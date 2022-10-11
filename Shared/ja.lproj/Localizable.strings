@@ -935,7 +935,7 @@
 "Onboarding.SyncTitle.v102" = "同期して作業を続けられます";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
-"Onboarding.Wallpaper.Accessibility.Classic.v106" = "クラシックな壁紙";
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "定番の壁紙";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "限定版の壁紙";
@@ -959,7 +959,7 @@
 "Onboarding.Welcome.Description.v106" = "Firefox は利益よりも人々を優先し、あなたのプライバシーを守ります。";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Welcome.Title.v106" = "支配を受けない自由なインターネットへようこそ";
+"Onboarding.Welcome.Title.v106" = "誰のものでもない自由なインターネットへようこそ";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "ブラウジングを開始";
@@ -1390,6 +1390,9 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox の壁紙、夕暮れの丘パターンです。";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ の定番";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "オープニング画面";
 
@@ -1400,7 +1403,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "新しいコレクションを試す。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
-"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "新しい Independent Voices コレクションです。";
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "新しい壁紙コレクション「揺るぎない声」です。";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "限定版";
@@ -1814,7 +1817,7 @@
 "Upgrade.SyncSign.Title.v106" = "画面の切り替えがこれまで以上に簡単に";
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
-"Upgrade.Welcome.Action.v106" = "はじめに";
+"Upgrade.Welcome.Action.v106" = "はじめる";
 
 /* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Description.v106" = "新しいカラー、さらに便利に、利益を超えて人々への平等なコミットメント。";
@@ -1827,6 +1830,24 @@
 
 /* Username textbox in Authentication prompt */
 "Username" = "ユーザー名";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "この壁紙に問題が発生しました。";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "壁紙を変更できませんでした";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "ダウンロード時に問題が発生しました。";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "壁紙をダウンロードできませんでした";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "キャンセル";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "再試行";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ウェブコンテンツ";

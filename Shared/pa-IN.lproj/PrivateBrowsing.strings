@@ -1,8 +1,8 @@
 /* Setting for closing private tabs */
-"Close Private Tabs" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
+"Close Private Tabs" = "ਨਿੱਜੀ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
 
 /* Context menu option for opening a link in a new private tab */
-"ContextMenu.OpenInNewPrivateTabButtonTitle" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "ਨਵੀਂ ਨਿੱਜੀ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
 /* Description text displayed when there are no open tabs while in private mode */
 "Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "ਫਾਇਰਫਾਕਸ ਤੁਹਾਡੇ ਅਤੀਤ ਜਾਂ ਕੂਕੀਜ਼ ਨੂੰ ਯਾਦ ਨਹੀਂ ਰੱਖੇਗਾ, ਪਰ ਤੁਹਾਡੇ ਨਵੇਂ ਬੁੱਕਮਾਰਕਾਂ ਨੂੰ ਸੰਭਾਲਿਆ ਜਾਵੇਗਾ।";
@@ -17,14 +17,14 @@
 "On" = "ਚਾਲੂ";
 
 /* Title displayed for when there are no open tabs while in private mode */
-"Private Browsing" = "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ";
+"Private Browsing" = "ਨਿੱਜੀ ਬਰਾਊਜ਼ਿੰਗ";
 
 /* Accessibility label for toggling on/off private mode */
-"Private Mode" = "ਪ੍ਰਾਈਵੇਟ ਮੋਡ";
+"Private Mode" = "ਨਿੱਜੀ ਮੋਡ";
 
 /* Accessiblity hint for toggling on/off private mode */
-"Turns private mode on or off" = "ਪ੍ਰਾਈਵੇਟ ਮੋਡ ਨੂੰ ਚਾਲੂ ਜਾਂ ਬੰਦ ਕਰਦੇ ਹੋ";
+"Turns private mode on or off" = "ਨਿੱਜੀ ਮੋਡ ਨੂੰ ਚਾਲੂ ਜਾਂ ਬੰਦ ਕਰਦੇ ਹੋ";
 
 /* Will be displayed in Settings under 'Close Private Tabs' */
-"When Leaving Private Browsing" = "ਜਦੋਂ ਤਸੀਂ ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਨੂੰ ਛੱਡਦੇ ਹੋ";
+"When Leaving Private Browsing" = "ਜਦੋਂ ਤਸੀਂ ਨਿੱਜੀ ਬਰਾਊਜ਼ਿੰਗ ਨੂੰ ਛੱਡਦੇ ਹੋ";
 

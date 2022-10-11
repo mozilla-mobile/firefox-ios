@@ -11,7 +11,7 @@
 "Menu.FindInPageAction.Title" = "ਸਫ਼ੇ 'ਚ ਲੱਭੋ";
 
 /* Label for the button, displayed in the menu, used to open a new private tab. */
-"Menu.NewPrivateTabAction.Title" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਖੋਲ੍ਹੋ";
+"Menu.NewPrivateTabAction.Title" = "ਨਵੀਂ ਨਿੱਜੀ ਟੈਬ ਖੋਲ੍ਹੋ";
 
 /* Label for the button, displayed in the menu, used to open a new tab */
 "Menu.NewTabAction.Title" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੋ";

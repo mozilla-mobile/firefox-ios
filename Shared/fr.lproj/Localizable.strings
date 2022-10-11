@@ -1820,7 +1820,7 @@
 "Upgrade.Welcome.Action.v106" = "Démarrer";
 
 /* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.Welcome.Description.v106" = "De nouvelles couleurs. Un nouveau confort. Mais le même engagement pour les gens plutôt que pour les profits.";
+"Upgrade.Welcome.Description.v106" = "De nouvelles couleurs. Un nouveau confort. Mais le même engagement pour les gens plutôt que pour l’argent.";
 
 /* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Title.v106" = "Bienvenue sur un Internet plus personnel";
