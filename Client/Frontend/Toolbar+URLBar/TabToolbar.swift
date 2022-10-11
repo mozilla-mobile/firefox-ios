@@ -71,21 +71,22 @@ class TabToolbar: UIView {
         buttons.forEach { contentView.addArrangedSubview($0) }
     }
 
-    /* Ecosia: no separator
+    var needsSeparation = true
+    
     override func draw(_ rect: CGRect) {
-        if let context = UIGraphicsGetCurrentContext() {
+        if let context = UIGraphicsGetCurrentContext(), needsSeparation {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
         }
     }
 
     fileprivate func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
-        context.setStrokeColor(UIColor.black.withAlphaComponent(0.05).cgColor)
+        context.setStrokeColor(UIColor.theme.ecosia.barSeparator.cgColor)
         context.setLineWidth(2)
         context.move(to: CGPoint(x: start.x, y: start.y))
         context.addLine(to: CGPoint(x: end.x, y: end.y))
         context.strokePath()
     }
-     */
+
 }
 
 extension TabToolbar: TabToolbarProtocol {

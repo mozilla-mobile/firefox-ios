@@ -16,10 +16,10 @@ private struct URLBarViewUX {
     static let ButtonHeight: CGFloat = 44
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 22
-    static var TextFieldBorderWidth: CGFloat { LegacyThemeManager.instance.current.isDark ? 1 : 0 }
     static let TextFieldBorderWidthSelected: CGFloat = 2
     static let ProgressBarHeight: CGFloat = 3
-    static let SearchIconImageWidth: CGFloat = 24
+    static let SearchIconWidthSmall: CGFloat = 16
+    static let SearchIconWidthMedium: CGFloat = 24
     static let TabsButtonRotationOffset: CGFloat = 1.5
     static let TabsButtonHeight: CGFloat = 18.0
     static let ToolbarButtonInsets = UIEdgeInsets(equalInset: Padding)
@@ -175,8 +175,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     lazy var searchIconImageView: UIImageView = {
         let searchIconImageView = UIImageView()
         searchIconImageView.contentMode = .scaleAspectFit
-        searchIconImageView.layer.cornerRadius = 12
-        searchIconImageView.clipsToBounds = true
         searchIconImageView.image = UIImage(named: "searchLogo")
         return searchIconImageView
     }()
@@ -257,7 +255,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 searchIconImageView.image = .init(themed: "searchLogo")
             }
         } else {
-            searchIconImageView.image = .init(named: "quickSearch")
+            searchIconImageView.image = .init(named: "search")
         }
         searchIconImageView.isHidden = !isHome && !inOverlayMode
     }
@@ -329,7 +327,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         searchIconImageView.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.leading.equalTo(locationContainer.snp.leading).offset(12)
-            make.size.equalTo(URLBarViewUX.SearchIconImageWidth)
+            make.size.equalTo(URLBarViewUX.SearchIconWidthSmall)
         }
 
 
@@ -446,12 +444,11 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 make.height.equalTo(URLBarViewUX.LocationHeight+URLBarViewUX.TextFieldBorderWidthSelected * 2)
                 make.centerY.equalTo(self)
             }
-            self.locationContainer.layer.borderWidth = isHome ? URLBarViewUX.TextFieldBorderWidth : 0
 
             self.locationView.snp.remakeConstraints { make in
                 make.top.bottom.trailing.equalTo(self.locationContainer)
                 if isHome {
-                    make.leading.equalTo(searchIconImageView.snp.trailing).offset(8)
+                    make.leading.equalTo(searchIconImageView.snp.trailing)
                 } else {
                     make.leading.equalTo(self.locationContainer)
                 }
@@ -467,6 +464,12 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 make.size.equalTo(URLBarViewUX.ButtonHeight).priority(.high)
             }
         }
+
+        let width = inOverlayMode ? URLBarViewUX.SearchIconWidthMedium : URLBarViewUX.SearchIconWidthSmall
+        searchIconImageView.snp.updateConstraints { make in
+            make.size.equalTo(width)
+        }
+
         updateSearchEngineImage()
     }
 
@@ -658,7 +661,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 make.edges.equalTo(self.locationView.urlTextField)
             }
         }
-        line.isHidden = inOverlayMode || isBottomSearchBar()
+        line.isHidden = isHome
     }
 
     func updateViewsForOverlayModeAndToolbarChanges() {
@@ -905,7 +908,7 @@ extension URLBarView: NotificationThemeable {
         cancelTintColor = UIColor.theme.browser.tint
         showQRButtonTintColor = UIColor.theme.browser.tint
         backgroundColor = UIColor.theme.textField.background
-        line.backgroundColor = UIColor.theme.browser.urlBarDivider
+        line.backgroundColor = UIColor.theme.ecosia.barSeparator
 
         locationBorderColor = UIColor.theme.ecosia.border
         locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.ecosia.tertiaryBackground
@@ -927,8 +930,6 @@ extension URLBarView: NotificationThemeable {
         // Border for dark mode on home or selection state
         if inOverlayMode {
             locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidthSelected
-        } else if isHome {
-            locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
         } else {
             locationContainer.layer.borderWidth = 0
         }

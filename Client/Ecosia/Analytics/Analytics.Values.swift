@@ -37,7 +37,8 @@ extension Analytics {
             settings,
             newTab = "new_tab",
             shareContent = "share_content",
-            blockImages = "block_images"
+            blockImages = "block_images",
+            searchbar = "searchbar"
         }
     }
     
@@ -52,7 +53,8 @@ extension Analytics {
         retry,
         send,
         claim,
-        click
+        click,
+        change
         
         enum Activity: String {
             case

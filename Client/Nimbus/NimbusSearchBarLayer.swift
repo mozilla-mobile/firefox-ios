@@ -13,6 +13,6 @@ final class NimbusSearchBarLayer {
 
         return isAtBottom ? .bottom : .top
          */
-        .bottom
+        .top
     }
 }

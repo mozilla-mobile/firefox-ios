@@ -168,5 +168,6 @@ extension String {
         case findAnswersTo = "Find answers to popular questions like how Ecosia neutralizes CO2 emissions and what it means to be a social business."
         case customization = "Customization"
         case clearAll = "Clear all"
+        case searchBarHint = "To make entering info easier, the toolbar can be set to the bottom of the screen"
     }
 }

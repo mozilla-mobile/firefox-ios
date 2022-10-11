@@ -27,8 +27,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 
     static var isEnabled: Bool {
         let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isFeatureEnabled = FeatureFlagsManager.shared.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
-        return !isiPad && isFeatureEnabled && !AppConstants.isRunningUITests
+        return !isiPad && !AppConstants.isRunningUITests
     }
 
     var title: String = .Settings.Toolbar.Toolbar
@@ -47,7 +46,7 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 
     var searchBarPosition: SearchBarPosition {
         guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
-            return .bottom
+            return .top
         }
 
         return position
@@ -82,6 +81,8 @@ private extension SearchBarSettingsViewModel {
 
         let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
         notificationCenter.post(name: .SearchBarPositionDidChange, object: notificationObject)
+
+        Analytics.shared.searchbarChanged(to: searchBarPosition.rawValue)
     }
 
     func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {

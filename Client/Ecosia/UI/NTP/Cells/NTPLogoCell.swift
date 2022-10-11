@@ -33,8 +33,7 @@ final class NTPLogoCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         bottom.priority = .defaultHigh
         bottom.isActive = true
 
-        let height = max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
-        logo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: (height/10)).isActive = true
+        logo.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         logo.widthAnchor.constraint(equalToConstant: 144).isActive = true
         applyTheme()

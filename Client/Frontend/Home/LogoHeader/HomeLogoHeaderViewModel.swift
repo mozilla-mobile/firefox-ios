@@ -6,19 +6,9 @@ import Foundation
 import Shared
 
 class HomeLogoHeaderViewModel {
-
     struct UX {
         static let bottomSpacing: CGFloat = 12
     }
-
-    /* Ecosia
-    private let profile: Profile
-    var onTapAction: ((UIButton) -> Void)?
-
-    init(profile: Profile) {
-        self.profile = profile
-    }
-     */
 }
 
 // MARK: HomeViewModelProtocol
@@ -43,8 +33,13 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
         let section = NSCollectionLayoutSection(group: group)
 
+        // different top insets for different search bar layouts
+        let height = max(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+        let pos: SearchBarPosition = FeatureFlagsManager.shared.getCustomState(for: .searchBarPosition) ?? .top
+        let factor = pos == .bottom ? 0.1 : 0.05
+
         section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
+            top: height * factor,
             leading: 0,
             bottom: UX.bottomSpacing,
             trailing: 0)
@@ -57,7 +52,6 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var isEnabled: Bool {
-        // Ecosia // return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
         true
     }
 
@@ -70,7 +64,6 @@ extension HomeLogoHeaderViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let logoHeaderCell = cell as? NTPLogoCell else { return UICollectionViewCell() }
-        // Ecosia // logoHeaderCell.configure(onTapAction: onTapAction)
         return logoHeaderCell
     }
 }

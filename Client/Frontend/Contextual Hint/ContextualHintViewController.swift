@@ -9,14 +9,13 @@ import Shared
 class ContextualHintViewController: UIViewController, OnViewDismissable, NotificationThemeable {
 
     struct UX {
-        static let closeButtonSize = CGSize(width: 35, height: 35)
-        static let closeButtonTrailing: CGFloat = 5
-        static let closeButtonTop: CGFloat = 5
+        static let closeButtonSize = CGSize(width: 56, height: 56)
 
         static let labelLeading: CGFloat = 16
-        static let labelTop: CGFloat = 10
-        static let labelBottom: CGFloat = 23
-        static let labelTrailing: CGFloat = 3
+        static let labelTop: CGFloat = 8
+        static let labelBottom: CGFloat = 16
+
+        static let padding: CGFloat = 32
     }
 
     // MARK: - UI Elements
@@ -25,29 +24,29 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
     }
 
     private lazy var closeButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: ImageIdentifiers.contextualHintClose)?.withRenderingMode(.alwaysTemplate),
+        button.setImage(.init(named: "tab_close"),
                         for: .normal)
         button.addTarget(self,
                          action: #selector(self?.dismissAnimated),
                          for: .touchUpInside)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0,
-                                                left: 7.5,
-                                                bottom: 15,
-                                                right: 7.5)
         button.accessibilityLabel = String.ContextualHints.ContextualHintsCloseAccessibility
     }
 
     private lazy var descriptionLabel: UILabel = .build { [weak self] label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .body,
-            maxSize: 28)
+        label.font = .preferredFont(forTextStyle: .callout)
+        label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .left
         label.numberOfLines = 0
     }
 
     private lazy var actionButton: UIButton = .build { [weak self] button in
         button.titleLabel?.textAlignment = .left
+        button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.titleLabel?.numberOfLines = 0
+        button.contentEdgeInsets = .init(top: 6, left: 12, bottom: 6, right: 12)
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = true
         button.addTarget(self,
                          action: #selector(self?.performAction),
                          for: .touchUpInside)
@@ -55,9 +54,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
 
     private lazy var stackView: UIStackView = .build { [weak self] stack in
         stack.backgroundColor = .clear
-        stack.distribution = .fillProportionally
+        stack.distribution = .fill
         stack.alignment = .leading
         stack.axis = .vertical
+        stack.spacing = 4
     }
 
     /*
@@ -76,7 +76,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
      */
 
     // MARK: - Properties
-    private var viewModel: ContextualHintViewModel
+    private (set) var viewModel: ContextualHintViewModel
 
     private var onViewSummoned: (() -> Void)?
     var onViewDismissed: (() -> Void)?
@@ -87,10 +87,10 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
     var isPresenting: Bool = false
 
     private var popupContentHeight: CGFloat {
-        let spacingWidth = UX.labelLeading + UX.closeButtonSize.width + UX.closeButtonTrailing + UX.labelTrailing
+        let spacingWidth = UX.labelLeading + UX.closeButtonSize.width
         let labelHeight = descriptionLabel.heightForLabel(
             descriptionLabel,
-            width: containerView.frame.width - spacingWidth,
+            width: UIScreen.main.bounds.width - UX.padding - spacingWidth,
             text: viewModel.descriptionText(arrowDirection: viewModel.arrowDirection))
 
         switch viewModel.isActionType() {
@@ -100,7 +100,9 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
                 titleLabel,
                 width: containerView.frame.width - spacingWidth,
                 text: viewModel.buttonActionText())
-            return buttonHeight + labelHeight + UX.labelTop + UX.labelBottom
+            let totalHeight = buttonHeight + labelHeight + UX.labelTop + UX.labelBottom + stackView.spacing + actionButton.contentEdgeInsets.top + actionButton.contentEdgeInsets.bottom
+            debugPrint("height: \(totalHeight)")
+            return totalHeight
 
         case false:
             return labelHeight + UX.labelTop + UX.labelBottom
@@ -138,7 +140,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        preferredContentSize = CGSize(width: 350, height: popupContentHeight)
+        preferredContentSize = CGSize(width: UIScreen.main.bounds.width-UX.padding, height: popupContentHeight)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -186,17 +188,15 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor),
-            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                  constant: -UX.closeButtonTrailing),
+            closeButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
             closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
 
             stackView.topAnchor.constraint(equalTo: containerView.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                constant: UX.labelLeading),
-            stackView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor,
-                                                constant: -UX.labelTrailing),
+            stackView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -226,20 +226,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
         descriptionLabel.text = viewModel.descriptionText(arrowDirection: viewModel.arrowDirection)
 
         if viewModel.isActionType() {
-
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                     maxSize: 28),
-                .foregroundColor: UIColor.theme.ecosia.primaryTextInverted,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-
-            let attributeString = NSMutableAttributedString(
-                string: viewModel.buttonActionText(),
-                attributes: textAttributes
-            )
-
-            actionButton.setAttributedTitle(attributeString, for: .normal)
+           actionButton.setTitle(viewModel.buttonActionText(), for: .normal)
         }
     }
 
@@ -310,5 +297,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
         view.backgroundColor = .theme.ecosia.quarternaryBackground
         descriptionLabel.textColor = .theme.ecosia.primaryTextInverted
         closeButton.tintColor = .theme.ecosia.primaryTextInverted
+        actionButton.setTitleColor(.Light.Text.primary, for: .normal)
+        actionButton.setBackgroundColor(.Light.Background.primary, forState: .normal)
     }
 }

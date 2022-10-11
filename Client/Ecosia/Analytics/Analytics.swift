@@ -195,4 +195,12 @@ final class Analytics {
                               action: Action.click.rawValue)
                     .label("your_impact"))
     }
+
+    func searchbarChanged(to position: String) {
+        tracker
+            .track(Structured(category: Category.browser.rawValue,
+                              action: Action.change.rawValue)
+                .label(Label.Browser.searchbar.rawValue)
+                .property(position))
+    }
 }

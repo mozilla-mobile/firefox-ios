@@ -61,7 +61,7 @@ class TabLocationView: UIView {
     }
 
     var placeholder: NSAttributedString {
-        return NSAttributedString(string: .localized(.searchAndPlant), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.secondaryText])
+        return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.secondaryText])
     }
 
     lazy var urlTextField: URLTextField = .build { urlTextField in

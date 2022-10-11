@@ -88,21 +88,14 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
         case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Body
         case .jumpBackIn: return CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
         case .jumpBackInSyncedTab: return CFRStrings.FirefoxHomepage.JumpBackIn.SyncedTab
-
-        case .toolbarLocation:
-            switch arrowDirection {
-            case .up:
-                return CFRStrings.Toolbar.SearchBarTopPlacement
-            default:
-                return CFRStrings.Toolbar.SearchBarPlacementForNewUsers
-            }
+        case .toolbarLocation: return .localized(.searchBarHint)
         }
     }
 
     func buttonActionText() -> String {
         switch hintType {
         case .inactiveTabs: return CFRStrings.TabsTray.InactiveTabs.Action
-        case .toolbarLocation: return CFRStrings.Toolbar.SearchBarPlacementButtonText
+        case .toolbarLocation: return .localized(.openSettings)
         default: return ""
         }
     }

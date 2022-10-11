@@ -126,7 +126,7 @@ class ShareViewController: UIViewController {
             */
         } else {
             pageInfoRowUrlLabel?.removeFromSuperview()
-            makeActionRow(addTo: stackView, label: .ShareSearchInFirefox, imageName: "quickSearch", action: #selector(actionSearchInFirefox), hasNavigation: false)
+            makeActionRow(addTo: stackView, label: .ShareSearchInFirefox, imageName: "search", action: #selector(actionSearchInFirefox), hasNavigation: false)
         }
 
         let footerSpaceRow = UIView()
