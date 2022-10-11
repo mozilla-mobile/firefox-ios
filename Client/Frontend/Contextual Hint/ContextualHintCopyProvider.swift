@@ -68,9 +68,12 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             let shouldShowNew = featureFlags.isFeatureEnabled(.copyForToolbar, checking: .buildOnly)
 
             if let arrowDirection = arrowDirection,
-               arrowDirection == .up,
                shouldShowNew {
-                descriptionCopy = CFRStrings.Toolbar.SearchBarTopPlacement
+                switch arrowDirection {
+                case .up: descriptionCopy = CFRStrings.Toolbar.SearchBarTopPlacement
+                case .down: descriptionCopy = CFRStrings.Toolbar.SearchBarBottomPlacement
+                default: break
+                }
             } else if let arrowDirection = arrowDirection {
                 switch arrowDirection {
                 case .up: descriptionCopy = CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
