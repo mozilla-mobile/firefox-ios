@@ -344,7 +344,7 @@ public class RustPlaces: BookmarksHandler {
 
         return deferred
     }
-    
+
     public func syncHistory(unlockInfo: SyncUnlockInfo) -> Success {
         let deferred = Success()
 
@@ -359,9 +359,15 @@ public class RustPlaces: BookmarksHandler {
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let placesError = err as? PlacesError {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Places error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
+                    SentryIntegration.shared.sendWithStacktrace(message: "Places error when syncing Places database",
+                                                                tag: SentryTag.rustPlaces,
+                                                                severity: .error,
+                                                                description: placesError.localizedDescription)
                 } else {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
+                    SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database",
+                                                                tag: SentryTag.rustPlaces,
+                                                                severity: .error,
+                                                                description: err.localizedDescription)
                 }
 
                 deferred.fill(Maybe(failure: err))
@@ -390,7 +396,7 @@ public class RustPlaces: BookmarksHandler {
 
         return deferred
     }
-    
+
     public func resetHistoryMetadata() -> Success {
          let deferred = Success()
 
@@ -513,10 +519,9 @@ public class RustPlaces: BookmarksHandler {
 // MARK: History APIs
 
 extension VisitTransition {
-    static public func fromVisitType(visitType: VisitType) -> Self {
+    public static func fromVisitType(visitType: VisitType) -> Self {
         switch visitType {
         case .unknown:
-            // TODO: Incorrect
             return VisitTransition.link
         case .link:
             return VisitTransition.link
@@ -535,8 +540,7 @@ extension VisitTransition {
         case .framedLink:
             return VisitTransition.framedLink
         case .recentlyClosed:
-            // TODO: Incorrect
-            return VisitTransition.reload
+            return VisitTransition.link
         }
     }
 }
@@ -562,7 +566,8 @@ extension RustPlaces {
 
     public func deleteVisitsBetween(_ date: Date) -> Success {
         return withWriter { connection in
-            return try connection.deleteVisitsBetween(start: PlacesTimestamp(date.toMillisecondsSince1970()), end: PlacesTimestamp(Date().toMillisecondsSince1970()))
+            return try connection.deleteVisitsBetween(start: PlacesTimestamp(date.toMillisecondsSince1970()),
+                                                      end: PlacesTimestamp(Date().toMillisecondsSince1970()))
         }
     }
 
@@ -571,11 +576,13 @@ extension RustPlaces {
             return try connection.queryAutocomplete(search: filter, limit: Int32(limit))
         }
     }
-    
 
     public func getVisitPageWithBound(limit: Int, offset: Int, excludedTypes: VisitTransitionSet) -> Deferred<Maybe<HistoryVisitInfosWithBound>> {
         return withReader { connection in
-            return try connection.getVisitPageWithBound(bound: Int64(Date().toMillisecondsSince1970()), offset: Int64(offset), count: Int64(limit), excludedTypes: excludedTypes)
+            return try connection.getVisitPageWithBound(bound: Int64(Date().toMillisecondsSince1970()),
+                                                        offset: Int64(offset),
+                                                        count: Int64(limit),
+                                                        excludedTypes: excludedTypes)
         }
     }
 
@@ -585,4 +592,3 @@ extension RustPlaces {
         }
     }
 }
-
