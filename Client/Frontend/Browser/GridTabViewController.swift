@@ -291,6 +291,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     func applyTheme() {
         tabDisplayManager.theme = themeManager.currentTheme
+        emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
         backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
         collectionView.backgroundColor = themeManager.currentTheme.colors.layer3
         collectionView.reloadData()
