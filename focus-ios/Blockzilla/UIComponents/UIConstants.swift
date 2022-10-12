@@ -337,9 +337,14 @@ struct UIConstants {
         static let buttonTextShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.ButtonText.V2", value: "Done", comment: "This is the button text that is displayed in the Show Me How Onboarding Screen")
 
         // Quick Action - Small Size - Gallery View
+        static let quickActionGalleryDescriptionV2 = NSLocalizedString(
+            "TodayWidget.QuickActionGallery.Description",
+            value: "Start a private search in %@ with your default search engine.",
+            comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
+
         static let quickActionGalleryDescription = NSLocalizedString(
                 "TodayWidget.QuickActionGalleryDescription",
-                value: "Start a private search in %@ with your default search engine.",
+                value: "Add a %@ shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
                 comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
 
         public static let quickActionsGalleryTitle = NSLocalizedString(
