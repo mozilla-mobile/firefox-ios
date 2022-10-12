@@ -220,7 +220,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
             top: 0,
             leading: horizontalInset,
             bottom: HomepageViewModel.UX.spacingBetweenSections,
-            trailing: horizontalInset)
+            trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
 
         return section
