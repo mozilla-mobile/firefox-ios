@@ -310,8 +310,8 @@ extension TopTabsViewController: NotificationThemeable, PrivateModeUI {
     func applyTheme() {
         view.backgroundColor = themeManager.currentTheme.colors.layer3
         tabsButton.applyTheme()
-
-        newTab.tintColor = themeManager.currentTheme.colors.textSecondary
+        privateModeButton.applyTheme(theme: themeManager.currentTheme)
+        newTab.tintColor = themeManager.currentTheme.colors.iconPrimary
         collectionView.backgroundColor = view.backgroundColor
         collectionView.reloadData()
         topTabDisplayManager.refreshStore()

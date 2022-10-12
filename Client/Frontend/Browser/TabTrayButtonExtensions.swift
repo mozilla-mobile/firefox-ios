@@ -31,7 +31,7 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
 
     func applyTheme(theme: Theme) {
         onTint = theme.colors.iconOnColor
-        offTint = theme.colors.iconDisabled
+        offTint = theme.colors.iconPrimary
         tintColor = isSelected ? onTint : offTint
         imageView?.tintColor = tintColor
     }

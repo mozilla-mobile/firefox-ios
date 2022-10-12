@@ -71,7 +71,7 @@ class EmptyPrivateTabsView: UIView {
     func applyTheme(_ theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
-        learnMoreButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
+        learnMoreButton.setTitleColor(theme.colors.textAccent, for: [])
         iconImageView.tintColor = theme.colors.indicatorActive
     }
 }
