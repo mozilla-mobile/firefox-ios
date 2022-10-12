@@ -247,6 +247,9 @@ class HomeTabBannerColor {
 
 class OnboardingColor {
     var backgroundColor: UIColor { return UIColor.white }
+    var etpBackgroundColor: UIColor { return UIColor.white }
+    var etpTextColor: UIColor { return UIColor.black }
+    var etpButtonColor: UIColor { return UIColor.Photon.Blue50 }
 }
 
 class RemoteTabTrayColor {

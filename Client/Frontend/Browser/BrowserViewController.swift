@@ -2151,10 +2151,13 @@ extension BrowserViewController {
 
     func presentETPCoverSheetViewController(_ force: Bool = false) {
         guard !hasTriedToPresentETPAlready else { return }
+
         hasTriedToPresentETPAlready = true
         let cleanInstall = ETPViewModel.isCleanInstall(userPrefs: profile.prefs)
         let shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall)
+
         guard force || shouldShow else { return }
+
         let etpCoverSheetViewController = ETPCoverSheetViewController()
         if topTabsVisible {
             etpCoverSheetViewController.preferredContentSize = CGSize(
