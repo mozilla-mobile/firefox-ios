@@ -184,8 +184,7 @@ class TabTrayViewController: UIViewController, Themeable {
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .ProfileDidStartSyncing,
+                           observing: [.ProfileDidStartSyncing,
                                        .ProfileDidFinishSyncing,
                                        .UpdateLabelOnTabClosed])
     }
