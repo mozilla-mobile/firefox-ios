@@ -37,7 +37,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
-        static let tabStackTopAnchorConstant: CGFloat = 44
+        static let tabStackTopAnchorConstant: CGFloat = 72
         static let tabStackTopAnchorCompactPhoneConstant: CGFloat = 24
     }
 
@@ -319,9 +319,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
             syncedTabTapTargetView.topAnchor.constraint(equalTo: tabStack.topAnchor),
             syncedTabTapTargetView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             syncedTabTapTargetView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 232)
+            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
 
         syncedDeviceIconCenterConstraint = syncedDeviceLabel.centerYAnchor.constraint(equalTo: syncedDeviceImage.centerYAnchor).priority(UILayoutPriority(999))
