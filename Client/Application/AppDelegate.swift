@@ -6,7 +6,6 @@ import Shared
 import Storage
 import CoreSpotlight
 import SDWebImage
-import Glean
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 
@@ -35,10 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         log.info("startApplication begin")
-
-        NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: nil) { _ in
-            self.runAppServicesHistoryMigration()
-        }
 
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
@@ -286,67 +281,5 @@ extension AppDelegate {
         guard builder.system == .main else { return }
 
         menuBuilderHelper?.mainMenu(for: builder)
-    }
-}
-
-// MARK: - Application Services History Migration
-// A convinient mapping, `Profile.swift` can't depend
-// on `PlacesMigrationConfiguration` directly since
-// the FML is only usable from `Client` at the moment
-extension PlacesMigrationConfiguration {
-    func into() -> HistoryMigrationConfiguration {
-        switch self {
-        case .disabled:
-            return HistoryMigrationConfiguration.disabled
-        case .dryRun:
-            return HistoryMigrationConfiguration.dryRun
-        case .real:
-            return HistoryMigrationConfiguration.real
-        }
-    }
-}
-
-extension AppDelegate {
-    func runAppServicesHistoryMigration() {
-        let placesHistory = FxNimbus.shared.features.placesHistory.value()
-        FxNimbus.shared.features.placesHistory.recordExposure()
-        guard placesHistory.migration != .disabled else {
-            return
-        }
-        let p = self.profile as? BrowserProfile
-        let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
-        let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
-        if !migrationRan {
-            let id = GleanMetrics.PlacesHistoryMigration.duration.start()
-            // We mark that the migration started
-            // this will help us identify how often the migration starts, but never ends
-            // additionally, we have a seperate metric for error rates
-            GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
-            GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
-            p?.migrateHistoryToPlaces(
-            migrationConfig: placesHistory.migration.into(),
-            callback: { result in
-                self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
-                UserDefaults.standard.setValue(true, forKey: migrationRanKey)
-
-                // We record various success metrics here
-                GleanMetrics.PlacesHistoryMigration.duration.stopAndAccumulate(id)
-                GleanMetrics.PlacesHistoryMigration.numMigrated.set(Int64(result.numSucceeded))
-                GleanMetrics.PlacesHistoryMigration.numToMigrate.set(Int64(result.numTotal))
-                GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
-            },
-            errCallback: { err in
-                let errMsg = err?.localizedDescription ?? "Unknown error during History migration"
-                self.log.error(errMsg)
-
-                GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
-                GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
-                GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
-                // We also send the error to sentry
-                SentryIntegration.shared.sendWithStacktrace(message: errMsg, tag: SentryTag.rustPlaces, severity: .error)
-            })
-        } else {
-            log.info("History Migration skipped, already migrated")
-        }
     }
 }
