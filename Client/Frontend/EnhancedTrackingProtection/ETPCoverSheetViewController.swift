@@ -52,7 +52,7 @@ class ETPCoverSheetViewController: UIViewController {
         button.addTarget(self, action: #selector(self.dismissAnimated), for: .touchUpInside)
     }
 
-    let pairImageView: UIImageView = .build { imageView in
+    private lazy var pairImageView: UIImageView = .build { imageView in
         imageView.image = UIImage(named: ImageIdentifiers.signinSync)
         imageView.contentMode = .scaleAspectFit
     }
@@ -61,6 +61,11 @@ class ETPCoverSheetViewController: UIViewController {
         imageView.image = self.viewModel.etpCoverSheetmodel?.titleImage
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
+    }
+
+    private lazy var textStackView: UIStackView = .build { stackview in
+        stackview.axis = .vertical
+        stackview.spacing = UX.horizontalMargin
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -115,10 +120,12 @@ class ETPCoverSheetViewController: UIViewController {
 
     private func setupLayout() {
         // Initialize
+        textStackView.addArrangedSubview(titleLabel)
+        textStackView.addArrangedSubview(descriptionLabel)
+
         view.addSubviews(topImageView,
                          doneButton,
-                         titleLabel,
-                         descriptionLabel,
+                         textStackView,
                          goToSettingsButton,
                          startBrowsingButton)
 
@@ -130,25 +137,21 @@ class ETPCoverSheetViewController: UIViewController {
                                                   constant: -UX.doneButtonPadding),
             doneButton.heightAnchor.constraint(equalToConstant: UX.doneButtonPadding),
 
-            topImageView.topAnchor.constraint(equalTo: doneButton.bottomAnchor, constant: 10),
-            topImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            topImageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor,
+            topImageView.topAnchor.constraint(equalTo: doneButton.bottomAnchor,
+                                              constant: UX.horizontalMargin),
+            topImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                   constant: UX.horizontalMargin),
+            topImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                    constant: -UX.horizontalMargin),
+            topImageView.bottomAnchor.constraint(greaterThanOrEqualTo: textStackView.topAnchor,
                                                  constant: -UX.largeVerticalMargin),
-            topImageView.heightAnchor.constraint(lessThanOrEqualToConstant: UX.imageHeight),
 
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                constant: UX.horizontalMargin),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                 constant: -UX.horizontalMargin),
-            titleLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor,
-                                               constant: -UX.horizontalMargin),
-
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                      constant: UX.horizontalMargin),
-            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                       constant: -UX.horizontalMargin),
-            descriptionLabel.bottomAnchor.constraint(equalTo: goToSettingsButton.topAnchor,
-                                                     constant: -UX.largeVerticalMargin),
+            textStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                   constant: UX.horizontalMargin),
+            textStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                    constant: -UX.horizontalMargin),
+            textStackView.bottomAnchor.constraint(greaterThanOrEqualTo: goToSettingsButton.topAnchor,
+                                                  constant: -UX.largeVerticalMargin),
 
             goToSettingsButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
                                                       constant: UX.primaryButtonEdgeInset),
