@@ -42,6 +42,7 @@ protocol TabManagerProtocol {
 
     func selectTab(_ tab: Tab?, previous: Tab?)
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
+    func getMostRecentHomepageTab() -> Tab?
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
@@ -267,6 +268,13 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             tab.applyTheme()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+    }
+
+    func getMostRecentHomepageTab() -> Tab? {
+        let tabsToFilter = selectedTab?.isPrivate ?? false ? privateTabs : normalTabs
+        let homePageTabs = tabsToFilter.filter { $0.isFxHomeTab }
+
+        return mostRecentTab(inTabs: homePageTabs)
     }
 
     // MARK: - Clear and store
