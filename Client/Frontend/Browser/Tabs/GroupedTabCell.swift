@@ -163,10 +163,10 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
 }
 
 class GroupedTabContainerCell: UITableViewCell,
-                                UICollectionViewDelegateFlowLayout,
-                                UICollectionViewDataSource,
-                                TabCellDelegate,
-                                ReusableCell {
+                               UICollectionViewDelegateFlowLayout,
+                               UICollectionViewDataSource,
+                               TabCellDelegate,
+                               ReusableCell {
 
     // Delegate
     var delegate: GroupedTabsDelegate?

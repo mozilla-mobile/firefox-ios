@@ -194,7 +194,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         self.nimbus = nimbus
         self.notificationCenter = NotificationCenter.default
         self.theme = theme
-        
+
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
         self.inactiveViewModel = InactiveTabViewModel()
