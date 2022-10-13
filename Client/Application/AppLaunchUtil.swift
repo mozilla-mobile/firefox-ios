@@ -204,6 +204,7 @@ class AppLaunchUtil {
         let browserProfile = self.profile as? BrowserProfile
         let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
         let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
+        UserDefaults.standard.setValue(true, forKey: migrationRanKey)
         if !migrationRan {
             log.info("Migrating Application services history")
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
@@ -216,8 +217,6 @@ class AppLaunchUtil {
             migrationConfig: placesHistory.migration.into(),
             callback: { result in
                 self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
-                UserDefaults.standard.setValue(true, forKey: migrationRanKey)
-
                 // We record various success metrics here
                 GleanMetrics.PlacesHistoryMigration.duration.stopAndAccumulate(id)
                 GleanMetrics.PlacesHistoryMigration.numMigrated.set(Int64(result.numSucceeded))

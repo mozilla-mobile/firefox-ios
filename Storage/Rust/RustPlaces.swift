@@ -441,18 +441,11 @@ public class RustPlaces: BookmarksHandler {
         _ = reopenIfClosed()
         let deferredResponse = self.migrateHistory(dbPath: dbPath, lastSyncTimestamp: lastSyncTimestamp)
         deferredResponse.upon { result in
-            guard result.isSuccess else {
+            guard result.isSuccess, let result = result.successValue else {
                 errCallback(result.failureValue)
                 return
             }
-            if let result = result.successValue {
-                completion(result)
-                return
-            }
-            // Should be impossible, but we report it anyways
-            // this case is only possible if for some reason we have `result.isSucess`
-            // but we don't have a value back.
-            errCallback(nil)
+            completion(result)
         }
     }
 
