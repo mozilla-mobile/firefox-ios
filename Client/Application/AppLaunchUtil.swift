@@ -225,14 +225,14 @@ class AppLaunchUtil {
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
             },
             errCallback: { err in
-                let errMsg = err?.localizedDescription ?? "Unknown error during History migration"
-                self.log.error(errMsg)
+                let errDescription = err?.localizedDescription ?? "Unknown error during History migration"
+                self.log.error(errDescription)
 
                 GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
                 GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
                 // We also send the error to sentry
-                SentryIntegration.shared.sendWithStacktrace(message: errMsg, tag: SentryTag.rustPlaces, severity: .error)
+                SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
             })
         } else {
             log.info("History Migration skipped, already migrated")
