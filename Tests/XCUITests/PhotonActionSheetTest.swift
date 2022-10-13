@@ -111,21 +111,6 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 10)
     }
 
-    private func disableFennec() {
-        navigator.nowAt(BrowserTab)
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].staticTexts["Share"].tap()
-        waitForExistence(app.buttons["Copy"])
-        let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier: "Reminders").buttons["More"]
-        moreElement.tap()
-        waitForExistence(app.switches["Reminders"])
-        // Tap on Fennec switch
-        app.switches.element(boundBy: 1).tap()
-        app.buttons["Done"].tap()
-        waitForExistence(app.buttons["Copy"], timeout: 3)
-    }
-
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()

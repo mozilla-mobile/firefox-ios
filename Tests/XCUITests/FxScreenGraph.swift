@@ -17,7 +17,6 @@ let PrivateURLBarOpen = "PrivateURLBarOpen"
 let BrowserTab = "BrowserTab"
 let PrivateBrowserTab = "PrivateBrowserTab"
 let BrowserTabMenu = "BrowserTabMenu"
-let PageOptionsMenu = "PageOptionsMenu"
 let ToolsMenu = "ToolsMenu"
 let FindInPage = "FindInPage"
 let SettingsScreen = "SettingsScreen"
@@ -187,9 +186,6 @@ class Action {
     static let SelectAutomatically = "SelectAutomatically"
     static let SelectManually = "SelectManually"
     static let SystemThemeSwitch = "SystemThemeSwitch"
-
-    static let SelectGoogle = "SelectGoogle"
-    static let SelectBing = "SelectBing"
 
     static let AddCustomSearchEngine = "AddCustomSearchEngine"
     static let RemoveCustomSearchEngine = "RemoveCustomSearchEngine"
@@ -451,9 +447,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.buttons["urlBar-cancel"].tap()
         }
 
-        screenState.gesture(forAction: Action.OpenSearchBarFromSearchButton, transitionTo: URLBarOpen) {
-            userState in app.buttons["TabToolbar.stopReloadButton"].tap()
-        }
     }
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
@@ -770,7 +763,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
         screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
-//        screenState.tap(app.buttons["syncNowButtonTabsButtonTabTray"], to: CloseTabMenu)
 
         var regularModeSelector: XCUIElement
         var privateModeSelector: XCUIElement
