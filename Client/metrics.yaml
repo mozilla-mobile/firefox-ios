@@ -3015,3 +3015,78 @@ migration:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+
+places_history_migration:
+  duration:
+    type: timing_distribution
+    time_unit: millisecond
+    description: |
+        A time distribution of how long it took for the migration to occur
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"
+  num_to_migrate:
+    type: quantity
+    unit: visits
+    description: |
+       The number of visits expected to migrate to the places.db
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"
+  num_migrated:
+    type: quantity
+    unit: visits
+    description: |
+       The number of visits migrated to the places.db
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"
+  migration_ended_rate:
+    type: rate
+    description: |
+       A Rate of how often migrations end
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"
+  migration_error_rate:
+    type: rate
+    description: |
+       A Rate of how often migrations error out
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/SYNC-3308
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/11896
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - teshaq@mozilla.com
+      - sync-team@mozilla.com
+    expires: "2023-10-17"

@@ -431,6 +431,24 @@ public class RustPlaces: BookmarksHandler {
         }
     }
 
+    private func migrateHistory(dbPath: String, lastSyncTimestamp: Int64) -> Deferred<Maybe<HistoryMigrationResult>> {
+        return withWriter { connection in
+            return try connection.migrateHistoryFromBrowserDb(path: dbPath, lastSyncTimestamp: lastSyncTimestamp)
+        }
+    }
+
+    public func migrateHistory(dbPath: String, lastSyncTimestamp: Int64, completion: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
+        _ = reopenIfClosed()
+        let deferredResponse = self.migrateHistory(dbPath: dbPath, lastSyncTimestamp: lastSyncTimestamp)
+        deferredResponse.upon { result in
+            guard result.isSuccess, let result = result.successValue else {
+                errCallback(result.failureValue)
+                return
+            }
+            completion(result)
+        }
+    }
+
     public func deleteHistoryMetadata(key: HistoryMetadataKey) -> Deferred<Maybe<Void>> {
         return withWriter { connection in
             let response: Void = try connection.deleteHistoryMetadata(key: key)
