@@ -392,7 +392,7 @@ class BrowserViewController: UIViewController {
                         subtitle: UIConstants.strings.widgetOnboardingCardSubtitle,
                         actionButtonTitle: UIConstants.strings.widgetOnboardingCardActionButton,
                         widget: .init(
-                            title: UIConstants.strings.searchInApp
+                            title: UIConstants.strings.searchInAppInstruction
                         )),
                     primaryAction: { [weak self] in
                         self?.onboardingEventsHandler.route = nil
@@ -424,7 +424,7 @@ class BrowserViewController: UIViewController {
                         subtitleStep2: UIConstants.strings.subtitleStepTwoShowMeHowOnboardingV2,
                         subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
                         buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
-                        widgetText: UIConstants.strings.searchInApp),
+                        widgetText: UIConstants.strings.searchInAppInstruction),
                     dismissAction: { self.onboardingEventsHandler.route = nil }))
             controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             controller.isModalInPresentation = true

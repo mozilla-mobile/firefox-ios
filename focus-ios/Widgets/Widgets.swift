@@ -31,7 +31,7 @@ struct FocusWidgetsEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        SearchWidgetView(title: String(format: UIConstants.strings.searchInAppFormat, String.appNameForBundle))
+        SearchWidgetView(title: String(format: .searchInAppFormat, String.appNameForBundle))
     }
 }
 
@@ -43,8 +43,8 @@ struct Widgets: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             FocusWidgetsEntryView(entry: entry)
         }
-        .configurationDisplayName(UIConstants.strings.quickActionsGalleryTitle)
-        .description(String(format: UIConstants.strings.quickActionGalleryDescription, String.appNameForBundle))
+        .configurationDisplayName(String.quickActionsGalleryTitle)
+        .description(String(format: .quickActionGalleryDescription, String.appNameForBundle))
         .supportedFamilies([.systemSmall])
     }
 }
@@ -61,4 +61,25 @@ fileprivate extension String {
         var isKlar: Bool { return (Bundle.main.infoDictionary!["CFBundleIdentifier"] as! String).contains("Klar") }
         return isKlar ? "Klar" : "Focus"
     }
+    // Quick Action - Small Size - Gallery View
+    static let quickActionGalleryDescriptionV2 = NSLocalizedString(
+        "TodayWidget.QuickActionGalleryDescriptionV2",
+        value: "Start a private search in %@ with your default search engine.",
+        comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
+
+    static let quickActionGalleryDescription = NSLocalizedString(
+        "TodayWidget.QuickActionGalleryDescription",
+        value: "Add a %@ shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
+        comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
+
+    static let quickActionsGalleryTitle = NSLocalizedString(
+        "TodayWidget.QuickActionsGalleryTitle",
+        value: "Quick Actions",
+        comment: "Quick Actions title when widget enters edit mode")
+
+    static let searchInAppFormat = NSLocalizedString(
+        "TodayWidget.SearchInApp",
+        value: "Search in %@",
+        comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
+    static let searchInApp = String(format: searchInAppFormat, AppInfo.shortProductName)
 }

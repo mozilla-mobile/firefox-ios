@@ -336,27 +336,11 @@ struct UIConstants {
         static let subtitleStepThreeShowMeHowOnboardingV2 = String(format: NSLocalizedString("ShowMeHowOnboarding.SubtitleStepThree.V2", value: "Search for %@. Then choose a widget.", comment: "This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar)"), AppInfo.shortProductName)
         static let buttonTextShowMeHowOnboardingV2 = NSLocalizedString("ShowMeHowOnboarding.ButtonText.V2", value: "Done", comment: "This is the button text that is displayed in the Show Me How Onboarding Screen")
 
-        // Quick Action - Small Size - Gallery View
-        static let quickActionGalleryDescriptionV2 = NSLocalizedString(
-            "TodayWidget.QuickActionGalleryDescriptionV2",
-            value: "Start a private search in %@ with your default search engine.",
-            comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
-
-        static let quickActionGalleryDescription = NSLocalizedString(
-                "TodayWidget.QuickActionGalleryDescription",
-                value: "Add a %@ shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.",
-                comment: "Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar).")
-
-        public static let quickActionsGalleryTitle = NSLocalizedString(
-                "TodayWidget.QuickActionsGalleryTitle",
-                value: "Quick Actions",
-                comment: "Quick Actions title when widget enters edit mode")
-
-        public static let searchInAppFormat = NSLocalizedString(
-                "TodayWidget.SearchInApp",
-                value: "Search in %@",
-                comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
-        public static let searchInApp = String(format: searchInAppFormat, AppInfo.shortProductName)
+        static let searchInAppFormatInstruction = NSLocalizedString(
+            "TodayWidget.SearchInApp.Instruction",
+            value: "Search in %@",
+            comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
+        static let searchInAppInstruction = String(format: searchInAppFormatInstruction, AppInfo.shortProductName)
 
         public static let widgetOnboardingCardTitle = NSLocalizedString(
                 "WidgetOnboardingCard.Title",

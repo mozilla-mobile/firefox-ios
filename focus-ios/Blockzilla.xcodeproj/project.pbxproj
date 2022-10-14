@@ -84,7 +84,6 @@
 		C824D2DA28EEBF9B00DEA5DE /* Widgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C824D2D928EEBF9B00DEA5DE /* Widgets.swift */; };
 		C824D2DC28EEBF9D00DEA5DE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C824D2DB28EEBF9D00DEA5DE /* Assets.xcassets */; };
 		C824D2E028EEBF9D00DEA5DE /* WidgetsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C824D2D528EEBF9100DEA5DE /* WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		C824D2E828EEC75400DEA5DE /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
 		C824D2E928EEC77500DEA5DE /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E251FA1DAF0668005918DC /* AppInfo.swift */; };
 		C824D2EA28EEC79000DEA5DE /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C11461E04AADA005FFFEF /* AppConfig.swift */; };
 		C82F45F328193628000D7D84 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F45F228193628000D7D84 /* TestHelpers.swift */; };
@@ -2354,7 +2353,6 @@
 			files = (
 				C824D2DA28EEBF9B00DEA5DE /* Widgets.swift in Sources */,
 				C824D2EA28EEC79000DEA5DE /* AppConfig.swift in Sources */,
-				C824D2E828EEC75400DEA5DE /* UIConstants.swift in Sources */,
 				C824D2E928EEC77500DEA5DE /* AppInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
