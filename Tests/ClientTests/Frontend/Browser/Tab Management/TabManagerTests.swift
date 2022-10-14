@@ -603,6 +603,62 @@ class TabManagerTests: XCTestCase {
             self.delegate.verify("Not all delegate methods were called")
         }
     }
+
+    func testGetMostRecentHomePageTab_NilHomepage() {
+        let urlTab = manager.addTab(URLRequest(url: URL(string: "https://test.com")!))
+        manager.selectTab(urlTab)
+
+        XCTAssertNil(manager.getMostRecentHomepageTab())
+    }
+
+    func testGetMostRecentHomePageTab_ExistingHomepage() {
+        let homepageTab = manager.addTab()
+        let urlTab = manager.addTab(URLRequest(url: URL(string: "https://test.com")!))
+        manager.selectTab(homepageTab)
+        manager.selectTab(urlTab)
+
+        XCTAssertEqual(manager.getMostRecentHomepageTab(), homepageTab)
+    }
+
+    func testGetMostRecentHomePageTab_LastCreated() {
+        let firstHomepageTab = manager.addTab()
+        let secondHomepageTab = manager.addTab()
+        manager.selectTab(firstHomepageTab)
+        manager.selectTab(secondHomepageTab)
+
+        XCTAssertEqual(manager.getMostRecentHomepageTab(), secondHomepageTab)
+    }
+
+    func testGetMostRecentHomePageTab_SelectingFirst() {
+        let firstHomepageTab = manager.addTab()
+        let secondHomepageTab = manager.addTab()
+        manager.selectTab(firstHomepageTab)
+        manager.selectTab(secondHomepageTab)
+        manager.selectTab(firstHomepageTab)
+
+        XCTAssertEqual(manager.getMostRecentHomepageTab(), firstHomepageTab)
+    }
+
+    func testGetMostRecentHomePageTab_LastPrivateCreated() {
+        let firstHomepageTab = manager.addTab(nil, afterTab: nil, isPrivate: true)
+        let secondHomepageTab = manager.addTab(nil, afterTab: nil, isPrivate: true)
+        manager.selectTab(firstHomepageTab)
+        manager.selectTab(secondHomepageTab)
+
+        XCTAssertEqual(manager.getMostRecentHomepageTab(), secondHomepageTab)
+    }
+
+    func testGetMostRecentHomePageTab_FirstPrivateCreated() {
+        let privateHomepageTab = manager.addTab(nil, afterTab: nil, isPrivate: true)
+        let normalHomepageTab = manager.addTab()
+        let privateUrlTab = manager.addTab(URLRequest(url: URL(string: "https://test.com")!), afterTab: nil, isPrivate: true)
+        manager.selectTab(privateHomepageTab)
+        manager.selectTab(normalHomepageTab)
+        manager.selectTab(privateUrlTab)
+
+        // Expected private homepage because last selected tab is private
+        XCTAssertEqual(manager.getMostRecentHomepageTab(), privateHomepageTab)
+    }
 }
 
 // MARK: - Helper methods
