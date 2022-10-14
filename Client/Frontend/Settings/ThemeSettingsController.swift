@@ -23,6 +23,9 @@ class ThemeSettingsController: ThemedTableViewController {
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
 
+    // TODO decide if this is themeable, or if it is being replaced by a different style of slider
+    private let deviceBrightnessIndicatorColor = UIColor(white: 182/255, alpha: 1.0)
+
     var isAutoBrightnessOn: Bool {
         return LegacyThemeManager.instance.automaticBrightnessIsOn
     }
@@ -32,8 +35,10 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     private var shouldHideSystemThemeSection = false
+    private let themeManager: ThemeManager
 
-    init() {
+    init(themeManager: ThemeManager = AppContainer.shared.resolve()) {
+        self.themeManager = themeManager
         super.init(style: .grouped)
     }
 
@@ -45,6 +50,7 @@ class ThemeSettingsController: ThemedTableViewController {
         super.viewDidLoad()
         title = .SettingsDisplayThemeTitle
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
@@ -56,11 +62,6 @@ class ThemeSettingsController: ThemedTableViewController {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
         LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         applyTheme()
-    }
-
-    override func applyTheme() {
-        super.applyTheme()
-
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -91,7 +92,7 @@ class ThemeSettingsController: ThemedTableViewController {
             label.text = .DisplayThemeSectionFooter
             label.numberOfLines = 0
             label.font = UIFont.systemFont(ofSize: UX.footerFontSize)
-            label.textColor = self.themeManager.currentTheme.colors.textSecondary
+            label.textColor = UIColor.theme.tableView.headerTextLight
         }
         footer.addSubview(label)
         NSLayoutConstraint.activate([
@@ -155,7 +156,7 @@ class ThemeSettingsController: ThemedTableViewController {
     private func makeSlider(parent: UIView) -> UISlider {
         let size = CGSize(width: UX.moonSunIconSize, height: UX.moonSunIconSize)
         let images = [ImageIdentifiers.nightMode, "themeBrightness"].map { name in
-            UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: themeManager.currentTheme.colors.layerLightGrey30)
+            UIImage(imageLiteralResourceName: name).createScaled(size).tinted(withColor: UIColor.theme.browser.tint)
         }
 
         let slider: UISlider = .build { slider in
@@ -186,7 +187,7 @@ class ThemeSettingsController: ThemedTableViewController {
             let control = UISwitchThemed()
 
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
-            control.onTintColor = themeManager.currentTheme.colors.actionPrimary
+            control.onTintColor = UIColor.theme.tableView.controlTint
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
             control.isOn = LegacyThemeManager.instance.systemThemeIsOn
             cell.accessoryView = control
@@ -219,7 +220,7 @@ class ThemeSettingsController: ThemedTableViewController {
                 deviceBrightnessIndicator.isUserInteractionEnabled = false
                 deviceBrightnessIndicator.minimumTrackTintColor = .clear
                 deviceBrightnessIndicator.maximumTrackTintColor = .clear
-                deviceBrightnessIndicator.thumbTintColor = themeManager.currentTheme.colors.formKnob
+                deviceBrightnessIndicator.thumbTintColor = deviceBrightnessIndicatorColor
                 self.slider = (slider, deviceBrightnessIndicator)
             } else {
                 if indexPath.row == 0 {
@@ -238,7 +239,6 @@ class ThemeSettingsController: ThemedTableViewController {
                 }
             }
         }
-        cell.applyTheme(theme: themeManager.currentTheme)
 
         return cell
     }

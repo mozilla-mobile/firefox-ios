@@ -35,7 +35,6 @@ class WallpaperSettingsViewModel {
         }
     }
 
-    private var theme: Theme
     private var wallpaperManager: WallpaperManagerInterface
     private var wallpaperCollections = [WallpaperCollection]()
     var tabManager: TabManagerProtocol
@@ -46,12 +45,9 @@ class WallpaperSettingsViewModel {
         return wallpaperCollections.count
     }
 
-    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         tabManager: TabManagerProtocol,
-         theme: Theme) {
+    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), tabManager: TabManagerProtocol) {
         self.wallpaperManager = wallpaperManager
         self.tabManager = tabManager
-        self.theme = theme
         setupWallpapers()
     }
 
@@ -86,7 +82,6 @@ class WallpaperSettingsViewModel {
         }
 
         return WallpaperSettingsHeaderViewModel(
-            theme: theme,
             title: title,
             titleA11yIdentifier: "\(a11yIds.collectionTitle)_\(sectionIndex)",
             description: description,

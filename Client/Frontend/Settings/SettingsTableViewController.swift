@@ -12,12 +12,12 @@ struct SettingsUX {
 
 extension UILabel {
     // iOS bug: NSAttributed string color is ignored without setting font/color to nil
-    func assign(attributed: NSAttributedString?, theme: Theme) {
+    func assign(attributed: NSAttributedString?) {
         guard let attributed = attributed else { return }
         let attribs = attributed.attributes(at: 0, effectiveRange: nil)
         if attribs[NSAttributedString.Key.foregroundColor] == nil {
-            // If the text color attribute isn't set, use textPrimary
-            textColor = theme.colors.textPrimary
+            // If the text color attribute isn't set, use the table view row text color.
+            textColor = UIColor.theme.tableView.rowText
         } else {
             textColor = nil
         }
@@ -44,7 +44,6 @@ class Setting: NSObject {
     fileprivate var _footerTitle: NSAttributedString?
     fileprivate var _cellHeight: CGFloat?
     fileprivate var _image: UIImage?
-    var theme: Theme!
 
     weak var delegate: SettingsDelegate?
 
@@ -79,12 +78,11 @@ class Setting: NSObject {
     var onAccessoryButtonTapped: (() -> Void)?
 
     // Called when the cell is setup. Call if you need the default behaviour.
-    func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        self.theme = theme
-        cell.detailTextLabel?.assign(attributed: status, theme: theme)
+    func onConfigureCell(_ cell: UITableViewCell) {
+        cell.detailTextLabel?.assign(attributed: status)
         cell.detailTextLabel?.attributedText = status
         cell.detailTextLabel?.numberOfLines = 0
-        cell.textLabel?.assign(attributed: title, theme: theme)
+        cell.textLabel?.assign(attributed: title)
         cell.textLabel?.textAlignment = textAlignment
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.lineBreakMode = .byTruncatingTail
@@ -107,14 +105,14 @@ class Setting: NSObject {
         cell.layoutMargins = .zero
 
         let backgroundView = UIView()
-        backgroundView.backgroundColor = theme.colors.layer3
+        backgroundView.backgroundColor = UIColor.theme.tableView.selectedBackground
         backgroundView.bounds = cell.bounds
         cell.selectedBackgroundView = backgroundView
 
         // So that the separator line goes all the way to the left edge.
         cell.separatorInset = .zero
         if let cell = cell as? ThemedTableViewCell {
-            cell.applyTheme(theme: theme)
+            cell.applyTheme()
         }
     }
 
@@ -220,7 +218,6 @@ class BoolSetting: Setting, FeatureFlaggable {
 
     convenience init(
         prefs: Prefs,
-        theme: Theme,
         prefKey: String? = nil,
         defaultValue: Bool,
         titleText: String,
@@ -229,9 +226,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     ) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
-            statusTextAttributedString = NSAttributedString(string: statusTextString,
-                                                            attributes: attributes)
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
         }
         self.init(
             prefs: prefs,
@@ -239,7 +234,7 @@ class BoolSetting: Setting, FeatureFlaggable {
             defaultValue: defaultValue,
             attributedTitleText: NSAttributedString(
                 string: titleText,
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
             attributedStatusText: statusTextAttributedString,
             settingDidChange: settingDidChange)
     }
@@ -261,11 +256,11 @@ class BoolSetting: Setting, FeatureFlaggable {
         return statusText
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
 
         let control = UISwitchThemed()
-        control.onTintColor = theme.colors.actionPrimary
+        control.onTintColor = UIConstants.SystemBlueColor
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
         control.isEnabled = enabled
@@ -398,8 +393,8 @@ class WebPageSetting: StringPrefSetting {
         return URIFixup.getURL(value)?.absoluteString
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
         cell.accessoryType = isChecked() ? .checkmark : .none
         textField.textAlignment = .left
     }
@@ -449,18 +444,18 @@ class StringSetting: Setting, UITextFieldDelegate {
         self.accessibilityIdentifier = accessibilityIdentifier
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
         }
-        let placeholderColor = theme.colors.textSecondary
+        let placeholderColor = UIColor.theme.general.settingsTextPlaceholder
         textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
 
-        cell.tintColor = self.persister.readPersistedValue() != nil ? theme.colors.actionPrimary : UIColor.clear
+        cell.tintColor = self.persister.readPersistedValue() != nil ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         textField.textAlignment = .center
         textField.delegate = self
-        textField.tintColor = theme.colors.actionPrimary
+        textField.tintColor = UIColor.theme.tableView.rowActionAccessory
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraits.none
@@ -498,7 +493,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
+        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
         textField.textColor = color
     }
 
@@ -549,12 +544,12 @@ class CheckmarkSetting: Setting {
         self.accessibilityIdentifier = accessibilityIdentifier
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
 
         if checkmarkStyle == .rightSide {
             cell.accessoryType = .checkmark
-            cell.tintColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
+            cell.tintColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         } else {
             let window = UIWindow.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
@@ -562,9 +557,9 @@ class CheckmarkSetting: Setting {
             cell.indentationLevel = 1
 
             cell.accessoryType = .detailButton
-            cell.tintColor = theme.colors.actionPrimary // Sets accessory color only
+            cell.tintColor = UIColor.theme.tableView.rowActionAccessory // Sets accessory color only
 
-            let checkColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
+            let checkColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
             let check = UILabel()
             cell.contentView.addSubview(check)
             check.snp.makeConstraints { make in
@@ -579,10 +574,9 @@ class CheckmarkSetting: Setting {
 
             let result = NSMutableAttributedString()
             if let str = title?.string {
-                result.append(NSAttributedString(string: str,
-                                                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
+                result.append(NSAttributedString(string: str, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
             }
-            cell.textLabel?.assign(attributed: result, theme: theme)
+            cell.textLabel?.assign(attributed: result)
         }
 
         if !enabled {
@@ -618,13 +612,13 @@ class ButtonSetting: Setting {
         self.accessibilityIdentifier = accessibilityIdentifier
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
 
         if isEnabled?() ?? true {
-            cell.textLabel?.textColor = destructive ? theme.colors.textWarning : theme.colors.actionPrimary
+            cell.textLabel?.textColor = destructive ? UIColor.theme.general.destructiveRed : UIColor.theme.general.highlightBlue
         } else {
-            cell.textLabel?.textColor = theme.colors.textDisabled
+            cell.textLabel?.textColor = UIColor.theme.tableView.disabledRowText
         }
         cell.textLabel?.snp.makeConstraints({ make in
             make.height.equalTo(44)
@@ -661,8 +655,8 @@ class AccountSetting: Setting {
         super.init(title: nil)
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
         if settings.profile.rustFxA.userProfile != nil {
             cell.selectionStyle = .none
         }
@@ -781,10 +775,9 @@ class SettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
-            // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
             let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
-            setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-            cell.backgroundColor = themeManager.currentTheme.colors.layer2
+            setting.onConfigureCell(cell)
+            cell.backgroundColor = UIColor.theme.tableView.rowBackground
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)

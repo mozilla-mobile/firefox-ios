@@ -52,7 +52,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
-            setting.onConfigureCell(cell, theme: viewModel.theme)
+            setting.onConfigureCell(cell)
             if hideSettings {
                 cell.isHidden = true
             } else if viewModel.isDuringSearchControllerDismiss {

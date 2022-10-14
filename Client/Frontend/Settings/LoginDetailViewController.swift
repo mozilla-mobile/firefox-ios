@@ -25,7 +25,6 @@ struct LoginDetailUX {
     static let SeparatorHeight: CGFloat = 84
 }
 
-// TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
 private class CenteredDetailCell: ThemedTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()

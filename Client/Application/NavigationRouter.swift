@@ -331,9 +331,7 @@ enum NavigationPath {
         case .wallpaper:
             let wallpaperManager = WallpaperManager()
             if wallpaperManager.canSettingsBeShown {
-                let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager,
-                                                           tabManager: tabManager,
-                                                           theme: baseSettingsVC.themeManager.currentTheme)
+                let viewModel = WallpaperSettingsViewModel(wallpaperManager: wallpaperManager, tabManager: tabManager)
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel)
                 controller.pushViewController(wallpaperVC, animated: true)
             }

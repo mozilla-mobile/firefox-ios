@@ -17,7 +17,7 @@ class ManageFxAccountSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: .FxAManageAccount, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+        super.init(title: NSAttributedString(string: .FxAManageAccount, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -33,7 +33,7 @@ class DisconnectSetting: Setting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: settingsVC.themeManager.currentTheme.colors.textWarning])
+        return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
     }
 
     init(settings: SettingsTableViewController) {
@@ -105,8 +105,8 @@ class DeviceNameSetting: StringSetting {
         }
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
-        super.onConfigureCell(cell, theme: theme)
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
         textField.textAlignment = .natural
     }
 

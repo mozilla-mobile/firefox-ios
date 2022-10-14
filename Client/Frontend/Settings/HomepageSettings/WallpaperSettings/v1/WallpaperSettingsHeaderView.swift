@@ -5,7 +5,6 @@
 import Foundation
 
 struct WallpaperSettingsHeaderViewModel {
-    var theme: Theme
     var title: String
     var titleA11yIdentifier: String
 
@@ -25,6 +24,7 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
     }
 
     private var viewModel: WallpaperSettingsHeaderViewModel?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // Views
     private lazy var contentStackView: UIStackView = .build { stackView in
@@ -54,10 +54,17 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        applyTheme()
+        setupNotifications(forObserver: self,
+                           observing: [.DisplayThemeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Helper functions
@@ -88,6 +95,7 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
         if let _ = viewModel.buttonTitle,
            let buttonA11y = viewModel.buttonA11yIdentifier,
            let _ = viewModel.buttonAction {
+            setButtonStyle()
             learnMoreButton.addTarget(
                 self,
                 action: #selector((buttonTapped(_:))),
@@ -100,8 +108,6 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             setNeedsLayout()
             layoutIfNeeded()
         }
-
-        applyTheme(theme: viewModel.theme)
     }
 
     @objc func buttonTapped(_ sender: Any) {
@@ -125,18 +131,37 @@ private extension WallpaperSettingsHeaderView {
     }
 }
 
-// MARK: - Themable
-extension WallpaperSettingsHeaderView {
+// MARK: - Themable & Notifiable
+extension WallpaperSettingsHeaderView: NotificationThemeable, Notifiable {
 
-    private func applyTheme(theme: Theme) {
-        contentStackView.backgroundColor = theme.colors.layer5
-        titleLabel.textColor = theme.colors.textSecondary
-        descriptionLabel.textColor = theme.colors.textSecondary
-        setButtonStyle(theme: theme)
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
     }
 
-    private func setButtonStyle(theme: Theme) {
-        let color = theme.colors.actionSecondary
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+
+        if theme == .dark {
+            contentStackView.backgroundColor = UIColor.Photon.DarkGrey40
+            titleLabel.textColor = UIColor.Photon.Grey10
+            descriptionLabel.textColor = UIColor.Photon.Grey10
+        } else {
+            contentStackView.backgroundColor = UIColor.Photon.LightGrey10
+            titleLabel.textColor = UIColor.Photon.Grey75A60
+            descriptionLabel.textColor = UIColor.Photon.Grey75A60
+        }
+        setButtonStyle()
+    }
+
+    func setButtonStyle() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+
+        let color = theme == .dark ? UIColor.Photon.Grey10 : UIColor.Photon.Grey75A60
+
         learnMoreButton.setTitleColor(color, for: .normal)
 
         // in iOS 13 the title color set is not used for the attributed text color so we have to set it via attributes
