@@ -7,17 +7,6 @@ import XCTest
 import Shared
 @testable import Client
 
-class MockUIDevice: UIDevice {
-    var isIpad: Bool
-    override var userInterfaceIdiom: UIUserInterfaceIdiom {
-        return isIpad ? .pad : .phone
-    }
-
-    init(isIpad: Bool) {
-        self.isIpad = isIpad
-    }
-}
-
 class ContextualHintEligibilityUtilityTests: XCTestCase {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 

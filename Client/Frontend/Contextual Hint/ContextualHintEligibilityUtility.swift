@@ -12,10 +12,10 @@ protocol ContextualHintEligibilityUtilityProtocol {
 struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtocol, ContextualHintPrefsKeysProvider {
 
     var profile: Profile
-    var device: UIDevice
+    var device: UIDeviceInterface
 
     init(with profile: Profile,
-         device: UIDevice = UIDevice.current) {
+         device: UIDeviceInterface = UIDevice.current) {
         self.profile = profile
         self.device = device
     }
