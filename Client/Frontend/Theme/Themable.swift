@@ -20,4 +20,15 @@ extension Themeable {
             self?.applyTheme()
         }
     }
+
+    func updateThemeApplicableSubviews() {
+        let themeViews = view.getAllSubviews(ofType: ThemeApplicable.self)
+        themeViews.forEach { $0.applyTheme(theme: themeManager.currentTheme) }
+    }
 }
+
+// Used to pass in a theme to a view or cell to apply a theme
+protocol ThemeApplicable {
+    func applyTheme(theme: Theme)
+}
+

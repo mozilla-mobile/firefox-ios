@@ -99,4 +99,13 @@ extension UIView {
         maskLayer.path = maskPath.cgPath
         layer.mask = maskLayer
     }
+
+    func getAllSubviews<T>(ofType type: T.Type) -> [T] {
+        var secondLevelSubviews = [T]()
+        let firstLevelSubviews: [T] = subviews.compactMap { view in
+            secondLevelSubviews = secondLevelSubviews + view.getAllSubviews(ofType: type)
+            return view as? T
+        }
+        return firstLevelSubviews + secondLevelSubviews
+    }
 }

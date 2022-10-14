@@ -6,13 +6,10 @@ import Foundation
 import XCTest
 
 extension XCTestCase {
-    func wait(_ time: TimeInterval) {
-        let expectation = self.expectation(description: "Wait")
-        let delayTime = DispatchTime.now() + Double(Int64(time * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-        DispatchQueue.main.asyncAfter(deadline: delayTime) {
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: time + 1, handler: nil)
+
+    func wait(_ timeout: TimeInterval) {
+        let expectation = XCTestExpectation(description: "Waiting for \(timeout) seconds")
+        XCTWaiter().wait(for: [expectation], timeout: timeout)
     }
 
     func waitForCondition(timeout: TimeInterval = 10, condition: () -> Bool) {
