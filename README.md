@@ -42,7 +42,9 @@ Building the code
 1. Open `Client.xcodeproj` in Xcode.
 1. Build the `Fennec` scheme in Xcode.
 
-Note: In case you have dependencies issues with SPM, you can try to reset package caches and resolve package version.
+Note: In case you have dependencies issues with SPM, you can try:
+- Xcode -> File -> Packages -> Reset Package Caches
+- Xcode -> File -> Packages -> Resolve Package Versions
 
 Building User Scripts
 -----------------
