@@ -27,6 +27,7 @@ enum LoginTableViewCellStyle {
     case iconAndDescriptionLabel
 }
 
+// TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
 class LoginDetailTableViewCell: ThemedTableViewCell {
 
     fileprivate lazy var labelContainer: UIView = .build { _ in }
@@ -162,9 +163,9 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         setNeedsUpdateConstraints()
     }
 
-    override func applyTheme() {
-        super.applyTheme()
-        descriptionLabel.textColor = UIColor.theme.tableView.rowText
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+        descriptionLabel.textColor = theme.colors.textPrimary
     }
 }
 
