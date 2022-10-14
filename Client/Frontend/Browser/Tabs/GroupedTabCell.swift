@@ -37,17 +37,13 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?
     var selectedTab: Tab?
-    let GroupedTabsTableIdentifier = "GroupedTabsTableIdentifier"
-    let GroupedTabsHeaderIdentifier = "GroupedTabsHeaderIdentifier"
-    let GroupedTabCellIdentifier = "GroupedTabCellIdentifier"
     var hasExpanded = true
+    var theme: Theme = LightTheme()
 
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: GroupedTabsTableIdentifier)
-        tableView.register(GroupedTabContainerCell.self, forCellReuseIdentifier: GroupedTabCellIdentifier)
-        tableView.register(InactiveTabHeader.self, forHeaderFooterViewReuseIdentifier: GroupedTabsHeaderIdentifier)
+        tableView.register(GroupedTabContainerCell.self, forCellReuseIdentifier: GroupedTabContainerCell.cellIdentifier)
         tableView.allowsMultipleSelectionDuringEditing = false
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
@@ -90,8 +86,10 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabCellIdentifier, for: indexPath) as! GroupedTabContainerCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: GroupedTabContainerCell.cellIdentifier,
+                                                 for: indexPath) as! GroupedTabContainerCell
         cell.delegate = self
+        cell.theme = theme
         cell.tabs = tabGroups?.map { $0.groupedItems }[indexPath.item]
         cell.titleLabel.text = tabGroups?.map { $0.searchTerm }[indexPath.item] ?? ""
         cell.collectionView.reloadData()
@@ -164,17 +162,17 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
     }
 }
 
-class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, TabCellDelegate {
+class GroupedTabContainerCell: UITableViewCell,
+                               UICollectionViewDelegateFlowLayout,
+                               UICollectionViewDataSource,
+                               TabCellDelegate,
+                               ReusableCell {
 
     // Delegate
     var delegate: GroupedTabsDelegate?
 
     // Views
-    var selectedView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.theme.tableView.selectedBackground
-        return view
-    }()
+    var selectedView = UIView()
 
     lazy var searchButton: UIButton = .build { button in
         button.setImage(UIImage(named: "search")?.withTintColor(.label), for: [.normal])
@@ -195,18 +193,16 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
 
     let containerView = UIView()
     let midView = UIView()
-
-    let singleTabCellIdentifier = "singleTabCellIdentifier"
     var tabs: [Tab]?
     var selectedTab: Tab?
     var searchGroupName: String = ""
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var theme: Theme = LightTheme()
 
     lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-        collectionView.register(TabCell.self, forCellWithReuseIdentifier: singleTabCellIdentifier)
+        collectionView.register(TabCell.self, forCellWithReuseIdentifier: TabCell.cellIdentifier)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
@@ -224,7 +220,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         initialViewSetup()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
 
     required init?(coder: NSCoder) {
@@ -281,12 +276,8 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     }
 
     private func applyTheme() {
-        if LegacyThemeManager.instance.currentName == .normal {
-            collectionView.backgroundColor = UIColor.Photon.White100
-        } else {
-            collectionView.backgroundColor = UIColor.Photon.DarkGrey50
-        }
-
+        selectedView.backgroundColor = theme.colors.layer3
+        collectionView.backgroundColor = theme.colors.layer5
     }
 
     override func prepareForReuse() {
@@ -343,13 +334,15 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: singleTabCellIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabCell.cellIdentifier, for: indexPath)
         guard let tabCell = cell as? TabCell,
               let tab = tabs?[indexPath.item]
         else { return cell }
 
         tabCell.delegate = self
-        tabCell.configureWith(tab: tab, isSelected: selectedTab == tab)
+        tabCell.configureWith(tab: tab,
+                              isSelected: selectedTab == tab,
+                              theme: theme)
         tabCell.animator = nil
         return tabCell
     }
@@ -357,17 +350,6 @@ class GroupedTabContainerCell: UITableViewCell, UICollectionViewDelegateFlowLayo
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell), let tab = tabs?[indexPath.item] {
             delegate?.closeTab(tab: tab)
-        }
-    }
-}
-
-// MARK: - Notifiable
-extension GroupedTabContainerCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
         }
     }
 }

@@ -256,7 +256,8 @@ extension TabDisplayManagerTests {
                                                   tabDisplayer: self,
                                                   reuseID: TopTabCell.cellIdentifier,
                                                   tabDisplayType: .TopTabTray,
-                                                  profile: profile)
+                                                  profile: profile,
+                                                  theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
         return tabDisplayManager
@@ -282,7 +283,7 @@ extension TabDisplayManagerTests: TabDisplayer {
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
         guard let tabCell = cell as? TabTrayCell else { return UICollectionViewCell() }
         let isSelected = (tab == manager.selectedTab)
-        tabCell.configureWith(tab: tab, isSelected: isSelected)
+        tabCell.configureWith(tab: tab, isSelected: isSelected, theme: LightTheme())
         return tabCell
     }
 }

@@ -34,12 +34,10 @@ class EmptyPrivateTabsView: UIView {
     }
     let learnMoreButton: UIButton = .build { button in
         button.setTitle( .PrivateBrowsingLearnMore, for: [])
-        button.setTitleColor(UIColor.theme.tabTray.privateModeLearnMore, for: [])
         button.titleLabel?.font = EmptyPrivateTabsViewUX.LearnMoreFont
     }
     let iconImageView: UIImageView = .build { imageView in
         imageView.image = UIImage.templateImageNamed("largePrivateMask")
-        imageView.tintColor = UIColor.Photon.Grey60
     }
 
     // MARK: - Inits
@@ -64,24 +62,16 @@ class EmptyPrivateTabsView: UIView {
             learnMoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: CGFloat(EmptyPrivateTabsViewUX.LearnMoreMargin)),
             learnMoreButton.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])
-
-        applyTheme()
-
-        NotificationCenter.default.addObserver(self, selector: #selector(applyTheme), name: .DisplayThemeChanged, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-}
-
-extension EmptyPrivateTabsView: NotificationThemeable {
-    @objc func applyTheme() {
-        titleLabel.textColor = UIColor.theme.tabTray.tabTitleText
-        descriptionLabel.textColor = UIColor.theme.tabTray.tabTitleText
+    func applyTheme(_ theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor = theme.colors.textPrimary
+        learnMoreButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
+        iconImageView.tintColor = theme.colors.indicatorActive
     }
 }

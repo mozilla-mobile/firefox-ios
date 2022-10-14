@@ -32,7 +32,6 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Properties
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     var inactiveTabsViewModel: InactiveTabViewModel?
     var hasExpanded = false
     weak var delegate: InactiveTabsDelegate?
@@ -73,9 +72,6 @@ class InactiveTabCell: UICollectionViewCell, ReusableCell {
         containerView.addSubviews(tableView)
         addSubviews(containerView)
         setupConstraints()
-        applyTheme()
-
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -271,23 +267,11 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
 
         return tab.url?.domainURL
     }
-}
 
-extension InactiveTabCell: NotificationThemeable {
-    @objc func applyTheme() {
-        self.backgroundColor = .clear
-        self.tableView.backgroundColor = .clear
+    func applyTheme(_ theme: Theme) {
+        backgroundColor = .clear
+        tableView.backgroundColor = .clear
+        containerView.backgroundColor = theme.colors.layer5
         tableView.reloadData()
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        containerView.backgroundColor = theme == .normal ? .white : .Photon.DarkGrey50
-    }
-}
-
-extension InactiveTabCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged: applyTheme()
-        default: break
-        }
     }
 }
