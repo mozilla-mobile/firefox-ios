@@ -7,6 +7,17 @@ import XCTest
 import Shared
 @testable import Client
 
+class MockUIDevice: UIDevice {
+    var isIpad: Bool
+    override var userInterfaceIdiom: UIUserInterfaceIdiom {
+        return isIpad ? .pad : .phone
+    }
+
+    init(isIpad: Bool) {
+        self.isIpad = isIpad
+    }
+}
+
 class ContextualHintEligibilityUtilityTests: XCTestCase {
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 
@@ -17,7 +28,8 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         super.setUp()
 
         profile = MockProfile()
-        subject = ContextualHintEligibilityUtility(with: profile)
+        subject = ContextualHintEligibilityUtility(with: profile,
+                                                   device: MockUIDevice(isIpad: false))
     }
 
     override func tearDown() {
@@ -42,9 +54,33 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertTrue(result)
     }
 
+    func test_shouldPresentJumpBackHint_iPhoneWithoutToolbar() {
+        let result = subject.canPresent(.jumpBackIn)
+        XCTAssertFalse(result)
+    }
+
+    func test_shouldPresentJumpBackHint_iPadWithoutToolbar() {
+        subject = ContextualHintEligibilityUtility(with: profile,
+                                                   device: MockUIDevice(isIpad: true))
+        let result = subject.canPresent(.jumpBackIn)
+        XCTAssertTrue(result)
+    }
+
     func test_shouldPresentSyncedTabHint() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.toolbarOnboardingKey.rawValue)
 
+        let result = subject.canPresent(.jumpBackInSyncedTab)
+        XCTAssertTrue(result)
+    }
+
+    func test_shouldPresentSyncedHint_iPhoneWithoutToolbar() {
+        let result = subject.canPresent(.jumpBackInSyncedTab)
+        XCTAssertFalse(result)
+    }
+
+    func test_shouldPresentSyncedHint_iPadWithoutToolbar() {
+        subject = ContextualHintEligibilityUtility(with: profile,
+                                                   device: MockUIDevice(isIpad: true))
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertTrue(result)
     }
@@ -78,5 +114,4 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertFalse(result)
     }
-
 }
