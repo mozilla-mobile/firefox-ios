@@ -63,13 +63,25 @@ class BookmarksPanelViewModel {
             return
         }
 
-        _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(destinationIndexPath.row))
+        let newIndex = getNewIndex(from: destinationIndexPath.row)
+        _ = profile.places.updateBookmarkNode(guid: bookmarkNode.guid, position: UInt32(newIndex))
 
         bookmarkNodes.remove(at: sourceIndexPath.row)
         bookmarkNodes.insert(bookmarkNode, at: destinationIndexPath.row)
     }
 
     // MARK: - Private
+
+    /// Since we have a Local Desktop folder that isn't referenced in A-S under the mobile folder, we need to account for this when saving bookmark index in A-S.
+    /// This is done by substracting the Local Desktop Folder number of rows it takes to the actual index.
+    func getNewIndex(from index: Int) -> Int {
+        guard bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID else {
+            return index
+        }
+
+        // Ensure we don't return lower than 0
+        return max(index - LocalDesktopFolder.numberOfRowsTaken, 0)
+    }
 
     private func setupMobileFolderData(completion: @escaping () -> Void) {
         profile.places
