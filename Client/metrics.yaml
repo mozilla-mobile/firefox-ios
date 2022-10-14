@@ -24,7 +24,7 @@ app_cycle:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-12"
+    expires: "2023-06-01"
   background:
     type: event
     description: |
@@ -35,7 +35,7 @@ app_cycle:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-12"
+    expires: "2023-06-01"
 # Accessibility
 accessibility:
   voice_over:
@@ -53,7 +53,7 @@ accessibility:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-17"
+    expires: "2023-06-01"
   switch_control:
     type: event
     description: |
@@ -69,7 +69,7 @@ accessibility:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-17"
+    expires: "2023-06-01"
   reduce_transparency:
     type: event
     description: |
@@ -85,7 +85,7 @@ accessibility:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-17"
+    expires: "2023-06-01"
   reduce_motion:
     type: event
     description: |
@@ -101,7 +101,7 @@ accessibility:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-17"
+    expires: "2023-06-01"
   invert_colors:
     type: event
     description: |
@@ -117,7 +117,7 @@ accessibility:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10839
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-17"
+    expires: "2023-06-01"
 # App menu
 app_menu:
   library:
@@ -437,7 +437,7 @@ downloads:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-12"
+    expires: "2023-06-01"
   downloads_panel_row_tapped:
     type: event
     description: |
@@ -448,7 +448,7 @@ downloads:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-12"
+    expires: "2023-06-01"
   view_download_complete_toast:
     type: event
     description: |
@@ -459,7 +459,7 @@ downloads:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-12"
+    expires: "2023-06-01"
 # Key Commands
 key_commands:
   press_key_command_action:
@@ -478,7 +478,7 @@ key_commands:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10777
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-12"
+    expires: "2023-06-01"
 # Onboarding metrics
 onboarding:
   card_view:
@@ -496,7 +496,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-12-10"
+    expires: "2023-06-01"
   primary_button_tap:
     type: event
     description: |
@@ -512,7 +512,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-12-10"
+    expires: "2023-06-01"
   secondary_button_tap:
     type: event
     description: |
@@ -528,7 +528,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-12-10"
+    expires: "2023-06-01"
   wallpaper_selected:
     type: event
     description: |
@@ -549,7 +549,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-12-10"
+    expires: "2023-06-01"
   wallpaper_selector_view:
     type: event
     description: |
@@ -610,7 +610,7 @@ onboarding:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10984
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-12-10"
+    expires: "2023-06-01"
 
 # Upgrade onboarding metrics
 upgrade:
@@ -1743,7 +1743,7 @@ preferences:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-10"
+    expires: "2023-06-01"
 
 # QR Code metrics
 qr_code:
@@ -2337,7 +2337,7 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-10"
+    expires: "2023-06-01"
   press_top_tab:
     type: event
     description: |
@@ -2348,7 +2348,7 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-10"
+    expires: "2023-06-01"
 
 # Theme metrics
 theme:
@@ -2758,7 +2758,7 @@ awesomebar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/10734
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2022-11-10"
+    expires: "2023-06-01"
   search_result_tap:
     type: event
     description: |
@@ -2778,7 +2778,7 @@ awesomebar:
       - fx-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: "2022-12-01"
+    expires: "2023-06-01"
   query_time:
     type: timing_distribution
     time_unit: millisecond
