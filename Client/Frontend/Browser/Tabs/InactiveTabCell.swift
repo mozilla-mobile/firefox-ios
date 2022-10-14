@@ -212,7 +212,10 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleInactiveTabSection))
             headerView.addGestureRecognizer(tapGesture)
 
-            delegate?.setupCFR(with: headerView.titleLabel)
+            if InactiveTabSection(rawValue: section) == .inactive {
+                delegate?.setupCFR(with: headerView.titleLabel)
+                delegate?.presentCFR()
+            }
 
             return headerView
 
@@ -251,7 +254,8 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         // Post accessibility notification when the section was opened/closed
         UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
 
-        if hasExpanded { delegate?.presentCFR() }
+// Ecosia
+//        if hasExpanded { delegate?.presentCFR() }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

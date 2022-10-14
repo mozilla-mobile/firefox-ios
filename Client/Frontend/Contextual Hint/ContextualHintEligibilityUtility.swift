@@ -76,6 +76,9 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     }
 
     private func hasAlreadyBeenPresented(_ hintType: ContextualHintType) -> Bool {
+        // Ecosia
+        guard hintType != .inactiveTabs else { return false }
+        
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey(for: hintType)) else { return false }
 
         return contextualHintData

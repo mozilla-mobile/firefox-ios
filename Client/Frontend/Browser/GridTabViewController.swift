@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import Core
 
 struct GridTabTrayControllerUX {
     static let CornerRadius = CGFloat(10.0)
@@ -863,7 +864,9 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {
-        guard contextualHintViewController.shouldPresentHint() else { return }
+// Ecosia
+        guard User.shared.showsInactiveTabsTooltip else { return }
+//        guard contextualHintViewController.shouldPresentHint() else { return }
 
         contextualHintViewController.configure(
             anchor: title,

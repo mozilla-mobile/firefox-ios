@@ -93,7 +93,9 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     var shouldEnableInactiveTabs: Bool {
-        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+        // Ecosia
+        // return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+        true
     }
 
     var orderedTabs: [Tab] {
