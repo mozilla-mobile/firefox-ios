@@ -27,7 +27,7 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidChangeTab()
 }
 
-class TopTabsViewController: UIViewController {
+class TopTabsViewController: UIViewController, Themeable {
 
     // MARK: - Properties
     let tabManager: TabManager
@@ -35,6 +35,9 @@ class TopTabsViewController: UIViewController {
     private var topTabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
     var profile: Profile
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
@@ -89,9 +92,14 @@ class TopTabsViewController: UIViewController {
     }()
 
     // MARK: - Inits
-    init(tabManager: TabManager, profile: Profile) {
+    init(tabManager: TabManager,
+         profile: Profile,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tabManager = tabManager
         self.profile = profile
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
@@ -99,7 +107,8 @@ class TopTabsViewController: UIViewController {
                                                  tabDisplayer: self,
                                                  reuseID: TopTabCell.cellIdentifier,
                                                  tabDisplayType: .TopTabTray,
-                                                 profile: profile)
+                                                 profile: profile,
+                                                 theme: themeManager.currentTheme)
         tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -273,7 +282,9 @@ extension TopTabsViewController: TabDisplayer {
         guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
         tabCell.delegate = self
         let isSelected = (tab == tabManager.selectedTab)
-        tabCell.configureWith(tab: tab, isSelected: isSelected)
+        tabCell.configureWith(tab: tab,
+                              isSelected: isSelected,
+                              theme: themeManager.currentTheme)
         // Not all cells are visible when the appearance changes. Let's make sure
         // the cell has the proper theme when recycled.
         tabCell.applyTheme()
@@ -292,20 +303,17 @@ extension TopTabsViewController: NotificationThemeable, PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         topTabDisplayManager.togglePrivateMode(isOn: isPrivate, createTabOnEmptyPrivateMode: true)
 
-        privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
-        privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint
+        privateModeButton.applyTheme(theme: themeManager.currentTheme)
         privateModeButton.applyUIMode(isPrivate: topTabDisplayManager.isPrivate)
     }
 
     func applyTheme() {
-        view.backgroundColor = UIColor.theme.topTabs.background
+        view.backgroundColor = themeManager.currentTheme.colors.layer3
         tabsButton.applyTheme()
-        privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
-        privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint
-        privateModeButton.applyTheme()
-        newTab.tintColor = UIColor.theme.topTabs.buttonTint
+        privateModeButton.applyTheme(theme: themeManager.currentTheme)
+        newTab.tintColor = themeManager.currentTheme.colors.iconPrimary
         collectionView.backgroundColor = view.backgroundColor
-        (collectionView.visibleCells as? [TopTabCell])?.forEach { $0.applyTheme() }
+        collectionView.reloadData()
         topTabDisplayManager.refreshStore()
     }
 }

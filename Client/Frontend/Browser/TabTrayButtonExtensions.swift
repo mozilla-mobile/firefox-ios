@@ -4,7 +4,7 @@
 
 import UIKit
 
-class PrivateModeButton: ToggleButton, NotificationThemeable, PrivateModeUI {
+class PrivateModeButton: ToggleButton, PrivateModeUI {
     var offTint = UIColor.black
     var onTint = UIColor.black
 
@@ -29,7 +29,9 @@ class PrivateModeButton: ToggleButton, NotificationThemeable, PrivateModeUI {
         accessibilityValue = isSelected ? .TabTrayToggleAccessibilityValueOn : .TabTrayToggleAccessibilityValueOff
     }
 
-    func applyTheme() {
+    func applyTheme(theme: Theme) {
+        onTint = theme.colors.iconOnColor
+        offTint = theme.colors.iconPrimary
         tintColor = isSelected ? onTint : offTint
         imageView?.tintColor = tintColor
     }
