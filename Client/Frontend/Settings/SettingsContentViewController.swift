@@ -13,12 +13,8 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  * A controller that manages a single web view and provides a way for
  * the user to navigate back to Settings.
  */
-class SettingsContentViewController: UIViewController, WKNavigationDelegate, Themeable {
-
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
-
+class SettingsContentViewController: UIViewController, WKNavigationDelegate {
+    let interstitialBackgroundColor: UIColor
     var settingsTitle: NSAttributedString?
     var url: URL!
     var timer: Timer?
@@ -77,12 +73,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         self.interstitialSpinnerView.startAnimating()
     }
 
-    init(title: NSAttributedString? = nil,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
-        self.settingsTitle = title
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
+    init(backgroundColor: UIColor = UIColor.Photon.White100, title: NSAttributedString? = nil) {
+        interstitialBackgroundColor = backgroundColor
+        settingsTitle = title
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -92,6 +85,10 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // This background agrees with the web page background.
+        // Keeping the background constant prevents a pop of mismatched color.
+        view.backgroundColor = interstitialBackgroundColor
 
         self.settingsWebView = makeWebView()
         view.addSubview(settingsWebView)
@@ -110,9 +107,6 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         }
 
         startLoading()
-
-        applyTheme()
-        listenForThemeChange()
     }
 
     func makeWebView() -> WKWebView {
@@ -140,14 +134,18 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
 
     fileprivate func makeInterstitialViews() -> InterstitialViews {
         let view = UIView()
+
+        // Keeping the background constant prevents a pop of mismatched color.
+        view.backgroundColor = interstitialBackgroundColor
+
         let spinner = UIActivityIndicatorView(style: .medium)
-        spinner.color = themeManager.currentTheme.colors.iconSpinnerDefault
+        spinner.color = .systemGray
         view.addSubview(spinner)
 
         let error = UILabel()
         if let _ = settingsTitle {
             error.text = .SettingsContentPageLoadError
-            error.textColor = themeManager.currentTheme.colors.textWarning
+            error.textColor = UIColor.theme.tableView.errorText
             error.textAlignment = .center
         }
         error.isHidden = true
@@ -186,9 +184,5 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         self.timer?.invalidate()
         self.timer = nil
         self.isLoaded = true
-    }
-
-    func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer2
     }
 }

@@ -4,12 +4,7 @@
 
 import UIKit
 
-class ThemedNavigationController: DismissableNavigationViewController, Themeable {
-
-    var themeManager: ThemeManager = AppContainer.shared.resolve()
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
+class ThemedNavigationController: DismissableNavigationViewController {
     var presentingModalViewControllerDelegate: PresentingModalViewControllerDelegate?
 
     @objc func done() {
@@ -29,16 +24,15 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         modalPresentationStyle = .overFullScreen
         modalPresentationCapturesStatusBarAppearance = true
         applyTheme()
-        listenForThemeChange()
     }
 }
 
-extension ThemedNavigationController {
-    private func setupNavigationBarAppearance(theme: Theme) {
+extension ThemedNavigationController: NotificationThemeable {
+    private func setupNavigationBarAppearance() {
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = theme.colors.layer1
-        standardAppearance.titleTextAttributes = [.foregroundColor: theme.colors.textPrimary]
+        standardAppearance.backgroundColor = UIColor.theme.tableView.headerBackground
+        standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.theme.tableView.headerTextDark]
 
         navigationBar.standardAppearance = standardAppearance
         navigationBar.compactAppearance = standardAppearance
@@ -46,14 +40,11 @@ extension ThemedNavigationController {
         if #available(iOS 15.0, *) {
             navigationBar.compactScrollEdgeAppearance = standardAppearance
         }
-        navigationBar.tintColor = theme.colors.actionPrimary
+        navigationBar.tintColor = UIColor.theme.general.controlTint
     }
-
     func applyTheme() {
-        setupNavigationBarAppearance(theme: themeManager.currentTheme)
+        setupNavigationBarAppearance()
         setNeedsStatusBarAppearanceUpdate()
-
-        // TODO: Remove with legacy theme clean up FXIOS-3960
         viewControllers.forEach {
             ($0 as? NotificationThemeable)?.applyTheme()
         }
