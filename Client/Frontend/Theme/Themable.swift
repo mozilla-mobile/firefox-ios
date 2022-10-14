@@ -31,4 +31,3 @@ extension Themeable {
 protocol ThemeApplicable {
     func applyTheme(theme: Theme)
 }
-
