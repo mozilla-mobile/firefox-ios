@@ -553,15 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Mangler siden indhold eller opfører den sig underligt?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Tilføj en %@-genvej til din startskærm. Efter at du har tilføjet en ny widget, skal du trykke og holde for at redigere den og vælge en anden genvej.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Hurtige handlinger";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Søg i %@";
-
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Gå til Indstillinger for at håndtere specifikke privatlivs- og sikkerhedsindstillinger.";
 

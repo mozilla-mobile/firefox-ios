@@ -544,15 +544,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Sedło se źiwnje zaźaržujo abo wopśimjeśe felujo?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Pśidajśo startowej wobrazowce zwězanje %@. Za tym až sćo pśidał asistent, pótusniśo asistent a źaržćo jen, aby wobźěłował a wubjeŕśo druge zwězanje.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Malsne akcije";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "W %@ pytaś";
-
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Wócyńśo nastajenja, aby wěste nastajenja priwatnosći a wěstoty zastojał.";
 

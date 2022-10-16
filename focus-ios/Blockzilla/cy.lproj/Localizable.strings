@@ -553,15 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Oes yna gynnwys ar goll neu a yw'r wefan yn ymddwyn yn rhyfedd?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Ychwanegwch llwybr byr %@ i'ch sgrin Cartref. Ar ôl ychwanegu'r teclyn, cyffwrdd a dal i'w olygu a dewis llwybr byr gwahanol.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Gweithredoedd Cyflym";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Chwilio yn %@";
-
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Ewch i'r Gosodiadau i reoli dewisiadau preifatrwydd a diogelwch penodol.";
 

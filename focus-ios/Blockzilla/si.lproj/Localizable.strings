@@ -547,12 +547,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "අඩවියේ අන්තර්ගත මඟහැරී හෝ අමුතු ලෙස ක්‍රියා කරනවාද?";
 
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "ඉක්මන් ක්‍රියාමාර්ග";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "%@ හි සොයන්න";
-
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "පෞද්ගලික හා ආරක්‍ෂණ විකල්ප කළමනාකරණයට සැකසුම් වෙත යන්න.";
 

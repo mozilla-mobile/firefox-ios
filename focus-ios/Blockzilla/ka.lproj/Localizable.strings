@@ -553,15 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "საიტზე აკლია რამე ან უცნაურად მუშაობს?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "დაამატეთ %@-მალსახმობი მთავარ ეკრანზე. დამატების შემდგომ დიდხანს შეეხეთ ჩასასწორებლად ან სხვა მალსახმობის შესარჩევად.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "სწრაფი მოქმედებები";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "ძიება – %@";
-
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "გადადით პარამეტრებში პირადულობისა და უსაფრთხოების სურვილისამებრ სამართავად.";
 

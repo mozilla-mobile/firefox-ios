@@ -553,15 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Guneak edukia falta du edo portaera bitxia du?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Gehitu %@(e)rako lasterbidea zure hasierako pantailan. Widgeta gehitu bezain laster, sakatu eta mantendu lasterbidea editatu eta beste bat hautatzeko.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Ekintza bizkorrak";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Bilatu %@ erabiliz";
-
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Zoaz ezarpenetara pribatutasun- eta segurtasun-aukera zehatzak kudeatzeko.";
 

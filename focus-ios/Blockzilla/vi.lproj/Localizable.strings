@@ -553,14 +553,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Trang web thiếu nội dung hoặc hoạt động không đúng?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Thêm lối tắt %@ vào màn hình chính của bạn. Sau khi thêm tiện ích, hãy nhấn và giữ để chỉnh sửa tiện ích và chọn một lối tắt khác.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Hành động nhanh";
-
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Tìm kiếm trong %@";
+"TodayWidget.SearchInApp.Instruction" = "Tìm kiếm trong %@";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Đi đến Cài đặt để quản lý các tùy chọn quyền riêng tư và bảo mật cụ thể.";

@@ -553,15 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Falta conteúdo ou o site está a ter um comportamento estranho?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Adicione um atalho do %@ ao seu ecrã inicial. Depois de adicionar o widget, faça um toque longo para o editar e selecione um atalho diferente.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Ações rápidas";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Pesquisar %@";
-
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Aceda às Definições para gerir as opções específicas de privacidade e segurança.";
 
@@ -578,7 +569,7 @@
 "TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Foram apanhados! Impedimos que este site o/a espiasse. Toque no escudo a qualquer momento para ver o que estamos a bloquear.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon" = "Toque na lixeira a qualquer momento para remover todos os vestígios da sua sessão atual.";
+"TooltipBodyText.TrashIcon" = "Toque no lixo a qualquer momento para remover todos os vestígios da sua sessão atual.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon.V2" = "Toque aqui para mandar tudo para o lixo — histórico, cookies, tudo — e recomeçar num novo separador.";

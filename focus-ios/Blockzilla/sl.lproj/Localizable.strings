@@ -535,11 +535,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Spletnemu mestu manjka vsebina ali deluje nenavadno?";
 
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Hitra dejanja";
-
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Išči v %@u";
+"TodayWidget.SearchInApp.Instruction" = "Išči v %@u";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Določene možnosti zasebnosti in varnosti lahko upravljate v nastavitvah.";

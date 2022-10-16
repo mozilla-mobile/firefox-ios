@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Ana ekranınıza %@ kısayolu ekleyin. Araç takımını ekledikten sonra düzenlemek isterseniz basılı tutup farklı bir kısayol seçebilirsiniz.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Varsayılan arama motorunuzla %@ uygulamasında gizli gezinti başlatın.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Hızlı Eylemler";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "%@ ile ara";
+

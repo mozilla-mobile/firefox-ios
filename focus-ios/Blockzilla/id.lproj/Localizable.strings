@@ -553,15 +553,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Konten menghilang atau situs bertingkah aneh?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Tambahkan pintasan %@ ke layar Beranda Anda. Setelah menambahkan widget, sentuh dan tahan untuk mengeditnya lalu pilih pintasan yang berbeda.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Tindakan Cepat";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Cari di %@";
-
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Buka Pengaturan untuk mengelola pilihan privasi & keamanan tertentu.";
 

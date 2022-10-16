@@ -553,14 +553,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "網站的內容不見了，或功能變得怪怪的嗎？";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "把 %@ 捷徑加到主畫面。新增小工具之後，請長按小工具選擇不同的捷徑。";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "快速操作";
-
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "使用 %@ 搜尋";
+"TodayWidget.SearchInApp.Instruction" = "使用 %@ 搜尋";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "前往「設定」管理各種隱私與安全性選項。";

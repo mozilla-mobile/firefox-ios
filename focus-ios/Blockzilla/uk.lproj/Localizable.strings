@@ -553,14 +553,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "На сайті відсутній вміст або він дивно поводиться?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "Додайте ярлик %@ на головний екран. Після додавання віджета торкніться й утримуйте, щоб змінити його та вибрати інший ярлик.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Швидкі дії";
-
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Шукати у %@";
+"TodayWidget.SearchInApp.Instruction" = "Шукати у %@";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Перейдіть до Налаштувань, щоб керувати певними опціями приватності та безпеки.";

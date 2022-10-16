@@ -529,11 +529,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "¿Falta contenido en el sitio o se comporta de forma extraña?";
 
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Acciones rápidas";
-
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Buscar en %@";
+"TodayWidget.SearchInApp.Instruction" = "Buscar en %@";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Esta configuración predeterminada ofrece una protección fuerte. Pero es fácil ajustar la configuración para satisfacer tus necesidades específicas.";

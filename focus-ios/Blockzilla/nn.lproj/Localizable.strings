@@ -538,12 +538,6 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Manglar nettstaden innhald eller oppfører han seg rart?";
 
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "Snøgghandlingar";
-
-/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "Søk i %@";
-
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Desse standardinnstillingane gir sterkt vern. Men det er enkelt å tilpasse innstillingane for å møte dine spesielle behov.";
 

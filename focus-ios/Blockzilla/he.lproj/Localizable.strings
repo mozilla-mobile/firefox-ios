@@ -544,14 +544,8 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "חסר תוכן כלשהו באתר או שהאתר לא פועל כצפוי?";
 
-/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־%@ למסך הבית שלך. לאחר הוספת הוידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו ולבחור בקיצור דרך שונה.";
-
-/* Quick Actions title when widget enters edit mode */
-"TodayWidget.QuickActionsGalleryTitle" = "פעולות מהירות";
-
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
-"TodayWidget.SearchInApp" = "חיפוש ב־%@";
+"TodayWidget.SearchInApp.Instruction" = "חיפוש ב־%@";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "ניתן לעבור להגדרות כדי לנהל אפשרויות פרטיות ואבטחה.";
@@ -630,6 +624,9 @@
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "הראו לי כיצד";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "ניתן לך להמשיך בגלישה הפרטית שלך, אבל אולי קודם כדאי להוסיף את היישומון של %@ למסך הבית שלך לצורך הפעלה מהירה יותר.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "היסטוריית הגלישה נמחקה! 🎉";
