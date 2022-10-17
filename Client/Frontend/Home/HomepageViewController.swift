@@ -10,6 +10,10 @@ import MozillaAppServices
 
 class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
+    struct UX {
+        static let statusBarViewTag: Int = 11111
+    }
+
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
@@ -679,7 +683,7 @@ private extension HomepageViewController {
         // We put a view behind the status bar to be able to give it a background color.
         // We use a tag to be able to retrieve the view instead of recreating it every time
         // the user scrolls.
-        let tag = 11111
+        let tag = UX.statusBarViewTag
 
         if let view = view.viewWithTag(tag) {
             return view
