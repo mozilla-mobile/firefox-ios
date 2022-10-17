@@ -91,6 +91,47 @@ class BookmarksPanelViewModelTests: XCTestCase {
         }
         waitForExpectations(timeout: 1)
     }
+
+    // MARK: - Move row at index
+
+    func testMoveRowAtGetNewIndex_NotMobileGuid_atZero() {
+        let subject = createSubject(guid: BookmarkRoots.MenuFolderGUID)
+        let expectedIndex = 0
+        let index = subject.getNewIndex(from: expectedIndex)
+        XCTAssertEqual(index, expectedIndex)
+    }
+
+    func testMoveRowAtGetNewIndex_NotMobileGuid_minusIndex() {
+        let subject = createSubject(guid: BookmarkRoots.MenuFolderGUID)
+        let expectedIndex = -1
+        let index = subject.getNewIndex(from: expectedIndex)
+        XCTAssertEqual(index, expectedIndex)
+    }
+
+    func testMoveRowAtGetNewIndex_NotMobileGuid_atFive() {
+        let subject = createSubject(guid: BookmarkRoots.MenuFolderGUID)
+        let expectedIndex = 5
+        let index = subject.getNewIndex(from: expectedIndex)
+        XCTAssertEqual(index, expectedIndex)
+    }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_zeroIndex() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        let index = subject.getNewIndex(from: 0)
+        XCTAssertEqual(index, 0)
+    }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_minusIndex() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        let index = subject.getNewIndex(from: -1)
+        XCTAssertEqual(index, 0)
+    }
+
+    func testMoveRowAtGetNewIndex_MobileGuid_atFive() {
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        let index = subject.getNewIndex(from: 5)
+        XCTAssertEqual(index, 4)
+    }
 }
 
 extension BookmarksPanelViewModelTests {
