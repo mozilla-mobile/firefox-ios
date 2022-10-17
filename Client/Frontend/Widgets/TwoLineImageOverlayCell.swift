@@ -113,10 +113,6 @@ class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
         applyTheme()
     }
 
-    func configure() {
-
-    }
-
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
