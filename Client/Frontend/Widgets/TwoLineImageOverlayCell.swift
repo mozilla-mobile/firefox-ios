@@ -4,7 +4,6 @@
 
 import UIKit
 
-// TODO: Add support for accessibility for when text size changes
 class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
 
     struct UX {
@@ -45,16 +44,14 @@ class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
 
     lazy var titleLabel: UILabel = .build { label in
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 16)
         label.textAlignment = .natural
-        label.numberOfLines = 1
     }
 
     lazy var descriptionLabel: UILabel = .build { label in
         label.textColor = UIColor.Photon.Grey40
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 14)
         label.textAlignment = .natural
-        label.numberOfLines = 1
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
