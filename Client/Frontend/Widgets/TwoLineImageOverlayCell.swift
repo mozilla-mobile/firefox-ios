@@ -18,7 +18,6 @@ class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
 
     // Tableview cell items
     private lazy var selectedView: UIView = .build { view in
-        view.backgroundColor = UIColor.theme.tableView.selectedBackground
     }
 
     lazy var containerView: UIView = .build { view in
@@ -49,7 +48,6 @@ class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
     }
 
     lazy var descriptionLabel: UILabel = .build { label in
-        label.textColor = UIColor.Photon.Grey40
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 14)
         label.textAlignment = .natural
     }

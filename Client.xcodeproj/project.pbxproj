@@ -100,8 +100,6 @@
 		21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */; };
 		21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */; };
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
-		21E78A7428F9C0F900F8D687 /* SimpleTwoLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7328F9C0F900F8D687 /* SimpleTwoLineCell.swift */; };
-		21E78A7628F9C12100F8D687 /* TwoLineHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7528F9C12100F8D687 /* TwoLineHeaderFooterView.swift */; };
 		2386E4E624F8358E0072EF17 /* HomepageMessageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2386E4E524F8358E0072EF17 /* HomepageMessageCard.swift */; };
 		23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA766251A99E300A014BF /* NewYorkMedium-Bold.otf */; };
 		23BEA768251A99ED00A014BF /* NewYorkMedium-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA765251A99E200A014BF /* NewYorkMedium-BoldItalic.otf */; };
@@ -2031,8 +2029,6 @@
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIDevice.swift; sourceTree = "<group>"; };
 		21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDeviceInterface.swift; sourceTree = "<group>"; };
-		21E78A7328F9C0F900F8D687 /* SimpleTwoLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTwoLineCell.swift; sourceTree = "<group>"; };
-		21E78A7528F9C12100F8D687 /* TwoLineHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoLineHeaderFooterView.swift; sourceTree = "<group>"; };
 		220A4CC8B2685EEA3146A967 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		222F456780B38CE88601C7E1 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Shared.strings; sourceTree = "<group>"; };
 		226347ACAF708B19B6BC2694 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/Search.strings; sourceTree = "<group>"; };
@@ -7301,8 +7297,6 @@
 				E663D5771BB341C4001EF30E /* ToggleButton.swift */,
 				8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */,
 				59A68B1F857A8638598A63A0 /* TwoLineImageOverlayCell.swift */,
-				21E78A7328F9C0F900F8D687 /* SimpleTwoLineCell.swift */,
-				21E78A7528F9C12100F8D687 /* TwoLineHeaderFooterView.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -10478,7 +10472,6 @@
 				DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */,
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
-				21E78A7428F9C0F900F8D687 /* SimpleTwoLineCell.swift in Sources */,
 				96A562A327D7B32A0045144A /* Contile.swift in Sources */,
 				962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */,
 				21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */,
@@ -10682,7 +10675,6 @@
 				C8656D79270F866700E199EA /* CustomizeHomepageSectionCell.swift in Sources */,
 				C84655FB28879FC600861B4A /* WallpaperStorageUtility.swift in Sources */,
 				6025B10D267B6C5400F59F6B /* LoginRecordExtension.swift in Sources */,
-				21E78A7628F9C12100F8D687 /* TwoLineHeaderFooterView.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */,
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
