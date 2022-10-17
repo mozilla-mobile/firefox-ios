@@ -651,7 +651,6 @@ extension HistoryPanel: UITableViewDelegate {
                                                        collapsibleState:
                                                         isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
         header.configure(headerViewModel)
-        header.showImage(true)
 
         // Configure tap to collapse/expand section
         header.tag = section
