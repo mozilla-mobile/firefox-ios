@@ -4,7 +4,7 @@
 
 import Foundation
 
-// TODO: Add support for accessibility for when text size changes
+// TODO: Remove SnapKit and add support for accessibility for when text size changes
 class TwoLineHeaderFooterView: UITableViewHeaderFooterView, NotificationThemeable {
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
     var leftImageView: UIImageView = {

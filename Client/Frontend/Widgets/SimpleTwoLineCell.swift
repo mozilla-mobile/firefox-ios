@@ -4,6 +4,7 @@
 
 import Foundation
 
+// TODO: Remove SnapKit
 class SimpleTwoLineCell: UITableViewCell, NotificationThemeable {
     // Tableview cell items
     var selectedView: UIView = {
