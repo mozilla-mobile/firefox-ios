@@ -2,9 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-/// TODO: Preparing services to be injected (https://mozilla-hub.atlassian.net/browse/FXIOS-4381) & actually
-/// injecting at those points (https://mozilla-hub.atlassian.net/browse/FXIOS-4152) will come in a later PR.
-
 import Foundation
 import os.log
 import Dip
@@ -23,12 +20,12 @@ class AppContainer: ServiceProvider {
         container = bootstrapContainer()
     }
 
-    /// Any services needed by the client can be resolved by calling this and passing the type.
+    /// Any services needed by the client can be resolved by calling this.
     func resolve<T>() -> T {
         do {
             return try container?.resolve(T.self) as! T
         } catch {
-            /// If a service we've thought was registered but can't be resolved, this is likely an issue within
+            /// If a service we thought was registered can't be resolved, this is likely an issue within
             /// bootstrapping. Double check your registrations and their types.
             os_log(.error, "Could not resolve the requested type!")
 
@@ -46,12 +43,30 @@ class AppContainer: ServiceProvider {
             do {
                 unowned let container = container
 
-                container.register(.singleton) { () -> ThemeManager in
-                    if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                        return delegate.themeManager
-                    } else {
-                        return DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
-                    }
+                container.register(.eagerSingleton) {
+                    return BrowserProfile(
+                        localName: "profile",
+                        syncDelegate: UIApplication.shared.syncDelegate
+                    ) as Profile
+                }
+
+                /// TabManager access should be through the container, since we'll support multiple scenes.
+                container.register(.singleton) {
+                    return TabManager(
+                        profile: try container.resolve(),
+                        imageStore: DiskImageStore(
+                            files: (try container.resolve() as Profile).files,
+                            namespace: "TabManagerScreenshots",
+                            quality: UIConstants.ScreenshotQuality)
+                    )
+                }
+
+                container.register(.singleton) {
+                    return DefaultThemeManager(appDelegate: UIApplication.shared.delegate) as ThemeManager
+                }
+
+                container.register(.singleton) {
+                    return RatingPromptManager(profile: try container.resolve())
                 }
 
                 try container.bootstrap()

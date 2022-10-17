@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import UIKit
 import Shared
 import Storage
 import Sync
@@ -73,17 +74,20 @@ extension AppDelegate {
     }
 
     private func openURLsInNewTabs(_ notification: UNNotification) {
+        var sentUrlsToQueue: [URL] = []
+
         guard let urls = notification.request.content.userInfo["sentTabs"] as? [NSDictionary]  else { return }
         for sentURL in urls {
             if let urlString = sentURL.value(forKey: "url") as? String, let url = URL(string: urlString) {
-                receivedURLs.append(url)
+                sentUrlsToQueue.append(url)
             }
         }
 
         // Check if the app is foregrounded, _also_ verify the BVC is initialized. Most BVC functions depend on viewDidLoad() having run –if not, they will crash.
-        if UIApplication.shared.applicationState == .active && browserViewController.isViewLoaded {
-            browserViewController.loadQueuedTabs(receivedURLs: receivedURLs)
-            receivedURLs.removeAll()
+        if UIApplication.shared.applicationState == .active {
+            let browserViewController = BrowserViewController.foregroundBVC()
+
+            browserViewController.loadQueuedTabs(receivedURLs: sentUrlsToQueue)
         }
     }
 }
