@@ -20,4 +20,23 @@ extension Themeable {
             self?.applyTheme()
         }
     }
+
+    func updateThemeApplicableSubviews() {
+        let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
+        themeViews.forEach { $0.applyTheme(theme: themeManager.currentTheme) }
+    }
+
+    func getAllSubviews<T>(for view: UIView, ofType type: T.Type) -> [T] {
+        var secondLevelSubviews = [T]()
+        let firstLevelSubviews: [T] = view.subviews.compactMap { childView in
+            secondLevelSubviews = secondLevelSubviews + getAllSubviews(for: childView, ofType: type)
+            return childView as? T
+        }
+        return firstLevelSubviews + secondLevelSubviews
+    }
+}
+
+// Used to pass in a theme to a view or cell to apply a theme
+protocol ThemeApplicable {
+    func applyTheme(theme: Theme)
 }
