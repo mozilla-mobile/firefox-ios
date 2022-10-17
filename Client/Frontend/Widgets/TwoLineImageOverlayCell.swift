@@ -137,7 +137,7 @@ class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.selectionStyle = .default
+        selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0,
                                       left: UX.ImageSize + 2 * UX.BorderViewMargin,
                                       bottom: 0,
