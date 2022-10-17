@@ -6,25 +6,28 @@ import XCTest
 
 @testable import Client
 
-class UIViewExtensionsTests: XCTestCaseRootViewController {
+class ThemableTests: XCTestCaseRootViewController {
 
     private var tableViewDelegate: TestsTableView!
+    private var testThemable: TestsThemeable!
 
     override func setUp() {
         super.setUp()
         tableViewDelegate = TestsTableView()
+        testThemable = TestsThemeable()
     }
 
     override func tearDown() {
         super.tearDown()
         tableViewDelegate = nil
+        testThemable = nil
     }
 
     // MARK: Get all subviews
 
     func testGetAllSubviews_noSubviews() {
         let subject = UIView()
-        let result = subject.getAllSubviews(ofType: UIView.self)
+        let result = testThemable.getAllSubviews(for: subject, ofType: UIView.self)
         XCTAssertEqual(result.count, 0, "No subviews")
     }
 
@@ -33,7 +36,7 @@ class UIViewExtensionsTests: XCTestCaseRootViewController {
         let subject = UIView()
         subject.addSubviews(subview1, subview2)
 
-        let result = subject.getAllSubviews(ofType: UIView.self)
+        let result = testThemable.getAllSubviews(for: subject, ofType: UIView.self)
         XCTAssertEqual(result.count, 2, "Two subviews")
     }
 
@@ -45,7 +48,7 @@ class UIViewExtensionsTests: XCTestCaseRootViewController {
         let subject = UIView()
         subject.addSubviews(subview1, subview2)
 
-        let result = subject.getAllSubviews(ofType: UIView.self)
+        let result = testThemable.getAllSubviews(for: subject, ofType: UIView.self)
         XCTAssertEqual(result.count, 4, "Four subviews")
     }
 
@@ -59,7 +62,7 @@ class UIViewExtensionsTests: XCTestCaseRootViewController {
         tableView.reloadData()
         wait(0.5)
 
-        let result = tableView.getAllSubviews(ofType: UITableViewCell.self)
+        let result = testThemable.getAllSubviews(for: tableView, ofType: UITableViewCell.self)
         XCTAssertEqual(result.count, 3, "Retrieving three UITableViewCell in tableview")
     }
 }
@@ -81,4 +84,13 @@ class TestsTableView: NSObject, UITableViewDataSource, UITableViewDelegate {
                                                  for: indexPath as IndexPath)
         return cell
     }
+}
+
+// MARK: - TestsThemeable
+class TestsThemeable: UIViewController, Themeable {
+    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+
+    func applyTheme() {}
 }
