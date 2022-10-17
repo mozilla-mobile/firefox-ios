@@ -1,3 +1,6 @@
-/* Contextual hints are little popups that appear for the users informing them of new features. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
-"ContextualHints.Toolbar.Top.Description.v106" = "내 스타일과 맞는다면 설정에서 도구 모음을 맨 아래로 이동하십시오.";
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top. */
+"ContextualHints.Toolbar.Bottom.Description.v107" = "내 스타일과 맞는다면 도구 모음을 맨 위로 이동하세요.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom. */
+"ContextualHints.Toolbar.Top.Description.v107" = "내 스타일과 맞는다면 도구 모음을 맨 아래로 이동하세요.";
 

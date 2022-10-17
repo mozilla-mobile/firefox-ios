@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Alamat jeung Paluruh";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Tambah ka Daptar Bacaeun";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Palang Alamat";
 
@@ -196,6 +199,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Ngarah ngasupkeun émbaran leuwih babari, sacara baku tulbar dipasang di handap.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Tepas Firefox pribadi kiwari mantuan anjeun nyokot ti anu ditinggalkeun. Néangan tab anu can lila, markah, jeung hasil nyungsi.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Setélan Tulbar";
 
@@ -204,6 +210,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Pareuman dina setélan";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Tutup";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Teu bisa nambahkeun kaca kana Daptar bacaan";
@@ -351,6 +360,15 @@
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Sponsor Kami & Pripasi Anjeun";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Buka tab singkron";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Tingali sadaya tab singkron";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Jemput tab";
 
 /* This string will show under the description on pocket story, indicating that the story is sponsored. */
 "FirefoxHomepage.Pocket.Sponsored.v103" = "Disponsoran";
@@ -571,6 +589,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Minggu Kamari";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Markah";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Jujutan";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Bolay";
 
@@ -582,6 +606,9 @@
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Mupus jujutan (kaasup jujutan anu disingkronkeun ti séjén parabot), réréméh, jeung data nyungsi lianna.";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Pupus";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "Taya jujutan kapanggih";
@@ -736,6 +763,12 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Undeuran";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Salindung PAREUM pikeun ieu loka";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Salindung HURUNG pikeun ieu loka";
+
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Pitulung";
 
@@ -883,6 +916,15 @@
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
 "Onboarding.LaterAction.v102" = "Moal Waka";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "Cokot tab jeung kecap sandi ti parabot anjeun lianna anu panungtung dipaké.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "Liwat";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "Luncat tina telepon ka laptop jeung sabalikna";
+
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "Daptar jeung Asup";
 
@@ -904,11 +946,20 @@
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Pilih latar anu nyarita ka anjeun.";
 
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "Cobaan képrétkeun kelir";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "Atur Latar";
 
 /* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
 "Onboarding.WallpaperTitle.v102" = "Pilih Latar Firefox";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox merenahkeun jalma batan bati tur mélaan pripasi anjeun sacara baku.";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "Wilujeng sumping di internét mandiri";
 
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Mitembeyan Ngalanglang";
@@ -969,6 +1020,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Modeu Baca sayaga";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Cirian geus Dibaca";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Cirian can Dibaca";
 
 /* Panel accessibility label */
 "Reading list" = "Daptar bacaeun";
@@ -1069,6 +1126,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OKÉH";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Mesin Pamaluruh Baku";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Mesin Pamaluruh Baku";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Paluruh";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Kirim laporan karuksakan sangkan Mozilla bisa ngoméan masalahna?";
 
@@ -1080,6 +1146,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Bolay";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Tutup";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Paranti sayaga:";
@@ -1218,6 +1287,9 @@
 
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Téma bakal otomatis robah dumasar caangna pidangan anjeun. Anjeun bisa setél wates parobahanana. Buleudanna téh ciri caangna pidangan anjeun kiwari.";
+
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Otomatis";
 
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Pindah Modeu";
@@ -1639,6 +1711,9 @@
 /* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
 "TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Sumputkeun Tab Teu Aktip";
 
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Paluruh";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Tambah Tab";
 
@@ -1669,6 +1744,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Buka Tab";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Témbongkeun Tab";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Kaca teu bisa dipidangkeun dina Modeu Baca";
 
@@ -1680,6 +1758,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "minggu ieu";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "kamari";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Moal Waka";
@@ -1726,14 +1807,38 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "can dibaca";
 
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Asup";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "Buka ti panungtung anu ditinggalkeun maké tab ti séjén parabot ayeuna dina kaca tepas.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Ngagilirkeun layar leuwih babari ti nu atos-atos";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Mitembeyan";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Kelir anyar. Kagenah anyar. Komitmen anu sarua pikeun jalma batan bati.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Wilujeng sumping di internét anu leuwih pribadi";
+
 /* Debug option */
 "Use stage servers" = "Paké serper hambalan";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Sandiasma";
 
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Aya anu salah dina ieu latar.";
+
 /* The title of the error displayed when changing wallpaper fails. */
 "Wallpaper.Change.Error.Title.v106" = "Teu Bisa Ngarobah Latar";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Aya nu salah dina undeuran anjeun.";
 
 /* The title of the error displayed if download fails when changing a wallpaper. */
 "Wallpaper.Download.Error.Title.v106" = "Teu Bisa Ngundeur Latar";
