@@ -57,11 +57,19 @@ firefox_url = 'https://apps.apple.com/ca/app/firefox-private-safe-browser/id9898
 author_exception_list = ['4530+thatswinnie@users.noreply.github.com',
                          'lmarceau@mozilla.com',
                          'mitchell.orla@gmail.com',
+                         'omitchell@mozilla.com',
                          'nikieme3@gmail.com',
+                         'nish.bhasin@gmail.com',
                          'yriosdiaz@mozilla.com',
+                         'yrrios13@gmail.com',
                          'nishantpatel2718@gmail.com',
+                         'clare.m.so@gmail.com',
+                         'cso@mozilla.com',
                          '11182210+electricRGB@users.noreply.github.com',
+                         '107960801+jjSDET@users.noreply.github.com',
+                         'roux@mozilla.com',
                          'isabelrios@gmail.com',
+                         'dnarcese@gmail.com',
                          '41898282+github-actions[bot]@users.noreply.github.com',
                          'litianu.razvan@gmail.com',
                          'ralucaiordan@icloud.com',
@@ -91,9 +99,9 @@ def get_diff_commits(current_version: Version,
     We find the intersection with main to be able to make the diff then prettify logs
     """
     repo = git.Repo(search_parent_directories=True)
-    commit_origin_current = repo.commit(f"mozilla/v{current_version.string_name}")
+    commit_origin_current = repo.commit(f"mozilla/release/v{current_version.string_name}")
 
-    stream = os.popen(f'git merge-base mozilla/v{previous_version.string_name} mozilla/main')
+    stream = os.popen(f'git merge-base mozilla/release/v{previous_version.string_name} mozilla/main')
     commit_intersect = stream.read().strip('\n')
     # Add 1 to date to avoid getting that commit in the diff
     commit_intersect_object = repo.commit(f"{commit_intersect}")
@@ -114,6 +122,7 @@ def filter_commits(commits: list) -> list[str]:
     for commit in commits:
         author = re.search('email: (.*) username:', commit).group(1)
         if author not in author_exception_list:
+            print(f"Found contributor commit: {commit}")
             contributor_commits.append(commit)
     return contributor_commits
 
@@ -178,10 +187,10 @@ def build_release_message(current_version: Version,
 
     return f"# Overview \n" \
            f"This is our official {current_tag} release of Firefox-iOS. It's based on the " \
-           f"[{current_tag} branch](https://github.com/mozilla-mobile/firefox-ios/tree/{current_tag}) \n\n" \
+           f"[{current_tag} branch](https://github.com/mozilla-mobile/firefox-ios/tree/release/{current_tag}) \n\n" \
            f"## Differences between {previous_tag} & {current_tag} \n" \
            f"You can view the changes between our previous and newly released version " \
-           f"[here](https://github.com/mozilla-mobile/firefox-ios/compare/{previous_tag}...{current_tag}).\n\n" \
+           f"[here](https://github.com/mozilla-mobile/firefox-ios/compare/release/{previous_tag}...release/{current_tag}).\n\n" \
            f"{contributions}"
 
 
