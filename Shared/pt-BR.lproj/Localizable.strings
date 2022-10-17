@@ -923,7 +923,7 @@
 "Onboarding.Sync.Skip.Action.v106" = "Pular";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Title.v106" = "Alterne entre celular e notebook";
+"Onboarding.Sync.Title.v106" = "Alterne entre celular e computador";
 
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "Cadastrar-se e entrar";
