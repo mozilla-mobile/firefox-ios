@@ -319,6 +319,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
             height: collectionView.frame.height + UIWindow.statusBarHeight
         )
         updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: relativeRect)
+
+        updateStatusBar()
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
@@ -663,6 +665,69 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
+    }
+}
+
+// MARK: - Status Bar Background
+private extension HomepageViewController {
+
+    var statusBarView: UIView? {
+        guard let statusBarFrame = statusBarFrame else {
+            return nil
+        }
+
+        // We put a view behind the status bar to be able to give it a background color.
+        // We use a tag to be able to retrieve the view instead of recreating it every time
+        // the user scrolls.
+        let tag = 11111
+
+        if let view = view.viewWithTag(tag) {
+            return view
+        } else {
+            let statusBar = UIView(frame: statusBarFrame)
+            statusBar.tag = tag
+            view.addSubview(statusBar)
+            return statusBar
+        }
+    }
+
+    var statusBarFrame: CGRect? {
+        guard let keyWindow = UIWindow.keyWindow else { return nil }
+        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+    }
+
+    // Returns a value between 0 and 1 which indicates how far the user has scrolled.
+    // This is used as the alpha of the status bar background.
+    // 0 = no status bar background shown
+    // 1 = status bar background is opaque
+    var scrollOffset: CGFloat {
+        // Status bar height can be 0 on iPhone in landscape mode.
+        guard let scrollView = collectionView,
+              isBottomSearchBar,
+              let statusBarHeight: CGFloat = statusBarFrame?.height,
+              statusBarHeight > 0
+        else { return 0 }
+
+        // The scrollview content offset is automatically adjusted to account for the status bar.
+        // We want to start showing the status bar background as soon as the user scrolls.
+        var offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight
+
+        if offset > 1 {
+            offset = 1
+        } else if offset < 0 {
+            offset = 0
+        }
+        return offset
+    }
+
+    var isBottomSearchBar: Bool {
+        guard SearchBarSettingsViewModel.isEnabled else { return false }
+        return SearchBarSettingsViewModel(prefs: viewModel.profile.prefs).searchBarPosition == .bottom
+    }
+
+    func updateStatusBar() {
+        let backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        statusBarView?.backgroundColor = backgroundColor.withAlphaComponent(scrollOffset)
     }
 }
 
