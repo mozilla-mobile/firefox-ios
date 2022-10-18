@@ -681,6 +681,7 @@ private extension HomepageViewController {
 
     var statusBarFrame: CGRect? {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
+        
         return keyWindow.windowScene?.statusBarManager?.statusBarFrame
     }
 
@@ -710,6 +711,7 @@ private extension HomepageViewController {
 
     var isBottomSearchBar: Bool {
         guard SearchBarSettingsViewModel.isEnabled else { return false }
+
         return SearchBarSettingsViewModel(prefs: viewModel.profile.prefs).searchBarPosition == .bottom
     }
 
