@@ -27,20 +27,8 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
     var shouldLeftAlignTitle = false
     var customization: OneLineTableViewCustomization = .regular
 
-//    override var indentationLevel: Int {
-//        didSet {
-//            containerView.snp.remakeConstraints { make in
-//                make.height.equalTo(44)
-//                make.top.bottom.equalToSuperview()
-//                make.leading.equalToSuperview().offset(indentationLevel * Int(indentationWidth))
-//                make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
-//            }
-//        }
-//    }
-
     private lazy var selectedView: UIView = .build { _ in }
     private lazy var containerView: UIView = .build { _ in }
-    private lazy var midView: UIView = .build { _ in }
 
     lazy var leftImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -83,10 +71,9 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         separatorInset = defaultSeparatorInset
         selectionStyle = .default
 
-        midView.addSubview(titleLabel)
-        containerView.addSubviews(bottomSeparatorView)
-        containerView.addSubview(leftImageView)
-        containerView.addSubview(midView)
+        containerView.addSubviews(leftImageView,
+                                  titleLabel,
+                                  bottomSeparatorView)
 
         contentView.addSubview(containerView)
         bringSubviewToFront(containerView)
@@ -102,72 +89,26 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
                                                   constant: -8),
             containerView.trailingAnchor.constraint(equalTo: containerViewTrailingAnchor),
 
-            leftImageView.centerYAnchor.constraint(equalTo: midView.centerYAnchor),
+            leftImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
                                                   constant: 16),
             leftImageView.widthAnchor.constraint(equalToConstant: 28),
             leftImageView.heightAnchor.constraint(equalToConstant: 28),
-            leftImageView.trailingAnchor.constraint(equalTo: midView.leadingAnchor,
+            leftImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor,
                                                     constant: -midViewLeadingMargin),
 
-            midView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            midView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            midView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                             constant: -8),
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor,
+                                            constant: 4),
+            titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
+                                               constant: -4),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
+                                                 constant: -8),
 
-            titleLabel.topAnchor.constraint(equalTo: midView.topAnchor,
-                                           constant: 4),
-            titleLabel.leadingAnchor.constraint(equalTo: midView.leadingAnchor,
-                                             constant: 8),
-            titleLabel.bottomAnchor.constraint(equalTo: midView.bottomAnchor,
-                                              constant: -4),
-            titleLabel.trailingAnchor.constraint(equalTo: midView.trailingAnchor,
-                                             constant: -8),
-
-            bottomSeparatorView.topAnchor.constraint(greaterThanOrEqualTo: midView.bottomAnchor),
             bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             bottomSeparatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             bottomSeparatorView.heightAnchor.constraint(equalToConstant: 0.7)
         ])
-
-//        containerView.snp.makeConstraints { make in
-//            make.height.equalTo(44)
-//            make.top.bottom.equalToSuperview()
-//            make.leading.equalToSuperview()
-//            make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
-//        }
-
-//        leftImageView.snp.makeConstraints { make in
-//            make.height.width.equalTo(28)
-//            make.leading.equalTo(containerView.snp.leading).offset(15)
-//            make.centerY.equalTo(containerView.snp.centerY)
-//        }
-
-//        midView.snp.makeConstraints { make in
-//            make.height.equalTo(42)
-//            make.centerY.equalToSuperview()
-//            if shouldLeftAlignTitle {
-//                make.leading.equalTo(containerView.snp.leading).offset(5)
-//            } else {
-//                make.leading.equalTo(leftImageView.snp.trailing).offset(13)
-//            }
-//            make.trailing.equalTo(containerView.snp.trailing).offset(-7)
-//        }
-
-//        titleLabel.snp.makeConstraints { make in
-//            make.height.equalTo(40)
-//            make.centerY.equalTo(midView.snp.centerY)
-//            make.leading.equalTo(midView.snp.leading)
-//            make.trailing.equalTo(midView.snp.trailing)
-//        }
-
-//        bottomSeparatorView.snp.makeConstraints { make in
-//            make.height.equalTo(0.7)
-//            make.bottom.equalTo(containerView.snp.bottom)
-//            make.leading.equalTo(titleLabel.snp.leading)
-//            make.trailing.equalTo(containerView.snp.trailing)
-//        }
 
         selectedBackgroundView = selectedView
         applyTheme()
@@ -181,24 +122,6 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         leftImageView.image = nil
         applyTheme()
     }
-
-//    private func updateMidConstraint() {
-//        leftImageView.snp.updateConstraints { update in
-//            let leadingLeft = customization == .regular ? 15 : customization == .inactiveCell ? 16 : 15
-//            update.leading.equalTo(containerView.snp.leading).offset(leadingLeft)
-//        }
-//
-//        midView.snp.remakeConstraints { make in
-//            make.height.equalTo(42)
-//            make.centerY.equalToSuperview()
-//            if shouldLeftAlignTitle {
-//                make.leading.equalTo(containerView.snp.leading).offset(5)
-//            } else {
-//                make.leading.equalTo(leftImageView.snp.trailing).offset(13)
-//            }
-//            make.trailing.equalTo(containerView.snp.trailing).offset(-7)
-//        }
-//    }
 
     // To simplify setup, OneLineTableViewCell now has a viewModel
     // Use it for new code, replace when possible in old code
