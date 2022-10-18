@@ -709,7 +709,7 @@ class BrowserViewController: UIViewController {
         // Remake constraints even if we're already showing the home controller.
         // The home controller may change sizes if we tap the URL bar while on about:home.
         homepageViewController?.view.snp.remakeConstraints { make in
-            make.top.equalTo(header.snp.bottom)
+            make.top.equalTo(isBottomSearchBar ? view : header.snp.bottom)
             make.left.right.equalTo(view)
             let homePageBottomOffset: CGFloat = isBottomSearchBar ? urlBarHeightConstraintValue ?? 0 : 0
             make.bottom.equalTo(bottomContainer.snp.top).offset(-homePageBottomOffset)
