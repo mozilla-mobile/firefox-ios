@@ -681,7 +681,7 @@ private extension HomepageViewController {
 
     var statusBarFrame: CGRect? {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
-        
+
         return keyWindow.windowScene?.statusBarManager?.statusBarFrame
     }
 
