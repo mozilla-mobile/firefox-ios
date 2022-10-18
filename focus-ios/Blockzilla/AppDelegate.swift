@@ -60,16 +60,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
-            #if DEBUG
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
                 return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             } else {
                 return nimbus.shouldShowNewOnboarding
             }
-            #else
-            return nimbus.shouldShowNewOnboarding
-            #endif
-    }
+        }
         guard !AppInfo.isTesting() else { return TestOnboarding() }
         return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
     }()
