@@ -39,7 +39,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == LoginsSettingsSection {
+        if section == LoginListViewController.loginsSettingsSection {
             return 2
         }
         return viewModel.loginsForSection(section)?.count ?? 0
@@ -47,8 +47,9 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        if indexPath.section == LoginsSettingsSection {
-            let cell = LoginListTableViewSettingsCell(style: .default, reuseIdentifier: CellReuseIdentifier)
+        if indexPath.section == LoginListViewController.loginsSettingsSection,
+           let cell = tableView.dequeueReusableCell(withIdentifier: LoginListTableViewSettingsCell.cellIdentifier,
+                                                    for: indexPath) as? LoginListTableViewSettingsCell {
 
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
@@ -67,8 +68,8 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             }
             return cell
 
-        } else {
-            let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier, inset: tableView.separatorInset)
+        } else if let cell = tableView.dequeueReusableCell(withIdentifier: LoginListTableViewCell.cellIdentifier,
+                                                           for: indexPath) as? LoginListTableViewCell {
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
             let username = login.decryptedUsername
             cell.hostnameLabel.text = login.hostname
@@ -82,7 +83,11 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             if let breaches = viewModel.userBreaches, breaches.contains(login) {
                 cell.breachAlertImageView.isHidden = false
             }
+            cell.applyTheme(theme: viewModel.theme)
+            cell.configure(inset: tableView.separatorInset)
             return cell
         }
+
+        return UITableViewCell()
     }
 }

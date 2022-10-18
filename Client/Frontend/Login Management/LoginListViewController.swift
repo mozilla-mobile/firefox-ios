@@ -6,20 +6,9 @@ import UIKit
 import Storage
 import Shared
 
-private extension UITableView {
-    var allLoginIndexPaths: [IndexPath] {
-        return ((LoginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
-            (0..<self.numberOfRows(inSection: sectionNum)).map {
-                IndexPath(row: $0, section: sectionNum)
-            }
-        }
-    }
-}
-
-let CellReuseIdentifier = "cell-reuse-id"
-let LoginsSettingsSection = 0
-
 class LoginListViewController: SensitiveViewController, Themeable {
+
+    static let loginsSettingsSection = 0
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -107,9 +96,9 @@ class LoginListViewController: SensitiveViewController, Themeable {
         super.viewDidLoad()
         self.title = .Settings.Passwords.Title
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
-        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
-        tableView.register(ThemedTableSectionHeaderFooterView.self,
-                           forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
+        tableView.register(cellType: LoginListTableViewSettingsCell.self)
+        tableView.register(cellType: LoginListTableViewCell.self)
+        tableView.registerHeaderFooter(cellType: ThemedTableSectionHeaderFooterView.self)
 
         tableView.accessibilityIdentifier = "Login List"
         tableView.dataSource = loginDataSource
@@ -405,7 +394,8 @@ extension LoginListViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == LoginsSettingsSection, searchController.isActive || tableView.isEditing {
+        if indexPath.section == LoginListViewController.loginsSettingsSection,
+            searchController.isActive || tableView.isEditing {
             return 0
         }
         return UITableView.automaticDimension
@@ -500,6 +490,17 @@ extension LoginListViewController: LoginViewModelDelegate {
     func restoreSelectedRows() {
         for path in self.loginSelectionController.selectedIndexPaths {
             tableView.selectRow(at: path, animated: false, scrollPosition: .none)
+        }
+    }
+}
+
+// MARK: - UITableView extension
+private extension UITableView {
+    var allLoginIndexPaths: [IndexPath] {
+        return ((LoginListViewController.loginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
+            (0..<self.numberOfRows(inSection: sectionNum)).map {
+                IndexPath(row: $0, section: sectionNum)
+            }
         }
     }
 }
