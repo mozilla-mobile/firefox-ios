@@ -360,9 +360,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     // Check if we already present something on top of the homepage,
-    // and if the homepage is actually being shown to the user
+    // if the homepage is actually being shown to the user and if the page is shown from a loaded webpage (zero search).
     private var canModalBePresented: Bool {
-        return presentedViewController == nil && view.alpha == 1
+        return presentedViewController == nil && view.alpha == 1 && !viewModel.isZeroSearch
     }
 
     // MARK: - Contextual hint
