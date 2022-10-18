@@ -152,3 +152,13 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         bottomSeparatorView.backgroundColor = UIColor.Photon.Grey40
     }
 }
+
+extension OneLineTableViewCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
+        default: break
+        }
+    }
+}

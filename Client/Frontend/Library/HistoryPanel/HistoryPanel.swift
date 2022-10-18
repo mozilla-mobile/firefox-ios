@@ -372,10 +372,9 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }
 
     private func configureHistoryActionableCell(_ historyActionable: HistoryActionablesModel, _ cell: OneLineTableViewCell) -> OneLineTableViewCell {
-//        cell.titleLabel.text = historyActionable.itemTitle
-//        cell.leftImageView.image = historyActionable.itemImage
-//        cell.leftImageView.tintColor = .theme.browser.tint
-//        cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
+
+        cell.leftImageView.tintColor = .theme.browser.tint
+        cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
 
         let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
                                                       leftImageView: historyActionable.itemImage,
