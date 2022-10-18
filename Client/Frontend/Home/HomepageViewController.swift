@@ -10,10 +10,6 @@ import MozillaAppServices
 
 class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
-    struct UX {
-        static let statusBarViewTag: Int = 11111
-    }
-
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
@@ -37,6 +33,14 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
+
+    // Background for status bar
+    private lazy var statusBarView: UIView = {
+        let statusBarFrame = statusBarFrame ?? CGRect.zero
+        let statusBarView = UIView(frame: statusBarFrame)
+        view.addSubview(statusBarView)
+        return statusBarView
+    }()
 
     // Content stack views contains collection view.
     lazy var contentStackView: UIStackView = .build { stackView in
@@ -675,26 +679,6 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 // MARK: - Status Bar Background
 private extension HomepageViewController {
 
-    var statusBarView: UIView? {
-        guard let statusBarFrame = statusBarFrame else {
-            return nil
-        }
-
-        // We put a view behind the status bar to be able to give it a background color.
-        // We use a tag to be able to retrieve the view instead of recreating it every time
-        // the user scrolls.
-        let tag = UX.statusBarViewTag
-
-        if let view = view.viewWithTag(tag) {
-            return view
-        } else {
-            let statusBar = UIView(frame: statusBarFrame)
-            statusBar.tag = tag
-            view.addSubview(statusBar)
-            return statusBar
-        }
-    }
-
     var statusBarFrame: CGRect? {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
         return keyWindow.windowScene?.statusBarManager?.statusBarFrame
@@ -731,10 +715,10 @@ private extension HomepageViewController {
 
     func updateStatusBar() {
         let backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        statusBarView?.backgroundColor = backgroundColor.withAlphaComponent(scrollOffset)
+        statusBarView.backgroundColor = backgroundColor.withAlphaComponent(scrollOffset)
 
         if let statusBarFrame = statusBarFrame {
-            statusBarView?.frame = statusBarFrame
+            statusBarView.frame = statusBarFrame
         }
     }
 }
