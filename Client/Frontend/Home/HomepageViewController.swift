@@ -732,6 +732,10 @@ private extension HomepageViewController {
     func updateStatusBar() {
         let backgroundColor = UIColor.theme.homePanel.topSitesBackground
         statusBarView?.backgroundColor = backgroundColor.withAlphaComponent(scrollOffset)
+
+        if let statusBarFrame = statusBarFrame {
+            statusBarView?.frame = statusBarFrame
+        }
     }
 }
 
