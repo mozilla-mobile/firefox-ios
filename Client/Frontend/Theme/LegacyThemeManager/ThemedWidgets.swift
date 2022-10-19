@@ -23,16 +23,20 @@ class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
 
 class ThemedTableViewController: UITableViewController, Themeable {
 
-    var themeManager: ThemeManager = AppContainer.shared.resolve()
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
 
-    override init(style: UITableView.Style = .grouped) {
-        super.init(style: style)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    init(style: UITableView.Style = .grouped,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(style: style)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
