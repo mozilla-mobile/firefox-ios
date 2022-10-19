@@ -216,5 +216,6 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - rust-components-swift/
   - Blockzilla/Generated/Metrics.swift
   - l10n-screenshots-dd/
+  - DerivedData/
 
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
