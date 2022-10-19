@@ -1,7 +1,7 @@
 {
   "data": [
     {
-      "schemaVersion": "1.9.0",
+      "schemaVersion": "1.10.0",
       "slug": "release-firefox-ios-mr-new-user-onboarding",
       "id": "release-firefox-ios-mr-new-user-onboarding",
       "arguments": {},
