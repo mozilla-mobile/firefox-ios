@@ -66,6 +66,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         // Otherwise, there is nothing to delete.
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         tableView.reloadData()
+        applyTheme()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -189,11 +190,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
-        if cell.isEditing {
-            for v in cell.subviews where v.classForCoder.description() == "_UITableCellVerticalSeparator" {
-                v.backgroundColor = UIColor.clear
-            }
+        // Change color of a thin vertical line that iOS renders between the accessoryView and the reordering control.
+        for subview in cell.subviews where subview.classForCoder.description() == "_UITableViewCellVerticalSeparator" {
+            subview.backgroundColor = themeManager.currentTheme.colors.borderPrimary
         }
 
         // Change re-order control tint color to match app theme
@@ -300,6 +299,11 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         navigationItem.rightBarButtonItem?.action = editing ?
             #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
     }
 }
 
