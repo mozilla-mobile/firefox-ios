@@ -5,6 +5,7 @@
 import Foundation
 import XCTest
 import Shared
+import Core
 @testable import Client
 
 class ContextualHintEligibilityUtilityTests: XCTestCase {
@@ -31,6 +32,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     // MARK: - Test should Present cases
 
     func test_shouldPresentInactiveTabsHint() {
+        User.shared.showInactiveTabsTooltip()
         let result = subject.canPresent(.inactiveTabs)
         XCTAssertTrue(result)
     }
@@ -52,7 +54,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     // MARK: - Test should NOT Present cases
 
     func test_shouldNotPresentInactiveTabsHint() {
-        profile.prefs.setBool(true, forKey: CFRPrefsKeys.InactiveTabsKey.rawValue)
+        User.shared.hideInactiveTabsTooltip()
 
         let result = subject.canPresent(.inactiveTabs)
         XCTAssertFalse(result)

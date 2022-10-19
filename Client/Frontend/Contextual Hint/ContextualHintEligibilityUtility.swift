@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Core
 
 /// Public interface for contextual hint consumers
 protocol ContextualHintEligibilityUtilityProtocol {
@@ -77,7 +78,9 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
     private func hasAlreadyBeenPresented(_ hintType: ContextualHintType) -> Bool {
         // Ecosia
-        guard hintType != .inactiveTabs else { return false }
+        guard hintType != .inactiveTabs else {
+            return !User.shared.showsInactiveTabsTooltip
+        }
         
         guard let contextualHintData = profile.prefs.boolForKey(prefsKey(for: hintType)) else { return false }
 
