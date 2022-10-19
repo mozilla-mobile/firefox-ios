@@ -183,12 +183,12 @@ class ThemeSettingsController: ThemedTableViewController {
             cell.textLabel?.numberOfLines = 0
             cell.textLabel?.lineBreakMode = .byWordWrapping
 
-            let control = UISwitchThemed()
-
+            let control = UISwitch()
             control.accessibilityIdentifier = "SystemThemeSwitchValue"
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
             control.isOn = LegacyThemeManager.instance.systemThemeIsOn
+            
             cell.accessoryView = control
         case .automaticBrightness:
             if indexPath.row == 0 {

@@ -264,7 +264,7 @@ class BoolSetting: Setting, FeatureFlaggable {
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
 
-        let control = UISwitchThemed()
+        let control = UISwitch()
         control.onTintColor = theme.colors.actionPrimary
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.accessibilityIdentifier = prefKey
@@ -553,8 +553,7 @@ class CheckmarkSetting: Setting {
         super.onConfigureCell(cell, theme: theme)
 
         if checkmarkStyle == .rightSide {
-            cell.accessoryType = .checkmark
-            cell.tintColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
+            cell.accessoryType = isChecked() ? .checkmark : .none
         } else {
             let window = UIWindow.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
@@ -562,7 +561,6 @@ class CheckmarkSetting: Setting {
             cell.indentationLevel = 1
 
             cell.accessoryType = .detailButton
-            cell.tintColor = theme.colors.actionPrimary // Sets accessory color only
 
             let checkColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
             let check = UILabel()
@@ -700,7 +698,7 @@ class SettingsTableViewController: ThemedTableViewController {
     /// Used to calculate cell heights.
     fileprivate lazy var dummyToggleCell: UITableViewCell = {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
-        cell.accessoryView = UISwitchThemed()
+        cell.accessoryView = UISwitch()
         return cell
     }()
 

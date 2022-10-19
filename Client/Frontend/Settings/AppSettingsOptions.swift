@@ -1088,7 +1088,7 @@ class ChinaSyncServiceSetting: Setting {
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
-        let control = UISwitchThemed()
+        let control = UISwitch()
         control.onTintColor = theme.colors.actionPrimary
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
         control.isOn = prefs.boolForKey(prefKey) ?? AppInfo.isChinaEdition

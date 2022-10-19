@@ -100,10 +100,3 @@ class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
     }
 }
-
-class UISwitchThemed: UISwitch {
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        onTintColor = UIColor.theme.general.controlTint
-    }
-}

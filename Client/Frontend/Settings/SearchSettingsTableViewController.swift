@@ -91,7 +91,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
                 cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
-                let toggle = UISwitchThemed()
+                let toggle = UISwitch()
                 toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
@@ -108,7 +108,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 engine = model.orderedEngines[index]
                 cell.showsReorderControl = true
 
-                let toggle = UISwitchThemed()
+                let toggle = UISwitch()
                 toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
