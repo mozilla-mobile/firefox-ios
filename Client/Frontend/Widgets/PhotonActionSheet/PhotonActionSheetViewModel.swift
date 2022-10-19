@@ -82,7 +82,7 @@ class PhotonActionSheetViewModel {
         actions = actions.map { $0.reversed() }.reversed()
 
         // Flip cells
-        actions.forEach { $0.forEach { $0.items.forEach { $0.isFlipped = true } } }
+        actions.forEach { $0.forEach { $0.item.isFlipped = true } } 
     }
 
     // Main menu is inverted if hamburger icon is at the bottom

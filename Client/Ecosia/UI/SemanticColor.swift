@@ -41,14 +41,14 @@ extension UIColor {
             static let primary = UIColor(red: 0, green: 0.5, blue: 0.033, alpha: 1)
         }
         
-        static let border = UIColor(red: 0.871, green: 0.871, blue: 0.851, alpha: 1)
+        static let border = UIColor(rgb: 0xDEDED9)
     }
     
     struct Dark {
         struct Background {
             static let primary = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
-            static let secondary = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
-            static let tertiary = UIColor(red: 0.298, green: 0.298, blue: 0.298, alpha: 1)
+            static let secondary = UIColor(rgb: 0x252525)
+            static let tertiary = UIColor(rgb: 0x333333)
             static let quarternary = UIColor(rgb: 0xAFE9B0)
             static let highlighted = UIColor(rgb: 0x577568)
         }
@@ -79,7 +79,7 @@ extension UIColor {
             static let decorative = UIColor(red: 0.871, green: 0.871, blue: 0.871, alpha: 1)
         }
         
-        static let border = Grey.fifty
+        static let border = UIColor(rgb: 0x4C4C4C)
     }
 
     struct Grey {

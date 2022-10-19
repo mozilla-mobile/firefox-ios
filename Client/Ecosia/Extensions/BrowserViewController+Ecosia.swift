@@ -35,3 +35,29 @@ extension BrowserViewController: DefaultBrowserDelegate {
         homepageViewController?.reloadTooltip()
     }
 }
+
+extension BrowserViewController: PageActionsShortcutsDelegate {
+    func pageOptionsOpenHome() {
+        tabToolbarDidPressHome(toolbar, button: .init())
+        dismiss(animated: true)
+    }
+
+    func pageOptionsNewTab() {
+        openBlankNewTab(focusLocationField: false)
+        dismiss(animated: true)
+    }
+
+    func pageOptionsYourImpact() {
+        dismiss(animated: true) {
+            self.presentEcosiaWorld()
+        }
+    }
+
+    func pageOptionsShare() {
+        dismiss(animated: true) {
+            guard let item = self.menuHelper?.getSharingAction().item,
+                  let handler = item.tapHandler else { return }
+            handler(item)
+        }
+    }
+}

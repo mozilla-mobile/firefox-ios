@@ -26,7 +26,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_portraitiPadRegular_defaultRowNumber() {

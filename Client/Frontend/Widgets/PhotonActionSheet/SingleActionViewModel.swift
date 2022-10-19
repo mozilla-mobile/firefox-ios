@@ -6,13 +6,9 @@ import Foundation
 
 // One row on the PhotonActionSheet table view can contain more than one item
 struct PhotonRowActions {
-    var items: [SingleActionViewModel]
-    init(_ items: [SingleActionViewModel]) {
-        self.items = items
-    }
-
+    var item: SingleActionViewModel
     init(_ item: SingleActionViewModel) {
-        self.items = [item]
+        self.item = item
     }
 }
 

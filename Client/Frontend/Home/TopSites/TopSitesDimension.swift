@@ -82,8 +82,7 @@ class TopSitesDimensionImplementation: TopSitesDimension {
     /// - Returns: The number of tiles per row the user will see
     private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
         if interface.isIphone {
-            return interface.isLandscape ? 8 : 4
-
+            return 4
         } else {
             // The number of items in a row is equal to the number of top sites in a row * 2
             var numItems = Int(UX.numberOfItemsPerRowForSizeClassIpad[interface.horizontalSizeClass])

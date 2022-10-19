@@ -88,10 +88,15 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         menuHelper.menuActionDelegate = self
 
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
-            let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
-            let viewModel = PhotonActionSheetViewModel(actions: actions, modalStyle: .popover, isMainMenu: true, isMainMenuInverted: shouldInverse)
+
+            let isPhone = self.traitCollection.userInterfaceIdiom == .phone
+            let viewModel = PhotonActionSheetViewModel(actions: actions,
+                                                       modalStyle: isPhone ? .pageSheet : .popover,
+                                                       isMainMenu: true,
+                                                       isMainMenuInverted: false)
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         }
+        self.menuHelper = menuHelper
     }
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -204,7 +209,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?) {
         switch toastAction {
         case .removeBookmark:
-            let toast = ButtonToast(labelText: message, buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
+            let toast = ButtonToast(labelText: message, imageName: "bookmarksEmpty", buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
                 isButtonTapped ? self.addBookmark(url: url ?? "") : nil
             }
             show(toast: toast)

@@ -56,7 +56,7 @@ class BookmarksPanelTests: XCTestCase {
         }
 
         // Fake clicking on new bookmark action
-        let viewModel = photonSheet.viewModel.actions[0][0].items[0]
+        let viewModel = photonSheet.viewModel.actions[0][0].item
         _ = viewModel.tapHandler!(viewModel)
 
         XCTAssertNotNil(mockNavigationController.pushedViewController)
@@ -80,7 +80,7 @@ class BookmarksPanelTests: XCTestCase {
         }
 
         // Fake clicking on new folder action
-        let viewModel = photonSheet.viewModel.actions[0][1].items[0]
+        let viewModel = photonSheet.viewModel.actions[0][1].item
         _ = viewModel.tapHandler!(viewModel)
 
         XCTAssertNotNil(mockNavigationController.pushedViewController)
@@ -103,7 +103,7 @@ class BookmarksPanelTests: XCTestCase {
         }
 
         // Fake clicking on new separator action
-        let viewModel = photonSheet.viewModel.actions[0][2].items[0]
+        let viewModel = photonSheet.viewModel.actions[0][2].item
         _ = viewModel.tapHandler!(viewModel)
 
         XCTAssertEqual(panel.state, .bookmarks(state: .inFolderEditMode))

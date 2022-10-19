@@ -665,6 +665,8 @@
 		CAA6AC4528E470BB00A13DE9 /* EcosiaBookmarkMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA6AC4428E470BB00A13DE9 /* EcosiaBookmarkMigrationTests.swift */; };
 		CAA6AC4828E4732A00A13DE9 /* EcosiaTabMigrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA6AC4728E4732A00A13DE9 /* EcosiaTabMigrationTests.swift */; };
 		CAA6AC4A28E473D500A13DE9 /* EcosiaNTPTooltipHighlightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA6AC4928E473D500A13DE9 /* EcosiaNTPTooltipHighlightTests.swift */; };
+		CAB544C628F5AE6B00657722 /* PageActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB544C528F5AE6B00657722 /* PageActionMenu.swift */; };
+		CAB544C828F6BBFD00657722 /* PageActionsShortcutsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB544C728F6BBFD00657722 /* PageActionsShortcutsHeader.swift */; };
 		CAC458F1249429C20042561A /* LoginListSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */; };
 		CACF7CF628D9E72900A996A4 /* MockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B2BE91ADF4D90002917DC /* MockProfile.swift */; };
 		CACF7D0C28DB3BAF00A996A4 /* FakeSentry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CD728C8D801006AFB5D /* FakeSentry.swift */; };
@@ -3599,6 +3601,8 @@
 		CAA6AC4428E470BB00A13DE9 /* EcosiaBookmarkMigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaBookmarkMigrationTests.swift; sourceTree = "<group>"; };
 		CAA6AC4728E4732A00A13DE9 /* EcosiaTabMigrationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaTabMigrationTests.swift; sourceTree = "<group>"; };
 		CAA6AC4928E473D500A13DE9 /* EcosiaNTPTooltipHighlightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaNTPTooltipHighlightTests.swift; sourceTree = "<group>"; };
+		CAB544C528F5AE6B00657722 /* PageActionMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageActionMenu.swift; sourceTree = "<group>"; };
+		CAB544C728F6BBFD00657722 /* PageActionsShortcutsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageActionsShortcutsHeader.swift; sourceTree = "<group>"; };
 		CAB7414DA1BA84F4CD08A8F8 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListSelectionHelper.swift; sourceTree = "<group>"; };
 		CACF7D1028DC553B00A996A4 /* NTPLibaryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLibaryViewModel.swift; sourceTree = "<group>"; };
@@ -6353,6 +6357,7 @@
 				CA4D9C9C28C8D801006AFB5D /* MarketsController.swift */,
 				CA4D9C9D28C8D801006AFB5D /* MyImpact */,
 				CA4D9CAF28C8D801006AFB5D /* Onboarding */,
+				CAB544C428F5AE6B00657722 /* PageAction */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -6485,6 +6490,15 @@
 				CAA6AC4928E473D500A13DE9 /* EcosiaNTPTooltipHighlightTests.swift */,
 			);
 			path = Ecosia;
+			sourceTree = "<group>";
+		};
+		CAB544C428F5AE6B00657722 /* PageAction */ = {
+			isa = PBXGroup;
+			children = (
+				CAB544C528F5AE6B00657722 /* PageActionMenu.swift */,
+				CAB544C728F6BBFD00657722 /* PageActionsShortcutsHeader.swift */,
+			);
+			path = PageAction;
 			sourceTree = "<group>";
 		};
 		CAEB316A28D0BFC000ADC9DB /* Extensions */ = {
@@ -9196,6 +9210,7 @@
 				8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */,
 				CA8BCC3928D1FBBC0020BC50 /* HistoryHighlightsManager.swift in Sources */,
 				CA4D9D0C28C8D801006AFB5D /* WelcomeTourProfit.swift in Sources */,
+				CAB544C828F6BBFD00657722 /* PageActionsShortcutsHeader.swift in Sources */,
 				D8D33A7D1FBD080300A20A28 /* UIView+Extension.swift in Sources */,
 				CA4D9CFD28C8D801006AFB5D /* MultiplyImpact.swift in Sources */,
 				E650755C1E37F747006961AC /* Swizzling.m in Sources */,
@@ -9378,6 +9393,7 @@
 				63306D3921103EAE00F25400 /* SavedTab.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				1DA3CE5F24EEE7C600422BB2 /* SiteArchiver.swift in Sources */,
+				CAB544C628F5AE6B00657722 /* PageActionMenu.swift in Sources */,
 				D04D1B92209790B60074B35F /* Toast.swift in Sources */,
 				8AD5702F27AB4DEA005BFDC8 /* UIStackView+Extension.swift in Sources */,
 				CA4D9CF728C8D801006AFB5D /* NewsController.swift in Sources */,
@@ -9644,6 +9660,7 @@
 				EB94075320850C9F00702E05 /* photon-colors.swift in Sources */,
 				D38B2D8C1A8D98D90040E6B5 /* OpenSearch.swift in Sources */,
 				8AB8574027D961550075C173 /* DataObserver.swift in Sources */,
+				CA7D2D7D28F839EF00D4B5AE /* BrowserViewController+Ecosia.swift in Sources */,
 				6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,

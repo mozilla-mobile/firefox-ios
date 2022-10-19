@@ -365,11 +365,11 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let section = viewModel.actions[safe: indexPath.section],
               let action = section[safe: indexPath.row],
-              let custom = action.items[0].customHeight
+              let custom = action.item.customHeight
         else { return UITableView.automaticDimension }
 
         // Nested tableview rows get additional height
-        return custom(action.items[0])
+        return custom(action.item)
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
