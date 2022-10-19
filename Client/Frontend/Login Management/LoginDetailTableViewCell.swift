@@ -26,7 +26,7 @@ enum LoginTableViewCellStyle {
     case iconAndDescriptionLabel
 }
 
-class LoginDetailTableViewCell: ThemedTableViewCell {
+class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
 
     fileprivate lazy var labelContainer: UIView = .build { _ in }
 
@@ -180,7 +180,6 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         case .editingFieldData:
             highlightedLabel.textColor = theme.colors.textSecondary
         case .delete:
-            // laurie test this.
             textLabel?.textColor = theme.colors.textWarning
             backgroundColor = theme.colors.layer2
         }
