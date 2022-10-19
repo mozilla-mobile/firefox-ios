@@ -419,7 +419,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     // Popover and not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController,
                                    traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        if shouldUseiPadSetup() {
+        if shouldUseiPadSetup(traitCollection: traitCollection) {
             return .overFullScreen
         }
         return .none
