@@ -55,6 +55,12 @@ struct UIConstants {
         static let urlBarButtonImageSize: CGFloat = 20
         static let urlBarButtonTargetSize: CGFloat = 40
         static let settingsTextPadding: CGFloat = 10
+        static let settingsPadding: CGFloat = 24
+        static let settingsViewOffset: CGFloat = 50
+        static let settingsSafariViewImageSize: CGFloat = 650/7
+        static let settingsInstructionViewWidth: CGFloat = 250
+        static let settingsInstructionImageViewWidth: CGFloat = 40
+        static let settingsInstructionImageViewHeight: CGFloat = 30
         static let siriUrlSectionPadding: CGFloat = 40
         static let settingsSectionHeight: CGFloat = 44
         static let suggestionViewCornerRadius: CGFloat = 10
@@ -197,8 +203,10 @@ struct UIConstants {
         static let light = NSLocalizedString("Settings.lightTheme", value: "Light", comment: "Light theme option in settings menu")
         static let dark = NSLocalizedString("Settings.darkTheme", value: "Dark", comment: "Dark theme option in settings menu")
         static let safariInstructionsContentBlockers = NSLocalizedString("Safari.instructionsContentBlockers", value: "Tap Safari, then select Content Blockers", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
+        static let safariInstructionsExtensions = NSLocalizedString("Safari.instructionsExtentions", value: "Select Safari, then select Extensions", comment: "Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsEnable = NSLocalizedString("Safari.instructionsEnable", value: "Enable %@", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsOpen = NSLocalizedString("Safari.instructionsOpen", value: "Open Settings App", comment: "Label for instructions to enable Safari, shown when enabling Safari Integration in Settings")
+        static let instructionToOpenSafari = NSLocalizedString("Safari.openInstruction", value: "Open device settings", comment: "Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings")
         static let safariInstructionsNotEnabled = String(format: NSLocalizedString("Safari.instructionsNotEnabled", value: "%@ is not enabled.", comment: "Error label when the blocker is not enabled, shown in the intro and main app when disabled"), AppInfo.productName)
         static let searchButton = NSLocalizedString("URL.searchLabel", value: "Search for %@", comment: "Label displayed for search button when typing in the URL bar")
         static let findInPageButton = NSLocalizedString("URL.findOnPageLabel", value: "Find in page: %@", comment: "Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page.")

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Instructions Safari.pdf",
+      "filename" : "safari-instruction-light.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "instructions-safari.pdf",
+      "filename" : "safari-instruction-dark.pdf",
       "idiom" : "universal"
     }
   ],

@@ -6,7 +6,12 @@ import UIKit
 
 class SafariInstructionsViewController: UIViewController {
     private let detector = BlockerEnabledDetector()
-    private let disabledStateView = DisabledStateView()
+
+    private lazy var disabledStateView: DisabledStateView = {
+        let disabledStateView = DisabledStateView()
+        disabledStateView.translatesAutoresizingMaskIntoConstraints = false
+        return disabledStateView
+    }()
 
     override func viewDidLoad() {
         view.backgroundColor = .systemBackground
@@ -14,9 +19,11 @@ class SafariInstructionsViewController: UIViewController {
 
         view.addSubview(disabledStateView)
 
-        disabledStateView.snp.makeConstraints { make in
-            make.leading.trailing.centerY.equalTo(view)
-        }
+        NSLayoutConstraint.activate([
+            disabledStateView.topAnchor.constraint(equalTo: view.topAnchor, constant: UIConstants.layout.settingsViewOffset),
+            disabledStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            disabledStateView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
         NotificationCenter.default.addObserver(self, selector: #selector(updateEnabledState), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
@@ -31,39 +38,50 @@ class SafariInstructionsViewController: UIViewController {
 }
 
 private class DisabledStateView: UIView {
+    private lazy var label: SmartLabel = {
+        let label = SmartLabel()
+        label.text = UIConstants.strings.safariInstructionsNotEnabled
+        label.textColor = UIColor.extensionNotEnabled
+        label.font = .body18Bold
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private lazy var instructionsView: InstructionsView = {
+        let instructionsView = InstructionsView()
+        instructionsView.translatesAutoresizingMaskIntoConstraints = false
+        return instructionsView
+    }()
+
+    private lazy var image: UIImageView = {
+        let disableStateIcon = UIImage(named: "enabled-no")!
+        let image = UIImageView(image: disableStateIcon)
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+
     init() {
         super.init(frame: CGRect.zero)
 
-        let label = SmartLabel()
-        label.text = UIConstants.strings.safariInstructionsNotEnabled
-        label.textColor = .red
-        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         addSubview(label)
-
-        let instructionsView = InstructionsView()
         addSubview(instructionsView)
-
-        let image = UIImageView(image: #imageLiteral(resourceName: "enabled-no"))
         addSubview(image)
 
-        image.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.equalTo(self)
-            make.size.lessThanOrEqualTo(650/7)
-            make.width.equalTo(image.snp.height)
-        }
+        NSLayoutConstraint.activate([
+            image.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            image.topAnchor.constraint(equalTo: self.topAnchor),
+            image.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsSafariViewImageSize),
+            image.widthAnchor.constraint(equalTo: image.heightAnchor),
 
-        label.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.equalTo(image.snp.bottom).offset(50)
-        }
+            label.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            label.topAnchor.constraint(equalTo: image.bottomAnchor, constant: UIConstants.layout.settingsViewOffset),
 
-        instructionsView.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.width.equalTo(250)
-            make.top.equalTo(label.snp.bottom).offset(50)
-            make.bottom.equalTo(self)
-        }
+            instructionsView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            instructionsView.widthAnchor.constraint(equalToConstant: UIConstants.layout.settingsInstructionViewWidth),
+            instructionsView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: UIConstants.layout.settingsViewOffset),
+            instructionsView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

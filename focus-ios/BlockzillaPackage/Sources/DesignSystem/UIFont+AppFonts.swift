@@ -21,6 +21,7 @@ public extension UIFont {
     static let body17Medium = UIFont.systemFont(ofSize: 17, weight: .medium)
     static let body18 = UIFont.systemFont(ofSize: 18)
     static let body18Medium = UIFont.systemFont(ofSize: 18, weight: .medium)
+    static let body18Bold = UIFont.systemFont(ofSize: 18, weight: .bold)
 
     static let title20 = UIFont.systemFont(ofSize: 20)
     static let title20Bold = UIFont.systemFont(ofSize: 20, weight: .bold)

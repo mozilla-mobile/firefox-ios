@@ -5,32 +5,50 @@
 import UIKit
 
 class InstructionsView: UIView {
+
+    private lazy var settingsInstructionView: InstructionView = {
+        let settingsIcon = UIImage(named: "instructions-cog")!
+        let instructionView = InstructionView(text: UIConstants.strings.instructionToOpenSafari, image: settingsIcon)
+        instructionView.translatesAutoresizingMaskIntoConstraints = false
+        return instructionView
+    }()
+
+    private lazy var safariInstructionView: InstructionView = {
+        let safariIcon = UIImage(named: "instructions-safari")!
+        let safariInstructionView = InstructionView(text: UIConstants.strings.safariInstructionsExtensions, image: safariIcon)
+        safariInstructionView.translatesAutoresizingMaskIntoConstraints = false
+        return safariInstructionView
+    }()
+
+    private lazy var enableInstructionView: InstructionView = {
+        let toggleIcon = UIImage(named: "instructions-switch")!
+        let enableInstructionView = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: toggleIcon)
+        enableInstructionView.translatesAutoresizingMaskIntoConstraints = false
+        return enableInstructionView
+    }()
+
     init() {
         super.init(frame: CGRect.zero)
 
-        let settingsInstruction = InstructionView(text: UIConstants.strings.safariInstructionsOpen, image: #imageLiteral(resourceName: "instructions-cog"))
-        let safariInstruction = InstructionView(text: UIConstants.strings.safariInstructionsContentBlockers, image: #imageLiteral(resourceName: "instructions-safari"))
-        let enableInstruction = InstructionView(text: String(format: UIConstants.strings.safariInstructionsEnable, AppInfo.productName), image: #imageLiteral(resourceName: "instructions-switch"))
+        addSubview(settingsInstructionView)
+        addSubview(safariInstructionView)
+        addSubview(enableInstructionView)
 
-        addSubview(settingsInstruction)
-        addSubview(safariInstruction)
-        addSubview(enableInstruction)
+        NSLayoutConstraint.activate([
+            settingsInstructionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            settingsInstructionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            settingsInstructionView.topAnchor.constraint(equalTo: self.topAnchor),
 
-        let instructionOffset = 50
+            safariInstructionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            safariInstructionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            safariInstructionView.topAnchor.constraint(equalTo: settingsInstructionView.bottomAnchor, constant: UIConstants.layout.settingsViewOffset),
 
-        settingsInstruction.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(self)
-        }
+            enableInstructionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            enableInstructionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            enableInstructionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            enableInstructionView.topAnchor.constraint(equalTo: safariInstructionView.bottomAnchor, constant: UIConstants.layout.settingsViewOffset)
 
-        safariInstruction.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.top.equalTo(settingsInstruction.snp.bottom).offset(instructionOffset)
-        }
-
-        enableInstruction.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalTo(self)
-            make.top.equalTo(safariInstruction.snp.bottom).offset(instructionOffset)
-        }
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -39,31 +57,42 @@ class InstructionsView: UIView {
 }
 
 private class InstructionView: UIView {
+
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+
+    private lazy var label: SmartLabel = {
+        let label = SmartLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.font = .body18
+        label.setContentCompressionResistancePriority(.required, for: .vertical)
+        return label
+    }()
+
     init(text: String, image: UIImage) {
         super.init(frame: CGRect.zero)
 
-        let imageView = UIImageView()
         imageView.image = image
-        addSubview(imageView)
-
-        let label = SmartLabel()
         label.text = text
-        label.textColor = .defaultFont
-        label.numberOfLines = 0
-        label.font = .body16Medium
-        label.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
+        addSubview(imageView)
         addSubview(label)
 
-        imageView.snp.makeConstraints { make in
-            make.leading.centerY.equalTo(self)
-            make.width.equalTo(image.size.width)
-            make.height.equalTo(image.size.height)
-        }
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsInstructionImageViewHeight),
+            imageView.widthAnchor.constraint(equalToConstant: UIConstants.layout.settingsInstructionImageViewWidth),
 
-        label.snp.makeConstraints { make in
-            make.leading.equalTo(imageView.snp.trailing).offset(30)
-            make.trailing.top.bottom.equalTo(self)
-        }
+            label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: UIConstants.layout.settingsPadding),
+            label.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            label.topAnchor.constraint(equalTo: self.topAnchor),
+            label.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

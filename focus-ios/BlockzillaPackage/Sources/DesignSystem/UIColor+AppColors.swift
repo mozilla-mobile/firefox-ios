@@ -49,6 +49,7 @@ public extension UIColor {
     static let secondaryButton = UIColor(named: "SecondaryButton")!
     static let primaryButton = UIColor(named: "PrimaryButton")!
     static let searchSuggestionButtonHighlight = UIColor(named: "SearchSuggestionButtonHighlight")!
+    static let extensionNotEnabled = UIColor(named: "ExtensionNotEnabled")!
 
     /**
      * Initializes and returns a color object for the given RGB hex integer.

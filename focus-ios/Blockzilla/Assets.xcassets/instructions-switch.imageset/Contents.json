@@ -1,7 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "instructions-switch.pdf",
+      "filename" : "light-toggle.pdf",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "dark-toggle.pdf",
       "idiom" : "universal"
     }
   ],
