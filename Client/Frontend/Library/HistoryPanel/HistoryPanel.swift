@@ -106,9 +106,12 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         view.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
 
+    var placeholder: NSAttributedString {
+        return NSAttributedString(string: viewModel.searchHistoryPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.secondaryText])
+    }
+
     lazy var searchbar: UISearchBar = .build { searchbar in
         searchbar.searchBarStyle = .prominent
-        searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
         searchbar.returnKeyType = .go
         searchbar.delegate = self
         searchbar.searchTextField.layer.cornerRadius = 18
@@ -199,9 +202,9 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
-            bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            bottomStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 8),
             bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            bottomStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -8)
         ])
     }
 
@@ -504,13 +507,14 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
         tableView.backgroundColor = .theme.homePanel.panelBackground
         searchbar.barTintColor = tableView.backgroundColor
-        searchbar.tintColor = .theme.ecosia.secondaryText
+        searchbar.tintColor = .theme.ecosia.information
         searchbar.searchTextField.backgroundColor = .theme.ecosia.primaryBackground
+        searchbar.searchTextField.attributedPlaceholder = placeholder
         searchSeparator.backgroundColor = .theme.ecosia.border
 
-        let config = UIImage.SymbolConfiguration(scale: .small)
-        let searchBarImage = UIImage(systemName: "magnifying.glass", withConfiguration: config)
+        let searchBarImage = UIImage(named: "search")?.tinted(withColor: .theme.ecosia.secondaryText).createScaled(.init(width: 16, height: 16))
         searchbar.setImage(searchBarImage, for: .search, state: .normal)
+        searchbar.setPositionAdjustment(.init(horizontal: 4, vertical: 0), for: .search)
 
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.ecosia.primaryText]
         bottomSearchButton.tintColor = .theme.ecosia.primaryText

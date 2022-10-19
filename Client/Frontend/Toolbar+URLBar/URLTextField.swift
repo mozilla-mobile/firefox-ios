@@ -21,7 +21,9 @@ class URLTextField: UITextField {
         return false
     }
 
+    /* Ecosia
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.insetBy(dx: TabLocationViewUX.Spacing, dy: 0)
     }
+     */
 }

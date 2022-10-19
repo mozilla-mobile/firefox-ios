@@ -448,7 +448,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             self.locationView.snp.remakeConstraints { make in
                 make.top.bottom.trailing.equalTo(self.locationContainer)
                 if isHome {
-                    make.leading.equalTo(searchIconImageView.snp.trailing)
+                    make.leading.equalTo(searchIconImageView.snp.trailing).offset(8)
                 } else {
                     make.leading.equalTo(self.locationContainer)
                 }

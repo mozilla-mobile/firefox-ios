@@ -127,7 +127,7 @@ final class DarkEcosiaTheme: EcosiaTheme {
     override var secondaryButton: UIColor { .Dark.Button.secondary }
 
     override var textfieldPlaceholder: UIColor { .Dark.Text.secondary }
-    override var textfieldIconTint: UIColor { .Dark.Text.secondary }
+    override var textfieldIconTint: UIColor { .Dark.Button.primary }
 
     override var personalCounterSelection: UIColor { UIColor.Photon.Grey60 }
     override var privateButtonBackground: UIColor { .white }

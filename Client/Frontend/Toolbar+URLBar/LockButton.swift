@@ -38,8 +38,9 @@ class LockButton: UIButton {
 
         clipsToBounds = false
         setImage(UIImage.templateImageNamed("lock_verified"), for: .normal)
-        imageView?.contentMode = .scaleAspectFill
+        imageView?.contentMode = .center
         adjustsImageWhenHighlighted = false
+        imageEdgeInsets = .init(top: 0, left: 10, bottom: 0, right: 0)
     }
 
     required init?(coder aDecoder: NSCoder) {
