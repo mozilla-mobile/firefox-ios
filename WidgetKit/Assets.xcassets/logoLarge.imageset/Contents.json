@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Logo.pdf",
+      "filename" : "LogoBright.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Logo-1.pdf",
+      "filename" : "LogoDark.pdf",
       "idiom" : "universal"
     }
   ],
