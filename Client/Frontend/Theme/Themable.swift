@@ -18,6 +18,7 @@ extension Themeable {
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
                                                        queue: mainQueue) { [weak self] _ in
             self?.applyTheme()
+            self?.updateThemeApplicableSubviews()
         }
     }
 
