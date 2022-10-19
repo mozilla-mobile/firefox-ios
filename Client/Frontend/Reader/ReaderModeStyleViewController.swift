@@ -19,15 +19,15 @@ protocol ReaderModeStyleViewControllerDelegate: AnyObject {
 class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
     var delegate: ReaderModeStyleViewControllerDelegate?
 
-    fileprivate var fontTypeButtons: [FontTypeButton]!
-    fileprivate var fontSizeLabel: FontSizeLabel!
-    fileprivate var fontSizeButtons: [FontSizeButton]!
-    fileprivate var themeButtons: [ThemeButton]!
-    fileprivate var separatorLines = [UIView.build(), UIView.build(), UIView.build()]
+    private var fontTypeButtons: [FontTypeButton]!
+    private var fontSizeLabel: FontSizeLabel!
+    private var fontSizeButtons: [FontSizeButton]!
+    private var themeButtons: [ThemeButton]!
+    private var separatorLines = [UIView.build(), UIView.build(), UIView.build()]
 
-    fileprivate var fontTypeRow: UIView!
-    fileprivate var fontSizeRow: UIView!
-    fileprivate var brightnessRow: UIView!
+    private var fontTypeRow: UIView!
+    private var fontSizeRow: UIView!
+    private var brightnessRow: UIView!
 
     // Keeps user-defined reader color until reader mode is closed or reloaded
     fileprivate var isUsingUserDefinedColor = false
