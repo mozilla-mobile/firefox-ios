@@ -74,7 +74,7 @@ class TabTrayViewController: UIViewController, Themeable {
         return button
     }()
 
-    private lazy var syncLoadingView: UIStackView = {
+    private lazy var syncLoadingView: UIStackView = .build { [self] stackView in
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
         syncingLabel.textColor = themeManager.currentTheme.colors.textPrimary
@@ -83,10 +83,10 @@ class TabTrayViewController: UIViewController, Themeable {
         activityIndicator.color = themeManager.currentTheme.colors.textPrimary
         activityIndicator.startAnimating()
 
-        let stackView = UIStackView(arrangedSubviews: [syncingLabel, activityIndicator])
+        stackView.addArrangedSubview(syncingLabel)
+        stackView.addArrangedSubview(activityIndicator)
         stackView.spacing = 12
-        return stackView
-    }()
+    }
 
     private lazy var flexibleSpace: UIBarButtonItem = {
         return UIBarButtonItem(barButtonSystemItem: .flexibleSpace,
@@ -108,6 +108,7 @@ class TabTrayViewController: UIViewController, Themeable {
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = .center
         label.text = viewModel.normalTabsCount
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -150,13 +151,11 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     // Toolbars
-    private lazy var navigationToolbar: UIToolbar = {
-        let toolbar = UIToolbar()
+    private lazy var navigationToolbar: UIToolbar = .build { [self] toolbar in
         toolbar.delegate = self
         toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
         toolbar.isTranslucent = false
-        return toolbar
-    }()
+    }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -242,9 +241,11 @@ class TabTrayViewController: UIViewController, Themeable {
         navigationItem.titleView = navigationMenu
         navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
 
-        navigationItem.titleView?.snp.makeConstraints { make in
-            make.width.equalTo(343)
-        }
+        guard let titleView = navigationItem.titleView else { return }
+
+        NSLayoutConstraint.activate([
+            titleView.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
+        ])
     }
 
     fileprivate func iPhoneViewSetup() {
@@ -252,15 +253,14 @@ class TabTrayViewController: UIViewController, Themeable {
 
         view.addSubview(navigationToolbar)
 
-        navigationToolbar.snp.makeConstraints { make in
-            make.left.right.equalTo(view)
-            make.top.equalTo(view.safeArea.top)
-        }
+        NSLayoutConstraint.activate([
+            navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
-        navigationMenu.snp.makeConstraints { make in
-            make.width.lessThanOrEqualTo(UX.NavigationMenu.width)
-            make.height.equalTo(UX.NavigationMenu.height)
-        }
+            navigationMenu.widthAnchor.constraint(lessThanOrEqualToConstant: UX.NavigationMenu.width),
+            navigationMenu.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height)
+        ])
     }
 
     fileprivate func updateTitle() {
