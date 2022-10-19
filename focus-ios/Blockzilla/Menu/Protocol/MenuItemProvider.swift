@@ -5,12 +5,37 @@
 import UIKit
 import AppShortcuts
 
-protocol MenuItemProvider: AnyObject {
+protocol WebViewItemProvider: AnyObject {
+    func openInDefaultBrowserItem(for url: URL) -> MenuAction
+    func copyItem(url: URL) -> MenuAction
+    func sharePageItem(for utils: OpenUtils, sender: UIView) -> MenuAction
+}
+
+extension WebViewItemProvider where Self: WebViewMenuActionable {
+    func openInDefaultBrowserItem(for url: URL) -> MenuAction {
+        MenuAction(title: UIConstants.strings.shareOpenInDefaultBrowser, image: "icon_favicon") { [unowned self] in
+            self.openInDefaultBrowser(url: url)
+        }
+    }
+
+    func sharePageItem(for utils: OpenUtils, sender: UIView) -> MenuAction {
+        MenuAction(title: UIConstants.strings.sharePage, image: "icon_openwith_active") { [unowned self] in
+            self.showSharePage(for: utils, sender: sender)
+        }
+    }
+
+    func copyItem(url: URL) -> MenuAction {
+        MenuAction(title: UIConstants.strings.copyAddress, image: "icon_link") { [unowned self] in
+            self.showCopy(url: url)
+        }
+    }
+}
+
+protocol MenuItemProvider: WebViewItemProvider {
     var shortcutManager: ShortcutsManager { get }
 
     func openInFireFoxItem(for url: URL) -> MenuAction?
     func openInChromeItem(for url: URL) -> MenuAction?
-    func openInDefaultBrowserItem(for url: URL) -> MenuAction
 
     var findInPageItem: MenuAction { get }
     var requestDesktopItem: MenuAction { get }
@@ -18,12 +43,10 @@ protocol MenuItemProvider: AnyObject {
     var settingsItem: MenuAction { get }
     var helpItem: MenuAction { get }
     var whatsNewItem: MenuAction { get }
-    var copyItem: MenuAction { get }
 
     func getShortcutsItem(for url: URL) -> MenuAction?
     func addToShortcutsItem(for url: URL) -> MenuAction
     func removeFromShortcutsItem(for url: URL) -> MenuAction
-    func sharePageItem(for utils: OpenUtils, sender: UIView) -> MenuAction
 }
 
 extension MenuItemProvider where Self: MenuActionable {
@@ -42,12 +65,6 @@ extension MenuItemProvider where Self: MenuActionable {
             self.openInChrome(url: url)
         }
         : nil
-    }
-
-    func openInDefaultBrowserItem(for url: URL) -> MenuAction {
-        MenuAction(title: UIConstants.strings.shareOpenInDefaultBrowser, image: "icon_favicon") { [unowned self] in
-            self.openInDefaultBrowser(url: url)
-        }
     }
 
     var findInPageItem: MenuAction {
@@ -86,12 +103,6 @@ extension MenuItemProvider where Self: MenuActionable {
         }
     }
 
-    var copyItem: MenuAction {
-        MenuAction(title: UIConstants.strings.copyAddress, image: "icon_link") { [unowned self] in
-            self.showCopy()
-        }
-    }
-
     func getShortcutsItem(for url: URL) -> MenuAction? {
         if shortcutManager.isSaved(url: url) {
             return removeFromShortcutsItem(for: url)
@@ -111,12 +122,6 @@ extension MenuItemProvider where Self: MenuActionable {
     func removeFromShortcutsItem(for url: URL) -> MenuAction {
         MenuAction(title: UIConstants.strings.shareMenuRemoveFromShortcuts, image: "icon_shortcuts_remove") { [unowned self] in
             self.removeShortcut(url: url)
-        }
-    }
-
-    func sharePageItem(for utils: OpenUtils, sender: UIView) -> MenuAction {
-        MenuAction(title: UIConstants.strings.sharePage, image: "icon_openwith_active") { [unowned self] in
-            self.showSharePage(for: utils, sender: sender)
         }
     }
 }

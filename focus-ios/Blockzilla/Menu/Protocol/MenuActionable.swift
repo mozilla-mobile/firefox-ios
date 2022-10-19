@@ -4,7 +4,13 @@
 
 import UIKit
 
-protocol MenuActionable: AnyObject {
+protocol WebViewMenuActionable: AnyObject {
+    func openInDefaultBrowser(url: URL)
+    func showCopy(url: URL)
+    func showSharePage(for utils: OpenUtils, sender: UIView)
+}
+
+protocol MenuActionable: WebViewMenuActionable {
     func addToShortcuts(url: URL)
     func removeShortcut(url: URL)
 
@@ -12,11 +18,8 @@ protocol MenuActionable: AnyObject {
     func requestDesktopBrowsing()
     func requestMobileBrowsing()
 
-    func showCopy()
-    func showSharePage(for utils: OpenUtils, sender: UIView)
     func openInFirefox(url: URL)
     func openInChrome(url: URL)
-    func openInDefaultBrowser(url: URL)
     var canOpenInFirefox: Bool { get }
     var canOpenInChrome: Bool { get }
 
