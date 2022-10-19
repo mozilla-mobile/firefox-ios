@@ -68,8 +68,6 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
     private weak var websiteField: UITextField?
     private weak var usernameField: UITextField?
     private weak var passwordField: UITextField?
-    // Used to temporarily store a reference to the cell the user is showing the menu controller for
-    private var menuControllerCell: LoginDetailTableViewCell?
     private var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
     private var breach: BreachRecord?
@@ -392,11 +390,6 @@ extension LoginDetailViewController {
         isEditingFieldData = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 
-        defer {
-            // Required to get UI to reload with changed state
-            tableView.reloadData()
-        }
-
         // Only update if user made changes
         guard let username = usernameField?.text, let password = passwordField?.text else { return }
 
@@ -416,7 +409,11 @@ extension LoginDetailViewController {
         )
 
         if updatedLogin.isValid.isSuccess {
-            _ = profile.logins.updateLogin(id: login.id, login: updatedLogin)
+            profile.logins.updateLogin(id: login.id, login: updatedLogin).uponQueue(.main) { _ in
+                self.onProfileDidFinishSyncing()
+                // Required to get UI to reload with changed state
+                self.tableView.reloadData()
+            }
         }
     }
 }
