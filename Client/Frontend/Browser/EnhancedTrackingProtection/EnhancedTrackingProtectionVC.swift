@@ -112,7 +112,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
     private let toggleSwitch: UISwitch = .build { toggleSwitch in
         toggleSwitch.isEnabled = true
-        toggleSwitch.onTintColor = .systemBlue
     }
 
     private let toggleStatusLabel: UILabel = .build { label in

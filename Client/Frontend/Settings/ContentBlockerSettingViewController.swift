@@ -58,7 +58,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         let header = UILabel()
         header.text = .TPAccessoryInfoBlocksTitle
         header.font = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
-        header.textColor = UIColor.theme.tableView.headerTextLight
+        header.textColor = themeManager.currentTheme.colors.textSecondary
 
         stack.addArrangedSubview(UIView())
         stack.addArrangedSubview(header)
@@ -76,7 +76,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         topStack.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
         topStack.isLayoutMarginsRelativeArrangement = true
 
-        sep.backgroundColor = UIColor.theme.tableView.separator
+        sep.backgroundColor = themeManager.currentTheme.colors.layer4
         sep.snp.makeConstraints { make in
             make.height.equalTo(0.5)
             make.width.equalToSuperview()
@@ -93,6 +93,7 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
@@ -125,14 +126,14 @@ class TPAccessoryInfo: ThemedTableViewController {
                 cell.textLabel?.text = .TPCategoryDescriptionContentTrackers
             }
         }
-        cell.imageView?.tintColor = UIColor.theme.tableView.rowText
+        cell.imageView?.tintColor = themeManager.currentTheme.colors.iconPrimary
         if indexPath.row == 1 {
             cell.textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         }
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
         cell.backgroundColor = .clear
-        cell.textLabel?.textColor = UIColor.theme.tableView.rowDetailText
+        cell.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
         cell.selectionStyle = .none
         return cell
     }
@@ -240,7 +241,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
         var attributes = [NSAttributedString.Key: AnyObject]()
         attributes[NSAttributedString.Key.font] = font
-        attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
+        attributes[NSAttributedString.Key.foregroundColor] = themeManager.currentTheme.colors.actionPrimary
 
         let button = UIButton()
         button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
