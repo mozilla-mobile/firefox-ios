@@ -4,24 +4,24 @@
 
 @font-face {
     font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-Regular.ttf');
+    src: url('/reader-mode/fonts/SF-Pro-Text-Bold.otf');
 }
 
 @font-face {
     font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-Book.ttf');
+    src: url('/reader-mode/fonts/SF-Pro-Text-BoldItalic.otf');
     font-weight: medium;
     }
 
 @font-face {
     font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-Bold.ttf');
+    src: url('/reader-mode/fonts/SF-Pro-Text-Regular.otf');
     font-weight: bold;
 }
 
 @font-face {
     font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-Italic.ttf');
+    src: url('/reader-mode/fonts/SF-Pro-Text-RegularItalic.otf');
     font-style: italic;
 }
 
