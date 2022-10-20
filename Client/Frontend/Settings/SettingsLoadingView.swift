@@ -29,7 +29,7 @@ class SettingsLoadingView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        indicator.color = theme.colors.iconSpinnerDefault
+        indicator.color = theme.colors.iconSpinner
         backgroundColor = theme.colors.layer1
     }
 

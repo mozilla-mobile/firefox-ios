@@ -139,7 +139,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
 
     func applyTheme() {
         let theme = themeManager.currentTheme
-        tableView.separatorColor = theme.colors.layer4
+        tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
 
         updateThemeApplicableSubviews()

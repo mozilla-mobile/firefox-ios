@@ -176,7 +176,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
         loginDataSource.viewModel = viewModel
 
         view.backgroundColor = theme.colors.layer1
-        tableView.separatorColor = theme.colors.layer4
+        tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
 
         selectionButton.setTitleColor(theme.colors.layer2, for: [])

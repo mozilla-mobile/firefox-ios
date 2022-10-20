@@ -59,6 +59,7 @@ protocol ThemeColourPalette {
     var iconAction: UIColor { get }
     var iconOnColor: UIColor { get }
     var iconWarning: UIColor { get }
+    var iconSpinner: UIColor { get }
     var iconAccentViolet: UIColor { get }
     var iconAccentBlue: UIColor { get }
     var iconAccentPink: UIColor { get }
@@ -73,7 +74,4 @@ protocol ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor { get }
-
-    // MARK: - Icon Spinner
-    var iconSpinnerDefault: UIColor { get }
 }
