@@ -68,7 +68,7 @@ class RemoteTabsPanel: UIViewController, Themeable, Loggable {
     func applyTheme() {
         view.backgroundColor = themeManager.currentTheme.colors.layer4
         tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
-        tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
+        tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableViewController.tableView.reloadData()
         tableViewController.refreshTabs()
     }
@@ -170,8 +170,6 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }
-        headerView.theme = theme
-        headerView.setupLayout()
         let clientTabs = self.clientAndTabs[section]
         let client = clientTabs.client
 
@@ -188,7 +186,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         headerView.tag = section
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
         headerView.addGestureRecognizer(tapGesture)
-
+        headerView.applyTheme(theme: theme)
         /*
         * A note on timestamps.
         * We have access to two timestamps here: the timestamp of the remote client record,
@@ -253,7 +251,7 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
     weak var remoteTabsPanel: RemoteTabsPanel?
     var error: RemoteTabsError
     var notLoggedCell: UITableViewCell?
-    var theme: Theme
+    private var theme: Theme
 
     init(remoteTabsPanel: RemoteTabsPanel,
          error: RemoteTabsError,
@@ -622,7 +620,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
         if let delegate = tableViewDelegate as? RemoteTabsPanelErrorDataSource {
-            delegate.theme = themeManager.currentTheme
+            delegate.applyTheme(theme: themeManager.currentTheme)
         }
     }
 

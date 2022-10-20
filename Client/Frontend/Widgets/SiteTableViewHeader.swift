@@ -40,18 +40,25 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
 
     private var titleTrailingConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
-    var theme: Theme = LightTheme()
-
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
         return titleLabel
     }
 
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+
+        setupLayout()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
         setDefaultBordersValues()
-        applyTheme(theme: theme)
     }
 
     func configure(_ model: SiteTableViewHeaderModel) {
@@ -61,7 +68,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         collapsibleState = model.collapsibleState
     }
 
-    func setupLayout() {
+    private func setupLayout() {
         translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(titleLabel, collapsibleImageView)
 
@@ -95,7 +102,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         ])
 
         showImage(false)
-        applyTheme(theme: theme)
     }
 
     func applyTheme(theme: Theme) {
