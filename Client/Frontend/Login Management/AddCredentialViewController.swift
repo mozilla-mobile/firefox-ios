@@ -38,10 +38,16 @@ class AddCredentialViewController: UIViewController, Themeable {
 
     fileprivate let didSaveAction: (LoginEntry) -> Void
 
-    fileprivate lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+    fileprivate lazy var cancelButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
+        button.tintColor = themeManager.currentTheme.colors.actionPrimary
+        return button
+    }()
+
     fileprivate lazy var saveButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
         button.isEnabled = false
+        button.tintColor = themeManager.currentTheme.colors.actionPrimary
         return button
     }()
 
@@ -180,6 +186,9 @@ extension AddCredentialViewController: UITableViewDataSource {
         let theme = themeManager.currentTheme
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
+
+        cancelButton.tintColor = theme.colors.actionPrimary
+        saveButton.tintColor = theme.colors.actionPrimary
 
         updateThemeApplicableSubviews()
     }
