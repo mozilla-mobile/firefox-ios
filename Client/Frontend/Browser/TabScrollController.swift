@@ -74,6 +74,11 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     private lazy var panGesture: UIPanGestureRecognizer = {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
         panGesture.maximumNumberOfTouches = 1
+        // Note: Setting this mask enables the pan gesture to recognize scroll events,
+        // like a mouse scroll movement or a two-finger scroll on a track pad.
+        if #available(iOS 13.4, *) {
+            panGesture.allowedScrollTypesMask = .continuous
+        }
         panGesture.delegate = self
         return panGesture
     }()
