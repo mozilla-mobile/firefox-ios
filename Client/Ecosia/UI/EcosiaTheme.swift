@@ -29,7 +29,7 @@ class EcosiaTheme {
     var ntpCellBackground: UIColor { .Light.Background.primary }
     var ntpBackground: UIColor { .Light.Background.tertiary }
     var ntpIntroBackground: UIColor { .Light.Background.primary }
-    var ntpImpactBackground: UIColor { .white }
+    var ntpImpactBackground: UIColor { .Light.Background.primary }
 
     var impactMultiplyCardBackground: UIColor { .Light.Background.primary }
     var trackingSheetBackground: UIColor { .Light.Background.tertiary }

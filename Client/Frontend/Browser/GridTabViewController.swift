@@ -700,7 +700,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
             return CGSize(width: 0, height: 0)
         }
 
-        let closeAllButtonHeight = InactiveTabCell.UX.CloseAllTabRowHeight
+        let closeAllButtonHeight = InactiveTabCell.UX.CloseAllTabRowHeight + InactiveTabCell.UX.CloseAllTabsButtonMargin
         let headerHeightWithRoundedCorner = InactiveTabCell.UX.HeaderAndRowHeight + InactiveTabCell.UX.RoundedContainerPaddingClosed
         var totalHeight = headerHeightWithRoundedCorner
         let width: CGFloat = collectionView.frame.size.width - InactiveTabCell.UX.InactiveTabTrayWidthPadding
@@ -734,7 +734,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
                   tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
             else { return .zero }
 
-            return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
+            return UIEdgeInsets(top: 0, left: GridTabTrayControllerUX.Margin, bottom: 0, right: GridTabTrayControllerUX.Margin)
 
         case .groupedTabs:
             guard tabDisplayManager.shouldEnableGroupedTabs,

@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import UIKit
+import Core
 
 enum CFRTelemetryEvent {
     case closeButton
@@ -52,6 +53,8 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
         case .jumpBackInSyncedTab:
             profile.prefs.setBool(true, forKey: CFRPrefsKeys.JumpBackInSyncedTabKey.rawValue)
             profile.prefs.setBool(true, forKey: CFRPrefsKeys.JumpBackinKey.rawValue)
+        case .inactiveTabs:
+            User.shared.hideInactiveTabsTooltip()
         default:
             profile.prefs.setBool(true, forKey: prefsKey(for: hintType))
         }

@@ -79,22 +79,22 @@ class InactiveTabViewModel {
         let bvc = BrowserViewController.foregroundBVC()
         // First time starting up with this feature we'll have cold start as update state
         // after updating model we can mark tabs that needs to become inactive
-        updateModelState(state: bvc.updateState)
+
+        // Ecosia: Early expiration debug feature
+        let expireEarly = bvc.profile.prefs.boolForKey(InactiveTabsExpireEarly.key) ?? false
+        updateModelState(state: bvc.updateState, expireEarly: expireEarly)
         bvc.updateState = bvc.updateState == .coldStart ? .sameSession : bvc.updateState
 
         updateFilteredTabs()
     }
 
-    private func updateModelState(state: TabUpdateState) {
+    private func updateModelState(state: TabUpdateState, expireEarly: Bool = false) {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
         let day14_Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
-        let defaultOldDay = day14_Old
 
-        // Debug for inactive tabs to easily test in code
-        // TODO: Add a switch in the debug menu to switch between debug or regular
-//        let min_Old = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date() // testing only
-//        let defaultOldDay = min_Old
+        // Ecosia: debug setting to expire tabs early
+        let defaultOldDay = expireEarly ? Date().addingTimeInterval(-10) : day14_Old
 
         let hasRunInactiveTabFeatureBefore = InactiveTabModel.hasRunInactiveTabFeatureBefore
         if hasRunInactiveTabFeatureBefore == false { InactiveTabModel.hasRunInactiveTabFeatureBefore = true }

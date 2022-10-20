@@ -243,7 +243,8 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 ToggleReferrals(settings: self),
                 CreateReferralCode(settings: self),
                 AddReferral(settings: self),
-                AddClaim(settings: self)
+                AddClaim(settings: self),
+                InactiveTabsExpireEarly(settings: self)
             ])]
 
         return settings

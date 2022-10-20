@@ -68,11 +68,10 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
         accessibilityIdentifier = AccessibilityIdentifiers.TabTray.inactiveTabHeader
 
         NSLayoutConstraint.activate([
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 19),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -19),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12, priority: .defaultHigh),
             titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -16),
+            titleLabel.trailingAnchor.constraint(equalTo: moreButton.leadingAnchor, constant: -16, priority: .defaultHigh),
 
             moreButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             moreButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -28),
@@ -86,8 +85,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
     }
 
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        self.titleLabel.textColor = theme == .dark ? .white : .black
+        self.titleLabel.textColor = .theme.ecosia.primaryText
         moreButton.imageView?.tintColor = .theme.ecosia.decorativeIcon
     }
 }

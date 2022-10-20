@@ -838,6 +838,24 @@ final class AddClaim: HiddenSetting {
     }
 }
 
+class InactiveTabsExpireEarly: BoolSetting {
+
+    static let key = "EcosiaInactiveTabsDebugSetting"
+
+    init(settings: SettingsTableViewController) {
+        super.init(
+            prefs: settings.profile.prefs,
+            prefKey: Self.key,
+            defaultValue: false,
+            attributedTitleText: NSAttributedString(string: "Inactive tabs expire after 10 seconds"), attributedStatusText: .init(string: "Restart app to see effect"))
+    }
+
+    override var hidden: Bool {
+        return !ShowDebugSettings
+    }
+
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController

@@ -101,7 +101,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Notific
                 width: containerView.frame.width - spacingWidth,
                 text: viewModel.buttonActionText())
             let totalHeight = buttonHeight + labelHeight + UX.labelTop + UX.labelBottom + stackView.spacing + actionButton.contentEdgeInsets.top + actionButton.contentEdgeInsets.bottom
-            debugPrint("height: \(totalHeight)")
             return totalHeight
 
         case false:
