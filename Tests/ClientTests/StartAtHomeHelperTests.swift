@@ -85,7 +85,7 @@ class StartAtHomeHelperTests: XCTestCase {
         setupHelper()
 
         // Create home tab
-        let url = URL(string: "internal://home")
+        let url = URL(string: "internal://local/about/home")
         let urlRequest = URLRequest(url: url!)
         let tab = tabManager.addTab(urlRequest)
 

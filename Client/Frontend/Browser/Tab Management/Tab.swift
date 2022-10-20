@@ -272,10 +272,16 @@ class Tab: NSObject {
     }
 
     var isFxHomeTab: Bool {
-        if let url = url, url.absoluteString.hasPrefix("internal://") { return true }
+        // Check if there is a url or last known url
+        let url = url ?? lastKnownUrl
+        guard let url = url else { return false }
 
-        // Check lastKnownUrl in case url is nil
-        if let url = lastKnownUrl, url.absoluteString.hasPrefix("internal://") { return true }
+        // Make sure the url is of type home page
+        if url.absoluteString.hasPrefix("internal://"),
+            let internalUrl = InternalURL(url),
+            internalUrl.isAboutHomeURL {
+            return true
+        }
 
         return false
     }

@@ -33,7 +33,7 @@ class TabMetadataManagerTests: XCTestCase {
         let stringUrl = "www.mozilla.org"
 
         manager.tabGroupData.tabAssociatedSearchTerm = "test search"
-        manager.tabGroupData.tabAssociatedSearchUrl = "internal://home"
+        manager.tabGroupData.tabAssociatedSearchUrl = "internal://local/about/home"
         manager.tabGroupData.tabAssociatedNextUrl = ""
 
         let shouldUpdate = manager.shouldUpdateSearchTermData(webViewUrl: stringUrl)
