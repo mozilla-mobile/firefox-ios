@@ -18,23 +18,31 @@ protocol RemotePanelDelegate: AnyObject {
 }
 
 // MARK: - RemoteTabsPanel
-class RemoteTabsPanel: UIViewController, NotificationThemeable, Loggable {
+class RemoteTabsPanel: UIViewController, Themeable, Loggable {
 
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
     lazy var tableViewController = RemoteTabsTableViewController()
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(notificationReceived),
-                                               name: .FirefoxAccountChanged,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(notificationReceived),
-                                               name: .ProfileDidFinishSyncing,
-                                               object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(notificationReceived),
+                                       name: .FirefoxAccountChanged,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(notificationReceived),
+                                       name: .ProfileDidFinishSyncing,
+                                       object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -53,14 +61,14 @@ class RemoteTabsPanel: UIViewController, NotificationThemeable, Loggable {
         }
 
         tableViewController.didMove(toParent: self)
-
+        listenForThemeChange()
         applyTheme()
     }
 
     func applyTheme() {
-        view.backgroundColor = UIColor.theme.tabTray.background
-        tableViewController.tableView.backgroundColor =  UIColor.theme.homePanel.panelBackground
-        tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
+        view.backgroundColor = themeManager.currentTheme.colors.layer4
+        tableViewController.tableView.backgroundColor =  themeManager.currentTheme.colors.layer3
+        tableViewController.tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableViewController.tableView.reloadData()
         tableViewController.refreshTabs()
     }
@@ -122,11 +130,16 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     var clientAndTabs: [ClientAndTabs]
     var hiddenSections = Set<Int>()
     private let siteImageHelper: SiteImageHelper
+    private var theme: Theme
 
-    init(remoteTabPanel: RemoteTabsPanel, clientAndTabs: [ClientAndTabs], profile: Profile) {
+    init(remoteTabPanel: RemoteTabsPanel,
+         clientAndTabs: [ClientAndTabs],
+         profile: Profile,
+         theme: Theme) {
         self.remoteTabPanel = remoteTabPanel
         self.clientAndTabs = clientAndTabs
         self.siteImageHelper = SiteImageHelper(profile: profile)
+        self.theme = theme
     }
 
     @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
@@ -173,7 +186,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         headerView.tag = section
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
         headerView.addGestureRecognizer(tapGesture)
-
+        headerView.applyTheme(theme: theme)
         /*
         * A note on timestamps.
         * We have access to two timestamps here: the timestamp of the remote client record,
@@ -210,7 +223,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 
         getFavicon(for: tab) { [weak cell] image in
             cell?.leftImageView.image = image
-            cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
+            cell?.leftImageView.backgroundColor = .clear
         }
 
         return cell
@@ -234,15 +247,19 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 
 // MARK: - RemoteTabsPanelErrorDataSource
 
-class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
+class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeApplicable {
     weak var remoteTabsPanel: RemoteTabsPanel?
     var error: RemoteTabsError
     var notLoggedCell: UITableViewCell?
+    private var theme: Theme
 
-    init(remoteTabsPanel: RemoteTabsPanel, error: RemoteTabsError) {
+    init(remoteTabsPanel: RemoteTabsPanel,
+         error: RemoteTabsError,
+         theme: Theme) {
         self.remoteTabsPanel = remoteTabsPanel
         self.error = error
         self.notLoggedCell = nil
+        self.theme = theme
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -272,21 +289,26 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch error {
         case .notLoggedIn:
-            let cell = RemoteTabsNotLoggedInCell(remoteTabsPanel: remoteTabsPanel)
+            let cell = RemoteTabsNotLoggedInCell(remoteTabsPanel: remoteTabsPanel,
+                                                 theme: theme)
             self.notLoggedCell = cell
             return cell
         default:
-            let cell = RemoteTabsErrorCell(error: self.error)
+            let cell = RemoteTabsErrorCell(error: self.error,
+                                           theme: theme)
             self.notLoggedCell = nil
             return cell
         }
     }
 
+    func applyTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: - RemoteTabsErrorCell
 
-class RemoteTabsErrorCell: UITableViewCell, ReusableCell {
+class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     struct UX {
         static let EmptyStateInstructionsWidth = 170
@@ -297,8 +319,11 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell {
     let titleLabel = UILabel()
     let emptyStateImageView = UIImageView()
     let instructionsLabel = UILabel()
+    var theme: Theme
 
-    init(error: RemoteTabsError) {
+    init(error: RemoteTabsError,
+         theme: Theme) {
+        self.theme = theme
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
         selectionStyle = .none
 
@@ -352,28 +377,26 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell {
 
         containerView.backgroundColor =  .clear
 
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme() {
-        emptyStateImageView.tintColor = UIColor.theme.tableView.rowText
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
-        backgroundColor = UIColor.theme.tabTray.background
-
+    func applyTheme(theme: Theme) {
+        emptyStateImageView.tintColor = theme.colors.textPrimary
+        titleLabel.textColor = theme.colors.textPrimary
+        instructionsLabel.textColor = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer3
     }
 }
 
 // MARK: - RemoteTabsNotLoggedInCell
 
-class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
+class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     struct UX {
-        static let EmptyStateSignInButtonColor = UIColor.Photon.Blue40
         static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
         static let EmptyStateSignInButtonHeight = 44
         static let EmptyStateSignInButtonWidth = 200
@@ -385,8 +408,11 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
     let signInButton = UIButton()
     let titleLabel = UILabel()
     let emptyStateImageView = UIImageView()
+    var theme: Theme
 
-    init(remoteTabsPanel: RemoteTabsPanel?) {
+    init(remoteTabsPanel: RemoteTabsPanel?,
+         theme: Theme) {
+        self.theme = theme
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
         selectionStyle = .none
 
@@ -441,19 +467,19 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
             make.top.equalTo(signInButton.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
         }
 
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme() {
-        emptyStateImageView.tintColor = UIColor.theme.tableView.rowText
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
-        signInButton.backgroundColor = UX.EmptyStateSignInButtonColor
-        backgroundColor = UIColor.theme.tabTray.background
+    func applyTheme(theme: Theme) {
+        emptyStateImageView.tintColor = theme.colors.textPrimary
+        titleLabel.textColor = theme.colors.textPrimary
+        instructionsLabel.textColor = theme.colors.textPrimary
+        signInButton.backgroundColor = theme.colors.textAccent
+        backgroundColor = theme.colors.layer4
     }
 
     @objc fileprivate func signIn() {
@@ -517,7 +543,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell {
 }
 
 // MARK: - RemoteTabsTableViewController
-class RemoteTabsTableViewController: UITableViewController {
+class RemoteTabsTableViewController: UITableViewController, Themeable {
 
     struct UX {
         static let RowHeight = SiteTableViewControllerUX.RowHeight
@@ -526,6 +552,9 @@ class RemoteTabsTableViewController: UITableViewController {
 
     weak var remoteTabsPanel: RemoteTabsPanel?
     var profile: Profile!
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
     var tableViewDelegate: RemoteTabsPanelDataSource? {
         didSet {
             tableView.dataSource = tableViewDelegate
@@ -536,6 +565,17 @@ class RemoteTabsTableViewController: UITableViewController {
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
+
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -552,8 +592,9 @@ class RemoteTabsTableViewController: UITableViewController {
         tableView.delegate = nil
         tableView.dataSource = nil
 
-        tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
+        listenForThemeChange()
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -573,6 +614,13 @@ class RemoteTabsTableViewController: UITableViewController {
         super.viewWillDisappear(animated)
         if refreshControl != nil {
             removeRefreshControl()
+        }
+    }
+
+    func applyTheme() {
+        tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
+        if let delegate = tableViewDelegate as? RemoteTabsPanelErrorDataSource {
+            delegate.applyTheme(theme: themeManager.currentTheme)
         }
     }
 
@@ -609,16 +657,19 @@ class RemoteTabsTableViewController: UITableViewController {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
         if clientAndTabs.isEmpty {
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                    error: .noClients)
+                                                                    error: .noClients,
+                                                                    theme: themeManager.currentTheme)
         } else {
             let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
             if nonEmptyClientAndTabs.isEmpty {
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                        error: .noTabs)
+                                                                        error: .noTabs,
+                                                                        theme: themeManager.currentTheme)
             } else {
                 let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
                                                                                  clientAndTabs: nonEmptyClientAndTabs,
-                                                                                 profile: profile)
+                                                                                 profile: profile,
+                                                                                 theme: themeManager.currentTheme)
                 tabsPanelDataSource.collapsibleSectionDelegate = self
                 self.tableViewDelegate = tabsPanelDataSource
             }
@@ -635,7 +686,8 @@ class RemoteTabsTableViewController: UITableViewController {
         guard profile.hasSyncableAccount() else {
             self.endRefreshing()
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                    error: .notLoggedIn)
+                                                                    error: .notLoggedIn,
+                                                                    theme: themeManager.currentTheme)
             return
         }
 
@@ -644,7 +696,8 @@ class RemoteTabsTableViewController: UITableViewController {
             guard let clientAndTabs = result.successValue else {
                 self.endRefreshing()
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                        error: .failedToSync)
+                                                                        error: .failedToSync,
+                                                                        theme: self.themeManager.currentTheme)
                 return
             }
 

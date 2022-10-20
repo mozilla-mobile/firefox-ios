@@ -16,7 +16,10 @@ protocol TabTrayCell where Self: UICollectionViewCell {
 }
 
 // MARK: - Tab Cell
-class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
+class TabCell: UICollectionViewCell,
+               TabTrayCell,
+               ReusableCell,
+               ThemeApplicable {
     // MARK: - Constants
     enum Style {
         case light
@@ -164,7 +167,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
     func configureWith(tab: Tab, isSelected selected: Bool, theme: Theme) {
         isSelectedTab = selected
 
-        applyColors(theme)
+        applyTheme(theme: theme)
 
         titleText.text = tab.getTabTrayTitle()
         accessibilityLabel = getA11yTitleLabel(tab: tab)
@@ -211,7 +214,7 @@ class TabCell: UICollectionViewCell, TabTrayCell, ReusableCell {
         }
     }
 
-    private func applyColors(_ theme: Theme) {
+    func applyTheme(theme: Theme) {
         backgroundHolder.backgroundColor = theme.colors.layer1
         closeButton.tintColor = theme.colors.indicatorActive
         titleText.textColor = theme.colors.textPrimary

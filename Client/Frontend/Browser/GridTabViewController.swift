@@ -64,7 +64,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }()
 
     fileprivate lazy var tabLayoutDelegate: TabLayoutDelegate = {
-        let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager, traitCollection: self.traitCollection, scrollView: self.collectionView)
+        let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager,
+                                         traitCollection: self.traitCollection,
+                                         scrollView: self.collectionView)
         delegate.tabSelectionDelegate = self
         delegate.tabPeekDelegate = self
         return delegate
@@ -143,6 +145,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
+        listenForThemeChange()
         applyTheme()
 
         setupNotifications(forObserver: self, observing: [

@@ -32,7 +32,12 @@ protocol GroupedTabDelegate: AnyObject {
     func newSearchFromGroup(searchTerm: String)
 }
 
-class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDataSource, UITableViewDelegate, GroupedTabsDelegate, ReusableCell {
+class GroupedTabCell: UICollectionViewCell,
+                      UITableViewDataSource,
+                      UITableViewDelegate,
+                      GroupedTabsDelegate,
+                      ReusableCell,
+                      ThemeApplicable {
 
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?
@@ -59,7 +64,7 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
         super.init(frame: frame)
         addSubviews(tableView)
         setupConstraints()
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -137,7 +142,7 @@ class GroupedTabCell: UICollectionViewCell, NotificationThemeable, UITableViewDa
         }
     }
 
-    func applyTheme() {
+    func applyTheme(theme: Theme) {
         self.backgroundColor = .clear
         self.tableView.backgroundColor = .clear
         tableView.reloadData()
@@ -166,7 +171,8 @@ class GroupedTabContainerCell: UITableViewCell,
                                UICollectionViewDelegateFlowLayout,
                                UICollectionViewDataSource,
                                TabCellDelegate,
-                               ReusableCell {
+                               ReusableCell,
+                               ThemeApplicable {
 
     // Delegate
     var delegate: GroupedTabsDelegate?
@@ -265,7 +271,7 @@ class GroupedTabContainerCell: UITableViewCell,
             make.bottom.equalToSuperview()
         }
 
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     func focusTab(tab: Tab) {
@@ -275,7 +281,7 @@ class GroupedTabContainerCell: UITableViewCell,
         }
     }
 
-    private func applyTheme() {
+    func applyTheme(theme: Theme) {
         selectedView.backgroundColor = theme.colors.layer3
         collectionView.backgroundColor = theme.colors.layer5
     }
@@ -284,7 +290,7 @@ class GroupedTabContainerCell: UITableViewCell,
         super.prepareForReuse()
         self.selectionStyle = .none
         self.titleLabel.text = searchGroupName
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     // UICollectionViewDelegateFlowLayout

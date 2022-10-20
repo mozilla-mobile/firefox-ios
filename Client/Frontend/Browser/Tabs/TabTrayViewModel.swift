@@ -67,7 +67,10 @@ class TabTrayViewModel {
         self.profile = profile
         self.tabManager = tabManager
 
-        self.tabTrayView = GridTabViewController(tabManager: self.tabManager, profile: profile, tabTrayDelegate: tabTrayDelegate, tabToFocus: tabToFocus)
+        self.tabTrayView = GridTabViewController(tabManager: self.tabManager,
+                                                 profile: profile,
+                                                 tabTrayDelegate: tabTrayDelegate,
+                                                 tabToFocus: tabToFocus)
         self.syncedTabsController = RemoteTabsPanel(profile: self.profile)
         self.segmentToFocus = segmentToFocus
     }
