@@ -127,6 +127,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
         tableView.estimatedRowHeight = 44.0
 
         applyTheme()
+        listenForThemeChange()
     }
 
     override func viewWillAppear(_ animated: Bool) {
