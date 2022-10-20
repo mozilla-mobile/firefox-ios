@@ -188,7 +188,7 @@ class ThemeSettingsController: ThemedTableViewController {
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
             control.isOn = LegacyThemeManager.instance.systemThemeIsOn
-            
+
             cell.accessoryView = control
         case .automaticBrightness:
             if indexPath.row == 0 {
