@@ -17,7 +17,6 @@ final class NTPImpactCell: UICollectionViewCell, NotificationThemeable, Reusable
         return formatter
     }()
 
-    private(set) weak var widthConstraint: NSLayoutConstraint!
     private weak var background: UIView!
     private weak var container: UIStackView!
 
@@ -258,11 +257,6 @@ final class NTPImpactCell: UICollectionViewCell, NotificationThemeable, Reusable
         let right = background.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         right.priority = .defaultHigh
         right.isActive = true
-
-        let width = background.widthAnchor.constraint(equalToConstant: bounds.width)
-        width.priority = .init(999)
-        width.isActive = true
-        self.widthConstraint = width
 
         background.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
 

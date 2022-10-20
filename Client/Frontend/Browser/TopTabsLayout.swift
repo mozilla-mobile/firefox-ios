@@ -20,7 +20,7 @@ class TopTabsLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout {
         let items = collectionView.numberOfItems(inSection: 0)
         var width = collectionView.frame.width / CGFloat(items)
         width = max(TopTabsUX.MinTabWidth, min(width, TopTabsUX.MaxTabWidth))
-        return CGSize(width: width, height: collectionView.frame.height)
+        return CGSize(width: width, height: collectionView.frame.height - TopTabsUX.TopTabsPadding)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

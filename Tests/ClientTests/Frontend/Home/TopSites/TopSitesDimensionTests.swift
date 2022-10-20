@@ -46,7 +46,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 8)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_portraitiPadCompact_defaultRowNumber() {
@@ -57,7 +57,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_landscapeiPadCompact_defaultRowNumber() {
@@ -68,7 +68,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_portraitiPadUnspecified_defaultRowNumber() {
@@ -79,7 +79,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 2)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_landscapeiPadUnspecified_defaultRowNumber() {
@@ -90,7 +90,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     // MARK: Section dimension with stubbed data

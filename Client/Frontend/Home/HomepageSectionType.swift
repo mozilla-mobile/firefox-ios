@@ -41,20 +41,13 @@ enum HomepageSectionType: Int, CaseIterable {
 
 }
 
-// Ecosia
-private let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 16)
 private let MinimumInsets: CGFloat = 16
 
+// Ecosia
 extension HomepageSectionType {
     func sectionInsets(_ traits: UITraitCollection) -> CGFloat {
-        var currentTraits = traits
-        let orientation: UIInterfaceOrientation = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.interfaceOrientation ?? .portrait
+        var insets: CGFloat = traits.userInterfaceIdiom == .phone ? 0 : 100
 
-        if (traits.horizontalSizeClass == .regular && orientation.isPortrait) || UIDevice.current.userInterfaceIdiom == .phone {
-            currentTraits = UITraitCollection(horizontalSizeClass: .compact)
-        }
-
-        var insets = sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
 
         switch self {
         case .libraryShortcuts, .topSites, .impact:
@@ -62,9 +55,9 @@ extension HomepageSectionType {
             let safeAreaInsets = window?.safeAreaInsets.left ?? 0
             insets += MinimumInsets + safeAreaInsets
 
-            /* Ecosia: center layout in landscape for iPhone */
-            if orientation.isLandscape,
-               UIDevice.current.userInterfaceIdiom == .phone {
+            /* Ecosia: center layout in landscape */
+            let orientation: UIInterfaceOrientation = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.interfaceOrientation ?? .portrait
+            if orientation.isLandscape {
                 insets = UIScreen.main.bounds.width / 4
             }
 

@@ -84,12 +84,7 @@ class TopSitesDimensionImplementation: TopSitesDimension {
         if interface.isIphone {
             return 4
         } else {
-            // The number of items in a row is equal to the number of top sites in a row * 2
-            var numItems = Int(UX.numberOfItemsPerRowForSizeClassIpad[interface.horizontalSizeClass])
-            if !interface.isLandscape || (interface.horizontalSizeClass == .compact && interface.isLandscape) {
-                numItems = numItems - 1
-            }
-            return numItems * 2
+            return 6
         }
     }
 }
