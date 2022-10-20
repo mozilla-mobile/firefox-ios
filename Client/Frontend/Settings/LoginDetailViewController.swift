@@ -125,6 +125,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         tableView.estimatedRowHeight = 44.0
+        tableView.separatorInset = .zero
 
         applyTheme()
         listenForThemeChange()

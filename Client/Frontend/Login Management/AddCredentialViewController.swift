@@ -30,6 +30,7 @@ class AddCredentialViewController: UIViewController, Themeable {
         tableView.estimatedRowHeight = 44.0
         // Add empty footer view to prevent separators from being drawn past the last item.
         tableView.tableFooterView = UIView()
+        tableView.separatorInset = .zero
     }
     fileprivate weak var websiteField: UITextField!
     fileprivate weak var usernameField: UITextField!
