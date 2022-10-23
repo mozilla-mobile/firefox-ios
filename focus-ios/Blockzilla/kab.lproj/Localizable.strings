@@ -175,6 +175,9 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Mdel";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Bdu";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Bdu tunigin";
 
@@ -441,6 +444,9 @@
 
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Sefsex";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Immed";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Rnu";

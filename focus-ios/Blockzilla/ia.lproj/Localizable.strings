@@ -553,6 +553,9 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Le sito ha contento mancante o se comporta estraniemente?";
 
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Cercar in %@";
+
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Va a Parametros, pro gerer optiones specific de confidentialitate e de securitate.";
 

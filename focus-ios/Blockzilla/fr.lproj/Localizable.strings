@@ -476,7 +476,7 @@
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Appuyez sur l’icône plus.";
 
 /* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
-"ShowMeHowOnboarding.Title.V2" = "Ajoutez un widget %@";
+"ShowMeHowOnboarding.Title.V2" = "Ajouter un widget %@";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Ajouter";
@@ -552,6 +552,9 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Un site se comporte bizarrement ou du contenu manque ?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Rechercher dans %@";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Rendez-vous dans les paramètres pour gérer les options avancées de sécurité et de vie privée.";

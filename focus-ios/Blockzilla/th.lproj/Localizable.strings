@@ -460,6 +460,9 @@
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.SubtitleStepTwo.V2" = "แตะที่ไอคอนบวก";
 
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "เพิ่ม %@ วิดเจ็ต";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "เพิ่ม";
 
@@ -534,6 +537,9 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "ไซต์ไม่มีเนื้อหาหรือทำงานแปลก ๆ ?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "ค้นหาใน %@";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "ไปที่การตั้งค่าเพื่อจัดการตัวเลือกต่าง ๆ เกี่ยวกับความเป็นส่วนตัวและความปลอดภัย";
