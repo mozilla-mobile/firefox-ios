@@ -44,34 +44,34 @@ class TabTrayViewController: UIViewController, Themeable {
     private lazy var deleteButtonIpad: UIBarButtonItem = {
         return createButtonItem(imageName: ImageIdentifiers.tabTrayDelete,
                                 action: #selector(didTapDeleteTabs(_:)),
-                                a11yId: "closeAllTabsButtonTabTray",
+                                a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIpad: UIBarButtonItem = {
         return createButtonItem(imageName: ImageIdentifiers.tabTrayNewTab,
                                 action: #selector(didTapAddTab(_:)),
-                                a11yId: "newTabButtonTabTray",
+                                a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)
     }()
 
     private lazy var deleteButtonIphone: UIBarButtonItem = {
         return createButtonItem(imageName: ImageIdentifiers.tabTrayDelete,
                                 action: #selector(didTapDeleteTabs(_:)),
-                                a11yId: "closeAllTabsButtonTabTray",
+                                a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
                                 a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIphone: UIBarButtonItem = {
         return createButtonItem(imageName: ImageIdentifiers.tabTrayNewTab,
                                 action: #selector(didTapAddTab(_:)),
-                                a11yId: "newTabButtonTabTray",
+                                a11yId: AccessibilityIdentifiers.TabTray.newTabButton,
                                 a11yLabel: .TabTrayAddTabAccessibilityLabel)
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
         let button = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDone))
-        button.accessibilityIdentifier = "doneButtonTabTray"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.doneButton
         return button
     }()
 
@@ -81,7 +81,7 @@ class TabTrayViewController: UIViewController, Themeable {
                                      target: self,
                                      action: #selector(didTapSyncTabs))
 
-        button.accessibilityIdentifier = "syncTabsButtonTabTray"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncTabsButton
         return button
     }()
 
@@ -91,7 +91,7 @@ class TabTrayViewController: UIViewController, Themeable {
                                      target: self,
                                      action: #selector(didTapSyncTabs))
 
-        button.accessibilityIdentifier = "syncTabsButtonTabTray"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncTabsButton
         return button
     }()
 
@@ -143,7 +143,9 @@ class TabTrayViewController: UIViewController, Themeable {
 
     private lazy var segmentedControlIpad: UISegmentedControl = {
         let items = TabTrayViewModel.Segment.allCases.map { $0.label }
-        return createSegmentedControl(items: items, action: #selector(segmentIpadChanged), a11yId: "navBarTabTray")
+        return createSegmentedControl(items: items,
+                                      action: #selector(segmentIpadChanged),
+                                      a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
     }()
 
     private lazy var segmentedControlIphone: UISegmentedControl = {
@@ -151,7 +153,9 @@ class TabTrayViewController: UIViewController, Themeable {
             TabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
             TabTrayViewModel.Segment.privateTabs.image!,
             TabTrayViewModel.Segment.syncedTabs.image!]
-        return createSegmentedControl(items: items, action: #selector(segmentIphoneChanged), a11yId: "navBarTabTray")
+        return createSegmentedControl(items: items,
+                                      action: #selector(segmentIphoneChanged),
+                                      a11yId: AccessibilityIdentifiers.TabTray.navBarSegmentedControl)
     }()
 
     // Toolbars
