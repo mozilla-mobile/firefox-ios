@@ -199,6 +199,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "ᱡᱤᱱᱤᱥ ᱟᱫᱮᱨ ᱟᱞᱜᱟ ᱛᱮᱭᱟᱨ ᱞᱟᱹᱜᱤᱫ, ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ ᱫᱚ ᱢᱩᱞ ᱦᱤᱥᱟᱹᱵᱽ ᱛᱮ ᱞᱟᱛᱟᱨ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "ᱟᱢᱟᱜ ᱢᱚᱱᱮᱛᱮᱭᱟᱜ Firefox ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱫᱚ ᱱᱤᱛᱚᱜ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱲᱟᱜ ᱠᱟᱜᱼᱟᱢ ᱚᱱᱰᱮ ᱜᱮ ᱤᱫᱤ ᱢᱮᱭᱟᱭ ᱾ ᱟᱢᱟᱜ ᱱᱤᱛᱚᱜᱟᱜ ᱴᱮᱵᱽ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ ᱟᱨ ᱥᱮᱸᱫᱽᱨᱟ ᱠᱚ ᱯᱟᱱᱛᱮ ᱛᱟᱢ ᱾";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ ᱨᱮᱭᱟᱜ ᱥᱟᱡᱟᱣ ᱠᱚ";
 
@@ -925,6 +928,9 @@
 /* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
 "Onboarding.SyncTitle.v102" = "ᱟᱢᱟᱜ ᱯᱨᱚᱵᱷᱟᱣ ᱨᱮ ᱛᱟᱦᱮᱸ ᱞᱟᱹᱜᱤᱫ ᱥᱭᱝᱠ ᱢᱮ";
 
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "ᱰᱷᱮᱨ ᱠᱟᱱᱛᱷᱪᱤᱛᱟᱹᱨ ᱠᱚ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
+
 /* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
 "Onboarding.WallpaperAction.v102" = "ᱠᱟᱸᱛᱷᱪᱤᱛᱟᱹᱨ ᱥᱮᱴ ᱢᱮ";
 
@@ -990,6 +996,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "ᱯᱟᱲᱦᱟᱣ ᱚᱵᱚᱥᱛᱟ ᱢᱮᱱᱟ-ᱟ";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "ᱯᱟᱲᱦᱟᱣ ᱞᱮᱠᱟ ᱪᱤᱸᱦᱟᱭ ᱢᱮ";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "ᱵᱟᱲ ᱯᱟᱲᱦᱟᱣ ᱞᱮᱠᱟ ᱪᱤᱸᱦᱟᱭ ᱢᱮ";
 
 /* Panel accessibility label */
 "Reading list" = "ᱯᱟᱰᱦᱟᱣ ᱞᱤᱥᱴᱤ";
@@ -1354,8 +1366,14 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ, ᱵᱮᱲᱟ ᱦᱟᱹᱥᱩᱨ ᱵᱩᱨᱩ ᱨᱮᱭᱟᱜ ᱱᱟᱹᱢᱩᱱᱟ ᱾";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "ᱠᱞᱟᱥᱤᱠ %@";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "ᱯᱚᱨᱫᱟ ᱠᱷᱩᱞᱟᱹᱜ ᱠᱟᱱᱟ";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "ᱰᱷᱮᱨ ᱥᱮᱬᱟᱭ ᱢᱮ";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Firefox ᱚᱲᱟᱜ ᱥᱟᱦᱴᱟ ᱞᱚᱜᱚ ᱨᱮ ᱴᱤᱯᱟᱹᱣ ᱠᱟᱛᱮ ᱞᱟᱴᱷᱟ ᱪᱤᱛᱟᱹᱨ ᱵᱚᱫᱚᱞ ᱢᱮ";
@@ -1759,11 +1777,32 @@
 /* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
 "Upgrade.SyncSign.Action.v106" = "ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ";
 
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "ᱫᱮᱞᱟ ᱮᱛᱦᱚᱵ ᱞᱮᱜᱮ ᱵᱚᱱ";
+
 /* Debug option */
 "Use stage servers" = "Stage ᱥᱚᱨᱵᱷᱚᱨ ᱠᱚ ᱵᱮᱵᱷᱟᱨ ᱢᱮ";
 
 /* Username textbox in Authentication prompt */
 "Username" = "ᱵᱮᱵᱷᱟᱨᱤᱡᱟᱠ ᱧᱩᱛᱩᱢ";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "ᱱᱚᱶᱟ ᱠᱟᱱᱛᱷᱪᱤᱛᱟᱹᱨ ᱥᱟᱞᱟᱜ ᱵᱷᱩᱞ ᱦᱩᱭᱮᱱᱟ ᱾";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "ᱠᱟᱱᱛᱷᱪᱤᱛᱟᱹᱨ ᱵᱚᱫᱚᱞ ᱵᱟᱭ ᱜᱟᱱ ᱞᱮᱱᱟ";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "ᱟᱢᱟᱜ ᱰᱟᱩᱱᱞᱚᱰ ᱥᱟᱞᱟᱜ ᱵᱷᱩᱞ ᱦᱩᱭᱮᱱᱟ ᱾";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "ᱠᱟᱱᱛᱷᱪᱤᱛᱟᱹᱨ ᱰᱟᱩᱱᱞᱳᱰ ᱵᱟᱭ ᱜᱟᱱ ᱞᱮᱱᱟ";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "ᱵᱟᱹᱰᱨᱟᱹ";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "ᱫᱩᱦᱲᱟᱹ ᱠᱩᱨᱩᱢᱩᱴᱩ";
 
 /* Accessibility label for the main web content view */
 "Web content" = "ᱣᱮᱵ ᱵᱤᱥᱳᱭ";
