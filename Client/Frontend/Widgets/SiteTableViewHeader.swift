@@ -9,9 +9,10 @@ struct SiteTableViewHeaderModel {
     let title: String
     let isCollapsible: Bool
     let collapsibleState: ExpandButtonState?
+    let theme: Theme
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
+class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
 
     struct UX {
         static let titleTrailingLeadingMargin: CGFloat = 16
@@ -60,7 +61,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     override func prepareForReuse() {
         super.prepareForReuse()
         setDefaultBordersValues()
-        applyTheme()
     }
 
     func configure(_ model: SiteTableViewHeaderModel) {
@@ -104,13 +104,12 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         ])
 
         showImage(false)
-        applyTheme()
     }
 
-    func applyTheme() {
+    func applyTheme(theme: Theme) {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
-        bordersHelper.applyTheme()
+        bordersHelper.applyTheme(theme: theme)
     }
 
     func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {

@@ -53,13 +53,10 @@ class ThemedTableViewController: UITableViewController, Themeable {
         tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.reloadData()
-
-        // TODO: Remove with legacy theme clean up FXIOS-3960
-        (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
     }
 }
 
-class ThemedHeaderFooterViewBordersHelper: NotificationThemeable, ThemeApplicable {
+class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
     enum BorderLocation {
         case top
         case bottom
@@ -97,13 +94,6 @@ class ThemedHeaderFooterViewBordersHelper: NotificationThemeable, ThemeApplicabl
             make.left.right.bottom.equalTo(view)
             make.height.equalTo(0.5)
         }
-    }
-
-    // TODO: FXIOS-4884 - Remove NotificationThemeable applyTheme
-    // to remove in favor of applyTheme(theme: Theme) and updateThemeApplicableSubviews
-    func applyTheme() {
-        topBorder.backgroundColor = UIColor.theme.tableView.separator
-        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
     }
 
     func applyTheme(theme: Theme) {

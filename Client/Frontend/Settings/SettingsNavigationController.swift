@@ -64,11 +64,6 @@ extension ThemedNavigationController {
     func applyTheme() {
         setupNavigationBarAppearance(theme: themeManager.currentTheme)
         setNeedsStatusBarAppearanceUpdate()
-
-        // TODO: Remove with legacy theme clean up FXIOS-3960
-        viewControllers.forEach {
-            ($0 as? NotificationThemeable)?.applyTheme()
-        }
     }
 }
 

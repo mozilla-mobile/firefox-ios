@@ -21,9 +21,9 @@ class SearchEnginePicker: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let engine = engines[indexPath.item]
         let cell = ThemedTableViewCell()
+        cell.applyTheme(theme: themeManager.currentTheme)
         cell.textLabel?.text = engine.shortName
         let size = CGSize(width: OpenSearchEngine.UX.preferredIconSize,
                           height: OpenSearchEngine.UX.preferredIconSize)

@@ -68,8 +68,5 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
         setupToolBarAppearance()
 
         setNeedsStatusBarAppearanceUpdate()
-
-        // TODO: Remove with legacy theme clean up FXIOS-3960
-        viewControllers.forEach { ($0 as? NotificationThemeable)?.applyTheme() }
     }
 }
