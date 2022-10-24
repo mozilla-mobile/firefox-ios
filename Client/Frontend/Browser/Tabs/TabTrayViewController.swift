@@ -5,6 +5,7 @@
 import Shared
 import Storage
 import Foundation
+import UIKit
 
 enum TabTrayViewAction {
     case addTab
@@ -38,24 +39,32 @@ class TabTrayViewController: UIViewController, Themeable {
 
     // MARK: - UI Elements
     // Buttons & Menus
-    private lazy var deleteButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.tabTrayDelete),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(didTapDeleteTabs(_:)))
-        button.accessibilityIdentifier = "closeAllTabsButtonTabTray"
-        button.accessibilityLabel = .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel
-        return button
+    private lazy var deleteButtonIpad: UIBarButtonItem = {
+        return createButtonItem(imageName: ImageIdentifiers.tabTrayDelete,
+                                action: #selector(didTapDeleteTabs(_:)),
+                                a11yId: "closeAllTabsButtonTabTray",
+                                a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
-    private lazy var newTabButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.tabTrayNewTab),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(didTapAddTab(_:)))
-        button.accessibilityIdentifier = "newTabButtonTabTray"
-        button.accessibilityLabel = .TabTrayAddTabAccessibilityLabel
-        return button
+    private lazy var newTabButtonIpad: UIBarButtonItem = {
+        return createButtonItem(imageName: ImageIdentifiers.tabTrayNewTab,
+                                action: #selector(didTapAddTab(_:)),
+                                a11yId: "newTabButtonTabTray",
+                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
+    }()
+
+    private lazy var deleteButtonIphone: UIBarButtonItem = {
+        return createButtonItem(imageName: ImageIdentifiers.tabTrayDelete,
+                                action: #selector(didTapDeleteTabs(_:)),
+                                a11yId: "closeAllTabsButtonTabTray",
+                                a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
+    }()
+
+    private lazy var newTabButtonIphone: UIBarButtonItem = {
+        return createButtonItem(imageName: ImageIdentifiers.tabTrayNewTab,
+                                action: #selector(didTapAddTab(_:)),
+                                a11yId: "newTabButtonTabTray",
+                                a11yLabel: .TabTrayAddTabAccessibilityLabel)
     }()
 
     private lazy var doneButton: UIBarButtonItem = {
@@ -64,7 +73,17 @@ class TabTrayViewController: UIViewController, Themeable {
         return button
     }()
 
-    private lazy var syncTabButton: UIBarButtonItem = {
+    private lazy var syncTabButtonIpad: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: .FxASyncNow,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(didTapSyncTabs))
+
+        button.accessibilityIdentifier = "syncTabsButtonTabTray"
+        return button
+    }()
+
+    private lazy var syncTabButtonIphone: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .FxASyncNow,
                                      style: .plain,
                                      target: self,
@@ -113,26 +132,16 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     private lazy var bottomToolbarItems: [UIBarButtonItem] = {
-        return [deleteButton, flexibleSpace, newTabButton]
+        return [deleteButtonIphone, flexibleSpace, newTabButtonIphone]
     }()
 
     private lazy var bottomToolbarItemsForSync: [UIBarButtonItem] = {
-        return [flexibleSpace, syncTabButton]
+        return [flexibleSpace, syncTabButtonIphone]
     }()
 
     private lazy var segmentedControlIpad: UISegmentedControl = {
         let items = TabTrayViewModel.Segment.allCases.map { $0.label }
-        var navigationMenu = UISegmentedControl(items: items)
-        navigationMenu.translatesAutoresizingMaskIntoConstraints = true
-        navigationMenu.accessibilityIdentifier = "navBarTabTray"
-
-        var segmentToFocus = viewModel.segmentToFocus
-        if segmentToFocus == nil {
-            segmentToFocus = viewModel.tabManager.selectedTab?.isPrivate ?? false ? .privateTabs : .tabs
-        }
-        navigationMenu.selectedSegmentIndex = segmentToFocus?.rawValue ?? TabTrayViewModel.Segment.tabs.rawValue
-        navigationMenu.addTarget(self, action: #selector(segmentIpadChanged), for: .valueChanged)
-        return navigationMenu
+        return createSegmentedControl(items: items, action: #selector(segmentIpadChanged), a11yId: "navBarTabTray")
     }()
 
     private lazy var segmentedControlIphone: UISegmentedControl = {
@@ -140,17 +149,7 @@ class TabTrayViewController: UIViewController, Themeable {
             TabTrayViewModel.Segment.tabs.image!.overlayWith(image: countLabel),
             TabTrayViewModel.Segment.privateTabs.image!,
             TabTrayViewModel.Segment.syncedTabs.image!]
-        var navigationMenu = UISegmentedControl(items: items)
-        navigationMenu.translatesAutoresizingMaskIntoConstraints = true
-        navigationMenu.accessibilityIdentifier = "navBarTabTray"
-
-        var segmentToFocus = viewModel.segmentToFocus
-        if segmentToFocus == nil {
-            segmentToFocus = viewModel.tabManager.selectedTab?.isPrivate ?? false ? .privateTabs : .tabs
-        }
-        navigationMenu.selectedSegmentIndex = segmentToFocus?.rawValue ?? TabTrayViewModel.Segment.tabs.rawValue
-        navigationMenu.addTarget(self, action: #selector(segmentIphoneChanged), for: .valueChanged)
-        return navigationMenu
+        return createSegmentedControl(items: items, action: #selector(segmentIphoneChanged), a11yId: "navBarTabTray")
     }()
 
     // Toolbars
@@ -337,11 +336,11 @@ class TabTrayViewController: UIViewController, Themeable {
     private func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if shouldUseiPadSetup() {
             if segmentedControlIphone.selectedSegmentIndex == TabTrayViewModel.Segment.syncedTabs.rawValue {
-                navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
+                navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButtonIpad] : [doneButton])
                 navigationItem.leftBarButtonItem = nil
             } else {
-                navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
-                navigationItem.leftBarButtonItem = deleteButton
+                navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
+                navigationItem.leftBarButtonItem = deleteButtonIpad
             }
         } else {
             var newToolbarItems: [UIBarButtonItem]? = bottomToolbarItems
@@ -359,17 +358,24 @@ class TabTrayViewController: UIViewController, Themeable {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
 
-                self.syncTabButton.isEnabled = false
-                self.syncTabButton.customView = self.syncLoadingView
+                self.syncTabButtonIpad.isEnabled = false
+                self.syncTabButtonIpad.customView = self.syncLoadingView
+
+                self.syncTabButtonIphone.isEnabled = false
+                self.syncTabButtonIphone.customView = self.syncLoadingView
             }
         case .ProfileDidFinishSyncing:
             // Update Sync Tab button
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
 
-                self.syncTabButton.customView = nil
-                self.syncTabButton.title = .FxASyncNow
-                self.syncTabButton.isEnabled = true
+                self.syncTabButtonIpad.customView = nil
+                self.syncTabButtonIpad.title = .FxASyncNow
+                self.syncTabButtonIpad.isEnabled = true
+
+                self.syncTabButtonIphone.customView = nil
+                self.syncTabButtonIphone.title = .FxASyncNow
+                self.syncTabButtonIphone.isEnabled = true
             }
         default:
             break
@@ -402,8 +408,8 @@ class TabTrayViewController: UIViewController, Themeable {
         navigationController?.isToolbarHidden = shouldUseiPadSetup
 
         if shouldUseiPadSetup {
-            navigationItem.leftBarButtonItem = deleteButton
-            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
+            navigationItem.leftBarButtonItem = deleteButtonIpad
+            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
         } else {
             navigationItem.leftBarButtonItem = nil
             navigationItem.rightBarButtonItems = nil
@@ -419,6 +425,35 @@ class TabTrayViewController: UIViewController, Themeable {
         }
 
         updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
+    }
+
+    private func createButtonItem(imageName: String,
+                                  action: Selector,
+                                  a11yId: String,
+                                  a11yLabel: String) -> UIBarButtonItem {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(imageName),
+                                     style: .plain,
+                                     target: self,
+                                     action: action)
+        button.accessibilityIdentifier = a11yId
+        button.accessibilityLabel = a11yLabel
+        return button
+    }
+
+    private func createSegmentedControl(items: [Any],
+                               action: Selector,
+                               a11yId: String) -> UISegmentedControl {
+        let segmentedControl = UISegmentedControl(items: items)
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = true
+        segmentedControl.accessibilityIdentifier = a11yId
+
+        var segmentToFocus = viewModel.segmentToFocus
+        if segmentToFocus == nil {
+            segmentToFocus = viewModel.tabManager.selectedTab?.isPrivate ?? false ? .privateTabs : .tabs
+        }
+        segmentedControl.selectedSegmentIndex = segmentToFocus?.rawValue ?? TabTrayViewModel.Segment.tabs.rawValue
+        segmentedControl.addTarget(self, action: action, for: .valueChanged)
+        return segmentedControl
     }
 
     // MARK: - Themable
