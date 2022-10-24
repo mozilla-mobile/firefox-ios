@@ -83,7 +83,7 @@
 "Back" = "Назад";
 
 /* Block pop-up windows setting */
-"Block Pop-up Windows" = "Блакаваць выплыўныя вокны";
+"Block Pop-up Windows" = "Блакаваць усплывальныя вокны";
 
 /* The label for the Title field when editing a bookmark */
 "Bookmark.DetailFieldTitle.Label" = "Загаловак";
@@ -125,7 +125,7 @@
 "BreachAlerts.BreachDate" = "Гэтая ўцечка адбылася";
 
 /* Description of what a breach is */
-"BreachAlerts.Description" = "З моманту апошняй змены вамім пароля на гэтым сайце адбылася ўцечка альбо крадзеж пароляў. Каб абараніць гэты акаўнт, увайдзіце на сайт і змяніце пароль.";
+"BreachAlerts.Description" = "З моманту апошняй змены вамі пароля адбылася ўцечка альбо крадзеж пароляў. Каб абараніць гэты ўліковы запіс, увайдзіце на сайт і змяніце пароль.";
 
 /* Link to monitor.firefox.com to learn more about breached passwords */
 "BreachAlerts.LearnMoreButton" = "Даведацца больш";
@@ -224,7 +224,7 @@
 "Could not load page." = "Немагчыма загрузіць старонку.";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "Убудаваная ўзмоцненая ахова ад сачэння дапамагае спыніць рэкламу, якая вас пераследуе. Уключыце Строгую ахову каб заблакаваць яшчэ болей трэкераў, рэкламы і выплыўных вокнаў.";
+"CoverSheet.v24.ETP.Description" = "Убудаваная ўзмоцненая ахова ад сачэння дапамагае спыніць рэкламу, якая вас асочвае. Уключыце Строгую ахову каб заблакаваць яшчэ болей трэкераў, рэкламы і ўсплывальных вокнаў.";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Перайсці ў налады";
@@ -308,7 +308,7 @@
 "ErrorPages.Advanced.Button" = "Дадаткова";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "Папярэджанне: мы не можам пацвердзіць, што ваша злучэнне з гэтым вэб-сайтам бяспечнаe.";
+"ErrorPages.AdvancedWarning1.Text" = "Папярэджанне: мы не можам пацвердзіць, што ваша злучэнне з гэтым вэб-сайтам бяспечнае.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "Гэта можа быць праз няправільную канфігурацыю альбо праз атаку зламысніка. Працягвайце, калі вы прымаеце патэнцыйную рызыку.";
@@ -1097,7 +1097,7 @@
 "Search.ThirdPartyEngines.AddMessage" = "Новая пошукавая сістэма з'явіцца ў панэлі хуткага пошуку.";
 
 /* The success message that appears after a user sucessfully adds a new search engine */
-"Search.ThirdPartyEngines.AddSuccess" = "Дададзены пашукавік!";
+"Search.ThirdPartyEngines.AddSuccess" = "Пашукавік дададзены!";
 
 /* The title that asks the user to Add the search provider */
 "Search.ThirdPartyEngines.AddTitle" = "Дадаць пашукавік?";
@@ -1262,10 +1262,10 @@
 "Settings.Disconnect.CancelButton" = "Скасаваць";
 
 /* Destructive action button in alert when user is prompted for disconnect */
-"Settings.Disconnect.DestructiveButton" = "Адлучыцца";
+"Settings.Disconnect.DestructiveButton" = "Адлучыць";
 
 /* Title of the alert when prompting the user asking to disconnect. */
-"Settings.Disconnect.Title" = "Адлучыць?";
+"Settings.Disconnect.Title" = "Адлучыць Sync?";
 
 /* Section header for brightness slider. */
 "Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "Парог";
@@ -1607,7 +1607,7 @@
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Дазваляе некаторыя трэкеры для карэктнай працы вэб-сайтаў.";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блакуе больш трэкераў, рэкламы і выплыўных вокнаў. Старонкі загружаюцца хутчэй, але некаторыя функцыі могуць не працаваць.";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Блакуе больш трэкераў, рэкламы і ўсплывальных вокнаў. Старонкі загружаюцца хутчэй, але некаторыя функцыі могуць не працаваць.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Узровень абароны";
