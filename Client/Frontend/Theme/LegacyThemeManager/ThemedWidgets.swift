@@ -3,7 +3,44 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import UIKit
 
+enum ThemedTableViewCellType {
+    case standard, actionPrimary, destructive, disabled
+}
+
+class ThemedTableViewCellViewModel {
+    var type: ThemedTableViewCellType
+
+    var textColor: UIColor!
+    var detailTextColor: UIColor!
+    var backgroundColor: UIColor!
+    var tintColor: UIColor!
+
+    init(theme: Theme, type: ThemedTableViewCellType) {
+        self.type = type
+        setColors(theme: theme)
+    }
+
+    func setColors(theme: Theme) {
+        detailTextColor = theme.colors.textSecondary
+        backgroundColor = theme.colors.layer2
+        tintColor = theme.colors.actionPrimary
+
+        switch self.type {
+        case .standard:
+            textColor = theme.colors.textPrimary
+        case .actionPrimary:
+            textColor = theme.colors.actionPrimary
+        case .destructive:
+            textColor = theme.colors.textWarning
+        case .disabled:
+            textColor = theme.colors.textDisabled
+        }
+    }
+}
+
 class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
+
+    var viewModel: ThemedTableViewCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -14,10 +51,16 @@ class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        textLabel?.textColor = theme.colors.textPrimary
-        detailTextLabel?.textColor = theme.colors.textSecondary
-        backgroundColor = theme.colors.layer2
-        tintColor = theme.colors.actionPrimary
+        self.viewModel?.setColors(theme: theme)
+        // Take view model color if it exists, otherwise fallback to default colors
+        textLabel?.textColor = viewModel?.textColor ?? theme.colors.textPrimary
+        detailTextLabel?.textColor = viewModel?.detailTextColor ?? theme.colors.textSecondary
+        backgroundColor = viewModel?.backgroundColor ?? theme.colors.layer2
+        tintColor = viewModel?.tintColor ?? theme.colors.actionPrimary
+    }
+
+    func configure(viewModel: ThemedTableViewCellViewModel) {
+        self.viewModel = viewModel
     }
 }
 

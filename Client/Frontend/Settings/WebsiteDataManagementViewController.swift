@@ -199,7 +199,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
-        cell.applyTheme(theme: themeManager.currentTheme)
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -212,18 +211,23 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
                 }
             }
         case .showMore:
+            let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled
+            let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: cellType)
             cell.textLabel?.text = .SettingsWebsiteDataShowMoreButton
-            cell.textLabel?.textColor = showMoreButtonEnabled ? themeManager.currentTheme.colors.actionPrimary : themeManager.currentTheme.colors.textDisabled
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
+            cell.configure(viewModel: cellViewModel)
             showMoreButton = cell
         case .clearButton:
+            let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: .destructive)
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = themeManager.currentTheme.colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
+            cell.configure(viewModel: cellViewModel)
         }
+
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -345,5 +349,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func applyTheme() {
         loadingView.applyTheme(theme: themeManager.currentTheme)
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
