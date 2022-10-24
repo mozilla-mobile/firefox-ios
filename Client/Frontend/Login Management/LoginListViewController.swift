@@ -179,7 +179,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
         tableView.separatorColor = theme.colors.borderPrimary
         tableView.backgroundColor = theme.colors.layer1
 
-        selectionButton.setTitleColor(theme.colors.layer2, for: [])
+        selectionButton.setTitleColor(theme.colors.textInverted, for: [])
         selectionButton.backgroundColor = theme.colors.actionPrimary
         deleteButton.tintColor = theme.colors.textWarning
 
