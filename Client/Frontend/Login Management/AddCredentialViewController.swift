@@ -187,8 +187,6 @@ extension AddCredentialViewController: UITableViewDataSource {
 
         cancelButton.tintColor = theme.colors.actionPrimary
         saveButton.tintColor = theme.colors.actionPrimary
-
-        updateThemeApplicableSubviews()
     }
 }
 

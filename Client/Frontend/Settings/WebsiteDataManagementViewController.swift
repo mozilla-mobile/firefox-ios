@@ -344,6 +344,5 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func applyTheme() {
         loadingView.applyTheme(theme: themeManager.currentTheme)
-        // TODO: FXIOS-4884 Update loading view through updateThemeApplicableSubviews
     }
 }

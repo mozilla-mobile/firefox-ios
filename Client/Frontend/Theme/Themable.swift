@@ -11,7 +11,6 @@ protocol Themeable: UIViewController {
 
     func listenForThemeChange()
     func applyTheme()
-    func updateThemeApplicableSubviews()
 }
 
 extension Themeable {

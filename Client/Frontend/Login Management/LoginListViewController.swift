@@ -196,8 +196,6 @@ class LoginListViewController: SensitiveViewController, Themeable {
             glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
             glassIconView.tintColor = theme.colors.iconSecondary
         }
-
-        updateThemeApplicableSubviews()
     }
 
     @objc func dismissLogins() {
