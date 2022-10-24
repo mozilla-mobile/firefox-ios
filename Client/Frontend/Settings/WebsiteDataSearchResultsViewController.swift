@@ -185,7 +185,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func applyTheme() {
-        tableView.separatorColor = themeManager.currentTheme.colors.layer4
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableView.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }

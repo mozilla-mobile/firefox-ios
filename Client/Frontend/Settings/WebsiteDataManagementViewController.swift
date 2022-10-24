@@ -131,7 +131,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.separatorColor = themeManager.currentTheme.colors.layer4
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
