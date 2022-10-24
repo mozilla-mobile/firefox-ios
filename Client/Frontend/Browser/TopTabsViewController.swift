@@ -140,6 +140,7 @@ class TopTabsViewController: UIViewController, Themeable {
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
 
+        listenForThemeChange()
         setupLayout()
 
         // Setup UIDropInteraction to handle dragging and dropping

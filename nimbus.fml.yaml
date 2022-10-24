@@ -1,4 +1,9 @@
 ---
+about:
+  description: The root level Feature Manifest for Firefox for iOS
+  ios:
+    class: FxNimbus
+    module: Client
 channels:
   - developer
   - beta

@@ -11,7 +11,7 @@ struct SiteTableViewHeaderModel {
     let collapsibleState: ExpandButtonState?
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
+class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
 
     struct UX {
         static let titleTrailingLeadingMargin: CGFloat = 16
@@ -40,7 +40,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     private var titleTrailingConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
-
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
@@ -60,7 +59,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     override func prepareForReuse() {
         super.prepareForReuse()
         setDefaultBordersValues()
-        applyTheme()
     }
 
     func configure(_ model: SiteTableViewHeaderModel) {
@@ -70,7 +68,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         collapsibleState = model.collapsibleState
     }
 
-    func setupLayout() {
+    private func setupLayout() {
         translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(titleLabel, collapsibleImageView)
 
@@ -104,12 +102,11 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         ])
 
         showImage(false)
-        applyTheme()
     }
 
-    func applyTheme() {
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        backgroundView?.backgroundColor = theme.colors.layer4
         bordersHelper.applyTheme()
     }
 
