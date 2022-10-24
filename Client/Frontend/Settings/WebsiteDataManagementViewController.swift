@@ -345,6 +345,5 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func applyTheme() {
         loadingView.applyTheme(theme: themeManager.currentTheme)
-        updateThemeApplicableSubviews()
     }
 }
