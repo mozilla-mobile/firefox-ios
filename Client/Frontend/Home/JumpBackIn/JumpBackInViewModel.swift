@@ -124,6 +124,7 @@ class JumpBackInViewModel: FeatureFlaggable {
                                      isPortrait: Bool = UIWindow.isPortrait,
                                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let isPhoneInLandscape = device == .phone && !isPortrait
+        let isPadInPortrait = device == .pad && UIWindow.isPortrait
 
         if hasSyncedTab, traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             if hasJumpBackIn {
@@ -133,6 +134,8 @@ class JumpBackInViewModel: FeatureFlaggable {
             }
         } else if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             sectionLayout = .compactJumpBackIn
+        } else if isPadInPortrait {
+            sectionLayout = hasSyncedTab ? .mediumWithSyncedTab : .medium
         } else {
             sectionLayout = hasSyncedTab ? .regularWithSyncedTab : .regular
         }
@@ -306,7 +309,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         switch sectionLayout {
         case .compactSyncedTab, .compactJumpBackInAndSyncedTab:
             section = sectionWithSyncedTabCompact(for: traitCollection)
-        case .compactJumpBackIn, .regular, .regularWithSyncedTab:
+        case .compactJumpBackIn, .regular, .regularWithSyncedTab, .medium, .mediumWithSyncedTab:
             section = defaultSection(for: traitCollection)
         }
 
