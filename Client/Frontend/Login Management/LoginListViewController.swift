@@ -183,14 +183,18 @@ class LoginListViewController: SensitiveViewController, Themeable {
         selectionButton.backgroundColor = theme.colors.actionPrimary
         deleteButton.tintColor = theme.colors.textWarning
 
+        // Search bar text and placeholder color
         let searchTextField = searchController.searchBar.searchTextField
         searchTextField.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = theme.colors.textPrimary
+        let placeholderAttribute = [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
+        searchTextField.attributedPlaceholder = NSAttributedString(string: searchTextField.placeholder ?? "",
+                                                                   attributes: placeholderAttribute)
 
         // Theme the glass icon next to the search text field
         if let glassIconView = searchTextField.leftView as? UIImageView {
             // Magnifying glass
             glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
-            glassIconView.tintColor = theme.colors.textSecondary
+            glassIconView.tintColor = theme.colors.iconSecondary
         }
 
         updateThemeApplicableSubviews()
