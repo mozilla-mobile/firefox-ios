@@ -4,18 +4,12 @@
 
 @font-face {
     font-family: sans-serif;
-    src: url('/reader-mode/fonts/SF-Pro-Text-Bold.otf');
+    src: url('/reader-mode/fonts/SF-Pro-Text-Regular.otf');
 }
 
 @font-face {
     font-family: sans-serif;
-    src: url('/reader-mode/fonts/SF-Pro-Text-BoldItalic.otf');
-    font-weight: medium;
-    }
-
-@font-face {
-    font-family: sans-serif;
-    src: url('/reader-mode/fonts/SF-Pro-Text-Regular.otf');
+    src: url('/reader-mode/fonts/SF-Pro-Text-Bold.otf');
     font-weight: bold;
 }
 
@@ -27,7 +21,7 @@
 
 @font-face {
     font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-BoldItalic.ttf');
+    src: url('/reader-mode/fonts/SF-Pro-Text-BoldItalic.otf');
     font-weight: bold;
     font-style: italic;
 }
