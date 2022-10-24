@@ -38,6 +38,8 @@ class TabTrayViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
 
     // MARK: - UI Elements
+    private var titleWidthConstraint: NSLayoutConstraint?
+
     // Buttons & Menus
     private lazy var deleteButtonIpad: UIBarButtonItem = {
         return createButtonItem(imageName: ImageIdentifiers.tabTrayDelete,
@@ -225,9 +227,8 @@ class TabTrayViewController: UIViewController, Themeable {
         navigationItem.titleView = segmentedControlIpad
 
         if let titleView = navigationItem.titleView {
-            NSLayoutConstraint.activate([
-                titleView.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width),
-            ])
+            titleWidthConstraint = titleView.widthAnchor.constraint(equalToConstant: UX.NavigationMenu.width)
+            titleWidthConstraint?.isActive = true
         }
 
         // iPhone setup
@@ -406,6 +407,7 @@ class TabTrayViewController: UIViewController, Themeable {
     private func updateLayout() {
         let shouldUseiPadSetup = shouldUseiPadSetup()
         navigationController?.isToolbarHidden = shouldUseiPadSetup
+        titleWidthConstraint?.isActive = shouldUseiPadSetup
 
         if shouldUseiPadSetup {
             navigationItem.leftBarButtonItem = deleteButtonIpad
