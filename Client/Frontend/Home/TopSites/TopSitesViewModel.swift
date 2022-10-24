@@ -163,6 +163,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                                                         leading: insets,
                                                         bottom: TopSiteItemCell.UX.bottomSpace,
                                                         trailing: insets)
+        section.interGroupSpacing = TopSiteItemCell.UX.bottomSpace
 
         return section
     }

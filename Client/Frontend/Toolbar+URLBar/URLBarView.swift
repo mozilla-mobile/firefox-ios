@@ -661,7 +661,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
                 make.edges.equalTo(self.locationView.urlTextField)
             }
         }
-        line.isHidden = isHome
     }
 
     func updateViewsForOverlayModeAndToolbarChanges() {

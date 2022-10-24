@@ -71,7 +71,11 @@ class TabToolbar: UIView {
         buttons.forEach { contentView.addArrangedSubview($0) }
     }
 
-    var needsSeparation = true
+    var needsSeparation = false {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
     
     override func draw(_ rect: CGRect) {
         if let context = UIGraphicsGetCurrentContext(), needsSeparation {

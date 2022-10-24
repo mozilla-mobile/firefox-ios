@@ -29,7 +29,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let shadowRadius: CGFloat = 6
         static let topSpace: CGFloat = 8
         static let textSafeSpace: CGFloat = 4
-        static let bottomSpace: CGFloat = 10
+        static let bottomSpace: CGFloat = 8
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
@@ -72,10 +72,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.allowsDefaultTighteningForTruncation = true
         titleLabel.lineBreakMode = .byTruncatingTail
-        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
         titleLabel.numberOfLines = 2
         titleLabel.backgroundColor = UIColor.clear
-        titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
+        titleLabel.setContentHuggingPriority(.required, for: .vertical)
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
 
@@ -199,9 +198,10 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: faviconBG.bottomAnchor, constant: UX.topSpace),
             titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -UX.bottomSpace),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomSpace, priority: .defaultHigh),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomSpace).priority(.defaultHigh),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.textSafeSpace),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.textSafeSpace),
+            titleLabel.heightAnchor.constraint(equalToConstant: 10).priority(.defaultHigh),
 
             faviconBG.topAnchor.constraint(equalTo: contentView.topAnchor),
             faviconBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),

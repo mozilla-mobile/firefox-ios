@@ -15,7 +15,7 @@ protocol NTPLibraryDelegate: AnyObject {
 
 class NTPLibraryViewModel {
     struct UX {
-        static let bottomSpacing: CGFloat = 12
+        static let bottomSpacing: CGFloat = 8
     }
 
     weak var delegate: NTPLibraryDelegate?

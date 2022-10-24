@@ -2,16 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Shared
 import UIKit
-import Storage
-import SDWebImage
-import XCGLogger
-import SnapKit
 
 class NTPLibraryShortcutView: UIView {
     static let spacing: CGFloat = 14
     static let iconSize: CGFloat = 52
+    static let titleMargin: CGFloat = 2
+    static let margin: CGFloat = 10
+    static let titleButtonMargin: CGFloat = 4
 
     var button = UIButton()
     var title = UILabel()
@@ -20,12 +18,7 @@ class NTPLibraryShortcutView: UIView {
         super.init(frame: frame)
         addSubview(button)
         addSubview(title)
-        button.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
-            make.centerX.equalToSuperview()
-            make.width.equalTo(NTPLibraryShortcutView.iconSize)
-            make.height.equalTo(NTPLibraryShortcutView.iconSize)
-        }
+
         title.allowsDefaultTighteningForTruncation = true
         title.lineBreakMode = .byTruncatingTail
         title.font = .preferredFont(forTextStyle: .footnote)
@@ -33,19 +26,28 @@ class NTPLibraryShortcutView: UIView {
         title.textAlignment = .center
         title.numberOfLines = 2
         title.setContentHuggingPriority(.required, for: .vertical)
-        title.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(4).priority(.veryHigh)
-            let maxHeight = title.font.pointSize * 2.6
-            make.leading.trailing.equalToSuperview().inset(2).priority(.veryHigh)
-            make.height.lessThanOrEqualTo(maxHeight)
-            make.bottom.lessThanOrEqualToSuperview().offset(-8)
-        }
+        title.setContentCompressionResistancePriority(.required, for: .vertical)
+        title.translatesAutoresizingMaskIntoConstraints = false
+
         button.imageView?.contentMode = .scaleToFill
         button.layer.cornerRadius = Self.iconSize/2.0
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageEdgeInsets = UIEdgeInsets(equalInset: Self.spacing)
-        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: topAnchor, constant: Self.margin),
+            button.centerXAnchor.constraint(equalTo: centerXAnchor),
+            button.widthAnchor.constraint(equalToConstant: Self.iconSize),
+            button.heightAnchor.constraint(equalToConstant: Self.iconSize),
+            title.topAnchor.constraint(equalTo: button.bottomAnchor, constant: Self.titleButtonMargin),
+            title.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -Self.margin),
+            title.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Self.titleMargin),
+            title.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Self.titleMargin),
+            title.heightAnchor.constraint(equalToConstant: 10).priority(.defaultHigh)
+        ])
+
     }
 
     required init(coder: NSCoder) {

@@ -7,7 +7,7 @@ import Shared
 
 class HomeLogoHeaderViewModel {
     struct UX {
-        static let bottomSpacing: CGFloat = 12
+        static let bottomSpacing: CGFloat = 8
     }
 }
 

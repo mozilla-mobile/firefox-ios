@@ -6,6 +6,8 @@ import UIKit
 import Core
 
 final class NTPLogoCell: UICollectionViewCell, ReusableCell, NotificationThemeable {
+    static let bottomMargin: CGFloat = 6
+    static let width: CGFloat = 144
 
     private weak var logo: UIImageView!
 
@@ -29,13 +31,13 @@ final class NTPLogoCell: UICollectionViewCell, ReusableCell, NotificationThemeab
         contentView.addSubview(logo)
         self.logo = logo
 
-        let bottom = logo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -22)
+        let bottom = logo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.bottomMargin)
         bottom.priority = .defaultHigh
         bottom.isActive = true
 
         logo.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         logo.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        logo.widthAnchor.constraint(equalToConstant: 144).isActive = true
+        logo.widthAnchor.constraint(equalToConstant: Self.width).isActive = true
         applyTheme()
     }
 
