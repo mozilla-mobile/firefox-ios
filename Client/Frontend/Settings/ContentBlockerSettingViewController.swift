@@ -76,7 +76,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         topStack.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
         topStack.isLayoutMarginsRelativeArrangement = true
 
-        sep.backgroundColor = themeManager.currentTheme.colors.layer4
+        sep.backgroundColor = themeManager.currentTheme.colors.borderPrimary
         sep.snp.makeConstraints { make in
             make.height.equalTo(0.5)
             make.width.equalToSuperview()
