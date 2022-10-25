@@ -294,12 +294,12 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
 
         // Wallpapers
-        let currentWallpaper = LegacyWallpaperManager().currentWallpaper
+        let currentWallpaper = WallpaperManager().currentWallpaper
 
-        if case .themed = currentWallpaper.type {
+        if case .other = currentWallpaper.type {
             // Need to lowercase the name for labeled counter. Ref:
             // https://mozilla.github.io/glean/book/reference/metrics/index.html#label-format)
-            GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.name.lowercased()].add()
+            GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.id.lowercased()].add()
         }
 
     }
