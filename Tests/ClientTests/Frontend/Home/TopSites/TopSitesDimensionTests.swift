@@ -16,7 +16,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_landscapeIphone_defaultRowNumber() {
@@ -26,7 +26,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_portraitiPadRegular_defaultRowNumber() {
@@ -57,7 +57,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_landscapeiPadCompact_defaultRowNumber() {
@@ -68,7 +68,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_portraitiPadUnspecified_defaultRowNumber() {
@@ -79,7 +79,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     func testSectionDimension_landscapeiPadUnspecified_defaultRowNumber() {
@@ -90,7 +90,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
     }
 
     // MARK: Section dimension with stubbed data
@@ -102,7 +102,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(count: 4), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 1)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_twoEmptyRow_shouldBeRemoved() {
@@ -112,7 +112,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(count: 4), numberOfRows: 3, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 1)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_noEmptyRow_shouldNotBeRemoved() {
@@ -122,7 +122,7 @@ class TopSitesDimensionTests: XCTestCase {
 
         let dimension = sut.getSectionDimension(for: createSites(count: 8), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 
     func testSectionDimension_halfFilledRow_shouldNotBeRemoved() {
@@ -131,8 +131,8 @@ class TopSitesDimensionTests: XCTestCase {
         let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait)
 
         let dimension = sut.getSectionDimension(for: createSites(count: 6), numberOfRows: 2, interface: interface)
-        XCTAssertEqual(dimension.numberOfRows, 2)
-        XCTAssertEqual(dimension.numberOfTilesPerRow, 4)
+        XCTAssertEqual(dimension.numberOfRows, 1)
+        XCTAssertEqual(dimension.numberOfTilesPerRow, 6)
     }
 }
 

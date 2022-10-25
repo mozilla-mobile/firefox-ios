@@ -46,21 +46,21 @@ private let MinimumInsets: CGFloat = 16
 // Ecosia
 extension HomepageSectionType {
     func sectionInsets(_ traits: UITraitCollection) -> CGFloat {
-        var insets: CGFloat = traits.userInterfaceIdiom == .phone ? 0 : 100
-
+        var insets: CGFloat = traits.horizontalSizeClass == .regular ? 100 : 0
 
         switch self {
         case .libraryShortcuts, .topSites, .impact:
-            let window = UIApplication.shared.windows.first(where: \.isKeyWindow)
-            let safeAreaInsets = window?.safeAreaInsets.left ?? 0
+            guard let window = UIApplication.shared.windows.first(where: \.isKeyWindow) else { return MinimumInsets
+            }
+            let safeAreaInsets = window.safeAreaInsets.left
             insets += MinimumInsets + safeAreaInsets
 
-            /* Ecosia: center layout in landscape */
-            let orientation: UIInterfaceOrientation = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.interfaceOrientation ?? .portrait
-            if orientation.isLandscape {
-                insets = UIScreen.main.bounds.width / 4
-            }
+            let orientation: UIInterfaceOrientation = window.windowScene?.interfaceOrientation ?? .portrait
 
+            /* Ecosia: center layout in iphone landscape or regular size class */
+            if traits.horizontalSizeClass == .regular || (orientation.isLandscape && traits.userInterfaceIdiom == .phone) {
+                insets = window.bounds.width / 4
+            }
             return insets
         default:
             return 0

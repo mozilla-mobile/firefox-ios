@@ -81,10 +81,10 @@ class TopSitesDimensionImplementation: TopSitesDimension {
     /// - Parameter interface: Tile number is based on layout, this param contains the parameters needed to computer the tile number
     /// - Returns: The number of tiles per row the user will see
     private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
-        if interface.isIphone {
-            return 4
-        } else {
+        if interface.horizontalSizeClass == .regular {
             return 6
+        } else {
+            return 4
         }
     }
 }
