@@ -155,12 +155,12 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
 
-    func configure(_ topSite: TopSite, position: Int) {
+    func configure(_ topSite: TopSite, favIcon: UIImage?, position: Int) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
 
-        imageView.setFaviconOrDefaultIcon(forSite: topSite.site) {}
+        imageView.image = favIcon
 
         configurePinnedSite(topSite)
         configureSponsoredSite(topSite)
