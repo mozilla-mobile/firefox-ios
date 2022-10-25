@@ -12,8 +12,6 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         static let horizontalSpacing: CGFloat = 16
         static let generalCornerRadius: CGFloat = 10
         static let heroImageDimension: CGFloat = 24
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
     }
 
     // MARK: - UI Elements
@@ -162,9 +160,10 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
                 height: size
             )
 
+            // TODO: Laurie - shadowColor
             contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-            contentView.layer.shadowRadius = UX.shadowRadius
-            contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+            contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+            contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
             contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
         }
     }
@@ -187,6 +186,7 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
             contentView.layer.cornerRadius = UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
+            // TODO: Laurie - layer5?
             contentView.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
             setupShadow(cellModel?.shouldAddShadow ?? false, cornersToRound: cellModel?.corners)
         }

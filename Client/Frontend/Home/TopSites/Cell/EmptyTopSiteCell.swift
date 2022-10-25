@@ -8,6 +8,7 @@ import Foundation
 class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
+        // TODO: Laurie - borderPrimary
         static let borderColor = LegacyThemeManager.instance.current.homePanel.emptyTopSitesBorder
         static let horizontalMargin: CGFloat = 8
     }
@@ -46,6 +47,7 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
     }
 
     private func applyTheme() {
+        // TODO: Laurie - primaryBorder
         emptyBG.layer.borderColor = UX.borderColor.withAlphaComponent(0.2)
             .cgColor
     }

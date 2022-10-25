@@ -37,8 +37,8 @@ class TabCell: UICollectionViewCell,
     lazy private var faviconBG: UIView = .build { view in
         view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = TopSiteItemCell.UX.shadowRadius
+        view.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        view.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
     }
 
     lazy var screenshotView: UIImageView = .build { view in

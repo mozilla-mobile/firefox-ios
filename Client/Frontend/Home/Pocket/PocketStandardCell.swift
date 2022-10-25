@@ -19,8 +19,6 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
         static let sponsoredFontSize: CGFloat = 12
         static let siteFontSize: CGFloat = 12
         static let horizontalMargin: CGFloat = 16
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let sponsoredIconSize = CGSize(width: 12, height: 12)
         static let sponsoredStackSpacing: CGFloat = 4
@@ -208,12 +206,11 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.shadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0,
-                                                height: UX.shadowOffset)
-        // TODO: Laurie - formSurfaceOff
+        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        // TODO: Laurie - shadowColor
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 
     override func layoutSubviews() {

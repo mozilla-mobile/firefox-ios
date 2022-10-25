@@ -26,8 +26,6 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         static let generalCornerRadius: CGFloat = 12
         static let titleFontSize: CGFloat = 16
         static let siteFontSize: CGFloat = 12
-        static let stackViewShadowRadius: CGFloat = 4
-        static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
         static let faviconSize = CGSize(width: 24, height: 24)
@@ -236,8 +234,8 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
-            // TODO: Laurie - Layer5
             contentView.removeVisualEffectView()
+            // TODO: Laurie - Layer5
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey40 : .white
             setupShadow()
@@ -248,11 +246,11 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
-        // TODO: Laurie - formSurfaceOff
+        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        // TODO: Laurie - shadowColor
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 }
 
@@ -264,7 +262,7 @@ extension JumpBackInCell: NotificationThemeable {
         // descriptionLabel = textPrimary
         // faviconImage.tintColor = iconPrimary
         // fallbackFaviconImage.tintColor = iconPrimary
-        // fallbackFaviconBackground.backgroundColor = layer3
+        // fallbackFaviconBackground.backgroundColor = layer1
         // fallbackFaviconBackground.layer.borderColor = borderPrimary
 
         if LegacyThemeManager.instance.currentName == .dark {

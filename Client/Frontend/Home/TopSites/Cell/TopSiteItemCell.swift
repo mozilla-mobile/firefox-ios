@@ -26,8 +26,6 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
         static let topSpace: CGFloat = 8
         static let textSafeSpace: CGFloat = 8
         static let bottomSpace: CGFloat = 8
@@ -76,7 +74,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                         size: UX.titleFontSize)
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + UX.shadowRadius
+        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
         titleLabel.backgroundColor = .clear
         titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
@@ -86,7 +84,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
                                                                             size: UX.sponsorFontSize)
         sponsoredLabel.adjustsFontForContentSizeCategory = true
-        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
+        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
     }
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
@@ -245,6 +243,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         } else {
             // If blur is disabled set background color
             rootContainer.removeVisualEffectView()
+            // TODO: Laurie - layer5
             rootContainer.backgroundColor = UIColor.theme.homePanel.topSitesContainerView
             setupShadow()
         }
@@ -254,10 +253,11 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         rootContainer.layer.cornerRadius = UX.cellCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.cellCornerRadius).cgPath
+        // TODO: Laurie - shadowColor
         rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
-        rootContainer.layer.shadowRadius = UX.shadowRadius
+        rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
     }
 }
 
@@ -268,6 +268,7 @@ extension TopSiteItemCell: NotificationThemeable {
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
         // TODO: Laurie - textPrimary
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
+        // TODO: Laurie - secondary
         sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
 
         adjustLayout()

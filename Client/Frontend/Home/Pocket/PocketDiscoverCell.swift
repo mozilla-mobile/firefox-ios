@@ -12,7 +12,6 @@ class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
         static let discoverMoreFontSize: CGFloat = 20
         static let horizontalMargin: CGFloat = 16
         static let generalCornerRadius: CGFloat = 12
-        static let shadowOffset: CGFloat = 2
     }
 
     // MARK: - UI Elements
@@ -76,6 +75,7 @@ class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             contentView.removeVisualEffectView()
+            // TODO: Laurie - layer2
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey30 : .white
             setupShadow()
@@ -86,11 +86,11 @@ class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = PocketStandardCell.UX.shadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
-        // TODO: Laurie - formSurfaceOff
+        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        // TODO: Laurie - shadowColor
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 }
 

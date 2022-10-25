@@ -52,6 +52,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                                 size: UX.moreButtonTextSize)
         button.contentHorizontalAlignment = .trailing
+        // TODO: Laurie - to remove it seems
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
     }
 
@@ -151,6 +152,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 // MARK: - Theme
 extension LabelButtonHeaderView: NotificationThemeable {
     func applyTheme() {
+        // TODO: Laurie - textPrimary
         let textColor = viewModel?.textColor ?? LegacyThemeManager.instance.current.homePanel.topSiteHeaderTitle
 
         titleLabel.textColor = textColor

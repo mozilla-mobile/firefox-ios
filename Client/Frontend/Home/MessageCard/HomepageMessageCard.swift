@@ -31,10 +31,6 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
         static let bannerTitleFontSize: CGFloat = 16
         static let descriptionTextFontSize: CGFloat = 15
         static let buttonFontSize: CGFloat = 16
-        // Shadow
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 4
-        static let shadowOpacity: Float = 0.12
     }
 
     // MARK: - Properties
@@ -185,11 +181,11 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private func addShadow() {
-        // TODO: Laurie - formSurfaceOff
+        // TODO: Laurie - shadowColor
         cardView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        cardView.layer.shadowOffset = CGSize(width: 0.0, height: UX.shadowOffset)
-        cardView.layer.shadowOpacity = UX.shadowOpacity
-        cardView.layer.shadowRadius = UX.shadowRadius
+        cardView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        cardView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        cardView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         updateShadowPath()
     }
 
@@ -203,7 +199,7 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
             cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             cardView.removeVisualEffectView()
-        // TODO: Laurie - layer1?
+            // TODO: Laurie - layer1?
             cardView.backgroundColor = LegacyThemeManager.instance.current.homeTabBanner.backgroundColor
         }
 

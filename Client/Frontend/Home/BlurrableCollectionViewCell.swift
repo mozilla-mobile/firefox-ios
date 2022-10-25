@@ -4,6 +4,7 @@
 
 import Foundation
 
+// TODO: Laurie
 // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4882
 // This will be removed when the theme system pass on the homepage will happen
 // and apply theme will be done from the `reloadAll` call. This is a temporary

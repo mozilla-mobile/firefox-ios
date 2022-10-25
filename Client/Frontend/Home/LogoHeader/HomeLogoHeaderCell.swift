@@ -95,6 +95,7 @@ extension HomeLogoHeaderCell: NotificationThemeable {
         } else {
             logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
                 .withRenderingMode(.alwaysTemplate)
+            // TODO: Laurie - textPrimary
             logoTextImage.tintColor = LegacyThemeManager.instance.current.homePanel.topSiteHeaderTitle
         }
     }

@@ -32,8 +32,6 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
 
     struct UX {
         static let generalCornerRadius: CGFloat = 12
-        static let stackViewShadowRadius: CGFloat = 4
-        static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
@@ -370,11 +368,11 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
-        // TODO: Laurie - formSurfaceOff
+        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        // TODO: Laurie - shadowColor
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 }
 
@@ -386,7 +384,7 @@ extension SyncedTabCell: NotificationThemeable {
         // itemTitle.textColor = textPrimary
         // descriptionLabel.textColor = textSecondary
         // fallbackFaviconImage.tintColor = iconPrimary
-        // fallbackFaviconBackground.backgroundColor = layer3
+        // fallbackFaviconBackground.backgroundColor = layer1
         // syncedTabsButton.tintColor = iconPrimary
         // syncedDeviceImage.image = tinted with iconSecondary
         // fallbackFaviconBackground.layer.borderColor = borderPrimary

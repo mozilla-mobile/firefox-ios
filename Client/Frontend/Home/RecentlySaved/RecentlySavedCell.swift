@@ -14,8 +14,6 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         static let generalSpacing: CGFloat = 8
         static let containerSpacing: CGFloat = 16
         static let heroImageSize: CGSize = CGSize(width: 126, height: 82)
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
         static let iconCornerRadius: CGFloat = 4
         static let borderWidth: CGFloat = 0.5
         static let cellCornerRadius: CGFloat = 8
@@ -44,7 +42,7 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
     private let fallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.backgroundColor = UIColor.clear
+        imageView.backgroundColor = .clear
         imageView.layer.cornerRadius = UX.iconCornerRadius
         imageView.layer.masksToBounds = true
     }
@@ -190,7 +188,7 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             rootContainer.removeVisualEffectView()
-            // TODO: Laurie -
+            // TODO: Laurie - layer5
             rootContainer.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkCellBackground
             setupShadow()
         }
@@ -199,8 +197,8 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
     func applyTheme() {
         // TODO: Laurie -
         // itemTitle.textColor = textPrimary
-        // fallbackFaviconBackground.backgroundColor = layer 1
-        // fallbackFaviconBackground.layer.borderColor = layer2
+        // fallbackFaviconBackground.backgroundColor = layer1
+        // fallbackFaviconBackground.layer.borderColor = borderPrimary
 
         itemTitle.textColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkTitle
         fallbackFaviconBackground.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkImageBackground
@@ -213,11 +211,11 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         rootContainer.layer.cornerRadius = UX.generalCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.generalCornerRadius).cgPath
-        // TODO: Laurie - formSurfaceOff
+        // TODO: Laurie - shadowColor
         rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        rootContainer.layer.shadowOpacity = 0.2
-        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
-        rootContainer.layer.shadowRadius = UX.shadowRadius
+        rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
     }
 }
 

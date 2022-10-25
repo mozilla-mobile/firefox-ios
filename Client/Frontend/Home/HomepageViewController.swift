@@ -722,6 +722,7 @@ private extension HomepageViewController {
     }
 
     func updateStatusBar() {
+        // TODO: Laurie - layer1
         let backgroundColor = UIColor.theme.homePanel.topSitesBackground
         statusBarView.backgroundColor = backgroundColor.withAlphaComponent(scrollOffset)
 
