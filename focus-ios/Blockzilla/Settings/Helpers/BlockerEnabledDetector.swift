@@ -4,7 +4,6 @@
 
 import Foundation
 import SafariServices
-import SnapKit
 
 typealias EnabledCallback = (Bool) -> Void
 

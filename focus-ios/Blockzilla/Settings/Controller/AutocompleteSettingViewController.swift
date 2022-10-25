@@ -13,6 +13,7 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         tableView.separatorStyle = .singleLine
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
@@ -34,9 +35,12 @@ class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, 
         navigationController?.navigationBar.tintColor = .accent
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

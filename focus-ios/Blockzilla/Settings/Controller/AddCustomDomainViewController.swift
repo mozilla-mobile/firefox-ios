@@ -11,10 +11,44 @@ protocol AddCustomDomainViewControllerDelegate: AnyObject {
 }
 
 class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
+
+    private lazy var inputLabel: SmartLabel = {
+        let inputLabel = SmartLabel()
+        inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel
+        inputLabel.font = .body18
+        inputLabel.textColor = .primaryText
+        inputLabel.translatesAutoresizingMaskIntoConstraints = false
+        return inputLabel
+    }()
+
+    private lazy var textInput: UITextField = {
+        let textInput: UITextField = InsetTextField(insetBy: 10)
+        textInput.backgroundColor = .secondarySystemGroupedBackground
+        textInput.keyboardType = .URL
+        textInput.autocapitalizationType = .none
+        textInput.autocorrectionType = .no
+        textInput.returnKeyType = .done
+        textInput.textColor = .primaryText
+        textInput.delegate = self
+        textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIColor.inputPlaceholder])
+        textInput.accessibilityIdentifier = "urlInput"
+        textInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
+        textInput.tintColor = .accent
+        textInput.becomeFirstResponder()
+        textInput.translatesAutoresizingMaskIntoConstraints = false
+        return textInput
+    }()
+
+    private lazy var inputDescription: SmartLabel = {
+        let inputDescription = SmartLabel()
+        inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
+        inputDescription.textColor = .primaryText
+        inputDescription.font = .footnote12
+        inputDescription.translatesAutoresizingMaskIntoConstraints = false
+        return inputDescription
+    }()
+
     private let autocompleteSource: CustomAutocompleteSource
-    private let inputLabel = SmartLabel()
-    private let textInput: UITextField = InsetTextField(insetBy: 10)
-    private let inputDescription = SmartLabel()
     weak var delegate: AddCustomDomainViewControllerDelegate?
 
     init(autocompleteSource: CustomAutocompleteSource) {
@@ -39,46 +73,23 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     private func setupUI() {
         view.backgroundColor = .systemGroupedBackground
 
-        inputLabel.text = UIConstants.strings.autocompleteAddCustomUrlLabel
-        inputLabel.font = .body18
-        inputLabel.textColor = .primaryText
         view.addSubview(inputLabel)
-
-        textInput.backgroundColor = .secondarySystemGroupedBackground
-        textInput.keyboardType = .URL
-        textInput.autocapitalizationType = .none
-        textInput.autocorrectionType = .no
-        textInput.returnKeyType = .done
-        textInput.textColor = .primaryText
-        textInput.delegate = self
-        textInput.attributedPlaceholder = NSAttributedString(string: UIConstants.strings.autocompleteAddCustomUrlPlaceholder, attributes: [.foregroundColor: UIColor.inputPlaceholder])
-        textInput.accessibilityIdentifier = "urlInput"
-        textInput.layer.cornerRadius = UIConstants.layout.settingsCellCornerRadius
-        textInput.tintColor = .accent
-        textInput.becomeFirstResponder()
         view.addSubview(textInput)
-
-        inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
-        inputDescription.textColor = .primaryText
-        inputDescription.font = .footnote12
         view.addSubview(inputDescription)
 
-        inputLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview()
-            make.leading.equalToSuperview().offset(UIConstants.layout.settingsItemOffset)
-        }
+        NSLayoutConstraint.activate([
+            inputLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: UIConstants.layout.settingsAddCustomDomainInputTopOffset),
+            inputLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.layout.settingsItemOffset),
+            inputLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
-        textInput.snp.makeConstraints { make in
-            make.height.equalTo(44)
-            make.top.equalTo(inputLabel.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
-        }
+            textInput.topAnchor.constraint(equalTo: inputLabel.bottomAnchor, constant: UIConstants.layout.settingsAddCustomDomainOffset),
+            textInput.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.layout.settingsItemInset),
+            textInput.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -UIConstants.layout.settingsItemInset),
+            textInput.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsSectionHeight),
 
-        inputDescription.snp.makeConstraints { make in
-            make.top.equalTo(textInput.snp.bottom).offset(10)
-            make.leading.equalToSuperview().offset(UIConstants.layout.settingsItemOffset)
-        }
+            inputDescription.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: UIConstants.layout.settingsAddCustomDomainOffset),
+            inputDescription.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.layout.settingsItemOffset)
+        ])
     }
 
     @objc func cancelTapped() {

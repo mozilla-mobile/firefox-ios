@@ -3,12 +3,31 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import Telemetry
 
 class AutocompleteCustomUrlViewController: UIViewController {
+
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundView = emptyStateView
+        tableView.backgroundView?.isHidden = true
+        return tableView
+    }()
+
+    private lazy var label: SmartLabel = {
+        let label = SmartLabel()
+        label.text = UIConstants.strings.autocompleteEmptyState
+        label.font = .footnote12
+        label.textColor = .primaryText
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     private let emptyStateView = UIView()
-    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
 
     private let customAutocompleteSource: CustomAutocompleteSource
     private var domains: [String] { return customAutocompleteSource.getSuggestions() }
@@ -21,24 +40,17 @@ class AutocompleteCustomUrlViewController: UIViewController {
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "editButton"
 
         view.addSubview(tableView)
-
-        let label = SmartLabel()
-        label.text = UIConstants.strings.autocompleteEmptyState
-        label.font = .footnote12
-        label.textColor = .primaryText
-        label.textAlignment = .center
         emptyStateView.addSubview(label)
-        tableView.backgroundView = emptyStateView
-        tableView.backgroundView?.isHidden = true
 
-        label.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(UIConstants.layout.autocompleteCustomURLLabelOffset)
-        }
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.topAnchor.constraint(equalTo: view.topAnchor, constant: UIConstants.layout.autocompleteCustomURLLabelOffset),
 
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -21,6 +21,7 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         tableView.separatorStyle = .singleLine
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
@@ -40,9 +41,13 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
         navigationController?.navigationBar.tintColor = .accent
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
 
         tableView.selectRow(at: IndexPath(row: 0, section: 1), animated: false, scrollPosition: .none)
         tableView.tableFooterView = UIView()
@@ -117,21 +122,22 @@ class SearchSettingsViewController: UIViewController, UITableViewDelegate, UITab
             cell.selectionStyle = .gray
             cell.accessibilityIdentifier = engine.name
 
+            cell.contentView.translatesAutoresizingMaskIntoConstraints = false
+            cell.imageView?.translatesAutoresizingMaskIntoConstraints = false
+            cell.textLabel?.translatesAutoresizingMaskIntoConstraints = false
+
             if tableView.isEditing {
-                cell.contentView.snp.makeConstraints({ (make) in
-                    make.leading.equalTo(0)
-                })
+                NSLayoutConstraint.activate([
+                    cell.contentView.leadingAnchor.constraint(equalTo: cell.leadingAnchor)
+                ])
 
-                cell.imageView?.snp.makeConstraints({ (make) in
-                    make.leading.equalTo(50)
-                    make.centerY.equalTo(cell)
-                })
-
-                if let imageView = cell.imageView {
-                    cell.textLabel?.snp.makeConstraints({ (make) in
-                        make.centerY.equalTo(imageView.snp.centerY)
-                        make.leading.equalTo(imageView.snp.trailing).offset(10)
-                    })
+                if let imageView = cell.imageView, let label = cell.textLabel {
+                    NSLayoutConstraint.activate([
+                        imageView.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: UIConstants.layout.settingsViewOffset),
+                        imageView.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
+                        label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: UIConstants.layout.settingsSearchViewImageOffset),
+                        label.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
+                    ])
                 }
             }
 

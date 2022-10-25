@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import SnapKit
 import UIKit
 import Telemetry
 import Intents
@@ -50,6 +49,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorStyle = .singleLine
         tableView.allowsSelection = true
         tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
 
@@ -88,6 +88,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         return themeName
     }
+
+    lazy private var tableViewConstraints = [
+        tableView.topAnchor.constraint(equalTo: view.topAnchor),
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+    ]
 
     private func getSectionIndex(_ section: Section) -> Int? {
         return Section.getSections().firstIndex(where: { $0 == section })
@@ -166,9 +173,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationItem.rightBarButtonItem = doneButton
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+
+        NSLayoutConstraint.activate(tableViewConstraints)
 
         initializeToggles()
         for (sectionIndex, toggleArray) in toggles {
@@ -202,6 +208,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        tableView.removeConstraints(tableViewConstraints)
+        NSLayoutConstraint.activate(tableViewConstraints)
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
         }

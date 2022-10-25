@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import SnapKit
 import UIKit
 import WebKit
 
@@ -56,12 +55,37 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     }
 
     // The view shown while the content is loading in the background web view.
-    private var interstitialView: UIView!
-    private var interstitialSpinnerView: UIActivityIndicatorView!
-    private var interstitialErrorView: UILabel!
+    private lazy var interstitialView: UIView = {
+        let interstitialView = UIView()
+        interstitialView.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = interstitialBackgroundColor
+        return interstitialView
+    }()
+
+    private lazy var interstitialSpinnerView: UIActivityIndicatorView = {
+        let interstitialSpinnerView = UIActivityIndicatorView(style: .large)
+        interstitialSpinnerView.translatesAutoresizingMaskIntoConstraints = false
+        return interstitialSpinnerView
+    }()
+
+    private lazy var interstitialErrorView: SmartLabel = {
+        let interstitialErrorView = SmartLabel()
+        interstitialErrorView.translatesAutoresizingMaskIntoConstraints = false
+        return interstitialErrorView
+    }()
 
     // The web view that displays content.
-    var webView: WKWebView!
+    private lazy var webView: WKWebView = {
+        let config = WKWebViewConfiguration()
+        let webView = WKWebView(
+            frame: CGRect(x: 0, y: 0, width: 1, height: 1),
+            configuration: config
+        )
+        webView.allowsLinkPreview = false
+        webView.navigationDelegate = self
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        return webView
+    }()
 
     private func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
         if self.isLoaded {
@@ -99,53 +123,29 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         view.backgroundColor = interstitialBackgroundColor
         navigationController?.navigationBar.tintColor = .accent
 
-        self.webView = makeWebView()
         view.addSubview(webView)
-        self.webView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-
-        // Destructuring let causes problems.
-        let ret = makeInterstitialViews()
-        self.interstitialView = ret.0
-        self.interstitialSpinnerView = ret.1
-        self.interstitialErrorView = ret.2
         view.addSubview(interstitialView)
-        self.interstitialView.snp.remakeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
+        interstitialView.addSubview(interstitialSpinnerView)
+
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            interstitialView.topAnchor.constraint(equalTo: view.topAnchor),
+            interstitialView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            interstitialView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            interstitialView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            interstitialSpinnerView.topAnchor.constraint(equalTo: interstitialView.topAnchor),
+            interstitialSpinnerView.bottomAnchor.constraint(equalTo: interstitialView.bottomAnchor),
+            interstitialSpinnerView.leadingAnchor.constraint(equalTo: interstitialView.leadingAnchor),
+            interstitialSpinnerView.trailingAnchor.constraint(equalTo: interstitialView.trailingAnchor)
+
+        ])
 
         startLoading()
-    }
-
-    func makeWebView() -> WKWebView {
-        let config = WKWebViewConfiguration()
-        let webView = WKWebView(
-            frame: CGRect(x: 0, y: 0, width: 1, height: 1),
-            configuration: config
-        )
-        webView.allowsLinkPreview = false
-        webView.navigationDelegate = self
-        return webView
-    }
-
-    private func makeInterstitialViews() -> (UIView, UIActivityIndicatorView, UILabel) {
-        let view = UIView()
-
-        // Keeping the background constant prevents a pop of mismatched color.
-        view.backgroundColor = interstitialBackgroundColor
-
-        let spinner = UIActivityIndicatorView(style: .large)
-        view.addSubview(spinner)
-
-        let error = SmartLabel()
-
-        spinner.snp.makeConstraints { make in
-            make.center.equalTo(view)
-            return
-        }
-
-        return (view, spinner, error)
     }
 
     @objc func SELdidTimeOut() {

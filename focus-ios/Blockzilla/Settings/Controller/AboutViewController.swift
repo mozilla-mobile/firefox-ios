@@ -25,9 +25,15 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             case .aboutHeader:
                 cell.contentView.addSubview(headerView)
                 cell.contentView.backgroundColor = .systemGroupedBackground
-                headerView.snp.makeConstraints { make in
-                    make.edges.equalTo(cell)
-                }
+                headerView.translatesAutoresizingMaskIntoConstraints = false
+
+                NSLayoutConstraint.activate([
+                    headerView.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor),
+                    headerView.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor),
+                    headerView.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
+                    headerView.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
+                ])
+
             case .aboutCategories:
                 switch row {
                 case 0: cell.textLabel?.text = UIConstants.strings.aboutRowHelp
@@ -65,6 +71,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .systemGroupedBackground
         tableView.estimatedRowHeight = 44
         tableView.separatorStyle = .singleLine
@@ -89,9 +96,12 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         view.addSubview(tableView)
         view.backgroundColor = .systemGroupedBackground
 
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -119,13 +129,18 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
             // Hack to cover header separator line
             let footer = UIView()
             footer.backgroundColor = .systemGroupedBackground
-            cell.addSubview(footer)
-            cell.sendSubviewToBack(footer)
-            footer.snp.makeConstraints { make in
-                make.height.equalTo(1)
-                make.bottom.equalToSuperview().offset(1)
-                make.leading.trailing.equalToSuperview()
-            }
+            footer.translatesAutoresizingMaskIntoConstraints = false
+
+            cell.contentView.addSubview(footer)
+            cell.contentView.sendSubviewToBack(footer)
+
+            NSLayoutConstraint.activate([
+                footer.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsAboutFooterViewOffset),
+                footer.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor),
+                footer.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor),
+                footer.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -UIConstants.layout.settingsAboutFooterViewOffset)
+            ])
+
             return cell
         case .aboutCategories:
             return nil
@@ -174,6 +189,7 @@ private class AboutHeaderView: UIView {
 
     private lazy var logo: UIImageView = {
         let logo = UIImageView(image: AppInfo.config.wordmark)
+        logo.translatesAutoresizingMaskIntoConstraints = false
         return logo
     }()
 
@@ -204,6 +220,7 @@ private class AboutHeaderView: UIView {
         aboutParagraph.textColor = .secondaryLabel
         aboutParagraph.font = .footnote14
         aboutParagraph.numberOfLines = 0
+        aboutParagraph.translatesAutoresizingMaskIntoConstraints = false
         return aboutParagraph
     }()
 
@@ -212,6 +229,7 @@ private class AboutHeaderView: UIView {
         label.text = "\(AppInfo.shortVersion) (\(AppInfo.buildNumber)) / \(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
         label.font = .footnote14
         label.textColor = .secondaryLabel
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
@@ -222,6 +240,7 @@ private class AboutHeaderView: UIView {
         learnMoreButton.setTitleColor(.accent, for: .highlighted)
         learnMoreButton.titleLabel?.font = .footnote14
         learnMoreButton.addTarget(self, action: #selector(didPressLearnMore), for: .touchUpInside)
+        learnMoreButton.translatesAutoresizingMaskIntoConstraints = false
         return learnMoreButton
     }()
 
@@ -245,31 +264,27 @@ private class AboutHeaderView: UIView {
 
     private func configureConstraints() {
 
-        logo.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.equalTo(self).offset(50)
-        }
+        let learnMoreButtonTopConstraint = learnMoreButton.topAnchor.constraint(greaterThanOrEqualTo: aboutParagraph.bottomAnchor)
+        learnMoreButtonTopConstraint.priority = .required
+        let learnMoreButtonBottomConstraint = learnMoreButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -UIConstants.layout.settingsViewOffset)
+        learnMoreButtonBottomConstraint.priority = .defaultLow
 
-        versionNumber.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.equalTo(logo.snp.bottom).offset(8)
-        }
+        NSLayoutConstraint.activate([
+            logo.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            logo.topAnchor.constraint(equalTo: self.topAnchor, constant: UIConstants.layout.settingsViewOffset),
 
-        aboutParagraph.snp.makeConstraints { make in
-            // Priority hack is needed to avoid conflicting constraints with the cell height.
-            // See http://stackoverflow.com/a/25795758
-            make.top.equalTo(logo.snp.bottom).offset(50).priority(999)
+            versionNumber.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            versionNumber.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: UIConstants.layout.settingsVerticalOffset),
 
-            make.centerX.equalTo(self)
-            make.width.lessThanOrEqualTo(self).inset(20)
-            make.width.lessThanOrEqualTo(315)
-        }
+            aboutParagraph.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            aboutParagraph.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: UIConstants.layout.settingsViewOffset),
+            aboutParagraph.widthAnchor.constraint(lessThanOrEqualTo: self.widthAnchor, constant:  -UIConstants.layout.settingsHorizontalOffset),
+            aboutParagraph.widthAnchor.constraint(lessThanOrEqualToConstant: UIConstants.layout.settingsAboutViewWidth),
 
-        learnMoreButton.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(aboutParagraph.snp.bottom).priority(.required)
-            make.leading.equalTo(aboutParagraph)
-            make.bottom.equalTo(self).inset(50).priority(.low)
-        }
+            learnMoreButton.leadingAnchor.constraint(equalTo: aboutParagraph.leadingAnchor),
+            learnMoreButtonTopConstraint,
+            learnMoreButtonBottomConstraint
+        ])
     }
 
     private func setupSecretMenuActivation() {

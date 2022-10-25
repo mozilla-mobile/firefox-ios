@@ -25,6 +25,7 @@ class ActionFooterView: UIView {
 
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [textLabel, detailTextButton])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = 0
         stackView.alignment = .leading
         stackView.axis = .vertical
@@ -34,10 +35,14 @@ class ActionFooterView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.top.bottom.equalToSuperview().inset(8)
-        }
+
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: UIConstants.layout.settingsVerticalOffset),
+            stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -UIConstants.layout.settingsVerticalOffset),
+            stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: UIConstants.layout.settingsHorizontalOffset),
+            stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -UIConstants.layout.settingsHorizontalOffset)
+
+        ])
     }
 
     required init?(coder: NSCoder) {
