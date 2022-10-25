@@ -155,7 +155,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
 
-    func configure(_ topSite: TopSite, favIcon: UIImage?, position: Int) {
+    func configure(_ topSite: TopSite, favicon: UIImage?, position: Int) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
