@@ -48,6 +48,12 @@ final class Welcome: UIViewController {
         addOverlay()
         addBackground()
         addStack()
+
+        if LegacyThemeManager.instance.systemThemeIsOn {
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+        }
+
     }
 
     private var didAppear = false
