@@ -1,11 +1,26 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import SnapKit
 import DesignSystem
+import Combine
 
-class SplashView: UIView {
+class SplashViewController: UIViewController {
+    init(authenticationManager: AuthenticationManager) {
+        self.authenticationManager = authenticationManager
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        commonInit()
+    }
 
     enum State {
         case needsAuth
@@ -18,14 +33,7 @@ class SplashView: UIView {
         }
     }
 
-    var authenticationManager: AuthenticationManager! {
-        didSet {
-            authButton.setImage(
-                authenticationManager.biometricType == .faceID ? .faceid : .touchid,
-                for: .normal
-            )
-        }
-    }
+    var authenticationManager: AuthenticationManager
 
     private let logoImage = UIImageView(image: AppInfo.config.wordmark)
 
@@ -39,24 +47,20 @@ class SplashView: UIView {
         return button
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
-    }
+    var cancellable: AnyCancellable?
 
     private func commonInit() {
-        backgroundColor = .launchScreenBackground
-        addSubview(logoImage)
+        authButton.setImage(
+            authenticationManager.biometricType == .faceID ? .faceid : .touchid,
+            for: .normal
+        )
+        view.backgroundColor = .launchScreenBackground
+        view.addSubview(logoImage)
         logoImage.snp.makeConstraints { make in
-            make.center.equalTo(self)
+            make.center.equalTo(self.view)
         }
 
-        addSubview(authButton)
+        view.addSubview(authButton)
         authButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(logoImage).inset(100)
@@ -64,6 +68,22 @@ class SplashView: UIView {
         }
 
         updateUI()
+
+        cancellable = authenticationManager
+            .$authenticationState
+            .receive(on: DispatchQueue.main)
+            .sink { state in
+                switch state {
+                case .loggedin:
+                    break
+
+                case .loggedout:
+                    self.state = .default
+
+                case .canceled:
+                    self.state = .needsAuth
+                }
+            }
     }
 
     private func updateUI() {
@@ -75,20 +95,6 @@ class SplashView: UIView {
         Task {
             await authenticationManager.authenticateWithBiometrics()
         }
-    }
-
-    func animateDissapear(_ duration: Double = 0.25) {
-        UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
-            self.logoImage.layer.transform = .start
-        }, completion: { success in
-            UIView.animate(withDuration: duration, delay: 0.0, options: UIView.AnimationOptions(), animations: {
-                self.alpha = 0
-                self.logoImage.layer.transform = .mid
-            }, completion: { success in
-                self.isHidden = true
-                self.logoImage.layer.transform = CATransform3DIdentity
-            })
-        })
     }
 }
 

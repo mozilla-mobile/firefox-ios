@@ -38,12 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    lazy var splashView: SplashView = {
-        let splashView = SplashView()
-        splashView.authenticationManager = authenticationManager
-        return splashView
-    }()
-
     private lazy var browserViewController = BrowserViewController(
         shortcutManager: shortcutManager,
         authenticationManager: authenticationManager,
@@ -79,10 +73,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 authenticateWithBiometrics()
 
             case .didBecomeActive:
-                if authenticationManager.authenticationState == .loggedin { hideSplashView() }
+                if authenticationManager.authenticationState == .loggedin { hidePrivacyProtectionWindow() }
 
             case .willResignActive:
-                showSplashView()
+                guard privacyProtectionWindow == nil else { return }
+                showPrivacyProtectionWindow()
 
             case .didEnterBackgroundkground:
                 authenticationManager.logout()
@@ -99,14 +94,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .sink { state in
                 switch state {
                 case .loggedin:
-                    self.hideSplashView()
+                    self.hidePrivacyProtectionWindow()
+                    break
 
                 case .loggedout:
-                    self.splashView.state = .default
-                    self.showSplashView()
+                    self.showPrivacyProtectionWindow()
+                    break
 
                 case .canceled:
-                    self.splashView.state = .needsAuth
+                    break
                 }
             }
             .store(in: &cancellables)
@@ -302,21 +298,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func hideSplashView() {
-        browserViewController.activateUrlBarOnHomeView()
-        splashView.alpha = 0
-        splashView.isHidden = true
-        splashView.removeFromSuperview()
+    // MARK: Privacy Protection
+    private var privacyProtectionWindow: UIWindow?
+
+    private func showPrivacyProtectionWindow() {
+        browserViewController.deactivateUrlBarOnHomeView()
+        guard let windowScene = self.window?.windowScene else {
+            return
+        }
+
+        privacyProtectionWindow = UIWindow(windowScene: windowScene)
+        privacyProtectionWindow?.rootViewController = SplashViewController(authenticationManager: authenticationManager)
+        privacyProtectionWindow?.windowLevel = .alert + 1
+        privacyProtectionWindow?.makeKeyAndVisible()
     }
 
-    func showSplashView() {
-        browserViewController.deactivateUrlBarOnHomeView()
-        window!.addSubview(splashView)
-        splashView.snp.makeConstraints { make in
-            make.edges.equalTo(window!)
-        }
-        splashView.alpha = 1
-        splashView.isHidden = false
+    private func hidePrivacyProtectionWindow() {
+        privacyProtectionWindow?.isHidden = true
+        privacyProtectionWindow = nil
+        browserViewController.activateUrlBarOnHomeView()
     }
 }
 

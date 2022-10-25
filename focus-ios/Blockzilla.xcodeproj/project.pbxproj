@@ -126,7 +126,6 @@
 		C8D0306E27E9B03D000664DA /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D392887E1BC5E47E0016A9A0 /* UIConstants.swift */; };
 		C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD12742A00300E76AE6 /* MenuActionable.swift */; };
 		C8EADCD42742A0AB00E76AE6 /* MenuItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */; };
-		C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F3EABE2762558F00C2AF0C /* SplashView.swift */; };
 		C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6327F59D9C00C60DC6 /* UIHelpers */; };
 		C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6527F5A79300C60DC6 /* DesignSystem */; };
 		CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = CDFA746E27ABD43D0055FE55 /* Glean */; };
@@ -213,6 +212,7 @@
 		E4BF2DF51BACE92400DA9D68 /* ContentBlocker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E4BF2DEC1BACE92400DA9D68 /* ContentBlocker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
+		E528833B2900328800011920 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528833A2900328800011920 /* SplashViewController.swift */; };
 		E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */; };
 		E5E4504D28CF4548005A01F1 /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504B28CF4548005A01F1 /* TipViewController.swift */; };
 		E5E4504E28CF4548005A01F1 /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504C28CF4548005A01F1 /* TipsPageViewController.swift */; };
@@ -756,7 +756,6 @@
 		C8CE050D2743FEC5002057C6 /* MenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuAction.swift; sourceTree = "<group>"; };
 		C8EADCD12742A00300E76AE6 /* MenuActionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuActionable.swift; sourceTree = "<group>"; };
 		C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemProvider.swift; sourceTree = "<group>"; };
-		C8F3EABE2762558F00C2AF0C /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		C8FB1E6227F59BC600C60DC6 /* BlockzillaPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BlockzillaPackage; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
@@ -1084,6 +1083,7 @@
 		E4D0AB881E300EFE00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E528833A2900328800011920 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		E56FB76D28C0DF96005CF1B9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E56FB76F28C0DF96005CF1B9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Rename.swift"; sourceTree = "<group>"; };
@@ -1531,7 +1531,7 @@
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
 				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				161D90302108085F00C2A74A /* HomeViewToolbar.swift */,
-				C8F3EABE2762558F00C2AF0C /* SplashView.swift */,
+				E528833A2900328800011920 /* SplashViewController.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
 				8400575127351B7700E48144 /* EditView.swift */,
 				C8958C50280D84EE0064BDF8 /* AutocompleteTextField.swift */,
@@ -2505,7 +2505,6 @@
 				74584E351FA1077000AF2582 /* SettingsContentViewController.swift in Sources */,
 				24433101219DA46F00778D02 /* Debouncer.swift in Sources */,
 				7460BD671F58B1B10096B745 /* GradientProgressBar.swift in Sources */,
-				C8F3EABF2762558F00C2AF0C /* SplashView.swift in Sources */,
 				D3E54FE01DF0E221003E1AFF /* SearchSettingsViewController.swift in Sources */,
 				30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */,
 				F861799D2795EE9800CFD324 /* InternalExperimentDetailView.swift in Sources */,
@@ -2536,6 +2535,7 @@
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
 				8400575A27353B1800E48144 /* UIPasteBoardExtensions.swift in Sources */,
 				7497BE6728DB2E68002E33AF /* OnboardingTelemetryHelper.swift in Sources */,
+				E528833B2900328800011920 /* SplashViewController.swift in Sources */,
 				C8958C51280D84EE0064BDF8 /* AutocompleteTextField.swift in Sources */,
 				C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
