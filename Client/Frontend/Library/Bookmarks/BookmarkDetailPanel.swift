@@ -169,12 +169,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
     override func applyTheme() {
         super.applyTheme()
-
-        if let current = navigationController?.visibleViewController as? NotificationThemeable, current !== self {
-            current.applyTheme()
-        }
-
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 
     override func reloadData() {
