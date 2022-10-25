@@ -203,4 +203,12 @@ final class Analytics {
                 .label(Label.Browser.searchbar.rawValue)
                 .property(position))
     }
+
+    func menuClick(label: String, toggle: Bool? = nil) {
+        let event = Structured(category: Category.menu.rawValue,
+                               action: Action.click.rawValue)
+                 .label(label)
+        toggle.map({ event.value = NSNumber(value: $0)})
+        tracker.track(event)
+    }
 }
