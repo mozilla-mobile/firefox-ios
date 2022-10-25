@@ -259,15 +259,40 @@ class TelemetryWrapperTests: XCTestCase {
         let profile = MockProfile()
         TelemetryWrapper.shared.setup(profile: profile)
 
-        LegacyWallpaperManager().updateSelectedWallpaperIndex(to: 0)
-        XCTAssertEqual(LegacyWallpaperManager().currentWallpaper.type, .defaultBackground)
+        let defaultWallpaper = Wallpaper(id: "fxDefault",
+                                         textColor: nil,
+                                         cardColor: nil,
+                                         logoTextColor: nil)
+
+        WallpaperManager().setCurrentWallpaper(to: defaultWallpaper) { _ in }
+        XCTAssertEqual(WallpaperManager().currentWallpaper.type, .defaultWallpaper)
 
         let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
         TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
 
         testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
-        let wallpaperName = LegacyWallpaperManager().currentWallpaper.name.lowercased()
+        let wallpaperName = WallpaperManager().currentWallpaper.id.lowercased()
         XCTAssertNil(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue())
+    }
+
+    func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
+        let profile = MockProfile()
+        TelemetryWrapper.shared.setup(profile: profile)
+
+        let themedWallpaper = Wallpaper(id: "amethyst",
+                                        textColor: nil,
+                                        cardColor: nil,
+                                        logoTextColor: nil)
+
+        WallpaperManager().setCurrentWallpaper(to: themedWallpaper) { _ in }
+        XCTAssertEqual(WallpaperManager().currentWallpaper.type, .other)
+
+        let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
+        TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
+
+        testLabeledMetricSuccess(metric: GleanMetrics.WallpaperAnalytics.themedWallpaper)
+        let wallpaperName = WallpaperManager().currentWallpaper.id.lowercased()
+        XCTAssertEqual(GleanMetrics.WallpaperAnalytics.themedWallpaper[wallpaperName].testGetValue(), 1)
     }
 
     // MARK: - Awesomebar result tap
