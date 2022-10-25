@@ -16,6 +16,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     struct UX {
+        // TODO: Laurie - borderPrimary
         static let borderColor = UIColor(white: 0, alpha: 0.1)
         static let borderWidth: CGFloat = 0.5
         static let cellCornerRadius: CGFloat = 8
@@ -23,7 +24,6 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         static let iconSize = CGSize(width: 36, height: 36)
         static let iconCornerRadius: CGFloat = 4
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
-        static let overlayColor = UIColor(white: 0.0, alpha: 0.25)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let shadowRadius: CGFloat = 4
@@ -77,7 +77,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
                                                                         size: UX.titleFontSize)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + UX.shadowRadius
-        titleLabel.backgroundColor = UIColor.clear
+        titleLabel.backgroundColor = .clear
         titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
 
@@ -92,7 +92,9 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
         selectedOverlay.layer.cornerRadius = UX.cellCornerRadius
-        selectedOverlay.backgroundColor = UX.overlayColor
+        // TODO: Laurie - actionSecondaryHover
+        let overlayColor = UIColor(white: 0.0, alpha: 0.25)
+        selectedOverlay.backgroundColor = overlayColor
     }
 
     override var isSelected: Bool {
@@ -262,7 +264,9 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 // MARK: NotificationThemeable
 extension TopSiteItemCell: NotificationThemeable {
     func applyTheme() {
+        // TODO: Laurie - textPrimary or secondary?
         pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
+        // TODO: Laurie - textPrimary
         titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
         sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
 

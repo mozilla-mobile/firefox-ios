@@ -55,6 +55,7 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
                                                                    size: UX.bannerTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.titleLabel
+        // TODO: Laurie - textPrimary?
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
@@ -65,10 +66,12 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
                                                                    size: UX.descriptionTextFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.descriptionLabel
+        // TODO: Laurie - textPrimary?
         label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var ctaButton: ActionButton = .build { [weak self] button in
+        // TODO: Laurie - actionPrimary
         button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                                     size: UX.buttonFontSize)
@@ -85,6 +88,7 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
         button.setImage(UIImage(named: ImageIdentifiers.xMark)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        // TODO: Laurie - textPrimary?
         button.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
         button.accessibilityLabel = BannerCopy.HomeTabBannerCloseAccessibility
@@ -98,6 +102,7 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private lazy var cardView: UIView = .build { view in
+        // TODO: Laurie - layer1?
         view.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
         view.layer.cornerRadius = UX.cornerRadius
     }
@@ -180,6 +185,7 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private func addShadow() {
+        // TODO: Laurie - formSurfaceOff
         cardView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         cardView.layer.shadowOffset = CGSize(width: 0.0, height: UX.shadowOffset)
         cardView.layer.shadowOpacity = UX.shadowOpacity
@@ -197,13 +203,17 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
             cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             cardView.removeVisualEffectView()
+        // TODO: Laurie - layer1?
             cardView.backgroundColor = LegacyThemeManager.instance.current.homeTabBanner.backgroundColor
         }
 
         updateShadowPath()
 
+        // TODO: Laurie - textPrimary?
         bannerTitle.textColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
+        // TODO: Laurie - textPrimary?
         descriptionText.textColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
+        // TODO: Laurie - textPrimary?
         dismissButton.imageView?.tintColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
         backgroundColor = .clear
     }

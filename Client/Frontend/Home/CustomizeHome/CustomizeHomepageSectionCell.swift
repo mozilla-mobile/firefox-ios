@@ -89,7 +89,9 @@ class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
 // MARK: - Theme
 extension CustomizeHomepageSectionCell: NotificationThemeable {
     func applyTheme() {
+        // TODO: Laurie - layer2
         goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
+        // TODO: Laurie - textPrimary
         goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
     }
 }

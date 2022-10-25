@@ -60,6 +60,7 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
                                                                    size: UX.sponsoredFontSize)
+        // TODO: Laurie - textSecondary, set it in apply theme down there instead
         label.textColor = .secondaryLabel
         label.text = .FirefoxHomepage.Pocket.Sponsored
     }
@@ -171,6 +172,10 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private func applyTheme() {
+        // TODO: Laurie - titleLabel.textColor = textPrimary
+        // descriptionLabel.textColor = textSecondary
+        // sponsoredLabel = textSecondary
+        // Why descriptionLabel.isHidden ?
         if LegacyThemeManager.instance.currentName == .dark {
             titleLabel.textColor = UIColor.Photon.LightGrey10
             descriptionLabel.textColor = descriptionLabel.isHidden ? UIColor.Photon.LightGrey10 : UIColor.Photon.LightGrey80
@@ -192,6 +197,7 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             contentView.removeVisualEffectView()
+            // TODO: Laurie - Layer2
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey30 : .white
             setupShadow()
@@ -205,6 +211,7 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
         contentView.layer.shadowRadius = UX.shadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0,
                                                 height: UX.shadowOffset)
+        // TODO: Laurie - formSurfaceOff
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
     }

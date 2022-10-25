@@ -170,8 +170,11 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private func applyTheme() {
+        // TODO: Laurie - layer2
         contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
+        // TODO: Laurie - iconPrimary
         heroImage.tintColor = UIColor.theme.homePanel.recentlyVisitedCellGroupImage
+        // TODO: Laurie - borderPrimary
         bottomLine.backgroundColor = UIColor.theme.homePanel.recentlyVisitedCellBottomLine
     }
 

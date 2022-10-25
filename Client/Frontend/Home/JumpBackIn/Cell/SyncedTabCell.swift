@@ -124,7 +124,6 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1)
-        label.textColor = .label
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.descriptionLabel
     }
 
@@ -360,6 +359,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             contentView.removeVisualEffectView()
+            // TODO: Laurie - Layer5
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey40 : .white
             setupShadow()
@@ -372,6 +372,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
                                                     cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = UX.stackViewShadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
+        // TODO: Laurie - formSurfaceOff
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
     }
@@ -380,6 +381,16 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
 // MARK: - Theme
 extension SyncedTabCell: NotificationThemeable {
     func applyTheme() {
+        // TODO: Laurie -
+        // cardTitle.textColor = textPrimary
+        // itemTitle.textColor = textPrimary
+        // descriptionLabel.textColor = textSecondary
+        // fallbackFaviconImage.tintColor = iconPrimary
+        // fallbackFaviconBackground.backgroundColor = layer3
+        // syncedTabsButton.tintColor = iconPrimary
+        // syncedDeviceImage.image = tinted with iconSecondary
+        // fallbackFaviconBackground.layer.borderColor = borderPrimary
+
         if LegacyThemeManager.instance.currentName == .dark {
             cardTitle.textColor  = UIColor.Photon.LightGrey10
             tabItemTitle.textColor = UIColor.Photon.LightGrey05

@@ -38,7 +38,6 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = UX.generalCornerRadius
-        imageView.backgroundColor = .systemBackground
     }
 
     // Used as a fallback if hero image isn't set
@@ -59,7 +58,6 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: UX.bookmarkTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
-        label.textColor = .label
     }
 
     // MARK: - Variables
@@ -192,12 +190,18 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             rootContainer.removeVisualEffectView()
+            // TODO: Laurie -
             rootContainer.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkCellBackground
             setupShadow()
         }
     }
 
     func applyTheme() {
+        // TODO: Laurie -
+        // itemTitle.textColor = textPrimary
+        // fallbackFaviconBackground.backgroundColor = layer 1
+        // fallbackFaviconBackground.layer.borderColor = layer2
+
         itemTitle.textColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkTitle
         fallbackFaviconBackground.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkImageBackground
         fallbackFaviconBackground.layer.borderColor = LegacyThemeManager.instance.current.homePanel.topSitesBackground.cgColor
@@ -209,8 +213,9 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         rootContainer.layer.cornerRadius = UX.generalCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.generalCornerRadius).cgPath
+        // TODO: Laurie - formSurfaceOff
         rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+        rootContainer.layer.shadowOpacity = 0.2
         rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
         rootContainer.layer.shadowRadius = UX.shadowRadius
     }

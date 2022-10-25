@@ -17,7 +17,8 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
     lazy private var emptyBG: UIView = .build { view in
         view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
         view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
-        view.layer.borderColor = UX.borderColor.cgColor
+        // TODO: Laurie - borderPrimary
+        view.layer.borderColor = TopSiteItemCell.UX.borderColor.cgColor
     }
 
     override init(frame: CGRect) {

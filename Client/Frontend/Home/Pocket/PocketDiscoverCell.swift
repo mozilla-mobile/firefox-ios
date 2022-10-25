@@ -88,6 +88,7 @@ class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
                                                     cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = PocketStandardCell.UX.shadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
+        // TODO: Laurie - formSurfaceOff
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
     }
@@ -96,6 +97,7 @@ class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
 // MARK: - Theme
 extension PocketDiscoverCell: NotificationThemeable {
     func applyTheme() {
+        // TODO: Laurie - textPrimary
         if LegacyThemeManager.instance.currentName == .dark {
             itemTitle.textColor = UIColor.Photon.LightGrey10
         } else {

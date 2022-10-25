@@ -72,14 +72,13 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    size: UX.siteFontSize)
-        label.textColor = .label
     }
 
     // Used as a fallback if hero image isn't set
     private let fallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.backgroundColor = UIColor.clear
+        imageView.backgroundColor = .clear
         imageView.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
         imageView.layer.masksToBounds = true
     }
@@ -237,6 +236,7 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
+            // TODO: Laurie - Layer5
             contentView.removeVisualEffectView()
             contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
             UIColor.Photon.DarkGrey40 : .white
@@ -250,6 +250,7 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
                                                     cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = UX.stackViewShadowRadius
         contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
+        // TODO: Laurie - formSurfaceOff
         contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
         contentView.layer.shadowOpacity = 0.12
     }
@@ -258,6 +259,14 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
 // MARK: - Theme
 extension JumpBackInCell: NotificationThemeable {
     func applyTheme() {
+        // TODO: Laurie -
+        // itemTitle = textPrimary
+        // descriptionLabel = textPrimary
+        // faviconImage.tintColor = iconPrimary
+        // fallbackFaviconImage.tintColor = iconPrimary
+        // fallbackFaviconBackground.backgroundColor = layer3
+        // fallbackFaviconBackground.layer.borderColor = borderPrimary
+
         if LegacyThemeManager.instance.currentName == .dark {
             [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
             faviconImage.tintColor = UIColor.Photon.LightGrey10
