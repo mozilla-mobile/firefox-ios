@@ -40,7 +40,6 @@ class AddCredentialViewController: UIViewController, Themeable {
 
     fileprivate lazy var cancelButton: UIBarButtonItem = {
         let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
-        button.tintColor = themeManager.currentTheme.colors.actionPrimary
         return button
     }()
 

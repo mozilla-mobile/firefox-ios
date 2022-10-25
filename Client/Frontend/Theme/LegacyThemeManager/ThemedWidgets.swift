@@ -140,7 +140,7 @@ class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        topBorder.backgroundColor = theme.colors.layer4
-        bottomBorder.backgroundColor = theme.colors.layer4
+        topBorder.backgroundColor = theme.colors.borderPrimary
+        bottomBorder.backgroundColor = theme.colors.borderPrimary
     }
 }

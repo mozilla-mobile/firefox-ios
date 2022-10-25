@@ -41,7 +41,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
 
     private var titleTrailingConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
-
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
@@ -70,7 +69,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         collapsibleState = model.collapsibleState
     }
 
-    func setupLayout() {
+    private func setupLayout() {
         translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(titleLabel, collapsibleImageView)
 
@@ -107,8 +106,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
     }
 
     func applyTheme(theme: Theme) {
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
+        titleLabel.textColor = theme.colors.textPrimary
+        backgroundView?.backgroundColor = theme.colors.layer4
         bordersHelper.applyTheme(theme: theme)
     }
 
