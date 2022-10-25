@@ -222,9 +222,9 @@ extension TopSitesViewModel: HomepageSectionHandler {
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = topSites[safe: indexPath.row] {
-            let favIcon = topSitesDataAdaptor.getFaviconImage(forSite: contentItem.site)
+            let favicon = topSitesDataAdaptor.getFaviconImage(forSite: contentItem.site)
             cell.configure(contentItem,
-                           favIcon: favIcon,
+                           favicon: favicon,
                            position: indexPath.row)
             sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
