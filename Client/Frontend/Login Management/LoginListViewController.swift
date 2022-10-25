@@ -104,6 +104,7 @@ class LoginListViewController: SensitiveViewController, NotificationThemeable {
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.delegate = self
         tableView.tableFooterView = UIView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
 
         if #available(iOS 15.0, *) {
              tableView.sectionHeaderTopPadding = 0

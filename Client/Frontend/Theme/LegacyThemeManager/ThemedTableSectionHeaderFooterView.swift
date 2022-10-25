@@ -91,7 +91,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
         titleTopConstraint = titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                              constant: UX.titleVerticalLongPadding)
         titleBottomConstraint = titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                                   constant: -UX.titleVerticalPadding)
+                                                                   constant: -UX.titleVerticalPadding, priority: .defaultHigh)
 
         NSLayoutConstraint.activate([
             titleTopConstraint,

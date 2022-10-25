@@ -38,7 +38,7 @@ class LoginDetailViewController: SensitiveViewController, NotificationThemeable 
     private let profile: Profile
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
-
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Login Detail List"

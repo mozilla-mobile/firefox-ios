@@ -146,14 +146,9 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
             labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -LoginTableViewCellUX.HorizontalMargin),
             labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
 
-            highlightedLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
-            highlightedLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
-            highlightedLabel.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor),
-            highlightedLabel.widthAnchor.constraint(equalTo: labelContainer.widthAnchor),
-
             descriptionLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
             descriptionLabel.bottomAnchor.constraint(equalTo: labelContainer.bottomAnchor),
-            descriptionLabel.topAnchor.constraint(equalTo: highlightedLabel.bottomAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
             descriptionLabel.widthAnchor.constraint(equalTo: labelContainer.widthAnchor)
         ])
 

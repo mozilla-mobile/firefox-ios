@@ -20,6 +20,7 @@ class AddCredentialViewController: UIViewController, NotificationThemeable {
     
     fileprivate lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.accessibilityIdentifier = "Add Credential"
         tableView.delegate = self
         tableView.dataSource = self
