@@ -8,6 +8,7 @@ protocol Themeable: UIViewController {
     var themeManager: ThemeManager { get }
     var themeObserver: NSObjectProtocol? { get set }
     var notificationCenter: NotificationProtocol { get set }
+
     func listenForThemeChange()
     func applyTheme()
 }

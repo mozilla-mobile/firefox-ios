@@ -6,11 +6,23 @@ import UIKit
 
 class ThemedNavigationController: DismissableNavigationViewController, Themeable {
 
-    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var notificationCenter: NotificationProtocol
 
     var presentingModalViewControllerDelegate: PresentingModalViewControllerDelegate?
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(rootViewController: UIViewController,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(rootViewController: rootViewController)
+    }
 
     @objc func done() {
         if let delegate = presentingModalViewControllerDelegate {

@@ -5,7 +5,7 @@
 import UIKit
 import SnapKit
 
-class SettingsLoadingView: UIView {
+class SettingsLoadingView: UIView, ThemeApplicable {
     var searchBarHeight: CGFloat = 0 {
         didSet {
             setNeedsUpdateConstraints()
@@ -28,8 +28,8 @@ class SettingsLoadingView: UIView {
         indicator.startAnimating()
     }
 
-    func configure(theme: Theme) {
-        indicator.color = theme.colors.iconSpinnerDefault
+    func applyTheme(theme: Theme) {
+        indicator.color = theme.colors.iconSpinner
         backgroundColor = theme.colors.layer1
     }
 

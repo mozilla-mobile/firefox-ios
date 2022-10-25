@@ -32,7 +32,7 @@ class CustomSearchViewController: SettingsTableViewController {
     fileprivate var engineTitle = ""
     fileprivate lazy var spinnerView: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
-        spinner.color = themeManager.currentTheme.colors.iconSpinnerDefault
+        spinner.color = themeManager.currentTheme.colors.iconSpinner
         spinner.hidesWhenStopped = true
         return spinner
     }()

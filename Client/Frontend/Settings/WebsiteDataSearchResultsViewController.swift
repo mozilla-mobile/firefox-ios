@@ -9,9 +9,9 @@ import WebKit
 
 class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
 
-    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var notificationCenter: NotificationProtocol
 
     private enum Section: Int {
         case sites = 0
@@ -26,13 +26,17 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
     private var currentSearchText = ""
 
-    init(viewModel: WebsiteDataManagementViewModel) {
+    init(viewModel: WebsiteDataManagementViewModel,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("Not Implemented")
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {

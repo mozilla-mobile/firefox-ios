@@ -16,6 +16,8 @@ struct Gradient {
 }
 
 /// The colour palette for a theme.
+/// Based on the official themes in https://www.figma.com/file/pEyGeE4KV5ytYHeXMfLcEr/Mobile-Styles?node-id=889%3A46413
+/// Do not add any named colours in here unless it's part of the official theme
 protocol ThemeColourPalette {
 
     // MARK: - Layers
@@ -57,6 +59,7 @@ protocol ThemeColourPalette {
     var iconAction: UIColor { get }
     var iconOnColor: UIColor { get }
     var iconWarning: UIColor { get }
+    var iconSpinner: UIColor { get }
     var iconAccentViolet: UIColor { get }
     var iconAccentBlue: UIColor { get }
     var iconAccentPink: UIColor { get }
@@ -71,7 +74,4 @@ protocol ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor { get }
-
-    // MARK: - Icon Spinner
-    var iconSpinnerDefault: UIColor { get }
 }

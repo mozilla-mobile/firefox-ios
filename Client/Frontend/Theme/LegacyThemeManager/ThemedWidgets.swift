@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import UIKit
 
-class ThemedTableViewCell: UITableViewCell {
+class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,16 +23,20 @@ class ThemedTableViewCell: UITableViewCell {
 
 class ThemedTableViewController: UITableViewController, Themeable {
 
-    var themeManager: ThemeManager = AppContainer.shared.resolve()
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
 
-    override init(style: UITableView.Style = .grouped) {
-        super.init(style: style)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    init(style: UITableView.Style = .grouped,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(style: style)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,7 +59,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
     }
 }
 
-class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
+class ThemedHeaderFooterViewBordersHelper: NotificationThemeable, ThemeApplicable {
     enum BorderLocation {
         case top
         case bottom
@@ -95,8 +99,15 @@ class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
         }
     }
 
+    // TODO: FXIOS-4884 - Remove NotificationThemeable applyTheme
+    // to remove in favor of applyTheme(theme: Theme) and updateThemeApplicableSubviews
     func applyTheme() {
         topBorder.backgroundColor = UIColor.theme.tableView.separator
         bottomBorder.backgroundColor = UIColor.theme.tableView.separator
+    }
+
+    func applyTheme(theme: Theme) {
+        topBorder.backgroundColor = theme.colors.layer4
+        bottomBorder.backgroundColor = theme.colors.layer4
     }
 }

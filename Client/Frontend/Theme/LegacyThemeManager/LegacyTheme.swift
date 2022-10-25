@@ -30,7 +30,7 @@ private let defaultTextAndTint = UIColor.Photon.Grey80 // textPrimary in new sys
 class TableViewColor {
     var rowBackground: UIColor { return UIColor.Photon.White100 } // layer2
     var rowText: UIColor { return UIColor.Photon.Grey90 } // textPrimary
-    var rowDetailText: UIColor { return UIColor.Photon.Grey60 }
+    var rowDetailText: UIColor { return UIColor.Photon.Grey60 } // textSecondary
     var disabledRowText: UIColor { return UIColor.Photon.Grey40 } // textDisabled
     var separator: UIColor { return defaultSeparator } // layer4
     var headerBackground: UIColor { return defaultBackground } // layer1

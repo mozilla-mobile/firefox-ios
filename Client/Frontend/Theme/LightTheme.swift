@@ -49,6 +49,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var iconAction: UIColor = FXColors.Blue50
     var iconOnColor: UIColor = FXColors.LightGrey05
     var iconWarning: UIColor = FXColors.Red70
+    var iconSpinner: UIColor = FXColors.LightGrey80
     var iconAccentViolet: UIColor = FXColors.Violet60
     var iconAccentBlue: UIColor = FXColors.Blue60
     var iconAccentPink: UIColor = FXColors.Pink60
@@ -63,7 +64,4 @@ private struct LightColourPalette: ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.16)
-
-    // MARK: - Icon Spinner
-    var iconSpinnerDefault: UIColor = FXColors.LightGrey80
 }

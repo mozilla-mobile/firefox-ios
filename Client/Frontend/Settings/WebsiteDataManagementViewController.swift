@@ -88,9 +88,9 @@ class WebsiteDataManagementViewModel {
 class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource,
                                            UITableViewDelegate, UISearchBarDelegate, Themeable {
 
-    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var notificationCenter: NotificationProtocol
 
     private enum Section: Int {
         case sites = 0
@@ -98,6 +98,17 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         case clearButton = 2
 
         static let count = 3
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(nibName: nil, bundle: nil)
     }
 
     fileprivate let loadingView = SettingsLoadingView()
@@ -135,7 +146,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
         view.addSubview(tableView)
         view.addSubview(loadingView)
-        loadingView.configure(theme: themeManager.currentTheme)
+        loadingView.applyTheme(theme: themeManager.currentTheme)
 
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(view)
@@ -332,6 +343,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
 
     func applyTheme() {
-        loadingView.configure(theme: themeManager.currentTheme)
+        loadingView.applyTheme(theme: themeManager.currentTheme)
     }
 }
