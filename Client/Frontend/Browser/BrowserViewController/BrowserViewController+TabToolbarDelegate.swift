@@ -213,8 +213,18 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
                 isButtonTapped ? self.addBookmark(url: url ?? "") : nil
             }
             show(toast: toast)
-        default:
-            SimpleToast().showAlertWithText(message, image: "bookmarksEmpty", bottomContainer: webViewContainer)
+        case .addToReadingList:
+            SimpleToast().showAlertWithText(message, image: "reader-action-bar", bottomContainer: webViewContainer)
+        case .removeFromReadingList:
+            SimpleToast().showAlertWithText(message, image: "libraryReading", bottomContainer: webViewContainer)
+        case .pinPage:
+            SimpleToast().showAlertWithText(message, image: "action_unpin", bottomContainer: webViewContainer)
+        case .removePinPage:
+            SimpleToast().showAlertWithText(message, image: "action_pin", bottomContainer: webViewContainer)
+        case .copyUrl:
+            SimpleToast().showAlertWithText(message, image: ImageIdentifiers.copyLink, bottomContainer: webViewContainer)
+        case .share, .bookmarkPage:
+            break
         }
     }
 

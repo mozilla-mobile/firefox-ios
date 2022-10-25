@@ -26,7 +26,7 @@ class OneLineTableViewCell: UITableViewCell, NotificationThemeable, ReusableCell
     override var indentationLevel: Int {
         didSet {
             containerView.snp.remakeConstraints { make in
-                make.height.equalTo(44)
+                make.height.equalTo(44).priority(.veryHigh)
                 make.top.bottom.equalToSuperview()
                 make.leading.equalToSuperview().offset(indentationLevel * Int(indentationWidth))
                 make.trailing.equalTo(accessoryView?.snp.leading ?? contentView.snp.trailing)
