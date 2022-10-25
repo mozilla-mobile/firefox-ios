@@ -162,14 +162,11 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         configureSponsoredSite(topSite)
 
         applyTheme()
-        adjustLayout()
     }
 
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
-        rootContainer.backgroundColor = .clear
-
         titlePinWrapper.addArrangedSubview(pinViewHolder)
         titlePinWrapper.addArrangedSubview(titleLabel)
         pinViewHolder.addSubview(pinImageView)
@@ -235,6 +232,9 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 
     private func adjustLayout() {
         // If blur is disabled set background color
+        rootContainer.setNeedsLayout()
+        rootContainer.layoutIfNeeded()
+
         if shouldApplyWallpaperBlur {
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
