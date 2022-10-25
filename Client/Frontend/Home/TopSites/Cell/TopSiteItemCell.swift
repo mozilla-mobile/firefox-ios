@@ -160,7 +160,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
 
-        imageView.image = favIcon
+        imageView.image = favicon
 
         configurePinnedSite(topSite)
         configureSponsoredSite(topSite)
