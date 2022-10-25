@@ -50,7 +50,7 @@ class OnboardingTelemetryHelper {
             let cardTypeExtra = GleanMetrics.Onboarding.CardViewExtra(cardType: CardViewType.widgetTutorial.rawValue)
             GleanMetrics.Onboarding.cardView.record(cardTypeExtra)
         case .widgetPrimaryButtonTapped:
-            let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.welcomeView.rawValue)
+            let cardTypeExtra = GleanMetrics.Onboarding.PrimaryButtonTapExtra(cardType: CardViewType.widgetTutorial.rawValue)
             GleanMetrics.Onboarding.primaryButtonTap.record(cardTypeExtra)
         case .widgetCloseTapped:
             let cardTypeExtra = GleanMetrics.Onboarding.CloseTapExtra(cardType: CardViewType.widgetTutorial.rawValue)
