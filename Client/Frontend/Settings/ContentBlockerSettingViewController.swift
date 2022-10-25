@@ -44,11 +44,11 @@ class TPAccessoryInfo: ThemedTableViewController {
         tableView.estimatedRowHeight = 130
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
-        tableView.tableHeaderView = headerView()
 
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         applyTheme()
+        listenForThemeChange()
     }
 
     func headerView() -> UIView {
@@ -82,6 +82,11 @@ class TPAccessoryInfo: ThemedTableViewController {
             make.width.equalToSuperview()
         }
         return topStack
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        tableView.tableHeaderView = headerView()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
