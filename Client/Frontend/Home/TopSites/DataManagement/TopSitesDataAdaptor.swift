@@ -30,7 +30,7 @@ protocol TopSitesDataAdaptor {
     /// - Parameter numberOfTilesPerRow: The number of tiles per row shown to the user
     func recalculateTopSiteData(for numberOfTilesPerRow: Int)
 
-    /// Get fav icon for site
+    /// Get favicon for site
     func getFaviconImage(forSite site: Site) -> UIImage?
 }
 
