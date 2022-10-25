@@ -20,10 +20,6 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
     private let background = Background()
     private weak var impactCell: MyImpactCell?
 
-    fileprivate var treesCellModel: NTPImpactCell.Model {
-        return .init(trees: User.shared.searchImpact, searches: personalCounter.state!, style: .impact)
-    }
-
     convenience init(delegate: EcosiaHomeDelegate?, referrals: Referrals) {
         let layout = EcosiaHomeLayout()
         layout.scrollDirection = .vertical
@@ -71,10 +67,9 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
         personalCounter.subscribe(self)  { [weak self] _ in
             guard
                 let self = self,
-                self.collectionView.numberOfSections > Section.impact.rawValue,
-                self.collectionView.numberOfSections > Section.legacyImpact.rawValue
+                self.collectionView.numberOfSections > Section.impact.rawValue
             else { return }
-            self.collectionView.reloadSections([Section.impact.rawValue, Section.legacyImpact.rawValue])
+            self.collectionView.reloadSections([Section.impact.rawValue])
         }
 
         referrals.subscribe(self)  { [weak self] _ in
@@ -93,10 +88,8 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
         news.load(session: .shared, force: items.isEmpty)
         Analytics.shared.navigation(.view, label: .home)
 
-        if Referrals.isEnabled {
-            referrals.refresh(force: true)
-        }
-        
+        referrals.refresh(force: true)
+
         User.shared.hideRebrandIntro()
 
         if #available(iOS 15, *) {
@@ -139,9 +132,8 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
-        case .impact: return Referrals.isEnabled ? 1 : 0
-        case .legacyImpact: return Referrals.isEnabled ? 0 : 1
-        case .multiply: return Referrals.isEnabled ? 2 : 0 // with header
+        case .impact: return 1
+        case .multiply: return 2  // with header
         case .explore: return Section.Explore.allCases.count + 1 // header
         case .news: return min(3, items.count) + 2 // header and footer
         }
@@ -160,11 +152,6 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
             self.impactCell = impactCell
             updateImpactCell()
             return impactCell
-
-        case .legacyImpact:
-            let treesCell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: section.cell), for: indexPath) as! NTPImpactCell
-            treesCell.display(treesCellModel)
-            return treesCell
 
         case .multiply:
             if indexPath.row == 0 {
@@ -210,11 +197,6 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let section = Section(rawValue: indexPath.section)!
         switch section {
-        case .legacyImpact:
-            delegate?.ecosiaHome(didSelectURL: Environment.current.aboutCounter)
-            dismiss(animated: true) { [weak collectionView] in
-                collectionView?.deselectItem(at: indexPath, animated: false)
-            }
         case .news:
             let index = indexPath.row - 1
             guard index >= 0, items.count > index else { return }

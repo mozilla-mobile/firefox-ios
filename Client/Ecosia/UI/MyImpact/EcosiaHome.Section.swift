@@ -7,12 +7,11 @@ import Core
 
 extension EcosiaHome {
     enum Section: Int, CaseIterable {
-        case impact, legacyImpact, multiply, news, explore
+        case impact, multiply, news, explore
 
         var cell: AnyClass {
             switch self {
             case .impact: return MyImpactCell.self
-            case .legacyImpact: return NTPImpactCell.self
             case .multiply: return MultiplyImpactCell.self
             case .explore: return EcosiaExploreCell.self
             case .news: return NewsCell.self
@@ -34,7 +33,7 @@ extension EcosiaHome {
         
         var height: CGFloat {
             switch self {
-            case .impact, .legacyImpact:
+            case .impact:
                 return 290
             case .multiply:
                 return 100

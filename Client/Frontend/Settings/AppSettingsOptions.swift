@@ -737,33 +737,6 @@ final class ShowTour: HiddenSetting, WelcomeDelegate {
 }
 
 
-final class ToggleReferrals: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Toggle Referrals", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        let isOn = Referrals.isEnabled
-        return NSAttributedString(string: isOn ? "On" : "Off", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-
-    override func onClick(_ navigationController: UINavigationController?) {
-
-        let isOn = Referrals.isEnabled
-        Goodall.shared.turn(.referrals, on: !isOn)
-
-        let alertTitle = "Referrals toggled to: "
-        let alert = AlertController(title: alertTitle, message: !isOn ? "ON" : "OFF", preferredStyle: .alert)
-        navigationController?.topViewController?.present(alert, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                alert.dismiss(animated: true)
-            }
-            self.settings.tableView.reloadData()
-        }
-    }
-}
-
 final class CreateReferralCode: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Referral Code \(User.shared.referrals.code ?? "-")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])

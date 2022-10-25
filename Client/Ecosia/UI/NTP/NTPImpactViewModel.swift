@@ -18,8 +18,7 @@ class NTPImpactViewModel {
     }
 
     fileprivate var treesCellModel: NTPImpactCell.Model {
-        let trees = Referrals.isEnabled ? User.shared.impact : User.shared.searchImpact
-        return .init(trees: trees, searches: personalCounter.state!, style: .ntp)
+        .init(trees: User.shared.impact, searches: personalCounter.state!, style: .ntp)
     }
 
     weak var cell: NTPImpactCell?
