@@ -71,7 +71,8 @@ platform :ios do
     )
     pilot(
       skip_waiting_for_build_processing: true, 
-      apple_id: "1541358670"
+      apple_id: "1541358670",
+      itc_provider: "33YMRSYD2L"
     )
   end
 
@@ -90,7 +91,8 @@ platform :ios do
     )
     pilot(
       skip_waiting_for_build_processing: true, 
-      apple_id: "670881887"
+      apple_id: "670881887",
+      itc_provider: "33YMRSYD2L"
     )
   end 
 
