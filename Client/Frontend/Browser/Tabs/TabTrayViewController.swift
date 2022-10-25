@@ -255,7 +255,7 @@ class TabTrayViewController: UIViewController, Themeable {
         UserDefaults.standard.set(viewModel.tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
     }
 
-    fileprivate func updateTitle() {
+    private func updateTitle() {
         if let newTitle = viewModel.navTitle(for: segmentedControlIphone.selectedSegmentIndex,
                                              foriPhone: !shouldUseiPadSetup()) {
             navigationItem.title = newTitle
