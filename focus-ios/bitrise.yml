@@ -6,7 +6,7 @@ project_type: ios
 
 trigger_map:
 - push_branch: main
-  workflow: runParallelTests
+  pipeline: pipeline_build_and_run_tests
 - pull_request_source_branch: "*"
   pipeline: pipeline_build_and_run_tests
 - tag: "*"
@@ -120,7 +120,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.0.x
-        machine_type_id: g2.4core
+        machine_type_id: g2.8core
   
   ui_test_focus:
     steps:
