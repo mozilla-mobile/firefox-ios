@@ -39,7 +39,7 @@ class Toast: UIView {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             viewController?.view.addSubview(self)
-            guard let _ = viewController else { return }
+            guard viewController != nil else { return }
 
             NSLayoutConstraint.activate(updateConstraintsOn(self))
             self.layoutIfNeeded()

@@ -590,7 +590,7 @@ class Tab: NSObject {
             return
         }
 
-        if let _ = webView?.reloadFromOrigin() {
+        if webView?.reloadFromOrigin() != nil {
             print("reloaded zombified tab from origin")
             return
         }

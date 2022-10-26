@@ -314,7 +314,7 @@ extension LoginDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch InfoItem(rawValue: indexPath.row)! {
         case .breachItem:
-            guard let _ = breach else { return 0 }
+            guard breach != nil else { return 0 }
             return UITableView.automaticDimension
         case .usernameItem, .passwordItem, .websiteItem:
             return LoginDetailUX.InfoRowHeight
