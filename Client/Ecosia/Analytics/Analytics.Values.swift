@@ -11,7 +11,8 @@ extension Analytics {
         onboarding,
         invitations,
         ntp,
-        menu
+        menu,
+        settings
     }
     
     enum Label {
