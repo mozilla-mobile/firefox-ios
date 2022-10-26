@@ -69,13 +69,15 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
-        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
+                                                                      height: SettingsUX.TableViewHeaderFooterHeight))
+        footer.applyTheme(theme: themeManager.currentTheme)
         tableView.tableFooterView = footer
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell()
+        cell.applyTheme(theme: themeManager.currentTheme)
 
         if indexPath.section == SectionArrow {
             cell.accessoryType = .disclosureIndicator

@@ -28,7 +28,7 @@ private let defaultSeparator = UIColor.Photon.Grey30 // layerLightGray30
 private let defaultTextAndTint = UIColor.Photon.Grey80 // textPrimary in new system
 
 class TableViewColor {
-    var rowBackground: UIColor { return UIColor.Photon.White100 } // layer2
+    var rowBackground: UIColor { return UIColor.Photon.White100 } // layer5
     var rowText: UIColor { return UIColor.Photon.Grey90 } // textPrimary
     var rowDetailText: UIColor { return UIColor.Photon.Grey60 } // textSecondary
     var disabledRowText: UIColor { return UIColor.Photon.Grey40 } // textDisabled
@@ -44,7 +44,7 @@ class TableViewColor {
     var errorText: UIColor { return UIColor.Photon.Red50 } // textWarning
     var warningText: UIColor { return UIColor.Photon.Orange50 } // textWarning
     var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 } // iconSecondary
-    var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightLight } // layer3
+    var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightLight } // layer5Hover
 }
 
 class ActionMenuColor {

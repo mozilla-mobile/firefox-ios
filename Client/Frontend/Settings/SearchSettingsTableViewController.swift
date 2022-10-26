@@ -75,8 +75,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell()
+        cell.applyTheme(theme: themeManager.currentTheme)
         var engine: OpenSearchEngine!
 
         if indexPath.section == SectionDefault {
@@ -231,7 +231,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        footerView.applyTheme()
+        footerView.applyTheme(theme: themeManager.currentTheme)
         return footerView
     }
 

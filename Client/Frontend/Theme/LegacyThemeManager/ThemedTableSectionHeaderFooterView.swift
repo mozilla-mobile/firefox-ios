@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableCell, NotificationThemeable, ThemeApplicable {
+class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
 
     private struct UX {
         static let titleHorizontalPadding: CGFloat = 15
@@ -56,25 +56,16 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
         bordersHelper.initBorders(view: self.contentView)
         setDefaultBordersValues()
         setupInitialConstraints()
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // TODO: FXIOS-4884 - NotificationThemeable applyTheme
-    // to remove in favor of applyTheme(theme: Theme) and updateThemeApplicableSubviews
-    func applyTheme() {
-        bordersHelper.applyTheme()
-        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
-        titleLabel.textColor = UIColor.theme.tableView.headerTextLight
-    }
-
     func applyTheme(theme: Theme) {
-        bordersHelper.applyTheme()
-        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
-        titleLabel.textColor = UIColor.theme.tableView.headerTextLight
+        bordersHelper.applyTheme(theme: theme)
+        contentView.backgroundColor = theme.colors.layer1
+        titleLabel.textColor = theme.colors.textSecondary
     }
 
     func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {
@@ -91,8 +82,6 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, ReusableC
         setDefaultBordersValues()
         titleLabel.text = nil
         titleAlignment = .bottom
-
-        applyTheme()
     }
 
     private func setupInitialConstraints() {

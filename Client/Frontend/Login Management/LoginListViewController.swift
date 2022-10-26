@@ -391,7 +391,7 @@ extension LoginListViewController: UITableViewDelegate {
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)
         headerView.showBorder(for: .bottom, true)
-        headerView.applyTheme()
+        headerView.applyTheme(theme: themeManager.currentTheme)
         return headerView
     }
 

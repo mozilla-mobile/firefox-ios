@@ -44,11 +44,11 @@ class TPAccessoryInfo: ThemedTableViewController {
         tableView.estimatedRowHeight = 130
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
-        tableView.tableHeaderView = headerView()
 
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         applyTheme()
+        listenForThemeChange()
     }
 
     func headerView() -> UIView {
@@ -76,12 +76,17 @@ class TPAccessoryInfo: ThemedTableViewController {
         topStack.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
         topStack.isLayoutMarginsRelativeArrangement = true
 
-        sep.backgroundColor = themeManager.currentTheme.colors.layer4
+        sep.backgroundColor = themeManager.currentTheme.colors.borderPrimary
         sep.snp.makeConstraints { make in
             make.height.equalTo(0.5)
             make.width.equalToSuperview()
         }
         return topStack
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        tableView.tableHeaderView = headerView()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -93,8 +98,8 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        cell.applyTheme(theme: themeManager.currentTheme)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 cell.textLabel?.text = .TPSocialBlocked

@@ -53,7 +53,9 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
         view.addSubview(tableView)
 
-        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
+                                                                      height: SettingsUX.TableViewHeaderFooterHeight))
+        footer.applyTheme(theme: themeManager.currentTheme)
         footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
@@ -85,8 +87,8 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
         let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
+        cell.applyTheme(theme: themeManager.currentTheme)
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -183,7 +185,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func applyTheme() {
-        tableView.separatorColor = themeManager.currentTheme.colors.layer4
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableView.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }

@@ -3,7 +3,44 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import UIKit
 
+enum ThemedTableViewCellType {
+    case standard, actionPrimary, destructive, disabled
+}
+
+class ThemedTableViewCellViewModel {
+    var type: ThemedTableViewCellType
+
+    var textColor: UIColor!
+    var detailTextColor: UIColor!
+    var backgroundColor: UIColor!
+    var tintColor: UIColor!
+
+    init(theme: Theme, type: ThemedTableViewCellType) {
+        self.type = type
+        setColors(theme: theme)
+    }
+
+    func setColors(theme: Theme) {
+        detailTextColor = theme.colors.textSecondary
+        backgroundColor = theme.colors.layer5
+        tintColor = theme.colors.actionPrimary
+
+        switch self.type {
+        case .standard:
+            textColor = theme.colors.textPrimary
+        case .actionPrimary:
+            textColor = theme.colors.actionPrimary
+        case .destructive:
+            textColor = theme.colors.textWarning
+        case .disabled:
+            textColor = theme.colors.textDisabled
+        }
+    }
+}
+
 class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
+
+    var viewModel: ThemedTableViewCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -14,10 +51,16 @@ class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        textLabel?.textColor = theme.colors.textPrimary
-        detailTextLabel?.textColor = theme.colors.textSecondary
-        backgroundColor = theme.colors.layer2
-        tintColor = theme.colors.actionPrimary
+        self.viewModel?.setColors(theme: theme)
+        // Take view model color if it exists, otherwise fallback to default colors
+        textLabel?.textColor = viewModel?.textColor ?? theme.colors.textPrimary
+        detailTextLabel?.textColor = viewModel?.detailTextColor ?? theme.colors.textSecondary
+        backgroundColor = viewModel?.backgroundColor ?? theme.colors.layer5
+        tintColor = viewModel?.tintColor ?? theme.colors.actionPrimary
+    }
+
+    func configure(viewModel: ThemedTableViewCellViewModel) {
+        self.viewModel = viewModel
     }
 }
 
@@ -53,13 +96,10 @@ class ThemedTableViewController: UITableViewController, Themeable {
         tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
         tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.reloadData()
-
-        // TODO: Remove with legacy theme clean up FXIOS-3960
-        (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
     }
 }
 
-class ThemedHeaderFooterViewBordersHelper: NotificationThemeable, ThemeApplicable {
+class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
     enum BorderLocation {
         case top
         case bottom
@@ -99,15 +139,8 @@ class ThemedHeaderFooterViewBordersHelper: NotificationThemeable, ThemeApplicabl
         }
     }
 
-    // TODO: FXIOS-4884 - Remove NotificationThemeable applyTheme
-    // to remove in favor of applyTheme(theme: Theme) and updateThemeApplicableSubviews
-    func applyTheme() {
-        topBorder.backgroundColor = UIColor.theme.tableView.separator
-        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
-    }
-
     func applyTheme(theme: Theme) {
-        topBorder.backgroundColor = theme.colors.layer4
-        bottomBorder.backgroundColor = theme.colors.layer4
+        topBorder.backgroundColor = theme.colors.borderPrimary
+        bottomBorder.backgroundColor = theme.colors.borderPrimary
     }
 }

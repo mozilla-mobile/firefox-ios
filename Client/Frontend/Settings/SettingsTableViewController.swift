@@ -107,7 +107,7 @@ class Setting: NSObject {
         cell.layoutMargins = .zero
 
         let backgroundView = UIView()
-        backgroundView.backgroundColor = theme.colors.layer3
+        backgroundView.backgroundColor = theme.colors.layer5Hover
         backgroundView.bounds = cell.bounds
         cell.selectedBackgroundView = backgroundView
 
@@ -779,10 +779,9 @@ class SettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row] {
-            // TODO: Next task for FXIOS-4884 - apply ThemedTableViewCell theme
             let cell = ThemedTableViewCell(style: setting.style, reuseIdentifier: nil)
             setting.onConfigureCell(cell, theme: themeManager.currentTheme)
-            cell.backgroundColor = themeManager.currentTheme.colors.layer2
+            cell.applyTheme(theme: themeManager.currentTheme)
             return cell
         }
         return super.tableView(tableView, cellForRowAt: indexPath)
@@ -804,7 +803,7 @@ class SettingsTableViewController: ThemedTableViewController {
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
         }
-        headerView.applyTheme()
+        headerView.applyTheme(theme: themeManager.currentTheme)
         return headerView
     }
 
@@ -816,7 +815,7 @@ class SettingsTableViewController: ThemedTableViewController {
 
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
-        footerView.applyTheme()
+        footerView.applyTheme(theme: themeManager.currentTheme)
         return footerView
     }
 
