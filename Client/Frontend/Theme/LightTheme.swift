@@ -16,6 +16,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layer3: UIColor = FXColors.LightGrey20
     var layer4: UIColor = FXColors.LightGrey30.withAlphaComponent(0.6)
     var layer5: UIColor = FXColors.White
+    var layer5Hover: UIColor = FXColors.LightGrey20
     var layerScrim: UIColor = FXColors.DarkGrey30.withAlphaComponent(0.95)
     var layerGradient: Gradient = Gradient(start: FXColors.Violet70, end: FXColors.Violet40)
     var layerAccentNonOpaque: UIColor = FXColors.Blue50.withAlphaComponent(0.1)
@@ -49,6 +50,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var iconAction: UIColor = FXColors.Blue50
     var iconOnColor: UIColor = FXColors.LightGrey05
     var iconWarning: UIColor = FXColors.Red70
+    var iconSpinner: UIColor = FXColors.LightGrey80
     var iconAccentViolet: UIColor = FXColors.Violet60
     var iconAccentBlue: UIColor = FXColors.Blue60
     var iconAccentPink: UIColor = FXColors.Pink60
@@ -62,5 +64,5 @@ private struct LightColourPalette: ThemeColourPalette {
     var borderAccentPrivate: UIColor = FXColors.Purple60
 
     // MARK: - Shadow
-    var shadow: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.16)
+    var shadowDefault: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.16)
 }

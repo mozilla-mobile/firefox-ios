@@ -25,23 +25,38 @@ struct LoginDetailUX {
     static let SeparatorHeight: CGFloat = 84
 }
 
-private class CenteredDetailCell: ThemedTableViewCell {
+private class CenteredDetailCell: ThemedTableViewCell, ReusableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         var f = detailTextLabel?.frame ?? CGRect()
         f.center = CGPoint(x: frame.center.x - safeAreaInsets.right, y: frame.center.y)
         detailTextLabel?.frame = f
     }
+
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+        backgroundColor = theme.colors.layer1
+    }
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
-class LoginDetailViewController: SensitiveViewController {
+class LoginDetailViewController: SensitiveViewController, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
     private let profile: Profile
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
-
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Login Detail List"
         tableView.delegate = self
         tableView.dataSource = self
@@ -53,8 +68,6 @@ class LoginDetailViewController: SensitiveViewController {
     private weak var websiteField: UITextField?
     private weak var usernameField: UITextField?
     private weak var passwordField: UITextField?
-    // Used to temporarily store a reference to the cell the user is showing the menu controller for
-    private var menuControllerCell: LoginDetailTableViewCell?
     private var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
     private var breach: BreachRecord?
@@ -73,10 +86,16 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    init(profile: Profile, login: LoginRecord, webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
+    init(profile: Profile,
+         login: LoginRecord,
+         webpageNavigationHandler: ((_ url: URL?) -> Void)?,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.login = login
         self.profile = profile
         self.webpageNavigationHandler = webpageNavigationHandler
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -95,6 +114,8 @@ class LoginDetailViewController: SensitiveViewController {
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 
+        tableView.register(cellType: LoginDetailTableViewCell.self)
+        tableView.register(cellType: CenteredDetailCell.self)
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
@@ -104,6 +125,10 @@ class LoginDetailViewController: SensitiveViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         tableView.estimatedRowHeight = 44.0
+        tableView.separatorInset = .zero
+
+        applyTheme()
+        listenForThemeChange()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -113,6 +138,12 @@ class LoginDetailViewController: SensitiveViewController {
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
+
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        tableView.separatorColor = theme.colors.borderPrimary
+        tableView.backgroundColor = theme.colors.layer1
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -121,7 +152,9 @@ extension LoginDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InfoItem(rawValue: indexPath.row)! {
         case .breachItem:
-            let breachCell = cell(forIndexPath: indexPath)
+            guard let breachCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+                return UITableViewCell()
+            }
             guard let breach = breach else { return breachCell }
             breachCell.isHidden = false
             let breachDetailView = BreachAlertsDetailView()
@@ -142,11 +175,14 @@ extension LoginDetailViewController: UITableViewDataSource {
             breachCell.isAccessibilityElement = false
             breachCell.contentView.accessibilityElementsHidden = true
             breachCell.accessibilityElements = [breachDetailView]
+            breachCell.applyTheme(theme: themeManager.currentTheme)
 
             return breachCell
 
         case .usernameItem:
-            let loginCell = cell(forIndexPath: indexPath)
+            guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+                return UITableViewCell()
+            }
             loginCell.highlightedLabelTitle = .LoginDetailUsername
             loginCell.descriptionLabel.text = login.decryptedUsername
             loginCell.descriptionLabel.keyboardType = .emailAddress
@@ -154,10 +190,13 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.isEditingFieldData = isEditingFieldData
             usernameField = loginCell.descriptionLabel
             usernameField?.accessibilityIdentifier = "usernameField"
+            loginCell.applyTheme(theme: themeManager.currentTheme)
             return loginCell
 
         case .passwordItem:
-            let loginCell = cell(forIndexPath: indexPath)
+            guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+                return UITableViewCell()
+            }
             loginCell.highlightedLabelTitle = .LoginDetailPassword
             loginCell.descriptionLabel.text = login.decryptedPassword
             loginCell.descriptionLabel.returnKeyType = .default
@@ -166,10 +205,13 @@ extension LoginDetailViewController: UITableViewDataSource {
             setCellSeparatorHidden(loginCell)
             passwordField = loginCell.descriptionLabel
             passwordField?.accessibilityIdentifier = "passwordField"
+            loginCell.applyTheme(theme: themeManager.currentTheme)
             return loginCell
 
         case .websiteItem:
-            let loginCell = cell(forIndexPath: indexPath)
+            guard let loginCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+                return UITableViewCell()
+            }
             loginCell.highlightedLabelTitle = .LoginDetailWebsite
             loginCell.descriptionLabel.text = login.hostname
             websiteField = loginCell.descriptionLabel
@@ -178,10 +220,15 @@ extension LoginDetailViewController: UITableViewDataSource {
             if isEditingFieldData {
                 loginCell.contentView.alpha = 0.5
             }
+            loginCell.applyTheme(theme: themeManager.currentTheme)
             return loginCell
 
         case .lastModifiedSeparator:
-            let cell = CenteredDetailCell(style: .subtitle, reuseIdentifier: nil)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CenteredDetailCell.cellIdentifier,
+                                                           for: indexPath) as? CenteredDetailCell else {
+                return UITableViewCell()
+            }
+
             let created: String = .LoginDetailCreatedAt
             let lastModified: String = .LoginDetailModifiedAt
 
@@ -191,27 +238,33 @@ extension LoginDetailViewController: UITableViewDataSource {
             cell.detailTextLabel?.text = createdFormatted + "\n" + lastModifiedFormatted
             cell.detailTextLabel?.numberOfLines = 2
             cell.detailTextLabel?.textAlignment = .center
-            cell.backgroundColor = view.backgroundColor
             setCellSeparatorHidden(cell)
+            cell.applyTheme(theme: themeManager.currentTheme)
             return cell
 
         case .deleteItem:
-            let deleteCell = cell(forIndexPath: indexPath)
+            guard let deleteCell = cell(tableView: tableView, forIndexPath: indexPath) else {
+                return UITableViewCell()
+            }
             deleteCell.textLabel?.text = .LoginDetailDelete
             deleteCell.textLabel?.textAlignment = .center
-            deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button
-            deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
+            deleteCell.configure(type: .delete)
+            deleteCell.applyTheme(theme: themeManager.currentTheme)
+
             setCellSeparatorFullWidth(deleteCell)
             return deleteCell
         }
     }
 
-    private func cell(forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell {
-        let loginCell = LoginDetailTableViewCell()
-        loginCell.selectionStyle = .none
-        loginCell.delegate = self
-        return loginCell
+    private func cell(tableView: UITableView, forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell? {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: LoginDetailTableViewCell.cellIdentifier,
+                                                       for: indexPath) as? LoginDetailTableViewCell else {
+            return nil
+        }
+        cell.selectionStyle = .none
+        cell.delegate = self
+        return cell
     }
 
     private func setCellSeparatorHidden(_ cell: UITableViewCell) {
@@ -337,11 +390,6 @@ extension LoginDetailViewController {
         isEditingFieldData = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 
-        defer {
-            // Required to get UI to reload with changed state
-            tableView.reloadData()
-        }
-
         // Only update if user made changes
         guard let username = usernameField?.text, let password = passwordField?.text else { return }
 
@@ -361,7 +409,11 @@ extension LoginDetailViewController {
         )
 
         if updatedLogin.isValid.isSuccess {
-            _ = profile.logins.updateLogin(id: login.id, login: updatedLogin)
+            profile.logins.updateLogin(id: login.id, login: updatedLogin).uponQueue(.main) { _ in
+                self.onProfileDidFinishSyncing()
+                // Required to get UI to reload with changed state
+                self.tableView.reloadData()
+            }
         }
     }
 }
