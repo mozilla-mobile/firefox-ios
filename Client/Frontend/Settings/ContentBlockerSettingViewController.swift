@@ -225,12 +225,12 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let _defaultFooter = super.tableView(tableView, viewForFooterInSection: section) as? ThemedTableSectionHeaderFooterView
-        guard let defaultFooter = _defaultFooter else { return nil}
+        guard let defaultFooter = _defaultFooter else { return nil }
 
         if section == 0 {
             // TODO: Get a dedicated string for this.
             let title: String = .TrackerProtectionLearnMore
-            
+
             let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
             var attributes = [NSAttributedString.Key: AnyObject]()
             attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
