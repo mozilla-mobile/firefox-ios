@@ -250,8 +250,6 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         }
 
         // Set interaction behavior and style
-//        cell.titleLabel.alpha = isEnabled ? 1.0 : 0.5
-//        cell.leftImageView.alpha = isEnabled ? 1.0 : 0.5
         cell.configureTapState(isEnabled: isEnabled)
         cell.selectionStyle = isEnabled ? .default : .none
         cell.isUserInteractionEnabled = isEnabled
