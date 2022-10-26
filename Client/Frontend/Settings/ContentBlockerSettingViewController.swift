@@ -139,6 +139,7 @@ class TPAccessoryInfo: ThemedTableViewController {
 }
 
 class ContentBlockerSettingViewController: SettingsTableViewController {
+    private let button = UIButton()
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
@@ -180,6 +181,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                                                  extras: extras)
 
                     if option == .strict {
+                        self.button.isHidden = true
                         let alert = UIAlertController(title: .TrackerProtectionAlertTitle,
                                                       message: .TrackerProtectionAlertDescription,
                                                       preferredStyle: .alert)
@@ -236,9 +238,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
             attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
             attributes[NSAttributedString.Key.font] = font
 
-            let button = UIButton()
             button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
             button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
+            button.isHidden = false
 
             defaultFooter.addSubview(button)
 
