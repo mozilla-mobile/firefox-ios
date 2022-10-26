@@ -235,9 +235,12 @@ public class RustPlaces: BookmarksHandler {
     public func deleteBookmarkNode(guid: GUID) -> Success {
         return withWriter { connection in
             let result = try connection.deleteBookmarkNode(guid: guid)
-            if !result {
+            guard result else {
                 log.debug("Bookmark with GUID \(guid) does not exist.")
+                return
             }
+
+            self.notificationCenter.post(name: .BookmarksUpdated, object: self)
         }
     }
 
