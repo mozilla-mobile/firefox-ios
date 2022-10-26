@@ -591,23 +591,23 @@ class Tab: NSObject {
 		}
 		
 		if bypassCache {
-			let reloadRequest = URLRequest(url: url!,
-				cachePolicy:NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData,
-				timeoutInterval: 10.0)
-
-			if let _ = self.webView?.load(reloadRequest) {
-				print("Reloaded the tab from originating source, ignoring local cache.")
-				return
+			if let url = webView?.url {
+				let reloadRequest = URLRequest(url: url, cachePolicy:NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10.0)
+				
+				if let _ = self.webView?.load(reloadRequest) {
+					browserLog.debug("Reloaded the tab from originating source, ignoring local cache.")
+					return
+				}
 			}
 		}
 
 		if let _ = webView?.reloadFromOrigin() {
-			print("reloaded zombified tab from origin")
+			browserLog.debug("reloaded zombified tab from origin")
 			return
 		}
 
 		if let webView = self.webView {
-			print("restoring webView from scratch")
+			browserLog.debug("restoring webView from scratch")
 			restore(webView)
 		}
 	}

@@ -48,7 +48,8 @@ class MenuBuilderHelper {
             UIKeyCommand(title: .KeyboardShortcuts.ZoomIn, action: #selector(BrowserViewController.zoomIn), input: "+", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ZoomIn),
             UIKeyCommand(title: .KeyboardShortcuts.ZoomOut, action: #selector(BrowserViewController.zoomOut), input: "-", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ZoomOut),
             UIKeyCommand(title: .KeyboardShortcuts.ActualSize, action: #selector(BrowserViewController.resetZoom), input: "0", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ActualSize),
-            UIKeyCommand(title: .KeyboardShortcuts.ReloadPage, action: #selector(BrowserViewController.reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ReloadPage)
+            UIKeyCommand(title: .KeyboardShortcuts.ReloadPage, action: #selector(BrowserViewController.reloadTabKeyCommand), input: "r", modifierFlags: .command, discoverabilityTitle: .KeyboardShortcuts.ReloadPage),
+			UIKeyCommand(title: .KeyboardShortcuts.ReloadWithoutCache, action: #selector(BrowserViewController.reloadTabIgnoringCacheKeyCommand), input: "r", modifierFlags: [.command, .shift], discoverabilityTitle: .KeyboardShortcuts.ReloadWithoutCache)
         ])
 
         if #available(iOS 15, *) {
