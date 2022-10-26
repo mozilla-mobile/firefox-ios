@@ -132,9 +132,9 @@ accessibility:
         description: |
           The preferred content size category selected.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12236
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12236
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
