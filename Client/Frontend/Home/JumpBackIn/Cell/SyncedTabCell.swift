@@ -37,7 +37,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
-        static let tabStackTopAnchorConstant: CGFloat = 64
+        static let tabStackTopAnchorConstant: CGFloat = 72
         static let tabStackTopAnchorCompactPhoneConstant: CGFloat = 24
     }
 
@@ -105,7 +105,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
     private let tabItemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline)
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemTitle
     }
 
@@ -122,7 +122,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
 
     private let syncedDeviceLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1)
         label.textColor = .label
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.descriptionLabel
@@ -267,7 +267,8 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
 
             syncedTabsButton.topAnchor.constraint(equalTo: cardTitle.bottomAnchor, constant: 2), // 8 - button top inset
             syncedTabsButton.leadingAnchor.constraint(equalTo: cardTitle.leadingAnchor, constant: 0),
-            syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: 0),
+            syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
+                                                       constant: -16),
 
             tabStackTopConstraint,
             tabStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -302,7 +303,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
             syncedDeviceImage.bottomAnchor.constraint(lessThanOrEqualTo: syncedDeviceContainer.bottomAnchor),
 
             syncedDeviceLabel.topAnchor.constraint(equalTo: syncedDeviceContainer.firstBaselineAnchor),
-            syncedDeviceLabel.leadingAnchor.constraint(equalTo: syncedDeviceImage.trailingAnchor, constant: 20),
+            syncedDeviceLabel.leadingAnchor.constraint(equalTo: syncedDeviceImage.trailingAnchor, constant: 8),
             syncedDeviceLabel.trailingAnchor.constraint(equalTo: syncedDeviceContainer.trailingAnchor),
             syncedDeviceLabel.bottomAnchor.constraint(equalTo: syncedDeviceContainer.bottomAnchor),
 

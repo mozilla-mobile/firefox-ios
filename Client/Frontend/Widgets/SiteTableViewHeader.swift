@@ -11,13 +11,13 @@ struct SiteTableViewHeaderModel {
     let collapsibleState: ExpandButtonState?
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, ReusableCell {
+class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
 
     struct UX {
-        static let TitleTrailingLeadingMargin: CGFloat = 16
-        static let TitleTopBottomMargin: CGFloat = 12
-        static let ImageTrailingSpace: CGFloat = 12
-        static let ImageWidthHeight: CGFloat = 24
+        static let titleTrailingLeadingMargin: CGFloat = 16
+        static let titleTopBottomMargin: CGFloat = 12
+        static let imageTrailingSpace: CGFloat = 12
+        static let imageWidthHeight: CGFloat = 24
     }
 
     var collapsibleState: ExpandButtonState? {
@@ -29,7 +29,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     private let titleLabel: UILabel = .build { label in
         label.textColor = UIColor.theme.tableView.headerTextDark
         label.numberOfLines = 0
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 16)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+                                                                   size: 16)
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -39,7 +40,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
 
     private var titleTrailingConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
-
     fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
@@ -49,39 +49,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubviews(titleLabel, collapsibleImageView)
-
-        bordersHelper.initBorders(view: self.contentView)
-        setDefaultBordersValues()
-
-        backgroundView = UIView()
-        imageViewLeadingConstraint = titleLabel.trailingAnchor.constraint(
-            equalTo: collapsibleImageView.leadingAnchor,
-            constant: -UX.TitleTrailingLeadingMargin)
-        titleTrailingConstraint = titleLabel.trailingAnchor.constraint(
-            equalTo: contentView.trailingAnchor,
-            constant: -UX.TitleTrailingLeadingMargin)
-
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: UX.TitleTrailingLeadingMargin),
-            titleTrailingConstraint,
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                constant: UX.TitleTopBottomMargin),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                constant: -UX.TitleTopBottomMargin),
-
-            collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            imageViewLeadingConstraint,
-            collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                           constant: -UX.ImageTrailingSpace),
-            collapsibleImageView.widthAnchor.constraint(equalToConstant: UX.ImageWidthHeight),
-            collapsibleImageView.heightAnchor.constraint(equalToConstant: UX.ImageWidthHeight)
-        ])
-
-        showImage(false)
-        applyTheme()
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -91,7 +59,6 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
     override func prepareForReuse() {
         super.prepareForReuse()
         setDefaultBordersValues()
-        applyTheme()
     }
 
     func configure(_ model: SiteTableViewHeaderModel) {
@@ -101,9 +68,45 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         collapsibleState = model.collapsibleState
     }
 
-    func applyTheme() {
-        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        backgroundView?.backgroundColor = UIColor.theme.tableView.selectedBackground
+    private func setupLayout() {
+        translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubviews(titleLabel, collapsibleImageView)
+
+        bordersHelper.initBorders(view: self.contentView)
+        setDefaultBordersValues()
+
+        backgroundView = UIView()
+
+        imageViewLeadingConstraint = titleLabel.trailingAnchor.constraint(
+            equalTo: collapsibleImageView.leadingAnchor,
+            constant: -UX.titleTrailingLeadingMargin)
+
+        titleTrailingConstraint = titleLabel.trailingAnchor.constraint(
+            equalTo: contentView.trailingAnchor,
+            constant: -UX.titleTrailingLeadingMargin)
+
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: UX.titleTrailingLeadingMargin),
+            titleTrailingConstraint,
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                                constant: UX.titleTopBottomMargin),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                constant: -UX.titleTopBottomMargin),
+
+            collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                           constant: -UX.imageTrailingSpace),
+            collapsibleImageView.widthAnchor.constraint(equalToConstant: UX.imageWidthHeight),
+            collapsibleImageView.heightAnchor.constraint(equalToConstant: UX.imageWidthHeight)
+        ])
+
+        showImage(false)
+    }
+
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        backgroundView?.backgroundColor = theme.colors.layer4
         bordersHelper.applyTheme()
     }
 
@@ -111,7 +114,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, NotificationThemeable, R
         bordersHelper.showBorder(for: location, show)
     }
 
-    func showImage(_ show: Bool) {
+    private func showImage(_ show: Bool) {
         collapsibleImageView.isHidden = !show
         titleTrailingConstraint.isActive = !show
         imageViewLeadingConstraint.isActive = show

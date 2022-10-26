@@ -39,4 +39,8 @@ class MockTabManager: TabManagerProtocol {
         tabs.append(tab)
         return tab
     }
+
+    func getMostRecentHomepageTab() -> Tab? {
+        return addTab(nil, afterTab: nil, isPrivate: false)
+    }
 }

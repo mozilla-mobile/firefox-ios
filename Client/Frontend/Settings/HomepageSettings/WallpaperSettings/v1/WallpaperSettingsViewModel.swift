@@ -35,7 +35,6 @@ class WallpaperSettingsViewModel {
         }
     }
 
-    private var theme: Theme
     private var wallpaperManager: WallpaperManagerInterface
     private var wallpaperCollections = [WallpaperCollection]()
     var tabManager: TabManagerProtocol
@@ -46,12 +45,9 @@ class WallpaperSettingsViewModel {
         return wallpaperCollections.count
     }
 
-    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
-         tabManager: TabManagerProtocol,
-         theme: Theme) {
+    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), tabManager: TabManagerProtocol) {
         self.wallpaperManager = wallpaperManager
         self.tabManager = tabManager
-        self.theme = theme
         setupWallpapers()
     }
 
@@ -86,7 +82,6 @@ class WallpaperSettingsViewModel {
         }
 
         return WallpaperSettingsHeaderViewModel(
-            theme: theme,
             title: title,
             titleA11yIdentifier: "\(a11yIds.collectionTitle)_\(sectionIndex)",
             description: description,
@@ -146,6 +141,22 @@ class WallpaperSettingsViewModel {
 
     func removeAssetsOnDismiss() {
         wallpaperManager.removeUnusedAssets()
+    }
+
+    func selectHomepageTab() {
+        let homepageTab = getHomepageTab(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+
+        tabManager.selectTab(homepageTab, previous: nil)
+    }
+
+    /// Get mostRecentHomePage used if none is available we add and select a new homepage Tab
+    /// - Parameter isPrivate: If private mode is selected
+    private func getHomepageTab(isPrivate: Bool) -> Tab {
+        guard let homepageTab = tabManager.getMostRecentHomepageTab() else {
+            return tabManager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
+        }
+
+        return homepageTab
     }
 }
 

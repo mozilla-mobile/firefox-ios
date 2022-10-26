@@ -40,6 +40,11 @@ public protocol SyncManager {
 
 typealias SyncFunction = (SyncDelegate, Prefs, Ready, SyncReason) -> SyncResult
 
+public enum HistoryMigrationConfiguration {
+    case disabled
+    case dryRun
+    case real
+}
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
         self.init(localName: profile.localName())
@@ -436,8 +441,33 @@ open class BrowserProfile: Profile {
     }
 
     lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
+    lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
+    lazy var places: RustPlaces = RustPlaces(databasePath: self.placesDbPath)
 
-    lazy var places = RustPlaces(databasePath: placesDbPath)
+    public func migrateHistoryToPlaces(migrationConfig: HistoryMigrationConfiguration, callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
+        let lastSyncTimestamp = Int64(self.syncManager.lastSyncFinishTime ?? 0)
+        switch migrationConfig {
+        case .disabled:
+            break
+        case .dryRun:
+            let dryRunPath = URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("dry-run-places.db").path
+            RustPlaces(databasePath: dryRunPath)
+                .migrateHistory(
+                    dbPath: self.browserDbPath,
+                    lastSyncTimestamp: lastSyncTimestamp,
+                    completion: { result in
+                    do {
+                        try FileManager.default.removeItem(atPath: dryRunPath)
+                    } catch {
+                        log.error("Unable do delete dry run database")
+                    }
+                    callback(result)
+                },
+                errCallback: errCallback)
+        case .real:
+            self.places.migrateHistory(dbPath: self.browserDbPath, lastSyncTimestamp: lastSyncTimestamp, completion: callback, errCallback: errCallback)
+        }
+    }
 
     lazy var tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("tabs.db").path
 

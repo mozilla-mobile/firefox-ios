@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Themeable {
+class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -16,8 +16,6 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Th
 
     private var viewModel: WallpaperSettingsViewModel
     var notificationCenter: NotificationProtocol
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -40,18 +38,11 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Th
         return collectionView
     }()
 
-    private lazy var activityIndicatorView: UIActivityIndicatorView = .build { view in
-        view.style = .large
-        view.isHidden = true
-    }
-
     // MARK: - Initializers
     init(viewModel: WallpaperSettingsViewModel,
-         notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
-        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -65,8 +56,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Th
         setupView()
         applyTheme()
         setupNotifications(forObserver: self,
-                           observing: [UIContentSizeCategory.didChangeNotification])
-        listenForThemeChange()
+                           observing: [.DisplayThemeChanged, UIContentSizeCategory.didChangeNotification])
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -90,10 +80,6 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Th
 
     override func updateOnRotation() {
         configureCollectionView()
-    }
-
-    func applyTheme() {
-        contentView.backgroundColor = themeManager.currentTheme.colors.layer5
     }
 }
 
@@ -151,7 +137,6 @@ private extension WallpaperSettingsViewController {
         configureCollectionView()
 
         contentView.addSubview(collectionView)
-        contentView.addSubview(activityIndicatorView)
         view.addSubview(contentView)
 
         NSLayoutConstraint.activate([
@@ -164,9 +149,6 @@ private extension WallpaperSettingsViewController {
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-
-            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
         ])
     }
 
@@ -244,11 +226,7 @@ private extension WallpaperSettingsViewController {
     func dismissView() {
         guard let navigationController = self.navigationController as? ThemedNavigationController else { return }
 
-        if let isFxHomeTab = viewModel.tabManager.selectedTab?.isFxHomeTab, !isFxHomeTab {
-            viewModel.tabManager.selectTab(viewModel.tabManager.addTab(nil, afterTab: nil, isPrivate: false),
-                                           previous: nil)
-        }
-
+        viewModel.selectHomepageTab()
         navigationController.done()
     }
 
@@ -258,7 +236,11 @@ private extension WallpaperSettingsViewController {
     }
 
     func downloadAndSetWallpaper(at indexPath: IndexPath) {
-        activityIndicatorView.startAnimating()
+        guard let cell = collectionView.cellForItem(at: indexPath) as? WallpaperCollectionViewCell
+            else { return }
+
+        cell.showDownloading(true)
+
         viewModel.downloadAndSetWallpaper(at: indexPath) { [weak self] result in
             ensureMainThread {
                 switch result {
@@ -270,20 +252,31 @@ private extension WallpaperSettingsViewController {
                         self?.downloadAndSetWallpaper(at: indexPath)
                     }
                 }
-                self?.activityIndicatorView.stopAnimating()
+                cell.showDownloading(false)
             }
         }
     }
 }
 
-// MARK: - Notifiable
-extension WallpaperSettingsViewController: Notifiable {
+// MARK: - Themable & Notifiable
+extension WallpaperSettingsViewController: NotificationThemeable, Notifiable {
 
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
+        case .DisplayThemeChanged:
+            applyTheme()
         case UIContentSizeCategory.didChangeNotification:
             preferredContentSizeChanged(notification)
         default: break
+        }
+    }
+
+    func applyTheme() {
+        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            contentView.backgroundColor = UIColor.Photon.DarkGrey40
+        } else {
+            contentView.backgroundColor = UIColor.Photon.LightGrey10
         }
     }
 }

@@ -4,7 +4,7 @@
 
 import UIKit
 
-class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
+class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
@@ -37,7 +37,8 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
         applyTheme()
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged,
+                                       .WallpaperDidChange])
     }
 
     required init?(coder: NSCoder) {
@@ -71,11 +72,22 @@ class CustomizeHomepageSectionView: UICollectionViewCell, ReusableCell {
 
     func configure(onTapAction: ((UIButton) -> Void)?) {
         goToSettingsButton.touchUpAction = onTapAction
+
+        adjustLayout()
+    }
+
+    private func adjustLayout() {
+        if shouldApplyWallpaperBlur {
+            goToSettingsButton.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            goToSettingsButton.removeVisualEffectView()
+            applyTheme()
+        }
     }
 }
 
 // MARK: - Theme
-extension CustomizeHomepageSectionView: NotificationThemeable {
+extension CustomizeHomepageSectionCell: NotificationThemeable {
     func applyTheme() {
         goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
         goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
@@ -83,12 +95,16 @@ extension CustomizeHomepageSectionView: NotificationThemeable {
 }
 
 // MARK: - Notifiable
-extension CustomizeHomepageSectionView: Notifiable {
+extension CustomizeHomepageSectionCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DisplayThemeChanged:
+                self?.applyTheme()
+            case .WallpaperDidChange:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }

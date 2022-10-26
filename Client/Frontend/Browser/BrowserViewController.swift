@@ -709,7 +709,7 @@ class BrowserViewController: UIViewController {
         // Remake constraints even if we're already showing the home controller.
         // The home controller may change sizes if we tap the URL bar while on about:home.
         homepageViewController?.view.snp.remakeConstraints { make in
-            make.top.equalTo(header.snp.bottom)
+            make.top.equalTo(isBottomSearchBar ? view : header.snp.bottom)
             make.left.right.equalTo(view)
             let homePageBottomOffset: CGFloat = isBottomSearchBar ? urlBarHeightConstraintValue ?? 0 : 0
             make.bottom.equalTo(bottomContainer.snp.top).offset(-homePageBottomOffset)
@@ -1017,7 +1017,7 @@ class BrowserViewController: UIViewController {
                     self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
                 }
             }
-        } else if presentedViewController is IntroViewController {
+        } else if presentedViewController is OnboardingViewControllerProtocol {
             // leave from overlay mode while in onboarding is displayed on iPad
             self.urlBar.leaveOverlayMode()
         } else {
@@ -2151,10 +2151,13 @@ extension BrowserViewController {
 
     func presentETPCoverSheetViewController(_ force: Bool = false) {
         guard !hasTriedToPresentETPAlready else { return }
+
         hasTriedToPresentETPAlready = true
         let cleanInstall = ETPViewModel.isCleanInstall(userPrefs: profile.prefs)
         let shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall)
+
         guard force || shouldShow else { return }
+
         let etpCoverSheetViewController = ETPCoverSheetViewController()
         if topTabsVisible {
             etpCoverSheetViewController.preferredContentSize = CGSize(

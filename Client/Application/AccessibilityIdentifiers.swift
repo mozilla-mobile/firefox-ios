@@ -21,6 +21,16 @@ public struct AccessibilityIdentifiers {
         static let reloadButton = "TabLocationView.reloadButton"
     }
 
+    struct Browser {
+
+        struct TopTabs {
+            static let collectionView = "Top Tabs View"
+            static let tabsButton = "TopTabsViewController.tabsButton"
+            static let newTabButton = "TopTabsViewController.newTabButton"
+            static let privateModeButton = "TopTabsViewController.privateModeButton"
+        }
+    }
+
     struct FirefoxHomepage {
 
         static let collectionView = "FxCollectionView"
@@ -181,13 +191,14 @@ public struct AccessibilityIdentifiers {
         }
 
         struct FirefoxAccount {
-            static let qrButton = "QRCodeSignIn.button"
             static let continueButton = "Sign up or sign in"
             static let emailTextFieldChinaFxA = "Email"
             static let emailTextField = "Enter your email"
             static let fxaNavigationBar = "Sync and Save Data"
             static let fxaSettingsButton = "Sync and Save Data"
             static let fxaSignInButton = "EmailSignIn.button"
+            static let qrButton = "QRCodeSignIn.button"
+            static let qrScanFailedAlertOkButton = "qrCodeAlert.okButton"
         }
 
         struct Search {

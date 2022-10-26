@@ -67,17 +67,7 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .toolbarLocation:
             let shouldShowNew = featureFlags.isFeatureEnabled(.copyForToolbar, checking: .buildOnly)
 
-            if let arrowDirection = arrowDirection,
-               arrowDirection == .up,
-               shouldShowNew {
-                descriptionCopy = CFRStrings.Toolbar.SearchBarTopPlacement
-            } else if let arrowDirection = arrowDirection {
-                switch arrowDirection {
-                case .up: descriptionCopy = CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
-                case .down: descriptionCopy = CFRStrings.Toolbar.SearchBarPlacementForNewUsers
-                default: break
-                }
-            }
+            return getToolbarDescriptionCopy(with: arrowDirection, and: shouldShowNew)
         }
 
         return descriptionCopy
@@ -97,6 +87,23 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         }
 
         return actionCopy
+    }
+
+    // MARK: - Private helpers
+
+    private func getToolbarDescriptionCopy(with arrowDirection: UIPopoverArrowDirection?, and shouldShowNew: Bool) -> String {
+        /// Toolbar description should never be empty! If it is, find where this struct is being
+        /// created for toolbar and ensure there's an arrowDirection passed.
+        guard let arrowDirection = arrowDirection else { return "" }
+
+        switch arrowDirection {
+        case .up:
+            return shouldShowNew ? CFRStrings.Toolbar.SearchBarTopPlacement : CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
+        case .down:
+            return shouldShowNew ? CFRStrings.Toolbar.SearchBarBottomPlacement : CFRStrings.Toolbar.SearchBarPlacementForNewUsers
+        default: return ""
+        }
+
     }
 
 }

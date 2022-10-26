@@ -17,7 +17,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 private enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101, v102, v103, v104, v105, v106
+    case v39, v96, v97, v98, v99, v100, v101, v102, v103, v104, v105, v106, v107
 
     // Used for all cases before version 39.
     case unknown
@@ -157,11 +157,17 @@ extension String {
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar.",
                 lastUpdated: .v98)
             public static let SearchBarTopPlacement = MZLocalizedString(
-                "ContextualHints.Toolbar.Top.Description.v106",
+                "ContextualHints.Toolbar.Top.Description.v107",
                 tableName: "ToolbarLocation",
-                value: "Move the toolbar to the bottom in settings if that’s more your style.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. ",
-                lastUpdated: .v106)
+                value: "Move the toolbar to the bottom if that’s more your style.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom.",
+                lastUpdated: .v107)
+            public static let SearchBarBottomPlacement = MZLocalizedString(
+                "ContextualHints.Toolbar.Bottom.Description.v107",
+                tableName: "ToolbarLocation",
+                value: "Move the toolbar to the top if that’s more your style.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.",
+                lastUpdated: .v107)
         }
     }
 }

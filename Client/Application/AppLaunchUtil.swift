@@ -6,6 +6,23 @@ import Foundation
 import Shared
 import Storage
 import Account
+import Glean
+
+// A convinient mapping, `Profile.swift` can't depend
+// on `PlacesMigrationConfiguration` directly since
+// the FML is only usable from `Client` at the moment
+extension PlacesMigrationConfiguration {
+    func into() -> HistoryMigrationConfiguration {
+        switch self {
+        case .disabled:
+            return .disabled
+        case .dryRun:
+            return .dryRun
+        case .real:
+            return .real
+        }
+    }
+}
 
 class AppLaunchUtil {
 
@@ -124,6 +141,7 @@ class AppLaunchUtil {
         // We also make sure that any cache invalidation happens after each applyPendingExperiments().
         NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: nil) { _ in
             FxNimbus.shared.invalidateCachedValues()
+            self.runEarlyExperimentDependencies()
         }
 
         let defaults = UserDefaults.standard
@@ -168,5 +186,56 @@ class AppLaunchUtil {
         }
         // increase session count value
         profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
+    }
+
+    private func runEarlyExperimentDependencies() {
+        runAppServicesHistoryMigration()
+    }
+
+    // MARK: - Application Services History Migration
+
+    private func runAppServicesHistoryMigration() {
+        let placesHistory = FxNimbus.shared.features.placesHistory.value()
+        FxNimbus.shared.features.placesHistory.recordExposure()
+        guard placesHistory.migration != .disabled else {
+            log.info("Migration disabled, won't run migration")
+            return
+        }
+        let browserProfile = self.profile as? BrowserProfile
+        let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
+        let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
+        UserDefaults.standard.setValue(true, forKey: migrationRanKey)
+        if !migrationRan {
+            log.info("Migrating Application services history")
+            let id = GleanMetrics.PlacesHistoryMigration.duration.start()
+            // We mark that the migration started
+            // this will help us identify how often the migration starts, but never ends
+            // additionally, we have a seperate metric for error rates
+            GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
+            GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
+            browserProfile?.migrateHistoryToPlaces(
+            migrationConfig: placesHistory.migration.into(),
+            callback: { result in
+                self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
+                // We record various success metrics here
+                GleanMetrics.PlacesHistoryMigration.duration.stopAndAccumulate(id)
+                GleanMetrics.PlacesHistoryMigration.numMigrated.set(Int64(result.numSucceeded))
+                self.log.info("Migrated \(result.numSucceeded) entries")
+                GleanMetrics.PlacesHistoryMigration.numToMigrate.set(Int64(result.numTotal))
+                GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
+            },
+            errCallback: { err in
+                let errDescription = err?.localizedDescription ?? "Unknown error during History migration"
+                self.log.error(errDescription)
+
+                GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
+                GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
+                GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
+                // We also send the error to sentry
+                SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
+            })
+        } else {
+            log.info("History Migration skipped, already migrated")
+        }
     }
 }

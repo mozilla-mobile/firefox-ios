@@ -218,7 +218,7 @@
 "Could not add page to Reading list" = "No se pudo agregar la página a la lista de lectura";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "No se pudo añadir la página a la lista de lectura. ¿Puede que ya esté ahí?";
+"Could not add page to Reading List. Maybe it’s already there?" = "No se pudo agregar la página a la lista de lectura. ¿Puede ser que ya esté ahí?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "No se pudo cargar la página.";
@@ -1390,8 +1390,8 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Fondo de pantalla de Firefox, diseño de colinas al atardecer.";
 
-/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. */
-"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Firefox clásico";
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ Clásico";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "PANTALLA DE APERTURA";

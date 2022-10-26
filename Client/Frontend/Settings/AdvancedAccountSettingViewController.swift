@@ -71,14 +71,13 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let prefs = profile.prefs
 
-        let attributes = [NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textPrimary]
         let useStage = BoolSetting(
             prefs: prefs,
             prefKey: PrefsKeys.UseStageServer,
             defaultValue: false,
             attributedTitleText: NSAttributedString(
                 string: .AdvancedAccountUseStageServer,
-                attributes: attributes)) { isOn in
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])) { isOn in
             self.settings = self.generateSettings()
             self.tableView.reloadData()
         }

@@ -184,8 +184,7 @@ class TabTrayViewController: UIViewController, Themeable {
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .ProfileDidStartSyncing,
+                           observing: [.ProfileDidStartSyncing,
                                        .ProfileDidFinishSyncing,
                                        .UpdateLabelOnTabClosed])
     }
@@ -203,6 +202,7 @@ class TabTrayViewController: UIViewController, Themeable {
         super.viewDidLoad()
 
         viewSetup()
+        listenForThemeChange()
         applyTheme()
         updatePrivateUIState()
         panelChanged()
@@ -384,7 +384,6 @@ class TabTrayViewController: UIViewController, Themeable {
     func applyTheme() {
         view.backgroundColor = themeManager.currentTheme.colors.layer4
         navigationToolbar.barTintColor = themeManager.currentTheme.colors.layer1
-        viewModel.syncedTabsController.applyTheme()
     }
 }
 

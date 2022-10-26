@@ -31,7 +31,7 @@ protocol TabTrayDelegate: AnyObject {
     func tabTrayDidRequestTabsSettings()
 }
 
-class GridTabViewController: UIViewController, TabTrayViewDelegate {
+class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
@@ -40,11 +40,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     static let independentTabsHeaderIdentifier = "IndependentTabs"
     var otherBrowsingModeOffset = CGPoint.zero
     // Backdrop used for displaying greyed background for private tabs
-    var webViewContainerBackdrop = UIView()
+    var backgroundPrivacyOverlay = UIView()
     var collectionView: UICollectionView!
     var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
     var notificationCenter: NotificationProtocol
     var contextualHintViewController: ContextualHintViewController
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     // This is an optional variable used if we wish to focus a tab that is not the
     // currently selected tab. This allows us to force the scroll behaviour to move
@@ -62,7 +64,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }()
 
     fileprivate lazy var tabLayoutDelegate: TabLayoutDelegate = {
-        let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager, traitCollection: self.traitCollection, scrollView: self.collectionView)
+        let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager,
+                                         traitCollection: self.traitCollection,
+                                         scrollView: self.collectionView)
         delegate.tabSelectionDelegate = self
         delegate.tabPeekDelegate = self
         return delegate
@@ -77,7 +81,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
          profile: Profile,
          tabTrayDelegate: TabTrayDelegate? = nil,
          tabToFocus: Tab? = nil,
-         notificationCenter: NotificationProtocol = NotificationCenter.default
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.tabManager = tabManager
         self.profile = profile
@@ -88,6 +93,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         let contextualViewModel = ContextualHintViewModel(forHintType: .inactiveTabs,
                                                           with: profile)
         self.contextualHintViewController = ContextualHintViewController(with: contextualViewModel)
+        self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
         collectionViewSetup()
@@ -109,7 +115,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
                                               reuseID: TabCell.cellIdentifier,
                                               tabDisplayType: .TabGrid,
                                               profile: profile,
-                                              cfrDelegate: self)
+                                              cfrDelegate: self,
+                                              theme: themeManager.currentTheme)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
 
@@ -121,7 +128,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         tabManager.addDelegate(self)
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
 
-        webViewContainerBackdrop.alpha = 0
+        backgroundPrivacyOverlay.alpha = 0
 
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
@@ -138,12 +145,12 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
+        listenForThemeChange()
         applyTheme()
 
         setupNotifications(forObserver: self, observing: [
             UIApplication.willResignActiveNotification,
-            UIApplication.didBecomeActiveNotification,
-            .DisplayThemeChanged
+            UIApplication.didBecomeActiveNotification
         ])
     }
 
@@ -151,7 +158,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         // TODO: Remove SNAPKIT - this will require some work as the layouts
         // are using other snapkit constraints and this will require modification
         // in several places.
-        [webViewContainerBackdrop, collectionView].forEach { view.addSubview($0) }
+        [backgroundPrivacyOverlay, collectionView].forEach { view.addSubview($0) }
         setupConstraints()
 
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
@@ -161,7 +168,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
     }
 
     private func setupConstraints() {
-        webViewContainerBackdrop.snp.makeConstraints { make in
+        backgroundPrivacyOverlay.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -187,12 +194,16 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
         flowlayout.invalidateLayout()
     }
 
-    deinit {
+    private func tabManagerTeardown() {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
         tabDisplayManager = nil
         contextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
+    }
+
+    deinit {
+        tabManagerTeardown()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -280,6 +291,14 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate {
 
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
+
+    func applyTheme() {
+        tabDisplayManager.theme = themeManager.currentTheme
+        emptyPrivateTabsView.applyTheme(themeManager.currentTheme)
+        backgroundPrivacyOverlay.backgroundColor = themeManager.currentTheme.colors.layerScrim
+        collectionView.backgroundColor = themeManager.currentTheme.colors.layer3
+        collectionView.reloadData()
+    }
 }
 
 extension GridTabViewController: TabManagerDelegate {
@@ -312,7 +331,7 @@ extension GridTabViewController: TabDisplayer {
         tabCell.animator?.delegate = self
         tabCell.delegate = self
         let selected = tab == tabManager.selectedTab
-        tabCell.configureWith(tab: tab, isSelected: selected)
+        tabCell.configureWith(tab: tab, isSelected: selected, theme: themeManager.currentTheme)
         return tabCell
     }
 }
@@ -385,8 +404,8 @@ extension GridTabViewController {
 extension GridTabViewController {
     @objc func appWillResignActiveNotification() {
         if tabDisplayManager.isPrivate {
-            webViewContainerBackdrop.alpha = 1
-            view.bringSubviewToFront(webViewContainerBackdrop)
+            backgroundPrivacyOverlay.alpha = 1
+            view.bringSubviewToFront(backgroundPrivacyOverlay)
             collectionView.alpha = 0
             emptyPrivateTabsView.alpha = 0
         }
@@ -401,8 +420,8 @@ extension GridTabViewController {
                 self.collectionView.alpha = 1
                 self.emptyPrivateTabsView.alpha = 1
             }) { _ in
-                self.webViewContainerBackdrop.alpha = 0
-                self.view.sendSubviewToBack(self.webViewContainerBackdrop)
+                self.backgroundPrivacyOverlay.alpha = 0
+                self.view.sendSubviewToBack(self.backgroundPrivacyOverlay)
             }
     }
 }
@@ -791,14 +810,6 @@ protocol TabCellDelegate: AnyObject {
     func tabCellDidClose(_ cell: TabCell)
 }
 
-// MARK: - NotificationThemable
-extension GridTabViewController: NotificationThemeable {
-    @objc func applyTheme() {
-        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
-        collectionView.backgroundColor = UIColor.theme.tabTray.background
-    }
-}
-
 // MARK: - Notifiable
 extension GridTabViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
@@ -807,8 +818,6 @@ extension GridTabViewController: Notifiable {
             appWillResignActiveNotification()
         case UIApplication.didBecomeActiveNotification:
             appDidBecomeActiveNotification()
-        case .DisplayThemeChanged:
-            applyTheme()
         default: break
         }
     }

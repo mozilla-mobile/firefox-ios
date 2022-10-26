@@ -10,16 +10,16 @@ private let defaultSeparator = UIColor.Photon.Grey60
 private let defaultTextAndTint = UIColor.Photon.Grey10
 
 private class DarkTableViewColor: TableViewColor {
-    override var rowBackground: UIColor { return UIColor.Photon.Grey70 } // layer2
-    override var rowText: UIColor { return defaultTextAndTint } // textPrimary
+    override var rowBackground: UIColor { return UIColor.Photon.Grey70 }
+    override var rowText: UIColor { return defaultTextAndTint }
     override var rowDetailText: UIColor { return UIColor.Photon.Grey30 }
-    override var disabledRowText: UIColor { return UIColor.Photon.Grey40 } // textDisabled
+    override var disabledRowText: UIColor { return UIColor.Photon.Grey40 }
     override var separator: UIColor { return UIColor.Photon.Grey60 }
     override var headerBackground: UIColor { return UIColor.Photon.Grey80 }
-    override var headerTextLight: UIColor { return UIColor.Photon.Grey30 } // textSecondary
+    override var headerTextLight: UIColor { return UIColor.Photon.Grey30 }
     override var headerTextDark: UIColor { return UIColor.Photon.Grey30 }
     override var syncText: UIColor { return defaultTextAndTint }
-    override var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 } // actionSecondary
+    override var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 }
     override var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightDark }
 }
 
@@ -169,6 +169,9 @@ class DarkHomeTabBannerColor: HomeTabBannerColor {
 
 class DarkOnboardingColor: OnboardingColor {
     override var backgroundColor: UIColor { return UIColor.Photon.DarkGrey40 }
+    override var etpBackgroundColor: UIColor { return UIColor.Photon.DarkGrey40 }
+    override var etpTextColor: UIColor { return UIColor.white }
+    override var etpButtonColor: UIColor { return UIColor.Photon.Blue20 }
 }
 
 class DarkRemoteTabTrayColor: RemoteTabTrayColor {

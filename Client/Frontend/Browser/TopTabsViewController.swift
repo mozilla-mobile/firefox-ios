@@ -14,8 +14,6 @@ struct TopTabsUX {
     static let MaxTabWidth: CGFloat = 220
     static let FaderPading: CGFloat = 8
     static let SeparatorWidth: CGFloat = 1
-    static let TabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
-    static let TabTitlePadding: CGFloat = 10
     static let AnimationSpeed: TimeInterval = 0.1
     static let SeparatorYOffset: CGFloat = 7
     static let SeparatorHeight: CGFloat = 32
@@ -29,14 +27,17 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidChangeTab()
 }
 
-class TopTabsViewController: UIViewController {
+class TopTabsViewController: UIViewController, Themeable {
 
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
-    fileprivate var topTabDisplayManager: TabDisplayManager!
+    private var topTabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
     var profile: Profile
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     // MARK: - UI Elements
     lazy var collectionView: UICollectionView = {
@@ -47,36 +48,35 @@ class TopTabsViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.bounces = false
         collectionView.clipsToBounds = true
-        collectionView.accessibilityIdentifier = "Top Tabs View"
+        collectionView.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.collectionView
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
 
-    fileprivate lazy var tabsButton: TabsButton = {
-        let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.semanticContentAttribute = .forceLeftToRight
-        tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
-        tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
-        tabsButton.inTopTabs = true
-        return tabsButton
-    }()
+    private lazy var tabsButton: TabsButton = .build { button in
+        button.semanticContentAttribute = .forceLeftToRight
+        button.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.tabsButton
+        button.inTopTabs = true
+    }
 
-    fileprivate lazy var newTab: UIButton = {
-        let newTab = UIButton.newTabButton()
-        newTab.semanticContentAttribute = .forceLeftToRight
-        newTab.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
-        newTab.accessibilityIdentifier = "TopTabsViewController.newTabButton"
-        return newTab
-    }()
+    private lazy var newTab: UIButton = .build { button in
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.newTab), for: .normal)
+        button.semanticContentAttribute = .forceLeftToRight
+        button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.newTabButton
+    }
 
     lazy var privateModeButton: PrivateModeButton = {
         let privateModeButton = PrivateModeButton()
         privateModeButton.semanticContentAttribute = .forceLeftToRight
-        privateModeButton.accessibilityIdentifier = "TopTabsViewController.privateModeButton"
+        privateModeButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
         privateModeButton.addTarget(self, action: #selector(TopTabsViewController.togglePrivateModeTapped), for: .touchUpInside)
+        privateModeButton.translatesAutoresizingMaskIntoConstraints = false
         return privateModeButton
     }()
 
-    fileprivate lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
+    private lazy var tabLayoutDelegate: TopTabsLayoutDelegate = {
         let delegate = TopTabsLayoutDelegate()
         delegate.scrollViewDelegate = self
         delegate.tabSelectionDelegate = topTabDisplayManager
@@ -86,14 +86,20 @@ class TopTabsViewController: UIViewController {
     private lazy var topTabFader: TopTabFader = {
         let fader = TopTabFader()
         fader.semanticContentAttribute = .forceLeftToRight
+        fader.translatesAutoresizingMaskIntoConstraints = false
 
         return fader
     }()
 
     // MARK: - Inits
-    init(tabManager: TabManager, profile: Profile) {
+    init(tabManager: TabManager,
+         profile: Profile,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.tabManager = tabManager
         self.profile = profile
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         topTabDisplayManager = TabDisplayManager(collectionView: self.collectionView,
@@ -101,7 +107,8 @@ class TopTabsViewController: UIViewController {
                                                  tabDisplayer: self,
                                                  reuseID: TopTabCell.cellIdentifier,
                                                  tabDisplayType: .TopTabTray,
-                                                 profile: profile)
+                                                 profile: profile,
+                                                 theme: themeManager.currentTheme)
         tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
@@ -133,44 +140,13 @@ class TopTabsViewController: UIViewController {
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
 
-        view.addSubview(topTabFader)
-        topTabFader.addSubview(collectionView)
-        view.addSubview(tabsButton)
-        view.addSubview(newTab)
-        view.addSubview(privateModeButton)
+        listenForThemeChange()
+        setupLayout()
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links onto the "New Tab" button.
         let dropInteraction = UIDropInteraction(delegate: topTabDisplayManager)
         newTab.addInteraction(dropInteraction)
-
-        view.snp.makeConstraints { make in
-            make.height.equalTo(TopTabsUX.TopTabsViewHeight)
-        }
-
-        newTab.snp.makeConstraints { make in
-            make.centerY.equalTo(view)
-            make.trailing.equalTo(tabsButton.snp.leading)
-            make.size.equalTo(view.snp.height)
-        }
-        tabsButton.snp.makeConstraints { make in
-            make.centerY.equalTo(view)
-            make.trailing.equalTo(view).offset(-10)
-            make.size.equalTo(view.snp.height)
-        }
-        privateModeButton.snp.makeConstraints { make in
-            make.centerY.equalTo(view)
-            make.leading.equalTo(view).offset(10)
-            make.size.equalTo(view.snp.height)
-        }
-        topTabFader.snp.makeConstraints { make in
-            make.top.bottom.equalTo(view)
-            make.leading.equalTo(privateModeButton.snp.trailing)
-            make.trailing.equalTo(newTab.snp.leading)
-        }
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(topTabFader)
-        }
 
         tabsButton.applyTheme()
         applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
@@ -240,6 +216,43 @@ class TopTabsViewController: UIViewController {
         }
     }
 
+    private func setupLayout() {
+        view.addSubview(topTabFader)
+        topTabFader.addSubview(collectionView)
+        view.addSubview(tabsButton)
+        view.addSubview(newTab)
+        view.addSubview(privateModeButton)
+
+        NSLayoutConstraint.activate([
+            view.heightAnchor.constraint(equalToConstant: TopTabsUX.TopTabsViewHeight),
+
+            newTab.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            newTab.trailingAnchor.constraint(equalTo: tabsButton.leadingAnchor),
+            newTab.widthAnchor.constraint(equalTo: view.heightAnchor),
+            newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
+
+            tabsButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            tabsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            tabsButton.widthAnchor.constraint(equalTo: view.heightAnchor),
+            tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+
+            privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            privateModeButton.widthAnchor.constraint(equalTo: view.heightAnchor),
+            privateModeButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+
+            topTabFader.topAnchor.constraint(equalTo: view.topAnchor),
+            topTabFader.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            topTabFader.leadingAnchor.constraint(equalTo: privateModeButton.trailingAnchor),
+            topTabFader.trailingAnchor.constraint(equalTo: newTab.leadingAnchor),
+
+            collectionView.topAnchor.constraint(equalTo: topTabFader.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: topTabFader.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: topTabFader.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
+        ])
+    }
+
     private func handleFadeOutAfterTabSelection() {
         guard let currentTab = tabManager.selectedTab,
               let index = topTabDisplayManager.dataStore.index(of: currentTab),
@@ -270,7 +283,9 @@ extension TopTabsViewController: TabDisplayer {
         guard let tabCell = cell as? TopTabCell else { return UICollectionViewCell() }
         tabCell.delegate = self
         let isSelected = (tab == tabManager.selectedTab)
-        tabCell.configureWith(tab: tab, isSelected: isSelected)
+        tabCell.configureWith(tab: tab,
+                              isSelected: isSelected,
+                              theme: themeManager.currentTheme)
         // Not all cells are visible when the appearance changes. Let's make sure
         // the cell has the proper theme when recycled.
         tabCell.applyTheme()
@@ -289,20 +304,17 @@ extension TopTabsViewController: NotificationThemeable, PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
         topTabDisplayManager.togglePrivateMode(isOn: isPrivate, createTabOnEmptyPrivateMode: true)
 
-        privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
-        privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint
+        privateModeButton.applyTheme(theme: themeManager.currentTheme)
         privateModeButton.applyUIMode(isPrivate: topTabDisplayManager.isPrivate)
     }
 
     func applyTheme() {
-        view.backgroundColor = UIColor.theme.topTabs.background
+        view.backgroundColor = themeManager.currentTheme.colors.layer3
         tabsButton.applyTheme()
-        privateModeButton.onTint = UIColor.theme.topTabs.privateModeButtonOnTint
-        privateModeButton.offTint = UIColor.theme.topTabs.privateModeButtonOffTint
-        privateModeButton.applyTheme()
-        newTab.tintColor = UIColor.theme.topTabs.buttonTint
+        privateModeButton.applyTheme(theme: themeManager.currentTheme)
+        newTab.tintColor = themeManager.currentTheme.colors.iconPrimary
         collectionView.backgroundColor = view.backgroundColor
-        (collectionView.visibleCells as? [TopTabCell])?.forEach { $0.applyTheme() }
+        collectionView.reloadData()
         topTabDisplayManager.refreshStore()
     }
 }

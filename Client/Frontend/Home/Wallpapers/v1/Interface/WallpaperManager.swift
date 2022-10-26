@@ -14,9 +14,9 @@ enum WallpaperManagerError: Error {
 protocol WallpaperManagerInterface {
     var currentWallpaper: Wallpaper { get }
     var availableCollections: [WallpaperCollection] { get }
-    var canOnboardingBeShown: Bool { get }
     var canSettingsBeShown: Bool { get }
 
+    func canOnboardingBeShown(using: Profile) -> Bool
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func removeUnusedAssets()
@@ -59,8 +59,14 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     }
 
     /// Determines whether the wallpaper onboarding can be shown
-    var canOnboardingBeShown: Bool {
-        guard featureAvailable,
+    func canOnboardingBeShown(using profile: Profile) -> Bool {
+        let cfrHintUtility = ContextualHintEligibilityUtility(with: profile)
+        let toolbarCFRShown = !cfrHintUtility.canPresent(.toolbarLocation)
+        let jumpBackInCFRShown = !cfrHintUtility.canPresent(.jumpBackIn)
+        let cfrsHaveBeenShown = toolbarCFRShown && jumpBackInCFRShown
+
+        guard cfrsHaveBeenShown,
+              featureAvailable,
               hasEnoughThumbnailsToShow,
               !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey),
               featureFlags.isFeatureEnabled(.wallpaperOnboardingSheet,

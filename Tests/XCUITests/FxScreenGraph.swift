@@ -17,7 +17,6 @@ let PrivateURLBarOpen = "PrivateURLBarOpen"
 let BrowserTab = "BrowserTab"
 let PrivateBrowserTab = "PrivateBrowserTab"
 let BrowserTabMenu = "BrowserTabMenu"
-let PageOptionsMenu = "PageOptionsMenu"
 let ToolsMenu = "ToolsMenu"
 let FindInPage = "FindInPage"
 let SettingsScreen = "SettingsScreen"
@@ -188,9 +187,6 @@ class Action {
     static let SelectManually = "SelectManually"
     static let SystemThemeSwitch = "SystemThemeSwitch"
 
-    static let SelectGoogle = "SelectGoogle"
-    static let SelectBing = "SelectBing"
-
     static let AddCustomSearchEngine = "AddCustomSearchEngine"
     static let RemoveCustomSearchEngine = "RemoveCustomSearchEngine"
 
@@ -321,9 +317,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let menu = app.tables["Context Menu"].firstMatch
 
         if !(processIsTranslatedStr() == m1Rosetta) {
-            screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
-                UIPasteboard.general.string = userState.url ?? defaultURL
-                menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
+            if #unavailable(iOS 16) {
+                screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
+                    UIPasteboard.general.string = userState.url ?? defaultURL
+                    menu.otherElements[ImageIdentifiers.pasteAndGo].firstMatch.tap()
+                }
             }
         }
 
@@ -449,9 +447,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.buttons["urlBar-cancel"].tap()
         }
 
-        screenState.gesture(forAction: Action.OpenSearchBarFromSearchButton, transitionTo: URLBarOpen) {
-            userState in app.buttons["TabToolbar.stopReloadButton"].tap()
-        }
     }
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
@@ -767,8 +762,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["newTabButtonTabTray"],
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
-        screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
-//        screenState.tap(app.buttons["syncNowButtonTabsButtonTabTray"], to: CloseTabMenu)
+        screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
 
         var regularModeSelector: XCUIElement
         var privateModeSelector: XCUIElement
@@ -814,7 +808,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(CloseTabMenu) { screenState in
-        screenState.tap(app.sheets.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
+        screenState.tap(app.scrollViews.buttons[AccessibilityIdentifiers.TabTray.deleteCloseAllButton], forAction: Action.AcceptRemovingAllTabs, transitionTo: HomePanelsScreen)
         screenState.backAction = cancelBackAction
     }
 
@@ -989,7 +983,10 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
+        // Using LoadURLByTyping for Intel too on Xcode14
         if processIsTranslatedStr() == m1Rosetta {
+            performAction(Action.LoadURLByTyping)
+        } else if #available (iOS 16, *) {
             performAction(Action.LoadURLByTyping)
         } else {
             performAction(Action.LoadURL)

@@ -62,8 +62,5 @@ private struct LightColourPalette: ThemeColourPalette {
     var borderAccentPrivate: UIColor = FXColors.Purple60
 
     // MARK: - Shadow
-    var shadowDefault: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.16)
-
-    // MARK: - Icon Spinner
-    var iconSpinnerDefault: UIColor = FXColors.LightGrey80
+    var shadow: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.16)
 }
