@@ -583,23 +583,34 @@ class Tab: NSObject {
         webView?.stopLoading()
     }
 
-    func reload() {
-        // If the current page is an error page, and the reload button is tapped, load the original URL
-        if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
-            webView?.replaceLocation(with: page)
-            return
-        }
+	func reload(bypassCache: Bool = false) {
+		// If the current page is an error page, and the reload button is tapped, load the original URL
+		if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
+			webView?.replaceLocation(with: page)
+			return
+		}
+		
+		if bypassCache {
+			let reloadRequest = URLRequest(url: url!,
+				cachePolicy:NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData,
+				timeoutInterval: 10.0)
 
-        if let _ = webView?.reloadFromOrigin() {
-            print("reloaded zombified tab from origin")
-            return
-        }
+			if let _ = self.webView?.load(reloadRequest) {
+				print("Reloaded the tab from originating source, ignoring local cache.")
+				return
+			}
+		}
 
-        if let webView = self.webView {
-            print("restoring webView from scratch")
-            restore(webView)
-        }
-    }
+		if let _ = webView?.reloadFromOrigin() {
+			print("reloaded zombified tab from origin")
+			return
+		}
+
+		if let webView = self.webView {
+			print("restoring webView from scratch")
+			restore(webView)
+		}
+	}
 
     @objc func reloadPage() {
         reload()

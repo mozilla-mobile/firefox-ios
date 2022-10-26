@@ -2445,6 +2445,12 @@ extension String {
             value: "Request Mobile Site",
             comment: "Label for the button, displayed in the menu, used to request the mobile version of the current website.",
             lastUpdated: .unknown)
+		public static let AppMenuReloadWithoutCacheTitleString = MZLocalizedString(
+			"Menu.RefreshWithoutCache.Title",
+			tableName: "Menu",
+			value: "Reload Ignoring Cache",
+			comment: "Label for the button, displayed in the menu, used to reload without cache.",
+			lastUpdated: .unknown)
         public static let AppMenuSettingsTitleString = MZLocalizedString(
             "Menu.OpenSettingsAction.Title",
             tableName: "Menu",

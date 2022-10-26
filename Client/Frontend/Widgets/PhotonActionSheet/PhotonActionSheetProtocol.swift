@@ -86,6 +86,11 @@ extension PhotonActionSheetProtocol {
                 Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: tab.changedUserAgent, isPrivate: tab.isPrivate)
             }
         }.items
+		
+		// Hard Refresh
+		let toggleHardRefresh = SingleActionViewModel(title: .AppMenu.AppMenuReloadWithoutCacheTitleString, iconString: ImageIdentifiers.reloadWithoutCache) { _ in
+			tab.reload(bypassCache: true)
+		}.items
 
         if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled, helper.blockingStrengthPref == .strict {
             let isSafelisted = helper.status == .safelisted
@@ -97,9 +102,9 @@ extension PhotonActionSheetProtocol {
                     tab.reload()
                 }
             }.items
-            return [toggleDesktopSite, toggleTP]
+            return [toggleDesktopSite, toggleTP, toggleHardRefresh]
         } else {
-            return [toggleDesktopSite]
+            return [toggleDesktopSite, toggleHardRefresh]
         }
     }
 
