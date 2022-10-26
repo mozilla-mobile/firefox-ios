@@ -59,6 +59,8 @@
         "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
         "FindInPageTests\/testFindFromMenu()",
         "FirstRunTourTests\/testFirstRunTour()",
+        "HistoryTests\/testClearPrivateDataButtonDisabled()",
+        "HistoryTests\/testDeleteHistoryEntryBySwiping()",
         "HomePageSettingsTest",
         "HomePageSettingsUITests\/testCustomizeHomepage()",
         "HomePageSettingsUITests\/testJumpBackIn()",
