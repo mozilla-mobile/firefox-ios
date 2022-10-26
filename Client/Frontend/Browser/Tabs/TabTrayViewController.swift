@@ -221,6 +221,8 @@ class TabTrayViewController: UIViewController, Themeable {
         // We expose the tab tray feature whenever it's going to be seen by the user
         nimbus.features.tabTrayFeature.recordExposure()
 
+        viewModel.layout = shouldUseiPadSetup() ? .regular : .compact
+
         updateLayout()
     }
 
@@ -256,8 +258,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }
 
     private func updateTitle() {
-        if let newTitle = viewModel.navTitle(for: segmentedControlIphone.selectedSegmentIndex,
-                                             foriPhone: !shouldUseiPadSetup()) {
+        if let newTitle = viewModel.navTitle(for: segmentedControlIphone.selectedSegmentIndex) {
             navigationItem.title = newTitle
         }
     }
@@ -313,7 +314,7 @@ class TabTrayViewController: UIViewController, Themeable {
         panel.beginAppearanceTransition(true, animated: true)
         view.addSubview(panel.view)
         view.bringSubviewToFront(navigationToolbar)
-        let topEdgeInset = shouldUseiPadSetup() ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
+        let topEdgeInset = viewModel.layout == .regular ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
         panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
         panel.endAppearanceTransition()
 
@@ -339,20 +340,32 @@ class TabTrayViewController: UIViewController, Themeable {
     }
 
     private func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
-        if shouldUseiPadSetup() {
-            if segmentedControlIphone.selectedSegmentIndex == TabTrayViewModel.Segment.syncedTabs.rawValue {
-                navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButtonIpad] : [doneButton])
-                navigationItem.leftBarButtonItem = nil
-            } else {
-                navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
-                navigationItem.leftBarButtonItem = deleteButtonIpad
-            }
-        } else {
-            var newToolbarItems: [UIBarButtonItem]? = bottomToolbarItems
-            if segmentedControlIphone.selectedSegmentIndex == TabTrayViewModel.Segment.syncedTabs.rawValue {
-                newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : nil
-            }
+        // The "Synced" panel has different toolbar items so we handle them separately.
+        guard segmentedControlIphone.selectedSegmentIndex != TabTrayViewModel.Segment.syncedTabs.rawValue else {
+            updateSyncedToolbarItems(forSyncTabs: showSyncItems)
+            return
+        }
+
+        switch viewModel.layout {
+        case .compact:
+            setToolbarItems(bottomToolbarItems, animated: true)
+        case .regular:
+            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
+            navigationItem.leftBarButtonItem = deleteButtonIpad
+        }
+    }
+
+    private func updateSyncedToolbarItems(forSyncTabs showSyncItems: Bool = false) {
+        guard segmentedControlIphone.selectedSegmentIndex == TabTrayViewModel.Segment.syncedTabs.rawValue
+        else { return }
+
+        switch viewModel.layout {
+        case .compact:
+            let newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : nil
             setToolbarItems(newToolbarItems, animated: true)
+        case .regular:
+            navigationItem.rightBarButtonItems = showSyncItems ? [doneButton, fixedSpace, syncTabButtonIpad] : [doneButton]
+            navigationItem.leftBarButtonItem = nil
         }
     }
 
@@ -391,6 +404,7 @@ class TabTrayViewController: UIViewController, Themeable {
         super.viewWillTransition(to: size, with: coordinator)
 
         if UIDevice.current.userInterfaceIdiom == .pad {
+            viewModel.layout = shouldUseiPadSetup() ? .regular : .compact
             updateLayout()
         }
     }
@@ -401,6 +415,7 @@ class TabTrayViewController: UIViewController, Themeable {
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            viewModel.layout = shouldUseiPadSetup() ? .regular : .compact
             updateLayout()
         }
     }
@@ -409,17 +424,17 @@ class TabTrayViewController: UIViewController, Themeable {
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We updateLayout from viewWillTransition in that case.
     private func updateLayout() {
-        let shouldUseiPadSetup = shouldUseiPadSetup()
+        let shouldUseiPadSetup = viewModel.layout == .regular
         navigationController?.isToolbarHidden = shouldUseiPadSetup
         titleWidthConstraint?.isActive = shouldUseiPadSetup
 
-        if shouldUseiPadSetup {
+        switch viewModel.layout {
+        case .compact:
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItems = [doneButton]
+        case .regular:
             navigationItem.leftBarButtonItem = deleteButtonIpad
             navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButtonIpad]
-        } else {
-            navigationItem.leftBarButtonItem = nil
-            navigationItem.rightBarButtonItems = nil
-            navigationItem.rightBarButtonItem = doneButton
         }
 
         segmentedControlIpad.isHidden = !shouldUseiPadSetup
