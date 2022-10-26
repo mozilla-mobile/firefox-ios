@@ -42,6 +42,7 @@ extension UILabel {
 class Setting: NSObject {
     fileprivate var _title: NSAttributedString?
     fileprivate var _footerTitle: NSAttributedString?
+	fileprivate var _footerButton: UIButton?
     fileprivate var _cellHeight: CGFloat?
     fileprivate var _image: UIImage?
 
@@ -53,6 +54,7 @@ class Setting: NSObject {
     // The title shown on the pref.
     var title: NSAttributedString? { return _title }
     var footerTitle: NSAttributedString? { return _footerTitle }
+	var footerButton: UIButton? { return _footerButton }
     var cellHeight: CGFloat? { return _cellHeight}
     fileprivate(set) var accessibilityIdentifier: String?
 
@@ -132,9 +134,10 @@ class Setting: NSObject {
         }
     }
 
-    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
+	init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, footerButton: UIButton? = nil, cellHeight: CGFloat? = nil, delegate: SettingsDelegate? = nil, enabled: Bool? = nil) {
         self._title = title
         self._footerTitle = footerTitle
+		self._footerButton = footerButton
         self._cellHeight = cellHeight
         self.delegate = delegate
         self.enabled = enabled ?? true
@@ -145,9 +148,9 @@ class Setting: NSObject {
 class SettingSection: Setting {
     fileprivate let children: [Setting]
 
-    init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, cellHeight: CGFloat? = nil, children: [Setting]) {
+	init(title: NSAttributedString? = nil, footerTitle: NSAttributedString? = nil, footerButton: UIButton? = nil, cellHeight: CGFloat? = nil, children: [Setting]) {
         self.children = children
-        super.init(title: title, footerTitle: footerTitle, cellHeight: cellHeight)
+        super.init(title: title, footerTitle: footerTitle, footerButton: footerButton, cellHeight: cellHeight)
     }
 
     var count: Int {
@@ -805,9 +808,20 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
-
+		
         guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView,
-                let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
+		
+		let sectionFooter = sectionSetting.footerTitle?.string else { return nil }
+		
+		if let sectionFooterButton = sectionSetting.footerButton {
+			// Add button subview
+			footerView.addSubview(sectionFooterButton)
+
+			sectionFooterButton.snp.makeConstraints { (make) in
+				make.top.equalTo(footerView.titleLabel.snp.bottom)
+				make.leading.equalTo(footerView.titleLabel)
+			}
+		}
 
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top

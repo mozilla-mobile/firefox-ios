@@ -210,8 +210,21 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 }
                 self?.tableView.reloadData()
         }
+		
+		// The first section header gets a More Info link
+		let title: String = .TrackerProtectionLearnMore
 
-        let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter), children: [enabledSetting])
+		let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
+		var attributes = [NSAttributedString.Key: AnyObject]()
+		attributes[NSAttributedString.Key.font] = font
+		attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
+
+		let button = UIButton()
+		button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
+		button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
+
+        let firstSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: .TrackingProtectionCellFooter), footerButton: button, children: [enabledSetting])
+		
 
         let optionalFooterTitle = NSAttributedString(string: .TrackingProtectionLevelFooter)
 
@@ -222,47 +235,32 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         return [firstSection, secondSection]
     }
 
-    // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let _defaultFooter = super.tableView(tableView, viewForFooterInSection: section) as? ThemedTableSectionHeaderFooterView
 
-        guard let defaultFooter = _defaultFooter, section > 0 else {
-            return _defaultFooter
-        }
-
-        if currentBlockingStrength == .basic {
-            return nil
-        }
-
-        // TODO: Get a dedicated string for this.
-        let title: String = .TrackerProtectionLearnMore
-
-        let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
-        var attributes = [NSAttributedString.Key: AnyObject]()
-        attributes[NSAttributedString.Key.font] = font
-        attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
-
-        let button = UIButton()
-        button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
-        button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
-
-        defaultFooter.addSubview(button)
-
-        button.snp.makeConstraints { (make) in
-            make.top.equalTo(defaultFooter.titleLabel.snp.bottom)
-            make.leading.equalTo(defaultFooter.titleLabel)
-        }
+		guard let defaultFooter = _defaultFooter, section == 1 else {
+			return _defaultFooter
+		}
+		
+		if currentBlockingStrength == .basic {
+			return nil
+		}
 
         return defaultFooter
     }
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+		return UITableView.automaticDimension
     }
 
     @objc func moreInfoTapped() {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("tracking-protection-ios")
-        navigationController?.pushViewController(viewController, animated: true)
+		let navBarOnModal: UINavigationController = UINavigationController(rootViewController: viewController)
+		navBarOnModal.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, closure: { _ in
+			navBarOnModal.dismiss(animated: true)
+		})
+		self.present(navBarOnModal, animated: true, completion: nil)
+		
     }
 }

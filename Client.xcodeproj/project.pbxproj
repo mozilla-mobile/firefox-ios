@@ -14112,6 +14112,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "KingfisherDynamic-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
@@ -14136,6 +14137,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "KingfisherDynamic-Info.plist";
 				LOCALIZED_STRING_MACRO_NAMES = (
 					MZLocalizedString,
