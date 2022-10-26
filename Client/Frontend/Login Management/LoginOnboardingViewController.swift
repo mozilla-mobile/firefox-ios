@@ -30,7 +30,6 @@ class LoginOnboardingViewController: SettingsViewController {
     private lazy var continueButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
         button.setTitle(.LoginsOnboardingContinueButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
@@ -92,5 +91,10 @@ class LoginOnboardingViewController: SettingsViewController {
 
     @objc func proceedButtonTapped(_ sender: UIButton) {
         self.proceedHandler()
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        continueButton.backgroundColor = themeManager.currentTheme.colors.actionPrimary
     }
 }

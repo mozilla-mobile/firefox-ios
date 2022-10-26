@@ -5,10 +5,10 @@
 import Foundation
 
 /// Empty state view when there is no logins to display.
-class NoLoginsView: UIView {
+class NoLoginsView: UIView, ThemeApplicable {
+
     lazy var titleLabel: UILabel = .build { label in
-        label.font = LoginListViewModel.LoginListUX.NoResultsFont
-        label.textColor = LoginListViewModel.LoginListUX.NoResultsTextColor
+        label.font = LoginListViewModel.LoginListUX.noResultsFont
         label.text = .NoLoginsFound
     }
 
@@ -25,5 +25,9 @@ class NoLoginsView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textDisabled
     }
 }

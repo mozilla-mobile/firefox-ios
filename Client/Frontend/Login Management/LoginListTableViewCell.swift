@@ -4,7 +4,7 @@
 
 import UIKit
 
-class LoginListTableViewSettingsCell: ThemedTableViewCell {
+class LoginListTableViewSettingsCell: ThemedTableViewCell, ReusableCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
@@ -14,7 +14,7 @@ class LoginListTableViewSettingsCell: ThemedTableViewCell {
     }
 }
 
-class LoginListTableViewCell: ThemedTableViewCell {
+class LoginListTableViewCell: ThemedTableViewCell, ReusableCell {
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = .build { imageView in
         imageView.image = BreachAlertsManager.icon
@@ -33,7 +33,6 @@ class LoginListTableViewCell: ThemedTableViewCell {
     }()
 
     lazy var hostnameLabel: UILabel = .build { label in
-        label.textColor = UIColor.theme.tableView.rowText
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
@@ -41,7 +40,6 @@ class LoginListTableViewCell: ThemedTableViewCell {
     }
 
     lazy var usernameLabel: UILabel = .build { label in
-        label.textColor = UIColor.theme.tableView.rowDetailText
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 1
@@ -66,16 +64,19 @@ class LoginListTableViewCell: ThemedTableViewCell {
         stack.axis = .horizontal
     }
 
-    private let inset: UIEdgeInsets
+    private var inset: UIEdgeInsets = .zero
 
-    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, inset: UIEdgeInsets) {
-        self.inset = inset
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
         accessoryType = .disclosureIndicator
         contentView.addSubview(contentStack)
         // Need to override the default background multi-select color to support theming
         multipleSelectionBackgroundView = UIView()
-        applyTheme()
+    }
+
+    func configure(inset: UIEdgeInsets) {
+        self.inset = inset
         setConstraints()
     }
 
@@ -101,5 +102,11 @@ class LoginListTableViewCell: ThemedTableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         setConstraints()
+    }
+
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+        hostnameLabel.textColor = theme.colors.textPrimary
+        usernameLabel.textColor = theme.colors.textSecondary
     }
 }

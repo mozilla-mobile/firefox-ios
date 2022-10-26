@@ -3,55 +3,103 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import UIKit
 
-class ThemedTableViewCell: UITableViewCell, NotificationThemeable {
-    var detailTextColor = UIColor.theme.tableView.disabledRowText
+enum ThemedTableViewCellType {
+    case standard, actionPrimary, destructive, disabled
+}
+
+class ThemedTableViewCellViewModel {
+    var type: ThemedTableViewCellType
+
+    var textColor: UIColor!
+    var detailTextColor: UIColor!
+    var backgroundColor: UIColor!
+    var tintColor: UIColor!
+
+    init(theme: Theme, type: ThemedTableViewCellType) {
+        self.type = type
+        setColors(theme: theme)
+    }
+
+    func setColors(theme: Theme) {
+        detailTextColor = theme.colors.textSecondary
+        backgroundColor = theme.colors.layer5
+        tintColor = theme.colors.actionPrimary
+
+        switch self.type {
+        case .standard:
+            textColor = theme.colors.textPrimary
+        case .actionPrimary:
+            textColor = theme.colors.actionPrimary
+        case .destructive:
+            textColor = theme.colors.textWarning
+        case .disabled:
+            textColor = theme.colors.textDisabled
+        }
+    }
+}
+
+class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
+
+    var viewModel: ThemedTableViewCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme() {
-        textLabel?.textColor = UIColor.theme.tableView.rowText
-        detailTextLabel?.textColor = detailTextColor
-        backgroundColor = UIColor.theme.tableView.rowBackground
-        tintColor = UIColor.theme.general.controlTint
+    func applyTheme(theme: Theme) {
+        self.viewModel?.setColors(theme: theme)
+        // Take view model color if it exists, otherwise fallback to default colors
+        textLabel?.textColor = viewModel?.textColor ?? theme.colors.textPrimary
+        detailTextLabel?.textColor = viewModel?.detailTextColor ?? theme.colors.textSecondary
+        backgroundColor = viewModel?.backgroundColor ?? theme.colors.layer5
+        tintColor = viewModel?.tintColor ?? theme.colors.actionPrimary
+    }
+
+    func configure(viewModel: ThemedTableViewCellViewModel) {
+        self.viewModel = viewModel
     }
 }
 
-class ThemedTableViewController: UITableViewController, NotificationThemeable {
-    override init(style: UITableView.Style = .grouped) {
+class ThemedTableViewController: UITableViewController, Themeable {
+
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(style: UITableView.Style = .grouped,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(style: style)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
-        return cell
+        return ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
+        listenForThemeChange()
     }
 
     func applyTheme() {
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.reloadData()
-
-        (tableView.tableHeaderView as? NotificationThemeable)?.applyTheme()
     }
 }
 
-class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
+class ThemedHeaderFooterViewBordersHelper: ThemeApplicable {
     enum BorderLocation {
         case top
         case bottom
@@ -91,15 +139,8 @@ class ThemedHeaderFooterViewBordersHelper: NotificationThemeable {
         }
     }
 
-    func applyTheme() {
-        topBorder.backgroundColor = UIColor.theme.tableView.separator
-        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
-    }
-}
-
-class UISwitchThemed: UISwitch {
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        onTintColor = UIColor.theme.general.controlTint
+    func applyTheme(theme: Theme) {
+        topBorder.backgroundColor = theme.colors.borderPrimary
+        bottomBorder.backgroundColor = theme.colors.borderPrimary
     }
 }

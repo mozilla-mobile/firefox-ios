@@ -112,7 +112,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
     private let toggleSwitch: UISwitch = .build { toggleSwitch in
         toggleSwitch.isEnabled = true
-        toggleSwitch.onTintColor = .systemBlue
     }
 
     private let toggleStatusLabel: UILabel = .build { label in
@@ -440,6 +439,7 @@ extension EnhancedTrackingProtectionMenuVC: NotificationThemeable {
             connectionImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
         }
         toggleView.backgroundColor = UIColor.theme.etpMenu.sectionColor
+        // TODO: FXIOS-5097 toggleSwitch should be theme.colors.actionPrimary
         toggleSwitch.tintColor = UIColor.theme.etpMenu.switchAndButtonTint
         toggleSwitch.onTintColor = UIColor.theme.etpMenu.switchAndButtonTint
         toggleStatusLabel.textColor = UIColor.theme.etpMenu.subtextColor

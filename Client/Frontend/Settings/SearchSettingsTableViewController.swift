@@ -66,6 +66,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         // Otherwise, there is nothing to delete.
         navigationItem.rightBarButtonItem?.isEnabled = isEditable
         tableView.reloadData()
+        applyTheme()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -75,6 +76,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell()
+        cell.applyTheme(theme: themeManager.currentTheme)
         var engine: OpenSearchEngine!
 
         if indexPath.section == SectionDefault {
@@ -90,8 +92,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
                 cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
-                let toggle = UISwitchThemed()
-                toggle.onTintColor = UIColor.theme.tableView.controlTint
+                let toggle = UISwitch()
+                toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
                 toggle.isOn = model.shouldShowSearchSuggestions
                 cell.editingAccessoryView = toggle
@@ -107,8 +109,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 engine = model.orderedEngines[index]
                 cell.showsReorderControl = true
 
-                let toggle = UISwitchThemed()
-                toggle.onTintColor = UIColor.theme.tableView.controlTint
+                let toggle = UISwitch()
+                toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 // This is an easy way to get from the toggle control to the corresponding index.
                 toggle.tag = index
                 toggle.addTarget(self, action: #selector(didToggleEngine), for: .valueChanged)
@@ -188,11 +190,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
-        if cell.isEditing {
-            for v in cell.subviews where v.classForCoder.description() == "_UITableCellVerticalSeparator" {
-                v.backgroundColor = UIColor.clear
-            }
+        // Change color of a thin vertical line that iOS renders between the accessoryView and the reordering control.
+        for subview in cell.subviews where subview.classForCoder.description() == "_UITableViewCellVerticalSeparator" {
+            subview.backgroundColor = themeManager.currentTheme.colors.borderPrimary
         }
 
         // Change re-order control tint color to match app theme
@@ -200,7 +200,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             for subViewB in subViewA.subviews {
                 if let imageView = subViewB as? UIImageView {
                     imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
-                    imageView.tintColor = UIColor.theme.tableView.accessoryViewTint
+                    imageView.tintColor = themeManager.currentTheme.colors.iconSecondary
                 }
             }
         }
@@ -231,7 +231,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier) as? ThemedTableSectionHeaderFooterView else { return nil }
 
-        footerView.applyTheme()
+        footerView.applyTheme(theme: themeManager.currentTheme)
         return footerView
     }
 
@@ -299,6 +299,11 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         navigationItem.rightBarButtonItem?.action = editing ?
             #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
     }
 }
 

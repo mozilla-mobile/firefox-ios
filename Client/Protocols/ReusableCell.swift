@@ -52,4 +52,8 @@ extension UITableView {
     func register<T: ReusableCell>(cellType: T.Type) {
         register(T.self, forCellReuseIdentifier: T.cellIdentifier)
     }
+
+    func registerHeaderFooter<T: ReusableCell>(cellType: T.Type) {
+        register(T.self, forHeaderFooterViewReuseIdentifier: T.cellIdentifier)
+    }
 }

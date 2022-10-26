@@ -85,13 +85,30 @@ class WebsiteDataManagementViewModel {
     }
 }
 
-class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource,
+                                           UITableViewDelegate, UISearchBarDelegate, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
     private enum Section: Int {
         case sites = 0
         case showMore = 1
         case clearButton = 2
 
         static let count = 3
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
+        super.init(nibName: nil, bundle: nil)
     }
 
     fileprivate let loadingView = SettingsLoadingView()
@@ -103,7 +120,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     var tableView: UITableView!
     var searchController: UISearchController?
     var showMoreButtonEnabled = true
-    let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
 
     private lazy var searchResultsViewController = WebsiteDataSearchResultsViewController(viewModel: viewModel)
 
@@ -115,20 +131,23 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.register(ThemedTableSectionHeaderFooterView.self,
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
 
-        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
+                                                                      height: SettingsUX.TableViewHeaderFooterHeight))
+        footer.applyTheme(theme: themeManager.currentTheme)
         footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
         view.addSubview(tableView)
         view.addSubview(loadingView)
+        loadingView.applyTheme(theme: themeManager.currentTheme)
 
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(view)
@@ -162,14 +181,15 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = .SettingsFilterSitesSearchLabel
         searchController.searchBar.delegate = self
+        searchController.searchBar.barStyle = themeManager.currentTheme.type.getBarStyle()
 
-        if theme == .dark {
-            searchController.searchBar.barStyle = .black
-        }
         navigationItem.searchController = searchController
         self.searchController = searchController
 
         definesPresentationContext = true
+
+        listenForThemeChange()
+        applyTheme()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -191,18 +211,23 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
                 }
             }
         case .showMore:
+            let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled
+            let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: cellType)
             cell.textLabel?.text = .SettingsWebsiteDataShowMoreButton
-            cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
+            cell.configure(viewModel: cellViewModel)
             showMoreButton = cell
         case .clearButton:
+            let cellViewModel = ThemedTableViewCellViewModel(theme: themeManager.currentTheme, type: .destructive)
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
+            cell.configure(viewModel: cellViewModel)
         }
+
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -320,5 +345,11 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     private func unfoldSearchbar() {
         guard let searchBarHeight = navigationItem.searchController?.searchBar.intrinsicContentSize.height else { return }
         tableView.setContentOffset(CGPoint(x: 0, y: -searchBarHeight + tableView.contentOffset.y), animated: true)
+    }
+
+    func applyTheme() {
+        loadingView.applyTheme(theme: themeManager.currentTheme)
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }

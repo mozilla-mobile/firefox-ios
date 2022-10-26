@@ -7,7 +7,12 @@ import SnapKit
 import Shared
 import WebKit
 
-class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
     private enum Section: Int {
         case sites = 0
         case clearButton = 1
@@ -21,13 +26,17 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     private var filteredSiteRecords = [WKWebsiteDataRecord]()
     private var currentSearchText = ""
 
-    init(viewModel: WebsiteDataManagementViewModel) {
+    init(viewModel: WebsiteDataManagementViewModel,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("Not Implemented")
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -36,8 +45,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -45,7 +53,9 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
                            forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier)
         view.addSubview(tableView)
 
-        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
+        let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width,
+                                                                      height: SettingsUX.TableViewHeaderFooterHeight))
+        footer.applyTheme(theme: themeManager.currentTheme)
         footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
@@ -53,6 +63,9 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
             make.edges.equalTo(view)
         }
         KeyboardHelper.defaultHelper.addDelegate(self)
+
+        listenForThemeChange()
+        applyTheme()
     }
 
     func reloadData() {
@@ -75,6 +88,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
+        cell.applyTheme(theme: themeManager.currentTheme)
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
@@ -89,7 +103,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         case .clearButton:
             cell.textLabel?.text = viewModel.clearButtonTitle
             cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
+            cell.textLabel?.textColor = themeManager.currentTheme.colors.textWarning
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
         }
@@ -168,6 +182,11 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         })
 
         tableView.reloadData()
+    }
+
+    func applyTheme() {
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }
 

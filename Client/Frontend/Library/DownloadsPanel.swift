@@ -351,9 +351,12 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             assertionFailure("Invalid Downloads section \(section)")
         }
 
+        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let headerViewModel = SiteTableViewHeaderModel(title: title,
                                                        isCollapsible: false,
-                                                       collapsibleState: nil)
+                                                       collapsibleState: nil,
+                                                       theme: themeManager.currentTheme)
         headerView.configure(headerViewModel)
         headerView.showBorder(for: .top, !isFirstSection(section))
 

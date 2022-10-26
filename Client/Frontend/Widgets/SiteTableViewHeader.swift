@@ -9,6 +9,7 @@ struct SiteTableViewHeaderModel {
     let title: String
     let isCollapsible: Bool
     let collapsibleState: ExpandButtonState?
+    let theme: Theme
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
@@ -107,7 +108,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         backgroundView?.backgroundColor = theme.colors.layer4
-        bordersHelper.applyTheme()
+        bordersHelper.applyTheme(theme: theme)
     }
 
     func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {

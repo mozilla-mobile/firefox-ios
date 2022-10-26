@@ -646,10 +646,14 @@ extension HistoryPanel: UITableViewDelegate {
         else { return nil }
 
         let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
+
+        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let headerViewModel = SiteTableViewHeaderModel(title: actualSection.title ?? "",
                                                        isCollapsible: true,
                                                        collapsibleState:
-                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down,
+                                                       theme: themeManager.currentTheme)
         header.configure(headerViewModel)
 
         // Configure tap to collapse/expand section

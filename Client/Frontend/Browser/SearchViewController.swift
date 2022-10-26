@@ -56,7 +56,13 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener, FeatureFlaggable {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener,
+                            FeatureFlaggable, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
@@ -102,11 +108,15 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
          viewModel: SearchViewModel,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -576,7 +586,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         let viewModel = SiteTableViewHeaderModel(title: .Search.SuggestSectionTitle,
                                                  isCollapsible: false,
-                                                 collapsibleState: nil)
+                                                 collapsibleState: nil,
+                                                 theme: themeManager.currentTheme)
         headerView.configure(viewModel)
         return headerView
     }
