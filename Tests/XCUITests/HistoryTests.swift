@@ -417,14 +417,19 @@ class HistoryTests: BaseTestCase {
     }*/
 
     // Smoketest
-    func testDeleteHistoryEntryBySwiping() {
-        navigateToGoogle()
-        navigator.goto(LibraryPanel_History)
-        print(app.debugDescription)
-        waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: 10)
-        app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
-        waitForExistence(app.buttons["Delete"], timeout: 10)
-        app.buttons["Delete"].tap()
-        waitForNoExistence(app.staticTexts["http://example.com"])
+    func testDeleteHistoryEntryBySwiping() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("Swipe gesture does not work on M1")
+        }
+        else {
+            navigateToGoogle()
+            navigator.goto(LibraryPanel_History)
+            print(app.debugDescription)
+            waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
+            app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
+            waitForExistence(app.buttons["Delete"], timeout: TIMEOUT)
+            app.buttons["Delete"].tap()
+            waitForNoExistence(app.staticTexts["http://example.com"])
+        }
     }
 }
