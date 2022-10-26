@@ -139,7 +139,6 @@ class TPAccessoryInfo: ThemedTableViewController {
 }
 
 class ContentBlockerSettingViewController: SettingsTableViewController {
-    private let button = UIButton()
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
@@ -181,7 +180,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                                                  extras: extras)
 
                     if option == .strict {
-                        self.button.isHidden = false
                         let alert = UIAlertController(title: .TrackerProtectionAlertTitle,
                                                       message: .TrackerProtectionAlertDescription,
                                                       preferredStyle: .alert)
@@ -189,8 +187,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                                                       style: .default,
                                                       handler: nil))
                         self.present(alert, animated: true)
-                    } else {
-                        self.button.isHidden = true
                     }
             })
 
@@ -229,31 +225,32 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let _defaultFooter = super.tableView(tableView, viewForFooterInSection: section) as? ThemedTableSectionHeaderFooterView
+        guard let defaultFooter = _defaultFooter else { return nil}
 
-        guard let defaultFooter = _defaultFooter, section > 0 else {
-            return _defaultFooter
+        if section == 0 {
+            // TODO: Get a dedicated string for this.
+            let title: String = .TrackerProtectionLearnMore
+            
+            let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
+            var attributes = [NSAttributedString.Key: AnyObject]()
+            attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
+            attributes[NSAttributedString.Key.font] = font
+
+            let button = UIButton()
+            button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
+            button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
+
+            defaultFooter.addSubview(button)
+
+            button.snp.makeConstraints { (make) in
+                make.top.equalTo(defaultFooter.titleLabel.snp.bottom)
+                make.leading.equalTo(defaultFooter.titleLabel)
+            }
+            return defaultFooter
         }
 
         if currentBlockingStrength == .basic {
             return nil
-        }
-
-        // TODO: Get a dedicated string for this.
-        let title: String = .TrackerProtectionLearnMore
-
-        let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
-        var attributes = [NSAttributedString.Key: AnyObject]()
-        attributes[NSAttributedString.Key.font] = font
-        attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
-
-        button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
-        button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
-
-        defaultFooter.addSubview(button)
-
-        button.snp.makeConstraints { (make) in
-            make.top.equalTo(defaultFooter.titleLabel.snp.bottom)
-            make.leading.equalTo(defaultFooter.titleLabel)
         }
 
         return defaultFooter
