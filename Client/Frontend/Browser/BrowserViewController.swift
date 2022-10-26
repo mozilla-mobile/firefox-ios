@@ -2722,5 +2722,11 @@ extension BrowserViewController {
                                      method: .invertColors,
                                      object: .app,
                                      extras: [TelemetryWrapper.EventExtraKey.isInvertColorsEnabled.rawValue: UIAccessibility.isInvertColorsEnabled.description])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .dynamicTextSize,
+                                     object: .app,
+                                     extras: [
+                                        TelemetryWrapper.EventExtraKey.isAccessibilitySizeEnabled.rawValue: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description,
+                                        TelemetryWrapper.EventExtraKey.preferredContentSizeCategory.rawValue: UIApplication.shared.preferredContentSizeCategory.rawValue.description])
     }
 }
