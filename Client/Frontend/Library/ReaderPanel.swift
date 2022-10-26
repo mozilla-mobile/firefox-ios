@@ -22,12 +22,7 @@ private struct ReadingListTableViewCellUX {
     static let TitleLabelRightOffset: CGFloat = -40
 
     static let HostnameLabelBottomOffset: CGFloat = 11
-
-    static let DeleteButtonTitleColor = UIColor.Photon.White100
     static let DeleteButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-
-    static let MarkAsReadButtonBackgroundColor = UIColor.Photon.Blue50
-    static let MarkAsReadButtonTitleColor = UIColor.Photon.White100
     static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 }
 
@@ -42,7 +37,7 @@ private struct ReadingListPanelUX {
     static let WelcomeScreenTopPadding: CGFloat = 120
 }
 
-class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
+class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     var title: String = "Example" {
         didSet {
             titleLabel.text = title
@@ -60,8 +55,6 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
     var unread: Bool = true {
         didSet {
             readStatusImageView.image = UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread")
-            titleLabel.textColor = unread ? UIColor.theme.homePanel.readingListActive : UIColor.theme.homePanel.readingListDimmed
-            hostnameLabel.textColor = unread ? UIColor.theme.homePanel.readingListActive : UIColor.theme.homePanel.readingListDimmed
             updateAccessibilityLabel()
         }
     }
@@ -106,18 +99,13 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
             hostnameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: CGFloat(-ReadingListTableViewCellUX.HostnameLabelBottomOffset)),
             hostnameLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor)
         ])
-
-        applyTheme()
     }
 
-    func applyTheme() {
-        titleLabel.textColor = UIColor.theme.homePanel.readingListActive
-        hostnameLabel.textColor = UIColor.theme.homePanel.readingListActive
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        applyTheme()
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        hostnameLabel.textColor = theme.colors.textPrimary
+        titleLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
+        hostnameLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -161,12 +149,17 @@ class ReadingListTableViewCell: UITableViewCell, NotificationThemeable {
     }
 }
 
-class ReadingListPanel: UITableViewController, LibraryPanel {
+class ReadingListPanel: UITableViewController,
+                        LibraryPanel,
+                        Themeable {
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
     var state: LibraryPanelMainState
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
@@ -174,8 +167,12 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
     private var records: [ReadingListItem]?
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         self.state = .readingList
         super.init(nibName: nil, bundle: nil)
 
@@ -211,6 +208,9 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
         tableView.dragDelegate = self
+
+        applyTheme()
+        listenForThemeChange()
     }
 
     @objc func notificationReceived(_ notification: Notification) {
@@ -343,6 +343,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             cell.title = record.title
             cell.url = URL(string: record.url)!
             cell.unread = record.unread
+            cell.applyTheme(theme: themeManager.currentTheme)
         }
         return cell
     }
@@ -362,8 +363,6 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         let unreadToggleAction = UIContextualAction(style: .normal,
                                                     title: toggleText.stringSplitWithNewline()) { [weak self] (_, view, completion) in
             guard let strongSelf = self else { completion(false); return }
-
-            view.backgroundColor = ReadingListTableViewCellUX.MarkAsReadButtonBackgroundColor
             strongSelf.toggleItem(atIndex: indexPath)
             completion(true)
         }
@@ -415,6 +414,13 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             }
         }
     }
+
+    func applyTheme() {
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
+        refreshReadingList()
+    }
 }
 
 extension ReadingListPanel: LibraryPanelContextMenu {
@@ -458,14 +464,5 @@ extension ReadingListPanel: UITableViewDragDelegate {
 
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
         presentedViewController?.dismiss(animated: true)
-    }
-}
-
-extension ReadingListPanel: NotificationThemeable {
-    func applyTheme() {
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        view.backgroundColor = UIColor.theme.tableView.rowBackground
-        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        refreshReadingList()
     }
 }

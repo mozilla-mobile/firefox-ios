@@ -519,7 +519,7 @@ class HistoryPanel: UIViewController,
         // overlayView becomes the footer view, and for unknown reason, setting the bgcolor is ignored.
         // Create an explicit view for setting the color.
         let bgColor: UIView = .build { view in
-            view.backgroundColor = self.themeManager.currentTheme.colors.layer5
+            view.backgroundColor = self.themeManager.currentTheme.colors.layer1
         }
         overlayView.addSubview(bgColor)
 
@@ -547,7 +547,7 @@ class HistoryPanel: UIViewController,
     func applyTheme() {
         updateEmptyPanelState()
 
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer5
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
         searchbar.backgroundColor = themeManager.currentTheme.colors.layer3
         let tintColor = themeManager.currentTheme.colors.textPrimary
         let searchBarImage = UIImage(named: ImageIdentifiers.libraryPanelHistory)?.withRenderingMode(.alwaysTemplate).tinted(withColor: tintColor)
