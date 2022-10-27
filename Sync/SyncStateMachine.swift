@@ -824,7 +824,7 @@ open class NeedsFreshMetaGlobal: BaseSyncStateWithInfo {
                 return deferMaybe(ResolveMetaGlobalVersion.fromState(self, fetched: fetched))
             }
 
-            if let _ = result.failureValue as? NotFound<HTTPURLResponse> {
+            if result.failureValue as? NotFound<HTTPURLResponse> != nil {
                 // OK, this is easy.
                 // This state is responsible for creating the new m/g, uploading it, and
                 // restarting with a clean scratchpad.
@@ -927,7 +927,7 @@ open class NeedsFreshCryptoKeys: BaseSyncStateWithInfo {
                 return deferMaybe(HasFreshCryptoKeys.fromState(self, scratchpad: s, collectionKeys: collectionKeys))
             }
 
-            if let _ = result.failureValue as? NotFound<HTTPURLResponse> {
+            if result.failureValue as? NotFound<HTTPURLResponse> != nil {
                 // No crypto/keys?  We can handle this.  Wipe and upload both meta/global and crypto/keys.
                 return deferMaybe(MissingCryptoKeysError(previousState: self))
             }

@@ -151,7 +151,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     fileprivate var isLongPressGestureStarted: Bool {
         var started = false
         collectionView.gestureRecognizers?.forEach { recognizer in
-            if let _ = recognizer as? UILongPressGestureRecognizer, recognizer.state == .began || recognizer.state == .changed {
+            if let recognizer = recognizer as? UILongPressGestureRecognizer,
+               recognizer.state == .began || recognizer.state == .changed {
                 started = true
             }
         }
@@ -529,7 +530,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if let _ = tabGroups,
+        if tabGroups != nil,
            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                       withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
                                                                       for: indexPath) as? LabelButtonHeaderView {
@@ -713,7 +714,9 @@ extension TabDisplayManager: TabSelectionDelegate {
 extension TabDisplayManager: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         // Prevent tabs from being dragged and dropped onto the "New Tab" button.
-        if let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab {
+        if let localDragSession = session.localDragSession,
+           let item = localDragSession.items.first,
+           item.localObject as? Tab != nil {
             return false
         }
 

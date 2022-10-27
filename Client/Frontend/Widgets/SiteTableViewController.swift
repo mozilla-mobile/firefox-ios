@@ -31,7 +31,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         table.estimatedRowHeight = SiteTableViewControllerUX.RowHeight
         table.setEditing(false, animated: false)
 
-        if let _ = self as? LibraryPanelContextMenu {
+        if self as? LibraryPanelContextMenu != nil {
             table.dragDelegate = self
         }
 
@@ -80,7 +80,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewWillTransition(to: size, with: coordinator)
         tableView.setEditing(false, animated: false)
         // The AS context menu does not behave correctly. Dismiss it when rotating.
-        if let _ = self.presentedViewController as? PhotonActionSheet {
+        if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
     }

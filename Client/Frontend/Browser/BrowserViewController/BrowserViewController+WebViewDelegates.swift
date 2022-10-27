@@ -201,7 +201,8 @@ extension BrowserViewController: WKUIDelegate {
                     makeURLSession(
                         userAgent: UserAgent.fxaUserAgent,
                         configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
-                            if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
+                            if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
+                               let data = data {
                                 success(data)
                             }
                         }.resume()
@@ -307,7 +308,7 @@ extension BrowserViewController: WKUIDelegate {
                         })
 
                         makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
-                            guard let _ = validatedHTTPResponse(response, statusCode: 200..<300) else {
+                            guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
                                 application.endBackgroundTask(taskId)
                                 return
                             }

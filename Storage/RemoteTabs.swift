@@ -45,7 +45,7 @@ public struct RemoteTab: Equatable {
     public var faviconURL: String? // Empty for now until #10000 is done
 
     public static func shouldIncludeURL(_ url: Foundation.URL) -> Bool {
-        if let _ = InternalURL(url) {
+        if InternalURL(url) != nil {
             return false
         }
 

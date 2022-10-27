@@ -825,7 +825,7 @@ class SettingsTableViewController: ThemedTableViewController {
     // for that: `UITableViewAutomaticDimension`.
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
-        if let _ = sectionSetting.footerTitle?.string {
+        if sectionSetting.footerTitle?.string != nil {
             return UITableView.automaticDimension
         }
         return 0

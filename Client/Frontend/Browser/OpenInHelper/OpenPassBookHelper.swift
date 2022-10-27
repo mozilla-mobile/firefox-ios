@@ -83,7 +83,7 @@ class OpenPassBookHelper {
         }
 
         session.dataTask(with: url) { (data, response, error) in
-            guard let _ = validatedHTTPResponse(response, statusCode: 200..<300),
+            guard validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                   let data = data
             else {
                 completion(nil)

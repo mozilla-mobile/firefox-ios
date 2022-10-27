@@ -139,7 +139,7 @@ class TabsButton: UIButton {
         }
         isUpdatingTabCount = true
 
-        if let _ = self.clonedTabsButton {
+        if self.clonedTabsButton != nil {
             self.clonedTabsButton?.layer.removeAllAnimations()
             self.clonedTabsButton?.removeFromSuperview()
             insideButton.layer.removeAllAnimations()

@@ -326,7 +326,7 @@ class BrowserViewController: UIViewController {
 
     func dismissVisibleMenus() {
         displayedPopoverController?.dismiss(animated: true)
-        if let _ = self.presentedViewController as? PhotonActionSheet {
+        if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -336,7 +336,7 @@ class BrowserViewController: UIViewController {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
-        if let _ = self.presentedViewController as? PhotonActionSheet {
+        if self.presentedViewController as? PhotonActionSheet != nil {
             self.presentedViewController?.dismiss(animated: true, completion: nil)
         }
     }
@@ -1650,7 +1650,7 @@ extension BrowserViewController {
             return VisitType.link
         }
 
-        if let _ = self.ignoredNavigation.remove(navigation) {
+        if self.ignoredNavigation.remove(navigation) != nil {
             return nil
         }
 
@@ -2388,7 +2388,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 })
 
                 makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
-                    guard let _ = validatedHTTPResponse(response, statusCode: 200..<300) else {
+                    guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
                         application.endBackgroundTask(taskId)
                         return
                     }
@@ -2429,7 +2429,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         }
 
         if let dialogTitle = dialogTitle {
-            if let _ = dialogTitle.asURL {
+            if dialogTitle.asURL != nil {
                 actionSheetController.title = dialogTitle.ellipsize(maxLength: UX.ActionSheetTitleMaxLength)
             } else {
                 actionSheetController.title = dialogTitle
@@ -2443,7 +2443,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
         makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
-            if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
+            if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
+               let data = data {
                 success(data)
             }
         }.resume()
@@ -2606,7 +2607,7 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidTogglePrivateMode() {
         libraryDrawerViewController?.close(immediately: true)
-        guard let _ = tabManager.selectedTab else { return }
+        guard tabManager.selectedTab != nil else { return }
         urlBar.leaveOverlayMode()
     }
 

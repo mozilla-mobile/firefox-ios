@@ -125,7 +125,7 @@ private extension TopSitesProviderImplementation {
 
         // Favour topsites from defaultSites as they have better favicons. But keep PinnedSites
         let newSites = allSites.map { site -> Site in
-            if let _ = site as? PinnedSite {
+            if let site = site as? PinnedSite {
                 return site
             }
             let domain = URL(string: site.url)?.shortDisplayString

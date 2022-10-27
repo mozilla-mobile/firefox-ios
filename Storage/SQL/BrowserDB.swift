@@ -70,7 +70,7 @@ open class BrowserDB {
     // instance has been initialized (schema is created/updated).
     public func touch() -> Success {
         return withConnection { connection -> Void in
-            guard let _ = connection as? ConcreteSQLiteDBConnection else {
+            guard connection as? ConcreteSQLiteDBConnection != nil else {
                 throw DatabaseError(description: "Could not establish a database connection")
             }
         }

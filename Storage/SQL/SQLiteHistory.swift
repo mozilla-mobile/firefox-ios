@@ -25,13 +25,9 @@ private var ignoredSchemes = ["about"]
 public func isIgnoredURL(_ url: URL) -> Bool {
     guard let scheme = url.scheme else { return false }
 
-    if let _ = ignoredSchemes.firstIndex(of: scheme) {
-        return true
-    }
+    if ignoredSchemes.contains(scheme) { return true }
 
-    if url.host == "localhost" {
-        return true
-    }
+    if url.host == "localhost" { return true }
 
     return false
 }

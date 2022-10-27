@@ -35,7 +35,7 @@ public extension FileManager {
         }
 
         // Bail out if we encountered an issue getting the enumerator.
-        if let _ = enumeratorError {
+        if let enumeratorError = enumeratorError {
             throw errorWithCode(.errorEnumeratingDirectory, underlyingError: enumeratorError)
         }
 
@@ -96,7 +96,7 @@ public extension FileManager {
 
     private func errorWithCode(_ code: NSFileManagerExtensionsErrorCodes, underlyingError error: NSError? = nil) -> NSError {
         var userInfo = [String: AnyObject]()
-        if let _ = error {
+        if let error = error {
             userInfo[NSUnderlyingErrorKey] = error
         }
 

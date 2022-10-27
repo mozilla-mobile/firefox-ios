@@ -229,8 +229,8 @@ class LoginsHelper: TabContentScript {
             // Even though we don't currently use these two fields,
             // verify that they were received as additional confirmation
             // that this is a valid request from LoginsHelper.js.
-            let _ = request["formOrigin"] as? String,
-            let _ = request["actionOrigin"] as? String,
+            request["formOrigin"] as? String != nil,
+            request["actionOrigin"] as? String != nil,
 
             // We pass in the webview's URL and derive the origin here
             // to workaround Bug 1194567.
