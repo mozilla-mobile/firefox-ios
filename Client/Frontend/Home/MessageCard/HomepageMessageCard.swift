@@ -166,7 +166,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow(theme: Theme) {
-        cardView.layer.shadowColor = theme.colors.shadow.cgColor
+        cardView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         cardView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         cardView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
         cardView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
@@ -216,7 +216,7 @@ extension HomepageMessageCardCell: Blurrable {
             cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             cardView.removeVisualEffectView()
-            cardView.backgroundColor = theme.colors.layer1
+            cardView.backgroundColor = theme.colors.layer5
             setupShadow(theme: theme)
         }
     }
@@ -228,7 +228,6 @@ extension HomepageMessageCardCell: ThemeApplicable {
         bannerTitle.textColor = theme.colors.textPrimary
         descriptionText.textColor = theme.colors.textPrimary
         dismissButton.imageView?.tintColor = theme.colors.textPrimary
-        cardView.backgroundColor = theme.colors.layer1
         ctaButton.backgroundColor = theme.colors.actionPrimary
         backgroundColor = .clear
 

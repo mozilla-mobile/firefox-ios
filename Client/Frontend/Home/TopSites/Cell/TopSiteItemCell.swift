@@ -223,7 +223,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         rootContainer.layer.cornerRadius = UX.cellCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.cellCornerRadius).cgPath
-        rootContainer.layer.shadowColor = theme.colors.shadow.cgColor
+        rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
         rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
         rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
@@ -236,8 +236,7 @@ extension TopSiteItemCell: ThemeApplicable {
         pinImageView.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textPrimary
         sponsoredLabel.textColor = theme.colors.textSecondary
-        // TODO: Laurie - Hover
-//        selectedOverlay.backgroundColor = theme.colors.layer5Hover
+        selectedOverlay.backgroundColor = theme.colors.layer5Hover
 
         adjustBlur(theme: theme)
     }
@@ -246,10 +245,13 @@ extension TopSiteItemCell: ThemeApplicable {
 // MARK: - Blurrable
 extension TopSiteItemCell: Blurrable {
     func adjustBlur(theme: Theme) {
-        // If blur is disabled set background color
+        rootContainer.setNeedsLayout()
+        rootContainer.layoutIfNeeded()
+
         if shouldApplyWallpaperBlur {
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
+            // If blur is disabled set background color
             rootContainer.removeVisualEffectView()
             rootContainer.backgroundColor = theme.colors.layer5
             setupShadow(theme: theme)

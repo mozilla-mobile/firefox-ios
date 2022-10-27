@@ -174,7 +174,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.generalCornerRadius).cgPath
 
-        rootContainer.layer.shadowColor = theme.colors.shadow.cgColor
+        rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
         rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
         rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius

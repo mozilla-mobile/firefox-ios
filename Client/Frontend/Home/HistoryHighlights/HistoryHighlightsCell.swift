@@ -153,7 +153,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
                 height: size
             )
 
-            contentView.layer.shadowColor = theme.colors.shadow.cgColor
+            contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
             contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
             contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
             contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
@@ -184,7 +184,7 @@ extension HistoryHighlightsCell: Blurrable {
             contentView.layer.cornerRadius = UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
-            contentView.backgroundColor = theme.colors.layer2
+            contentView.backgroundColor = theme.colors.layer5
             setupShadow(cellModel?.shouldAddShadow ?? false,
                         cornersToRound: cellModel?.corners,
                         theme: theme)

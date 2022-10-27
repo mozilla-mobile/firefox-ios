@@ -62,7 +62,7 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
                                                     cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        contentView.layer.shadowColor = theme.colors.shadow.cgColor
+        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
         contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 }
@@ -82,7 +82,7 @@ extension PocketDiscoverCell: Blurrable {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             contentView.removeVisualEffectView()
-            contentView.backgroundColor = theme.colors.layer2
+            contentView.backgroundColor = theme.colors.layer5
             setupShadow(theme: theme)
         }
     }
