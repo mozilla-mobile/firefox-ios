@@ -40,8 +40,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "5aedaf3001cb6c0174179ad97c1d91d2bef4b91d",
-        "version" : "51.4.0"
+        "revision" : "35a894ffdc3af8d34150562ea4bf634a437e4694",
+        "version" : "51.7.0"
       }
     },
     {
@@ -103,8 +103,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "3441e8f9be290edcc7be57c93a1c128c1a787c2a",
-        "version" : "7.27.1"
+        "revision" : "7521e07ce9a73f23ca9f028d6b0f8917c3e72c1b",
+        "version" : "7.29.0"
       }
     },
     {

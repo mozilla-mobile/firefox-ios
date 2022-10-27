@@ -17,7 +17,7 @@ class ManageFxAccountSetting: Setting {
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: .FxAManageAccount, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .FxAManageAccount, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -33,7 +33,7 @@ class DisconnectSetting: Setting {
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
+        return NSAttributedString(string: .SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: settingsVC.themeManager.currentTheme.colors.textWarning])
     }
 
     init(settings: SettingsTableViewController) {
@@ -105,8 +105,8 @@ class DeviceNameSetting: StringSetting {
         }
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell) {
-        super.onConfigureCell(cell)
+    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
+        super.onConfigureCell(cell, theme: theme)
         textField.textAlignment = .natural
     }
 
@@ -143,7 +143,7 @@ class SyncContentSettingsViewController: SettingsTableViewController {
     func engineSettingChanged(_ engineName: String) -> (Bool) -> Void {
         let prefName = "sync.engine.\(engineName).enabledStateChanged"
         return { enabled in
-            if let _ = self.profile.prefs.boolForKey(prefName) { // Switch it back to not-changed
+            if self.profile.prefs.boolForKey(prefName) != nil { // Switch it back to not-changed
                 self.profile.prefs.removeObjectForKey(prefName)
                 self.enginesToSyncOnExit.remove(engineName)
             } else {

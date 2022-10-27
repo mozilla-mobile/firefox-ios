@@ -762,7 +762,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["newTabButtonTabTray"],
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
-        screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
+        if isTablet {
+            screenState.tap(app.navigationBars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
+        } else {
+            screenState.tap(app.toolbars.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
+        }
 
         var regularModeSelector: XCUIElement
         var privateModeSelector: XCUIElement

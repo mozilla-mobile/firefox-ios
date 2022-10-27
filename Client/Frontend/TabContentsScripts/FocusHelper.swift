@@ -28,7 +28,7 @@ class FocusHelper: TabContentScript {
             return log.error("FocusHelper.js sent wrong type of message")
         }
 
-        guard let _ = data["elementType"],
+        guard data["elementType"] != nil,
               let eventType = data["eventType"]
         else { return log.error("FocusHelper.js sent wrong keys for message") }
 

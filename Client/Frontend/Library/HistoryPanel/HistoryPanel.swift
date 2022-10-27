@@ -646,10 +646,14 @@ extension HistoryPanel: UITableViewDelegate {
         else { return nil }
 
         let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
+
+        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let headerViewModel = SiteTableViewHeaderModel(title: actualSection.title ?? "",
                                                        isCollapsible: true,
                                                        collapsibleState:
-                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down,
+                                                       theme: themeManager.currentTheme)
         header.configure(headerViewModel)
 
         // Configure tap to collapse/expand section
@@ -761,11 +765,10 @@ extension HistoryPanel {
     @objc private func onLongPressGestureRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint),
+              diffableDatasource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel != nil
+        else { return }
 
-        if let _ = diffableDatasource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel {
-            return
-        }
         presentContextMenu(for: indexPath)
     }
 
