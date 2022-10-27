@@ -76,7 +76,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Public methods
-    public func updateCell(with options: HistoryHighlightsModel) {
+    func configureCell(with options: HistoryHighlightsModel, theme: Theme) {
         cellModel = options
         itemTitle.text = options.title
 
@@ -90,6 +90,8 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         accessibilityLabel = options.accessibilityLabel
 
         heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
+
+        applyTheme(theme: theme)
     }
 
     override func prepareForReuse() {

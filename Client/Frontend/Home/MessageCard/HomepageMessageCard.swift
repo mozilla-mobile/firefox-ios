@@ -109,12 +109,14 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         kvoToken?.invalidate()
     }
 
-    func configure(viewModel: HomepageMessageCardViewModel) {
+    func configure(viewModel: HomepageMessageCardViewModel, theme: Theme) {
         self.viewModel = viewModel
 
         if let message = viewModel.getMessage(for: .newTabCard) {
             applyGleanMessage(message)
         }
+
+        applyTheme(theme: theme)
     }
 
     // MARK: - Layout

@@ -144,7 +144,7 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
             let viewModel = RecentlySavedCellViewModel(site: site,
                                                        heroImage: recentlySavedDataAdaptor.getHeroImage(forSite: site),
                                                        favIconImage: recentlySavedDataAdaptor.getFaviconImage(forSite: site))
-            recentlySavedCell.configure(viewModel: viewModel)
+            recentlySavedCell.configure(viewModel: viewModel, theme: theme)
         }
 
         return recentlySavedCell

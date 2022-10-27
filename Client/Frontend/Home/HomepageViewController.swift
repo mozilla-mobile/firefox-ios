@@ -444,7 +444,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
 
         // Configure header only if section is shown
         let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
-        headerView.configure(viewModel: headerViewModel)
+        headerView.configure(viewModel: headerViewModel, theme: themeManager.currentTheme)
         return headerView
     }
 

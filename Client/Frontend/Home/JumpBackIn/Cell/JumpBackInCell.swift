@@ -134,13 +134,15 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: JumpBackInCellViewModel) {
+    func configure(viewModel: JumpBackInCellViewModel, theme: Theme) {
         configureImages(viewModel: viewModel)
 
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
         adjustLayout()
+
+        applyTheme(theme: theme)
     }
 
     private func configureImages(viewModel: JumpBackInCellViewModel) {

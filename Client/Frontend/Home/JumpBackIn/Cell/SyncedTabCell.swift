@@ -156,6 +156,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     // MARK: - Helpers
 
     func configure(viewModel: SyncedTabCellViewModel,
+                   theme: Theme,
                    onTapShowAllAction: (() -> Void)?,
                    onOpenSyncedTabAction: ((URL) -> Void)?) {
         tabItemTitle.text = viewModel.titleText
@@ -178,6 +179,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSyncedTab(_:)))
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
         adjustLayout()
+        applyTheme(theme: theme)
 
         let showAllSyncedTabsA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabsButtonText,
                                                                       target: self,

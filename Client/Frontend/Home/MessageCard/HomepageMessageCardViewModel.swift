@@ -114,7 +114,7 @@ extension HomepageMessageCardViewModel: HomepageSectionHandler {
             return UICollectionViewCell()
         }
 
-        messageCell.configure(viewModel: self)
+        messageCell.configure(viewModel: self, theme: theme)
         return messageCell
     }
 }

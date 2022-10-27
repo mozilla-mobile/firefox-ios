@@ -535,13 +535,12 @@ extension TabDisplayManager: UICollectionViewDataSource {
                                                                       withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
                                                                       for: indexPath) as? LabelButtonHeaderView {
 
-            // TODO: Laurie - configure self.theme
             let viewModel = LabelButtonHeaderViewModel(leadingInset: 15,
                                                        title: .TabTrayOtherTabsSectionHeader,
                                                        titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
                                                        isButtonHidden: true)
 
-            view.configure(viewModel: viewModel)
+            view.configure(viewModel: viewModel, theme: theme)
             view.title = .TabTrayOtherTabsSectionHeader
             view.titleLabel.font = .systemFont(ofSize: GroupedTabCellProperties.CellUX.titleFontSize, weight: .semibold)
 

@@ -99,7 +99,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: PocketStandardCellViewModel) {
+    func configure(viewModel: PocketStandardCellViewModel, theme: Theme) {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
@@ -123,6 +123,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         sponsoredStack.isHidden  = viewModel.shouldHideSponsor
 
         adjustLayout()
+        applyTheme(theme: theme)
     }
 
     private func setupLayout() {

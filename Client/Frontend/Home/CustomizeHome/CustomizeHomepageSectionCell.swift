@@ -58,8 +58,9 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
         layoutIfNeeded()
     }
 
-    func configure(onTapAction: ((UIButton) -> Void)?) {
+    func configure(onTapAction: ((UIButton) -> Void)?, theme: Theme) {
         goToSettingsButton.touchUpAction = onTapAction
+        applyTheme(theme: theme)
     }
 }
 

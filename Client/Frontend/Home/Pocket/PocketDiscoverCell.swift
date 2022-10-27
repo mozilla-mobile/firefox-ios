@@ -38,8 +38,10 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
         itemTitle.text = nil
     }
 
-    func configure(text: String) {
+    func configure(text: String, theme: Theme) {
         itemTitle.text = text
+
+        applyTheme(theme: theme)
     }
 
     // MARK: - Helpers

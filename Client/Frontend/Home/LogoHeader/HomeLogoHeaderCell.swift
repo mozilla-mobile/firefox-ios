@@ -37,7 +37,6 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var userDefaults: UserDefaults = UserDefaults.standard
 
     // MARK: - Initializers
@@ -48,10 +47,6 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - UI Setup

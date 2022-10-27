@@ -221,12 +221,12 @@ extension PocketViewModel: HomepageSectionHandler {
                                                           for: indexPath) as! PocketStandardCell
             let viewModel = pocketStoriesViewModels[indexPath.row]
             viewModel.tag = indexPath.row
-            cell.configure(viewModel: viewModel)
+            cell.configure(viewModel: viewModel, theme: theme)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
                                                           for: indexPath) as! PocketDiscoverCell
-            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore)
+            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore, theme: theme)
             return cell
         }
     }

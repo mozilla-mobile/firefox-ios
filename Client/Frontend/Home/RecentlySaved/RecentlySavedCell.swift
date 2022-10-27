@@ -85,10 +85,11 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
                                                       cornerRadius: UX.generalCornerRadius).cgPath
     }
 
-    func configure(viewModel: RecentlySavedCellViewModel) {
+    func configure(viewModel: RecentlySavedCellViewModel, theme: Theme) {
         configureImages(heroImage: viewModel.heroImage, favIconImage: viewModel.favIconImage)
 
         itemTitle.text = viewModel.site.title
+        applyTheme(theme: theme)
     }
 
     private func configureImages(heroImage: UIImage?, favIconImage: UIImage?) {

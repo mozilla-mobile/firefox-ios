@@ -157,7 +157,7 @@ private extension JumpBackInViewModel {
                                                     descriptionText: descriptionText,
                                                     favIconImage: faviconImage,
                                                     heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
-        cell.configure(viewModel: cellViewModel)
+        cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
     func configureJumpBackInCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
@@ -169,7 +169,7 @@ private extension JumpBackInViewModel {
                                                     descriptionText: descriptionText,
                                                     favIconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
                                                     heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
-        cell.configure(viewModel: cellViewModel)
+        cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
     func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
@@ -190,6 +190,7 @@ private extension JumpBackInViewModel {
 
         cell.configure(
             viewModel: cellViewModel,
+            theme: theme,
             onTapShowAllAction: syncedTabsShowAllAction,
             onOpenSyncedTabAction: openSyncedTabAction
         )

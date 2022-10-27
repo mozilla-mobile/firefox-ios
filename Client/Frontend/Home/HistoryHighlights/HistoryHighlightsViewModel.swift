@@ -425,7 +425,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                  with: cornersToRound,
                                                  shouldAddShadow: shouldAddShadow)
 
-        cell.updateCell(with: cellOptions)
+        cell.configureCell(with: cellOptions, theme: theme)
 
         getFavIcon(for: site) { image in
             cell.heroImage.image = image
@@ -448,7 +448,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                  with: cornersToRound,
                                                  shouldAddShadow: shouldAddShadow)
 
-        cell.updateCell(with: cellOptions)
+        cell.configureCell(with: cellOptions, theme: theme)
 
         return cell
 
@@ -465,7 +465,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                  with: cornersToRound,
                                                  shouldAddShadow: shouldAddShadow)
 
-        cell.updateCell(with: cellOptions)
+        cell.configureCell(with: cellOptions, theme: theme)
         return cell
     }
 }

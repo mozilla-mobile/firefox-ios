@@ -107,7 +107,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
     }
 
-    func configure(viewModel: LabelButtonHeaderViewModel) {
+    func configure(viewModel: LabelButtonHeaderViewModel, theme: Theme) {
         self.viewModel = viewModel
 
         title = viewModel.title
@@ -121,6 +121,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         }
 
         setConstraints(viewModel: viewModel)
+        applyTheme(theme: theme)
     }
 
     // MARK: - Dynamic Type Support
