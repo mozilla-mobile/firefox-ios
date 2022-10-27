@@ -4,15 +4,23 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
     weak var settingsDelegate: SettingsDelegate?
 
     var profile: Profile!
     var tabManager: TabManager!
 
-    let theme = LegacyThemeManager.instance
-
-    init(profile: Profile? = nil, tabManager: TabManager? = nil) {
+    init(profile: Profile? = nil,
+         tabManager: TabManager? = nil,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
         self.profile = profile
         self.tabManager = tabManager
@@ -24,15 +32,11 @@ class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateTheme()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .DisplayThemeChanged, object: nil)
+        listenForThemeChange()
+        applyTheme()
     }
 
-    @objc func updateTheme() {
-        view.backgroundColor = theme.current.tableView.headerBackground
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+    func applyTheme() {
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
     }
 }

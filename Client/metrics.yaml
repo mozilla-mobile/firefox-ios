@@ -118,6 +118,26 @@ accessibility:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
+  dynamic_text:
+    type: event
+    description: |
+      Records the Dynamic Text feature
+    extra_keys:
+      is_accessibility_size_enabled:
+        type: string
+        description: |
+          If larger accessibility sizes is enabled or not (true / false).
+      preferred_size:
+        type: string
+        description: |
+          The preferred content size category selected.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12236
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12236
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-06-01"
 # App menu
 app_menu:
   library:

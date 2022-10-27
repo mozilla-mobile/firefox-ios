@@ -45,7 +45,7 @@ class TextFieldTableViewCell: UITableViewCell, NotificationThemeable {
 
         titleLabel.font = TextFieldTableViewCellUX.TitleLabelFont
         titleLabel.snp.remakeConstraints { make in
-            guard let _ = titleLabel.superview else { return }
+            guard titleLabel.superview != nil else { return }
 
             make.leading.equalTo(TextFieldTableViewCellUX.HorizontalMargin)
             make.trailing.equalTo(-TextFieldTableViewCellUX.HorizontalMargin)
@@ -54,7 +54,7 @@ class TextFieldTableViewCell: UITableViewCell, NotificationThemeable {
 
         textField.font = TextFieldTableViewCellUX.TextFieldFont
         textField.snp.remakeConstraints { make in
-            guard let _ = textField.superview else { return }
+            guard textField.superview != nil else { return }
 
             make.leading.equalTo(TextFieldTableViewCellUX.HorizontalMargin)
             make.trailing.equalTo(-TextFieldTableViewCellUX.HorizontalMargin)

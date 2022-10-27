@@ -216,7 +216,7 @@ extension SearchGroupedItemsViewController: NotificationThemeable {
         }
 
         view.backgroundColor = .systemBackground
-        tableView.separatorColor = themeManager.currentTheme.colors.layer4
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
 
         tableView.reloadData()
     }

@@ -358,6 +358,58 @@ class TelemetryWrapperTests: XCTestCase {
 
         testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.viewDownloadsPanel)
     }
+
+    // Accessibility
+
+    func test_accessibilityVoiceOver_GleanIsCalled() {
+        let isRunningKey = TelemetryWrapper.EventExtraKey.isVoiceOverRunning.rawValue
+        let extras = [isRunningKey: "\(1)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .voiceOver, object: .app, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Accessibility.voiceOver)
+    }
+
+    func test_accessibilitySwitchControl_GleanIsCalled() {
+        let isRunningKey = TelemetryWrapper.EventExtraKey.isSwitchControlRunning.rawValue
+        let extras = [isRunningKey: "\(1)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .switchControl, object: .app, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Accessibility.switchControl)
+    }
+
+    func test_accessibilityReduceTransparency_GleanIsCalled() {
+        let isRunningKey = TelemetryWrapper.EventExtraKey.isReduceTransparencyEnabled.rawValue
+        let extras = [isRunningKey: "\(1)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .reduceTransparency, object: .app, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Accessibility.reduceTransparency)
+    }
+
+    func test_accessibilityReduceMotionEnabled_GleanIsCalled() {
+        let isRunningKey = TelemetryWrapper.EventExtraKey.isReduceMotionEnabled.rawValue
+        let extras = [isRunningKey: "\(1)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .reduceMotion, object: .app, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Accessibility.reduceMotion)
+    }
+
+    func test_accessibilityInvertColorsEnabled_GleanIsCalled() {
+        let isRunningKey = TelemetryWrapper.EventExtraKey.isInvertColorsEnabled.rawValue
+        let extras = [isRunningKey: "\(1)"]
+        TelemetryWrapper.recordEvent(category: .action, method: .invertColors, object: .app, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Accessibility.invertColors)
+    }
+
+    func test_accessibilityDynamicText_GleanIsCalled() {
+        let isAccessibilitySizeEnabledKey = TelemetryWrapper.EventExtraKey.isAccessibilitySizeEnabled.rawValue
+        let preferredContentSizeCategoryKey = TelemetryWrapper.EventExtraKey.preferredContentSizeCategory.rawValue
+        let extras = [isAccessibilitySizeEnabledKey: "\(1)",
+                    preferredContentSizeCategoryKey: "UICTContentSizeCategoryAccessibilityL"]
+        TelemetryWrapper.recordEvent(category: .action, method: .dynamicTextSize, object: .app, extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Accessibility.dynamicText)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
