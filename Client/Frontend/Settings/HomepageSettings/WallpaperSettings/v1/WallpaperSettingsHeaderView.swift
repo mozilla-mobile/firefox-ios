@@ -88,7 +88,7 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
         if viewModel.buttonTitle != nil,
            let buttonA11y = viewModel.buttonA11yIdentifier,
            viewModel.buttonAction != nil {
-            setButtonStyle()
+            setButtonStyle(theme: viewModel.theme)
             learnMoreButton.addTarget(
                 self,
                 action: #selector((buttonTapped(_:))),

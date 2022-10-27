@@ -49,7 +49,6 @@ disabled_rules: # rule identifiers to exclude from running
 - unused_closure_parameter
 - unused_control_flow_label
 - unused_enumerated
-- unused_setter_value
 - valid_ibinspectable
 - vertical_parameter_alignment
 - weak_delegate
