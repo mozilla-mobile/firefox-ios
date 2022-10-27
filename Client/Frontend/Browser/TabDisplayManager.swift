@@ -535,6 +535,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
                                                                       withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
                                                                       for: indexPath) as? LabelButtonHeaderView {
 
+            // TODO: Laurie - configure self.theme
             let viewModel = LabelButtonHeaderViewModel(leadingInset: 15,
                                                        title: .TabTrayOtherTabsSectionHeader,
                                                        titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,

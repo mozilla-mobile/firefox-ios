@@ -8,16 +8,13 @@ import Storage
 import UIKit
 
 /// The TopSite cell that appears in the ASHorizontalScrollView.
-class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
+class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
 
     private var homeTopSite: TopSite?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     struct UX {
-        // TODO: Laurie - borderPrimary
-        static let borderColor = UIColor(white: 0, alpha: 0.1)
         static let borderWidth: CGFloat = 0.5
         static let cellCornerRadius: CGFloat = 8
         static let titleOffset: CGFloat = 4
@@ -90,9 +87,6 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
         selectedOverlay.layer.cornerRadius = UX.cellCornerRadius
-        // TODO: Laurie - actionSecondaryHover
-        let overlayColor = UIColor(white: 0.0, alpha: 0.25)
-        selectedOverlay.backgroundColor = overlayColor
     }
 
     override var isSelected: Bool {
@@ -115,17 +109,10 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
 
         setupLayout()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged,
-                                                          .WallpaperDidChange])
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -164,8 +151,6 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 
         configurePinnedSite(topSite)
         configureSponsoredSite(topSite)
-
-        applyTheme()
     }
 
     // MARK: - Setup Helper methods
@@ -234,27 +219,11 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         sponsoredLabel.text = topSite.sponsoredText
     }
 
-    private func adjustLayout() {
-        rootContainer.setNeedsLayout()
-        rootContainer.layoutIfNeeded()
-
-        if shouldApplyWallpaperBlur {
-            rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            // If blur is disabled set background color
-            rootContainer.removeVisualEffectView()
-            // TODO: Laurie - layer5
-            rootContainer.backgroundColor = UIColor.theme.homePanel.topSitesContainerView
-            setupShadow()
-        }
-    }
-
-    private func setupShadow() {
+    private func setupShadow(theme: Theme) {
         rootContainer.layer.cornerRadius = UX.cellCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.cellCornerRadius).cgPath
-        // TODO: Laurie - shadowColor
-        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        rootContainer.layer.shadowColor = theme.colors.shadow.cgColor
         rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
         rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
@@ -262,29 +231,28 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 }
 
 // MARK: NotificationThemeable
-extension TopSiteItemCell: NotificationThemeable {
-    func applyTheme() {
-        // TODO: Laurie - textPrimary or secondary?
-        pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
-        // TODO: Laurie - textPrimary
-        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
-        // TODO: Laurie - secondary
-        sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
+extension TopSiteItemCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        pinImageView.tintColor = theme.colors.iconPrimary
+        titleLabel.textColor = theme.colors.textPrimary
+        sponsoredLabel.textColor = theme.colors.textSecondary
+        // TODO: Laurie - Hover
+//        selectedOverlay.backgroundColor = theme.colors.layer5Hover
 
-        adjustLayout()
+        adjustBlur(theme: theme)
     }
 }
 
-// MARK: - Notifiable
-extension TopSiteItemCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged,
-                    .WallpaperDidChange:
-                self?.applyTheme()
-            default: break
-            }
+// MARK: - Blurrable
+extension TopSiteItemCell: Blurrable {
+    func adjustBlur(theme: Theme) {
+        // If blur is disabled set background color
+        if shouldApplyWallpaperBlur {
+            rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            rootContainer.removeVisualEffectView()
+            rootContainer.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
     }
 }

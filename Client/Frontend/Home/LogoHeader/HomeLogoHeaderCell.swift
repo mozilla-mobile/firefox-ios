@@ -44,10 +44,6 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        applyTheme()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
     }
 
     required init?(coder: NSCoder) {
@@ -84,9 +80,9 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     }
 }
 
-// MARK: - Theme
-extension HomeLogoHeaderCell: NotificationThemeable {
-    func applyTheme() {
+// MARK: - ThemeApplicable
+extension HomeLogoHeaderCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
         let wallpaperManager = WallpaperManager()
         if let logoTextColor = wallpaperManager.currentWallpaper.logoTextColor {
             logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
@@ -95,22 +91,7 @@ extension HomeLogoHeaderCell: NotificationThemeable {
         } else {
             logoTextImage.image = UIImage(imageLiteralResourceName: ImageIdentifiers.homeHeaderLogoText)
                 .withRenderingMode(.alwaysTemplate)
-            // TODO: Laurie - textPrimary
-            logoTextImage.tintColor = LegacyThemeManager.instance.current.homePanel.topSiteHeaderTitle
-        }
-    }
-}
-
-// MARK: - Notifiable
-extension HomeLogoHeaderCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged,
-                .WallpaperDidChange:
-            ensureMainThread {
-                self.applyTheme()
-            }
-        default: break
+            logoTextImage.tintColor = theme.colors.textPrimary
         }
     }
 }

@@ -6,7 +6,7 @@ import Foundation
 
 // MARK: - FxHomePocketDiscoverMoreCell
 /// A cell to be placed at the last position in the Pocket section
-class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
+class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let discoverMoreFontSize: CGFloat = 20
@@ -23,18 +23,10 @@ class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
         label.textAlignment = .left
     }
 
-    // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: .zero)
-
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
         setupLayout()
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {
@@ -46,19 +38,13 @@ class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
         itemTitle.text = nil
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     func configure(text: String) {
         itemTitle.text = text
-        adjustLayout()
     }
 
     // MARK: - Helpers
 
     private func setupLayout() {
-        setupShadow()
         contentView.addSubviews(itemTitle)
 
         NSLayoutConstraint.activate([
@@ -70,53 +56,34 @@ class PocketDiscoverCell: BlurrableCollectionViewCell, ReusableCell {
         ])
     }
 
-    private func adjustLayout() {
-        if shouldApplyWallpaperBlur {
-            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            contentView.removeVisualEffectView()
-            // TODO: Laurie - layer2
-            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
-            UIColor.Photon.DarkGrey30 : .white
-            setupShadow()
-        }
-    }
-
-    private func setupShadow() {
+    private func setupShadow(theme: Theme) {
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        // TODO: Laurie - shadowColor
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowColor = theme.colors.shadow.cgColor
         contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 }
 
-// MARK: - Theme
-extension PocketDiscoverCell: NotificationThemeable {
-    func applyTheme() {
-        // TODO: Laurie - textPrimary
-        if LegacyThemeManager.instance.currentName == .dark {
-            itemTitle.textColor = UIColor.Photon.LightGrey10
-        } else {
-            itemTitle.textColor = UIColor.Photon.DarkGrey90
-        }
+// MARK: - ThemeApplicable
+extension PocketDiscoverCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        itemTitle.textColor = theme.colors.textPrimary
+        adjustBlur(theme: theme)
     }
 }
 
-// MARK: - Notifiable
-extension PocketDiscoverCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged:
-                self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
-            default: break
-            }
+// MARK: - ThemeApplicable
+extension PocketDiscoverCell: Blurrable {
+    func adjustBlur(theme: Theme) {
+        if shouldApplyWallpaperBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentView.removeVisualEffectView()
+            contentView.backgroundColor = theme.colors.layer2
+            setupShadow(theme: theme)
         }
     }
 }

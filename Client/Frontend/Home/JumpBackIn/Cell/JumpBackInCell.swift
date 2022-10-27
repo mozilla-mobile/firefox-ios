@@ -18,7 +18,7 @@ struct JumpBackInCellViewModel {
 
 // MARK: - JumpBackInCell
 /// A cell used in Home page Jump Back In section
-class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
+class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
@@ -102,10 +102,6 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell
 
-        applyTheme()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
         setupLayout()
     }
 
@@ -125,7 +121,6 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         descriptionLabel.text = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
-        applyTheme()
 
         faviconImage.isHidden = false
         descriptionContainer.addArrangedViewToTop(faviconImage)
@@ -171,8 +166,6 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
-        setupShadow()
-
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
         descriptionContainer.addArrangedSubview(faviconImage)
@@ -229,69 +222,42 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
         faviconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
-
-        // Add blur
-        if shouldApplyWallpaperBlur {
-            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            contentView.removeVisualEffectView()
-            // TODO: Laurie - Layer5
-            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
-            UIColor.Photon.DarkGrey40 : .white
-            setupShadow()
-        }
     }
 
-    private func setupShadow() {
+    private func setupShadow(theme: Theme) {
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        // TODO: Laurie - shadowColor
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowColor = theme.colors.shadow.cgColor
         contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 }
 
-// MARK: - Theme
-extension JumpBackInCell: NotificationThemeable {
-    func applyTheme() {
-        // TODO: Laurie -
-        // itemTitle = textPrimary
-        // descriptionLabel = textPrimary
-        // faviconImage.tintColor = iconPrimary
-        // fallbackFaviconImage.tintColor = iconPrimary
-        // fallbackFaviconBackground.backgroundColor = layer1
-        // fallbackFaviconBackground.layer.borderColor = borderPrimary
+// MARK: - ThemeApplicable
+extension JumpBackInCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        [itemTitle, descriptionLabel].forEach { $0.textColor = theme.colors.textPrimary }
+        faviconImage.tintColor = theme.colors.iconPrimary
+        fallbackFaviconImage.tintColor = theme.colors.iconPrimary
+        fallbackFaviconBackground.backgroundColor = theme.colors.layer1
 
-        if LegacyThemeManager.instance.currentName == .dark {
-            [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
-            faviconImage.tintColor = UIColor.Photon.LightGrey10
-            fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey10
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
-        } else {
-            [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
-            faviconImage.tintColor = UIColor.Photon.DarkGrey90
-            fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
-        }
-
-        fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
-        adjustLayout()
+        fallbackFaviconBackground.layer.borderColor = theme.colors.borderPrimary.cgColor
+        adjustBlur(theme: theme)
     }
 }
 
-// MARK: - Notifiable
-extension JumpBackInCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged,
-                    .WallpaperDidChange:
-                self?.applyTheme()
-            default: break
-            }
+// MARK: - Blurrable
+extension JumpBackInCell: Blurrable {
+    func adjustBlur(theme: Theme) {
+        // Add blur
+        if shouldApplyWallpaperBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            contentView.removeVisualEffectView()
+            contentView.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
     }
 }

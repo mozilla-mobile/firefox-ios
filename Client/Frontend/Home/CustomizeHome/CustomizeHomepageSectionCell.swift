@@ -4,7 +4,7 @@
 
 import UIKit
 
-class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
+class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
@@ -27,26 +27,14 @@ class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
                                                 right: ResizableButton.UX.buttonEdgeSpacing)
     }
 
-    // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        applyTheme()
-
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - UI Setup
@@ -65,48 +53,33 @@ class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
 
         goToSettingsButton.setContentHuggingPriority(.required, for: .vertical)
 
-        // needed so the button sizes correctly
+        // Needed so the button sizes correctly
         setNeedsLayout()
         layoutIfNeeded()
     }
 
     func configure(onTapAction: ((UIButton) -> Void)?) {
         goToSettingsButton.touchUpAction = onTapAction
-
-        adjustLayout()
     }
+}
 
-    private func adjustLayout() {
+// MARK: - Blurrable
+extension CustomizeHomepageSectionCell: Blurrable {
+    func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             goToSettingsButton.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             goToSettingsButton.removeVisualEffectView()
-            applyTheme()
         }
     }
 }
 
-// MARK: - Theme
-extension CustomizeHomepageSectionCell: NotificationThemeable {
-    func applyTheme() {
-        // TODO: Laurie - layer2
-        goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
-        // TODO: Laurie - textPrimary
-        goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
-    }
-}
+// MARK: - ThemeApplicable
+extension CustomizeHomepageSectionCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        goToSettingsButton.backgroundColor = theme.colors.layer2
+        goToSettingsButton.setTitleColor(theme.colors.textPrimary, for: .normal)
 
-// MARK: - Notifiable
-extension CustomizeHomepageSectionCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged:
-                self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
-            default: break
-            }
-        }
+        adjustBlur(theme: theme)
     }
 }

@@ -28,7 +28,7 @@ struct SyncedTabCellViewModel {
 }
 
 /// A cell used in FxHomeScreen's Jump Back In section
-class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
+class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let generalCornerRadius: CGFloat = 12
@@ -84,7 +84,7 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
     private let tabFallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.backgroundColor = UIColor.clear
+        imageView.backgroundColor = .clear
         imageView.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
         imageView.layer.masksToBounds = true
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.fallbackFavIconImage
@@ -141,11 +141,8 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemCell
 
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .DynamicFontChanged,
-                                       .WallpaperDidChange])
+                           observing: [.DynamicFontChanged])
         setupLayout()
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {
@@ -180,7 +177,6 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
 
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapSyncedTab(_:)))
         syncedTabTapTargetView.addGestureRecognizer(tapRecognizer)
-        applyTheme()
         adjustLayout()
 
         let showAllSyncedTabsA11yAction = UIAccessibilityCustomAction(name: viewModel.syncedTabsButtonText,
@@ -234,12 +230,9 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
         syncedDeviceLabel.text = nil
         tabItemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
-        applyTheme()
     }
 
     private func setupLayout() {
-        setupShadow()
-
         tabFallbackFaviconBackground.addSubviews(tabFallbackFaviconImage)
         tabImageContainer.addSubviews(tabHeroImage, tabFallbackFaviconBackground)
         syncedDeviceContainer.addSubviews(syncedDeviceImage, syncedDeviceLabel)
@@ -351,63 +344,45 @@ class SyncedTabCell: BlurrableCollectionViewCell, ReusableCell {
 
         }
         tabStackTopConstraint.constant = tabStackTopAnchorConstant
-
-        // Add blur
-        if shouldApplyWallpaperBlur {
-            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            contentView.removeVisualEffectView()
-            // TODO: Laurie - Layer5
-            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
-            UIColor.Photon.DarkGrey40 : .white
-            setupShadow()
-        }
     }
 
-    private func setupShadow() {
+    private func setupShadow(theme: Theme) {
         contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
-        // TODO: Laurie - shadowColor
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+        contentView.layer.shadowColor = theme.colors.shadow.cgColor
         contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 }
 
-// MARK: - Theme
-extension SyncedTabCell: NotificationThemeable {
-    func applyTheme() {
-        // TODO: Laurie -
-        // cardTitle.textColor = textPrimary
-        // itemTitle.textColor = textPrimary
-        // descriptionLabel.textColor = textSecondary
-        // fallbackFaviconImage.tintColor = iconPrimary
-        // fallbackFaviconBackground.backgroundColor = layer1
-        // syncedTabsButton.tintColor = iconPrimary
-        // syncedDeviceImage.image = tinted with iconSecondary
-        // fallbackFaviconBackground.layer.borderColor = borderPrimary
+// MARK: - ThemeApplicable
+extension SyncedTabCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        cardTitle.textColor  = theme.colors.textPrimary
+        tabItemTitle.textColor = theme.colors.textPrimary
+        syncedDeviceLabel.textColor = theme.colors.textSecondary
+        syncedTabsButton.tintColor = theme.colors.iconPrimary
+        syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: theme.colors.iconSecondary)
 
-        if LegacyThemeManager.instance.currentName == .dark {
-            cardTitle.textColor  = UIColor.Photon.LightGrey10
-            tabItemTitle.textColor = UIColor.Photon.LightGrey05
-            syncedDeviceLabel.textColor = UIColor.Photon.LightGrey40
-            tabFallbackFaviconImage.tintColor = UIColor.Photon.LightGrey40
-            tabFallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
-            syncedTabsButton.tintColor = UIColor.Photon.LightGrey40
-            syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: UIColor.Photon.LightGrey40)
+        tabFallbackFaviconImage.tintColor = theme.colors.iconPrimary
+        tabFallbackFaviconBackground.backgroundColor = theme.colors.layer1
+        tabFallbackFaviconBackground.layer.borderColor = theme.colors.borderPrimary.cgColor
+    }
+}
+
+// MARK: - Blurrable
+extension SyncedTabCell: Blurrable {
+    func adjustBlur(theme: Theme) {
+        // Add blur
+        if shouldApplyWallpaperBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
-            cardTitle.textColor = .black
-            tabItemTitle.textColor = UIColor.Photon.DarkGrey90
-            syncedDeviceLabel.textColor = UIColor.Photon.DarkGrey05
-            tabFallbackFaviconImage.tintColor = .black
-            tabFallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
-            syncedTabsButton.tintColor = .black
-            syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: .black)
+            contentView.removeVisualEffectView()
+            contentView.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
-
-        tabFallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
     }
 }
 
@@ -416,10 +391,6 @@ extension SyncedTabCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             switch notification.name {
-            case .DisplayThemeChanged:
-                self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
             case .DynamicFontChanged:
                 self?.adjustLayout()
             default: break

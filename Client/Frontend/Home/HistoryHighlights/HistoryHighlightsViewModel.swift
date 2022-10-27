@@ -64,6 +64,7 @@ class HistoryHighlightsViewModel {
     }
 
     // MARK: - Properties & Variables
+    var theme: Theme
     var historyItems = [HighlightItem]()
     private var profile: Profile
     private var isPrivate: Bool
@@ -73,9 +74,11 @@ class HistoryHighlightsViewModel {
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
     private let telemetry: TelemetryWrapperProtocol
+
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
+
     weak var delegate: HomepageDataModelDelegate?
     private var wallpaperManager: WallpaperManager
 
@@ -109,6 +112,7 @@ class HistoryHighlightsViewModel {
     init(with profile: Profile,
          isPrivate: Bool,
          urlBar: URLBarViewProtocol,
+         theme: Theme,
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
          telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
@@ -116,6 +120,7 @@ class HistoryHighlightsViewModel {
         self.profile = profile
         self.isPrivate = isPrivate
         self.urlBar = urlBar
+        self.theme = theme
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry
         self.wallpaperManager = wallpaperManager
@@ -249,6 +254,10 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: FxHomeSectionHandler

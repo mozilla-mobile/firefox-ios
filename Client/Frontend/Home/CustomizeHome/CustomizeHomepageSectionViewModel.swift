@@ -6,7 +6,12 @@ import Foundation
 
 /// Customize button is always present at the bottom of the page
 class CustomizeHomepageSectionViewModel {
+    var theme: Theme
     var onTapAction: ((UIButton) -> Void)?
+
+    init(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: HomeViewModelProtocol
@@ -50,6 +55,10 @@ extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: FxHomeSectionHandler

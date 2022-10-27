@@ -13,9 +13,11 @@ class HomeLogoHeaderViewModel {
 
     private let profile: Profile
     var onTapAction: ((UIButton) -> Void)?
+    var theme: Theme
 
-    init(profile: Profile) {
+    init(profile: Profile, theme: Theme) {
         self.profile = profile
+        self.theme = theme
     }
 }
 
@@ -62,6 +64,10 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 extension HomeLogoHeaderViewModel: HomepageSectionHandler {

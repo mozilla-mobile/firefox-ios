@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
-class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, NotificationThemeable {
+class RecentlySavedCell: UICollectionViewCell, ReusableCell {
 
     private struct UX {
         static let generalCornerRadius: CGFloat = 12
@@ -58,27 +58,16 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         label.adjustsFontForContentSizeCategory = true
     }
 
-    // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     // MARK: - Inits
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
         setupLayout()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -88,7 +77,6 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         fallbackFaviconImage.image = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
-
     }
 
     override func layoutSubviews() {
@@ -101,7 +89,6 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         configureImages(heroImage: viewModel.heroImage, favIconImage: viewModel.favIconImage)
 
         itemTitle.text = viewModel.site.title
-        applyTheme()
     }
 
     private func configureImages(heroImage: UIImage?, favIconImage: UIImage?) {
@@ -182,54 +169,39 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         ])
     }
 
-    func adjustLayout() {
-        // If blur is disabled set background color
-        if shouldApplyWallpaperBlur {
-            rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            rootContainer.removeVisualEffectView()
-            // TODO: Laurie - layer5
-            rootContainer.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkCellBackground
-            setupShadow()
-        }
-    }
-
-    func applyTheme() {
-        // TODO: Laurie -
-        // itemTitle.textColor = textPrimary
-        // fallbackFaviconBackground.backgroundColor = layer1
-        // fallbackFaviconBackground.layer.borderColor = borderPrimary
-
-        itemTitle.textColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkTitle
-        fallbackFaviconBackground.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkImageBackground
-        fallbackFaviconBackground.layer.borderColor = LegacyThemeManager.instance.current.homePanel.topSitesBackground.cgColor
-
-        adjustLayout()
-    }
-
-    private func setupShadow() {
+    private func setupShadow(theme: Theme) {
         rootContainer.layer.cornerRadius = UX.generalCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.generalCornerRadius).cgPath
-        // TODO: Laurie - shadowColor
-        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+
+        rootContainer.layer.shadowColor = theme.colors.shadow.cgColor
         rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
         rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
     }
 }
 
-// MARK: - Notifiable
-extension RecentlySavedCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged,
-                    .WallpaperDidChange:
-                self?.applyTheme()
-            default:
-                break
-            }
+// MARK: - ThemeApplicable
+extension RecentlySavedCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        itemTitle.textColor = theme.colors.textPrimary
+        fallbackFaviconBackground.backgroundColor = theme.colors.layer1
+        fallbackFaviconBackground.layer.borderColor = theme.colors.borderPrimary.cgColor
+
+        adjustBlur(theme: theme)
+    }
+}
+
+// MARK: - Blurrable
+extension RecentlySavedCell: Blurrable {
+    func adjustBlur(theme: Theme) {
+        // If blur is disabled set background color
+        if shouldApplyWallpaperBlur {
+            rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            rootContainer.removeVisualEffectView()
+            rootContainer.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
     }
 }

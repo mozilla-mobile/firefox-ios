@@ -8,7 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 
-class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
+class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable {
 
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -22,8 +22,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         }
     }
 
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManagerProtocol
@@ -33,6 +31,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
+
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
+    var themeObserver: NSObjectProtocol?
 
     // Background for status bar
     private lazy var statusBarView: UIView = {
@@ -56,7 +58,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          urlBar: URLBarViewProtocol,
-         userDefaults: UserDefaultsInterface = UserDefaults.standard
+         userDefaults: UserDefaultsInterface = UserDefaults.standard,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.urlBar = urlBar
         self.tabManager = tabManager
@@ -65,7 +69,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
-                                           urlBar: urlBar)
+                                           urlBar: urlBar,
+                                           theme: themeManager.currentTheme)
 
         let jumpBackInContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
                                                                     with: viewModel.profile)
@@ -74,6 +79,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
                                                                  with: viewModel.profile)
         self.syncTabContextualHintViewController = ContextualHintViewController(with: syncTabContextualViewModel)
         self.contextMenuHelper = HomepageContextMenuHelper(viewModel: viewModel)
+
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         contextMenuHelper.delegate = self
@@ -113,9 +121,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
 
-        applyTheme()
         setupSectionsAction()
         reloadView()
+
+        listenForThemeChange()
+        applyTheme()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -290,10 +300,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     func applyTheme() {
-        // TODO: Laurie - layer1
-        view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        // TODO: Remove this once the new theme system is implemented on the homepage FXIOS-4882
-        reloadView()
+        view.backgroundColor = themeManager.currentTheme.colors.layer1
+        updateStatusBar()
     }
 
     func scrollToTop(animated: Bool = false) {
@@ -722,8 +730,7 @@ private extension HomepageViewController {
     }
 
     func updateStatusBar() {
-        // TODO: Laurie - layer1
-        let backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        let backgroundColor = themeManager.currentTheme.colors.layer1
         statusBarView.backgroundColor = backgroundColor.withAlphaComponent(scrollOffset)
 
         if let statusBarFrame = statusBarFrame {

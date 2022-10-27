@@ -5,7 +5,7 @@
 import UIKit
 
 /// A cell used in FxHomeScreen's History Highlights section.
-class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
+class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let verticalSpacing: CGFloat = 20
@@ -58,7 +58,6 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var cellModel: HistoryHighlightsModel?
 
     // MARK: - Inits
@@ -69,18 +68,11 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell
 
-        applyTheme()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - Public methods
@@ -98,7 +90,6 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         accessibilityLabel = options.accessibilityLabel
 
         heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
-        adjustLayout()
     }
 
     override func prepareForReuse() {
@@ -139,7 +130,9 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         ])
     }
 
-    private func setupShadow(_ shouldAddShadow: Bool, cornersToRound: CACornerMask?) {
+    private func setupShadow(_ shouldAddShadow: Bool,
+                             cornersToRound: CACornerMask?,
+                             theme: Theme) {
         contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
         contentView.layer.cornerRadius = UX.generalCornerRadius
 
@@ -160,24 +153,29 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
                 height: size
             )
 
-            // TODO: Laurie - shadowColor
-            contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
+            contentView.layer.shadowColor = theme.colors.shadow.cgColor
             contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
             contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
             contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
         }
     }
+}
 
-    private func applyTheme() {
-        // TODO: Laurie - layer2
-        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
-        // TODO: Laurie - iconPrimary
-        heroImage.tintColor = UIColor.theme.homePanel.recentlyVisitedCellGroupImage
-        // TODO: Laurie - borderPrimary
-        bottomLine.backgroundColor = UIColor.theme.homePanel.recentlyVisitedCellBottomLine
+// MARK: - ThemeApplicable
+extension HistoryHighlightsCell: ThemeApplicable {
+
+    func applyTheme(theme: Theme) {
+        heroImage.tintColor = theme.colors.iconPrimary
+        bottomLine.backgroundColor = theme.colors.borderPrimary
+
+        adjustBlur(theme: theme)
     }
+}
 
-    private func adjustLayout() {
+// MARK: - Blurrable
+extension HistoryHighlightsCell: Blurrable {
+
+    func adjustBlur(theme: Theme) {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
@@ -186,24 +184,10 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
             contentView.layer.cornerRadius = UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
-            // TODO: Laurie - layer5?
-            contentView.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
-            setupShadow(cellModel?.shouldAddShadow ?? false, cornersToRound: cellModel?.corners)
-        }
-    }
-}
-
-// MARK: - Notifiable
-extension HistoryHighlightsCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged:
-                self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
-            default: break
-            }
+            contentView.backgroundColor = theme.colors.layer2
+            setupShadow(cellModel?.shouldAddShadow ?? false,
+                        cornersToRound: cellModel?.corners,
+                        theme: theme)
         }
     }
 }

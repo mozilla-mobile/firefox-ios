@@ -19,11 +19,14 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
     weak var delegate: HomepageDataModelDelegate?
     var message: GleanPlumbMessage?
     var dismissClosure: (() -> Void)?
+    var theme: Theme
 
     init(dataAdaptor: MessageCardDataAdaptor,
+         theme: Theme,
          messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared
     ) {
         self.dataAdaptor = dataAdaptor
+        self.theme = theme
         self.messagingManager = messagingManager
     }
 
@@ -97,6 +100,10 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: - HomepageSectionHandler
