@@ -259,7 +259,11 @@ class TabTrayViewController: UIViewController, Themeable {
 
     private func updateTitle() {
         if let newTitle = viewModel.navTitle(for: segmentedControlIphone.selectedSegmentIndex) {
+            navigationItem.titleView = nil
             navigationItem.title = newTitle
+        } else {
+            navigationItem.titleView = viewModel.layout == .compact ? segmentedControlIphone : segmentedControlIpad
+            navigationItem.title = nil
         }
     }
 
@@ -446,6 +450,7 @@ class TabTrayViewController: UIViewController, Themeable {
         }
 
         updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
+        updateTitle()
     }
 
     private func createButtonItem(imageName: String,
