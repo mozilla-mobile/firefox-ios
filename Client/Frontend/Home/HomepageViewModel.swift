@@ -73,6 +73,7 @@ class HomepageViewModel: FeatureFlaggable {
     var libraryViewModel: NTPLibraryViewModel
     var topSiteViewModel: TopSitesViewModel
     var impactViewModel: NTPImpactViewModel
+    var newsViewModel: NTPNewsViewModel
 
     var shouldDisplayHomeTabBanner: Bool {
         return false // Ecoaia: return messageCardViewModel.shouldDisplayMessageCard
@@ -92,12 +93,15 @@ class HomepageViewModel: FeatureFlaggable {
         self.libraryViewModel = NTPLibraryViewModel()
         self.topSiteViewModel = TopSitesViewModel(profile: profile)
         self.impactViewModel = NTPImpactViewModel(personalCounter: personalCounter)
+        self.newsViewModel = NTPNewsViewModel()
         self.childViewModels = [headerViewModel,
                                 libraryViewModel,
                                 topSiteViewModel,
-                                impactViewModel]
+                                impactViewModel,
+                                newsViewModel]
         self.isPrivate = isPrivate
         topSiteViewModel.delegate = self
+        newsViewModel.delegate = self
         updateEnabledSections()
     }
 

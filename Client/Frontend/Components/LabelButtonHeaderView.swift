@@ -26,17 +26,16 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         static let maxTitleLabelTextSize: CGFloat = 55 // Style title3 - AX5
         static let maxMoreButtonTextSize: CGFloat = 49 // Style subheadline - AX5
         static let inBetweenSpace: CGFloat = 12
-        static let bottomSpace: CGFloat = 10
+        static let bottomSpace: CGFloat = 16
         static let bottomButtonSpace: CGFloat = 6
     }
 
     // MARK: - UIElements
     lazy var titleLabel: UILabel = .build { label in
         label.text = self.title
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       maxSize: UX.maxTitleLabelTextSize)
+        label.font = .preferredFont(forTextStyle: .headline).bold()
         label.adjustsFontForContentSizeCategory = true
-        label.numberOfLines = 0
+        label.numberOfLines = 1
     }
 
     lazy var moreButton: ActionButton = .build { button in
@@ -123,7 +122,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 // MARK: - Theme
 extension LabelButtonHeaderView: NotificationThemeable {
     func applyTheme() {
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        titleLabel.textColor = .theme.ecosia.primaryText
         moreButton.setTitleColor(UIColor.theme.homePanel.activityStreamHeaderButton, for: .normal)
     }
 }

@@ -134,6 +134,9 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         collectionView.register(NTPTooltip.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: NTPTooltip.key)
+        collectionView.register(MoreButtonCell.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: MoreButtonCell.cellIdentifier)
         collectionView.keyboardDismissMode = .onDrag
         collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.delegate = self
@@ -295,16 +298,24 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 
-        guard kind == UICollectionView.elementKindSectionHeader,
-              let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
+        guard let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
         else { return UICollectionReusableView() }
 
-        if sectionViewModel.sectionType == .impact, let text = viewModel.impactViewModel.ntpLayoutHighlightText()  {
-
+        // tooltip for impact
+        if sectionViewModel.sectionType == .impact, let text = viewModel.impactViewModel.ntpLayoutHighlightText(), kind == UICollectionView.elementKindSectionHeader {
             let tooltip = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NTPTooltip.key, for: indexPath) as! NTPTooltip
             tooltip.setText(text)
             tooltip.delegate = self
             return tooltip
+        }
+
+        // footer for news
+        if sectionViewModel.sectionType == .news, kind == UICollectionView.elementKindSectionFooter  {
+            let moreButton = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MoreButtonCell.cellIdentifier, for: indexPath) as! MoreButtonCell
+            moreButton.button.setTitle(.localized(.seeMoreNews), for: .normal)
+            moreButton.button.addTarget(self, action: #selector(allNews), for: .primaryActionTriggered)
+            moreButton.applyTheme()
+            return moreButton
         }
 
         guard let headerView = collectionView.dequeueReusableSupplementaryView(
@@ -333,6 +344,10 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
         }
 
         return viewModel.configure(collectionView, at: indexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        (cell as? NotificationThemeable)?.applyTheme()
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

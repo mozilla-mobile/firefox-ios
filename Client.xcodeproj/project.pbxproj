@@ -581,6 +581,7 @@
 		CA103C7928C8DF8D00F7170A /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = CA103C7828C8DF8D00F7170A /* Core */; };
 		CA103C7A28C8E20D00F7170A /* SentryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02818601EF056C800240CAA /* SentryIntegration.swift */; };
 		CA103C8028C8F78E00F7170A /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA103C7F28C8F78E00F7170A /* CircleButton.swift */; };
+		CA1453C1290943270000957F /* NTPNewsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA1453C0290943270000957F /* NTPNewsViewModel.swift */; };
 		CA220A6C28D070FE000E66E6 /* FeatureFlagsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */; };
 		CA220A6D28D071C2000E66E6 /* NimbusFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */; };
 		CA220A6E28D0721B000E66E6 /* NimbusFeatureFlagLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81B78A3280752A20000C15F /* NimbusFeatureFlagLayer.swift */; };
@@ -3501,6 +3502,7 @@
 		C9F84738A8E6E512DBC35ADE /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsClient.swift; sourceTree = "<group>"; };
 		CA103C7F28C8F78E00F7170A /* CircleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleButton.swift; sourceTree = "<group>"; };
+		CA1453C0290943270000957F /* NTPNewsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPNewsViewModel.swift; sourceTree = "<group>"; };
 		CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsListSelectionHelperTests.swift; sourceTree = "<group>"; };
 		CA24B53A24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsListDataSourceHelperTests.swift; sourceTree = "<group>"; };
 		CA4ACE4824C8C91500F55894 /* BreachAlertsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsDetailView.swift; sourceTree = "<group>"; };
@@ -6366,15 +6368,16 @@
 			isa = PBXGroup;
 			children = (
 				CA8BCC3C28D308E30020BC50 /* Cells */,
-				CA506BAD28D1EA080064072B /* NTPLibraryShortcutView.swift */,
 				CA103C7F28C8F78E00F7170A /* CircleButton.swift */,
-				CA4D9C9028C8D801006AFB5D /* NTPLayout.swift */,
 				CA4D9C9228C8D801006AFB5D /* DefaultBrowser.swift */,
-				CA4D9C9428C8D801006AFB5D /* NTPIntroViewController.swift */,
 				CA8BCC3A28D218830020BC50 /* NTPImpactViewModel.swift */,
+				CA4D9C9428C8D801006AFB5D /* NTPIntroViewController.swift */,
+				CA4D9C9028C8D801006AFB5D /* NTPLayout.swift */,
 				CACF7D1028DC553B00A996A4 /* NTPLibaryViewModel.swift */,
-				CA4D9C9728C8D801006AFB5D /* NTPTooltip.swift */,
+				CA506BAD28D1EA080064072B /* NTPLibraryShortcutView.swift */,
+				CA1453C0290943270000957F /* NTPNewsViewModel.swift */,
 				CA4D9C9828C8D801006AFB5D /* NTPTooltip.Highlight.swift */,
+				CA4D9C9728C8D801006AFB5D /* NTPTooltip.swift */,
 			);
 			path = NTP;
 			sourceTree = "<group>";
@@ -9509,6 +9512,7 @@
 				E4C358551AF144BA00299F7E /* FSReadingList.m in Sources */,
 				8AE1E1CB27B18F560024C45E /* SearchBarSettingsViewController.swift in Sources */,
 				8AD40FC527BADC1F00672675 /* TabToolbarHelper.swift in Sources */,
+				CA1453C1290943270000957F /* NTPNewsViewModel.swift in Sources */,
 				CA8BCC4028D340AF0020BC50 /* TabCell+Ecosia.swift in Sources */,
 				96C11E992864BA2C00840E7C /* ServiceProvider.swift in Sources */,
 				9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */,
@@ -9660,7 +9664,6 @@
 				EB94075320850C9F00702E05 /* photon-colors.swift in Sources */,
 				D38B2D8C1A8D98D90040E6B5 /* OpenSearch.swift in Sources */,
 				8AB8574027D961550075C173 /* DataObserver.swift in Sources */,
-				CA7D2D7D28F839EF00D4B5AE /* BrowserViewController+Ecosia.swift in Sources */,
 				6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
 				DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,

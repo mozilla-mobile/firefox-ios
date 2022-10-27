@@ -33,6 +33,13 @@ extension HomepageViewController {
         .init(trees: User.shared.impact, searches: personalCounter.state!, style: .ntp)
     }
 
+    @objc func allNews() {
+        let news = NewsController(items: viewModel.newsViewModel.items, delegate: self)
+        let nav = EcosiaNavigation(rootViewController: news)
+        present(nav, animated: true)
+        Analytics.shared.navigation(.open, label: .news)
+    }
+
 }
 
 extension HomepageViewController: NTPTooltipDelegate {
@@ -76,5 +83,12 @@ extension HomepageViewController: NTPLibraryDelegate {
 
     func libraryCellOpenDownloads() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
+    }
+}
+
+extension HomepageViewController: EcosiaHomeDelegate {
+    func ecosiaHome(didSelectURL url: URL) {
+        dismiss(animated: true)
+        homePanelDelegate?.homePanel(didSelectURL: url, visitType: .link, isGoogleTopSite: false)
     }
 }

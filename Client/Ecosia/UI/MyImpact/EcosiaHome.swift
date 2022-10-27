@@ -12,10 +12,8 @@ protocol EcosiaHomeDelegate: AnyObject {
 final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlowLayout, NotificationThemeable {
     var delegate: EcosiaHomeDelegate?
     private weak var referrals: Referrals!
-    private var items = [NewsModel]()
     private var disclosed: IndexPath?
     private let images = Images(.init(configuration: .ephemeral))
-    private let news = News()
     private let personalCounter = PersonalCounter()
     private let background = Background()
     private weak var impactCell: MyImpactCell?
@@ -47,22 +45,12 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
             collectionView!.register($0.cell, forCellWithReuseIdentifier: String(describing: $0.cell))
         }
         collectionView!.register(HeaderCell.self, forCellWithReuseIdentifier: .init(describing: HeaderCell.self))
-        collectionView.register(MoreButtonCell.self, forCellWithReuseIdentifier: .init(describing: MoreButtonCell.self))
         collectionView.delegate = self
         collectionView.contentInsetAdjustmentBehavior = .scrollableAxes
 
         NotificationCenter.default.addObserver(self, selector: #selector(updateLayout), name: UIDevice.orientationDidChangeNotification, object: nil)
 
         applyTheme()
-
-        news.subscribeAndReceive(self) { [weak self] in
-            guard
-                let self = self,
-                self.collectionView.numberOfSections > Section.news.rawValue
-            else { return }
-            self.items = $0
-            self.collectionView.reloadSections([Section.news.rawValue])
-        }
 
         personalCounter.subscribe(self)  { [weak self] _ in
             guard
@@ -85,7 +73,6 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        news.load(session: .shared, force: items.isEmpty)
         Analytics.shared.navigation(.view, label: .home)
 
         referrals.refresh(force: true)
@@ -135,7 +122,6 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
         case .impact: return 1
         case .multiply: return 2  // with header
         case .explore: return Section.Explore.allCases.count + 1 // header
-        case .news: return min(3, items.count) + 2 // header and footer
         }
     }
 
@@ -175,36 +161,12 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
                 exploreCell.model = .init(rawValue: indexPath.row - 1)
                 return exploreCell
             }
-        case .news:
-            if indexPath.row == 0 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .init(describing: HeaderCell.self), for: indexPath) as! HeaderCell
-                cell.title.text = section.title
-                return cell
-            } else if indexPath.row == self.collectionView(collectionView, numberOfItemsInSection: Section.news.rawValue) - 1 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .init(describing: MoreButtonCell.self), for: indexPath) as! MoreButtonCell
-                cell.button.setTitle(.localized(.seeMoreNews), for: .normal)
-                cell.button.addTarget(self, action: #selector(allNews), for: .primaryActionTriggered)
-                return cell
-            } else {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: section.cell), for: indexPath) as! NewsCell
-                let itemCount = self.collectionView(collectionView, numberOfItemsInSection: Section.news.rawValue) - 2
-                cell.configure(items[indexPath.row - 1], images: images, positions: .derive(row: indexPath.row - 1, items: itemCount))
-                return cell
-            }
         }
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let section = Section(rawValue: indexPath.section)!
         switch section {
-        case .news:
-            let index = indexPath.row - 1
-            guard index >= 0, items.count > index else { return }
-            delegate?.ecosiaHome(didSelectURL: items[index].targetUrl)
-            Analytics.shared.navigationOpenNews(items[index].trackingName)
-            dismiss(animated: true) { [weak collectionView] in
-                collectionView?.deselectItem(at: indexPath, animated: false)
-            }
         case .explore:
             // Index is off by one as first cell is the header
             guard indexPath.row > 0 else { return }
@@ -253,7 +215,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
 
         guard let section = Section(rawValue: section) else { return 0 }
         switch section {
-        case .multiply, .news, .explore:
+        case .multiply, .explore:
             return 0
         default:
             return 16
@@ -263,7 +225,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, insetForSectionAt: Int) -> UIEdgeInsets {
         let vertical = insetForSectionAt == Section.explore.rawValue ? 26 : CGFloat()
         let horizontal = (collectionView.bounds.width - collectionView.ecosiaHomeMaxWidth) / 2
-        return .init(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
+        return .init(top: 0, left: horizontal, bottom: vertical, right: horizontal)
     }
     
     func applyTheme() {
@@ -305,12 +267,6 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
         navigationController?.navigationBar.setNeedsDisplay()
     }
     
-    @objc private func allNews() {
-        let news = NewsController(items: items, delegate: delegate)
-        navigationController?.pushViewController(news, animated: true)
-        Analytics.shared.navigation(.open, label: .news)
-    }
-
     @objc private func updateLayout() {
         collectionView.collectionViewLayout.invalidateLayout()
     }

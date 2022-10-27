@@ -4,7 +4,7 @@
 
 import UIKit
 
-final class MoreButtonCell: UICollectionViewCell {
+final class MoreButtonCell: UICollectionReusableView, ReusableCell {
     private(set) weak var button: UIButton!
     
     required init?(coder: NSCoder) { return nil }
@@ -23,12 +23,12 @@ final class MoreButtonCell: UICollectionViewCell {
         button.imageEdgeInsets.left = -8
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1
-        contentView.addSubview(button)
+        addSubview(button)
         
-        button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-        button.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
-        button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 8).isActive = true
-        button.heightAnchor.constraint(greaterThanOrEqualToConstant: 32).isActive = true
+        button.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        button.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
+        button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 32).priority(.defaultHigh).isActive = true
 
         applyTheme()
     }
@@ -43,10 +43,11 @@ final class MoreButtonCell: UICollectionViewCell {
         button.layer.borderColor = UIColor.theme.ecosia.primaryText.cgColor
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
         applyTheme()
     }
+
 }
 
 final class HeaderCell: UICollectionViewCell, NotificationThemeable {

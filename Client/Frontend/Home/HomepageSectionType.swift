@@ -9,6 +9,7 @@ enum HomepageSectionType: Int, CaseIterable {
     case libraryShortcuts
     case topSites
     case impact
+    case news
 
     var title: String? {
         switch self {
@@ -23,6 +24,7 @@ enum HomepageSectionType: Int, CaseIterable {
         case .libraryShortcuts: return NTPLibraryCell.cellIdentifier
         case .topSites: return "" // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .impact: return NTPImpactCell.cellIdentifier
+        case .news: return NewsCell.cellIdentifier
          }
     }
 
@@ -32,6 +34,7 @@ enum HomepageSectionType: Int, CaseIterable {
                 EmptyTopSiteCell.self,
                 NTPLibraryCell.self,
                 NTPImpactCell.self,
+                NewsCell.self
         ]
     }
 
@@ -49,7 +52,7 @@ extension HomepageSectionType {
         var insets: CGFloat = traits.horizontalSizeClass == .regular ? 100 : 0
 
         switch self {
-        case .libraryShortcuts, .topSites, .impact:
+        case .libraryShortcuts, .topSites, .impact, .news:
             guard let window = UIApplication.shared.windows.first(where: \.isKeyWindow) else { return MinimumInsets
             }
             let safeAreaInsets = window.safeAreaInsets.left
