@@ -15,7 +15,9 @@ class LoginsListViewModelTests: XCTestCase {
         super.setUp()
         let mockProfile = MockProfile()
         let searchController = UISearchController()
-        self.viewModel = LoginListViewModel(profile: mockProfile, searchController: searchController)
+        self.viewModel = LoginListViewModel(profile: mockProfile,
+                                            searchController: searchController,
+                                            theme: LightTheme())
         self.dataSource = LoginDataSource(viewModel: self.viewModel)
         self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
         self.addLogins()

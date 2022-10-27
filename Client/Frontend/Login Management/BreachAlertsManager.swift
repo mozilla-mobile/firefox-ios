@@ -26,6 +26,7 @@ struct BreachRecord: Codable, Equatable, Hashable {
 /// A manager for the user's breached login information, if any.
 final public class BreachAlertsManager {
     static let icon = UIImage(named: "Breached Website")?.withRenderingMode(.alwaysTemplate)
+    // TODO: FXIOS-4995 - BreachAlertsManager theming
     static let lightMode = UIColor(red: 0.77, green: 0.00, blue: 0.26, alpha: 1.00)
     static let darkMode = UIColor(red: 1.00, green: 0.02, blue: 0.35, alpha: 1.00)
     static let monitorAboutUrl = URL(string: "https://monitor.firefox.com/about")
