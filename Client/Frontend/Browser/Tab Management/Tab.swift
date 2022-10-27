@@ -157,17 +157,13 @@ class Tab: NSObject {
     }
 
     var historyList: [URL] {
-        get {
-            func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
+        func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
 
-            var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
-            if let url = url {
-                historyUrls.append(url)
-            }
-            return historyUrls
+        var historyUrls = self.backList?.map(listToUrl) ?? [URL]()
+        if let url = url {
+            historyUrls.append(url)
         }
-
-        set { }
+        return historyUrls
     }
 
     var title: String? {
@@ -527,8 +523,6 @@ class Tab: NSObject {
 
         url = currentlyOpenUrl
         sessionData = SessionData(currentPage: 0, urls: [currentlyOpenUrl], lastUsedTime: Date.now())
-        historyList = [currentlyOpenUrl]
-        webView = nil
 
         close()
     }
