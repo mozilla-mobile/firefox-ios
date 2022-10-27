@@ -1,0 +1,17 @@
+---
+nimbus-validation:
+  description: A tiny feature to validate that Nimbus is working
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    bold-tip-title:
+      type: boolean
+      description: Make the tips title label bold
+onboarding-variables:
+  description: A collection of variables about onboarding
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    show-new-onboarding:
+      type: boolean
+      description: Should the v2 of the onboarding be shown.

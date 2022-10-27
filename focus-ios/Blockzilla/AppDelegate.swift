@@ -57,7 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
                 return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
             } else {
-                return nimbus.shouldShowNewOnboarding
+                let config = AppNimbus.shared.features.onboardingVariables.value()
+                return config.showNewOnboarding
             }
         }
         guard !AppInfo.isTesting() else { return TestOnboarding() }
@@ -414,11 +415,28 @@ extension AppDelegate {
     }
 
     func setupExperimentation() {
+        let isFirstRun = !UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
+
         do {
             // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
-            try NimbusWrapper.shared.initialize(enabled: Settings.getToggle(.sendAnonymousUsageData) && Settings.getToggle(.studies))
+            try NimbusWrapper.shared.initialize(enabled: true, isFirstRun: isFirstRun)
         } catch {
             NSLog("Failed to setup experimentation: \(error)")
+        }
+
+        guard let nimbus = NimbusWrapper.shared.nimbus else {
+            return
+        }
+
+        AppNimbus.shared.initialize {
+            nimbus
+        }
+
+        NotificationCenter.default.addObserver(
+            forName: Notification.Name.nimbusExperimentsApplied,
+            object: nil,
+            queue: OperationQueue.main) { _ in
+            AppNimbus.shared.invalidateCachedValues()
         }
     }
 }

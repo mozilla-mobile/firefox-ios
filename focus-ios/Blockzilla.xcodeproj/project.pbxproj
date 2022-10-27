@@ -43,6 +43,8 @@
 		2696EB04211F540600F0C73F /* SearchHistoryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */; };
 		30DFF98021810BF20055707C /* SearchSuggestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30DFF97F21810BF20055707C /* SearchSuggestClient.swift */; };
 		31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */; };
+		394C36CD2906DE1500B9845E /* AppNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394C36CC2906DE1500B9845E /* AppNimbus.swift */; };
+		398E40882906BFC00077F5BD /* initial_experiments.json in Resources */ = {isa = PBXBuildFile; fileRef = 398E40872906BFC00077F5BD /* initial_experiments.json */; };
 		3AEC0B3E267DE30A007B7850 /* URIFixupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */; };
 		4351A09928FCB8750087C1AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4351A09728FCB8750087C1AF /* InfoPlist.strings */; };
 		4351A09C28FCB8750087C1AF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4351A09A28FCB8750087C1AF /* Localizable.strings */; };
@@ -442,6 +444,8 @@
 		29B90C056305836CB297FF79 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		30DFF97F21810BF20055707C /* SearchSuggestClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSuggestClient.swift; sourceTree = "<group>"; };
 		31421EB02176492A0015F48B /* TitleActivityItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleActivityItemProvider.swift; sourceTree = "<group>"; };
+		394C36CC2906DE1500B9845E /* AppNimbus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppNimbus.swift; sourceTree = "<group>"; };
+		398E40872906BFC00077F5BD /* initial_experiments.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = initial_experiments.json; sourceTree = "<group>"; };
 		3AEC0B3D267DE30A007B7850 /* URIFixupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URIFixupTests.swift; sourceTree = "<group>"; };
 		427B752EF11959F9C38B12D6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		43157BC328FCB8C9007A8159 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -1507,6 +1511,7 @@
 			children = (
 				F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */,
 				F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */,
+				398E40872906BFC00077F5BD /* initial_experiments.json */,
 			);
 			path = Nimbus;
 			sourceTree = "<group>";
@@ -1695,6 +1700,7 @@
 		D5D2F029252FA6AE00761DC8 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
+				394C36CC2906DE1500B9845E /* AppNimbus.swift */,
 				D5D2F02A252FA6AE00761DC8 /* Metrics.swift */,
 			);
 			path = Generated;
@@ -1981,6 +1987,7 @@
 				F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */,
 				D48C953D27FF411800FF8AEF /* Run Swiftlint */,
 				D5D067F9252F939600C35227 /* Glean */,
+				394C36CB2906DC5900B9845E /* Nimbus Feature Manifest Generator Script */,
 				E4BF2DCF1BACE8CA00DA9D68 /* Sources */,
 				E4BF2DD01BACE8CA00DA9D68 /* Frameworks */,
 				E4BF2DD11BACE8CA00DA9D68 /* Resources */,
@@ -2287,6 +2294,7 @@
 				F8324CE6264EA223007E4BFA /* style.css in Resources */,
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */,
+				398E40882906BFC00077F5BD /* initial_experiments.json in Resources */,
 				D50939A91FBF807A005D4316 /* Settings.bundle in Resources */,
 				F8324CE4264EA223007E4BFA /* gpl.html in Resources */,
 				D3E54FD51DEFB25B003E1AFF /* SearchPlugins in Resources */,
@@ -2311,6 +2319,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		394C36CB2906DC5900B9845E /* Nimbus Feature Manifest Generator Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/nimbus.fml.yaml",
+			);
+			name = "Nimbus Feature Manifest Generator Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/$(PROJECT)/Generated/AppNimbus.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   bash $PWD/bin/nimbus-fml.sh --verbose\nfi\n";
+		};
 		D48C953D27FF411800FF8AEF /* Run Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2572,6 +2600,7 @@
 				C8337E002710898800093D42 /* SheetMetrics.swift in Sources */,
 				D3E251F91DAF064B005918DC /* Utils.swift in Sources */,
 				C8337DF72710898800093D42 /* SecureConnectionStatus.swift in Sources */,
+				394C36CD2906DE1500B9845E /* AppNimbus.swift in Sources */,
 				D3E2C96B1DA3069000DEBE3D /* URIFixup.swift in Sources */,
 				D3DA77851DC2C307009C114E /* ErrorPage.swift in Sources */,
 				D3426AE91DB7F4060016DA5A /* KeyboardHelper.swift in Sources */,

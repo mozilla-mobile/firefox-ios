@@ -1,0 +1,29 @@
+---
+about:
+  description: The root level Feature Manifest for Focus for iOS
+  ios:
+    class: AppNimbus
+    module: Blockzilla
+channels:
+  - developer
+  - beta
+  - release
+features:
+  nimbus-validation:
+    description: A tiny feature to validate that Nimbus is working
+    variables:
+      bold-tip-title:
+        description: Make the tips title label bold
+        type: Boolean
+        default: true
+  onboarding-variables:
+    description: A collection of variables about onboarding
+    variables:
+      show-new-onboarding:
+        description: Should the v2 of the onboarding be shown.
+        type: Boolean
+        default: false
+    defaults:
+      - channel: developer
+        value:
+          show-new-onboarding: true

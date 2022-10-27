@@ -67,6 +67,10 @@
 		<key>openUrl</key>
 		<string>org.mozilla.ios.Klar.openUrl</string>
 	</dict>
+	<key>NimbusAppChannel</key>
+	<string>developer</string>
+	<key>NimbusAppName</key>
+	<string>focus_ios</string>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
