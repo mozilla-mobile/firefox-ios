@@ -40,9 +40,12 @@ final class LoginListViewModel {
         }
     }
     var hasLoadedBreaches: Bool = false
-    init(profile: Profile, searchController: UISearchController) {
+    var theme: Theme
+
+    init(profile: Profile, searchController: UISearchController, theme: Theme) {
         self.profile = profile
         self.searchController = searchController
+        self.theme = theme
     }
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
@@ -167,11 +170,10 @@ final class LoginListViewModel {
 
     // MARK: - UX Constants
     struct LoginListUX {
-        static let RowHeight: CGFloat = 58
-        static let SearchHeight: CGFloat = 58
+        static let rowHeight: CGFloat = 58
+        static let searchHeight: CGFloat = 58
         static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
-        static let NoResultsFont = UIFont.systemFont(ofSize: 16)
-        static let NoResultsTextColor = UIColor.Photon.Grey40
+        static let noResultsFont = UIFont.systemFont(ofSize: 16)
     }
 }
 

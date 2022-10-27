@@ -353,6 +353,7 @@ extension TelemetryWrapper {
         case reduceMotion = "reduce-motion"
         case invertColors = "invert-colors"
         case switchControl = "switch-control"
+        case dynamicTextSize = "dynamic-text-size"
     }
 
     public enum EventObject: String {
@@ -608,6 +609,8 @@ extension TelemetryWrapper {
         case isReduceTransparencyEnabled = "is-reduce-transparency-enabled"
         case isReduceMotionEnabled = "is-reduce-motion-enabled"
         case isInvertColorsEnabled = "is-invert-colors-enabled"
+        case isAccessibilitySizeEnabled = "is-accessibility-size-enabled"
+        case preferredContentSizeCategory = "preferred-content-size-category"
 
         // Onboarding
         case cardType = "card-type"
@@ -1003,6 +1006,21 @@ extension TelemetryWrapper {
             if let isEnabled = extras?[EventExtraKey.isInvertColorsEnabled.rawValue] as? String {
                 let isEnabledExtra = GleanMetrics.Accessibility.InvertColorsExtra(isEnabled: isEnabled)
                 GleanMetrics.Accessibility.invertColors.record(isEnabledExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
+        case(.action, .dynamicTextSize, .app, _, let extras):
+            if let isAccessibilitySizeEnabled = extras?[EventExtraKey.isAccessibilitySizeEnabled.rawValue] as? String,
+               let preferredSize = extras?[EventExtraKey.preferredContentSizeCategory.rawValue] as? String {
+                let dynamicTextExtra = GleanMetrics.Accessibility.DynamicTextExtra(
+                    isAccessibilitySizeEnabled: isAccessibilitySizeEnabled,
+                    preferredSize: preferredSize)
+                GleanMetrics.Accessibility.dynamicText.record(dynamicTextExtra)
             } else {
                 recordUninstrumentedMetrics(
                     category: category,

@@ -113,15 +113,6 @@
 		<string>NewYorkMedium-BoldItalic.otf</string>
 		<string>NewYorkMedium-Regular.otf</string>
 		<string>NewYorkMedium-RegularItalic.otf</string>
-		<string>FiraSans-Bold.ttf</string>
-		<string>FiraSans-BoldItalic.ttf</string>
-		<string>FiraSans-Book.ttf</string>
-		<string>FiraSans-Italic.ttf</string>
-		<string>FiraSans-Light.ttf</string>
-		<string>FiraSans-Medium.ttf</string>
-		<string>FiraSans-Regular.ttf</string>
-		<string>FiraSans-SemiBold.ttf</string>
-		<string>FiraSans-UltraLight.ttf</string>
 	</array>
 	<key>UIApplicationShortcutItems</key>
 	<array>

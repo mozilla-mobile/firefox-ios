@@ -178,7 +178,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private func countPinnedSites(sites: [Site]) -> Int {
         var pinnedSites = 0
         sites.forEach {
-            if let _ = $0 as? PinnedSite { pinnedSites += 1 }
+            if $0 as? PinnedSite != nil { pinnedSites += 1 }
         }
         return pinnedSites
     }

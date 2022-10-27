@@ -16,19 +16,21 @@ enum AddCredentialField: Int {
     }
 }
 
-class AddCredentialViewController: UIViewController {
+class AddCredentialViewController: UIViewController, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
-
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         tableView.accessibilityIdentifier = "Add Credential"
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 44.0
         // Add empty footer view to prevent separators from being drawn past the last item.
         tableView.tableFooterView = UIView()
+        tableView.separatorInset = .zero
     }
     fileprivate weak var websiteField: UITextField!
     fileprivate weak var usernameField: UITextField!
@@ -36,15 +38,24 @@ class AddCredentialViewController: UIViewController {
 
     fileprivate let didSaveAction: (LoginEntry) -> Void
 
-    fileprivate lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
-    fileprivate lazy var saveButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
-        button.isEnabled = false
+    fileprivate lazy var cancelButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         return button
     }()
 
-    init(didSaveAction: @escaping (LoginEntry) -> Void) {
+    fileprivate lazy var saveButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: .SettingsAddCustomEngineSaveButtonText, style: .done, target: self, action: #selector(addCredential))
+        button.isEnabled = false
+        button.tintColor = themeManager.currentTheme.colors.actionPrimary
+        return button
+    }()
+
+    init(didSaveAction: @escaping (LoginEntry) -> Void,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.didSaveAction = didSaveAction
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -65,6 +76,9 @@ class AddCredentialViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        applyTheme()
+        listenForThemeChange()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -129,6 +143,7 @@ extension AddCredentialViewController: UITableViewDataSource {
             loginCell.isEditingFieldData = true
             usernameField = loginCell.descriptionLabel
             usernameField?.accessibilityIdentifier = "usernameField"
+            loginCell.applyTheme(theme: themeManager.currentTheme)
             return loginCell
 
         case .passwordItem:
@@ -139,6 +154,7 @@ extension AddCredentialViewController: UITableViewDataSource {
             loginCell.isEditingFieldData = true
             passwordField = loginCell.descriptionLabel
             passwordField?.accessibilityIdentifier = "passwordField"
+            loginCell.applyTheme(theme: themeManager.currentTheme)
             return loginCell
 
         case .websiteItem:
@@ -149,6 +165,7 @@ extension AddCredentialViewController: UITableViewDataSource {
             websiteField?.accessibilityIdentifier = "websiteField"
             websiteField?.keyboardType = .URL
             loginCell.isEditingFieldData = true
+            loginCell.applyTheme(theme: themeManager.currentTheme)
             return loginCell
         }
     }
@@ -162,6 +179,15 @@ extension AddCredentialViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
+    }
+
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        tableView.separatorColor = theme.colors.borderPrimary
+        tableView.backgroundColor = theme.colors.layer1
+
+        cancelButton.tintColor = theme.colors.actionPrimary
+        saveButton.tintColor = theme.colors.actionPrimary
     }
 }
 
