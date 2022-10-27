@@ -80,7 +80,7 @@ class SecurityTests: KIFTestCase {
 
         // Workaround number of tabs not updated
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
@@ -101,7 +101,7 @@ class SecurityTests: KIFTestCase {
 
         // Workaround number of tabs not updated
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().wait(forTimeInterval: 5)

@@ -74,8 +74,8 @@ class TabsPerformanceTest: BaseTestCase {
                 // go to tab tray
                 waitForExistence(app.buttons["TabToolbar.tabsButton"])
                 app.buttons["TabToolbar.tabsButton"].tap()
-                waitForExistence(app.buttons["doneButtonTabTray"])
-                app.buttons["doneButtonTabTray"].tap()
+                waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
+                app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
             }
         }
     }
@@ -92,7 +92,7 @@ class TabsPerformanceTest: BaseTestCase {
                 XCTMemoryMetric()]) {
                 // go to tab tray
                 app.buttons["TabToolbar.tabsButton"].tap()
-                app.buttons["doneButtonTabTray"].tap()
+                app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
             }
         }
     }

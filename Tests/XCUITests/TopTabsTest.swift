@@ -130,8 +130,8 @@ class TopTabsTest: BaseTestCase {
         if iPad() {
             waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
             app.buttons["TopTabsViewController.tabsButton"].tap()
-            waitForExistence(app.buttons["newTabButtonTabTray"], timeout: 10)
-            app.buttons["newTabButtonTabTray"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: 10)
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
@@ -178,8 +178,8 @@ class TopTabsTest: BaseTestCase {
         if iPad() {
             waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
             app.buttons["TopTabsViewController.tabsButton"].tap()
-            waitForExistence(app.buttons["newTabButtonTabTray"], timeout: 10)
-            app.buttons["newTabButtonTabTray"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: 10)
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)

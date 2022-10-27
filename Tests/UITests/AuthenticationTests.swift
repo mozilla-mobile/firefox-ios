@@ -62,7 +62,7 @@ class AuthenticationTests: KIFTestCase {
             tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         }
         tester().tapView(withAccessibilityLabel: "smallPrivateMask")
-        tester().tapView(withAccessibilityIdentifier: "newTabButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.newTabButton)
         tester().waitForAnimationsToFinish()
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().waitForAnimationsToFinish()

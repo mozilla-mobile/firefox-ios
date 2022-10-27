@@ -759,7 +759,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         // Both iPad and iPhone use the same accessibility identifiers for buttons,
         // even thought they may be in separate locations design wise.
-        screenState.tap(app.buttons["newTabButtonTabTray"],
+        screenState.tap(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton],
                         forAction: Action.OpenNewTabFromTabTray,
                         transitionTo: NewTabScreen)
         if isTablet {
@@ -777,9 +777,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             privateModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 1)
             syncModeSelector = app.navigationBars.segmentedControls.buttons.element(boundBy: 2)
         } else {
-            regularModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 0)
-            privateModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 1)
-            syncModeSelector = app.toolbars["Toolbar"].segmentedControls["navBarTabTray"].buttons.element(boundBy: 2)
+            regularModeSelector = app.toolbars["Toolbar"]
+                .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 0)
+            privateModeSelector = app.toolbars["Toolbar"]
+                .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 1)
+            syncModeSelector = app.toolbars["Toolbar"]
+                .segmentedControls[AccessibilityIdentifiers.TabTray.navBarSegmentedControl].buttons.element(boundBy: 2)
         }
         screenState.tap(regularModeSelector, forAction: Action.ToggleRegularMode) { userState in
             userState.isPrivate = !userState.isPrivate
@@ -1014,7 +1017,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
-        app.buttons["newTabButtonTabTray"].tap()
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
         self.nowAt(NewTabScreen)
     }
 

@@ -225,7 +225,7 @@ class LoginManagerTests: KIFTestCase {
 
         // Workaround
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
@@ -250,7 +250,7 @@ class LoginManagerTests: KIFTestCase {
 
         // Workaround
         tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
-        tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.closeAllTabsButton)
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
