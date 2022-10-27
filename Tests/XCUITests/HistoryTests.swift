@@ -10,9 +10,6 @@ let emptyRecentlyClosedMesg = "Websites you’ve visited recently will show up h
 // This is part of the info the user will see in recent closed tabs once the default visited website (https://www.mozilla.org/en-US/book/) is closed
 let bookOfMozilla = ["file": "test-mozilla-book.html", "title": "The Book of Mozilla", "label": "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"]
 
-// Default timeout for waitForExistence and waitForNoExistence
-let TIMEOUT: TimeInterval = 15
-let TIMEOUT_LONG: TimeInterval = 45
 
 class HistoryTests: BaseTestCase {
 
@@ -75,13 +72,11 @@ class HistoryTests: BaseTestCase {
         // Go to Clear Data
         navigator.goto(NewTabScreen)
         closeKeyboard()
-        navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
 
         // Back on History panel view check that there is not any item
         navigator.goto(HomePanelsScreen)
         closeKeyboard()
-        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         waitForExistence(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
@@ -116,7 +111,6 @@ class HistoryTests: BaseTestCase {
     func testRecentlyClosedNoWebsiteOpen() {
         // "Recently Closed Tabs List" is empty by default
         closeKeyboard()
-        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -142,6 +136,7 @@ class HistoryTests: BaseTestCase {
 
         // On regular mode, the closed tab is listed in "Recently Closed Tabs List"
         navigator.nowAt(NewTabScreen)
+        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -149,7 +144,7 @@ class HistoryTests: BaseTestCase {
         // On private mode, the closed tab on regular mode is listed in "Recently Closed Tabs List" as well
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
+        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -157,6 +152,9 @@ class HistoryTests: BaseTestCase {
 
     func testRecentlyClosedPrivateMode() {
         // Open "Book of Mozilla" on private mode and close the tab
+        closeKeyboard()
+        waitForTabsButton()
+        navigator.goto(TabTray)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         openBookOfMozilla()
@@ -165,13 +163,14 @@ class HistoryTests: BaseTestCase {
         // "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
+        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
         XCTAssertFalse(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
     }
 
-    func testRemoveAllTabsButton() {
+    func testRemoveAllTabsButtonRecentlyClosedHistory() {
         // Open "Book of Mozilla"
         openBookOfMozilla()
 
@@ -182,7 +181,6 @@ class HistoryTests: BaseTestCase {
 
         // The closed tab is *not* listed in "Recently Closed Tabs List" (FXIOS-5128)
         closeKeyboard()
-        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
@@ -196,6 +194,7 @@ class HistoryTests: BaseTestCase {
 
         // Once the website is visited and closed it will appear in Recently Closed Tabs list
         navigator.nowAt(NewTabScreen)
+        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -210,7 +209,6 @@ class HistoryTests: BaseTestCase {
         // The closed tab is *not* listed in "Recently Closed Tabs List"
         navigator.goto(HomePanelsScreen)
         closeKeyboard()
-        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
@@ -224,6 +222,7 @@ class HistoryTests: BaseTestCase {
 
         // Long tap a recently closed item launches a context menu
         navigator.nowAt(NewTabScreen)
+        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -240,6 +239,7 @@ class HistoryTests: BaseTestCase {
 
         // Open the page on a new tab from History Recently Closed screen
         navigator.nowAt(NewTabScreen)
+        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -250,7 +250,11 @@ class HistoryTests: BaseTestCase {
 
         // The page is opened on the new tab
         navigator.goto(TabTray)
-        waitForExistence(app.staticTexts["Open Tabs"])
+        if isTablet {
+            waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
+        } else {
+            waitForExistence(app.navigationBars.staticTexts["Open Tabs"])
+        }
         XCTAssertTrue(app.staticTexts[bookOfMozilla["title"]!].exists)
         XCTAssertEqual(userState.numTabs, 2)
     }
@@ -262,6 +266,7 @@ class HistoryTests: BaseTestCase {
 
         // Open the page on a new private tab from History Recently Closed screen
         navigator.nowAt(NewTabScreen)
+        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -271,10 +276,18 @@ class HistoryTests: BaseTestCase {
 
         // The page is opened only on the new private tab
         navigator.goto(TabTray)
-        waitForExistence(app.staticTexts["Open Tabs"])
+        if isTablet {
+            waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
+        } else {
+            waitForExistence(app.navigationBars.staticTexts["Open Tabs"])
+        }
         XCTAssertFalse(app.staticTexts[bookOfMozilla["title"]!].exists)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        waitForExistence(app.staticTexts["Private Browsing"])
+        if isTablet {
+            XCTAssertTrue(app.segmentedControls.buttons["Private"].isSelected)
+        } else {
+            waitForExistence(app.staticTexts["Private Browsing"])
+        }
         XCTAssertTrue(app.staticTexts[bookOfMozilla["title"]!].exists)
         XCTAssertEqual(userState.numTabs, 1)
     }
@@ -301,7 +314,6 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
         closeKeyboard()
-        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
@@ -313,7 +325,6 @@ class HistoryTests: BaseTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.goto(NewTabScreen)
         closeKeyboard()
-        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
@@ -369,6 +380,7 @@ class HistoryTests: BaseTestCase {
     private func closeKeyboard() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
     }
 
     /* Disabled due to default browser onboarding card shown
@@ -420,8 +432,7 @@ class HistoryTests: BaseTestCase {
     func testDeleteHistoryEntryBySwiping() throws {
         if processIsTranslatedStr() == m1Rosetta {
             throw XCTSkip("Swipe gesture does not work on M1")
-        }
-        else {
+        } else {
             navigateToGoogle()
             navigator.goto(LibraryPanel_History)
             print(app.debugDescription)
