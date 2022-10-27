@@ -44,11 +44,11 @@ class TPAccessoryInfo: ThemedTableViewController {
         tableView.estimatedRowHeight = 130
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
-        tableView.tableHeaderView = headerView()
 
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         applyTheme()
+        listenForThemeChange()
     }
 
     func headerView() -> UIView {
@@ -58,7 +58,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         let header = UILabel()
         header.text = .TPAccessoryInfoBlocksTitle
         header.font = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
-        header.textColor = UIColor.theme.tableView.headerTextLight
+        header.textColor = themeManager.currentTheme.colors.textSecondary
 
         stack.addArrangedSubview(UIView())
         stack.addArrangedSubview(header)
@@ -76,12 +76,17 @@ class TPAccessoryInfo: ThemedTableViewController {
         topStack.layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
         topStack.isLayoutMarginsRelativeArrangement = true
 
-        sep.backgroundColor = UIColor.theme.tableView.separator
+        sep.backgroundColor = themeManager.currentTheme.colors.borderPrimary
         sep.snp.makeConstraints { make in
             make.height.equalTo(0.5)
             make.width.equalToSuperview()
         }
         return topStack
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+        tableView.tableHeaderView = headerView()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -94,6 +99,7 @@ class TPAccessoryInfo: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        cell.applyTheme(theme: themeManager.currentTheme)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 cell.textLabel?.text = .TPSocialBlocked
@@ -125,14 +131,14 @@ class TPAccessoryInfo: ThemedTableViewController {
                 cell.textLabel?.text = .TPCategoryDescriptionContentTrackers
             }
         }
-        cell.imageView?.tintColor = UIColor.theme.tableView.rowText
+        cell.imageView?.tintColor = themeManager.currentTheme.colors.iconPrimary
         if indexPath.row == 1 {
             cell.textLabel?.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
         }
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
         cell.backgroundColor = .clear
-        cell.textLabel?.textColor = UIColor.theme.tableView.rowDetailText
+        cell.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
         cell.selectionStyle = .none
         return cell
     }
@@ -244,7 +250,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline, size: 12.0)
         var attributes = [NSAttributedString.Key: AnyObject]()
         attributes[NSAttributedString.Key.font] = font
-        attributes[NSAttributedString.Key.foregroundColor] = UIColor.theme.general.highlightBlue
+        attributes[NSAttributedString.Key.foregroundColor] = themeManager.currentTheme.colors.actionPrimary
 
         button.setAttributedTitle(NSAttributedString(string: title, attributes: attributes), for: .normal)
         button.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)

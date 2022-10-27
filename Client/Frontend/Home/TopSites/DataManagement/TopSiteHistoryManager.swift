@@ -46,7 +46,7 @@ class TopSiteHistoryManager: DataObserver, Loggable {
 
     func getTopSites(completion: @escaping ([Site]?) -> Void) {
         topSitesProvider.getTopSites { [weak self] result in
-            guard let _ = self else { return }
+            guard self != nil else { return }
             completion(result)
         }
     }

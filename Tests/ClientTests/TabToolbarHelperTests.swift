@@ -68,7 +68,9 @@ class MockToolbarButton: ToolbarButton {
 class MockTabToolbar: TabToolbarProtocol {
     var tabToolbarDelegate: TabToolbarDelegate? {
         get { return nil }
+        // swiftlint:disable unused_setter_value
         set { }
+        // swiftlint:enable unused_setter_value
     }
 
     var _tabsButton = MockTabsButton()
