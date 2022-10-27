@@ -35,7 +35,7 @@ public extension LoginsStoreError {
 public extension EncryptedLogin {
     init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
         let hostname: String
-        if let _ = protectionSpace.protocol {
+        if protectionSpace.protocol != nil {
             hostname = protectionSpace.urlString()
         } else {
             hostname = protectionSpace.host
@@ -153,9 +153,7 @@ public extension EncryptedLogin {
 
     var hasMalformedHostname: Bool {
         let hostnameURL = fields.origin.asURL
-        guard let _ = hostnameURL?.host else {
-            return true
-        }
+        guard hostnameURL?.host != nil else { return true }
 
         return false
     }
@@ -250,7 +248,7 @@ public class LoginEntryFlattened {
 public extension LoginEntry {
     init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
         let hostname: String
-        if let _ = protectionSpace.protocol {
+        if protectionSpace.protocol != nil {
             hostname = protectionSpace.urlString()
         } else {
             hostname = protectionSpace.host
@@ -349,7 +347,8 @@ public extension LoginEntry {
         }
 
         // Logins with both a formSubmitUrl and httpRealm are not valid.
-        if let _ = self.fields.formActionOrigin, let _ = self.fields.httpRealm {
+        if self.fields.formActionOrigin != nil,
+           self.fields.httpRealm != nil {
             return Maybe(failure: LoginRecordError(description: "Can't add a login with both a httpRealm and formSubmitUrl."))
         }
 

@@ -145,7 +145,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         view.addSubview(spinner)
 
         let error = UILabel()
-        if let _ = settingsTitle {
+        if settingsTitle != nil {
             error.text = .SettingsContentPageLoadError
             error.textColor = themeManager.currentTheme.colors.textWarning
             error.textAlignment = .center

@@ -169,7 +169,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
     }
 
     func configure(with site: Site) {
-        if let _ = site.icon {
+        if site.icon != nil {
             self.siteImageView.setFavicon(forSite: site) {
                 self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheet.UX.IconSize)
             }

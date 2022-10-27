@@ -49,7 +49,6 @@ disabled_rules: # rule identifiers to exclude from running
 - unused_closure_parameter
 - unused_control_flow_label
 - unused_enumerated
-- unused_optional_binding
 - unused_setter_value
 - valid_ibinspectable
 - vertical_parameter_alignment
@@ -72,7 +71,6 @@ opt_in_rules: # some rules are only opt-in
   # - redundant_type_annotation
   # Find all the available rules by running:
   # swiftlint rules
-
   - closing_brace
   - contains_over_filter_count
   - contains_over_filter_is_empty
@@ -87,6 +85,7 @@ opt_in_rules: # some rules are only opt-in
   - multiline_arguments
   - opening_brace
   - return_arrow_whitespace
+  - unused_import
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - build

@@ -60,7 +60,7 @@ public class PushRegistrationAPIImplementation: PushRegistrationAPI {
                 return
             }
 
-            guard let _ = validatedHTTPResponse(response, contentType: "application/json"),
+            guard validatedHTTPResponse(response, contentType: "application/json") != nil,
                   let data = data,
                   !data.isEmpty
             else {

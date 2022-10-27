@@ -214,7 +214,7 @@ class SyncNowSetting: WithAccountSetting {
         if let syncStatus = profile.syncManager.syncDisplayState {
             switch syncStatus {
             case .bad(let message):
-                if let _ = message {
+                if message != nil {
                     // add the red warning symbol
                     // add a link to the MANA page
                     cell.detailTextLabel?.attributedText = nil

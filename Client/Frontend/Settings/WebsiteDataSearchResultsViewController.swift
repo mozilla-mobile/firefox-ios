@@ -69,7 +69,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     }
 
     func reloadData() {
-        guard let _ = tableView else { return }
+        guard tableView != nil else { return }
         // to update filteredSiteRecords before reloading the tableView
         filterContentForSearchText(currentSearchText)
     }

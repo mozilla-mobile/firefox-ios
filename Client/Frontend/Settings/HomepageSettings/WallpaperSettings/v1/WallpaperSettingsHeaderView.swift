@@ -85,9 +85,10 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
             contentStackView.addArrangedSubview(descriptionLabel)
         }
 
-        if let _ = viewModel.buttonTitle,
+        if viewModel.buttonTitle != nil,
            let buttonA11y = viewModel.buttonA11yIdentifier,
-           let _ = viewModel.buttonAction {
+           viewModel.buttonAction != nil {
+            setButtonStyle()
             learnMoreButton.addTarget(
                 self,
                 action: #selector((buttonTapped(_:))),
