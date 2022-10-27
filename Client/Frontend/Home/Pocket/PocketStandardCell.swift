@@ -208,5 +208,7 @@ extension PocketStandardCell: ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textSecondary
         sponsoredLabel.textColor = theme.colors.textSecondary
+
+        adjustBlur(theme: theme)
     }
 }

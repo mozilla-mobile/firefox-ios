@@ -142,6 +142,7 @@ private extension WallpaperCollectionViewCell {
     }
 }
 
+// Laurie - TODO
 // MARK: - Notifications
 extension WallpaperCollectionViewCell: Notifiable, NotificationThemeable {
     func handleNotifications(_ notification: Notification) {

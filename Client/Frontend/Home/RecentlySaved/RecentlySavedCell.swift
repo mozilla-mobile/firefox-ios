@@ -187,7 +187,7 @@ extension RecentlySavedCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         itemTitle.textColor = theme.colors.textPrimary
         fallbackFaviconBackground.backgroundColor = theme.colors.layer1
-        fallbackFaviconBackground.layer.borderColor = theme.colors.borderPrimary.cgColor
+        fallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
 
         adjustBlur(theme: theme)
     }

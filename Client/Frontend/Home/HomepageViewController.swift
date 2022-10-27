@@ -300,8 +300,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     }
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
-        updateStatusBar()
+        let theme = themeManager.currentTheme
+        viewModel.theme = theme
+        view.backgroundColor = theme.colors.layer1
+        updateStatusBar(theme: theme)
     }
 
     func scrollToTop(animated: Bool = false) {
@@ -342,7 +344,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         )
         updatePocketCellsWithVisibleRatio(cells: cells, relativeRect: relativeRect)
 
-        updateStatusBar()
+        updateStatusBar(theme: themeManager.currentTheme)
     }
 
     private func showSiteWithURLHandler(_ url: URL, isGoogleTopSite: Bool = false) {
@@ -729,8 +731,8 @@ private extension HomepageViewController {
         return SearchBarSettingsViewModel(prefs: viewModel.profile.prefs).searchBarPosition == .bottom
     }
 
-    func updateStatusBar() {
-        let backgroundColor = themeManager.currentTheme.colors.layer1
+    func updateStatusBar(theme: Theme) {
+        let backgroundColor = theme.colors.layer1
         statusBarView.backgroundColor = backgroundColor.withAlphaComponent(scrollOffset)
 
         if let statusBarFrame = statusBarFrame {

@@ -78,7 +78,7 @@ extension CustomizeHomepageSectionCell: Blurrable {
 // MARK: - ThemeApplicable
 extension CustomizeHomepageSectionCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        goToSettingsButton.backgroundColor = theme.colors.layer5
+        goToSettingsButton.backgroundColor = theme.colors.layer4
         goToSettingsButton.setTitleColor(theme.colors.textPrimary, for: .normal)
 
         adjustBlur(theme: theme)

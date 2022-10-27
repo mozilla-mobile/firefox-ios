@@ -91,9 +91,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         view.backgroundColor = .clear
     }
 
-    // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     // MARK: - Inits
 
     override init(frame: CGRect) {
@@ -107,10 +104,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -244,8 +237,7 @@ extension JumpBackInCell: ThemeApplicable {
         faviconImage.tintColor = theme.colors.iconPrimary
         fallbackFaviconImage.tintColor = theme.colors.iconPrimary
         fallbackFaviconBackground.backgroundColor = theme.colors.layer1
-
-        fallbackFaviconBackground.layer.borderColor = theme.colors.borderPrimary.cgColor
+        fallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
         adjustBlur(theme: theme)
     }
 }

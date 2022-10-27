@@ -35,7 +35,6 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Properties
     private var viewModel: HomepageMessageCardViewModel?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var kvoToken: NSKeyValueObservation?
 
     // MARK: - UI
@@ -233,6 +232,7 @@ extension HomepageMessageCardCell: ThemeApplicable {
         descriptionText.textColor = theme.colors.textPrimary
         dismissButton.imageView?.tintColor = theme.colors.textPrimary
         ctaButton.backgroundColor = theme.colors.actionPrimary
+        ctaButton.setTitleColor(theme.colors.textInverted, for: .normal)
         backgroundColor = .clear
 
         adjustBlur(theme: theme)

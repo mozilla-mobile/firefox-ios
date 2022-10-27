@@ -370,7 +370,9 @@ extension SyncedTabCell: ThemeApplicable {
 
         tabFallbackFaviconImage.tintColor = theme.colors.iconPrimary
         tabFallbackFaviconBackground.backgroundColor = theme.colors.layer1
-        tabFallbackFaviconBackground.layer.borderColor = theme.colors.borderPrimary.cgColor
+        tabFallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
+
+        adjustBlur(theme: theme)
     }
 }
 
@@ -388,6 +390,7 @@ extension SyncedTabCell: Blurrable {
     }
 }
 
+// Laurie - needed?
 // MARK: - Notifiable
 extension SyncedTabCell: Notifiable {
     func handleNotifications(_ notification: Notification) {
