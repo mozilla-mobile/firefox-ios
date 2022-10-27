@@ -429,7 +429,6 @@ class URLBar: UIView {
     @objc public func activateTextField() {
         urlTextField.isUserInteractionEnabled = true
         urlTextField.becomeFirstResponder()
-        highlightText(urlTextField)
         isEditing = true
     }
 
@@ -801,11 +800,10 @@ class URLBar: UIView {
         urlTextField.text = displayFullUrl ? fullUrl : displayText
         truncatedUrlText.text = truncatedURL
     }
+
     private func highlightText(_ textField: UITextField) {
         guard textField.text != nil else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
-            textField.selectAll(nil)
-        }
+        textField.selectAll(nil)
     }
 
     private func activateConstraints(_ activate: Bool, shownConstraints: [Constraint]?, hiddenConstraints: [Constraint]?) {
@@ -875,11 +873,16 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
 
-        setTextToURL(displayFullUrl: true)
+        DispatchQueue.main.async {
+            self.setTextToURL(displayFullUrl: true)
+        }
 
         if !isEditing {
             isEditing = true
             delegate?.urlBarDidActivate(self)
+            DispatchQueue.main.async {
+                self.highlightText(autocompleteTextField)
+            }
         }
 
         // When text.characters.count == 0, it is the HomeView
