@@ -53,12 +53,10 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener,
-                            FeatureFlaggable, Themeable {
-
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
+class SearchViewController: SiteTableViewController,
+                            KeyboardHelperDelegate,
+                            LoaderListener,
+                            FeatureFlaggable {
 
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
@@ -102,15 +100,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
          viewModel: SearchViewModel,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -629,7 +623,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         super.applyTheme()
         view.backgroundColor = themeManager.currentTheme.colors.layer5
         searchEngineContainerView.layer.backgroundColor = themeManager.currentTheme.colors.layer1.cgColor
-        searchEngineContainerView.layer.shadowColor = themeManager.currentTheme.colors.shadow.cgColor
+        searchEngineContainerView.layer.shadowColor = themeManager.currentTheme.colors.shadowDefault.cgColor
         reloadData()
     }
 
