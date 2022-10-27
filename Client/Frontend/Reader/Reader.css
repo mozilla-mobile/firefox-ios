@@ -3,30 +3,6 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 @font-face {
-    font-family: sf-pro;
-    src: url('/reader-mode/fonts/SF-Pro-Text-Regular.otf');
-}
-
-@font-face {
-    font-family: sf-pro;
-    src: url('/reader-mode/fonts/SF-Pro-Text-Bold.otf');
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: sf-pro;
-    src: url('/reader-mode/fonts/SF-Pro-Text-RegularItalic.otf');
-    font-style: italic;
-}
-
-@font-face {
-    font-family: sf-pro;
-    src: url('/reader-mode/fonts/SF-Pro-Text-BoldItalic.otf');
-    font-weight: bold;
-    font-style: italic;
-}
-
-@font-face {
     font-family: new-york;
     src: url('/reader-mode/fonts/NewYorkMedium-Regular.otf');
 }
@@ -61,6 +37,7 @@ body {
   transition-duration: 0.4s;
   margin-left: auto;
   margin-right: auto;
+  font-family: -apple-system, sans-serif;
 }
 
 .light {
@@ -79,11 +56,11 @@ body {
 }
 
 .sans-serif {
-  font-family: sf-pro;
+  font-family: -apple-system, sans-serif;
 }
 
 .sans-serif-bold {
-  font-family: sf-pro;
+  font-family: -apple-system, sans-serif;
   font-weight: bold;
 }
 
@@ -111,7 +88,7 @@ body {
 
 .domain,
 .credits {
-  font-family: sf-pro;
+font-family: -apple-system, sans-serif;
 }
 
 .domain {
@@ -392,7 +369,7 @@ body {
 .content .caption,
 .content .wp-caption-text,
 .content figcaption {
-  font-family: sf-pro;
+  font-family: -apple-system, sans-serif;
   margin: 0px !important;
   padding-top: 4px !important;
 }
@@ -524,7 +501,7 @@ body {
 }
 
 .toolbar {
-  font-family: "Clear Sans",sf-pro;
+  font-family: -apple-system, sans-serif;
   transition-property: visibility, opacity;
   transition-duration: 0.7s;
   visibility: visible;
@@ -668,7 +645,7 @@ body {
 .segmented-button > li > a {
   display: block;
   padding: 5px 0;
-  font-family: "Clear Sans",sf-pro;
+  font-family: -apple-system, sans-serif;
   font-weight: lighter;
 }
 
