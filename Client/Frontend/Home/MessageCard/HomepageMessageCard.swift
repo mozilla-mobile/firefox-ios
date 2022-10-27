@@ -160,8 +160,7 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     // the view bounds is incorrect causing weird shadow effect
     private func observeCardViewBounds() {
         kvoToken = cardView.observe(\.bounds, options: .new) { [weak self] _, _ in
-            // TODO: Laurie
-//            self?.updateShadowPath()
+            self?.updateShadowPath()
         }
     }
 
@@ -170,7 +169,10 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
         cardView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         cardView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
         cardView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        updateShadowPath()
+    }
 
+    private func updateShadowPath() {
         cardView.layer.shadowPath = UIBezierPath(roundedRect: cardView.bounds,
                                                  cornerRadius: UX.cornerRadius).cgPath
     }
