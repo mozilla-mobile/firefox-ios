@@ -115,9 +115,11 @@ open class TokenServerClient {
         if json.error != nil {
             return nil
         }
-        if 200 <= statusCode && statusCode <= 299 {
+
+        if statusCode >= 200 && statusCode <= 299 {
             return nil
         }
+        
         return TokenServerError.remote(
             code: Int32(statusCode),
             status: json["status"].string,
