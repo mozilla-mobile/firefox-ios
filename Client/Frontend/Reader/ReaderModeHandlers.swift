@@ -22,7 +22,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
 
     static func register(_ webServer: WebServer, profile: Profile) {
         // Register our fonts and css, which we want to expose to web content that we present in the WebView
-        webServer.registerMainBundleResourcesOfType("ttf", module: "reader-mode/fonts")
+        webServer.registerMainBundleResourcesOfType("otf", module: "reader-mode/fonts")
         webServer.registerMainBundleResource("Reader.css", module: "reader-mode/styles")
 
         // Register a handler that simply lets us know if a document is in the cache or not. This is called from the

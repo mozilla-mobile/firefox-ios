@@ -9,9 +9,13 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 enum ReaderModeBarButtonType {
-    case markAsRead, markAsUnread, settings, addToReadingList, removeFromReadingList
+    case markAsRead
+    case markAsUnread
+    case settings
+    case addToReadingList
+    case removeFromReadingList
 
-    fileprivate var localizedDescription: String {
+    private var localizedDescription: String {
         switch self {
         case .markAsRead: return .ReaderModeBarMarkAsRead
         case .markAsUnread: return .ReaderModeBarMarkAsUnread
@@ -21,7 +25,7 @@ enum ReaderModeBarButtonType {
         }
     }
 
-    fileprivate var imageName: String {
+    private var imageName: String {
         switch self {
         case .markAsRead: return "MarkAsRead"
         case .markAsUnread: return "MarkAsUnread"
@@ -31,7 +35,7 @@ enum ReaderModeBarButtonType {
         }
     }
 
-    fileprivate var image: UIImage? {
+    var image: UIImage? {
         let image = UIImage(named: imageName)
         image?.accessibilityLabel = localizedDescription
         return image
@@ -67,7 +71,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         readStatusButton = createButton(.markAsRead, action: #selector(tappedReadStatusButton))
         readStatusButton.accessibilityIdentifier = "ReaderModeBarView.readStatusButton"
         NSLayoutConstraint.activate([
-            readStatusButton.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+            readStatusButton.leadingAnchor.constraint(equalTo: leadingAnchor),
             readStatusButton.heightAnchor.constraint(equalTo: heightAnchor),
             readStatusButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             readStatusButton.widthAnchor.constraint(equalToConstant: 80)
@@ -98,7 +102,9 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
+
         guard let context = UIGraphicsGetCurrentContext() else { return }
+
         context.setLineWidth(0.5)
         context.setStrokeColor(UIColor.Photon.Grey50.cgColor)
         context.beginPath()
@@ -108,7 +114,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         context.strokePath()
     }
 
-    fileprivate func createButton(_ type: ReaderModeBarButtonType, action: Selector) -> UIButton {
+    private func createButton(_ type: ReaderModeBarButtonType, action: Selector) -> UIButton {
         let button: UIButton = .build { button in
             button.setImage(type.image, for: [])
             button.addTarget(self, action: action, for: .touchUpInside)

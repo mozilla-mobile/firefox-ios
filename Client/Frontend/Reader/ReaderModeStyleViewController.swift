@@ -19,15 +19,15 @@ protocol ReaderModeStyleViewControllerDelegate: AnyObject {
 class ReaderModeStyleViewController: UIViewController, NotificationThemeable {
     var delegate: ReaderModeStyleViewControllerDelegate?
 
-    fileprivate var fontTypeButtons: [FontTypeButton]!
-    fileprivate var fontSizeLabel: FontSizeLabel!
-    fileprivate var fontSizeButtons: [FontSizeButton]!
-    fileprivate var themeButtons: [ThemeButton]!
-    fileprivate var separatorLines = [UIView.build(), UIView.build(), UIView.build()]
+    private var fontTypeButtons: [FontTypeButton]!
+    private var fontSizeLabel: FontSizeLabel!
+    private var fontSizeButtons: [FontSizeButton]!
+    private var themeButtons: [ThemeButton]!
+    private var separatorLines = [UIView.build(), UIView.build(), UIView.build()]
 
-    fileprivate var fontTypeRow: UIView!
-    fileprivate var fontSizeRow: UIView!
-    fileprivate var brightnessRow: UIView!
+    private var fontTypeRow: UIView!
+    private var fontSizeRow: UIView!
+    private var brightnessRow: UIView!
 
     // Keeps user-defined reader color until reader mode is closed or reloaded
     fileprivate var isUsingUserDefinedColor = false
@@ -309,7 +309,7 @@ class FontTypeButton: UIButton {
         case .sansSerif,
              .sansSerifBold:
             setTitle(.ReaderModeStyleSansSerifFontType, for: [])
-            let f = UIFont(name: "FiraSans-Book", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+            let f = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             titleLabel?.font = f
         case .serif,
              .serifBold:
@@ -347,7 +347,7 @@ class FontSizeButton: UIButton {
         }
 
         // TODO Does this need to change with the selected font type? Not sure if makes sense for just +/-
-        titleLabel?.font = UIFont(name: "FiraSans-Light", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
+        titleLabel?.font = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
     }
 }
 
@@ -369,7 +369,7 @@ class FontSizeLabel: UILabel {
             switch fontType {
             case .sansSerif,
                  .sansSerifBold:
-                font = UIFont(name: "FiraSans-Book", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
+                font = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
             case .serif,
                  .serifBold:
                 font = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
@@ -412,7 +412,7 @@ class ThemeButton: UIButton {
             switch fontType {
             case .sansSerif,
                  .sansSerifBold:
-                titleLabel?.font = UIFont(name: "FiraSans-Book", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+                titleLabel?.font = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             case .serif,
                  .serifBold:
                 titleLabel?.font = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
