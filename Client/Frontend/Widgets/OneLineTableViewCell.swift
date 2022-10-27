@@ -21,6 +21,11 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
     struct UX {
         static let imageSize: CGFloat = 29
         static let borderViewMargin: CGFloat = 16
+        static let labelFontSize: CGFloat = 17
+        static let verticalMargin: CGFloat = 8
+        static let leftImageViewSize: CGFloat = 28
+        static let separatorViewHeight: CGFloat = 0.7
+        static let labelMargin: CGFloat = 4
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -37,8 +42,8 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                   size: UX.labelFontSize)
         label.textAlignment = .natural
     }
 
@@ -83,44 +88,43 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                              constant: 8),
+                                               constant: UX.verticalMargin),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                  constant: -8),
+                                                  constant: -UX.verticalMargin),
             containerView.trailingAnchor.constraint(equalTo: containerViewTrailingAnchor),
 
             leftImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                  constant: 16),
-            leftImageView.widthAnchor.constraint(equalToConstant: 28),
-            leftImageView.heightAnchor.constraint(equalToConstant: 28),
+                                                   constant: UX.borderViewMargin),
+            leftImageView.widthAnchor.constraint(equalToConstant: UX.leftImageViewSize),
+            leftImageView.heightAnchor.constraint(equalToConstant: UX.leftImageViewSize),
             leftImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor,
                                                     constant: -midViewLeadingMargin),
 
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor,
-                                            constant: 4),
+                                            constant: UX.labelMargin),
             titleLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                               constant: -4),
+                                               constant: -UX.labelMargin),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                 constant: -8),
+                                                 constant: -UX.verticalMargin),
 
             bottomSeparatorView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             bottomSeparatorView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             bottomSeparatorView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            bottomSeparatorView.heightAnchor.constraint(equalToConstant: 0.7)
+            bottomSeparatorView.heightAnchor.constraint(equalToConstant: UX.separatorViewHeight)
         ])
 
         selectedBackgroundView = selectedView
-        applyTheme()
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.selectionStyle = .default
+
+        selectionStyle = .default
         separatorInset = defaultSeparatorInset
         titleLabel.text = nil
         leftImageView.image = nil
-        applyTheme()
     }
 
     // To simplify setup, OneLineTableViewCell now has a viewModel
@@ -142,11 +146,11 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
         if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey80
-            self.titleLabel.textColor = .white
+            backgroundColor = UIColor.Photon.Grey80
+            titleLabel.textColor = .white
         } else {
-            self.backgroundColor = .white
-            self.titleLabel.textColor = .black
+            backgroundColor = .white
+            titleLabel.textColor = .black
         }
 
         bottomSeparatorView.backgroundColor = UIColor.Photon.Grey40
