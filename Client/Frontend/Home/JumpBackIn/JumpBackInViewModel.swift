@@ -160,10 +160,10 @@ class JumpBackInViewModel: FeatureFlaggable {
     private func isPadInLandscapeSplit(split: CGFloat,
                                        isPortrait: Bool = UIWindow.isPortrait,
                                        device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
-        guard device == .pad, 
-                   !isPortrait, 
-                   isMultitasking, 
-                   let window = UIWindow.keyWindow
+        guard device == .pad,
+              !isPortrait,
+              isMultitasking,
+              let window = UIWindow.keyWindow
         else { return false }
 
         let splitScreenWidth = window.screen.bounds.width * split
