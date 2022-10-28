@@ -250,8 +250,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         }
 
         // Set interaction behavior and style
-        cell.titleLabel.alpha = isEnabled ? 1.0 : 0.5
-        cell.leftImageView.alpha = isEnabled ? 1.0 : 0.5
+        cell.configureTapState(isEnabled: isEnabled)
         cell.selectionStyle = isEnabled ? .default : .none
         cell.isUserInteractionEnabled = isEnabled
     }
@@ -371,10 +370,16 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }
 
     private func configureHistoryActionableCell(_ historyActionable: HistoryActionablesModel, _ cell: OneLineTableViewCell) -> OneLineTableViewCell {
-        cell.titleLabel.text = historyActionable.itemTitle
-        cell.leftImageView.image = historyActionable.itemImage
+
         cell.leftImageView.tintColor = .theme.browser.tint
         cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
+
+        let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
+                                                      leftImageView: historyActionable.itemImage,
+                                                      leftImageViewContentView: .scaleAspectFit,
+                                                      accessoryView: nil,
+                                                      accessoryType: .none)
+        cell.configure(viewModel: viewModel)
         cell.accessibilityIdentifier = historyActionable.itemA11yId
         setTappableStateAndStyle(with: historyActionable, on: cell)
 
