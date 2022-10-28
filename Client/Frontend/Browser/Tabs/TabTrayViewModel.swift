@@ -46,6 +46,11 @@ class TabTrayViewModel {
         }
     }
 
+    enum Layout: Equatable {
+        case regular // iPad
+        case compact // iPhone
+    }
+
     let profile: Profile
     let tabManager: TabManager
 
@@ -54,6 +59,7 @@ class TabTrayViewModel {
     let syncedTabsController: RemoteTabsPanel
 
     var segmentToFocus: TabTrayViewModel.Segment?
+    var layout: Layout = .compact
 
     var normalTabsCount: String {
         (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
@@ -75,8 +81,8 @@ class TabTrayViewModel {
         self.segmentToFocus = segmentToFocus
     }
 
-    func navTitle(for segmentIndex: Int, foriPhone: Bool) -> String? {
-        if foriPhone {
+    func navTitle(for segmentIndex: Int) -> String? {
+        if layout == .compact {
             let segment = TabTrayViewModel.Segment(rawValue: segmentIndex)
             return segment?.navTitle
         }

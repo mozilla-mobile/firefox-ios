@@ -80,9 +80,17 @@ fi
 number_string=$(grep -A 3 $'https://github.com/mozilla/rust-components-swift' "$SOURCE_ROOT/$PROJECT.xcodeproj/project.pbxproj" | grep -E -o "\d+\.\d+\.\d+")
 
 if [ -z "$number_string" ]; then
-    echo "Error: No https://github.com/mozilla/rust-components-swift package was detected."
-    echo "The package must be added as a project dependency."
-    exit 2
+    # If there is no rust-components then perhaps we're building with a local versions of rust_components, using rust_components_local.sh .
+    # We try to resolve that, and find the version from the Package.swift file in that local directory.
+    # https://github.com/mozilla-mobile/firefox-ios/issues/12243
+    rust_components_path=$(grep -A 3 $'XCRemoteSwiftPackageReference "rust-components-swift"' "$SOURCE_ROOT/$PROJECT.xcodeproj/project.pbxproj" | grep 'repositoryURL = "file://' | grep -o -E '/\w[^"]+')
+    number_string=$(grep 'let version =' "$rust_components_path/Package.swift" | grep -E -o "\d+\.\d+\.\d+")
+
+    if [ -z "$number_string" ]; then
+        echo "Error: No https://github.com/mozilla/rust-components-swift package was detected."
+        echo "The package must be added as a project dependency."
+        exit 2
+    fi
 fi
 
 AS_VERSION="v$number_string"
@@ -218,7 +226,7 @@ done
 # Now generate the YAML that the `experimenter` server will use to keep up to date.
 # This file, `.experimenter.yaml` **must** be checked into source control, and kept up-to-date.
 # Experimenter will download it regularly/nightly.
-CMD="$BINARY_PATH generate-experimenter --channel $CHANNEL --cache-dir $CACHE_DIR $APP_FML_FILE $EXPERIMENTER_MANIFEST"
+CMD="$BINARY_PATH generate-experimenter $repo_args --channel $CHANNEL --cache-dir $CACHE_DIR $APP_FML_FILE $EXPERIMENTER_MANIFEST"
 display=${CMD//"$SOURCE_ROOT"/\$SOURCE_ROOT}
 echo "$display"
 $CMD

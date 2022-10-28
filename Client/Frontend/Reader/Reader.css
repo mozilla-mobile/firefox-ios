@@ -3,54 +3,24 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 @font-face {
-    font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-Regular.ttf');
-}
-
-@font-face {
-    font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-Book.ttf');
-    font-weight: medium;
-    }
-
-@font-face {
-    font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-Bold.ttf');
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-Italic.ttf');
-    font-style: italic;
-}
-
-@font-face {
-    font-family: sans-serif;
-    src: url('/reader-mode/fonts/FiraSans-BoldItalic.ttf');
-    font-weight: bold;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: serif;
+    font-family: new-york;
     src: url('/reader-mode/fonts/NewYorkMedium-Regular.otf');
 }
 
 @font-face {
-    font-family: serif;
+    font-family: new-york;
     src: url('/reader-mode/fonts/NewYorkMedium-Bold.otf');
     font-weight: bold;
 }
 
 @font-face {
-    font-family: serif;
+    font-family: new-york;
     src: url('/reader-mode/fonts/NewYorkMedium-RegularItalic.otf');
     font-style: italic;
 }
 
 @font-face {
-    font-family: serif;
+    font-family: new-york;
     src: url('/reader-mode/fonts/NewYorkMedium-BoldItalic.otf');
     font-weight: bold;
     font-style: italic;
@@ -67,6 +37,7 @@ body {
   transition-duration: 0.4s;
   margin-left: auto;
   margin-right: auto;
+  font-family: -apple-system, sans-serif;
 }
 
 .light {
@@ -85,20 +56,20 @@ body {
 }
 
 .sans-serif {
-  font-family: sans-serif;
+  font-family: -apple-system, sans-serif;
 }
 
 .sans-serif-bold {
-  font-family: sans-serif;
+  font-family: -apple-system, sans-serif;
   font-weight: bold;
 }
 
 .serif {
-  font-family: serif;
+  font-family: new-york;
 }
 
 .serif-bold {
-    font-family: serif;
+    font-family: new-york;
     font-weight: bold;
 }
 
@@ -117,7 +88,7 @@ body {
 
 .domain,
 .credits {
-  font-family: sans-serif;
+font-family: -apple-system, sans-serif;
 }
 
 .domain {
@@ -398,7 +369,7 @@ body {
 .content .caption,
 .content .wp-caption-text,
 .content figcaption {
-  font-family: sans-serif;
+  font-family: -apple-system, sans-serif;
   margin: 0px !important;
   padding-top: 4px !important;
 }
@@ -530,7 +501,7 @@ body {
 }
 
 .toolbar {
-  font-family: "Clear Sans",sans-serif;
+  font-family: -apple-system, sans-serif;
   transition-property: visibility, opacity;
   transition-duration: 0.7s;
   visibility: visible;
@@ -674,7 +645,7 @@ body {
 .segmented-button > li > a {
   display: block;
   padding: 5px 0;
-  font-family: "Clear Sans",sans-serif;
+  font-family: -apple-system, sans-serif;
   font-weight: lighter;
 }
 
