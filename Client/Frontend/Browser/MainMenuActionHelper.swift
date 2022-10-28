@@ -364,8 +364,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
                                                         dismissAction: {
                     bvc.dismissInstructionsView()
                 })
-                let instructionsViewController = UIHostingController(rootView: instructionsView)
-                let navigationController = UINavigationController(rootViewController: instructionsViewController)
+                let hostingViewController = UIHostingController(rootView: instructionsView)
+                let navigationController = UINavigationController(rootViewController: hostingViewController)
                 navigationController.modalPresentationStyle = .formSheet
                 self.delegate?.showViewController(viewController: navigationController)
                 return

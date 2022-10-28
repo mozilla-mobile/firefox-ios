@@ -20,8 +20,8 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControll
                                                     dismissAction: { [weak self] in
                 self?.dismissInstructionsView()
             })
-            let instructionsViewController = UIHostingController(rootView: instructionsView)
-            return instructionsViewController
+            let hostingViewController = UIHostingController(rootView: instructionsView)
+            return hostingViewController
         }
         let devicePickerViewController = DevicePickerViewController()
         devicePickerViewController.pickerDelegate = self
