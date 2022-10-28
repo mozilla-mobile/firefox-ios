@@ -1083,6 +1083,10 @@
 		E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */; };
 		E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
+		E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
+		E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
+		E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
+		E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
 		E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
@@ -4773,6 +4777,8 @@
 		E1B04A9C28E20A8300670E54 /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		E1B8412CB5BD748F7D81B41E /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		E1BE455FA65078F46476F88F /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewCell.swift; sourceTree = "<group>"; };
+		E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewHeaderCell.swift; sourceTree = "<group>"; };
 		E1D0406692C3B058BF50AA81 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
 		E1FF93E128A2E55700E6360E /* WallpaperSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewController.swift; sourceTree = "<group>"; };
@@ -6200,6 +6206,8 @@
 		7B0B1B9C1C1B69F500DF4AB5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */,
+				E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */,
 				D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */,
 				D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */,
 				D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */,
@@ -10360,6 +10368,7 @@
 				1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
+				E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */,
 				5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */,
 				E571EE772875694C0051D9AA /* MockPocketSponsoredStoriesProvider.swift in Sources */,
@@ -10765,6 +10774,7 @@
 				8AB8573727D951640075C173 /* HomeLogoHeaderViewModel.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				21112968289480630082C08B /* HomepageMessageCardViewModel.swift in Sources */,
+				E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				5A43EC9328CBC25F003155A3 /* Themable.swift in Sources */,
 				E12BD0AC28AC37F00029AAF0 /* UIColor+Extension.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
@@ -11025,8 +11035,10 @@
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
 				EB9407492081353100702E05 /* UXConstants.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncStatusResolver.swift in Sources */,
+				E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */,
 				D04CD74E216CF86F004FF5B0 /* InstructionsViewController.swift in Sources */,
+				E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

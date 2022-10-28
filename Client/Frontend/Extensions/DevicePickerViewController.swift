@@ -13,24 +13,43 @@ protocol DevicePickerViewControllerDelegate: AnyObject {
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice])
 }
 
-private struct DevicePickerViewControllerUX {
-    static let TableHeaderRowHeight = CGFloat(50)
-    static let TableHeaderTextFont = UIFont.systemFont(ofSize: 16)
-    static let TableHeaderTextColor = UIColor.Photon.Grey50
-    static let TableHeaderTextPaddingLeft = CGFloat(20)
-
-    static let DeviceRowHeight = CGFloat(50)
-    static let DeviceRowTextFont = UIFont.systemFont(ofSize: 16)
-    static let DeviceRowTextPaddingLeft = CGFloat(72)
-    static let DeviceRowTextPaddingRight = CGFloat(50)
-}
-
 private enum LoadingState {
     case loading
     case loaded
 }
 
+public enum ClientType: String {
+    case Desktop = "deviceTypeDesktop"
+    case Mobile = "deviceTypeMobile"
+    case Tablet = "deviceTypeTablet"
+    case VR = "deviceTypeVR"
+    case TV = "deviceTypeTV"
+
+    static func fromFxAType(_ type: String?) -> ClientType {
+        switch type {
+        case "desktop":
+            return ClientType.Desktop
+        case "mobile":
+            return ClientType.Mobile
+        case "tablet":
+            return ClientType.Tablet
+        case "vr":
+            return ClientType.VR
+        case "tv":
+            return ClientType.TV
+        default:
+            return ClientType.Mobile
+        }
+    }
+}
+
 class DevicePickerViewController: UITableViewController {
+
+    private struct UX {
+        static let tableHeaderRowHeight: CGFloat = 50
+        static let deviceRowHeight: CGFloat = 50
+    }
+
     private var devices = [RemoteDevice]()
     var profile: Profile?
     var profileNeedsShutdown = true
@@ -196,9 +215,9 @@ class DevicePickerViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if !devices.isEmpty {
             if indexPath.section == 0 {
-                return DevicePickerViewControllerUX.TableHeaderRowHeight
+                return UX.tableHeaderRowHeight
             } else {
-                return DevicePickerViewControllerUX.DeviceRowHeight
+                return UX.deviceRowHeight
             }
         } else {
             return tableView.frame.height
@@ -254,101 +273,6 @@ class DevicePickerViewController: UITableViewController {
         loadingIndicator.startAnimating()
         let customBarButton = UIBarButtonItem(customView: loadingIndicator)
         self.navigationItem.rightBarButtonItem = customBarButton
-    }
-}
-
-class DevicePickerTableViewHeaderCell: UITableViewCell {
-    static let CellIdentifier = "ClientPickerTableViewSectionHeader"
-    let nameLabel = UILabel()
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(nameLabel)
-        nameLabel.font = DevicePickerViewControllerUX.TableHeaderTextFont
-        nameLabel.text = .SendToDevicesListTitle
-        nameLabel.textColor = DevicePickerViewControllerUX.TableHeaderTextColor
-
-        nameLabel.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(contentView).offset(DevicePickerViewControllerUX.TableHeaderTextPaddingLeft)
-            make.centerY.equalTo(contentView)
-            make.right.equalTo(contentView)
-        }
-
-        preservesSuperviewLayoutMargins = false
-        layoutMargins = .zero
-        separatorInset = .zero
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-public enum ClientType: String {
-    case Desktop = "deviceTypeDesktop"
-    case Mobile = "deviceTypeMobile"
-    case Tablet = "deviceTypeTablet"
-    case VR = "deviceTypeVR"
-    case TV = "deviceTypeTV"
-
-    static func fromFxAType(_ type: String?) -> ClientType {
-        switch type {
-        case "desktop":
-            return ClientType.Desktop
-        case "mobile":
-            return ClientType.Mobile
-        case "tablet":
-            return ClientType.Tablet
-        case "vr":
-            return ClientType.VR
-        case "tv":
-            return ClientType.TV
-        default:
-            return ClientType.Mobile
-        }
-    }
-}
-
-class DevicePickerTableViewCell: UITableViewCell {
-    static let CellIdentifier = "ClientPickerTableViewCell"
-
-    var nameLabel: UILabel
-    var checked: Bool = false {
-        didSet {
-            self.accessoryType = checked ? .checkmark : .none
-        }
-    }
-
-    var clientType = ClientType.Mobile {
-        didSet {
-            self.imageView?.image = UIImage.templateImageNamed(clientType.rawValue)
-        }
-    }
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        nameLabel = UILabel()
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(nameLabel)
-        nameLabel.font = DevicePickerViewControllerUX.DeviceRowTextFont
-        nameLabel.numberOfLines = 2
-        nameLabel.lineBreakMode = .byWordWrapping
-        self.tintColor = UIColor.label
-        self.preservesSuperviewLayoutMargins = false
-        self.selectionStyle = .none
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        nameLabel.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(DevicePickerViewControllerUX.DeviceRowTextPaddingLeft)
-            make.centerY.equalTo(self.snp.centerY)
-            make.right.equalTo(self.snp.right).offset(-DevicePickerViewControllerUX.DeviceRowTextPaddingRight)
-        }
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
