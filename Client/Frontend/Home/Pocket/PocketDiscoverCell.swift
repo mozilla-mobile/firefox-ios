@@ -11,7 +11,6 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
     struct UX {
         static let discoverMoreFontSize: CGFloat = 20
         static let horizontalMargin: CGFloat = 16
-        static let generalCornerRadius: CGFloat = 12
     }
 
     // MARK: - UI Elements
@@ -59,9 +58,9 @@ class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
@@ -82,6 +81,7 @@ extension PocketDiscoverCell: Blurrable {
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5

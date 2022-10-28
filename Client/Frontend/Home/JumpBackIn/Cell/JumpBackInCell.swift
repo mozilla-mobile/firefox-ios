@@ -23,7 +23,6 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     struct UX {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
-        static let generalCornerRadius: CGFloat = 12
         static let titleFontSize: CGFloat = 16
         static let siteFontSize: CGFloat = 12
         static let heroImageSize =  CGSize(width: 108, height: 80)
@@ -39,7 +38,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         imageView.backgroundColor = .clear
     }
 
@@ -63,7 +62,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     private let descriptionLabel: UILabel = .build { label in
@@ -77,13 +76,13 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = .clear
-        imageView.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
     private var fallbackFaviconBackground: UIView = .build { view in
-        view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
-        view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
     // Contains the hero image and fallback favicons
@@ -121,8 +120,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
     // MARK: - Helpers
@@ -220,9 +220,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
@@ -248,6 +248,7 @@ extension JumpBackInCell: Blurrable {
         // Add blur
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5

@@ -15,11 +15,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private var homeTopSite: TopSite?
 
     struct UX {
-        static let borderWidth: CGFloat = 0.5
-        static let cellCornerRadius: CGFloat = 8
         static let titleOffset: CGFloat = 4
         static let iconSize = CGSize(width: 36, height: 36)
-        static let iconCornerRadius: CGFloat = 4
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
@@ -33,11 +30,11 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
-        view.layer.cornerRadius = UX.cellCornerRadius
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
-        imageView.layer.cornerRadius = UX.iconCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
@@ -86,7 +83,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
-        selectedOverlay.layer.cornerRadius = UX.cellCornerRadius
+        selectedOverlay.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     override var isSelected: Bool {
@@ -137,7 +134,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         rootContainer.layoutIfNeeded()
 
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: UX.cellCornerRadius).cgPath
+                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
     // MARK: - Public methods
@@ -222,9 +219,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow(theme: Theme) {
-        rootContainer.layer.cornerRadius = UX.cellCornerRadius
+        rootContainer.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: UX.cellCornerRadius).cgPath
+                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
         rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
         rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
         rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset

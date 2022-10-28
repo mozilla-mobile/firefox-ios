@@ -14,7 +14,6 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         static let cellWidth: CGFloat = 350
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
-        static let generalCornerRadius: CGFloat = 12
         static let titleFontSize: CGFloat = 12
         static let sponsoredFontSize: CGFloat = 12
         static let siteFontSize: CGFloat = 12
@@ -29,7 +28,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.layer.masksToBounds = true
-        image.layer.cornerRadius = UX.generalCornerRadius
+        image.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         image.backgroundColor = .clear
     }
 
@@ -127,7 +126,6 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.addSubviews(titleLabel, heroImageView)
         sponsoredStack.addArrangedSubview(sponsoredIcon)
         sponsoredStack.addArrangedSubview(sponsoredLabel)
@@ -172,9 +170,9 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
@@ -184,7 +182,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 }
 
@@ -194,6 +192,7 @@ extension PocketStandardCell: Blurrable {
         // Add blur
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5

@@ -31,7 +31,6 @@ struct SyncedTabCellViewModel {
 class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
-        static let generalCornerRadius: CGFloat = 12
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
@@ -75,7 +74,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         imageView.backgroundColor = .clear
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.heroImage
     }
@@ -85,14 +84,14 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = .clear
-        imageView.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         imageView.layer.masksToBounds = true
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.fallbackFavIconImage
     }
 
     private var tabFallbackFaviconBackground: UIView = .build { view in
-        view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
-        view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
     // contains tabItemTitle and syncedDeviceContainer
@@ -349,9 +348,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow(theme: Theme) {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
         contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
         contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
@@ -382,6 +381,7 @@ extension SyncedTabCell: Blurrable {
         // Add blur
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5

@@ -9,21 +9,17 @@ import Storage
 class RecentlySavedCell: UICollectionViewCell, ReusableCell {
 
     private struct UX {
-        static let generalCornerRadius: CGFloat = 12
         static let bookmarkTitleFontSize: CGFloat = 12
-        static let generalSpacing: CGFloat = 8
         static let containerSpacing: CGFloat = 16
         static let heroImageSize: CGSize = CGSize(width: 126, height: 82)
-        static let iconCornerRadius: CGFloat = 4
-        static let borderWidth: CGFloat = 0.5
-        static let cellCornerRadius: CGFloat = 8
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
+        static let generalSpacing: CGFloat = 8
     }
 
     // MARK: - UI Elements
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
-        view.layer.cornerRadius = UX.generalCornerRadius
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     // Contains the hero image and fallback favicons
@@ -35,7 +31,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     // Used as a fallback if hero image isn't set
@@ -43,13 +39,13 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = .clear
-        imageView.layer.cornerRadius = UX.iconCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
     private var fallbackFaviconBackground: UIView = .build { view in
-        view.layer.cornerRadius = UX.cellCornerRadius
-        view.layer.borderWidth = UX.borderWidth
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
     let itemTitle: UILabel = .build { label in
@@ -82,7 +78,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: UX.generalCornerRadius).cgPath
+                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
     func configure(viewModel: RecentlySavedCellViewModel, theme: Theme) {
@@ -171,9 +167,8 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     }
 
     private func setupShadow(theme: Theme) {
-        rootContainer.layer.cornerRadius = UX.generalCornerRadius
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: UX.generalCornerRadius).cgPath
+                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
 
         rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
         rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity

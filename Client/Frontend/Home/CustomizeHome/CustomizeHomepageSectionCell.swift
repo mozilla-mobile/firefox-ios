@@ -12,6 +12,7 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
         static let buttonFontSize: CGFloat = 15
         static let buttonTrailingSpace: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 11
+        static let buttonCornerRadius: CGFloat = 4
     }
 
     // MARK: - UI Elements
@@ -19,7 +20,7 @@ class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .subheadline,
                                                                                     size: UX.buttonFontSize)
-        button.layer.cornerRadius = 5
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = a11y.customizeHome
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: ResizableButton.UX.buttonEdgeSpacing,

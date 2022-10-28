@@ -156,7 +156,6 @@ extension LabelButtonHeaderView: ThemeApplicable {
     }
 }
 
-// Laurie needed?
 // MARK: - Notifiable
 extension LabelButtonHeaderView: Notifiable {
     func handleNotifications(_ notification: Notification) {

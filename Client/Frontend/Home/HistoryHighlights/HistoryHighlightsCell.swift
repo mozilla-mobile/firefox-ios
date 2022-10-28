@@ -10,7 +10,6 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     struct UX {
         static let verticalSpacing: CGFloat = 20
         static let horizontalSpacing: CGFloat = 16
-        static let generalCornerRadius: CGFloat = 10
         static let heroImageDimension: CGFloat = 24
     }
 
@@ -19,7 +18,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         imageView.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
     }
 
@@ -136,7 +135,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
                              cornersToRound: CACornerMask?,
                              theme: Theme) {
         contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
-        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
 
         var needsShadow = shouldAddShadow
         if let cornersToRound = cornersToRound {
@@ -183,7 +182,7 @@ extension HistoryHighlightsCell: Blurrable {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
             contentView.backgroundColor = .clear
             contentView.layer.maskedCorners = cellModel?.corners ?? .layerMaxXMinYCorner
-            contentView.layer.cornerRadius = UX.generalCornerRadius
+            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5

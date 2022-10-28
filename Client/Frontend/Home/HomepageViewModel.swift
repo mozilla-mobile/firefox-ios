@@ -25,6 +25,11 @@ class HomepageViewModel: FeatureFlaggable {
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let shadowOpacity: Float = 0.12
 
+        // General
+        static let generalCornerRadius: CGFloat = 8
+        static let generalBorderWidth: CGFloat = 0.5
+        static let generalIconCornerRadius: CGFloat = 4
+
         static func leadingInset(traitCollection: UITraitCollection) -> CGFloat {
             guard UIDevice.current.userInterfaceIdiom != .phone else { return standardInset }
 
