@@ -101,6 +101,11 @@ public struct AccessibilityIdentifiers {
         static let syncedTabs = "Synced Tabs"
         static let inactiveTabHeader = "InactiveTabs.header"
         static let inactiveTabDeleteButton = "InactiveTabs.deleteButton"
+        static let closeAllTabsButton = "closeAllTabsButtonTabTray"
+        static let newTabButton = "newTabButtonTabTray"
+        static let doneButton = "doneButtonTabTray"
+        static let syncTabsButton = "syncTabsButtonTabTray"
+        static let navBarSegmentedControl = "navBarTabTray"
     }
 
     struct LibraryPanels {
