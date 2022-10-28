@@ -390,7 +390,6 @@ extension SyncedTabCell: Blurrable {
     }
 }
 
-// Laurie - needed?
 // MARK: - Notifiable
 extension SyncedTabCell: Notifiable {
     func handleNotifications(_ notification: Notification) {

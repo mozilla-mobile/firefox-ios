@@ -238,7 +238,7 @@ extension TopSiteItemCell: ThemeApplicable {
         pinImageView.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textPrimary
         sponsoredLabel.textColor = theme.colors.textSecondary
-        selectedOverlay.backgroundColor = theme.colors.layer5Hover
+        selectedOverlay.backgroundColor = theme.colors.layer5Hover.withAlphaComponent(0.25)
 
         adjustBlur(theme: theme)
     }

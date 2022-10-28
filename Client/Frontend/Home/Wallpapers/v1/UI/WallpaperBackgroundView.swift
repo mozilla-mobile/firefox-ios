@@ -67,7 +67,6 @@ class WallpaperBackgroundView: UIView {
     }
 }
 
-// laurie - adapt?
 // MARK: - Notifiable
 extension WallpaperBackgroundView: Notifiable {
     func handleNotifications(_ notification: Notification) {
