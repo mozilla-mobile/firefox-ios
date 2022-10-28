@@ -43,26 +43,37 @@ class AppContainer: ServiceProvider {
             do {
                 unowned let container = container
 
-                container.register(.eagerSingleton) {
-                    return BrowserProfile(
-                        localName: "profile",
-                        syncDelegate: UIApplication.shared.syncDelegate
-                    ) as Profile
+                container.register(.eagerSingleton) { () -> Profile in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.profile
+                    } else {
+                        return BrowserProfile(
+                            localName: "profile",
+                            syncDelegate: UIApplication.shared.syncDelegate
+                        ) as Profile
+                    }
                 }
 
-                /// TabManager access should be through the container, since we'll support multiple scenes.
-                container.register(.singleton) {
-                    return TabManager(
-                        profile: try container.resolve(),
-                        imageStore: DiskImageStore(
-                            files: (try container.resolve() as Profile).files,
-                            namespace: "TabManagerScreenshots",
-                            quality: UIConstants.ScreenshotQuality)
-                    )
+                container.register(.singleton) { () -> TabManager in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.tabManager
+                    } else {
+                        return TabManager(
+                            profile: try container.resolve(),
+                            imageStore: DiskImageStore(
+                                files: (try container.resolve() as Profile).files,
+                                namespace: "TabManagerScreenshots",
+                                quality: UIConstants.ScreenshotQuality)
+                        )
+                    }
                 }
 
-                container.register(.singleton) {
-                    return DefaultThemeManager(appDelegate: UIApplication.shared.delegate) as ThemeManager
+                container.register(.singleton) { () -> ThemeManager in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.themeManager
+                    } else {
+                        return DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
+                    }
                 }
 
                 container.register(.singleton) {

@@ -6,6 +6,7 @@ import Shared
 import Storage
 import CoreSpotlight
 import SDWebImage
+import UIKit
 
 let LatestAppVersionProfileKey = "latestAppVersion"
 
@@ -14,14 +15,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // This is the easiest way to force a bootstrap that's guaranteed to happen on app launch
     private var appContainer: ServiceProvider = AppContainer.shared
 
-    var rootViewController: UIViewController!
-    var receivedURLs = [URL]()
     var orientationLock = UIInterfaceOrientationMask.all
 
     private let log = Logger.browserLogger
 
-    lazy var tabManager: TabManager = appContainer.resolve()
-    lazy var profile: Profile = appContainer.resolve()
+    lazy var profile: Profile = BrowserProfile(
+        localName: "profile",
+        syncDelegate: UIApplication.shared.syncDelegate
+    )
+
+    lazy var tabManager: TabManager = TabManager(
+        profile: profile,
+        imageStore: DiskImageStore(
+            files: profile.files,
+            namespace: "TabManagerScreenshots",
+            quality: UIConstants.ScreenshotQuality)
+    )
+
+    lazy var themeManager: ThemeManager = DefaultThemeManager(appDelegate: self)
     lazy private var ratingPromptManager: RatingPromptManager = appContainer.resolve()
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
@@ -133,12 +144,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
         profile.shutdown()
-
-        // Allow deinitializers to close our database connections.
-        /// Is this really necessary? If so, we can move it to `sceneDidDisconnect`.
-//        tabManager = nil
-//        browserViewController = nil
-//        rootViewController = nil
     }
 
     private func updateTopSitesWidget() {
@@ -198,7 +203,7 @@ extension AppDelegate {
 
     /// UIKit is responsible for creating & vending Scene instances. This method is especially useful when there
     /// are multiple scene configurations to choose from.  With this method, we can select a configuration
-    /// to create a new scene with dynamically.
+    /// to create a new scene with dynamically (outside of what's in the pList).
     func application(
         _ application: UIApplication,
         configurationForConnecting connectingSceneSession: UISceneSession,

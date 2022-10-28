@@ -41,6 +41,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
 
         self.window = window
+
+        handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
     }
 
     /// Invoked as the scene is being released by the system. A scene is released when its backgrounded or when its session is discarded.
@@ -49,7 +51,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to do any final clean up before the scene is purged from memory. Release resources and shutdown things gracefully.
     /// Note: Removal of a scene occurs before it's discarded.
     func sceneDidDisconnect(_ scene: UIScene) {
-        print("sceneDidDisconnect")
+        // no-op
     }
 
     // MARK: - Transitioning to Foreground
@@ -58,7 +60,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ///
     /// Use this method to undo changes made on the scene entering the background.
     func sceneWillEnterForeground(_ scene: UIScene) {
-        print("sceneWillEnterForeground")
+        // no-op
     }
 
     /// Invoked when the interface is finished loading for your screen, but before that interface appears on screen.
@@ -68,8 +70,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         /// Resume previously stopped downloads for, and on, THIS scene only.
         browserViewController.downloadQueue.resumeAll()
-
-        /// Sent Tabs are now handled when the app is notified of them. Having that handling in lifecycle methods is redundant.
     }
 
     // MARK: - Transitioning to Background
@@ -189,7 +189,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         traitCollection previousTraitCollection: UITraitCollection
     ) {
         // no-op
-        // return self.orientationLock
     }
 
     // MARK: - Performing Tasks
@@ -204,10 +203,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem,
-                                                                                 withBrowserViewController: self.browserViewController)
-
-        completionHandler(handledShortCutItem)
+        QuickActions.sharedInstance.handleShortCutItem(
+            shortcutItem,
+            withBrowserViewController: browserViewController
+        )
     }
 
     // MARK: - Misc. Helpers
@@ -239,70 +238,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return navigationController
     }
 
-}
+    /// Handling either deeplinks or shortcuts at launch is slightly different than when the scene has been backgrounded.
+    private func handleDeeplinkOrShortcutsAtLaunch(
+        with connectionOptions: UIScene.ConnectionOptions,
+        on scene: UIScene
+    ) {
+        /// Handling deeplinks at launch can be handled this way.
+        if !connectionOptions.urlContexts.isEmpty {
+            self.scene(scene, openURLContexts: connectionOptions.urlContexts)
+        }
 
-/**
-    TODO: We need to figure out what the best approach to addressing `foregroundBVC` is.
-    The extensions below are one possible solution, but we'll discuss with the team.
-
-extension UIWindowScene {
-
-    /// Typically, we'll have one BVC per scene. But in the off chance where we have multiple windows per scene,
-    /// and each has a BVC, we can find them all.
-    var browserViewControllers: [BrowserViewController] {
-        let bvcs = windows.compactMap({ window in
-            window.rootViewController as? UINavigationController
-        }).flatMap({ navigationController in
-            navigationController.viewControllers.compactMap({ viewController in
-                viewController as? BrowserViewController
-            })
-        })
-
-        return bvcs
-    }
-
-    var bvcForScene: BrowserViewController? {
-        browserViewControllers.first
+        /// At launch, shortcut items can be handled this way.
+        if let shortcutItem = connectionOptions.shortcutItem {
+            QuickActions.sharedInstance.handleShortCutItem(
+                shortcutItem,
+                withBrowserViewController: browserViewController
+            )
+        }
     }
 
 }
-
-extension UIView {
-
-    /// Return the scene the view belongs to.
-    var sceneForView: UIWindowScene? {
-        guard let scene = window?.windowScene else { return nil }
-
-        return scene
-    }
-
-}
-
-extension UIViewController {
-
-    /// Return the scene this VC belongs to.
-    var sceneForViewController: UIWindowScene? {
-        guard let scene = view.window?.windowScene else { return nil }
-
-        return scene
-    }
-
-}
-
- extension AppDelegate {
- /// In cases where you need a `Scene`, but don't have access to a view or viewController (and therefore a window), we can retrieve a scene this way.
- /// It'll attempt to return a scene with activation states in this order: foregroundActive, foregroundInactive, background.
- func getNextScene() -> UIScene? {
-     guard let foregroundedScene = UIApplication.shared.connectedScenes.first(where: { scene in
-         return scene.activationState == .foregroundActive
-     }) else {
-         /// The best case is returning a foregrounded scene. But if there's none, return the next options.
-         return UIApplication.shared.connectedScenes.first(where: { scene in
-             scene.activationState == .foregroundInactive || scene.activationState == .background
-         })
-     }
-
-     return foregroundedScene
- }
- }
-*/
