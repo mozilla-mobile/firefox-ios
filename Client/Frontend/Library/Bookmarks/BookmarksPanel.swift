@@ -391,6 +391,7 @@ class BookmarksPanel: SiteTableViewController,
             }
 
             cell.configure(viewModel: viewModel)
+            cell.applyTheme(theme: themeManager.currentTheme)
             return cell
 
         } else {

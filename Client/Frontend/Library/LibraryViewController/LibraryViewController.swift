@@ -82,9 +82,13 @@ class LibraryViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-        applyTheme()
         listenForThemeChange()
         setupNotifications(forObserver: self, observing: [.LibraryPanelStateDidChange])
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {
