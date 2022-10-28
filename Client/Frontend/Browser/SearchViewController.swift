@@ -287,18 +287,23 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // search settings icon
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "quickSearch"), for: [])
-        searchButton.imageView?.contentMode = .center
+        searchButton.imageView?.contentMode = .scaleAspectFit
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
         searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
         searchButton.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
 
+        searchButton.imageView?.snp.makeConstraints { make in
+            make.width.height.equalTo(20)
+            return
+        }
+
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
-            make.size.equalTo(SearchViewControllerUX.FaviconSize)
+            make.width.height.equalTo(SearchViewControllerUX.FaviconSize)
             // offset the left edge to align with search results
-            make.leading.equalTo(leftEdge).offset(SearchViewControllerUX.SuggestionMargin * 2)
-            make.top.equalTo(self.searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
-            make.bottom.equalTo(self.searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
+            make.leading.equalTo(leftEdge).offset(16)
+            make.top.equalTo(searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
+            make.bottom.equalTo(searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
         }
 
         // search engines
