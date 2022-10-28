@@ -16,6 +16,10 @@ enum JumpBackInSectionLayout: Equatable {
     case regular // only jumpBackIn
     case regularWithSyncedTab // synced tab is displayed first and then jumpBackIn
 
+    // iPad in portrait or iPad with 2/3 split screen or iPhone in landscape
+    case medium // only jumpBackIn
+    case mediumWithSyncedTab // synced tab is displayed first and then jumpBackIn
+
     // The width dimension of a cell / group; takes into account how many groups will be displayed
     var widthDimension: NSCollectionLayoutDimension {
         switch self {
@@ -23,8 +27,13 @@ enum JumpBackInSectionLayout: Equatable {
             // When the trailing inset will be handled by the section layout, this can be set to .fractionalWidth(1)
             return .fractionalWidth(0.95)
         case .regular, .regularWithSyncedTab:
+            // Cards need to be less than 1/3 (8/24) wide to account for spacing.
+            return .fractionalWidth(7.66/24)
+        case .medium, .mediumWithSyncedTab:
+            // Cards need to be less than 1/2 (8/16) wide to account for spacing.
+            // On iPhone they need to be slightly wider to match the spacing of the rest of the UI.
             return UIDevice.current.userInterfaceIdiom == .pad ?
-                .fractionalWidth(7.66/24) : .fractionalWidth(7.8/16) // iPad or iPhone in landscape
+                .fractionalWidth(7.66/16) : .fractionalWidth(7.8/16) // iPad or iPhone in landscape
         }
     }
 
@@ -36,9 +45,9 @@ enum JumpBackInSectionLayout: Equatable {
             return nil
         case .compactJumpBackInAndSyncedTab:
             return indexPath.row == 1 ? nil : indexPath.row
-        case .regular:
+        case .medium, .regular:
             return indexPath.row
-        case .regularWithSyncedTab:
+        case .mediumWithSyncedTab, .regularWithSyncedTab:
             return indexPath.row == 0 ? nil : indexPath.row - 1
         }
     }
@@ -64,10 +73,14 @@ enum JumpBackInSectionLayout: Equatable {
             return 0
         case .compactJumpBackInAndSyncedTab:
             return 1
+        case .medium:
+            return 4
+        case .mediumWithSyncedTab:
+            return 2
         case .regular:
-            return device == .pad ? 6 : 4 // iPad or iPhone in landscape
+            return 6
         case .regularWithSyncedTab:
-            return device == .pad ? 4 : 2 // iPad or iPhone in landscape
+            return 4
         }
     }
 }

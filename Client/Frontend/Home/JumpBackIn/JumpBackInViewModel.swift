@@ -124,6 +124,9 @@ class JumpBackInViewModel: FeatureFlaggable {
                                      isPortrait: Bool = UIWindow.isPortrait,
                                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let isPhoneInLandscape = device == .phone && !isPortrait
+        let isPadInPortrait = device == .pad && isPortrait
+        let isPadInLandscapeTwoThirdSplit = isPadInLandscapeSplit(split: 2/3, isPortrait: isPortrait, device: device)
+        let isPadInLandscapeHalfSplit = isPadInLandscapeSplit(split: 1/2, isPortrait: isPortrait, device: device)
 
         if hasSyncedTab, traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             if hasJumpBackIn {
@@ -133,6 +136,8 @@ class JumpBackInViewModel: FeatureFlaggable {
             }
         } else if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             sectionLayout = .compactJumpBackIn
+        } else if isPadInPortrait || isPhoneInLandscape || isPadInLandscapeHalfSplit || isPadInLandscapeTwoThirdSplit {
+            sectionLayout = hasSyncedTab ? .mediumWithSyncedTab : .medium
         } else {
             sectionLayout = hasSyncedTab ? .regularWithSyncedTab : .regular
         }
@@ -144,6 +149,25 @@ class JumpBackInViewModel: FeatureFlaggable {
 
     private var hasJumpBackIn: Bool {
         return jumpBackInList.itemsToDisplay > 0
+    }
+
+    private var isMultitasking: Bool {
+        guard let window = UIWindow.keyWindow else { return false }
+
+        return window.frame.width != window.screen.bounds.width && window.frame.width != window.screen.bounds.height
+    }
+
+    private func isPadInLandscapeSplit(split: CGFloat,
+                                       isPortrait: Bool = UIWindow.isPortrait,
+                                       device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Bool {
+        guard device == .pad,
+              !isPortrait,
+              isMultitasking,
+              let window = UIWindow.keyWindow
+        else { return false }
+
+        let splitScreenWidth = window.screen.bounds.width * split
+        return window.frame.width >= splitScreenWidth * 0.9 && window.frame.width <= splitScreenWidth * 1.1
     }
 }
 
@@ -306,7 +330,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         switch sectionLayout {
         case .compactSyncedTab, .compactJumpBackInAndSyncedTab:
             section = sectionWithSyncedTabCompact(for: traitCollection)
-        case .compactJumpBackIn, .regular, .regularWithSyncedTab:
+        case .compactJumpBackIn, .regular, .regularWithSyncedTab, .medium, .mediumWithSyncedTab:
             section = defaultSection(for: traitCollection)
         }
 
