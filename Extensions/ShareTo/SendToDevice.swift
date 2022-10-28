@@ -14,9 +14,9 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControll
 
     func initialViewController() -> UIViewController {
         if !hasAccount() {
-            let instructionsView = InstructionsView(backgroundColor: .white,
-                                                    textColor: UIColor.Photon.LightGrey30,
-                                                    imageColor: UIColor.Photon.LightGrey30,
+            let instructionsView = InstructionsView(backgroundColor: ShareTheme.defaultBackground.color,
+                                                    textColor: ShareTheme.textColor.color,
+                                                    imageColor: ShareTheme.iconColor.color,
                                                     dismissAction: { [weak self] in
                 self?.dismissInstructionsView()
             })
