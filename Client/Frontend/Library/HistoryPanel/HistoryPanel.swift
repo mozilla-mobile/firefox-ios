@@ -250,8 +250,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         }
 
         // Set interaction behavior and style
-        cell.titleLabel.alpha = isEnabled ? 1.0 : 0.5
-        cell.leftImageView.alpha = isEnabled ? 1.0 : 0.5
+        cell.configureTapState(isEnabled: isEnabled)
         cell.selectionStyle = isEnabled ? .default : .none
         cell.isUserInteractionEnabled = isEnabled
     }
@@ -371,10 +370,16 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     }
 
     private func configureHistoryActionableCell(_ historyActionable: HistoryActionablesModel, _ cell: OneLineTableViewCell) -> OneLineTableViewCell {
-        cell.titleLabel.text = historyActionable.itemTitle
-        cell.leftImageView.image = historyActionable.itemImage
+
         cell.leftImageView.tintColor = .theme.browser.tint
         cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
+
+        let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
+                                                      leftImageView: historyActionable.itemImage,
+                                                      leftImageViewContentView: .scaleAspectFit,
+                                                      accessoryView: nil,
+                                                      accessoryType: .none)
+        cell.configure(viewModel: viewModel)
         cell.accessibilityIdentifier = historyActionable.itemA11yId
         setTappableStateAndStyle(with: historyActionable, on: cell)
 
@@ -646,10 +651,14 @@ extension HistoryPanel: UITableViewDelegate {
         else { return nil }
 
         let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
+
+        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let headerViewModel = SiteTableViewHeaderModel(title: actualSection.title ?? "",
                                                        isCollapsible: true,
                                                        collapsibleState:
-                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down,
+                                                       theme: themeManager.currentTheme)
         header.configure(headerViewModel)
 
         // Configure tap to collapse/expand section
@@ -761,11 +770,10 @@ extension HistoryPanel {
     @objc private func onLongPressGestureRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
-        guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
+        guard let indexPath = tableView.indexPathForRow(at: touchPoint),
+              diffableDatasource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel != nil
+        else { return }
 
-        if let _ = diffableDatasource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel {
-            return
-        }
         presentContextMenu(for: indexPath)
     }
 

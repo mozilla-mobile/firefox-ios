@@ -56,7 +56,13 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener, FeatureFlaggable {
+class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener,
+                            FeatureFlaggable, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
     var searchDelegate: SearchViewControllerDelegate?
     var currentTheme: BuiltinThemeName {
         return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
@@ -102,11 +108,15 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
          viewModel: SearchViewModel,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -277,18 +287,23 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // search settings icon
         let searchButton = UIButton()
         searchButton.setImage(UIImage(named: "quickSearch"), for: [])
-        searchButton.imageView?.contentMode = .center
+        searchButton.imageView?.contentMode = .scaleAspectFit
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
         searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
         searchButton.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
 
+        searchButton.imageView?.snp.makeConstraints { make in
+            make.width.height.equalTo(20)
+            return
+        }
+
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
-            make.size.equalTo(SearchViewControllerUX.FaviconSize)
+            make.width.height.equalTo(SearchViewControllerUX.FaviconSize)
             // offset the left edge to align with search results
-            make.leading.equalTo(leftEdge).offset(SearchViewControllerUX.SuggestionMargin * 2)
-            make.top.equalTo(self.searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
-            make.bottom.equalTo(self.searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
+            make.leading.equalTo(leftEdge).offset(16)
+            make.top.equalTo(searchEngineScrollViewContent).offset(SearchViewControllerUX.SuggestionMargin)
+            make.bottom.equalTo(searchEngineScrollViewContent).offset(-SearchViewControllerUX.SuggestionMargin)
         }
 
         // search engines
@@ -576,7 +591,8 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         let viewModel = SiteTableViewHeaderModel(title: .Search.SuggestSectionTitle,
                                                  isCollapsible: false,
-                                                 collapsibleState: nil)
+                                                 collapsibleState: nil,
+                                                 theme: themeManager.currentTheme)
         headerView.configure(viewModel)
         return headerView
     }

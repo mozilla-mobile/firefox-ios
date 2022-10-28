@@ -11,6 +11,10 @@ func path(forTestPage page: String) -> String {
     return "http://localhost:\(serverPort)/test-fixture/\(page)"
 }
 
+// Extended timeout values for waitForExistence and waitForNoExistence
+let TIMEOUT: TimeInterval = 15
+let TIMEOUT_LONG: TimeInterval = 45
+
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     let app = XCUIApplication()

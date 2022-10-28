@@ -6,16 +6,14 @@ import Shared
 
 extension BrowserViewController: ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab) {
-        // If this reader mode availability state change is for the tab that we currently show, then update
-        // the button. Otherwise do nothing and the button will be updated when the tab is made active.
+        // Update reader mode state if is the selected tab. Otherwise it will update once is active
         if tabManager.selectedTab === tab {
             urlBar.updateReaderModeState(state, hideReloadButton: shouldUseiPadSetup())
         }
     }
 
     func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab) {
-        // If this reader mode availability state change is for the tab that we currently show, then update
-        // the button. Otherwise do nothing and the button will be updated when the tab is made active.
+        // Update reader mode state if is the selected tab. Otherwise it will update once is active
         if tabManager.selectedTab === tab {
             self.showReaderModeBar(animated: true)
             tab.showContent(true)

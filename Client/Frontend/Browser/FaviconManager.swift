@@ -107,8 +107,9 @@ class FaviconManager: TabContentScript {
             var favicons = [Favicon]()
             if let icons = message.body as? [String: Int] {
                 for icon in icons {
-                    if let _ = URL(string: icon.0), let iconType = IconType(rawValue: icon.1) {
-                        let favicon = Favicon(url: icon.0, date: Date(), type: iconType)
+                    if let iconURL = URL(string: icon.0),
+                       let iconType = IconType(rawValue: icon.1) {
+                        let favicon = Favicon(url: iconURL, date: Date(), type: iconType)
                         favicons.append(favicon)
                     }
                 }

@@ -188,12 +188,12 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         guard let siteURL = site.url.asURL else { return nil }
 
         let topSiteActions: [PhotonRowActions]
-        if let _ = site as? PinnedSite {
+        if let site = site as? PinnedSite {
             topSiteActions = [getRemovePinTopSiteAction(site: site),
                               getOpenInNewPrivateTabAction(siteURL: siteURL),
                               getRemoveTopSiteAction(site: site)]
 
-        } else if let _ = site as? SponsoredTile {
+        } else if site as? SponsoredTile != nil {
             topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL),
                               getSettingsAction(),
                               getSponsoredContentAction()]

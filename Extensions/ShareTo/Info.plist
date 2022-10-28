@@ -44,12 +44,6 @@
 		<string>InitialViewController</string>
 	</dict>
 	<key>UIAppFonts</key>
-	<array>
-		<string>FiraSans-Regular.ttf</string>
-		<string>FiraSans-SemiBold.ttf</string>
-		<string>FiraSans-Light.ttf</string>
-		<string>FiraSans-UltraLight.ttf</string>
-		<string>FiraSans-Medium.ttf</string>
-	</array>
+	<array/>
 </dict>
 </plist>

@@ -5,6 +5,7 @@
 import Foundation
 
 class SeparatorTableViewCell: OneLineTableViewCell {
+
     override func applyTheme() {
         super.applyTheme()
 
