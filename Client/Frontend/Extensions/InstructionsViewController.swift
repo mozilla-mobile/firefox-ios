@@ -13,10 +13,6 @@ private struct InstructionsViewControllerUX {
     static let LinkColor = UIColor.Photon.Blue60
 }
 
-protocol InstructionsViewControllerDelegate: AnyObject {
-    func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController)
-}
-
 private func highlightLink(_ string: NSString, withColor color: UIColor) -> NSAttributedString {
     let start = string.range(of: "<")
     if start.location == NSNotFound {
@@ -67,25 +63,5 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
         make.width.equalTo(250)
         make.top.equalTo(label1.snp.bottom).offset(InstructionsViewControllerUX.TopPadding)
         make.centerX.equalTo(view)
-    }
-}
-
-class InstructionsViewController: UIViewController {
-    weak var delegate: InstructionsViewControllerDelegate?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor.Photon.White100
-
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SendToCloseButton, style: .done, target: self, action: #selector(close))
-        navigationItem.leftBarButtonItem?.accessibilityIdentifier = "InstructionsViewController.navigationItem.leftBarButtonItem"
-
-        setupHelpView(view,
-            introText: .SendToNotSignedInText,
-                showMeText: .SendToNotSignedInMessage)
-    }
-
-    @objc func close() {
-        delegate?.instructionsViewControllerDidClose(self)
     }
 }

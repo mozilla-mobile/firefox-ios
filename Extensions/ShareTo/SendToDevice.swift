@@ -7,7 +7,7 @@ import Shared
 import Storage
 import SwiftUI
 
-class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate, InstructionsViewDelegate {
+class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
 
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
@@ -48,10 +48,6 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControll
     }
 
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
-        finish()
-    }
-
-    func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         finish()
     }
 
