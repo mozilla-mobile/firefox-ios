@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable {
+class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable, Themeable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
@@ -14,7 +14,9 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable {
     }
 
     private var viewModel: WallpaperSelectorViewModel
-    internal var notificationCenter: NotificationProtocol
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -65,9 +67,11 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable {
 
     // MARK: - Initializers
     init(viewModel: WallpaperSelectorViewModel,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -78,9 +82,9 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        listenForThemeChange()
         setupView()
-        applyTheme()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
+
         settingsButton.addTarget(self, action: #selector(self.settingsButtonTapped), for: .touchUpInside)
     }
 
@@ -102,6 +106,14 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable {
     override func updateOnRotation() {
         configureCollectionView()
     }
+
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        contentView.backgroundColor = theme.colors.layer1
+        headerLabel.textColor = theme.colors.textPrimary
+        instructionLabel.textColor = theme.colors.textPrimary
+        settingsButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
+    }
 }
 
 // MARK: - CollectionView Data Source
@@ -118,6 +130,7 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -227,34 +240,6 @@ private extension WallpaperSelectorViewController {
     /// Settings button tapped
     @objc func settingsButtonTapped(_ sender: UIButton) {
         viewModel.openSettingsAction()
-    }
-}
-
-// TODO: FXIOS-4882 next PR to finish up homepage theming
-// MARK: - Themable & Notifiable
-extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
-
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
-
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            contentView.backgroundColor = UIColor.Photon.DarkGrey40
-            headerLabel.textColor = UIColor.Photon.LightGrey05
-            instructionLabel.textColor = UIColor.Photon.LightGrey05
-            settingsButton.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
-        } else {
-            contentView.backgroundColor = UIColor.Photon.LightGrey10
-            headerLabel.textColor = UIColor.Photon.Ink80
-            instructionLabel.textColor = UIColor.Photon.DarkGrey05
-            settingsButton.setTitleColor(UIColor.Photon.Blue50, for: .normal)
-        }
     }
 }
 
