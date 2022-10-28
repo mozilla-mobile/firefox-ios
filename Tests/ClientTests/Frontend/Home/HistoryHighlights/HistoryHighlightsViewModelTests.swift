@@ -235,6 +235,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
             with: profile,
             isPrivate: isPrivate,
             urlBar: urlBar,
+            theme: LightTheme(),
             historyHighlightsDataAdaptor: dataAdaptor,
             dispatchQueue: MockDispatchQueue(),
             telemetry: telemetry,
