@@ -31,8 +31,15 @@ struct InstructionsView: View {
                         .renderingMode(.template)
                         .foregroundColor(Color(imageColor))
                         .padding(.top, UX.padding)
-                    Text(String.SendToNotSignedInText).font(UX.textFont).multilineTextAlignment(.center)
-                    Text(String.SendToNotSignedInMessage).font(UX.textFont).multilineTextAlignment(.center)
+                        .accessibility(hidden: true)
+                    Text(String.SendToNotSignedInText)
+                        .font(UX.textFont)
+                        .multilineTextAlignment(.center)
+                        .accessibility(identifier: AccessibilityIdentifiers.ShareTo.Instructions.notSignedInLabel)
+                    Text(String.SendToNotSignedInMessage)
+                        .font(UX.textFont)
+                        .multilineTextAlignment(.center)
+                        .accessibility(identifier: AccessibilityIdentifiers.ShareTo.Instructions.instructionsLabel)
 
                     Spacer()
                 }
@@ -46,7 +53,7 @@ struct InstructionsView: View {
             }) {
                 Text(String.CloseButtonTitle)
             }
-            .accessibility(identifier: "InstructionsViewController.navigationItem.leftBarButtonItem")
+            .accessibility(identifier: AccessibilityIdentifiers.ShareTo.Instructions.doneButton)
         )
         .navigationBarBackButtonHidden(true)
     }

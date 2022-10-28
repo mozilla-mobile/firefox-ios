@@ -227,4 +227,12 @@ public struct AccessibilityIdentifiers {
             static let bottomSetting = "BottomSearchBar"
         }
     }
+
+    struct ShareTo {
+        struct Instructions {
+            static let doneButton = "doneButton"
+            static let notSignedInLabel = "notSignedInLabel"
+            static let instructionsLabel = "instructionsLabel"
+        }
+    }
 }
