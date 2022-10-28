@@ -395,8 +395,13 @@ class BookmarksPanel: SiteTableViewController,
             return cell
 
         } else {
-            return tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
-                                                 for: indexPath)
+            if let cell = tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
+                                                        for: indexPath) as? SeparatorTableViewCell {
+                cell.applyTheme(theme: themeManager.currentTheme)
+                return cell
+            } else {
+                return UITableViewCell()
+            }
         }
     }
 

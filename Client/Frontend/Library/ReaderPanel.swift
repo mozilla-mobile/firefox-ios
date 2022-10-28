@@ -102,8 +102,6 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        titleLabel.textColor = theme.colors.textPrimary
-        hostnameLabel.textColor = theme.colors.textPrimary
         titleLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
         hostnameLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
     }
