@@ -102,7 +102,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let url = URLContexts.first?.url,
               let routerPath = NavigationPath(url: url) else { return }
 
-        if let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
+        if profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) != nil {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
 
             var object = TelemetryWrapper.EventObject.url
