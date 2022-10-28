@@ -278,7 +278,7 @@ class LibraryViewController: UIViewController, Themeable {
     private func setupToolBarAppearance() {
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
-        standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer2
+        standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
         if #available(iOS 15.0, *) {
