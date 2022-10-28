@@ -102,6 +102,8 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer5
+        selectedBackgroundView?.backgroundColor = theme.colors.layer5Hover
         titleLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
         hostnameLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
     }
@@ -254,13 +256,13 @@ class ReadingListPanel: UITableViewController,
             label.textAlignment = .center
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
             label.adjustsFontSizeToFitWidth = true
-            label.textColor = .label
+            label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let readerModeLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingModeDescription
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
             label.numberOfLines = 0
-            label.textColor = .label
+            label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let readerModeImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
@@ -270,11 +272,12 @@ class ReadingListPanel: UITableViewController,
             label.text = .ReaderPanelReadingListDescription
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
             label.numberOfLines = 0
-            label.textColor = .label
+            label.textColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let readingListImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: "AddToReadingListCircle")
+            imageView.image = UIImage(named: "AddToReadingListCircle")?.withRenderingMode(.alwaysTemplate)
+            imageView.tintColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let emptyStateViewWrapper: UIView = .build { view in
             view.addSubviews(welcomeLabel, readerModeLabel, readerModeImageView, readingListLabel, readingListImageView)
@@ -415,8 +418,8 @@ class ReadingListPanel: UITableViewController,
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
+        view.backgroundColor = themeManager.currentTheme.colors.layer6
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
         refreshReadingList()
     }
 }

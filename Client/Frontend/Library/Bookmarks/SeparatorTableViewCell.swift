@@ -8,6 +8,6 @@ class SeparatorTableViewCell: OneLineTableViewCell {
 
     override func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
-        backgroundColor = theme.colors.layer1
+        backgroundColor = theme.colors.layer5
     }
 }

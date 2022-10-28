@@ -286,11 +286,11 @@ class DownloadsPanel: UIViewController,
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView: UIView = .build { view in
-            view.backgroundColor = self.themeManager.currentTheme.colors.layer1
+            view.backgroundColor = self.themeManager.currentTheme.colors.layer6
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         let logoImageView: UIImageView = .build { imageView in
-            imageView.image = UIImage.templateImageNamed("emptyDownloads")
+            imageView.image = UIImage.templateImageNamed("emptyDownloads")?.withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.themeManager.currentTheme.colors.iconSecondary
         }
         let welcomeLabel: UILabel = .build { label in
@@ -366,14 +366,12 @@ class DownloadsPanel: UIViewController,
             assertionFailure("Invalid Downloads section \(section)")
         }
 
-        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let headerViewModel = SiteTableViewHeaderModel(title: title,
                                                        isCollapsible: false,
-                                                       collapsibleState: nil,
-                                                       theme: themeManager.currentTheme)
+                                                       collapsibleState: nil)
         headerView.configure(headerViewModel)
         headerView.showBorder(for: .top, !isFirstSection(section))
+        headerView.applyTheme(theme: themeManager.currentTheme)
 
         return headerView
     }
@@ -392,6 +390,7 @@ class DownloadsPanel: UIViewController,
             cell.titleLabel.text = downloadedFile.filename
             cell.descriptionLabel.text = downloadedFile.formattedSize
             cell.leftImageView.image = iconForFileExtension(downloadedFile.fileExtension)
+            cell.applyTheme(theme: themeManager.currentTheme)
         }
         return cell
     }
@@ -464,7 +463,7 @@ class DownloadsPanel: UIViewController,
         emptyStateOverlayView = createEmptyStateOverlayView()
         updateEmptyPanelState()
 
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
         tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
 
         reloadData()

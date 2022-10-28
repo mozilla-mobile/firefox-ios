@@ -146,7 +146,7 @@ class OneLineTableViewCell: UITableViewCell,
 
     func applyTheme(theme: Theme) {
         selectedView.backgroundColor = theme.colors.layer5Hover
-        backgroundColor = theme.colors.layer1
+        backgroundColor = theme.colors.layer5
         titleLabel.textColor = theme.colors.textPrimary
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
     }

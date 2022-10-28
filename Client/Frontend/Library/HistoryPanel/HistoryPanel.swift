@@ -387,7 +387,7 @@ class HistoryPanel: UIViewController,
         cell.configure(viewModel: viewModel)
         cell.accessibilityIdentifier = historyActionable.itemA11yId
         setTappableStateAndStyle(with: historyActionable, on: cell)
-
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -403,7 +403,7 @@ class HistoryPanel: UIViewController,
             cell?.leftImageView.image = image
             cell?.leftImageView.backgroundColor = .clear
         }
-
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -423,7 +423,7 @@ class HistoryPanel: UIViewController,
         cell.accessoryView = imageView
         cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)?.withTintColor(themeManager.currentTheme.colors.iconSecondary)
         cell.leftImageView.backgroundColor = themeManager.currentTheme.colors.layer5
-
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -519,7 +519,7 @@ class HistoryPanel: UIViewController,
         // overlayView becomes the footer view, and for unknown reason, setting the bgcolor is ignored.
         // Create an explicit view for setting the color.
         let bgColor: UIView = .build { view in
-            view.backgroundColor = self.themeManager.currentTheme.colors.layer1
+            view.backgroundColor = self.themeManager.currentTheme.colors.layer6
         }
         overlayView.addSubview(bgColor)
 
@@ -547,7 +547,7 @@ class HistoryPanel: UIViewController,
     func applyTheme() {
         updateEmptyPanelState()
 
-        tableView.backgroundColor = themeManager.currentTheme.colors.layer1
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
         searchbar.backgroundColor = themeManager.currentTheme.colors.layer3
         let tintColor = themeManager.currentTheme.colors.textPrimary
         let searchBarImage = UIImage(named: ImageIdentifiers.libraryPanelHistory)?.withRenderingMode(.alwaysTemplate).tinted(withColor: tintColor)
@@ -649,15 +649,12 @@ extension HistoryPanel: UITableViewDelegate {
         else { return nil }
 
         let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
-
-        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let headerViewModel = SiteTableViewHeaderModel(title: actualSection.title ?? "",
                                                        isCollapsible: true,
                                                        collapsibleState:
-                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down,
-                                                       theme: themeManager.currentTheme)
+                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
         header.configure(headerViewModel)
+        header.applyTheme(theme: themeManager.currentTheme)
 
         // Configure tap to collapse/expand section
         header.tag = section

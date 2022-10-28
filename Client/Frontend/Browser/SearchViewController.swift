@@ -573,9 +573,9 @@ class SearchViewController: SiteTableViewController,
 
         let viewModel = SiteTableViewHeaderModel(title: .Search.SuggestSectionTitle,
                                                  isCollapsible: false,
-                                                 collapsibleState: nil,
-                                                 theme: themeManager.currentTheme)
+                                                 collapsibleState: nil)
         headerView.configure(viewModel)
+        headerView.applyTheme(theme: themeManager.currentTheme)
         return headerView
     }
 
