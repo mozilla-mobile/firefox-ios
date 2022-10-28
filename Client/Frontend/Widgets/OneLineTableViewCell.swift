@@ -26,6 +26,9 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         static let leftImageViewSize: CGFloat = 28
         static let separatorViewHeight: CGFloat = 0.7
         static let labelMargin: CGFloat = 4
+        static let shortLeadingMargin: CGFloat = 5
+        static let longLeadingMargin: CGFloat = 13
+        static let cornerRadius: CGFloat = 5
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -37,7 +40,7 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
 
     lazy var leftImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 5.0
+        imageView.layer.cornerRadius = UX.cornerRadius
         imageView.clipsToBounds = true
     }
 
@@ -84,7 +87,7 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         bringSubviewToFront(containerView)
 
         let containerViewTrailingAnchor = accessoryView?.leadingAnchor ?? contentView.trailingAnchor
-        let midViewLeadingMargin: CGFloat = shouldLeftAlignTitle ? 5 : 13
+        let midViewLeadingMargin: CGFloat = shouldLeftAlignTitle ? UX.shortLeadingMargin : UX.longLeadingMargin
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor,
