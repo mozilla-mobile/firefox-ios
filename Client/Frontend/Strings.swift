@@ -17,7 +17,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 private enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101, v102, v103, v104, v105, v106, v107
+    case v39, v96, v97, v98, v99, v100, v101, v102, v103, v104, v105, v106, v107, v108
 
     // Used for all cases before version 39.
     case unknown
@@ -2457,6 +2457,12 @@ extension String {
             value: "Close All Tabs",
             comment: "Label for the button, displayed in the menu, used to close all tabs currently open.",
             lastUpdated: .unknown)
+        public static let AppMenuCloseTabsAndClearCookiesTitleString = MZLocalizedString(
+            "Menu.CloseTabsAndClearCookiesAction.Title",
+            tableName: "Menu",
+            value: "Close Tabs & Clear Cookies",
+            comment: "Label for the button, displayed in the menu, used to close all tabs currently open and remove all cookies.",
+            lastUpdated: .v108)
         public static let AppMenuOpenHomePageTitleString = MZLocalizedString(
             "SettingsMenu.OpenHomePageAction.Title",
             tableName: "Menu",

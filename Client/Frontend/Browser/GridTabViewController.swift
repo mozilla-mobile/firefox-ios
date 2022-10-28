@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import WebKit
 
 struct GridTabTrayControllerUX {
     static let CornerRadius = CGFloat(6.0)
@@ -47,6 +48,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     var contextualHintViewController: ContextualHintViewController
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    let clearable = CookiesClearable()
 
     // This is an optional variable used if we wish to focus a tab that is not the
     // currently selected tab. This allows us to force the scroll behaviour to move
@@ -346,11 +348,15 @@ extension GridTabViewController {
         }
     }
 
-    func closeTabsTrayBackground() {
+    func closeTabsTrayBackground(removeCookies: Bool = false) {
         tabDisplayManager.removeAllTabsFromView()
 
         tabManager.backgroundRemoveAllTabs(isPrivate: tabDisplayManager.isPrivate) {
             recentlyClosedTabs, isPrivateState, previousTabUUID in
+
+            if removeCookies {
+                _ = self.clearable.clear()
+            }
 
             DispatchQueue.main.async { [unowned self] in
                 if isPrivateState {
@@ -591,6 +597,10 @@ extension GridTabViewController {
                                            style: .default,
                                            handler: { _ in self.closeTabsTrayBackground() }),
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
+        controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseTabsAndClearCookiesTitleString,
+                                           style: .default,
+                                           handler: { _ in self.closeTabsTrayBackground(removeCookies: true) }),
+                             accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllAndClearButton)
         controller.addAction(UIAlertAction(title: .TabTrayCloseAllTabsPromptCancel,
                                            style: .cancel,
                                            handler: nil),
@@ -859,3 +869,4 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
         )
     }
 }
+
