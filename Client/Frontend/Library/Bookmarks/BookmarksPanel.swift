@@ -241,13 +241,14 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     /// Performs the delete asynchronously even though we update the
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
-        _ = profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
+        profile.places.deleteBookmarkNode(guid: bookmarkNode.guid).uponQueue(.main) { _ in
+            self.removeBookmarkShortcut()
+        }
 
         tableView.beginUpdates()
         viewModel.bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
-        removeBookmarkShortcut()
     }
 
     // MARK: Button Actions helpers

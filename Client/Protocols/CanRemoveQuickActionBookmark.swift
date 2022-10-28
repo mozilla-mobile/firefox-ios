@@ -15,14 +15,24 @@ extension CanRemoveQuickActionBookmark {
     func removeBookmarkShortcut() {
         // Get most recent bookmark
         profile.places.getRecentBookmarks(limit: 1).uponQueue(.main) { result in
-            guard let bookmarkItems = result.successValue else { return }
+            guard let bookmarkItems = result.successValue else {
+                // Remove openLastBookmark shortcut on failure
+                QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                                       fromApplication: .shared)
+                return
+            }
+
             if bookmarkItems.isEmpty {
                 // Remove the openLastBookmark shortcut
-                QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.openLastBookmark, fromApplication: .shared)
+                QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                                       fromApplication: .shared)
             } else {
                 // Update the last bookmark shortcut
-                let userData = [QuickActions.TabURLKey: bookmarkItems[0].url, QuickActions.TabTitleKey: bookmarkItems[0].title]
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
+                let userData = [QuickActions.TabURLKey: bookmarkItems[0].url,
+                                QuickActions.TabTitleKey: bookmarkItems[0].title]
+                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                                    withUserData: userData,
+                                                                                    toApplication: .shared)
             }
         }
     }
