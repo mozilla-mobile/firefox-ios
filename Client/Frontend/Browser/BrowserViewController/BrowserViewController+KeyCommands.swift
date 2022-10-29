@@ -366,7 +366,7 @@ extension BrowserViewController {
             homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
             shouldCancelHandler = true
 
-            // Download Link
+        // Download Link
         } else if keyboardPressesHandler().isOnlyOptionPressed, let currentTab = tabManager.selectedTab {
             // This checks if download is a blob, if yes, begin blob download process
             if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
