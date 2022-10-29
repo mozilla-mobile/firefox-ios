@@ -4507,5 +4507,3 @@ extension String {
         comment: "This is the value for a label that indicates if a user is on an unencrypted website.",
         lastUpdated: .unknown)
 }
-
-

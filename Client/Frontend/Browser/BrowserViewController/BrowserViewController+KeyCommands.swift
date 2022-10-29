@@ -383,5 +383,3 @@ extension BrowserViewController {
         return shouldCancelHandler
     }
 }
-
-

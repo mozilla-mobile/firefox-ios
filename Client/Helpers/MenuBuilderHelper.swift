@@ -107,5 +107,3 @@ class MenuBuilderHelper {
         builder.insertChild(windowMenu, atStartOfMenu: .window)
     }
 }
-
-
