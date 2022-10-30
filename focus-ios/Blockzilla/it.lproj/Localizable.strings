@@ -167,7 +167,7 @@
 "FindInPage.PreviousResult" = "Trova risultato precedente nella pagina";
 
 /* Label on button to dismiss first run UI */
-"FirstRun.lastSlide.buttonLabel" = "OK, tutto chiaro.";
+"FirstRun.lastSlide.buttonLabel" = "OK";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Naviga come se nessuno ti stesse guardando.";
@@ -229,11 +229,17 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Attiva %@";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Seleziona Safari, quindi Estensioni";
+
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ non è attivo.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Apri le impostazioni";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Apri impostazioni del dispositivo";
 
 /* Save button label */
 "Save" = "Salva";

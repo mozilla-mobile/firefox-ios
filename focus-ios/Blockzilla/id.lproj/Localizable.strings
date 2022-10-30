@@ -229,11 +229,17 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Aktifkan %@";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Pilih Safari, lalu pilih Ekstensi";
+
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ tidak aktif.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Buka Aplikasi Pengaturan";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Buka setelan peranti";
 
 /* Save button label */
 "Save" = "Simpan";

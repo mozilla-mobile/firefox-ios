@@ -229,11 +229,17 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "%@ ਸਮਰੱਥ ਕਰੋ";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Safari ਚੁਣ ਕੇ, ਇਕਸਟੈਨਸਨਾਂ ਨੂੰ ਚੁਣੋ";
+
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ ਸਮਰੱਥ ਨਹੀਂ ਹੈ।";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Settings ਐਪ ਖੋਲ੍ਹੋ";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "ਡਿਵਾਈਸ ਸੈਟਿੰਗਾਂ ਖੋਲ੍ਹੋ";
 
 /* Save button label */
 "Save" = "ਸੰਭਾਲੋ";
@@ -552,6 +558,9 @@
 
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "ਸਾਈਟ ਦੀ ਸਮੱਗਰੀ ਗੁੰਮ ਹੈ ਜਾਂ ਅਜੀਬ ਤਰ੍ਹਾਂ ਕੰਮ ਕਰ ਰਹੀ ਹੈ?";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "%@ ਵਿੱਚ ਲੱਭੋ";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "ਖਾਸ ਪਰਦੇਦਾਰੀ ਅਤੇ ਸੁਰੱਖਿਆ ਚੋਣਾਂ ਦਾ ਇੰਤਜ਼ਾਮ ਕਰਨ ਲਈ ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ।";

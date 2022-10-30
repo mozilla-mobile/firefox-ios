@@ -178,11 +178,20 @@
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Comenzar";
 
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Rápido. Privado. Sin distracciones.";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Empieza a navegar";
 
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Saltar";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Borramos tu historial cuando cierras la aplicación para mayor privacidad.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ no es como otros navegadores";
 
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Establecer como navegador predeterminado";

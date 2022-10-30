@@ -224,16 +224,22 @@
 "Onboarding.Title" = "ברוכים הבאים אל Firefox %@!";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "יש להיכנס ל־Safari ולבחור בחוסמי תוכן";
+"Safari.instructionsContentBlockers" = "יש להקיש על Safari ולבחור בחוסמי תוכן";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "הפעלת %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "יש לבחור ב־Safari ולאחר מכן בהרחבות";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "u200f%@ לא מופעל.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "פתחו את היישום הגדרות";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "יש לפתוח את הגדרות המכשיר";
 
 /* Save button label */
 "Save" = "שמירה";

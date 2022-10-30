@@ -229,11 +229,17 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Ενεργοποίηση στο %@";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Επιλέξτε το Safari και έπειτα, επιλέξτε «Επεκτάσεις»";
+
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "Το %@ δεν είναι ενεργό.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Άνοιγμα εφαρμογής «Ρυθμίσεις»";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Ανοίξτε τις ρυθμίσεις της συσκευής";
 
 /* Save button label */
 "Save" = "Αποθήκευση";

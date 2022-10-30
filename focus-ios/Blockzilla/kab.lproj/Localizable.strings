@@ -178,8 +178,26 @@
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Bdu";
 
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "D arurad. D uslig. Ulac yesruḥuyen ddehn. ";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Bdu tunigin";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Suref";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Anseffeḍ azray-ik•im mi ara tmedleḍ asnas i wugar n lemqadra n tbaḍnit.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Err %@ d iminig-ik·im amezwer i ummesten n yifeka-k·m yal tikkelt mi ara teldiḍ aseɣwen.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ mačči am yiminigen-nniḍen";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Sbadu-t d iminig amezwer";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Sfeḍ azray-ik•im n Tunigin, awalen-ik•im uffir, inagan-ik•im n tuqqna, tesweḥleḍ adellel akken ur ak•akem-iṭṭafar ara s yiwen kan usiti!";
@@ -211,11 +229,17 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Rmed %@";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Fren Safari, syen fren Iseɣzaf";
+
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ ur yermid ara.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Ldi asnas n iɣewwaṛen";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Ldi iɣewwaren n yibenk";
 
 /* Save button label */
 "Save" = "Sekles";
@@ -448,6 +472,18 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Immed";
 
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Sit aṭas ɣef ugdil agejdan alamma bdant ttembiwilent tegnitin.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "Nadi ɣef %@. Syen fren awiǧit.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Sit ɣef tqeffalt \"+\".";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "Rnu awiǧit %@";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Rnu";
 
@@ -523,14 +559,29 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Asmel ixuṣṣ agbur neɣ ur iteddu ara akken yella uqbel?";
 
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Nadi deg %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Ddu ɣer yiɣewwaren i wakken ad tesferkeḍ tixtiṛiyin tufrinin n tbaḍnit & tɣellist.";
+
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Iɣewwaren-a s wudem amezwer ttmuddun ammesten iǧehden. Maca yeshel ad ttubeddlen, ad ten-terreḍ akken i tebɣiḍ.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Bdu tiɣimit-ik·im n tunigin tusligt, ad nessewḥal ineḍfaren d yir tɣawsiwin simi tettedduḍ.";
 
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ issewḥel asmel-a seg tεessast-ik·im. Sit ɣef ẓẓerb-nni i wugar n telɣut ɣef wayen i nessewḥel.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Ṭṭfeɣ-ten! Nesseḥbes asmel-a ɣef tɛessast-ik·im. Sit ɣef ẓẓerb-nni yal tikkelt i wakken ad twaliḍ acu i nessewḥel.";
+
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Sit ɣef tqecwalt yal tikkelt i tukksa n lǧeṛṛa n tɣimit-ik•im tamirant.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Sit dagi i wakken ad tḍeggreḍ kullec — azray, inagan n tuqqna, kullec — syen bdu seg tazwara qef yiccer amaynut.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Tettummestneḍ!";
@@ -585,4 +636,13 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Ineḍfaṛen weḥlen";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Sken-iyi-d amek";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Ad ak·akem-neǧǧ tunigin tusligt, maca bdu s zzerb deg wussan i d-iteddun s uwiǧit %@ ɣef ugdil-ik·im agejdan.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Azray n tunigin yettwasfaḍ! 🎉";
 
