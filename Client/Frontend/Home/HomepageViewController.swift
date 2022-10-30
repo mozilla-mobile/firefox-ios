@@ -7,6 +7,7 @@ import UIKit
 import Storage
 import SyncTelemetry
 import MozillaAppServices
+import CoreTelephony
 
 class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
@@ -98,6 +99,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         notificationCenter.removeObserver(self)
     }
 
+    let cellularData = CTCellularData()
+
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,6 +119,24 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         applyTheme()
         setupSectionsAction()
         reloadView()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Notification is fired whenever cellular data option changes. If it changes to restricted, alert user.
+        cellularData.cellularDataRestrictionDidUpdateNotifier = { newState in
+            if newState == .restricted {
+                DispatchQueue.main.async {
+                    self.presentNoCellularDataAlert()
+                }
+            }
+        }
+
+        if cellularData.restrictedState == .restricted {
+            // Cellular data is turned off. Alert the user
+            presentNoCellularDataAlert()
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -154,6 +175,33 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
            presentedViewController.isKind(of: BottomSheetViewController.self) || tabManager.isStartingAtHome {
             self.dismissKeyboard()
         }
+    }
+
+    private func presentNoCellularDataAlert() {
+        let alert = UIAlertController(title: "Cellular Data is Turned Off for \"Firefox\"",
+                                      message: "You can turn on cellular data for this app in Settings.",
+                                      preferredStyle: .alert)
+
+        let action = UIAlertAction(title: "Cancel",
+                                   style: .cancel)
+
+        let okAction = UIAlertAction(title: "Settings",
+                                     style: .default) { _ in
+            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+
+            if UIApplication.shared.canOpenURL(settingsUrl) {
+                UIApplication.shared.open(settingsUrl, options: [:]) { success in
+                    return
+                }
+            }
+        }
+
+        alert.addAction(action)
+        alert.addAction(okAction)
+
+        present(alert, animated: true)
     }
 
     // MARK: - Layout
