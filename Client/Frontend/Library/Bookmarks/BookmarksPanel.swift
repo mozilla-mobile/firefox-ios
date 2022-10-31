@@ -23,6 +23,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     // MARK: - Properties
+    var bookmarksHandler: BookmarksHandler
     var libraryPanelDelegate: LibraryPanelDelegate?
     var notificationCenter: NotificationProtocol
     var state: LibraryPanelMainState
@@ -77,6 +78,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.state = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
+        self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile)
 
         setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged])

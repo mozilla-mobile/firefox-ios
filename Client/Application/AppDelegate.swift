@@ -175,7 +175,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// Quick actions / shortcut items are handled here as long as our two launch methods return `true`. If either of them return `false`, this method
     /// won't be called to handle shortcut items.
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
+        let handledShortCutItem = QuickActionsImplementation().handleShortCutItem(
+            shortcutItem,
+            withBrowserViewController: browserViewController)
 
         completionHandler(handledShortCutItem)
     }

@@ -3,36 +3,30 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Storage
 
 protocol CanRemoveQuickActionBookmark {
-    var profile: Profile { get }
-    func removeBookmarkShortcut()
+    var bookmarksHandler: BookmarksHandler { get }
+    func removeBookmarkShortcut(quickAction: QuickActions)
 }
 
 // Extension to easily remove a bookmark from the quick actions
 extension CanRemoveQuickActionBookmark {
 
-    func removeBookmarkShortcut() {
+    func removeBookmarkShortcut(quickAction: QuickActions = QuickActionsImplementation()) {
         // Get most recent bookmark
-        profile.places.getRecentBookmarks(limit: 1).uponQueue(.main) { result in
-            guard let bookmarkItems = result.successValue else {
-                // Remove openLastBookmark shortcut on failure
-                QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                                       fromApplication: .shared)
-                return
-            }
-
+        bookmarksHandler.getRecentBookmarks(limit: 1) { bookmarkItems in
             if bookmarkItems.isEmpty {
                 // Remove the openLastBookmark shortcut
-                QuickActions.sharedInstance.removeDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                                       fromApplication: .shared)
+                quickAction.removeDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                       fromApplication: .shared)
             } else {
                 // Update the last bookmark shortcut
-                let userData = [QuickActions.TabURLKey: bookmarkItems[0].url,
-                                QuickActions.TabTitleKey: bookmarkItems[0].title]
-                QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                                    withUserData: userData,
-                                                                                    toApplication: .shared)
+                let userData = [QuickActionInfos.tabURLKey: bookmarkItems[0].url,
+                                QuickActionInfos.tabTitleKey: bookmarkItems[0].title]
+                quickAction.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                    withUserData: userData,
+                                                                    toApplication: .shared)
             }
         }
     }
