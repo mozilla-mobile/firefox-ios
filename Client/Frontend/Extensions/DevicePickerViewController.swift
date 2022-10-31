@@ -171,15 +171,15 @@ class DevicePickerViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell
+        var cell: UITableViewCell?
 
         if !devices.isEmpty {
             if indexPath.section == 0 {
                 cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewHeaderCell.cellIdentifier,
-                                                     for: indexPath) as! DevicePickerTableViewHeaderCell
-            } else {
-                let clientCell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewCell.cellIdentifier,
-                                                               for: indexPath) as! DevicePickerTableViewCell
+                                                     for: indexPath) as? DevicePickerTableViewHeaderCell
+            } else if let clientCell = tableView.dequeueReusableCell(
+                withIdentifier: DevicePickerTableViewCell.cellIdentifier,
+                for: indexPath) as? DevicePickerTableViewCell {
                 let item = devices[indexPath.row]
                 clientCell.nameLabel.text = item.name
                 clientCell.clientType = ClientType.fromFxAType(item.type)
@@ -190,10 +190,9 @@ class DevicePickerViewController: UITableViewController {
                 cell = clientCell
             }
         } else {
-            if loadingState == .loaded {
+            if loadingState == .loaded,
                 let hostingCell = tableView.dequeueReusableCell(
-                    withIdentifier: emptyCellIdentifier) as! HostingTableViewCell<HelpView>
-
+                withIdentifier: emptyCellIdentifier) as? HostingTableViewCell<HelpView> {
                 #if MOZ_TARGET_SHARETO
                 let textColor = ShareTheme.textColor.color
                 let imageColor = ShareTheme.iconColor.color
@@ -212,12 +211,10 @@ class DevicePickerViewController: UITableViewController {
                 // Move the separator off screen
                 hostingCell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
                 cell = hostingCell
-            } else {
-                cell = UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
             }
         }
 
-        return cell
+        return cell ?? UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
