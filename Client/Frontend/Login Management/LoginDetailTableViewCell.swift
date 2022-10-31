@@ -80,9 +80,9 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
                 return "\(highlightedLabel.text ?? ""), \(descriptionLabel.text ?? "")"
             }
         }
-        set {
-            // Ignore sets
-        }
+        // swiftlint:disable unused_setter_value
+        set { }
+        // swiftlint:enable unused_setter_value
     }
 
     var descriptionTextSize: CGSize? {
