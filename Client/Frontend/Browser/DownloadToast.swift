@@ -139,7 +139,7 @@ class DownloadToast: Toast {
 
         horizontalStackView.addArrangedSubview(labelStackView)
 
-        let cancel = UIImageView(image: UIImage.templateImageNamed("close-medium"))
+        let cancel = UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.closeMediumButton))
         cancel.tintColor = UIColor.Photon.White100
         cancel.isUserInteractionEnabled = true
         cancel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))

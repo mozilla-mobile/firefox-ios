@@ -24,6 +24,7 @@ public struct ImageIdentifiers {
     public static let contextualHintClose = "find_close"
     public static let copyLink = "menu-Copy-Link"
     public static let closeLargeButton = "close-large"
+    public static let closeMediumButton = "close-medium"
     public static let closeTap = "menu-CloseTabs"
     public static let customSwitchBackground = "menu-customswitch-background"
     public static let customSwitchOff = "menu-customswitch-off"

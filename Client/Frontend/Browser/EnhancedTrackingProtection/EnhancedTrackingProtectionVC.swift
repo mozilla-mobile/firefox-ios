@@ -72,7 +72,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     private var closeButton: UIButton = .build { button in
         button.layer.cornerRadius = 0.5 * ETPMenuUX.UX.closeButtonSize
         button.clipsToBounds = true
-        button.setImage(UIImage(named: "close-medium"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
     }
 
@@ -440,6 +439,9 @@ extension EnhancedTrackingProtectionMenuVC {
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         closeButton.backgroundColor = theme.colors.layer2
+        let buttonImage = UIImage(named: ImageIdentifiers.closeMediumButton)?
+            .tinted(withColor: theme.colors.iconPrimary)
+        closeButton.setImage(buttonImage, for: .normal)
         connectionView.backgroundColor = theme.colors.layer2
         connectionDetailArrow.tintColor = theme.colors.iconPrimary
         if viewModel.connectionSecure {
@@ -448,7 +450,7 @@ extension EnhancedTrackingProtectionMenuVC {
         toggleView.backgroundColor = theme.colors.layer2
         toggleSwitch.tintColor = theme.colors.actionPrimary
         toggleSwitch.onTintColor = theme.colors.actionPrimary
-        toggleStatusLabel.textColor = theme.colors.textPrimary
+        toggleStatusLabel.textColor = theme.colors.textSecondary
         protectionView.backgroundColor = theme.colors.layer2
         protectionButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary

@@ -86,6 +86,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
+        listenForThemeChange()
         applyTheme()
     }
 
@@ -175,7 +176,7 @@ extension EnhancedTrackingProtectionDetailsVC {
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor =  theme.colors.layer1
         siteInfoSection.backgroundColor = theme.colors.layer2
-        siteInfoURLLabel.textColor = theme.colors.textPrimary
+        siteInfoURLLabel.textColor = theme.colors.textSecondary
         connectionView.backgroundColor = theme.colors.layer2
         if viewModel.connectionSecure {
             connectionImage.tintColor = theme.colors.iconPrimary
