@@ -152,13 +152,13 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                                              title: shareItem.title,
                                                              position: 0)
 
-            var userData = [QuickActions.TabURLKey: shareItem.url]
+            var userData = [QuickActionInfos.tabURLKey: shareItem.url]
             if let title = shareItem.title {
-                userData[QuickActions.TabTitleKey] = title
+                userData[QuickActionInfos.tabTitleKey] = title
             }
-            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                                withUserData: userData,
-                                                                                toApplication: .shared)
+            QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                                 withUserData: userData,
+                                                                                 toApplication: .shared)
             site.setBookmarked(true)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
         })
