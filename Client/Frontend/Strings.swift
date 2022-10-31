@@ -17,7 +17,7 @@ public struct Strings {
 // Used as a helper enum to keep track of what app version strings were last updated in. Updates
 // are considered .unknown unless the string's Key is updated, or of course a new string is introduced.
 private enum StringLastUpdatedAppVersion {
-    case v39, v96, v97, v98, v99, v100, v101, v102, v103, v104, v105, v106, v107
+    case v39, v96, v97, v98, v99, v100, v101, v102, v103, v104, v105, v106, v107, v108
 
     // Used for all cases before version 39.
     case unknown
@@ -397,6 +397,11 @@ extension String {
             value: "Reload Page",
             comment: "A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.",
             lastUpdated: .v96)
+        public static let ReloadWithoutCache = MZLocalizedString(
+            "Keyboard.Shortcuts.RefreshWithoutCache.v108",
+            value: "Reload Ignoring Cache",
+            comment: "A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad.",
+            lastUpdated: .v108)
         public static let SelectLocationBar = MZLocalizedString(
             "Hotkeys.SelectLocationBar.DiscoveryTitle",
             value: "Select Location Bar",

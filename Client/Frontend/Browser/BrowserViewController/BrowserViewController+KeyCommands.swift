@@ -58,6 +58,17 @@ extension BrowserViewController {
         }
     }
 
+    @objc func reloadTabIgnoringCacheKeyCommand() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .press,
+                                     object: .keyCommand,
+                                     extras: ["action": "reload-no-cache"])
+
+        if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
+            tab.reload(bypassCache: true)
+        }
+    }
+
     @objc func goBackKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .press,
