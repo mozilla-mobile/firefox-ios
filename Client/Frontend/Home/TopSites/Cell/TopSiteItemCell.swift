@@ -139,12 +139,15 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Public methods
 
-    func configure(_ topSite: TopSite, position: Int, theme: Theme) {
+    func configure(_ topSite: TopSite,
+                   favicon: UIImage?,
+                   position: Int,
+                   theme: Theme) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
 
-        imageView.setFaviconOrDefaultIcon(forSite: topSite.site) {}
+        imageView.image = favicon
 
         configurePinnedSite(topSite)
         configureSponsoredSite(topSite)
