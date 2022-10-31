@@ -52,11 +52,6 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
         label.font = ETPMenuUX.Fonts.viewTitleLabels
     }
 
-    private let connectionVerifierLabel: UILabel = .build { label in
-        label.font = ETPMenuUX.Fonts.minorInfoLabel
-        label.isHidden = true
-    }
-
     // MARK: - Variables
     var viewModel: EnhancedTrackingProtectionDetailsVM
     var notificationCenter: NotificationProtocol
@@ -103,7 +98,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
         siteInfoSection.addSubviews(siteInfoImage, siteInfoTitleLabel, siteInfoURLLabel)
         baseView.addSubview(siteInfoSection)
 
-        connectionView.addSubviews(connectionImage, connectionStatusLabel, connectionVerifierLabel)
+        connectionView.addSubviews(connectionImage, connectionStatusLabel)
         baseView.addSubview(connectionView)
 
         NSLayoutConstraint.activate([
@@ -151,15 +146,9 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
             connectionImage.widthAnchor.constraint(equalToConstant: 20),
 
             connectionStatusLabel.leadingAnchor.constraint(equalTo: connectionImage.trailingAnchor, constant: 28),
-//            connectionStatusLabel.topAnchor.constraint(equalTo: connectionView.topAnchor, constant: 8),
             connectionStatusLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -21),
             connectionStatusLabel.heightAnchor.constraint(equalToConstant: 22),
             connectionStatusLabel.centerYAnchor.constraint(equalTo: connectionView.centerYAnchor)
-
-//            connectionVerifierLabel.leadingAnchor.constraint(equalTo: connectionStatusLabel.leadingAnchor),
-//            connectionVerifierLabel.bottomAnchor.constraint(equalTo: connectionView.bottomAnchor, constant: -8),
-//            connectionVerifierLabel.trailingAnchor.constraint(equalTo: connectionView.trailingAnchor, constant: -21),
-//            connectionVerifierLabel.heightAnchor.constraint(equalToConstant: 20),
         ])
     }
 
@@ -169,7 +158,6 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
         siteInfoTitleLabel.text = viewModel.title
         siteInfoURLLabel.text = viewModel.URL
         connectionStatusLabel.text = viewModel.connectionStatusMessage
-        connectionVerifierLabel.text = viewModel.connectionVerifier
         connectionImage.image = viewModel.lockIcon
     }
 
@@ -192,7 +180,6 @@ extension EnhancedTrackingProtectionDetailsVC {
         if viewModel.connectionSecure {
             connectionImage.tintColor = theme.colors.iconPrimary
         }
-        connectionVerifierLabel.textColor = theme.colors.textPrimary
         closeButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
         setNeedsStatusBarAppearanceUpdate()
     }

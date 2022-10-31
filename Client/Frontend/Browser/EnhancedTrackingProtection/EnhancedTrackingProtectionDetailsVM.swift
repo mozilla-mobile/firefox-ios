@@ -12,6 +12,5 @@ struct EnhancedTrackingProtectionDetailsVM {
 
     let lockIcon: UIImage
     let connectionStatusMessage: String
-    let connectionVerifier: String
     let connectionSecure: Bool
 }
