@@ -4,7 +4,7 @@
 
 import Foundation
 
-class EnhancedTrackingProtectionDetailsVC: UIViewController {
+class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
 
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
@@ -18,7 +18,6 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
         button.clipsToBounds = true
         button.setTitle(.AppSettingsDone, for: .normal)
         button.titleLabel?.font = ETPMenuUX.Fonts.viewTitleLabels
-        button.setTitleColor(.systemBlue, for: .normal)
     }
 
     private let siteInfoSection = ETPSectionView(frame: .zero)
@@ -61,13 +60,17 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
     // MARK: - Variables
     var viewModel: EnhancedTrackingProtectionDetailsVM
     var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     // MARK: - View Lifecycle
 
     init(with viewModel: EnhancedTrackingProtectionDetailsVM,
-         and notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         and notificationCenter: NotificationProtocol = NotificationCenter.default,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -83,7 +86,6 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -179,28 +181,19 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController {
 }
 
 // MARK: - Themable
-extension EnhancedTrackingProtectionDetailsVC: NotificationThemeable {
-    @objc func applyTheme() {
-        overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
-        view.backgroundColor = UIColor.theme.etpMenu.background
-        siteInfoSection.backgroundColor = UIColor.theme.etpMenu.sectionColor
-        siteInfoURLLabel.textColor = UIColor.theme.etpMenu.subtextColor
-        connectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
+extension EnhancedTrackingProtectionDetailsVC {
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
+        view.backgroundColor =  theme.colors.layer1
+        siteInfoSection.backgroundColor = theme.colors.layer2
+        siteInfoURLLabel.textColor = theme.colors.textPrimary
+        connectionView.backgroundColor = theme.colors.layer2
         if viewModel.connectionSecure {
-            connectionImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
+            connectionImage.tintColor = theme.colors.iconPrimary
         }
-        connectionVerifierLabel.textColor = UIColor.theme.etpMenu.subtextColor
+        connectionVerifierLabel.textColor = theme.colors.textPrimary
+        closeButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
         setNeedsStatusBarAppearanceUpdate()
-    }
-}
-
-// MARK: - Notifiable
-extension EnhancedTrackingProtectionDetailsVC: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
     }
 }
