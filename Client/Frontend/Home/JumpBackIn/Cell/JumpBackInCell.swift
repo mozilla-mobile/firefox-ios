@@ -233,7 +233,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 // MARK: - ThemeApplicable
 extension JumpBackInCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        [itemTitle, descriptionLabel].forEach { $0.textColor = theme.colors.textPrimary }
+        itemTitle.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor = theme.colors.textSecondary
         faviconImage.tintColor = theme.colors.iconPrimary
         fallbackFaviconImage.tintColor = theme.colors.iconPrimary
         fallbackFaviconBackground.backgroundColor = theme.colors.layer1

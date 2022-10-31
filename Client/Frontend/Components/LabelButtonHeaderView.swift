@@ -149,10 +149,11 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 // MARK: - Theme
 extension LabelButtonHeaderView: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        let textColor = viewModel?.textColor ?? theme.colors.textPrimary
+        let titleColor = viewModel?.textColor ?? theme.colors.textPrimary
+        let moreButtonColor = viewModel?.textColor ?? theme.colors.textAccent
 
-        titleLabel.textColor = textColor
-        moreButton.setTitleColor(textColor, for: .normal)
+        titleLabel.textColor = titleColor
+        moreButton.setTitleColor(moreButtonColor, for: .normal)
     }
 }
 
