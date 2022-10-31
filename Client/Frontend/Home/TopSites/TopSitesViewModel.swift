@@ -39,9 +39,11 @@ class TopSitesViewModel {
 
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
+        let siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = TopSitesDataAdaptorImplementation(profile: profile,
                                                         topSiteHistoryManager: topSiteHistoryManager,
-                                                        googleTopSiteManager: googleTopSiteManager)
+                                                        googleTopSiteManager: googleTopSiteManager,
+                                                        siteImageHelper: siteImageHelper)
         topSitesDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
         adaptor.delegate = self
@@ -220,7 +222,10 @@ extension TopSitesViewModel: HomepageSectionHandler {
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = topSites[safe: indexPath.row] {
-            cell.configure(contentItem, position: indexPath.row)
+            let favicon = topSitesDataAdaptor.getFaviconImage(forSite: contentItem.site)
+            cell.configure(contentItem,
+                           favicon: favicon,
+                           position: indexPath.row)
             sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
 
