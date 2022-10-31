@@ -176,24 +176,6 @@ extension AppDelegate: Notifiable {
         default: break
         }
     }
-
-<<<<<<< HEAD
-    /// When a user presses and holds the app icon from the Home Screen, we present quick actions / shortcut items (see QuickActions).
-    ///
-    /// This method can handle a quick action from both app launch and when the app becomes active. However, the system calls launch methods first if the app `launches`
-    /// and gives you a chance to handle the shortcut there. If it's not handled there, this method is called in the activation process with the shortcut item.
-    ///
-    /// Quick actions / shortcut items are handled here as long as our two launch methods return `true`. If either of them return `false`, this method
-    /// won't be called to handle shortcut items.
-    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        let handledShortCutItem = QuickActionsImplementation().handleShortCutItem(
-            shortcutItem,
-            withBrowserViewController: browserViewController)
-
-        completionHandler(handledShortCutItem)
-    }
-=======
->>>>>>> e96f57a28 (Add FXIOS-2997 [v107] Single scene setup)
 }
 
 // This functionality will need to be moved to the SceneDelegate when the time comes
