@@ -203,7 +203,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        QuickActions.sharedInstance.handleShortCutItem(
+        QuickActionsImplementation().handleShortCutItem(
             shortcutItem,
             withBrowserViewController: browserViewController
         )
@@ -250,7 +250,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         /// At launch, shortcut items can be handled this way.
         if let shortcutItem = connectionOptions.shortcutItem {
-            QuickActions.sharedInstance.handleShortCutItem(
+            QuickActionsImplementation().handleShortCutItem(
                 shortcutItem,
                 withBrowserViewController: browserViewController
             )
