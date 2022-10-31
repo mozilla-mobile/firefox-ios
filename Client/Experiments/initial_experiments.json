@@ -74,7 +74,8 @@
       "endDate": null,
       "proposedDuration": 73,
       "proposedEnrollment": 24,
-      "referenceBranch": "control"
+      "referenceBranch": "control",
+      "featureValidationOptOut": false
     }
   ]
 }
