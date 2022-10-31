@@ -266,7 +266,8 @@ class ReadingListPanel: UITableViewController,
         }
         let readerModeImageView: UIImageView = .build { imageView in
             imageView.contentMode = .scaleAspectFit
-            imageView.image = UIImage(named: "ReaderModeCircle")
+            imageView.image = UIImage(named: "ReaderModeCircle")?.withRenderingMode(.alwaysTemplate)
+            imageView.tintColor = self.themeManager.currentTheme.colors.textSecondary
         }
         let readingListLabel: UILabel = .build { label in
             label.text = .ReaderPanelReadingListDescription
