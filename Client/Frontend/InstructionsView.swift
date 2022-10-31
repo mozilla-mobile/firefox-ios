@@ -26,24 +26,10 @@ struct InstructionsView: View {
         ZStack {
             Color(backgroundColor).edgesIgnoringSafeArea(.all)
             ScrollView {
-                VStack(alignment: .center, spacing: UX.padding) {
-                    Image(ImageIdentifiers.emptySyncImageName)
-                        .renderingMode(.template)
-                        .foregroundColor(Color(imageColor))
-                        .padding(.top, UX.padding)
-                        .accessibility(hidden: true)
-                    Text(String.SendToNotSignedInText)
-                        .font(UX.textFont)
-                        .multilineTextAlignment(.center)
-                        .accessibility(identifier: AccessibilityIdentifiers.ShareTo.Instructions.notSignedInLabel)
-                    Text(String.SendToNotSignedInMessage)
-                        .font(UX.textFont)
-                        .multilineTextAlignment(.center)
-                        .accessibility(identifier: AccessibilityIdentifiers.ShareTo.Instructions.instructionsLabel)
-
-                    Spacer()
-                }
-                .padding(UX.padding)
+                HelpView(textColor: textColor,
+                         imageColor: imageColor,
+                         topMessage: String.SendToNotSignedInText,
+                         bottomMessage: String.SendToNotSignedInMessage)
             }
         }
         .foregroundColor(Color(textColor))
