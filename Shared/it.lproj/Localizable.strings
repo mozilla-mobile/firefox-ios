@@ -1583,7 +1583,7 @@
 "Settings.Toolbar.Top" = "In alto";
 
 /* Dismiss button for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Button" = "OK, tutto chiaro";
+"Settings.TrackingProtection.Alert.Button" = "OK";
 
 /* Decription for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Description" = "Se un sito non funziona come previsto, tocca lo scudo nella barra degli indirizzi e disattiva la protezione antitracciamento avanzata per quella pagina.";

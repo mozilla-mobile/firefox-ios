@@ -110,7 +110,7 @@
 "Bookmarks.Menu.DesktopBookmarks" = "Marcapaginas del scriptorio";
 
 /* The button to create a new bookmark */
-"Bookmarks.NewBookmark.Label" = "Nove marcapaginas";
+"Bookmarks.NewBookmark.Label" = "Nove marcapagina";
 
 /* The button to create a new folder */
 "Bookmarks.NewFolder.Label" = "Nove dossier";
@@ -161,7 +161,7 @@
 "Closing tab" = "Claudente le scheda";
 
 /* Context menu item for bookmarking a link URL */
-"ContextMenu.BookmarkLinkButtonTitle" = "Adder al marcapaginas";
+"ContextMenu.BookmarkLinkButtonTitle" = "Adder le ligamine al marcapaginas";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nove scheda private aperite";
@@ -200,7 +200,7 @@
 "ContextualHint.SearchBarPlacement.NewUsers" = "Pro facilitar le insertion de informationes, le barra de instrumentos es ora placiate in basso per predefinition.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Tu pagina principal personalisate de Firefox ora simplifica reprender de ubi tu lassava. Retrova tu recente schedas, marcapaginas e resultatos del recerca.";
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Tu pagina principal personalisate in Firefox ora rende facile reprender ubi tu lassava. Retrova tu recente schedas, marcapaginas e resultatos de recerca.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Parametros del barra de instrumentos";
@@ -1550,7 +1550,7 @@
 "Settings.Studies.Toggle.Title" = "Studios";
 
 /* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
-"Settings.Sync.ButtonDescription.v103" = "Authentica te pro synchronisar tu schedas, marca-paginas, contrasignos e plus.";
+"Settings.Sync.ButtonDescription.v103" = "Aperi session pro synchronisar tu schedas, marcapaginas, contrasignos e plus.";
 
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Synchronisar e salvar datos";
@@ -1646,10 +1646,10 @@
 "ShareExtension.AddToReadingListActionDone.Title" = "Addite al lista de lectura";
 
 /* Action label on share extension to bookmark the page in Firefox. */
-"ShareExtension.BookmarkThisPageAction.Title" = "Adder al marcapaginas";
+"ShareExtension.BookmarkThisPageAction.Title" = "Adder iste pagina al marcapaginas";
 
 /* Share extension label shown after user has performed 'Bookmark this Page' action. */
-"ShareExtension.BookmarkThisPageActionDone.Title" = "Marcapaginas addite";
+"ShareExtension.BookmarkThisPageActionDone.Title" = "Addite al marcapaginas";
 
 /* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
 "ShareExtension.LoadInBackgroundAction.Title" = "Cargar in secunde plano";
