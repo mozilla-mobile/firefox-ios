@@ -229,10 +229,10 @@ public struct AccessibilityIdentifiers {
     }
 
     struct ShareTo {
-        struct Instructions {
+        struct HelpView {
             static let doneButton = "doneButton"
-            static let notSignedInLabel = "notSignedInLabel"
-            static let instructionsLabel = "instructionsLabel"
+            static let topMessageLabel = "topMessageLabel"
+            static let bottomMessageLabel = "bottomMessageLabel"
         }
     }
 }

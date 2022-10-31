@@ -28,14 +28,14 @@ struct HelpView: View {
                 .font(UX.textFont)
                 .foregroundColor(Color(textColor))
                 .multilineTextAlignment(.center)
-                .accessibility(identifier: AccessibilityIdentifiers.ShareTo.Instructions.notSignedInLabel)
+                .accessibility(identifier: AccessibilityIdentifiers.ShareTo.HelpView.topMessageLabel)
 
             if let bottomMessage = bottomMessage {
                 Text(bottomMessage)
                     .font(UX.textFont)
                     .foregroundColor(Color(textColor))
                     .multilineTextAlignment(.center)
-                    .accessibility(identifier: AccessibilityIdentifiers.ShareTo.Instructions.instructionsLabel)
+                    .accessibility(identifier: AccessibilityIdentifiers.ShareTo.HelpView.bottomMessageLabel)
             }
 
             Spacer()

@@ -128,7 +128,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.Instructions.doneButton], timeout: 10)
 
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
-        app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.Instructions.doneButton].tap()
+        app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
     }
 
     func testShareSheetOpenAndCancel() {

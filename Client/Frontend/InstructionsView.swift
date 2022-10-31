@@ -39,7 +39,7 @@ struct InstructionsView: View {
             }) {
                 Text(String.CloseButtonTitle)
             }
-            .accessibility(identifier: AccessibilityIdentifiers.ShareTo.Instructions.doneButton)
+            .accessibility(identifier: AccessibilityIdentifiers.ShareTo.HelpView.doneButton)
         )
         .navigationBarBackButtonHidden(true)
     }
