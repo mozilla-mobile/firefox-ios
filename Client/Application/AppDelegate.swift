@@ -12,9 +12,7 @@ let LatestAppVersionProfileKey = "latestAppVersion"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    // This is the easiest way to force a bootstrap that's guaranteed to happen on app launch
-    private var appContainer: ServiceProvider = AppContainer.shared
-
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
     private let log = Logger.browserLogger
@@ -33,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
 
     lazy var themeManager: ThemeManager = DefaultThemeManager(appDelegate: self)
-    lazy private var ratingPromptManager: RatingPromptManager = appContainer.resolve()
+    lazy private var ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve()
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
@@ -78,6 +76,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
         }
+
+        addObservers()
 
         return true
     }
@@ -151,6 +151,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // only if iOS 14 is available.
         if #available(iOS 14.0, *) {
             widgetManager?.writeWidgetKitTopSites()
+        }
+    }
+}
+
+extension AppDelegate: Notifiable {
+
+    private func addObservers() {
+        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
+                                                          UIApplication.willResignActiveNotification,
+                                                          UIApplication.didEnterBackgroundNotification])
+    }
+
+    /// When migrated to Scenes, these methods aren't called. Consider this a tempoary solution to calling into those methods.
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.didBecomeActiveNotification:
+            applicationDidBecomeActive(UIApplication.shared)
+        case UIApplication.willResignActiveNotification:
+            applicationWillResignActive(UIApplication.shared)
+        case UIApplication.didEnterBackgroundNotification:
+            applicationDidEnterBackground(UIApplication.shared)
+
+        default: break
         }
     }
 
