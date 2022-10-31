@@ -16,18 +16,25 @@ extension CanRemoveQuickActionBookmark {
     func removeBookmarkShortcut(quickAction: QuickActions = QuickActionsImplementation()) {
         // Get most recent bookmark
         bookmarksHandler.getRecentBookmarks(limit: 1) { bookmarkItems in
-            if bookmarkItems.isEmpty {
-                // Remove the openLastBookmark shortcut
-                quickAction.removeDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                       fromApplication: .shared)
-            } else {
-                // Update the last bookmark shortcut
-                let userData = [QuickActionInfos.tabURLKey: bookmarkItems[0].url,
-                                QuickActionInfos.tabTitleKey: bookmarkItems[0].title]
-                quickAction.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                    withUserData: userData,
-                                                                    toApplication: .shared)
+            ensureMainThread {
+                self.removeBookmarks(quickAction: quickAction,
+                                     bookmarkItems: bookmarkItems)
             }
+        }
+    }
+
+    private func removeBookmarks(quickAction: QuickActions, bookmarkItems: [BookmarkItemData]) {
+        if bookmarkItems.isEmpty {
+            // Remove the openLastBookmark shortcut
+            quickAction.removeDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                   fromApplication: .shared)
+        } else {
+            // Update the last bookmark shortcut
+            let userData = [QuickActionInfos.tabURLKey: bookmarkItems[0].url,
+                            QuickActionInfos.tabTitleKey: bookmarkItems[0].title]
+            quickAction.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                withUserData: userData,
+                                                                toApplication: .shared)
         }
     }
 }
