@@ -63,7 +63,7 @@ extension QuickActions {
         withUserData userData: [String: String] = [String: String](),
         toApplication application: UIApplication
     ) {
-        self.addDynamicApplicationShortcutItemOfType(type, withUserData: userData, toApplication: application)
+        addDynamicApplicationShortcutItemOfType(type, withUserData: userData, toApplication: application)
     }
 }
 
