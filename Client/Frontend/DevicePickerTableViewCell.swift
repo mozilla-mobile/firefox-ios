@@ -12,7 +12,7 @@ class DevicePickerTableViewCell: UITableViewCell {
         static let deviceRowTextPaddingRight: CGFloat = 50
     }
 
-    static let CellIdentifier = "ClientPickerTableViewCell"
+    static let cellIdentifier = "ClientPickerTableViewCell"
 
     var nameLabel: UILabel
     var checked: Bool = false {

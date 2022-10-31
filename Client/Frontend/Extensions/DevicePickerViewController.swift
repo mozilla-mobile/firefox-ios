@@ -7,6 +7,7 @@ import Shared
 import Storage
 import SnapKit
 import Account
+import SwiftUI
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
@@ -57,8 +58,10 @@ class DevicePickerViewController: UITableViewController {
     private var selectedIdentifiers = Set<String>() // Stores Device.id
     private var notification: Any?
     private var loadingState = LoadingState.loading
+    private let emptyCellIdentifier = "EmptyCell"
 
-    // ShareItem has been added as we are now using this class outside of the ShareTo extension to provide Share To functionality
+    // ShareItem has been added as we are now using this class outside of the ShareTo extension to
+    // provide Share To functionality
     // And in this case we need to be able to store the item we are sharing as we may not have access to the
     // url later. Currently used only when sharing an item from the Tab Tray from a Preview Action.
     var shareItem: ShareItem?
@@ -75,14 +78,19 @@ class DevicePickerViewController: UITableViewController {
             action: #selector(cancel)
         )
 
-        tableView.register(DevicePickerTableViewHeaderCell.self, forCellReuseIdentifier: DevicePickerTableViewHeaderCell.CellIdentifier)
-        tableView.register(DevicePickerTableViewCell.self, forCellReuseIdentifier: DevicePickerTableViewCell.CellIdentifier)
-        tableView.register(DevicePickerNoClientsTableViewCell.self, forCellReuseIdentifier: DevicePickerNoClientsTableViewCell.CellIdentifier)
+        tableView.register(DevicePickerTableViewHeaderCell.self,
+                           forCellReuseIdentifier: DevicePickerTableViewHeaderCell.cellIdentifier)
+        tableView.register(DevicePickerTableViewCell.self,
+                           forCellReuseIdentifier: DevicePickerTableViewCell.cellIdentifier)
+        tableView.register(HostingTableViewCell<HelpView>.self,
+                           forCellReuseIdentifier: emptyCellIdentifier)
         tableView.tableFooterView = UIView(frame: .zero)
 
         tableView.allowsSelection = true
 
-        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: .main) { [weak self ] _ in
+        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate,
+                                                              object: nil,
+                                                              queue: .main) { [weak self ] _ in
             self?.loadList()
             self?.refreshControl?.endRefreshing()
         }
@@ -130,7 +138,10 @@ class DevicePickerViewController: UITableViewController {
             if self.devices.isEmpty {
                 self.navigationItem.rightBarButtonItem = nil
             } else {
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: .SendToSendButtonTitle, style: .done, target: self, action: #selector(self.send))
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: .SendToSendButtonTitle,
+                                                                         style: .done,
+                                                                         target: self,
+                                                                         action: #selector(self.send))
                 self.navigationItem.rightBarButtonItem?.isEnabled = false
             }
 
@@ -164,9 +175,11 @@ class DevicePickerViewController: UITableViewController {
 
         if !devices.isEmpty {
             if indexPath.section == 0 {
-                cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewHeaderCell.CellIdentifier, for: indexPath) as! DevicePickerTableViewHeaderCell
+                cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewHeaderCell.cellIdentifier,
+                                                     for: indexPath) as! DevicePickerTableViewHeaderCell
             } else {
-                let clientCell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewCell.CellIdentifier, for: indexPath) as! DevicePickerTableViewCell
+                let clientCell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewCell.cellIdentifier,
+                                                               for: indexPath) as! DevicePickerTableViewCell
                 let item = devices[indexPath.row]
                 clientCell.nameLabel.text = item.name
                 clientCell.clientType = ClientType.fromFxAType(item.type)
@@ -178,7 +191,27 @@ class DevicePickerViewController: UITableViewController {
             }
         } else {
             if loadingState == .loaded {
-                cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerNoClientsTableViewCell.CellIdentifier, for: indexPath) as! DevicePickerNoClientsTableViewCell
+                let hostingCell = tableView.dequeueReusableCell(
+                    withIdentifier: emptyCellIdentifier) as! HostingTableViewCell<HelpView>
+
+                #if MOZ_TARGET_SHARETO
+                let textColor = ShareTheme.textColor.color
+                let imageColor = ShareTheme.iconColor.color
+                #else
+                let themeManager: ThemeManager = AppContainer.shared.resolve()
+                let textColor = themeManager.currentTheme.colors.textPrimary
+                let imageColor = themeManager.currentTheme.colors.iconPrimary
+                #endif
+
+                let emptyView = HelpView(textColor: textColor,
+                                         imageColor: imageColor,
+                                         topMessage: String.SendToNoDevicesFound,
+                                         bottomMessage: nil)
+                hostingCell.host(emptyView, parentController: self)
+
+                // Move the separator off screen
+                hostingCell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
+                cell = hostingCell
             } else {
                 cell = UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
             }
@@ -206,7 +239,9 @@ class DevicePickerViewController: UITableViewController {
             selectedIdentifiers.insert(id)
         }
 
-        UIView.performWithoutAnimation { // if the selected cell is off-screen when the tableview is first shown, the tableview will re-scroll without disabling animation
+        UIView.performWithoutAnimation {
+            // If the selected cell is off-screen when the tableview is first shown, the tableview
+            // will re-scroll without disabling animation.
             tableView.reloadRows(at: [indexPath], with: .none)
         }
         navigationItem.rightBarButtonItem?.isEnabled = !selectedIdentifiers.isEmpty
@@ -245,9 +280,9 @@ class DevicePickerViewController: UITableViewController {
 
     @objc func refresh() {
         RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
-        if let refreshControl = self.refreshControl {
+        if let refreshControl = refreshControl {
             refreshControl.beginRefreshing()
-            let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
+            let height = -(refreshControl.bounds.size.height + (navigationController?.navigationBar.bounds.size.height ?? 0))
             self.tableView.contentOffset = CGPoint(x: 0, y: height)
         }
     }
@@ -264,7 +299,7 @@ class DevicePickerViewController: UITableViewController {
             }
         }
 
-        self.pickerDelegate?.devicePickerViewController(self, didPickDevices: pickedItems)
+        pickerDelegate?.devicePickerViewController(self, didPickDevices: pickedItems)
 
         // Replace the Send button with a loading indicator since it takes a while to sync
         // up our changes to the server.
@@ -273,22 +308,5 @@ class DevicePickerViewController: UITableViewController {
         loadingIndicator.startAnimating()
         let customBarButton = UIBarButtonItem(customView: loadingIndicator)
         self.navigationItem.rightBarButtonItem = customBarButton
-    }
-}
-
-class DevicePickerNoClientsTableViewCell: UITableViewCell {
-    static let CellIdentifier = "ClientPickerNoClientsTableViewCell"
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupHelpView(contentView,
-            introText: .SendToNoDevicesFound,
-            showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
-        // Move the separator off screen
-        separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

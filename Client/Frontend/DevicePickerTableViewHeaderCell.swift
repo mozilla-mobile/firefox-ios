@@ -12,7 +12,7 @@ class DevicePickerTableViewHeaderCell: UITableViewCell {
         static let tableHeaderTextPaddingLeft: CGFloat = 20
     }
 
-    static let CellIdentifier = "ClientPickerTableViewSectionHeader"
+    static let cellIdentifier = "ClientPickerTableViewSectionHeader"
     let nameLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
