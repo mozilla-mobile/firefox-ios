@@ -172,8 +172,9 @@ class SyncNowSetting: WithAccountSetting {
 
             return profile.hasSyncableAccount()
         }
-        set {
-        }
+        // swiftlint:disable unused_setter_value
+        set { }
+        // swiftlint:enable unused_setter_value
     }
 
     fileprivate lazy var troubleshootButton: UIButton = {
