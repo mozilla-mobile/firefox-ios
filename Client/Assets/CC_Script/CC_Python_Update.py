@@ -3,8 +3,8 @@ import filecmp
 import shutil
 import os
 
-FILE_TO_DOWNLOAD = "https://hg.mozilla.org/mozilla-central/raw-file/tip/toolkit/components/passwordmgr/LoginManagerChild.jsm"
-REAL_FILE_NAME = "LoginManagerChild.jsm"
+FILE_TO_DOWNLOAD = "https://hg.mozilla.org/mozilla-central/raw-file/tip/toolkit/components/passwordmgr/LoginManager.shared.mjs"
+REAL_FILE_NAME = "LoginManager.shared.mjs"
 TEMP_FILE_NAME_APPEND = "TEMP_DOWNLOADED_FILE"
 GITHUB_ACTIONS_PATH = "./Client/Assets/CC_Script/"
 TEMP_FILE_PATH = GITHUB_ACTIONS_PATH + TEMP_FILE_NAME_APPEND
