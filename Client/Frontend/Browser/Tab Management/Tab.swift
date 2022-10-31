@@ -124,14 +124,14 @@ class Tab: NSObject {
 
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,
-            let siteURL = URL(string: string) {
+           let siteURL = URL(string: string) {
 
             // If the canonical URL from the page metadata doesn't contain the
             // "#" fragment, check if the tab's URL has a fragment and if so,
             // append it to the canonical URL.
             if siteURL.fragment == nil,
-                let fragment = self.url?.fragment,
-                let siteURLWithFragment = URL(string: "\(string)#\(fragment)") {
+               let fragment = self.url?.fragment,
+               let siteURLWithFragment = URL(string: "\(string)#\(fragment)") {
                 return siteURLWithFragment
             }
 
@@ -274,8 +274,8 @@ class Tab: NSObject {
 
         // Make sure the url is of type home page
         if url.absoluteString.hasPrefix("internal://"),
-            let internalUrl = InternalURL(url),
-            internalUrl.isAboutHomeURL {
+           let internalUrl = InternalURL(url),
+           internalUrl.isAboutHomeURL {
             return true
         }
 
@@ -499,7 +499,7 @@ class Tab: NSObject {
 
         debugTabCount -= 1
 
-        #if DEBUG
+#if DEBUG
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         func checkTabCount(failures: Int) {
             // Need delay for pool to drain.
@@ -514,7 +514,7 @@ class Tab: NSObject {
             }
         }
         checkTabCount(failures: 0)
-        #endif
+#endif
     }
 
     /// When a user clears ALL history, `sessionData` and `historyList` need to be purged, and close the webView.
@@ -577,20 +577,31 @@ class Tab: NSObject {
         webView?.stopLoading()
     }
 
-    func reload() {
+    func reload(bypassCache: Bool = false) {
         // If the current page is an error page, and the reload button is tapped, load the original URL
         if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
             webView?.replaceLocation(with: page)
             return
         }
 
+        if bypassCache, let url = webView?.url {
+            let reloadRequest = URLRequest(url: url,
+                                           cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
+                                           timeoutInterval: 10.0)
+
+            if webView?.load(reloadRequest) != nil {
+                browserLog.debug("Reloaded the tab from originating source, ignoring local cache.")
+                return
+            }
+        }
+
         if webView?.reloadFromOrigin() != nil {
-            print("reloaded zombified tab from origin")
+            browserLog.debug("reloaded zombified tab from origin")
             return
         }
 
         if let webView = self.webView {
-            print("restoring webView from scratch")
+            browserLog.debug("restoring webView from scratch")
             restore(webView)
         }
     }
@@ -950,8 +961,8 @@ class TabWebView: WKWebView, MenuHelperInterface {
     /// Override evaluateJavascript - should not be called directly on TabWebViews any longer
     // We should only be calling evaluateJavascriptInDefaultContentWorld in the future
     @available(*,
-               unavailable,
-               message: "Do not call evaluateJavaScript directly on TabWebViews, should only be called on super class")
+                unavailable,
+                message: "Do not call evaluateJavaScript directly on TabWebViews, should only be called on super class")
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
@@ -980,8 +991,8 @@ class TabWebViewMenuHelper: UIView {
 
 extension URL {
     /**
-    Returns a URL without a mobile prefix (`"m."` or `"mobile."`)
-    */
+     Returns a URL without a mobile prefix (`"m."` or `"mobile."`)
+     */
     func withoutMobilePrefix() -> URL {
         let subDomainsToRemove: Set<String> = ["m", "mobile"]
 
