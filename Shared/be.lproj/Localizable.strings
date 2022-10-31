@@ -26,7 +26,7 @@
 "ActivityStream.ContextMenu.UnpinTopsite" = "Адмацаваць";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
-"ActivityStream.JumpBackIn.SectionTitle" = "Назад да";
+"ActivityStream.JumpBackIn.SectionTitle" = "Адкрыць зноў";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Карткі: %d";
@@ -194,16 +194,16 @@
 "ContextMenu.ShareLinkButtonTitle" = "Падзяліцца спасылкай";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
-"ContextualHint.SearchBarPlacement.ExistingUsers" = "Цяпер вы можаце перанесці паліцу прылад уніз, каб было зручней уводзіць даныя";
+"ContextualHint.SearchBarPlacement.ExistingUsers" = "Цяпер вы можаце перанесці паліцу інструментаў уніз, каб было зручней уводзіць даныя";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
-"ContextualHint.SearchBarPlacement.NewUsers" = "Каб было зручней уводзіць даныя, паліца прылад цяпер тыпова знаходзіцца ўнізе.";
+"ContextualHint.SearchBarPlacement.NewUsers" = "Каб было зручней уводзіць даныя, паліца інструментаў цяпер тыпова знаходзіцца ўнізе.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
 "ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Цяпер ваша персаналізаваная хатняя старонка Firefox палягчае працяг працы адтуль, дзе вы спыніліся. Знайдзіце свае апошнія карткі, закладкі і вынікі пошуку.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
-"ContextualHints.SearchBarPlacement.CallToAction" = "Налады паліцы прылад";
+"ContextualHints.SearchBarPlacement.CallToAction" = "Налады паліцы інструментаў";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Карткі, якія вы не праглядалі на працягу двух тыдняў, будуць перанесеныя сюды.";
@@ -1331,7 +1331,7 @@
 "Settings.Home.Option.Description.v101" = "Выберыце, што будзе паказвацца на хатняй старонцы Firefox.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
-"Settings.Home.Option.JumpBackIn" = "Перайсці назад да";
+"Settings.Home.Option.JumpBackIn" = "Адкрыць зноў";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
 "Settings.Home.Option.Pocket" = "Рэкамендавана Pocket";

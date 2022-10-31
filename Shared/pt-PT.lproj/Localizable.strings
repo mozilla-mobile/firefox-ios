@@ -656,13 +656,13 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Saber mais";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Para utilizar a funcionalidade de auto-preenchimento para o Firefox, deve ter um código do dispositivo ativado.";
+"Logins.PasscodeRequirement.Warning" = "Para utilizar a funcionalidade de autopreenchimento para o Firefox, deve ter um código do dispositivo ativado.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Leve as suas palavras-passe para todo o lado";
 
 /* Label displaying welcome view title */
-"Logins.WelcomeView.Title2" = "Auto-preencher palavras-passe do Firefox";
+"Logins.WelcomeView.Title2" = "Autopreenchimento de palavras-passe do Firefox";
 
 /* Title of the big blue button to enable AutoFill */
 "Logins.WelcomeView.TurnOnAutoFill" = "Ativar o Preenchimento automático";
