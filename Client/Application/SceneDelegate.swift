@@ -34,6 +34,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
+        guard !AppConstants.isRunningUnitTest else { return }
+
         let window = configureWindowFor(scene)
         let rootVC = configureRootViewController()
 
@@ -68,6 +70,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to refresh the contents of your scene's view (especially if it's a restored scene), or other activities that need
     /// to begin.
     func sceneDidBecomeActive(_ scene: UIScene) {
+        guard !AppConstants.isRunningUnitTest else { return }
+
         /// Resume previously stopped downloads for, and on, THIS scene only.
         browserViewController.downloadQueue.resumeAll()
     }
@@ -205,7 +209,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         QuickActionsImplementation().handleShortCutItem(
             shortcutItem,
-            withBrowserViewController: browserViewController
+            withBrowserViewController: browserViewController,
+            completionHandler: completionHandler
         )
     }
 
@@ -252,7 +257,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let shortcutItem = connectionOptions.shortcutItem {
             QuickActionsImplementation().handleShortCutItem(
                 shortcutItem,
-                withBrowserViewController: browserViewController
+                withBrowserViewController: browserViewController,
+                completionHandler: { _ in }
             )
         }
     }

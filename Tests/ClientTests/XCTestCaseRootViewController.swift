@@ -22,8 +22,8 @@ class XCTestCaseRootViewController: XCTestCase {
     }
 
     func loadViewForTesting() {
-        _ = rootViewController.view
         window.rootViewController = rootViewController
         window.makeKeyAndVisible()
+        rootViewController.view.layoutIfNeeded()
     }
 }
