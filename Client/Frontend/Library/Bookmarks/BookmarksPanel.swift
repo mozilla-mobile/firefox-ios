@@ -23,6 +23,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     }
 
     // MARK: - Properties
+    var bookmarksHandler: BookmarksHandler
     var libraryPanelDelegate: LibraryPanelDelegate?
     var notificationCenter: NotificationProtocol
     var state: LibraryPanelMainState
@@ -77,6 +78,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.state = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
+        self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile)
 
         setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged])
@@ -241,13 +243,14 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     /// Performs the delete asynchronously even though we update the
     /// table view data source immediately for responsiveness.
     private func deleteBookmarkNode(_ indexPath: IndexPath, bookmarkNode: FxBookmarkNode) {
-        _ = profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
+        profile.places.deleteBookmarkNode(guid: bookmarkNode.guid).uponQueue(.main) { _ in
+            self.removeBookmarkShortcut()
+        }
 
         tableView.beginUpdates()
         viewModel.bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
-        removeBookmarkShortcut()
     }
 
     // MARK: Button Actions helpers

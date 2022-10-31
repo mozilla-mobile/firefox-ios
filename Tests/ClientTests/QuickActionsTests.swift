@@ -20,7 +20,7 @@ class QuickActionsTest: XCTestCase {
         tabManager = TabManager(profile: profile, imageStore: nil)
         browserViewController = SpyBrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()
-        quickActions = QuickActions.sharedInstance
+        quickActions = QuickActionsImplementation()
     }
 
     override func tearDown() {
@@ -61,7 +61,8 @@ private extension QuickActionsTest {
             expectation.fulfill()
         }
 
-        quickActions.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
+        _ = quickActions.handleShortCutItem(shortcutItem,
+                                            withBrowserViewController: browserViewController)
         waitForExpectations(timeout: 5, handler: nil)
     }
 }
@@ -72,7 +73,7 @@ private class BookmarkShortcutItem: UIApplicationShortcutItem {
     }
 
     override var userInfo: [String: NSSecureCoding]? {
-        return [QuickActions.TabURLKey: "https://www.mozilla.org/en-CA/" as NSSecureCoding]
+        return [QuickActionInfos.tabURLKey: "https://www.mozilla.org/en-CA/" as NSSecureCoding]
     }
 }
 

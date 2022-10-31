@@ -51,6 +51,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private let showFXASyncAction: (FXASyncClosure) -> Void
     private let themeManager: ThemeManager
 
+    var bookmarksHandler: BookmarksHandler
     let profile: Profile
     let tabManager: TabManager
 
@@ -70,6 +71,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
 
         self.profile = profile
+        self.bookmarksHandler = profile.places
         self.tabManager = tabManager
         self.buttonView = buttonView
         self.showFXASyncAction = showFXASyncAction

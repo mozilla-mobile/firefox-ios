@@ -4,10 +4,9 @@
 
 import Foundation
 import Storage
-
 import Shared
-import XCGLogger
 
+// MARK: - ShortcutType
 enum ShortcutType: String {
     case newTab = "NewTab"
     case newPrivateTab = "NewPrivateTab"
@@ -25,60 +24,96 @@ enum ShortcutType: String {
     }
 }
 
-class QuickActions: NSObject {
+// MARK: - QuickActionInfos
+struct QuickActionInfos {
+    static let version = "1.0"
+    static let versionKey = "dynamicQuickActionsVersion"
+    static let tabURLKey = "url"
+    static let tabTitleKey = "title"
+}
 
-    fileprivate let log = Logger.browserLogger
+// MARK: - QuickActions
+protocol QuickActions {
+    func addDynamicApplicationShortcutItemOfType(
+        _ type: ShortcutType,
+        fromShareItem shareItem: ShareItem,
+        toApplication application: UIApplication
+    )
 
-    static let QuickActionsVersion = "1.0"
-    static let QuickActionsVersionKey = "dynamicQuickActionsVersion"
+    func addDynamicApplicationShortcutItemOfType(
+        _ type: ShortcutType,
+        withUserData userData: [String: String],
+        toApplication application: UIApplication
+    )
 
-    static let TabURLKey = "url"
-    static let TabTitleKey = "title"
+    func removeDynamicApplicationShortcutItemOfType(
+        _ type: ShortcutType,
+        fromApplication application: UIApplication
+    )
 
-    static var sharedInstance = QuickActions()
+    func handleShortCutItem(
+        _ shortcutItem: UIApplicationShortcutItem,
+        withBrowserViewController bvc: BrowserViewController
+    ) -> Bool
+}
 
-    var launchedShortcutItem: UIApplicationShortcutItem?
-
-    // MARK: Administering Quick Actions
-    func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType, fromShareItem shareItem: ShareItem, toApplication application: UIApplication) {
-            var userData = [QuickActions.TabURLKey: shareItem.url]
-            if let title = shareItem.title {
-                userData[QuickActions.TabTitleKey] = title
-            }
-        QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(type, withUserData: userData, toApplication: application)
-    }
-
-    @discardableResult func addDynamicApplicationShortcutItemOfType(
+extension QuickActions {
+    func addDynamicApplicationShortcutItemOfType(
         _ type: ShortcutType,
         withUserData userData: [String: String] = [String: String](),
         toApplication application: UIApplication
-    ) -> Bool {
+    ) {
+        addDynamicApplicationShortcutItemOfType(type, withUserData: userData, toApplication: application)
+    }
+}
+
+class QuickActionsImplementation: NSObject, QuickActions, Loggable {
+
+    // MARK: Administering Quick Actions
+    func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
+                                                 fromShareItem shareItem: ShareItem,
+                                                 toApplication application: UIApplication) {
+        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
+        if let title = shareItem.title {
+            userData[QuickActionInfos.tabTitleKey] = title
+        }
+        addDynamicApplicationShortcutItemOfType(type,
+                                                withUserData: userData,
+                                                toApplication: application)
+    }
+
+    func addDynamicApplicationShortcutItemOfType(
+        _ type: ShortcutType,
+        withUserData userData: [String: String] = [String: String](),
+        toApplication application: UIApplication
+    ) {
         // add the quick actions version so that it is always in the user info
         var userData: [String: String] = userData
-        userData[QuickActions.QuickActionsVersionKey] = QuickActions.QuickActionsVersion
+        userData[QuickActionInfos.versionKey] = QuickActionInfos.version
         var dynamicShortcutItems = application.shortcutItems ?? [UIApplicationShortcutItem]()
         switch type {
         case .openLastBookmark:
-            let openLastBookmarkShortcut = UIMutableApplicationShortcutItem(type: ShortcutType.openLastBookmark.type,
+            let openLastBookmarkShortcut = UIMutableApplicationShortcutItem(
+                type: ShortcutType.openLastBookmark.type,
                 localizedTitle: .QuickActionsLastBookmarkTitle,
-                localizedSubtitle: userData[QuickActions.TabTitleKey],
+                localizedSubtitle: userData[QuickActionInfos.tabTitleKey],
                 icon: UIApplicationShortcutIcon(templateImageName: "quick_action_last_bookmark"),
                 userInfo: userData as [String: NSSecureCoding]
             )
+
             if let index = (dynamicShortcutItems.firstIndex { $0.type == ShortcutType.openLastBookmark.type }) {
                 dynamicShortcutItems[index] = openLastBookmarkShortcut
             } else {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
             }
         default:
-            log.warning("Cannot add static shortcut item of type \(type)")
-            return false
+            Logger.browserLogger.warning("Cannot add static shortcut item of type \(type)")
         }
         application.shortcutItems = dynamicShortcutItems
-        return true
     }
 
-    func removeDynamicApplicationShortcutItemOfType(_ type: ShortcutType, fromApplication application: UIApplication) {
+    func removeDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
+                                                    fromApplication application: UIApplication) {
         guard var dynamicShortcutItems = application.shortcutItems,
               let index = (dynamicShortcutItems.firstIndex { $0.type == type.type })
         else { return }
@@ -87,8 +122,10 @@ class QuickActions: NSObject {
         application.shortcutItems = dynamicShortcutItems
     }
 
-    // MARK: Handling Quick Actions
-    @discardableResult func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem, withBrowserViewController bvc: BrowserViewController ) -> Bool {
+    // MARK: - Handling Quick Actions
+
+    func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem,
+                            withBrowserViewController bvc: BrowserViewController) -> Bool {
 
         // Verify that the provided `shortcutItem`'s `type` is one handled by the application.
         guard let shortCutType = ShortcutType(fullType: shortcutItem.type) else { return false }
@@ -100,14 +137,17 @@ class QuickActions: NSObject {
         return true
     }
 
-    fileprivate func handleShortCutItemOfType(_ type: ShortcutType, userData: [String: NSSecureCoding]?, browserViewController: BrowserViewController) {
+    // MARK: - Private
+
+    private func handleShortCutItemOfType(_ type: ShortcutType, userData: [String: NSSecureCoding]?,
+                                          browserViewController: BrowserViewController) {
         switch type {
         case .newTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: false)
         case .newPrivateTab:
             handleOpenNewTab(withBrowserViewController: browserViewController, isPrivate: true)
         case .openLastBookmark:
-            if let urlToOpen = (userData?[QuickActions.TabURLKey] as? String)?.asURL {
+            if let urlToOpen = (userData?[QuickActionInfos.tabURLKey] as? String)?.asURL {
                 handleOpenURL(withBrowserViewController: browserViewController, urlToOpen: urlToOpen)
             }
         case .qrCode:
@@ -115,11 +155,13 @@ class QuickActions: NSObject {
         }
     }
 
-    fileprivate func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController, isPrivate: Bool) {
+    private func handleOpenNewTab(withBrowserViewController bvc: BrowserViewController,
+                                  isPrivate: Bool) {
         bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
     }
 
-    fileprivate func handleOpenURL(withBrowserViewController bvc: BrowserViewController, urlToOpen: URL) {
+    private func handleOpenURL(withBrowserViewController bvc: BrowserViewController,
+                               urlToOpen: URL) {
         // open bookmark in a non-private browsing tab
         bvc.switchToPrivacyMode(isPrivate: false)
 
@@ -129,7 +171,7 @@ class QuickActions: NSObject {
         bvc.switchToTabForURLOrOpen(urlToOpen)
     }
 
-    fileprivate func handleQRCode(with vc: QRCodeViewControllerDelegate & UIViewController) {
+    private func handleQRCode(with vc: QRCodeViewControllerDelegate & UIViewController) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = vc
         let controller = UINavigationController(rootViewController: qrCodeViewController)
