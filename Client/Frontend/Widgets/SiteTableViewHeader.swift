@@ -9,7 +9,6 @@ struct SiteTableViewHeaderModel {
     let title: String
     let isCollapsible: Bool
     let collapsibleState: ExpandButtonState?
-    let theme: Theme
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
@@ -21,11 +20,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         static let imageWidthHeight: CGFloat = 24
     }
 
-    var collapsibleState: ExpandButtonState? {
-        willSet(state) {
-            collapsibleImageView.image = state?.image?.tinted(withColor: UIColor.Photon.Blue50)
-        }
-    }
+    var collapsibleState: ExpandButtonState?
 
     private let titleLabel: UILabel = .build { label in
         label.textColor = UIColor.theme.tableView.headerTextDark
@@ -35,9 +30,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private let collapsibleImageView: UIImageView = .build { imageView in
-        imageView.image = ExpandButtonState.down.image?.tinted(withColor: UIColor.Photon.Blue50)
-    }
+    private let collapsibleImageView: UIImageView = .build { _ in }
 
     private var titleTrailingConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
@@ -107,7 +100,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
 
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
-        backgroundView?.backgroundColor = theme.colors.layer4
+        backgroundView?.backgroundColor = theme.colors.layer1
+        collapsibleImageView.image = collapsibleState?.image?.tinted(withColor: theme.colors.iconAction)
         bordersHelper.applyTheme(theme: theme)
     }
 

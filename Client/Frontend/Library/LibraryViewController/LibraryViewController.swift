@@ -12,7 +12,7 @@ extension LibraryViewController: UIToolbarDelegate {
     }
 }
 
-class LibraryViewController: UIViewController {
+class LibraryViewController: UIViewController, Themeable {
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
@@ -24,6 +24,8 @@ class LibraryViewController: UIViewController {
     var notificationCenter: NotificationProtocol
     weak var delegate: LibraryPanelDelegate?
     var onViewDismissed: (() -> Void)?
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
@@ -61,9 +63,13 @@ class LibraryViewController: UIViewController {
     }()
 
     // MARK: - Initializers
-    init(profile: Profile, tabManager: TabManager, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    init(profile: Profile,
+         tabManager: TabManager,
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = LibraryViewModel(withProfile: profile, tabManager: tabManager)
         self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,16 +78,12 @@ class LibraryViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-        applyTheme()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged, .LibraryPanelStateDidChange])
+        listenForThemeChange()
+        setupNotifications(forObserver: self, observing: [.LibraryPanelStateDidChange])
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -96,11 +98,6 @@ class LibraryViewController: UIViewController {
     }
 
     private func viewSetup() {
-        if let appWindow = (UIApplication.shared.delegate?.window),
-           let window = appWindow as UIWindow? {
-            window.backgroundColor = .black
-        }
-
         navigationItem.rightBarButtonItem = topRightButton
         view.addSubviews(controllerContainerView, segmentControlToolbar)
 
@@ -281,58 +278,45 @@ class LibraryViewController: UIViewController {
     private func setupToolBarAppearance() {
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
-
-        let backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
-                                UIColor.Photon.DarkGrey30 : UIColor.Photon.LightGrey10
-        standardAppearance.backgroundColor = backgroundColor
-
+        standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
         navigationController?.toolbar.standardAppearance = standardAppearance
         navigationController?.toolbar.compactAppearance = standardAppearance
         if #available(iOS 15.0, *) {
             navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
             navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
         }
-        let tintColor = LegacyThemeManager.instance.currentName == .dark ?
-                            UIColor.Photon.Blue20 : UIColor.Photon.Blue50
-        navigationController?.toolbar.tintColor = tintColor
-    }
-}
-
-// MARK: Notifiable
-extension LibraryViewController: NotificationThemeable, Notifiable {
-
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        case .LibraryPanelStateDidChange:
-            setupButtons()
-        default: break
-        }
+        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimaryHover
     }
 
-    @objc func applyTheme() {
-        viewModel.panelDescriptors.forEach { item in
-            (item.viewController as? NotificationThemeable)?.applyTheme()
-        }
-
+    func applyTheme() {
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
         // have a seamless nav bar, if embedding the segmented control.
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        view.backgroundColor = UIColor.theme.homePanel.panelBackground
-        navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationController?.navigationBar.tintColor = .systemBlue
-        navigationController?.navigationBar.backgroundColor = UIColor.theme.tabTray.toolbar
-        navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        navigationController?.toolbar.tintColor = .systemBlue
-        segmentControlToolbar.barTintColor = UIColor.theme.tabTray.toolbar
-        segmentControlToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        view.backgroundColor = themeManager.currentTheme.colors.layer3
+        navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer1
+        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimaryHover
+        navigationController?.navigationBar.backgroundColor = themeManager.currentTheme.colors.layer1
+        navigationController?.toolbar.barTintColor = themeManager.currentTheme.colors.layer1
+        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimaryHover
+        segmentControlToolbar.barTintColor = themeManager.currentTheme.colors.layer1
+        segmentControlToolbar.tintColor = themeManager.currentTheme.colors.textPrimary
         segmentControlToolbar.isTranslucent = false
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
+    }
+}
+
+// MARK: Notifiable
+extension LibraryViewController: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .LibraryPanelStateDidChange:
+            setupButtons()
+        default: break
+        }
     }
 }
