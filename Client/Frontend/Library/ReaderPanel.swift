@@ -190,6 +190,7 @@ class ReadingListPanel: UITableViewController,
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        refreshReadingList()
         // Note this will then call applyTheme() on this class, which reloads the tableview.
         (navigationController as? ThemedNavigationController)?.applyTheme()
         tableView.accessibilityIdentifier = "ReadingTable"
