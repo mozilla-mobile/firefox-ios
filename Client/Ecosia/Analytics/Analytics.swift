@@ -199,8 +199,9 @@ final class Analytics {
     func searchbarChanged(to position: String) {
         tracker
             .track(Structured(category: Category.settings.rawValue,
-                              action: "toolbar")
-                .label(position))
+                              action: Action.change.rawValue)
+                .label("toolbar")
+                .property(position))
     }
 
     func menuClick(label: String, toggle: Bool? = nil) {
