@@ -4,7 +4,7 @@
 
 import UIKit
 
-final class MoreButtonCell: UICollectionReusableView, ReusableCell {
+final class MoreButtonCell: UICollectionReusableView, ReusableCell, NotificationThemeable {
     private(set) weak var button: UIButton!
     
     required init?(coder: NSCoder) { return nil }
@@ -29,8 +29,6 @@ final class MoreButtonCell: UICollectionReusableView, ReusableCell {
         button.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
         button.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
         button.heightAnchor.constraint(equalToConstant: 32).priority(.defaultHigh).isActive = true
-
-        applyTheme()
     }
     
     func applyTheme() {
@@ -42,12 +40,6 @@ final class MoreButtonCell: UICollectionReusableView, ReusableCell {
         button.backgroundColor = .theme.ecosia.moreNewsButton
         button.layer.borderColor = UIColor.theme.ecosia.primaryText.cgColor
     }
-
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        applyTheme()
-    }
-
 }
 
 final class HeaderCell: UICollectionViewCell, NotificationThemeable {
@@ -79,10 +71,5 @@ final class HeaderCell: UICollectionViewCell, NotificationThemeable {
 
     func applyTheme() {
         title.textColor = .theme.ecosia.primaryText
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        applyTheme()
     }
 }

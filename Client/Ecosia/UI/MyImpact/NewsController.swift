@@ -51,6 +51,12 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
             self?.collection.reloadData()
             self?.collection.backgroundView = nil
         }
+
+        let done = UIBarButtonItem(barButtonSystemItem: .done) { [ weak self ] _ in
+            self?.dismiss(animated: true, completion: nil)
+        }
+        navigationItem.rightBarButtonItem = done
+
         applyTheme()
     }
 

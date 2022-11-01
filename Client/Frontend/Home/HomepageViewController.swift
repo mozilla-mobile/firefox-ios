@@ -225,6 +225,12 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         collectionView.visibleCells.forEach({
             ($0 as? NotificationThemeable)?.applyTheme()
         })
+        collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader).forEach({
+            ($0 as? NotificationThemeable)?.applyTheme()
+        })
+        collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionFooter).forEach({
+            ($0 as? NotificationThemeable)?.applyTheme()
+        })
     }
 
     func scrollToTop(animated: Bool = false) {

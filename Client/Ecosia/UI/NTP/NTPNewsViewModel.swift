@@ -37,7 +37,7 @@ extension NTPNewsViewModel: HomepageViewModelProtocol {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
-        return LabelButtonHeaderViewModel(title: "Ecosia news", isButtonHidden: true)
+        return LabelButtonHeaderViewModel(title: .localized(.stories), isButtonHidden: true)
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {

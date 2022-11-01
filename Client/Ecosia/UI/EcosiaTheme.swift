@@ -102,7 +102,7 @@ final class DarkEcosiaTheme: EcosiaTheme {
 
     override var impactMultiplyCardBackground: UIColor { .Dark.Background.tertiary }
     override var trackingSheetBackground: UIColor { .Dark.Background.secondary }
-    override var moreNewsButton: UIColor { .Dark.Background.tertiary }
+    override var moreNewsButton: UIColor { .Dark.Background.primary }
     override var newsPlaceholder: UIColor { .Grey.fifty }
 
     override var actionSheetBackground: UIColor { .Dark.Background.secondary }
