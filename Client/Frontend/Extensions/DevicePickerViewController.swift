@@ -58,7 +58,6 @@ class DevicePickerViewController: UITableViewController {
     private var selectedIdentifiers = Set<String>() // Stores Device.id
     private var notification: Any?
     private var loadingState = LoadingState.loading
-    private let emptyCellIdentifier = "EmptyCell"
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to
     // provide Share To functionality
@@ -83,7 +82,7 @@ class DevicePickerViewController: UITableViewController {
         tableView.register(DevicePickerTableViewCell.self,
                            forCellReuseIdentifier: DevicePickerTableViewCell.cellIdentifier)
         tableView.register(HostingTableViewCell<HelpView>.self,
-                           forCellReuseIdentifier: emptyCellIdentifier)
+                           forCellReuseIdentifier: HostingTableViewCell<HelpView>.cellIdentifier)
         tableView.tableFooterView = UIView(frame: .zero)
 
         tableView.allowsSelection = true
@@ -192,7 +191,7 @@ class DevicePickerViewController: UITableViewController {
         } else {
             if loadingState == .loaded,
                 let hostingCell = tableView.dequeueReusableCell(
-                withIdentifier: emptyCellIdentifier) as? HostingTableViewCell<HelpView> {
+                withIdentifier: HostingTableViewCell<HelpView>.cellIdentifier) as? HostingTableViewCell<HelpView> {
                 #if MOZ_TARGET_SHARETO
                 let textColor = ShareTheme.textColor.color
                 let imageColor = ShareTheme.iconColor.color

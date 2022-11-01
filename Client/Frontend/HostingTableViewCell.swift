@@ -4,9 +4,8 @@
 
 import SwiftUI
 
-final class HostingTableViewCell<Content: View>: UITableViewCell {
+final class HostingTableViewCell<Content: View>: UITableViewCell, ReusableCell {
 
-    let cellIdentifier = "HostingTableViewCell"
     private let hostingController = UIHostingController<Content?>(rootView: nil)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

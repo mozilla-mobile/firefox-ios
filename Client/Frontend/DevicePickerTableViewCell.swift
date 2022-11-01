@@ -4,15 +4,13 @@
 
 import UIKit
 
-class DevicePickerTableViewCell: UITableViewCell {
+class DevicePickerTableViewCell: UITableViewCell, ReusableCell {
 
     private struct UX {
         static let deviceRowTextFont = UIFont.systemFont(ofSize: 16)
         static let deviceRowTextPaddingLeft: CGFloat = 72
         static let deviceRowTextPaddingRight: CGFloat = 50
     }
-
-    static let cellIdentifier = "ClientPickerTableViewCell"
 
     var nameLabel: UILabel
     var checked: Bool = false {

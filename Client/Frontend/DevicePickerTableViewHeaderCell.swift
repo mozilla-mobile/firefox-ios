@@ -4,7 +4,7 @@
 
 import UIKit
 
-class DevicePickerTableViewHeaderCell: UITableViewCell {
+class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell {
 
     private struct UX {
         static let tableHeaderTextFont = UIFont.systemFont(ofSize: 16)
@@ -12,7 +12,6 @@ class DevicePickerTableViewHeaderCell: UITableViewCell {
         static let tableHeaderTextPaddingLeft: CGFloat = 20
     }
 
-    static let cellIdentifier = "ClientPickerTableViewSectionHeader"
     let nameLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
