@@ -66,7 +66,7 @@ final class NimbusFeatureFlagLayer {
     }
 
     public func checkNimbusConfigForStartAtHome(using nimbus: FxNimbus = FxNimbus.shared) -> StartAtHomeSetting {
-        /* Ecosia: always start at home
+        /* Ecosia: never start at home
         let config = nimbus.features.startAtHomeFeature.value()
         let nimbusSetting = config.setting
 
@@ -76,7 +76,7 @@ final class NimbusFeatureFlagLayer {
         case .always: return .always
         }
          */
-        return .always
+        return .disabled
     }
 
     // MARK: - Private methods
