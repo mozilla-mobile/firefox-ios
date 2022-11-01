@@ -155,11 +155,9 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
 
     private func updateViewDetails() {
         siteTitleLabel.text = viewModel.topLevelDomain
-        siteInfoImage.image = viewModel.image
         siteInfoTitleLabel.text = viewModel.title
         siteInfoURLLabel.text = viewModel.URL
         connectionStatusLabel.text = viewModel.connectionStatusMessage
-        connectionImage.image = viewModel.lockIcon
     }
 
     // MARK: - Actions
@@ -175,6 +173,9 @@ extension EnhancedTrackingProtectionDetailsVC {
         let theme = themeManager.currentTheme
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor =  theme.colors.layer1
+        siteTitleLabel.textColor = theme.colors.textPrimary
+        siteInfoTitleLabel.textColor = theme.colors.textPrimary
+        connectionStatusLabel.textColor = theme.colors.textPrimary
         siteInfoSection.backgroundColor = theme.colors.layer2
         siteInfoURLLabel.textColor = theme.colors.textSecondary
         connectionView.backgroundColor = theme.colors.layer2
@@ -182,6 +183,9 @@ extension EnhancedTrackingProtectionDetailsVC {
             connectionImage.tintColor = theme.colors.iconPrimary
         }
         closeButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
+        connectionImage.image = viewModel.getLockIcon(theme.type)
+        siteInfoImage.image = viewModel.image ?? UIImage(imageLiteralResourceName: ImageIdentifiers.defaultFavicon).withTintColor(theme.colors.iconPrimary)
+
         setNeedsStatusBarAppearanceUpdate()
     }
 }

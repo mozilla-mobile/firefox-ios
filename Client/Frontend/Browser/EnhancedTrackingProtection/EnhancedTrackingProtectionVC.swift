@@ -337,20 +337,19 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private func updateViewDetails() {
-        heroImage.image = UIImage(named: ImageIdentifiers.defaultFavicon)
         if let favIconURL = viewModel.favIcon {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: favIconURL,
                                                                    limit: ImageLoadingConstants.NoLimitImageSize) {
                 [weak self] image, error in
                 guard error == nil, let image = image else { return }
                 self?.heroImage.image = image
+                self?.viewModel.heroImage = image
             }
         }
 
         siteDomainLabel.text = viewModel.websiteTitle
 
         connectionLabel.text = viewModel.connectionStatusString
-        connectionImage.image = viewModel.connectionStatusImage
 
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
         toggleLabel.text = .TrackingProtectionEnableTitle
@@ -440,10 +439,13 @@ extension EnhancedTrackingProtectionMenuVC {
         view.backgroundColor = theme.colors.layer1
         closeButton.backgroundColor = theme.colors.layer2
         let buttonImage = UIImage(named: ImageIdentifiers.closeMediumButton)?
-            .tinted(withColor: theme.colors.iconPrimary)
+            .tinted(withColor: theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         connectionView.backgroundColor = theme.colors.layer2
-        connectionDetailArrow.tintColor = theme.colors.iconPrimary
+        connectionDetailArrow.tintColor = theme.colors.iconSecondary
+        connectionImage.image = viewModel.getConnectionStatusImage(themeType: theme.type)
+        heroImage.image = viewModel.heroImage ?? UIImage(named: ImageIdentifiers.defaultFavicon)?
+            .tinted(withColor: theme.colors.iconPrimary)
         if viewModel.connectionSecure {
             connectionImage.tintColor = theme.colors.iconPrimary
         }

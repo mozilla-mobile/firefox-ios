@@ -11,6 +11,7 @@ class EnhancedTrackingProtectionMenuVM {
     var tab: Tab
     var profile: Profile
     var onOpenSettingsTapped: (() -> Void)?
+    var heroImage: UIImage?
 
     var websiteTitle: String {
         return tab.url?.baseDomain ?? ""
@@ -25,9 +26,10 @@ class EnhancedTrackingProtectionMenuVM {
         return connectionSecure ? .ProtectionStatusSecure : .ProtectionStatusNotSecure
     }
 
-    var connectionStatusImage: UIImage {
-        let insecureImageString = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
-        let image = connectionSecure ? UIImage(imageLiteralResourceName: "lock_verified").withRenderingMode(.alwaysTemplate) : UIImage(imageLiteralResourceName: insecureImageString)
+    func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
+        let insecureImage = themeType.getLockImage()
+        let image = connectionSecure ? UIImage(imageLiteralResourceName: "lock_verified")
+            .withRenderingMode(.alwaysTemplate) : insecureImage
         return image
     }
 
@@ -60,9 +62,9 @@ class EnhancedTrackingProtectionMenuVM {
     func getDetailsViewModel(withCachedImage cachedImage: UIImage?) -> EnhancedTrackingProtectionDetailsVM {
         return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
                                                    title: tab.displayTitle,
-                                                   image: cachedImage ?? UIImage(imageLiteralResourceName: "defaulFavicon"),
+                                                   image: cachedImage,
                                                    URL: tab.url?.absoluteDisplayString ?? websiteTitle,
-                                                   lockIcon: connectionStatusImage,
+                                                   getLockIcon: getConnectionStatusImage(themeType:),
                                                    connectionStatusMessage: connectionStatusString,
                                                    connectionSecure: connectionSecure)
     }

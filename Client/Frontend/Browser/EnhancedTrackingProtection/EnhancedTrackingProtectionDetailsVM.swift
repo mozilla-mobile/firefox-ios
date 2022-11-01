@@ -7,10 +7,10 @@ import Foundation
 struct EnhancedTrackingProtectionDetailsVM {
     let topLevelDomain: String
     let title: String
-    let image: UIImage
+    let image: UIImage?
     let URL: String
 
-    let lockIcon: UIImage
+    let getLockIcon: (ThemeType) -> UIImage
     let connectionStatusMessage: String
     let connectionSecure: Bool
 }

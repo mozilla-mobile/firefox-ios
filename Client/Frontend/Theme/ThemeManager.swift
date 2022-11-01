@@ -26,6 +26,17 @@ enum ThemeType: String {
             return .black
         }
     }
+
+    func getLockImage() -> UIImage {
+        let imageString: String
+        switch self {
+        case .light:
+            imageString = "lock_blocked"
+        case .dark:
+            imageString = "lock_blocked_dark"
+        }
+        return UIImage(imageLiteralResourceName: imageString)
+    }
 }
 
 protocol ThemeManager {
