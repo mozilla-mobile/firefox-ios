@@ -64,7 +64,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.SentToDevice)
-        waitForExistence(app.navigationBars["Client.InstructionsView"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
     // Disable issue #5554, More button is not accessible
@@ -125,10 +125,10 @@ class PhotonActionSheetTest: BaseTestCase {
     func testShareSheetSendToDevice() {
         openNewShareSheet()
         app.staticTexts["Send to Device"].tap()
-        waitForExistence(app.navigationBars.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"], timeout: 10)
+        waitForExistence(app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton], timeout: 10)
 
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
-        app.navigationBars.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].tap()
+        app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
     }
 
     func testShareSheetOpenAndCancel() {

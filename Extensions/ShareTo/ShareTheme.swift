@@ -38,4 +38,6 @@ struct ShareTheme {
     static let doneLabelBackground = ModernColor(dark: UIColor.Photon.Blue40, light: UIColor.Photon.Blue40)
     static let separator = ModernColor(dark: UIColor.Photon.Grey10, light: UIColor.Photon.Grey30)
     static let actionRowTextAndIcon = ModernColor(dark: .white, light: UIColor.Photon.Grey80)
+    static let textColor = ModernColor(dark: UIColor.Photon.LightGrey05, light: UIColor.Photon.DarkGrey90)
+    static let iconColor = ModernColor(dark: UIColor.Photon.LightGrey05, light: UIColor.Photon.DarkGrey90)
 }
