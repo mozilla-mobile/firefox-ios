@@ -215,6 +215,7 @@
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E528833B2900328800011920 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528833A2900328800011920 /* SplashViewController.swift */; };
+		E5A890A9290FB8E2004F95B8 /* WebMenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A890A8290FB8E2004F95B8 /* WebMenuAction.swift */; };
 		E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */; };
 		E5E4504D28CF4548005A01F1 /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504B28CF4548005A01F1 /* TipViewController.swift */; };
 		E5E4504E28CF4548005A01F1 /* TipsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504C28CF4548005A01F1 /* TipsPageViewController.swift */; };
@@ -1091,6 +1092,7 @@
 		E528833A2900328800011920 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		E56FB76D28C0DF96005CF1B9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E56FB76F28C0DF96005CF1B9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		E5A890A8290FB8E2004F95B8 /* WebMenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebMenuAction.swift; sourceTree = "<group>"; };
 		E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Rename.swift"; sourceTree = "<group>"; };
 		E5E4504B28CF4548005A01F1 /* TipViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
 		E5E4504C28CF4548005A01F1 /* TipsPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TipsPageViewController.swift; sourceTree = "<group>"; };
@@ -1479,6 +1481,7 @@
 			children = (
 				C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */,
 				C8EADCD12742A00300E76AE6 /* MenuActionable.swift */,
+				E5A890A8290FB8E2004F95B8 /* WebMenuAction.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -2560,6 +2563,7 @@
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
 				F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */,
+				E5A890A9290FB8E2004F95B8 /* WebMenuAction.swift in Sources */,
 				C8337DF52710898800093D42 /* ToggleItem.swift in Sources */,
 				F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */,
 				8400575A27353B1800E48144 /* UIPasteBoardExtensions.swift in Sources */,

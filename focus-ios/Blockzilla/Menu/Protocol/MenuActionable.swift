@@ -4,13 +4,7 @@
 
 import UIKit
 
-protocol WebViewMenuActionable: AnyObject {
-    func openInDefaultBrowser(url: URL)
-    func showCopy(url: URL)
-    func showSharePage(for utils: OpenUtils, sender: UIView)
-}
-
-protocol MenuActionable: WebViewMenuActionable {
+protocol MenuActionable: AnyObject {
     func addToShortcuts(url: URL)
     func removeShortcut(url: URL)
 
@@ -26,4 +20,8 @@ protocol MenuActionable: WebViewMenuActionable {
     func showSettings(shouldScrollToSiri: Bool)
     func showHelp()
     func showWhatsNew()
+
+    func openInDefaultBrowser(url: URL)
+    func showCopy(url: URL)
+    func showSharePage(for utils: OpenUtils, sender: UIView)
 }

@@ -6,7 +6,8 @@ import UIKit
 
 extension UIAction {
     convenience init(_ menuAction: MenuAction) {
-        self.init(title: menuAction.title, image: UIImage(named: menuAction.image)) { _ in
+        let image = menuAction.image.flatMap(UIImage.init(named:))
+        self.init(title: menuAction.title, image: image) { _ in
             menuAction.action()
         }
     }

@@ -6,6 +6,6 @@ import UIKit
 
 struct MenuAction {
     let title: String
-    let image: String
+    let image: String?
     let action: () -> Void
 }

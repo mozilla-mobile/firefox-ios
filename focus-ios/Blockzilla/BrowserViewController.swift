@@ -21,7 +21,13 @@ class BrowserViewController: UIViewController {
         isTrackingEnabled: {
             Settings.getToggle(.trackingProtection)
         })
-    private lazy var webViewController = WebViewController(trackingProtectionManager: trackingProtectionManager)
+    private lazy var webViewController: WebViewController = {
+        var menuAction = WebMenuAction.live
+        menuAction.openLink = { url in
+            self.submit(url: url)
+        }
+        return WebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
+    }()
     private let webViewContainer = UIView()
 
     var modalDelegate: ModalDelegate?
@@ -883,7 +889,7 @@ class BrowserViewController: UIViewController {
         }
         webViewController.load(URLRequest(url: url))
 
-        if urlBar.url == nil {
+        if urlBar.url != url {
             urlBar.url = url
         }
 

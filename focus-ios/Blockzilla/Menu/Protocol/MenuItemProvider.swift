@@ -5,33 +5,7 @@
 import UIKit
 import AppShortcuts
 
-protocol WebViewItemProvider: AnyObject {
-    func openInDefaultBrowserItem(for url: URL) -> MenuAction
-    func copyItem(url: URL) -> MenuAction
-    func sharePageItem(for utils: OpenUtils, sender: UIView) -> MenuAction
-}
-
-extension WebViewItemProvider where Self: WebViewMenuActionable {
-    func openInDefaultBrowserItem(for url: URL) -> MenuAction {
-        MenuAction(title: UIConstants.strings.shareOpenInDefaultBrowser, image: "icon_favicon") { [unowned self] in
-            self.openInDefaultBrowser(url: url)
-        }
-    }
-
-    func sharePageItem(for utils: OpenUtils, sender: UIView) -> MenuAction {
-        MenuAction(title: UIConstants.strings.sharePage, image: "icon_openwith_active") { [unowned self] in
-            self.showSharePage(for: utils, sender: sender)
-        }
-    }
-
-    func copyItem(url: URL) -> MenuAction {
-        MenuAction(title: UIConstants.strings.copyAddress, image: "icon_link") { [unowned self] in
-            self.showCopy(url: url)
-        }
-    }
-}
-
-protocol MenuItemProvider: WebViewItemProvider {
+protocol MenuItemProvider {
     var shortcutManager: ShortcutsManager { get }
 
     func openInFireFoxItem(for url: URL) -> MenuAction?
@@ -47,6 +21,10 @@ protocol MenuItemProvider: WebViewItemProvider {
     func getShortcutsItem(for url: URL) -> MenuAction?
     func addToShortcutsItem(for url: URL) -> MenuAction
     func removeFromShortcutsItem(for url: URL) -> MenuAction
+
+    func openInDefaultBrowserItem(for url: URL) -> MenuAction
+    func copyItem(url: URL) -> MenuAction
+    func sharePageItem(for utils: OpenUtils, sender: UIView) -> MenuAction
 }
 
 extension MenuItemProvider where Self: MenuActionable {
@@ -122,6 +100,24 @@ extension MenuItemProvider where Self: MenuActionable {
     func removeFromShortcutsItem(for url: URL) -> MenuAction {
         MenuAction(title: UIConstants.strings.shareMenuRemoveFromShortcuts, image: "icon_shortcuts_remove") { [unowned self] in
             self.removeShortcut(url: url)
+        }
+    }
+
+    func openInDefaultBrowserItem(for url: URL) -> MenuAction {
+        MenuAction(title: UIConstants.strings.shareOpenInDefaultBrowser, image: "icon_favicon") { [unowned self] in
+            self.openInDefaultBrowser(url: url)
+        }
+    }
+
+    func sharePageItem(for utils: OpenUtils, sender: UIView) -> MenuAction {
+        MenuAction(title: UIConstants.strings.sharePage, image: "icon_openwith_active") { [unowned self] in
+            self.showSharePage(for: utils, sender: sender)
+        }
+    }
+
+    func copyItem(url: URL) -> MenuAction {
+        MenuAction(title: UIConstants.strings.copyAddress, image: "icon_link") { [unowned self] in
+            self.showCopy(url: url)
         }
     }
 }
