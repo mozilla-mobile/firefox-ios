@@ -272,7 +272,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         browserViewController.photonActionSheetDidDismiss()
-        browserViewController.dismiss(animated: true, completion: nil)
         browserViewController.navigationController?.popViewController(animated: true)
 
         switch userActivity.activityType {
