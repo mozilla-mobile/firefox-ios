@@ -42,12 +42,19 @@ struct DownloadedFile: Equatable {
     }
 }
 
-class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel {
+class DownloadsPanel: UIViewController,
+                      UITableViewDelegate,
+                      UITableViewDataSource,
+                      LibraryPanel,
+                      Themeable {
 
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
     var state: LibraryPanelMainState
     var bottomToolbarItems: [UIBarButtonItem] = [UIBarButtonItem]()
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -74,8 +81,12 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var fileExtensionIcons: [String: UIImage] = [:]
 
     // MARK: - Lifecycle
-    init(profile: Profile) {
+    init(profile: Profile,
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.profile = profile
+        self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
         self.state = .downloads
         super.init(nibName: nil, bundle: nil)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
@@ -101,6 +112,9 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+
+        listenForThemeChange()
+        applyTheme()
     }
 
     deinit {
@@ -220,12 +234,13 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private func roundRectImageWithLabel(
         _ label: String,
         width: CGFloat,
-        height: CGFloat,
-        radius: CGFloat = 5.0,
-        strokeWidth: CGFloat = 1.0,
-        strokeColor: UIColor = UIColor.theme.homePanel.downloadedFileIcon,
-        fontSize: CGFloat = 9.0
+        height: CGFloat
     ) -> UIImage? {
+        let radius: CGFloat = 5.0
+        let strokeWidth: CGFloat = 1.0
+        let strokeColor: UIColor = themeManager.currentTheme.colors.iconSecondary
+        let fontSize: CGFloat = 9.0
+
         UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0.0)
         let context = UIGraphicsGetCurrentContext()
         context?.setStrokeColor(strokeColor.cgColor)
@@ -271,18 +286,18 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView: UIView = .build { view in
-            view.backgroundColor = UIColor.theme.homePanel.panelBackground
+            view.backgroundColor = self.themeManager.currentTheme.colors.layer6
             view.translatesAutoresizingMaskIntoConstraints = false
         }
         let logoImageView: UIImageView = .build { imageView in
-            imageView.image = UIImage.templateImageNamed("emptyDownloads")
-            imageView.tintColor = UIColor.Photon.Grey60
+            imageView.image = UIImage.templateImageNamed("emptyDownloads")?.withRenderingMode(.alwaysTemplate)
+            imageView.tintColor = self.themeManager.currentTheme.colors.iconSecondary
         }
         let welcomeLabel: UILabel = .build { label in
             label.text = .DownloadsPanelEmptyStateTitle
             label.textAlignment = .center
             label.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-            label.textColor = UIColor.theme.homePanel.welcomeScreenText
+            label.textColor = self.themeManager.currentTheme.colors.textSecondary
             label.numberOfLines = 0
             label.adjustsFontSizeToFitWidth = true
         }
@@ -319,8 +334,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.selectedBackground // UIColor.theme.tableView.headerBackground
+            header.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
+            header.contentView.backgroundColor = themeManager.currentTheme.colors.layer1
         }
     }
 
@@ -351,14 +366,12 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             assertionFailure("Invalid Downloads section \(section)")
         }
 
-        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let headerViewModel = SiteTableViewHeaderModel(title: title,
                                                        isCollapsible: false,
-                                                       collapsibleState: nil,
-                                                       theme: themeManager.currentTheme)
+                                                       collapsibleState: nil)
         headerView.configure(headerViewModel)
         headerView.showBorder(for: .top, !isFirstSection(section))
+        headerView.applyTheme(theme: themeManager.currentTheme)
 
         return headerView
     }
@@ -377,6 +390,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             cell.titleLabel.text = downloadedFile.filename
             cell.descriptionLabel.text = downloadedFile.formattedSize
             cell.leftImageView.image = iconForFileExtension(downloadedFile.fileExtension)
+            cell.applyTheme(theme: themeManager.currentTheme)
         }
         return cell
     }
@@ -443,25 +457,22 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         return UISwipeActionsConfiguration(actions: [deleteAction, shareAction])
     }
+
+    func applyTheme() {
+        emptyStateOverlayView.removeFromSuperview()
+        emptyStateOverlayView = createEmptyStateOverlayView()
+        updateEmptyPanelState()
+
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+
+        reloadData()
+    }
 }
 
 // MARK: - UIDocumentInteractionControllerDelegate
 extension DownloadsPanel: UIDocumentInteractionControllerDelegate {
     func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         return self
-    }
-}
-
-// MARK: - NotificationThemeable
-extension DownloadsPanel: NotificationThemeable {
-    func applyTheme() {
-        emptyStateOverlayView.removeFromSuperview()
-        emptyStateOverlayView = createEmptyStateOverlayView()
-        updateEmptyPanelState()
-
-        tableView.backgroundColor =  UIColor.theme.homePanel.panelBackground
-        tableView.separatorColor = UIColor.theme.tableView.separator
-
-        reloadData()
     }
 }

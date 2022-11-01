@@ -2563,8 +2563,6 @@ extension BrowserViewController: NotificationThemeable {
                                             readerModeBar,
                                             topTabsViewController,
                                             homepageViewController,
-                                            searchController,
-                                            libraryViewController,
                                             libraryDrawerViewController]
         ui.forEach { $0?.applyTheme() }
 
