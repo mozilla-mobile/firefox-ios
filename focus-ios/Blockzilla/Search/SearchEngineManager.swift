@@ -27,6 +27,7 @@ class SearchEngineManager {
 
         set {
             prefs.set(newValue.name, forKey: SearchEngineManager.prefKeyEngine)
+            setActiveEngineAsFirstElement()
         }
     }
 
@@ -144,12 +145,19 @@ class SearchEngineManager {
         }
 
         sortEnginesAlphabetically()
+        setActiveEngineAsFirstElement()
     }
 
     private func sortEnginesAlphabetically() {
         engines.sort { (aEngine, bEngine) -> Bool in
             return aEngine.name < bEngine.name
         }
+    }
+
+    private func setActiveEngineAsFirstElement() {
+        let activeEngineIndex = engines.firstIndex(of: activeEngine)!
+        engines.insert(activeEngine, at: 0)
+        engines.remove(at: activeEngineIndex.advanced(by: 1))
     }
 
     private func readCustomEngines() -> [SearchEngine] {

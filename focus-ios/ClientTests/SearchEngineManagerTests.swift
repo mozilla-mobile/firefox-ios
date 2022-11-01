@@ -57,7 +57,7 @@ class SearchEngineManagerTests: XCTestCase {
     func testRemoveCustomEngine() {
         let manager = SearchEngineManager(prefs: mockUserDefaults)
         let engineAdded = manager.addEngine(name: CUSTOM_ENGINE_NAME, template: CUSTOM_ENGINE_TEMPLATE)
-        manager.activeEngine = manager.engines[0]
+        manager.activeEngine = manager.engines[1]
         manager.removeEngine(engine: engineAdded)
 
         XCTAssertEqual(mockUserDefaults.setCalls, 6)
