@@ -7,6 +7,7 @@ import Foundation
 import Shared
 import Storage
 import UIKit
+import SwiftUI
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
@@ -354,12 +355,19 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getSendToDevice() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
-            guard let bvc = self.menuActionDelegate as? InstructionsViewControllerDelegate & DevicePickerViewControllerDelegate else { return }
+            guard let bvc = self.menuActionDelegate as? InstructionsViewDelegate & DevicePickerViewControllerDelegate
+            else { return }
 
             if !self.profile.hasAccount() {
-                let instructionsViewController = InstructionsViewController()
-                instructionsViewController.delegate = bvc
-                let navigationController = UINavigationController(rootViewController: instructionsViewController)
+                let colors = self.themeManager.currentTheme.colors
+                let instructionsView = InstructionsView(backgroundColor: colors.layer1,
+                                                        textColor: colors.textPrimary,
+                                                        imageColor: colors.iconPrimary,
+                                                        dismissAction: {
+                    bvc.dismissInstructionsView()
+                })
+                let hostingViewController = UIHostingController(rootView: instructionsView)
+                let navigationController = UINavigationController(rootViewController: hostingViewController)
                 navigationController.modalPresentationStyle = .formSheet
                 self.delegate?.showViewController(viewController: navigationController)
                 return

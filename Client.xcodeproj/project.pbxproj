@@ -868,9 +868,7 @@
 		D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD717215EBD85004FF5B0 /* SettingsLoadingView.swift */; };
 		D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */; };
 		D04CD74B216CF86B004FF5B0 /* DevicePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */; };
-		D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */; };
 		D04CD74D216CF86F004FF5B0 /* DevicePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */; };
-		D04CD74E216CF86F004FF5B0 /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */; };
 		D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04D1B852097859B0074B35F /* DownloadToast.swift */; };
 		D04D1B92209790B60074B35F /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04D1B91209790B60074B35F /* Toast.swift */; };
 		D053D6742211CD53006C6B64 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D053D6732211CD53006C6B64 /* KeychainStore.swift */; };
@@ -1051,6 +1049,8 @@
 		E1390FAC28B032B300C9EF3E /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FA628B032AD00C9EF3E /* UIView+Extension.swift */; };
 		E1390FB628B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB528B040E900C9EF3E /* WallpaperSelectorViewModelTests.swift */; };
 		E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1390FB728B42EF200C9EF3E /* WallpaperManagerMock.swift */; };
+		E13A72D9291154E600E9A99D /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
+		E13A72DA2911552500E9A99D /* Loggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87DC85D27B2CA49006EFCE2 /* Loggable.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
 		E15A8B2D286D0066004BB2B8 /* TabsPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A8B2C286D0066004BB2B8 /* TabsPayloadTests.swift */; };
 		E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */; };
@@ -1082,6 +1082,18 @@
 		E1AF3565286DE5F800960045 /* UnitTest.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355D286DE5F700960045 /* UnitTest.xctestplan */; };
 		E1AF3566286DE5F800960045 /* SmokeXCUITests.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355E286DE5F700960045 /* SmokeXCUITests.xctestplan */; };
 		E1AF3567286DE5F800960045 /* PerformanceTestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */; };
+		E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
+		E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84266742728462900382274 /* AccessibilityIdentifiers.swift */; };
+		E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
+		E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
+		E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */; };
+		E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */; };
+		E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */; };
+		E1CD81C3290C670A00124B27 /* HostingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */; };
+		E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
+		E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1CD81C4290C6D5800124B27 /* HelpView.swift */; };
+		E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
+		E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
 		E1FF93E228A2E55700E6360E /* WallpaperSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FF93E128A2E55700E6360E /* WallpaperSelectorViewController.swift */; };
 		E1FF93E428A2E74600E6360E /* WallpaperSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FF93E328A2E74600E6360E /* WallpaperSelectorViewModel.swift */; };
@@ -4162,7 +4174,6 @@
 		D04CD717215EBD85004FF5B0 /* SettingsLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLoadingView.swift; sourceTree = "<group>"; };
 		D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SiriShortcuts.swift; path = Extensions/SiriShortcuts.swift; sourceTree = "<group>"; };
 		D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DevicePickerViewController.swift; path = Extensions/DevicePickerViewController.swift; sourceTree = "<group>"; };
-		D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InstructionsViewController.swift; path = Extensions/InstructionsViewController.swift; sourceTree = "<group>"; };
 		D04D1B852097859B0074B35F /* DownloadToast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadToast.swift; sourceTree = "<group>"; };
 		D04D1B91209790B60074B35F /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D053D6732211CD53006C6B64 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
@@ -4768,8 +4779,13 @@
 		E1AF355D286DE5F700960045 /* UnitTest.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = UnitTest.xctestplan; sourceTree = "<group>"; };
 		E1AF355E286DE5F700960045 /* SmokeXCUITests.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SmokeXCUITests.xctestplan; sourceTree = "<group>"; };
 		E1AF355F286DE5F700960045 /* PerformanceTestPlan.xctestplan */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PerformanceTestPlan.xctestplan; sourceTree = "<group>"; };
+		E1B04A9C28E20A8300670E54 /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		E1B8412CB5BD748F7D81B41E /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		E1BE455FA65078F46476F88F /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewCell.swift; sourceTree = "<group>"; };
+		E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePickerTableViewHeaderCell.swift; sourceTree = "<group>"; };
+		E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingTableViewCell.swift; sourceTree = "<group>"; };
+		E1CD81C4290C6D5800124B27 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		E1D0406692C3B058BF50AA81 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
 		E1FF93E128A2E55700E6360E /* WallpaperSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewController.swift; sourceTree = "<group>"; };
@@ -6197,8 +6213,12 @@
 		7B0B1B9C1C1B69F500DF4AB5 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				E1CD81BB290C5C3F00124B27 /* DevicePickerTableViewCell.swift */,
+				E1CD81BD290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift */,
 				D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */,
-				D04CD749216CF86B004FF5B0 /* InstructionsViewController.swift */,
+				E1CD81C4290C6D5800124B27 /* HelpView.swift */,
+				E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */,
+				E1B04A9C28E20A8300670E54 /* InstructionsView.swift */,
 				D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */,
 			);
 			name = Extensions;
@@ -10339,6 +10359,7 @@
 				602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */,
 				602A2B9727F6243A00C3CB78 /* Metrics.swift in Sources */,
 				8A1E3BE628CBBF44003388C4 /* OpenSearchEngine.swift in Sources */,
+				E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */,
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				C8B0F5ED283B7C9F007AE65D /* PocketStandardCell.swift in Sources */,
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
@@ -10357,6 +10378,7 @@
 				1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				E4CD9F6D1A77DD2800318571 /* ReaderModeStyleViewController.swift in Sources */,
+				E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				8AD40FD527BB1C1000672675 /* LockButton.swift in Sources */,
 				5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */,
 				E571EE772875694C0051D9AA /* MockPocketSponsoredStoriesProvider.swift in Sources */,
@@ -10501,6 +10523,7 @@
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
 				C84656012887A0F700861B4A /* WallpaperMetadataUtility.swift in Sources */,
 				E571EE782875694C0051D9AA /* PocketSponsoredStoriesProvider.swift in Sources */,
+				E1B04A9D28E20A8300670E54 /* InstructionsView.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
@@ -10761,6 +10784,7 @@
 				8AB8573727D951640075C173 /* HomeLogoHeaderViewModel.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				21112968289480630082C08B /* HomepageMessageCardViewModel.swift in Sources */,
+				E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				5A43EC9328CBC25F003155A3 /* Themable.swift in Sources */,
 				E12BD0AC28AC37F00029AAF0 /* UIColor+Extension.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
@@ -10809,6 +10833,7 @@
 				EBA3B2D22268F57E00728BDB /* BadgeIcon.swift in Sources */,
 				8AB5958828413F6C0090F4AE /* RecentlySavedCell.swift in Sources */,
 				96EB6C3C27D82AEA00A9D159 /* HistoryPanel+ContextMenuExtensions.swift in Sources */,
+				E1CD81C2290C62A600124B27 /* HostingTableViewCell.swift in Sources */,
 				43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */,
 				43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */,
 				217AEF7828480844004EED37 /* ResizableButton.swift in Sources */,
@@ -10828,7 +10853,6 @@
 				8A04136928258DF600D20B10 /* SponsoredTileTelemetry.swift in Sources */,
 				D04CD718215EBD85004FF5B0 /* SettingsLoadingView.swift in Sources */,
 				4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */,
-				D04CD74C216CF86B004FF5B0 /* InstructionsViewController.swift in Sources */,
 				E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */,
 				8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */,
 				C8501F4F2850FB72003B09AB /* LegacyWallpaperMigrationUtility.swift in Sources */,
@@ -11004,23 +11028,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */,
+				E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */,
 				FA6B2AC41D41F02D00429414 /* Punycode.swift in Sources */,
+				E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */,
 				D38B2D8A1A8D98D00040E6B5 /* SearchEngines.swift in Sources */,
 				EB6E0C60207E6C3100FBFF7E /* SendToDevice.swift in Sources */,
+				E13A72DA2911552500E9A99D /* Loggable.swift in Sources */,
 				D3C744CF1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				EB94075320850C9F00702E05 /* photon-colors.swift in Sources */,
 				D38B2D8C1A8D98D90040E6B5 /* OpenSearchParser.swift in Sources */,
 				D04CD74D216CF86F004FF5B0 /* DevicePickerViewController.swift in Sources */,
+				E13A72D9291154E600E9A99D /* ReusableCell.swift in Sources */,
 				8AB8574027D961550075C173 /* DataObserver.swift in Sources */,
 				6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
 				E418D0D91A251B3200CAE47A /* Profile.swift in Sources */,
+				E1CD81C3290C670A00124B27 /* HostingTableViewCell.swift in Sources */,
 				DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				8A1E3BE728CBC204003388C4 /* OpenSearchEngine.swift in Sources */,
 				EA0EE87723D0F1DE002BEDAA /* ShareTheme.swift in Sources */,
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
 				EB9407492081353100702E05 /* UXConstants.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncStatusResolver.swift in Sources */,
-				D04CD74E216CF86F004FF5B0 /* InstructionsViewController.swift in Sources */,
+				E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */,
+				E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */,
+				E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				E41A7D4B1A1BE04500245963 /* InitialViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
