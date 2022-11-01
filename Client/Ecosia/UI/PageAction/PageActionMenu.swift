@@ -4,7 +4,7 @@
 
 import UIKit
 
-class PageActionMenu: UIViewController {
+class PageActionMenu: UIViewController, UIGestureRecognizerDelegate {
 
     struct UX {
         static let Spacing: CGFloat = 16
@@ -77,6 +77,7 @@ class PageActionMenu: UIViewController {
     private var contentSizeObserver : NSKeyValueObservation?
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        checkSwipeDown()
 
         guard traitCollection.userInterfaceIdiom == .pad else { return }
         contentSizeObserver = tableView.observe(\.contentSize) { [weak self] tableView, _ in
@@ -88,6 +89,38 @@ class PageActionMenu: UIViewController {
         super.viewDidDisappear(animated)
         contentSizeObserver?.invalidate()
         contentSizeObserver = nil
+    }
+
+    // MARK: Swipe down to close in iPhone Landscape
+    lazy var swipeDown: UISwipeGestureRecognizer = {
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(close))
+        swipeDown.direction = .down
+        swipeDown.isEnabled = false
+        swipeDown.delegate = self
+        view.addGestureRecognizer(swipeDown)
+        return swipeDown
+    }()
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard gestureRecognizer === swipeDown else { return false }
+        return tableView.contentOffset.y <= 0
+    }
+
+    private func checkSwipeDown() {
+        guard traitCollection.userInterfaceIdiom == .phone,
+                let window = UIApplication.shared.windows.first(where: \.isKeyWindow),
+                let orientation = window.windowScene?.interfaceOrientation else { return }
+
+        swipeDown.isEnabled = orientation.isLandscape
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        checkSwipeDown()
+    }
+
+    @objc func close() {
+        dismiss(animated: true, completion: nil)
     }
 }
 
