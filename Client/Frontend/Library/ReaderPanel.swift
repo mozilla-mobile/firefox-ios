@@ -54,7 +54,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
     var unread: Bool = true {
         didSet {
-            readStatusImageView.image = UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread")
+            readStatusImageView.image = UIImage(named: unread ? "MarkAsRead" : "MarkAsUnread")?.withRenderingMode(.alwaysTemplate)
             updateAccessibilityLabel()
         }
     }
@@ -106,6 +106,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
         selectedBackgroundView?.backgroundColor = theme.colors.layer5Hover
         titleLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
         hostnameLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
+        readStatusImageView.tintColor = theme.colors.iconAction
     }
 
     required init?(coder aDecoder: NSCoder) {
