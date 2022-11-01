@@ -174,13 +174,10 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let client = clientTabs.client
 
         let isCollapsed = hiddenSections.contains(section)
-        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let viewModel = SiteTableViewHeaderModel(title: client.name,
                                                  isCollapsible: true,
                                                  collapsibleState:
-                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down,
-                                                 theme: themeManager.currentTheme)
+                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
         headerView.configure(viewModel)
         headerView.showBorder(for: .bottom, true)
         headerView.showBorder(for: .top, section != 0)
@@ -229,6 +226,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
             cell?.leftImageView.backgroundColor = .clear
         }
 
+        cell.applyTheme(theme: theme)
         return cell
     }
 

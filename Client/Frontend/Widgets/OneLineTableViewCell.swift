@@ -15,7 +15,9 @@ struct OneLineTableViewCellViewModel {
     let accessoryType: UITableViewCell.AccessoryType
 }
 
-class OneLineTableViewCell: UITableViewCell, ReusableCell {
+class OneLineTableViewCell: UITableViewCell,
+                            ReusableCell,
+                            ThemeApplicable {
     // Tableview cell items
 
     struct UX {
@@ -31,7 +33,6 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         static let cornerRadius: CGFloat = 5
     }
 
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     var shouldLeftAlignTitle = false
     var customization: OneLineTableViewCustomization = .regular
 
@@ -60,8 +61,6 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         setupLayout()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {
@@ -145,27 +144,10 @@ class OneLineTableViewCell: UITableViewCell, ReusableCell {
         leftImageView.alpha = isEnabled ? 1.0 : 0.5
     }
 
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
-        if theme == .dark {
-            backgroundColor = UIColor.Photon.Grey80
-            titleLabel.textColor = .white
-        } else {
-            backgroundColor = .white
-            titleLabel.textColor = .black
-        }
-
-        bottomSeparatorView.backgroundColor = UIColor.Photon.Grey40
-    }
-}
-
-extension OneLineTableViewCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
+    func applyTheme(theme: Theme) {
+        selectedView.backgroundColor = theme.colors.layer5Hover
+        backgroundColor = theme.colors.layer5
+        titleLabel.textColor = theme.colors.textPrimary
+        bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
     }
 }

@@ -13,7 +13,13 @@ struct SiteTableViewControllerUX {
  * Provides base shared functionality for site rows and headers.
  */
 @objcMembers
-class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NotificationThemeable {
+class SiteTableViewController: UIViewController,
+                               UITableViewDelegate,
+                               UITableViewDataSource,
+                               Themeable {
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
     let profile: Profile
 
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
@@ -47,9 +53,14 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         fatalError("init(coder:) has not been implemented")
     }
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.profile = profile
+        self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
+        listenForThemeChange()
         applyTheme()
     }
 
@@ -113,7 +124,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
             cell.separatorInset = .zero
         }
-        cell.textLabel?.textColor = UIColor.theme.tableView.rowText
+        cell.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
         return cell
     }
 
@@ -123,8 +134,8 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
-            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            header.textLabel?.textColor = themeManager.currentTheme.colors.textPrimary
+            header.contentView.backgroundColor = themeManager.currentTheme.colors.layer1
         }
     }
 
@@ -141,17 +152,14 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func applyTheme() {
-        navigationController?.navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
-        navigationController?.navigationBar.tintColor = UIColor.theme.general.controlTint
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextDark]
+        navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer1
+        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.iconAction
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: themeManager.currentTheme.colors.textPrimary]
         setNeedsStatusBarAppearanceUpdate()
 
-        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        tableView.separatorColor = UIColor.theme.tableView.separator
-        if let rows = tableView.indexPathsForVisibleRows {
-            tableView.reloadRows(at: rows, with: .none)
-            tableView.reloadSections(IndexSet(rows.map { $0.section }), with: .none)
-        }
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
+        tableView.separatorColor = themeManager.currentTheme.colors.borderPrimary
+        tableView.reloadData()
     }
 }
 

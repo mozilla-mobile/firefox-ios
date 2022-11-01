@@ -16,14 +16,15 @@ private class FetchInProgressError: MaybeErrorType {
 }
 
 @objcMembers
-class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemeable {
+class HistoryPanel: UIViewController,
+                    LibraryPanel,
+                    Loggable,
+                    Themeable {
 
     struct UX {
         static let WelcomeScreenItemWidth = 170
         static let IconSize = 23
-        static let IconBorderColor = UIColor.Photon.Grey30
         static let IconBorderWidth: CGFloat = 0.5
-        static let actionIconColor = UIColor.Photon.Grey40 // Works for light and dark theme.
         static let EmptyTabContentOffset: CGFloat = -180
     }
 
@@ -41,7 +42,9 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     var keyboardState: KeyboardState?
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
-    private var themeManager: ThemeManager
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -134,7 +137,6 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         label.text = self.viewModel.emptyStateText
         label.textAlignment = .center
         label.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        label.textColor = UIColor.theme.homePanel.welcomeScreenText
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
     }
@@ -145,13 +147,14 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     init(profile: Profile,
          tabManager: TabManager,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
         self.viewModel = HistoryPanelViewModel(profile: profile)
         self.profile = profile
         self.state = .history(state: .mainView)
         self.themeManager = themeManager
-
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -173,9 +176,11 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
             NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: $0, object: nil)
         }
 
+        listenForThemeChange()
         handleRefreshControl()
         setupLayout()
         configureDatasource()
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -371,8 +376,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
 
     private func configureHistoryActionableCell(_ historyActionable: HistoryActionablesModel, _ cell: OneLineTableViewCell) -> OneLineTableViewCell {
 
-        cell.leftImageView.tintColor = .theme.browser.tint
-        cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
+        cell.leftImageView.tintColor = themeManager.currentTheme.colors.textPrimary
+        cell.leftImageView.backgroundColor = .clear
 
         let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
                                                       leftImageView: historyActionable.itemImage,
@@ -382,7 +387,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         cell.configure(viewModel: viewModel)
         cell.accessibilityIdentifier = historyActionable.itemA11yId
         setTappableStateAndStyle(with: historyActionable, on: cell)
-
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -391,14 +396,14 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         cell.titleLabel.isHidden = site.title.isEmpty
         cell.descriptionLabel.text = site.url
         cell.descriptionLabel.isHidden = false
-        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
+        cell.leftImageView.layer.borderColor = themeManager.currentTheme.colors.borderPrimary.cgColor
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
         cell.accessoryView = nil
         getFavIcon(for: site) { [weak cell] image in
             cell?.leftImageView.image = image
-            cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
+            cell?.leftImageView.backgroundColor = .clear
         }
-
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -417,8 +422,8 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         let imageView = UIImageView(image: chevronImage)
         cell.accessoryView = imageView
         cell.leftImageView.image = UIImage(named: ImageIdentifiers.stackedTabsIcon)?.withTintColor(themeManager.currentTheme.colors.iconSecondary)
-        cell.leftImageView.backgroundColor = .theme.homePanel.historyHeaderIconsBackground
-
+        cell.leftImageView.backgroundColor = themeManager.currentTheme.colors.layer5
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -514,7 +519,7 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
         // overlayView becomes the footer view, and for unknown reason, setting the bgcolor is ignored.
         // Create an explicit view for setting the color.
         let bgColor: UIView = .build { view in
-            view.backgroundColor = UIColor.theme.homePanel.panelBackground
+            view.backgroundColor = self.themeManager.currentTheme.colors.layer6
         }
         overlayView.addSubview(bgColor)
 
@@ -542,23 +547,16 @@ class HistoryPanel: UIViewController, LibraryPanel, Loggable, NotificationThemea
     func applyTheme() {
         updateEmptyPanelState()
 
-        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        searchbar.backgroundColor = UIColor.theme.textField.backgroundInOverlay
-        let tintColor = UIColor.theme.textField.textAndTint
+        tableView.backgroundColor = themeManager.currentTheme.colors.layer6
+        searchbar.backgroundColor = themeManager.currentTheme.colors.layer3
+        let tintColor = themeManager.currentTheme.colors.textPrimary
         let searchBarImage = UIImage(named: ImageIdentifiers.libraryPanelHistory)?.withRenderingMode(.alwaysTemplate).tinted(withColor: tintColor)
         searchbar.setImage(searchBarImage, for: .search, state: .normal)
-        searchbar.tintColor = UIColor.theme.textField.textAndTint
-
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            bottomSearchButton.tintColor = .white
-            bottomDeleteButton.tintColor = .white
-        } else {
-            navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-            bottomSearchButton.tintColor = .black
-            bottomDeleteButton.tintColor = .black
-        }
+        searchbar.tintColor = themeManager.currentTheme.colors.textPrimary
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: themeManager.currentTheme.colors.textPrimary]
+        bottomSearchButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+        bottomDeleteButton.tintColor = themeManager.currentTheme.colors.iconPrimary
+        welcomeLabel.textColor = themeManager.currentTheme.colors.textSecondary
 
         tableView.reloadData()
     }
@@ -651,15 +649,12 @@ extension HistoryPanel: UITableViewDelegate {
         else { return nil }
 
         let isCollapsed = viewModel.isSectionCollapsed(sectionIndex: section - 1)
-
-        // TODO: Need to pass the theme from the correct themeManager once FXIOS-4885 is done
-        let themeManager: ThemeManager = AppContainer.shared.resolve()
         let headerViewModel = SiteTableViewHeaderModel(title: actualSection.title ?? "",
                                                        isCollapsible: true,
                                                        collapsibleState:
-                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down,
-                                                       theme: themeManager.currentTheme)
+                                                        isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
         header.configure(headerViewModel)
+        header.applyTheme(theme: themeManager.currentTheme)
 
         // Configure tap to collapse/expand section
         header.tag = section

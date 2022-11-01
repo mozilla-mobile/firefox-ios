@@ -4,14 +4,14 @@
 
 import UIKit
 
-class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
+class TwoLineImageOverlayCell: UITableViewCell,
+                               ReusableCell,
+                               ThemeApplicable {
 
     struct UX {
         static let ImageSize: CGFloat = 29
         static let BorderViewMargin: CGFloat = 16
     }
-
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
     static let accessoryUsageReuseIdentifier = "temporary-reuse-identifier"
@@ -55,8 +55,6 @@ class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
     }
 
     required init?(coder: NSCoder) {
@@ -110,22 +108,13 @@ class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
         ])
 
         selectedBackgroundView = selectedView
-        applyTheme()
     }
 
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            self.backgroundColor = UIColor.Photon.Grey80
-            self.titleLabel.textColor = .white
-            self.descriptionLabel.textColor = UIColor.Photon.Grey40
-            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
-        } else {
-            self.backgroundColor = .white
-            self.titleLabel.textColor = .black
-            self.descriptionLabel.textColor = UIColor.Photon.DarkGrey05
-            self.selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
-        }
+    func applyTheme(theme: Theme) {
+        self.backgroundColor = theme.colors.layer5
+        self.selectedView.backgroundColor = theme.colors.layer5Hover
+        self.titleLabel.textColor = theme.colors.textPrimary
+        self.descriptionLabel.textColor = theme.colors.textSecondary
     }
 
     override func prepareForReuse() {
@@ -137,17 +126,5 @@ class TwoLineImageOverlayCell: UITableViewCell, ReusableCell {
                                       bottom: 0,
                                       right: 0)
         leftImageView.image = nil
-        applyTheme()
-    }
-}
-
-extension TwoLineImageOverlayCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
-        }
     }
 }

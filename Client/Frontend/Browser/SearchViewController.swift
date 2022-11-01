@@ -17,9 +17,6 @@ private enum SearchListSection: Int, CaseIterable {
 }
 
 private struct SearchViewControllerUX {
-    static var SearchEngineScrollViewBackgroundColor: CGColor { return UIColor.theme.homePanel.toolbarBackground.withAlphaComponent(0.8).cgColor }
-    static let SearchEngineScrollViewBorderColor = UIColor.black.withAlphaComponent(0.2).cgColor
-
     // TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
     static let EngineButtonHeight: Float = 44
     static let EngineButtonWidth = EngineButtonHeight * 1.4
@@ -56,17 +53,12 @@ struct SearchViewModel {
     let isBottomSearchBar: Bool
 }
 
-class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, LoaderListener,
-                            FeatureFlaggable, Themeable {
-
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
+class SearchViewController: SiteTableViewController,
+                            KeyboardHelperDelegate,
+                            LoaderListener,
+                            FeatureFlaggable {
 
     var searchDelegate: SearchViewControllerDelegate?
-    var currentTheme: BuiltinThemeName {
-        return BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-    }
     private let viewModel: SearchViewModel
     private var suggestClient: SearchSuggestClient?
     private var remoteClientTabs = [ClientTabsSearchWrapper]()
@@ -108,15 +100,11 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
          viewModel: SearchViewModel,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -129,19 +117,14 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     }
 
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.theme.homePanel.panelBackground
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        view.addSubview(blur)
-
         super.viewDidLoad()
         getCachedTabs()
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
         searchEngineContainerView.layer.shadowRadius = 0
         searchEngineContainerView.layer.shadowOpacity = 100
-        searchEngineContainerView.layer.shadowOffset = CGSize(width: 0, height: -SearchViewControllerUX.SearchEngineTopBorderWidth)
-        searchEngineContainerView.layer.shadowColor = SearchViewControllerUX.SearchEngineScrollViewBorderColor
+        searchEngineContainerView.layer.shadowOffset = CGSize(width: 0,
+                                                              height: -SearchViewControllerUX.SearchEngineTopBorderWidth)
         searchEngineContainerView.clipsToBounds = false
 
         searchEngineScrollView.decelerationRate = UIScrollView.DecelerationRate.fast
@@ -155,15 +138,14 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         layoutSearchEngineScrollView()
         layoutSearchEngineScrollViewContent()
 
-        blur.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-
         searchEngineContainerView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(dynamicFontChanged),
+                                               name: .DynamicFontChanged,
+                                               object: nil)
     }
 
     private func loadSearchHighlights() {
@@ -591,9 +573,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         let viewModel = SiteTableViewHeaderModel(title: .Search.SuggestSectionTitle,
                                                  isCollapsible: false,
-                                                 collapsibleState: nil,
-                                                 theme: themeManager.currentTheme)
+                                                 collapsibleState: nil)
         headerView.configure(viewModel)
+        headerView.applyTheme(theme: themeManager.currentTheme)
         return headerView
     }
 
@@ -639,7 +621,9 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     override func applyTheme() {
         super.applyTheme()
-        searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
+        view.backgroundColor = themeManager.currentTheme.colors.layer5
+        searchEngineContainerView.layer.backgroundColor = themeManager.currentTheme.colors.layer1.cgColor
+        searchEngineContainerView.layer.shadowColor = themeManager.currentTheme.colors.shadowDefault.cgColor
         reloadData()
     }
 
@@ -670,12 +654,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
                 oneLineCell.leftImageView.image = UIImage(named: SearchViewControllerUX.SearchImage)
-                oneLineCell.leftImageView.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                oneLineCell.leftImageView.tintColor = themeManager.currentTheme.colors.iconPrimary
                 oneLineCell.leftImageView.backgroundColor = nil
                 let appendButton = UIButton(type: .roundedRect)
                 appendButton.setImage(searchAppendImage?.withRenderingMode(.alwaysTemplate), for: .normal)
                 appendButton.addTarget(self, action: #selector(append(_ :)), for: .touchUpInside)
-                appendButton.tintColor = LegacyThemeManager.instance.currentName == .dark ? UIColor.white : UIColor.black
+                appendButton.tintColor = themeManager.currentTheme.colors.iconPrimary
                 appendButton.sizeToFit()
                 oneLineCell.accessoryView = indexPath.row > 0 ? appendButton : nil
                 cell = oneLineCell

@@ -15,7 +15,10 @@ let LocalizedRootBookmarkFolderStrings = [
     LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
 ]
 
-class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActionBookmark, Loggable {
+class BookmarksPanel: SiteTableViewController,
+                      LibraryPanel,
+                      CanRemoveQuickActionBookmark,
+                      Loggable {
 
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
@@ -25,7 +28,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
     // MARK: - Properties
     var bookmarksHandler: BookmarksHandler
     var libraryPanelDelegate: LibraryPanelDelegate?
-    var notificationCenter: NotificationProtocol
     var state: LibraryPanelMainState
     let viewModel: BookmarksPanelViewModel
 
@@ -72,11 +74,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     // MARK: - Init
 
-    init(viewModel: BookmarksPanelViewModel,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
-
+    init(viewModel: BookmarksPanelViewModel) {
         self.viewModel = viewModel
-        self.notificationCenter = notificationCenter
         self.state = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
         self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile)
@@ -105,7 +104,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         tableView.allowsSelectionDuringEditing = true
-        tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -113,14 +111,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
         if self.state == .bookmarks(state: .inFolderEditMode) {
             self.tableView.setEditing(true, animated: true)
-        }
-    }
-
-    override func applyTheme() {
-        super.applyTheme()
-
-        if let current = navigationController?.visibleViewController as? NotificationThemeable, current !== self {
-            current.applyTheme()
         }
     }
 
@@ -401,11 +391,17 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
             }
 
             cell.configure(viewModel: viewModel)
+            cell.applyTheme(theme: themeManager.currentTheme)
             return cell
 
         } else {
-            return tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
-                                                 for: indexPath)
+            if let cell = tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
+                                                        for: indexPath) as? SeparatorTableViewCell {
+                cell.applyTheme(theme: themeManager.currentTheme)
+                return cell
+            } else {
+                return UITableViewCell()
+            }
         }
     }
 

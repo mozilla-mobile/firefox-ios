@@ -16,6 +16,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layer3: UIColor = FXColors.LightGrey20
     var layer4: UIColor = FXColors.LightGrey30.withAlphaComponent(0.6)
     var layer5: UIColor = FXColors.White
+    var layer6: UIColor = FXColors.White
     var layer5Hover: UIColor = FXColors.LightGrey20
     var layerScrim: UIColor = FXColors.DarkGrey30.withAlphaComponent(0.95)
     var layerGradient: Gradient = Gradient(start: FXColors.Violet70, end: FXColors.Violet40)

@@ -6,9 +6,8 @@ import Foundation
 
 class SeparatorTableViewCell: OneLineTableViewCell {
 
-    override func applyTheme() {
-        super.applyTheme()
-
-        backgroundColor = UIColor.theme.tableView.headerBackground
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+        backgroundColor = theme.colors.layer5
     }
 }
