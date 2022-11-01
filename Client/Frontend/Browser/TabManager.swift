@@ -574,6 +574,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             var didPressButton = false
             toast = ButtonToast(
                 labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs),
+                imageName: "tabs",
                 buttonText: .TabsDeleteAllUndoAction,
                 completion: { buttonPressed in
                     if buttonPressed {

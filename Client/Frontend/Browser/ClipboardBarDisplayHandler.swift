@@ -133,6 +133,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         ButtonToast(
             labelText: .GoToCopiedLink,
             descriptionText: url.absoluteDisplayString,
+            imageName: "menu-Copy-Link",
             buttonText: .GoButtonTittle,
             completion: { buttonPressed in
                 if buttonPressed {
