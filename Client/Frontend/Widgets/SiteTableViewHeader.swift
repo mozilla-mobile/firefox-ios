@@ -30,9 +30,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private let collapsibleImageView: UIImageView = .build { imageView in
-        imageView.image = ExpandButtonState.down.image
-    }
+    private let collapsibleImageView: UIImageView = .build { _ in }
 
     private var titleTrailingConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
