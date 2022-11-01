@@ -26,8 +26,10 @@ class JumpBackInViewModel: FeatureFlaggable {
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
     weak var delegate: HomepageDataModelDelegate?
 
-    var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
-    var mostRecentSyncedTab: JumpBackInSyncedTab?
+    private var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
+    private var recentTabs: [Tab] = [Tab]()
+    private var recentGroups: [ASGroup<Tab>]?
+    private var mostRecentSyncedTab: JumpBackInSyncedTab?
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
@@ -168,6 +170,56 @@ class JumpBackInViewModel: FeatureFlaggable {
 
         let splitScreenWidth = window.screen.bounds.width * split
         return window.frame.width >= splitScreenWidth * 0.9 && window.frame.width <= splitScreenWidth * 1.1
+    }
+}
+
+// MARK: - Private: Prepare UI data
+private extension JumpBackInViewModel {
+
+    func refreshData(maxItemToDisplay: Int) {
+        jumpBackInList = createJumpBackInList(
+            from: recentTabs,
+            withMaxItemsToDisplay: maxItemToDisplay,
+            and: recentGroups)
+    }
+
+    func createJumpBackInList(
+        from tabs: [Tab],
+        withMaxItemsToDisplay maxItems: Int,
+        and groups: [ASGroup<Tab>]? = nil
+    ) -> JumpBackInList {
+        let recentGroup = groups?.first
+        let groupCount = recentGroup != nil ? 1 : 0
+        let recentTabs = filter(
+            tabs: tabs,
+            from: recentGroup,
+            usingGroupCount: groupCount,
+            withMaxItemsToDisplay: maxItems
+        )
+
+        return JumpBackInList(group: recentGroup, tabs: recentTabs)
+    }
+
+    func filter(
+        tabs: [Tab],
+        from recentGroup: ASGroup<Tab>?,
+        usingGroupCount groupCount: Int,
+        withMaxItemsToDisplay maxItemsToDisplay: Int
+    ) -> [Tab] {
+        var recentTabs = [Tab]()
+        let maxItemCount = maxItemsToDisplay - groupCount
+
+        for tab in tabs {
+            // We must make sure to not include any 'solo' tabs that are also part of a group
+            // because they should not show up in the Jump Back In section.
+            if let recentGroup = recentGroup, recentGroup.groupedItems.contains(tab) { continue }
+
+            recentTabs.append(tab)
+            // We are only showing one group in Jump Back in, so adjust count accordingly
+            if recentTabs.count == maxItemCount { break }
+        }
+
+        return recentTabs
     }
 }
 
@@ -369,12 +421,12 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
             hasAccount: jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled,
             device: device
         )
-        jumpBackInDataAdaptor.refreshData(maxItemToDisplay: maxItemToDisplay)
-        getLatestData()
+        refreshData(maxItemToDisplay: maxItemToDisplay)
     }
 
     private func getLatestData() {
-        jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
+        recentTabs = jumpBackInDataAdaptor.getRecentTabData()
+        recentGroups = jumpBackInDataAdaptor.getGroupsData()
         mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
     }
 
