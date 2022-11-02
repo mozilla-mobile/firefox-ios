@@ -37,12 +37,15 @@ class AppContainer: ServiceProvider {
     // MARK: - Misc helpers
 
     /// Prepares the container by registering all services for the app session.
+    /// Insert a dependency when needed, otherwise it floats in memory.
     /// - Returns: A bootstrapped `DependencyContainer`.
     private func bootstrapContainer() -> DependencyContainer {
         return DependencyContainer { container in
             do {
                 unowned let container = container
 
+                /// Since Profile's usage is at the very beginning (and is a dependency for others in this container)
+                /// we give this an `eagerSingleton` scope, forcing the instance to exist ON container boostrap.
                 container.register(.eagerSingleton) { () -> Profile in
                     if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
                         return appDelegate.profile

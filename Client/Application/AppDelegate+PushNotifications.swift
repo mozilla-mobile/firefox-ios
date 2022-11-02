@@ -74,12 +74,12 @@ extension AppDelegate {
     }
 
     private func openURLsInNewTabs(_ notification: UNNotification) {
-        var sentUrlsToQueue: [URL] = []
+        var receivedUrlsQueue: [URL] = []
 
         guard let urls = notification.request.content.userInfo["sentTabs"] as? [NSDictionary]  else { return }
         for sentURL in urls {
             if let urlString = sentURL.value(forKey: "url") as? String, let url = URL(string: urlString) {
-                sentUrlsToQueue.append(url)
+                receivedUrlsQueue.append(url)
             }
         }
 
@@ -87,7 +87,7 @@ extension AppDelegate {
         if UIApplication.shared.applicationState == .active {
             let browserViewController = BrowserViewController.foregroundBVC()
 
-            browserViewController.loadQueuedTabs(receivedURLs: sentUrlsToQueue)
+            browserViewController.loadQueuedTabs(receivedURLs: receivedUrlsQueue)
         }
     }
 }
