@@ -50,11 +50,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     weak var delegate: JumpBackInDelegate?
 
-    // laurie - GOALS
-    // 1. try to mitigate main call for tab manager
-    // 2. remove refresh, remove main call for it
-    // test with groups
-
     // MARK: Init
     init(profile: Profile,
          tabManager: TabManagerProtocol,

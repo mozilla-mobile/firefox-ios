@@ -154,7 +154,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     private var hasJumpBackIn: Bool {
-        return !recentTabs.isEmpty || recentGroups != nil
+        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
     }
 
     private var isMultitasking: Bool {
