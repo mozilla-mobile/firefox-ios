@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import MozillaAppServices
+import Shared
 
 class TabMetadataManager {
 
@@ -98,7 +99,9 @@ class TabMetadataManager {
                                          completion: (() -> Void)?) {
         guard let profile = profile else { return }
 
-        guard !key.url.isEmpty else { return }
+        // If URL is empty or a session restore URL, do not record in metadata observation
+        let sessionRestoreURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)"
+        guard !key.url.isEmpty, !key.url.contains(sessionRestoreURL) else { return }
 
         profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in
             completion?()
