@@ -23,7 +23,7 @@ class HomepageViewModel: FeatureFlaggable {
         // Shadow
         static let shadowRadius: CGFloat = 4
         static let shadowOffset = CGSize(width: 0, height: 2)
-        static let shadowOpacity: Float = 0.12
+        static let shadowOpacity: Float = 1 // shadow opacity set to 0.16 through shadowDefault themed color
 
         // General
         static let generalCornerRadius: CGFloat = 8
