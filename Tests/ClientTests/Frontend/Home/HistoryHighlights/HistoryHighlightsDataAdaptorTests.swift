@@ -9,7 +9,7 @@ import MozillaAppServices
 class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
     var subject: RecentlyVisitedDataAdaptor!
-    var historyManager: MockHistoryHighlightsManager!
+    var historyManager: MockRecentlyVisitedManager!
     var notificationCenter: MockNotificationCenter!
     var delegate: MockHistoryHighlightsDelegate!
     var deletionUtility: MockHistoryDeletionProtocol!
@@ -17,7 +17,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        historyManager = MockHistoryHighlightsManager()
+        historyManager = MockRecentlyVisitedManager()
         notificationCenter = MockNotificationCenter()
         delegate = MockHistoryHighlightsDelegate()
         deletionUtility = MockHistoryDeletionProtocol()
@@ -50,7 +50,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         let results = subject.getRecentlyVisited()
 
         XCTAssertEqual(results.count, 1)
-        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 1)
+        XCTAssertEqual(historyManager.getDataCallCount, 1)
         XCTAssertEqual(delegate.didLoadNewDataCallCount, 1)
     }
 
@@ -61,7 +61,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         let results = subject.getRecentlyVisited()
 
         XCTAssert(results.isEmpty)
-        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 1)
+        XCTAssertEqual(historyManager.getDataCallCount, 1)
         XCTAssertEqual(delegate.didLoadNewDataCallCount, 1)
     }
 
@@ -78,7 +78,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         let results = subject.getRecentlyVisited()
 
         XCTAssertEqual(results.count, 2)
-        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
+        XCTAssertEqual(historyManager.getDataCallCount, 2)
         XCTAssertEqual(delegate.didLoadNewDataCallCount, 2)
     }
 
@@ -93,7 +93,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         subject.delete(item1)
         deletionUtility.callDeleteCompletion(result: true)
 
-        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
+        XCTAssertEqual(historyManager.getDataCallCount, 2)
     }
 
     func testDeleteGroupItem() {
@@ -112,6 +112,6 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         subject.delete(group)
         deletionUtility.callDeleteCompletion(result: true)
 
-        XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
+        XCTAssertEqual(historyManager.getDataCallCount, 2)
     }
 }

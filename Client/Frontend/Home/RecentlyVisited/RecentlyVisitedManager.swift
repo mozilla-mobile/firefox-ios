@@ -7,7 +7,7 @@ import Shared
 import Storage
 import MozillaAppServices
 
-private let defaultHighlightCount = 9
+private let defaultRecentlyVisitedCount = 9
 private let searchLimit = 1000
 
 extension HistoryHighlight {
@@ -17,33 +17,33 @@ extension HistoryHighlight {
 }
 
 protocol RecentlyVisitedManagerProtocol {
-    func searchHighlightsData(
+    func searchData(
         searchQuery: String,
         profile: Profile,
         tabs: [Tab],
         resultCount: Int,
         completion: @escaping ([RecentlyVisitedItem]?) -> Void)
 
-    func getHighlightsData(
+    func getData(
         with profile: Profile,
         and tabs: [Tab],
-        shouldGroupHighlights: Bool,
+        shouldGroup: Bool,
         resultCount: Int,
         completion: @escaping ([RecentlyVisitedItem]?) -> Void)
 }
 
 extension RecentlyVisitedManagerProtocol {
-    func getHighlightsData(
+    func getData(
         with profile: Profile,
         and tabs: [Tab],
-        shouldGroupHighlights: Bool = false,
-        resultCount: Int = defaultHighlightCount,
+        shouldGroup: Bool = false,
+        resultCount: Int = defaultRecentlyVisitedCount,
         completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
 
-        self.getHighlightsData(
+        self.getData(
             with: profile,
             and: tabs,
-            shouldGroupHighlights: shouldGroupHighlights,
+            shouldGroup: shouldGroup,
             resultCount: resultCount,
             completion: completion)
     }
@@ -58,14 +58,14 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
     private let defaultViewTimeWeight = 10.0
     private let defaultFrequencyWeight = 4.0
 
-    func searchHighlightsData(
+    func searchData(
         searchQuery: String,
         profile: Profile,
         tabs: [Tab],
         resultCount: Int,
         completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
 
-        getHighlightsData(with: profile,
+        getData(with: profile,
                           and: tabs,
                           resultCount: searchLimit) { results in
 
@@ -88,7 +88,7 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
 
     // MARK: - Public interface
 
-    /// Fetches HistoryHighlight from A~S, and then filters currently open
+    /// Fetches RecentlyVisited from A~S, and then filters currently open
     /// tabs against history highlights in order to avoid duplicated items. Then,
     /// if `shouldGroupHighlights` is set to true, applies group logic and finally, 
     /// collates individual HistoryHighlight with `ASGroup<HistoryHighlight>`
@@ -101,11 +101,11 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
     ///   - resultCount: The number of results to return
     ///   - completion: completion handler than contains either a list of `HistoryHighlights` if `shouldGroupHighlights` is set to false
     ///   or a combine list of `HistoryHighlights` and `ASGroup<HistoryHighlights>`if is true
-    func getHighlightsData(
+    func getData(
         with profile: Profile,
         and tabs: [Tab],
-        shouldGroupHighlights: Bool = false,
-        resultCount: Int = defaultHighlightCount,
+        shouldGroup: Bool = false,
+        resultCount: Int = defaultRecentlyVisitedCount,
         completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
 
         fetchHighlights(with: profile) { highlights in
@@ -121,7 +121,7 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
 
             filterHighlights = SponsoredContentFilterUtility().filterSponsoredHighlights(from: filterHighlights)
 
-            if shouldGroupHighlights {
+            if shouldGroup {
                 self.buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
                     let collatedHighlights = self.collateForRecentlySaved(from: groups, and: filterHighlights)
                     completion(Array(collatedHighlights.prefix(resultCount)))

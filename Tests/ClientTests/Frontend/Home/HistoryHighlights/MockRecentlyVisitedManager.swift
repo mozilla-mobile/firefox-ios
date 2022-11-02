@@ -4,27 +4,27 @@
 
 @testable import Client
 
-class MockHistoryHighlightsManager: RecentlyVisitedManagerProtocol {
+class MockRecentlyVisitedManager: RecentlyVisitedManagerProtocol {
 
-    var getHighlightsDataCallCount = 0
-    var getHighlightsDataCompletion: (([RecentlyVisitedItem]?) -> Void)?
+    var getDataCallCount = 0
+    var getDataCompletion: (([RecentlyVisitedItem]?) -> Void)?
 
-    func searchHighlightsData(searchQuery: String,
+    func searchData(searchQuery: String,
                               profile: Profile,
                               tabs: [Tab],
                               resultCount: Int,
                               completion: @escaping ([RecentlyVisitedItem]?) -> Void) {}
 
-    func getHighlightsData(with profile: Profile,
+    func getData(with profile: Profile,
                            and tabs: [Tab],
-                           shouldGroupHighlights: Bool,
+                           shouldGroup: Bool,
                            resultCount: Int,
                            completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
-        getHighlightsDataCallCount += 1
-        getHighlightsDataCompletion = completion
+        getDataCallCount += 1
+        getDataCompletion = completion
     }
 
     func callGetHighlightsDataCompletion(result: [RecentlyVisitedItem]) {
-        getHighlightsDataCompletion?(result)
+        getDataCompletion?(result)
     }
 }

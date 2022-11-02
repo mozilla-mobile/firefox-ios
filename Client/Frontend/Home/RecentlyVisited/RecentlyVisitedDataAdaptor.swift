@@ -57,10 +57,10 @@ class RecentlyVisitedDataAdaptorImplementation: RecentlyVisitedDataAdaptor {
     // MARK: - Private Methods
 
     private func loadHistory() {
-        historyManager.getHighlightsData(
+        historyManager.getData(
             with: profile,
             and: tabManager.tabs,
-            shouldGroupHighlights: true) { [weak self] highlights in
+            shouldGroup: true) { [weak self] highlights in
 
                 self?.historyItems = highlights ?? []
                 self?.delegate?.didLoadNewData()

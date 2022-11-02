@@ -63,7 +63,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         let expectation = expectation(description: "Highlights")
 
-        manager.getHighlightsData(with: profile, and: [Tab]()) { highlights in
+        manager.getData(with: profile, and: [Tab]()) { highlights in
             XCTAssertNil(highlights, "Highlights should be nil if the DB is empty")
             expectation.fulfill()
         }
@@ -82,7 +82,7 @@ class HistoryHighlightsTests: XCTestCase {
         let expectation = expectation(description: "Highlights")
         let expectedCount = 3
 
-        manager.getHighlightsData(with: profile, and: [Tab]()) { highlights in
+        manager.getData(with: profile, and: [Tab]()) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
@@ -115,7 +115,7 @@ class HistoryHighlightsTests: XCTestCase {
         let expectation = expectation(description: "Highlights")
         let expectedCount = 9
 
-        manager.getHighlightsData(with: profile, and: [Tab]()) { highlights in
+        manager.getData(with: profile, and: [Tab]()) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
@@ -142,7 +142,7 @@ class HistoryHighlightsTests: XCTestCase {
         let expectation = expectation(description: "Highlights")
         let expectedCount = 2
 
-        manager.getHighlightsData(with: profile, and: [tabs]) { highlights in
+        manager.getData(with: profile, and: [tabs]) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
@@ -170,7 +170,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         let expectation = expectation(description: "Highlights")
 
-        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+        manager.getData(with: profile, and: [Tab](), shouldGroup: true) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
@@ -199,7 +199,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         let expectation = expectation(description: "Highlights")
 
-        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+        manager.getData(with: profile, and: [Tab](), shouldGroup: true) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
@@ -230,7 +230,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         let expectation = expectation(description: "Highlights")
 
-        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+        manager.getData(with: profile, and: [Tab](), shouldGroup: true) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
@@ -259,7 +259,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         let expectation = expectation(description: "Highlights")
 
-        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+        manager.getData(with: profile, and: [Tab](), shouldGroup: true) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
@@ -290,7 +290,7 @@ class HistoryHighlightsTests: XCTestCase {
 
         let expectation = expectation(description: "Highlights")
 
-        manager.getHighlightsData(with: profile, and: [Tab](), shouldGroupHighlights: true) { highlights in
+        manager.getData(with: profile, and: [Tab](), shouldGroup: true) { highlights in
 
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
