@@ -82,6 +82,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        // This is not fatal but sentry only sends fatal events
+        SentryIntegration.shared.sendWithStacktrace(message: "Memory warning received",
+                                                    severity: .fatal)
+    }
+
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(_ application: UIApplication) {
