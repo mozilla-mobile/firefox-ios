@@ -68,7 +68,7 @@ class SearchViewController: SiteTableViewController,
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [RecentlyVisitedItem]()
-    private var highlightManager: HistoryHighlightsManagerProtocol
+    private var highlightManager: RecentlyVisitedManagerProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -101,7 +101,7 @@ class SearchViewController: SiteTableViewController,
          viewModel: SearchViewModel,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
+         highlightManager: RecentlyVisitedManagerProtocol = RecentlyVisitedManager()) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig

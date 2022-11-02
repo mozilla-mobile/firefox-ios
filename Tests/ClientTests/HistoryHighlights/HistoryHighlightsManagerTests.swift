@@ -10,14 +10,14 @@ import Shared
 
 class HistoryHighlightsTests: XCTestCase {
 
-    private var manager: HistoryHighlightsManager!
+    private var manager: RecentlyVisitedManager!
     private var profile: MockProfile!
     private var entryProvider: HistoryHighlightsTestEntryProvider!
 
     override func setUp() {
         super.setUp()
 
-        manager = HistoryHighlightsManager()
+        manager = RecentlyVisitedManager()
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile.reopen()
         let tabManager = TabManager(profile: profile, imageStore: nil)

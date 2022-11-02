@@ -16,7 +16,7 @@ extension HistoryHighlight {
     }
 }
 
-protocol HistoryHighlightsManagerProtocol {
+protocol RecentlyVisitedManagerProtocol {
     func searchHighlightsData(
         searchQuery: String,
         profile: Profile,
@@ -32,7 +32,7 @@ protocol HistoryHighlightsManagerProtocol {
         completion: @escaping ([RecentlyVisitedItem]?) -> Void)
 }
 
-extension HistoryHighlightsManagerProtocol {
+extension RecentlyVisitedManagerProtocol {
     func getHighlightsData(
         with profile: Profile,
         and tabs: [Tab],
@@ -49,7 +49,7 @@ extension HistoryHighlightsManagerProtocol {
     }
 }
 
-class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
+class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
 
     // MARK: - Variables
 

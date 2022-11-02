@@ -18,14 +18,14 @@ protocol HistoryHighlightsDelegate: AnyObject {
 class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
 
     private var historyItems = [RecentlyVisitedItem]()
-    private var historyManager: HistoryHighlightsManagerProtocol
+    private var historyManager: RecentlyVisitedManagerProtocol
     private var profile: Profile
     private var tabManager: TabManagerProtocol
     private var deletionUtility: HistoryDeletionProtocol
     var notificationCenter: NotificationProtocol
     weak var delegate: HistoryHighlightsDelegate?
 
-    init(historyManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
+    init(historyManager: RecentlyVisitedManagerProtocol = RecentlyVisitedManager(),
          profile: Profile,
          tabManager: TabManagerProtocol,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
