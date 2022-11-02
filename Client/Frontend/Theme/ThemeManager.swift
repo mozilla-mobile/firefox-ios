@@ -5,40 +5,6 @@
 import UIKit
 import Shared
 
-enum ThemeType: String {
-    case light = "normal" // This needs to match the string used in the legacy system
-    case dark
-
-    func getInterfaceStyle() -> UIUserInterfaceStyle {
-        switch self {
-        case .light:
-            return .light
-        case .dark:
-            return .dark
-        }
-    }
-
-    func getBarStyle() -> UIBarStyle {
-        switch self {
-        case .light:
-            return .default
-        case .dark:
-            return .black
-        }
-    }
-
-    func getLockImage() -> UIImage {
-        let imageString: String
-        switch self {
-        case .light:
-            imageString = "lock_blocked"
-        case .dark:
-            imageString = "lock_blocked_dark"
-        }
-        return UIImage(imageLiteralResourceName: imageString)
-    }
-}
-
 protocol ThemeManager {
     var currentTheme: Theme { get }
 

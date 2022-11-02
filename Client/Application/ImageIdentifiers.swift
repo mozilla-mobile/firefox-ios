@@ -50,6 +50,8 @@ public struct ImageIdentifiers {
     public static let libraryPanelHistory = "library-history"
     public static let libraryPanelSearch = "search"
     public static let libraryReadingList = "library-readinglist"
+    public static let lockBlocked = "lock_blocked"
+    public static let lockVerifed = "lock_verified"
     public static let logo = "splash"
     public static let menuChevron = "menu-Disclosure"
     public static let navAdd = "nav-add"
