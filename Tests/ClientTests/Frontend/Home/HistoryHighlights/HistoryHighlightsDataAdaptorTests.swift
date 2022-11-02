@@ -11,7 +11,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
     var subject: RecentlyVisitedDataAdaptor!
     var historyManager: MockRecentlyVisitedManager!
     var notificationCenter: MockNotificationCenter!
-    var delegate: MockHistoryHighlightsDelegate!
+    var delegate: MockRecentlyVisitedDelegate!
     var deletionUtility: MockHistoryDeletionProtocol!
 
     override func setUp() {
@@ -19,7 +19,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
         historyManager = MockRecentlyVisitedManager()
         notificationCenter = MockNotificationCenter()
-        delegate = MockHistoryHighlightsDelegate()
+        delegate = MockRecentlyVisitedDelegate()
         deletionUtility = MockHistoryDeletionProtocol()
 
         let subject = RecentlyVisitedDataAdaptorImplementation(

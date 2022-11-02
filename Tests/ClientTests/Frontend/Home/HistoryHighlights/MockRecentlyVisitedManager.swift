@@ -7,7 +7,8 @@
 class MockRecentlyVisitedManager: RecentlyVisitedManagerProtocol {
 
     var getDataCallCount = 0
-    var getDataCompletion: (([RecentlyVisitedItem]?) -> Void)?
+    var
+    tlyVisitedItem]?) -> Void)?
 
     func searchData(searchQuery: String,
                               profile: Profile,

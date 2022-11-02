@@ -436,7 +436,7 @@
 		5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */; };
 		5AF6254528A57B6700A90253 /* MockRecentlyVisitedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254428A57B6700A90253 /* MockRecentlyVisitedManager.swift */; };
 		5AF6254728A58AC100A90253 /* MockRecentlyVisitedDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254628A58AC100A90253 /* MockRecentlyVisitedDataAdaptor.swift */; };
-		5AF6254928A58BB400A90253 /* MockHistoryHighlightsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254828A58BB400A90253 /* MockHistoryHighlightsDelegate.swift */; };
+		5AF6254928A58BB400A90253 /* MockRecentlyVisitedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254828A58BB400A90253 /* MockRecentlyVisitedDelegate.swift */; };
 		5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F130D2D2483508E00B0F7D0 /* FxAWebViewModel.swift */; };
 		5F97DD5F27FB0FE800AD3C60 /* GleanTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */; };
 		5FA2233C27F74071005B3D87 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 5FA2233B27F74071005B3D87 /* Glean */; };
@@ -2857,7 +2857,7 @@
 		5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsDataAdaptorTests.swift; sourceTree = "<group>"; };
 		5AF6254428A57B6700A90253 /* MockRecentlyVisitedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentlyVisitedManager.swift; sourceTree = "<group>"; };
 		5AF6254628A58AC100A90253 /* MockRecentlyVisitedDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentlyVisitedDataAdaptor.swift; sourceTree = "<group>"; };
-		5AF6254828A58BB400A90253 /* MockHistoryHighlightsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryHighlightsDelegate.swift; sourceTree = "<group>"; };
+		5AF6254828A58BB400A90253 /* MockRecentlyVisitedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRecentlyVisitedDelegate.swift; sourceTree = "<group>"; };
 		5AFE480388201E6CE88C0EA7 /* lv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lv; path = lv.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		5B1F416DB7D06B66C9631289 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		5B3644F2BBE3D05767989153 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/FindInPage.strings; sourceTree = "<group>"; };
@@ -6201,7 +6201,7 @@
 				5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */,
 				5AF6254428A57B6700A90253 /* MockRecentlyVisitedManager.swift */,
 				5AF6254628A58AC100A90253 /* MockRecentlyVisitedDataAdaptor.swift */,
-				5AF6254828A58BB400A90253 /* MockHistoryHighlightsDelegate.swift */,
+				5AF6254828A58BB400A90253 /* MockRecentlyVisitedDelegate.swift */,
 				5A9A09D728B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift */,
 			);
 			path = HistoryHighlights;
@@ -10905,7 +10905,7 @@
 				5A3A7DDC2889EC5D0065F81A /* BookmarksHandlerMock.swift in Sources */,
 				8AF0CFF527A0B0ED00C1A4A2 /* QuickActionsTests.swift in Sources */,
 				2F44FA1B1A9D426A00FD20CC /* TestHashExtensions.swift in Sources */,
-				5AF6254928A58BB400A90253 /* MockHistoryHighlightsDelegate.swift in Sources */,
+				5AF6254928A58BB400A90253 /* MockRecentlyVisitedDelegate.swift in Sources */,
 				8A04136B2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift in Sources */,
 				8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */,
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
