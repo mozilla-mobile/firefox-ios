@@ -169,6 +169,8 @@ extension HistoryHighlightsCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         heroImage.tintColor = theme.colors.iconPrimary
         bottomLine.backgroundColor = theme.colors.borderPrimary
+        itemTitle.textColor = theme.colors.textPrimary
+        itemDescription.textColor = theme.colors.textSecondary
 
         adjustBlur(theme: theme)
     }
