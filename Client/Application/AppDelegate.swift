@@ -226,16 +226,4 @@ extension AppDelegate {
         return configuration
     }
 
-    /// Invoked by the system when an open scene session is discarded. It can be discarded by a user interaction,
-    /// or by the system itself (in the background as well).
-    ///
-    /// Use this method to release resources specific to that discarded scene.
-    /// Clean anything that holds memory or can deadlock resources for other scenes.
-    func application(
-        _ application: UIApplication,
-        didDiscardSceneSessions sceneSessions: Set<UISceneSession>
-    ) {
-        // no-op
-    }
-
 }
