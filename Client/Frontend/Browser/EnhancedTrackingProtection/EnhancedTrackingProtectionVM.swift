@@ -28,9 +28,11 @@ class EnhancedTrackingProtectionMenuVM {
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
         let insecureImageName = themeType.getThemedImageName(name: ImageIdentifiers.lockBlocked)
-        return connectionSecure
-        ? UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed).withRenderingMode(.alwaysTemplate)
-        : UIImage(imageLiteralResourceName: insecureImageName)
+        if connectionSecure {
+            return UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed).withRenderingMode(.alwaysTemplate)
+        } else {
+            return UIImage(imageLiteralResourceName: insecureImageName)
+        }
     }
 
     var connectionSecure: Bool {
