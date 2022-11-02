@@ -83,7 +83,7 @@ extension Notification.Name {
     public static let LibraryPanelStateDidChange = Notification.Name("LibraryPanelStateDidChange")
 
     public static let SearchSettingsChanged = Notification.Name("SearchSettingsChanged")
-    
+
     // MARK: Tab manager
 
     // Tab manager creates a toast for undo recently closed tabs and a notification is
