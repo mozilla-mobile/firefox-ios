@@ -2558,11 +2558,11 @@ extension BrowserViewController: TabTrayDelegate {
 extension BrowserViewController: NotificationThemeable {
     func applyTheme() {
         guard self.isViewLoaded else { return }
+        // TODO: Clean up after FXIOS-5109
         let ui: [NotificationThemeable?] = [urlBar,
                                             toolbar,
                                             readerModeBar,
                                             topTabsViewController,
-                                            homepageViewController,
                                             libraryDrawerViewController]
         ui.forEach { $0?.applyTheme() }
 

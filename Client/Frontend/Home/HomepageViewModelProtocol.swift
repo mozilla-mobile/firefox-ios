@@ -36,6 +36,10 @@ protocol HomepageViewModelProtocol {
 
     // Called anytime the screen is shown
     func screenWasShown()
+
+    // Theme management
+    var theme: Theme { get set }
+    func setTheme(theme: Theme)
 }
 
 extension HomepageViewModelProtocol {

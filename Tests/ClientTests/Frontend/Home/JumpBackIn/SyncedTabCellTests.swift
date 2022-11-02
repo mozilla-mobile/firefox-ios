@@ -31,6 +31,7 @@ class SyncedTabCellTests: XCTestCase {
         trackForMemoryLeaks(subject)
 
         subject.configure(viewModel: viewModel,
+                          theme: LightTheme(),
                           onTapShowAllAction: syncedTabsShowAllAction,
                           onOpenSyncedTabAction: onOpenSyncedTabAction)
 

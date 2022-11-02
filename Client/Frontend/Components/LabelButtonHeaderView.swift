@@ -52,7 +52,6 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                                 size: UX.moreButtonTextSize)
         button.contentHorizontalAlignment = .trailing
-        button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
     }
 
     // MARK: - Variables
@@ -72,10 +71,9 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         stackView.addArrangedSubview(moreButton)
         addSubview(stackView)
 
-        applyTheme()
         adjustLayout()
         setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged, .DynamicFontChanged])
+                           observing: [.DynamicFontChanged])
     }
 
     func setConstraints(viewModel: LabelButtonHeaderViewModel) {
@@ -109,7 +107,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
     }
 
-    func configure(viewModel: LabelButtonHeaderViewModel) {
+    func configure(viewModel: LabelButtonHeaderViewModel, theme: Theme) {
         self.viewModel = viewModel
 
         title = viewModel.title
@@ -123,7 +121,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         }
 
         setConstraints(viewModel: viewModel)
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     // MARK: - Dynamic Type Support
@@ -149,12 +147,13 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 }
 
 // MARK: - Theme
-extension LabelButtonHeaderView: NotificationThemeable {
-    func applyTheme() {
-        let textColor = viewModel?.textColor ?? LegacyThemeManager.instance.current.homePanel.topSiteHeaderTitle
+extension LabelButtonHeaderView: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        let titleColor = viewModel?.textColor ?? theme.colors.textPrimary
+        let moreButtonColor = viewModel?.textColor ?? theme.colors.textAccent
 
-        titleLabel.textColor = textColor
-        moreButton.setTitleColor(textColor, for: .normal)
+        titleLabel.textColor = titleColor
+        moreButton.setTitleColor(moreButtonColor, for: .normal)
     }
 }
 
@@ -162,8 +161,6 @@ extension LabelButtonHeaderView: NotificationThemeable {
 extension LabelButtonHeaderView: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
         case .DynamicFontChanged:
             adjustLayout()
         default: break

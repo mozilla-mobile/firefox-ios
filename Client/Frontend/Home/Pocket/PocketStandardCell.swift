@@ -7,20 +7,17 @@ import Shared
 
 // MARK: - PocketStandardCell
 /// A cell used in FxHomeScreen's Pocket section
-class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
+class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let cellHeight: CGFloat = 112
         static let cellWidth: CGFloat = 350
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
-        static let generalCornerRadius: CGFloat = 12
         static let titleFontSize: CGFloat = 12
         static let sponsoredFontSize: CGFloat = 12
         static let siteFontSize: CGFloat = 12
         static let horizontalMargin: CGFloat = 16
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let sponsoredIconSize = CGSize(width: 12, height: 12)
         static let sponsoredStackSpacing: CGFloat = 4
@@ -31,7 +28,7 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.layer.masksToBounds = true
-        image.layer.cornerRadius = UX.generalCornerRadius
+        image.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         image.backgroundColor = .clear
     }
 
@@ -60,7 +57,6 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
                                                                    size: UX.sponsoredFontSize)
-        label.textColor = .secondaryLabel
         label.text = .FirefoxHomepage.Pocket.Sponsored
     }
 
@@ -75,7 +71,6 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var sponsoredImageCenterConstraint: NSLayoutConstraint?
     private var sponsoredImageFirstBaselineConstraint: NSLayoutConstraint?
 
@@ -83,9 +78,6 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
-
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
 
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell
@@ -106,7 +98,7 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: PocketStandardCellViewModel) {
+    func configure(viewModel: PocketStandardCellViewModel, theme: Theme) {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
@@ -129,12 +121,11 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
 
         sponsoredStack.isHidden  = viewModel.shouldHideSponsor
 
-        applyTheme()
         adjustLayout()
+        applyTheme(theme: theme)
     }
 
     private func setupLayout() {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
         contentView.addSubviews(titleLabel, heroImageView)
         sponsoredStack.addArrangedSubview(sponsoredIcon)
         sponsoredStack.addArrangedSubview(sponsoredLabel)
@@ -170,63 +161,53 @@ class PocketStandardCell: BlurrableCollectionViewCell, ReusableCell {
         ])
     }
 
-    private func applyTheme() {
-        if LegacyThemeManager.instance.currentName == .dark {
-            titleLabel.textColor = UIColor.Photon.LightGrey10
-            descriptionLabel.textColor = descriptionLabel.isHidden ? UIColor.Photon.LightGrey10 : UIColor.Photon.LightGrey80
-        } else {
-            titleLabel.textColor = UIColor.Photon.DarkGrey90
-            descriptionLabel.textColor = descriptionLabel.isHidden ? UIColor.Photon.LightGrey10 : UIColor.Photon.LightGrey90
-        }
-    }
-
     private func adjustLayout() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
         sponsoredImageCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
         sponsoredImageFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
-
-        // Add blur
-        if shouldApplyWallpaperBlur {
-            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            contentView.removeVisualEffectView()
-            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
-            UIColor.Photon.DarkGrey30 : .white
-            setupShadow()
-        }
     }
 
-    private func setupShadow() {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
+    private func setupShadow(theme: Theme) {
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.shadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0,
-                                                height: UX.shadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 }
 
-// MARK: - Notifiable
-extension PocketStandardCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged:
-                self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
-            default: break
-            }
+// MARK: - Blurrable
+extension PocketStandardCell: Blurrable {
+    func adjustBlur(theme: Theme) {
+        // Add blur
+        if shouldApplyWallpaperBlur {
+            contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        } else {
+            contentView.removeVisualEffectView()
+            contentView.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
+    }
+}
+
+// MARK: - ThemeApplicable
+extension PocketStandardCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor = theme.colors.textSecondary
+        sponsoredLabel.textColor = theme.colors.textSecondary
+
+        adjustBlur(theme: theme)
     }
 }

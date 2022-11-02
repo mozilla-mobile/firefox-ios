@@ -33,6 +33,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
 
     var isZeroSearch: Bool
+    var theme: Theme
     private let profile: Profile
     private var isPrivate: Bool
     private var hasSentJumpBackInTileEvent = false
@@ -41,16 +42,11 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var wallpaperManager: WallpaperManager
     var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
-    var shouldAddDefaultBackground: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return true }
-
-        return wallpaperManager.currentWallpaper.type == .defaultWallpaper
-    }
-
     init(
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
+        theme: Theme,
         tabManager: TabManagerProtocol,
         adaptor: JumpBackInDataAdaptor,
         wallpaperManager: WallpaperManager
@@ -58,6 +54,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
+        self.theme = theme
         self.tabManager = tabManager
         self.jumpBackInDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
@@ -184,7 +181,7 @@ private extension JumpBackInViewModel {
                                                     descriptionText: descriptionText,
                                                     favIconImage: faviconImage,
                                                     heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
-        cell.configure(viewModel: cellViewModel)
+        cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
     func configureJumpBackInCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
@@ -196,7 +193,7 @@ private extension JumpBackInViewModel {
                                                     descriptionText: descriptionText,
                                                     favIconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
                                                     heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
-        cell.configure(viewModel: cellViewModel)
+        cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
     func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
@@ -217,6 +214,7 @@ private extension JumpBackInViewModel {
 
         cell.configure(
             viewModel: cellViewModel,
+            theme: theme,
             onTapShowAllAction: syncedTabsShowAllAction,
             onOpenSyncedTabAction: openSyncedTabAction
         )
@@ -384,6 +382,10 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
     func screenWasShown() {
         hasSentJumpBackInTileEvent = false
+    }
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
     }
 }
 
