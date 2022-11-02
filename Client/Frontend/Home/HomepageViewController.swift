@@ -545,10 +545,10 @@ private extension HomepageViewController {
             self?.prepareSyncedTabContextualHint(onCell: syncedTabCell)
         }
 
-        // History highlights
-        viewModel.recentlyVisitedViewModel.onTapItem = { [weak self] highlight in
-            guard let url = highlight.siteUrl else {
-                self?.openHistoryHighlightsSearchGroup(item: highlight)
+        // Recently Visited
+        viewModel.recentlyVisitedViewModel.onTapItem = { [weak self] item in
+            guard let url = item.siteUrl else {
+                self?.openRecentlyVisitedSearchGroup(item: item)
                 return
             }
 
@@ -557,8 +557,8 @@ private extension HomepageViewController {
                                                isGoogleTopSite: false)
         }
 
-        viewModel.recentlyVisitedViewModel.recentlyVisitedLongPressHandler = { [weak self] (highlightItem, sourceView) in
-            self?.contextMenuHelper.presentContextMenu(for: highlightItem,
+        viewModel.recentlyVisitedViewModel.recentlyVisitedLongPressHandler = { [weak self] (item, sourceView) in
+            self?.contextMenuHelper.presentContextMenu(for: item,
                                                        with: sourceView,
                                                        sectionType: .recentlyVisited)
         }
@@ -588,7 +588,7 @@ private extension HomepageViewController {
         }
     }
 
-    private func openHistoryHighlightsSearchGroup(item: RecentlyVisitedItem) {
+    private func openRecentlyVisitedSearchGroup(item: RecentlyVisitedItem) {
         guard let groupItem = item.group else { return }
 
         var groupedSites = [Site]()
@@ -614,9 +614,9 @@ private extension HomepageViewController {
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
     }
 
-    private func buildSite(from highlight: RecentlyVisitedItem) -> Site {
-        let itemURL = highlight.siteUrl?.absoluteString ?? ""
-        return Site(url: itemURL, title: highlight.displayTitle)
+    private func buildSite(from recentlyVisitedItem: RecentlyVisitedItem) -> Site {
+        let itemURL = recentlyVisitedItem.siteUrl?.absoluteString ?? ""
+        return Site(url: itemURL, title: recentlyVisitedItem.displayTitle)
     }
 
     func openTabTray(_ sender: UIButton) {

@@ -9,10 +9,10 @@ import Shared
 @testable import Storage
 
 // This file has two built in assumptions:
-// 1. HistoryHighlights writes&deletes data correctly
+// 1. RecentlyVisited writes&deletes data correctly
 // 2. History writes&deletes data correctly
 // These basic cases are not tested here as they are tested in
-// `HistoryHighlightsManagerTests` and `TestHistory` respectively
+// `RecentlyVisitedTests` and `TestHistory` respectively
 class HistoryDeletionUtilityTests: XCTestCase {
 
     struct SiteElements {

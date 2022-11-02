@@ -6,7 +6,7 @@
 import XCTest
 import MozillaAppServices
 
-class HistoryHighlightsDataAdaptorTests: XCTestCase {
+class RecentlyVisitedDataAdaptorTests: XCTestCase {
 
     var subject: RecentlyVisitedDataAdaptor!
     var historyManager: MockRecentlyVisitedManager!

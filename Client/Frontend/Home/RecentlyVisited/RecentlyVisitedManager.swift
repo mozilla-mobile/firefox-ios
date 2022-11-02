@@ -89,8 +89,8 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
     // MARK: - Public interface
 
     /// Fetches RecentlyVisited from A~S, and then filters currently open
-    /// tabs against history highlights in order to avoid duplicated items. Then,
-    /// if `shouldGroupHighlights` is set to true, applies group logic and finally, 
+    /// tabs against recently visited in order to avoid duplicated items. Then,
+    /// if `shouldGroup` is set to true, applies group logic and finally,
     /// collates individual HistoryHighlight with `ASGroup<HistoryHighlight>`
     /// to return the top nine results alternating between them.
     ///
@@ -99,7 +99,7 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
     ///   - tabs: List of `Tab` to filter open tabs from the highlight item list
     ///   - shouldGroupHighlights: Toggle to support highlight groups in the future for now is set to false
     ///   - resultCount: The number of results to return
-    ///   - completion: completion handler than contains either a list of `HistoryHighlights` if `shouldGroupHighlights` is set to false
+    ///   - completion: completion handler than contains either a list of `HistoryHighlights` if `shouldGroup` is set to false
     ///   or a combine list of `HistoryHighlights` and `ASGroup<HistoryHighlights>`if is true
     func getData(
         with profile: Profile,

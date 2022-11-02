@@ -36,7 +36,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         return featureFlags.isFeatureEnabled(.sponsoredPocket, checking: .buildOnly)
     }
 
-    var isHistoryHighlightsSectionEnabled: Bool {
+    var isRecentlyVisitedSectionEnabled: Bool {
         return featureFlags.isFeatureEnabled(.historyHighlights, checking: .buildOnly)
     }
 
@@ -158,7 +158,7 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
             sectionItems.append(recentlySavedSetting)
         }
 
-        if isHistoryHighlightsSectionEnabled {
+        if isRecentlyVisitedSectionEnabled {
             sectionItems.append(historyHighlightsSetting)
         }
 

@@ -6,7 +6,7 @@ import XCTest
 @testable import Client
 import MozillaAppServices
 
-class HistoryHighlightsViewModelTests: XCTestCase {
+class RecentlyVisitedViewModelTests: XCTestCase {
 
     private var subject: RecentlyVisitedViewModel!
     private var profile: MockProfile!
