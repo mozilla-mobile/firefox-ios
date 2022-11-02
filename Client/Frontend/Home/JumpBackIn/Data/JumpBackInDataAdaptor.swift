@@ -45,7 +45,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
     private var hasSyncAccount: Bool?
 
-    private let dispatchGroup: DispatchGroupInterface
     private let userInitiatedQueue: DispatchQueueInterface
 
     weak var delegate: JumpBackInDelegate?
@@ -54,7 +53,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          siteImageHelper: SiteImageHelperProtocol,
-         dispatchGroup: DispatchGroupInterface = DispatchGroup(),
          userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
@@ -62,7 +60,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         self.siteImageHelper = siteImageHelper
         self.notificationCenter = notificationCenter
 
-        self.dispatchGroup = dispatchGroup
         self.userInitiatedQueue = userInitiatedQueue
 
         setupNotifications(forObserver: self, observing: [.ShowHomepage,
@@ -133,17 +130,11 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     }
 
     private func updateTabsData() {
-        dispatchGroup.enter()
         updateJumpBackInData { [weak self] in
-            self?.dispatchGroup.leave()
+            self?.delegate?.didLoadNewData()
         }
 
-        dispatchGroup.enter()
         updateRemoteTabs { [weak self] in
-            self?.dispatchGroup.leave()
-        }
-
-        dispatchGroup.notify(queue: userInitiatedQueue) { [weak self] in
             self?.delegate?.didLoadNewData()
         }
     }
