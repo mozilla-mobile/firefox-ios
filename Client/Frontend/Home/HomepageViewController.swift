@@ -557,7 +557,7 @@ private extension HomepageViewController {
                                                isGoogleTopSite: false)
         }
 
-        viewModel.historyHighlightsViewModel.historyHighlightLongPressHandler = { [weak self] (highlightItem, sourceView) in
+        viewModel.historyHighlightsViewModel.recentlyVisitedLongPressHandler = { [weak self] (highlightItem, sourceView) in
             self?.contextMenuHelper.presentContextMenu(for: highlightItem,
                                                        with: sourceView,
                                                        sectionType: .historyHighlights)

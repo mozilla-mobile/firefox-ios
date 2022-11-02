@@ -54,7 +54,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
 
     // Pre-loading the data with a default number of tiles so we always show section when needed
     // If this isn't done, then no data will be found from the view model and section won't show
-    // This gets ajusted once we actually know in which UI we're showing top sites.
+    // This gets adjusted once we actually know in which UI we're showing top sites.
     private static let defaultTopSitesRowCount = 8
 
     private var faviconImages = [String: UIImage]() {
