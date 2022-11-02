@@ -36,6 +36,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
         static let tabStackTopAnchorConstant: CGFloat = 72
         static let tabStackTopAnchorCompactPhoneConstant: CGFloat = 24
+        static let cardTitleFontSize: CGFloat = 17
+        static let itemTitleFontSize: CGFloat = 15
+        static let deviceSourceFontSize: CGFloat = 12
     }
 
     private var syncedDeviceIconFirstBaselineConstraint: NSLayoutConstraint?
@@ -47,7 +50,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     // MARK: - UI Elements
     private let cardTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline, size: 16)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+                                                                   size: UX.cardTitleFontSize)
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.cardTitle
     }
 
@@ -101,7 +105,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
 
     private let tabItemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                   size: UX.itemTitleFontSize)
         label.numberOfLines = 2
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.itemTitle
     }
@@ -120,7 +125,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private let syncedDeviceLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+                                                                   size: UX.deviceSourceFontSize)
+        label.textColor = .label
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.descriptionLabel
     }
 
