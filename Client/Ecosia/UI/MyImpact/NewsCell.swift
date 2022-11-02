@@ -26,6 +26,7 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
     private weak var date: UILabel!
     private weak var border: UIView!
     private weak var placeholder: UIImageView!
+    var defaultBackgroundColor: (() -> UIColor) = { .theme.ecosia.ntpCellBackground }
 
     required init?(coder: NSCoder) { nil }
     
@@ -182,11 +183,11 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
     }
     
     private func hover() {
-        background.backgroundColor = isSelected || isHighlighted ? .theme.ecosia.secondarySelectedBackground : .theme.ecosia.ntpCellBackground
+        background.backgroundColor = isSelected || isHighlighted ? .theme.ecosia.secondarySelectedBackground : defaultBackgroundColor()
     }
 
     func applyTheme() {
-        background.backgroundColor = UIColor.theme.ecosia.ntpCellBackground
+        background.backgroundColor = defaultBackgroundColor()
         placeholder.tintColor = .theme.ecosia.decorativeIcon
         placeholder.backgroundColor = .theme.ecosia.newsPlaceholder
         border?.backgroundColor = UIColor.theme.ecosia.border
