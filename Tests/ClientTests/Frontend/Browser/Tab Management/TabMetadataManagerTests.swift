@@ -16,7 +16,7 @@ class TabMetadataManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        profile = MockProfile(databasePrefix: "historyHighlights_tests")
+        profile = MockProfile(databasePrefix: "recentlyVisited_tests")
         profile.reopen()
         manager = TabMetadataManager(profile: profile)
     }

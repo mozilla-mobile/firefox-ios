@@ -8,7 +8,7 @@ import Storage
 @testable import Client
 import XCTest
 
-class HistoryHighlightsTestEntryProvider {
+class RecentlyVisitedTestEntryProvider {
 
     private var profile: MockProfile!
     private var tabManager: TabManager!
@@ -24,7 +24,7 @@ class HistoryHighlightsTestEntryProvider {
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess)
     }
 
-    func createHistoryEntry(siteEntry: [(String, String)]) {
+    func createEntry(siteEntry: [(String, String)]) {
         for (siteText, suffix) in siteEntry {
             let site = createWebsiteEntry(named: siteText, with: suffix)
             add(site: site)

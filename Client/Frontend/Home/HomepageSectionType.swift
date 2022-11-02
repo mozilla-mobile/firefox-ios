@@ -20,7 +20,7 @@ enum HomepageSectionType: Int, CaseIterable {
         case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
         case .recentlySaved: return .RecentlySavedSectionTitle
         case .topSites: return .ASShortcutsTitle
-        case .recentlyVisited: return .FirefoxHomepage.HistoryHighlights.Title
+        case .recentlyVisited: return .FirefoxHomepage.RecentlyVisited.Title
         default: return nil
         }
     }

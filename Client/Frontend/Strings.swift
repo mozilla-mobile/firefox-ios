@@ -278,7 +278,7 @@ extension String {
 
         }
 
-        public struct HistoryHighlights {
+        public struct RecentlyVisited {
             public static let Title = MZLocalizedString(
                 "ActivityStream.RecentHistory.Title",
                 value: "Recently Visited",

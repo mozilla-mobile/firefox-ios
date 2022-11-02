@@ -14,7 +14,7 @@ class LibraryViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        profile = MockProfile(databasePrefix: "historyHighlights_tests")
+        profile = MockProfile(databasePrefix: "recentlyVisited_tests")
         profile.reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
