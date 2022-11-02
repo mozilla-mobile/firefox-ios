@@ -328,12 +328,14 @@ extension TabLocationView: TabEventHandler {
         trackingProtectionButton.alpha = 1.0
 
         var lockImage: UIImage?
+        // TODO: FXIOS-5101 Use theme.type.getThemedImageName()
         let imageID = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
         if !(tab.webView?.hasOnlySecureContent ?? false) {
             lockImage = UIImage(imageLiteralResourceName: imageID)
 
         } else if let tintColor = trackingProtectionButton.tintColor {
-            lockImage = UIImage(imageLiteralResourceName: "lock_verified").withTintColor(tintColor, renderingMode: .alwaysTemplate)
+            lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed)
+                .withTintColor(tintColor, renderingMode: .alwaysTemplate)
         }
 
         switch blocker.status {

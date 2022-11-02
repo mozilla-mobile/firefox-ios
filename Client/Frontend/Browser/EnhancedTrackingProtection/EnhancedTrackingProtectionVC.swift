@@ -44,7 +44,11 @@ class ETPSectionView: UIView {
     }
 }
 
-class EnhancedTrackingProtectionMenuVC: UIViewController {
+class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
+
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     // MARK: UI components
 
@@ -68,13 +72,10 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     private var closeButton: UIButton = .build { button in
         button.layer.cornerRadius = 0.5 * ETPMenuUX.UX.closeButtonSize
         button.clipsToBounds = true
-        button.setImage(UIImage(named: "close-medium"), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
     }
 
-    private let horizontalLine: UIView = .build { line in
-        line.backgroundColor = UIColor.theme.etpMenu.horizontalLine
-    }
+    private let horizontalLine: UIView = .build { _ in }
 
     // Connection Info view
     private let connectionView = ETPSectionView(frame: .zero)
@@ -125,7 +126,6 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     private var protectionButton: UIButton = .build { button in
         button.setTitle(.TPProtectionSettings, for: .normal)
         button.titleLabel?.font = ETPMenuUX.Fonts.viewTitleLabels
-        button.setTitleColor(.systemBlue, for: .normal)
         button.contentHorizontalAlignment = .left
     }
 
@@ -146,8 +146,12 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
 
     // MARK: - View lifecycle
 
-    init(viewModel: EnhancedTrackingProtectionMenuVM) {
+    init(viewModel: EnhancedTrackingProtectionMenuVM,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -168,6 +172,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
             addGestureRecognizer()
         }
         setupView()
+        listenForThemeChange()
     }
 
     override func viewDidLayoutSubviews() {
@@ -332,21 +337,19 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 
     private func updateViewDetails() {
-        heroImage.image = UIImage(named: ImageIdentifiers.defaultFavicon)
-        heroImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
         if let favIconURL = viewModel.favIcon {
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: favIconURL,
                                                                    limit: ImageLoadingConstants.NoLimitImageSize) {
                 [weak self] image, error in
                 guard error == nil, let image = image else { return }
                 self?.heroImage.image = image
+                self?.viewModel.heroImage = image
             }
         }
 
         siteDomainLabel.text = viewModel.websiteTitle
 
         connectionLabel.text = viewModel.connectionStatusString
-        connectionImage.image = viewModel.connectionStatusImage
 
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
         toggleLabel.text = .TrackingProtectionEnableTitle
@@ -385,9 +388,9 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
         self.dismiss(animated: true) {
             self.viewModel.onOpenSettingsTapped?()
         }
-}
+    }
 
-// MARK: - Gesture Recognizer
+    // MARK: - Gesture Recognizer
 
     private func addGestureRecognizer() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognizerAction))
@@ -421,30 +424,39 @@ class EnhancedTrackingProtectionMenuVC: UIViewController {
     }
 }
 
+// MARK: - PresentingModalViewControllerDelegate
 extension EnhancedTrackingProtectionMenuVC: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
         self.dismiss(animated: true, completion: nil)
     }
 }
 
-extension EnhancedTrackingProtectionMenuVC: NotificationThemeable {
-    @objc func applyTheme() {
-        overrideUserInterfaceStyle =  LegacyThemeManager.instance.userInterfaceStyle
-        view.backgroundColor = UIColor.theme.etpMenu.background
-        closeButton.backgroundColor = UIColor.theme.etpMenu.closeButtonColor
-        connectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
-        connectionImage.image = viewModel.connectionStatusImage
-        connectionDetailArrow.tintColor = UIColor.theme.etpMenu.defaultImageTints
+// MARK: - Themable
+extension EnhancedTrackingProtectionMenuVC {
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
+        view.backgroundColor = theme.colors.layer1
+        closeButton.backgroundColor = theme.colors.layer2
+        let buttonImage = UIImage(named: ImageIdentifiers.closeMediumButton)?
+            .tinted(withColor: theme.colors.iconSecondary)
+        closeButton.setImage(buttonImage, for: .normal)
+        connectionView.backgroundColor = theme.colors.layer2
+        connectionDetailArrow.tintColor = theme.colors.iconSecondary
+        connectionImage.image = viewModel.getConnectionStatusImage(themeType: theme.type)
+        heroImage.image = viewModel.heroImage ?? UIImage(named: ImageIdentifiers.defaultFavicon)?
+            .tinted(withColor: theme.colors.iconPrimary)
         if viewModel.connectionSecure {
-            connectionImage.tintColor = UIColor.theme.etpMenu.defaultImageTints
+            connectionImage.tintColor = theme.colors.iconPrimary
         }
-        toggleView.backgroundColor = UIColor.theme.etpMenu.sectionColor
-        // TODO: FXIOS-5097 toggleSwitch should be theme.colors.actionPrimary
-        toggleSwitch.tintColor = UIColor.theme.etpMenu.switchAndButtonTint
-        toggleSwitch.onTintColor = UIColor.theme.etpMenu.switchAndButtonTint
-        toggleStatusLabel.textColor = UIColor.theme.etpMenu.subtextColor
-        protectionView.backgroundColor = UIColor.theme.etpMenu.sectionColor
-        protectionButton.setTitleColor(UIColor.theme.etpMenu.switchAndButtonTint, for: .normal)
+        toggleView.backgroundColor = theme.colors.layer2
+        toggleSwitch.tintColor = theme.colors.actionPrimary
+        toggleSwitch.onTintColor = theme.colors.actionPrimary
+        toggleStatusLabel.textColor = theme.colors.textSecondary
+        protectionView.backgroundColor = theme.colors.layer2
+        protectionButton.setTitleColor(theme.colors.textAccent, for: .normal)
+        horizontalLine.backgroundColor = theme.colors.borderPrimary
+        heroImage.tintColor = theme.colors.iconPrimary
         setNeedsStatusBarAppearanceUpdate()
-     }
- }
+    }
+}
