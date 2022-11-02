@@ -56,7 +56,8 @@ struct SearchViewModel {
 class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             LoaderListener,
-                            FeatureFlaggable {
+                            FeatureFlaggable,
+                            Notifiable {
 
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
@@ -142,10 +143,8 @@ class SearchViewController: SiteTableViewController,
             make.leading.trailing.bottom.equalToSuperview()
         }
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(dynamicFontChanged),
-                                               name: .DynamicFontChanged,
-                                               object: nil)
+        setupNotifications(forObserver: self, observing: [.DynamicFontChanged,
+                                                          .SearchSettingsChanged])
     }
 
     private func loadSearchHighlights() {
@@ -758,6 +757,19 @@ class SearchViewController: SiteTableViewController,
             )
         }
         return searchAppendImage
+    }
+
+    // MARK: - Notifable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            dynamicFontChanged(notification)
+        case .SearchSettingsChanged:
+            reloadSearchEngines()
+        default:
+            break
+        }
     }
 }
 
