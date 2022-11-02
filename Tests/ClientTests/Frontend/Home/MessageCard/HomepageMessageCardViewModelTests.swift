@@ -130,6 +130,7 @@ extension HomepageMessageCardViewModelTests {
     func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> HomepageMessageCardViewModel {
         let subject = HomepageMessageCardViewModel(dataAdaptor: adaptor,
+                                                   theme: LightTheme(),
                                                    messagingManager: messageManager)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
@@ -207,7 +208,7 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
 // MARK: SpyHomepageMessageCardCell
 class SpyHomepageMessageCardCell: HomepageMessageCardCell {
     var configureCalled = 0
-    override func configure(viewModel: HomepageMessageCardViewModel) {
+    override func configure(viewModel: HomepageMessageCardViewModel, theme: Theme) {
         configureCalled += 1
     }
 }

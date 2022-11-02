@@ -17,6 +17,7 @@ class PocketViewModel {
     // MARK: - Properties
 
     var isZeroSearch: Bool
+    var theme: Theme
     private var hasSentPocketSectionEvent = false
 
     var onTapTileAction: ((URL) -> Void)?
@@ -30,9 +31,11 @@ class PocketViewModel {
 
     init(pocketDataAdaptor: PocketDataAdaptor,
          isZeroSearch: Bool = false,
+         theme: Theme,
          wallpaperManager: WallpaperManager) {
         self.dataAdaptor = pocketDataAdaptor
         self.isZeroSearch = isZeroSearch
+        self.theme = theme
         self.wallpaperManager = wallpaperManager
     }
 
@@ -199,6 +202,10 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func screenWasShown() {
         hasSentPocketSectionEvent = false
     }
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: FxHomeSectionHandler
@@ -214,12 +221,12 @@ extension PocketViewModel: HomepageSectionHandler {
                                                           for: indexPath) as! PocketStandardCell
             let viewModel = pocketStoriesViewModels[indexPath.row]
             viewModel.tag = indexPath.row
-            cell.configure(viewModel: viewModel)
+            cell.configure(viewModel: viewModel, theme: theme)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
                                                           for: indexPath) as! PocketDiscoverCell
-            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore)
+            cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore, theme: theme)
             return cell
         }
     }

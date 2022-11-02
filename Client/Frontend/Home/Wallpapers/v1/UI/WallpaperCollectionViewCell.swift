@@ -153,6 +153,7 @@ extension WallpaperCollectionViewCell: Notifiable, NotificationThemeable {
         }
     }
 
+    // TODO: FXIOS-4882 next PR to finish up homepage theming
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {

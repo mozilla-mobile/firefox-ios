@@ -8,26 +8,18 @@ import Storage
 import UIKit
 
 /// The TopSite cell that appears in the ASHorizontalScrollView.
-class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
+class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Variables
 
     private var homeTopSite: TopSite?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     struct UX {
-        static let borderColor = UIColor(white: 0, alpha: 0.1)
-        static let borderWidth: CGFloat = 0.5
-        static let cellCornerRadius: CGFloat = 8
         static let titleOffset: CGFloat = 4
         static let iconSize = CGSize(width: 36, height: 36)
-        static let iconCornerRadius: CGFloat = 4
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
-        static let overlayColor = UIColor(white: 0.0, alpha: 0.25)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
         static let topSpace: CGFloat = 8
         static let textSafeSpace: CGFloat = 8
         static let bottomSpace: CGFloat = 8
@@ -38,11 +30,11 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
-        view.layer.cornerRadius = UX.cellCornerRadius
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     private lazy var imageView: UIImageView = .build { imageView in
-        imageView.layer.cornerRadius = UX.iconCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
@@ -76,8 +68,8 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                         size: UX.titleFontSize)
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + UX.shadowRadius
-        titleLabel.backgroundColor = UIColor.clear
+        titleLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
+        titleLabel.backgroundColor = .clear
         titleLabel.setContentHuggingPriority(UILayoutPriority(1000), for: .vertical)
     }
 
@@ -86,13 +78,12 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
                                                                             size: UX.sponsorFontSize)
         sponsoredLabel.adjustsFontForContentSizeCategory = true
-        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
+        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + HomepageViewModel.UX.shadowRadius
     }
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.isHidden = true
-        selectedOverlay.layer.cornerRadius = UX.cellCornerRadius
-        selectedOverlay.backgroundColor = UX.overlayColor
+        selectedOverlay.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     override var isSelected: Bool {
@@ -115,17 +106,10 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
 
         setupLayout()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged,
-                                                          .WallpaperDidChange])
-        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -150,12 +134,15 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         rootContainer.layoutIfNeeded()
 
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: UX.cellCornerRadius).cgPath
+                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
     // MARK: - Public methods
 
-    func configure(_ topSite: TopSite, favicon: UIImage?, position: Int) {
+    func configure(_ topSite: TopSite,
+                   favicon: UIImage?,
+                   position: Int,
+                   theme: Theme) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
@@ -165,7 +152,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         configurePinnedSite(topSite)
         configureSponsoredSite(topSite)
 
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     // MARK: - Setup Helper methods
@@ -234,7 +221,32 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         sponsoredLabel.text = topSite.sponsoredText
     }
 
-    private func adjustLayout() {
+    private func setupShadow(theme: Theme) {
+        rootContainer.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
+                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+        rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+    }
+}
+
+// MARK: NotificationThemeable
+extension TopSiteItemCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        pinImageView.tintColor = theme.colors.iconPrimary
+        titleLabel.textColor = theme.colors.textPrimary
+        sponsoredLabel.textColor = theme.colors.textSecondary
+        selectedOverlay.backgroundColor = theme.colors.layer5Hover.withAlphaComponent(0.25)
+
+        adjustBlur(theme: theme)
+    }
+}
+
+// MARK: - Blurrable
+extension TopSiteItemCell: Blurrable {
+    func adjustBlur(theme: Theme) {
         rootContainer.setNeedsLayout()
         rootContainer.layoutIfNeeded()
 
@@ -243,43 +255,8 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         } else {
             // If blur is disabled set background color
             rootContainer.removeVisualEffectView()
-            rootContainer.backgroundColor = UIColor.theme.homePanel.topSitesContainerView
-            setupShadow()
-        }
-    }
-
-    private func setupShadow() {
-        rootContainer.layer.cornerRadius = UX.cellCornerRadius
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: UX.cellCornerRadius).cgPath
-        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
-        rootContainer.layer.shadowRadius = UX.shadowRadius
-    }
-}
-
-// MARK: NotificationThemeable
-extension TopSiteItemCell: NotificationThemeable {
-    func applyTheme() {
-        pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
-        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
-        sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
-
-        adjustLayout()
-    }
-}
-
-// MARK: - Notifiable
-extension TopSiteItemCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged,
-                    .WallpaperDidChange:
-                self?.applyTheme()
-            default: break
-            }
+            rootContainer.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
     }
 }

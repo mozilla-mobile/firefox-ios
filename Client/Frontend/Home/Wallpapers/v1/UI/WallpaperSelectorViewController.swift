@@ -230,6 +230,7 @@ private extension WallpaperSelectorViewController {
     }
 }
 
+// TODO: FXIOS-4882 next PR to finish up homepage theming
 // MARK: - Themable & Notifiable
 extension WallpaperSelectorViewController: NotificationThemeable, Notifiable {
 

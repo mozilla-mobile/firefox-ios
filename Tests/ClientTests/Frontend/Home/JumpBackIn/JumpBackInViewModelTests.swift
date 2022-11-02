@@ -463,6 +463,7 @@ extension JumpBackInViewModelTests {
             isZeroSearch: false,
             profile: mockProfile,
             isPrivate: false,
+            theme: LightTheme(),
             tabManager: mockTabManager,
             adaptor: adaptor,
             wallpaperManager: WallpaperManager()

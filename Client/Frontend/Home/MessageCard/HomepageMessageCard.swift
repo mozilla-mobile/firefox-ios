@@ -11,7 +11,7 @@ import UIKit
 /// The HomeTabBanner is one UI surface that is being targeted for experimentation with `GleanPlumb` AKA Messaging.
 /// When there are GleanPlumbMessages, the card will get populated with that data. Otherwise, we'll continue showing the
 /// default browser message AKA the evergreen.
-class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
+class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner
     typealias BannerCopy = String.FirefoxHomepage.HomeTabBanner.EvergreenMessage
@@ -31,18 +31,13 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
         static let bannerTitleFontSize: CGFloat = 16
         static let descriptionTextFontSize: CGFloat = 15
         static let buttonFontSize: CGFloat = 16
-        // Shadow
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 4
-        static let shadowOpacity: Float = 0.12
     }
 
     // MARK: - Properties
     private var viewModel: HomepageMessageCardViewModel?
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var kvoToken: NSKeyValueObservation?
 
-    // UI
+    // MARK: - UI
 
     private lazy var titleContainerView: UIView = .build { view in
         view.backgroundColor = .clear
@@ -55,7 +50,6 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
                                                                    size: UX.bannerTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.titleLabel
-        label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var descriptionText: UILabel = .build { label in
@@ -65,11 +59,9 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
                                                                    size: UX.descriptionTextFontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = a11y.descriptionLabel
-        label.textColor = UIColor.theme.homeTabBanner.textColor
     }
 
     private lazy var ctaButton: ActionButton = .build { [weak self] button in
-        button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                                     size: UX.buttonFontSize)
 
@@ -85,7 +77,6 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
 
     private lazy var dismissButton: UIButton = .build { [weak self] button in
         button.setImage(UIImage(named: ImageIdentifiers.xMark)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.imageView?.tintColor = UIColor.theme.homeTabBanner.textColor
         button.addTarget(self, action: #selector(self?.dismissCard), for: .touchUpInside)
         button.accessibilityLabel = BannerCopy.HomeTabBannerCloseAccessibility
     }
@@ -98,7 +89,6 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private lazy var cardView: UIView = .build { view in
-        view.backgroundColor = UIColor.theme.homeTabBanner.backgroundColor
         view.layer.cornerRadius = UX.cornerRadius
     }
 
@@ -108,9 +98,6 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
 
         setupLayout()
         observeCardViewBounds()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
     }
 
     required init(coder: NSCoder) {
@@ -121,14 +108,14 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
         kvoToken?.invalidate()
     }
 
-    func configure(viewModel: HomepageMessageCardViewModel) {
+    func configure(viewModel: HomepageMessageCardViewModel, theme: Theme) {
         self.viewModel = viewModel
 
         if let message = viewModel.getMessage(for: .newTabCard) {
             applyGleanMessage(message)
         }
 
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     // MARK: - Layout
@@ -168,7 +155,6 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
             ctaButton.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -UX.standardSpacing),
             ctaButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -UX.standardSpacing),
         ])
-        addShadow()
     }
 
     // Observing cardView bounds change to set the shadow correctly because initially
@@ -179,33 +165,17 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
         }
     }
 
-    private func addShadow() {
-        cardView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        cardView.layer.shadowOffset = CGSize(width: 0.0, height: UX.shadowOffset)
-        cardView.layer.shadowOpacity = UX.shadowOpacity
-        cardView.layer.shadowRadius = UX.shadowRadius
+    private func setupShadow(theme: Theme) {
+        cardView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        cardView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        cardView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        cardView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
         updateShadowPath()
     }
 
     private func updateShadowPath() {
         cardView.layer.shadowPath = UIBezierPath(roundedRect: cardView.bounds,
                                                  cornerRadius: UX.cornerRadius).cgPath
-    }
-
-    func applyTheme() {
-        if shouldApplyWallpaperBlur {
-            cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
-        } else {
-            cardView.removeVisualEffectView()
-            cardView.backgroundColor = LegacyThemeManager.instance.current.homeTabBanner.backgroundColor
-        }
-
-        updateShadowPath()
-
-        bannerTitle.textColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
-        descriptionText.textColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
-        dismissButton.imageView?.tintColor = LegacyThemeManager.instance.current.homeTabBanner.textColor
-        backgroundColor = .clear
     }
 
     // MARK: - Message setup
@@ -243,15 +213,28 @@ class HomepageMessageCardCell: BlurrableCollectionViewCell, ReusableCell {
 }
 
 // MARK: - Notifiable
-extension HomepageMessageCardCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged,
-                    .WallpaperDidChange:
-                self?.applyTheme()
-            default: break
-            }
+extension HomepageMessageCardCell: Blurrable {
+    func adjustBlur(theme: Theme) {
+        if shouldApplyWallpaperBlur {
+            cardView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+        } else {
+            cardView.removeVisualEffectView()
+            cardView.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
+    }
+}
+
+// MARK: - ThemeApplicable
+extension HomepageMessageCardCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        bannerTitle.textColor = theme.colors.textPrimary
+        descriptionText.textColor = theme.colors.textPrimary
+        dismissButton.imageView?.tintColor = theme.colors.textPrimary
+        ctaButton.backgroundColor = theme.colors.actionPrimary
+        ctaButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        backgroundColor = .clear
+
+        adjustBlur(theme: theme)
     }
 }

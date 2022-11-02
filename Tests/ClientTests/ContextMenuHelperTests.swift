@@ -30,7 +30,8 @@ class ContextMenuHelperTests: XCTestCase {
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
-                                          urlBar: URLBarView(profile: profile))
+                                          urlBar: URLBarView(profile: profile),
+                                          theme: LightTheme())
         let helper = HomepageContextMenuHelper(viewModel: viewModel)
 
         helper.sendHistoryHighlightContextualTelemetry(type: .remove)
