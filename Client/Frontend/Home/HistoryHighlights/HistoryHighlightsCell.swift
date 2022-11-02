@@ -157,6 +157,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
             contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
             contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
             contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+            contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
             contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
         }
     }
