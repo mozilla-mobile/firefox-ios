@@ -1039,6 +1039,7 @@
 		DFF95955279B021700ECC572 /* LegacyWallpaperDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF95954279B021700ECC572 /* LegacyWallpaperDataManager.swift */; };
 		E10A1F752863BC51001EEA80 /* InactiveTabItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10A1F742863BC51001EEA80 /* InactiveTabItemCell.swift */; };
 		E118B9292862674E00C84831 /* InactiveTabItemCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E118B9282862674E00C84831 /* InactiveTabItemCellModel.swift */; };
+		E125D9C32912FC31007F00E6 /* RecentlyVisitedCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E125D9C22912FC31007F00E6 /* RecentlyVisitedCellViewModel.swift */; };
 		E127313C28B6AD99006F39D2 /* WallpaperSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313A28B6AD99006F39D2 /* WallpaperSettingsViewController.swift */; };
 		E127313D28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313B28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift */; };
 		E127313F28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313E28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift */; };
@@ -4741,6 +4742,7 @@
 		E118B9282862674E00C84831 /* InactiveTabItemCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabItemCellModel.swift; sourceTree = "<group>"; };
 		E11B4025AC47F0E4AA12517F /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		E122487AA250D69EA8275912 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		E125D9C22912FC31007F00E6 /* RecentlyVisitedCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyVisitedCellViewModel.swift; sourceTree = "<group>"; };
 		E127313A28B6AD99006F39D2 /* WallpaperSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewController.swift; sourceTree = "<group>"; };
 		E127313B28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModel.swift; sourceTree = "<group>"; };
 		E127313E28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsHeaderView.swift; sourceTree = "<group>"; };
@@ -7482,6 +7484,7 @@
 			children = (
 				DFACDFA9274D489B00A94EEC /* RecentlyVisitedViewModel.swift */,
 				DF036E42274FD434002E834E /* RecentlyVisitedCell.swift */,
+				E125D9C22912FC31007F00E6 /* RecentlyVisitedCellViewModel.swift */,
 				DFA51480275FFEE500266AA0 /* RecentlyVisitedManager.swift */,
 				1DFE57FA27B2CB870025DE58 /* RecentlyVisitedItem.swift */,
 				5AB4237D28A2BA9C003BC40C /* RecentlyVisitedDataAdaptor.swift */,
@@ -10745,6 +10748,7 @@
 				2816F0001B33E05400522243 /* UIConstants.swift in Sources */,
 				21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */,
 				E1390FAA28B032AD00C9EF3E /* UIView+Constraints.swift in Sources */,
+				E125D9C32912FC31007F00E6 /* RecentlyVisitedCellViewModel.swift in Sources */,
 				EBB89508219398E500EB91A0 /* ContentBlocker+Safelist.swift in Sources */,
 				437A9B6A2681257F00FB41C1 /* InactiveTabViewModel.swift in Sources */,
 				C838FD5E289981240068F60B /* WallpaperURLProvider.swift in Sources */,
