@@ -50,14 +50,14 @@ public struct AccessibilityIdentifiers {
         struct MoreButtons {
             static let recentlySaved = "recentlySavedSectionMoreButton"
             static let jumpBackIn = "jumpBackInSectionMoreButton"
-            static let historyHighlights = "historyHighlightsSectionMoreButton"
+            static let recentlyVisited = "recentlyVisitedSectionMoreButton"
             static let customizeHomePage = "FxHomeCustomizeHomeSettingButton"
         }
 
         struct SectionTitles {
             static let jumpBackIn = "jumpBackInTitle"
             static let recentlySaved = "recentlySavedTitle"
-            static let historyHighlights = "historyHightlightsTitle"
+            static let recentlyVisited = "recentlyVisitedTitle"
             static let pocket = "pocketTitle"
             static let topSites = "topSitesTitle"
         }

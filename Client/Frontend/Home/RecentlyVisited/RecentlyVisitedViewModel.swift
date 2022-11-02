@@ -138,11 +138,11 @@ extension RecentlyVisitedViewModel: HomepageViewModelProtocol, FeatureFlaggable 
 
         return LabelButtonHeaderViewModel(
             title: HomepageSectionType.recentlyVisited.title,
-            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
+            titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.recentlyVisited,
             isButtonHidden: false,
             buttonTitle: .RecentlySavedShowAllText,
             buttonAction: headerButtonAction,
-            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.historyHighlights,
+            buttonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlyVisited,
             textColor: textColor)
     }
 

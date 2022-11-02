@@ -646,7 +646,7 @@ private extension HomepageViewController {
     func openHistory(_ sender: UIButton) {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
 
-        if sender.accessibilityIdentifier == a11y.MoreButtons.historyHighlights {
+        if sender.accessibilityIdentifier == a11y.MoreButtons.recentlyVisited {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
                                          object: .firefoxHomepage,
