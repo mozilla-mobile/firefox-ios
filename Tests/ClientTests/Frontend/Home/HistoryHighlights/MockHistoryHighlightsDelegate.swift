@@ -4,7 +4,7 @@
 
 @testable import Client
 
-class MockHistoryHighlightsDelegate: HistoryHighlightsDelegate {
+class MockHistoryHighlightsDelegate: RecentlyVisitedDelegate {
 
     var didLoadNewDataCallCount = 0
 

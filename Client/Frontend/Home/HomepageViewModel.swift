@@ -135,7 +135,7 @@ class HomepageViewModel: FeatureFlaggable {
                                                              theme: theme,
                                                              wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)
-        let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
+        let historyDataAdaptor = RecentlyVisitedDataAdaptorImplementation(
             profile: profile,
             tabManager: tabManager,
             deletionUtility: deletionUtility)

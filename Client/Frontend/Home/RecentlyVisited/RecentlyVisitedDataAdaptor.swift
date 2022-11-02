@@ -4,18 +4,18 @@
 
 import Foundation
 
-protocol HistoryHighlightsDataAdaptor {
-    var delegate: HistoryHighlightsDelegate? { get set }
+protocol RecentlyVisitedDataAdaptor {
+    var delegate: RecentlyVisitedDelegate? { get set }
 
-    func getHistoryHightlights() -> [RecentlyVisitedItem]
+    func getRecentlyVisited() -> [RecentlyVisitedItem]
     func delete(_ item: RecentlyVisitedItem)
 }
 
-protocol HistoryHighlightsDelegate: AnyObject {
+protocol RecentlyVisitedDelegate: AnyObject {
     func didLoadNewData()
 }
 
-class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
+class RecentlyVisitedDataAdaptorImplementation: RecentlyVisitedDataAdaptor {
 
     private var historyItems = [RecentlyVisitedItem]()
     private var historyManager: RecentlyVisitedManagerProtocol
@@ -23,7 +23,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
     private var tabManager: TabManagerProtocol
     private var deletionUtility: HistoryDeletionProtocol
     var notificationCenter: NotificationProtocol
-    weak var delegate: HistoryHighlightsDelegate?
+    weak var delegate: RecentlyVisitedDelegate?
 
     init(historyManager: RecentlyVisitedManagerProtocol = RecentlyVisitedManager(),
          profile: Profile,
@@ -42,7 +42,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         loadHistory()
     }
 
-    func getHistoryHightlights() -> [RecentlyVisitedItem] {
+    func getRecentlyVisited() -> [RecentlyVisitedItem] {
         return historyItems
     }
 
@@ -82,7 +82,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
     }
 }
 
-extension HistoryHighlightsDataAdaptorImplementation: Notifiable {
+extension RecentlyVisitedDataAdaptorImplementation: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .HistoryUpdated,

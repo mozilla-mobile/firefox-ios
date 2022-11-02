@@ -71,7 +71,7 @@ class HistoryHighlightsViewModel {
     private var urlBar: URLBarViewProtocol
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
-    private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
+    private var historyHighlightsDataAdaptor: RecentlyVisitedDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
     private let telemetry: TelemetryWrapperProtocol
 
@@ -113,7 +113,7 @@ class HistoryHighlightsViewModel {
          isPrivate: Bool,
          urlBar: URLBarViewProtocol,
          theme: Theme,
-         historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
+         historyHighlightsDataAdaptor: RecentlyVisitedDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
          telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
          wallpaperManager: WallpaperManager) {
@@ -472,10 +472,10 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
 // MARK: - HistoryHighlightsDelegate
 
-extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
+extension HistoryHighlightsViewModel: RecentlyVisitedDelegate {
     func didLoadNewData() {
         dispatchQueue.ensureMainThread {
-            self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHightlights()
+            self.historyItems = self.historyHighlightsDataAdaptor.getRecentlyVisited()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }

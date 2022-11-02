@@ -4,13 +4,13 @@
 
 @testable import Client
 
-class MockHistoryHighlightsDataAdaptor: HistoryHighlightsDataAdaptor {
+class MockHistoryHighlightsDataAdaptor: RecentlyVisitedDataAdaptor {
 
     var mockHistoryItems = [RecentlyVisitedItem]()
-    var delegate: HistoryHighlightsDelegate?
+    var delegate: RecentlyVisitedDelegate?
     var deleteCallCount = 0
 
-    func getHistoryHightlights() -> [RecentlyVisitedItem] {
+    func getRecentlyVisited() -> [RecentlyVisitedItem] {
         return mockHistoryItems
     }
 

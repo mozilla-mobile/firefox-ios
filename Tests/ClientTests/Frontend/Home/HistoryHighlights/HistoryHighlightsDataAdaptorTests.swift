@@ -8,7 +8,7 @@ import MozillaAppServices
 
 class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
-    var subject: HistoryHighlightsDataAdaptor!
+    var subject: RecentlyVisitedDataAdaptor!
     var historyManager: MockHistoryHighlightsManager!
     var notificationCenter: MockNotificationCenter!
     var delegate: MockHistoryHighlightsDelegate!
@@ -22,7 +22,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         delegate = MockHistoryHighlightsDelegate()
         deletionUtility = MockHistoryDeletionProtocol()
 
-        let subject = HistoryHighlightsDataAdaptorImplementation(
+        let subject = RecentlyVisitedDataAdaptorImplementation(
             historyManager: historyManager,
             profile: MockProfile(),
             tabManager: MockTabManager(),
@@ -47,7 +47,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         let item: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
         historyManager.callGetHighlightsDataCompletion(result: [item])
 
-        let results = subject.getHistoryHightlights()
+        let results = subject.getRecentlyVisited()
 
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(historyManager.getHighlightsDataCallCount, 1)
@@ -58,7 +58,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
     func testInitialLoadWithNoHistoryData() {
         historyManager.callGetHighlightsDataCompletion(result: [])
 
-        let results = subject.getHistoryHightlights()
+        let results = subject.getRecentlyVisited()
 
         XCTAssert(results.isEmpty)
         XCTAssertEqual(historyManager.getHighlightsDataCallCount, 1)
@@ -75,7 +75,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         let item2: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
         historyManager.callGetHighlightsDataCompletion(result: [item1, item2])
 
-        let results = subject.getHistoryHightlights()
+        let results = subject.getRecentlyVisited()
 
         XCTAssertEqual(results.count, 2)
         XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)

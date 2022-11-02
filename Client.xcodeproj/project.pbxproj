@@ -432,7 +432,7 @@
 		5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */; };
 		5A9A09D828B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D728B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift */; };
 		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
-		5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
+		5AB4237E28A2BA9C003BC40C /* RecentlyVisitedDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* RecentlyVisitedDataAdaptor.swift */; };
 		5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254228A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift */; };
 		5AF6254528A57B6700A90253 /* MockHistoryHighlightsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254428A57B6700A90253 /* MockHistoryHighlightsManager.swift */; };
 		5AF6254728A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6254628A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift */; };
@@ -2849,7 +2849,7 @@
 		5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockURLBarView.swift; sourceTree = "<group>"; };
 		5A9A09D728B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHistoryDeletionProtocol.swift; sourceTree = "<group>"; };
 		5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNotificationCenter.swift; sourceTree = "<group>"; };
-		5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsDataAdaptor.swift; sourceTree = "<group>"; };
+		5AB4237D28A2BA9C003BC40C /* RecentlyVisitedDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyVisitedDataAdaptor.swift; sourceTree = "<group>"; };
 		5ABD40B68B3D03806BC6819C /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		5AC24B85BF0D2FCC2F1EB6D3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		5AC549C0BA565EB2B08B87EC /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
@@ -7484,7 +7484,7 @@
 				DF036E42274FD434002E834E /* RecentlyVisitedCell.swift */,
 				DFA51480275FFEE500266AA0 /* RecentlyVisitedManager.swift */,
 				1DFE57FA27B2CB870025DE58 /* RecentlyVisitedItem.swift */,
-				5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */,
+				5AB4237D28A2BA9C003BC40C /* RecentlyVisitedDataAdaptor.swift */,
 			);
 			path = RecentlyVisited;
 			sourceTree = "<group>";
@@ -10375,7 +10375,7 @@
 				F85C7F0F271DD154004BDBA4 /* AppAuthenticator.swift in Sources */,
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
 				C8BA0E7627F20B8E00DD8214 /* HistoryDeletionUtility.swift in Sources */,
-				5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */,
+				5AB4237E28A2BA9C003BC40C /* RecentlyVisitedDataAdaptor.swift in Sources */,
 				8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */,
 				EBB895332193FFF400EB91A0 /* ContentBlockerSettingViewController.swift in Sources */,
 				E692E3371C46E86A009D1240 /* AppSettingsOptions.swift in Sources */,
