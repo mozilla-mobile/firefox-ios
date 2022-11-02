@@ -23,6 +23,7 @@ class RecentlySavedViewModel {
     // MARK: - Properties
 
     var isZeroSearch: Bool
+    var theme: Theme
     private let profile: Profile
     private var recentlySavedDataAdaptor: RecentlySavedDataAdaptor
     private var recentItems = [RecentlySavedItem]()
@@ -33,9 +34,11 @@ class RecentlySavedViewModel {
 
     init(profile: Profile,
          isZeroSearch: Bool = false,
+         theme: Theme,
          wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.theme = theme
         let siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = RecentlySavedDataAdaptorImplementation(siteImageHelper: siteImageHelper,
                                                              readingList: profile.readingList,
@@ -121,6 +124,10 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: FxHomeSectionHandler
@@ -137,7 +144,7 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
             let viewModel = RecentlySavedCellViewModel(site: site,
                                                        heroImage: recentlySavedDataAdaptor.getHeroImage(forSite: site),
                                                        favIconImage: recentlySavedDataAdaptor.getFaviconImage(forSite: site))
-            recentlySavedCell.configure(viewModel: viewModel)
+            recentlySavedCell.configure(viewModel: viewModel, theme: theme)
         }
 
         return recentlySavedCell

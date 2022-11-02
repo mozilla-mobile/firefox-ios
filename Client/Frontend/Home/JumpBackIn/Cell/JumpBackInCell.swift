@@ -18,16 +18,13 @@ struct JumpBackInCellViewModel {
 
 // MARK: - JumpBackInCell
 /// A cell used in Home page Jump Back In section
-class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
+class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
-        static let generalCornerRadius: CGFloat = 12
         static let titleFontSize: CGFloat = 16
         static let siteFontSize: CGFloat = 12
-        static let stackViewShadowRadius: CGFloat = 4
-        static let stackViewShadowOffset: CGFloat = 2
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
         static let faviconSize = CGSize(width: 24, height: 24)
@@ -41,7 +38,7 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         imageView.backgroundColor = .clear
     }
 
@@ -65,37 +62,33 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
                                                                    size: UX.siteFontSize)
-        label.textColor = .label
     }
 
     // Used as a fallback if hero image isn't set
     private let fallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.backgroundColor = UIColor.clear
-        imageView.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
+        imageView.backgroundColor = .clear
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
     private var fallbackFaviconBackground: UIView = .build { view in
-        view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
-        view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
     // Contains the hero image and fallback favicons
     private var imageContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
-
-    // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Inits
 
@@ -105,19 +98,11 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell
 
-        applyTheme()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
         setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -128,7 +113,6 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         descriptionLabel.text = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
-        applyTheme()
 
         faviconImage.isHidden = false
         descriptionContainer.addArrangedViewToTop(faviconImage)
@@ -136,19 +120,22 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
     // MARK: - Helpers
 
-    func configure(viewModel: JumpBackInCellViewModel) {
+    func configure(viewModel: JumpBackInCellViewModel, theme: Theme) {
         configureImages(viewModel: viewModel)
 
         itemTitle.text = viewModel.titleText
         descriptionLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
         adjustLayout()
+
+        applyTheme(theme: theme)
     }
 
     private func configureImages(viewModel: JumpBackInCellViewModel) {
@@ -174,8 +161,6 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private func setupLayout() {
-        setupShadow()
-
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
         descriptionContainer.addArrangedSubview(faviconImage)
@@ -232,59 +217,43 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
         faviconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
         faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
+    }
 
+    private func setupShadow(theme: Theme) {
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
+                                                    cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+        contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+        contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+    }
+}
+
+// MARK: - ThemeApplicable
+extension JumpBackInCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        itemTitle.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor = theme.colors.textSecondary
+        faviconImage.tintColor = theme.colors.iconPrimary
+        fallbackFaviconImage.tintColor = theme.colors.iconPrimary
+        fallbackFaviconBackground.backgroundColor = theme.colors.layer1
+        fallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
+        adjustBlur(theme: theme)
+    }
+}
+
+// MARK: - Blurrable
+extension JumpBackInCell: Blurrable {
+    func adjustBlur(theme: Theme) {
         // Add blur
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
+            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
-            contentView.backgroundColor = LegacyThemeManager.instance.currentName == .dark ?
-            UIColor.Photon.DarkGrey40 : .white
-            setupShadow()
-        }
-    }
-
-    private func setupShadow() {
-        contentView.layer.cornerRadius = UX.generalCornerRadius
-        contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
-                                                    cornerRadius: UX.generalCornerRadius).cgPath
-        contentView.layer.shadowRadius = UX.stackViewShadowRadius
-        contentView.layer.shadowOffset = CGSize(width: 0, height: UX.stackViewShadowOffset)
-        contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        contentView.layer.shadowOpacity = 0.12
-    }
-}
-
-// MARK: - Theme
-extension JumpBackInCell: NotificationThemeable {
-    func applyTheme() {
-        if LegacyThemeManager.instance.currentName == .dark {
-            [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.LightGrey10 }
-            faviconImage.tintColor = UIColor.Photon.LightGrey10
-            fallbackFaviconImage.tintColor = UIColor.Photon.LightGrey10
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.DarkGrey60
-        } else {
-            [itemTitle, descriptionLabel].forEach { $0.textColor = UIColor.Photon.DarkGrey90 }
-            faviconImage.tintColor = UIColor.Photon.DarkGrey90
-            fallbackFaviconImage.tintColor = UIColor.Photon.DarkGrey90
-            fallbackFaviconBackground.backgroundColor = UIColor.Photon.LightGrey10
-        }
-
-        fallbackFaviconBackground.layer.borderColor = UIColor.theme.homePanel.topSitesBackground.cgColor
-        adjustLayout()
-    }
-}
-
-// MARK: - Notifiable
-extension JumpBackInCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged,
-                    .WallpaperDidChange:
-                self?.applyTheme()
-            default: break
-            }
+            contentView.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
     }
 }

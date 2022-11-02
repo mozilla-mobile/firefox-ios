@@ -4,7 +4,7 @@
 
 import UIKit
 
-class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
+class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
 
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
@@ -12,6 +12,7 @@ class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
         static let buttonFontSize: CGFloat = 15
         static let buttonTrailingSpace: CGFloat = 12
         static let buttonVerticalInset: CGFloat = 11
+        static let buttonCornerRadius: CGFloat = 4
     }
 
     // MARK: - UI Elements
@@ -19,7 +20,7 @@ class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
         button.setTitle(.FirefoxHomepage.CustomizeHomepage.ButtonTitle, for: .normal)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .subheadline,
                                                                                     size: UX.buttonFontSize)
-        button.layer.cornerRadius = 5
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.accessibilityIdentifier = a11y.customizeHome
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
                                                 left: ResizableButton.UX.buttonEdgeSpacing,
@@ -27,26 +28,14 @@ class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
                                                 right: ResizableButton.UX.buttonEdgeSpacing)
     }
 
-    // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        applyTheme()
-
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     // MARK: - UI Setup
@@ -65,46 +54,34 @@ class CustomizeHomepageSectionCell: BlurrableCollectionViewCell, ReusableCell {
 
         goToSettingsButton.setContentHuggingPriority(.required, for: .vertical)
 
-        // needed so the button sizes correctly
+        // Needed so the button sizes correctly
         setNeedsLayout()
         layoutIfNeeded()
     }
 
-    func configure(onTapAction: ((UIButton) -> Void)?) {
+    func configure(onTapAction: ((UIButton) -> Void)?, theme: Theme) {
         goToSettingsButton.touchUpAction = onTapAction
-
-        adjustLayout()
+        applyTheme(theme: theme)
     }
+}
 
-    private func adjustLayout() {
+// MARK: - Blurrable
+extension CustomizeHomepageSectionCell: Blurrable {
+    func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
             goToSettingsButton.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             goToSettingsButton.removeVisualEffectView()
-            applyTheme()
         }
     }
 }
 
-// MARK: - Theme
-extension CustomizeHomepageSectionCell: NotificationThemeable {
-    func applyTheme() {
-        goToSettingsButton.backgroundColor = UIColor.theme.homePanel.customizeHomepageButtonBackground
-        goToSettingsButton.setTitleColor(UIColor.theme.homePanel.customizeHomepageButtonText, for: .normal)
-    }
-}
+// MARK: - ThemeApplicable
+extension CustomizeHomepageSectionCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        goToSettingsButton.backgroundColor = theme.colors.layer4
+        goToSettingsButton.setTitleColor(theme.colors.textPrimary, for: .normal)
 
-// MARK: - Notifiable
-extension CustomizeHomepageSectionCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged:
-                self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
-            default: break
-            }
-        }
+        adjustBlur(theme: theme)
     }
 }

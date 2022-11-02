@@ -217,6 +217,7 @@ extension PocketViewModelTests {
                        line: UInt = #line) -> PocketViewModel {
         let subject = PocketViewModel(pocketDataAdaptor: adaptor,
                                       isZeroSearch: isZeroSearch,
+                                      theme: LightTheme(),
                                       wallpaperManager: WallpaperManager())
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

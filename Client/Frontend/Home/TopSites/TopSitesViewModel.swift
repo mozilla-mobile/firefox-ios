@@ -16,6 +16,7 @@ class TopSitesViewModel {
 
     weak var delegate: HomepageDataModelDelegate?
     var isZeroSearch: Bool
+    var theme: Theme
     var tilePressedHandler: ((Site, Bool) -> Void)?
     var tileLongPressedHandler: ((Site, UIView?) -> Void)?
 
@@ -32,9 +33,11 @@ class TopSitesViewModel {
 
     init(profile: Profile,
          isZeroSearch: Bool = false,
+         theme: Theme,
          wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.theme = theme
         self.dimensionManager = TopSitesDimensionImplementation()
 
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
@@ -202,6 +205,10 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func screenWasShown() {
         sentImpressionTelemetry = [String: Bool]()
     }
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: - FxHomeTopSitesManagerDelegate
@@ -225,11 +232,13 @@ extension TopSitesViewModel: HomepageSectionHandler {
             let favicon = topSitesDataAdaptor.getFaviconImage(forSite: contentItem.site)
             cell.configure(contentItem,
                            favicon: favicon,
-                           position: indexPath.row)
+                           position: indexPath.row,
+                           theme: theme)
             sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
 
         } else if let cell = collectionView.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) {
+            cell.applyTheme(theme: theme)
             return cell
         }
 

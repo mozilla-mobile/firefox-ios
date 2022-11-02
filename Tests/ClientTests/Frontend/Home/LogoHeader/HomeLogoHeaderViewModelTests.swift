@@ -31,7 +31,7 @@ class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
 extension HomeLogoHeaderViewModelTests {
 
     func createSubject(file: StaticString = #file, line: UInt = #line) -> HomeLogoHeaderViewModel {
-        let subject = HomeLogoHeaderViewModel(profile: profile)
+        let subject = HomeLogoHeaderViewModel(profile: profile, theme: LightTheme())
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

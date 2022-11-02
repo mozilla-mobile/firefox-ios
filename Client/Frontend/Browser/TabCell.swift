@@ -35,10 +35,10 @@ class TabCell: UICollectionViewCell,
     }
 
     lazy private var faviconBG: UIView = .build { view in
-        view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
-        view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = TopSiteItemCell.UX.shadowRadius
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
+        view.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        view.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
     }
 
     lazy var screenshotView: UIImageView = .build { view in
@@ -52,7 +52,7 @@ class TabCell: UICollectionViewCell,
         view.clipsToBounds = true
         view.isUserInteractionEnabled = false
         view.backgroundColor = UIColor.clear
-        view.layer.cornerRadius = TopSiteItemCell.UX.iconCornerRadius
+        view.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         view.layer.masksToBounds = true
     }
 

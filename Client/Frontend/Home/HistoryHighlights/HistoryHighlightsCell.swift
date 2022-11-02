@@ -5,15 +5,12 @@
 import UIKit
 
 /// A cell used in FxHomeScreen's History Highlights section.
-class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
+class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let verticalSpacing: CGFloat = 20
         static let horizontalSpacing: CGFloat = 16
-        static let generalCornerRadius: CGFloat = 10
         static let heroImageDimension: CGFloat = 24
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
     }
 
     // MARK: - UI Elements
@@ -21,7 +18,7 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         imageView.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
     }
 
@@ -60,7 +57,6 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var cellModel: HistoryHighlightsModel?
 
     // MARK: - Inits
@@ -71,9 +67,6 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell
 
-        applyTheme()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged])
         setupLayout()
     }
 
@@ -81,12 +74,8 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     // MARK: - Public methods
-    public func updateCell(with options: HistoryHighlightsModel) {
+    func configureCell(with options: HistoryHighlightsModel, theme: Theme) {
         cellModel = options
         itemTitle.text = options.title
 
@@ -100,7 +89,8 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         accessibilityLabel = options.accessibilityLabel
 
         heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
-        adjustLayout()
+
+        applyTheme(theme: theme)
     }
 
     override func prepareForReuse() {
@@ -141,9 +131,11 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
         ])
     }
 
-    private func setupShadow(_ shouldAddShadow: Bool, cornersToRound: CACornerMask?) {
+    private func setupShadow(_ shouldAddShadow: Bool,
+                             cornersToRound: CACornerMask?,
+                             theme: Theme) {
         contentView.layer.maskedCorners = cornersToRound ?? .layerMaxXMinYCorner
-        contentView.layer.cornerRadius = UX.generalCornerRadius
+        contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
 
         var needsShadow = shouldAddShadow
         if let cornersToRound = cornersToRound {
@@ -162,45 +154,44 @@ class HistoryHighlightsCell: BlurrableCollectionViewCell, ReusableCell {
                 height: size
             )
 
-            contentView.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-            contentView.layer.shadowRadius = UX.shadowRadius
-            contentView.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
+            contentView.layer.shadowColor = theme.colors.shadowDefault.cgColor
+            contentView.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+            contentView.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+            contentView.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
             contentView.layer.shadowPath = UIBezierPath(ovalIn: rect).cgPath
         }
     }
+}
 
-    private func applyTheme() {
-        contentView.backgroundColor = UIColor.theme.homePanel.recentlySavedBookmarkCellBackground
-        heroImage.tintColor = UIColor.theme.homePanel.recentlyVisitedCellGroupImage
-        bottomLine.backgroundColor = UIColor.theme.homePanel.recentlyVisitedCellBottomLine
+// MARK: - ThemeApplicable
+extension HistoryHighlightsCell: ThemeApplicable {
+
+    func applyTheme(theme: Theme) {
+        heroImage.tintColor = theme.colors.iconPrimary
+        bottomLine.backgroundColor = theme.colors.borderPrimary
+        itemTitle.textColor = theme.colors.textPrimary
+        itemDescription.textColor = theme.colors.textSecondary
+
+        adjustBlur(theme: theme)
     }
+}
 
-    private func adjustLayout() {
+// MARK: - Blurrable
+extension HistoryHighlightsCell: Blurrable {
+
+    func adjustBlur(theme: Theme) {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {
             contentView.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
             contentView.backgroundColor = .clear
             contentView.layer.maskedCorners = cellModel?.corners ?? .layerMaxXMinYCorner
-            contentView.layer.cornerRadius = UX.generalCornerRadius
+            contentView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         } else {
             contentView.removeVisualEffectView()
-            contentView.backgroundColor = LegacyThemeManager.instance.current.homePanel.topSitesContainerView
-            setupShadow(cellModel?.shouldAddShadow ?? false, cornersToRound: cellModel?.corners)
-        }
-    }
-}
-
-// MARK: - Notifiable
-extension HistoryHighlightsCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged:
-                self?.applyTheme()
-            case .WallpaperDidChange:
-                self?.adjustLayout()
-            default: break
-            }
+            contentView.backgroundColor = theme.colors.layer5
+            setupShadow(cellModel?.shouldAddShadow ?? false,
+                        cornersToRound: cellModel?.corners,
+                        theme: theme)
         }
     }
 }
