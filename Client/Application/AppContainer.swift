@@ -2,9 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-/// TODO: Preparing services to be injected (https://mozilla-hub.atlassian.net/browse/FXIOS-4381) & actually
-/// injecting at those points (https://mozilla-hub.atlassian.net/browse/FXIOS-4152) will come in a later PR.
-
 import Foundation
 import os.log
 import Dip
@@ -23,12 +20,12 @@ class AppContainer: ServiceProvider {
         container = bootstrapContainer()
     }
 
-    /// Any services needed by the client can be resolved by calling this and passing the type.
+    /// Any services needed by the client can be resolved by calling this.
     func resolve<T>() -> T {
         do {
             return try container?.resolve(T.self) as! T
         } catch {
-            /// If a service we've thought was registered but can't be resolved, this is likely an issue within
+            /// If a service we thought was registered can't be resolved, this is likely an issue within
             /// bootstrapping. Double check your registrations and their types.
             os_log(.error, "Could not resolve the requested type!")
 
@@ -40,18 +37,50 @@ class AppContainer: ServiceProvider {
     // MARK: - Misc helpers
 
     /// Prepares the container by registering all services for the app session.
+    /// Insert a dependency when needed, otherwise it floats in memory.
     /// - Returns: A bootstrapped `DependencyContainer`.
     private func bootstrapContainer() -> DependencyContainer {
         return DependencyContainer { container in
             do {
                 unowned let container = container
 
+                /// Since Profile's usage is at the very beginning (and is a dependency for others in this container)
+                /// we give this an `eagerSingleton` scope, forcing the instance to exist ON container boostrap.
+                container.register(.eagerSingleton) { () -> Profile in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.profile
+                    } else {
+                        return BrowserProfile(
+                            localName: "profile",
+                            syncDelegate: UIApplication.shared.syncDelegate
+                        ) as Profile
+                    }
+                }
+
+                container.register(.singleton) { () -> TabManager in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.tabManager
+                    } else {
+                        return TabManager(
+                            profile: try container.resolve(),
+                            imageStore: DiskImageStore(
+                                files: (try container.resolve() as Profile).files,
+                                namespace: "TabManagerScreenshots",
+                                quality: UIConstants.ScreenshotQuality)
+                        )
+                    }
+                }
+
                 container.register(.singleton) { () -> ThemeManager in
-                    if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                        return delegate.themeManager
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.themeManager
                     } else {
                         return DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
                     }
+                }
+
+                container.register(.singleton) {
+                    return RatingPromptManager(profile: try container.resolve())
                 }
 
                 try container.bootstrap()
