@@ -560,7 +560,7 @@ private extension HomepageViewController {
         viewModel.recentlyVisitedViewModel.recentlyVisitedLongPressHandler = { [weak self] (highlightItem, sourceView) in
             self?.contextMenuHelper.presentContextMenu(for: highlightItem,
                                                        with: sourceView,
-                                                       sectionType: .historyHighlights)
+                                                       sectionType: .recentlyVisited)
         }
 
         viewModel.recentlyVisitedViewModel.headerButtonAction = { [weak self] button in

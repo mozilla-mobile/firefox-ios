@@ -126,7 +126,7 @@ class RecentlyVisitedViewModel {
 extension RecentlyVisitedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
-        return .historyHighlights
+        return .recentlyVisited
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
@@ -137,7 +137,7 @@ extension RecentlyVisitedViewModel: HomepageViewModelProtocol, FeatureFlaggable 
         }
 
         return LabelButtonHeaderViewModel(
-            title: HomepageSectionType.historyHighlights.title,
+            title: HomepageSectionType.recentlyVisited.title,
             titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.historyHighlights,
             isButtonHidden: false,
             buttonTitle: .RecentlySavedShowAllText,

@@ -10,7 +10,7 @@ enum HomepageSectionType: Int, CaseIterable {
     case topSites
     case jumpBackIn
     case recentlySaved
-    case historyHighlights
+    case recentlyVisited
     case pocket
     case customizeHome
 
@@ -20,7 +20,7 @@ enum HomepageSectionType: Int, CaseIterable {
         case .jumpBackIn: return .FirefoxHomeJumpBackInSectionTitle
         case .recentlySaved: return .RecentlySavedSectionTitle
         case .topSites: return .ASShortcutsTitle
-        case .historyHighlights: return .FirefoxHomepage.HistoryHighlights.Title
+        case .recentlyVisited: return .FirefoxHomepage.HistoryHighlights.Title
         default: return nil
         }
     }
@@ -33,7 +33,7 @@ enum HomepageSectionType: Int, CaseIterable {
         case .pocket: return "" // Pocket has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .jumpBackIn: return "" // JumpBackIn has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .recentlySaved: return RecentlySavedCell.cellIdentifier
-        case .historyHighlights: return RecentlyVisitedCell.cellIdentifier
+        case .recentlyVisited: return RecentlyVisitedCell.cellIdentifier
         case .customizeHome: return CustomizeHomepageSectionCell.cellIdentifier
         }
     }
