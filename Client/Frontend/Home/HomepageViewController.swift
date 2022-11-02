@@ -546,7 +546,7 @@ private extension HomepageViewController {
         }
 
         // History highlights
-        viewModel.historyHighlightsViewModel.onTapItem = { [weak self] highlight in
+        viewModel.recentlyVisitedViewModel.onTapItem = { [weak self] highlight in
             guard let url = highlight.siteUrl else {
                 self?.openHistoryHighlightsSearchGroup(item: highlight)
                 return
@@ -557,13 +557,13 @@ private extension HomepageViewController {
                                                isGoogleTopSite: false)
         }
 
-        viewModel.historyHighlightsViewModel.recentlyVisitedLongPressHandler = { [weak self] (highlightItem, sourceView) in
+        viewModel.recentlyVisitedViewModel.recentlyVisitedLongPressHandler = { [weak self] (highlightItem, sourceView) in
             self?.contextMenuHelper.presentContextMenu(for: highlightItem,
                                                        with: sourceView,
                                                        sectionType: .historyHighlights)
         }
 
-        viewModel.historyHighlightsViewModel.headerButtonAction = { [weak self] button in
+        viewModel.recentlyVisitedViewModel.headerButtonAction = { [weak self] button in
             self?.openHistory(button)
         }
 

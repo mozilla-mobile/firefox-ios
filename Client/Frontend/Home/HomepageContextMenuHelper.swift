@@ -91,7 +91,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                       iconString: ImageIdentifiers.actionRemove,
                                       tapHandler: { _ in
 
-            self.viewModel.historyHighlightsViewModel.delete(highlightItem)
+            self.viewModel.recentlyVisitedViewModel.delete(highlightItem)
             self.sendHistoryHighlightContextualTelemetry(type: .remove)
         }).items]
     }

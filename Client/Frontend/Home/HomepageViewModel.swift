@@ -88,7 +88,7 @@ class HomepageViewModel: FeatureFlaggable {
     var topSiteViewModel: TopSitesViewModel
     var recentlySavedViewModel: RecentlySavedViewModel
     var jumpBackInViewModel: JumpBackInViewModel
-    var historyHighlightsViewModel: RecentlyVisitedViewModel
+    var recentlyVisitedViewModel: RecentlyVisitedViewModel
     var pocketViewModel: PocketViewModel
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
@@ -135,16 +135,16 @@ class HomepageViewModel: FeatureFlaggable {
                                                              theme: theme,
                                                              wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)
-        let historyDataAdaptor = RecentlyVisitedDataAdaptorImplementation(
+        let recentlyVisitedDataAdaptor = RecentlyVisitedDataAdaptorImplementation(
             profile: profile,
             tabManager: tabManager,
             deletionUtility: deletionUtility)
-        self.historyHighlightsViewModel = RecentlyVisitedViewModel(
+        self.recentlyVisitedViewModel = RecentlyVisitedViewModel(
             with: profile,
             isPrivate: isPrivate,
             urlBar: urlBar,
             theme: theme,
-            recentlyVisitedDataAdaptor: historyDataAdaptor,
+            recentlyVisitedDataAdaptor: recentlyVisitedDataAdaptor,
             wallpaperManager: wallpaperManager)
 
         let pocketDataAdaptor = PocketDataAdaptorImplementation(
@@ -161,14 +161,14 @@ class HomepageViewModel: FeatureFlaggable {
                                 topSiteViewModel,
                                 jumpBackInViewModel,
                                 recentlySavedViewModel,
-                                historyHighlightsViewModel,
+                                recentlyVisitedViewModel,
                                 pocketViewModel,
                                 customizeButtonViewModel]
         self.isPrivate = isPrivate
 
         self.nimbus = nimbus
         topSiteViewModel.delegate = self
-        historyHighlightsViewModel.delegate = self
+        recentlyVisitedViewModel.delegate = self
         recentlySavedViewModel.delegate = self
         pocketViewModel.delegate = self
         jumpBackInViewModel.delegate = self
