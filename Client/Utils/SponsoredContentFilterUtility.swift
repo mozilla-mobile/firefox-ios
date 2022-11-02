@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Shared
 
 // Utility to filter sponsored content out of certain data type
 struct SponsoredContentFilterUtility {
@@ -23,6 +24,13 @@ struct SponsoredContentFilterUtility {
     }
 
     func filterSponsoredHighlights(from items: [HistoryHighlight]) -> [HistoryHighlight] {
-        return items.filter { !$0.url.contains(hideWithSearchParam) }
+        return items.filter {
+            // As part of bug TODO, session restore URLs have been saved in metadata for a while
+            // This means that to abstain already recorded restore session URLs to appear in recently visited we
+            // need to manually filter them out for now. In a couple of release (greater than v115) this can be removed
+            // with task TODO
+            let sessionRestoreURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)"
+            return !$0.url.contains(hideWithSearchParam) && !$0.url.contains(sessionRestoreURL)
+        }
     }
 }
