@@ -186,7 +186,7 @@ private extension JumpBackInViewModel {
             withMaxTabsCount: maxItemsToDisplay.tabsCount,
             and: recentGroups
         )
-        let shouldShowSyncTab = maxItemsToDisplay.syncTabCount >= 1 && hasSyncedTab
+        let shouldShowSyncTab = maxItemsToDisplay.syncedTabCount >= 1 && hasSyncedTab
         mostRecentSyncedTab = shouldShowSyncTab ? recentSyncedTab : nil
     }
 

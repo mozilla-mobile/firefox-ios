@@ -6,7 +6,7 @@ import Foundation
 
 struct JumpBackInDisplayGroupCount {
     var tabsCount: Int
-    var syncTabCount: Int
+    var syncedTabCount: Int
 }
 
 enum JumpBackInSectionLayout: Equatable {
@@ -59,7 +59,7 @@ enum JumpBackInSectionLayout: Equatable {
 
         return JumpBackInDisplayGroupCount(
             tabsCount: maxJumpBackInItemsToDisplay(device: device),
-            syncTabCount: hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0
+            syncedTabCount: hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0
         )
     }
 

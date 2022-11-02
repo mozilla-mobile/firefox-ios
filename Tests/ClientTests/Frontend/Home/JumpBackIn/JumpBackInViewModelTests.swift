@@ -173,6 +173,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: false,
                                                                device: .phone)
         XCTAssertEqual(maxItems.tabsCount, 2)
+        XCTAssertEqual(maxItems.syncedTabCount, 0)
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
     }
 
@@ -190,6 +191,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .phone)
 
         XCTAssertEqual(maxItems.tabsCount, 0)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .compactSyncedTab)
     }
 
@@ -209,6 +211,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .phone)
 
         XCTAssertEqual(maxItems.tabsCount, 1)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackInAndSyncedTab)
     }
 
@@ -227,6 +230,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .phone)
 
         XCTAssertEqual(maxItems.tabsCount, 4)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .medium)
     }
 
@@ -245,6 +249,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .phone)
 
         XCTAssertEqual(maxItems.tabsCount, 2)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .mediumWithSyncedTab)
     }
 
@@ -263,6 +268,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .pad)
 
         XCTAssertEqual(maxItems.tabsCount, 4)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .medium)
     }
 
@@ -281,6 +287,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .pad)
 
         XCTAssertEqual(maxItems.tabsCount, 2)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .mediumWithSyncedTab)
     }
 
@@ -299,9 +306,11 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .pad)
 
         XCTAssertEqual(maxItems.tabsCount, 6)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .regular)
     }
 
+    // This case should never happen on a real device
     func testMaxJumpBackInItemsToDisplay_regularIphone() {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -317,6 +326,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .phone)
 
         XCTAssertEqual(maxItems.tabsCount, 6)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .regular)
     }
 
@@ -335,9 +345,11 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .pad)
 
         XCTAssertEqual(maxItems.tabsCount, 4)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .regularWithSyncedTab)
     }
 
+    // This case should never happen on a real device
     func testMaxJumpBackInItemsToDisplay_regularWithSyncedTabIphone() {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -353,6 +365,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .phone)
 
         XCTAssertEqual(maxItems.tabsCount, 4)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .regularWithSyncedTab)
     }
 
@@ -370,6 +383,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .phone)
 
         XCTAssertEqual(maxItems.tabsCount, 4)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .medium)
     }
 
@@ -387,6 +401,7 @@ class JumpBackInViewModelTests: XCTestCase {
                                                                device: .pad)
 
         XCTAssertEqual(maxItems.tabsCount, 6)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
         XCTAssertEqual(subject.sectionLayout, .regular)
     }
 
@@ -423,7 +438,8 @@ class JumpBackInViewModelTests: XCTestCase {
 
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
-        XCTAssertEqual(maxItems.syncTabCount, 1)
+        XCTAssertEqual(maxItems.tabsCount, 2)
+        XCTAssertEqual(maxItems.syncedTabCount, 1)
     }
 
     func testMaxDisplayedItemSyncedTab_withoutAccount() {
@@ -431,7 +447,8 @@ class JumpBackInViewModelTests: XCTestCase {
 
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: false,
                                                                device: .pad)
-        XCTAssertEqual(maxItems.syncTabCount, 0)
+        XCTAssertEqual(maxItems.tabsCount, 2)
+        XCTAssertEqual(maxItems.syncedTabCount, 0)
     }
 
     // MARK: Refresh data
