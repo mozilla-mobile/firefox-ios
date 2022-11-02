@@ -26,8 +26,14 @@ class JumpBackInViewModel: FeatureFlaggable {
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
     weak var delegate: HomepageDataModelDelegate?
 
+    // The data that is showed to the user after layout calculation
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     var mostRecentSyncedTab: JumpBackInSyncedTab?
+
+    // Raw data to calculate what we can show to the user
+    var recentTabs: [Tab] = [Tab]()
+    var recentGroups: [ASGroup<Tab>]?
+    var recentSyncedTab: JumpBackInSyncedTab?
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
@@ -141,11 +147,11 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     private var hasSyncedTab: Bool {
-        return jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled && mostRecentSyncedTab != nil
+        return jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled && recentSyncedTab != nil
     }
 
     private var hasJumpBackIn: Bool {
-        return jumpBackInList.itemsToDisplay > 0
+        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
     }
 
     private var isMultitasking: Bool {
@@ -165,6 +171,59 @@ class JumpBackInViewModel: FeatureFlaggable {
 
         let splitScreenWidth = window.screen.bounds.width * split
         return window.frame.width >= splitScreenWidth * 0.9 && window.frame.width <= splitScreenWidth * 1.1
+    }
+}
+
+// MARK: - Private: Prepare UI data
+private extension JumpBackInViewModel {
+
+    func refreshData(maxItemsToDisplay: JumpBackInDisplayGroupCount) {
+        jumpBackInList = createJumpBackInList(
+            from: recentTabs,
+            withMaxTabsCount: maxItemsToDisplay.tabsCount,
+            and: recentGroups
+        )
+        let shouldShowSyncTab = maxItemsToDisplay.syncedTabCount >= 1 && hasSyncedTab
+        mostRecentSyncedTab = shouldShowSyncTab ? recentSyncedTab : nil
+    }
+
+    func createJumpBackInList(
+        from tabs: [Tab],
+        withMaxTabsCount maxTabs: Int,
+        and groups: [ASGroup<Tab>]? = nil
+    ) -> JumpBackInList {
+        let recentGroup = groups?.first
+        let groupCount = recentGroup != nil ? 1 : 0
+        let recentTabs = filter(
+            tabs: tabs,
+            from: recentGroup,
+            usingGroupCount: groupCount,
+            withMaxTabsCount: maxTabs
+        )
+
+        return JumpBackInList(group: recentGroup, tabs: recentTabs)
+    }
+
+    func filter(
+        tabs: [Tab],
+        from recentGroup: ASGroup<Tab>?,
+        usingGroupCount groupCount: Int,
+        withMaxTabsCount maxTabs: Int
+    ) -> [Tab] {
+        var recentTabs = [Tab]()
+        let maxTabsCount = maxTabs - groupCount
+
+        for tab in tabs {
+            // We must make sure to not include any 'solo' tabs that are also part of a group
+            // because they should not show up in the Jump Back In section.
+            if let recentGroup = recentGroup, recentGroup.groupedItems.contains(tab) { continue }
+
+            recentTabs.append(tab)
+            // We are only showing one group in Jump Back in, so adjust count accordingly
+            if recentTabs.count == maxTabsCount { break }
+        }
+
+        return recentTabs
     }
 }
 
@@ -362,18 +421,17 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
                             isPortrait: isPortrait,
                             device: device)
 
-        let maxItemToDisplay = sectionLayout.maxItemsToDisplay(
-            displayGroup: .jumpBackIn,
+        let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
             hasAccount: jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled,
             device: device
         )
-        jumpBackInDataAdaptor.refreshData(maxItemToDisplay: maxItemToDisplay)
-        getLatestData()
+        refreshData(maxItemsToDisplay: maxItemsToDisplay)
     }
 
     private func getLatestData() {
-        jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
-        mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
+        recentTabs = jumpBackInDataAdaptor.getRecentTabData()
+        recentGroups = jumpBackInDataAdaptor.getGroupsData()
+        recentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {

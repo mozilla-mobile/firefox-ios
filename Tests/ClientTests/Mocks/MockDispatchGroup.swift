@@ -16,4 +16,11 @@ class MockDispatchGroup: DispatchGroupInterface {
                 execute work: @escaping @convention(block) () -> Void) {
         work()
     }
+
+    func notify(qos: DispatchQoS,
+                flags: DispatchWorkItemFlags,
+                queue: DispatchQueueInterface,
+                execute work: @escaping @convention(block) () -> Void) {
+        work()
+    }
 }

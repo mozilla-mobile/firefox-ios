@@ -8,12 +8,12 @@ import Storage
 protocol JumpBackInDataAdaptor {
     var hasSyncedTabFeatureEnabled: Bool { get }
 
-    func getJumpBackInData() -> JumpBackInList
+    func getRecentTabData() -> [Tab]
+    func getGroupsData() -> [ASGroup<Tab>]?
     func getSyncedTabData() -> JumpBackInSyncedTab?
+
     func getHeroImage(forSite site: Site) -> UIImage?
     func getFaviconImage(forSite site: Site) -> UIImage?
-
-    func refreshData(maxItemToDisplay: Int)
 }
 
 protocol JumpBackInDelegate: AnyObject {
@@ -42,13 +42,10 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     private var recentTabs: [Tab] = [Tab]()
     private var recentGroups: [ASGroup<Tab>]?
-    private var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
     private var hasSyncAccount: Bool?
 
-    private let mainQueue: DispatchQueueInterface
-    private let dispatchGroup: DispatchGroupInterface
-    private let userInteractiveQueue: DispatchQueueInterface
+    private let userInitiatedQueue: DispatchQueueInterface
 
     weak var delegate: JumpBackInDelegate?
 
@@ -56,18 +53,14 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          siteImageHelper: SiteImageHelperProtocol,
-         dispatchGroup: DispatchGroupInterface = DispatchGroup(),
-         mainQueue: DispatchQueueInterface = DispatchQueue.main,
-         userInteractiveQueue: DispatchQueueInterface = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass),
+         userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
         self.tabManager = tabManager
         self.siteImageHelper = siteImageHelper
         self.notificationCenter = notificationCenter
 
-        self.mainQueue = mainQueue
-        self.dispatchGroup = dispatchGroup
-        self.userInteractiveQueue = userInteractiveQueue
+        self.userInitiatedQueue = userInitiatedQueue
 
         setupNotifications(forObserver: self, observing: [.ShowHomepage,
                                                           .TabsTrayDidClose,
@@ -75,7 +68,10 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
                                                           .TopTabsTabClosed,
                                                           .ProfileDidFinishSyncing,
                                                           .FirefoxAccountChanged])
-        updateTabsAndAccountData()
+
+        userInitiatedQueue.async { [weak self] in
+            self?.updateTabsAndAccountData()
+        }
     }
 
     deinit {
@@ -88,8 +84,12 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         return featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) && hasSyncAccount ?? false
     }
 
-    func getJumpBackInData() -> JumpBackInList {
-        return jumpBackInList
+    func getRecentTabData() -> [Tab] {
+        return recentTabs
+    }
+
+    func getGroupsData() -> [ASGroup<Tab>]? {
+        return recentGroups
     }
 
     func getSyncedTabData() -> JumpBackInSyncedTab? {
@@ -121,82 +121,22 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         return nil
     }
 
-    /// Default number of items to display to 2 in the case that we want to refresh data after the first async fetch
-    /// At that moment we don't know for which UI we want to display the data, but we need to calculate some
-    /// jumpBackInList items to be able to show the section. jumpBackInList gets refreshed with the proper UI
-    func refreshData(maxItemToDisplay: Int = 2) {
-        jumpBackInList = createJumpBackInList(
-            from: recentTabs,
-            withMaxItemsToDisplay: maxItemToDisplay,
-            and: recentGroups)
-    }
-
     // MARK: Jump back in data
 
     private func updateTabsAndAccountData() {
         getHasSyncAccount { [weak self] in
-            // Has to be on main due to tab manager needing main tread
-            // This can be fixed when tab manager has been revisited
-            self?.mainQueue.async { [weak self] in
-                self?.updateTabsData()
-            }
+            self?.updateTabsData()
         }
     }
 
     private func updateTabsData() {
-        dispatchGroup.enter()
         updateJumpBackInData { [weak self] in
-            self?.dispatchGroup.leave()
-        }
-
-        dispatchGroup.enter()
-        updateRemoteTabs { [weak self] in
-            self?.dispatchGroup.leave()
-        }
-
-        dispatchGroup.notify(queue: .main) { [weak self] in
-            self?.refreshData()
             self?.delegate?.didLoadNewData()
         }
-    }
 
-    private func createJumpBackInList(
-        from tabs: [Tab],
-        withMaxItemsToDisplay maxItems: Int,
-        and groups: [ASGroup<Tab>]? = nil
-    ) -> JumpBackInList {
-        let recentGroup = groups?.first
-        let groupCount = recentGroup != nil ? 1 : 0
-        let recentTabs = filter(
-            tabs: tabs,
-            from: recentGroup,
-            usingGroupCount: groupCount,
-            withMaxItemsToDisplay: maxItems
-        )
-
-        return JumpBackInList(group: recentGroup, tabs: recentTabs)
-    }
-
-    private func filter(
-        tabs: [Tab],
-        from recentGroup: ASGroup<Tab>?,
-        usingGroupCount groupCount: Int,
-        withMaxItemsToDisplay maxItemsToDisplay: Int
-    ) -> [Tab] {
-        var recentTabs = [Tab]()
-        let maxItemCount = maxItemsToDisplay - groupCount
-
-        for tab in tabs {
-            // We must make sure to not include any 'solo' tabs that are also part of a group
-            // because they should not show up in the Jump Back In section.
-            if let recentGroup = recentGroup, recentGroup.groupedItems.contains(tab) { continue }
-
-            recentTabs.append(tab)
-            // We are only showing one group in Jump Back in, so adjust count accordingly
-            if recentTabs.count == maxItemCount { break }
+        updateRemoteTabs { [weak self] in
+            self?.delegate?.didLoadNewData()
         }
-
-        return recentTabs
     }
 
     /// Update data with tab and search term group managers, saving it in view model for further usage
@@ -205,8 +145,8 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
         if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
             SearchTermGroupsUtility.getTabGroups(
-                with: profile,
-                from: recentTabs,
+                with: self.profile,
+                from: self.recentTabs,
                 using: .orderedDescending
             ) { [weak self] groups, _ in
 
@@ -241,10 +181,8 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         }
 
         // Get cached tabs
-        userInteractiveQueue.async { [weak self] in
-            self?.profile.getCachedClientsAndTabs { [weak self] result in
-                self?.createMostRecentSyncedTab(from: result, completion: completion)
-            }
+        profile.getCachedClientsAndTabs { [weak self] result in
+            self?.createMostRecentSyncedTab(from: result, completion: completion)
         }
     }
 
@@ -289,16 +227,18 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 // MARK: - Notifiable
 extension JumpBackInDataAdaptorImplementation: Notifiable {
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .ShowHomepage,
-                .TabsTrayDidClose,
-                .TabsTrayDidSelectHomeTab,
-                .TopTabsTabClosed:
-            updateTabsData()
-        case .ProfileDidFinishSyncing,
-                .FirefoxAccountChanged:
-            updateTabsAndAccountData()
-        default: break
+        userInitiatedQueue.async { [weak self] in
+            switch notification.name {
+            case .ShowHomepage,
+                    .TabsTrayDidClose,
+                    .TabsTrayDidSelectHomeTab,
+                    .TopTabsTabClosed:
+                self?.updateTabsData()
+            case .ProfileDidFinishSyncing,
+                    .FirefoxAccountChanged:
+                self?.updateTabsAndAccountData()
+            default: break
+            }
         }
     }
 }
