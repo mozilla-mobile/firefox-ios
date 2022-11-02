@@ -69,7 +69,7 @@
 		1DF4266E251BC46D0086386A /* FaviconFetcher+Non-Bundled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF4266D251BC46D0086386A /* FaviconFetcher+Non-Bundled.swift */; };
 		1DF42682251BDB3A0086386A /* FaviconFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075561E37F714006961AC /* FaviconFetcher.swift */; };
 		1DF426CF251BDF6A0086386A /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
-		1DFE57FB27B2CB870025DE58 /* HighlightItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */; };
+		1DFE57FB27B2CB870025DE58 /* RecentlyVisitedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FA27B2CB870025DE58 /* RecentlyVisitedItem.swift */; };
 		1DFE57FD27BADD7D0025DE58 /* HomepageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FC27BADD7C0025DE58 /* HomepageViewModel.swift */; };
 		1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */; };
 		2109478928AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */; };
@@ -1023,14 +1023,14 @@
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
-		DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */; };
+		DF036E43274FD434002E834E /* RecentlyVisitedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF036E42274FD434002E834E /* RecentlyVisitedCell.swift */; };
 		DF984600276B99660071CCAE /* LegacyWallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF9845FF276B99660071CCAE /* LegacyWallpaperManager.swift */; };
 		DFA51481275FFEE500266AA0 /* HistoryHighlightsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA51480275FFEE500266AA0 /* HistoryHighlightsManager.swift */; };
 		DFA51484276103A000266AA0 /* HistoryHighlightsManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA514822761012D00266AA0 /* HistoryHighlightsManagerTests.swift */; };
 		DFACBF7F277B5F7B003D5F41 /* WallpaperBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF7E277B5F7B003D5F41 /* WallpaperBackgroundView.swift */; };
 		DFACBF81277B916B003D5F41 /* ConfigurableGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF80277B916B003D5F41 /* ConfigurableGradientView.swift */; };
 		DFACBF85277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACBF84277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift */; };
-		DFACDFAA274D489B00A94EEC /* HistoryHighlightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFA9274D489B00A94EEC /* HistoryHighlightsViewModel.swift */; };
+		DFACDFAA274D489B00A94EEC /* RecentlyVisitedCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFA9274D489B00A94EEC /* RecentlyVisitedCellViewModel.swift */; };
 		DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */; };
 		DFB2610B277CA7D300DDDD38 /* LegacyWallpaperSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB2610A277CA7D300DDDD38 /* LegacyWallpaperSettingsViewController.swift */; };
 		DFB2610D277CC5A200DDDD38 /* WallpaperSettingCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB2610C277CC5A200DDDD38 /* WallpaperSettingCollectionCell.swift */; };
@@ -1982,7 +1982,7 @@
 		1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidget.swift; sourceTree = "<group>"; };
 		1DE6449A95FE587845F9A459 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		1DF4266D251BC46D0086386A /* FaviconFetcher+Non-Bundled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FaviconFetcher+Non-Bundled.swift"; sourceTree = "<group>"; };
-		1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightItem.swift; sourceTree = "<group>"; };
+		1DFE57FA27B2CB870025DE58 /* RecentlyVisitedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyVisitedItem.swift; sourceTree = "<group>"; };
 		1DFE57FC27BADD7C0025DE58 /* HomepageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageViewModel.swift; sourceTree = "<group>"; };
 		1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageSectionType.swift; sourceTree = "<group>"; };
 		1E26464F9A5C96917A1CAFBD /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -4705,7 +4705,7 @@
 		DE964E9A99B08F1FC7A3C6E5 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		DEE24C998DA12ED5CE67FF6A /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Menu.strings; sourceTree = "<group>"; };
 		DEE64F20810420CECBA98E54 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Search.strings; sourceTree = "<group>"; };
-		DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsCell.swift; sourceTree = "<group>"; };
+		DF036E42274FD434002E834E /* RecentlyVisitedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyVisitedCell.swift; sourceTree = "<group>"; };
 		DF10441BA5FD33966E422B37 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/Intro.strings"; sourceTree = "<group>"; };
 		DF16405B8C523F7BDC578A89 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		DF46B9A32755297000657F75 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Today.strings"; sourceTree = "<group>"; };
@@ -4721,7 +4721,7 @@
 		DFACBF7E277B5F7B003D5F41 /* WallpaperBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBackgroundView.swift; sourceTree = "<group>"; };
 		DFACBF80277B916B003D5F41 /* ConfigurableGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableGradientView.swift; sourceTree = "<group>"; };
 		DFACBF84277B9B5B003D5F41 /* TopSitesRowCountSettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesRowCountSettingsController.swift; sourceTree = "<group>"; };
-		DFACDFA9274D489B00A94EEC /* HistoryHighlightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsViewModel.swift; sourceTree = "<group>"; };
+		DFACDFA9274D489B00A94EEC /* RecentlyVisitedCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyVisitedCellViewModel.swift; sourceTree = "<group>"; };
 		DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
 		DFB2610A277CA7D300DDDD38 /* LegacyWallpaperSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWallpaperSettingsViewController.swift; sourceTree = "<group>"; };
 		DFB2610C277CC5A200DDDD38 /* WallpaperSettingCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingCollectionCell.swift; sourceTree = "<group>"; };
@@ -7477,16 +7477,16 @@
 			path = SearchQuickLinksSmall;
 			sourceTree = "<group>";
 		};
-		DF036E41274FD3FC002E834E /* HistoryHighlights */ = {
+		DF036E41274FD3FC002E834E /* RecentlyVisited */ = {
 			isa = PBXGroup;
 			children = (
-				DFACDFA9274D489B00A94EEC /* HistoryHighlightsViewModel.swift */,
-				DF036E42274FD434002E834E /* HistoryHighlightsCell.swift */,
+				DFACDFA9274D489B00A94EEC /* RecentlyVisitedCellViewModel.swift */,
+				DF036E42274FD434002E834E /* RecentlyVisitedCell.swift */,
 				DFA51480275FFEE500266AA0 /* HistoryHighlightsManager.swift */,
-				1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */,
+				1DFE57FA27B2CB870025DE58 /* RecentlyVisitedItem.swift */,
 				5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */,
 			);
-			path = HistoryHighlights;
+			path = RecentlyVisited;
 			sourceTree = "<group>";
 		};
 		DFACBF82277B9278003D5F41 /* Wallpapers */ = {
@@ -8359,7 +8359,7 @@
 			children = (
 				C834ACD028D3ACA900203AD1 /* Blurrable.swift */,
 				8AB5958628412B620090F4AE /* CustomizeHome */,
-				DF036E41274FD3FC002E834E /* HistoryHighlights */,
+				DF036E41274FD3FC002E834E /* RecentlyVisited */,
 				8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */,
 				8AB8574527D97CB00075C173 /* HomepageContextMenuProtocol.swift */,
 				8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */,
@@ -10424,7 +10424,7 @@
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				8AE80BBC2891C20D00BC12EA /* JumpBackInList.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
-				DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */,
+				DF036E43274FD434002E834E /* RecentlyVisitedCell.swift in Sources */,
 				EB9A179C20E69A7F00B12184 /* LegacyDarkTheme.swift in Sources */,
 				DA52E1DA25F5961F0092204C /* TabTrayViewController.swift in Sources */,
 				8AD40FD327BB068F00672675 /* MainMenuActionHelper.swift in Sources */,
@@ -10650,7 +10650,7 @@
 				C84655F728879EF100861B4A /* WallpaperManager.swift in Sources */,
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
 				D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */,
-				1DFE57FB27B2CB870025DE58 /* HighlightItem.swift in Sources */,
+				1DFE57FB27B2CB870025DE58 /* RecentlyVisitedItem.swift in Sources */,
 				8A887D7A2912B206005BCB1D /* ThemeType.swift in Sources */,
 				CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */,
 				8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */,
@@ -10714,7 +10714,7 @@
 				8AD5702F27AB4DEA005BFDC8 /* UIStackView+Extension.swift in Sources */,
 				8AE80BBA2891C0C300BC12EA /* JumpBackInSectionLayout.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
-				DFACDFAA274D489B00A94EEC /* HistoryHighlightsViewModel.swift in Sources */,
+				DFACDFAA274D489B00A94EEC /* RecentlyVisitedCellViewModel.swift in Sources */,
 				C84655FF2887A06B00861B4A /* WallpaperFilePathProvider.swift in Sources */,
 				215A5F9F283D38B800FF4053 /* WallpapersCardViewController.swift in Sources */,
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,

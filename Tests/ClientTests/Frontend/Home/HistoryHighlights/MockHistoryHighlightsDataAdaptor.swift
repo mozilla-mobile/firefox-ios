@@ -6,15 +6,15 @@
 
 class MockHistoryHighlightsDataAdaptor: HistoryHighlightsDataAdaptor {
 
-    var mockHistoryItems = [HighlightItem]()
+    var mockHistoryItems = [RecentlyVisitedItem]()
     var delegate: HistoryHighlightsDelegate?
     var deleteCallCount = 0
 
-    func getHistoryHightlights() -> [HighlightItem] {
+    func getHistoryHightlights() -> [RecentlyVisitedItem] {
         return mockHistoryItems
     }
 
-    func delete(_ item: HighlightItem) {
+    func delete(_ item: RecentlyVisitedItem) {
         deleteCallCount += 1
     }
 }

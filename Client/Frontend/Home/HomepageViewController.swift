@@ -588,7 +588,7 @@ private extension HomepageViewController {
         }
     }
 
-    private func openHistoryHighlightsSearchGroup(item: HighlightItem) {
+    private func openHistoryHighlightsSearchGroup(item: RecentlyVisitedItem) {
         guard let groupItem = item.group else { return }
 
         var groupedSites = [Site]()
@@ -614,7 +614,7 @@ private extension HomepageViewController {
         asGroupListVC.libraryPanelDelegate = libraryPanelDelegate
     }
 
-    private func buildSite(from highlight: HighlightItem) -> Site {
+    private func buildSite(from highlight: RecentlyVisitedItem) -> Site {
         let itemURL = highlight.siteUrl?.absoluteString ?? ""
         return Site(url: itemURL, title: highlight.displayTitle)
     }

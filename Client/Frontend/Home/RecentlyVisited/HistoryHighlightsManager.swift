@@ -22,14 +22,14 @@ protocol HistoryHighlightsManagerProtocol {
         profile: Profile,
         tabs: [Tab],
         resultCount: Int,
-        completion: @escaping ([HighlightItem]?) -> Void)
+        completion: @escaping ([RecentlyVisitedItem]?) -> Void)
 
     func getHighlightsData(
         with profile: Profile,
         and tabs: [Tab],
         shouldGroupHighlights: Bool,
         resultCount: Int,
-        completion: @escaping ([HighlightItem]?) -> Void)
+        completion: @escaping ([RecentlyVisitedItem]?) -> Void)
 }
 
 extension HistoryHighlightsManagerProtocol {
@@ -38,7 +38,7 @@ extension HistoryHighlightsManagerProtocol {
         and tabs: [Tab],
         shouldGroupHighlights: Bool = false,
         resultCount: Int = defaultHighlightCount,
-        completion: @escaping ([HighlightItem]?) -> Void) {
+        completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
 
         self.getHighlightsData(
             with: profile,
@@ -63,13 +63,13 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
         profile: Profile,
         tabs: [Tab],
         resultCount: Int,
-        completion: @escaping ([HighlightItem]?) -> Void) {
+        completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
 
         getHighlightsData(with: profile,
                           and: tabs,
                           resultCount: searchLimit) { results in
 
-            var searchResults = [HighlightItem]()
+            var searchResults = [RecentlyVisitedItem]()
 
             guard let results = results else {
                 completion(searchResults)
@@ -106,7 +106,7 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
         and tabs: [Tab],
         shouldGroupHighlights: Bool = false,
         resultCount: Int = defaultHighlightCount,
-        completion: @escaping ([HighlightItem]?) -> Void) {
+        completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
 
         fetchHighlights(with: profile) { highlights in
 
@@ -176,11 +176,11 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
     /// - Returns: A  `HighlightItem` array alternating `HistoryHighlight` and search `ASGroup<HistoryHighlight>`
     private func collateForRecentlySaved(
         from groups: [ASGroup<HistoryHighlight>]?,
-        and highlights: [HistoryHighlight]) -> [HighlightItem] {
+        and highlights: [HistoryHighlight]) -> [RecentlyVisitedItem] {
 
         guard let groups = groups, !groups.isEmpty else { return highlights }
 
-        var highlightItems: [HighlightItem] = highlights
+        var highlightItems: [RecentlyVisitedItem] = highlights
 
         for (index, group) in groups.enumerated() {
             let insertIndex = (index * 2) + 1

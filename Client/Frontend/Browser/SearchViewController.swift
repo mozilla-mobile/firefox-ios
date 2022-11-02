@@ -67,7 +67,7 @@ class SearchViewController: SiteTableViewController,
     private var openedTabs = [Tab]()
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
-    private var searchHighlights = [HighlightItem]()
+    private var searchHighlights = [RecentlyVisitedItem]()
     private var highlightManager: HistoryHighlightsManagerProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the

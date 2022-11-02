@@ -4,8 +4,8 @@
 
 import UIKit
 
-/// A cell used in FxHomeScreen's History Highlights section.
-class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
+/// A cell used in FxHomeScreen's Recently Visited section.
+class RecentlyVisitedCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
         static let verticalSpacing: CGFloat = 20
@@ -57,7 +57,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    private var cellModel: HistoryHighlightsModel?
+    private var cellModel: RecentlyVisitedCellViewModel?
 
     // MARK: - Inits
 
@@ -75,7 +75,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Public methods
-    func configureCell(with options: HistoryHighlightsModel, theme: Theme) {
+    func configureCell(with options: RecentlyVisitedCellViewModel, theme: Theme) {
         cellModel = options
         itemTitle.text = options.title
 
@@ -164,7 +164,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 }
 
 // MARK: - ThemeApplicable
-extension HistoryHighlightsCell: ThemeApplicable {
+extension RecentlyVisitedCell: ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         heroImage.tintColor = theme.colors.iconPrimary
@@ -177,7 +177,7 @@ extension HistoryHighlightsCell: ThemeApplicable {
 }
 
 // MARK: - Blurrable
-extension HistoryHighlightsCell: Blurrable {
+extension RecentlyVisitedCell: Blurrable {
 
     func adjustBlur(theme: Theme) {
         // If blur is disabled set background color

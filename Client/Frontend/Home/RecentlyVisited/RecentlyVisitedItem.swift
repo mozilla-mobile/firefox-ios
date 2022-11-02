@@ -4,26 +4,26 @@
 
 import MozillaAppServices
 
-enum HighlightItemType {
+enum RecentlyVisitedItemType {
     case group
     case item
 }
 
-protocol HighlightItem {
+protocol RecentlyVisitedItem {
     var displayTitle: String { get }
     var description: String? { get }
     var siteUrl: URL? { get }
-    var type: HighlightItemType { get }
-    var group: [HighlightItem]? { get }
+    var type: RecentlyVisitedItemType { get }
+    var group: [RecentlyVisitedItem]? { get }
 }
 
-extension HistoryHighlight: HighlightItem {
+extension HistoryHighlight: RecentlyVisitedItem {
 
-    var group: [HighlightItem]? {
+    var group: [RecentlyVisitedItem]? {
         return nil
     }
 
-    var type: HighlightItemType {
+    var type: RecentlyVisitedItemType {
         return .item
     }
 

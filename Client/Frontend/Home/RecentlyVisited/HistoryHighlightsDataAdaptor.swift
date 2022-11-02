@@ -7,8 +7,8 @@ import Foundation
 protocol HistoryHighlightsDataAdaptor {
     var delegate: HistoryHighlightsDelegate? { get set }
 
-    func getHistoryHightlights() -> [HighlightItem]
-    func delete(_ item: HighlightItem)
+    func getHistoryHightlights() -> [RecentlyVisitedItem]
+    func delete(_ item: RecentlyVisitedItem)
 }
 
 protocol HistoryHighlightsDelegate: AnyObject {
@@ -17,7 +17,7 @@ protocol HistoryHighlightsDelegate: AnyObject {
 
 class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
 
-    private var historyItems = [HighlightItem]()
+    private var historyItems = [RecentlyVisitedItem]()
     private var historyManager: HistoryHighlightsManagerProtocol
     private var profile: Profile
     private var tabManager: TabManagerProtocol
@@ -42,11 +42,11 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         loadHistory()
     }
 
-    func getHistoryHightlights() -> [HighlightItem] {
+    func getHistoryHightlights() -> [RecentlyVisitedItem] {
         return historyItems
     }
 
-    func delete(_ item: HighlightItem) {
+    func delete(_ item: RecentlyVisitedItem) {
         let urls = extractDeletableURLs(from: item)
 
         deletionUtility.delete(urls) { [weak self] successful in
@@ -67,7 +67,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         }
     }
 
-    private func extractDeletableURLs(from item: HighlightItem) -> [String] {
+    private func extractDeletableURLs(from item: RecentlyVisitedItem) -> [String] {
         var urls = [String]()
         if item.type == .item, let url = item.siteUrl?.absoluteString {
             urls = [url]

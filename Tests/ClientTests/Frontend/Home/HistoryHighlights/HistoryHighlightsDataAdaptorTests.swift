@@ -44,7 +44,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
     // Loads history on first launch with data
     func testInitialLoadWithHistoryData() {
-        let item: HighlightItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
+        let item: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
         historyManager.callGetHighlightsDataCompletion(result: [item])
 
         let results = subject.getHistoryHightlights()
@@ -71,8 +71,8 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
         notificationCenter.post(name: .HistoryUpdated)
 
-        let item1: HighlightItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
-        let item2: HighlightItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
+        let item1: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
+        let item2: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
         historyManager.callGetHighlightsDataCompletion(result: [item1, item2])
 
         let results = subject.getHistoryHightlights()
@@ -83,7 +83,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
     }
 
     func testDeleteIndividualItem() {
-        let item1: HighlightItem = HistoryHighlight(score: 0,
+        let item1: RecentlyVisitedItem = HistoryHighlight(score: 0,
                                                     placeId: 0,
                                                     url: "www.firefox.com",
                                                     title: "",
@@ -97,13 +97,13 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
     }
 
     func testDeleteGroupItem() {
-        let item: HighlightItem = HistoryHighlight(score: 0,
+        let item: RecentlyVisitedItem = HistoryHighlight(score: 0,
                                                     placeId: 0,
                                                     url: "www.firefox.com",
                                                     title: "",
                                                     previewImageUrl: "")
 
-        let group: HighlightItem = ASGroup(searchTerm: "foxes",
+        let group: RecentlyVisitedItem = ASGroup(searchTerm: "foxes",
                                            groupedItems: [item],
                                            timestamp: 0)
 

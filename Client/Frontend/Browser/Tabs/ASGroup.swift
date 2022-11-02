@@ -20,12 +20,12 @@ struct ASGroup<T>: Hashable {
     }
 }
 
-extension ASGroup: HighlightItem {
-    var group: [HighlightItem]? {
-        return groupedItems as? [HighlightItem]
+extension ASGroup: RecentlyVisitedItem {
+    var group: [RecentlyVisitedItem]? {
+        return groupedItems as? [RecentlyVisitedItem]
     }
 
-    var type: HighlightItemType {
+    var type: RecentlyVisitedItemType {
         return .group
     }
 

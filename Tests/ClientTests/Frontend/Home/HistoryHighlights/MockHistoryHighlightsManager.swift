@@ -7,24 +7,24 @@
 class MockHistoryHighlightsManager: HistoryHighlightsManagerProtocol {
 
     var getHighlightsDataCallCount = 0
-    var getHighlightsDataCompletion: (([HighlightItem]?) -> Void)?
+    var getHighlightsDataCompletion: (([RecentlyVisitedItem]?) -> Void)?
 
     func searchHighlightsData(searchQuery: String,
                               profile: Profile,
                               tabs: [Tab],
                               resultCount: Int,
-                              completion: @escaping ([HighlightItem]?) -> Void) {}
+                              completion: @escaping ([RecentlyVisitedItem]?) -> Void) {}
 
     func getHighlightsData(with profile: Profile,
                            and tabs: [Tab],
                            shouldGroupHighlights: Bool,
                            resultCount: Int,
-                           completion: @escaping ([HighlightItem]?) -> Void) {
+                           completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
         getHighlightsDataCallCount += 1
         getHighlightsDataCompletion = completion
     }
 
-    func callGetHighlightsDataCompletion(result: [HighlightItem]) {
+    func callGetHighlightsDataCompletion(result: [RecentlyVisitedItem]) {
         getHighlightsDataCompletion?(result)
     }
 }

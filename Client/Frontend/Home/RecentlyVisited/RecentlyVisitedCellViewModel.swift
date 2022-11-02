@@ -6,7 +6,7 @@ import Foundation
 import Storage
 import UIKit
 
-struct HistoryHighlightsModel {
+struct RecentlyVisitedCellViewModel {
     let title: String
     let description: String?
     let favIconImage: UIImage?
@@ -65,7 +65,7 @@ class HistoryHighlightsViewModel {
 
     // MARK: - Properties & Variables
     var theme: Theme
-    var historyItems = [HighlightItem]()
+    var historyItems = [RecentlyVisitedItem]()
     private var profile: Profile
     private var isPrivate: Bool
     private var urlBar: URLBarViewProtocol
@@ -75,8 +75,8 @@ class HistoryHighlightsViewModel {
     private let dispatchQueue: DispatchQueueInterface
     private let telemetry: TelemetryWrapperProtocol
 
-    var onTapItem: ((HighlightItem) -> Void)?
-    var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
+    var onTapItem: ((RecentlyVisitedItem) -> Void)?
+    var historyHighlightLongPressHandler: ((RecentlyVisitedItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
@@ -141,7 +141,7 @@ class HistoryHighlightsViewModel {
         }
     }
 
-    func switchTo(_ highlight: HighlightItem) {
+    func switchTo(_ highlight: RecentlyVisitedItem) {
         if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
 
         onTapItem?(highlight)
@@ -158,13 +158,13 @@ class HistoryHighlightsViewModel {
         }
     }
 
-    func getItemDetailsAt(index: Int) -> HighlightItem? {
+    func getItemDetailsAt(index: Int) -> RecentlyVisitedItem? {
         guard let selectedItem = historyItems[safe: index] else { return nil }
 
         return selectedItem
     }
 
-    func delete(_ item: HighlightItem) {
+    func delete(_ item: RecentlyVisitedItem) {
         historyHighlightsDataAdaptor.delete(item)
     }
 }
@@ -265,7 +265,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
+        guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
         recordSectionHasShown()
 
@@ -412,18 +412,18 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                   hideBottomLine: Bool,
                                                   cornersToRound: CACornerMask?,
                                                   shouldAddShadow: Bool,
-                                                  item: HighlightItem) -> UICollectionViewCell {
+                                                  item: RecentlyVisitedItem) -> UICollectionViewCell {
 
-        guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
+        guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
         let itemURL = item.siteUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
 
-        let cellOptions = HistoryHighlightsModel(title: item.displayTitle,
-                                                 description: nil,
-                                                 shouldHideBottomLine: hideBottomLine,
-                                                 with: cornersToRound,
-                                                 shouldAddShadow: shouldAddShadow)
+        let cellOptions = RecentlyVisitedCellViewModel(title: item.displayTitle,
+                                                       description: nil,
+                                                       shouldHideBottomLine: hideBottomLine,
+                                                       with: cornersToRound,
+                                                       shouldAddShadow: shouldAddShadow)
 
         cell.configureCell(with: cellOptions, theme: theme)
 
@@ -438,11 +438,11 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                              hideBottomLine: Bool,
                                              cornersToRound: CACornerMask?,
                                              shouldAddShadow: Bool,
-                                             item: HighlightItem) -> UICollectionViewCell {
+                                             item: RecentlyVisitedItem) -> UICollectionViewCell {
 
-        guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
+        guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
-        let cellOptions = HistoryHighlightsModel(title: item.displayTitle,
+        let cellOptions = RecentlyVisitedCellViewModel(title: item.displayTitle,
                                                  description: item.description,
                                                  shouldHideBottomLine: hideBottomLine,
                                                  with: cornersToRound,
@@ -459,9 +459,9 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                      cornersToRound: CACornerMask?,
                                      shouldAddShadow: Bool) -> UICollectionViewCell {
 
-        guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
+        guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
-        let cellOptions = HistoryHighlightsModel(shouldHideBottomLine: hideBottomLine,
+        let cellOptions = RecentlyVisitedCellViewModel(shouldHideBottomLine: hideBottomLine,
                                                  with: cornersToRound,
                                                  shouldAddShadow: shouldAddShadow)
 

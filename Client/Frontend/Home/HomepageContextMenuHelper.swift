@@ -55,7 +55,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         return actions
     }
 
-    func presentContextMenu(for highlightItem: HighlightItem,
+    func presentContextMenu(for highlightItem: RecentlyVisitedItem,
                             with sourceView: UIView?,
                             sectionType: HomepageSectionType,
                             completionHandler: @escaping () -> PhotonActionSheet?
@@ -64,7 +64,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         delegate?.present(contextMenu, animated: true, completion: nil)
     }
 
-    func getContextMenuActions(for highlightItem: HighlightItem,
+    func getContextMenuActions(for highlightItem: RecentlyVisitedItem,
                                with sourceView: UIView?,
                                sectionType: HomepageSectionType
     ) -> [PhotonRowActions]? {
@@ -86,7 +86,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - History Highlights
 
-    private func getHistoryHighlightsActions(for highlightItem: HighlightItem) -> [PhotonRowActions]? {
+    private func getHistoryHighlightsActions(for highlightItem: RecentlyVisitedItem) -> [PhotonRowActions]? {
         return [SingleActionViewModel(title: .RemoveContextMenuTitle,
                                       iconString: ImageIdentifiers.actionRemove,
                                       tapHandler: { _ in
