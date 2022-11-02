@@ -26,7 +26,7 @@ class ContextMenuHelperTests: XCTestCase {
         profile = nil
     }
 
-    func testHistoryHighlightsTelemetry() {
+    func testRecentlyVisitedTelemetry() {
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
@@ -34,7 +34,7 @@ class ContextMenuHelperTests: XCTestCase {
                                           theme: LightTheme())
         let helper = HomepageContextMenuHelper(viewModel: viewModel)
 
-        helper.sendHistoryHighlightContextualTelemetry(type: .remove)
+        helper.sendRecentlyVisitedContextualTelemetry(type: .remove)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.FirefoxHomePage.historyHighlightsContext)
     }

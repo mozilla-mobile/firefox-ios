@@ -92,7 +92,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                       tapHandler: { _ in
 
             self.viewModel.recentlyVisitedViewModel.delete(highlightItem)
-            self.sendHistoryHighlightContextualTelemetry(type: .remove)
+            self.sendRecentlyVisitedContextualTelemetry(type: .remove)
         }).items]
     }
 
@@ -274,7 +274,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .view, object: .topSiteContextualMenu, value: nil, extras: extras)
     }
 
-    func sendHistoryHighlightContextualTelemetry(type: ContextualActionType) {
+    func sendRecentlyVisitedContextualTelemetry(type: ContextualActionType) {
         let extras = [TelemetryWrapper.EventExtraKey.contextualMenuType.rawValue: type.rawValue]
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,
