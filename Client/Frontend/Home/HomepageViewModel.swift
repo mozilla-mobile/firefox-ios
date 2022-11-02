@@ -88,7 +88,7 @@ class HomepageViewModel: FeatureFlaggable {
     var topSiteViewModel: TopSitesViewModel
     var recentlySavedViewModel: RecentlySavedViewModel
     var jumpBackInViewModel: JumpBackInViewModel
-    var historyHighlightsViewModel: HistoryHighlightsViewModel
+    var historyHighlightsViewModel: RecentlyVisitedViewModel
     var pocketViewModel: PocketViewModel
     var customizeButtonViewModel: CustomizeHomepageSectionViewModel
 
@@ -139,7 +139,7 @@ class HomepageViewModel: FeatureFlaggable {
             profile: profile,
             tabManager: tabManager,
             deletionUtility: deletionUtility)
-        self.historyHighlightsViewModel = HistoryHighlightsViewModel(
+        self.historyHighlightsViewModel = RecentlyVisitedViewModel(
             with: profile,
             isPrivate: isPrivate,
             urlBar: urlBar,

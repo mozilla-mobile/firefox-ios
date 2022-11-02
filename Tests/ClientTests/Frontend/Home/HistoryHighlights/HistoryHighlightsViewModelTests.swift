@@ -8,7 +8,7 @@ import MozillaAppServices
 
 class HistoryHighlightsViewModelTests: XCTestCase {
 
-    private var subject: HistoryHighlightsViewModel!
+    private var subject: RecentlyVisitedViewModel!
     private var profile: MockProfile!
     private var dataAdaptor: MockHistoryHighlightsDataAdaptor!
     private var delegate: MockHomepageDataModelDelegate!
@@ -231,7 +231,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
     // MARK: - Helper methods
 
     private func setupSubject(isPrivate: Bool = false) {
-        subject = HistoryHighlightsViewModel(
+        subject = RecentlyVisitedViewModel(
             with: profile,
             isPrivate: isPrivate,
             urlBar: urlBar,

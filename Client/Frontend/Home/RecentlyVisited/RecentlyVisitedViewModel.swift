@@ -53,7 +53,7 @@ struct RecentlyVisitedCellViewModel {
     }
 }
 
-class HistoryHighlightsViewModel {
+class RecentlyVisitedViewModel {
 
     struct UX {
         static let maxNumberOfItemsPerColumn = 3
@@ -170,7 +170,7 @@ class HistoryHighlightsViewModel {
 }
 
 // MARK: HomeViewModelProtocol
-extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggable {
+extension RecentlyVisitedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
     var sectionType: HomepageSectionType {
         return .historyHighlights
@@ -261,7 +261,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
 }
 
 // MARK: FxHomeSectionHandler
-extension HistoryHighlightsViewModel: HomepageSectionHandler {
+extension RecentlyVisitedViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
@@ -472,7 +472,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
 // MARK: - HistoryHighlightsDelegate
 
-extension HistoryHighlightsViewModel: RecentlyVisitedDelegate {
+extension RecentlyVisitedViewModel: RecentlyVisitedDelegate {
     func didLoadNewData() {
         dispatchQueue.ensureMainThread {
             self.historyItems = self.historyHighlightsDataAdaptor.getRecentlyVisited()
