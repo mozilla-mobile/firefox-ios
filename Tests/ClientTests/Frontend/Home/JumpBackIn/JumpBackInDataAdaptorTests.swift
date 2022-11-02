@@ -33,14 +33,14 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     func testEmptyData_tabTrayGroupsDisabled() {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
-        let jumpBackIn = subject.getJumpBackInData()
+        let recentTabs = subject.getRecentTabData()
         let synced = subject.getSyncedTabData()
 
-        XCTAssertEqual(jumpBackIn.itemsToDisplay, 0)
+        XCTAssertEqual(recentTabs.count, 0)
         XCTAssertNil(synced)
     }
 
-    func testCompactJumpBackIn_tabTrayGroupsDisabled_withMoreJumpBackInTabs() {
+    func testGetRecentTabs() {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         mockProfile.hasSyncableAccountMock = false
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
@@ -49,72 +49,12 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
 
         let subject = createSubject()
-        subject.refreshData(maxItemToDisplay: 2)
 
-        let jumpBackIn = subject.getJumpBackInData()
-        XCTAssertEqual(jumpBackIn.tabs.count, 2, "iPhone portrait has 2 tabs in it's jumpbackin layout")
-        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
-        XCTAssertEqual(jumpBackIn.tabs[1], tab2)
-        XCTAssertFalse(jumpBackIn.tabs.contains(tab3))
+        let recentTabs = subject.getRecentTabData()
+        XCTAssertEqual(recentTabs.count, 3)
     }
 
-    func testCompactJumpBackIn_tabTrayGroupsDisabled_withLessJumpBackInTabs() {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
-        mockProfile.hasSyncableAccountMock = false
-        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1]
-
-        let subject = createSubject()
-        subject.refreshData(maxItemToDisplay: 2)
-
-        let jumpBackIn = subject.getJumpBackInData()
-        XCTAssertEqual(jumpBackIn.tabs.count, 1, "With a max of 2 items, only shows 1 item when only 1 is available")
-        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
-    }
-
-    func testCompactJumpBackInAndSyncedTab_tabTrayGroupsDisabled_withMoreJumpBackInTabsAndRemoteTabs() {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
-        mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteDesktopClient(),
-                                                       tabs: remoteTabs(idRange: 1...3))]
-        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
-        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
-        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-
-        let subject = createSubject()
-        subject.refreshData(maxItemToDisplay: 1)
-
-        let jumpBackIn = subject.getJumpBackInData()
-        XCTAssertEqual(jumpBackIn.tabs.count, 1, "iPhone portrait has 1 tab in it's jumpbackin layout")
-        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
-        XCTAssertFalse(jumpBackIn.tabs.contains(tab2))
-        XCTAssertFalse(jumpBackIn.tabs.contains(tab3))
-
-        let syncTab = subject.getSyncedTabData()
-        XCTAssertNotNil(syncTab, "iPhone portrait will show 1 sync tab")
-    }
-
-    func testRegularIphone_tabTrayGroupsDisabled() {
-        FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
-        let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
-        let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
-        let tab3 = createTab(profile: mockProfile, urlString: "www.firefox3.com")
-        mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
-
-        let subject = createSubject()
-        subject.refreshData(maxItemToDisplay: 4)
-
-        let jumpBackIn = subject.getJumpBackInData()
-        XCTAssertEqual(jumpBackIn.tabs.count, 3, "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4")
-        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
-        XCTAssertEqual(jumpBackIn.tabs[1], tab2)
-        XCTAssertEqual(jumpBackIn.tabs[2], tab3)
-
-        let syncTab = subject.getSyncedTabData()
-        XCTAssertNil(syncTab)
-    }
-
-    func testRegularWithSyncedTabIphone_tabTrayGroupsDisabled_withSyncTab() {
+    func testGetRecentTabsAndSyncedData() {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox2.com")
@@ -124,16 +64,12 @@ class JumpBackInDataAdaptorTests: XCTestCase {
                                                        tabs: remoteTabs(idRange: 1...3))]
 
         let subject = createSubject()
-        subject.refreshData(maxItemToDisplay: 2)
 
-        let jumpBackIn = subject.getJumpBackInData()
-        XCTAssertEqual(jumpBackIn.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")
-        XCTAssertEqual(jumpBackIn.tabs[0], tab1)
-        XCTAssertEqual(jumpBackIn.tabs[1], tab2)
-        XCTAssertFalse(jumpBackIn.tabs.contains(tab3))
+        let recentTabs = subject.getRecentTabData()
+        XCTAssertEqual(recentTabs.count, 3)
 
         let syncTab = subject.getSyncedTabData()
-        XCTAssertNotNil(syncTab, "iPhone landscape will show 1 sync tab")
+        XCTAssertNotNil(syncTab)
     }
 
     func testSyncTab_whenNoSyncTabsData_notReturned() {
@@ -200,7 +136,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
 extension JumpBackInDataAdaptorTests {
 
     func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
-        let dispatchGroup = MockDispatchGroup()
         let dispatchQueue = MockDispatchQueue()
         let siteImageHelper = SiteImageHelperMock()
         let notificationCenter = SpyNotificationCenter()
@@ -208,14 +143,11 @@ extension JumpBackInDataAdaptorTests {
         let subject = JumpBackInDataAdaptorImplementation(profile: mockProfile,
                                                           tabManager: mockTabManager,
                                                           siteImageHelper: siteImageHelper,
-                                                          dispatchGroup: dispatchGroup,
-                                                          mainQueue: dispatchQueue,
-                                                          userInteractiveQueue: dispatchQueue,
+                                                          userInitiatedQueue: dispatchQueue,
                                                           notificationCenter: notificationCenter)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         trackForMemoryLeaks(siteImageHelper, file: file, line: line)
-        trackForMemoryLeaks(dispatchGroup, file: file, line: line)
         trackForMemoryLeaks(dispatchQueue, file: file, line: line)
 
         return subject

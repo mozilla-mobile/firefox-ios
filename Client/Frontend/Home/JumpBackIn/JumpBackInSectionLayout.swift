@@ -4,9 +4,9 @@
 
 import Foundation
 
-enum JumpBackInDisplayGroup {
-    case jumpBackIn
-    case syncedTab
+struct JumpBackInDisplayGroupCount {
+    var tabsCount: Int
+    var syncedTabCount: Int
 }
 
 enum JumpBackInSectionLayout: Equatable {
@@ -53,15 +53,14 @@ enum JumpBackInSectionLayout: Equatable {
     }
 
     // The maximum number of items to display in the whole section
-    func maxItemsToDisplay(displayGroup: JumpBackInDisplayGroup,
-                           hasAccount: Bool,
-                           device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> Int {
-        switch displayGroup {
-        case .jumpBackIn:
-            return maxJumpBackInItemsToDisplay(device: device)
-        case .syncedTab:
-            return hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0
-        }
+    func maxItemsToDisplay(hasAccount: Bool,
+                           device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+    ) -> JumpBackInDisplayGroupCount {
+
+        return JumpBackInDisplayGroupCount(
+            tabsCount: maxJumpBackInItemsToDisplay(device: device),
+            syncedTabCount: hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0
+        )
     }
 
     // The maximum number of Jump Back In items to display in the whole section
