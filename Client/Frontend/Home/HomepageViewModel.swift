@@ -144,7 +144,7 @@ class HomepageViewModel: FeatureFlaggable {
             isPrivate: isPrivate,
             urlBar: urlBar,
             theme: theme,
-            historyHighlightsDataAdaptor: historyDataAdaptor,
+            recentlyVisitedDataAdaptor: historyDataAdaptor,
             wallpaperManager: wallpaperManager)
 
         let pocketDataAdaptor = PocketDataAdaptorImplementation(

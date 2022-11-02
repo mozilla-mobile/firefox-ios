@@ -18,18 +18,18 @@ class RecentlyVisitedViewModel {
 
     // MARK: - Properties & Variables
     var theme: Theme
-    var historyItems = [RecentlyVisitedItem]()
+    var items = [RecentlyVisitedItem]()
     private var profile: Profile
     private var isPrivate: Bool
     private var urlBar: URLBarViewProtocol
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
-    private var historyHighlightsDataAdaptor: RecentlyVisitedDataAdaptor
+    private var recentlyVisitedDataAdaptor: RecentlyVisitedDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
     private let telemetry: TelemetryWrapperProtocol
 
     var onTapItem: ((RecentlyVisitedItem) -> Void)?
-    var historyHighlightLongPressHandler: ((RecentlyVisitedItem, UIView?) -> Void)?
+    var recentlyVisitedLongPressHandler: ((RecentlyVisitedItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
@@ -40,17 +40,17 @@ class RecentlyVisitedViewModel {
     /// available such that we always have the appropriate number of columns for the
     /// rest of the dynamic calculations.
     var numberOfColumns: Int {
-        return Int(ceil(Double(historyItems.count) / Double(UX.maxNumberOfItemsPerColumn)))
+        return Int(ceil(Double(items.count) / Double(UX.maxNumberOfItemsPerColumn)))
     }
 
     var numberOfRows: Int {
-        return historyItems.count < UX.maxNumberOfItemsPerColumn ? historyItems.count : UX.maxNumberOfItemsPerColumn
+        return items.count < UX.maxNumberOfItemsPerColumn ? items.count : UX.maxNumberOfItemsPerColumn
     }
 
     /// Group weight used to create collection view compositional layout
     /// Case 1: For compact and a single column use 0.9 to occupy must of the width of the parent
     /// Case 2: For compact and multiple columns 0.8 to show part of the next column
-    /// Case 3: For ipad and iphone landscape we use 1/3 of the available width
+    /// Case 3: For iPad and iPhone landscape we use 1/3 of the available width
     var groupWidthWeight: NSCollectionLayoutDimension {
         guard !UIDevice().isIphoneLandscape,
               UIDevice.current.userInterfaceIdiom != .pad else {
@@ -66,7 +66,7 @@ class RecentlyVisitedViewModel {
          isPrivate: Bool,
          urlBar: URLBarViewProtocol,
          theme: Theme,
-         historyHighlightsDataAdaptor: RecentlyVisitedDataAdaptor,
+         recentlyVisitedDataAdaptor: RecentlyVisitedDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
          telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
          wallpaperManager: WallpaperManager) {
@@ -77,8 +77,8 @@ class RecentlyVisitedViewModel {
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry
         self.wallpaperManager = wallpaperManager
-        self.historyHighlightsDataAdaptor = historyHighlightsDataAdaptor
-        self.historyHighlightsDataAdaptor.delegate = self
+        self.recentlyVisitedDataAdaptor = recentlyVisitedDataAdaptor
+        self.recentlyVisitedDataAdaptor.delegate = self
     }
 
     // MARK: - Public methods
@@ -112,13 +112,13 @@ class RecentlyVisitedViewModel {
     }
 
     func getItemDetailsAt(index: Int) -> RecentlyVisitedItem? {
-        guard let selectedItem = historyItems[safe: index] else { return nil }
+        guard let selectedItem = items[safe: index] else { return nil }
 
         return selectedItem
     }
 
     func delete(_ item: RecentlyVisitedItem) {
-        historyHighlightsDataAdaptor.delete(item)
+        recentlyVisitedDataAdaptor.delete(item)
     }
 }
 
@@ -189,15 +189,15 @@ extension RecentlyVisitedViewModel: HomepageViewModelProtocol, FeatureFlaggable 
         // we can return the standard count, as we don't need to display filler cells.
         // However, if there's more items, filler cells needs to be accounted for, so sections
         // are always a multiple of the max number of items allowed per column.
-        if historyItems.count <= UX.maxNumberOfItemsPerColumn {
-            return historyItems.count
+        if items.count <= UX.maxNumberOfItemsPerColumn {
+            return items.count
         } else {
             return numberOfColumns * UX.maxNumberOfItemsPerColumn
         }
     }
 
     var hasData: Bool {
-        return !historyItems.isEmpty
+        return !items.isEmpty
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -223,13 +223,13 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
         recordSectionHasShown()
 
         let hideBottomLine = isBottomCell(indexPath: indexPath,
-                                          totalItems: historyItems.count)
+                                          totalItems: items.count)
         let cornersToRound = determineCornerToRound(indexPath: indexPath,
-                                                    totalItems: historyItems.count)
+                                                    totalItems: items.count)
         let shouldAddShadow = isBottomOfColumn(with: indexPath.row,
-                                               totalItems: historyItems.count)
+                                               totalItems: items.count)
 
-        guard let item = historyItems[safe: indexPath.row] else {
+        guard let item = items[safe: indexPath.row] else {
             return configureFillerCell(cell,
                                        hideBottomLine: hideBottomLine,
                                        cornersToRound: cornersToRound,
@@ -237,7 +237,7 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
         }
 
         if item.type == .item {
-            return configureIndividualHighlightCell(cell,
+            return configureIndividualCell(cell,
                                                     hideBottomLine: hideBottomLine,
                                                     cornersToRound: cornersToRound,
                                                     shouldAddShadow: shouldAddShadow,
@@ -255,13 +255,13 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
 
-        if let highlight = historyItems[safe: indexPath.row] {
+        if let highlight = items[safe: indexPath.row] {
             switchTo(highlight)
         }
     }
 
     func handleLongPress(with collectionView: UICollectionView, indexPath: IndexPath) {
-        guard let longPressHandler = historyHighlightLongPressHandler,
+        guard let longPressHandler = recentlyVisitedLongPressHandler,
               let selectedItem = getItemDetailsAt(index: indexPath.row)
         else { return }
 
@@ -361,11 +361,11 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
         return false
     }
 
-    private func configureIndividualHighlightCell(_ cell: UICollectionViewCell,
-                                                  hideBottomLine: Bool,
-                                                  cornersToRound: CACornerMask?,
-                                                  shouldAddShadow: Bool,
-                                                  item: RecentlyVisitedItem) -> UICollectionViewCell {
+    private func configureIndividualCell(_ cell: UICollectionViewCell,
+                                         hideBottomLine: Bool,
+                                         cornersToRound: CACornerMask?,
+                                         shouldAddShadow: Bool,
+                                         item: RecentlyVisitedItem) -> UICollectionViewCell {
 
         guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
@@ -392,17 +392,14 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
                                              cornersToRound: CACornerMask?,
                                              shouldAddShadow: Bool,
                                              item: RecentlyVisitedItem) -> UICollectionViewCell {
-
         guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
         let cellOptions = RecentlyVisitedCellViewModel(title: item.displayTitle,
-                                                 description: item.description,
-                                                 shouldHideBottomLine: hideBottomLine,
-                                                 with: cornersToRound,
-                                                 shouldAddShadow: shouldAddShadow)
-
+                                                       description: item.description,
+                                                       shouldHideBottomLine: hideBottomLine,
+                                                       with: cornersToRound,
+                                                       shouldAddShadow: shouldAddShadow)
         cell.configureCell(with: cellOptions, theme: theme)
-
         return cell
 
     }
@@ -411,7 +408,6 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
                                      hideBottomLine: Bool,
                                      cornersToRound: CACornerMask?,
                                      shouldAddShadow: Bool) -> UICollectionViewCell {
-
         guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
         let cellOptions = RecentlyVisitedCellViewModel(shouldHideBottomLine: hideBottomLine,
@@ -423,12 +419,12 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
     }
 }
 
-// MARK: - HistoryHighlightsDelegate
+// MARK: - RecentlyVisitedDelegate
 
 extension RecentlyVisitedViewModel: RecentlyVisitedDelegate {
     func didLoadNewData() {
         dispatchQueue.ensureMainThread {
-            self.historyItems = self.historyHighlightsDataAdaptor.getRecentlyVisited()
+            self.items = self.recentlyVisitedDataAdaptor.getRecentlyVisited()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
