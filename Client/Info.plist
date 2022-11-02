@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AdjustAppToken</key>
+	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
@@ -99,12 +101,10 @@
 		<string>QuickActionIntent</string>
 		<string>org.mozilla.ios.firefox.browsing</string>
 	</array>
-	<key>PocketEnvironmentAPIKey</key>
-	<string>$(POCKET_API_KEY)</string>
-	<key>AdjustAppToken</key>
-	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>NimbusURL</key>
 	<string>$(NIMBUS_URL)</string>
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
 	<key>SentryCloudDSN</key>
 	<string>$(SENTRY_CLOUD_DSN)</string>
 	<key>UIAppFonts</key>
@@ -114,6 +114,25 @@
 		<string>NewYorkMedium-Regular.otf</string>
 		<string>NewYorkMedium-RegularItalic.otf</string>
 	</array>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneClassName</key>
+					<string>UIWindowScene</string>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>UIApplicationShortcutItems</key>
 	<array>
 		<dict>
@@ -141,6 +160,8 @@
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).QRCode</string>
 		</dict>
 	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
@@ -171,8 +192,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UTImportedTypeDeclarations</key>
 	<array>

@@ -53,14 +53,12 @@ class ThemableTests: XCTestCaseRootViewController {
     }
 
     func testGetAllSubviews_withTableView() {
-        loadViewForTesting()
-
         let tableView = UITableView(frame: CGRect(width: 200, height: 300))
         tableView.dataSource = tableViewDelegate
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: TestsTableView.testCellId)
         rootViewController.view.addSubview(tableView)
-        tableView.reloadData()
-        wait(0.5)
+
+        loadViewForTesting()
 
         let result = testThemable.getAllSubviews(for: tableView, ofType: UITableViewCell.self)
         XCTAssertEqual(result.count, 3, "Retrieving three UITableViewCell in tableview")

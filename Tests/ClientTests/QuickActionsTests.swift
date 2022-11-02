@@ -62,7 +62,8 @@ private extension QuickActionsTest {
         }
 
         _ = quickActions.handleShortCutItem(shortcutItem,
-                                            withBrowserViewController: browserViewController)
+                                            withBrowserViewController: browserViewController,
+                                            completionHandler: { _ in })
         waitForExpectations(timeout: 5, handler: nil)
     }
 }

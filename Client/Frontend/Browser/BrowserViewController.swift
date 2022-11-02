@@ -169,14 +169,17 @@ class BrowserViewController: UIViewController {
 
     fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
-    init(profile: Profile,
-         tabManager: TabManager,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+    init(
+        profile: Profile,
+        tabManager: TabManager,
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve()
+    ) {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
+        self.ratingPromptManager = ratingPromptManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
-        self.ratingPromptManager = RatingPromptManager(profile: profile)
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -2683,13 +2686,16 @@ extension BrowserViewController: FeatureFlaggable {
 }
 
 extension BrowserViewController {
+    /// This method now returns the BrowserViewController associated with the scene.
+    /// We currently have a single scene app setup, so this will change as we introduce support for multiple scenes.
     public static func foregroundBVC() -> BrowserViewController {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-              let browserViewController = appDelegate.browserViewController else {
-            fatalError("Unable unwrap BrowserViewController")
+        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else {
+            /// Currently, we have a single scene app. If we're here, there's no scene or window.
+            /// This should be impossible, and fatal.
+            fatalError("Unable to fetch the Scene.")
         }
 
-        return browserViewController
+        return sceneDelegate.browserViewController
     }
 }
 

@@ -95,9 +95,12 @@ class MockQuickActions: QuickActions {
     }
 
     var handleShortCutItemCalled = 0
-    func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem,
-                            withBrowserViewController bvc: BrowserViewController) -> Bool {
+    func handleShortCutItem(
+        _ shortcutItem: UIApplicationShortcutItem,
+        withBrowserViewController bvc: BrowserViewController,
+        completionHandler: @escaping (Bool) -> Void
+    ) {
         handleShortCutItemCalled += 1
-        return true
+        completionHandler(true)
     }
 }
