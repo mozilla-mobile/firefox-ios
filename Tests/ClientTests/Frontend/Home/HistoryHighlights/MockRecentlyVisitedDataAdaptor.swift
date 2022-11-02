@@ -4,7 +4,7 @@
 
 @testable import Client
 
-class MockHistoryHighlightsDataAdaptor: RecentlyVisitedDataAdaptor {
+class MockRecentlyVisitedDataAdaptor: RecentlyVisitedDataAdaptor {
 
     var mockHistoryItems = [RecentlyVisitedItem]()
     var delegate: RecentlyVisitedDelegate?

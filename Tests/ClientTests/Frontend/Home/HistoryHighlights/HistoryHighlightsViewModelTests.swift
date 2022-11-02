@@ -10,7 +10,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
     private var subject: RecentlyVisitedViewModel!
     private var profile: MockProfile!
-    private var dataAdaptor: MockHistoryHighlightsDataAdaptor!
+    private var dataAdaptor: MockRecentlyVisitedDataAdaptor!
     private var delegate: MockHomepageDataModelDelegate!
     private var telemetry: MockTelemetryWrapper!
     private var urlBar: MockURLBarView!
@@ -20,7 +20,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
         profile = MockProfile()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        dataAdaptor = MockHistoryHighlightsDataAdaptor()
+        dataAdaptor = MockRecentlyVisitedDataAdaptor()
         delegate = MockHomepageDataModelDelegate()
         telemetry = MockTelemetryWrapper()
         urlBar = MockURLBarView()
