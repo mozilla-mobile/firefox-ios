@@ -42,6 +42,7 @@
         "AuthenticationTest\/testWrongPasscodeAttemptsPersistAcrossEntryAndConfirmation()",
         "AuthenticationTest\/testWrongPasscodeDisplaysAttemptsAndMaxError()",
         "BaseTestCase",
+        "BookmarkingTests\/testAccessBookmarksFromContextMenu()",
         "BookmarkingTests\/testBookmarkingUI()",
         "BrowsingPDFTests",
         "ClipBoardTests\/testClipboard()",

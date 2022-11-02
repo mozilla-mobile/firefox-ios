@@ -282,10 +282,16 @@ class BookmarkingTests: BaseTestCase {
         // Check that it appears in Bookmarks panel
         navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"], timeout: 5)
-        app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].press(forDuration: 1)
-        waitForExistence(app.tables["Context Menu"])
+
         // Delete the Bookmark added, check it is removed
-        app.tables.otherElements["Remove Bookmark"].tap()
+        if processIsTranslatedStr() == m1Rosetta {
+            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].press(forDuration: 1)
+            waitForExistence(app.tables["Context Menu"])
+            app.tables.otherElements["Remove Bookmark"].tap()
+        } else {
+            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
+            app.buttons["Delete"].tap()
+        }
         waitForNoExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeoutValue: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
     }

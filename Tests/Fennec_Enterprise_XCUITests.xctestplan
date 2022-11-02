@@ -37,6 +37,7 @@
         "ActivityStreamTest\/testTopSitesRemoveAllExceptDefaultClearPrivateData()",
         "AuthenticationTest\/testPromptPassCodeUponReentry()",
         "BaseTestCase",
+        "BookmarkingTests\/testBookmarkLibraryAddDeleteBookmark()",
         "BookmarkingTests\/testBookmarksAwesomeBar()",
         "BookmarkingTests\/testUndoDeleteBookmark()",
         "BrowsingPDFTests",
