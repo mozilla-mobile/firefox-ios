@@ -125,8 +125,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private let syncedDeviceLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 2
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   size: UX.deviceSourceFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+                                                                       size: UX.deviceSourceFontSize)
         label.textColor = .label
         label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.descriptionLabel
     }

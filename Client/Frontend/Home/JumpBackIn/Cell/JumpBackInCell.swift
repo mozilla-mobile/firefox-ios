@@ -68,8 +68,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   size: UX.siteFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+                                                                       size: UX.siteFontSize)
+        label.textColor = .label
     }
 
     // Used as a fallback if hero image isn't set

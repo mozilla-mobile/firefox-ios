@@ -67,7 +67,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
                                                                    size: UX.siteFontSize)
     }
 
