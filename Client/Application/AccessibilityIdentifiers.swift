@@ -70,8 +70,8 @@ public struct AccessibilityIdentifiers {
             static let itemCell = "PocketCell"
         }
 
-        struct HistoryHighlights {
-            static let itemCell = "HistoryHighlightsCell"
+        struct RecentlyVisited {
+            static let itemCell = "RecentlyVisitedCell"
         }
 
         struct JumpBackIn {

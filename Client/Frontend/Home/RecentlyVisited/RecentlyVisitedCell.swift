@@ -65,7 +65,7 @@ class RecentlyVisitedCell: UICollectionViewCell, ReusableCell {
         super.init(frame: .zero)
 
         isAccessibilityElement = true
-        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.RecentlyVisited.itemCell
 
         setupLayout()
     }
