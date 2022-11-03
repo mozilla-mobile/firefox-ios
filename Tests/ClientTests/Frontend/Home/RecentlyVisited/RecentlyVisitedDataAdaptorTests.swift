@@ -9,7 +9,7 @@ import MozillaAppServices
 class RecentlyVisitedDataAdaptorTests: XCTestCase {
 
     var subject: RecentlyVisitedDataAdaptor!
-    var historyManager: MockRecentlyVisitedManager!
+    var recentlyVisitedManager: MockRecentlyVisitedManager!
     var notificationCenter: MockNotificationCenter!
     var delegate: MockRecentlyVisitedDelegate!
     var deletionUtility: MockHistoryDeletionProtocol!
@@ -17,13 +17,13 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        historyManager = MockRecentlyVisitedManager()
+        recentlyVisitedManager = MockRecentlyVisitedManager()
         notificationCenter = MockNotificationCenter()
         delegate = MockRecentlyVisitedDelegate()
         deletionUtility = MockHistoryDeletionProtocol()
 
         let subject = RecentlyVisitedDataAdaptorImplementation(
-            historyManager: historyManager,
+            historyManager: recentlyVisitedManager,
             profile: MockProfile(),
             tabManager: MockTabManager(),
             notificationCenter: notificationCenter,
@@ -36,7 +36,7 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         subject = nil
-        historyManager = nil
+        recentlyVisitedManager = nil
         notificationCenter = nil
         delegate = nil
         deletionUtility = nil
@@ -45,40 +45,40 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
     // Loads history on first launch with data
     func testInitialLoadWithHistoryData() {
         let item: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
-        historyManager.callGetRecentlyVisitedDataCompletion(result: [item])
+        recentlyVisitedManager.callGetRecentlyVisitedDataCompletion(result: [item])
 
         let results = subject.getRecentlyVisited()
 
         XCTAssertEqual(results.count, 1)
-        XCTAssertEqual(historyManager.getDataCallCount, 1)
+        XCTAssertEqual(recentlyVisitedManager.getDataCallCount, 1)
         XCTAssertEqual(delegate.didLoadNewDataCallCount, 1)
     }
 
     // Loads history on first launch without data
     func testInitialLoadWithNoHistoryData() {
-        historyManager.callGetRecentlyVisitedDataCompletion(result: [])
+        recentlyVisitedManager.callGetRecentlyVisitedDataCompletion(result: [])
 
         let results = subject.getRecentlyVisited()
 
         XCTAssert(results.isEmpty)
-        XCTAssertEqual(historyManager.getDataCallCount, 1)
+        XCTAssertEqual(recentlyVisitedManager.getDataCallCount, 1)
         XCTAssertEqual(delegate.didLoadNewDataCallCount, 1)
     }
 
     // Reloads for notification
     func testReloadDataOnNotification() {
-        historyManager.callGetRecentlyVisitedDataCompletion(result: [])
+        recentlyVisitedManager.callGetRecentlyVisitedDataCompletion(result: [])
 
         notificationCenter.post(name: .HistoryUpdated)
 
         let item1: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
         let item2: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
-        historyManager.callGetRecentlyVisitedDataCompletion(result: [item1, item2])
+        recentlyVisitedManager.callGetRecentlyVisitedDataCompletion(result: [item1, item2])
 
         let results = subject.getRecentlyVisited()
 
         XCTAssertEqual(results.count, 2)
-        XCTAssertEqual(historyManager.getDataCallCount, 2)
+        XCTAssertEqual(recentlyVisitedManager.getDataCallCount, 2)
         XCTAssertEqual(delegate.didLoadNewDataCallCount, 2)
     }
 
@@ -88,12 +88,12 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
                                                     url: "www.firefox.com",
                                                     title: "",
                                                     previewImageUrl: "")
-        historyManager.callGetRecentlyVisitedDataCompletion(result: [item1])
+        recentlyVisitedManager.callGetRecentlyVisitedDataCompletion(result: [item1])
 
         subject.delete(item1)
         deletionUtility.callDeleteCompletion(result: true)
 
-        XCTAssertEqual(historyManager.getDataCallCount, 2)
+        XCTAssertEqual(recentlyVisitedManager.getDataCallCount, 2)
     }
 
     func testDeleteGroupItem() {
@@ -107,11 +107,11 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
                                            groupedItems: [item],
                                            timestamp: 0)
 
-        historyManager.callGetRecentlyVisitedDataCompletion(result: [group])
+        recentlyVisitedManager.callGetRecentlyVisitedDataCompletion(result: [group])
 
         subject.delete(group)
         deletionUtility.callDeleteCompletion(result: true)
 
-        XCTAssertEqual(historyManager.getDataCallCount, 2)
+        XCTAssertEqual(recentlyVisitedManager.getDataCallCount, 2)
     }
 }

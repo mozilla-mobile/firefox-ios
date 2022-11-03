@@ -11,9 +11,9 @@ protocol HomepageContextMenuProtocol {
     func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType)
     func presentContextMenu(for site: Site, with sourceView: UIView?, sectionType: HomepageSectionType, completionHandler: @escaping () -> PhotonActionSheet?)
 
-    func getContextMenuActions(for highlightItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> [PhotonRowActions]?
-    func presentContextMenu(for highlightItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType)
-    func presentContextMenu(for highlightItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType, completionHandler: @escaping () -> PhotonActionSheet?)
+    func getContextMenuActions(for recentlyVisitedItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> [PhotonRowActions]?
+    func presentContextMenu(for recentlyVisitedItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType)
+    func presentContextMenu(for recentlyVisitedItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType, completionHandler: @escaping () -> PhotonActionSheet?)
 
 }
 
@@ -44,30 +44,30 @@ extension HomepageContextMenuProtocol {
     }
 
     // MARK: - Highlight Item
-    func presentContextMenu(for highlightItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType) {
-        presentContextMenu(for: highlightItem, with: sourceView, sectionType: sectionType, completionHandler: {
-            return self.contextMenu(for: highlightItem, with: sourceView, sectionType: sectionType)
+    func presentContextMenu(for recentlyVisitedItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType) {
+        presentContextMenu(for: recentlyVisitedItem, with: sourceView, sectionType: sectionType, completionHandler: {
+            return self.contextMenu(for: recentlyVisitedItem, with: sourceView, sectionType: sectionType)
         })
     }
-    func contextMenu(for highlightItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> PhotonActionSheet? {
-        guard let actions = getContextMenuActions(for: highlightItem,
+    func contextMenu(for recentlyVisitedItem: RecentlyVisitedItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> PhotonActionSheet? {
+        guard let actions = getContextMenuActions(for: recentlyVisitedItem,
                                                   with: sourceView,
                                                   sectionType: sectionType)
         else { return nil }
 
         var viewModel: PhotonActionSheetViewModel
 
-        switch highlightItem.type {
+        switch recentlyVisitedItem.type {
         case .item:
-            guard let url = highlightItem.siteUrl?.absoluteString else { return nil }
-            let site = Site(url: url, title: highlightItem.displayTitle)
+            guard let url = recentlyVisitedItem.siteUrl?.absoluteString else { return nil }
+            let site = Site(url: url, title: recentlyVisitedItem.displayTitle)
 
             viewModel = PhotonActionSheetViewModel(actions: [actions],
                                                    site: site,
                                                    modalStyle: .overFullScreen)
         case .group:
             viewModel = PhotonActionSheetViewModel(actions: [actions],
-                                                   title: highlightItem.displayTitle,
+                                                   title: recentlyVisitedItem.displayTitle,
                                                    modalStyle: .overFullScreen)
         }
 

@@ -24,7 +24,7 @@
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.jumpBackIn))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.pocket))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.recentlySaved))
-//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.recentlyVisited))
+//        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.historyHighlights))
 //        XCTAssertTrue(nimbusLayer.checkNimbusConfigFor(.topSites))
 //        XCTAssertFalse(nimbusLayer.checkNimbusConfigFor(.inactiveTabs))
 //    }

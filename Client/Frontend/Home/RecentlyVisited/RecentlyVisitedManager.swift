@@ -88,7 +88,7 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
 
     // MARK: - Public interface
 
-    /// Fetches HistoryHighlights from A~S, and then filters currently open
+    /// Fetches HistoryHighlight from A~S, and then filters currently open
     /// tabs against history highlights in order to avoid duplicated items. Then,
     /// if `shouldGroup` is set to true, applies group logic and finally,
     /// collates individual HistoryHighlight with `ASGroup<HistoryHighlight>`

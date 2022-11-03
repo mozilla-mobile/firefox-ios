@@ -86,12 +86,12 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     // MARK: - Recently Visited
 
-    private func getRecentlyVisitedActions(for highlightItem: RecentlyVisitedItem) -> [PhotonRowActions]? {
+    private func getRecentlyVisitedActions(for recentlyVisitedItem: RecentlyVisitedItem) -> [PhotonRowActions]? {
         return [SingleActionViewModel(title: .RemoveContextMenuTitle,
                                       iconString: ImageIdentifiers.actionRemove,
                                       tapHandler: { _ in
 
-            self.viewModel.recentlyVisitedViewModel.delete(highlightItem)
+            self.viewModel.recentlyVisitedViewModel.delete(recentlyVisitedItem)
             self.sendRecentlyVisitedContextualTelemetry(type: .remove)
         }).items]
     }

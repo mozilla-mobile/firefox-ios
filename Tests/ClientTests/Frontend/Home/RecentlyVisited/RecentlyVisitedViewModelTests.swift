@@ -39,7 +39,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testLoadNewDataIsEnabled() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "mozilla")]
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "mozilla")]
 
         subject.didLoadNewData()
 
@@ -49,7 +49,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testLoadNewDataIsNotEnabled() {
         setupSubject(isPrivate: true)
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "mozilla")]
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "mozilla")]
 
         subject.didLoadNewData()
 
@@ -59,7 +59,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testOneColumns() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one"),
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three")]
 
@@ -71,7 +71,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testTwoColumns() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one"),
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four")]
@@ -84,7 +84,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testThreeColumns() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one"),
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four"),
@@ -143,7 +143,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testNumberOfItemsInSection1Column() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one"),
                                         getItemWithTitle(title: "two")]
         subject.didLoadNewData()
 
@@ -152,7 +152,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testNumberOfItemsInSection2Column() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one"),
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four")]
@@ -163,7 +163,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testNumberOfItemsInSection3Column() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one"),
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four"),
@@ -177,7 +177,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testConfigureFillerCell() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one"),
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one"),
                                         getItemWithTitle(title: "two"),
                                         getItemWithTitle(title: "three"),
                                         getItemWithTitle(title: "four")]
@@ -190,7 +190,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testConfigureIndividualCell() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one")]
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one")]
         subject.didLoadNewData()
         let cell = subject.configure(RecentlyVisitedCell(), at: IndexPath(row: 0, section: 0)) as? RecentlyVisitedCell
 
@@ -204,7 +204,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
                            groupedItems: [getItemWithTitle(title: "one"), getItemWithTitle(title: "two")],
                            timestamp: 0)
 
-        dataAdaptor.mockHistoryItems = [item]
+        dataAdaptor.mockRecentlyVisitedItems = [item]
         subject.didLoadNewData()
         let cell = subject.configure(RecentlyVisitedCell(), at: IndexPath(row: 0, section: 0)) as? RecentlyVisitedCell
 
@@ -216,7 +216,7 @@ class RecentlyVisitedViewModelTests: XCTestCase {
 
     func testDidSelectItem() {
         setupSubject()
-        dataAdaptor.mockHistoryItems = [getItemWithTitle(title: "one")]
+        dataAdaptor.mockRecentlyVisitedItems = [getItemWithTitle(title: "one")]
         subject.didLoadNewData()
         subject.didSelectItem(at: IndexPath(row: 0, section: 0),
                               homePanelDelegate: nil,

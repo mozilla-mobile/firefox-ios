@@ -6,12 +6,12 @@
 
 class MockRecentlyVisitedDataAdaptor: RecentlyVisitedDataAdaptor {
 
-    var mockHistoryItems = [RecentlyVisitedItem]()
+    var mockRecentlyVisitedItems = [RecentlyVisitedItem]()
     var delegate: RecentlyVisitedDelegate?
     var deleteCallCount = 0
 
     func getRecentlyVisited() -> [RecentlyVisitedItem] {
-        return mockHistoryItems
+        return mockRecentlyVisitedItems
     }
 
     func delete(_ item: RecentlyVisitedItem) {

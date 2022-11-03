@@ -10,16 +10,16 @@ class MockRecentlyVisitedManager: RecentlyVisitedManagerProtocol {
     var getDataCompletion: (([RecentlyVisitedItem]?) -> Void)?
 
     func searchData(searchQuery: String,
-                              profile: Profile,
-                              tabs: [Tab],
-                              resultCount: Int,
-                              completion: @escaping ([RecentlyVisitedItem]?) -> Void) {}
+                    profile: Profile,
+                    tabs: [Tab],
+                    resultCount: Int,
+                    completion: @escaping ([RecentlyVisitedItem]?) -> Void) {}
 
     func getData(with profile: Profile,
-                           and tabs: [Tab],
-                           shouldGroup: Bool,
-                           resultCount: Int,
-                           completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
+                 and tabs: [Tab],
+                 shouldGroup: Bool,
+                 resultCount: Int,
+                 completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
         getDataCallCount += 1
         getDataCompletion = completion
     }
