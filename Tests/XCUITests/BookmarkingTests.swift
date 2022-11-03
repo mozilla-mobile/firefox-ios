@@ -108,7 +108,8 @@ class BookmarkingTests: BaseTestCase {
     private func checkItemInBookmarkList() {
         waitForExistence(app.tables["Bookmarks List"], timeout: 5)
         let list = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
+        XCTAssertEqual(list, 2, "There should be an entry in the bookmarks list")
+        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts["Desktop Bookmarks"].exists)
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
     }
 
@@ -123,7 +124,7 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         // There should be a bookmark
-        navigator.goto(MobileBookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList()
     }
 
@@ -281,9 +282,16 @@ class BookmarkingTests: BaseTestCase {
         // Check that it appears in Bookmarks panel
         navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"], timeout: 5)
-        app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
+
         // Delete the Bookmark added, check it is removed
-        app.buttons["Delete"].tap()
+        if processIsTranslatedStr() == m1Rosetta {
+            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].press(forDuration: 1)
+            waitForExistence(app.tables["Context Menu"])
+            app.tables.otherElements["Remove Bookmark"].tap()
+        } else {
+            app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
+            app.buttons["Delete"].tap()
+        }
         waitForNoExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeoutValue: 10)
         XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
     }
