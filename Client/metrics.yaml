@@ -1901,6 +1901,11 @@ search:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
   default_engine:
     type: string
     lifetime: application
@@ -1916,6 +1921,11 @@ search:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
   start_search_pressed:
     type: counter
     description: |
@@ -1941,6 +1951,11 @@ search:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-01-01"
+    send_in_pings:
+      - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
   google_topsite_pressed:
     type: labeled_counter
     description: |
@@ -2692,6 +2707,9 @@ browser_search:
       The key format is `<provider-name>`.
     send_in_pings:
       - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7616
     data_reviews:
@@ -2707,6 +2725,9 @@ browser_search:
       The key format is `<provider-name>`.
     send_in_pings:
       - metrics
+      - baseline
+    no_lint:
+      - BASELINE_PING
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7616
     data_reviews:
