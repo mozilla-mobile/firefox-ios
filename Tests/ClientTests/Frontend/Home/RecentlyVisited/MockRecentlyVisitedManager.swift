@@ -24,7 +24,7 @@ class MockRecentlyVisitedManager: RecentlyVisitedManagerProtocol {
         getDataCompletion = completion
     }
 
-    func callGetHighlightsDataCompletion(result: [RecentlyVisitedItem]) {
+    func callGetRecentlyVisitedDataCompletion(result: [RecentlyVisitedItem]) {
         getDataCompletion?(result)
     }
 }

@@ -94,10 +94,10 @@ class RecentlyVisitedViewModel {
         }
     }
 
-    func switchTo(_ highlight: RecentlyVisitedItem) {
+    func switchTo(_ recentlyVisitedItem: RecentlyVisitedItem) {
         if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
 
-        onTapItem?(highlight)
+        onTapItem?(recentlyVisitedItem)
         telemetry.recordEvent(category: .action,
                               method: .tap,
                               object: .firefoxHomepage,
@@ -238,16 +238,16 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
 
         if item.type == .item {
             return configureIndividualCell(cell,
-                                                    hideBottomLine: hideBottomLine,
-                                                    cornersToRound: cornersToRound,
-                                                    shouldAddShadow: shouldAddShadow,
-                                                    item: item)
+                                           hideBottomLine: hideBottomLine,
+                                           cornersToRound: cornersToRound,
+                                           shouldAddShadow: shouldAddShadow,
+                                           item: item)
         } else {
-            return configureGroupHighlightCell(cell,
-                                               hideBottomLine: hideBottomLine,
-                                               cornersToRound: cornersToRound,
-                                               shouldAddShadow: shouldAddShadow,
-                                               item: item)
+            return configureGroupCell(cell,
+                                      hideBottomLine: hideBottomLine,
+                                      cornersToRound: cornersToRound,
+                                      shouldAddShadow: shouldAddShadow,
+                                      item: item)
         }
     }
 
@@ -255,8 +255,8 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
 
-        if let highlight = items[safe: indexPath.row] {
-            switchTo(highlight)
+        if let item = items[safe: indexPath.row] {
+            switchTo(item)
         }
     }
 
@@ -387,11 +387,11 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
         return cell
     }
 
-    private func configureGroupHighlightCell(_ cell: UICollectionViewCell,
-                                             hideBottomLine: Bool,
-                                             cornersToRound: CACornerMask?,
-                                             shouldAddShadow: Bool,
-                                             item: RecentlyVisitedItem) -> UICollectionViewCell {
+    private func configureGroupCell(_ cell: UICollectionViewCell,
+                                    hideBottomLine: Bool,
+                                    cornersToRound: CACornerMask?,
+                                    shouldAddShadow: Bool,
+                                    item: RecentlyVisitedItem) -> UICollectionViewCell {
         guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
         let cellOptions = RecentlyVisitedCellViewModel(title: item.displayTitle,
@@ -411,8 +411,8 @@ extension RecentlyVisitedViewModel: HomepageSectionHandler {
         guard let cell = cell as? RecentlyVisitedCell else { return UICollectionViewCell() }
 
         let cellOptions = RecentlyVisitedCellViewModel(shouldHideBottomLine: hideBottomLine,
-                                                 with: cornersToRound,
-                                                 shouldAddShadow: shouldAddShadow)
+                                                       with: cornersToRound,
+                                                       shouldAddShadow: shouldAddShadow)
 
         cell.configureCell(with: cellOptions, theme: theme)
         return cell

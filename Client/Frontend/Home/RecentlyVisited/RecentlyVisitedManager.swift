@@ -88,16 +88,16 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
 
     // MARK: - Public interface
 
-    /// Fetches RecentlyVisited from A~S, and then filters currently open
-    /// tabs against recently visited in order to avoid duplicated items. Then,
+    /// Fetches HistoryHighlights from A~S, and then filters currently open
+    /// tabs against history highlights in order to avoid duplicated items. Then,
     /// if `shouldGroup` is set to true, applies group logic and finally,
     /// collates individual HistoryHighlight with `ASGroup<HistoryHighlight>`
     /// to return the top nine results alternating between them.
     ///
     /// - Parameters:
     ///   - profile: The user's `Profile` info
-    ///   - tabs: List of `Tab` to filter open tabs from the highlight item list
-    ///   - shouldGroupHighlights: Toggle to support highlight groups in the future for now is set to false
+    ///   - tabs: List of `Tab` to filter open tabs from the recently visited item list
+    ///   - shouldGroup: Toggle to support recently visited groups in the future for now is set to false
     ///   - resultCount: The number of results to return
     ///   - completion: completion handler than contains either a list of `HistoryHighlights` if `shouldGroup` is set to false
     ///   or a combine list of `HistoryHighlights` and `ASGroup<HistoryHighlights>`if is true
@@ -109,7 +109,6 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
         completion: @escaping ([RecentlyVisitedItem]?) -> Void) {
 
         fetchHighlights(with: profile) { highlights in
-
             guard let highlights = highlights, !highlights.isEmpty else {
                 completion(nil)
                 return
@@ -164,8 +163,8 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
     }
 
     /// Collate `HistoryHighlight` groups and individual `HistoryHighlight` items, such that
-    /// the resulting array alternates between them, starting with individual highlights.
-    /// Because groups could be nil, the `HighlightItem` array gets initialized with the 
+    /// the resulting array alternates between them, starting with individual recently visited.
+    /// Because groups could be nil, the `RecentlyVisitedItem` array gets initialized with the
     /// `HistoryHighlight` array and, if not `nil`, groups are then inserted in the odd index
     /// of the array. In case the individual items are done, the rest of the group array gets 
     /// appended to the result array.
@@ -173,11 +172,10 @@ class RecentlyVisitedManager: RecentlyVisitedManagerProtocol {
     /// - Parameters:
     ///   - groups: Search Groups of `ASGroup<HistoryHighlight>`
     ///   - highlights: Individual `HistoryHighlight`
-    /// - Returns: A  `HighlightItem` array alternating `HistoryHighlight` and search `ASGroup<HistoryHighlight>`
+    /// - Returns: A  `RecentlyVisitedItem` array alternating `HistoryHighlight` and search `ASGroup<HistoryHighlight>`
     private func collateForRecentlySaved(
         from groups: [ASGroup<HistoryHighlight>]?,
         and highlights: [HistoryHighlight]) -> [RecentlyVisitedItem] {
-
         guard let groups = groups, !groups.isEmpty else { return highlights }
 
         var highlightItems: [RecentlyVisitedItem] = highlights

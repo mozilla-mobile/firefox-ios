@@ -45,7 +45,7 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
     // Loads history on first launch with data
     func testInitialLoadWithHistoryData() {
         let item: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
-        historyManager.callGetHighlightsDataCompletion(result: [item])
+        historyManager.callGetRecentlyVisitedDataCompletion(result: [item])
 
         let results = subject.getRecentlyVisited()
 
@@ -56,7 +56,7 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
 
     // Loads history on first launch without data
     func testInitialLoadWithNoHistoryData() {
-        historyManager.callGetHighlightsDataCompletion(result: [])
+        historyManager.callGetRecentlyVisitedDataCompletion(result: [])
 
         let results = subject.getRecentlyVisited()
 
@@ -67,13 +67,13 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
 
     // Reloads for notification
     func testReloadDataOnNotification() {
-        historyManager.callGetHighlightsDataCompletion(result: [])
+        historyManager.callGetRecentlyVisitedDataCompletion(result: [])
 
         notificationCenter.post(name: .HistoryUpdated)
 
         let item1: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
         let item2: RecentlyVisitedItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
-        historyManager.callGetHighlightsDataCompletion(result: [item1, item2])
+        historyManager.callGetRecentlyVisitedDataCompletion(result: [item1, item2])
 
         let results = subject.getRecentlyVisited()
 
@@ -88,7 +88,7 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
                                                     url: "www.firefox.com",
                                                     title: "",
                                                     previewImageUrl: "")
-        historyManager.callGetHighlightsDataCompletion(result: [item1])
+        historyManager.callGetRecentlyVisitedDataCompletion(result: [item1])
 
         subject.delete(item1)
         deletionUtility.callDeleteCompletion(result: true)
@@ -107,7 +107,7 @@ class RecentlyVisitedDataAdaptorTests: XCTestCase {
                                            groupedItems: [item],
                                            timestamp: 0)
 
-        historyManager.callGetHighlightsDataCompletion(result: [group])
+        historyManager.callGetRecentlyVisitedDataCompletion(result: [group])
 
         subject.delete(group)
         deletionUtility.callDeleteCompletion(result: true)

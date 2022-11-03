@@ -68,7 +68,7 @@ class SearchViewController: SiteTableViewController,
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [RecentlyVisitedItem]()
-    private var highlightManager: RecentlyVisitedManagerProtocol
+    private var recentlyVisitedManager: RecentlyVisitedManagerProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
@@ -101,11 +101,11 @@ class SearchViewController: SiteTableViewController,
          viewModel: SearchViewModel,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
-         highlightManager: RecentlyVisitedManagerProtocol = RecentlyVisitedManager()) {
+         recentlyVisitedManager: RecentlyVisitedManagerProtocol = RecentlyVisitedManager()) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
-        self.highlightManager = highlightManager
+        self.recentlyVisitedManager = recentlyVisitedManager
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -150,7 +150,7 @@ class SearchViewController: SiteTableViewController,
     private func loadSearchHighlights() {
         guard featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) else { return }
 
-        highlightManager.searchData(
+        recentlyVisitedManager.searchData(
             searchQuery: searchQuery,
             profile: profile,
             tabs: tabManager.tabs,

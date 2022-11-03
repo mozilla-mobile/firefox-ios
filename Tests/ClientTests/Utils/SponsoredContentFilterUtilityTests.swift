@@ -96,8 +96,8 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
 
     func testNoNormalHighlightsFilter() {
         let subject = SponsoredContentFilterUtility()
-        let highlights = createRecentlyVisited(normalHighlightsCount: 5,
-                                               sponsoredHighlightsCount: 0)
+        let highlights = createHistoryHighlight(normalCount: 5,
+                                                sponsoredCount: 0)
         XCTAssertEqual(highlights.count, 5)
         let result = subject.filterSponsoredHighlights(from: highlights)
         XCTAssertEqual(result.count, 5, "No sponsored highlights were removed")
@@ -105,8 +105,8 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
 
     func testSponsoredHighlightsFilter() {
         let subject = SponsoredContentFilterUtility()
-        let highlights = createRecentlyVisited(normalHighlightsCount: 0,
-                                               sponsoredHighlightsCount: 5)
+        let highlights = createHistoryHighlight(normalCount: 0,
+                                                sponsoredCount: 5)
         XCTAssertEqual(highlights.count, 5)
         let result = subject.filterSponsoredHighlights(from: highlights)
         XCTAssertEqual(result.count, 0, "All sponsored highlights were removed")
@@ -114,8 +114,8 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
 
     func testSponsoredHighlightsFilterMixed() {
         let subject = SponsoredContentFilterUtility()
-        let highlights = createRecentlyVisited(normalHighlightsCount: 3,
-                                               sponsoredHighlightsCount: 2)
+        let highlights = createHistoryHighlight(normalCount: 3,
+                                                sponsoredCount: 2)
         XCTAssertEqual(highlights.count, 5)
         let result = subject.filterSponsoredHighlights(from: highlights)
         XCTAssertEqual(result.count, 3, "All sponsored highlights were removed")
@@ -168,10 +168,10 @@ extension SponsoredContentFilterUtilityTests {
         return tabs
     }
 
-    func createRecentlyVisited(normalHighlightsCount: Int,
-                               sponsoredHighlightsCount: Int) -> [HistoryHighlight] {
+    func createHistoryHighlight(normalCount: Int,
+                                sponsoredCount: Int) -> [HistoryHighlight] {
         var highlights = [HistoryHighlight]()
-        (0..<normalHighlightsCount).forEach { index in
+        (0..<normalCount).forEach { index in
             let highlight = HistoryHighlight(score: 0,
                                              placeId: 0,
                                              url: normalURL,
@@ -180,7 +180,7 @@ extension SponsoredContentFilterUtilityTests {
             highlights.append(highlight)
         }
 
-        (0..<sponsoredHighlightsCount).forEach { index in
+        (0..<sponsoredCount).forEach { index in
             let highlight = HistoryHighlight(score: 0,
                                              placeId: 0,
                                              url: sponsoredURL,
