@@ -631,7 +631,6 @@
 		CA4D9D0C28C8D801006AFB5D /* WelcomeTourProfit.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CB628C8D801006AFB5D /* WelcomeTourProfit.swift */; };
 		CA4D9D0D28C8D801006AFB5D /* Ecosia.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA4D9CB828C8D801006AFB5D /* Ecosia.strings */; };
 		CA4D9D0E28C8D801006AFB5D /* Plurals.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = CA4D9CBA28C8D801006AFB5D /* Plurals.stringsdict */; };
-		CA4D9D0F28C8D801006AFB5D /* AppStore.strings in Resources */ = {isa = PBXBuildFile; fileRef = CA4D9CBC28C8D801006AFB5D /* AppStore.strings */; };
 		CA4D9D1228C8D801006AFB5D /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CCA28C8D801006AFB5D /* String.swift */; };
 		CA4D9D1328C8D801006AFB5D /* EcosiaSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CD128C8D801006AFB5D /* EcosiaSettings.swift */; };
 		CA4D9D1428C8D801006AFB5D /* markets.json in Resources */ = {isa = PBXBuildFile; fileRef = CA4D9CD228C8D801006AFB5D /* markets.json */; };
@@ -8510,7 +8509,6 @@
 				7B42406E1CA04CAC009B5C28 /* Menu.xcassets in Resources */,
 				E49943F71AE69EDD00BF9DE4 /* Intro.xcassets in Resources */,
 				4336FAD2264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js in Resources */,
-				CA4D9D0F28C8D801006AFB5D /* AppStore.strings in Resources */,
 				23BEA767251A99ED00A014BF /* NewYorkMedium-Bold.otf in Resources */,
 				3BC659591E5BA505006D560F /* top_sites.json in Resources */,
 				43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */,
