@@ -230,10 +230,18 @@ extension TopSitesViewModel: HomepageSectionHandler {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = topSites[safe: indexPath.row] {
             let favicon = topSitesDataAdaptor.getFaviconImage(forSite: contentItem.site)
+            var textColor: UIColor?
+
+            if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+               wallpaperVersion == .v1 {
+                textColor = wallpaperManager.currentWallpaper.textColor
+            }
+
             cell.configure(contentItem,
                            favicon: favicon,
                            position: indexPath.row,
-                           theme: theme)
+                           theme: theme,
+                           textColor: textColor)
             sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
 
