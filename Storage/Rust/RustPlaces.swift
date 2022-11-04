@@ -12,7 +12,13 @@ public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
 }
 
-public class RustPlaces: BookmarksHandler {
+public protocol HistoryMetadataObserver {
+    func noteHistoryMetadataObservation(key: HistoryMetadataKey,
+                                        observation: HistoryMetadataObservation,
+                                        completion: @escaping () -> Void)
+}
+
+public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     let databasePath: String
 
     let writerQueue: DispatchQueue
@@ -435,6 +441,18 @@ public class RustPlaces: BookmarksHandler {
     public func queryHistoryMetadata(query: String, limit: Int32) -> Deferred<Maybe<[HistoryMetadata]>> {
         return withReader { connection in
             return try connection.queryHistoryMetadata(query: query, limit: limit)
+        }
+    }
+
+    public func noteHistoryMetadataObservation(key: HistoryMetadataKey,
+                                               observation: HistoryMetadataObservation,
+                                               completion: @escaping () -> Void) {
+        let deferredResponse = withReader { connection in
+            return self.noteHistoryMetadataObservation(key: key, observation: observation)
+        }
+
+        deferredResponse.upon { result in
+            completion()
         }
     }
 
