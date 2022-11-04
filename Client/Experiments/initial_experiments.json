@@ -11,7 +11,7 @@
       "channel": "release",
       "userFacingName": "[Release] Firefox iOS MR New User Onboarding",
       "userFacingDescription": "New onboarding for v106.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
