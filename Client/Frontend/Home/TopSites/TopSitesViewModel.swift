@@ -220,7 +220,13 @@ extension TopSitesViewModel: HomepageSectionHandler {
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = topSites[safe: indexPath.row] {
-            cell.configure(contentItem, position: indexPath.row)
+            var textColor: UIColor?
+            if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
+               wallpaperVersion == .v1 {
+                textColor = wallpaperManager.currentWallpaper.textColor
+            }
+
+            cell.configure(contentItem, position: indexPath.row, textColor: textColor)
             sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
 
