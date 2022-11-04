@@ -143,6 +143,7 @@ extension JumpBackInDataAdaptorTests {
         let subject = JumpBackInDataAdaptorImplementation(profile: mockProfile,
                                                           tabManager: mockTabManager,
                                                           siteImageHelper: siteImageHelper,
+                                                          mainQueue: dispatchQueue,
                                                           userInitiatedQueue: dispatchQueue,
                                                           notificationCenter: notificationCenter)
 
