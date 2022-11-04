@@ -30,6 +30,7 @@ enum ReaderModeTheme: String {
     case dark = "dark"
     case sepia = "sepia"
 
+    // TODO: Make it more readable
     static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
         // If there is no reader theme provided than we default to light theme
         let readerTheme = theme ?? .light
