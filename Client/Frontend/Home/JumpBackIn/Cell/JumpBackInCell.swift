@@ -23,7 +23,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     struct UX {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
-        static let titleFontSize: CGFloat = 16
+        static let generalCornerRadius: CGFloat = 12
+        static let titleFontSize: CGFloat = 15
         static let siteFontSize: CGFloat = 12
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
@@ -44,7 +45,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                    size: UX.titleFontSize)
         label.numberOfLines = 2
     }
@@ -67,8 +68,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     private let descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
-                                                                   size: UX.siteFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+                                                                       size: UX.siteFontSize)
+        label.textColor = .label
     }
 
     // Used as a fallback if hero image isn't set
