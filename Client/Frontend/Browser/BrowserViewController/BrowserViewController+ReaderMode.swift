@@ -80,7 +80,6 @@ extension BrowserViewController {
         }
 
         updateReaderModeBar()
-
         updateViewConstraints()
     }
 
@@ -157,27 +156,9 @@ extension BrowserViewController {
         }
     }
 
-    @objc func dynamicFontChanged(_ notification: Notification) {
-        guard notification.name == .DynamicFontChanged else { return }
-
-        var readerModeStyle = DefaultReaderModeStyle
-        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
-           let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
-            readerModeStyle = style
-        }
-
-        readerModeStyleViewController(getReaderModeViewController(),
-                                      didConfigureStyle: readerModeStyle,
-                                      isUsingUserDefinedColor: false)
-    }
-
     func applyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {
-        getReaderModeViewController().applyTheme(preferences, contentScript: contentScript)
-    }
-
-    private func getReaderModeViewController() -> ReaderModeStyleViewController {
         var readerModeStyle = DefaultReaderModeStyle
-        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+        if let dict = preferences.dictionaryForKey(ReaderModeProfileKeyStyle),
            let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
             readerModeStyle = style
         }
@@ -185,12 +166,12 @@ extension BrowserViewController {
         readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
         let viewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
                                                  readerModeStyle: readerModeStyle)
-        return ReaderModeStyleViewController(viewModel: viewModel)
+        let viewController = ReaderModeStyleViewController(viewModel: viewModel)
+        viewController.applyTheme(preferences, contentScript: contentScript)
     }
 }
 
 extension BrowserViewController: ReaderModeBarViewDelegate {
-//    var readerModeViewController: ReaderModeStyleViewController?
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
         libraryDrawerViewController?.close()
 

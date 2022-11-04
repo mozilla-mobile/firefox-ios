@@ -8,7 +8,6 @@ class ReaderModeFontSizeLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         text = .ReaderModeStyleFontSize
-        isAccessibilityElement = false
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -20,7 +19,7 @@ class ReaderModeFontSizeLabel: UILabel {
             switch fontType {
             case .sansSerif,
                  .sansSerifBold:
-                font = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
+                font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1, size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
             case .serif,
                  .serifBold:
                 font = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)

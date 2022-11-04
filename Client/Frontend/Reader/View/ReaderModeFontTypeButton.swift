@@ -15,13 +15,13 @@ class ReaderModeFontTypeButton: UIButton {
         case .sansSerif,
              .sansSerifBold:
             setTitle(.ReaderModeStyleSansSerifFontType, for: [])
-            let f = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
-            titleLabel?.font = f
+            let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+            titleLabel?.font = font
         case .serif,
              .serifBold:
             setTitle(.ReaderModeStyleSerifFontType, for: [])
-            let f = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
-            titleLabel?.font = f
+            let font = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+            titleLabel?.font = font
         }
     }
 }

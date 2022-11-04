@@ -17,10 +17,6 @@ protocol ReaderModeStyleViewControllerDelegate: AnyObject {
 // MARK: - ReaderModeStyleViewController
 
 class ReaderModeStyleViewController: UIViewController, Themeable {
-    var themeManager: ThemeManager
-    var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
-    var delegate: ReaderModeStyleViewControllerDelegate?
 
     // UI views
     private var fontTypeButtons: [ReaderModeFontTypeButton]!
@@ -37,6 +33,11 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     private var isUsingUserDefinedColor = false
 
     private var viewModel: ReaderModeStyleViewModel!
+    var delegate: ReaderModeStyleViewControllerDelegate?
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
+
 
     init(viewModel: ReaderModeStyleViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
