@@ -432,6 +432,10 @@ extension URL {
         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
     }
 
+    public var isSessionRestoreURL: Bool {
+        return absoluteString.hasPrefix("internal://local/sessionrestore?url=https")
+    }
+
     public var isSyncedReaderModeURL: Bool {
         return self.absoluteString.hasPrefix("about:reader?url=")
     }
