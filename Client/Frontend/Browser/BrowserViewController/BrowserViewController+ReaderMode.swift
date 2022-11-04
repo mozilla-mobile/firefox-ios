@@ -166,18 +166,31 @@ extension BrowserViewController {
             readerModeStyle = style
         }
 
-        readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
-        readerModeStyleViewController(ReaderModeStyleViewController(),
+        readerModeStyleViewController(getReaderModeViewController(),
                                       didConfigureStyle: readerModeStyle,
                                       isUsingUserDefinedColor: false)
     }
 
-    func appyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {
-        ReaderModeStyleViewController().applyTheme(preferences, contentScript: contentScript)
+    func applyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {
+        getReaderModeViewController().applyTheme(preferences, contentScript: contentScript)
+    }
+
+    private func getReaderModeViewController() -> ReaderModeStyleViewController {
+        var readerModeStyle = DefaultReaderModeStyle
+        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+           let style = ReaderModeStyle(dict: dict as [String: AnyObject]) {
+            readerModeStyle = style
+        }
+
+        readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
+        let viewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
+                                                 readerModeStyle: readerModeStyle)
+        return ReaderModeStyleViewController(viewModel: viewModel)
     }
 }
 
 extension BrowserViewController: ReaderModeBarViewDelegate {
+//    var readerModeViewController: ReaderModeStyleViewController?
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
         libraryDrawerViewController?.close()
 
@@ -195,7 +208,7 @@ extension BrowserViewController: ReaderModeBarViewDelegate {
 
             let readerModeViewModel = ReaderModeStyleViewModel(isBottomPresented: isBottomSearchBar,
                                                                readerModeStyle: readerModeStyle)
-            let readerModeStyleViewController = ReaderModeStyleViewController.initReaderModeViewController(viewModel: readerModeViewModel)
+            let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeViewModel)
             readerModeStyleViewController.delegate = self
             readerModeStyleViewController.modalPresentationStyle = .popover
 

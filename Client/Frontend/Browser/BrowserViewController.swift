@@ -2584,8 +2584,8 @@ extension BrowserViewController: NotificationThemeable {
             urlBar.locationView.tabDidChangeContentBlocking($0)
         }
 
-        guard let contentScript = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
-        appyThemeForPreferences(profile.prefs, contentScript: contentScript)
+        guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
+        applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 }
 
