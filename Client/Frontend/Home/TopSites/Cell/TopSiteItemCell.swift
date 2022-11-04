@@ -232,7 +232,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     }
 }
 
-// MARK: NotificationThemeable
+// MARK: ThemeApplicable
 extension TopSiteItemCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         pinImageView.tintColor = theme.colors.iconPrimary
