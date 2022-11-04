@@ -217,7 +217,7 @@ class TrackingProtectionViewController: UIViewController {
         if case .browsing = state { return 2 }  else { return 1 }
     }
     private var tableViewTopInset: CGFloat {
-        if case .settings = state { return 0 }  else { return 48 }
+        if case .settings = state { return 0 }  else { return UIConstants.layout.trackingProtectionTableViewTopInset }
     }
     var state: TrackingProtectionState
     let favIconPublisher: AnyPublisher<URL?, Never>?
@@ -303,8 +303,9 @@ class TrackingProtectionViewController: UIViewController {
            let baseDomain = browsingStatus.url.baseDomain {
             view.addSubview(header)
             header.snp.makeConstraints { make in
-                self.headerHeight = make.height.equalTo(72).constraint
-                make.top.leading.trailing.equalToSuperview()
+                self.headerHeight = make.height.equalTo(UIConstants.layout.trackingProtectionHeaderHeight).constraint
+                make.leading.trailing.equalToSuperview()
+                make.top.equalTo(view.safeAreaLayoutGuide).offset(UIConstants.layout.trackingProtectionHeaderTopOffset)
             }
             if let publisher = favIconPublisher {
                 header.configure(domain: baseDomain, publisher: publisher)

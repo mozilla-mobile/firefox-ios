@@ -79,6 +79,9 @@ struct UIConstants {
         static let findInPagePreviousButtonOffset: CGFloat = 16
         static let progressBarHeight: CGFloat = 1.5
         static let trackingProtectionHeight: CGFloat = 18
+        static let trackingProtectionTableViewTopInset: CGFloat = 54
+        static let trackingProtectionHeaderHeight: CGFloat = 72
+        static let trackingProtectionHeaderTopOffset: CGFloat = 18
         static let collapsedProtectionBadgeOffset: CGFloat = 10
         static let truncatedUrlTextOffset: CGFloat = 5
         static let addSearchEngineInputHeight: CGFloat = 44

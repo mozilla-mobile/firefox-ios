@@ -92,7 +92,7 @@ class SheetModalViewController: UIViewController {
 
         containerView.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
-            make.trailing.top.equalToSuperview().inset(metrics.closeButtonInset)
+            make.trailing.top.equalTo(containerView.safeAreaLayoutGuide).inset(metrics.closeButtonInset)
             make.height.width.equalTo(metrics.closeButtonSize)
         }
     }
