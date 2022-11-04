@@ -30,11 +30,10 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(emptyBG)
 
         NSLayoutConstraint.activate([
+            emptyBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            emptyBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.width),
+            emptyBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height),
             emptyBG.topAnchor.constraint(equalTo: contentView.topAnchor),
-            emptyBG.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            emptyBG.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                              constant: -UX.horizontalMargin),
-            emptyBG.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }
 }
