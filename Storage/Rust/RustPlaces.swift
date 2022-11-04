@@ -43,7 +43,7 @@ public class RustPlaces: BookmarksHandler {
             notificationCenter.post(name: .RustPlacesOpened, object: nil)
             return nil
         } catch let err as NSError {
-            if let placesError = err as? PlacesError {
+            if let placesError = err as? PlacesApiError {
                 SentryIntegration.shared.sendWithStacktrace(
                     message: "Places error when opening Rust Places database",
                     tag: SentryTag.rustPlaces,
@@ -74,7 +74,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -90,7 +90,7 @@ public class RustPlaces: BookmarksHandler {
                     deferred.fill(Maybe(failure: error as MaybeErrorType))
                 }
             } else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
             }
         }
 
@@ -102,7 +102,7 @@ public class RustPlaces: BookmarksHandler {
 
         readerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -122,7 +122,7 @@ public class RustPlaces: BookmarksHandler {
                     deferred.fill(Maybe(failure: error as MaybeErrorType))
                 }
             } else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
             }
         }
 
@@ -319,7 +319,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -327,7 +327,7 @@ public class RustPlaces: BookmarksHandler {
                 try _ = self.api?.syncBookmarks(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
-                if let placesError = err as? PlacesError {
+                if let placesError = err as? PlacesApiError {
                     SentryIntegration.shared.sendWithStacktrace(
                         message: "Places error when syncing Places database",
                         tag: SentryTag.rustPlaces,
@@ -353,7 +353,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -361,7 +361,7 @@ public class RustPlaces: BookmarksHandler {
                 try _ = self.api?.syncHistory(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
-                if let placesError = err as? PlacesError {
+                if let placesError = err as? PlacesApiError {
                     SentryIntegration.shared.sendWithStacktrace(message: "Places error when syncing Places database",
                                                                 tag: SentryTag.rustPlaces,
                                                                 severity: .error,
@@ -385,7 +385,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -405,7 +405,7 @@ public class RustPlaces: BookmarksHandler {
 
          writerQueue.async {
              guard self.isOpen else {
-                 deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                 deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                  return
              }
 
