@@ -19,7 +19,7 @@ class ReaderModeFontSizeLabel: UILabel {
             switch fontType {
             case .sansSerif,
                  .sansSerifBold:
-                font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1, size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
+                font = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
             case .serif,
                  .serifBold:
                 font = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)

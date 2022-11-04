@@ -9,13 +9,15 @@ class ReaderModeFontTypeButton: UIButton {
 
     convenience init(fontType: ReaderModeFontType) {
         self.init(frame: .zero)
+
         self.fontType = fontType
         accessibilityHint = .ReaderModeStyleFontTypeAccessibilityLabel
+        
         switch fontType {
         case .sansSerif,
              .sansSerifBold:
             setTitle(.ReaderModeStyleSansSerifFontType, for: [])
-            let font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+            let font = UIFont(name: "SF-Pro-Text-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             titleLabel?.font = font
         case .serif,
              .serifBold:

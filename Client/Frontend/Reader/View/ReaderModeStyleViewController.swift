@@ -56,7 +56,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChange()
         // Our preferred content size has a fixed width and height based on the rows + padding
         preferredContentSize = CGSize(width: ReaderModeStyleViewModel.Width, height: ReaderModeStyleViewModel.Height)
         popoverPresentationController?.backgroundColor = UIColor.theme.tableView.rowBackground
@@ -188,6 +187,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         selectTheme(viewModel.readerModeStyle.theme)
         slider.value = Float(UIScreen.main.brightness)
 
+        listenForThemeChange()
         applyTheme()
     }
 
