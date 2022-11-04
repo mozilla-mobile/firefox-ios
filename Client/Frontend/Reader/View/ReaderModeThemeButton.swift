@@ -4,32 +4,8 @@
 
 import UIKit
 
-class ReaderModeThemeButton: UIButton {
-    var theme: ReaderModeTheme!
-
-    convenience init(theme: ReaderModeTheme) {
-        self.init(frame: .zero)
-        self.theme = theme
-
-        setTitle(theme.rawValue, for: [])
-
-        accessibilityHint = .ReaderModeStyleChangeColorSchemeAccessibilityHint
-
-        switch theme {
-        case .light:
-            setTitle(.ReaderModeStyleLightLabel, for: [])
-            setTitleColor(ReaderModeStyleViewModel.ThemeTitleColorLight, for: .normal)
-            backgroundColor = ReaderModeStyleViewModel.ThemeBackgroundColorLight
-        case .dark:
-            setTitle(.ReaderModeStyleDarkLabel, for: [])
-            setTitleColor(ReaderModeStyleViewModel.ThemeTitleColorDark, for: [])
-            backgroundColor = ReaderModeStyleViewModel.ThemeBackgroundColorDark
-        case .sepia:
-            setTitle(.ReaderModeStyleSepiaLabel, for: [])
-            setTitleColor(ReaderModeStyleViewModel.ThemeTitleColorSepia, for: .normal)
-            backgroundColor = ReaderModeStyleViewModel.ThemeBackgroundColorSepia
-        }
-    }
+class ReaderModeThemeButton: UIButton, ThemeApplicable {
+    var readerModeTheme: ReaderModeTheme!
 
     var fontType: ReaderModeFontType = .sansSerif {
         didSet {
@@ -41,6 +17,35 @@ class ReaderModeThemeButton: UIButton {
                  .serifBold:
                 titleLabel?.font = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             }
+        }
+    }
+
+    convenience init(readerModeTheme: ReaderModeTheme, appTheme: Theme) {
+        self.init(frame: .zero)
+        self.readerModeTheme = readerModeTheme
+
+        accessibilityHint = .ReaderModeStyleChangeColorSchemeAccessibilityHint
+        applyTheme(theme: appTheme)
+    }
+
+    func applyTheme(theme: Theme) {
+        switch readerModeTheme {
+        case .light:
+            setTitle(.ReaderModeStyleLightLabel, for: [])
+            setTitleColor(theme.colors.textPrimary, for: .normal)
+            backgroundColor = theme.colors.layer1
+        case .sepia:
+            setTitle(.ReaderModeStyleSepiaLabel, for: [])
+            setTitleColor(theme.colors.textPrimary, for: .normal)
+            // TODO: wait for crystal color
+            backgroundColor = ReaderModeStyleViewModel.ThemeBackgroundColorSepia
+        case .dark:
+            setTitle(.ReaderModeStyleDarkLabel, for: [])
+            setTitleColor(theme.colors.textOnColor, for: [])
+            // TODO: wait for crystal color
+            backgroundColor = ReaderModeStyleViewModel.ThemeBackgroundColorDark
+        case .none:
+            break
         }
     }
 }

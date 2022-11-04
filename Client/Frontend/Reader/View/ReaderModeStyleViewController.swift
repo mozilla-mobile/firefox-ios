@@ -38,7 +38,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
 
-
     init(viewModel: ReaderModeStyleViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
@@ -58,7 +57,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
         // Our preferred content size has a fixed width and height based on the rows + padding
         preferredContentSize = CGSize(width: ReaderModeStyleViewModel.Width, height: ReaderModeStyleViewModel.Height)
-        popoverPresentationController?.backgroundColor = UIColor.theme.tableView.rowBackground
 
         // Font type row
         fontTypeRow = .build()
@@ -125,9 +123,12 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         ])
 
         themeButtons = [
-            ReaderModeThemeButton(theme: ReaderModeTheme.light),
-            ReaderModeThemeButton(theme: ReaderModeTheme.sepia),
-            ReaderModeThemeButton(theme: ReaderModeTheme.dark)
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.light,
+                                  appTheme: themeManager.currentTheme),
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.sepia,
+                                  appTheme: themeManager.currentTheme),
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.dark,
+                                  appTheme: themeManager.currentTheme)
         ]
 
         setupButtons(themeButtons, inRow: themeRow, action: #selector(changeTheme))
@@ -193,20 +194,28 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
     // MARK: - Applying Theme
     func applyTheme() {
-        fontTypeRow.backgroundColor = UIColor.theme.tableView.rowBackground
-        fontSizeRow.backgroundColor = UIColor.theme.tableView.rowBackground
-        brightnessRow.backgroundColor = UIColor.theme.tableView.rowBackground
-        fontSizeLabel.textColor = UIColor.theme.tableView.rowText
+        popoverPresentationController?.backgroundColor = themeManager.currentTheme.colors.layer1
+
+        // Set background color to container views
+        [fontTypeRow, fontSizeRow, brightnessRow].forEach { view in
+            view?.backgroundColor = themeManager.currentTheme.colors.layer1
+        }
+
+        fontSizeLabel.textColor = themeManager.currentTheme.colors.textPrimary
+
         fontTypeButtons.forEach { button in
-            button.setTitleColor(UIColor.theme.tableView.rowText, for: .selected)
-            button.setTitleColor(UIColor.Photon.Grey40, for: [])
+            button.setTitleColor(themeManager.currentTheme.colors.textPrimary,
+                                 for: .selected)
+            button.setTitleColor(themeManager.currentTheme.colors.textDisabled, for: [])
         }
+
         fontSizeButtons.forEach { button in
-            button.setTitleColor(UIColor.theme.tableView.rowText, for: .normal)
-            button.setTitleColor(UIColor.theme.tableView.disabledRowText, for: .disabled)
+            button.setTitleColor(themeManager.currentTheme.colors.textPrimary, for: .normal)
+            button.setTitleColor(themeManager.currentTheme.colors.textPrimary, for: .disabled)
         }
+
         separatorLines.forEach { line in
-            line.backgroundColor = UIColor.theme.tableView.separator
+            line.backgroundColor = themeManager.currentTheme.colors.borderPrimary
         }
     }
 
@@ -293,7 +302,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     }
 
     @objc func changeTheme(_ button: ReaderModeThemeButton) {
-        selectTheme(button.theme)
+        selectTheme(button.readerModeTheme)
         isUsingUserDefinedColor = true
         delegate?.readerModeStyleViewController(self,
                                                 didConfigureStyle: viewModel.readerModeStyle,

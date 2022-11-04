@@ -16,11 +16,6 @@ struct ReaderModeStyleViewModel {
     static let Width = 270.0
     static let Height = 4.0 * RowHeight + 3.0 * SeparatorLineThickness
 
-    static let ThemeRowBackgroundColor = UIColor.Photon.White100
-    static let ThemeTitleColorLight = UIColor.Photon.Grey70
-    static let ThemeTitleColorDark = UIColor.Photon.White100
-    static let ThemeTitleColorSepia = UIColor.Photon.Grey70
-    static let ThemeBackgroundColorLight = UIColor.Photon.White100
     static let ThemeBackgroundColorDark = UIColor.Photon.Grey80
     static let ThemeBackgroundColorSepia = UIColor.Defaults.LightBeige
 
