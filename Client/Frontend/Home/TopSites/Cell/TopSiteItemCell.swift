@@ -270,7 +270,7 @@ extension TopSiteItemCell: NotificationThemeable {
     func applyTheme() {
         pinImageView.tintColor = textColor ?? UIColor.theme.homePanel.topSitePin
         titleLabel.textColor = textColor ?? UIColor.theme.homePanel.topSiteDomain
-        sponsoredLabel.textColor = textColor?.withAlphaComponent(0.66) ?? UIColor.theme.homePanel.sponsored
+        sponsoredLabel.textColor = textColor ?? UIColor.theme.homePanel.sponsored
 
         adjustLayout()
     }
