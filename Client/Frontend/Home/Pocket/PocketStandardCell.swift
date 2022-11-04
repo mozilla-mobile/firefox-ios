@@ -14,7 +14,8 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         static let cellWidth: CGFloat = 350
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
-        static let titleFontSize: CGFloat = 12
+        static let generalCornerRadius: CGFloat = 12
+        static let titleFontSize: CGFloat = 15
         static let sponsoredFontSize: CGFloat = 12
         static let siteFontSize: CGFloat = 12
         static let horizontalMargin: CGFloat = 16
@@ -34,7 +35,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var titleLabel: UILabel = .build { title in
         title.adjustsFontForContentSizeCategory = true
-        title.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
+        title.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                    size: UX.titleFontSize)
         title.numberOfLines = 2
     }
@@ -66,7 +67,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
                                                                    size: UX.siteFontSize)
     }
 
