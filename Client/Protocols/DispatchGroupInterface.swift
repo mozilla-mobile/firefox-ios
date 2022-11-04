@@ -11,6 +11,11 @@ protocol DispatchGroupInterface {
                 flags: DispatchWorkItemFlags,
                 queue: DispatchQueue,
                 execute work: @escaping @convention(block) () -> Void)
+
+    func notify(qos: DispatchQoS,
+                flags: DispatchWorkItemFlags,
+                queue: DispatchQueueInterface,
+                execute work: @escaping @convention(block) () -> Void)
 }
 
 extension DispatchGroupInterface {
@@ -23,6 +28,24 @@ extension DispatchGroupInterface {
                queue: queue,
                execute: work)
     }
+
+    func notify(qos: DispatchQoS = .unspecified,
+                flags: DispatchWorkItemFlags = [],
+                queue: DispatchQueueInterface,
+                execute work: @escaping @convention(block) () -> Void) {
+        notify(qos: qos,
+               flags: flags,
+               queue: queue,
+               execute: work)
+    }
 }
 
-extension DispatchGroup: DispatchGroupInterface {}
+extension DispatchGroup: DispatchGroupInterface {
+    func notify(qos: DispatchQoS,
+                flags: DispatchWorkItemFlags,
+                queue: DispatchQueueInterface,
+                execute work: @escaping @convention(block) () -> Void) {
+        guard let queue = queue as? DispatchQueue else { return }
+        notify(qos: qos, flags: flags, queue: queue, execute: work)
+    }
+}
