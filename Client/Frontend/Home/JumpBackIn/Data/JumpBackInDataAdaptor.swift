@@ -45,6 +45,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
     private var hasSyncAccount: Bool?
 
+    private let mainQueue: DispatchQueueInterface
     private let userInitiatedQueue: DispatchQueueInterface
 
     weak var delegate: JumpBackInDelegate?
@@ -53,6 +54,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     init(profile: Profile,
          tabManager: TabManagerProtocol,
          siteImageHelper: SiteImageHelperProtocol,
+         mainQueue: DispatchQueueInterface = DispatchQueue.main,
          userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
@@ -60,6 +62,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         self.siteImageHelper = siteImageHelper
         self.notificationCenter = notificationCenter
 
+        self.mainQueue = mainQueue
         self.userInitiatedQueue = userInitiatedQueue
 
         setupNotifications(forObserver: self, observing: [.ShowHomepage,
@@ -130,30 +133,37 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     }
 
     private func updateTabsData() {
-        updateJumpBackInData { [weak self] in
+        updateTabsData { [weak self] in
             self?.delegate?.didLoadNewData()
         }
 
         updateRemoteTabs { [weak self] in
             self?.delegate?.didLoadNewData()
         }
-    }
-
-    /// Update data with tab and search term group managers, saving it in view model for further usage
-    private func updateJumpBackInData(completion: @escaping () -> Void) {
-        recentTabs = tabManager.recentlyAccessedNormalTabs
 
         if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
-            SearchTermGroupsUtility.getTabGroups(
-                with: self.profile,
-                from: self.recentTabs,
-                using: .orderedDescending
-            ) { [weak self] groups, _ in
-
-                self?.recentGroups = groups
-                completion()
+            updateGroupsData { [weak self] in
+                self?.delegate?.didLoadNewData()
             }
-        } else {
+        }
+    }
+
+    private func updateTabsData(completion: @escaping () -> Void) {
+        // Recent tabs need to be accessed from .main otherwise value isn't proper
+        mainQueue.async {
+            self.recentTabs = self.tabManager.recentlyAccessedNormalTabs
+            completion()
+        }
+    }
+
+    private func updateGroupsData(completion: @escaping () -> Void) {
+        SearchTermGroupsUtility.getTabGroups(
+            with: self.profile,
+            from: self.recentTabs,
+            using: .orderedDescending
+        ) { [weak self] groups, _ in
+
+            self?.recentGroups = groups
             completion()
         }
     }
