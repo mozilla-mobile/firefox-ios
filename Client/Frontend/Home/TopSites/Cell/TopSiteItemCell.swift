@@ -28,10 +28,11 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let shadowRadius: CGFloat = 4
         static let shadowOffset: CGFloat = 2
-        static let topSpace: CGFloat = 8
-        static let textSafeSpace: CGFloat = 8
+        static let textSafeSpace: CGFloat = 6
         static let bottomSpace: CGFloat = 8
-        static let imageBottomSpace: CGFloat = 3
+        static let imageTopSpace: CGFloat = 11
+        static let imageBottomSpace: CGFloat = 11
+        static let imageLeadingTrailingSpace: CGFloat = 11
         static let titleFontSize: CGFloat = 12
         static let sponsorFontSize: CGFloat = 11
     }
@@ -50,7 +51,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
     private lazy var titlePinWrapper: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
         stackView.axis = .horizontal
-        stackView.alignment = .center
+        stackView.alignment = .top
         stackView.distribution = .fillProportionally
     }
 
@@ -86,7 +87,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         sponsoredLabel.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption2,
                                                                             size: UX.sponsorFontSize)
         sponsoredLabel.adjustsFontForContentSizeCategory = true
-        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + TopSiteItemCell.UX.shadowRadius
+        sponsoredLabel.preferredMaxLayoutWidth = UX.imageBackgroundSize.width + UX.shadowRadius
     }
 
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
@@ -106,6 +107,8 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
             selectedOverlay.isHidden = !isHighlighted
         }
     }
+
+    private var textColor: UIColor?
 
     // MARK: - Inits
 
@@ -145,16 +148,21 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
+        rootContainer.setNeedsLayout()
+        rootContainer.layoutIfNeeded()
+
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
                                                       cornerRadius: UX.cellCornerRadius).cgPath
     }
 
     // MARK: - Public methods
 
-    func configure(_ topSite: TopSite, position: Int) {
+    func configure(_ topSite: TopSite, position: Int, textColor: UIColor?) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
+        self.textColor = textColor
 
         imageView.setFaviconOrDefaultIcon(forSite: topSite.site) {}
 
@@ -162,46 +170,45 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         configureSponsoredSite(topSite)
 
         applyTheme()
-        adjustLayout()
     }
 
     // MARK: - Setup Helper methods
 
     private func setupLayout() {
-        rootContainer.backgroundColor = .clear
-
         titlePinWrapper.addArrangedSubview(pinViewHolder)
         titlePinWrapper.addArrangedSubview(titleLabel)
         pinViewHolder.addSubview(pinImageView)
 
         descriptionWrapper.addArrangedSubview(titlePinWrapper)
         descriptionWrapper.addArrangedSubview(sponsoredLabel)
-        rootContainer.addSubview(descriptionWrapper)
 
         rootContainer.addSubview(imageView)
         rootContainer.addSubview(selectedOverlay)
         contentView.addSubview(rootContainer)
+        contentView.addSubview(descriptionWrapper)
 
         NSLayoutConstraint.activate([
             rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
-            rootContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            rootContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            rootContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            rootContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.width),
+            rootContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.height),
 
             imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
-                                           constant: UX.topSpace),
-            imageView.centerXAnchor.constraint(equalTo: rootContainer.centerXAnchor),
+                                           constant: UX.imageTopSpace),
+            imageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
+                                               constant: UX.imageLeadingTrailingSpace),
+            imageView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
+                                                constant: -UX.imageLeadingTrailingSpace),
+            imageView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
+                                              constant: -UX.imageBottomSpace),
             imageView.widthAnchor.constraint(equalToConstant: UX.iconSize.width),
             imageView.heightAnchor.constraint(equalToConstant: UX.iconSize.height),
-            imageView.bottomAnchor.constraint(lessThanOrEqualTo: descriptionWrapper.topAnchor,
-                                              constant: -UX.imageBottomSpace),
 
-            descriptionWrapper.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
-                                                        constant: UX.textSafeSpace),
-            descriptionWrapper.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
-                                                         constant: -UX.textSafeSpace),
-            descriptionWrapper.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
-                                                       constant: -UX.bottomSpace),
+            descriptionWrapper.topAnchor.constraint(equalTo: rootContainer.bottomAnchor,
+                                                    constant: UX.textSafeSpace),
+            descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             selectedOverlay.topAnchor.constraint(equalTo: rootContainer.topAnchor),
             selectedOverlay.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
@@ -234,10 +241,13 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
     }
 
     private func adjustLayout() {
-        // If blur is disabled set background color
+        rootContainer.setNeedsLayout()
+        rootContainer.layoutIfNeeded()
+
         if shouldApplyWallpaperBlur {
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
+            // If blur is disabled set background color
             rootContainer.removeVisualEffectView()
             rootContainer.backgroundColor = UIColor.theme.homePanel.topSitesContainerView
             setupShadow()
@@ -258,9 +268,9 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
 // MARK: NotificationThemeable
 extension TopSiteItemCell: NotificationThemeable {
     func applyTheme() {
-        pinImageView.tintColor = UIColor.theme.homePanel.topSitePin
-        titleLabel.textColor = UIColor.theme.homePanel.topSiteDomain
-        sponsoredLabel.textColor = UIColor.theme.homePanel.sponsored
+        pinImageView.tintColor = textColor ?? UIColor.theme.homePanel.topSitePin
+        titleLabel.textColor = textColor ?? UIColor.theme.homePanel.topSiteDomain
+        sponsoredLabel.textColor = textColor?.withAlphaComponent(0.66) ?? UIColor.theme.homePanel.sponsored
 
         adjustLayout()
     }
