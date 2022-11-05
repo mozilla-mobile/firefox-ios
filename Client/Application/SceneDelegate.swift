@@ -165,6 +165,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return UIWindow(frame: UIScreen.main.bounds)
         }
 
+        windowScene.screenshotService?.delegate = self
+
         let window = UIWindow(windowScene: windowScene)
 
         if !LegacyThemeManager.instance.systemThemeIsOn {
@@ -207,4 +209,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
+}
+
+extension SceneDelegate: UIScreenshotServiceDelegate {
+    func screenshotService(_ screenshotService: UIScreenshotService,
+                           generatePDFRepresentationWithCompletion completionHandler: @escaping (Data?, Int, CGRect) -> Void) {
+        guard let webView = tabManager.selectedTab?.currentWebView() else {
+            completionHandler(nil, 0, .zero)
+            return
+        }
+
+        var rect = webView.scrollView.frame
+        rect.origin.x = webView.scrollView.contentOffset.x
+        rect.origin.y = webView.scrollView.contentSize.height - rect.height - webView.scrollView.contentOffset.y
+
+        webView.createPDF { result in
+            switch result {
+            case .success(let data):
+                completionHandler(data, 0, rect)
+            case .failure:
+                completionHandler(nil, 0, .zero)
+            }
+        }
+    }
 }
