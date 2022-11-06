@@ -1,3 +1,6 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "Inicia una búsqueda privada en %@ con tu motor de búsqueda predeterminado.";
+
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Acciones rápidas";
 

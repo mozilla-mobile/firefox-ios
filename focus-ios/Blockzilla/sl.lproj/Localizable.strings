@@ -640,6 +640,9 @@
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Pokaži, kako";
 
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Prepustili vas bomo zasebnemu brskanju, vendar lahko naslednjič hitreje začnete s pripomočkom %@ na domačem zaslonu.";
+
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Zgodovina brskanja izbrisana! 🎉";
 
