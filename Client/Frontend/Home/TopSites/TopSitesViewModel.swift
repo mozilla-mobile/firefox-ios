@@ -166,7 +166,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             heightDimension: .estimated(UX.cellEstimatedSize.height)
         )
 
-        let interface = TopSitesUIInterface(trait: traitCollection)
+        let interface = TopSitesUIInterface(trait: traitCollection, availableWidth: size.width)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: topSitesDataAdaptor.numberOfRows,
                                                                     interface: interface)
@@ -194,7 +194,8 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
-        let interface = TopSitesUIInterface(trait: traitCollection)
+        let interface = TopSitesUIInterface(trait: traitCollection,
+                                            availableWidth: size.width)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: topSitesDataAdaptor.numberOfRows,
                                                                     interface: interface)

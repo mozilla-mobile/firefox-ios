@@ -13,15 +13,18 @@ struct TopSitesUIInterface {
     var isLandscape: Bool = UIWindow.isLandscape
     var isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone
     var horizontalSizeClass: UIUserInterfaceSizeClass
+    var availableWidth: CGFloat
 
-    init(trait: UITraitCollection) {
+    init(trait: UITraitCollection, availableWidth: CGFloat) {
         horizontalSizeClass = trait.horizontalSizeClass
+        self.availableWidth = availableWidth
     }
 
-    init(isLandscape: Bool, isIphone: Bool, trait: UITraitCollection) {
+    init(isLandscape: Bool, isIphone: Bool, trait: UITraitCollection, availableWidth: CGFloat) {
         self.isLandscape = isLandscape
         self.isIphone = isIphone
         horizontalSizeClass = trait.horizontalSizeClass
+        self.availableWidth = availableWidth
     }
 }
 
@@ -81,16 +84,14 @@ class TopSitesDimensionImplementation: TopSitesDimension {
     /// - Parameter interface: Tile number is based on layout, this param contains the parameters needed to computer the tile number
     /// - Returns: The number of tiles per row the user will see
     private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
-        if interface.isIphone {
-            return interface.isLandscape ? 8 : 4
+        let cellWidth = TopSiteItemCell.UX.imageBackgroundSize.width
+        var availableWidth = interface.availableWidth - 18 * 2
+        var numberOfTiles = 0
 
-        } else {
-            // The number of items in a row is equal to the number of top sites in a row * 2
-            var numItems = Int(UX.numberOfItemsPerRowForSizeClassIpad[interface.horizontalSizeClass])
-            if !interface.isLandscape || (interface.horizontalSizeClass == .compact && interface.isLandscape) {
-                numItems = numItems - 1
-            }
-            return numItems * 2
+        while availableWidth > cellWidth {
+            numberOfTiles += 1
+            availableWidth = availableWidth - cellWidth - TopSitesViewModel.UX.cardSpacing
         }
+        return numberOfTiles
     }
 }
