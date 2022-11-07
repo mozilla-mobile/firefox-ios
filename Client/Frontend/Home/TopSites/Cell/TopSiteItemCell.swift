@@ -20,10 +20,11 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
         static let pinAlignmentSpacing: CGFloat = 2
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
-        static let topSpace: CGFloat = 8
-        static let textSafeSpace: CGFloat = 8
+        static let textSafeSpace: CGFloat = 6
         static let bottomSpace: CGFloat = 8
-        static let imageBottomSpace: CGFloat = 3
+        static let imageTopSpace: CGFloat = 11
+        static let imageBottomSpace: CGFloat = 11
+        static let imageLeadingTrailingSpace: CGFloat = 11
         static let titleFontSize: CGFloat = 12
         static let sponsorFontSize: CGFloat = 11
     }
@@ -42,7 +43,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     private lazy var titlePinWrapper: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
         stackView.axis = .horizontal
-        stackView.alignment = .center
+        stackView.alignment = .top
         stackView.distribution = .fillProportionally
     }
 
@@ -98,6 +99,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         }
     }
 
+    private var textColor: UIColor?
+
     // MARK: - Inits
 
     override init(frame: CGRect) {
@@ -142,12 +145,14 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     func configure(_ topSite: TopSite,
                    favicon: UIImage?,
                    position: Int,
-                   theme: Theme) {
+                   theme: Theme,
+                   textColor: UIColor?) {
         homeTopSite = topSite
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
 
         imageView.image = favicon
+        self.textColor = textColor
 
         configurePinnedSite(topSite)
         configureSponsoredSite(topSite)
@@ -164,32 +169,34 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 
         descriptionWrapper.addArrangedSubview(titlePinWrapper)
         descriptionWrapper.addArrangedSubview(sponsoredLabel)
-        rootContainer.addSubview(descriptionWrapper)
 
         rootContainer.addSubview(imageView)
         rootContainer.addSubview(selectedOverlay)
         contentView.addSubview(rootContainer)
+        contentView.addSubview(descriptionWrapper)
 
         NSLayoutConstraint.activate([
             rootContainer.topAnchor.constraint(equalTo: contentView.topAnchor),
-            rootContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            rootContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            rootContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            rootContainer.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            rootContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.width),
+            rootContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.imageBackgroundSize.height),
 
             imageView.topAnchor.constraint(equalTo: rootContainer.topAnchor,
-                                           constant: UX.topSpace),
-            imageView.centerXAnchor.constraint(equalTo: rootContainer.centerXAnchor),
+                                           constant: UX.imageTopSpace),
+            imageView.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
+                                               constant: UX.imageLeadingTrailingSpace),
+            imageView.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
+                                                constant: -UX.imageLeadingTrailingSpace),
+            imageView.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
+                                              constant: -UX.imageBottomSpace),
             imageView.widthAnchor.constraint(equalToConstant: UX.iconSize.width),
             imageView.heightAnchor.constraint(equalToConstant: UX.iconSize.height),
-            imageView.bottomAnchor.constraint(lessThanOrEqualTo: descriptionWrapper.topAnchor,
-                                              constant: -UX.imageBottomSpace),
 
-            descriptionWrapper.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor,
-                                                        constant: UX.textSafeSpace),
-            descriptionWrapper.trailingAnchor.constraint(equalTo: rootContainer.trailingAnchor,
-                                                         constant: -UX.textSafeSpace),
-            descriptionWrapper.bottomAnchor.constraint(equalTo: rootContainer.bottomAnchor,
-                                                       constant: -UX.bottomSpace),
+            descriptionWrapper.topAnchor.constraint(equalTo: rootContainer.bottomAnchor,
+                                                    constant: UX.textSafeSpace),
+            descriptionWrapper.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            descriptionWrapper.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            descriptionWrapper.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             selectedOverlay.topAnchor.constraint(equalTo: rootContainer.topAnchor),
             selectedOverlay.leadingAnchor.constraint(equalTo: rootContainer.leadingAnchor),
@@ -235,9 +242,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
 // MARK: ThemeApplicable
 extension TopSiteItemCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        pinImageView.tintColor = theme.colors.iconPrimary
-        titleLabel.textColor = theme.colors.textPrimary
-        sponsoredLabel.textColor = theme.colors.textSecondary
+        pinImageView.tintColor = textColor ?? theme.colors.iconPrimary
+        titleLabel.textColor = textColor ?? theme.colors.textPrimary
+        sponsoredLabel.textColor = textColor ?? theme.colors.textSecondary
         selectedOverlay.backgroundColor = theme.colors.layer5Hover.withAlphaComponent(0.25)
 
         adjustBlur(theme: theme)
