@@ -49,8 +49,8 @@ class SessionData: NSObject, Codable, NSCoding {
     let urls: [URL]
 
     enum CodingKeys: String, CodingKey {
-        case currentPage = "user_first_name"
-        case lastUsedTime = "user_last_name"
+        case currentPage
+        case lastUsedTime
         case urls
     }
 
