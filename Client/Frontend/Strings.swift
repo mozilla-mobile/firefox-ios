@@ -225,38 +225,38 @@ extension String {
                     value: "Close",
                     comment: "Accessibility label for action denoting closing default browser home tab banner.",
                     lastUpdated: .v102)
-                public static let HomeTabBannerTreatmentATitle = MZLocalizedString(
-                    "DefaultBrowserCard.Title.TreatmentA",
+                public static let PeaceOfMindTitle = MZLocalizedString(
+                    "DefaultBrowserCard.PeaceOfMind.Title.v108",
                     tableName: "Default Browser",
                     value: "Firefox Has Privacy Covered",
                     comment: "Title for small home tab banner shown that allows user to switch their default browser to Firefox.",
                     lastUpdated: .v108)
-                public static let HomeTabBannerTreatmentADescription = MZLocalizedString(
-                    "DefaultBrowserCard.Description.TreatmentA",
+                public static let PeaceOfMindDescription = MZLocalizedString(
+                    "DefaultBrowserCard.PeaceOfMind.Description.v108",
                     tableName: "Default Browser",
                     value: "Firefox blocks 3,000+ trackers per user each month on average. Make us your default browser for privacy peace of mind.",
                     comment: "Description for small home tab banner shown that allows user to switch their default browser to Firefox.",
                     lastUpdated: .v108)
-                public static let HomeTabBannerTreatmentBTitle = MZLocalizedString(
-                    "DefaultBrowserCard.Title.TreatmentB",
+                public static let BetterInternetTitle = MZLocalizedString(
+                    "DefaultBrowserCard.BetterInternet.Title.v108",
                     tableName: "Default Browser",
                     value: "Default to a Better Internet",
                     comment: "Title for small home tab banner shown that allows user to switch their default browser to Firefox.",
                     lastUpdated: .v108)
-                public static let HomeTabBannerTreatmentBDescription = MZLocalizedString(
-                    "DefaultBrowserCard.Description.TreatmentB",
+                public static let BetterInternetDescription = MZLocalizedString(
+                    "DefaultBrowserCard.BetterInternet.Description.v108",
                     tableName: "Default Browser",
                     value: "Making Firefox your default browser is a vote for an open, accessible internet.",
                     comment: "Description for small home tab banner shown that allows user to switch their default browser to Firefox.",
                     lastUpdated: .v108)
-                public static let HomeTabBannerTreatmentCTitle = MZLocalizedString(
-                    "DefaultBrowserCard.Title.TreatmentC",
+                public static let NextLevelTitle = MZLocalizedString(
+                    "DefaultBrowserCard.NextLevel.Title.v108",
                     tableName: "Default Browser",
                     value: "Elevate Everyday Browsing",
                     comment: "Title for small home tab banner shown that allows user to switch their default browser to Firefox.",
                     lastUpdated: .v108)
-                public static let HomeTabBannerTreatmentCDescription = MZLocalizedString(
-                    "DefaultBrowserCard.Description.TreatmentC",
+                public static let NextLevelDescription = MZLocalizedString(
+                    "DefaultBrowserCard.NextLevel.Description.v108",
                     tableName: "Default Browser",
                     value: "Choose Firefox as your default browser to make speed, safety, and privacy automatic.",
                     comment: "Description for small home tab banner shown that allows user to switch their default browser to Firefox.",
