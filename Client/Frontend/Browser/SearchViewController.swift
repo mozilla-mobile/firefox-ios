@@ -557,20 +557,40 @@ class SearchViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section == SearchListSection.remoteTabs.rawValue,
-              hasFirefoxSuggestions else { return 0 }
+//        guard section == SearchListSection.remoteTabs.rawValue,
+//              hasFirefoxSuggestions else { return 0 }
 
         return UITableView.automaticDimension
     }
 
+    private func shouldShowHeader(viewForHeaderInSection section: Int) -> Bool {
+        switch section {
+        case SearchListSection.remoteTabs.rawValue:
+            return hasFirefoxSuggestions
+        case SearchListSection.searchSuggestions.rawValue:
+            return true
+        default:
+            return false
+        }
+
+    }
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == SearchListSection.remoteTabs.rawValue,
-              hasFirefoxSuggestions,
+        guard shouldShowHeader(viewForHeaderInSection: section),
               let headerView = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader
         else { return nil }
 
-        let viewModel = SiteTableViewHeaderModel(title: .Search.SuggestSectionTitle,
+        var title: String
+        switch section {
+        case SearchListSection.remoteTabs.rawValue:
+            title = .Search.SuggestSectionTitle
+        case SearchListSection.searchSuggestions.rawValue:
+            title = searchEngines.defaultEngine.headerSearchTitle
+        default:  title = ""
+        }
+
+        let viewModel = SiteTableViewHeaderModel(title: title,
                                                  isCollapsible: false,
                                                  collapsibleState: nil)
         headerView.configure(viewModel)
