@@ -47,10 +47,6 @@ protocol TopSitesDimension {
 
 class TopSitesDimensionImplementation: TopSitesDimension {
 
-    struct UX {
-        static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
-    }
-
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
                              interface: TopSitesUIInterface

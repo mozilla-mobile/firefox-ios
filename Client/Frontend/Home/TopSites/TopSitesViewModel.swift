@@ -9,7 +9,6 @@ import Storage
 class TopSitesViewModel {
 
     struct UX {
-        static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
         static let cellEstimatedSize: CGSize = CGSize(width: 73, height: 83)
         static let cardSpacing: CGFloat = 16
     }
