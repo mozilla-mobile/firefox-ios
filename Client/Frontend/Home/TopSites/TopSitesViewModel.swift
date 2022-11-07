@@ -191,6 +191,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func refreshData(for traitCollection: UITraitCollection,
+                     size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         let interface = TopSitesUIInterface(trait: traitCollection)

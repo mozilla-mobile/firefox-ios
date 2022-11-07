@@ -195,10 +195,6 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !pocketStoriesViewModels.isEmpty
     }
 
-    func refreshData(for traitCollection: UITraitCollection,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
-
     func screenWasShown() {
         hasSentPocketSectionEvent = false
     }

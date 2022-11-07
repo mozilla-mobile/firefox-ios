@@ -61,10 +61,6 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
     }
 
-    func refreshData(for traitCollection: UITraitCollection,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
-
     func setTheme(theme: Theme) {
         self.theme = theme
     }

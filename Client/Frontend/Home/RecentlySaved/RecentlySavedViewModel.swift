@@ -121,10 +121,6 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return !recentItems.isEmpty
     }
 
-    func refreshData(for traitCollection: UITraitCollection,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
-
     func setTheme(theme: Theme) {
         self.theme = theme
     }
