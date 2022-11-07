@@ -44,7 +44,7 @@ extension SiteImageHelperProtocol {
 class SiteImageHelper: SiteImageHelperProtocol {
 
     private static let cache = NSCache<NSString, UIImage>()
-    private let throttler = Throttler(seconds: 0.5, on: .main)
+    private let throttler = Throttler(seconds: 0.5, on: DispatchQueue.main)
     private let faviconFetcher: Favicons
 
     convenience init(profile: Profile) {

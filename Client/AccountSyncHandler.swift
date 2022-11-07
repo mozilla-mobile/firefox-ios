@@ -9,11 +9,15 @@ import Storage
 /// and react accordingly.
 class AccountSyncHandler: TabEventHandler, Loggable {
 
-    let throttler = Throttler(seconds: 5.0, on: DispatchQueue.global(qos: .utility))
-    let profile: Profile
+    private let throttler: Throttler
+    private let profile: Profile
 
-    init(with profile: Profile) {
+    init(with profile: Profile,
+         throttleTime: Double = 5.0,
+         queue: DispatchQueueInterface = DispatchQueue.global(qos: .utility)) {
         self.profile = profile
+        self.throttler = Throttler(seconds: throttleTime,
+                                   on: queue)
 
         register(self, forTabEvents: .didLoadPageMetadata, .didGainFocus)
     }

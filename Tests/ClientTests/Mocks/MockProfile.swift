@@ -29,7 +29,10 @@ open class MockSyncManager: SyncManager {
     open func syncEverything(why: SyncReason) -> Success {
         return succeed()
     }
+
+    var syncNamedCollectionsCalled = 0
     open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+        syncNamedCollectionsCalled += 1
         return succeed()
     }
     open func beginTimedSyncs() {}
