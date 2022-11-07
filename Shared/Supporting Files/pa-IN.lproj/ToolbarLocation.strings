@@ -1,3 +1,6 @@
-/* Contextual hints are little popups that appear for the users informing them of new features. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
-"ContextualHints.Toolbar.Top.Description.v106" = "ਜੇ ਤੁਹਾਨੂੰ ਸੌਖਾ ਲੱਗੇ ਤਾਂ ਟੂਲਬਾਰ ਨੂੰ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਹੇਠਾਂ ਰੱਖਣ ਨੂੰ ਚੁਣੋ।";
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top. */
+"ContextualHints.Toolbar.Bottom.Description.v107" = "ਜੇ ਤੁਹਾਨੂੰ ਪਸੰਦ ਹੋਵੇ ਤਾਂ ਟੂਲਬਾਰ ਨੂੰ ਉੱਤੇ ਭੇਜੋ।";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom. */
+"ContextualHints.Toolbar.Top.Description.v107" = "ਜੇ ਤੁਹਾਨੂੰ ਪਸੰਦ ਹੋਵੇ ਤਾਂ ਟੂਲਬਾਰ ਨੂੰ ਹੇਠਾਂ ਭੇਜੋ।";
 
