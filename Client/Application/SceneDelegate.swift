@@ -165,7 +165,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return UIWindow(frame: UIScreen.main.bounds)
         }
 
-        windowScene.screenshotService?.delegate = self
+        if #available(iOS 14, *) {
+            windowScene.screenshotService?.delegate = self
+        }
 
         let window = UIWindow(windowScene: windowScene)
 
@@ -211,6 +213,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+@available(iOS 14, *)
 extension SceneDelegate: UIScreenshotServiceDelegate {
     func screenshotService(_ screenshotService: UIScreenshotService,
                            generatePDFRepresentationWithCompletion completionHandler: @escaping (Data?, Int, CGRect) -> Void) {
