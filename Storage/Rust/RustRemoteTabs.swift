@@ -63,7 +63,7 @@ public class RustRemoteTabs {
 
         queue.async {
             guard self.isOpen else {
-                let error = TabsError.OpenDatabaseError(message: "Database is closed")
+                let error = TabsApiError.UnexpectedTabsError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -72,7 +72,7 @@ public class RustRemoteTabs {
                 try _ = self.storage?.sync(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
-                if let tabsError = err as? TabsError {
+                if let tabsError = err as? TabsApiError {
                     SentryIntegration.shared.sendWithStacktrace(
                         message: "Tabs error when syncing Tabs database",
                         tag: SentryTag.rustRemoteTabs,
@@ -98,7 +98,7 @@ public class RustRemoteTabs {
 
         queue.async {
             guard self.isOpen else {
-                let error = TabsError.OpenDatabaseError(message: "Database is closed")
+                let error = TabsApiError.UnexpectedTabsError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -124,7 +124,7 @@ public class RustRemoteTabs {
                 storage.setLocalTabs(remoteTabs: tabs)
                 deferred.fill(Maybe(success: tabs.count))
             } else {
-                let error = TabsError.OpenDatabaseError(message: "Unknown error when setting local Rust Tabs")
+                let error = TabsApiError.UnexpectedTabsError(reason: "Unknown error when setting local Rust Tabs")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
             }
         }
@@ -140,7 +140,7 @@ public class RustRemoteTabs {
 
         queue.async {
             guard self.isOpen else {
-                let error = TabsError.OpenDatabaseError(message: "Database is closed")
+                let error = TabsApiError.UnexpectedTabsError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -149,7 +149,7 @@ public class RustRemoteTabs {
                 let records = storage.getAll()
                 deferred.fill(Maybe(success: records))
             } else {
-                deferred.fill(Maybe(failure: TabsError.OpenDatabaseError(message: "Unknown error when getting all Rust Tabs") as MaybeErrorType))
+                deferred.fill(Maybe(failure: TabsApiError.UnexpectedTabsError(reason: "Unknown error when getting all Rust Tabs") as MaybeErrorType))
             }
         }
 
