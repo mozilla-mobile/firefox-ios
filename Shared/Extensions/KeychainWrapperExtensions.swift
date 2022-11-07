@@ -44,7 +44,7 @@ public extension MZKeychainWrapper {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
                 log.debug("updating item \(key) with \(accessibility)")
 
-                guard let value = self.object(forKey: key) else {
+                guard let value = self.object(forKey: key, ofClass: NSDictionary.self) else {
                     log.error("failed to get item \(key)")
                     return
                 }
