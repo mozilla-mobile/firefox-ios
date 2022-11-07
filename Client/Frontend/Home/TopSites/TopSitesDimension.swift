@@ -12,18 +12,18 @@ struct TopSitesSectionDimension {
 struct TopSitesUIInterface {
     var isLandscape: Bool = UIWindow.isLandscape
     var isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone
-    var horizontalSizeClass: UIUserInterfaceSizeClass
+    var trait: UITraitCollection
     var availableWidth: CGFloat
 
     init(trait: UITraitCollection, availableWidth: CGFloat) {
-        horizontalSizeClass = trait.horizontalSizeClass
+        self.trait = trait
         self.availableWidth = availableWidth
     }
 
     init(isLandscape: Bool, isIphone: Bool, trait: UITraitCollection, availableWidth: CGFloat) {
         self.isLandscape = isLandscape
         self.isIphone = isIphone
-        horizontalSizeClass = trait.horizontalSizeClass
+        self.trait = trait
         self.availableWidth = availableWidth
     }
 }
@@ -80,8 +80,9 @@ class TopSitesDimensionImplementation: TopSitesDimension {
     /// - Parameter interface: Tile number is based on layout, this param contains the parameters needed to computer the tile number
     /// - Returns: The number of tiles per row the user will see
     private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
-        let cellWidth = TopSiteItemCell.UX.imageBackgroundSize.width
-        var availableWidth = interface.availableWidth - 18 * 2
+        let cellWidth = TopSitesViewModel.UX.cellEstimatedSize.width
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: interface.trait)
+        var availableWidth = interface.availableWidth - leadingInset * 2
         var numberOfTiles = 0
 
         while availableWidth > cellWidth {
