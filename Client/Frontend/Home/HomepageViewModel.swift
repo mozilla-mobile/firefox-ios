@@ -30,8 +30,9 @@ class HomepageViewModel: FeatureFlaggable {
         static let generalBorderWidth: CGFloat = 0.5
         static let generalIconCornerRadius: CGFloat = 4
 
-        static func leadingInset(traitCollection: UITraitCollection) -> CGFloat {
-            guard UIDevice.current.userInterfaceIdiom != .phone else { return standardInset }
+        static func leadingInset(traitCollection: UITraitCollection,
+                                 interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> CGFloat {
+            guard interfaceIdiom != .phone else { return standardInset }
 
             // Handles multitasking on iPad
             return traitCollection.horizontalSizeClass == .regular ? iPadInset : standardInset

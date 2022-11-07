@@ -81,7 +81,8 @@ class TopSitesDimensionImplementation: TopSitesDimension {
     /// - Returns: The number of tiles per row the user will see
     private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
         let cellWidth = TopSitesViewModel.UX.cellEstimatedSize.width
-        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: interface.trait)
+        let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: interface.trait,
+                                                             interfaceIdiom: interface.isIphone ? .phone : .pad)
         var availableWidth = interface.availableWidth - leadingInset * 2
         var numberOfTiles = 0
 
