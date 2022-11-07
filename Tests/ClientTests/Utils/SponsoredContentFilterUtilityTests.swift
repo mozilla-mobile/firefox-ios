@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Shared
 import Storage
 import WebKit
 
@@ -10,7 +11,8 @@ import WebKit
 
 class SponsoredContentFilterUtilityTests: XCTestCase {
 
-    private let sponsoredURL = "www.test.com/?parameter&mfadid=adm"
+    private static let sponsoredStandardURL = "www.test.com/?parameter&mfadid=adm"
+    private let sessionRestoreURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=https://www.mozilla.org/"
     private let normalURL = "www.test.com/?parameter&parameter"
 
     private var profile: MockProfile!
@@ -121,6 +123,15 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
         XCTAssertEqual(result.count, 3, "All sponsored highlights were removed")
     }
 
+    func testSponsoredHighlightsFilterSessionRestoreURLs () {
+        let subject = SponsoredContentFilterUtility()
+        let highlights = createHistoryHighlight(normalHighlightsCount: 3,
+                                                sponsoredHighlightsCount: 2,
+                                                sponsoredUrl: sessionRestoreURL)
+        XCTAssertEqual(highlights.count, 5)
+        let result = subject.filterSponsoredHighlights(from: highlights)
+        XCTAssertEqual(result.count, 3, "All sponsored highlights were removed")
+    }
 }
 
 // MARK: - Helpers
@@ -136,7 +147,7 @@ extension SponsoredContentFilterUtilityTests {
         }
 
         (0..<sponsoredSitesCount).forEach { index in
-            let site = Site(url: sponsoredURL,
+            let site = Site(url: SponsoredContentFilterUtilityTests.sponsoredStandardURL,
                             title: "")
             sites.append(site)
         }
@@ -161,15 +172,19 @@ extension SponsoredContentFilterUtilityTests {
 
         (0..<sponsoredTabsCount).forEach { index in
             let tab = Tab(profile: profile, configuration: WKWebViewConfiguration())
-            tab.url = URL(string: sponsoredURL)
+            tab.url = URL(string: SponsoredContentFilterUtilityTests.sponsoredStandardURL)
             tabs.append(tab)
         }
 
         return tabs
     }
 
-    func createHistoryHighlight(normalHighlightsCount: Int,
-                                sponsoredHighlightsCount: Int) -> [HistoryHighlight] {
+    func createHistoryHighlight(
+        normalHighlightsCount: Int,
+        sponsoredHighlightsCount: Int,
+        sponsoredUrl: String = SponsoredContentFilterUtilityTests.sponsoredStandardURL
+    ) -> [HistoryHighlight] {
+
         var highlights = [HistoryHighlight]()
         (0..<normalHighlightsCount).forEach { index in
             let highlight = HistoryHighlight(score: 0,
@@ -183,7 +198,7 @@ extension SponsoredContentFilterUtilityTests {
         (0..<sponsoredHighlightsCount).forEach { index in
             let highlight = HistoryHighlight(score: 0,
                                              placeId: 0,
-                                             url: sponsoredURL,
+                                             url: sponsoredUrl,
                                              title: "",
                                              previewImageUrl: nil)
             highlights.append(highlight)

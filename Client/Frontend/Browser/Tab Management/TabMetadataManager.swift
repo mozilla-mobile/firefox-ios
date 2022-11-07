@@ -3,10 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import MozillaAppServices
+import Shared
+import Storage
 
 class TabMetadataManager {
 
-    let profile: Profile?
+    let metadataObserver: HistoryMetadataObserver
 
     // Tab Groups
     var tabGroupData = TabGroupData()
@@ -20,8 +22,8 @@ class TabMetadataManager {
         tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openURLOnly.rawValue
     }
 
-    init(profile: Profile) {
-        self.profile = profile
+    init(metadataObserver: HistoryMetadataObserver) {
+        self.metadataObserver = metadataObserver
     }
 
     // Only update search term data with valid search term data
@@ -96,11 +98,14 @@ class TabMetadataManager {
     private func updateObservationForKey(key: HistoryMetadataKey,
                                          observation: HistoryMetadataObservation,
                                          completion: (() -> Void)?) {
-        guard let profile = profile else { return }
+        // If URL is empty or a session restore URL, do not record in metadata observation
+        let sessionRestoreURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)"
+        guard !key.url.isEmpty, !key.url.contains(sessionRestoreURL) else {
+            completion?()
+            return
+        }
 
-        guard !key.url.isEmpty else { return }
-
-        profile.places.noteHistoryMetadataObservation(key: key, observation: observation).uponQueue(.main) { _ in
+        metadataObserver.noteHistoryMetadataObservation(key: key, observation: observation) {
             completion?()
         }
     }
