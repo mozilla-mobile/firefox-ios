@@ -240,7 +240,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
         let result: Success
         switch profile.historyApiConfiguration {
-            case .old:
+        case .old:
             result = profile.history.addLocalVisit(visit)
         case .new:
             result = profile.places.applyObservation(visitObservation: VisitObservation(url: url, title: title, visitType: VisitTransition.link))

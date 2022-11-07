@@ -9,7 +9,6 @@ import SDWebImage
 import UIKit
 
 let LatestAppVersionProfileKey = "latestAppVersion"
-let NewPlacesAPIDefaultKey = "NewPlacesAPI"
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -18,9 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private let log = Logger.browserLogger
 
-    lazy var profile: Profile = BrowserProfile(localName: "profile",
-                                               syncDelegate: UIApplication.shared.syncDelegate,
-                                               isNewHistoryPlacesAPI: UserDefaults.standard.bool(forKey: NewPlacesAPIDefaultKey))
+    lazy var profile: Profile = BrowserProfile(
+        localName: "profile",
+        syncDelegate: UIApplication.shared.syncDelegate,
+        isNewHistoryPlacesAPI: UserDefaults.standard.bool(forKey: PrefsKeys.NewPlacesAPIDefaultKey)
+    )
 
     lazy var tabManager: TabManager = TabManager(
         profile: profile,

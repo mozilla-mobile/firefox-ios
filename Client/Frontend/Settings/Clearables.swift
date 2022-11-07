@@ -46,11 +46,11 @@ class HistoryClearable: Clearable {
         case .old:
             return profile.history.clearHistory().bindQueue(.main) { success in
                 return self.clearAfterHistory(success: success)
-        }
-        case.new:
-                _ = profile.history.clearHistory()
-                return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
-                    return self.clearAfterHistory(success: success)
+            }
+        case .new:
+            _ = profile.history.clearHistory()
+            return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
+                return self.clearAfterHistory(success: success)
             }
         }
     }

@@ -52,10 +52,11 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         }
     }
 
-    fileprivate func getHistoryAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+    private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int) ->
+    Deferred<Maybe<Cursor<Site>>> {
 
         switch self.profile.historyApiConfiguration {
-           case .old:
+        case .old:
             currentDeferredHistoryQuery?.cancel()
 
             guard let deferredHistory = frecentHistory.getSites(
@@ -116,10 +117,8 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                 }
 
                 let cancellableHistory = deferredHistory as? CancellableDeferred
-                if let cancellableHistory = cancellableHistory {
-                    if cancellableHistory.cancelled {
-                        return
-                    }
+                if let cancellableHistory = cancellableHistory, cancellableHistory.cancelled {
+                    return
                 }
 
                 let deferredHistorySites = results[0].successValue?.asArray() ?? []

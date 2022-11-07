@@ -206,8 +206,6 @@ class AppLaunchUtil {
     // MARK: - Application Services History Migration
 
     private func runAppServicesHistoryMigration() {
-        let browserProfile = self.profile as? BrowserProfile
-
         let placesHistory = FxNimbus.shared.features.placesHistory.value()
         FxNimbus.shared.features.placesHistory.recordExposure()
 
@@ -216,6 +214,8 @@ class AppLaunchUtil {
             return
         }
 
+        let browserProfile = self.profile as? BrowserProfile
+
         let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
         let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
         UserDefaults.standard.setValue(true, forKey: migrationRanKey)
@@ -223,7 +223,7 @@ class AppLaunchUtil {
             if placesHistory.api == .new {
                 browserProfile?.historyApiConfiguration = .new
                 // We set a user default so users with new configuration never go back
-                UserDefaults.standard.setValue(true, forKey: NewPlacesAPIDefaultKey)
+                UserDefaults.standard.setValue(true, forKey: PrefsKeys.NewPlacesAPIDefaultKey)
             }
 
             log.info("Migrating Application services history")

@@ -144,9 +144,11 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
         switch self.profile.historyApiConfiguration {
         case .old:
-            profile.history.getHistory(matching: term,
-                                       limit: searchQueryFetchLimit,
-                                       offset: searchCurrentFetchOffset) { results in
+            profile.history.getHistory(
+                matching: term,
+                limit: searchQueryFetchLimit,
+                offset: searchCurrentFetchOffset
+            ) { results in
                 self.isFetchInProgress = false
                 self.searchResultSites = results
                 completion(!results.isEmpty)
@@ -290,7 +292,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
         isFetchInProgress = true
 
         switch profile.historyApiConfiguration {
-            case .old:
+        case .old:
             return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
                 // Force 100ms delay between resolution of the last batch of results
                 // and the next time `fetchData()` can be called.
@@ -300,7 +302,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
                 }
                 return deferMaybe(result)
             }
-            case .new:
+        case .new:
             return profile.places.getVisitPageWithBound(
                 limit: queryFetchLimit,
                 offset: currentFetchOffset,
@@ -311,7 +313,14 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
                     self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
                 }
                 let sites = result.infos.map { info in
-                    let title = (info.title ?? "").isEmpty ? info.url : info.title!
+                    var title: String
+                    if let actualTitle = info.title, !actualTitle.isEmpty {
+                        title = actualTitle
+                    } else {
+                        // In case there is no title, we use the url
+                        // as the title
+                        title = info.url
+                    }
                     let site = Site(url: info.url, title: title)
                     site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000)
                     return site

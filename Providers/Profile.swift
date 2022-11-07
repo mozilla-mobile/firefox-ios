@@ -390,7 +390,13 @@ open class BrowserProfile: Profile {
                                       type: visitType)
                 history.addLocalVisit(visit)
                 if self.historyApiConfiguration == .new {
-                    let result = self.places.applyObservation(visitObservation: VisitObservation(url: url.description, title: title as String, visitType: VisitTransition.fromVisitType(visitType: visitType)))
+                    let result = self.places.applyObservation(
+                        visitObservation: VisitObservation(
+                            url: url.description,
+                            title: title as String,
+                            visitType: VisitTransition.fromVisitType(visitType: visitType)
+                        )
+                    )
                     result.upon { result in
                         guard result.isSuccess else {
                             SentryIntegration.shared.sendWithStacktrace(message: result.failureValue?.localizedDescription ?? "Unknown error adding history visit", tag: .rustPlaces, severity: .error)
@@ -489,7 +495,12 @@ open class BrowserProfile: Profile {
                 },
                 errCallback: errCallback)
         case .real:
-            self.places.migrateHistory(dbPath: self.browserDbPath, lastSyncTimestamp: lastSyncTimestamp, completion: callback, errCallback: errCallback)
+            self.places.migrateHistory(
+                dbPath: self.browserDbPath,
+                lastSyncTimestamp: lastSyncTimestamp,
+                completion: callback,
+                errCallback: errCallback
+            )
         }
     }
 

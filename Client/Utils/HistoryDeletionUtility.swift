@@ -103,14 +103,13 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         switch dateOption {
         case .allTime:
             switch profile.historyApiConfiguration {
-                case .old:
-                    profile.history
-                        .clearHistory()
-                        .uponQueue(.global(qos: .userInteractive)) { result in
-                            completion(result.isSuccess)
-                        }
+            case .old:
+                profile.history
+                    .clearHistory()
+                    .uponQueue(.global(qos: .userInteractive)) { result in
+                        completion(result.isSuccess)
+                    }
             case .new:
-                // for now we also delete the old history to keep
                 _ = profile.history
                     .clearHistory()
                 profile.places.deleteEverythingHistory().uponQueue(.global(qos: .userInteractive)) { result in
@@ -120,7 +119,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         default:
             guard let date = dateFor(dateOption) else { return }
             switch profile.historyApiConfiguration {
-                case .old:
+            case .old:
                 profile.history
                     .removeHistoryFromDate(date)
                     .uponQueue(.global(qos: .userInteractive)) { result in
@@ -134,7 +133,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
                     completion(result.isSuccess)
                 }
             }
-
         }
     }
 
