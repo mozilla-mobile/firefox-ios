@@ -199,7 +199,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
         return !isPrivate
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                heightDimension: .estimated(UX.estimatedCellHeight))

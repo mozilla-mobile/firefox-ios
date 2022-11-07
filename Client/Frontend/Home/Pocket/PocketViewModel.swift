@@ -138,7 +138,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             textColor: textColor)
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(PocketStandardCell.UX.cellHeight)

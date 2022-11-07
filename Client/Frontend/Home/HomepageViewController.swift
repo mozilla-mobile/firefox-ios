@@ -220,7 +220,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
             else { return nil }
-            return viewModel.section(for: layoutEnvironment.traitCollection)
+            return viewModel.section(for: layoutEnvironment.traitCollection, size: self.view.frame.size)
         }
         return layout
     }

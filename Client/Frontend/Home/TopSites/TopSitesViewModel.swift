@@ -154,7 +154,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return numberOfItems
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(UX.cellEstimatedSize.height)

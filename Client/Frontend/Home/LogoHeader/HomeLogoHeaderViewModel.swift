@@ -32,7 +32,7 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return .emptyHeader
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(100))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

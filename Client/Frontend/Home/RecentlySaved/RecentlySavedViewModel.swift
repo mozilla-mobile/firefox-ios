@@ -74,7 +74,7 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             textColor: textColor)
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(UX.cellWidth),
             heightDimension: .estimated(UX.cellHeight)
