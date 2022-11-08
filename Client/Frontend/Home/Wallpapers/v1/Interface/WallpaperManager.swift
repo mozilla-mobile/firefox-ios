@@ -94,8 +94,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
         return true
     }
 
-    /// Returns true if the feature is enabled for the build
-    private var featureAvailable: Bool {
+    /// Returns true if the feature is enabled for the build and the version matches the
+    /// current shipped version.
+    public var featureAvailable: Bool {
         guard let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
               wallpaperVersion == .v1
         else { return false }
