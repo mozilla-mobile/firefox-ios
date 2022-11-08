@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import WebKit
 import CoreSpotlight
-import SDWebImage
 import Kingfisher
 
 private let log = Logger.browserLogger
@@ -44,10 +43,6 @@ class HistoryClearable: Clearable {
         Tab.ChangeUserAgent.clear()
 
         return profile.history.clearHistory().bindQueue(.main) { success in
-            // TODO: Remove clear cache for SDWebImage when we are ready to remove library
-            // Clear image cache - SDWebImage
-            SDImageCache.shared.clearDisk()
-            SDImageCache.shared.clearMemory()
 
             // Clear image cache - Kingfisher
             KingfisherManager.shared.cache.clearMemoryCache()
