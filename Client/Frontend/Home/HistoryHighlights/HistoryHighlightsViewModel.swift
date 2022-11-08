@@ -178,8 +178,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
 
     var headerViewModel: LabelButtonHeaderViewModel {
         var textColor: UIColor?
-        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-           wallpaperVersion == .v1 {
+        if wallpaperManager.featureAvailable {
             textColor = wallpaperManager.currentWallpaper.textColor
         }
 
