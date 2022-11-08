@@ -20,13 +20,14 @@ class OpenSearchEngine: NSObject, NSCoding {
     private let searchTermComponent = "{searchTerms}"
     private let localeTermComponent = "{moz:locale}"
     private lazy var searchQueryComponentKey: String? = self.getQueryArgFromTemplate()
+    private let googleEngineID = "google-b-1-m"
 
     var headerSearchTitle: String {
-        if shortName == "Google" {
-            return "\(shortName) Search"
-        } else {
-            return"\(shortName) search"
+        guard engineID != googleEngineID else {
+            return .Search.GoogleEngineSectionTitle
         }
+
+        return String(format: .Search.EngineSectionTitle, shortName)
     }
 
     enum CodingKeys: String, CodingKey {
