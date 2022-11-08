@@ -252,17 +252,17 @@ extension SQLiteHistory: Favicons {
     fileprivate func lookupFaviconURLFromDatabase(forSite site: Site) -> Deferred<Maybe<URL>> {
         let deferred = CancellableDeferred<Maybe<URL>>()
 
-        getFaviconsForURL(site.url).upon { result in
-            guard let favicons = result.successValue,
-                let favicon = favicons[0],
-                let faviconURLString = favicon?.url,
-                let faviconURL = URL(string: faviconURLString) else {
-                deferred.fill(Maybe(failure: FaviconLookupError(siteURL: site.url)))
-                return
-            }
-
-            deferred.fill(Maybe(success: faviconURL))
-        }
+//        getFaviconsForURL(site.url).upon { result in
+//            guard let favicons = result.successValue,
+//                let favicon = favicons[0],
+//                let faviconURLString = favicon?.url,
+//                let faviconURL = URL(string: faviconURLString) else {
+//                deferred.fill(Maybe(failure: FaviconLookupError(siteURL: site.url)))
+//                return
+//            }
+//
+//            deferred.fill(Maybe(success: faviconURL))
+//        }
 
         return deferred
     }
