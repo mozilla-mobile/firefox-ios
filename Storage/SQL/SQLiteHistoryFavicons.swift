@@ -264,6 +264,8 @@ extension SQLiteHistory: Favicons {
 //            deferred.fill(Maybe(success: faviconURL))
 //        }
 
+        deferred.fill(Maybe(failure: FaviconLookupError(siteURL: site.url)))
+
         return deferred
     }
 
