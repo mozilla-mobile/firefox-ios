@@ -782,6 +782,18 @@ extension String {
             value: "Firefox Suggest",
             comment: "When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions.",
             lastUpdated: .v102)
+        public static let EngineSectionTitle = MZLocalizedString(
+            "Search.EngineSection.Title.v108",
+            tableName: "SearchHeaderTitle",
+            value: "%@ search",
+            comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. Different sections with results from the selected search engine will appear. This string will be used as a header to separate the selected engine search results from current search query.",
+            lastUpdated: .v108)
+        public static let GoogleEngineSectionTitle = MZLocalizedString(
+            "Search.Google.Title.v108",
+            tableName: "SearchHeaderTitle",
+            value: "Google Search",
+            comment: "When making a new search from the awesome bar, search results appear as the user write new letters in their search. This string will be used as a header for Google search results listed as suggestions.",
+            lastUpdated: .v108)
     }
 }
 
