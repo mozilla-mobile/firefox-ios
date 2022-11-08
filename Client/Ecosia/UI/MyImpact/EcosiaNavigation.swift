@@ -3,12 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Core
 
 final class EcosiaNavigation: UINavigationController, NotificationThemeable {
-
-    convenience init(delegate: EcosiaHomeDelegate?, referrals: Referrals) {
-        self.init(rootViewController: EcosiaHome(delegate: delegate, referrals: referrals))
+    required init?(coder aDecoder: NSCoder) {
+        nil
+    }
+    
+    override init(rootViewController: UIViewController) {
+        super.init(rootViewController: rootViewController)
 
         if traitCollection.userInterfaceIdiom == .pad {
             modalPresentationStyle = .formSheet
@@ -17,7 +19,7 @@ final class EcosiaNavigation: UINavigationController, NotificationThemeable {
             modalPresentationCapturesStatusBarAppearance = true
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationBar.setBackgroundImage(UIImage(), for: .default)

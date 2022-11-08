@@ -8,6 +8,7 @@ import Shared
 import Storage
 import UIKit
 import SafariServices
+import Core
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
@@ -22,6 +23,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showMenuPresenter(url: URL, tab: Tab, view: UIView)
     func showFindInPage()
     func showCustomizeHomePage()
+    func showReferrals()
 }
 
 enum MenuButtonToastAction {
@@ -84,6 +86,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
         if isHomePage {
             actions.append(contentsOf: [
+                getFirstSection(),
                 getLibrarySection(),
                 getLastSection()
             ])
@@ -93,8 +96,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         } else {
 
             // Actions on site page need specific data to be loaded
-            updateData(dataLoadingCompletion: {
+            updateData(dataLoadingCompletion: { [weak self] in
+                guard let self = self else { return }
+                
                 actions.append(contentsOf: [
+                    self.getFirstSection(),
                     self.getPageActionsSection(navigationController),
                     self.getLibrarySection(),
                     self.getLastSection()
@@ -172,6 +178,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         append(to: &section, action: getNewTabAction())
 
         return section
+    }
+    
+    private func getFirstSection() -> [PhotonRowActions] {
+        [getInviteFriendsAction()]
     }
 
     private func getLibrarySection() -> [PhotonRowActions] {
@@ -260,6 +270,17 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
     // MARK: - Actions
 
+    private func getInviteFriendsAction() -> PhotonRowActions {
+        SingleActionViewModel(
+            title: .localized(.inviteFriends),
+            iconString: "inviteFriends",
+            isNew: User.shared.referralsEntryPointIsNew) { [weak self] action in
+                action.isNew = false
+                User.shared.referralsEntryPointUsed()
+                self?.delegate?.showReferrals()
+        }.items
+    }
+    
     private func getNewTabAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.NewTab,
                                      iconString: ImageIdentifiers.newTab) { _ in

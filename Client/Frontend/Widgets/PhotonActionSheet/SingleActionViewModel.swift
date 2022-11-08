@@ -29,6 +29,8 @@ class SingleActionViewModel {
     private(set) var iconTint: UIColor?
 
     var isEnabled: Bool // Used by toggles like nightmode to switch tint color
+    var isNew: Bool // Used to display the "New" badge
+    
     private(set) var bold: Bool = false
     private(set) var tabCount: String?
     private(set) var tapHandler: ((SingleActionViewModel) -> Void)?
@@ -63,6 +65,7 @@ class SingleActionViewModel {
          badgeIconNamed: String? = nil,
          bold: Bool? = false,
          tabCount: String? = nil,
+         isNew: Bool = false,
          tapHandler: ((SingleActionViewModel) -> Void)? = nil) {
 
         self.title = title
@@ -76,6 +79,7 @@ class SingleActionViewModel {
         self.text = text
         self.bold = bold ?? false
         self.tabCount = tabCount
+        self.isNew = isNew
         self.badgeIconName = badgeIconNamed
     }
 

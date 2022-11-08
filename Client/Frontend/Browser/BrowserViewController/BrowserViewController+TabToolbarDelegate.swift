@@ -197,13 +197,19 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
 // MARK: - ToolbarActionMenuDelegate
 extension BrowserViewController: ToolBarActionMenuDelegate {
-
     func updateToolbarState() {
         updateToolbarStateForTraitCollection(view.traitCollection)
     }
 
     func showViewController(viewController: UIViewController) {
         presentWithModalDismissIfNeeded(viewController, animated: true)
+    }
+    
+    func showReferrals() {
+        presentWithModalDismissIfNeeded(EcosiaNavigation(
+            rootViewController: MultiplyImpact(delegate: self,
+                                               referrals: referrals)),
+                                        animated: true)
     }
 
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?) {

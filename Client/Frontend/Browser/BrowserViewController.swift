@@ -164,8 +164,9 @@ class BrowserViewController: UIViewController {
 
     // Ecosia
     lazy var ecosiaNavigation: EcosiaNavigation = {
-        return EcosiaNavigation(delegate: self, referrals: referrals)
+        .init(rootViewController: EcosiaHome(delegate: self, referrals: referrals))
     }()
+    
     let referrals = Referrals()
     var menuHelper: MainMenuActionHelper?
 
