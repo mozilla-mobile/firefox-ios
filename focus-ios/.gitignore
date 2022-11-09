@@ -44,6 +44,9 @@ screenshots-derived-data
 focusios-l10n
 export-locales-env
 
+# localization tools clone
+tools/Localizations
+
 # Glean
 .venv/
 Blockzilla/Generated

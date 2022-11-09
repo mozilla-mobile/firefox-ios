@@ -31,16 +31,30 @@ if [ ! -d Blockzilla.xcodeproj ]; then
 fi
 
 echo "[*] Cloning mozilla-l10n/focusios-l10n"
-git clone https://github.com/mozilla-l10n/focusios-l10n.git
+[ -d focusios-l10n ] && rm -rf focusios-l10n
+git clone https://github.com/mozilla-l10n/focusios-l10n.git focusios-l10n
 
-echo "\n\n[*] Building tools/Localizations"
+echo "[*] Cloning mozilla-mobile/LocalizationTools"
+[ -d tools/Localizations ] && rm -rf tools/Localizations
+git clone https://github.com/mozilla-mobile/LocalizationTools.git tools/Localizations
+
+echo "[*] Building tools/Localizations"
 (cd tools/Localizations && swift build)
 
-echo "\n\n[*] Importing Strings - takes a minute. (output in import-strings.log)"
-(cd tools/Localizations && swift run Localizations \
+echo "[*] Replacing firefox with focus in swift task files"
+sed -i '' 's/firefox-ios.xliff/focus-ios.xliff/g' tools/Localizations/Sources/LocalizationTools/tasks/*.swift
+
+echo "[*] Removing es-ES locale mapping from swift import task"
+sed -i '' '/es-ES/d' tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
+
+echo "[*] Removing WidgetKit/en-US.lproj/WidgetIntents.strings from swift import task"
+# Match all text between a line containing 'ShortcutItemTitleQRCode' to ']' and delete them
+sed -ri '' '/ShortcutItemTitleQRCode/,/\]/{/ShortcutItemTitleQRCode/!{/\]/!d;};}' tools/Localizations/Sources/LocalizationTools/tasks/ImportTask.swift
+
+echo "[*] Importing Strings - takes a minute. (output in import-strings.log)"
+(cd tools/Localizations && swift run LocalizationTools \
   --import \
   --project-path "$PWD/../../Blockzilla.xcodeproj" \
   --l10n-project-path "$PWD/../../focusios-l10n") > import-strings.log 2>&1
 
-echo "\n\n[!] Strings have been imported. You can now create a PR."
-
+echo "[!] Strings have been imported. You can now create a PR."
