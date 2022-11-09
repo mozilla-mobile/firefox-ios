@@ -4,6 +4,9 @@
 /* Close Private Tabs */
 "TodayWidget.ClosePrivateTabsLabelV2" = "Sulje yksityiset välilehdet";
 
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Lisää Firefoxin oikotiet kotinäyttöön.";
+
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Siirry kopioituun linkkiin";
 
@@ -25,9 +28,33 @@
 /* Open New Private Tab button label */
 "TodayWidget.PrivateTabButtonLabelV1" = "Yksityinen haku";
 
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Lisää Firefox-oikotie kotinäyttöön. Kun olet lisännyt widgetin, kosketa pitkään muokataksesi sitä ja valitse toinen oikotie.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Pikatoiminnot";
+
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
 "TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-oikotiet";
 
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Lisää oikoteitä avoimiin välilehtiisi.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Pikanäkymä";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Hae\nFirefoxissa";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Hae\nyksityisessä välilehdessä";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Lisää oikotiet usein ja äskettäin vierailtuihin sivustoihin.";
+
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Ykkössivustot";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Sivustojen oikotiet";
 
