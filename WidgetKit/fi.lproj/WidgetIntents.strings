@@ -2,47 +2,47 @@
 "2GqvPe" = "Siirry kopioituun linkkiin";
 
 /* (No Comment) */
-"ctDNmu" = "Quick access to various Firefox actions";
+"ctDNmu" = "Nopea pääsy useisiin Firefoxin toimintoihin";
 
 /* (No Comment) */
-"eHmH1H" = "Clear Private Tabs";
+"eHmH1H" = "Tyhjennä yksityiset välilehdet";
 
 /* (No Comment) */
-"eqyNJg" = "Quick Action";
+"eqyNJg" = "Poikatoiminto";
 
 /* (No Comment) */
-"eV8mOT" = "Quick Action Type";
+"eV8mOT" = "Pikatoiminnon tyyppi";
 
 /* (No Comment) */
-"fi3W24-2GqvPe" = "There are ${count} options matching ‘Go to Copied Link’.";
+"fi3W24-2GqvPe" = "On ${count} vaihtoehtoa, jotka vastaavat \"Siirry kopioituun linkkiin\".";
 
 /* (No Comment) */
-"fi3W24-eHmH1H" = "There are ${count} options matching ‘Clear Private Tabs’.";
+"fi3W24-eHmH1H" = "On ${count} vaihtoehtoa, jotka vastaavat \"Tyhjennä yksityiset välilehdet\".";
 
 /* (No Comment) */
-"fi3W24-scEmjs" = "There are ${count} options matching ‘New Private Search’.";
+"fi3W24-scEmjs" = "On ${count} vaihtoehtoa, jotka vastaavat \"Uusi yksityinen haku\".";
 
 /* (No Comment) */
-"fi3W24-xRJbBP" = "There are ${count} options matching ‘New Search’.";
+"fi3W24-xRJbBP" = "On ${count} vaihtoehtoa, jotka vastaavat \"Uusi haku\".";
 
 /* (No Comment) */
-"PzSrmZ-2GqvPe" = "Just to confirm, you wanted ‘Go to Copied Link’?";
+"PzSrmZ-2GqvPe" = "Asian vahvistamiseksi, halusitko \"Siirry kopioituun linkkiin\"?";
 
 /* (No Comment) */
-"PzSrmZ-eHmH1H" = "Just to confirm, you wanted ‘Clear Private Tabs’?";
+"PzSrmZ-eHmH1H" = "Asian vahvistamiseksi, halusitko \"Tyhjennä yksityiset välilehdet\"?";
 
 /* (No Comment) */
-"PzSrmZ-scEmjs" = "Just to confirm, you wanted ‘New Private Search’?";
+"PzSrmZ-scEmjs" = "Asian vahvistamiseksi, halusitko \"Uusi yksityinen haku\"?";
 
 /* (No Comment) */
-"PzSrmZ-xRJbBP" = "Just to confirm, you wanted ‘New Search’?";
+"PzSrmZ-xRJbBP" = "Asian vahvistamiseksi, halusitko \"Uusi haku\"?";
 
 /* (No Comment) */
-"scEmjs" = "New Private Search";
+"scEmjs" = "Uusi yksityinen haku";
 
 /* (No Comment) */
-"w9jdPK" = "Quick Action";
+"w9jdPK" = "Poikatoiminto";
 
 /* (No Comment) */
-"xRJbBP" = "New Search";
+"xRJbBP" = "Uusi haku";
 
