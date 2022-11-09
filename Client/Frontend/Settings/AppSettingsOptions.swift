@@ -714,7 +714,7 @@ class UseNewHistoryApiOption: HiddenSetting {
                         Logger.browserLogger.info("Successful Migration took \(result.totalDuration / 1000) seconds")
 
                     }, errCallback: { _ in
-                        // noop
+                        Logger.browserLogger.debug("Failed migration of history")
                     }
                 )
                 browserProfile?.historyApiConfiguration = .new
@@ -724,7 +724,7 @@ class UseNewHistoryApiOption: HiddenSetting {
         case .new:
             Logger.browserLogger.info("Setting the history configuration to old")
             browserProfile?.historyApiConfiguration = .old
-            // We set a user default so users with new configuration never go back
+            // We set a user default so users will use the old configuration
             UserDefaults.standard.setValue(false, forKey: PrefsKeys.NewPlacesAPIDefaultKey)
         }
     }
