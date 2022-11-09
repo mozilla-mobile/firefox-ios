@@ -77,7 +77,7 @@ fileprivate extension CGFloat {
     static let imageSize: CGFloat = 30
     static let titleSize: CGFloat = 26
     static let titleBottomPadding: CGFloat = 12
-    static let skipButtonPadding: CGFloat = 20
+    static let skipButtonPadding: CGFloat = 40
     static let firstSubtitleBottomPadding: CGFloat = 14
     static let viewPadding: CGFloat = 26
     static let radius: CGFloat = 12
