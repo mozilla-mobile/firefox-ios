@@ -32,6 +32,7 @@ struct FocusWidgetsEntryView : View {
 
     var body: some View {
         SearchWidgetView(title: String(format: .searchInAppFormat, String.appNameForBundle))
+            .widgetURL(.deepLinkURL)
     }
 }
 
@@ -82,4 +83,8 @@ fileprivate extension String {
         value: "Search in %@",
         comment: "Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar).")
     static let searchInApp = String(format: searchInAppFormat, AppInfo.shortProductName)
+}
+
+fileprivate extension URL {
+    static let deepLinkURL: URL = URL(string: "firefox-focus://widget")!
 }
