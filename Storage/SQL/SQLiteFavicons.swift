@@ -67,27 +67,6 @@ open class SQLiteFavicons {
     }
 
     func insertOrUpdateFaviconInTransaction(_ favicon: Favicon, conn: SQLiteDBConnection) -> Int? {
-        let query = self.getFaviconIDQuery(url: favicon.url)
-        let cursor = conn.executeQuery(query.sql, factory: IntFactory, withArgs: query.args)
-
-        if let id = cursor[0] {
-            let updateQuery = self.getUpdateFaviconQuery(favicon: favicon)
-            do {
-                try conn.executeChange(updateQuery.sql, withArgs: updateQuery.args)
-            } catch {
-                return nil
-            }
-
-            return id
-        }
-
-        let insertQuery = self.getInsertFaviconQuery(favicon: favicon)
-        do {
-            try conn.executeChange(insertQuery.sql, withArgs: insertQuery.args)
-        } catch {
-            return nil
-        }
-
-        return Int(conn.lastInsertedRowID)
+        return nil
     }
 }
