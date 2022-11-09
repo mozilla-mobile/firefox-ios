@@ -21,7 +21,8 @@ class SettingsTableViewCell: UITableViewCell {
             label.adjustsFontForContentSizeCategory = true
         }
 
-        NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: nil, queue: nil) { _ in
+        NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: nil, queue: nil) { [weak self] _ in
+            guard let self = self else { return }
             self.setupDynamicFont(forLabels: labels)
         }
     }

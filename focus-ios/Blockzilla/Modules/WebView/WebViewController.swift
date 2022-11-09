@@ -189,7 +189,8 @@ class WebViewController: UIViewController, WebController {
     }
 
     private func setupBlockLists() {
-        ContentBlockerHelper.shared.getBlockLists { lists in
+        ContentBlockerHelper.shared.getBlockLists { [weak self] lists in
+            guard let self = self else { return }
             self.reloadBlockers(lists)
         }
     }
@@ -258,7 +259,7 @@ class WebViewController: UIViewController, WebController {
     }
 
     /// Get the metadata out of the page-metadata-parser, and into a type safe struct as soon as possible.
-    /// 
+    ///
     func getMetadata(completion: @escaping (Swift.Result<Metadata, Error>) -> Void) {
         evaluate("__firefox__.metadata.getMetadata()") { result, error in
             let metadata = result
@@ -275,8 +276,9 @@ class WebViewController: UIViewController, WebController {
         }
     }
 
-    func getMetadata()  -> Future<Metadata, Error> {
-        Future { promise in
+    func getMetadata() -> Future<Metadata, Error> {
+        Future { [weak self] promise in
+            guard let self = self else { return }
             self.getMetadata { result in
                 promise(result)
             }
@@ -284,7 +286,8 @@ class WebViewController: UIViewController, WebController {
     }
 
     func getMetadata() async throws -> Metadata {
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard let self = self else { return }
             self.getMetadata { result in
                 continuation.resume(with: result)
             }

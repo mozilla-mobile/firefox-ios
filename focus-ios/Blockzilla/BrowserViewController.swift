@@ -109,12 +109,12 @@ class BrowserViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
 
-        self.shortcutManager.onTap = self.shortcutTapped(url:)
-        self.shortcutManager.onDismiss = self.dismissShortcut
-        self.shortcutManager.onRemove = self.removeFromShortcuts
-        self.shortcutManager.onShowRenameAlert = self.showRenameAlert(shortcut:)
-        self.shortcutManager.shortcutsDidUpdate = self.shortcutsDidUpdate
-        self.shortcutManager.shortcutDidRemove = self.shortcutDidRemove(shortcut:)
+        self.shortcutManager.onTap = { [unowned self] in self.shortcutTapped(url: $0) }
+        self.shortcutManager.onDismiss = { [unowned self] in self.dismissShortcut() }
+        self.shortcutManager.onRemove = { [unowned self] in self.removeFromShortcuts() }
+        self.shortcutManager.onShowRenameAlert = { [unowned self] in self.showRenameAlert(shortcut: $0) }
+        self.shortcutManager.shortcutsDidUpdate = { [unowned self] in self.shortcutsDidUpdate() }
+        self.shortcutManager.shortcutDidRemove = { [unowned self] in self.shortcutDidRemove(shortcut: $0) }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -256,21 +256,21 @@ class BrowserViewController: UIViewController {
         }
 
         // Listen for request desktop site notifications
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { _ in
-            self.webViewController.requestUserAgentChange()
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { [weak self] _ in
+            self?.webViewController.requestUserAgentChange()
         }
 
         // Listen for request mobile site notifications
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification), object: nil, queue: nil) { _ in
-            self.webViewController.requestUserAgentChange()
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification), object: nil, queue: nil) { [weak self] _ in
+            self?.webViewController.requestUserAgentChange()
         }
 
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
         // Listen for find in page actvitiy notifications
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil) { _ in
-            self.updateFindInPageVisibility(visible: true, text: "")
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil) { [weak self] _ in
+            self?.updateFindInPageVisibility(visible: true, text: "")
         }
 
         setupOnboardingEvents()
@@ -319,7 +319,7 @@ class BrowserViewController: UIViewController {
                     sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
                     body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
                     dismiss: {
-                        self.onboardingEventsHandler.route = nil
+                        [unowned self] in self.onboardingEventsHandler.route = nil
                         self.onboardingEventsHandler.send(.showTrash)
                     }
                 )
@@ -329,7 +329,7 @@ class BrowserViewController: UIViewController {
                     anchoredBy: self.urlBar.shieldIcon,
                     sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
                     body: UIConstants.strings.tooltipBodyTextForShieldIcon,
-                    dismiss: { self.onboardingEventsHandler.route = nil }
+                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
                 )
             }
 
@@ -343,7 +343,7 @@ class BrowserViewController: UIViewController {
                     anchoredBy: sourceButton,
                     sourceRect: sourceRect,
                     body: UIConstants.strings.tooltipBodyTextForTrashIconV2,
-                    dismiss: { self.onboardingEventsHandler.route = nil }
+                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
                 )
 
             case .v1:
@@ -354,7 +354,7 @@ class BrowserViewController: UIViewController {
                     anchoredBy: sourceButton,
                     sourceRect: sourceRect,
                     body: UIConstants.strings.tooltipBodyTextForTrashIcon,
-                    dismiss: { self.onboardingEventsHandler.route = nil }
+                    dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
                 )
             }
 
@@ -366,7 +366,7 @@ class BrowserViewController: UIViewController {
                     y: self.urlBar.textFieldAnchor.bounds.maxY, width: 0, height: 0
                 ),
                 body: UIConstants.strings.tooltipBodyTextStartPrivateBrowsing,
-                dismiss: { self.onboardingEventsHandler.route = nil }
+                dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
             )
 
         case .onboarding(let onboardingType):
@@ -419,7 +419,7 @@ class BrowserViewController: UIViewController {
                 anchoredBy: self.urlBar.contextMenuButton,
                 sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
                 body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
-                dismiss: { self.onboardingEventsHandler.route = nil }
+                dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
             )
         case .widgetTutorial:
             let controller = PortraitHostingController(
@@ -431,7 +431,7 @@ class BrowserViewController: UIViewController {
                         subtitleStep3: UIConstants.strings.subtitleStepThreeShowMeHowOnboardingV2,
                         buttonText: UIConstants.strings.buttonTextShowMeHowOnboardingV2,
                         widgetText: UIConstants.strings.searchInAppInstruction),
-                    dismissAction: { self.onboardingEventsHandler.route = nil }))
+                    dismissAction: { [unowned self] in self.onboardingEventsHandler.route = nil }))
             controller.modalPresentationStyle = UIDevice.current.userInterfaceIdiom == .phone ? .overFullScreen : .formSheet
             controller.isModalInPresentation = true
             return controller
@@ -937,7 +937,8 @@ class BrowserViewController: UIViewController {
                                         UIConstants.layout.shortcutsContainerSpacingSmallestSplitView :
                                         (isIPadRegularDimensions ? UIConstants.layout.shortcutsContainerSpacingIPad : UIConstants.layout.shortcutsContainerSpacing)
 
-        coordinator.animate(alongsideTransition: { _ in
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            guard let self = self else { return }
             self.urlBar.shouldShowToolset = self.showsToolsetInURLBar
 
             if self.homeViewController == nil && self.scrollBarState != .expanded {
@@ -1219,7 +1220,8 @@ extension BrowserViewController: URLBarDelegate {
 
         if Settings.getToggle(.enableSearchSuggestions), !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
-            searchSuggestionsDebouncer.completion = {
+            searchSuggestionsDebouncer.completion = { [weak self] in
+                guard let self = self else { return }
                 self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
                     let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
 
@@ -2032,11 +2034,13 @@ extension BrowserViewController {
     func showRenameAlert(shortcut: Shortcut) {
         let alert = UIAlertController.renameAlertController(
             currentName: shortcut.name,
-            renameAction: { newName in
+            renameAction: { [weak self] newName in
+                guard let self = self else { return }
                 self.shortcutManager.rename(shortcut: shortcut, newName: newName)
                 self.urlBar.activateTextField()
 
-            }, cancelAction: {
+            }, cancelAction: { [weak self] in
+                guard let self = self else { return }
                 self.urlBar.activateTextField()
 
             })

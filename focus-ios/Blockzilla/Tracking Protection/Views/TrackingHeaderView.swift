@@ -70,7 +70,8 @@ class TrackingHeaderView: UIView {
     func configure(domain: String, publisher: AnyPublisher<URL?, Never>) {
         self.domainLabel.text = domain
         cancellable = publisher
-            .sink { url in
+            .sink { [weak self] url in
+                guard let self = self else { return }
                 guard let url = url else {
                     self.faviImageView.defaultImage = .defaultFavicon
                     return

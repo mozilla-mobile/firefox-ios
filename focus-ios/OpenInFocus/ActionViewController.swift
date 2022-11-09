@@ -70,14 +70,16 @@ class ActionViewController: SLComposeServiceViewController {
         // If a URL is found, process it. Otherwise we will try to convert
         // the text item to a URL falling back to sending just the text.
         if let urlProvider = urlProvider {
-            urlProvider.processUrl { (urlItem, error) in
+            urlProvider.processUrl { [weak self] (urlItem, error) in
+                guard let self = self else { return }
                 Task { @MainActor in
                     guard let url = (urlItem as? NSURL)?.encodedUrl, let focusUrl = self.focusUrl(url: url) else { self.cancel(); return }
                     self.handleUrl(focusUrl)
                 }
             }
         } else if let textProvider = textProvider {
-            textProvider.processText { (textItem, error) in
+            textProvider.processText { [weak self] (textItem, error) in
+                guard let self = self else { return }
                 Task { @MainActor in
                     guard let text = textItem as? String else { self.cancel(); return }
                     guard let focusUrl = self.textUrl(text: text) else { self.cancel(); return }
