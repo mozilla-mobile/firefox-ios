@@ -92,6 +92,8 @@ class ContileProviderTests: XCTestCase {
         }
     }
 
+    // MARK: - Tile order
+
     func testOrderingTilePosition_succeedsWithCorrectPosition() {
         stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
         testProvider { result in
@@ -118,6 +120,8 @@ class ContileProviderTests: XCTestCase {
         }
     }
 
+    // MARK: - Cache
+
     func testCaching_succeedsFromCache() {
         stubResponse(response: twoTilesWithOutOfOrderPositions, statusCode: 200, error: nil)
         let provider = getProvider()
@@ -132,6 +136,29 @@ class ContileProviderTests: XCTestCase {
                 default:
                     XCTFail("Expected success, got \(result) instead")
                 }
+
+                expectation.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 1.0, handler: nil)
+    }
+
+    func testCaching_withEmptyResponse_succeedsFromCache() {
+        stubResponse(response: emptyResponse, statusCode: 200, error: nil)
+        let provider = getProvider()
+        let expectation = expectation(description: "Wait for completion")
+        provider.fetchContiles { _ in
+            URLProtocolStub.removeStub()
+
+            provider.fetchContiles { result in
+                switch result {
+                case let .failure(error as ContileProvider.Error):
+                    XCTAssertEqual(error, ContileProvider.Error.failure)
+                default:
+                    XCTFail("Expected failure, got \(result) instead")
+                }
+
                 expectation.fulfill()
             }
         }
@@ -197,7 +224,7 @@ class ContileProviderTests: XCTestCase {
 
 private extension ContileProviderTests {
 
-    func getProvider(file: StaticString = #filePath, line: UInt = #line) -> ContileProviderInterface {
+    func getProvider(file: StaticString = #filePath, line: UInt = #line) -> ContileProvider {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]
         let session = URLSession(configuration: configuration)
