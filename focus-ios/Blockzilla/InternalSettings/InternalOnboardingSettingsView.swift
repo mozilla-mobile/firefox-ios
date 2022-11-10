@@ -11,10 +11,7 @@ struct InternalOnboardingSettingsView {
 extension InternalOnboardingSettingsView: View {
     var body: some View {
         Form {
-            Section(footer: Text(verbatim: "To show the old version of onboarding disable first the Nimbus experiment, then turn on the option.")) {
-                Toggle(isOn: $internalSettings.ignoreOnboardingExperiment) {
-                    Text(verbatim: "Ignore Onboarding Experiment")
-                }
+            Section {
                 Toggle(isOn: $internalSettings.showOldOnboarding) {
                     Text(verbatim: "Show Old Onboarding")
                 }

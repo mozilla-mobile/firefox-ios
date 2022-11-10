@@ -54,12 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private lazy var onboardingEventsHandler: OnboardingEventsHandling = {
         var shouldShowNewOnboarding: () -> Bool = { [unowned self] in
-            if UserDefaults.standard.bool(forKey: OnboardingConstants.ignoreOnboardingExperiment) {
-                return !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
-            } else {
-                let config = AppNimbus.shared.features.onboardingVariables.value()
-                return config.showNewOnboarding
-            }
+            !UserDefaults.standard.bool(forKey: OnboardingConstants.showOldOnboarding)
         }
         guard !AppInfo.isTesting() else { return TestOnboarding() }
         return OnboardingFactory.makeOnboardingEventsHandler(shouldShowNewOnboarding)
