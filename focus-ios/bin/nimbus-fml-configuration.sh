@@ -19,6 +19,9 @@ case "${CONFIGURATION}" in
     Focus)
         CHANNEL="release"
         ;;
+    FocusRelease)
+        CHANNEL="release"
+        ;;
     KlarDebug)
         CHANNEL="developer"
         ;;
@@ -26,6 +29,9 @@ case "${CONFIGURATION}" in
         CHANNEL="beta"
         ;;
     Klar)
+        CHANNEL="release"
+        ;;
+    KlarRelease)
         CHANNEL="release"
         ;;
     *) # The channel must match up with the channels listed in APP_FML_FILE.
