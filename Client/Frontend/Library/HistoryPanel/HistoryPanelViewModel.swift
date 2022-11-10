@@ -312,7 +312,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
                     self.isFetchInProgress = false
                     self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
                 }
-                let sites = result.infos.map { info in
+                let sites = result.infos.map { info -> Site in
                     var title: String
                     if let actualTitle = info.title, !actualTitle.isEmpty {
                         title = actualTitle
