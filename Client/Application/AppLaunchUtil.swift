@@ -24,6 +24,17 @@ extension PlacesMigrationConfiguration {
     }
 }
 
+extension PlacesApiConfiguration {
+    func into() -> HistoryAPIConfiguration {
+        switch self {
+        case .old:
+            return .old
+        case .new:
+            return .new
+        }
+    }
+}
+
 class AppLaunchUtil {
 
     private var log: RollingFileLogger
@@ -197,15 +208,24 @@ class AppLaunchUtil {
     private func runAppServicesHistoryMigration() {
         let placesHistory = FxNimbus.shared.features.placesHistory.value()
         FxNimbus.shared.features.placesHistory.recordExposure()
+
         guard placesHistory.migration != .disabled else {
             log.info("Migration disabled, won't run migration")
             return
         }
+
         let browserProfile = self.profile as? BrowserProfile
+
         let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
         let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
         UserDefaults.standard.setValue(true, forKey: migrationRanKey)
         if !migrationRan {
+            if placesHistory.api == .new {
+                browserProfile?.historyApiConfiguration = .new
+                // We set a user default so users with new configuration never go back
+                UserDefaults.standard.setValue(true, forKey: PrefsKeys.NewPlacesAPIDefaultKey)
+            }
+
             log.info("Migrating Application services history")
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started

@@ -142,12 +142,37 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     func performSearch(term: String, completion: @escaping (Bool) -> Void) {
         isFetchInProgress = true
 
-        profile.history.getHistory(matching: term,
-                                   limit: searchQueryFetchLimit,
-                                   offset: searchCurrentFetchOffset) { results in
-            self.isFetchInProgress = false
-            self.searchResultSites = results
-            completion(!results.isEmpty)
+        switch self.profile.historyApiConfiguration {
+        case .old:
+            profile.history.getHistory(
+                matching: term,
+                limit: searchQueryFetchLimit,
+                offset: searchCurrentFetchOffset
+            ) { results in
+                self.isFetchInProgress = false
+                self.searchResultSites = results
+                completion(!results.isEmpty)
+            }
+        case .new:
+            profile.places.interruptReader()
+            profile.places.queryAutocomplete(matchingSearchQuery: term, limit: searchQueryFetchLimit).uponQueue(.main) { result in
+                self.isFetchInProgress = false
+
+                guard result.isSuccess else {
+                    SentryIntegration.shared.sendWithStacktrace(
+                        message: "Error searching history panel",
+                        tag: .rustPlaces,
+                        severity: .error,
+                        description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
+                    )
+                    completion(false)
+                    return
+                }
+                if let result = result.successValue {
+                    self.searchResultSites = result.map { Site(url: $0.url, title: $0.title) }
+                    completion(!result.isEmpty)
+                }
+            }
         }
     }
 
@@ -266,16 +291,42 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
         isFetchInProgress = true
 
-        return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
-            // Force 100ms delay between resolution of the last batch of results
-            // and the next time `fetchData()` can be called.
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                self.isFetchInProgress = false
-
-                self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
+        switch profile.historyApiConfiguration {
+        case .old:
+            return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
+                // Force 100ms delay between resolution of the last batch of results
+                // and the next time `fetchData()` can be called.
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                    self.isFetchInProgress = false
+                    self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
+                }
+                return deferMaybe(result)
             }
-
-            return deferMaybe(result)
+        case .new:
+            return profile.places.getVisitPageWithBound(
+                limit: queryFetchLimit,
+                offset: currentFetchOffset,
+                excludedTypes: VisitTransitionSet(0)
+            ) >>== { result in
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                    self.isFetchInProgress = false
+                    self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
+                }
+                let sites = result.infos.map { info in
+                    var title: String
+                    if let actualTitle = info.title, !actualTitle.isEmpty {
+                        title = actualTitle
+                    } else {
+                        // In case there is no title, we use the url
+                        // as the title
+                        title = info.url
+                    }
+                    let site = Site(url: info.url, title: title)
+                    site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000)
+                    return site
+                }.uniqued()
+                return deferMaybe(ArrayCursor(data: sites))
+            }
         }
     }
 
@@ -319,6 +370,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     private func deleteSingle(site: Site) {
         groupedSites.remove(site)
         profile.history.removeHistoryForURL(site.url)
+        if profile.historyApiConfiguration == .new {
+            _ = profile.places.deleteVisitsFor(site.url)
+        }
 
         if isSearchInProgress, let indexToRemove = searchResultSites.firstIndex(of: site) {
             searchResultSites.remove(at: indexToRemove)
