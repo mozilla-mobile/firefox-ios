@@ -45,7 +45,7 @@ struct WallpaperURLProvider {
 
     private func imageURLWith(_ key: String, and fileName: String) throws -> URL {
         let scheme = try urlScheme()
-        guard let url = URL(string: "\(scheme)/ios/\(key)/\(fileName).png") else {
+        guard let url = URL(string: "\(scheme)/ios/\(key)/\(fileName).jpg") else {
             throw URLProviderError.invalidURL
         }
 
