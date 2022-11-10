@@ -7,9 +7,13 @@ import SnapKit
 import Telemetry
 import Glean
 
+enum Source: String {
+   case action, shortcut, suggestion, topsite, widget, none
+}
+
 protocol URLBarDelegate: AnyObject {
     func urlBar(_ urlBar: URLBar, didEnterText text: String)
-    func urlBar(_ urlBar: URLBar, didSubmitText text: String)
+    func urlBar(_ urlBar: URLBar, didSubmitText text: String, source: Source)
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL)
     func urlBarDidActivate(_ urlBar: URLBar)
     func urlBarDidDeactivate(_ urlBar: URLBar)
@@ -462,7 +466,7 @@ class URLBar: UIView {
     @objc func pasteAndGo(clipboardString: String) {
         isEditing = true
         delegate?.urlBarDidActivate(self)
-        delegate?.urlBar(self, didSubmitText: clipboardString)
+        delegate?.urlBar(self, didSubmitText: clipboardString, source: .action)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.pasteAndGo)
         GleanMetrics.UrlInteraction.pasteAndGo.record()
@@ -901,7 +905,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
         }
         userInputText = nil
 
-        delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "")
+        delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "", source: .action)
 
         if Settings.getToggle(.enableSearchSuggestions) {
             Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))

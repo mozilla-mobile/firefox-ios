@@ -235,7 +235,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.deactivateUrlBarOnHomeView()
             browserViewController.dismissSettings()
             browserViewController.dismissActionSheet()
-            browserViewController.submit(url: url)
+            browserViewController.submit(url: url, source: .action)
             queuedUrl = nil
         } else if let text = queuedString {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)
@@ -246,9 +246,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.dismissActionSheet()
 
             if let fixedUrl = URIFixup.getURL(entry: text) {
-                browserViewController.submit(url: fixedUrl)
+                browserViewController.submit(url: fixedUrl, source: .action)
             } else {
-                browserViewController.submit(text: text)
+                browserViewController.submit(text: text, source: .action)
             }
 
             queuedString = nil
@@ -285,7 +285,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             browserViewController.resetBrowser(hidePreviousSession: true)
             browserViewController.ensureBrowsingMode()
             browserViewController.deactivateUrlBarOnHomeView()
-            browserViewController.submit(url: url)
+            browserViewController.submit(url: url, source: .action)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.siri, object: TelemetryEventObject.openFavoriteSite)
             GleanMetrics.Siri.openFavoriteSite.record()
         case "EraseIntent":

@@ -76,7 +76,7 @@ enum NavigationPath {
 
     private static func handleURL(_ application: UIApplication, url: URL, with browserViewController: BrowserViewController) -> URL? {
         if application.applicationState == .active {
-            browserViewController.submit(url: url)
+            browserViewController.submit(url: url, source: .action)
         }
         else { return url }
         return nil
@@ -85,10 +85,9 @@ enum NavigationPath {
     private static func handleText(_ application: UIApplication, text: String, with browserViewController: BrowserViewController) -> String? {
         if application.applicationState == .active {
             if let fixedUrl = URIFixup.getURL(entry: text) {
-                browserViewController.submit(url: fixedUrl)
-            }
-            else {
-                browserViewController.submit(text: text)
+                browserViewController.submit(url: fixedUrl, source: .action)
+            } else {
+                browserViewController.submit(text: text, source: .action)
             }
         }
         else { return text }

@@ -24,7 +24,7 @@ class BrowserViewController: UIViewController {
     private lazy var webViewController: WebViewController = {
         var menuAction = WebMenuAction.live
         menuAction.openLink = { url in
-            self.submit(url: url)
+            self.submit(url: url, source: .action)
         }
         return WebViewController(trackingProtectionManager: trackingProtectionManager, webMenuAction: menuAction)
     }()
@@ -286,7 +286,7 @@ class BrowserViewController: UIViewController {
         guard shouldEnsureBrowsingMode else { return }
         ensureBrowsingMode()
         guard let url = initialUrl else { return }
-        submit(url: url)
+        submit(url: url, source: .action)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -850,7 +850,7 @@ class BrowserViewController: UIViewController {
         shouldEnsureBrowsingMode = false
     }
 
-    func submit(text: String) {
+    func submit(text: String, source: Source) {
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -861,14 +861,22 @@ class BrowserViewController: UIViewController {
         }
 
         if let url = url {
-            submit(url: url)
+            submit(url: url, source: source)
         }
     }
 
-    func submit(url: URL) {
+    fileprivate func recordSearchEvent(_ source: Source) {
+        let identifier = searchEngineManager.activeEngine.getNameOrCustom()
+        let source = source.rawValue
+        GleanMetrics.BrowserSearch.searchCount["\(identifier).\(source)"].add()
+    }
+
+    func submit(url: URL, source: Source) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
-        GleanMetrics.BrowserSearch.searchCount["action"].add()
+
+        recordSearchEvent(source)
+
         shortcutsPresenter.shortcutsState = .none
         SearchInContentTelemetry.shouldSetUrlTypeSearch = true
         if isIPadRegularDimensions {
@@ -1149,7 +1157,7 @@ extension BrowserViewController: UIDropInteractionDelegate {
 
             self.ensureBrowsingMode()
             self.urlBar.fillUrlBar(text: url.absoluteString)
-            self.submit(url: url)
+            self.submit(url: url, source: .action)
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.drop, object: TelemetryEventObject.searchBar)
             GleanMetrics.UrlInteraction.dropEnded.record()
         }
@@ -1267,7 +1275,7 @@ extension BrowserViewController: URLBarDelegate {
         }
     }
 
-    func urlBar(_ urlBar: URLBar, didSubmitText text: String) {
+    func urlBar(_ urlBar: URLBar, didSubmitText text: String, source: Source) {
         let text = text.trimmingCharacters(in: .whitespaces)
 
         guard !text.isEmpty else {
@@ -1287,7 +1295,7 @@ extension BrowserViewController: URLBarDelegate {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
         if let urlBarURL = url {
-            submit(url: urlBarURL)
+            submit(url: urlBarURL, source: source)
             urlBar.url = urlBarURL
         }
 
@@ -1501,7 +1509,7 @@ extension BrowserViewController: HomeViewControllerDelegate {
         deactivateUrlBarOnHomeView()
         dismissSettings()
         dismissActionSheet()
-        submit(url: url)
+        submit(url: url, source: .action)
     }
 
     func homeViewControllerDidTapTip(_ controller: HomeViewController, tip: TipManager.Tip) {
@@ -1541,7 +1549,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if searchEngineManager.activeEngine.urlForQuery(query) != nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
-            urlBar(urlBar, didSubmitText: query)
+            urlBar(urlBar, didSubmitText: query, source: .topsite)
         }
 
         urlBar.dismiss()
@@ -1584,7 +1592,7 @@ extension BrowserViewController: OverlayViewDelegate {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
         }
         if let overlayURL = url {
-            submit(url: overlayURL)
+            submit(url: overlayURL, source: .suggestion)
             urlBar.url = overlayURL
         }
         urlBar.dismiss()
@@ -1992,11 +2000,11 @@ extension BrowserViewController: MenuActionable {
     }
 
     func showHelp() {
-        submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios")
+        submit(text: "https://support.mozilla.org/en-US/products/focus-firefox/Focus-ios", source: .action)
     }
 
     func showWhatsNew() {
-        submit(url: URL(forSupportTopic: .whatsNew))
+        submit(url: URL(forSupportTopic: .whatsNew), source: .action)
     }
 
     func showCopy(url: URL) {
@@ -2061,7 +2069,7 @@ extension BrowserViewController {
         ensureBrowsingMode()
         urlBar.url = url
         deactivateUrlBarOnHomeView()
-        submit(url: url)
+        submit(url: url, source: .shortcut)
         GleanMetrics.Shortcuts.shortcutOpenedCounter.add()
     }
 
