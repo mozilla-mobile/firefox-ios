@@ -24,7 +24,7 @@ class HistoryPanelViewModelTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
-        clear(profile.history)
+        clear(profile: profile)
         profile.shutdown()
         profile = nil
         subject = nil
@@ -230,19 +230,34 @@ class HistoryPanelViewModelTests: XCTestCase {
 
     // MARK: -
     private func setupSiteVisits() {
-        addSiteVisit(profile.history, url: "http://mozilla.org/", title: "Mozilla internet")
-        addSiteVisit(profile.history, url: "http://mozilla.dev.org/", title: "Internet dev")
-        addSiteVisit(profile.history, url: "https://apple.com/", title: "Apple")
+        addSiteVisit(profile, url: "http://mozilla.org/", title: "Mozilla internet")
+        addSiteVisit(profile, url: "http://mozilla.dev.org/", title: "Internet dev")
+        addSiteVisit(profile, url: "https://apple.com/", title: "Apple")
     }
 
-    private func addSiteVisit(_ history: BrowserHistory, url: String, title: String, siteAdded: Bool = true) {
+    private func addSiteVisit(_ profile: MockProfile, url: String, title: String) {
         let site = Site(url: url, title: title)
         let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
-        XCTAssertEqual(siteAdded, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
+        let result: Success
+        switch profile.historyApiConfiguration {
+        case .old:
+            result = profile.history.addLocalVisit(visit)
+        case .new:
+            result = profile.places.applyObservation(visitObservation: VisitObservation(url: url, title: title, visitType: VisitTransition.link))
+        }
+
+        XCTAssertEqual(true, result.value.isSuccess, "Site added: \(url).")
     }
 
-    private func clear(_ history: BrowserHistory) {
-        XCTAssertTrue(history.clearHistory().value.isSuccess, "History cleared.")
+    private func clear(profile: MockProfile) {
+        let result: Success
+        switch profile.historyApiConfiguration {
+        case .old:
+            result = profile.history.clearHistory()
+        case .new:
+            result = profile.places.deleteEverythingHistory()
+        }
+        XCTAssertTrue(result.value.isSuccess, "History cleared.")
     }
 
     private func fetchHistory(completion: @escaping (Bool) -> Void) {

@@ -126,6 +126,10 @@ public struct PrefsKeys {
     public static let WallpaperManagerCurrentWallpaperImage = "WallpaperManagerCurrentWallpaperImage"
     public static let WallpaperManagerCurrentWallpaperImageLandscape = "WallpaperManagerCurrentWallpaperImageLandscape"
     public static let WallpaperManagerLogoSwitchPreference = "WallpaperManagerLogoSwitchPreference"
+
+    // Application Services Migration to Places DB
+    public static let NewPlacesAPIDefaultKey = "NewPlacesAPI"
+
 }
 
 public struct PrefsDefaults {

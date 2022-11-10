@@ -19,7 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
-        syncDelegate: UIApplication.shared.syncDelegate
+        syncDelegate: UIApplication.shared.syncDelegate,
+        isNewHistoryPlacesAPI: UserDefaults.standard.bool(forKey: PrefsKeys.NewPlacesAPIDefaultKey)
     )
 
     lazy var tabManager: TabManager = TabManager(
