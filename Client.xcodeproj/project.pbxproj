@@ -646,6 +646,8 @@
 		CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */; };
 		CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */; };
 		CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */; };
+		CA8A48B4291BBA62008BE12F /* NewsCell.ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8A48B3291BBA62008BE12F /* NewsCell.ViewModel.swift */; };
+		CA8A48B6291BBBD1008BE12F /* Core.Promo.Variants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8A48B5291BBBD1008BE12F /* Core.Promo.Variants.swift */; };
 		CA8BCC3628D1FB7D0020BC50 /* HistoryHighlightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFA9274D489B00A94EEC /* HistoryHighlightsViewModel.swift */; };
 		CA8BCC3728D1FB840020BC50 /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
 		CA8BCC3828D1FB900020BC50 /* HighlightItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */; };
@@ -3586,6 +3588,8 @@
 		CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsManager.swift; sourceTree = "<group>"; };
 		CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListDataSourceHelper.swift; sourceTree = "<group>"; };
 		CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListTableViewCell.swift; sourceTree = "<group>"; };
+		CA8A48B3291BBA62008BE12F /* NewsCell.ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.ViewModel.swift; sourceTree = "<group>"; };
+		CA8A48B5291BBBD1008BE12F /* Core.Promo.Variants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Core.Promo.Variants.swift; sourceTree = "<group>"; };
 		CA8BCC3A28D218830020BC50 /* NTPImpactViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPImpactViewModel.swift; sourceTree = "<group>"; };
 		CA8BCC3D28D30A070020BC50 /* NTPImpactCell.Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPImpactCell.Model.swift; sourceTree = "<group>"; };
 		CA8BCC3F28D340AF0020BC50 /* TabCell+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabCell+Ecosia.swift"; sourceTree = "<group>"; };
@@ -6365,6 +6369,7 @@
 		CA4D9C8F28C8D801006AFB5D /* NTP */ = {
 			isa = PBXGroup;
 			children = (
+				CA8A48B0291BB8CA008BE12F /* News */,
 				CA8BCC3C28D308E30020BC50 /* Cells */,
 				CA103C7F28C8F78E00F7170A /* CircleButton.swift */,
 				CA4D9C9228C8D801006AFB5D /* DefaultBrowser.swift */,
@@ -6373,7 +6378,6 @@
 				CA4D9C9028C8D801006AFB5D /* NTPLayout.swift */,
 				CACF7D1028DC553B00A996A4 /* NTPLibaryViewModel.swift */,
 				CA506BAD28D1EA080064072B /* NTPLibraryShortcutView.swift */,
-				CA1453C0290943270000957F /* NTPNewsViewModel.swift */,
 				CA4D9C9828C8D801006AFB5D /* NTPTooltip.Highlight.swift */,
 				CA4D9C9728C8D801006AFB5D /* NTPTooltip.swift */,
 			);
@@ -6385,10 +6389,8 @@
 			children = (
 				CA4D9C9E28C8D801006AFB5D /* MultiplyImpactCell.swift */,
 				CA4D9C9F28C8D801006AFB5D /* EcosiaExploreCell.swift */,
-				CA4D9CA028C8D801006AFB5D /* NewsController.swift */,
 				CA4D9CA128C8D801006AFB5D /* MyImpactCell.Progress.swift */,
 				CA4D9CA228C8D801006AFB5D /* EcosiaHome.Section.swift */,
-				CA4D9CA328C8D801006AFB5D /* NewsCell.swift */,
 				CA4D9CA428C8D801006AFB5D /* EcosiaHomeLayout.swift */,
 				CA4D9CA528C8D801006AFB5D /* MultiplyImpactDash.swift */,
 				CA4D9CA628C8D801006AFB5D /* MultiplyImpact.swift */,
@@ -6469,6 +6471,18 @@
 				CA4D9CE028C8D801006AFB5D /* Analytics.Values.swift */,
 			);
 			path = Analytics;
+			sourceTree = "<group>";
+		};
+		CA8A48B0291BB8CA008BE12F /* News */ = {
+			isa = PBXGroup;
+			children = (
+				CA8A48B5291BBBD1008BE12F /* Core.Promo.Variants.swift */,
+				CA4D9CA328C8D801006AFB5D /* NewsCell.swift */,
+				CA8A48B3291BBA62008BE12F /* NewsCell.ViewModel.swift */,
+				CA4D9CA028C8D801006AFB5D /* NewsController.swift */,
+				CA1453C0290943270000957F /* NTPNewsViewModel.swift */,
+			);
+			path = News;
 			sourceTree = "<group>";
 		};
 		CA8BCC3C28D308E30020BC50 /* Cells */ = {
@@ -9366,6 +9380,7 @@
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
 				CA220A6D28D071C2000E66E6 /* NimbusFlaggableFeature.swift in Sources */,
 				CA8BCC3828D1FB900020BC50 /* HighlightItem.swift in Sources */,
+				CA8A48B4291BBA62008BE12F /* NewsCell.ViewModel.swift in Sources */,
 				E65075511E37F6D1006961AC /* URL+Mail.swift in Sources */,
 				D83822001FC7961D00303C12 /* DispatchQueueHelper.swift in Sources */,
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
@@ -9523,6 +9538,7 @@
 				CA220A6C28D070FE000E66E6 /* FeatureFlagsManager.swift in Sources */,
 				CAEB316728D0B38900ADC9DB /* HomepageViewController+Ecosia.swift in Sources */,
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
+				CA8A48B6291BBBD1008BE12F /* Core.Promo.Variants.swift in Sources */,
 				F85C7EDD27109241004BDBA4 /* LoginOnboardingViewController.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
@@ -12826,8 +12842,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA8BCC4128D352630020BC50 /* EcosiaBeta.xcconfig */;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 64;
-				MARKETING_VERSION = 8.0.0;
+				CURRENT_PROJECT_VERSION = 65;
+				MARKETING_VERSION = 8.1.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -13195,8 +13211,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA8BCC4228D352640020BC50 /* Ecosia.xcconfig */;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 64;
-				MARKETING_VERSION = 8.0.0;
+				CURRENT_PROJECT_VERSION = 65;
+				MARKETING_VERSION = 8.1.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -13389,8 +13405,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA8BCC4128D352630020BC50 /* EcosiaBeta.xcconfig */;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 64;
-				MARKETING_VERSION = 8.0.0;
+				CURRENT_PROJECT_VERSION = 65;
+				MARKETING_VERSION = 8.1.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -13514,8 +13530,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CA8BCC4328D352640020BC50 /* EcosiaDebug.xcconfig */;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 64;
-				MARKETING_VERSION = 8.0.0;
+				CURRENT_PROJECT_VERSION = 65;
+				MARKETING_VERSION = 8.1.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};

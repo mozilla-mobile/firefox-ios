@@ -12,16 +12,29 @@ class NTPNewsViewModel {
     }
 
     private let news = News()
-    private (set) var items = [NewsModel]()
+    private (set) var items = [NewsCell.ViewModel]()
     private let images = Images(.init(configuration: .ephemeral))
+    private let goodall = Goodall.shared
     weak var delegate: HomepageDataModelDelegate?
 
     init() {
         news.subscribeAndReceive(self) { [weak self] in
             guard let self = self else { return }
-            self.items = $0
+            self.items = $0.map({ NewsCell.ViewModel(model: $0, promo: nil) })
+
+            if let promo = Promo.current(for: .shared, using: .shared) {
+                self.items.insert(.init(model: nil, promo: promo), at: 0)
+            }
+
             self.delegate?.reloadView()
         }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(localeDidChange), name: NSLocale.currentLocaleDidChangeNotification, object: nil)
+
+    }
+
+    @objc func localeDidChange() {
+        Goodall.shared.refresh(force: true)
     }
 
 }
@@ -73,18 +86,19 @@ extension NTPNewsViewModel: HomepageViewModelProtocol {
     }
 
     func numberOfItemsInSection() -> Int {
-        return min(3, items.count)
+        let num = Promo.isEnabled(for: .shared, using: .shared) ? 4 : 3
+        return min(num, items.count)
     }
 
     var hasData: Bool {
-        !items.isEmpty
+        numberOfItemsInSection() > 0
     }
 
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
 
-        news.load(session: .shared, force: items.isEmpty)
+        news.load(session: .shared, force: !hasData)
     }
 
 }

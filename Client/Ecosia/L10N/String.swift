@@ -169,5 +169,8 @@ extension String {
         case customization = "Customization"
         case clearAll = "Clear all"
         case searchBarHint = "To make entering info easier, the toolbar can be set to the bottom of the screen"
+        case buyTrees = "Buy trees in the Ecosia tree store to delight a friend - or treat yourself"
+        case plantTreesAndEarn = "Plant trees and earn eco-friendly rewards with Treecard"
+        case sponsored = "Sponsored"
     }
 }

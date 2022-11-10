@@ -8,7 +8,7 @@ import UIKit
 final class NewsController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
     UICollectionViewDelegateFlowLayout, NotificationThemeable {
     private weak var collection: UICollectionView!
-    private var items = [NewsModel]()
+    private var items = [NewsCell.ViewModel]()
     private let images = Images(.init(configuration: .ephemeral))
     private let news = News()
     private let identifier = "news"
@@ -16,7 +16,7 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
 
     required init?(coder: NSCoder) { nil }
 
-    init(items: [NewsModel], delegate: EcosiaHomeDelegate?) {
+    init(items: [NewsCell.ViewModel], delegate: EcosiaHomeDelegate?) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
         self.items = items
@@ -25,15 +25,10 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     override func loadView() {
-        let flow = UICollectionViewFlowLayout()
-        flow.minimumInteritemSpacing = 0
-        flow.minimumLineSpacing = 0
-        flow.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.startAnimating()
         
-        let collection = UICollectionView(frame: .zero, collectionViewLayout: flow)
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collection.delegate = self
         collection.dataSource = self
         collection.register(NewsCell.self, forCellWithReuseIdentifier: identifier)
@@ -43,11 +38,52 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
         self.collection = collection
         view = collection
     }
+
+    func createLayout() -> UICollectionViewLayout {
+
+        let layout = UICollectionViewCompositionalLayout { [weak self]
+            (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+
+            guard let self = self else { return nil }
+
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                  heightDimension: .estimated(100))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                   heightDimension: .estimated(100))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+            let section = NSCollectionLayoutSection(group: group)
+
+            let horizontal = (self.collection.bounds.width - self.collection.ecosiaHomeMaxWidth) / 2
+            section.contentInsets = NSDirectionalEdgeInsets(
+                top: 0,
+                leading: horizontal,
+                bottom: 0,
+                trailing: horizontal)
+
+            let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .estimated(100.0))
+            let header = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: size,
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top)
+            section.boundarySupplementaryItems = [header]
+            return section
+        }
+        return layout
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        news.subscribe(self) { [weak self] in
-            self?.items = $0
+        news.subscribeAndReceive(self) { [weak self] in
+            self?.items = $0.map { .init(model: $0, promo: nil) }
+
+            if let promo = Promo.current(for: .shared, using: .shared) {
+                self?.items.insert(.init(model: nil, promo: promo), at: 0)
+            }
+
             self?.collection.reloadData()
             self?.collection.backgroundView = nil
         }
@@ -81,7 +117,6 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
     
     func collectionView(_: UICollectionView, viewForSupplementaryElementOfKind kind: String, at: IndexPath) -> UICollectionReusableView {
         let header = collection.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier, for: at)
-        collection.align(header: header as? NewsSubHeader)
         return header
     }
     
@@ -90,30 +125,13 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
         cell.configure(items[cellForItemAt.row], images: images, positions: .derive(row: cellForItemAt.item, items: items.count))
         return cell
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAt: IndexPath) -> CGSize {
-        return .init(width: collection.ecosiaHomeMaxWidth, height: 130)
-    }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        
-        collectionView.align(
-            header: collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader,
-            at: .init(item: 0, section: section)) as? NewsSubHeader)
-        
-        return .init(width: 0, height: UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).pointSize * 2 + 30)
-    }
-    
+
     func collectionView(_: UICollectionView, didSelectItemAt: IndexPath) {
         let item = items[didSelectItemAt.row]
         delegate?.ecosiaHome(didSelectURL: item.targetUrl)
         dismiss(animated: true, completion: nil)
         Analytics.shared.navigationOpenNews(item.trackingName)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, insetForSectionAt: Int) -> UIEdgeInsets {
-        let horizontal = (collectionView.bounds.width - collectionView.ecosiaHomeMaxWidth) / 2
-        return .init(top: 0, left: horizontal, bottom: 0, right: horizontal)
     }
 
     func applyTheme() {
@@ -148,45 +166,28 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
     }
 }
 
-private extension UICollectionView {
-    func align(header: NewsSubHeader?) {
-        let margin = (bounds.width - ecosiaHomeMaxWidth) / 2
-        header?.leftMargin.constant = margin
-        header?.rightMargin.constant = -margin
-    }
-}
-
 private final class NewsSubHeader: UICollectionReusableView, NotificationThemeable {
-    private(set) weak var leftMargin: NSLayoutConstraint!
-    private(set) weak var rightMargin: NSLayoutConstraint!
     private weak var subtitle: UILabel!
     
     required init?(coder: NSCoder) { nil }
 
     override init(frame: CGRect) {
-        super.init(frame: .zero)
+        super.init(frame: frame)
         isUserInteractionEnabled = false
 
         let subtitle = UILabel()
         subtitle.translatesAutoresizingMaskIntoConstraints = false
         subtitle.font = .preferredFont(forTextStyle: .body)
         subtitle.adjustsFontForContentSizeCategory = true
-        subtitle.adjustsFontSizeToFitWidth = true
-        subtitle.setContentHuggingPriority(.required, for: .vertical)
-        subtitle.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        subtitle.numberOfLines = 2
+        subtitle.numberOfLines = 0
         subtitle.text = .localized(.keepUpToDate)
         addSubview(subtitle)
         self.subtitle = subtitle
         
-        subtitle.topAnchor.constraint(equalTo: topAnchor, constant: 0).isActive = true
-        subtitle.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -10).isActive = true
-        
-        leftMargin = subtitle.leftAnchor.constraint(equalTo: leftAnchor)
-        leftMargin.isActive = true
-        rightMargin = subtitle.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor)
-        rightMargin.isActive = true
-
+        subtitle.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
+        subtitle.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        subtitle.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        subtitle.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         applyTheme()
     }
 

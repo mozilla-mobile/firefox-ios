@@ -23,7 +23,10 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
     private weak var background: UIView!
     private weak var image: UIImageView!
     private weak var title: UILabel!
-    private weak var date: UILabel!
+    private weak var bottomLine: UIStackView!
+    private weak var bottomIcon: UIImageView!
+    private weak var highlightLabel: UILabel!
+    private weak var bottomLabel: UILabel!
     private weak var border: UIView!
     private weak var placeholder: UIImageView!
     var defaultBackgroundColor: (() -> UIColor) = { .theme.ecosia.ntpCellBackground }
@@ -87,18 +90,47 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
         title.adjustsFontSizeToFitWidth = true
         background.addSubview(title)
         self.title = title
-        
-        let date = UILabel()
-        date.translatesAutoresizingMaskIntoConstraints = false
-        date.font = .preferredFont(forTextStyle: .footnote)
-        date.adjustsFontForContentSizeCategory = true
-        date.numberOfLines = 1
-        date.textAlignment = .left
-        date.setContentCompressionResistancePriority(.required, for: .vertical)
-        date.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        background.addSubview(date)
-        self.date = date
-        
+
+        let bottomLine = UIStackView()
+        bottomLine.translatesAutoresizingMaskIntoConstraints = false
+        bottomLine.distribution = .fill
+        bottomLine.axis = .horizontal
+        bottomLine.spacing = 4
+        bottomLine.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        background.addSubview(bottomLine)
+        self.bottomLine = bottomLine
+
+        let bottomIcon = UIImageView()
+        bottomIcon.translatesAutoresizingMaskIntoConstraints = false
+        bottomIcon.contentMode = .scaleAspectFill
+        bottomIcon.clipsToBounds = true
+        bottomLine.addArrangedSubview(bottomIcon)
+        self.bottomIcon = bottomIcon
+
+        let highlightLabel = UILabel()
+        highlightLabel.translatesAutoresizingMaskIntoConstraints = false
+        highlightLabel.font = .preferredFont(forTextStyle: .footnote).bold()
+        highlightLabel.adjustsFontForContentSizeCategory = true
+        highlightLabel.numberOfLines = 1
+        highlightLabel.textAlignment = .left
+        highlightLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        highlightLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        highlightLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        bottomLine.addArrangedSubview(highlightLabel)
+        self.highlightLabel = highlightLabel
+
+        let bottomLabel = UILabel()
+        bottomLabel.translatesAutoresizingMaskIntoConstraints = false
+        bottomLabel.font = .preferredFont(forTextStyle: .footnote)
+        bottomLabel.adjustsFontForContentSizeCategory = true
+        bottomLabel.numberOfLines = 1
+        bottomLabel.textAlignment = .left
+        bottomLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        bottomLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        bottomLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        bottomLine.addArrangedSubview(bottomLabel)
+        self.bottomLabel = bottomLabel
+
         placeholder.topAnchor.constraint(equalTo: image.topAnchor).isActive = true
         placeholder.bottomAnchor.constraint(equalTo: image.bottomAnchor).isActive = true
         placeholder.leftAnchor.constraint(equalTo: image.leftAnchor).isActive = true
@@ -117,15 +149,18 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
         title.leftAnchor.constraint(equalTo: background.leftAnchor, constant: 16).isActive = true
         title.rightAnchor.constraint(lessThanOrEqualTo: image.leftAnchor, constant: -16).isActive = true
         title.topAnchor.constraint(equalTo: background.topAnchor, constant: 16).isActive = true
-        title.bottomAnchor.constraint(lessThanOrEqualTo: date.topAnchor, constant: -12).isActive = true
+        title.bottomAnchor.constraint(lessThanOrEqualTo: bottomLine.topAnchor, constant: -12).isActive = true
 
-        let squeeze = title.bottomAnchor.constraint(equalTo: date.topAnchor, constant: -12)
+        let squeeze = title.bottomAnchor.constraint(equalTo: bottomLine.topAnchor, constant: -12)
         squeeze.priority = .init(700)
         squeeze.isActive = true
 
-        date.leftAnchor.constraint(equalTo: title.leftAnchor).isActive = true
-        date.bottomAnchor.constraint(equalTo: background.bottomAnchor, constant: -16).isActive = true
-        date.rightAnchor.constraint(equalTo: title.rightAnchor).isActive = true
+        bottomLine.leftAnchor.constraint(equalTo: background.leftAnchor, constant: 16).isActive = true
+        bottomLine.bottomAnchor.constraint(equalTo: background.bottomAnchor, constant: -16).isActive = true
+        bottomLine.rightAnchor.constraint(equalTo: background.rightAnchor, constant: -16).isActive = true
+
+        bottomIcon.heightAnchor.constraint(equalTo: bottomIcon.widthAnchor).isActive = true
+        bottomIcon.widthAnchor.constraint(equalToConstant: 24).isActive = true
 
         border.leftAnchor.constraint(equalTo: background.leftAnchor, constant: 16).isActive = true
         border.rightAnchor.constraint(equalTo: background.rightAnchor, constant: -16).isActive = true
@@ -147,15 +182,28 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
         }
     }
     
-    func configure(_ item: NewsModel, images: Images, positions: Positions) {
-        imageUrl = item.imageUrl
-        image.image = nil
+    func configure(_ item: ViewModel, images: Images, positions: Positions) {
         title.text = item.text.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
-        date.text = RelativeDateTimeFormatter().localizedString(for: item.publishDate, relativeTo: .init())
-        
-        images.load(self, url: item.imageUrl) { [weak self] in
-            guard self?.imageUrl == $0.url else { return }
-            self?.updateImage($0.data)
+
+        if let model = item.model {
+            bottomLabel.text = RelativeDateTimeFormatter().localizedString(for: model.publishDate, relativeTo: .init())
+            bottomIcon.isHidden = true
+            highlightLabel.isHidden = true
+
+            imageUrl = model.imageUrl
+            image.image = nil
+            images.load(self, url: model.imageUrl) { [weak self] in
+                guard self?.imageUrl == $0.url else { return }
+                self?.updateImage($0.data)
+            }
+        } else if let promo = item.promo {
+            imageUrl = nil
+            updateImage(UIImage(named: promo.image)!.pngData()!)
+            bottomLabel.text = promo.description
+            bottomIcon.isHidden = false
+            bottomIcon.image = UIImage(named: promo.icon)
+            highlightLabel.isHidden = promo.highlight == nil
+            highlightLabel.text = promo.highlight
         }
 
         border.isHidden = positions.contains(.bottom)
@@ -190,8 +238,9 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
         background.backgroundColor = defaultBackgroundColor()
         placeholder.tintColor = .theme.ecosia.decorativeIcon
         placeholder.backgroundColor = .theme.ecosia.newsPlaceholder
-        border?.backgroundColor = UIColor.theme.ecosia.border
-        title?.textColor = UIColor.theme.ecosia.primaryText
-        date?.textColor = UIColor.theme.ecosia.secondaryText
+        border?.backgroundColor = .theme.ecosia.border
+        title?.textColor = .theme.ecosia.primaryText
+        bottomLabel?.textColor = .theme.ecosia.secondaryText
+        highlightLabel?.textColor = .theme.ecosia.secondaryText
     }
 }

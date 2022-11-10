@@ -5,13 +5,18 @@
 import UIKit
 
 final class EcosiaNavigation: UINavigationController, NotificationThemeable {
-    required init?(coder aDecoder: NSCoder) {
-        nil
-    }
-    
+
     override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
+        commonInit()
+    }
 
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+    }
+
+    private func commonInit() {
         if traitCollection.userInterfaceIdiom == .pad {
             modalPresentationStyle = .formSheet
             preferredContentSize = .init(width: 544, height: .max)
