@@ -43,7 +43,7 @@ extension URLCaching {
     }
 
     func cache(response: HTTPURLResponse?, for request: URLRequest, with data: Data?) {
-        guard let response = response, let data  = data else { return }
+        guard let response = response, let data = data else { return }
 
         let metadata = [cacheAgeKey: Date.now()]
         let cachedResp = CachedURLResponse(response: response, data: data, userInfo: metadata, storagePolicy: .allowed)

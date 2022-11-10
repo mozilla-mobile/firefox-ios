@@ -153,6 +153,8 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         contileProvider.fetchContiles { [weak self] result in
             if case .success(let contiles) = result {
                 self?.contiles = contiles
+            } else {
+                self?.contiles = []
             }
             self?.dispatchGroup.leave()
         }
