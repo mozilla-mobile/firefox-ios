@@ -289,19 +289,19 @@ class TabTrayViewController: UIViewController {
     }
 
     fileprivate func updateTitle() {
-        if let newTitle = viewModel.navTitle(for: navigationMenu.selectedSegmentIndex,
-                                             foriPhone: !shouldUseiPadSetup()) {
-            navigationItem.title = newTitle
-        }
+        guard !shouldUseiPadSetup(), let grid = viewModel.tabTrayView as? GridTabViewController else { return }
+        navigationItem.title = grid.tabDisplayManager.isPrivate ?
+        TabTrayViewModel.Segment.privateTabs.navTitle :
+        TabTrayViewModel.Segment.tabs.navTitle
     }
 
     @objc func panelChanged() {
         let segment = TabTrayViewModel.Segment(rawValue: navigationMenu.selectedSegmentIndex)
         switch segment {
         case .tabs:
-            switchBetweenLocalPanels(withPrivateMode: false)
+            switchBetweenLocalPanels(withPrivateMode: false, animated: false)
         case .privateTabs:
-            switchBetweenLocalPanels(withPrivateMode: true)
+            switchBetweenLocalPanels(withPrivateMode: true, animated: false)
             /*
         case .syncedTabs:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .libraryPanel, value: .syncPanel, extras: nil)
@@ -319,7 +319,7 @@ class TabTrayViewController: UIViewController {
     // Ecosia: custom private mode UI
     @objc func togglePrivateMode() {
         guard let grid = viewModel.tabTrayView as? GridTabViewController else { return }
-        switchBetweenLocalPanels(withPrivateMode: !grid.tabDisplayManager.isPrivate)
+        switchBetweenLocalPanels(withPrivateMode: !grid.tabDisplayManager.isPrivate, animated: true)
     }
 
     fileprivate func updateMaskButton() {
@@ -328,7 +328,7 @@ class TabTrayViewController: UIViewController {
         maskButton.applyUIMode(isPrivate: grid.tabDisplayManager.isPrivate)
     }
 
-    private func switchBetweenLocalPanels(withPrivateMode privateMode: Bool) {
+    private func switchBetweenLocalPanels(withPrivateMode privateMode: Bool, animated: Bool) {
         viewModel.tabManager.didChangedPanelSelection = true
         viewModel.tabManager.didAddNewTab = true
         if children.first != viewModel.tabTrayView {
@@ -341,7 +341,7 @@ class TabTrayViewController: UIViewController {
         updateTitle()
 
         // Ecosia: update private button
-        maskButton.setSelected(privateMode, animated: true)
+        maskButton.setSelected(privateMode, animated: animated)
         maskButton.applyUIMode(isPrivate: privateMode)
     }
 
