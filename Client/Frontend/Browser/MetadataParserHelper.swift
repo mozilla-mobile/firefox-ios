@@ -7,6 +7,7 @@ import Shared
 import Storage
 import XCGLogger
 import WebKit
+import Core
 
 private let log = Logger.browserLogger
 
@@ -50,6 +51,15 @@ class MetadataParserHelper: TabEventHandler {
             ]
             NotificationCenter.default.post(name: .OnPageMetadataFetched, object: nil, userInfo: userInfo)
         }
+
+        // Ecosia: read local storage value for cookie consent
+        if url.normalizedHost?.hasPrefix("ecosia.org") == true {
+            webView.evaluateJavascriptInDefaultContentWorld("localStorage.getItem(\"\(Cookie.consentKey)\")") { result, error in
+                guard error == nil, let consentValue = result as? String else { return }
+                User.shared.cookieConsentValue = consentValue
+            }
+        }
+
     }
 }
 

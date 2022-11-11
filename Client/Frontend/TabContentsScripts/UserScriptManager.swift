@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import WebKit
+import Core
 
 class UserScriptManager {
 
@@ -88,6 +89,15 @@ class UserScriptManager {
         // that it gets enabled immediately when the DOM loads.
         if noImageMode {
             tab.webView?.configuration.userContentController.addUserScript(noImageModeUserScript)
+        }
+
+        // Ecosia: Inject Cookie banner consent
+        if let cookieConsentValue = User.shared.cookieConsentValue {
+            let cookieConsentScript = WKUserScript.createInDefaultContentWorld(
+                source: "localStorage.setItem(\"\(Cookie.consentKey)\", \"\(cookieConsentValue)\")",
+                injectionTime: .atDocumentStart,
+                forMainFrameOnly: true)
+            tab.webView?.configuration.userContentController.addUserScript(cookieConsentScript)
         }
     }
 }
