@@ -92,7 +92,6 @@ class CommandStoringSyncDelegate: SyncDelegate {
 protocol Profile: AnyObject {
 
     typealias HistoryFetcher = BrowserHistory & SyncableHistory & ResettableSyncStorage
-
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
@@ -1039,15 +1038,43 @@ open class BrowserProfile: Profile {
             }
 
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info) >>== { result in
+            let result = clientSynchronizer.synchronizeLocalClients(
+                self.profile.remoteClientsAndTabs,
+                withServer: ready.client,
+                info: ready.info
+            ) >>== { result in
                 guard case .completed = result, let accountManager = self.profile.rustFxA.accountManager.peek() else {
                     return deferMaybe(result)
                 }
                 log.debug("Updating FxA devices list.")
-
                 accountManager.deviceConstellation()?.refreshState()
                 return deferMaybe(result)
             }
+
+            log.debug("Polling for any missed commands")
+            let accountManager = self.profile.rustFxA.accountManager.peek()
+            accountManager?.deviceConstellation()?.pollForCommands { commands in
+                if let commands = try? commands.get() {
+                    for command in commands {
+                        switch command {
+                        case .tabReceived(let sender, let tabData):
+                            // The tabData.entries is the tabs history
+                            // we only want the last item, which is the tab
+                            // to display
+                            let title = tabData.entries.last?.title ?? ""
+                            let url = tabData.entries.last?.url ?? ""
+                            if let json = try? accountManager?.gatherTelemetry() {
+                                let events = FxATelemetry.parseTelemetry(fromJSONString: json)
+                                events.forEach { $0.record(intoPrefs: self.profile.prefs) }
+                            }
+                            if let url = URL(string: url) {
+                                self.profile.syncDelegate?.displaySentTab(for: url, title: title, from: sender?.displayName)
+                            }
+                        }
+                    }
+                }
+            }
+            return result
         }
 
         fileprivate func syncLegacyHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {

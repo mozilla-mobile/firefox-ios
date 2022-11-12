@@ -31,8 +31,8 @@ class AppSyncDelegate: SyncDelegate {
     }
 
     func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-        DispatchQueue.main.sync {
-            if app.applicationState == .active {
+        DispatchQueue.main.async {
+            if self.app.applicationState == .active {
                 BrowserViewController.foregroundBVC().switchToTabForURLOrOpen(url)
                 return
             }
@@ -63,7 +63,9 @@ class AppSyncDelegate: SyncDelegate {
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
 
                 // The identifier for each notification request must be unique in order to be created
-                let requestIdentifier = "\(SentTabAction.TabSendCategory).\(url.absoluteString)"
+                // we attach a unique identifier in case the user sends the tab multiple times.
+                let uuidString = UUID()
+                let requestIdentifier = "\(uuidString).\(SentTabAction.TabSendCategory).\(url.absoluteString)"
                 let request = UNNotificationRequest(identifier: requestIdentifier, content: notificationContent, trigger: trigger)
 
                 UNUserNotificationCenter.current().add(request) { error in
