@@ -245,7 +245,7 @@
 "Save" = "Guardar";
 
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
-"SearchEngine.addEngineError" = "Eso no funcionó. Intente remplazar el término de búsqueda con esto: %s.";
+"SearchEngine.addEngineError" = "Eso no funcionó. Intenta reemplazar el término de búsqueda con esto: %s.";
 
 /* Label for disable option on search suggestions prompt */
 "SearchSuggestions.promptDisable" = "No";
@@ -450,6 +450,9 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Abrir en Firefox";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Abrir enlace";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Compartir página con…";

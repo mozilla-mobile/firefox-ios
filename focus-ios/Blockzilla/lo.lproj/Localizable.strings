@@ -451,6 +451,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "ເປີດໃນ Firefox";
 
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "ເປີດລິ້ງ";
+
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "ແບ່ງປັນຫນ້າດ້ວຍ…";
 

@@ -175,8 +175,14 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Serriñ";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Kregiñ ganti";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Kregiñ gant ar merdeiñ";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Tremen";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Dilemel roll-istor ar merdeiñ, ar gerioù-tremen, an toupinoù ha mirout ouzh ar bruderezhioù strobus da heuliañ ac'hanoc'h gant ur c'hlik nemetken!";
@@ -421,6 +427,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Digeriñ e Firefox";
 
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Digeriñ an ere";
+
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Rannañ ar bajenn gant…";
 
@@ -438,6 +447,9 @@
 
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Nullañ";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Graet";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Bruderezh";

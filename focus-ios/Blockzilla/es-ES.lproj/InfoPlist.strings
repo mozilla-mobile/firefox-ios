@@ -5,10 +5,10 @@
 "NSFaceIDUsageDescription" = "Esto te permite desbloquear la aplicación.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Los sitios web que visitas pueden pedir tu ubicación.";
+"NSLocationWhenInUseUsageDescription" = "Los sitios web que visitas pueden solicitar tu ubicación.";
 
 /* Privacy - Microphone Usage Description */
-"NSMicrophoneUsageDescription" = "Esto te permite hacer y subir vídeos.";
+"NSMicrophoneUsageDescription" = "Esto te permite grabar y subir vídeos.";
 
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar y subir fotos.";
