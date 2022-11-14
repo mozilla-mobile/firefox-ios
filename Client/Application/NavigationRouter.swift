@@ -144,9 +144,7 @@ enum NavigationPath {
             NavigationPath.handleFxA(params: params, with: bvc)
         case .deepLink(let link):
             NavigationPath.handleDeepLink(link, with: bvc)
-        case .url(let url, _):
-            // Note: The we get browser private mode from current selected tab
-            let isPrivate = bvc.tabManager.selectedTab?.isPrivate ?? false
+        case .url(let url, let isPrivate):
             NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text):
             NavigationPath.handleText(text: text, with: bvc)
