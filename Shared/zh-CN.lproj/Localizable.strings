@@ -395,7 +395,7 @@
 "fxa.signin.qr-link-instruction" = "在计算机上使用 Firefox 打开 firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "扫描就绪";
+"fxa.signin.ready-to-scan" = "立即扫码";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "改用电子邮件";
