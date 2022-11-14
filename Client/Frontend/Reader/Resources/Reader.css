@@ -122,32 +122,6 @@ font-family: -apple-system, sans-serif;
   font-style: italic;
 }
 
-/*.light > .header > .domain {*/
-/*  color: #ee7600;*/
-/*  border-bottom-color: #d0d0d0;*/
-/*}*/
-/**/
-/*.light > .header > h1 {*/
-/*  color: #222222;*/
-/*}*/
-/**/
-/*.light > .header > .credits {*/
-/*  color: #333333;*/
-/*}*/
-/**/
-/*.dark > .header > .domain {*/
-/*  color: #ff9400;*/
-/*  border-bottom-color: #777777;*/
-/*}*/
-/**/
-/*.dark > .header > h1 {*/
-/*  color: #eeeeee;*/
-/*}*/
-/**/
-/*.dark > .header > .credits {*/
-/*  color: #aaaaaa;*/
-/*}*/
-
 .font-size1 > .header > h1 {
   font-size: 24px;
 }
