@@ -40,7 +40,6 @@ class BadgeWithBackdrop {
     }
 
     func layout(onButton button: UIView) {
-        badge.layout(onButton: button)
         backdrop.snp.makeConstraints { make in
             make.center.equalTo(button)
             make.size.equalTo(backdropCircleSize)
