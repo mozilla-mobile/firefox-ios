@@ -128,12 +128,9 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         ])
 
         themeButtons = [
-            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.light,
-                                  appTheme: themeManager.currentTheme),
-            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.sepia,
-                                  appTheme: themeManager.currentTheme),
-            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.dark,
-                                  appTheme: themeManager.currentTheme)
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.light),
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.sepia),
+            ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.dark)
         ]
 
         setupButtons(themeButtons, inRow: themeRow, action: #selector(changeTheme))

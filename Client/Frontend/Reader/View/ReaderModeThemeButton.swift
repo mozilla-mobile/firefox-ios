@@ -4,7 +4,7 @@
 
 import UIKit
 
-class ReaderModeThemeButton: UIButton, ThemeApplicable {
+class ReaderModeThemeButton: UIButton {
     var readerModeTheme: ReaderModeTheme!
 
     var fontType: ReaderModeFontType = .sansSerif {
@@ -20,30 +20,30 @@ class ReaderModeThemeButton: UIButton, ThemeApplicable {
         }
     }
 
-    convenience init(readerModeTheme: ReaderModeTheme, appTheme: Theme) {
+    convenience init(readerModeTheme: ReaderModeTheme) {
         self.init(frame: .zero)
         self.readerModeTheme = readerModeTheme
 
         accessibilityHint = .ReaderModeStyleChangeColorSchemeAccessibilityHint
-        applyTheme(theme: appTheme)
+        applyTheme()
     }
 
-    func applyTheme(theme: Theme) {
+    func applyTheme() {
+        let theme: Theme = readerModeTheme == .dark ? DarkTheme() : LightTheme()
+
         switch readerModeTheme {
         case .light:
             setTitle(.ReaderModeStyleLightLabel, for: [])
-            // TODO: Fix color for title and background
-            setTitleColor(FXColors.DarkGrey90, for: .normal)
-            backgroundColor = FXColors.LightGrey10
+            setTitleColor(theme.colors.textPrimary, for: .normal)
+            backgroundColor = theme.colors.layer1
         case .sepia:
             setTitle(.ReaderModeStyleSepiaLabel, for: [])
             setTitleColor(theme.colors.textPrimary, for: .normal)
             backgroundColor = theme.colors.layerSepia
         case .dark:
             setTitle(.ReaderModeStyleDarkLabel, for: [])
-            // TODO: Fix color for title and background
-            setTitleColor(FXColors.LightGrey05, for: [])
-            backgroundColor = FXColors.DarkGrey60
+            setTitleColor(theme.colors.textPrimary, for: [])
+            backgroundColor = theme.colors.layer1
         case .none:
             break
         }
