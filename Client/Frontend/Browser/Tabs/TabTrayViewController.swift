@@ -125,8 +125,8 @@ class TabTrayViewController: UIViewController, Themeable {
 
     lazy var countLabel: UILabel = {
         let label = UILabel(frame: CGRect(width: 24, height: 24))
-        label.font = TabsButtonUX.TitleFont
-        label.layer.cornerRadius = TabsButtonUX.CornerRadius
+        label.font = TabsButton.UX.TitleFont
+        label.layer.cornerRadius = TabsButton.UX.CornerRadius
         label.textAlignment = .center
         label.text = viewModel.normalTabsCount
         label.translatesAutoresizingMaskIntoConstraints = false

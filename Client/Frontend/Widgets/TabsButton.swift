@@ -6,13 +6,14 @@ import Foundation
 import SnapKit
 import Shared
 
-struct TabsButtonUX {
-    static let CornerRadius: CGFloat = 2
-    static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
-    static let BorderStrokeWidth: CGFloat = 1.5
-}
-
 class TabsButton: UIButton {
+
+    struct UX {
+        static let CornerRadius: CGFloat = 2
+        static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
+        static let BorderStrokeWidth: CGFloat = 1.5
+    }
+
     var textColor = UIColor.Photon.Blue40 {
         didSet {
             countLabel.textColor = textColor
@@ -42,8 +43,8 @@ class TabsButton: UIButton {
 
     lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = TabsButtonUX.TitleFont
-        label.layer.cornerRadius = TabsButtonUX.CornerRadius
+        label.font = UX.TitleFont
+        label.layer.cornerRadius = UX.CornerRadius
         label.textAlignment = .center
         label.isUserInteractionEnabled = false
         return label
@@ -58,7 +59,7 @@ class TabsButton: UIButton {
 
     fileprivate lazy var labelBackground: UIView = {
         let background = UIView()
-        background.layer.cornerRadius = TabsButtonUX.CornerRadius
+        background.layer.cornerRadius = UX.CornerRadius
         background.isUserInteractionEnabled = false
         return background
     }()
