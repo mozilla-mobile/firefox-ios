@@ -29,6 +29,11 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     private var fontSizeRow: UIView!
     private var brightnessRow: UIView!
 
+    private lazy var slider: UISlider = .build { slider in
+        slider.accessibilityLabel = .ReaderModeStyleBrightnessAccessibilityLabel
+        slider.addTarget(self, action: #selector(self.changeBrightness), for: .valueChanged)
+    }
+
     // Keeps user-defined reader color until reader mode is closed or reloaded
     private var isUsingUserDefinedColor = false
 
@@ -148,12 +153,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             brightnessRow.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: viewModel.brightnessRowOffset),
         ])
 
-        let slider: UISlider = .build { slider in
-            slider.accessibilityLabel = .ReaderModeStyleBrightnessAccessibilityLabel
-            slider.tintColor = ReaderModeStyleViewModel.BrightnessSliderTintColor
-            slider.addTarget(self, action: #selector(self.changeBrightness), for: .valueChanged)
-        }
-
         brightnessRow.addSubview(slider)
         NSLayoutConstraint.activate([
             slider.centerXAnchor.constraint(equalTo: brightnessRow.centerXAnchor),
@@ -194,28 +193,31 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
     // MARK: - Applying Theme
     func applyTheme() {
-        popoverPresentationController?.backgroundColor = themeManager.currentTheme.colors.layer1
+        let theme = themeManager.currentTheme
+        popoverPresentationController?.backgroundColor = theme.colors.layer1
+
+        slider.tintColor = theme.colors.actionPrimary
 
         // Set background color to container views
         [fontTypeRow, fontSizeRow, brightnessRow].forEach { view in
-            view?.backgroundColor = themeManager.currentTheme.colors.layer1
+            view?.backgroundColor = theme.colors.layer1
         }
 
-        fontSizeLabel.textColor = themeManager.currentTheme.colors.textPrimary
+        fontSizeLabel.textColor = theme.colors.textPrimary
 
         fontTypeButtons.forEach { button in
-            button.setTitleColor(themeManager.currentTheme.colors.textPrimary,
+            button.setTitleColor(theme.colors.textPrimary,
                                  for: .selected)
-            button.setTitleColor(themeManager.currentTheme.colors.textDisabled, for: [])
+            button.setTitleColor(theme.colors.textDisabled, for: [])
         }
 
         fontSizeButtons.forEach { button in
-            button.setTitleColor(themeManager.currentTheme.colors.textPrimary, for: .normal)
-            button.setTitleColor(themeManager.currentTheme.colors.textPrimary, for: .disabled)
+            button.setTitleColor(theme.colors.textPrimary, for: .normal)
+            button.setTitleColor(theme.colors.textPrimary, for: .disabled)
         }
 
         separatorLines.forEach { line in
-            line.backgroundColor = themeManager.currentTheme.colors.borderPrimary
+            line.backgroundColor = theme.colors.borderPrimary
         }
     }
 

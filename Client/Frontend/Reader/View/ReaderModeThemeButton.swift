@@ -32,18 +32,18 @@ class ReaderModeThemeButton: UIButton, ThemeApplicable {
         switch readerModeTheme {
         case .light:
             setTitle(.ReaderModeStyleLightLabel, for: [])
-            setTitleColor(theme.colors.textPrimary, for: .normal)
-            backgroundColor = theme.colors.layer1
+            // TODO: Fix color for title and background
+            setTitleColor(FXColors.DarkGrey90, for: .normal)
+            backgroundColor = FXColors.LightGrey10
         case .sepia:
             setTitle(.ReaderModeStyleSepiaLabel, for: [])
             setTitleColor(theme.colors.textPrimary, for: .normal)
-            // TODO: wait for crystal color
-            backgroundColor = ReaderModeStyleViewModel.ThemeBackgroundColorSepia
+            backgroundColor = theme.colors.layerSepia
         case .dark:
             setTitle(.ReaderModeStyleDarkLabel, for: [])
-            setTitleColor(theme.colors.textOnColor, for: [])
-            // TODO: wait for crystal color
-            backgroundColor = ReaderModeStyleViewModel.ThemeBackgroundColorDark
+            // TODO: Fix color for title and background
+            setTitleColor(FXColors.LightGrey05, for: [])
+            backgroundColor = FXColors.DarkGrey60
         case .none:
             break
         }

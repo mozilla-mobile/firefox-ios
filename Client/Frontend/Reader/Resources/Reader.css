@@ -42,17 +42,17 @@ body {
 
 .light {
   background-color: #ffffff;
-  color: #222222;
+  color: #15141a;
 }
 
 .dark {
   background-color: #333333;
-  color: #eeeeee;
+  color: #fbfbfe;
 }
 
 .sepia {
     background-color: #F0E6DC;
-    color: #333333;
+    color: #15141a;
 }
 
 .sans-serif {
@@ -122,31 +122,31 @@ font-family: -apple-system, sans-serif;
   font-style: italic;
 }
 
-.light > .header > .domain {
-  color: #ee7600;
-  border-bottom-color: #d0d0d0; 
-}
-
-.light > .header > h1 {
-  color: #222222;
-}
-
-.light > .header > .credits {
-  color: #333333;
-}
-
-.dark > .header > .domain {
-  color: #ff9400;
-  border-bottom-color: #777777; 
-}
-
-.dark > .header > h1 {
-  color: #eeeeee;
-}
-
-.dark > .header > .credits {
-  color: #aaaaaa;
-}
+/*.light > .header > .domain {*/
+/*  color: #ee7600;*/
+/*  border-bottom-color: #d0d0d0;*/
+/*}*/
+/**/
+/*.light > .header > h1 {*/
+/*  color: #222222;*/
+/*}*/
+/**/
+/*.light > .header > .credits {*/
+/*  color: #333333;*/
+/*}*/
+/**/
+/*.dark > .header > .domain {*/
+/*  color: #ff9400;*/
+/*  border-bottom-color: #777777;*/
+/*}*/
+/**/
+/*.dark > .header > h1 {*/
+/*  color: #eeeeee;*/
+/*}*/
+/**/
+/*.dark > .header > .credits {*/
+/*  color: #aaaaaa;*/
+/*}*/
 
 .font-size1 > .header > h1 {
   font-size: 24px;
