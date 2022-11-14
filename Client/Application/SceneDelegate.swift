@@ -217,7 +217,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 extension SceneDelegate: UIScreenshotServiceDelegate {
     func screenshotService(_ screenshotService: UIScreenshotService,
                            generatePDFRepresentationWithCompletion completionHandler: @escaping (Data?, Int, CGRect) -> Void) {
-        guard let webView = tabManager.selectedTab?.currentWebView() else {
+        guard browserViewController.homepageViewController?.view.alpha != 1,
+              browserViewController.presentedViewController == nil,
+              let webView = tabManager.selectedTab?.currentWebView(),
+              let url = webView.url,
+              InternalURL(url) == nil else {
             completionHandler(nil, 0, .zero)
             return
         }
