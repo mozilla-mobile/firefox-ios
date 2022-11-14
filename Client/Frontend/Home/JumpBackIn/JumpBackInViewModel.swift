@@ -177,7 +177,7 @@ class JumpBackInViewModel: FeatureFlaggable {
 // MARK: - Private: Prepare UI data
 private extension JumpBackInViewModel {
 
-    func refreshData(maxItemsToDisplay: JumpBackInDisplayGroupCount) {
+    private func refreshData(maxItemsToDisplay: JumpBackInDisplayGroupCount) {
         jumpBackInList = createJumpBackInList(
             from: recentTabs,
             withMaxTabsCount: maxItemsToDisplay.tabsCount,
@@ -415,22 +415,14 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
-        getLatestData()
         updateSectionLayout(for: traitCollection,
                             isPortrait: isPortrait,
                             device: device)
-
         let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
             hasAccount: jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled,
             device: device
         )
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
-    }
-
-    private func getLatestData() {
-        recentTabs = jumpBackInDataAdaptor.getRecentTabData()
-        recentGroups = jumpBackInDataAdaptor.getGroupsData()
-        recentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -509,7 +501,9 @@ extension JumpBackInViewModel: HomepageSectionHandler {
 extension JumpBackInViewModel: JumpBackInDelegate {
     func didLoadNewData() {
         ensureMainThread {
-            self.getLatestData()
+            self.recentTabs = self.jumpBackInDataAdaptor.getRecentTabData()
+            self.recentGroups = self.jumpBackInDataAdaptor.getGroupsData()
+            self.recentSyncedTab = self.jumpBackInDataAdaptor.getSyncedTabData()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }
