@@ -41,23 +41,33 @@ class HistoryClearable: Clearable {
 
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
-
-        return profile.history.clearHistory().bindQueue(.main) { success in
-
-            // Clear image cache - Kingfisher
-            KingfisherManager.shared.cache.clearMemoryCache()
-            KingfisherManager.shared.cache.clearDiskCache()
-
-            self.profile.recentlyClosedTabs.clearTabs()
-            self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
-            CSSearchableIndex.default().deleteAllSearchableItems()
-            NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
-            log.debug("HistoryClearable succeeded: \(success).")
-
-            self.tabManager.clearAllTabsHistory()
-
-            return Deferred(value: success)
+        switch profile.historyApiConfiguration {
+        case .old:
+            return profile.history.clearHistory().bindQueue(.main) { success in
+                return self.clearAfterHistory(success: success)
+            }
+        case .new:
+            _ = profile.history.clearHistory()
+            return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
+                return self.clearAfterHistory(success: success)
+            }
         }
+    }
+
+    func clearAfterHistory(success: Maybe<Void>) -> Success {
+        // Clear image cache - Kingfisher
+        KingfisherManager.shared.cache.clearMemoryCache()
+        KingfisherManager.shared.cache.clearDiskCache()
+
+        self.profile.recentlyClosedTabs.clearTabs()
+        self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
+        CSSearchableIndex.default().deleteAllSearchableItems()
+        NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
+        log.debug("HistoryClearable succeeded: \(success).")
+
+        self.tabManager.clearAllTabsHistory()
+
+        return Deferred(value: success)
     }
 }
 

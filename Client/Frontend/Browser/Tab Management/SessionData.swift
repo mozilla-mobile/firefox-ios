@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-
 import Shared
 
 /// PR: https://github.com/mozilla-mobile/firefox-ios/pull/4387
@@ -48,10 +47,18 @@ class SessionData: NSObject, Codable, NSCoding {
     let lastUsedTime: Timestamp
     let urls: [URL]
 
+    // This is temprorary in order to fix a migration error, can be removed after v107 has been well adopted
+    private let legacyCurrentPage: Int? = nil
+    private let legacyLastUsedTime: Timestamp? = nil
+
     enum CodingKeys: String, CodingKey {
         case currentPage
         case lastUsedTime
         case urls
+
+        // This is temprorary in order to fix a migration error, can be removed after v107 has been well adopted
+        case legacyCurrentPage = "user_first_name"
+        case legacyLastUsedTime = "user_last_name"
     }
 
     var jsonDictionary: [String: Any] {
@@ -77,6 +84,24 @@ class SessionData: NSObject, Codable, NSCoding {
 
         assert(!urls.isEmpty, "Session has at least one entry")
         assert(currentPage > -urls.count && currentPage <= 0, "Session index is valid")
+    }
+
+    // This is temprorary in order to fix a migration error, can be removed after v107 has been well adopted
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            currentPage = try values.decode(Int.self, forKey: .currentPage)
+        } catch {
+            currentPage = try values.decode(Int.self, forKey: .legacyCurrentPage)
+        }
+
+        do {
+            lastUsedTime = try values.decode(Timestamp.self, forKey: .lastUsedTime)
+        } catch {
+            lastUsedTime = try values.decode(Timestamp.self, forKey: .legacyLastUsedTime)
+        }
+
+        urls = try values.decode([URL].self, forKey: .urls)
     }
 
     required init?(coder: NSCoder) {

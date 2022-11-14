@@ -5,6 +5,7 @@
 import Foundation
 import MozillaAppServices
 import WebKit
+import Shared
 
 enum HistoryDeletionUtilityDateOptions {
     case lastHour
@@ -56,6 +57,9 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
     // MARK: URL based deletion functions
     private func deleteFromHistory(_ sites: [String]) {
         sites.forEach { profile.history.removeHistoryForURL($0) }
+        if profile.historyApiConfiguration == .new {
+            sites.forEach { _ = profile.places.deleteVisitsFor($0) }
+        }
     }
 
     private func deleteMetadata(
@@ -98,20 +102,37 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
 
         switch dateOption {
         case .allTime:
-            profile.history
-                .clearHistory()
-                .uponQueue(.global(qos: .userInteractive)) { result in
+            switch profile.historyApiConfiguration {
+            case .old:
+                profile.history
+                    .clearHistory()
+                    .uponQueue(.global(qos: .userInteractive)) { result in
+                        completion(result.isSuccess)
+                    }
+            case .new:
+                _ = profile.history
+                    .clearHistory()
+                profile.places.deleteEverythingHistory().uponQueue(.global(qos: .userInteractive)) { result in
                     completion(result.isSuccess)
                 }
-
+            }
         default:
             guard let date = dateFor(dateOption) else { return }
-
-            profile.history
-                .removeHistoryFromDate(date)
-                .uponQueue(.global(qos: .userInteractive)) { result in
+            switch profile.historyApiConfiguration {
+            case .old:
+                profile.history
+                    .removeHistoryFromDate(date)
+                    .uponQueue(.global(qos: .userInteractive)) { result in
+                        completion(result.isSuccess)
+                    }
+            case .new:
+                // for now we also delete the old history to keep the browser.db up to date
+                _ = profile.history
+                    .removeHistoryFromDate(date)
+                profile.places.deleteVisitsBetween(date).uponQueue(.global(qos: .userInteractive)) { result in
                     completion(result.isSuccess)
                 }
+            }
         }
     }
 
