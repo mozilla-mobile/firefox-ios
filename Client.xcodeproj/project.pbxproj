@@ -1074,6 +1074,7 @@
 		E19B38B528A42EBC00D8C541 /* WallpaperCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19B38B428A42EBC00D8C541 /* WallpaperCellViewModel.swift */; };
 		E1A6AB4628CA6A4C00EBEBDD /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A6AB4528CA6A4C00EBEBDD /* String+Extension.swift */; };
 		E1A6AB4828CA833000EBEBDD /* WallpaperBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A6AB4728CA833000EBEBDD /* WallpaperBaseViewController.swift */; };
+		E1AB69A72922AA900017022A /* BadgeWithBackdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AB69A62922AA900017022A /* BadgeWithBackdrop.swift */; };
 		E1AEC176286E0CF500062E29 /* JumpBackInViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC16F286E0CF500062E29 /* JumpBackInViewModelTests.swift */; };
 		E1AEC177286E0CF500062E29 /* HistoryHighlightsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC170286E0CF500062E29 /* HistoryHighlightsViewModelTests.swift */; };
 		E1AEC178286E0CF500062E29 /* HomepageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */; };
@@ -4779,6 +4780,7 @@
 		E19B38B428A42EBC00D8C541 /* WallpaperCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCellViewModel.swift; sourceTree = "<group>"; };
 		E1A6AB4528CA6A4C00EBEBDD /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		E1A6AB4728CA833000EBEBDD /* WallpaperBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperBaseViewController.swift; sourceTree = "<group>"; };
+		E1AB69A62922AA900017022A /* BadgeWithBackdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeWithBackdrop.swift; sourceTree = "<group>"; };
 		E1AEC16F286E0CF500062E29 /* JumpBackInViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JumpBackInViewModelTests.swift; sourceTree = "<group>"; };
 		E1AEC170286E0CF500062E29 /* HistoryHighlightsViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsViewModelTests.swift; sourceTree = "<group>"; };
 		E1AEC171286E0CF500062E29 /* HomepageViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomepageViewControllerTests.swift; sourceTree = "<group>"; };
@@ -7327,6 +7329,7 @@
 			children = (
 				EBA3B2CE2268F3E700728BDB /* PhotonActionSheet */,
 				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
+				E1AB69A62922AA900017022A /* BadgeWithBackdrop.swift */,
 				EBA3B2D12268F57E00728BDB /* BadgeIcon.swift */,
 				433396C727ACE92500491049 /* CellWithRoundedButton.swift */,
 				7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */,
@@ -10755,6 +10758,7 @@
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */,
+				E1AB69A72922AA900017022A /* BadgeWithBackdrop.swift in Sources */,
 				C81AC6B626160091007800C5 /* TabTrayViewModel.swift in Sources */,
 				EBB89504219398E500EB91A0 /* TrackingProtectionPageStats.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
