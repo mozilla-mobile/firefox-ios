@@ -30,7 +30,8 @@ class TabToolbar: UIView, FeatureFlaggable {
         return false
     }
 
-    private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
+    private let privateModeBadge = BadgeWithBackdrop2(imageName: "privateModeBadge",
+                                                      backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     private let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
     private let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
@@ -47,7 +48,8 @@ class TabToolbar: UIView, FeatureFlaggable {
         helper = TabToolbarHelper(toolbar: self)
         addButtons(actionButtons)
 
-        privateModeBadge.add(toParent: contentView)
+        tabsButton.addSubview(privateModeBadge)
+        privateModeBadge.translatesAutoresizingMaskIntoConstraints = false
         appMenuBadge.add(toParent: contentView)
         warningMenuBadge.add(toParent: contentView)
 
@@ -63,7 +65,6 @@ class TabToolbar: UIView, FeatureFlaggable {
     // MARK: - View Setup
 
     override func updateConstraints() {
-        privateModeBadge.layout(onButton: tabsButton)
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
 
@@ -71,7 +72,10 @@ class TabToolbar: UIView, FeatureFlaggable {
             contentView.topAnchor.constraint(equalTo: topAnchor),
             contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            contentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+
+            privateModeBadge.centerXAnchor.constraint(equalTo: tabsButton.centerXAnchor),
+            privateModeBadge.centerYAnchor.constraint(equalTo: tabsButton.centerYAnchor),
         ])
         super.updateConstraints()
     }
@@ -151,7 +155,7 @@ extension TabToolbar: NotificationThemeable, PrivateModeUI {
         backgroundColor = UIColor.theme.browser.background
         helper?.setTheme(forButtons: actionButtons)
 
-        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        privateModeBadge.updateTheme(badgeBackgroundColor: UIColor.theme.browser.background)
         appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
         warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
