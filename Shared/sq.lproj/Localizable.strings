@@ -64,6 +64,9 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Adresë dhe Kërkim";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Shtoje te Listë Leximesh";
+
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "Shtyllë Adresash";
 
@@ -196,6 +199,9 @@
 /* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
 "ContextualHint.SearchBarPlacement.NewUsers" = "Për ta bërë më të lehtë futjen e të dhënave, paneli tani, si parazgjedhje, gjendet në fund.";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Faqja juaj hyrëse në Firefox, e personalizuar, tani e bën më të lehtë të riktheheni atje ku e latë. Gjeni skedat, faqerojtësit dhe përfundime kërkimi tuajat më të freskëta.";
+
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Rregullime Paneli";
 
@@ -204,6 +210,9 @@
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
 "ContextualHints.TabTray.InactiveTabs.CallToAction" = "Çaktivizojeni te rregullimet";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Mbylle";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Faqja s’u shtua dot te Listë Leximesh";
@@ -234,6 +243,9 @@
 
 /* Title for default search engine picker. */
 "Default Search Engine" = "Motor Kërkimesh Parazgjedhje";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Mbylle";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Rregullime Ekrani";
@@ -340,6 +352,27 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Hiqe";
 
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "Sajte: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Rregullime";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Sponsorët Tanë & Privatësia Jonë";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Hap skedën e njëkohësuar";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Shihni krejt skedat e njëkohësuara";
+
+/* If a user is signed in, and a sync has been performed to collect their recent tabs from other signed in devices, their most recent tab from another device can now appear in the Jump Back In section. This label specifically points out which cell inside the Jump Back In section shows that synced tab. */
+"FirefoxHomepage.JumpBackIn.TabPickup.v104" = "Rimarrje skedash";
+
+/* This string will show under the description on pocket story, indicating that the story is sponsored. */
+"FirefoxHomepage.Pocket.Sponsored.v103" = "E sponsorizuar";
+
 /* This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible. */
 "FirefoxHomepage.Shortcuts.Sponsored.v100" = "E sponsorizuar";
 
@@ -442,6 +475,9 @@
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Fshije prej Historiku";
 
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Hape në Skedë Private";
+
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Hape në Skedë të Re";
 
@@ -511,6 +547,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Gjeje Sërish";
 
+/* A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. */
+"Keyboard.Shortcuts.RefreshWithoutCache.v108" = "Ringarkoje Duke Shpërfillur Fshehtinën";
+
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Faqerojtës";
 
@@ -553,6 +592,12 @@
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Javën e fundit";
 
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Faqerojtës";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Historik";
+
 /* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
 "LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Anuloje";
 
@@ -564,6 +609,9 @@
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "Heq historikun (përfshi historik të njëkohësuar prej pajisjesh të tjera), cookie-t dhe të tjera të dhëna shfletimi.";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Fshije";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
 "LibraryPanel.History.NoHistoryFound.v99" = "S’u gjet historik";
@@ -718,6 +766,12 @@
 /* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
 "Menu.Downloads.Label" = "Shkarkime";
 
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Për këtë sajt, mbrojtjet janë OFF";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Për këtë sajt, mbrojtjet janë ON";
+
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "Ndihmë";
 
@@ -774,6 +828,9 @@
 
 /* Label for the share button in the menu page. Pressing this button open the share menu to share the current website. */
 "Menu.Share.v99" = "Ndajeni me të tjerët";
+
+/* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
+"Menu.SyncAndSaveData.v103" = "Njëkohëso dhe Ruaj të Dhëna";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "Skeda u Dërgua";
@@ -850,6 +907,60 @@
 /* Restore Tabs Affirmative Action */
 "Okay" = "OK";
 
+/* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can continue the onboarding. */
+"Onboarding.IntroAction.v102" = "Fillojani";
+
+/* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. */
+"Onboarding.IntroDescriptionPart2.v102" = "Përkushtuar premtimit për një Internet më të mirë për këdo.";
+
+/* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
+"Onboarding.LaterAction.v102" = "Jo Tani";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Description.v106" = "Merrni skeda dhe fjalëkalim nga pajisjet tuaja të tjera, për të vazhduar atje ku e latë.";
+
+/* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
+"Onboarding.Sync.Skip.Action.v106" = "Anashkaloje";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Sync.Title.v106" = "Kaloni nga telefoni në portativ, ose anasjelltas";
+
+/* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
+"Onboarding.SyncAction.v102" = "Regjistrohu dhe Bëni Hyrjen";
+
+/* Description for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. */
+"Onboarding.SyncDescription.v102" = "Njëkohësoni vetvetiu skeda dhe faqerojtës nga pajisja në pajisje, për ndërrim të pakapshëm ekrani.";
+
+/* Title for the sync onboarding page in our Onboarding screens. The user will be able to setup their Firefox sync account from that screen. 'Stay in the flow' means that a person is fully immersed in an activity. The user will sync with their Firefox sync account to stay connected and immersed in the activity they are doing. */
+"Onboarding.SyncTitle.v102" = "Njëkohësojeni, Që të Mos Ndërpritet Puna Juaj";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.Classic.v106" = "Sfond Klasik";
+
+/* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
+"Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Sfond Edicion i Kufizuar";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
+"Onboarding.Wallpaper.Action.v106" = "Eksploroni më tepër sfonde";
+
+/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Description.v106" = "Zgjidhni një sfond që ju thotë diçka.";
+
+/* Title for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
+"Onboarding.Wallpaper.Title.v106" = "Shtoni pakëz ngjyrë";
+
+/* Description for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can set a wallpaper. */
+"Onboarding.WallpaperAction.v102" = "Caktoni Sfond";
+
+/* Title for the wallpaper onboarding page in our Onboarding screens. This describes to the user that they can choose different wallpapers. */
+"Onboarding.WallpaperTitle.v102" = "Zgjidhni një Sfond Firefox";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Description.v106" = "Firefox-i vë njerëzit mbi fitime dhe mbron, si parazgjedhje, privatësinë tuaj.";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
+"Onboarding.Welcome.Title.v106" = "Mirë se vini te një internet i pavarur";
+
 /* On the onboarding card letting users know what's new in this version of Firefox, this is the title for the button, on the bottom of the card, used to get back to browsing on Firefox by dismissing the onboarding card */
 "Onboarding.WhatsNew.Button.Title" = "Filloni të Shfletoni";
 
@@ -909,6 +1020,12 @@
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
 "ReaderMode.Available.VoiceOverAnnouncement" = "Mënyra Lexues është e mundshme";
+
+/* Name for Mark as read button in reader mode */
+"ReaderModeBar.MarkAsRead.v106" = "Vëri Shenjë si të Lexuar";
+
+/* Name for Mark as unread button in reader mode */
+"ReaderModeBar.MarkAsUnread.v106" = "Vëri Shenjë si të Palexuar";
 
 /* Panel accessibility label */
 "Reading list" = "Listë leximesh";
@@ -973,6 +1090,9 @@
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "Kalo te skeda";
 
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "Firefox-i Sugjeron";
+
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "Motori i ri i kërkimeve do të shfaqet te shtylla e kërkimeve të shpejta.";
 
@@ -1006,6 +1126,15 @@
 /* The confirmation button */
 "Search.ThirdPartyEngines.OK" = "OK";
 
+/* Accessibility label for default search engine setting. */
+"SearchSettings.Accessibility.DefaultSearchEngine.v106" = "Motor Parazgjedhje Kërkimesh";
+
+/* Title for default search engine settings section. */
+"SearchSettings.Title.DefaultSearchEngine.v106" = "Motor Parazgjedhje Kërkimesh";
+
+/* Navigation title for search settings. */
+"SearchSettings.Title.Search.v106" = "Kërko";
+
 /* Message displayed in the crash dialog above the buttons used to select when sending reports */
 "Send a crash report so Mozilla can fix the problem?" = "Të dërgohet një raport vithisjeje, që kështu Mozilla të mund të ndreqë problemin?";
 
@@ -1017,6 +1146,9 @@
 
 /* Button title for cancelling share screen */
 "SendTo.Cancel.Button" = "Anuloje";
+
+/* Close button in top navigation bar */
+"SendTo.Close.Button" = "Mbylle";
 
 /* Header for the list of devices table */
 "SendTo.DeviceList.Text" = "Pajisje të gatshme:";
@@ -1156,6 +1288,9 @@
 /* Display (theme) settings footer describing how the brightness slider works. */
 "Settings.DisplayTheme.SectionFooter" = "Tema do të ndryshojë vetvetiu bazuar në ndriçimin e ekranit tuaj. Mund të caktoni pragun se kur ndryshon tema. Rrethi tregon ndriçimin e tanishëm të ekranit tuaj.";
 
+/* Display (theme) settings label to show if automatically switch theme is enabled. */
+"Settings.DisplayTheme.StatusTitle" = "Vetvetiu";
+
 /* Switch mode settings section title */
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "Mënyrë Këmbimi";
 
@@ -1189,6 +1324,12 @@
 /* General settings section title */
 "Settings.General.SectionName" = "Të përgjithshme";
 
+/* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
+"Settings.Home.Current.Description.v101" = "Zgjidhni ç’të shfaqe te faqja hyrëse.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Zgjidhni ç’të përfshihet te faqja hyrëse e Firefox-it.";
+
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Hidhu Mbrapa Te";
 
@@ -1203,6 +1344,9 @@
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
 "Settings.Home.Option.Shortcuts" = "Shkurtore";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
+"Settings.Home.Option.SponsoredPocket.v103" = "Histori të sponsorizuara";
 
 /* In the settings menu, on the Start at Home homepage customization option, this allows users to set this setting to return to the Homepage after four hours of inactivity. */
 "Settings.Home.Option.StartAtHome.AfterFourHours" = "Faqe hyrëse pas katër orësh plogështie";
@@ -1219,11 +1363,17 @@
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
 "Settings.Home.Option.StartAtHome.Title" = "Skenën hyrëse";
 
+/* In the settings menu, this is the title of the Firefox Homepage customization settings section */
+"Settings.Home.Option.Title.v101" = "Përfshini te Faqja hyrëse";
+
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "Sfond";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Sfond Firefox-i, mostër ametisti.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Sfond Firefox-i, model me duna plazhi.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
 "Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Sfond Firefox-i, mostër në blu të thellë.";
@@ -1237,8 +1387,26 @@
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
 "Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Aktivizim/Çaktivizim cikli sfondesh faqeje hyrëse";
 
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Sfond Firefox-i, model me kodra në muzg.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
+"Settings.Home.Option.Wallpaper.Classic.Title.v106" = "%@ Klasik";
+
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.CollectionTitle" = "SKENA HYRËSE";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LearnMore.v106" = "Mësoni më tepër";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the default description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Default.Description.v106" = "Provoni koleksionin e ri.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the description of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.IndependentVoices.Description.v106" = "Koleksioni i ri Zëra të Pavarur.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are seasonally available to the user. */
+"Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "Edicion i Kufizuar";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
 "Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "Ndryshoni sfond duke prekur stemë faqeje hyrëse Firefox";
@@ -1324,6 +1492,18 @@
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Aplikacion Email";
 
+/* Touch ID prompt subtitle when accessing logins and passwords */
+"Settings.Passwords.FingerPrintReason.v103" = "Që të përdorni fjalëkalimin tuaj tani, përdorni shenjat tuaja të gishtit.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "Fjalëkalimet tuaja tani mbrohen nga Face ID, Touch ID, ose një kodkalim pajisjeje.";
+
+/* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
+"Settings.Passwords.SavePasswords.v103" = "Ruaji Fjalëkalimet";
+
+/* Title for the passwords screen. */
+"Settings.Passwords.Title.v103" = "Fjalëkalime";
+
 /* Setting to enable the built-in password manager */
 "Settings.SaveLogins.Title" = "Ruaji Kredencialet e Hyrjeve";
 
@@ -1369,8 +1549,20 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studime";
 
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Bëni hyrjen, që të njëkohësoni skeda, faqerojtës, fjalëkalime, etj.";
+
+/* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
+"Settings.Sync.ButtonTitle.v103" = "Njëkohëso dhe Ruaj të Dhëna";
+
+/* Title for the page where the user sign in to their Firefox Sync account. */
+"Settings.Sync.SignInView.Title.v103" = "Njëkohëso dhe Ruaj të Dhëna";
+
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Skedat Jo Aktive";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Skedat që s’i keni parë gjatë dy javësh, kalohen te ndarja joaktive.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Grupe Skedash";
@@ -1513,6 +1705,15 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "U mbyllën %d skeda";
 
+/* Accessibility title for the inactive tabs section button when section is closed. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103" = "Shihni Skeda Jo Aktive";
+
+/* Accessibility title for the inactive tabs section button when section is open. This section groups all tabs that haven't been used in a while. */
+"TabsTray.InactiveTabs.SectionTitle.Opened.Accessibility.v103" = "Fshihi Skedat Jo Aktive";
+
+/* Accessibility Label for the tab toolbar Search button */
+"TabToolbar.Accessibility.Search.v106" = "Kërko";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "TabTray.AddTab.Button" = "Shtoni Skedë";
 
@@ -1543,6 +1744,9 @@
 /* The title for the tab tray */
 "TabTray.Title" = "Hapi Skedat";
 
+/* Accessibility Label for the tabs button in the tab toolbar */
+"TabTrayButtons.Accessibility.ShowTabs.v106" = "Shfaq Skeda";
+
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Faqja s’u shfaq dot nën Pamjen Lexues.";
 
@@ -1554,6 +1758,9 @@
 
 /* Relative date for date in past week. */
 "this week" = "këtë javë";
+
+/* Relative date for yesterday. */
+"TimeConstants.Yesterday.v106" = "dje";
 
 /* label for Not Now button */
 "Toasts.NotNow" = "Jo Tani";
@@ -1600,11 +1807,47 @@
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "të palexuara";
 
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v106" = "Hyni";
+
+/* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v106" = "Vazhdojeni ku e latë, me skeda nga pajisje të tjera tani në faqen tuaj hyrëse.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v106" = "Ndërrimi i ekraneve është më i lehtë se kurrë";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v106" = "Fillojani";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "Ngjyra të reja. Rehati e re. I njëjti përkushtim ndaj njerëzve, jo ndaj fitimeve.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v106" = "Mirë se vini te një internet më personal";
+
 /* Debug option */
 "Use stage servers" = "Përdor shërbyes provash";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Emër përdoruesi";
+
+/* The message of the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Change.Error.Body.v106" = "Diç shkoi ters me këtë sfond.";
+
+/* The title of the error displayed when changing wallpaper fails. */
+"Wallpaper.Change.Error.Title.v106" = "S’u Ndryshua Dot Sfond";
+
+/* The message of the error displayed to a user when they try change a wallpaper that failed downloading. */
+"Wallpaper.Download.Error.Body.v106" = "Diç shkoi ters me shkarkimin tuaj.";
+
+/* The title of the error displayed if download fails when changing a wallpaper. */
+"Wallpaper.Download.Error.Title.v106" = "S’u Shkarkua Dot Sfond";
+
+/* An action for the error displayed to a user when they trying to change a wallpaper failed. */
+"Wallpaper.Error.Dismiss.v106" = "Anuloje";
+
+/* Action displayed when changing wallpaper fails. */
+"Wallpaper.Error.TryAgain.v106" = "Riprovoni";
 
 /* Accessibility label for the main web content view */
 "Web content" = "Lëndë Web";

@@ -1,3 +1,9 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Выбор Firefox в качестве браузера по умолчанию — это голосование за открытый и доступный Интернет.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Перейдите на лучший интернет";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Узнайте как";
 

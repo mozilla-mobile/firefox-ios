@@ -1,8 +1,14 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Faire de Firefox votre navigateur par défaut, c’est voter pour un Internet ouvert et accessible.";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Me montrer comment";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Faites en sorte que les liens des sites web, des courriels et des messages s’ouvrent automatiquement dans Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Choisissez Firefox comme navigateur par défaut pour rendre la vitesse, la sécurité et la confidentialité automatiques.";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Changez de navigateur par défaut";
