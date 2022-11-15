@@ -107,9 +107,11 @@ class BookmarkingTests: BaseTestCase {
 
     private func checkItemInBookmarkList() {
         waitForExistence(app.tables["Bookmarks List"], timeout: 5)
-        let list = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
-        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
+        let bookmarksList = app.tables["Bookmarks List"]
+        let list = bookmarksList.cells.count
+        XCTAssertEqual(list, 2, "There should be an entry in the bookmarks list")
+        XCTAssertTrue(bookmarksList.cells.element(boundBy: 0).staticTexts["Desktop Bookmarks"].exists)
+        XCTAssertTrue(bookmarksList.cells.element(boundBy: 1).staticTexts[url_2["bookmarkLabel"]!].exists)
     }
 
     func testAccessBookmarksFromContextMenu() {
@@ -123,7 +125,7 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         // There should be a bookmark
-        navigator.goto(MobileBookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList()
     }
 
