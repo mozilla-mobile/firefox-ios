@@ -86,8 +86,8 @@ public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
         }
         if let
             token = TokenServerToken.fromJSON(json["token"]),
-            let forKey = json["forKey"].string?.hexDecodedData,
-            let expiresAt = json["expiresAt"].int64 {
+           let forKey = json["forKey"].string?.hexDecodedData,
+           let expiresAt = json["expiresAt"].int64 {
             return SyncAuthStateCache(token: token, forKey: forKey, expiresAt: Timestamp(expiresAt))
         }
     }
@@ -151,11 +151,11 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
                 let client = TokenServerClient(url: tokenServerEndpointURL)
                 accountManager.getAccessToken(scope: OAuthScope.oldSync) { res in
                     switch res {
-                        case .failure(let err):
-                            deferred.fill(Maybe(failure: err as MaybeErrorType))
-                        case .success(let accessToken):
-                            log.debug("Fetching token server token.")
-                            client.token(token: accessToken.token, kid: accessToken.key!.kid).upon { result in
+                    case .failure(let err):
+                        deferred.fill(Maybe(failure: err as MaybeErrorType))
+                    case .success(let accessToken):
+                        log.debug("Fetching token server token.")
+                        client.token(token: accessToken.token, kid: accessToken.key!.kid).upon { result in
                             guard let token = result.successValue else {
                                 deferred.fill(Maybe(failure: result.failureValue!))
                                 return

@@ -178,7 +178,7 @@ class SearchTermGroupsUtility {
                 return true
             } else {
                 if let onlyItem = temp.first,
-                    let index = itemsInGroups.firstIndex(of: onlyItem) {
+                   let index = itemsInGroups.firstIndex(of: onlyItem) {
                     itemsInGroups.remove(at: index)
                 }
                 return false
@@ -210,18 +210,18 @@ class SearchTermGroupsUtility {
     /// - Returns: An array of `ASGroup<T>`
     private static func createGroups<T: Equatable>(from groupDictionary: [String: [T]]) -> [ASGroup<T>] {
         return groupDictionary.map {
-                let orderedItems = orderItemsIn(group: $0.value)
-                var timestamp: Timestamp = 0
-                if let firstItem = orderedItems.first, let tab = firstItem as? Tab {
-                    timestamp = tab.firstCreatedTime ?? 0
-                }
+            let orderedItems = orderItemsIn(group: $0.value)
+            var timestamp: Timestamp = 0
+            if let firstItem = orderedItems.first, let tab = firstItem as? Tab {
+                timestamp = tab.firstCreatedTime ?? 0
+            }
 
-                // Base timestamp on score to order historyHighlight properly
-                if let firstItem = orderedItems.first, let highlight = firstItem as? HistoryHighlight {
-                    timestamp = Date.now() - Timestamp(highlight.score)
-                }
+            // Base timestamp on score to order historyHighlight properly
+            if let firstItem = orderedItems.first, let highlight = firstItem as? HistoryHighlight {
+                timestamp = Date.now() - Timestamp(highlight.score)
+            }
 
-                return ASGroup<T>(searchTerm: $0.key.capitalized, groupedItems: orderedItems, timestamp: timestamp)
+            return ASGroup<T>(searchTerm: $0.key.capitalized, groupedItems: orderedItems, timestamp: timestamp)
         }
     }
 
