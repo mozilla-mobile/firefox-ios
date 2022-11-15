@@ -9,9 +9,8 @@ import Shared
 class TabsButton: UIButton {
 
     struct UX {
-        static let CornerRadius: CGFloat = 2
-        static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
-        static let BorderStrokeWidth: CGFloat = 1.5
+        static let cornerRadius: CGFloat = 2
+        static let titleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     }
 
     var textColor = UIColor.Photon.Blue40 {
@@ -43,8 +42,8 @@ class TabsButton: UIButton {
 
     lazy var countLabel: UILabel = {
         let label = UILabel()
-        label.font = UX.TitleFont
-        label.layer.cornerRadius = UX.CornerRadius
+        label.font = UX.titleFont
+        label.layer.cornerRadius = UX.cornerRadius
         label.textAlignment = .center
         label.isUserInteractionEnabled = false
         return label
@@ -59,7 +58,7 @@ class TabsButton: UIButton {
 
     fileprivate lazy var labelBackground: UIView = {
         let background = UIView()
-        background.layer.cornerRadius = UX.CornerRadius
+        background.layer.cornerRadius = UX.cornerRadius
         background.isUserInteractionEnabled = false
         return background
     }()
