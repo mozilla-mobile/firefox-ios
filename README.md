@@ -15,8 +15,7 @@ Ecosia for iOS is based on a fork of the code of "Firefox for iOS". We want to e
 ## Requirements
 
 - OSX
-- Xcode 13.0
-- Carthage
+- Xcode 13.4.1
 - Node
 - Python3
 - pip
@@ -31,13 +30,12 @@ Ecosia for iOS is based on a fork of the code of "Firefox for iOS". We want to e
 - uniffi-bindgen
 - swift-protobuf
 
-This branch works with [Xcode 13.0](https://developer.apple.com/download/more/?=xcode)
+This branch works with [Xcode 13.4.1](https://developer.apple.com/download/more/?=xcode)
 
-### Install Carthage, Node, VirtualEnv and python3 (mandatory)
+### Install Node, VirtualEnv and python3 (mandatory)
 
 ```bash
 brew update
-brew install carthage
 brew install node
 brew install virtualenv
 brew install python3
@@ -116,30 +114,6 @@ Setup content blocking scripts
 
 ```bash
 (cd content-blocker-lib-ios/ContentBlockerGen && swift run)
-```
-
-### Building Application Services
-
-To validate that application services can be build locally follow the guide [https://github.com/mozilla/application-services/blob/main/docs/building.md#ios-development](https://github.com/mozilla/application-services/blob/main/docs/building.md#ios-development)
-
-Make sure to have XCode 13.0 installed and selected for command line builds
-
-```bash
-sudo xcode-select --switch /<path-to-XCode-13.0-folder>/Xcode-13.0.app
-```
-
-Then fetch Mozilla App Services via the script:
-
-```bash
-./carthage_bootstrap_moz_services.sh
-```
-
-### Updating dependencies (not needed on first run)
-
-To update dependencies run:
-
-```bash
-./carthage update [optional name] --platform iOS --cache-builds
 ```
 
 ### Open the project
