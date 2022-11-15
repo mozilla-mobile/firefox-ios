@@ -259,7 +259,8 @@ class SearchTermGroupsUtility {
     ///   with no changes.
     /// - Returns: The passed in group, sorted according to its `ASGroup<T>.timestamp` property
     private static func order<T: Equatable>(groups: [ASGroup<T>], using order: ComparisonResult) -> [ASGroup<T>] {
-        switch order { case .orderedAscending:
+        switch order {
+        case .orderedAscending:
             return groups.sorted { $0.timestamp < $1.timestamp }
         case .orderedDescending:
             return groups.sorted { $0.timestamp > $1.timestamp }

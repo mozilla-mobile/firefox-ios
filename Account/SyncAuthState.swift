@@ -84,8 +84,7 @@ public func syncAuthStateCachefromJSON(_ json: JSON) -> SyncAuthStateCache? {
             log.warning("Sync Auth State Cache is wrong version; dropping.")
             return nil
         }
-        if let
-            token = TokenServerToken.fromJSON(json["token"]),
+        if let token = TokenServerToken.fromJSON(json["token"]),
            let forKey = json["forKey"].string?.hexDecodedData,
            let expiresAt = json["expiresAt"].int64 {
             return SyncAuthStateCache(token: token, forKey: forKey, expiresAt: Timestamp(expiresAt))

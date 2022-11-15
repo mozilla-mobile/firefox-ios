@@ -33,25 +33,25 @@ public extension EncryptedLogin {
         } else {
             hostname = protectionSpace.host
         }
-        
+
         let httpRealm = protectionSpace.realm
         let username = credentials.user ?? ""
         let password = credentials.password ?? ""
         let fields = LoginFields.init(origin: hostname, httpRealm: httpRealm, formActionOrigin: "", usernameField: "", passwordField: "")
         let record = RecordFields.init(id: "", timesUsed: 0, timeCreated: 0, timeLastUsed: 0, timePasswordChanged: 0)
         let login = Login.init(record: record, fields: fields, secFields: SecureLoginFields.init(password: password, username: username))
-        
+
         self.init(
             record: record,
             fields: fields,
             secFields: ""
         )
-        
+
         let rustLoginsEncryption: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
         let encryptedLogin = rustLoginsEncryption.encryptSecureFields(login: login)
         self.secFields = encryptedLogin?.secFields ?? ""
     }
-    
+
     var formSubmitUrl: String? {
         get {
             return self.fields.formActionOrigin
@@ -60,7 +60,7 @@ public extension EncryptedLogin {
             self.fields.formActionOrigin = newValue
         }
     }
-    
+
     var httpRealm: String? {
         get {
             return self.fields.httpRealm
@@ -69,7 +69,7 @@ public extension EncryptedLogin {
             self.fields.httpRealm = newValue
         }
     }
-    
+
     var hostname: String {
         get {
             return self.fields.origin
@@ -78,7 +78,7 @@ public extension EncryptedLogin {
             self.fields.origin = newValue
         }
     }
-    
+
     var usernameField: String {
         get {
             return self.fields.usernameField
@@ -87,7 +87,7 @@ public extension EncryptedLogin {
             self.fields.usernameField = newValue
         }
     }
-    
+
     var passwordField: String {
         get {
             return self.fields.passwordField
@@ -96,7 +96,7 @@ public extension EncryptedLogin {
             self.fields.passwordField = newValue
         }
     }
-    
+
     var id: String {
         get {
             return self.record.id
@@ -105,7 +105,7 @@ public extension EncryptedLogin {
             self.record.id = newValue
         }
     }
-    
+
     var timePasswordChanged: Int64 {
         get {
             return self.record.timePasswordChanged
@@ -114,7 +114,7 @@ public extension EncryptedLogin {
             self.record.timePasswordChanged = newValue
         }
     }
-    
+
     var timeCreated: Int64 {
         get {
             return self.record.timeCreated
@@ -123,45 +123,45 @@ public extension EncryptedLogin {
             self.record.timeCreated = newValue
         }
     }
-    
+
     var decryptedUsername: String {
         let rustKeys = RustLoginEncryptionKeys()
         return rustKeys.decryptSecureFields(login: self)?.secFields.username ?? ""
     }
-    
+
     var decryptedPassword: String {
         let rustKeys = RustLoginEncryptionKeys()
         return rustKeys.decryptSecureFields(login: self)?.secFields.password ?? ""
     }
-    
+
     var credentials: URLCredential {
         let rustLoginsEncryption: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
         let login = rustLoginsEncryption.decryptSecureFields(login: self)
         return URLCredential(user: login?.secFields.username ?? "", password: login?.secFields.password ?? "", persistence: .forSession)
     }
-    
+
     var protectionSpace: URLProtectionSpace {
         return URLProtectionSpace.fromOrigin(fields.origin)
     }
-    
+
     var hasMalformedHostname: Bool {
         let hostnameURL = fields.origin.asURL
         guard hostnameURL?.host != nil else { return true }
-        
+
         return false
     }
-    
+
     init(fromJSONDict dict: [String: Any]) {
         let password = dict["password"] as? String ?? ""
         let username = dict["username"] as? String ?? ""
-        
+
         let fields = LoginFields.init(
             origin: dict["hostname"] as? String ?? "",
             httpRealm: dict["httpRealm"] as? String,
             formActionOrigin: dict["formSubmitUrl"] as? String,
             usernameField: dict["usernameField"] as? String ?? "",
             passwordField: dict["passwordField"] as? String ?? "")
-        
+
         let record = RecordFields.init(
             id: dict["id"] as? String ?? "",
             timesUsed: (dict["timesUsed"] as? Int64) ?? 0,
@@ -173,45 +173,45 @@ public extension EncryptedLogin {
             fields: fields,
             secFields: SecureLoginFields.init(password: password,
                                               username: username))
-        
+
         self.init(
             record: record,
             fields: fields,
             secFields: ""
         )
-        
+
         let rustLoginsEncryption: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
         let encryptedLogin = rustLoginsEncryption.encryptSecureFields(login: login)
         self.secFields = encryptedLogin?.secFields ?? ""
     }
-    
+
     func toJSONDict() -> [String: Any] {
         let rustLoginsEncryption: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
         let login = rustLoginsEncryption.decryptSecureFields(login: self)
-        
+
         var dict: [String: Any] = [
             "id": record.id,
             "password": login?.secFields.password ?? "",
             "hostname": fields.origin,
-            
+
             "timesUsed": record.timesUsed,
             "timeCreated": record.timeCreated,
             "timeLastUsed": record.timeLastUsed,
             "timePasswordChanged": record.timePasswordChanged,
-            
+
             "username": login?.secFields.username ?? "",
             "passwordField": fields.passwordField,
             "usernameField": fields.usernameField,
         ]
-        
+
         if let httpRealm = fields.httpRealm {
             dict["httpRealm"] = httpRealm
         }
-        
+
         if let formSubmitUrl = fields.formActionOrigin {
             dict["formSubmitUrl"] = formSubmitUrl
         }
-        
+
         return dict
     }
 }
@@ -225,7 +225,7 @@ public class LoginEntryFlattened {
     var formSubmitUrl: String?
     var usernameField: String
     var passwordField: String
-    
+
     public init(id: String, hostname: String, password: String, username: String, httpRealm: String?, formSubmitUrl: String?, usernameField: String, passwordField: String) {
         self.id = id
         self.hostname = hostname
@@ -246,35 +246,35 @@ public extension LoginEntry {
         } else {
             hostname = protectionSpace.host
         }
-        
+
         let httpRealm = protectionSpace.realm
         let username = credentials.user
         let password = credentials.password
         let fields = LoginFields.init(origin: hostname, httpRealm: httpRealm, formActionOrigin: "", usernameField: "", passwordField: "")
-        
+
         self.init(
             fields: fields,
             secFields: SecureLoginFields.init(password: password ?? "", username: username ?? "")
         )
     }
-    
+
     init(fromJSONDict dict: [String: Any]) {
         let password = dict["password"] as? String ?? ""
         let username = dict["username"] as? String ?? ""
-        
+
         let fields = LoginFields.init(
             origin: dict["hostname"] as? String ?? "",
             httpRealm: dict["httpRealm"] as? String,
             formActionOrigin: dict["formSubmitUrl"] as? String,
             usernameField: dict["usernameField"] as? String ?? "",
             passwordField: dict["passwordField"] as? String ?? "")
-        
+
         self.init(
             fields: fields,
             secFields: SecureLoginFields.init(password: password, username: username)
         )
     }
-    
+
     init(fromLoginEntryFlattened login: LoginEntryFlattened) {
         self.init(
             fields: LoginFields(
@@ -290,7 +290,7 @@ public extension LoginEntry {
             )
         )
     }
-    
+
     var hostname: String {
         get {
             return self.fields.origin
@@ -299,7 +299,7 @@ public extension LoginEntry {
             self.fields.origin = newValue
         }
     }
-    
+
     var username: String {
         get {
             return self.secFields.username
@@ -308,7 +308,7 @@ public extension LoginEntry {
             self.secFields.username = newValue
         }
     }
-    
+
     var password: String {
         get {
             return self.secFields.password
@@ -317,39 +317,39 @@ public extension LoginEntry {
             self.secFields.password = newValue
         }
     }
-    
+
     var protectionSpace: URLProtectionSpace {
         return URLProtectionSpace.fromOrigin(fields.origin)
     }
-    
+
     var credentials: URLCredential {
         return URLCredential(user: self.secFields.username, password: self.secFields.password, persistence: .forSession)
     }
-    
+
     var isValid: Maybe<Void> {
         // Referenced from https://mxr.mozilla.org/mozilla-central/source/toolkit/components/passwordmgr/nsLoginManager.js?rev=f76692f0fcf8&mark=280-281#271
-        
+
         // Logins with empty hostnames are not valid.
         if self.fields.origin.isEmpty {
             return Maybe(failure: LoginRecordError(description: "Can't add a login with an empty hostname."))
         }
-        
+
         // Logins with empty passwords are not valid.
         if self.secFields.password.isEmpty {
             return Maybe(failure: LoginRecordError(description: "Can't add a login with an empty password."))
         }
-        
+
         // Logins with both a formSubmitUrl and httpRealm are not valid.
         if self.fields.formActionOrigin != nil,
            self.fields.httpRealm != nil {
             return Maybe(failure: LoginRecordError(description: "Can't add a login with both a httpRealm and formSubmitUrl."))
         }
-        
+
         // Login must have at least a formSubmitUrl or httpRealm.
         if self.fields.formActionOrigin == nil, self.fields.httpRealm == nil {
             return Maybe(failure: LoginRecordError(description: "Can't add a login without a httpRealm or formSubmitUrl."))
         }
-        
+
         // All good.
         return Maybe(success: ())
     }
@@ -364,28 +364,28 @@ public class RustLoginEncryptionKeys {
     public let loginsSaltKeychainKey = "sqlcipher.key.logins.salt"
     public let loginsUnlockKeychainKey = "sqlcipher.key.logins.db"
     public let loginPerFieldKeychainKey = "appservices.key.logins.perfield"
-    
+
     // The old database salt and key will be stored in the two keychain keys below to allow
     // for potential data restore
     public let loginsPostMigrationSalt = "sqlcipher.key.logins.salt.post.migration"
     public let loginsPostMigrationKey = "sqlcipher.key.logins.db.post.migration"
-    
+
     let keychain: MZKeychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
     let canaryPhraseKey = "canaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
-    
+
     public init() {}
-    
+
     fileprivate func createAndStoreKey() throws -> String {
         do {
             let secret = try createKey()
             let canary = try createCanary(text: canaryPhrase, encryptionKey: secret)
-            
+
             keychain.set(secret, forKey: loginPerFieldKeychainKey, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             keychain.set(canary,
                          forKey: canaryPhraseKey,
                          withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            
+
             return secret
         } catch let err as NSError {
             if let loginsStoreError = err as? LoginsStoreError {
@@ -393,7 +393,7 @@ public class RustLoginEncryptionKeys {
                     err: loginsStoreError,
                     errorDomain: err.domain,
                     errorMessage: "Error while creating and storing logins key")
-                
+
                 throw LoginEncryptionKeyError.noKeyCreated
             } else {
                 SentryIntegration.shared.sendWithStacktrace(
@@ -401,17 +401,17 @@ public class RustLoginEncryptionKeys {
                     tag: SentryTag.rustLogins,
                     severity: .error,
                     description: err.localizedDescription)
-                
+
                 throw LoginEncryptionKeyError.noKeyCreated
             }
         }
     }
-    
+
     func decryptSecureFields(login: EncryptedLogin) -> Login? {
         guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else {
             return nil
         }
-        
+
         do {
             return try decryptLogin(login: login, encryptionKey: key)
         } catch let err as NSError {
@@ -430,7 +430,7 @@ public class RustLoginEncryptionKeys {
         }
         return nil
     }
-    
+
     func encryptSecureFields(
         login: Login,
         encryptionKey: String? = nil
@@ -438,7 +438,7 @@ public class RustLoginEncryptionKeys {
         guard let key = self.keychain.string(forKey: self.loginPerFieldKeychainKey) else {
             return nil
         }
-        
+
         do {
             return try encryptLogin(login: login, encryptionKey: key)
         } catch let err as NSError {
@@ -457,7 +457,7 @@ public class RustLoginEncryptionKeys {
         }
         return nil
     }
-    
+
     private func sendLoginsStoreErrorToSentry(
         err: LoginsStoreError,
         errorDomain: String,
@@ -475,7 +475,7 @@ public class RustLoginEncryptionKeys {
                 return "Incorrect key"
             }
         }
-        
+
         SentryIntegration.shared.sendWithStacktrace(
             message: errorMessage,
             tag: SentryTag.rustLogins,
@@ -494,21 +494,21 @@ public class LoginRecordError: MaybeErrorType {
 public class RustLogins {
     let sqlCipherDatabasePath: String
     let perFieldDatabasePath: String
-    
+
     let queue: DispatchQueue
     var storage: LoginsStorage?
-    
+
     private(set) var isOpen = false
-    
+
     private var didAttemptToMoveToBackup = false
-    
+
     public init(sqlCipherDatabasePath: String, databasePath: String) {
         self.sqlCipherDatabasePath = sqlCipherDatabasePath
         self.perFieldDatabasePath = databasePath
-        
+
         queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
     }
-    
+
     // Open the db after attempting to migrate the database from sqlcipher, and if it fails, it moves the db and creates a new db file and opens it.
     private func open() -> NSError? {
         do {
@@ -534,57 +534,57 @@ public class RustLogins {
                     severity: .error,
                     description: err.localizedDescription)
             }
-            
+
             if !didAttemptToMoveToBackup {
                 RustShared.moveDatabaseFileToBackupLocation(databasePath: self.perFieldDatabasePath)
                 didAttemptToMoveToBackup = true
                 return open()
             }
-            
+
             return err
         }
     }
-    
+
     private func close() -> NSError? {
         storage = nil
         isOpen = false
         return nil
     }
-    
+
     public func reopenIfClosed() -> NSError? {
         var error: NSError?
-        
+
         queue.sync {
             guard !isOpen else { return }
-            
+
             error = open()
         }
-        
+
         return error
     }
-    
+
     public func forceClose() -> NSError? {
         var error: NSError?
-        
+
         queue.sync {
             guard isOpen else { return }
-            
+
             error = close()
         }
-        
+
         return error
     }
-    
+
     public func syncLogins(unlockInfo: SyncUnlockInfo) -> Success {
         let deferred = Success()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 try _ = self.storage?.sync(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
@@ -605,24 +605,24 @@ public class RustLogins {
                             description: loginsStoreError.localizedDescription)
                     }
                 }
-                
+
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     public func getLogin(id: String) -> Deferred<Maybe<EncryptedLogin?>> {
         let deferred = Deferred<Maybe<EncryptedLogin?>>()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 let record = try self.storage?.get(id: id)
                 deferred.fill(Maybe(success: record))
@@ -630,25 +630,25 @@ public class RustLogins {
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     public func searchLoginsWithQuery(_ query: String?) -> Deferred<Maybe<Cursor<EncryptedLogin>>> {
         let rustKeys = RustLoginEncryptionKeys()
         return listLogins().bind { result in
             if let error = result.failureValue {
                 return deferMaybe(error)
             }
-            
+
             guard let records = result.successValue else {
                 return deferMaybe(ArrayCursor(data: []))
             }
-            
+
             guard let query = query?.lowercased(), !query.isEmpty else {
                 return deferMaybe(ArrayCursor(data: records))
             }
-            
+
             let filteredRecords = records.filter {
                 let username = rustKeys.decryptSecureFields(login: $0)?.secFields.username ?? ""
                 return $0.fields.origin.lowercased().contains(query) || username.lowercased().contains(query)
@@ -656,18 +656,18 @@ public class RustLogins {
             return deferMaybe(ArrayCursor(data: filteredRecords))
         }
     }
-    
+
     public func getLoginsForProtectionSpace(_ protectionSpace: URLProtectionSpace, withUsername username: String? = nil) -> Deferred<Maybe<Cursor<EncryptedLogin>>> {
         let rustKeys = RustLoginEncryptionKeys()
         return listLogins().bind { result in
             if let error = result.failureValue {
                 return deferMaybe(error)
             }
-            
+
             guard let records = result.successValue else {
                 return deferMaybe(ArrayCursor(data: []))
             }
-            
+
             let filteredRecords: [EncryptedLogin]
             if let username = username {
                 filteredRecords = records.filter {
@@ -686,27 +686,27 @@ public class RustLogins {
             return deferMaybe(ArrayCursor(data: filteredRecords))
         }
     }
-    
+
     public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
         return listLogins().bind { result in
             if let error = result.failureValue {
                 return deferMaybe(error)
             }
-            
+
             return deferMaybe((result.successValue?.count ?? 0) > 0)
         }
     }
-    
+
     public func listLogins() -> Deferred<Maybe<[EncryptedLogin]>> {
         let deferred = Deferred<Maybe<[EncryptedLogin]>>()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 let records = try self.storage?.list()
                 deferred.fill(Maybe(success: records ?? []))
@@ -714,20 +714,20 @@ public class RustLogins {
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     public func addLogin(login: LoginEntry) -> Deferred<Maybe<String>> {
         let deferred = Deferred<Maybe<String>>()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 let key = try self.getStoredKey()
                 let id = try self.storage?.add(login: login, encryptionKey: key).record.id
@@ -736,20 +736,20 @@ public class RustLogins {
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     public func use(login: EncryptedLogin) -> Success {
         let deferred = Success()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 try self.storage?.touch(id: login.record.id)
                 deferred.fill(Maybe(success: ()))
@@ -757,20 +757,20 @@ public class RustLogins {
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     public func updateLogin(id: String, login: LoginEntry) -> Success {
         let deferred = Success()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 let key = try self.getStoredKey()
                 _ = try self.storage?.update(id: id, login: login, encryptionKey: key)
@@ -779,24 +779,24 @@ public class RustLogins {
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     public func deleteLogins(ids: [String]) -> Deferred<[Maybe<Bool>]> {
         return all(ids.map { deleteLogin(id: $0) })
     }
-    
+
     public func deleteLogin(id: String) -> Deferred<Maybe<Bool>> {
         let deferred = Deferred<Maybe<Bool>>()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 let existed = try self.storage?.delete(id: id)
                 deferred.fill(Maybe(success: existed!))
@@ -804,20 +804,20 @@ public class RustLogins {
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     public func resetSync() -> Success {
         let deferred = Success()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 try self.storage?.reset()
                 deferred.fill(Maybe(success: ()))
@@ -825,20 +825,20 @@ public class RustLogins {
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     public func wipeLocalEngine() -> Success {
         let deferred = Success()
-        
+
         queue.async {
             guard self.isOpen else {
                 let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
-            
+
             do {
                 try self.storage?.wipeLocal()
                 deferred.fill(Maybe(success: ()))
@@ -846,33 +846,33 @@ public class RustLogins {
                 deferred.fill(Maybe(failure: err))
             }
         }
-        
+
         return deferred
     }
-    
+
     private func migrateSQLCipherDBIfNeeded(key: String) {
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         let rustKeys: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
         let sqlCipherLoginsKey: String? = keychain.string(forKey: rustKeys.loginsUnlockKeychainKey)
         let sqlCipherLoginsSalt: String? = keychain.string(forKey: rustKeys.loginsSaltKeychainKey)
-        
+
         // If the sqlcipher salt or key are missing don't migrate
         if (sqlCipherLoginsKey ?? "").isEmpty || (sqlCipherLoginsSalt ?? "").isEmpty {
             return
         }
-        
+
         let migrationSucceeded = migrateLoginsFromSqlcipher(
             path: self.perFieldDatabasePath,
             newEncryptionKey: key,
             sqlcipherPath: self.sqlCipherDatabasePath,
             sqlcipherKey: sqlCipherLoginsKey!,
             salt: sqlCipherLoginsSalt!)
-        
+
         // If the migration fails, move the old database file and store the old key and salt for
         // potential data restore
         if !migrationSucceeded {
             RustShared.moveDatabaseFileToBackupLocation(databasePath: self.sqlCipherDatabasePath)
-            
+
             keychain.set(sqlCipherLoginsSalt!,
                          forKey: rustKeys.loginsPostMigrationSalt,
                          withAccessibility: .afterFirstUnlock)
@@ -880,16 +880,16 @@ public class RustLogins {
                          forKey: rustKeys.loginsPostMigrationKey,
                          withAccessibility: .afterFirstUnlock)
         }
-        
+
         keychain.removeObject(forKey: rustKeys.loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
         keychain.removeObject(forKey: rustKeys.loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
     }
-    
+
     public func getStoredKey() throws -> String {
         let rustKeys = RustLoginEncryptionKeys()
         let key = rustKeys.keychain.string(forKey: rustKeys.loginPerFieldKeychainKey)
         let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
-        
+
         switch(key, encryptedCanaryPhrase) {
             case (.some(key), .some(encryptedCanaryPhrase)):
                 // We expected the key to be present, and it is.
@@ -935,7 +935,7 @@ public class RustLogins {
                 // If none of the above cases apply, we're in a state that shouldn't be possible but is disallowed nonetheless
                 throw LoginEncryptionKeyError.illegalState
         }
-        
+
         // This must be declared again for Swift's sake even though the above switch statement handles all cases
         throw LoginEncryptionKeyError.illegalState
     }
