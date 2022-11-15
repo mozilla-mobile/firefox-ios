@@ -6,7 +6,6 @@ import UIKit
 
 struct LabelButtonHeaderViewModel {
     var leadingInset: CGFloat = 0
-    var trailingInset: CGFloat = HomepageViewModel.UX.standardInset
     var title: String?
     var titleA11yIdentifier: String?
     var isButtonHidden: Bool
@@ -29,6 +28,8 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         static let inBetweenSpace: CGFloat = 12
         static let bottomSpace: CGFloat = 10
         static let bottomButtonSpace: CGFloat = 6
+        static let leadingInset: CGFloat = 0
+        static let trailingInset: CGFloat = HomepageViewModel.UX.standardInset
     }
 
     // MARK: - UIElements
@@ -63,6 +64,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     private var viewModel: LabelButtonHeaderViewModel?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var stackViewLeadingConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -71,22 +73,31 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         stackView.addArrangedSubview(moreButton)
         addSubview(stackView)
 
-        adjustLayout()
+        setupLayout()
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
     }
 
-    func setConstraints(viewModel: LabelButtonHeaderViewModel) {
+    private func setupLayout() {
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(moreButton)
+        addSubview(stackView)
+
+        stackViewLeadingConstraint = stackView.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                                        constant: UX.leadingInset)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
-                                               constant: viewModel.leadingInset),
-            stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor,
-                                                constant: -viewModel.trailingInset),
+            stackViewLeadingConstraint,
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                constant: -UX.trailingInset),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace),
         ])
 
-        moreButton.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        // Setting custom values to resolve horizontal ambiguity
+        titleLabel.setContentCompressionResistancePriority(UILayoutPriority(751), for: .horizontal)
+        titleLabel.setContentHuggingPriority(UILayoutPriority(251), for: .horizontal)
+
+        adjustLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -120,7 +131,8 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
             moreButton.accessibilityIdentifier = viewModel.buttonA11yIdentifier
         }
 
-        setConstraints(viewModel: viewModel)
+        // Update constant value for `TabDisplayManager` usage that is not using Section inset
+        stackViewLeadingConstraint?.constant = viewModel.leadingInset
         applyTheme(theme: theme)
     }
 
