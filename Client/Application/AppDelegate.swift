@@ -5,7 +5,6 @@
 import Shared
 import Storage
 import CoreSpotlight
-import SDWebImage
 import UIKit
 
 let LatestAppVersionProfileKey = "latestAppVersion"
@@ -140,12 +139,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shutdownWebServer = singleShotTimer
         backgroundSyncUtil?.scheduleSyncOnAppBackground()
         tabManager.preserveTabs()
-
-        // send glean telemetry and clear cache
-        // we do this to remove any disk cache
-        // that the app might have built over the
-        // time which is taking up un-necessary space
-        SDImageCache.shared.clearDiskCache { _ in }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
