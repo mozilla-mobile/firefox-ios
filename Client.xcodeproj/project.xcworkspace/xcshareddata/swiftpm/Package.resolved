@@ -90,15 +90,6 @@
       }
     },
     {
-      "identity" : "sdwebimage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImage.git",
-      "state" : {
-        "revision" : "2e63d0061da449ad0ed130768d05dceb1496de44",
-        "version" : "5.12.5"
-      }
-    },
-    {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",

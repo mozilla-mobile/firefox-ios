@@ -483,7 +483,6 @@ extension TelemetryWrapper {
         case fxaConfirmSignInToken = "fxa-confirm-signin-token"
         case awesomebarLocation = "awesomebar-position"
         case searchHighlights = "search-highlights"
-        case clearSDWebImageCache = "clear-sd-webimage-cache"
         case viewDownloadsPanel = "view-downloads-panel"
         case viewHistoryPanel = "view-history-panel"
         case createNewTab = "create-new-tab"
@@ -1280,9 +1279,6 @@ extension TelemetryWrapper {
                     GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
                 )
             }
-        case (.information, .delete, .clearSDWebImageCache, _, _):
-            GleanMetrics.Migration.imageSdCacheCleanup.add()
-
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }

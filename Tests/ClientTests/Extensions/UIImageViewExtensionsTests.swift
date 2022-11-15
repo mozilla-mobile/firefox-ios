@@ -5,7 +5,6 @@
 import UIKit
 import XCTest
 import Storage
-import SDWebImage
 import GCDWebServers
 import Shared
 

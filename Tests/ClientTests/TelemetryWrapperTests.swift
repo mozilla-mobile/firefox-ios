@@ -246,13 +246,6 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Upgrade.closeTap)
     }
 
-    // MARK: - Migration
-
-    func test_SDWebImageDiskCacheClear_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(category: .information, method: .delete, object: .clearSDWebImageCache)
-        testCounterMetricRecordingSuccess(metric: GleanMetrics.Migration.imageSdCacheCleanup)
-    }
-
     // MARK: Wallpapers
 
     func test_backgroundWallpaperMetric_defaultBackgroundIsNotSent() {
