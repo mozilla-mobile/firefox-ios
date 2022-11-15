@@ -250,7 +250,11 @@ class BookmarkDetailPanel: SiteTableViewController {
                     return deferMaybe(BookmarkDetailPanelError())
                 }
 
-                return profile.places.createBookmark(parentGUID: parentBookmarkFolder.guid, url: bookmarkItemURL, title: bookmarkItemOrFolderTitle).bind({ result in
+                // Ecosia: add bookmark at the end of the list
+                return profile.places.createBookmark(parentGUID: parentBookmarkFolder.guid,
+                                                     url: bookmarkItemURL,
+                                                     title: bookmarkItemOrFolderTitle,
+                                                     position: nil).bind({ result in
                     return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
                 })
             } else if bookmarkNodeType == .folder {
@@ -258,7 +262,9 @@ class BookmarkDetailPanel: SiteTableViewController {
                     return deferMaybe(BookmarkDetailPanelError())
                 }
 
-                return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid, title: bookmarkItemOrFolderTitle).bind({ result in
+                return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid,
+                                                   title: bookmarkItemOrFolderTitle,
+                                                   position: nil).bind({ result in
                     return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
                 })
             }

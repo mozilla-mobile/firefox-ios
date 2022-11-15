@@ -353,7 +353,12 @@ extension ShareViewController {
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
             profile._reopen()
-            _ = profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: item.url, title: item.title).value // Intentionally block thread with database call.
+            // Intentionally block thread with database call.
+            // Ecosia: Add new mobile bookmark at the end of the list
+            _ = profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
+                                              url: item.url,
+                                              title: item.title,
+                                              position: nil).value
             profile._shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "bookmark-this-page")

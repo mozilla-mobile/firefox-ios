@@ -61,6 +61,9 @@ class BookmarksPanelViewModel {
         flashLastRowOnNextReload = true
     }
 
+
+    // MARK: - Private
+
     private func setupMobileFolderData(completion: @escaping () -> Void) {
         profile.places
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
@@ -71,8 +74,7 @@ class BookmarksPanelViewModel {
                 }
 
                 self.bookmarkFolder = mobileFolder
-                // Reversed since we want the newest mobile bookmarks at the top
-                self.bookmarkNodes = mobileFolder.fxChildren?.reversed() ?? []
+                self.bookmarkNodes = mobileFolder.fxChildren ?? []
 
                 /* Ecosia: remove desktop folder
                 let desktopFolder = LocalDesktopFolder()

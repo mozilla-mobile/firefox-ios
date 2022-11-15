@@ -31,7 +31,7 @@ final class EcosiaFavourites {
             
             favImport.enter()
 
-            let bookmark = profile.places.createBookmark(parentGUID: "mobile______", url: urlString, title: page.title)
+            let bookmark = profile.places.createBookmark(parentGUID: "mobile______", url: urlString, title: page.title, position: nil)
 
             bookmark.uponQueue(.main) { guid in
                 switch guid {
