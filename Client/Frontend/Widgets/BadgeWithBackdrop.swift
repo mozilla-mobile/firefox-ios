@@ -19,8 +19,6 @@ class BadgeWithBackdrop {
     private let backdropCircleSize: CGFloat
     private let backdropCircleColor: UIColor?
 
-    }
-
     // MARK: - Initializers
     init(imageName: String,
          imageMask: String = "badge-mask",
