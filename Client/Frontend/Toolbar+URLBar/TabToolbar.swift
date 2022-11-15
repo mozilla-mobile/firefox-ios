@@ -30,7 +30,8 @@ class TabToolbar: UIView, FeatureFlaggable {
         return false
     }
 
-    private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
+    private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge",
+                                                     backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     private let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
     private let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
@@ -71,7 +72,7 @@ class TabToolbar: UIView, FeatureFlaggable {
             contentView.topAnchor.constraint(equalTo: topAnchor),
             contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            contentView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
         ])
         super.updateConstraints()
     }

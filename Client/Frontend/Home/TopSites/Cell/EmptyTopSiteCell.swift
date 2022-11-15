@@ -8,24 +8,18 @@ import Foundation
 class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
 
     struct UX {
-        static let borderColor = LegacyThemeManager.instance.current.homePanel.emptyTopSitesBorder
         static let horizontalMargin: CGFloat = 8
     }
 
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
-
     lazy private var emptyBG: UIView = .build { view in
-        view.layer.cornerRadius = TopSiteItemCell.UX.cellCornerRadius
-        view.layer.borderWidth = TopSiteItemCell.UX.borderWidth
-        view.layer.borderColor = UX.borderColor.cgColor
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setupLayout()
-        applyTheme()
-        setupNotifications(forObserver: self, observing: [.DisplayThemeChanged])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -36,26 +30,17 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(emptyBG)
 
         NSLayoutConstraint.activate([
+            emptyBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            emptyBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.width),
+            emptyBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height),
             emptyBG.topAnchor.constraint(equalTo: contentView.topAnchor),
-            emptyBG.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            emptyBG.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                              constant: -UX.horizontalMargin),
-            emptyBG.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
-    }
-
-    private func applyTheme() {
-        emptyBG.layer.borderColor = UX.borderColor.withAlphaComponent(0.2)
-            .cgColor
     }
 }
 
-extension EmptyTopSiteCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
+// MARK: - ThemeApplicable
+extension EmptyTopSiteCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        emptyBG.layer.borderColor = theme.colors.borderPrimary.cgColor
     }
 }

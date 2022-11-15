@@ -12,7 +12,13 @@ public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
 }
 
-public class RustPlaces: BookmarksHandler {
+public protocol HistoryMetadataObserver {
+    func noteHistoryMetadataObservation(key: HistoryMetadataKey,
+                                        observation: HistoryMetadataObservation,
+                                        completion: @escaping () -> Void)
+}
+
+public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     let databasePath: String
 
     let writerQueue: DispatchQueue
@@ -43,7 +49,7 @@ public class RustPlaces: BookmarksHandler {
             notificationCenter.post(name: .RustPlacesOpened, object: nil)
             return nil
         } catch let err as NSError {
-            if let placesError = err as? PlacesError {
+            if let placesError = err as? PlacesApiError {
                 SentryIntegration.shared.sendWithStacktrace(
                     message: "Places error when opening Rust Places database",
                     tag: SentryTag.rustPlaces,
@@ -74,7 +80,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -90,7 +96,7 @@ public class RustPlaces: BookmarksHandler {
                     deferred.fill(Maybe(failure: error as MaybeErrorType))
                 }
             } else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
             }
         }
 
@@ -102,7 +108,7 @@ public class RustPlaces: BookmarksHandler {
 
         readerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -122,7 +128,7 @@ public class RustPlaces: BookmarksHandler {
                     deferred.fill(Maybe(failure: error as MaybeErrorType))
                 }
             } else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
             }
         }
 
@@ -319,7 +325,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -327,7 +333,7 @@ public class RustPlaces: BookmarksHandler {
                 try _ = self.api?.syncBookmarks(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
-                if let placesError = err as? PlacesError {
+                if let placesError = err as? PlacesApiError {
                     SentryIntegration.shared.sendWithStacktrace(
                         message: "Places error when syncing Places database",
                         tag: SentryTag.rustPlaces,
@@ -353,7 +359,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -361,7 +367,7 @@ public class RustPlaces: BookmarksHandler {
                 try _ = self.api?.syncHistory(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
-                if let placesError = err as? PlacesError {
+                if let placesError = err as? PlacesApiError {
                     SentryIntegration.shared.sendWithStacktrace(message: "Places error when syncing Places database",
                                                                 tag: SentryTag.rustPlaces,
                                                                 severity: .error,
@@ -385,7 +391,7 @@ public class RustPlaces: BookmarksHandler {
 
         writerQueue.async {
             guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                 return
             }
 
@@ -405,7 +411,7 @@ public class RustPlaces: BookmarksHandler {
 
          writerQueue.async {
              guard self.isOpen else {
-                 deferred.fill(Maybe(failure: PlacesApiError.connUseAfterApiClosed as MaybeErrorType))
+                 deferred.fill(Maybe(failure: PlacesConnectionError.connUseAfterApiClosed as MaybeErrorType))
                  return
              }
 
@@ -435,6 +441,18 @@ public class RustPlaces: BookmarksHandler {
     public func queryHistoryMetadata(query: String, limit: Int32) -> Deferred<Maybe<[HistoryMetadata]>> {
         return withReader { connection in
             return try connection.queryHistoryMetadata(query: query, limit: limit)
+        }
+    }
+
+    public func noteHistoryMetadataObservation(key: HistoryMetadataKey,
+                                               observation: HistoryMetadataObservation,
+                                               completion: @escaping () -> Void) {
+        let deferredResponse = withReader { connection in
+            return self.noteHistoryMetadataObservation(key: key, observation: observation)
+        }
+
+        deferredResponse.upon { result in
+            completion()
         }
     }
 

@@ -64,6 +64,7 @@ class HistoryHighlightsViewModel {
     }
 
     // MARK: - Properties & Variables
+    var theme: Theme
     var historyItems = [HighlightItem]()
     private var profile: Profile
     private var isPrivate: Bool
@@ -73,9 +74,11 @@ class HistoryHighlightsViewModel {
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
     private let telemetry: TelemetryWrapperProtocol
+
     var onTapItem: ((HighlightItem) -> Void)?
     var historyHighlightLongPressHandler: ((HighlightItem, UIView?) -> Void)?
     var headerButtonAction: ((UIButton) -> Void)?
+
     weak var delegate: HomepageDataModelDelegate?
     private var wallpaperManager: WallpaperManager
 
@@ -109,6 +112,7 @@ class HistoryHighlightsViewModel {
     init(with profile: Profile,
          isPrivate: Bool,
          urlBar: URLBarViewProtocol,
+         theme: Theme,
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
          telemetry: TelemetryWrapperProtocol = TelemetryWrapper.shared,
@@ -116,6 +120,7 @@ class HistoryHighlightsViewModel {
         self.profile = profile
         self.isPrivate = isPrivate
         self.urlBar = urlBar
+        self.theme = theme
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry
         self.wallpaperManager = wallpaperManager
@@ -173,8 +178,7 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
 
     var headerViewModel: LabelButtonHeaderViewModel {
         var textColor: UIColor?
-        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-           wallpaperVersion == .v1 {
+        if wallpaperManager.featureAvailable {
             textColor = wallpaperManager.currentWallpaper.textColor
         }
 
@@ -249,6 +253,10 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: FxHomeSectionHandler
@@ -416,7 +424,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                  with: cornersToRound,
                                                  shouldAddShadow: shouldAddShadow)
 
-        cell.updateCell(with: cellOptions)
+        cell.configureCell(with: cellOptions, theme: theme)
 
         getFavIcon(for: site) { image in
             cell.heroImage.image = image
@@ -439,7 +447,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                  with: cornersToRound,
                                                  shouldAddShadow: shouldAddShadow)
 
-        cell.updateCell(with: cellOptions)
+        cell.configureCell(with: cellOptions, theme: theme)
 
         return cell
 
@@ -456,7 +464,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                  with: cornersToRound,
                                                  shouldAddShadow: shouldAddShadow)
 
-        cell.updateCell(with: cellOptions)
+        cell.configureCell(with: cellOptions, theme: theme)
         return cell
     }
 }

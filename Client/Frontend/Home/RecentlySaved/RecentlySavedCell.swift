@@ -6,26 +6,20 @@ import Foundation
 import Storage
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
-class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, NotificationThemeable {
+class RecentlySavedCell: UICollectionViewCell, ReusableCell {
 
     private struct UX {
-        static let generalCornerRadius: CGFloat = 12
         static let bookmarkTitleFontSize: CGFloat = 12
-        static let generalSpacing: CGFloat = 8
         static let containerSpacing: CGFloat = 16
         static let heroImageSize: CGSize = CGSize(width: 126, height: 82)
-        static let shadowRadius: CGFloat = 4
-        static let shadowOffset: CGFloat = 2
-        static let iconCornerRadius: CGFloat = 4
-        static let borderWidth: CGFloat = 0.5
-        static let cellCornerRadius: CGFloat = 8
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
+        static let generalSpacing: CGFloat = 8
     }
 
     // MARK: - UI Elements
     private var rootContainer: UIView = .build { view in
         view.backgroundColor = .clear
-        view.layer.cornerRadius = UX.generalCornerRadius
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     // Contains the hero image and fallback favicons
@@ -37,33 +31,28 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = UX.generalCornerRadius
-        imageView.backgroundColor = .systemBackground
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
     // Used as a fallback if hero image isn't set
     private let fallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.backgroundColor = UIColor.clear
-        imageView.layer.cornerRadius = UX.iconCornerRadius
+        imageView.backgroundColor = .clear
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         imageView.layer.masksToBounds = true
     }
 
     private var fallbackFaviconBackground: UIView = .build { view in
-        view.layer.cornerRadius = UX.cellCornerRadius
-        view.layer.borderWidth = UX.borderWidth
+        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
     let itemTitle: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: UX.bookmarkTitleFontSize)
         label.adjustsFontForContentSizeCategory = true
-        label.textColor = .label
     }
-
-    // MARK: - Variables
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     // MARK: - Inits
 
@@ -71,18 +60,10 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         super.init(frame: .zero)
 
         setupLayout()
-        setupNotifications(forObserver: self,
-                           observing: [.DisplayThemeChanged,
-                                       .WallpaperDidChange])
-        applyTheme()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     override func prepareForReuse() {
@@ -92,20 +73,19 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         fallbackFaviconImage.image = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
-
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: UX.generalCornerRadius).cgPath
+                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
 
-    func configure(viewModel: RecentlySavedCellViewModel) {
+    func configure(viewModel: RecentlySavedCellViewModel, theme: Theme) {
         configureImages(heroImage: viewModel.heroImage, favIconImage: viewModel.favIconImage)
 
         itemTitle.text = viewModel.site.title
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
     private func configureImages(heroImage: UIImage?, favIconImage: UIImage?) {
@@ -186,47 +166,38 @@ class RecentlySavedCell: BlurrableCollectionViewCell, ReusableCell, Notification
         ])
     }
 
-    func adjustLayout() {
+    private func setupShadow(theme: Theme) {
+        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
+                                                      cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
+
+        rootContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        rootContainer.layer.shadowOpacity = HomepageViewModel.UX.shadowOpacity
+        rootContainer.layer.shadowOffset = HomepageViewModel.UX.shadowOffset
+        rootContainer.layer.shadowRadius = HomepageViewModel.UX.shadowRadius
+    }
+}
+
+// MARK: - ThemeApplicable
+extension RecentlySavedCell: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        itemTitle.textColor = theme.colors.textPrimary
+        fallbackFaviconBackground.backgroundColor = theme.colors.layer1
+        fallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
+
+        adjustBlur(theme: theme)
+    }
+}
+
+// MARK: - Blurrable
+extension RecentlySavedCell: Blurrable {
+    func adjustBlur(theme: Theme) {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             rootContainer.removeVisualEffectView()
-            rootContainer.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkCellBackground
-            setupShadow()
-        }
-    }
-
-    func applyTheme() {
-        itemTitle.textColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkTitle
-        fallbackFaviconBackground.backgroundColor = LegacyThemeManager.instance.current.homePanel.recentlySavedBookmarkImageBackground
-        fallbackFaviconBackground.layer.borderColor = LegacyThemeManager.instance.current.homePanel.topSitesBackground.cgColor
-
-        adjustLayout()
-    }
-
-    private func setupShadow() {
-        rootContainer.layer.cornerRadius = UX.generalCornerRadius
-        rootContainer.layer.shadowPath = UIBezierPath(roundedRect: rootContainer.bounds,
-                                                      cornerRadius: UX.generalCornerRadius).cgPath
-        rootContainer.layer.shadowColor = UIColor.theme.homePanel.shortcutShadowColor
-        rootContainer.layer.shadowOpacity = UIColor.theme.homePanel.shortcutShadowOpacity
-        rootContainer.layer.shadowOffset = CGSize(width: 0, height: UX.shadowOffset)
-        rootContainer.layer.shadowRadius = UX.shadowRadius
-    }
-}
-
-// MARK: - Notifiable
-extension RecentlySavedCell: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        ensureMainThread { [weak self] in
-            switch notification.name {
-            case .DisplayThemeChanged,
-                    .WallpaperDidChange:
-                self?.applyTheme()
-            default:
-                break
-            }
+            rootContainer.backgroundColor = theme.colors.layer5
+            setupShadow(theme: theme)
         }
     }
 }

@@ -85,18 +85,12 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
     // MARK: - Saving
 
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
-        // Using the new archiving method for v106 and upwards
-        preserveTabs(tabs, selectedTab: selectedTab, useNewArchivingMethod: true)
-    }
-
     /// Async write of the tab state. In most cases, code doesn't care about performing an operation
     /// after this completes. Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
     /// - Parameters:
     ///   - tabs: The tabs to preserve
     ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
-    ///   - useNewArchivingMethod: Used for tests only, to abstain to use the new archiving method to migration
-    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?, useNewArchivingMethod: Bool) {
+    func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
         assertIsMainThread("Preserving tabs is a main-only operation")
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab)
         else {
@@ -107,20 +101,12 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         writeOperation.cancel()
 
         let path = tabsStateArchivePath()
-        let deprecatedPath = deprecatedTabsStateArchivePath()
-
         let tabStateData = archive(savedTabs: savedTabs)
-        let deprecatedTabStateData = deprecatedArchive(savedTabs: savedTabs)
         let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
 
         writeOperation = DispatchWorkItem { [weak self] in
             SimpleTab.saveSimpleTab(tabs: simpleTabs)
-            if useNewArchivingMethod {
-                self?.write(tabStateData: tabStateData, path: path)
-            }
-
-            // We save to depracted path to support revert migration for now
-            self?.write(deprecatedTabStateData: deprecatedTabStateData, path: deprecatedPath)
+            self?.write(tabStateData: tabStateData, path: path)
         }
 
         // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
@@ -265,7 +251,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     }
 
     // MARK: - Deprecated
-    // To remove once migration is completed, see FXIOS-4912 && FXIOS-4913
+    // To remove once migration is completed, see FXIOS-4913
 
     func getDeprecatedTabsToMigrate() -> [SavedTab] {
         guard let tabData = deprecatedTabDataRetriever.getTabData() else { return [SavedTab]() }
@@ -283,15 +269,6 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         return migratedTabs
     }
 
-    /// Archive under old path in case a reverse migration needs to happen
-    private func deprecatedArchive(savedTabs: [SavedTab]) -> NSMutableData {
-        let tabData = NSMutableData()
-        let archiver = NSKeyedArchiver(forWritingWith: tabData)
-        archiver.encode(savedTabs, forKey: "tabs")
-        archiver.finishEncoding()
-        return tabData
-    }
-
     private func deprecatedTabsStateArchivePath() -> URL? {
         let profilePath: String?
         if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
@@ -301,13 +278,6 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         }
         guard let path = profilePath else { return nil }
         return URL(fileURLWithPath: path).appendingPathComponent(TabManagerStoreImplementation.deprecatedStorePath)
-    }
-
-    private func write(deprecatedTabStateData: NSMutableData, path: URL?) {
-        guard let path = path else { return }
-        let written = deprecatedTabStateData.write(to: path, atomically: true)
-        // Failure could happen when restoring
-        self.browserLog.debug("PreserveTabs write ok: \(written), bytes: \(deprecatedTabStateData.length)")
     }
 
     private func clearDeprecatedArchive() {
@@ -326,12 +296,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
 
 // MARK: Tests
 extension TabManagerStoreImplementation {
-    func testTabOnDisk(useNewArchivingMethod: Bool = true) -> [SavedTab] {
+    func testTabOnDisk() -> [SavedTab] {
         assert(AppConstants.isRunningTest)
-        if useNewArchivingMethod {
-            return tabs
-        } else {
-            return getDeprecatedTabsToMigrate()
-        }
+        return tabs
     }
 }

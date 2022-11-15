@@ -87,8 +87,10 @@ class Authenticator {
             }
 
             // Found a single entry that matches the scheme and host - good to go.
-            else {
+            else if logins.count == 1 {
                 credentials = logins[0].credentials
+            } else {
+                SentryIntegration.shared.send(message: "No logins found for Authenticator", severity: .warning)
             }
 
             return deferMaybe(credentials)

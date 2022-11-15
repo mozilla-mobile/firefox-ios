@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import XCGLogger
-import SDWebImage
 import Kingfisher
 
 private let log = Logger.browserLogger
@@ -167,11 +166,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
      **/
     func resetApplication() {
         log.debug("Wiping everything for a clean start.")
-
-        // TODO: Remove clear cache for SDWebImage when we are ready to remove library
-        // Clear image cache - SDWebImage
-        SDImageCache.shared.clearDisk()
-        SDImageCache.shared.clearMemory()
 
         // Clear image cache - Kingfisher
         KingfisherManager.shared.cache.clearMemoryCache()

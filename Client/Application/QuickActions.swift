@@ -53,8 +53,9 @@ protocol QuickActions {
 
     func handleShortCutItem(
         _ shortcutItem: UIApplicationShortcutItem,
-        withBrowserViewController bvc: BrowserViewController
-    ) -> Bool
+        withBrowserViewController bvc: BrowserViewController,
+        completionHandler: @escaping (Bool) -> Void
+    )
 }
 
 extension QuickActions {
@@ -67,7 +68,7 @@ extension QuickActions {
     }
 }
 
-class QuickActionsImplementation: NSObject, QuickActions, Loggable {
+struct QuickActionsImplementation: QuickActions, Loggable {
 
     // MARK: Administering Quick Actions
     func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
@@ -125,16 +126,21 @@ class QuickActionsImplementation: NSObject, QuickActions, Loggable {
     // MARK: - Handling Quick Actions
 
     func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem,
-                            withBrowserViewController bvc: BrowserViewController) -> Bool {
+                            withBrowserViewController bvc: BrowserViewController,
+                            completionHandler: @escaping (Bool) -> Void) {
 
         // Verify that the provided `shortcutItem`'s `type` is one handled by the application.
-        guard let shortCutType = ShortcutType(fullType: shortcutItem.type) else { return false }
-
-        DispatchQueue.main.async {
-            self.handleShortCutItemOfType(shortCutType, userData: shortcutItem.userInfo, browserViewController: bvc)
+        guard let shortCutType = ShortcutType(fullType: shortcutItem.type) else {
+            completionHandler(false)
+            return
         }
 
-        return true
+        DispatchQueue.main.async {
+            self.handleShortCutItemOfType(shortCutType,
+                                          userData: shortcutItem.userInfo,
+                                          browserViewController: bvc)
+            completionHandler(true)
+        }
     }
 
     // MARK: - Private

@@ -26,13 +26,20 @@ class JumpBackInViewModel: FeatureFlaggable {
     weak var browserBarViewDelegate: BrowserBarViewDelegate?
     weak var delegate: HomepageDataModelDelegate?
 
+    // The data that is showed to the user after layout calculation
     var jumpBackInList = JumpBackInList(group: nil, tabs: [Tab]())
     var mostRecentSyncedTab: JumpBackInSyncedTab?
+
+    // Raw data to calculate what we can show to the user
+    var recentTabs: [Tab] = [Tab]()
+    var recentGroups: [ASGroup<Tab>]?
+    var recentSyncedTab: JumpBackInSyncedTab?
 
     private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
 
     var isZeroSearch: Bool
+    var theme: Theme
     private let profile: Profile
     private var isPrivate: Bool
     private var hasSentJumpBackInTileEvent = false
@@ -41,16 +48,11 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var wallpaperManager: WallpaperManager
     var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
-    var shouldAddDefaultBackground: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return true }
-
-        return wallpaperManager.currentWallpaper.type == .defaultWallpaper
-    }
-
     init(
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
+        theme: Theme,
         tabManager: TabManagerProtocol,
         adaptor: JumpBackInDataAdaptor,
         wallpaperManager: WallpaperManager
@@ -58,6 +60,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
+        self.theme = theme
         self.tabManager = tabManager
         self.jumpBackInDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
@@ -144,11 +147,11 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     private var hasSyncedTab: Bool {
-        return jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled && mostRecentSyncedTab != nil
+        return jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled && recentSyncedTab != nil
     }
 
     private var hasJumpBackIn: Bool {
-        return jumpBackInList.itemsToDisplay > 0
+        return !recentTabs.isEmpty || !(recentGroups?.isEmpty ?? true)
     }
 
     private var isMultitasking: Bool {
@@ -171,6 +174,59 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 }
 
+// MARK: - Private: Prepare UI data
+private extension JumpBackInViewModel {
+
+    private func refreshData(maxItemsToDisplay: JumpBackInDisplayGroupCount) {
+        jumpBackInList = createJumpBackInList(
+            from: recentTabs,
+            withMaxTabsCount: maxItemsToDisplay.tabsCount,
+            and: recentGroups
+        )
+        let shouldShowSyncTab = maxItemsToDisplay.syncedTabCount >= 1 && hasSyncedTab
+        mostRecentSyncedTab = shouldShowSyncTab ? recentSyncedTab : nil
+    }
+
+    func createJumpBackInList(
+        from tabs: [Tab],
+        withMaxTabsCount maxTabs: Int,
+        and groups: [ASGroup<Tab>]? = nil
+    ) -> JumpBackInList {
+        let recentGroup = groups?.first
+        let groupCount = recentGroup != nil ? 1 : 0
+        let recentTabs = filter(
+            tabs: tabs,
+            from: recentGroup,
+            usingGroupCount: groupCount,
+            withMaxTabsCount: maxTabs
+        )
+
+        return JumpBackInList(group: recentGroup, tabs: recentTabs)
+    }
+
+    func filter(
+        tabs: [Tab],
+        from recentGroup: ASGroup<Tab>?,
+        usingGroupCount groupCount: Int,
+        withMaxTabsCount maxTabs: Int
+    ) -> [Tab] {
+        var recentTabs = [Tab]()
+        let maxTabsCount = maxTabs - groupCount
+
+        for tab in tabs {
+            // We must make sure to not include any 'solo' tabs that are also part of a group
+            // because they should not show up in the Jump Back In section.
+            if let recentGroup = recentGroup, recentGroup.groupedItems.contains(tab) { continue }
+
+            recentTabs.append(tab)
+            // We are only showing one group in Jump Back in, so adjust count accordingly
+            if recentTabs.count == maxTabsCount { break }
+        }
+
+        return recentTabs
+    }
+}
+
 // MARK: - Private: Configure UI
 private extension JumpBackInViewModel {
 
@@ -184,7 +240,7 @@ private extension JumpBackInViewModel {
                                                     descriptionText: descriptionText,
                                                     favIconImage: faviconImage,
                                                     heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
-        cell.configure(viewModel: cellViewModel)
+        cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
     func configureJumpBackInCellForTab(item: Tab, cell: JumpBackInCell, indexPath: IndexPath) {
@@ -196,7 +252,7 @@ private extension JumpBackInViewModel {
                                                     descriptionText: descriptionText,
                                                     favIconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
                                                     heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
-        cell.configure(viewModel: cellViewModel)
+        cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
     func configureSyncedTabCellForTab(item: JumpBackInSyncedTab, cell: SyncedTabCell, indexPath: IndexPath) {
@@ -217,6 +273,7 @@ private extension JumpBackInViewModel {
 
         cell.configure(
             viewModel: cellViewModel,
+            theme: theme,
             onTapShowAllAction: syncedTabsShowAllAction,
             onOpenSyncedTabAction: openSyncedTabAction
         )
@@ -300,8 +357,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
     var headerViewModel: LabelButtonHeaderViewModel {
         var textColor: UIColor?
-        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-           wallpaperVersion == .v1 {
+        if wallpaperManager.featureAvailable {
             textColor = wallpaperManager.currentWallpaper.textColor
         }
 
@@ -359,23 +415,14 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
-        getLatestData()
         updateSectionLayout(for: traitCollection,
                             isPortrait: isPortrait,
                             device: device)
-
-        let maxItemToDisplay = sectionLayout.maxItemsToDisplay(
-            displayGroup: .jumpBackIn,
+        let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
             hasAccount: jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled,
             device: device
         )
-        jumpBackInDataAdaptor.refreshData(maxItemToDisplay: maxItemToDisplay)
-        getLatestData()
-    }
-
-    private func getLatestData() {
-        jumpBackInList = jumpBackInDataAdaptor.getJumpBackInData()
-        mostRecentSyncedTab = jumpBackInDataAdaptor.getSyncedTabData()
+        refreshData(maxItemsToDisplay: maxItemsToDisplay)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -384,6 +431,10 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
     func screenWasShown() {
         hasSentJumpBackInTileEvent = false
+    }
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
     }
 }
 
@@ -450,7 +501,9 @@ extension JumpBackInViewModel: HomepageSectionHandler {
 extension JumpBackInViewModel: JumpBackInDelegate {
     func didLoadNewData() {
         ensureMainThread {
-            self.getLatestData()
+            self.recentTabs = self.jumpBackInDataAdaptor.getRecentTabData()
+            self.recentGroups = self.jumpBackInDataAdaptor.getGroupsData()
+            self.recentSyncedTab = self.jumpBackInDataAdaptor.getSyncedTabData()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }

@@ -44,7 +44,7 @@ extension SiteImageHelperProtocol {
 class SiteImageHelper: SiteImageHelperProtocol {
 
     private static let cache = NSCache<NSString, UIImage>()
-    private let throttler = Throttler(seconds: 0.5, on: .main)
+    private let throttler = Throttler(seconds: 0.5, on: DispatchQueue.main)
     private let faviconFetcher: Favicons
 
     convenience init(profile: Profile) {
@@ -133,24 +133,27 @@ class SiteImageHelper: SiteImageHelperProtocol {
                                            url: URL,
                                            metadataProvider: LPMetadataProvider,
                                            completion: @escaping (UIImage?, Bool?) -> Void) {
-
-        metadataProvider.startFetchingMetadata(for: url) { metadata, error in
-            guard let metadata = metadata,
-                  let imageProvider = metadata.imageProvider,
-                    error == nil
-            else {
-                completion(nil, false)
-                return
-            }
-
-            imageProvider.loadObject(ofClass: UIImage.self) { image, error in
-                guard error == nil, let image = image as? UIImage else {
+        // LPMetadataProvider must be interacted with on the main thread or it can crash
+        // The closure will return on a non-main thread
+        ensureMainThread {
+            metadataProvider.startFetchingMetadata(for: url) { metadata, error in
+                guard let metadata = metadata,
+                      let imageProvider = metadata.imageProvider,
+                        error == nil
+                else {
                     completion(nil, false)
                     return
                 }
 
-                SiteImageHelper.cache.setObject(image, forKey: heroImageCacheKey)
-                completion(image, true)
+                imageProvider.loadObject(ofClass: UIImage.self) { image, error in
+                    guard error == nil, let image = image as? UIImage else {
+                        completion(nil, false)
+                        return
+                    }
+
+                    SiteImageHelper.cache.setObject(image, forKey: heroImageCacheKey)
+                    completion(image, true)
+                }
             }
         }
     }

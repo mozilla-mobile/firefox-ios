@@ -4,11 +4,14 @@
 
 import Foundation
 
-// TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4882
-// This will be removed when the theme system pass on the homepage will happen
-// and apply theme will be done from the `reloadAll` call. This is a temporary
-// fix for the problem until then.
-class BlurrableCollectionViewCell: UICollectionViewCell {
+// Conveniance protocol to have a blur on a collection view cell
+// Currently used on the homepage cells
+protocol Blurrable: UICollectionViewCell {
+    var shouldApplyWallpaperBlur: Bool { get }
+    func adjustBlur(theme: Theme)
+}
+
+extension Blurrable {
     var shouldApplyWallpaperBlur: Bool {
         guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
 

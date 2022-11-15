@@ -4,11 +4,12 @@
 
 import Foundation
 import Shared
+import Glean
 @_exported import MozillaAppServices
 
 private let log = Logger.syncLogger
 
-typealias LoginsStoreError = LoginsStorageError
+typealias LoginsStoreError = LoginsApiError
 public typealias LoginRecord = EncryptedLogin
 
 public extension LoginsStoreError {
@@ -24,10 +25,8 @@ public extension LoginsStoreError {
            return "Interrupted"
        case .SyncAuthInvalid:
            return "SyncAuthInvalid"
-       case .RequestFailed:
-           return "RequestFailed"
-       case .UnexpectedLoginsStorageError:
-           return "UnexpectedLoginsStorageError"
+       case .UnexpectedLoginsApiError:
+           return "UnexpectedLoginsApiError"
        }
    }
 }
@@ -470,26 +469,24 @@ public class RustLoginEncryptionKeys {
         errorDomain: String,
         errorMessage: String
     ) {
-        var errDescription: String
-        var errMessage: String
-
-        switch err {
-        case .InvalidRecord(let message),
-        .NoSuchRecord(let message),
-        .IncorrectKey(let message),
-        .Interrupted(let message),
-        .SyncAuthInvalid(let message),
-        .RequestFailed(let message),
-        .UnexpectedLoginsStorageError(let message):
-            errMessage = message
-            errDescription = err.descriptionValue
-        }
+        var message: String {
+             switch err {
+                 case .InvalidRecord(let message),
+                      .NoSuchRecord(let message),
+                      .Interrupted(let message),
+                      .SyncAuthInvalid(let message),
+                      .UnexpectedLoginsApiError(let message):
+                          return message
+                  case .IncorrectKey:
+                      return "Incorrect key"
+             }
+          }
 
         SentryIntegration.shared.sendWithStacktrace(
             message: errorMessage,
             tag: SentryTag.rustLogins,
             severity: .error,
-            description: "\(errorDomain) - \(errDescription): \(errMessage)")
+            description: "\(errorDomain) - \(err.descriptionValue): \(message)")
     }
 }
 
@@ -589,7 +586,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -627,7 +624,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -711,7 +708,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -732,7 +729,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -754,7 +751,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -775,7 +772,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -801,7 +798,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -822,7 +819,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -843,7 +840,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.UnexpectedLoginsStorageError(message: "Database is closed")
+                let error = LoginsStoreError.UnexpectedLoginsApiError(reason: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -908,6 +905,7 @@ public class RustLogins {
                         return key!
                     } else {
                         SentryIntegration.shared.sendWithStacktrace(message: "Logins key was corrupted, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                        GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
                         _ = self.wipeLocalEngine()
                         return try rustKeys.createAndStoreKey()
                     }
@@ -918,6 +916,7 @@ public class RustLogins {
                 // The key is present, but we didn't expect it to be there.
                 do {
                     SentryIntegration.shared.sendWithStacktrace(message: "Logins key lost due to storage malfunction, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                    GleanMetrics.LoginsStoreKeyRegeneration.other.record()
                     _ = self.wipeLocalEngine()
                     return try rustKeys.createAndStoreKey()
                 } catch let err as NSError {
@@ -927,6 +926,7 @@ public class RustLogins {
                 // We expected the key to be present, but it's gone missing on us.
                 do {
                     SentryIntegration.shared.sendWithStacktrace(message: "Logins key lost, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                    GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
                     _ = self.wipeLocalEngine()
                     return try rustKeys.createAndStoreKey()
                 } catch let err as NSError {

@@ -32,7 +32,7 @@ class SingleActionViewModel {
     private(set) var iconAlignment: IconAlignment
     private(set) var iconTint: UIColor?
 
-    var isEnabled: Bool // Used by toggles like nightmode to switch tint color
+    var isEnabled: Bool // Used by toggles like night mode to switch tint color
     private(set) var bold: Bool = false
     private(set) var tabCount: String?
     private(set) var tapHandler: ((SingleActionViewModel) -> Void)?
@@ -105,7 +105,7 @@ class SingleActionViewModel {
         var axis: NSLayoutConstraint.Axis = .horizontal
     }
 
-    // MARK: Conveniance
+    // MARK: Convenience
     var items: PhotonRowActions {
         return PhotonRowActions(self)
     }

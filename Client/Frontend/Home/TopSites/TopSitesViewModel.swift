@@ -16,6 +16,7 @@ class TopSitesViewModel {
 
     weak var delegate: HomepageDataModelDelegate?
     var isZeroSearch: Bool
+    var theme: Theme
     var tilePressedHandler: ((Site, Bool) -> Void)?
     var tileLongPressedHandler: ((Site, UIView?) -> Void)?
 
@@ -32,9 +33,11 @@ class TopSitesViewModel {
 
     init(profile: Profile,
          isZeroSearch: Bool = false,
+         theme: Theme,
          wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.theme = theme
         self.dimensionManager = TopSitesDimensionImplementation()
 
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
@@ -131,8 +134,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         // Only show a header if the firefox browser logo isn't showing
         let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
         var textColor: UIColor?
-        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-           wallpaperVersion == .v1 {
+        if wallpaperManager.featureAvailable {
             textColor = wallpaperManager.currentWallpaper.textColor
         }
 
@@ -202,6 +204,10 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func screenWasShown() {
         sentImpressionTelemetry = [String: Bool]()
     }
+
+    func setTheme(theme: Theme) {
+        self.theme = theme
+    }
 }
 
 // MARK: - FxHomeTopSitesManagerDelegate
@@ -223,13 +229,22 @@ extension TopSitesViewModel: HomepageSectionHandler {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = topSites[safe: indexPath.row] {
             let favicon = topSitesDataAdaptor.getFaviconImage(forSite: contentItem.site)
+            var textColor: UIColor?
+
+            if wallpaperManager.featureAvailable {
+                textColor = wallpaperManager.currentWallpaper.textColor
+            }
+
             cell.configure(contentItem,
                            favicon: favicon,
-                           position: indexPath.row)
+                           position: indexPath.row,
+                           theme: theme,
+                           textColor: textColor)
             sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
 
         } else if let cell = collectionView.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) {
+            cell.applyTheme(theme: theme)
             return cell
         }
 

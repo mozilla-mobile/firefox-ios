@@ -27,7 +27,6 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         self.profile = profile
         self.urlBar = urlBar
         self.frecentHistory = profile.history.getFrecentHistory()
-
         self.skipNextAutocomplete = false
 
         super.init()
@@ -53,6 +52,43 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         }
     }
 
+    private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+
+        switch self.profile.historyApiConfiguration {
+        case .old:
+            currentDeferredHistoryQuery?.cancel()
+
+            guard let deferredHistory = frecentHistory.getSites(
+                matchingSearchQuery: query,
+                limit: 100
+            ) as? CancellableDeferred else {
+                assertionFailure("FrecentHistory query should be cancellable")
+                return deferMaybe(ArrayCursor(data: []))
+            }
+            currentDeferredHistoryQuery = deferredHistory
+            return deferredHistory
+        case .new:
+            return self.profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).bind { result in
+                guard let historyItems = result.successValue else {
+                    SentryIntegration.shared.sendWithStacktrace(
+                        message: "Error searching history",
+                        tag: .rustPlaces,
+                        severity: .error,
+                        description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
+                    )
+                    return deferMaybe(ArrayCursor(data: []))
+                }
+                let sites = historyItems.sorted {
+                    // Sort decending by frecency score
+                    $0.frecency > $1.frecency
+                }.map({
+                    return Site(url: $0.url, title: $0.title )
+                }).uniqued()
+                return deferMaybe(ArrayCursor(data: sites))
+            }
+        }
+    }
+
     var query: String = "" {
         didSet {
             let timerid = GleanMetrics.Awesomebar.queryTime.start()
@@ -62,21 +98,14 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                 return
             }
 
-            currentDeferredHistoryQuery?.cancel()
-
+            profile.places.interruptReader()
             if query.isEmpty {
                 load(Cursor(status: .success, msg: "Empty query"))
                 GleanMetrics.Awesomebar.queryTime.cancel(timerid)
                 return
             }
 
-            guard let deferredHistory = frecentHistory.getSites(matchingSearchQuery: query, limit: 100) as? CancellableDeferred else {
-                assertionFailure("FrecentHistory query should be cancellable")
-                GleanMetrics.Awesomebar.queryTime.cancel(timerid)
-                return
-            }
-
-            currentDeferredHistoryQuery = deferredHistory
+            let deferredHistory = getHistoryAsSites(matchingSearchQuery: query, limit: 100)
 
             let deferredBookmarks = getBookmarksAsSites(matchingSearchQuery: query, limit: 5)
 
@@ -86,7 +115,10 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                     GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
                 }
 
-                guard !deferredHistory.cancelled else { return }
+                let cancellableHistory = deferredHistory as? CancellableDeferred
+                if let cancellableHistory = cancellableHistory, cancellableHistory.cancelled {
+                    return
+                }
 
                 let deferredHistorySites = results[0].successValue?.asArray() ?? []
                 let deferredBookmarksSites = results[1].successValue?.asArray() ?? []

@@ -56,7 +56,8 @@ struct SearchViewModel {
 class SearchViewController: SiteTableViewController,
                             KeyboardHelperDelegate,
                             LoaderListener,
-                            FeatureFlaggable {
+                            FeatureFlaggable,
+                            Notifiable {
 
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
@@ -142,10 +143,8 @@ class SearchViewController: SiteTableViewController,
             make.leading.trailing.bottom.equalToSuperview()
         }
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(dynamicFontChanged),
-                                               name: .DynamicFontChanged,
-                                               object: nil)
+        setupNotifications(forObserver: self, observing: [.DynamicFontChanged,
+                                                          .SearchSettingsChanged])
     }
 
     private func loadSearchHighlights() {
@@ -558,20 +557,27 @@ class SearchViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section == SearchListSection.remoteTabs.rawValue,
-              hasFirefoxSuggestions else { return 0 }
+        guard shouldShowHeader(for: section) else { return 0 }
 
         return UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == SearchListSection.remoteTabs.rawValue,
-              hasFirefoxSuggestions,
+        guard shouldShowHeader(for: section),
               let headerView = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader
         else { return nil }
 
-        let viewModel = SiteTableViewHeaderModel(title: .Search.SuggestSectionTitle,
+        var title: String
+        switch section {
+        case SearchListSection.remoteTabs.rawValue:
+            title = .Search.SuggestSectionTitle
+        case SearchListSection.searchSuggestions.rawValue:
+            title = searchEngines.defaultEngine.headerSearchTitle
+        default:  title = ""
+        }
+
+        let viewModel = SiteTableViewHeaderModel(title: title,
                                                  isCollapsible: false,
                                                  collapsibleState: nil)
         headerView.configure(viewModel)
@@ -739,6 +745,18 @@ class SearchViewController: SiteTableViewController,
         return cell
     }
 
+    private func shouldShowHeader(for section: Int) -> Bool {
+        switch section {
+        case SearchListSection.remoteTabs.rawValue:
+            return hasFirefoxSuggestions
+        case SearchListSection.searchSuggestions.rawValue:
+            return true
+        default:
+            return false
+        }
+
+    }
+
     func append(_ sender: UIButton) {
         let buttonPosition = sender.convert(CGPoint(), to: tableView)
         if let indexPath = tableView.indexPathForRow(at: buttonPosition), let newQuery = suggestions?[indexPath.row] {
@@ -758,6 +776,19 @@ class SearchViewController: SiteTableViewController,
             )
         }
         return searchAppendImage
+    }
+
+    // MARK: - Notifiable
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            dynamicFontChanged(notification)
+        case .SearchSettingsChanged:
+            reloadSearchEngines()
+        default:
+            break
+        }
     }
 }
 

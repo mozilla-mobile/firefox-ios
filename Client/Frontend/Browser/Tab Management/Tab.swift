@@ -380,7 +380,7 @@ class Tab: NSObject {
         self.nightMode = false
         self.noImageMode = false
         self.profile = profile
-        self.metadataManager = TabMetadataManager(profile: profile)
+        self.metadataManager = TabMetadataManager(metadataObserver: profile.places)
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1

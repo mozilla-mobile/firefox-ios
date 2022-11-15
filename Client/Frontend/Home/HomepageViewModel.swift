@@ -20,6 +20,16 @@ class HomepageViewModel: FeatureFlaggable {
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
 
+        // Shadow
+        static let shadowRadius: CGFloat = 4
+        static let shadowOffset = CGSize(width: 0, height: 2)
+        static let shadowOpacity: Float = 1 // shadow opacity set to 0.16 through shadowDefault themed color
+
+        // General
+        static let generalCornerRadius: CGFloat = 8
+        static let generalBorderWidth: CGFloat = 0.5
+        static let generalIconCornerRadius: CGFloat = 4
+
         static func leadingInset(traitCollection: UITraitCollection) -> CGFloat {
             guard UIDevice.current.userInterfaceIdiom != .phone else { return standardInset }
 
@@ -58,6 +68,12 @@ class HomepageViewModel: FeatureFlaggable {
         }
     }
 
+    var theme: Theme {
+        didSet {
+            childViewModels.forEach { $0.setTheme(theme: theme) }
+        }
+    }
+
     /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
     private var viewAppeared: Bool = false
 
@@ -87,15 +103,19 @@ class HomepageViewModel: FeatureFlaggable {
          urlBar: URLBarViewProtocol,
          nimbus: FxNimbus = FxNimbus.shared,
          isZeroSearch: Bool = false,
+         theme: Theme,
          wallpaperManager: WallpaperManager = WallpaperManager()) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
+        self.theme = theme
 
-        self.headerViewModel = HomeLogoHeaderViewModel(profile: profile)
+        self.headerViewModel = HomeLogoHeaderViewModel(profile: profile, theme: theme)
         let messageCardAdaptor = MessageCardDataAdaptorImplementation()
-        self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor)
+        self.messageCardViewModel = HomepageMessageCardViewModel(dataAdaptor: messageCardAdaptor, theme: theme)
         messageCardAdaptor.delegate = messageCardViewModel
-        self.topSiteViewModel = TopSitesViewModel(profile: profile, wallpaperManager: wallpaperManager)
+        self.topSiteViewModel = TopSitesViewModel(profile: profile,
+                                                  theme: theme,
+                                                  wallpaperManager: wallpaperManager)
         self.wallpaperManager = wallpaperManager
 
         let siteImageHelper = SiteImageHelper(profile: profile)
@@ -105,12 +125,15 @@ class HomepageViewModel: FeatureFlaggable {
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,
+            theme: theme,
             tabManager: tabManager,
             adaptor: adaptor,
             wallpaperManager: wallpaperManager)
         adaptor.delegate = jumpBackInViewModel
 
-        self.recentlySavedViewModel = RecentlySavedViewModel(profile: profile, wallpaperManager: wallpaperManager)
+        self.recentlySavedViewModel = RecentlySavedViewModel(profile: profile,
+                                                             theme: theme,
+                                                             wallpaperManager: wallpaperManager)
         let deletionUtility = HistoryDeletionUtility(with: profile)
         let historyDataAdaptor = HistoryHighlightsDataAdaptorImplementation(
             profile: profile,
@@ -120,6 +143,7 @@ class HomepageViewModel: FeatureFlaggable {
             with: profile,
             isPrivate: isPrivate,
             urlBar: urlBar,
+            theme: theme,
             historyHighlightsDataAdaptor: historyDataAdaptor,
             wallpaperManager: wallpaperManager)
 
@@ -127,10 +151,11 @@ class HomepageViewModel: FeatureFlaggable {
             pocketAPI: PocketProvider(),
             pocketSponsoredAPI: MockPocketSponsoredStoriesProvider())
         self.pocketViewModel = PocketViewModel(pocketDataAdaptor: pocketDataAdaptor,
+                                               theme: theme,
                                                wallpaperManager: wallpaperManager)
         pocketDataAdaptor.delegate = pocketViewModel
 
-        self.customizeButtonViewModel = CustomizeHomepageSectionViewModel()
+        self.customizeButtonViewModel = CustomizeHomepageSectionViewModel(theme: theme)
         self.childViewModels = [headerViewModel,
                                 messageCardViewModel,
                                 topSiteViewModel,

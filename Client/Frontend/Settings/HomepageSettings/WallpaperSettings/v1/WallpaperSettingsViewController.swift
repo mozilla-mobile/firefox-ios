@@ -131,6 +131,7 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
+        cell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 

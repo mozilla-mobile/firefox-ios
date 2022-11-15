@@ -13,6 +13,13 @@ class MockDispatchQueue: DispatchQueueInterface {
         work()
     }
 
+    func asyncAfter(deadline: DispatchTime,
+                    qos: DispatchQoS,
+                    flags: DispatchWorkItemFlags,
+                    execute work: @escaping @convention(block) () -> Void) {
+        work()
+    }
+
     func ensureMainThread(execute work: @escaping () -> Void) {
         work()
     }

@@ -25,6 +25,12 @@
 /* The title for the unpinning a topsite action */
 "ActivityStream.ContextMenu.UnpinTopsite" = "Ajratish";
 
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Soʻnggi tashrif buyurilgan";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Qatorlarni oʻrnatish";
+
 /* Accessibility label for the Add Tab button in the Tab Tray. */
 "Add Tab" = "Sekme ekle";
 
@@ -38,10 +44,10 @@
 "AddPass.Error.Dismiss" = "OK";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Message" = "Talonni Wallet’ga qo‘shib bo‘lmadi. Yana urinib ko‘ring.";
+"AddPass.Error.Message" = "Talonni Wallet’ga qoʻshib boʻlmadi. Yana urinib koʻring.";
 
 /* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Title" = "Talon qo‘shilmadi";
+"AddPass.Error.Title" = "Talon qoʻshilmadi";
 
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Adres ve arama";
