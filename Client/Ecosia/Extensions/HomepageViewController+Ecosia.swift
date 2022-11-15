@@ -26,7 +26,6 @@ extension HomepageViewController {
     func updateTreesCell() {
         guard let impactCell = viewModel.impactViewModel.cell else { return }
         impactCell.display(treesCellModel)
-        (collectionView.collectionViewLayout as? NTPLayout)?.invalidateLayout()
     }
 
     var treesCellModel: NTPImpactCell.Model {
@@ -64,7 +63,7 @@ extension HomepageViewController: NTPTooltipDelegate {
     }
 
     func reloadTooltip() {
-        collectionView.collectionViewLayout.invalidateLayout()
+        reloadView()
     }
 }
 

@@ -103,6 +103,7 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
     
     override func viewWillTransition(to: CGSize, with: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: to, with: with)
+        collection?.reloadData()
         collection?.collectionViewLayout.invalidateLayout()
     }
     

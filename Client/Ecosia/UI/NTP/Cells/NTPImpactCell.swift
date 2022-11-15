@@ -76,7 +76,6 @@ final class NTPImpactCell: UICollectionViewCell, NotificationThemeable, Reusable
             treesCount.text = "\(model.trees)"
         }
 
-        applyTheme()
         updateGlobalCount()
     }
 

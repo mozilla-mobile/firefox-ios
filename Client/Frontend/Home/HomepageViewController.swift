@@ -204,7 +204,12 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
 
         // Force the entire collectionview to re-layout
         viewModel.refreshData(for: traitCollection)
+        collectionView.reloadData()
         collectionView.collectionViewLayout.invalidateLayout()
+
+        // This pushes a reload to the end of the main queue after all the work associated with
+        // rotating has been completed. This is important because some of the cells layout are
+        // based on the screen state
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
@@ -475,6 +480,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
 
             self.viewModel.refreshData(for: self.traitCollection)
             self.collectionView.reloadData()
+            self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
 }
