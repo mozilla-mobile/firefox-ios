@@ -79,11 +79,6 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
         super.viewDidLoad()
         news.subscribeAndReceive(self) { [weak self] in
             self?.items = $0.map { .init(model: $0, promo: nil) }
-
-            if let promo = Promo.current(for: .shared, using: .shared) {
-                self?.items.insert(.init(model: nil, promo: promo), at: 0)
-            }
-
             self?.collection.reloadData()
             self?.collection.backgroundView = nil
         }

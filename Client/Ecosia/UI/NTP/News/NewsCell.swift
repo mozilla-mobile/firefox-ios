@@ -66,7 +66,7 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
         placeholder.contentMode = .scaleAspectFill
         placeholder.clipsToBounds = true
         placeholder.image = UIImage(named: "image_placeholder")!
-        placeholder.layer.cornerRadius = 5
+        placeholder.layer.cornerRadius = 10
         background.addSubview(placeholder)
         self.placeholder = placeholder
 
@@ -75,7 +75,7 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.alpha = 0
-        image.layer.cornerRadius = 5
+        image.layer.cornerRadius = 10
         background.addSubview(image)
         self.image = image
         
