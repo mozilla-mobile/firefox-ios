@@ -34,7 +34,7 @@ protocol ThemeColourPalette {
     var layerAccentPrivate: UIColor { get }
     var layerAccentPrivateNonOpaque: UIColor { get }
     var layerLightGrey30: UIColor { get }
-    // Do not use outside of ReaderMode
+    // Only for Reader mode Sepia background
     var layerSepia: UIColor { get }
 
     // MARK: - Actions
