@@ -6,32 +6,44 @@ import UIKit
 
 // Puts a backdrop (i.e. dark highlight) circle on the badged button.
 class BadgeWithBackdrop {
-    let badge: ToolbarBadge
-    var backdrop: UIView
-    private let backdropCircleSize: CGFloat
-    private let backdropCircleColor: UIColor?
-    static let backdropAlpha = CGFloat(0.05)
 
-    private static func makeCircle(color: UIColor?, size: CGFloat) -> UIView {
-        let circle = UIView()
-        circle.alpha = BadgeWithBackdrop.backdropAlpha
-        circle.layer.cornerRadius = size / 2
-        if let color = color {
-            circle.backgroundColor = color
-        } else {
-            circle.backgroundColor = .black
-        }
-        return circle
+    struct UX {
+        static let backdropAlpha: CGFloat = 0.05
+        static let badgeOffset: CGFloat = 10
     }
 
-    init(imageName: String, imageMask: String = "badge-mask", backdropCircleColor: UIColor? = nil, backdropCircleSize: CGFloat = 40, badgeSize: CGFloat = 20) {
+    // MARK: - Variables
+    var backdrop: UIView
+    var badge: ToolbarBadge
+    private let badgeSize: CGFloat
+    private let backdropCircleSize: CGFloat
+    private let backdropCircleColor: UIColor?
+
+    }
+
+    // MARK: - Initializers
+    init(imageName: String,
+         imageMask: String = "badge-mask",
+         backdropCircleColor: UIColor? = nil,
+         backdropCircleSize: CGFloat = 40,
+         badgeSize: CGFloat = 20) {
         self.backdropCircleColor = backdropCircleColor
         self.backdropCircleSize = backdropCircleSize
+        self.badgeSize = badgeSize
+
         badge = ToolbarBadge(imageName: imageName, imageMask: imageMask, size: badgeSize)
         badge.isHidden = true
+
         backdrop = BadgeWithBackdrop.makeCircle(color: backdropCircleColor, size: backdropCircleSize)
         backdrop.isHidden = true
         backdrop.isUserInteractionEnabled = false
+
+        setupLayout()
+    }
+
+    func show(_ visible: Bool) {
+        badge.isHidden = !visible
+        backdrop.isHidden = !visible
     }
 
     func add(toParent parent: UIView) {
@@ -40,15 +52,35 @@ class BadgeWithBackdrop {
     }
 
     func layout(onButton button: UIView) {
-        backdrop.snp.makeConstraints { make in
-            make.center.equalTo(button)
-            make.size.equalTo(backdropCircleSize)
-        }
+        NSLayoutConstraint.activate([
+            backdrop.centerXAnchor.constraint(equalTo: button.centerXAnchor),
+            backdrop.centerYAnchor.constraint(equalTo: button.centerYAnchor),
+
+            badge.centerXAnchor.constraint(equalTo: button.centerXAnchor, constant: UX.badgeOffset),
+            badge.centerYAnchor.constraint(equalTo: button.centerYAnchor, constant: -UX.badgeOffset),
+        ])
         button.superview?.sendSubviewToBack(backdrop)
     }
 
-    func show(_ visible: Bool) {
-        badge.isHidden = !visible
-        backdrop.isHidden = !visible
+    // MARK: - Private
+    private static func makeCircle(color: UIColor?, size: CGFloat) -> UIView {
+        let circle = UIView()
+        circle.alpha = UX.backdropAlpha
+        circle.layer.cornerRadius = size / 2
+        circle.backgroundColor = color ?? .black
+        return circle
+    }
+
+    private func setupLayout() {
+        badge.translatesAutoresizingMaskIntoConstraints = false
+        backdrop.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            backdrop.widthAnchor.constraint(equalToConstant: backdropCircleSize),
+            backdrop.heightAnchor.constraint(equalToConstant: backdropCircleSize),
+
+            badge.widthAnchor.constraint(equalToConstant: badgeSize),
+            badge.heightAnchor.constraint(equalToConstant: badgeSize)
+        ])
     }
 }
