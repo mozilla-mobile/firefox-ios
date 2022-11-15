@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Glean
 @_exported import MozillaAppServices
 
 private let log = Logger.syncLogger
@@ -904,6 +905,7 @@ public class RustLogins {
                         return key!
                     } else {
                         SentryIntegration.shared.sendWithStacktrace(message: "Logins key was corrupted, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                        GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
                         _ = self.wipeLocalEngine()
                         return try rustKeys.createAndStoreKey()
                     }
@@ -914,6 +916,7 @@ public class RustLogins {
                 // The key is present, but we didn't expect it to be there.
                 do {
                     SentryIntegration.shared.sendWithStacktrace(message: "Logins key lost due to storage malfunction, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                    GleanMetrics.LoginsStoreKeyRegeneration.other.record()
                     _ = self.wipeLocalEngine()
                     return try rustKeys.createAndStoreKey()
                 } catch let err as NSError {
@@ -923,6 +926,7 @@ public class RustLogins {
                 // We expected the key to be present, but it's gone missing on us.
                 do {
                     SentryIntegration.shared.sendWithStacktrace(message: "Logins key lost, new one generated", tag: SentryTag.rustLogins, severity: .warning)
+                    GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
                     _ = self.wipeLocalEngine()
                     return try rustKeys.createAndStoreKey()
                 } catch let err as NSError {

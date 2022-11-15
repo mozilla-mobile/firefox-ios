@@ -20,3 +20,52 @@ history:
       - sync-core@mozilla.com
       - teshaq@mozilla.com
     expires: never
+
+logins_store_key_regeneration:
+  # These track when we need to regenerate the encryption key which causes all
+  # local data to be lost
+  lost:
+    type: event
+    description: >
+      The encryption key was regenerated because it was lost
+    bugs:
+      - https://github.com/mozilla/application-services/issues/5221
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12306
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+      - lougenia@mozilla.com
+    expires: never
+
+  corrupt:
+    type: event
+    description: >
+      The encryption key was regenerated because it didn't match the encrypted
+      data
+    bugs:
+      - https://github.com/mozilla/application-services/issues/5221
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12306
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+      - lougenia@mozilla.com
+    expires: never
+
+  other:
+    type: event
+    description: >
+      The encryption key was regenerated for an unknown reason
+    bugs:
+      - https://github.com/mozilla/application-services/issues/5221
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12306
+    data_sensitivity:
+      - technical
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+      - lougenia@mozilla.com
+    expires: never
