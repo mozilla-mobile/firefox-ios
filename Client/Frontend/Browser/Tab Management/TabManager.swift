@@ -268,6 +268,11 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             tab.applyTheme()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+        
+        // Note: we setup last session private case as the session is tied to user's selected
+        // tab but there are times when tab manager isn't available and we need to know
+        // users's last state (Private vs Regular)
+        UserDefaults.standard.set(selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
     }
 
     func getMostRecentHomepageTab() -> Tab? {
