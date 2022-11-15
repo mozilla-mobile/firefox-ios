@@ -143,6 +143,9 @@
                   Identifier = "EcosiaTabMigrationTests/testEcosiaImportTabs()">
                </Test>
                <Test
+                  Identifier = "HistoryDeletionUtilityTests">
+               </Test>
+               <Test
                   Identifier = "NimbusIntegrationTests">
                </Test>
                <Test
