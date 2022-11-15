@@ -165,6 +165,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return UIWindow(frame: UIScreen.main.bounds)
         }
 
+        if #available(iOS 14, *) {
+            windowScene.screenshotService?.delegate = self
+        }
+
         let window = UIWindow(windowScene: windowScene)
 
         if !LegacyThemeManager.instance.systemThemeIsOn {
@@ -207,4 +211,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
+}
+
+@available(iOS 14, *)
+extension SceneDelegate: UIScreenshotServiceDelegate {
+    func screenshotService(_ screenshotService: UIScreenshotService,
+                           generatePDFRepresentationWithCompletion completionHandler: @escaping (Data?, Int, CGRect) -> Void) {
+        guard browserViewController.homepageViewController?.view.alpha != 1,
+              browserViewController.presentedViewController == nil,
+              let webView = tabManager.selectedTab?.currentWebView(),
+              let url = webView.url,
+              InternalURL(url) == nil else {
+            completionHandler(nil, 0, .zero)
+            return
+        }
+
+        var rect = webView.scrollView.frame
+        rect.origin.x = webView.scrollView.contentOffset.x
+        rect.origin.y = webView.scrollView.contentSize.height - rect.height - webView.scrollView.contentOffset.y
+
+        webView.createPDF { result in
+            switch result {
+            case .success(let data):
+                completionHandler(data, 0, rect)
+            case .failure:
+                completionHandler(nil, 0, .zero)
+            }
+        }
+    }
 }
