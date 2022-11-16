@@ -128,7 +128,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         ])
 
         // These UIButtons represent the ReaderModeTheme (Light/Sepia/Dark)
-        // they are different from the App Theme
+        // they don't follow the App Theme
         themeButtons = [
             ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.light),
             ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.sepia),

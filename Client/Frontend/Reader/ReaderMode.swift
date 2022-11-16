@@ -31,16 +31,8 @@ enum ReaderModeTheme: String {
     case sepia = "sepia"
 
     static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
-        // Get App theme (Dark vs Normal) Normal means light theme.
-        // If appTheme is Dark it will return .dark ReaderModeTheme
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-        if themeManager.currentTheme.type == .dark {
-            return .dark
-        }
-
-        // If AppTheme is Normal returns the selected reader mode theme
-        // defaulting to light if none is selected
-        return theme ?? .light
+        return themeManager.currentTheme.type.getReaderMode(for: theme)
     }
 }
 
