@@ -9,8 +9,12 @@ final class Analytics {
                            network: .init(endpoint: Environment.current.snowplow),
                            configurations: [TrackerConfiguration()
                                                 .appId(Bundle.version)
+                                                .sessionContext(true)
+                                                .applicationContext(true)
                                                 .platformContext(true)
-                                                .geoLocationContext(true),
+                                                .geoLocationContext(true)
+                                                .deepLinkContext(false)
+                                                .screenContext(false),
                                             SubjectConfiguration()
                                                 .userId(User.shared.analyticsId.uuidString)])
     }
@@ -20,9 +24,11 @@ final class Analytics {
 
     private init() {
         tracker = Self.tracker
+        tracker.installAutotracking = true
         tracker.screenViewAutotracking = false
         tracker.lifecycleAutotracking = false
-        tracker.installAutotracking = false
+        tracker.exceptionAutotracking = false
+        tracker.diagnosticAutotracking = false
     }
     
     func install() {
