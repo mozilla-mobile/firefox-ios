@@ -41,8 +41,8 @@ enum ReaderModeTheme: String {
         // Theme: Dark - app-wide dark overrides all
         if appWideTheme == .dark {
             return .dark
-        // Theme: Sepia - special case for when the theme is sepia.
-        // For this we only check the them supplied and not the app wide theme
+            // Theme: Sepia - special case for when the theme is sepia.
+            // For this we only check the them supplied and not the app wide theme
         } else if readerTheme == .sepia {
             return .sepia
         }
@@ -69,10 +69,10 @@ enum ReaderModeFontType: String {
 
         switch font {
         case .serif,
-             .serifBold:
+                .serifBold:
             self = isBoldFontEnabled ? .serifBold : .serif
         case .sansSerif,
-             .sansSerifBold:
+                .sansSerifBold:
             self = isBoldFontEnabled ? .sansSerifBold : .sansSerif
         case .none:
             self = .sansSerif
@@ -302,10 +302,10 @@ class ReaderMode: TabContentScript {
 
     fileprivate func handleReaderPageEvent(_ readerPageEvent: ReaderPageEvent) {
         switch readerPageEvent {
-            case .pageShow:
-                if let tab = tab {
-                    delegate?.readerMode(self, didDisplayReaderizedContentForTab: tab)
-                }
+        case .pageShow:
+            if let tab = tab {
+                delegate?.readerMode(self, didDisplayReaderizedContentForTab: tab)
+            }
         }
     }
 
@@ -329,18 +329,18 @@ class ReaderMode: TabContentScript {
         else { return }
 
         switch messageType {
-            case .pageEvent:
-                if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] as? String ?? "Invalid") {
-                    handleReaderPageEvent(readerPageEvent)
-                }
-            case .stateChange:
-                if let readerModeState = ReaderModeState(rawValue: msg["Value"] as? String ?? "Invalid") {
-                    handleReaderModeStateChange(readerModeState)
-                }
-            case .contentParsed:
-                if let readabilityResult = ReadabilityResult(object: msg["Value"] as AnyObject?) {
-                    handleReaderContentParsed(readabilityResult)
-                }
+        case .pageEvent:
+            if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] as? String ?? "Invalid") {
+                handleReaderPageEvent(readerPageEvent)
+            }
+        case .stateChange:
+            if let readerModeState = ReaderModeState(rawValue: msg["Value"] as? String ?? "Invalid") {
+                handleReaderModeStateChange(readerModeState)
+            }
+        case .contentParsed:
+            if let readabilityResult = ReadabilityResult(object: msg["Value"] as AnyObject?) {
+                handleReaderContentParsed(readabilityResult)
+            }
         }
     }
 

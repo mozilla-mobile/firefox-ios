@@ -63,10 +63,10 @@ class LoginListViewController: SensitiveViewController, Themeable {
 
         AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
             switch result {
-                case .success:
-                    fillDeferred(ok: true)
-                case .failure:
-                    fillDeferred(ok: false)
+            case .success:
+                fillDeferred(ok: true)
+            case .failure:
+                fillDeferred(ok: false)
             }
         }
 
@@ -223,7 +223,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
                                                      action: #selector(cancelSelection))
 
     fileprivate func setupDefaultNavButtons() {
-         navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
+        navigationItem.rightBarButtonItems = [editButton, addCredentialButton]
 
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
@@ -397,7 +397,7 @@ extension LoginListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == LoginListViewController.loginsSettingsSection,
-            searchController.isActive || tableView.isEditing {
+           searchController.isActive || tableView.isEditing {
             return 0
         }
         return UITableView.automaticDimension
