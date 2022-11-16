@@ -910,7 +910,6 @@ public class RustLogins {
 
                     return try rustKeys.createAndStoreKey()
                 }
-
             } catch let error as NSError {
                 SentryIntegration.shared.sendWithStacktrace(
                     message: "Error retrieving logins encryption key",
@@ -929,6 +928,8 @@ public class RustLogins {
                 _ = self.wipeLocalEngine()
 
                 return try rustKeys.createAndStoreKey()
+            } catch let error as NSError {
+                throw error
             }
         case (.none, .some(encryptedCanaryPhrase)):
             // We expected the key to be present, but it's gone missing on us.
