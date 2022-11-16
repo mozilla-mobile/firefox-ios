@@ -7,7 +7,7 @@ import Shared
 import Storage
 
 // Manages the top site
-class TopSiteHistoryManager: DataObserver, Loggable {
+class TopSiteHistoryManager: DataObserver {
 
     private let profile: Profile
 

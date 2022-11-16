@@ -4,9 +4,6 @@
 
 import Foundation
 import Shared
-import XCGLogger
-
-private let log = Logger.syncLogger
 
 open class SQLiteQueue: TabQueue {
     let db: BrowserDB

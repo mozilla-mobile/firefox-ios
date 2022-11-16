@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import XCGLogger
 
 /// Accessors to find what a new tab should do when created without a URL.
 struct NewTabAccessors {

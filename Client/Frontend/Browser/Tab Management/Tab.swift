@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 import Storage
 import Shared
-import XCGLogger
 
 private var debugTabCount = 0
 

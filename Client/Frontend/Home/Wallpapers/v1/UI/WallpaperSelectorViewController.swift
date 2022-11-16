@@ -4,7 +4,7 @@
 
 import UIKit
 
-class WallpaperSelectorViewController: WallpaperBaseViewController, Loggable, Themeable {
+class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
 
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97

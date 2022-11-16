@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import XCGLogger
 import Glean
 
 private let log = Logger.syncLogger

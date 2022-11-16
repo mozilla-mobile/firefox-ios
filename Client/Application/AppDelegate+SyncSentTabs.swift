@@ -5,7 +5,6 @@
 import Shared
 import Storage
 import Sync
-import XCGLogger
 import UserNotifications
 import Account
 

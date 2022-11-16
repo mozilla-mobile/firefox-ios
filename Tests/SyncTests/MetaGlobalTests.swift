@@ -7,12 +7,9 @@ import Foundation
 import Shared
 import Storage
 @testable import Sync
-import XCGLogger
 
 import XCTest
 import SwiftyJSON
-
-private let log = Logger.syncLogger
 
 class MockSyncAuthState: SyncAuthState {
     var clientName: String?

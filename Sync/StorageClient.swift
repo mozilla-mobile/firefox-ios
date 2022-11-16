@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Account
-import XCGLogger
 import SwiftyJSON
 
 private let log = Logger.syncLogger
@@ -373,7 +372,6 @@ open class Sync15StorageClient {
     func getFailureInfo(_ response: URLResponse?, _ error: Error?) -> MaybeErrorType? {
         func failFromResponse(_ httpResponse: HTTPURLResponse?) -> MaybeErrorType? {
             guard let httpResponse = httpResponse else {
-                // TODO: better error.
                 log.error("No response")
                 return RecordParseError()
             }

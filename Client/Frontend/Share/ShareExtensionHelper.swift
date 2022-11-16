@@ -6,8 +6,6 @@ import Foundation
 import Shared
 import MobileCoreServices
 
-private let log = Logger.browserLogger
-
 class ShareExtensionHelper: NSObject {
     fileprivate weak var selectedTab: Tab?
 

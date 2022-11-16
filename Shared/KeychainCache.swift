@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import XCGLogger
 import SwiftyJSON
 import MozillaAppServices
 
@@ -54,7 +53,6 @@ open class KeychainCache<T: JSONLiteralConvertible> {
 
     open func checkpoint() {
         log.info("Storing \(self.branch) in Keychain with label \(self.branch).\(self.label).")
-        // TODO: PII logging.
         if let value = value,
             let jsonString = value.asJSON().stringify() {
             MZKeychainWrapper.sharedClientAppContainerKeychain.set(jsonString, forKey: "\(branch).\(label)", withAccessibility: .afterFirstUnlock)

@@ -18,7 +18,7 @@ struct WallpaperFilenameIdentifiers {
 }
 
 /// A single wallpaper instance.
-struct Wallpaper: Equatable, Loggable {
+struct Wallpaper: Equatable {
     typealias fileId = WallpaperFilenameIdentifiers
 
     static func == (lhs: Wallpaper, rhs: Wallpaper) -> Bool {

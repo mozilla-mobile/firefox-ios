@@ -11,7 +11,6 @@ import Account
 import Shared
 import Storage
 import Sync
-import XCGLogger
 import SyncTelemetry
 import AuthenticationServices
 import MozillaAppServices

@@ -6,7 +6,6 @@ import UIKit
 import NotificationCenter
 import Shared
 import SnapKit
-import XCGLogger
 
 private let log = Logger.browserLogger
 

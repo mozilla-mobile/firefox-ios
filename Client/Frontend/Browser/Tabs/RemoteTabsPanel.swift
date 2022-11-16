@@ -8,7 +8,6 @@ import Shared
 import SnapKit
 import Storage
 import Sync
-import XCGLogger
 
 protocol RemotePanelDelegate: AnyObject {
     func remotePanelDidRequestToSignIn()

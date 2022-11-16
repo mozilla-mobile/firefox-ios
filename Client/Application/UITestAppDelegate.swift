@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import XCGLogger
 import Kingfisher
 
 private let log = Logger.browserLogger

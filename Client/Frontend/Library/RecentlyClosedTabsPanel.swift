@@ -3,12 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-
 import Shared
 import Storage
-import XCGLogger
-
-private let log = Logger.browserLogger
 
 private struct RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)

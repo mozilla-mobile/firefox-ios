@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import XCGLogger
 
 private let AllTables: [String] = ["items"]
 
