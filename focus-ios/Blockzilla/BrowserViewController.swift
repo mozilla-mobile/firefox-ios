@@ -866,7 +866,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func recordSearchEvent(_ source: Source) {
-        let identifier = searchEngineManager.activeEngine.getNameOrCustom()
+        let identifier = searchEngineManager.activeEngine.getNameOrCustom().lowercased()
         let source = source.rawValue
         GleanMetrics.BrowserSearch.searchCount["\(identifier).\(source)"].add()
     }
