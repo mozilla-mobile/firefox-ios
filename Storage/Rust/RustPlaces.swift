@@ -579,4 +579,30 @@ extension RustPlaces {
             return try connection.getTopFrecentSiteInfos(numItems: Int32(limit), thresholdOption: thresholdOption)
         }
     }
+
+    public func getSitesWithBound(limit: Int, offset: Int, excludedTypes: VisitTransitionSet) -> Deferred<Maybe<Cursor<Site>>> {
+        let deferred = getVisitPageWithBound(limit: limit, offset: offset, excludedTypes: excludedTypes)
+        let result = Deferred<Maybe<Cursor<Site>>>()
+        deferred.upon { visitInfos in
+            guard let visitInfos = visitInfos.successValue else {
+                result.fill(Maybe(failure: visitInfos.failureValue ?? "Unknown Error"))
+                return
+            }
+            let sites = visitInfos.infos.map { info -> Site in
+                var title: String
+                if let actualTitle = info.title, !actualTitle.isEmpty {
+                    title = actualTitle
+                } else {
+                    // In case there is no title, we use the url
+                    // as the title
+                    title = info.url
+                }
+                let site = Site(url: info.url, title: title)
+                site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000)
+                return site
+            }.uniqued()
+            result.fill(Maybe(success: ArrayCursor(data: sites)))
+        }
+        return result
+    }
 }

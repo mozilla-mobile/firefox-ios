@@ -8,33 +8,6 @@ import Storage
 import Account
 import Glean
 
-// A convinient mapping, `Profile.swift` can't depend
-// on `PlacesMigrationConfiguration` directly since
-// the FML is only usable from `Client` at the moment
-extension PlacesMigrationConfiguration {
-    func into() -> HistoryMigrationConfiguration {
-        switch self {
-        case .disabled:
-            return .disabled
-        case .dryRun:
-            return .dryRun
-        case .real:
-            return .real
-        }
-    }
-}
-
-extension PlacesApiConfiguration {
-    func into() -> HistoryAPIConfiguration {
-        switch self {
-        case .old:
-            return .old
-        case .new:
-            return .new
-        }
-    }
-}
-
 class AppLaunchUtil {
     private var log: RollingFileLogger
     private var adjustHelper: AdjustHelper
@@ -203,26 +176,13 @@ class AppLaunchUtil {
     // MARK: - Application Services History Migration
 
     private func runAppServicesHistoryMigration() {
-        let placesHistory = FxNimbus.shared.features.placesHistory.value()
-        FxNimbus.shared.features.placesHistory.recordExposure()
-
-        guard placesHistory.migration != .disabled else {
-            log.info("Migration disabled, won't run migration")
-            return
-        }
 
         let browserProfile = self.profile as? BrowserProfile
 
-        let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
+        let migrationRanKey = "PlacesHistoryMigrationRanreal"
         let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
         UserDefaults.standard.setValue(true, forKey: migrationRanKey)
         if !migrationRan {
-            if placesHistory.api == .new {
-                browserProfile?.historyApiConfiguration = .new
-                // We set a user default so users with new configuration never go back
-                UserDefaults.standard.setValue(true, forKey: PrefsKeys.NewPlacesAPIDefaultKey)
-            }
-
             log.info("Migrating Application services history")
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started
@@ -231,7 +191,6 @@ class AppLaunchUtil {
             GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
             GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             browserProfile?.migrateHistoryToPlaces(
-            migrationConfig: placesHistory.migration.into(),
             callback: { result in
                 self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
                 // We record various success metrics here

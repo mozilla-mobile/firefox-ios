@@ -86,7 +86,6 @@ open class MockProfile: Client.Profile {
     public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
     public var logins: RustLogins
     public var syncManager: SyncManager!
-    public var historyApiConfiguration: HistoryAPIConfiguration
 
     fileprivate var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
 
@@ -111,6 +110,7 @@ open class MockProfile: Client.Profile {
         readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
         let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
         places = RustPlaces(databasePath: placesDatabasePath)
+        _ = places.reopenIfClosed()
 
         let tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_tabs.db").path
 
@@ -119,11 +119,6 @@ open class MockProfile: Client.Profile {
         legacyPlaces = SQLiteHistory(database: self.database, prefs: MockProfilePrefs())
         recommendations = legacyPlaces
         history = legacyPlaces
-        // We run the tests using the old configuration
-        // the new APIs have extensive tests in the application services repository
-        // For now, to test the new configuration
-        // change the following to `.new`
-        historyApiConfiguration = .old
     }
 
     public func localName() -> String {

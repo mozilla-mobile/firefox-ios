@@ -83,24 +83,6 @@ onboarding-feature:
     upgrade-flow:
       type: boolean
       description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
-places-history:
-  description: "This feature defines the migration to using application services places history\nfor history in iOS\n"
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    api:
-      type: string
-      description: "The api configuration, determines whether we use the new api or the old one\n"
-      enum:
-        - new
-        - old
-    migration:
-      type: string
-      description: "The migration configuration. This is either a dry-run, a real migration or\ndisabled\n"
-      enum:
-        - disabled
-        - dry-run
-        - real
 search:
   description: "Configuring the functionality to do with search. This will be separated into smaller sub-features in later releases.\n"
   hasExposure: true
