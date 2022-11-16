@@ -12,7 +12,7 @@ class ReaderModeFontTypeButton: UIButton {
 
         self.fontType = fontType
         accessibilityHint = .ReaderModeStyleFontTypeAccessibilityLabel
-        
+
         switch fontType {
         case .sansSerif,
              .sansSerifBold:
