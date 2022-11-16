@@ -113,6 +113,7 @@ class TabManagerTests: XCTestCase {
         profile = TabManagerMockProfile()
         manager = TabManager(profile: profile, imageStore: nil)
         delegate = MockTabManagerDelegate()
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -328,7 +329,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDeleteSelectedTab_ParentTabIfItWasMostRecentlyVisited() {
-
         func addTab(_ visit: Bool) -> Tab {
             let tab = manager.addTab()
             if visit {
@@ -336,6 +336,8 @@ class TabManagerTests: XCTestCase {
             }
             return tab
         }
+
+        profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.InactiveTabs)
 
         _ = addTab(false) // not visited
         let tab1 = addTab(true)
@@ -355,7 +357,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDeleteSelectedTab_NextToTheRight() {
-
         func addTab(_ visit: Bool) -> Tab {
             let tab = manager.addTab()
             if visit {
@@ -377,7 +378,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDeleteSelectedTab_NextToTheLeftWhenNoneToTheRight() {
-
         func addTab(_ visit: Bool) -> Tab {
             let tab = manager.addTab()
             if visit {
@@ -398,7 +398,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testDeleteSelectedTab_LastOneLeft() {
-
         func addTab(_ visit: Bool) -> Tab {
             let tab = manager.addTab()
             if visit {
@@ -411,6 +410,31 @@ class TabManagerTests: XCTestCase {
         let tab2 = addTab(true)
 
         manager.selectTab(tab2)
+
+        removeTabAndAssert(tab: manager.selectedTab!) {
+            XCTAssertEqual(self.manager.selectedTab, tab0)
+        }
+    }
+
+    func testDeleteSelectedTab_InactiveTabsPresent() {
+        func addTab(_ inactive: Bool) -> Tab {
+            let tab = manager.addTab()
+            if inactive {
+                let currentDate = Date()
+                let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
+                let day15Old = Calendar.current.date(byAdding: .day, value: -15, to: noon) ?? Date()
+                tab.lastExecutedTime = day15Old.toTimestamp()
+            }
+            return tab
+        }
+
+        let tab0 = addTab(false) // active
+        let tab1 = addTab(true) // inactive
+        let tab2 = addTab(true) // inactive
+        let tab3 = addTab(false) // active
+
+        manager.selectTab(tab3)
+        manager.removeTab(tab3)
 
         removeTabAndAssert(tab: manager.selectedTab!) {
             XCTAssertEqual(self.manager.selectedTab, tab0)
