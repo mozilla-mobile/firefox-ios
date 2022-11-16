@@ -691,12 +691,14 @@ class UseNewHistoryApiOption: HiddenSetting {
         super.init(settings: settings)
     }
 
-    override var title: NSAttributedString? { switch profile.historyApiConfiguration {
-    case .old:
-        return NSAttributedString(string: "Migrate and Use Places History Apis")
-    case .new:
-        return NSAttributedString(string: "Use Legacy History Apis")
-    }}
+    override var title: NSAttributedString? {
+        switch profile.historyApiConfiguration {
+        case .old:
+            return NSAttributedString(string: "Migrate and Use Places History Apis")
+        case .new:
+            return NSAttributedString(string: "Use Legacy History Apis")
+        }
+    }
 
     override func onClick(_ navigationController: UINavigationController?) {
         let browserProfile = profile as? BrowserProfile
@@ -916,20 +918,20 @@ class StudiesToggleSetting: BoolSetting {
 
     override var accessibilityIdentifier: String? { return "StudiesToggle" }
 
-        override var url: URL? {
-            return SupportUtils.URLForTopic("ios-studies")
-        }
+    override var url: URL? {
+        return SupportUtils.URLForTopic("ios-studies")
+    }
 
-        override func onClick(_ navigationController: UINavigationController?) {
-            setUpAndPushSettingsContentViewController(navigationController, self.url)
-        }
+    override func onClick(_ navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
+    }
 }
 
 // Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?, theme: Theme) {
         super.init(title: NSAttributedString(string: .AppSettingsHelp, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
-            delegate: delegate)
+                   delegate: delegate)
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -1027,7 +1029,7 @@ class LoginsSetting: Setting {
                             navController.viewControllers.removeAll { viewController in
                                 viewController == loginOnboardingViewController
                             }
-                    }
+                        }
                 }
 
                 navigationController?.pushViewController(loginOnboardingViewController, animated: true)
@@ -1041,7 +1043,7 @@ class LoginsSetting: Setting {
                     webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
                         guard let loginsVC = loginsVC else { return }
                         navController.pushViewController(loginsVC, animated: true)
-                }
+                    }
             }
         } else {
             let viewController = DevicePasscodeRequiredViewController()

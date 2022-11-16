@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Shared
 import Glean
+import Shared
 @_exported import MozillaAppServices
 
 private let log = Logger.syncLogger
@@ -14,21 +14,15 @@ public typealias LoginRecord = EncryptedLogin
 
 public extension LoginsStoreError {
     var descriptionValue: String {
-       switch self {
-       case .InvalidRecord:
-           return "InvalidRecord"
-       case .NoSuchRecord:
-           return "NoSuchRecord"
-       case .IncorrectKey:
-           return "IncorrectKey"
-       case .Interrupted:
-           return "Interrupted"
-       case .SyncAuthInvalid:
-           return "SyncAuthInvalid"
-       case .UnexpectedLoginsApiError:
-           return "UnexpectedLoginsApiError"
-       }
-   }
+        switch self {
+        case .InvalidRecord: return "InvalidRecord"
+        case .NoSuchRecord: return "NoSuchRecord"
+        case .IncorrectKey: return "IncorrectKey"
+        case .Interrupted: return "Interrupted"
+        case .SyncAuthInvalid: return "SyncAuthInvalid"
+        case .UnexpectedLoginsApiError: return "UnexpectedLoginsApiError"
+        }
+    }
 }
 
 public extension EncryptedLogin {
@@ -264,7 +258,7 @@ public extension LoginEntry {
         )
     }
 
-   init(fromJSONDict dict: [String: Any]) {
+    init(fromJSONDict dict: [String: Any]) {
         let password = dict["password"] as? String ?? ""
         let username = dict["username"] as? String ?? ""
 
@@ -470,17 +464,17 @@ public class RustLoginEncryptionKeys {
         errorMessage: String
     ) {
         var message: String {
-             switch err {
-                 case .InvalidRecord(let message),
-                      .NoSuchRecord(let message),
-                      .Interrupted(let message),
-                      .SyncAuthInvalid(let message),
-                      .UnexpectedLoginsApiError(let message):
-                          return message
-                  case .IncorrectKey:
-                      return "Incorrect key"
-             }
-          }
+            switch err {
+            case .InvalidRecord(let message),
+                    .NoSuchRecord(let message),
+                    .Interrupted(let message),
+                    .SyncAuthInvalid(let message),
+                    .UnexpectedLoginsApiError(let message):
+                return message
+            case .IncorrectKey:
+                return "Incorrect key"
+            }
+        }
 
         SentryIntegration.shared.sendWithStacktrace(
             message: errorMessage,
@@ -680,13 +674,13 @@ public class RustLogins {
                     let login = rustKeys.decryptSecureFields(login: $0)
                     return login?.secFields.username ?? "" == username && (
                         $0.fields.origin == protectionSpace.urlString() ||
-                            $0.fields.origin == protectionSpace.host
+                        $0.fields.origin == protectionSpace.host
                     )
                 }
             } else {
                 filteredRecords = records.filter {
                     return $0.fields.origin == protectionSpace.urlString() ||
-                        $0.fields.origin == protectionSpace.host
+                    $0.fields.origin == protectionSpace.host
                 }
             }
             return deferMaybe(ArrayCursor(data: filteredRecords))
@@ -897,51 +891,70 @@ public class RustLogins {
         let encryptedCanaryPhrase = rustKeys.keychain.string(forKey: rustKeys.canaryPhraseKey)
 
         switch(key, encryptedCanaryPhrase) {
-            case (.some(key), .some(encryptedCanaryPhrase)):
-                // We expected the key to be present, and it is.
-                do {
-                    let canaryIsValid = try checkCanary(canary: encryptedCanaryPhrase!, text: rustKeys.canaryPhrase, encryptionKey: key!)
-                    if canaryIsValid {
-                        return key!
-                    } else {
-                        SentryIntegration.shared.sendWithStacktrace(message: "Logins key was corrupted, new one generated", tag: SentryTag.rustLogins, severity: .warning)
-                        GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
-                        _ = self.wipeLocalEngine()
-                        return try rustKeys.createAndStoreKey()
-                    }
-                } catch let err as NSError {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Error retrieving logins encryption key", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
-                }
-            case (.some(key), .none):
-                // The key is present, but we didn't expect it to be there.
-                do {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Logins key lost due to storage malfunction, new one generated", tag: SentryTag.rustLogins, severity: .warning)
-                    GleanMetrics.LoginsStoreKeyRegeneration.other.record()
+        case (.some(key), .some(encryptedCanaryPhrase)):
+            // We expected the key to be present, and it is.
+            do {
+                let canaryIsValid = try checkCanary(
+                    canary: encryptedCanaryPhrase!,
+                    text: rustKeys.canaryPhrase,
+                    encryptionKey: key!)
+                if canaryIsValid {
+                    return key!
+                } else {
+                    SentryIntegration.shared.sendWithStacktrace(
+                        message: "Logins key was corrupted, new one generated",
+                        tag: SentryTag.rustLogins,
+                        severity: .warning)
+                    GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
                     _ = self.wipeLocalEngine()
+
                     return try rustKeys.createAndStoreKey()
-                } catch let err as NSError {
-                    throw err
                 }
-            case (.none, .some(encryptedCanaryPhrase)):
-                // We expected the key to be present, but it's gone missing on us.
-                do {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Logins key lost, new one generated", tag: SentryTag.rustLogins, severity: .warning)
-                    GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
-                    _ = self.wipeLocalEngine()
-                    return try rustKeys.createAndStoreKey()
-                } catch let err as NSError {
-                    throw err
-                }
-            case (.none, .none):
-                // We didn't expect the key to be present, and it's not (which is the case for first-time calls).
-                do {
-                    return try rustKeys.createAndStoreKey()
-                } catch let err as NSError {
-                    throw err
-                }
-            default:
-                // If none of the above cases apply, we're in a state that shouldn't be possible but is disallowed nonetheless
-                throw LoginEncryptionKeyError.illegalState
+            } catch let error as NSError {
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Error retrieving logins encryption key",
+                    tag: SentryTag.rustLogins,
+                    severity: .error,
+                    description: error.localizedDescription)
+            }
+        case (.some(key), .none):
+            // The key is present, but we didn't expect it to be there.
+            do {
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Logins key lost due to storage malfunction, new one generated",
+                    tag: SentryTag.rustLogins,
+                    severity: .warning)
+                GleanMetrics.LoginsStoreKeyRegeneration.other.record()
+                _ = self.wipeLocalEngine()
+
+                return try rustKeys.createAndStoreKey()
+            } catch let error as NSError {
+                throw error
+            }
+        case (.none, .some(encryptedCanaryPhrase)):
+            // We expected the key to be present, but it's gone missing on us.
+            do {
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Logins key lost, new one generated",
+                    tag: SentryTag.rustLogins,
+                    severity: .warning)
+                GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
+                _ = self.wipeLocalEngine()
+
+                return try rustKeys.createAndStoreKey()
+            } catch let error as NSError {
+                throw error
+            }
+        case (.none, .none):
+            // We didn't expect the key to be present, and it's not (which is the case for first-time calls).
+            do {
+                return try rustKeys.createAndStoreKey()
+            } catch let error as NSError {
+                throw error
+            }
+        default:
+            // If none of the above cases apply, we're in a state that shouldn't be possible but is disallowed nonetheless
+            throw LoginEncryptionKeyError.illegalState
         }
 
         // This must be declared again for Swift's sake even though the above switch statement handles all cases

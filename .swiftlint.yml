@@ -40,7 +40,6 @@ disabled_rules: # rule identifiers to exclude from running
 - self_in_property_initialization
 - shorthand_operator
 - superfluous_disable_command
-- switch_case_alignment
 - todo
 - type_name
 - type_body_length
