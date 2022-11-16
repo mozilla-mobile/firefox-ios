@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import XCGLogger
 
 open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType, SyncPingFailureFormattable {
     public let record: Record<T>
@@ -21,8 +20,6 @@ open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType, Sync
         self.record = record
     }
 }
-
-private let log = Logger.syncLogger
 
 private typealias UploadRecord = (guid: GUID, payload: String, sizeBytes: Int)
 public typealias DeferredResponse = Deferred<Maybe<StorageResponse<POSTResult>>>

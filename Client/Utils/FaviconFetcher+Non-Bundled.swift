@@ -4,7 +4,6 @@
 
 import Storage
 import Shared
-import XCGLogger
 import Fuzi
 
 // Extension of FaviconFetcher that handles fetching non-bundled, non-letter favicons
