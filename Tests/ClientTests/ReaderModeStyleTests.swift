@@ -14,6 +14,12 @@ class ReaderModeStyleTests: XCTestCase {
         themeManager = AppContainer.shared.resolve()
     }
 
+    override func tearDown() {
+        super.tearDown()
+
+        themeManager = nil
+    }
+
     func test_initWithProperties_succeeds() {
         let readerModeStyle = ReaderModeStyle(theme: .dark,
                                               fontType: .sansSerif,
