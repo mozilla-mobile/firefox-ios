@@ -92,6 +92,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
 protocol Profile: AnyObject {
 
     typealias HistoryFetcher = BrowserHistory & SyncableHistory & ResettableSyncStorage
+
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
@@ -145,6 +146,7 @@ protocol Profile: AnyObject {
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
+    func pollCommands(forcePoll: Bool)
 
     var syncManager: SyncManager! { get }
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
@@ -642,6 +644,42 @@ open class BrowserProfile: Profile {
         return deferred
     }
 
+    /// Polls for missed send tabs and handles them
+    /// The method will not poll FxA if the interval hasn't passed
+    /// See AppConstants.FXA_COMMANDS_INTERVAL for the interval value
+    public func pollCommands(forcePoll: Bool = false) {
+        // We should only poll if the interval has passed to not
+        // overwhelm FxA
+        let lastPoll = self.prefs.timestampForKey(PrefsKeys.PollCommandsTimestamp)
+        let now = Date.now()
+        if let lastPoll = lastPoll, !forcePoll, now - lastPoll < AppConstants.FXA_COMMANDS_INTERVAL {
+            return
+        }
+        self.prefs.setTimestamp(now, forKey: PrefsKeys.PollCommandsTimestamp)
+        let accountManager = self.rustFxA.accountManager.peek()
+        accountManager?.deviceConstellation()?.pollForCommands { commands in
+            if let commands = try? commands.get() {
+                for command in commands {
+                    switch command {
+                    case .tabReceived(let sender, let tabData):
+                        // The tabData.entries is the tabs history
+                        // we only want the last item, which is the tab
+                        // to display
+                        let title = tabData.entries.last?.title ?? ""
+                        let url = tabData.entries.last?.url ?? ""
+                        if let json = try? accountManager?.gatherTelemetry() {
+                            let events = FxATelemetry.parseTelemetry(fromJSONString: json)
+                            events.forEach { $0.record(intoPrefs: self.prefs) }
+                        }
+                        if let url = URL(string: url) {
+                            self.syncDelegate?.displaySentTab(for: url, title: title, from: sender?.displayName)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     lazy var logins: RustLogins = {
         let sqlCipherDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
         let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("loginsPerField.db").path
@@ -1038,7 +1076,7 @@ open class BrowserProfile: Profile {
             }
 
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            let result = clientSynchronizer.synchronizeLocalClients(
+            return clientSynchronizer.synchronizeLocalClients(
                 self.profile.remoteClientsAndTabs,
                 withServer: ready.client,
                 info: ready.info
@@ -1050,31 +1088,6 @@ open class BrowserProfile: Profile {
                 accountManager.deviceConstellation()?.refreshState()
                 return deferMaybe(result)
             }
-
-            log.debug("Polling for any missed commands")
-            let accountManager = self.profile.rustFxA.accountManager.peek()
-            accountManager?.deviceConstellation()?.pollForCommands { commands in
-                if let commands = try? commands.get() {
-                    for command in commands {
-                        switch command {
-                        case .tabReceived(let sender, let tabData):
-                            // The tabData.entries is the tabs history
-                            // we only want the last item, which is the tab
-                            // to display
-                            let title = tabData.entries.last?.title ?? ""
-                            let url = tabData.entries.last?.url ?? ""
-                            if let json = try? accountManager?.gatherTelemetry() {
-                                let events = FxATelemetry.parseTelemetry(fromJSONString: json)
-                                events.forEach { $0.record(intoPrefs: self.profile.prefs) }
-                            }
-                            if let url = URL(string: url) {
-                                self.profile.syncDelegate?.displaySentTab(for: url, title: title, from: sender?.displayName)
-                            }
-                        }
-                    }
-                }
-            }
-            return result
         }
 
         fileprivate func syncLegacyHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
@@ -1477,6 +1490,7 @@ open class BrowserProfile: Profile {
 
         @objc func syncOnTimer() {
             self.syncEverything(why: .scheduled)
+            self.profile.pollCommands()
         }
 
         public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {

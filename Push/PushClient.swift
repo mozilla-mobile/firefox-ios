@@ -46,7 +46,6 @@ public extension PushClientImplementation {
                   completion: @escaping (PushRegistration?) -> Void) {
 
         let registerURL = endpointURL.appendingPathComponent("registration")!
-
         var mutableURLRequest = URLRequest(url: registerURL)
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
 
