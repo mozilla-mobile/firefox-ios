@@ -7,8 +7,6 @@ import Glean
 import Shared
 @_exported import MozillaAppServices
 
-private let log = Logger.syncLogger
-
 typealias LoginsStoreError = LoginsApiError
 public typealias LoginRecord = EncryptedLogin
 

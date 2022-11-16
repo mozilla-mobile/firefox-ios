@@ -9,7 +9,6 @@ import WebKit
 import Shared
 import Storage
 import SnapKit
-import XCGLogger
 import Account
 import MobileCoreServices
 import Telemetry

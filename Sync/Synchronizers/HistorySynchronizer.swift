@@ -5,11 +5,10 @@
 import Foundation
 import Shared
 import Storage
-import XCGLogger
 import SwiftyJSON
 
 private let log = Logger.syncLogger
-private let HistoryTTLInSeconds = 5184000                   // 60 days.
+private let HistoryTTLInSeconds = 5184000 // 60 days.
 let HistoryStorageVersion = 1
 
 func makeDeletedHistoryRecord(_ guid: GUID) -> Record<HistoryPayload> {

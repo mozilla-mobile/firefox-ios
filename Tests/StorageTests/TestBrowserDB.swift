@@ -6,11 +6,8 @@ import Foundation
 import Shared
 @testable import Storage
 @testable import Client
-import XCGLogger
 
 import XCTest
-
-private let log = XCGLogger.default
 
 class TestBrowserDB: XCTestCase {
     let files = MockFiles()

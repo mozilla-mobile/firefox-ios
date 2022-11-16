@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 import Storage
-import XCGLogger
 import WebKit
 import os.log
 

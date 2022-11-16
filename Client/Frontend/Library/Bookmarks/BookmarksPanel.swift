@@ -5,7 +5,6 @@
 import UIKit
 import Storage
 import Shared
-import XCGLogger
 
 let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,

@@ -3,11 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import XCGLogger
 import SwiftyJSON
 import MozillaAppServices
-
-private let log = Logger.keychainLogger
 
 public class KeychainStore {
     public static let shared = KeychainStore()

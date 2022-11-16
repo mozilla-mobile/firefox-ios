@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Account
-import XCGLogger
 
 private let log = Logger.syncLogger
 

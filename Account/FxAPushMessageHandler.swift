@@ -8,8 +8,6 @@ import Account
 import os.log
 import MozillaAppServices
 
-private let log = Logger.syncLogger
-
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 /// This class provides handles push messages from FxA.

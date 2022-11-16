@@ -4,9 +4,6 @@
 
 import UIKit
 import Shared
-import XCGLogger
-
-private let log = Logger.browserLogger
 
 enum ReaderModeBarButtonType {
     case markAsRead

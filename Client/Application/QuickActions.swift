@@ -108,7 +108,7 @@ struct QuickActionsImplementation: QuickActions, Loggable {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
             }
         default:
-            Logger.browserLogger.warning("Cannot add static shortcut item of type \(type)")
+            browserLog.warning("Cannot add static shortcut item of type \(type)")
         }
         application.shortcutItems = dynamicShortcutItems
     }
