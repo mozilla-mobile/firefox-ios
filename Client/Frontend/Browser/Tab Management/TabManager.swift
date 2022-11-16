@@ -759,7 +759,15 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         let closedLastNormalTab = !tab.isPrivate && normalTabs.isEmpty
         let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
 
-        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
+        let viableTabs: [Tab]
+
+        if !tab.isPrivate, featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
+            // only use active tabs as viable tabs
+            // we cannot use recentlyAccessedNormalTabs as this is filtering for sponsored and sorting tabs
+            viableTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
+        } else {
+            viableTabs = tab.isPrivate ? privateTabs : normalTabs
+        }
 
         if closedLastNormalTab {
             selectTab(addTab(), previous: tab)
