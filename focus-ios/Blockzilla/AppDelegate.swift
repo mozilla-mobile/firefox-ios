@@ -16,7 +16,7 @@ enum AppPhase {
     case willEnterForeground
     case didBecomeActive
     case willResignActive
-    case didEnterBackgroundkground
+    case didEnterBackground
     case willTerminate
 }
 
@@ -75,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 guard privacyProtectionWindow == nil else { return }
                 showPrivacyProtectionWindow()
 
-            case .didEnterBackgroundkground:
+            case .didEnterBackground:
                 authenticationManager.logout()
 
             case .notRunning, .willTerminate:
@@ -259,7 +259,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // session. This gets called every time the app goes to background but should not get
         // called for *temporary* interruptions such as an incoming phone call until the user
         // takes action and we are officially backgrounded.
-        appPhase = .didEnterBackgroundkground
+        appPhase = .didEnterBackground
         let orientation = UIDevice.current.orientation.isPortrait ? "Portrait" : "Landscape"
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])

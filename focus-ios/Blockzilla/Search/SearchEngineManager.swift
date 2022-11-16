@@ -27,6 +27,7 @@ class SearchEngineManager {
 
         set {
             prefs.set(newValue.name, forKey: SearchEngineManager.prefKeyEngine)
+            sortEnginesAlphabetically()
             setActiveEngineAsFirstElement()
         }
     }
