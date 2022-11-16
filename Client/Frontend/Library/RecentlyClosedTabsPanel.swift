@@ -6,7 +6,6 @@ import UIKit
 import Shared
 import Storage
 
-
 private struct RecentlyClosedPanelUX {
     static let IconSize = CGSize(width: 23, height: 23)
     static let IconBorderColor = UIColor.Photon.Grey30
