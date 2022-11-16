@@ -30,25 +30,17 @@ enum ReaderModeTheme: String {
     case dark = "dark"
     case sepia = "sepia"
 
-    // TODO: Yoana Make it more readable
     static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
-        // If there is no reader theme provided than we default to light theme
-        let readerTheme = theme ?? .light
-        // Get current Firefox theme (Dark vs Normal)
-        // Normal means light theme. This is the overall theme used
-        // by Firefox iOS app
-        let appWideTheme = LegacyThemeManager.instance.currentName
-        // We check for 3 basic themes we have Light / Dark / Sepia
-        // Theme: Dark - app-wide dark overrides all
-        if appWideTheme == .dark {
+        // Get App theme (Dark vs Normal) Normal means light theme.
+        // If appTheme is Dark it will return .dark ReaderModeTheme
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        if themeManager.currentTheme.type == .dark {
             return .dark
-            // Theme: Sepia - special case for when the theme is sepia.
-            // For this we only check the them supplied and not the app wide theme
-        } else if readerTheme == .sepia {
-            return .sepia
         }
-        // Theme: Light - Default case for when there is no theme supplied i.e. nil and we revert to light
-        return readerTheme
+
+        // If AppTheme is Normal returns the selected reader mode theme
+        // defaulting to light if none is selected
+        return theme ?? .light
     }
 }
 
