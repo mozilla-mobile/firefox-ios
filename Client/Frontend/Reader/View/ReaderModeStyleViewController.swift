@@ -127,6 +127,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
             themeRow.heightAnchor.constraint(equalToConstant: ReaderModeStyleViewModel.RowHeight)
         ])
 
+        // These UIButtons represent the ReaderModeTheme (Light/Sepia/Dark)
+        // they are different from the App Theme
         themeButtons = [
             ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.light),
             ReaderModeThemeButton(readerModeTheme: ReaderModeTheme.sepia),

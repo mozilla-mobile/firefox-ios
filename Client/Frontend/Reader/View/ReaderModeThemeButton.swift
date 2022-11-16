@@ -29,6 +29,9 @@ class ReaderModeThemeButton: UIButton {
     }
 
     func applyTheme() {
+        //  This view doesn't follow the ThemeApplicable protocol. The view title and background is the
+        // same independently from the app theme, to accomplish this we create direct instances from
+        // LightTheme for (.light and sepia) and DarkTheme for (.dark)
         let theme: Theme = readerModeTheme == .dark ? DarkTheme() : LightTheme()
 
         switch readerModeTheme {
