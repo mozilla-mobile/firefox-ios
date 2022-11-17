@@ -117,7 +117,15 @@ extension NTPNewsViewModel: HomepageSectionHandler {
 
         let index = indexPath.row
         guard index >= 0, items.count > index else { return }
-        Analytics.shared.navigationOpenNews(items[index].trackingName)
-        homePanelDelegate?.homePanel(didSelectURL: items[index].targetUrl, visitType: .link, isGoogleTopSite: false)
+        let item = items[index]
+        homePanelDelegate?.homePanel(didSelectURL: item.targetUrl, visitType: .link, isGoogleTopSite: false)
+
+        if item.promo != nil {
+            Analytics.Label.Navigation(rawValue: item.trackingName).map {
+                Analytics.shared.promo(action: .click, for: $0)
+            }
+        } else {
+            Analytics.shared.navigationOpenNews(item.trackingName)
+        }
     }
 }

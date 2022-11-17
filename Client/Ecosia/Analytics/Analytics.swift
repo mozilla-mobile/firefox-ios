@@ -217,4 +217,12 @@ final class Analytics {
         toggle.map({ event.value = NSNumber(value: $0)})
         tracker.track(event)
     }
+
+    func promo(action: Action, for label: Label.Navigation) {
+        tracker
+            .track(Structured(category: Category.ntp.rawValue,
+                              action: action.rawValue)
+                .label(label.rawValue)
+                .property(Locale.current.regionCode ?? ""))
+    }
 }

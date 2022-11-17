@@ -28,7 +28,9 @@ extension Analytics {
             news,
             privacy,
             sendFeedback = "send_feedback",
-            terms
+            terms,
+            treecard,
+            treestore
         }
         
         enum Browser: String {
