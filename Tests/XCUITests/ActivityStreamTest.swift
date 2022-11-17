@@ -127,6 +127,11 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!], timeout: TIMEOUT)
         XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+        
+        app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].press(forDuration: 1)
+        selectOptionFromContextMenu(option: "Pin")
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
