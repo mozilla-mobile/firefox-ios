@@ -174,7 +174,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func getIsPinned(url: String, group: DispatchGroup) {
         group.enter()
-        profile.history.isPinnedTopSite(url).uponQueue(dataQueue) { result in
+        profile.pinnedSites.isPinnedTopSite(url).uponQueue(dataQueue) { result in
             self.isPinned = result.successValue ?? false
             group.leave()
         }
@@ -721,16 +721,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getAddShortcutAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AddToShortcutsActionTitle,
                                      iconString: ImageIdentifiers.addShortcut) { _ in
-            guard let url = self.selectedTab?.url?.displayURL,
-                  let sql = self.profile.history as? SQLiteHistory
-            else { return }
 
-            sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
-                guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
-                    return succeed()
-                }
-                return self.profile.history.addPinnedTopSite(site)
-            }.uponQueue(.main) { result in
+            guard let url = self.selectedTab?.url?.displayURL else { return }
+
+            self.profile.pinnedSites.addPinnedTopSite(Site(url: url.absoluteString, title: self.selectedTab?.title ?? "")).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
                 self.delegate?.showToast(message: .AppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage, url: nil)
             }
@@ -742,15 +736,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getRemoveShortcutAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.RemoveFromShortcuts,
                                      iconString: ImageIdentifiers.removeFromShortcut) { _ in
-            guard let url = self.selectedTab?.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
-            sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
-                guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
-                    return succeed()
-                }
-
-                return self.profile.history.removeFromPinnedTopSites(site)
-            }.uponQueue(.main) { result in
+            guard let url = self.selectedTab?.url?.displayURL else { return }
+            self.profile.pinnedSites.removeFromPinnedTopSites(Site(url: url.absoluteString, title: self.selectedTab?.title ?? "")).uponQueue(.main) { result in
                 if result.isSuccess {
                     self.delegate?.showToast(message: .AppMenu.RemovePinFromShortcutsConfirmMessage, toastAction: .removePinPage, url: nil)
                 }

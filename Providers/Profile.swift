@@ -79,15 +79,13 @@ class CommandStoringSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: AnyObject {
-    typealias HistoryFetcher = BrowserHistory & SyncableHistory & ResettableSyncStorage
 
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: HistoryFetcher { get }
-    var recommendations: HistoryRecommendations { get }
+    var pinnedSites: PinnedSites { get }
     var favicons: Favicons { get }
     var logins: RustLogins { get }
     var certStore: CertStore { get }
@@ -375,8 +373,6 @@ open class BrowserProfile: Profile {
                     }
                 }
             }
-
-            history.setTopSitesNeedsInvalidation()
         } else {
             log.debug("Ignoring navigation.")
         }
@@ -408,19 +404,19 @@ open class BrowserProfile: Profile {
     }
 
     lazy var queue: TabQueue = {
-        withExtendedLifetime(self.history) {
+        withExtendedLifetime(self.legacyPlaces) {
             return SQLiteQueue(db: self.database)
         }
     }()
 
     /**
-     * Favicons, history, and tabs are all stored in one intermeshed
+     * Favicons, and pinned sites, and are stored in one intermeshed
      * collection of tables.
      *
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var legacyPlaces: Favicons & Profile.HistoryFetcher & HistoryRecommendations  = {
+    private lazy var legacyPlaces: Favicons & PinnedSites  = {
         return SQLiteHistory(database: self.database, prefs: self.prefs)
     }()
 
@@ -428,7 +424,7 @@ open class BrowserProfile: Profile {
         return self.legacyPlaces
     }
 
-    var history: Profile.HistoryFetcher {
+    var pinnedSites: PinnedSites {
         return self.legacyPlaces
     }
 
@@ -436,9 +432,6 @@ open class BrowserProfile: Profile {
         return SQLiteMetadata(db: self.database)
     }()
 
-    var recommendations: HistoryRecommendations {
-        return self.legacyPlaces
-    }
 
     lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
     lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
@@ -546,7 +539,8 @@ open class BrowserProfile: Profile {
     }
 
     public func cleanupHistoryIfNeeded() {
-        recommendations.cleanupHistoryIfNeeded()
+        // TODO: we should run this on interval!
+        self.places.runMaintenance()
     }
 
     public func sendQueuedSyncEvents() {

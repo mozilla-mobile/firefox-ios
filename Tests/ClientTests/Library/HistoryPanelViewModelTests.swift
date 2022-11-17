@@ -238,7 +238,6 @@ class HistoryPanelViewModelTests: XCTestCase {
 
     private func addSiteVisit(_ profile: MockProfile, url: String, title: String) {
         let site = Site(url: url, title: title)
-        let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
         let result = profile.places.applyObservation(visitObservation: VisitObservation(url: url, title: title, visitType: VisitTransition.link))
 
         XCTAssertEqual(true, result.value.isSuccess, "Site added: \(url).")

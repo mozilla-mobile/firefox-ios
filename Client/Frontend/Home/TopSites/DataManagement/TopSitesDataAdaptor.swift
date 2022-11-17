@@ -285,7 +285,8 @@ extension TopSitesDataAdaptorImplementation: Notifiable, Loggable {
                 .PrivateDataClearedHistory,
                 .FirefoxAccountChanged,
                 .TopSitesUpdated:
-            topSiteHistoryManager.refreshIfNeeded(forceRefresh: true)
+            Logger.browserLogger.info("[DEBUG]: Refreshing top sites!")
+            self.didInvalidateDataSource(forceRefresh: true)
         default:
             browserLog.warning("Received unexpected notification \(notification.name)")
         }

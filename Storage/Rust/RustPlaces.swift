@@ -574,10 +574,22 @@ extension RustPlaces {
         }
     }
 
-    public func getTopFrecentSiteInfos(limit: Int, thresholdOption: FrecencyThresholdOption) -> Deferred<Maybe<[TopFrecentSiteInfo]>> {
-        return withReader { connection in
+    public func getTopFrecentSiteInfos(limit: Int, thresholdOption: FrecencyThresholdOption) -> Deferred<Maybe<[Site]>> {
+        let deferred: Deferred<Maybe<[TopFrecentSiteInfo]>> = withReader { connection in
             return try connection.getTopFrecentSiteInfos(numItems: Int32(limit), thresholdOption: thresholdOption)
         }
+        
+        let ret = Deferred<Maybe<[Site]>>()
+        deferred.upon { result in
+            guard let result = result.successValue else {
+                ret.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
+                return
+            }
+            ret.fill(Maybe(success: result.map { info in
+                return Site(url: info.url, title: info.title ?? "")
+            }))
+        }
+        return ret
     }
 
     public func getSitesWithBound(limit: Int, offset: Int, excludedTypes: VisitTransitionSet) -> Deferred<Maybe<Cursor<Site>>> {

@@ -9,10 +9,22 @@ import Shared
 import XCTest
 
 class TopSitesHelperTests: XCTestCase {
+    var places: RustPlaces
+    override func setUp() {
+        let files = MockFiles()
+
+        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testplaces.db").path
+        try? files.remove("testplaces.db")
+
+        places = RustPlaces(databasePath: databasePath)
+        _ = places.reopenIfClosed()
+    }
+
     func testGetTopSites_withError_completesWithZeroSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
 
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: BrowserHistoryMock(),
+        let subject = TopSitesProviderImplementation(placesFetcher: RustPlaces(databasePath: "database"),
+                                                     pinnedSiteFetcher: BrowserHistoryMock(),
                                                      prefs: MockProfilePrefs())
 
         subject.getTopSites { sites in
