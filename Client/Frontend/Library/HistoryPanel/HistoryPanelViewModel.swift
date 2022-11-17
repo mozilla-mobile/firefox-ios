@@ -313,7 +313,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
                 guard let result = result.successValue else {
                     // It's possible for our query to be interrupted
                     // either by triggering the interrupt or by the user leaving putting the application
-                    // in tha background
+                    // in the background
                     // we should make sure we re-set the fetching flag
                     self.isFetchInProgress = false
                     ret.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
