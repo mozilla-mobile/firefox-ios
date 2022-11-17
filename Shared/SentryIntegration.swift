@@ -195,8 +195,8 @@ public class SentryIntegration: SentryProtocol {
          Release    n      n       y
      */
     private func shouldSendEventFor(_ severity: SentryLevel) -> Bool {
-        let shouldSendRelease = AppConstants.BuildChannel == .release && severity.rawValue >= SentryLevel.warning.rawValue
-        let shouldSendBeta = AppConstants.BuildChannel == .beta && severity.rawValue >= SentryLevel.info.rawValue
+        let shouldSendRelease = AppConstants.BuildChannel == .release && severity.rawValue >= SentryLevel.fatal.rawValue
+        let shouldSendBeta = AppConstants.BuildChannel == .beta && severity.rawValue >= SentryLevel.fatal.rawValue
 
         return shouldSendBeta || shouldSendRelease
     }
