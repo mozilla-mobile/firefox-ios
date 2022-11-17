@@ -303,11 +303,22 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
                 return deferMaybe(result)
             }
         case .new:
-            return profile.places.getVisitPageWithBound(
+            let deferred = profile.places.getVisitPageWithBound(
                 limit: queryFetchLimit,
                 offset: currentFetchOffset,
                 excludedTypes: VisitTransitionSet(0)
-            ) >>== { result in
+            )
+            let ret = Deferred<Maybe<Cursor<Site>>>()
+            deferred.upon { result in
+                guard let result = result.successValue else {
+                    // It's possible for our query to be interrupted
+                    // either by triggering the interrupt or by the user leaving putting the application
+                    // in the background
+                    // we should make sure we re-set the fetching flag
+                    self.isFetchInProgress = false
+                    ret.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
+                    return
+                }
                 DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
                     self.isFetchInProgress = false
                     self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
@@ -325,8 +336,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
                     site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000)
                     return site
                 }.uniqued()
-                return deferMaybe(ArrayCursor(data: sites))
+                ret.fill(Maybe(success: ArrayCursor(data: sites)))
             }
+            return ret
         }
     }
 
