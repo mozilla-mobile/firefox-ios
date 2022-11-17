@@ -169,6 +169,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: false,
@@ -188,6 +189,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -210,6 +212,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -231,6 +234,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .compact
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -252,6 +256,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .compact
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -273,6 +278,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -294,6 +300,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -315,6 +322,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -337,6 +345,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .compact
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -358,6 +367,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -380,6 +390,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .compact
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -400,6 +411,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .compact
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -420,6 +432,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
@@ -436,6 +449,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let tab2 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         let tab3 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.recentTabs = [tab1, tab2, tab3]
+        subject.didLoadNewData()
 
         // Start in portrait
         let portraitTrait = MockTraitCollection()
@@ -482,6 +496,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     func testRefreshData_noData() {
         let subject = createSubject()
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: MockTraitCollection(), size: size)
 
@@ -493,6 +508,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.recentTabs = [tab1]
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: MockTraitCollection(), size: size)
 
@@ -503,6 +519,8 @@ class JumpBackInViewModelTests: XCTestCase {
     func testRefreshData_syncedTab() {
         let subject = createSubject()
         adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
+
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: MockTraitCollection(), size: size)
 
@@ -524,6 +542,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
 
@@ -545,6 +564,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
 
@@ -567,6 +587,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .compact
         trait.overridenVerticalSizeClass = .regular
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
 
@@ -593,6 +614,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .compact
 
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
 
@@ -619,7 +641,8 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .compact
-
+        
+        subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
 

@@ -268,6 +268,11 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             tab.applyTheme()
         }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .tab)
+
+        // Note: we setup last session private case as the session is tied to user's selected
+        // tab but there are times when tab manager isn't available and we need to know
+        // users's last state (Private vs Regular)
+        UserDefaults.standard.set(selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
     }
 
     func getMostRecentHomepageTab() -> Tab? {
@@ -754,7 +759,15 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         let closedLastNormalTab = !tab.isPrivate && normalTabs.isEmpty
         let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
 
-        let viableTabs: [Tab] = tab.isPrivate ? privateTabs : normalTabs
+        let viableTabs: [Tab]
+
+        if !tab.isPrivate, featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
+            // only use active tabs as viable tabs
+            // we cannot use recentlyAccessedNormalTabs as this is filtering for sponsored and sorting tabs
+            viableTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
+        } else {
+            viableTabs = tab.isPrivate ? privateTabs : normalTabs
+        }
 
         if closedLastNormalTab {
             selectTab(addTab(), previous: tab)

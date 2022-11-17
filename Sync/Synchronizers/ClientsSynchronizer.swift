@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 import Storage
-import XCGLogger
 import SwiftyJSON
 
 private let log = Logger.syncLogger

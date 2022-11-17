@@ -133,8 +133,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         // Only show a header if the firefox browser logo isn't showing
         let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
         var textColor: UIColor?
-        if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-           wallpaperVersion == .v1 {
+        if wallpaperManager.featureAvailable {
             textColor = wallpaperManager.currentWallpaper.textColor
         }
 
@@ -233,8 +232,7 @@ extension TopSitesViewModel: HomepageSectionHandler {
             let favicon = topSitesDataAdaptor.getFaviconImage(forSite: contentItem.site)
             var textColor: UIColor?
 
-            if let wallpaperVersion: WallpaperVersion = featureFlags.getCustomState(for: .wallpaperVersion),
-               wallpaperVersion == .v1 {
+            if wallpaperManager.featureAvailable {
                 textColor = wallpaperManager.currentWallpaper.textColor
             }
 

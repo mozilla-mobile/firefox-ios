@@ -6,7 +6,6 @@ import Shared
 import Account
 import Storage
 @testable import Sync
-import XCGLogger
 
 import XCTest
 import SwiftyJSON

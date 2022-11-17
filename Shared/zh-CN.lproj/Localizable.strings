@@ -395,7 +395,7 @@
 "fxa.signin.qr-link-instruction" = "在计算机上使用 Firefox 打开 firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "扫描就绪";
+"fxa.signin.ready-to-scan" = "立即扫码";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "改用电子邮件";
@@ -546,6 +546,9 @@
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "查找下一个";
+
+/* A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. */
+"Keyboard.Shortcuts.RefreshWithoutCache.v108" = "忽略缓存重新加载";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "书签";
@@ -797,10 +800,10 @@
 "Menu.ReadingList.Label" = "阅读列表";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
-"Menu.ReloadWithoutTrackingProtection.Title" = "重新加载，不使用跟踪保护";
+"Menu.ReloadWithoutTrackingProtection.Title" = "关闭跟踪保护并重新加载";
 
 /* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
-"Menu.ReloadWithTrackingProtection.Title" = "重新加载并附有跟踪保护";
+"Menu.ReloadWithTrackingProtection.Title" = "开启跟踪保护并重新加载";
 
 /* Toast displayed to the user after a bookmark has been removed. */
 "Menu.RemoveBookmark.Confirm" = "书签已移除";

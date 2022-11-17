@@ -7,8 +7,6 @@ import Shared
 import SnapKit
 import Storage
 
-private let log = Logger.browserLogger
-
 class CustomSearchError: MaybeErrorType {
 
     enum Reason {

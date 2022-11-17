@@ -683,6 +683,55 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
     }
 }
 
+class UseNewHistoryApiOption: HiddenSetting {
+    let profile: Profile
+
+    override init(settings: SettingsTableViewController) {
+        profile = settings.profile
+        super.init(settings: settings)
+    }
+
+    override var title: NSAttributedString? {
+        switch profile.historyApiConfiguration {
+        case .old:
+            return NSAttributedString(string: "Migrate and Use Places History Apis")
+        case .new:
+            return NSAttributedString(string: "Use Legacy History Apis")
+        }
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let browserProfile = profile as? BrowserProfile
+        switch profile.historyApiConfiguration {
+        case .old:
+            Logger.browserLogger.info("Setting the history configuration to new")
+            // We run the migration, then we override the profile to use the new apis
+            Logger.browserLogger.info("Deleting history to prepare for migration")
+            let deferred = browserProfile?.places.deleteEverythingHistory()
+            deferred?.upon { _ in
+                Logger.browserLogger.info("History deleted, about to migrate")
+                browserProfile?.migrateHistoryToPlaces(
+                    migrationConfig: .real,
+                    callback: { result in
+                        Logger.browserLogger.info("Successful Migration took \(result.totalDuration / 1000) seconds")
+
+                    }, errCallback: { _ in
+                        Logger.browserLogger.debug("Failed migration of history")
+                    }
+                )
+                browserProfile?.historyApiConfiguration = .new
+                // We set a user default so users with new configuration never go back
+                UserDefaults.standard.setValue(true, forKey: PrefsKeys.NewPlacesAPIDefaultKey)
+            }
+        case .new:
+            Logger.browserLogger.info("Setting the history configuration to old")
+            browserProfile?.historyApiConfiguration = .old
+            // We set a user default so users will use the old configuration
+            UserDefaults.standard.setValue(false, forKey: PrefsKeys.NewPlacesAPIDefaultKey)
+        }
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
@@ -869,20 +918,20 @@ class StudiesToggleSetting: BoolSetting {
 
     override var accessibilityIdentifier: String? { return "StudiesToggle" }
 
-        override var url: URL? {
-            return SupportUtils.URLForTopic("ios-studies")
-        }
+    override var url: URL? {
+        return SupportUtils.URLForTopic("ios-studies")
+    }
 
-        override func onClick(_ navigationController: UINavigationController?) {
-            setUpAndPushSettingsContentViewController(navigationController, self.url)
-        }
+    override func onClick(_ navigationController: UINavigationController?) {
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
+    }
 }
 
 // Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?, theme: Theme) {
         super.init(title: NSAttributedString(string: .AppSettingsHelp, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
-            delegate: delegate)
+                   delegate: delegate)
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -980,7 +1029,7 @@ class LoginsSetting: Setting {
                             navController.viewControllers.removeAll { viewController in
                                 viewController == loginOnboardingViewController
                             }
-                    }
+                        }
                 }
 
                 navigationController?.pushViewController(loginOnboardingViewController, animated: true)
@@ -994,7 +1043,7 @@ class LoginsSetting: Setting {
                     webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
                         guard let loginsVC = loginsVC else { return }
                         navController.pushViewController(loginsVC, animated: true)
-                }
+                    }
             }
         } else {
             let viewController = DevicePasscodeRequiredViewController()

@@ -5,7 +5,6 @@
 import Foundation
 import MozillaAppServices
 import Shared
-import XCGLogger
 
 private let log = Logger.browserLogger
 private let nimbusAppName = "firefox_ios"

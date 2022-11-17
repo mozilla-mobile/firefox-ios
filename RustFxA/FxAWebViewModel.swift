@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import WebKit
 import Foundation
@@ -50,11 +50,11 @@ class FxAWebViewModel {
     }
 
     /**
-    init() FxAWebViewModel.
-    - parameter pageType: Specify login flow or settings page if already logged in.
-    - parameter profile: a Profile.
-    - parameter deepLinkParams: url parameters that originate from a deep link
-    */
+     init() FxAWebViewModel.
+     - parameter pageType: Specify login flow or settings page if already logged in.
+     - parameter profile: a Profile.
+     - parameter deepLinkParams: url parameters that originate from a deep link
+     */
     required init(pageType: FxAPageType, profile: Profile, deepLinkParams: FxALaunchParams?) {
         self.pageType = pageType
         self.profile = profile
@@ -200,12 +200,12 @@ extension FxAWebViewModel {
         let typeId = "account_updates"
         let data: String
         switch pageType {
-            case .settingsPage:
-                // Both email and uid are required at this time to properly link the FxA settings session
-                let email = fxa.accountProfile()?.email ?? ""
-                let uid = fxa.accountProfile()?.uid ?? ""
-                let token = (try? fxa.getSessionToken().get()) ?? ""
-                data = """
+        case .settingsPage:
+            // Both email and uid are required at this time to properly link the FxA settings session
+            let email = fxa.accountProfile()?.email ?? ""
+            let uid = fxa.accountProfile()?.uid ?? ""
+            let token = (try? fxa.getSessionToken().get()) ?? ""
+            data = """
                 {
                     capabilities: {},
                     signedInUser: {
@@ -216,8 +216,8 @@ extension FxAWebViewModel {
                     }
                 }
                 """
-            case .emailLoginFlow, .qrCode:
-                data = """
+        case .emailLoginFlow, .qrCode:
+            data = """
                     { capabilities:
                         { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
                     }
