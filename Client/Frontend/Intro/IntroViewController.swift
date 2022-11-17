@@ -6,13 +6,15 @@ import Foundation
 import UIKit
 import Shared
 
-class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
+class IntroViewController: UIViewController, OnboardingViewControllerProtocol, Themeable {
 
     private var viewModel: IntroViewModel
     private let profile: Profile
     private var onboardingCards = [OnboardingCardViewController]()
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     var didFinishFlow: (() -> Void)?
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     struct UX {
         static let closeButtonSize: CGFloat = 30
@@ -39,21 +41,24 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
     private lazy var pageControl: UIPageControl = .build { pageControl in
         pageControl.currentPage = 0
         pageControl.numberOfPages = self.viewModel.enabledCards.count
-        pageControl.currentPageIndicatorTintColor = UIColor.Photon.Blue50
-        pageControl.pageIndicatorTintColor = UIColor.Photon.LightGrey40
+        pageControl.currentPageIndicatorTintColor = self.themeManager.currentTheme.colors.actionPrimary
+        pageControl.pageIndicatorTintColor = self.themeManager.currentTheme.colors.actionSecondary
         pageControl.isUserInteractionEnabled = false
         pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.pageControl
     }
 
     // MARK: Initializer
-    init(viewModel: IntroViewModel, profile: Profile) {
+    init(viewModel: IntroViewModel,
+         profile: Profile,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.profile = profile
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         setupLayout()
-        setupNotifications(forObserver: self,
-                                   observing: [.DisplayThemeChanged])
         applyTheme()
     }
 
@@ -61,13 +66,10 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        notificationCenter.removeObserver(self)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        listenForThemeChange()
         setupPageController()
     }
 
@@ -144,7 +146,8 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
 
 // MARK: UIPageViewControllerDataSource & UIPageViewControllerDelegate
 extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
 
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
@@ -155,7 +158,8 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
         return getNextOnboardingCard(index: index, goForward: false)
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
 
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
@@ -202,16 +206,15 @@ extension IntroViewController: OnboardingCardDelegate {
                                   flowType: FxAPageType = .emailLoginFlow,
                                   referringPage: ReferringPage = .onboarding) {
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
-                                                                                      flowType: flowType,
-                                                                                      referringPage: referringPage,
-                                                                                      profile: profile)
+                                                                                       flowType: flowType,
+                                                                                       referringPage: referringPage,
+                                                                                       profile: profile)
         let controller: DismissableNavigationViewController
         let buttonItem = UIBarButtonItem(title: .SettingsSearchDoneButton,
                                          style: .plain,
                                          target: self,
                                          action: #selector(dismissSignInViewController))
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        buttonItem.tintColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = {
@@ -241,25 +244,12 @@ extension IntroViewController {
         // presented version happily rotates with the iPad orientation.
         return .portrait
     }
-}
 
-// MARK: - NotificationThemeable and Notifiable
-extension IntroViewController: NotificationThemeable, Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default:
-            break
-        }
-    }
-
+    // MARK: - Themable
     func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-
-        let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
-        pageControl.currentPageIndicatorTintColor = indicatorColor
-        view.backgroundColor = LegacyThemeManager.instance.current.onboarding.backgroundColor
+        pageControl.currentPageIndicatorTintColor = themeManager.currentTheme.colors.actionPrimary
+        pageControl.pageIndicatorTintColor = themeManager.currentTheme.colors.actionSecondary
+        view.backgroundColor = themeManager.currentTheme.colors.layer2
 
         onboardingCards.forEach { cardViewController in
             cardViewController.applyTheme()
