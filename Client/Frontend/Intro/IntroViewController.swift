@@ -77,13 +77,8 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol {
         var cardViewController: OnboardingCardViewController
         for cardType in viewModel.enabledCards {
             if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
-                if cardType == .wallpapers {
-                    cardViewController = WallpaperCardViewController(viewModel: viewModel,
-                                                                     delegate: self)
-                } else {
-                    cardViewController = OnboardingCardViewController(viewModel: viewModel,
-                                                                      delegate: self)
-                }
+                cardViewController = OnboardingCardViewController(viewModel: viewModel,
+                                                                  delegate: self)
                 onboardingCards.append(cardViewController)
             }
         }
@@ -185,7 +180,7 @@ extension IntroViewController: OnboardingCardDelegate {
 
     func primaryAction(_ cardType: IntroViewModel.InformationCards) {
         switch cardType {
-        case .welcome, .wallpapers:
+        case .welcome:
             moveToNextPage(cardType: cardType)
         case .signSync:
             presentSignToSync()
