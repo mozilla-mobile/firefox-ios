@@ -13,11 +13,11 @@ stages:
   stage_2:
     workflows:
     - build_and_test_1_SmokeTest2: {}
-    - build_and_test_2_SmokeTest: {}
-    - build_and_test_3_SmokeTest3: {}
-    - build_and_test_4_SmokeTest4: {}
-    - build_and_test_5_UnitTest: {}
-    - just_build_fennec_to_get_warnings: {}
+    #- build_and_test_2_SmokeTest: {}
+    #- build_and_test_3_SmokeTest3: {}
+    #- build_and_test_4_SmokeTest4: {}
+    #- build_and_test_5_UnitTest: {}
+    #- just_build_fennec_to_get_warnings: {}
 workflows:
   configure_build:
     before_run:
@@ -110,13 +110,17 @@ workflows:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
   build_and_test_1_SmokeTest2:
+    before_run:
+    - Decission_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: {{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: {{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}
         title: Unzip
         inputs:
         - content: |
@@ -129,6 +133,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: {{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}
         title: Test without Building
         inputs:
         - content: |
@@ -143,10 +148,12 @@ workflows:
 
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building
     - custom-test-results-export@0:
+        run_if: {{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: Smoketest2
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: {{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}
   build_and_test_2_SmokeTest:
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
@@ -585,6 +592,28 @@ workflows:
                 exit 1
             fi
         is_always_run: true
+  Decission_to_run_UI_Tests:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            filesChanged=`git diff --name-only`
+
+            doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*'
+
+            echo $filesChanged
+
+            if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
+            then
+                echo "Running UI Tests"
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests
+            else
+                echo "Not Running UI Tests"
+            fi
+
   NewXcodeVersions:
     steps:
     - script@1:
