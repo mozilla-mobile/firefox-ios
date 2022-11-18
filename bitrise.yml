@@ -605,15 +605,16 @@ workflows:
             COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"`
             echo $COMMIT_ON_MAIN_ORIGIN
 
-            echo "Commit on main checkout detach"
-            COMMIT_ON_MAIN_ORIGIN_2=`git log -n 1 $BITRISE_GIT_BRANCH --pretty=format:"%H"`
-            echo $COMMIT_ON_MAIN_ORIGIN_2
+            echo "Commit on detach"
+            COMMIT_ON_MAIN_ORIGIN_DET=`git log -n 1 fork/build-mte-280-run-selective-builds --pretty=format:"%H"`
+            echo $COMMIT_ON_MAIN_ORIGIN_DET
 
             echo "Files changed with origin"
-            echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+            echo `git diff --name-only fork/build-mte-280-run-selective-builds $COMMIT_ON_MAIN_ORIGIN`
 
             echo "Commit on main branch"
-            COMMIT_ON_MAIN_PR=`git log -n 2 $BITRISE_GIT_BRANCH --pretty=format:"%H" | tail -n 1`
+            echo $GIT_CLONE_COMMIT_HASH
+            COMMIT_ON_MAIN_PR=`git log -n 2 $GIT_CLONE_COMMIT_HASH --pretty=format:"%H" | tail -n 1`
             echo $COMMIT_ON_MAIN_PR
 
             filesChanged=""
