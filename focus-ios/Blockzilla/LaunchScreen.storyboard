@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,7 +24,7 @@
                                 <rect key="frame" x="44" y="417.5" width="326" height="61"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" name="LaunchScreenBackground"/>
+                        <color key="backgroundColor" name="LaunchBackground"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="fxV-Ed-5Tp" secondAttribute="trailing" constant="44" id="AaX-BF-44t"/>
                             <constraint firstItem="fxV-Ed-5Tp" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="44" id="NEP-cX-cX1"/>
@@ -40,8 +40,8 @@
     </scenes>
     <resources>
         <image name="img_focus_launchscreen" width="292.5" height="61"/>
-        <namedColor name="LaunchScreenBackground">
-            <color red="0.90588235294117647" green="0.87450980392156863" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="LaunchBackground">
+            <color red="0.90600001811981201" green="0.875" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
