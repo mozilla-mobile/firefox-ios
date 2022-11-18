@@ -90,6 +90,6 @@ class TopSitesDimensionImplementation: TopSitesDimension {
             numberOfTiles += 1
             availableWidth = availableWidth - cellWidth - TopSitesViewModel.UX.cardSpacing
         }
-        return numberOfTiles
+        return numberOfTiles < TopSitesViewModel.UX.minCards ? TopSitesViewModel.UX.minCards : numberOfTiles
     }
 }
