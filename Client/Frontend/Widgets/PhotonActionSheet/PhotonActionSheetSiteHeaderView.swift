@@ -5,7 +5,6 @@
 import UIKit
 import Storage
 
-// MARK: - PhotonActionSheetSiteHeaderView
 class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
 
     struct UX {
@@ -13,58 +12,32 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         static let verticalPadding: CGFloat = 2
     }
 
-    lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
-        titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 2
-        return titleLabel
-    }()
+    lazy var labelContainerView: UIView = .build { _ in }
 
-    lazy var descriptionLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
-        titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 1
-        return titleLabel
-    }()
+    lazy var titleLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
+        label.textAlignment = .left
+        label.numberOfLines = 2
+    }
 
-    lazy var siteImageView: UIImageView = {
-        let siteImageView = UIImageView()
-        siteImageView.contentMode = .center
-        siteImageView.clipsToBounds = true
-        siteImageView.layer.cornerRadius = PhotonActionSheet.UX.CornerRadius
-        siteImageView.layer.borderColor = PhotonActionSheet.UX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = PhotonActionSheet.UX.BorderWidth
-        return siteImageView
-    }()
+    lazy var descriptionLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
+        label.textAlignment = .left
+        label.numberOfLines = 1
+    }
+
+    lazy var siteImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .center
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = PhotonActionSheet.UX.CornerRadius
+        imageView.layer.borderColor = PhotonActionSheet.UX.BorderColor.cgColor
+        imageView.layer.borderWidth = PhotonActionSheet.UX.BorderWidth
+    }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-
-        self.backgroundView = UIView()
-        self.backgroundView?.backgroundColor = .clear
-        contentView.addSubview(siteImageView)
-
-        siteImageView.snp.remakeConstraints { make in
-            make.top.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.UX.padding)
-            make.centerY.equalTo(contentView)
-            make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.UX.padding)
-            make.size.equalTo(PhotonActionSheet.UX.SiteImageViewSize)
-        }
-
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
-        stackView.spacing = PhotonActionSheetSiteHeaderView.UX.verticalPadding
-        stackView.alignment = .leading
-        stackView.axis = .vertical
-
-        contentView.addSubview(stackView)
-
-        stackView.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetSiteHeaderView.UX.padding)
-            make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.UX.padding)
-            make.centerY.equalTo(siteImageView.snp.centerY)
-        }
+        translatesAutoresizingMaskIntoConstraints = false
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -96,5 +69,44 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         self.titleLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
         self.descriptionLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
 
+    }
+
+    private func setupLayout() {
+        backgroundView = UIView()
+        backgroundView?.backgroundColor = .clear
+        contentView.addSubview(siteImageView)
+
+        labelContainerView.addSubview(titleLabel)
+        labelContainerView.addSubview(descriptionLabel)
+        contentView.addSubview(labelContainerView)
+
+        let padding = PhotonActionSheetSiteHeaderView.UX.padding
+
+        NSLayoutConstraint.activate([
+            siteImageView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: padding),
+            siteImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            siteImageView.widthAnchor.constraint(equalToConstant: PhotonActionSheet.UX.SiteImageViewSize),
+            siteImageView.heightAnchor.constraint(equalToConstant: PhotonActionSheet.UX.SiteImageViewSize),
+            siteImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -padding),
+            siteImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+
+            labelContainerView.leadingAnchor.constraint(equalTo: siteImageView.trailingAnchor, constant: padding),
+            labelContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            labelContainerView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: padding),
+            labelContainerView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
+                                                       constant: -padding),
+            labelContainerView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+
+            titleLabel.leadingAnchor.constraint(equalTo: labelContainerView.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: labelContainerView.trailingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: labelContainerView.topAnchor),
+
+            descriptionLabel.leadingAnchor.constraint(equalTo: labelContainerView.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: labelContainerView.trailingAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                                  constant: PhotonActionSheetSiteHeaderView.UX.verticalPadding),
+            descriptionLabel.bottomAnchor.constraint(equalTo: labelContainerView.bottomAnchor),
+
+        ])
     }
 }
