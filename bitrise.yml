@@ -601,8 +601,6 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
-            git log
-
             echo "Commit on origin/main"
             COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"`
             echo $COMMIT_ON_MAIN_ORIGIN
