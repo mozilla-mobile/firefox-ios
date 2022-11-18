@@ -213,8 +213,10 @@ final class Analytics {
     func menuClick(label: String, toggle: Bool? = nil) {
         let event = Structured(category: Category.menu.rawValue,
                                action: Action.click.rawValue)
-                 .label(label)
-        toggle.map({ event.value = NSNumber(value: $0)})
+            .label(label)
+        toggle.map {
+            event.value = .init(value: $0)
+        }
         tracker.track(event)
     }
 

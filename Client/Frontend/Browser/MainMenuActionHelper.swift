@@ -276,8 +276,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             iconString: "inviteFriends",
             isNew: User.shared.referralsEntryPointIsNew) { [weak self] action in
                 action.isNew = false
-                User.shared.referralsEntryPointUsed()
                 self?.delegate?.showReferrals()
+                User.shared.referralsEntryPointUsed()
+                Analytics.shared.menuClick(label: "invitations")
         }.items
     }
     
