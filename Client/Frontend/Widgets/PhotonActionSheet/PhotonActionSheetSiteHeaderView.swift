@@ -7,8 +7,11 @@ import Storage
 
 // MARK: - PhotonActionSheetSiteHeaderView
 class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
-    static let Padding: CGFloat = 12
-    static let VerticalPadding: CGFloat = 2
+
+    struct UX {
+        static let padding: CGFloat = 12
+        static let verticalPadding: CGFloat = 2
+    }
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -44,22 +47,22 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(siteImageView)
 
         siteImageView.snp.remakeConstraints { make in
-            make.top.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
+            make.top.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.UX.padding)
             make.centerY.equalTo(contentView)
-            make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
+            make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.UX.padding)
             make.size.equalTo(PhotonActionSheet.UX.SiteImageViewSize)
         }
 
         let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
-        stackView.spacing = PhotonActionSheetSiteHeaderView.VerticalPadding
+        stackView.spacing = PhotonActionSheetSiteHeaderView.UX.verticalPadding
         stackView.alignment = .leading
         stackView.axis = .vertical
 
         contentView.addSubview(stackView)
 
         stackView.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetSiteHeaderView.Padding)
-            make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.Padding)
+            make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetSiteHeaderView.UX.padding)
+            make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.UX.padding)
             make.centerY.equalTo(siteImageView.snp.centerY)
         }
     }
@@ -95,4 +98,3 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
 
     }
 }
-
