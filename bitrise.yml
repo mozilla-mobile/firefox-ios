@@ -24,6 +24,7 @@ workflows:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
+    - Decission_to_run_UI_Tests
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -600,7 +601,7 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
-            filesChanged='git diff --name-only'
+            filesChanged=`git diff --name-only`
 
             doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*'
 
