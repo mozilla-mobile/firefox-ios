@@ -61,7 +61,11 @@ class ClipBoardTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         app.textFields["address"].press(forDuration: 3)
         app.menuItems["Paste"].tap()
-        waitForValueContains(app.textFields["address"], value: "www.example.com")
+        if processIsTranslatedStr() == m1Rosetta {
+            waitForNoExistence(app.menuItems["Paste"])
+        } else {
+            waitForValueContains(app.textFields["address"], value: "www.example.com")
+        }
     }
 
     // Smoketest
