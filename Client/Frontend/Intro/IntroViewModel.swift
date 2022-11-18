@@ -34,7 +34,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         var position: Int {
             switch self {
             case .welcome: return 0
-            case .signSync: return 2
+            case .signSync: return 1
             case .updateWelcome: return 0
             case .updateSignSync: return 1
             }
