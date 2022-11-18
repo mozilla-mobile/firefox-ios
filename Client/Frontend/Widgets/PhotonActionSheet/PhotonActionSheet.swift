@@ -29,7 +29,7 @@ class PhotonActionSheet: UIViewController {
         static let BorderWidth: CGFloat = 0.5
         static let BorderColor = UIColor.Photon.Grey30
         static let CornerRadius: CGFloat = 10
-        static let SiteImageViewSize = 52
+        static let SiteImageViewSize: CGFloat = 52
         static let IconSize = CGSize(width: 24, height: 24)
         static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
         static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
