@@ -5,7 +5,7 @@
 import XCTest
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
-let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "mozilla", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
+let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "Mozilla", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
 let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter"]
 
 class ActivityStreamTest: BaseTestCase {
@@ -107,7 +107,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
-        waitForExistence(TopSiteCellgroup, timeout: 10)
+        waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
         if iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
             app.textFields.element(boundBy: 0).tap()
@@ -124,9 +124,14 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!], timeout: TIMEOUT)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
+
+        app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].press(forDuration: 1)
+        selectOptionFromContextMenu(option: "Pin")
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -141,21 +146,23 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesShiftAfterRemovingOne() {
         // Check top site in first and second cell
-        let topSiteFirstCell = app.collectionViews.cells.element(boundBy: 1).label
-        let topSiteSecondCell = app.collectionViews.cells.element(boundBy: 2).label
+        let allTopSites = app.collectionViews.cells.matching(identifier: "TopSitesCell")
+        let topSiteFirstCell = allTopSites.element(boundBy: 0).label
+        let topSiteSecondCell = allTopSites.element(boundBy: 1).label
 
         XCTAssertTrue(topSiteFirstCell == allDefaultTopSites[0])
         XCTAssertTrue(topSiteSecondCell == allDefaultTopSites[1])
 
         // Remove facebook top sites, first cell
-        waitForExistence(app.collectionViews.cells.element(boundBy: 1), timeout: 3)
-        app.collectionViews.cells.element(boundBy: 1).press(forDuration: 1)
+        waitForExistence(allTopSites.element(boundBy: 0), timeout: TIMEOUT)
+        allTopSites.element(boundBy: 0).press(forDuration: 1)
         selectOptionFromContextMenu(option: "Remove")
 
         // Check top site in first cell now
-        waitForExistence(app.collectionViews.cells.element(boundBy: 1))
-        let topSiteCells = app.collectionViews.cells.staticTexts
-        let topSiteFirstCellAfter = app.collectionViews.cells.element(boundBy: 1).label
+        let updatedAllTopSites = app.collectionViews.cells.matching(identifier: "TopSitesCell")
+        waitForExistence(updatedAllTopSites.element(boundBy: 0))
+        let topSiteCells = updatedAllTopSites.staticTexts
+        let topSiteFirstCellAfter = updatedAllTopSites.element(boundBy: 0).label
         XCTAssertTrue(topSiteFirstCellAfter == topSiteCells[allDefaultTopSites[1]].label, "First top site does not match")
     }
 
@@ -227,6 +234,7 @@ class ActivityStreamTest: BaseTestCase {
     private func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells.otherElements[option].exists)
         app.tables["Context Menu"].cells.otherElements[option].tap()
+        waitForNoExistence(app.tables["Context Menu"])
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
@@ -242,11 +250,11 @@ class ActivityStreamTest: BaseTestCase {
         // can't scroll only to that area. Needs investigation
         if iPad() {
             XCUIDevice.shared.orientation = .landscapeLeft
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
             navigator.performAction(Action.CloseURLBarOpen)
 
-            waitForExistence(TopSiteCellgroup.cells["Apple"], timeout: 5)
-            TopSiteCellgroup.cells["Apple"].press(forDuration: 1)
+            waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
+            app.collectionViews.cells.staticTexts["Apple"].press(forDuration: 1)
 
             let contextMenuHeight = app.tables["Context Menu"].frame.size.height
             let parentViewHeight = app.otherElements["Action Sheet"].frame.size.height
