@@ -269,15 +269,16 @@ class OnboardingCardViewController: UIViewController, Themeable {
 
     // MARK: - Themable
     func applyTheme() {
-        titleLabel.textColor = themeManager.currentTheme.colors.textPrimary
-        descriptionLabel.textColor  = themeManager.currentTheme.colors.textPrimary
-        descriptionBoldLabel.textColor = themeManager.currentTheme.colors.textPrimary
+        let theme = themeManager.currentTheme
+        titleLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor  = theme.colors.textPrimary
+        descriptionBoldLabel.textColor = theme.colors.textPrimary
 
-        primaryButton.setTitleColor(themeManager.currentTheme.colors.textInverted, for: .normal)
-        primaryButton.backgroundColor = themeManager.currentTheme.colors.actionPrimary
+        primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        primaryButton.backgroundColor = theme.colors.actionPrimary
 
-        secondaryButton.setTitleColor(themeManager.currentTheme.colors.textSecondaryAction, for: .normal)
-        secondaryButton.backgroundColor = themeManager.currentTheme.colors.actionSecondary
+        secondaryButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
+        secondaryButton.backgroundColor = theme.colors.actionSecondary
         handleSecondaryButton()
     }
 }

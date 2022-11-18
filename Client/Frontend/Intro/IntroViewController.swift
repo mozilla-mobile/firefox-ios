@@ -245,9 +245,10 @@ extension IntroViewController {
 
     // MARK: - Themable
     func applyTheme() {
-        pageControl.currentPageIndicatorTintColor = themeManager.currentTheme.colors.actionPrimary
-        pageControl.pageIndicatorTintColor = themeManager.currentTheme.colors.actionSecondary
-        view.backgroundColor = themeManager.currentTheme.colors.layer2
+        let theme = themeManager.currentTheme
+        pageControl.currentPageIndicatorTintColor = theme.colors.actionPrimary
+        pageControl.pageIndicatorTintColor = theme.colors.actionSecondary
+        view.backgroundColor = theme.colors.layer2
 
         onboardingCards.forEach { cardViewController in
             cardViewController.applyTheme()
