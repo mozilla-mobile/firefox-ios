@@ -65,7 +65,7 @@ author_exception_list = ['4530+thatswinnie@users.noreply.github.com',
                          'nishantpatel2718@gmail.com',
                          'clare.m.so@gmail.com',
                          'cso@mozilla.com',
-                         '11182210+electricRGB@users.noreply.github.com',
+                         '11182210+polymathruby@users.noreply.github.com',
                          '107960801+jjSDET@users.noreply.github.com',
                          'roux@mozilla.com',
                          'isabelrios@gmail.com',
@@ -73,7 +73,8 @@ author_exception_list = ['4530+thatswinnie@users.noreply.github.com',
                          '41898282+github-actions[bot]@users.noreply.github.com',
                          'litianu.razvan@gmail.com',
                          'ralucaiordan@icloud.com',
-                         '51127880+PARAIPAN9@users.noreply.github.com']
+                         '51127880+PARAIPAN9@users.noreply.github.com',
+                         '49699333+dependabot[bot]@users.noreply.github.com']
 
 
 def fetch_raw_data(url: str) -> str:
