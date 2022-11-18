@@ -276,7 +276,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         primaryButton.setTitleColor(themeManager.currentTheme.colors.textInverted, for: .normal)
         primaryButton.backgroundColor = themeManager.currentTheme.colors.actionPrimary
 
-        secondaryButton.setTitleColor(themeManager.currentTheme.colors.textInverted, for: .normal)
+        secondaryButton.setTitleColor(themeManager.currentTheme.colors.textSecondaryAction, for: .normal)
         secondaryButton.backgroundColor = themeManager.currentTheme.colors.actionSecondary
         handleSecondaryButton()
     }
