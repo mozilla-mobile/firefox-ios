@@ -41,8 +41,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     private lazy var pageControl: UIPageControl = .build { pageControl in
         pageControl.currentPage = 0
         pageControl.numberOfPages = self.viewModel.enabledCards.count
-        pageControl.currentPageIndicatorTintColor = self.themeManager.currentTheme.colors.actionPrimary
-        pageControl.pageIndicatorTintColor = self.themeManager.currentTheme.colors.actionSecondary
         pageControl.isUserInteractionEnabled = false
         pageControl.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.pageControl
     }
