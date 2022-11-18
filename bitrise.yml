@@ -606,7 +606,7 @@ workflows:
             echo $COMMIT_ON_MAIN_ORIGIN
 
             echo "Commit on main checkout detach"
-            COMMIT_ON_MAIN_ORIGIN_2=`git log -n 1 BITRISE_GIT_BRANCH --pretty=format:"%H"`
+            COMMIT_ON_MAIN_ORIGIN_2=`git log -n 1 $BITRISE_GIT_BRANCH --pretty=format:"%H"`
             echo $COMMIT_ON_MAIN_ORIGIN_2
 
             echo "Files changed with origin"
