@@ -20,12 +20,18 @@ class NTPNewsViewModel {
     init() {
         news.subscribeAndReceive(self) { [weak self] in
             guard let self = self else { return }
-            self.items = $0.map({ NewsCell.ViewModel(model: $0, promo: nil) })
+            var items = $0.map({ NewsCell.ViewModel(model: $0, promo: nil) })
 
             if let promo = Promo.current(for: .shared, using: .shared) {
-                self.items.insert(.init(model: nil, promo: promo), at: 0)
+                items.insert(.init(model: nil, promo: promo), at: 0)
+
+                // filter out duplicate tree store item
+                if Promo.variant(for: .shared, using: .shared) == .control {
+                    items = Self.filter(items: items, excluding: "TreeStoreBFCM22")
+                }
             }
 
+            self.items = items
             self.delegate?.reloadView()
         }
 
@@ -35,6 +41,10 @@ class NTPNewsViewModel {
 
     @objc func localeDidChange() {
         Goodall.shared.refresh(force: true)
+    }
+
+    static func filter(items: [NewsCell.ViewModel], excluding trackingName: String) -> [NewsCell.ViewModel] {
+        items.filter({ !$0.trackingName.hasSuffix(trackingName) })
     }
 
 }
