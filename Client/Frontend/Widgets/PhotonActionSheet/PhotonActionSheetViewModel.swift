@@ -133,7 +133,7 @@ class PhotonActionSheetViewModel {
     private func getHeaderHeightForFirstSection() -> CGFloat {
         switch sheetStyle {
         case .site:
-            return PhotonActionSheet.UX.TitleHeaderSectionHeightWithSite
+            return UITableView.automaticDimension
         case .title:
             return PhotonActionSheet.UX.TitleHeaderSectionHeight
         case .other:

@@ -41,7 +41,6 @@ class PhotonActionSheet: UIViewController {
         static let TablePadding: CGFloat = 6
         static let SeparatorRowHeight: CGFloat = 8
         static let TitleHeaderSectionHeight: CGFloat = 40
-        static let TitleHeaderSectionHeightWithSite: CGFloat = 70
         static let BigSpacing: CGFloat = 32
         static let Spacing: CGFloat = 16
         static let SmallSpacing: CGFloat = 8
