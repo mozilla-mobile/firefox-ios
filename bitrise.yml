@@ -601,7 +601,7 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
-            filesChanged=`git diff --name-only`
+            filesChanged=`git diff --name-only $BITRISE_GIT_COMMIT HEAD^`
 
             doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*'
 
