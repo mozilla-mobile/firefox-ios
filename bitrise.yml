@@ -601,13 +601,30 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
-            filesChanged=`git diff --name-only $BITRISE_GIT_COMMIT HEAD~1`
+            echo "Commit on origin/main"
+            COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"`
+            echo $COMMIT_ON_MAIN_ORIGIN
 
-            echo $BITRISE_GIT_COMMIT
+            echo "Files changed with origin"
+            echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+            echo "Commit on main branch"
+            COMMIT_ON_MAIN_PR=`git log -n 2 main --pretty=format:"%H" | tail -n 1`
+
+            filesChanged=""
+            if [[ $COMMIT_ON_MAIN_PR == $COMMIT_ON_MAIN_ORIGIN ]]
+            then
+                echo "First commit, use origin/main"
+                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+                echo $filesChanged
+            else
+                echo "Commits on PR"
+                echo "Files changed betwee commits"
+                echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
+                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
+                echo $filesChanged
+            fi
 
             doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*'
-
-            echo $filesChanged
 
             if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
             then
