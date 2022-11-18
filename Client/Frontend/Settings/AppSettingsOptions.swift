@@ -1021,7 +1021,6 @@ class LoginsSetting: Setting {
                     LoginListViewController.create(
                         authenticateInNavigationController: navController,
                         profile: self.profile,
-                        settingsDelegate: BrowserViewController.foregroundBVC(),
                         webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
                             guard let loginsVC = loginsVC else { return }
                             navController.pushViewController(loginsVC, animated: true)
@@ -1039,7 +1038,6 @@ class LoginsSetting: Setting {
                 LoginListViewController.create(
                     authenticateInNavigationController: navController,
                     profile: profile,
-                    settingsDelegate: BrowserViewController.foregroundBVC(),
                     webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
                         guard let loginsVC = loginsVC else { return }
                         navController.pushViewController(loginsVC, animated: true)
