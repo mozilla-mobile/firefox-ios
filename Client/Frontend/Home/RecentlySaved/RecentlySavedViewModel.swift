@@ -28,6 +28,7 @@ class RecentlySavedViewModel {
     private var recentlySavedDataAdaptor: RecentlySavedDataAdaptor
     private var recentItems = [RecentlySavedItem]()
     private var wallpaperManager: WallpaperManager
+    private var siteImageHelper: SiteImageHelperProtocol
     var headerButtonAction: ((UIButton) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
@@ -39,9 +40,8 @@ class RecentlySavedViewModel {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
-        let siteImageHelper = SiteImageHelper(profile: profile)
-        let adaptor = RecentlySavedDataAdaptorImplementation(siteImageHelper: siteImageHelper,
-                                                             readingList: profile.readingList,
+        self.siteImageHelper = SiteImageHelper(profile: profile)
+        let adaptor = RecentlySavedDataAdaptorImplementation(readingList: profile.readingList,
                                                              bookmarksHandler: profile.places)
         self.recentlySavedDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
@@ -140,9 +140,35 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
         if let item = recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
 
+            let id = Int(arc4random())
+            cell.tag = id
+            var heroImage: UIImage?
+            var favicon: UIImage?
             let viewModel = RecentlySavedCellViewModel(site: site,
-                                                       heroImage: recentlySavedDataAdaptor.getHeroImage(forSite: site),
-                                                       favIconImage: recentlySavedDataAdaptor.getFaviconImage(forSite: site))
+                                                       heroImage: heroImage,
+                                                       favIconImage: favicon)
+            siteImageHelper.fetchImageFor(site: site,
+                                          imageType: .heroImage,
+                                          shouldFallback: true) { image in
+                guard cell.tag == id else { return }
+                heroImage = image
+                let viewModel = RecentlySavedCellViewModel(site: site,
+                                                           heroImage: heroImage,
+                                                           favIconImage: favicon)
+                recentlySavedCell.configure(viewModel: viewModel, theme: self.theme)
+            }
+
+            siteImageHelper.fetchImageFor(site: site,
+                                          imageType: .favicon,
+                                          shouldFallback: true) { image in
+                guard cell.tag == id else { return }
+                favicon = image
+                let viewModel = RecentlySavedCellViewModel(site: site,
+                                                           heroImage: heroImage,
+                                                           favIconImage: favicon)
+                recentlySavedCell.configure(viewModel: viewModel, theme: self.theme)
+            }
+
             recentlySavedCell.configure(viewModel: viewModel, theme: theme)
         }
 
