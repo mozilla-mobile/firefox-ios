@@ -281,14 +281,14 @@ font-family: -apple-system, sans-serif;
 .light > .content a:visited,
 .light > .content a:hover,
 .light > .content a:active {
-  color: #00acff !important;
+  color: #0060df !important;
 }
 
 .dark > .content a,
 .dark > .content a:visited,
 .dark > .content a:hover,
 .dark > .content a:active {
-  color: #00acff !important;
+  color: #00ddff !important;
 }
 
 .sepia > .content a,
