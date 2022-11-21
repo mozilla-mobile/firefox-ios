@@ -42,7 +42,6 @@ class TwoLineImageOverlayCell: UITableViewCell,
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.textColor = .black
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 16)
         label.textAlignment = .natural
     }
@@ -111,10 +110,10 @@ class TwoLineImageOverlayCell: UITableViewCell,
     }
 
     func applyTheme(theme: Theme) {
-        self.backgroundColor = theme.colors.layer5
-        self.selectedView.backgroundColor = theme.colors.layer5Hover
-        self.titleLabel.textColor = theme.colors.textPrimary
-        self.descriptionLabel.textColor = theme.colors.textSecondary
+        backgroundColor = theme.colors.layer5
+        selectedView.backgroundColor = theme.colors.layer5Hover
+        titleLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor = theme.colors.textSecondary
     }
 
     override func prepareForReuse() {
