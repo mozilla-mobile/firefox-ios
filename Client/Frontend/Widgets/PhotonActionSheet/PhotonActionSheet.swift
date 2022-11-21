@@ -26,18 +26,16 @@ class PhotonActionSheet: UIViewController {
         static let maxWidth: CGFloat = 414
         static let padding: CGFloat = 6
         static let rowHeight: CGFloat = 44
-        static let BorderWidth: CGFloat = 0.5
-        static let BorderColor = UIColor.Photon.Grey30
-        static let CornerRadius: CGFloat = 10
-        static let SiteImageViewSize: CGFloat = 52
-        static let IconSize = CGSize(width: 24, height: 24)
-        static let CloseButtonHeight: CGFloat  = 56
-        static let TablePadding: CGFloat = 6
-        static let SeparatorRowHeight: CGFloat = 8
-        static let TitleHeaderSectionHeight: CGFloat = 40
-        static let BigSpacing: CGFloat = 32
-        static let Spacing: CGFloat = 16
-        static let SmallSpacing: CGFloat = 8
+        static let cornerRadius: CGFloat = 10
+        static let siteImageViewSize: CGFloat = 52
+        static let iconSize = CGSize(width: 24, height: 24)
+        static let closeButtonHeight: CGFloat  = 56
+        static let tablePadding: CGFloat = 6
+        static let separatorRowHeight: CGFloat = 8
+        static let titleHeaderSectionHeight: CGFloat = 40
+        static let bigSpacing: CGFloat = 32
+        static let spacing: CGFloat = 16
+        static let smallSpacing: CGFloat = 8
     }
 
     // MARK: - Variables
@@ -49,7 +47,7 @@ class PhotonActionSheet: UIViewController {
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-        button.layer.cornerRadius = UX.CornerRadius
+        button.layer.cornerRadius = UX.cornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
         button.accessibilityIdentifier = "PhotonMenu.close"
@@ -144,7 +142,7 @@ class PhotonActionSheet: UIViewController {
 
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
-        tableView.layer.cornerRadius = UX.CornerRadius
+        tableView.layer.cornerRadius = UX.cornerRadius
         // Don't show separators on ETP menu
         if viewModel.title != nil {
             tableView.separatorStyle = .none
@@ -190,7 +188,7 @@ class PhotonActionSheet: UIViewController {
         let bottomConstraints = [
             closeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
-            closeButton.heightAnchor.constraint(equalToConstant: UX.CloseButtonHeight),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonHeight),
             closeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.padding),
 
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -273,7 +271,7 @@ class PhotonActionSheet: UIViewController {
         if viewModel.presentationStyle == .popover && !wasHeightOverriden {
             if #available(iOS 15.4, *) {
                 var size = tableView.contentSize
-                size.height = tableView.contentSize.height - UX.Spacing - UX.TablePadding
+                size.height = tableView.contentSize.height - UX.spacing - UX.tablePadding
                 preferredContentSize = size
             } else {
                 preferredContentSize = tableView.contentSize
@@ -345,7 +343,7 @@ class PhotonActionSheet: UIViewController {
 
     private func setDefaultStyleTableViewHeight() {
         let frameHeight = view.safeAreaLayoutGuide.layoutFrame.size.height
-        let buttonHeight = viewModel.presentationStyle == .bottom ? UX.CloseButtonHeight : 0
+        let buttonHeight = viewModel.presentationStyle == .bottom ? UX.closeButtonHeight : 0
         let maxHeight = frameHeight - buttonHeight
 
         // The height of the menu should be no more than 90 percent of the screen

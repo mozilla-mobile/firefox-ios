@@ -8,6 +8,8 @@ import Storage
 class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell {
 
     struct UX {
+        static let borderWidth: CGFloat = 0.5
+        static let borderColor = UIColor.Photon.Grey30
         static let padding: CGFloat = 12
         static let verticalPadding: CGFloat = 2
     }
@@ -29,9 +31,9 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     lazy var siteImageView: UIImageView = .build { imageView in
         imageView.contentMode = .center
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = PhotonActionSheet.UX.CornerRadius
-        imageView.layer.borderColor = PhotonActionSheet.UX.BorderColor.cgColor
-        imageView.layer.borderWidth = PhotonActionSheet.UX.BorderWidth
+        imageView.layer.cornerRadius = PhotonActionSheet.UX.cornerRadius
+        imageView.layer.borderColor = UX.borderColor.cgColor
+        imageView.layer.borderWidth = UX.borderWidth
     }
 
     override init(reuseIdentifier: String?) {
@@ -53,7 +55,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     func configure(with site: Site) {
         if site.icon != nil {
             self.siteImageView.setFavicon(forSite: site) {
-                self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheet.UX.IconSize)
+                self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheet.UX.iconSize)
             }
         } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             let profile = appDelegate.profile
@@ -61,7 +63,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
                 guard let image = result.successValue else { return }
 
                 self.siteImageView.backgroundColor = .clear
-                self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.IconSize)
+                self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.iconSize)
             }
         }
         self.titleLabel.text = site.title.isEmpty ? site.url : site.title
@@ -85,8 +87,8 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         NSLayoutConstraint.activate([
             siteImageView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: padding),
             siteImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            siteImageView.widthAnchor.constraint(equalToConstant: PhotonActionSheet.UX.SiteImageViewSize),
-            siteImageView.heightAnchor.constraint(equalToConstant: PhotonActionSheet.UX.SiteImageViewSize),
+            siteImageView.widthAnchor.constraint(equalToConstant: PhotonActionSheet.UX.siteImageViewSize),
+            siteImageView.heightAnchor.constraint(equalToConstant: PhotonActionSheet.UX.siteImageViewSize),
             siteImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -padding),
             siteImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 

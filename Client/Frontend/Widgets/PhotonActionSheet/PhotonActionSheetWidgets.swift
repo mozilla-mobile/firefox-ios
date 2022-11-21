@@ -72,15 +72,15 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCel
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
             make.trailing.equalTo(contentView)
-            make.top.equalTo(contentView).offset(PhotonActionSheet.UX.TablePadding)
+            make.top.equalTo(contentView).offset(PhotonActionSheet.UX.tablePadding)
         }
 
         contentView.addSubview(separatorView)
 
         separatorView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheet.UX.TablePadding)
-            make.bottom.equalTo(contentView).inset(PhotonActionSheet.UX.TablePadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheet.UX.tablePadding)
+            make.bottom.equalTo(contentView).inset(PhotonActionSheet.UX.tablePadding)
             make.height.equalTo(0.5)
         }
     }
