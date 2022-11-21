@@ -112,6 +112,7 @@ workflows:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
   build_and_test_1_SmokeTest2:
     before_run:
+    - 1_git_clone_and_post_clone
     - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
