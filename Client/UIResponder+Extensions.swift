@@ -12,15 +12,4 @@ extension UIResponder {
             .first(where: { $0 is T }) as? T
     }
 
-    /// Outputs the entire responder chain from the leaf upwards.
-    ///
-    /// Debugging method.
-    func responderChain() -> String {
-        guard let next = next else {
-            return String(describing: self)
-        }
-
-        return String(describing: self) + "----->" + next.responderChain()
-    }
-
 }
