@@ -128,6 +128,8 @@ workflows:
         - content: |
             set -euxo pipefail
 
+            rm -r /Users/vagrant/git/firefox-ios/*
+
             echo "$BITRISE_ARTIFACT_PATHS"
 
             echo "-- unzip -- "
