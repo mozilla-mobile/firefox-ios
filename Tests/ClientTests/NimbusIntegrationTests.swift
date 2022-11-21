@@ -27,4 +27,14 @@ class NimbusIntegrationTests: XCTestCase {
         let stringWithTable = NSLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", bundle: Strings.bundle, comment: "")
         XCTAssertEqual(stringWithTable, "Switch Your Default Browser")
     }
+
+    func testLocalizedString_ForDefaultBrowserButton() throws {
+        XCTAssertEqual(Locale.current.languageCode, "en")
+
+        let nsString = NSLocalizedString("DefaultBrowserCard.Button.v2", tableName: "Default Browser", bundle: Strings.bundle, comment: "")
+        XCTAssertEqual(nsString, "Learn How")
+
+        let localizedString = Strings.bundle.localizedString(forKey: "DefaultBrowserCard.Button.v2", value: nil, table: "Default Browser")
+        XCTAssertEqual(localizedString, "Learn How")
+    }
 }
