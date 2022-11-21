@@ -5,17 +5,7 @@
 import Shared
 import UIKit
 
-/* The base favicons protocol */
+/// The base favicons protocol. To be deprecated soon, do not use for new code
 public protocol Favicons {
-    /**
-     * Returns the ID of the added favicon.
-     */
-    func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>>
-
-    /**
-     * Returns the ID of the added favicon.
-     */
-    @discardableResult func addFavicon(_ icon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>>
-
     func getFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>>
 }
