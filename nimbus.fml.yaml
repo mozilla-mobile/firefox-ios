@@ -481,9 +481,23 @@ features:
                 The api configuration, determines whether we use the new api or the old one
             type: PlacesAPIConfiguration
             default: old
-    
-        
-        
+  share-sheet:
+    description: This feature define the redesign of the share sheet
+    variables:
+      move-actions:
+        description: If true copy and send to device are moved to share sheet
+        type: Boolean
+        default: false
+      toolbar-changes:
+        description: If true share option is shown on the toolbar
+        type: Boolean
+        default: false
+    defaults:
+      - channel: developer
+        value: {
+            "move-actions": false,
+            "toolbar-changes": false
+        }
 
 types:
   objects:

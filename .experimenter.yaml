@@ -120,6 +120,17 @@ search-term-groups-feature:
     grouping-enabled:
       type: json
       description: This property provides a lookup table of whether or not the given grouping should be enabled.
+share-sheet:
+  description: This feature define the redesign of the share sheet
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    move-actions:
+      type: boolean
+      description: If true copy and send to device are moved to share sheet
+    toolbar-changes:
+      type: boolean
+      description: If true share option is shown on the toolbar
 spotlight-search:
   description: Add pages as items findable with Spotlight.
   hasExposure: true
