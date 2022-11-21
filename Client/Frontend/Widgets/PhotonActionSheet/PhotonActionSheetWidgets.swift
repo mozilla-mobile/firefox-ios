@@ -45,7 +45,7 @@ public enum PhotonActionSheetIconType {
 }
 
 // MARK: - PhotonActionSheetTitleHeaderView
-class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
+class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCell {
     static let Padding: CGFloat = 18
 
     lazy var titleLabel: UILabel = {
@@ -100,7 +100,7 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
 }
 
 // MARK: - PhotonActionSheetSeparator
-class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView {
+class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell {
 
     let separatorLineView = UIView()
 
@@ -123,7 +123,7 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView {
 }
 
 // MARK: - PhotonActionSheetSeparator
-class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
+class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)

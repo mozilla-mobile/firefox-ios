@@ -31,12 +31,6 @@ class PhotonActionSheet: UIViewController {
         static let CornerRadius: CGFloat = 10
         static let SiteImageViewSize: CGFloat = 52
         static let IconSize = CGSize(width: 24, height: 24)
-        static let SiteHeaderName  = "PhotonActionSheetSiteHeaderView"
-        static let TitleHeaderName = "PhotonActionSheetTitleHeaderView"
-        static let CellName = "PhotonActionSheetCell"
-        static let LineSeparatorSectionHeader = "LineSeparatorSectionHeader"
-        static let SeparatorSectionHeader = "SeparatorSectionHeader"
-        static let EmptyHeader = "EmptyHeader"
         static let CloseButtonHeight: CGFloat  = 56
         static let TablePadding: CGFloat = 6
         static let SeparatorRowHeight: CGFloat = 8
@@ -137,12 +131,16 @@ class PhotonActionSheet: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.keyboardDismissMode = .onDrag
-        tableView.register(PhotonActionSheetContainerCell.self, forCellReuseIdentifier: UX.CellName)
-        tableView.register(PhotonActionSheetSiteHeaderView.self, forHeaderFooterViewReuseIdentifier: UX.SiteHeaderName)
-        tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: UX.TitleHeaderName)
-        tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: UX.SeparatorSectionHeader)
-        tableView.register(PhotonActionSheetLineSeparator.self, forHeaderFooterViewReuseIdentifier: UX.LineSeparatorSectionHeader)
-        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: UX.EmptyHeader)
+        tableView.register(PhotonActionSheetSeparator.self,
+                           forHeaderFooterViewReuseIdentifier: PhotonActionSheetSeparator.cellIdentifier)
+        tableView.register(PhotonActionSheetContainerCell.self,
+                           forCellReuseIdentifier: PhotonActionSheetContainerCell.cellIdentifier)
+        tableView.register(PhotonActionSheetSiteHeaderView.self,
+                           forHeaderFooterViewReuseIdentifier: PhotonActionSheetSiteHeaderView.cellIdentifier)
+        tableView.register(PhotonActionSheetTitleHeaderView.self,
+                           forHeaderFooterViewReuseIdentifier: PhotonActionSheetTitleHeaderView.cellIdentifier)
+        tableView.register(PhotonActionSheetLineSeparator.self,
+                           forHeaderFooterViewReuseIdentifier: PhotonActionSheetLineSeparator.cellIdentifier)
 
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
@@ -163,8 +161,8 @@ class PhotonActionSheet: UIViewController {
         tableView.reloadData()
 
         DispatchQueue.main.async {
-            // Pick up the correct/final tableview.contentsize in order to set the height.
-            // Without async dispatch, the contentsize is wrong.
+            // Pick up the correct/final tableview.content size in order to set the height.
+            // Without async dispatch, the content size is wrong.
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
@@ -386,7 +384,9 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: UX.CellName, for: indexPath) as? PhotonActionSheetContainerCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: PhotonActionSheetContainerCell.cellIdentifier,
+            for: indexPath) as? PhotonActionSheetContainerCell else { return UITableViewCell() }
         let actions = viewModel.actions[indexPath.section][indexPath.row]
         cell.configure(actions: actions, viewModel: viewModel)
         cell.delegate = self

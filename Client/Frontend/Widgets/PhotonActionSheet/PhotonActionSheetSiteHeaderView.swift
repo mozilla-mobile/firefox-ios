@@ -5,7 +5,7 @@
 import UIKit
 import Storage
 
-class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
+class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell {
 
     struct UX {
         static let padding: CGFloat = 12

@@ -99,7 +99,8 @@ class PhotonActionSheetViewModel {
         switch sheetStyle {
         case .site:
             guard let site = site else { break }
-            let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.SiteHeaderName) as! PhotonActionSheetSiteHeaderView
+            let header = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: PhotonActionSheetSiteHeaderView.cellIdentifier) as! PhotonActionSheetSiteHeaderView
             header.tintColor = tintColor
             header.configure(with: site)
             return header
@@ -107,19 +108,21 @@ class PhotonActionSheetViewModel {
         case .title:
             guard let title = title else { break }
             if section > 0 {
-                return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.LineSeparatorSectionHeader)
+                return tableView.dequeueReusableHeaderFooterView(
+                    withIdentifier: PhotonActionSheetLineSeparator.cellIdentifier)
             } else {
-                let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.TitleHeaderName) as! PhotonActionSheetTitleHeaderView
+                let header = tableView.dequeueReusableHeaderFooterView(
+                    withIdentifier: PhotonActionSheetTitleHeaderView.cellIdentifier) as! PhotonActionSheetTitleHeaderView
                 header.tintColor = tintColor
                 header.configure(with: title)
                 return header
             }
 
         case .other:
-            return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.SeparatorSectionHeader)
+            return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetSeparator.cellIdentifier)
         }
 
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheet.UX.SeparatorSectionHeader)
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: PhotonActionSheetSeparator.cellIdentifier)
     }
 
     func getHeaderHeightForSection(section: Int) -> CGFloat {
