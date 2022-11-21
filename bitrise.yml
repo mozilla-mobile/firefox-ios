@@ -13,15 +13,16 @@ stages:
   stage_2:
     workflows:
     - build_and_test_1_SmokeTest2: {}
-    - build_and_test_2_SmokeTest: {}
-    - build_and_test_3_SmokeTest3: {}
-    - build_and_test_4_SmokeTest4: {}
-    - build_and_test_5_UnitTest: {}
-    - just_build_fennec_to_get_warnings: {}
+    #- build_and_test_2_SmokeTest: {}
+    #- build_and_test_3_SmokeTest3: {}
+    #- build_and_test_4_SmokeTest4: {}
+    #- build_and_test_5_UnitTest: {}
+    #- just_build_fennec_to_get_warnings: {}
 workflows:
   configure_build:
     before_run:
     - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
@@ -110,13 +111,17 @@ workflows:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
   build_and_test_1_SmokeTest2:
+    before_run:
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -129,6 +134,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Test without Building
         inputs:
         - content: |
@@ -143,10 +149,12 @@ workflows:
 
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building
     - custom-test-results-export@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: Smoketest2
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_2_SmokeTest:
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
@@ -585,6 +593,54 @@ workflows:
                 exit 1
             fi
         is_always_run: true
+  Decision_to_run_UI_Tests:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            echo "Commit on origin/main"
+            COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"`
+            echo $COMMIT_ON_MAIN_ORIGIN
+
+            echo "Commit on detach"
+            COMMIT_ON_MAIN_ORIGIN_DET=`git log -n 1 fork/build-mte-280-run-selective-builds --pretty=format:"%H"`
+            echo $COMMIT_ON_MAIN_ORIGIN_DET
+
+            echo "Files changed with origin"
+            echo `git diff --name-only fork/build-mte-280-run-selective-builds $COMMIT_ON_MAIN_ORIGIN`
+
+            echo "Commit on main branch"
+            echo $GIT_CLONE_COMMIT_HASH
+            COMMIT_ON_MAIN_PR=`git log -n 2 $GIT_CLONE_COMMIT_HASH --pretty=format:"%H" | tail -n 1`
+            echo $COMMIT_ON_MAIN_PR
+
+            filesChanged=""
+            if [[ $COMMIT_ON_MAIN_PR == $COMMIT_ON_MAIN_ORIGIN ]]
+            then
+                echo "First commit, use origin/main"
+                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+                echo $filesChanged
+            else
+                echo "Commits on PR"
+                echo "Files changed betwee commits"
+                echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
+                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
+                echo $filesChanged
+            fi
+
+            doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*'
+
+            if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
+            then
+                echo "Running UI Tests"
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests
+            else
+                echo "Not Running UI Tests"
+            fi
+
   NewXcodeVersions:
     steps:
     - script@1:
@@ -1390,10 +1446,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '108.0'
+    BITRISE_RELEASE_VERSION: '107.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '108.0'
+    BITRISE_BETA_VERSION: '107.0'
 
 meta:
   bitrise.io:
@@ -1405,7 +1461,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: release/v108.0
+- push_branch: release/v107.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
