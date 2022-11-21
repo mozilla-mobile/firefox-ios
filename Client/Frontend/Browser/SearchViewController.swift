@@ -742,6 +742,10 @@ class SearchViewController: SiteTableViewController,
             twoLineCell.accessoryView = nil
             cell = twoLineCell
         }
+
+        // We need to set the correct theme on the cells when the initial display happens
+        oneLineCell.applyTheme(theme: themeManager.currentTheme)
+        twoLineCell.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
