@@ -10,10 +10,10 @@ class ReaderViewTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.goto(BrowserTab)
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        waitForExistence(app.buttons["Reader View"], timeout: 5)
+        waitForExistence(app.buttons["Reader View"], timeout: TIMEOUT)
         app.buttons["Reader View"].tap()
         // The settings of reader view are shown as well as the content of the web site
-        waitForExistence(app.buttons["Display Settings"], timeout: 5)
+        waitForExistence(app.buttons["Display Settings"], timeout: TIMEOUT)
         XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
     }
 
@@ -28,7 +28,7 @@ class ReaderViewTest: BaseTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        waitForExistence(app.buttons["Reader View"], timeout: 5)
+        waitForExistence(app.buttons["Reader View"], timeout: TIMEOUT)
         app.buttons["Reader View"].tap()
         waitUntilPageLoad()
         waitForExistence(app.buttons["Add to Reading List"])
@@ -44,7 +44,7 @@ class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testAddToReadingList() {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -129,10 +129,9 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
-    func testMarkAsReadAndUnreadFromReadingList() {
+    func testMarkAsReadAndUnreadFromReadingList() throws {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
         navigator.goto(LibraryPanel_ReadingList)
 
         waitForExistence(app.tables["ReadingTable"])
@@ -141,11 +140,15 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertTrue(savedToReadingList.exists)
 
         // Mark it as read/unread
-        savedToReadingList.swipeLeft()
-        waitForExistence(app.tables.cells.buttons.staticTexts["Mark as  Read"], timeout: 3)
-        app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
-        savedToReadingList.swipeLeft()
-        waitForExistence(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("swipeLeft() does not work on M1")
+        } else {
+            savedToReadingList.swipeLeft()
+            waitForExistence(app.tables.cells.buttons.staticTexts["Mark as  Read"], timeout: TIMEOUT)
+            app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
+            savedToReadingList.swipeLeft()
+            waitForExistence(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
+        }
     }
 
     func testRemoveFromReadingList() {
@@ -155,11 +158,17 @@ class ReaderViewTest: BaseTestCase {
 
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         waitForExistence(savedToReadingList)
-        savedToReadingList.swipeLeft()
-        waitForExistence(app.buttons["Remove"])
 
         // Remove the item from reading list
-        app.buttons["Remove"].tap()
+        if processIsTranslatedStr() == m1Rosetta {
+            savedToReadingList.press(forDuration: 2)
+            waitForExistence(app.otherElements["Remove"])
+            app.otherElements["Remove"].tap()
+        } else {
+            savedToReadingList.swipeLeft()
+            waitForExistence(app.buttons["Remove"])
+            app.buttons["Remove"].tap()
+        }
         XCTAssertFalse(savedToReadingList.exists)
 
         // Reader list view should be empty
@@ -228,11 +237,11 @@ class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testAddToReaderListOptions() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 45)
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         }
         addContentToReaderView()
         // Check that Settings layouts options are shown
-        waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)
+        waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: TIMEOUT)
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         XCTAssertTrue(app.buttons["Light"].exists)
     }
