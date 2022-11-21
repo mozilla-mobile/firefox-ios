@@ -402,11 +402,7 @@ extension WebViewController: WKNavigationDelegate {
 
         currentBackForwardItem = webView.backForwardList.currentItem
 
-        // prevent Focus from opening universal links
-        // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
-        let allowDecision = WKNavigationActionPolicy(rawValue: WKNavigationActionPolicy.allow.rawValue + 2) ?? .allow
-
-        let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? allowDecision : .cancel
+        let decision: WKNavigationActionPolicy = RequestHandler().handle(request: navigationAction.request, alertCallback: present) ? .allow : .cancel
         if navigationAction.navigationType == .linkActivated && browserView.url != navigationAction.request.url {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.websiteLink)
         }
