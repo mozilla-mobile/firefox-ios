@@ -430,8 +430,7 @@ features:
               action: "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL"
               trigger: ["I_AM_NOT_DEFAULT_BROWSER", "SUPPORTS_DEFAULT_BROWSER"]
               style: "FALLBACK"
-              # Use string interpolation because $TABLE_NAME/$KEY doesn't exist in en.lproj/Default Browser.strings
-              button-label: \(String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerButton)
+              button-label: Default Browser/DefaultBrowserCard.Button.v2
 
   wallpaper-feature:
     description: This property defines the configuration for the wallpaper feature
