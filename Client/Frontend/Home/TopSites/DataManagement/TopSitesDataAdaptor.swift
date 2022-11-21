@@ -29,9 +29,6 @@ protocol TopSitesDataAdaptor {
     /// We only add Google top site or Contiles if number of pins doesn't exceeds the available number shown of tiles.
     /// - Parameter numberOfTilesPerRow: The number of tiles per row shown to the user
     func recalculateTopSiteData(for numberOfTilesPerRow: Int)
-
-    /// Get favicon for site
-    func getFaviconImage(forSite site: Site) -> UIImage?
 }
 
 class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, HasNimbusSponsoredTiles {
@@ -50,23 +47,15 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
     private let googleTopSiteManager: GoogleTopSiteManager
     private let contileProvider: ContileProviderInterface
     private let dispatchGroup: DispatchGroupInterface
-    private var siteImageHelper: SiteImageHelperProtocol
 
     // Pre-loading the data with a default number of tiles so we always show section when needed
     // If this isn't done, then no data will be found from the view model and section won't show
     // This gets ajusted once we actually know in which UI we're showing top sites.
     private static let defaultTopSitesRowCount = 8
 
-    private var faviconImages = [String: UIImage]() {
-        didSet {
-            delegate?.didLoadNewData()
-        }
-    }
-
     init(profile: Profile,
          topSiteHistoryManager: TopSiteHistoryManager,
          googleTopSiteManager: GoogleTopSiteManager,
-         siteImageHelper: SiteImageHelperProtocol,
          contileProvider: ContileProviderInterface = ContileProvider(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          dispatchGroup: DispatchGroupInterface = DispatchGroup()
@@ -74,7 +63,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
         self.profile = profile
         self.topSiteHistoryManager = topSiteHistoryManager
         self.googleTopSiteManager = googleTopSiteManager
-        self.siteImageHelper = siteImageHelper
         self.contileProvider = contileProvider
         self.notificationCenter = notificationCenter
         self.dispatchGroup = dispatchGroup
@@ -131,19 +119,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
             self?.delegate?.didLoadNewData()
             dataLoadingCompletion?()
         }
-    }
-
-    func getFaviconImage(forSite site: Site) -> UIImage? {
-        if let faviconImage = faviconImages[site.url] {
-            return faviconImage
-        }
-
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .favicon,
-                                      shouldFallback: false) { image in
-            self.faviconImages[site.url] = image
-        }
-        return nil
     }
 
     private func loadContiles() {
