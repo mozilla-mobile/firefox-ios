@@ -13,4 +13,12 @@ public extension UIApplication {
             .windowScene?
             .interfaceOrientation
     }
+
+    static var textInputMode: UITextInputMode? {
+        UIApplication
+            .shared
+            .delegate?
+            .window??
+            .textInputMode
+    }
 }

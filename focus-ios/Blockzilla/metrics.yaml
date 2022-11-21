@@ -36,6 +36,19 @@ app:
       - focus-ios-data-stewards@mozilla.com
     expires: "2023-03-14"
 
+  keyboard_type:
+    type: string
+    description: |
+      Records the name of the keyboard (custom or default) everytime
+      the keyboard appears on the screen.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3526
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3572
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    expires: "2023-11-10"
+
 browser:
   total_uri_count:
     type: counter
