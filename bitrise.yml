@@ -128,8 +128,9 @@ workflows:
         - content: |
             set -euxo pipefail
 
-            rm -r /Users/vagrant/git/firefox-ios/*
-
+            echo "remove directory before unziping"
+            ls
+            
             echo "$BITRISE_ARTIFACT_PATHS"
 
             echo "-- unzip -- "
@@ -146,7 +147,7 @@ workflows:
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/* .
+            mv ./Users/vagrant/git/DerivedData .
             ls -la
             echo "-- test-without-building --"
 
