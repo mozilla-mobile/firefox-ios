@@ -23,9 +23,9 @@ extension PhotonActionSheet: Notifiable {
 class PhotonActionSheet: UIViewController {
 
     struct UX {
-        static let MaxWidth: CGFloat = 414
-        static let Padding: CGFloat = 6
-        static let RowHeight: CGFloat = 44
+        static let maxWidth: CGFloat = 414
+        static let padding: CGFloat = 6
+        static let rowHeight: CGFloat = 44
         static let BorderWidth: CGFloat = 0.5
         static let BorderColor = UIColor.Photon.Grey30
         static let CornerRadius: CGFloat = 10
@@ -76,7 +76,7 @@ class PhotonActionSheet: UIViewController {
         title = viewModel.title
         modalPresentationStyle = viewModel.modalStyle
         closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
-        tableView.estimatedRowHeight = UX.RowHeight
+        tableView.estimatedRowHeight = UX.rowHeight
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -193,10 +193,10 @@ class PhotonActionSheet: UIViewController {
             closeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
             closeButton.heightAnchor.constraint(equalToConstant: UX.CloseButtonHeight),
-            closeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.Padding),
+            closeButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -UX.padding),
 
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tableView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -UX.Padding),
+            tableView.bottomAnchor.constraint(equalTo: closeButton.topAnchor, constant: -UX.padding),
             tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
         ]
         constraints.append(contentsOf: bottomConstraints)
@@ -236,8 +236,8 @@ class PhotonActionSheet: UIViewController {
 
     // The width used for the .centered and .bottom style
     private var centeredAndBottomWidth: CGFloat {
-        let minimumWidth = min(view.frame.size.width, UX.MaxWidth)
-        return minimumWidth - (UX.Padding * 2)
+        let minimumWidth = min(view.frame.size.width, UX.maxWidth)
+        return minimumWidth - (UX.padding * 2)
     }
 
     // MARK: - Theme
