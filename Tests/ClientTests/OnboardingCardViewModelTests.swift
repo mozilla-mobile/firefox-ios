@@ -31,15 +31,6 @@ class OnboardingCardViewModelTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
-    func testSendOnboardingCardView_WallpaperCard() {
-        subject = OnboardingCardViewModel(cardType: .wallpapers,
-                                          infoModel: createInfoModel(),
-                                          isv106Version: false)
-        subject.sendCardViewTelemetry()
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
-    }
-
     func testSendOnboardingCardView_SyncCard() {
         subject = OnboardingCardViewModel(cardType: .signSync,
                                           infoModel: createInfoModel(),
@@ -77,15 +68,6 @@ class OnboardingCardViewModelTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
     }
 
-    func testSendOnboardingPrimaryTap_WallpaperCard() {
-        subject = OnboardingCardViewModel(cardType: .wallpapers,
-                                          infoModel: createInfoModel(),
-                                          isv106Version: false)
-        subject.sendTelemetryButton(isPrimaryAction: true)
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
-    }
-
     func testSendOnboardingPrimaryTap_SyncCard() {
         subject = OnboardingCardViewModel(cardType: .signSync,
                                           infoModel: createInfoModel(),
@@ -114,15 +96,6 @@ class OnboardingCardViewModelTests: XCTestCase {
     }
 
     // MARK: - Secondary tap
-    func testSendOnboardingSecondaryTap_WallpaperCard() {
-        subject = OnboardingCardViewModel(cardType: .wallpapers,
-                                          infoModel: createInfoModel(),
-                                          isv106Version: false)
-        subject.sendTelemetryButton(isPrimaryAction: false)
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
-    }
-
     func testSendOnboardingSecondaryTap_SyncCard() {
         subject = OnboardingCardViewModel(cardType: .signSync,
                                           infoModel: createInfoModel(),

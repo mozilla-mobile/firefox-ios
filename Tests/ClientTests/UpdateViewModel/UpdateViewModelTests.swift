@@ -141,7 +141,6 @@ class UpdateViewModelTests: XCTestCase {
 
     func testGetViewModel_ForInvalidUpgradeCard() {
         XCTAssertNil(viewModel.getCardViewModel(cardType: .welcome))
-        XCTAssertNil(viewModel.getCardViewModel(cardType: .wallpapers))
         XCTAssertNil(viewModel.getCardViewModel(cardType: .signSync))
     }
 }
