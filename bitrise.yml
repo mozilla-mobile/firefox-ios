@@ -606,11 +606,11 @@ workflows:
             echo $COMMIT_ON_MAIN_ORIGIN
 
             echo "Files changed with origin"
-            echo `git diff --name-only fork/build-mte-280-run-selective-builds $COMMIT_ON_MAIN_ORIGIN`
+            echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
 
             echo "Commit on main branch"
             echo $GIT_CLONE_COMMIT_HASH
-            COMMIT_ON_MAIN_PR=`git log -n 2 $GIT_CLONE_COMMIT_HASH --pretty=format:"%H" | tail -n 1`
+            COMMIT_ON_MAIN_PR=`git log -n 2 main --pretty=format:"%H" | tail -n 1`
             echo $COMMIT_ON_MAIN_PR
 
             filesChanged=""
