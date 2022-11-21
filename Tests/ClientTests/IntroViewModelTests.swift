@@ -24,11 +24,6 @@ class IntroViewModelTests: XCTestCase {
         XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.welcome)
     }
 
-    func testGetWallpaperViewModel() {
-        let cardViewModel = viewModel.getCardViewModel(cardType: .wallpapers)
-        XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.wallpapers)
-    }
-
     func testGetSyncViewModel() {
         let cardViewModel = viewModel.getCardViewModel(cardType: .signSync)
         XCTAssertEqual(cardViewModel?.cardType, IntroViewModel.InformationCards.signSync)
