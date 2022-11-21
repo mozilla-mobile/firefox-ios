@@ -1,8 +1,23 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox-ը ձեր լռելյայն բրաուզերը դարձնելը քվեարկություն է բաց, հասանելի ինտերնետի համար:";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Բարի գալուստ ավելի լավ համացանց";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Իմանալ ինչպես";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Տեղադրեք հղումներ կայքերից, էլ. նամակներից և հաղորդագրություններից՝ Firefox-ում ավտոմատ կերպով բացելու համար:";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Ընտրեք Firefox-ը որպես ձեր լռելյայն դիտարկիչ՝ արագությունը, անվտանգությունը և գաղտնիությունը ավտոմատ դարձնելու համար:";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Բարձրացրեք ամենօրյա զննարկումը";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox֊ի գաղտնիության ծանուցում";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Փոխարկեք ձեր կանխադրված զննարկիչը";
