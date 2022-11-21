@@ -15,13 +15,13 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
     lazy var labelContainerView: UIView = .build { _ in }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: 17)
         label.textAlignment = .left
         label.numberOfLines = 2
     }
 
     lazy var descriptionLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.textAlignment = .left
         label.numberOfLines = 1
     }
