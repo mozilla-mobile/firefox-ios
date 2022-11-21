@@ -10,7 +10,7 @@ protocol OnboardingCardDelegate: AnyObject {
     func pageChanged(_ cardType: IntroViewModel.InformationCards)
 }
 
-class OnboardingCardViewController: UIViewController {
+class OnboardingCardViewController: UIViewController, Themeable {
 
     struct UX {
         static let stackViewSpacing: CGFloat = 16
@@ -36,6 +36,9 @@ class OnboardingCardViewController: UIViewController {
 
     var viewModel: OnboardingCardProtocol
     weak var delegate: OnboardingCardDelegate?
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     // Adjusting layout for devices with height lower than 667
     // including now iPhone SE 2nd generation and iPad
@@ -109,8 +112,6 @@ class OnboardingCardViewController: UIViewController {
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
-        button.backgroundColor = UIColor.Photon.Blue50
-        button.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -126,8 +127,6 @@ class OnboardingCardViewController: UIViewController {
             withTextStyle: .callout,
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
-        button.backgroundColor = UIColor.Photon.LightGrey30
-        button.setTitleColor(UIColor.Photon.DarkGrey90, for: .normal)
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
         button.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)SecondaryButton"
@@ -138,9 +137,14 @@ class OnboardingCardViewController: UIViewController {
                                                 right: UX.buttonHorizontalInset)
     }
 
-    init(viewModel: OnboardingCardProtocol, delegate: OnboardingCardDelegate?) {
+    init(viewModel: OnboardingCardProtocol,
+         delegate: OnboardingCardDelegate?,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
         self.delegate = delegate
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -152,6 +156,7 @@ class OnboardingCardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        listenForThemeChange()
         setupView()
         updateLayout()
         applyTheme()
@@ -252,24 +257,6 @@ class OnboardingCardViewController: UIViewController {
         secondaryButton.setTitle(buttonTitle, for: .normal)
     }
 
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-
-        if theme == .dark {
-            titleLabel.textColor = .white
-            descriptionLabel.textColor  = .white
-            descriptionBoldLabel.textColor = .white
-            primaryButton.setTitleColor(.black, for: .normal)
-            primaryButton.backgroundColor = UIColor.theme.homePanel.activityStreamHeaderButton
-        } else {
-            titleLabel.textColor = .black
-            descriptionLabel.textColor = .black
-            descriptionBoldLabel.textColor = .black
-            primaryButton.setTitleColor(UIColor.Photon.LightGrey05, for: .normal)
-            primaryButton.backgroundColor = UIColor.Photon.Blue50
-        }
-    }
-
     @objc func primaryAction() {
         viewModel.sendTelemetryButton(isPrimaryAction: true)
         delegate?.primaryAction(viewModel.cardType)
@@ -278,5 +265,20 @@ class OnboardingCardViewController: UIViewController {
     @objc func secondaryAction() {
         viewModel.sendTelemetryButton(isPrimaryAction: false)
         delegate?.showNextPage(viewModel.cardType)
+    }
+
+    // MARK: - Themable
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        titleLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor  = theme.colors.textPrimary
+        descriptionBoldLabel.textColor = theme.colors.textPrimary
+
+        primaryButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        primaryButton.backgroundColor = theme.colors.actionPrimary
+
+        secondaryButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
+        secondaryButton.backgroundColor = theme.colors.actionSecondary
+        handleSecondaryButton()
     }
 }
