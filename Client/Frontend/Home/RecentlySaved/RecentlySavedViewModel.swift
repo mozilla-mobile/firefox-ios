@@ -134,9 +134,9 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
         if let item = recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
             let id = Int(arc4random())
-                        cell.tag = id
-                        var heroImage: UIImage?
-                        var favicon: UIImage?
+            cell.tag = id
+            var heroImage: UIImage?
+            var favicon: UIImage?
 
             let viewModel = RecentlySavedCellViewModel(site: site,
                                                        heroImage: heroImage,
