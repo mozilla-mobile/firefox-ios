@@ -11,9 +11,6 @@ protocol JumpBackInDataAdaptor {
     func getRecentTabData() -> [Tab]
     func getGroupsData() -> [ASGroup<Tab>]?
     func getSyncedTabData() -> JumpBackInSyncedTab?
-
-    func getHeroImage(forSite site: Site) -> UIImage?
-    func getFaviconImage(forSite site: Site) -> UIImage?
 }
 
 protocol JumpBackInDelegate: AnyObject {
@@ -27,19 +24,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     var notificationCenter: NotificationProtocol
     private let profile: Profile
     private let tabManager: TabManagerProtocol
-    private var siteImageHelper: SiteImageHelperProtocol
-    private var heroImages = [String: UIImage]() {
-        didSet {
-            delegate?.didLoadNewData()
-        }
-    }
-
-    private var faviconImages = [String: UIImage]() {
-        didSet {
-            delegate?.didLoadNewData()
-        }
-    }
-
     private var recentTabs: [Tab] = [Tab]()
     private var recentGroups: [ASGroup<Tab>]?
     private var mostRecentSyncedTab: JumpBackInSyncedTab?
@@ -53,13 +37,11 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     // MARK: Init
     init(profile: Profile,
          tabManager: TabManagerProtocol,
-         siteImageHelper: SiteImageHelperProtocol,
          mainQueue: DispatchQueueInterface = DispatchQueue.main,
          userInitiatedQueue: DispatchQueueInterface = DispatchQueue.global(qos: DispatchQoS.userInitiated.qosClass),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
         self.tabManager = tabManager
-        self.siteImageHelper = siteImageHelper
         self.notificationCenter = notificationCenter
 
         self.mainQueue = mainQueue
@@ -97,31 +79,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     func getSyncedTabData() -> JumpBackInSyncedTab? {
         return mostRecentSyncedTab
-    }
-
-    func getHeroImage(forSite site: Site) -> UIImage? {
-        if let heroImage = heroImages[site.url] {
-            return heroImage
-        }
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .heroImage,
-                                      shouldFallback: true) { image in
-            self.heroImages[site.url] = image
-        }
-        return nil
-    }
-
-    func getFaviconImage(forSite site: Site) -> UIImage? {
-        if let faviconImage = faviconImages[site.url] {
-            return faviconImage
-        }
-
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .favicon,
-                                      shouldFallback: false) { image in
-            self.faviconImages[site.url] = image
-        }
-        return nil
     }
 
     // MARK: Jump back in data

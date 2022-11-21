@@ -97,66 +97,6 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
         XCTAssert(mockDelegate?.didLoadNewDataCallCount == 2)
     }
 
-    // MARK: - getHeroImage
-
-    // Without image cached
-    func testGetHeroImage_withoutImageCached() {
-        initializeSubject()
-
-        let site = Site(url: "www.google.com", title: "google")
-        let image = subject.getHeroImage(forSite: site)
-
-        XCTAssert(mockSiteImageHelper.getfetchImageForCallCount == 1)
-        XCTAssertNil(image)
-        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 0)
-    }
-
-    // With image cached
-    func testGetHeroImage_withImageCached() {
-        initializeSubject()
-
-        let site = Site(url: "www.google.com", title: "google")
-        _ = subject.getHeroImage(forSite: site)
-
-        mockSiteImageHelper.callFetchImageForCompletion(with: UIImage())
-
-        let image = subject.getHeroImage(forSite: site)
-
-        XCTAssert(mockSiteImageHelper.getfetchImageForCallCount == 1)
-        XCTAssertNotNil(image)
-        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 1)
-    }
-
-    // MARK: - getFavIconImage
-
-    // Without image cached
-    func testGetFavIconImage_withoutImageCached() {
-        initializeSubject()
-
-        let site = Site(url: "www.google.com", title: "google")
-        let image = subject.getFaviconImage(forSite: site)
-
-        XCTAssert(mockSiteImageHelper.getfetchImageForCallCount == 1)
-        XCTAssertNil(image)
-        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 0)
-    }
-
-    // With image cached
-    func testGetFavIconImage_withImageCached() {
-        initializeSubject()
-
-        let site = Site(url: "www.google.com", title: "google")
-        _ = subject.getFaviconImage(forSite: site)
-
-        mockSiteImageHelper.callFetchImageForCompletion(with: UIImage())
-
-        let image = subject.getFaviconImage(forSite: site)
-
-        XCTAssert(mockSiteImageHelper.getfetchImageForCallCount == 1)
-        XCTAssertNotNil(image)
-        XCTAssert(mockDelegate?.didLoadNewDataCallCount == 1)
-    }
-
     // MARK: - Bookmark Notifications
 
     func testBookmarksUpdateFromNotification() {
@@ -200,8 +140,7 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
     // MARK: - Helper functions
 
     private func initializeSubject() {
-        let subject = RecentlySavedDataAdaptorImplementation(siteImageHelper: mockSiteImageHelper,
-                                                             readingList: mockReadingList,
+        let subject = RecentlySavedDataAdaptorImplementation(readingList: mockReadingList,
                                                              bookmarksHandler: mockBookmarksHandler,
                                                              notificationCenter: mockNotificationCenter)
         subject.delegate = mockDelegate
