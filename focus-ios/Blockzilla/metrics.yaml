@@ -74,6 +74,20 @@ browser:
     no_lint:
       - BASELINE_PING
 
+  pdf_viewer_used:
+    type: counter
+    description: |
+      Counts the number of times pdf view is opened in browser.
+    bugs:
+      - https://github.com/mozilla-mobile/focus-ios/issues/3525
+    data_reviews:
+      - https://github.com/mozilla-mobile/focus-ios/pull/3569
+    notification_emails:
+      - focus-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2023-11-10"
+
 mozilla_products:
   has_firefox_installed:
     type: boolean

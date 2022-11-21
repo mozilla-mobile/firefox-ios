@@ -253,6 +253,12 @@ class WebViewController: UIViewController, WebController {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
 
+    func evaluateDocumentContentType(_ completion: @escaping (String?) -> Void) {
+        evaluate("document.contentType") { documentType, _ in
+            completion(documentType as? String)
+        }
+    }
+
     enum MetadataError: Swift.Error {
         case missingMetadata
         case missingURL
