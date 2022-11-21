@@ -75,7 +75,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         view.backgroundColor = .clear
     }
 
-    private let tabHeroImage: UIImageView = .build { imageView in
+    let tabHeroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
@@ -85,7 +85,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     }
 
     // Used as a fallback if hero image isn't set
-    private let tabFallbackFaviconImage: UIImageView = .build { imageView in
+    let tabFallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = .clear

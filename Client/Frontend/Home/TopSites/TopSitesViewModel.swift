@@ -30,6 +30,7 @@ class TopSitesViewModel {
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private var wallpaperManager: WallpaperManager
+    private var siteImageHelper: SiteImageHelper
 
     init(profile: Profile,
          isZeroSearch: Bool = false,
@@ -42,11 +43,10 @@ class TopSitesViewModel {
 
         self.topSiteHistoryManager = TopSiteHistoryManager(profile: profile)
         self.googleTopSiteManager = GoogleTopSiteManager(prefs: profile.prefs)
-        let siteImageHelper = SiteImageHelper(profile: profile)
+        self.siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = TopSitesDataAdaptorImplementation(profile: profile,
                                                         topSiteHistoryManager: topSiteHistoryManager,
-                                                        googleTopSiteManager: googleTopSiteManager,
-                                                        siteImageHelper: siteImageHelper)
+                                                        googleTopSiteManager: googleTopSiteManager)
         topSitesDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
         adaptor.delegate = self
@@ -228,7 +228,15 @@ extension TopSitesViewModel: HomepageSectionHandler {
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
            let contentItem = topSites[safe: indexPath.row] {
-            let favicon = topSitesDataAdaptor.getFaviconImage(forSite: contentItem.site)
+            let id = Int(arc4random())
+            cell.tag = id
+            siteImageHelper.fetchImageFor(site: contentItem.site,
+                                          imageType: .favicon,
+                                          shouldFallback: false) { image in
+                guard cell.tag == id else { return }
+                cell.imageView.image = image
+            }
+
             var textColor: UIColor?
 
             if wallpaperManager.featureAvailable {
@@ -236,7 +244,7 @@ extension TopSitesViewModel: HomepageSectionHandler {
             }
 
             cell.configure(contentItem,
-                           favicon: favicon,
+                           favicon: nil,
                            position: indexPath.row,
                            theme: theme,
                            textColor: textColor)

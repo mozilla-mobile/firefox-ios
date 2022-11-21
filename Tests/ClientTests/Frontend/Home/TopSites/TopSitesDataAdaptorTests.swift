@@ -515,7 +515,6 @@ extension TopSitesDataAdaptorTests {
         let subject = TopSitesDataAdaptorImplementation(profile: profile,
                                                         topSiteHistoryManager: historyStub,
                                                         googleTopSiteManager: googleManager,
-                                                        siteImageHelper: siteImageHelper,
                                                         contileProvider: contileProviderMock,
                                                         notificationCenter: notificationCenter,
                                                         dispatchGroup: dispatchGroup)

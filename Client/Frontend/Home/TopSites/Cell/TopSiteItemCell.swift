@@ -34,7 +34,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
-    private lazy var imageView: UIImageView = .build { imageView in
+    lazy var imageView: UIImageView = .build { imageView in
         imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
         imageView.layer.masksToBounds = true
     }

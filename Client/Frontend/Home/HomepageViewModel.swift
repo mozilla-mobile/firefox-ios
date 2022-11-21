@@ -118,10 +118,8 @@ class HomepageViewModel: FeatureFlaggable {
                                                   wallpaperManager: wallpaperManager)
         self.wallpaperManager = wallpaperManager
 
-        let siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = JumpBackInDataAdaptorImplementation(profile: profile,
-                                                          tabManager: tabManager,
-                                                          siteImageHelper: siteImageHelper)
+                                                          tabManager: tabManager)
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,
