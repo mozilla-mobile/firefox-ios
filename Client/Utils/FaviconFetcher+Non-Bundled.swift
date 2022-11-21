@@ -115,7 +115,6 @@ extension FaviconFetcher {
     func getFavicon(_ siteUrl: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
-        let site = Site(url: siteUrl.absoluteString, title: "")
 
         var fav = Favicon(url: url)
 
@@ -139,7 +138,6 @@ extension FaviconFetcher {
 
                 fav.width = Int(image.size.width)
                 fav.height = Int(image.size.height)
-                profile.favicons.addFavicon(fav, forSite: site)
 
                 deferred.fill(Maybe(success: fav))
             }

@@ -71,21 +71,10 @@ class FaviconHandler {
         }
 
         let domainLevelIconUrl = currentUrl.domainURL.appendingPathComponent("favicon.ico")
-        let site = Site(url: currentUrl.absoluteString, title: "")
 
         let onSuccess: (Favicon) -> Void = { [weak tab] (favicon) -> Void in
             tab?.favicons.append(favicon)
-
-            guard !(tab?.isPrivate ?? true),
-                  let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                completion(favicon, nil)
-                return
-            }
-
-            let profile = appDelegate.profile
-            profile.favicons.addFavicon(favicon, forSite: site) >>> {
-                completion(favicon, nil)
-            }
+            completion(favicon, nil)
         }
 
         getFaviconIconFrom(url: faviconUrl,
@@ -107,12 +96,13 @@ extension FaviconHandler: TabEventHandler {
         tab.favicons.removeAll(keepingCapacity: false)
         guard let faviconURL = metadata.faviconURL else { return }
 
+        // This is necessary for tab favicons. Tab tray tabs favicon doesn't get updated without it
         loadFaviconURL(faviconURL, forTab: tab) { favicon, error in
             guard error == nil else { return }
             TabEvent.post(.didLoadFavicon(favicon), for: tab)
         }
-
     }
+
     func tabMetadataNotAvailable(_ tab: Tab) {
         tab.favicons.removeAll(keepingCapacity: false)
     }
