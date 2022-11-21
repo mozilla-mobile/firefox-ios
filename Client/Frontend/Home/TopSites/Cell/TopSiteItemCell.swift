@@ -42,7 +42,7 @@ class TopSiteItemCell: BlurrableCollectionViewCell, ReusableCell {
         view.layer.cornerRadius = UX.cellCornerRadius
     }
 
-    private lazy var imageView: UIImageView = .build { imageView in
+    lazy var imageView: UIImageView = .build { imageView in
         imageView.layer.cornerRadius = UX.iconCornerRadius
         imageView.layer.masksToBounds = true
     }

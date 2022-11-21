@@ -37,7 +37,7 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
     private var faviconFirstBaselineConstraint: NSLayoutConstraint?
 
     // MARK: - UI Elements
-    private let heroImage: UIImageView = .build { imageView in
+    let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
@@ -61,7 +61,7 @@ class JumpBackInCell: BlurrableCollectionViewCell, ReusableCell {
         stackView.distribution = .fillProportionally
     }
 
-    private let faviconImage: UIImageView = .build { imageView in
+    let faviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true

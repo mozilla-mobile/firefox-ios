@@ -218,7 +218,16 @@ private extension JumpBackInViewModel {
         let cellViewModel = JumpBackInCellViewModel(titleText: group.searchTerm.localizedCapitalized,
                                                     descriptionText: descriptionText,
                                                     favIconImage: faviconImage,
-                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
+                                                    heroImage: nil)
+
+        let id = Int(arc4random())
+        cell.tag = id
+        siteImageHelper.fetchImageFor(site: site,
+                                      imageType: .heroImage,
+                                      shouldFallback: true) { image in
+            guard cell.tag == id else { return }
+            cell.heroImage.image = image
+        }
         cell.configure(viewModel: cellViewModel)
     }
 
@@ -227,10 +236,38 @@ private extension JumpBackInViewModel {
         let site = Site(url: itemURL, title: item.displayTitle)
         let descriptionText = site.tileURL.shortDisplayString.capitalized
 
+        let id = Int(arc4random())
+        cell.tag = id
+        var heroImage: UIImage?
+        var favicon: UIImage?
+
+        siteImageHelper.fetchImageFor(site: site,
+                                      imageType: .favicon,
+                                      shouldFallback: false) { image in
+            guard cell.tag == id else { return }
+            favicon = image
+            let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
+                                                        descriptionText: descriptionText,
+                                                        favIconImage: favicon,
+                                                        heroImage: heroImage)
+            cell.configure(viewModel: cellViewModel)
+        }
+        siteImageHelper.fetchImageFor(site: site,
+                                      imageType: .heroImage,
+                                      shouldFallback: true) { image in
+            guard cell.tag == id else { return }
+            heroImage = image
+            let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
+                                                        descriptionText: descriptionText,
+                                                        favIconImage: favicon,
+                                                        heroImage: heroImage)
+            cell.configure(viewModel: cellViewModel)
+        }
+
         let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
                                                     descriptionText: descriptionText,
-                                                    favIconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site),
-                                                    heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site))
+                                                    favIconImage: heroImage,
+                                                    heroImage: favicon)
         cell.configure(viewModel: cellViewModel)
     }
 
@@ -246,9 +283,24 @@ private extension JumpBackInViewModel {
             descriptionText: descriptionText,
             url: item.tab.URL,
             syncedDeviceImage: image,
-            heroImage: jumpBackInDataAdaptor.getHeroImage(forSite: site),
-            fallbackFaviconImage: jumpBackInDataAdaptor.getFaviconImage(forSite: site)
+            heroImage: nil,
+            fallbackFaviconImage: nil
         )
+
+        let id = Int(arc4random())
+        cell.tag = id
+        siteImageHelper.fetchImageFor(site: site,
+                                     imageType: .favicon,
+                                     shouldFallback: false) { image in
+           guard cell.tag == id else { return }
+           cell.tabFallbackFaviconImage.image = image
+        }
+        siteImageHelper.fetchImageFor(site: site,
+                                     imageType: .heroImage,
+                                     shouldFallback: true) { image in
+           guard cell.tag == id else { return }
+           cell.tabHeroImage.image = image
+        }
 
         cell.configure(
             viewModel: cellViewModel,

@@ -418,7 +418,10 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
         cell.updateCell(with: cellOptions)
 
+        let id = Int(arc4random())
+        cell.tag = id
         getFavIcon(for: site) { image in
+            guard cell.tag == id else { return }
             cell.heroImage.image = image
         }
 
