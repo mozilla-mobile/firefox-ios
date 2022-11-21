@@ -77,28 +77,16 @@ extension SQLiteHistory: Favicons {
         // First, attempt to lookup the favicon from our bundled top sites.
         return getTopSitesFaviconImage(forSite: site).bind { result in
             guard let image = result.successValue else {
-                // Second, attempt to lookup the favicon URL from the database.
-                return self.lookupFaviconURLFromDatabase(forSite: site).bind { result in
+                // Note: "Attempt to lookup the favicon URL from the database" was removed as part of FXIOS-5164 and
+                // FXIOS-5294. This means at the moment we don't save nor retrieve favicon URLs from the database.
+
+                // Attempt to scrape its URL from the web page.
+                return self.lookupFaviconURLFromWebPage(forSite: site).bind { result in
                     guard let faviconURL = result.successValue else {
-                        // If it isn't in the DB, attempt to scrape its URL from the web page.
-                        return self.lookupFaviconURLFromWebPage(forSite: site).bind { result in
-                            guard let faviconURL = result.successValue else {
-                                // Otherwise, get the default favicon image.
-                                return self.generateDefaultFaviconImage(forSite: site)
-                            }
-                            // Try to get the favicon from the URL scraped from the web page.
-                            return self.retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: faviconURL).bind { result in
-                                // If the favicon could not be downloaded, use the generated "default" favicon.
-                                guard let image = result.successValue else {
-                                    return self.generateDefaultFaviconImage(forSite: site)
-                                }
-
-                                return deferMaybe(image)
-                            }
-                        }
+                        // Otherwise, get the default favicon image.
+                        return self.generateDefaultFaviconImage(forSite: site)
                     }
-
-                    // Attempt to download the favicon from the URL found in the database.
+                    // Try to get the favicon from the URL scraped from the web page.
                     return self.retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: faviconURL).bind { result in
                         // If the favicon could not be downloaded, use the generated "default" favicon.
                         guard let image = result.successValue else {
@@ -173,13 +161,6 @@ extension SQLiteHistory: Favicons {
         }
 
         return deferMaybe(FaviconLookupError(siteURL: site.url))
-    }
-
-    // Retrieves a site's previously-known favicon URL from the database.
-    fileprivate func lookupFaviconURLFromDatabase(forSite site: Site) -> Deferred<Maybe<URL>> {
-        let deferred = CancellableDeferred<Maybe<URL>>()
-        deferred.fill(Maybe(failure: FaviconLookupError(siteURL: site.url)))
-        return deferred
     }
 
     // Retrieve's a site's favicon URL from the web.
