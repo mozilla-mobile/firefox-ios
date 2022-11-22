@@ -32,7 +32,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         static let titleSizeSmall: CGFloat = 24
         static let titleSizeLarge: CGFloat = 34
         static let buttonCornerRadius: CGFloat = 10
-        static let buttonColour = UIColor.Photon.Blue50
+        static let buttonColor = UIColor.Photon.Blue50
     }
 
     // MARK: - Properties
@@ -43,11 +43,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     let theme = LegacyThemeManager.instance
 
     // Private vars
-    private var fxTextThemeColour: UIColor {
-        // For dark theme we want to show light colours and for light we want to show dark colours
-        return theme.currentName == .dark ? .white : .black
-    }
-
     private var titleFontSize: CGFloat {
         return screenSize.height > 1000 ? UX.titleSizeLarge :
                screenSize.height > 640 ? UX.titleSize : UX.titleSizeSmall
@@ -110,8 +105,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         guard let self = self else { return }
         button.setTitle(.DefaultBrowserOnboardingButton, for: .normal)
         button.layer.cornerRadius = UX.buttonCornerRadius
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UX.buttonColour
         button.accessibilityIdentifier = "HomeTabBanner.goToSettingsButton"
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 20)
@@ -262,12 +255,19 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     // Theme
     @objc func updateTheme() {
+        let textColor: UIColor = theme.currentName == .dark ? .white : .black
+
         view.backgroundColor = .systemBackground
-        titleLabel.textColor = fxTextThemeColour
-        descriptionText.textColor = fxTextThemeColour
-        descriptionLabel1.textColor = fxTextThemeColour
-        descriptionLabel2.textColor = fxTextThemeColour
-        descriptionLabel3.textColor = fxTextThemeColour
+        titleLabel.textColor = textColor
+
+        descriptionText.textColor = textColor
+        descriptionLabel1.textColor = textColor
+        descriptionLabel2.textColor = textColor
+        descriptionLabel3.textColor = textColor
+
+        goToSettingsButton.backgroundColor = UX.buttonColor
+        goToSettingsButton.setTitleColor(.white, for: .normal)
+        closeButton.tintColor = .secondaryLabel
     }
 
     deinit {
