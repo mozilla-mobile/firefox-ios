@@ -1133,14 +1133,12 @@ extension String {
             "ShareSheet.Copy.Title.v108",
             tableName: nil,
             value: "Copy",
-            comment: "Button in share sheet to copy the url of the current tab.",
-            lastUpdated: .v108)
+            comment: "Button in share sheet to copy the url of the current tab.")
         public static let SendToDeviceButtonTitle = MZLocalizedString(
             "ShareSheet.SendToDevice.Title.v108",
             tableName: nil,
             value: "Send Link to Device",
-            comment: "Button in the share sheet to send the current link to another device.",
-            lastUpdated: .v108)
+            comment: "Button in the share sheet to send the current link to another device.")
     }
 }
 
