@@ -38,7 +38,32 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
+
+        waitForExistence(app.navigationBars["Homepage"])
+        waitForExistence(app.tables.otherElements["OPENING SCREEN"])
+        waitForExistence(app.tables.otherElements["INCLUDE ON HOMEPAGE"])
+        waitForExistence(app.tables.otherElements["CURRENT HOMEPAGE"])
+
+        // Opening Screen
+        XCTAssertFalse(app.tables.cells["StartAtHomeAlways"].isSelected)
+        XCTAssertFalse(app.tables.cells["StartAtHomeDisabled"].isSelected)
+        XCTAssertTrue(app.tables.cells["StartAtHomeAfterFourHours"].isSelected)
+
+        // Include on Homepage
+        XCTAssertTrue(app.tables.cells["TopSitesSettings"].staticTexts["On"].exists)
+        let jumpBackIn = app.tables.cells.switches["Jump Back In"].value
+        XCTAssertEqual("1", jumpBackIn as? String)
+        let recentlySaved = app.tables.cells.switches["Recently Saved"].value
+        XCTAssertEqual("1", recentlySaved as? String)
+        let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
+        XCTAssertEqual("1", recentlyVisited as? String)
+        let recommendedByPocket = app.tables.cells.switches["Recommended by Pocket"].value
+        XCTAssertEqual("1", recommendedByPocket as? String)
+        let sponsoredStories = app.tables.cells.switches["Sponsored stories"].value
+        XCTAssertEqual("1", sponsoredStories as? String)
+
+        // Current Homepage
+        XCTAssertTrue(app.tables.cells["Firefox Home"].isSelected)
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
     }
 
