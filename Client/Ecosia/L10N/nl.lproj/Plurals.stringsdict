@@ -98,5 +98,10 @@
 			<string>%d vrienden uitgenodigd</string>
 		</dict>
 	</dict>
+	<key>%d accepted invite(s)</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@invites@</string>
+	</dict>
 </dict>
 </plist>

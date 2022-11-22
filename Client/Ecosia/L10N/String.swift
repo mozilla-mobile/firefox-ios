@@ -105,6 +105,7 @@ extension String {
         case showTopSites = "Show Top Sites"
         case helpYourFriendsBecome = "Help your friends become climate active and plant trees together"
         case friendsJoined = "%d friend(s) joined"
+        case acceptedInvites = "%d accepted invite(s)"
         case invitingAFriend = "Inviting a friend"
         case inviteYourFriends = "Invite your friends"
         case sendAnInvite = "Send an invite with your unique invitation link"
@@ -172,5 +173,10 @@ extension String {
         case buyTrees = "Buy trees in the Ecosia tree store to delight a friend - or treat yourself"
         case plantTreesAndEarn = "Plant trees and earn eco-friendly rewards with Treecard"
         case sponsored = "Sponsored"
+        case inviteYourFriendsToCheck = "Invite your friends to check out Ecosia. When they join, you both plant an extra tree."
+        case sharingYourLink = "Sharing your link"
+        case copy = "Copy"
+        case moreSharingMethods = "More sharing methods"
+        case copied = "Copied!"
     }
 }

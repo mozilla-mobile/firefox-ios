@@ -16,6 +16,7 @@ class EcosiaTheme {
     var border: UIColor { .Light.border }
 
     var primaryBackground: UIColor { .Light.Background.primary }
+    var secondaryBackground: UIColor { .Light.Background.secondary }
     var tertiaryBackground: UIColor { .Light.Background.tertiary }
     var quarternaryBackground: UIColor { .Light.Background.quarternary }
     var barBackground: UIColor { .white }
@@ -85,6 +86,7 @@ final class DarkEcosiaTheme: EcosiaTheme {
     override var border: UIColor { .Dark.border }
 
     override var primaryBackground: UIColor { .Dark.Background.primary }
+    override var secondaryBackground: UIColor { .Dark.Background.secondary }
     override var tertiaryBackground: UIColor { .Dark.Background.tertiary }
     override var quarternaryBackground: UIColor { .Dark.Background.quarternary }
     override var barBackground: UIColor { .Dark.Background.secondary }

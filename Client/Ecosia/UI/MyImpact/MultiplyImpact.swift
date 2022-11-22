@@ -4,21 +4,32 @@
 
 import UIKit
 import Core
+import UniformTypeIdentifiers
+import MobileCoreServices
 
 final class MultiplyImpact: UIViewController, NotificationThemeable {
     private weak var subtitle: UILabel?
     private weak var topBackground: UIView?
     private weak var waves: UIImageView?
-    private weak var card: UIControl?
+    private weak var card: UIView?
     private weak var cardIcon: UIImageView?
     private weak var cardTitle: UILabel?
     private weak var cardTreeCount: UILabel?
     private weak var cardTreeIcon: UIImageView?
-    private weak var inviteButton: EcosiaPrimaryButton!
     private weak var yourInvites: UILabel?
-
+    
+    private weak var sharingYourLink: UILabel?
+    private weak var sharing: UIView?
+    private weak var copyControl: UIControl?
+    private weak var copyLink: UILabel?
+    private weak var copyText: UILabel?
+    private weak var copyDividerLeft: UIView?
+    private weak var copyDividerRight: UIView?
+    private weak var moreSharingMethods: UILabel?
+    private weak var inviteButton: EcosiaPrimaryButton!
+    
     private weak var learnMoreButton: UIButton?
-
+    
     private weak var flowTitle: UILabel?
     private weak var flowBackground: UIView?
     private weak var flowStack: UIStackView?
@@ -63,7 +74,7 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         let subtitle = UILabel()
         subtitle.translatesAutoresizingMaskIntoConstraints = false
         subtitle.numberOfLines = 0
-        subtitle.text = .localized(.helpYourFriendsBecome)
+        subtitle.text = .localized(.inviteYourFriendsToCheck)
         subtitle.font = .preferredFont(forTextStyle: .body)
         subtitle.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         subtitle.adjustsFontForContentSizeCategory = true
@@ -82,21 +93,14 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         self.waves = waves
 
         let yourInvites = UILabel()
-        yourInvites.translatesAutoresizingMaskIntoConstraints = false
         yourInvites.text = .localized(.yourInvites)
-        yourInvites.font = .preferredFont(forTextStyle: .headline).bold()
-        yourInvites.adjustsFontForContentSizeCategory = true
         content.addSubview(yourInvites)
         self.yourInvites = yourInvites
-
-        let card = UIControl()
+        
+        let card = UIView()
+        card.isUserInteractionEnabled = false
         card.translatesAutoresizingMaskIntoConstraints = false
         card.layer.cornerRadius = 10
-        card.addTarget(self, action: #selector(highlight), for: .touchDown)
-        card.addTarget(self, action: #selector(clear), for: .touchUpInside)
-        card.addTarget(self, action: #selector(clear), for: .touchUpOutside)
-        card.addTarget(self, action: #selector(clear), for: .touchCancel)
-        card.addTarget(self, action: #selector(inviteFriends), for: .touchUpInside)
         content.addSubview(card)
         self.card = card
         
@@ -110,7 +114,7 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         let cardTitle = UILabel()
         cardTitle.translatesAutoresizingMaskIntoConstraints = false
         cardTitle.numberOfLines = 0
-        cardTitle.text = .localizedPlural(.friendsJoined, num: User.shared.referrals.count)
+        cardTitle.text = .localizedPlural(.acceptedInvites, num: User.shared.referrals.count)
         cardTitle.font = .preferredFont(forTextStyle: .body)
         cardTitle.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         cardTitle.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -136,16 +140,64 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         card.addSubview(cardTreeIcon)
         self.cardTreeIcon = cardTreeIcon
 
+        let sharingYourLink = UILabel()
+        sharingYourLink.text = .localized(.sharingYourLink)
+        content.addSubview(sharingYourLink)
+        self.sharingYourLink = sharingYourLink
+        
+        let sharing = UIView()
+        self.sharing = sharing
+        
+        let copyControl = UIControl()
+        copyControl.layer.cornerRadius = 10
+        copyControl.layer.borderWidth = 1
+        copyControl.addTarget(self, action: #selector(copyCode), for: .touchUpInside)
+        copyControl.addTarget(self, action: #selector(hover), for: .touchDown)
+        copyControl.addTarget(self, action: #selector(unhover), for: .touchUpInside)
+        copyControl.addTarget(self, action: #selector(unhover), for: .touchUpOutside)
+        copyControl.addTarget(self, action: #selector(unhover), for: .touchCancel)
+        self.copyControl = copyControl
+        
+        let copyLink = UILabel()
+        copyLink.translatesAutoresizingMaskIntoConstraints = false
+        copyLink.adjustsFontForContentSizeCategory = true
+        copyLink.font = .preferredFont(forTextStyle: .body)
+        copyLink.text = inviteLink ?? "ecosia://invite/"
+        copyLink.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        copyLink.numberOfLines = 1
+        copyControl.addSubview(copyLink)
+        self.copyLink = copyLink
+        
+        let copyText = UILabel()
+        copyText.translatesAutoresizingMaskIntoConstraints = false
+        copyText.text = .localized(.copy)
+        copyText.font = .preferredFont(forTextStyle: .body)
+        copyText.adjustsFontForContentSizeCategory = true
+        copyControl.addSubview(copyText)
+        self.copyText = copyText
+        
+        let copyDividerLeft = UIView()
+        self.copyDividerLeft = copyDividerLeft
+        
+        let copyDividerRight = UIView()
+        self.copyDividerRight = copyDividerRight
+        
+        let moreSharingMethods = UILabel()
+        moreSharingMethods.translatesAutoresizingMaskIntoConstraints = false
+        moreSharingMethods.adjustsFontForContentSizeCategory = true
+        moreSharingMethods.font = .systemFont(ofSize: UIFont.preferredFont(forTextStyle: .footnote).pointSize, weight: .semibold)
+        moreSharingMethods.text = .localized(.moreSharingMethods)
+        sharing.addSubview(moreSharingMethods)
+        self.moreSharingMethods = moreSharingMethods
+        
         let inviteFriends = EcosiaPrimaryButton(type: .custom)
-        inviteFriends.translatesAutoresizingMaskIntoConstraints = false
         inviteFriends.setTitle(.localized(.inviteFriends), for: [])
         inviteFriends.titleLabel!.font = .preferredFont(forTextStyle: .callout)
         inviteFriends.titleLabel!.adjustsFontForContentSizeCategory = true
         inviteFriends.layer.cornerRadius = 22
         inviteFriends.addTarget(self, action: #selector(self.inviteFriends), for: .touchUpInside)
-        card.addSubview(inviteFriends)
         self.inviteButton = inviteFriends
-
+        
         let flowTitleStack = UIStackView()
         flowTitleStack.translatesAutoresizingMaskIntoConstraints = false
         flowTitleStack.alignment = .fill
@@ -153,11 +205,7 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         content.addSubview(flowTitleStack)
 
         let flowTitle = UILabel()
-        flowTitle.translatesAutoresizingMaskIntoConstraints = false
         flowTitle.text = .localized(.howItWorks)
-        flowTitle.font = .preferredFont(forTextStyle: .headline).bold()
-        flowTitle.adjustsFontForContentSizeCategory = true
-        flowTitle.setContentHuggingPriority(.defaultLow, for: .horizontal)
         flowTitleStack.addArrangedSubview(flowTitle)
         self.flowTitle = flowTitle
 
@@ -172,9 +220,6 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         self.learnMoreButton = learnMoreButton
 
         let flowBackground = UIView()
-        flowBackground.translatesAutoresizingMaskIntoConstraints = false
-        flowBackground.layer.cornerRadius = 10
-        content.addSubview(flowBackground)
         self.flowBackground = flowBackground
 
         let flowStack = UIStackView()
@@ -199,6 +244,40 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         let fourthStep = MultiplyImpactStep(title: .localized(.eachOfYouHelpsPlant), subtitle: .localized(.whenAFriendUses), image: "myImpact")
         flowStack.addArrangedSubview(fourthStep)
         self.fourthStep = fourthStep
+        
+        [yourInvites, sharingYourLink, flowTitle].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.font = .preferredFont(forTextStyle: .headline).bold()
+            $0.adjustsFontForContentSizeCategory = true
+            $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        }
+        
+        [card, sharing, flowBackground].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.layer.cornerRadius = 10
+            content.addSubview($0)
+            
+            $0.leftAnchor.constraint(equalTo: content.leftAnchor, constant: 16).isActive = true
+            $0.rightAnchor.constraint(equalTo: content.rightAnchor, constant: -16).isActive = true
+        }
+        
+        [copyControl, inviteFriends].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            sharing.addSubview($0)
+            
+            $0.leftAnchor.constraint(equalTo: sharing.leftAnchor, constant: 16).isActive = true
+            $0.rightAnchor.constraint(equalTo: sharing.rightAnchor, constant: -16).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        }
+        
+        [copyDividerLeft, copyDividerRight].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.isUserInteractionEnabled = false
+            sharing.addSubview($0)
+            
+            $0.topAnchor.constraint(equalTo: copyControl.bottomAnchor, constant: 21).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        }
         
         scroll.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         scroll.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
@@ -241,8 +320,7 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         yourInvites.topAnchor.constraint(equalTo: waves.bottomAnchor, constant: 16).isActive = true
 
         card.topAnchor.constraint(equalTo: yourInvites.bottomAnchor, constant: 16).isActive = true
-        card.leftAnchor.constraint(equalTo: content.leftAnchor, constant: 16).isActive = true
-        card.rightAnchor.constraint(equalTo: content.rightAnchor, constant: -16).isActive = true
+        card.bottomAnchor.constraint(equalTo: cardIcon.bottomAnchor, constant: 17).isActive = true
 
         cardIcon.topAnchor.constraint(equalTo: card.topAnchor, constant: 17).isActive = true
         cardIcon.leftAnchor.constraint(equalTo: card.leftAnchor, constant: 16).isActive = true
@@ -257,19 +335,37 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         cardTreeIcon.rightAnchor.constraint(equalTo: card.rightAnchor, constant: -16).isActive = true
         cardTreeIcon.centerYAnchor.constraint(equalTo: cardTreeCount.centerYAnchor).isActive = true
 
-        inviteFriends.leftAnchor.constraint(equalTo: card.leftAnchor, constant: 16).isActive = true
-        inviteFriends.rightAnchor.constraint(equalTo: card.rightAnchor, constant: -16).isActive = true
-        inviteFriends.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        inviteFriends.topAnchor.constraint(equalTo: cardIcon.bottomAnchor, constant: 20).isActive = true
-        inviteFriends.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -16).isActive = true
-
+        sharingYourLink.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 16).isActive = true
+        sharingYourLink.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -16).isActive = true
+        sharingYourLink.topAnchor.constraint(equalTo: card.bottomAnchor, constant: 32).isActive = true
+        
+        sharing.topAnchor.constraint(equalTo: sharingYourLink.bottomAnchor, constant: 16).isActive = true
+        
+        copyControl.topAnchor.constraint(equalTo: sharing.topAnchor, constant: 16).isActive = true
+        
+        copyLink.centerYAnchor.constraint(equalTo: copyControl.centerYAnchor).isActive = true
+        copyLink.leftAnchor.constraint(equalTo: copyControl.leftAnchor, constant: 16).isActive = true
+        copyLink.rightAnchor.constraint(lessThanOrEqualTo: copyText.leftAnchor, constant: -10).isActive = true
+        
+        copyText.centerYAnchor.constraint(equalTo: copyControl.centerYAnchor).isActive = true
+        copyText.rightAnchor.constraint(equalTo: copyControl.rightAnchor, constant: -12).isActive = true
+        
+        copyDividerLeft.leftAnchor.constraint(equalTo: copyControl.leftAnchor).isActive = true
+        copyDividerLeft.rightAnchor.constraint(equalTo: moreSharingMethods.leftAnchor, constant: -10).isActive = true
+        copyDividerRight.rightAnchor.constraint(equalTo: copyControl.rightAnchor).isActive = true
+        copyDividerRight.leftAnchor.constraint(equalTo: moreSharingMethods.rightAnchor, constant: 10).isActive = true
+        
+        moreSharingMethods.centerXAnchor.constraint(equalTo: sharing.centerXAnchor).isActive = true
+        moreSharingMethods.centerYAnchor.constraint(equalTo: copyDividerLeft.centerYAnchor).isActive = true
+        
+        inviteFriends.topAnchor.constraint(equalTo: copyDividerLeft.bottomAnchor, constant: 21).isActive = true
+        inviteFriends.bottomAnchor.constraint(equalTo: sharing.bottomAnchor, constant: -16).isActive = true
+        
         flowTitleStack.leftAnchor.constraint(equalTo: content.leftAnchor, constant: 16).isActive = true
         flowTitleStack.rightAnchor.constraint(equalTo: content.rightAnchor, constant: -16).isActive = true
-        flowTitleStack.topAnchor.constraint(equalTo: card.bottomAnchor, constant: 36).isActive = true
+        flowTitleStack.topAnchor.constraint(equalTo: sharing.bottomAnchor, constant: 36).isActive = true
 
         flowBackground.topAnchor.constraint(equalTo: flowTitleStack.bottomAnchor,constant: 16).isActive = true
-        flowBackground.leftAnchor.constraint(equalTo: content.leftAnchor, constant: 16).isActive = true
-        flowBackground.rightAnchor.constraint(equalTo: content.rightAnchor, constant: -16).isActive = true
         flowBackground.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: -20).isActive = true
 
         flowStack.leftAnchor.constraint(equalTo: flowBackground.leftAnchor, constant: 16).isActive = true
@@ -297,26 +393,34 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         inviteButton.setTitleColor(.theme.ecosia.primaryTextInverted, for: .highlighted)
         inviteButton.setTitleColor(.theme.ecosia.primaryTextInverted, for: .selected)
         learnMoreButton?.setTitleColor(.theme.ecosia.primaryBrand, for: .normal)
-        yourInvites?.textColor = .theme.ecosia.primaryText
-
         waves?.tintColor = .theme.ecosia.modalBackground
         topBackground?.backgroundColor = .theme.ecosia.modalHeader
-
         subtitle?.textColor = .Dark.Text.primary
-        card?.backgroundColor = .theme.ecosia.impactMultiplyCardBackground
-        cardIcon?.tintColor = .theme.ecosia.primaryBrand
-        cardTitle?.textColor = .theme.ecosia.primaryText
-        cardTreeCount?.textColor = .theme.ecosia.primaryText
-        cardTreeIcon?.tintColor = .theme.ecosia.primaryBrand
-        flowTitle?.textColor = .theme.ecosia.primaryText
-
-        flowBackground?.backgroundColor = .theme.ecosia.impactMultiplyCardBackground
-
-        firstStep?.applyTheme()
-        secondStep?.applyTheme()
-        thirdStep?.applyTheme()
-        fourthStep?.applyTheme()
-
+        copyControl?.backgroundColor = .theme.ecosia.secondaryBackground
+        copyControl?.layer.borderColor = UIColor.theme.ecosia.border.cgColor
+        moreSharingMethods?.textColor = .theme.ecosia.secondaryText
+        copyText?.textColor = .theme.ecosia.primaryBrand
+        
+        [yourInvites, sharingYourLink, flowTitle, cardTitle, cardTreeCount, copyLink].forEach {
+            $0?.textColor = .theme.ecosia.primaryText
+        }
+        
+        [card, sharing, flowBackground].forEach {
+            $0?.backgroundColor = .theme.ecosia.impactMultiplyCardBackground
+        }
+        
+        [cardIcon, cardTreeIcon].forEach {
+            $0?.tintColor = .theme.ecosia.primaryBrand
+        }
+        
+        [firstStep, secondStep, thirdStep, fourthStep].forEach {
+            $0?.applyTheme()
+        }
+        
+        [copyDividerLeft, copyDividerRight].forEach {
+            $0?.backgroundColor = .theme.ecosia.border
+        }
+        
         updateBarAppearance()
     }
 
@@ -335,9 +439,29 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
     
     @objc private func learnMore() {
         delegate?.ecosiaHome(didSelectURL: URL(string: "https://ecosia.helpscoutdocs.com/article/358-refer-a-friend-ios-only")!)
-        clear()
         dismiss(animated: true)
         Analytics.shared.inviteLearnMore()
+    }
+    
+    @objc private func hover() {
+        copyControl?.alpha = 0.3
+    }
+    
+    @objc private func unhover() {
+        copyControl?.alpha = 1
+    }
+    
+    @objc private func copyCode() {
+        unhover()
+        guard let message = inviteMessage else { return }
+        
+        if #available(iOS 14.0, *) {
+            UIPasteboard.general.setValue(message, forPasteboardType: UTType.plainText.identifier)
+        } else {
+            UIPasteboard.general.setValue(message, forPasteboardType: kUTTypePlainText as String)
+        }
+        
+        copyText?.text = .localized(.copied)
     }
     
     @objc private func inviteFriends() {
@@ -376,14 +500,6 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
             self?.inviteFriends()
         })
         present(alert, animated: true)
-    }
-
-    @objc private func highlight() {
-        card?.backgroundColor = .theme.ecosia.secondarySelectedBackground
-    }
-    
-    @objc private func clear() {
-        card?.backgroundColor = .theme.ecosia.impactMultiplyCardBackground
     }
 
     @objc private func doneTapped() {
