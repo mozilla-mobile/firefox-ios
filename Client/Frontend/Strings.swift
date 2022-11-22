@@ -1313,7 +1313,18 @@ extension String {
 // MARK: - Share Sheet
 extension String {
     public struct ShareSheet {
-
+        public static let CopyButtonTitle = MZLocalizedString(
+            "ShareSheet.Copy.Title.v108",
+            tableName: nil,
+            value: "Copy",
+            comment: "Button in share sheet to copy the url of the current tab.",
+            lastUpdated: .v108)
+        public static let SendToDeviceButtonTitle = MZLocalizedString(
+            "ShareSheet.SendToDevice.Title.v108",
+            tableName: nil,
+            value: "Send Link to Device",
+            comment: "Button in the share sheet to send the current link to another device.",
+            lastUpdated: .v108)
     }
 }
 
