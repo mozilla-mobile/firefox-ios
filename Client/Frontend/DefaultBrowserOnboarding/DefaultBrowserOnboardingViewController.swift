@@ -24,8 +24,8 @@ import Shared
  */
 
 struct DBOnboardingUX {
-    static let textOffset = 20
-    static let textOffsetSmall = 13
+    static let textOffset: CGFloat = 20
+    static let textOffsetSmall: CGFloat = 13
     static let fontSize: CGFloat = 24
     static let fontSizeSmall: CGFloat = 20
     static let fontSizeXSmall: CGFloat = 16
@@ -71,59 +71,56 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
 
     // UI
+    private lazy var scrollView: UIScrollView = .build { view in
+        view.backgroundColor = .clear
+    }
+
+    private lazy var containerView: UIView = .build { _ in }
+
     private lazy var closeButton: UIButton = .build { [weak self] button in
         button.setImage(UIImage(named: "close-large"), for: .normal)
         button.tintColor = .secondaryLabel
         button.addTarget(self, action: #selector(self?.dismissAnimated), for: .touchUpInside)
     }
 
-    private let textView: UIView = .build { view in }
-
     private lazy var titleLabel: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.titleText
-        label.font = .boldSystemFont(ofSize: self.titleFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title1,
+                                                                       size: self.titleFontSize)
         label.textAlignment = .center
-        label.numberOfLines = 2
+        label.numberOfLines = 0
     }
 
     private lazy var descriptionText: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[0]
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 28)
-        label.textAlignment = .left
-        label.numberOfLines = 5
-        label.adjustsFontSizeToFitWidth = true
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
+        label.numberOfLines = 0
     }
 
     private lazy var descriptionLabel1: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[1]
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)
-        label.textAlignment = .left
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
     }
 
     private lazy var descriptionLabel2: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[2]
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)
-        label.textAlignment = .left
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
     }
 
     private lazy var descriptionLabel3: UILabel = .build { [weak self] label in
         guard let self = self else { return }
         label.text = self.viewModel.model?.descriptionText[3]
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 36)
-        label.textAlignment = .left
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
     }
 
-    private lazy var goToSettingsButton: UIButton = .build { [weak self] button in
+    private lazy var goToSettingsButton: ResizableButton = .build { [weak self] button in
         guard let self = self else { return }
         button.setTitle(.DefaultBrowserOnboardingButton, for: .normal)
         button.layer.cornerRadius = DBOnboardingUX.buttonCornerRadius
@@ -131,12 +128,10 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         button.backgroundColor = DBOnboardingUX.buttonColour
         button.accessibilityIdentifier = "HomeTabBanner.goToSettingsButton"
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, maxSize: 40)
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 20)
+        button.contentEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
+        button.titleLabel?.textAlignment = .center
     }
-
-    // Used to set the part of text in center 
-    private var containerView = UIView()
 
     // MARK: - Inits
 
@@ -176,72 +171,94 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         updateTheme()
 
         view.addSubview(closeButton)
-        textView.addSubview(containerView)
-        containerView.addSubviews(titleLabel, descriptionText, descriptionLabel1, descriptionLabel2, descriptionLabel3)
-        view.addSubviews(textView, goToSettingsButton)
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(descriptionText)
+        containerView.addSubview(descriptionLabel1)
+        containerView.addSubview(descriptionLabel2)
+        containerView.addSubview(descriptionLabel3)
+        containerView.addSubview(goToSettingsButton)
+        scrollView.addSubviews(containerView)
+        view.addSubviews(scrollView)
 
         // Constraints
-        setupView()
+        setupLayout()
 
         // Theme change notification
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTheme), name: .DisplayThemeChanged, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateTheme),
+                                               name: .DisplayThemeChanged,
+                                               object: nil)
     }
 
-    private func setupView() {
+    private func setupLayout() {
+        let textOffset: CGFloat = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
 
-        let textOffset = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
+        let containerHeightConstraint = containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+        containerHeightConstraint.priority = .defaultLow
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             closeButton.heightAnchor.constraint(equalToConstant: 44),
 
-            textView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
-            textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 36),
-            textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -36),
-            textView.bottomAnchor.constraint(equalTo: goToSettingsButton.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
 
-            titleLabel.centerXAnchor.constraint(lessThanOrEqualTo: view.centerXAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
 
-            descriptionText.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: CGFloat(textOffset)),
-            descriptionText.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CGFloat(textOffset)),
-            descriptionText.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: CGFloat(-textOffset)),
+            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
 
-            descriptionLabel1.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: CGFloat(textOffset)),
+            containerHeightConstraint,
+
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: textOffset),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -textOffset),
+
+            descriptionText.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: textOffset),
+            descriptionText.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: textOffset),
+            descriptionText.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -textOffset),
+
+            descriptionLabel1.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: textOffset),
             descriptionLabel1.leadingAnchor.constraint(equalTo: descriptionText.leadingAnchor),
-            descriptionLabel1.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            descriptionLabel1.trailingAnchor.constraint(equalTo: descriptionText.trailingAnchor),
 
-            descriptionLabel2.topAnchor.constraint(equalTo: descriptionLabel1.bottomAnchor, constant: CGFloat(textOffset)),
+            descriptionLabel2.topAnchor.constraint(equalTo: descriptionLabel1.bottomAnchor, constant: textOffset),
             descriptionLabel2.leadingAnchor.constraint(equalTo: descriptionLabel1.leadingAnchor),
-            descriptionLabel2.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            descriptionLabel2.trailingAnchor.constraint(equalTo: descriptionLabel1.trailingAnchor),
 
-            descriptionLabel3.topAnchor.constraint(equalTo: descriptionLabel2.bottomAnchor, constant: CGFloat(textOffset)),
+            descriptionLabel3.topAnchor.constraint(equalTo: descriptionLabel2.bottomAnchor, constant: textOffset),
             descriptionLabel3.leadingAnchor.constraint(equalTo: descriptionLabel2.leadingAnchor),
-            descriptionLabel3.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            descriptionLabel3.trailingAnchor.constraint(equalTo: descriptionLabel2.trailingAnchor),
+
+            goToSettingsButton.topAnchor.constraint(greaterThanOrEqualTo: descriptionLabel3.bottomAnchor, constant: 24)
         ])
 
         if screenSize.height > 1000 {
             NSLayoutConstraint.activate([
-                goToSettingsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -60),
-                goToSettingsButton.heightAnchor.constraint(equalToConstant: 50),
+                goToSettingsButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
+                                                           constant: -60),
                 goToSettingsButton.widthAnchor.constraint(equalToConstant: 350)
             ])
         } else if screenSize.height > 640 {
             NSLayoutConstraint.activate([
-                goToSettingsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
-                goToSettingsButton.heightAnchor.constraint(equalToConstant: 60),
+                goToSettingsButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
+                                                           constant: -5),
                 goToSettingsButton.widthAnchor.constraint(equalToConstant: 350)
             ])
+            goToSettingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         } else {
             NSLayoutConstraint.activate([
-                goToSettingsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
-                goToSettingsButton.heightAnchor.constraint(equalToConstant: 50),
+                goToSettingsButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
+                                                           constant: -5),
                 goToSettingsButton.widthAnchor.constraint(equalToConstant: 300)
             ])
         }
-        goToSettingsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        goToSettingsButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
     }
 
     // Button Actions
