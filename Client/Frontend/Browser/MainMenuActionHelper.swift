@@ -246,11 +246,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             let shortAction = getShortcutAction()
             append(to: &section, action: shortAction)
 
-            let copyAction = getCopyAction()
-            append(to: &section, action: copyAction)
+            if !featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) {
+                let copyAction = getCopyAction()
+                append(to: &section, action: copyAction)
 
-            let sendToDeviceAction = getSendToDevice()
-            append(to: &section, action: sendToDeviceAction)
+                let sendToDeviceAction = getSendToDevice()
+                append(to: &section, action: sendToDeviceAction)
+            }
 
             let shareAction = getShareAction()
             append(to: &section, action: shareAction)
@@ -595,7 +597,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     }
 
     private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
-        let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
+        let helper = ShareSheetHelper(url: fileURL, tab: selectedTab)
         let controller = helper.createActivityViewController { completed, activityType in
             print("Shared downloaded file: \(completed)")
         }
