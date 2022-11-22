@@ -32,9 +32,6 @@ struct DBOnboardingUX {
     static let titleSize: CGFloat = 28
     static let titleSizeSmall: CGFloat = 24
     static let titleSizeLarge: CGFloat = 34
-    static let containerViewHeight = 350
-    static let containerViewHeightSmall = 300
-    static let containerViewHeightXSmall = 250
     static let buttonCornerRadius: CGFloat = 10
     static let buttonColour = UIColor.Photon.Blue50
 }
@@ -52,14 +49,6 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
         return theme.currentName == .dark ? .white : .black
-    }
-
-    private var fxBackgroundThemeColour: UIColor = UIColor.theme.onboarding.backgroundColor
-
-    private var descriptionFontSize: CGFloat {
-        return screenSize.height > 1000 ? DBOnboardingUX.fontSizeXSmall :
-               screenSize.height > 668 ? DBOnboardingUX.fontSize :
-               screenSize.height > 640 ? DBOnboardingUX.fontSizeSmall : DBOnboardingUX.fontSizeXSmall
     }
 
     private var titleFontSize: CGFloat {
