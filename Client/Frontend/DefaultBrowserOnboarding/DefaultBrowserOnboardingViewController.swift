@@ -23,20 +23,17 @@ import Shared
  
  */
 
-struct DBOnboardingUX {
-    static let textOffset: CGFloat = 20
-    static let textOffsetSmall: CGFloat = 13
-    static let fontSize: CGFloat = 24
-    static let fontSizeSmall: CGFloat = 20
-    static let fontSizeXSmall: CGFloat = 16
-    static let titleSize: CGFloat = 28
-    static let titleSizeSmall: CGFloat = 24
-    static let titleSizeLarge: CGFloat = 34
-    static let buttonCornerRadius: CGFloat = 10
-    static let buttonColour = UIColor.Photon.Blue50
-}
-
 class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable {
+
+    struct UX {
+        static let textOffset: CGFloat = 20
+        static let textOffsetSmall: CGFloat = 13
+        static let titleSize: CGFloat = 28
+        static let titleSizeSmall: CGFloat = 24
+        static let titleSizeLarge: CGFloat = 34
+        static let buttonCornerRadius: CGFloat = 10
+        static let buttonColour = UIColor.Photon.Blue50
+    }
 
     // MARK: - Properties
 
@@ -52,8 +49,8 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     private var titleFontSize: CGFloat {
-        return screenSize.height > 1000 ? DBOnboardingUX.titleSizeLarge :
-               screenSize.height > 640 ? DBOnboardingUX.titleSize : DBOnboardingUX.titleSizeSmall
+        return screenSize.height > 1000 ? UX.titleSizeLarge :
+               screenSize.height > 640 ? UX.titleSize : UX.titleSizeSmall
     }
 
     // Orientation independent screen size
@@ -112,9 +109,9 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private lazy var goToSettingsButton: ResizableButton = .build { [weak self] button in
         guard let self = self else { return }
         button.setTitle(.DefaultBrowserOnboardingButton, for: .normal)
-        button.layer.cornerRadius = DBOnboardingUX.buttonCornerRadius
+        button.layer.cornerRadius = UX.buttonCornerRadius
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = DBOnboardingUX.buttonColour
+        button.backgroundColor = UX.buttonColour
         button.accessibilityIdentifier = "HomeTabBanner.goToSettingsButton"
         button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 20)
@@ -141,7 +138,8 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Portrait orientation: lock enable
-        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
+                                               andRotateTo: UIInterfaceOrientation.portrait)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -180,7 +178,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     private func setupLayout() {
-        let textOffset: CGFloat = screenSize.height > 668 ? DBOnboardingUX.textOffset : DBOnboardingUX.textOffsetSmall
+        let textOffset: CGFloat = screenSize.height > 668 ? UX.textOffset : UX.textOffsetSmall
 
         let containerHeightConstraint = containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         containerHeightConstraint.priority = .defaultLow
