@@ -49,6 +49,7 @@ extension HomepageContextMenuProtocol {
             return self.contextMenu(for: highlightItem, with: sourceView, sectionType: sectionType)
         })
     }
+
     func contextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> PhotonActionSheet? {
         guard let actions = getContextMenuActions(for: highlightItem,
                                                   with: sourceView,

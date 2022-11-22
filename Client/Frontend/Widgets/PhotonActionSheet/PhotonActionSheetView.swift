@@ -304,8 +304,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
             statusIcon.tintColor = action.iconTint ?? action.tintColor ?? self.tintColor
 
         case .URL:
-            let image = UIImage(named: name)?.createScaled(PhotonActionSheet.UX.IconSize)
-            statusIcon.layer.cornerRadius = PhotonActionSheet.UX.IconSize.width / 2
+            let image = UIImage(named: name)?.createScaled(PhotonActionSheet.UX.iconSize)
+            statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
             statusIcon.image = image
             if let actionIconUrl = action.iconURL {
                 ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: actionIconUrl,
@@ -314,8 +314,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
                         return
                     }
 
-                    self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.IconSize)
-                    self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.IconSize.width / 2
+                    self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.iconSize)
+                    self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
                 }
             }
 
