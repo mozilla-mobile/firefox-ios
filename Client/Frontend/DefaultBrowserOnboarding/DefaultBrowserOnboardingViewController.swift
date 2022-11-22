@@ -59,8 +59,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     private lazy var containerView: UIView = .build { _ in }
 
     private lazy var closeButton: UIButton = .build { [weak self] button in
-        button.setImage(UIImage(named: "close-large"), for: .normal)
-        button.tintColor = .secondaryLabel
+        button.setImage(UIImage(named: ImageIdentifiers.closeLargeButton), for: .normal)
         button.addTarget(self, action: #selector(self?.dismissAnimated), for: .touchUpInside)
     }
 
