@@ -44,6 +44,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     // MARK: - Properties
 
     private let profile: Profile
+    private let historyDeletionUtility: HistoryDeletionUtility
     // Request limit and offset
     private let queryFetchLimit = 100
     // Is not intended to be use in prod code, only on test
@@ -84,6 +85,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     init(profile: Profile) {
         self.profile = profile
+        self.historyDeletionUtility = HistoryDeletionUtility(with: profile)
     }
 
     deinit {
@@ -338,7 +340,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     private func deleteSingle(site: Site) {
         groupedSites.remove(site)
-        _ = profile.places.deleteVisitsFor(site.url)
+        self.profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { _ in
+            NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)
+        }
 
         if isSearchInProgress, let indexToRemove = searchResultSites.firstIndex(of: site) {
             searchResultSites.remove(at: indexToRemove)

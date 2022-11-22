@@ -14,22 +14,19 @@ class MockFiles: FileAccessor {
     }
 }
 
-
-class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
-    func testCachePerf() {
+class TestHistoryFrecencyPerf: XCTestCase {
+    func testFrecencyPerf() {
         let files = MockFiles()
-        let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: database, prefs: prefs)
-
+        let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
+        let places = RustPlaces(databasePath: placesDatabasePath)
+        _ = places.reopenIfClosed()
         let count = 100
 
-        history.clearHistory().succeeded()
-        populateHistoryForFrecencyCalculations(history, siteCount: count)
+        _ = places.deleteEverythingHistory().value
 
-        history.setTopSitesNeedsInvalidation()
+        populateHistoryForFrecencyCalculations(places, siteCount: count)
         self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
-            history.repopulate(invalidateTopSites: true).succeeded()
+            _ = places.queryAutocomplete(matchingSearchQuery: "", limit: 10).value
             self.stopMeasuring()
         }
     }

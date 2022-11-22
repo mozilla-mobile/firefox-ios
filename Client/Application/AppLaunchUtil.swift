@@ -64,6 +64,9 @@ class AppLaunchUtil {
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
+        
+        // We migrate history from browser db to places if it hasn't already
+        runAppServicesHistoryMigration()
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
@@ -122,7 +125,6 @@ class AppLaunchUtil {
         // We also make sure that any cache invalidation happens after each applyPendingExperiments().
         NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: nil) { _ in
             FxNimbus.shared.invalidateCachedValues()
-            self.runEarlyExperimentDependencies()
         }
 
         let defaults = UserDefaults.standard
@@ -169,19 +171,14 @@ class AppLaunchUtil {
         profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
     }
 
-    private func runEarlyExperimentDependencies() {
-        runAppServicesHistoryMigration()
-    }
-
     // MARK: - Application Services History Migration
 
     private func runAppServicesHistoryMigration() {
 
         let browserProfile = self.profile as? BrowserProfile
 
-        let migrationRanKey = "PlacesHistoryMigrationRanreal"
-        let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
-        UserDefaults.standard.setValue(true, forKey: migrationRanKey)
+        let migrationRan = UserDefaults.standard.bool(forKey: PrefsKeys.HistoryMigratedToPlacesKey)
+        UserDefaults.standard.setValue(true, forKey: PrefsKeys.HistoryMigratedToPlacesKey)
         if !migrationRan {
             log.info("Migrating Application services history")
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()

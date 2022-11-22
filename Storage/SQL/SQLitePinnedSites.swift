@@ -8,13 +8,6 @@ import Glean
 
 private let log = Logger.syncLogger
 
-open class IgnoredSiteError: MaybeErrorType {
-    open var description: String {
-        return "Ignored site."
-    }
-}
-
-
 private var ignoredSchemes = ["about"]
 
 public func isIgnoredURL(_ url: URL) -> Bool {
@@ -48,24 +41,7 @@ extension SDRow {
     }
 }
 
-/**
- * The sqlite-backed implementation of the history protocol.
- */
-open class SQLiteHistory {
-    let database: BrowserDB
-    let prefs: Prefs
-    let notificationCenter: NotificationCenter
-
-    required public init(database: BrowserDB,
-                         prefs: Prefs,
-                         notificationCenter: NotificationCenter = NotificationCenter.default) {
-        self.database = database
-        self.prefs = prefs
-        self.notificationCenter = notificationCenter
-    }
-}
-
-extension SQLiteHistory: PinnedSites {
+extension BrowserDBSQLite: PinnedSites {
     public func removeFromPinnedTopSites(_ site: Site) -> Success {
         guard let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
@@ -94,7 +70,7 @@ extension SQLiteHistory: PinnedSites {
             SELECT * FROM pinned_top_sites
             ORDER BY pinDate DESC
             """
-        return database.runQueryConcurrently(sql, args: [], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
+        return database.runQueryConcurrently(sql, args: [], factory: BrowserDBSQLite.iconHistoryMetadataColumnFactory)
     }
 
     public func addPinnedTopSite(_ site: Site) -> Success { // needs test

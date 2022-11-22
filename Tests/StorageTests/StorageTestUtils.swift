@@ -8,6 +8,7 @@ import Foundation
 import Shared
 @testable import Storage
 @testable import Client
+
 import XCTest
 
 let threeMonthsInMillis: UInt64 = 3 * 30 * 24 * 60 * 60 * 1000
@@ -28,6 +29,25 @@ func advanceMicrosecondTimestamp(_ timestamp: MicrosecondTimestamp, by: Int) -> 
 enum VisitOrigin {
     case local
     case remote
+}
+
+func populateHistoryForFrecencyCalculations(_ places: RustPlaces, siteCount count: Int, visitPerSite: Int = 4) {
+    for i in 0...count {
+        let site = Site(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
+        site.guid = "abc\(i)def"
+
+
+        for j in 0..<visitPerSite {
+            let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
+            addVisitForSite(site, intoPlaces: places, atTime: visitTime)
+            addVisitForSite(site, intoPlaces: places, atTime: visitTime - 100)
+        }
+    }
+}
+
+func addVisitForSite(_ site: Site, intoPlaces places: RustPlaces, atTime: MicrosecondTimestamp) {
+    let visit = VisitObservation(url: site.url, visitType: VisitTransition.link, at: Int64(atTime) / 1000)
+    _ = places.applyObservation(visitObservation: visit).value
 }
 
 extension BrowserDB {

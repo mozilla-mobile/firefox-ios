@@ -95,6 +95,11 @@ class TopSitesViewModel {
 
     func hideURLFromTopSites(_ site: Site) {
         topSiteHistoryManager.removeDefaultTopSitesTile(site: site)
+        // We make sure to remove all history for URL so it doesn't show anymore in the
+        // top sites, this is the approach that Android takes too.
+        self.profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { _ in
+            NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
+        }
     }
 
     func pinTopSite(_ site: Site) {

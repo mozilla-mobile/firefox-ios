@@ -15,10 +15,6 @@ open class MockSyncManager: SyncManager {
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
 
-    open func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
-        return deferMaybe(true)
-    }
-
     private func completedWithStats(collection: String) -> Deferred<Maybe<SyncStatus>> {
         return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
     }
@@ -117,7 +113,7 @@ open class MockProfile: Client.Profile {
 
         tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
-        legacyPlaces = SQLiteHistory(database: self.database, prefs: MockProfilePrefs())
+        legacyPlaces = BrowserDBSQLite(database: self.database, prefs: MockProfilePrefs())
         
         pinnedSites = legacyPlaces
     }

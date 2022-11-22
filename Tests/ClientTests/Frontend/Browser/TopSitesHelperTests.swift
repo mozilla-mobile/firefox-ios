@@ -32,7 +32,7 @@ class TopSitesHelperTests: XCTestCase {
         let expectation = expectation(description: "Expect top sites to be fetched")
         let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
-        let pinnedSiteFetcher = SQLiteHistory(database: database, prefs: prefs)
+        let pinnedSiteFetcher = BrowserDBSQLite(database: database, prefs: prefs)
         let mockProfile = MockProfile(databasePrefix: "testGetTopSites_withError_completesWithZeroSites")
         let places = mockProfile.places
 
@@ -225,14 +225,12 @@ extension TopSitesHelperTests {
         return [Site(url: "https://frecencySite.com/1/", title: "a frecency site"),
                 Site(url: "https://anotherWebSite.com/2/", title: "Another website")]
     }
-    
+
     func addFrecencySitesToPlaces(_ sites: [Site], places: RustPlaces) {
         for site in sites {
             let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link)
             // force synchronous call
-            let res = places.applyObservation(visitObservation: visit).value
-            let ff = res.failureValue
-            let x = 0
+            _ = places.applyObservation(visitObservation: visit).value
         }
     }
 }

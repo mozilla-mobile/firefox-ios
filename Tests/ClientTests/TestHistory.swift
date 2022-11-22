@@ -10,6 +10,7 @@ import XCTest
 
 class TestHistory: ProfileTest {
     fileprivate func addSite(_ places: RustPlaces, url: String, title: String, bool: Bool = true) {
+        _ = places.reopenIfClosed()
         let site = Site(url: url, title: title)
         let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link)
         XCTAssertEqual(bool, places.applyObservation(visitObservation: visit).value.isSuccess, "Site added: \(url).")

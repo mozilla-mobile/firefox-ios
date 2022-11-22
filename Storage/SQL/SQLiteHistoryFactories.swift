@@ -8,7 +8,7 @@ import Shared
 /*
  * Factory methods for converting rows from SQLite into model objects
  */
-extension SQLiteHistory {
+extension BrowserDBSQLite {
     class func basicHistoryColumnFactory(_ row: SDRow) -> Site {
         let id = row["historyID"] as? Int
         let url = row["url"] as! String

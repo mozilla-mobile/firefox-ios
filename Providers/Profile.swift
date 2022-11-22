@@ -22,8 +22,6 @@ public protocol SyncManager {
     var lastSyncFinishTime: Timestamp? { get set }
     var syncDisplayState: SyncDisplayState? { get }
 
-    func hasSyncedHistory() -> Deferred<Maybe<Bool>>
-
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
@@ -413,7 +411,7 @@ open class BrowserProfile: Profile {
      * that this is initialized first.
      */
     private lazy var legacyPlaces: Favicons & PinnedSites  = {
-        return SQLiteHistory(database: self.database, prefs: self.prefs)
+        return BrowserDBSQLite(database: self.database, prefs: self.prefs)
     }()
 
     var favicons: Favicons {
@@ -1407,9 +1405,6 @@ open class BrowserProfile: Profile {
             self.profile.pollCommands()
         }
 
-        public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
-            return self.profile.hasSyncedLogins()
-        }
 
         public func syncClients() -> SyncResult {
             // TODO: recognize .NotStarted.
