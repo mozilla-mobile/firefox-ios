@@ -235,16 +235,6 @@ class DynamicFontHelper: NSObject {
         return fontMetrics.scaledFont(for: font, maximumPointSize: min(fontDescriptor.pointSize, maxSize))
     }
 
-    /// Return a bold font that will dynamically scale up to a certain size
-    /// - Parameters:
-    ///   - textStyle: The desired textStyle for the font
-    ///   - maxSize: The maximum size the font can scale - Refer to the human interface guidelines for more information on sizes for each style
-    ///              https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
-    /// - Returns: The UIFont with the specified bold font size and style
-    func preferredBoldFont(withTextStyle textStyle: UIFont.TextStyle, maxSize: CGFloat? = nil) -> UIFont {
-        return preferredFont(withTextStyle: textStyle, weight: .bold, maxSize: maxSize)
-    }
-
     /// Return a font that will dynamically scale up to a certain size
     /// - Parameters:
     ///   - textStyle: The desired textStyle for the font
