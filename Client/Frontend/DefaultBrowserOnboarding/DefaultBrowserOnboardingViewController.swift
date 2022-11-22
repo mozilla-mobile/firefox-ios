@@ -31,8 +31,13 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         static let titleSize: CGFloat = 28
         static let titleSizeSmall: CGFloat = 24
         static let titleSizeLarge: CGFloat = 34
-        static let buttonCornerRadius: CGFloat = 10
-        static let buttonColor = UIColor.Photon.Blue50
+        static let ctaButtonCornerRadius: CGFloat = 10
+        static let ctaButtonColor = UIColor.Photon.Blue50
+        static let ctaButtonWidth: CGFloat = 350
+        static let ctaButtonWidthSmall: CGFloat = 300
+        static let ctaButtonBottomSpace: CGFloat = 60
+        static let ctaButtonBottomSpaceSmall: CGFloat = 5
+        static let closeButtonSize = CGRect(width: 44, height: 44)
     }
 
     // MARK: - Properties
@@ -96,7 +101,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     private lazy var goToSettingsButton: ResizableButton = .build { button in
-        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.layer.cornerRadius = UX.ctaButtonCornerRadius
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.ctaButton
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 20)
         button.contentEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
@@ -178,7 +183,8 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            closeButton.heightAnchor.constraint(equalToConstant: 44),
+            closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width),
 
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
@@ -220,21 +226,21 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         if screenSize.height > 1000 {
             NSLayoutConstraint.activate([
                 goToSettingsButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                           constant: -60),
-                goToSettingsButton.widthAnchor.constraint(equalToConstant: 350)
+                                                           constant: -UX.ctaButtonBottomSpace),
+                goToSettingsButton.widthAnchor.constraint(equalToConstant: UX.ctaButtonWidth)
             ])
         } else if screenSize.height > 640 {
             NSLayoutConstraint.activate([
                 goToSettingsButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                           constant: -5),
-                goToSettingsButton.widthAnchor.constraint(equalToConstant: 350)
+                                                           constant: -UX.ctaButtonBottomSpaceSmall),
+                goToSettingsButton.widthAnchor.constraint(equalToConstant: UX.ctaButtonWidth)
             ])
             goToSettingsButton.contentEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         } else {
             NSLayoutConstraint.activate([
                 goToSettingsButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                           constant: -5),
-                goToSettingsButton.widthAnchor.constraint(equalToConstant: 300)
+                                                           constant: -UX.ctaButtonBottomSpaceSmall),
+                goToSettingsButton.widthAnchor.constraint(equalToConstant: UX.ctaButtonWidthSmall)
             ])
         }
         goToSettingsButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
@@ -264,7 +270,7 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         descriptionLabel2.textColor = textColor
         descriptionLabel3.textColor = textColor
 
-        goToSettingsButton.backgroundColor = UX.buttonColor
+        goToSettingsButton.backgroundColor = UX.ctaButtonColor
         goToSettingsButton.setTitleColor(.white, for: .normal)
         closeButton.tintColor = .secondaryLabel
     }
