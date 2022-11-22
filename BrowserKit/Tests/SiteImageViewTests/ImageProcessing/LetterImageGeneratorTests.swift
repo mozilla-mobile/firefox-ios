@@ -7,14 +7,6 @@ import XCTest
 
 final class LetterImageGeneratorTests: XCTestCase {
 
-    override func setUp() {
-        super.setUp()
-    }
-
-    override func tearDown() {
-        super.tearDown()
-    }
-
     func testEmptyDomain_doesntReturnEmptyImage() {
         let subject = DefaultLetterImageGeneratorSpy()
         let result = subject.generateLetterImage(domain: "")
