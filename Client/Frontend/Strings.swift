@@ -25,10 +25,11 @@ public struct Strings {
 ///   - value: The value is always the text that needs to be localized.  This can be nil for existing strings, new string shouldn't have a nil value.
 ///   - comment: The comment is an explanation aimed towards people that will translate the string value. Make sure it follow
 ///   https://mozilla-l10n.github.io/documentation/localization/dev_best_practices.html#add-localization-notes
-private func MZLocalizedString(_ key: String,
-                               tableName: String?,
-                               value: String?,
-                               comment: String,
+private func MZLocalizedString(
+    _ key: String,
+    tableName: String?,
+    value: String?,
+    comment: String
 ) -> String {
     return NSLocalizedString(key,
                              tableName: tableName,
