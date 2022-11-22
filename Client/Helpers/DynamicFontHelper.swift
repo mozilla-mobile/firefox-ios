@@ -217,6 +217,7 @@ class DynamicFontHelper: NSObject {
     ///   - maxSize: The maximum size the font can scale - Refer to the human interface guidelines for more information on sizes for each style (optional)
     ///              https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
     /// - Returns: The UIFont with the specified font size, style and weight
+    @available(*, deprecated, message: "Use preferredFont(withTextStyle:size:weight:) instead")
     func preferredFont(withTextStyle textStyle: UIFont.TextStyle, weight: UIFont.Weight? = nil, maxSize: CGFloat? = nil) -> UIFont {
         let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
         let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
@@ -240,7 +241,9 @@ class DynamicFontHelper: NSObject {
     ///   - textStyle: The desired textStyle for the font
     ///   - size: The size of the font
     /// - Returns: The UIFont with the specified font size and style
-    func preferredFont(withTextStyle textStyle: UIFont.TextStyle, size: CGFloat, weight: UIFont.Weight? = nil) -> UIFont {
+    func preferredFont(withTextStyle textStyle: UIFont.TextStyle,
+                       size: CGFloat,
+                       weight: UIFont.Weight? = nil) -> UIFont {
         let fontMetrics = UIFontMetrics(forTextStyle: textStyle)
         let fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
 
