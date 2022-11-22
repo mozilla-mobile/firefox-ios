@@ -90,4 +90,14 @@ extension UIViewController {
             present(viewController, animated: animated, completion: nil)
         }
     }
+
+    /// Returns the `SceneDelegate` that's foregrounded, active and currently engaged with.
+    var sceneForVC: SceneDelegate? {
+        guard let scene = walkChainUntil(visiting: UIWindow.self)?
+            .windowScene?
+            .delegate as? SceneDelegate
+        else { return nil }
+
+        return scene
+    }
 }

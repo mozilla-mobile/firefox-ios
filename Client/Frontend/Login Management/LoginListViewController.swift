@@ -45,7 +45,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
     static func create(
         authenticateInNavigationController navigationController: UINavigationController,
         profile: Profile,
-        settingsDelegate: SettingsDelegate,
+        settingsDelegate: SettingsDelegate? = nil,
         webpageNavigationHandler: ((_ url: URL?) -> Void)?
     ) -> Deferred<LoginListViewController?> {
         let deferred = Deferred<LoginListViewController?>()
@@ -166,8 +166,15 @@ class LoginListViewController: SensitiveViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         loadLogins()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        guard settingsDelegate != nil else {
+            settingsDelegate = sceneForVC?.browserViewController
+
+            return
+        }
     }
 
     func applyTheme() {
