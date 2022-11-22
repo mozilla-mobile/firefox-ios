@@ -1984,7 +1984,7 @@ settings_menu:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/12433
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/12433
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12462
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
