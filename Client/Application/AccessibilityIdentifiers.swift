@@ -38,7 +38,11 @@ public struct AccessibilityIdentifiers {
         struct HomeTabBanner {
             static let titleLabel = "HomeTabBanner.titleLabel"
             static let descriptionLabel = "HomeTabBanner.descriptionLabel"
-            static let ctaButton = "HomeTabBanner.ctaButton"
+            static let descriptionLabel1 = "HomeTabBanner.descriptionLabel1"
+            static let descriptionLabel2 = "HomeTabBanner.descriptionLabel2"
+            static let descriptionLabel3 = "HomeTabBanner.descriptionLabel3"
+            static let ctaButton = "HomeTabBanner.goToSettingsButton"
+            static let closeButton = "HomeTabBanner.closeButton"
         }
 
         struct OtherButtons {

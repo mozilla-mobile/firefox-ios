@@ -36,8 +36,8 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     // MARK: - Properties
-
     var onViewDismissed: (() -> Void)?
+
     // Public constants
     let viewModel = DefaultBrowserOnboardingViewModel()
     let theme = LegacyThemeManager.instance
@@ -58,54 +58,46 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
     private lazy var containerView: UIView = .build { _ in }
 
-    private lazy var closeButton: UIButton = .build { [weak self] button in
+    private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage(named: ImageIdentifiers.closeLargeButton), for: .normal)
-        button.addTarget(self, action: #selector(self?.dismissAnimated), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.closeButton
     }
 
     private lazy var titleLabel: UILabel = .build { [weak self] label in
-        guard let self = self else { return }
-        label.text = self.viewModel.model?.titleText
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title1,
-                                                                       size: self.titleFontSize)
+                                                                       size: self?.titleFontSize ?? UX.titleSize)
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.titleLabel
     }
 
-    private lazy var descriptionText: UILabel = .build { [weak self] label in
-        guard let self = self else { return }
-        label.text = self.viewModel.model?.descriptionText[0]
+    private lazy var descriptionText: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel
     }
 
-    private lazy var descriptionLabel1: UILabel = .build { [weak self] label in
-        guard let self = self else { return }
-        label.text = self.viewModel.model?.descriptionText[1]
+    private lazy var descriptionLabel1: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel1
     }
 
-    private lazy var descriptionLabel2: UILabel = .build { [weak self] label in
-        guard let self = self else { return }
-        label.text = self.viewModel.model?.descriptionText[2]
+    private lazy var descriptionLabel2: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel2
     }
 
-    private lazy var descriptionLabel3: UILabel = .build { [weak self] label in
-        guard let self = self else { return }
-        label.text = self.viewModel.model?.descriptionText[3]
+    private lazy var descriptionLabel3: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.numberOfLines = 0
+        label.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.descriptionLabel3
     }
 
-    private lazy var goToSettingsButton: ResizableButton = .build { [weak self] button in
-        guard let self = self else { return }
-        button.setTitle(.DefaultBrowserOnboardingButton, for: .normal)
+    private lazy var goToSettingsButton: ResizableButton = .build { button in
         button.layer.cornerRadius = UX.buttonCornerRadius
-        button.accessibilityIdentifier = "HomeTabBanner.goToSettingsButton"
-        button.addTarget(self, action: #selector(self.goToSettings), for: .touchUpInside)
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.HomeTabBanner.ctaButton
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title3, size: 20)
         button.contentEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
         button.titleLabel?.textAlignment = .center
@@ -147,19 +139,17 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     func initialViewSetup() {
+        titleLabel.text = viewModel.model?.titleText
+        descriptionText.text = viewModel.model?.descriptionText[0]
+        descriptionLabel1.text = viewModel.model?.descriptionText[1]
+        descriptionLabel2.text = viewModel.model?.descriptionText[2]
+        descriptionLabel3.text = viewModel.model?.descriptionText[3]
+        goToSettingsButton.setTitle(.DefaultBrowserOnboardingButton, for: .normal)
+
+        closeButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
+        goToSettingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)
+
         updateTheme()
-
-        view.addSubview(closeButton)
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(descriptionText)
-        containerView.addSubview(descriptionLabel1)
-        containerView.addSubview(descriptionLabel2)
-        containerView.addSubview(descriptionLabel3)
-        containerView.addSubview(goToSettingsButton)
-        scrollView.addSubviews(containerView)
-        view.addSubviews(scrollView)
-
-        // Constraints
         setupLayout()
 
         // Theme change notification
@@ -174,6 +164,16 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
 
         let containerHeightConstraint = containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         containerHeightConstraint.priority = .defaultLow
+
+        view.addSubview(closeButton)
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(descriptionText)
+        containerView.addSubview(descriptionLabel1)
+        containerView.addSubview(descriptionLabel2)
+        containerView.addSubview(descriptionLabel3)
+        containerView.addSubview(goToSettingsButton)
+        scrollView.addSubviews(containerView)
+        view.addSubviews(scrollView)
 
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
