@@ -296,10 +296,6 @@ open class BrowserProfile: Profile {
         notificationCenter.addObserver(self, selector: #selector(onLocationChange), name: .OnLocationChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched), name: .OnPageMetadataFetched, object: nil)
 
-        // Always start by needing invalidation.
-        // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
-        // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
-        prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
         if AppInfo.isChinaEdition {
             // Set the default homepage.

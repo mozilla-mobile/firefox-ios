@@ -70,14 +70,4 @@ extension SQLiteHistory {
         site.metadata = pageMetadataColumnFactory(row)
         return site
     }
-
-    class func basicHistoryMetadataColumnFactory(_ row: SDRow) -> Site {
-        let site = basicHistoryColumnFactory(row)
-        site.metadata = pageMetadataColumnFactory(row)
-        return site
-    }
-
-    class func countAllVisitsFactory(_ row: SDRow) -> Int? {
-        return row[0] as? Int
-    }
 }

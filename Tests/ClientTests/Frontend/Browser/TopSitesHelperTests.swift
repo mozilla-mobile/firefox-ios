@@ -9,22 +9,35 @@ import Shared
 import XCTest
 
 class TopSitesHelperTests: XCTestCase {
-    var places: RustPlaces
+    let files = MockFiles()
+    fileprivate func deleteDatabases() {
+        do {
+            try files.remove("browser.db")
+        } catch {}
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        self.deleteDatabases()
+    }
+
     override func setUp() {
-        let files = MockFiles()
+        super.setUp()
 
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testplaces.db").path
-        try? files.remove("testplaces.db")
-
-        places = RustPlaces(databasePath: databasePath)
-        _ = places.reopenIfClosed()
+        // Just in case tearDown didn't run or succeed last time!
+        self.deleteDatabases()
     }
 
     func testGetTopSites_withError_completesWithZeroSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
+        let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let prefs = MockProfilePrefs()
+        let pinnedSiteFetcher = SQLiteHistory(database: database, prefs: prefs)
+        let mockProfile = MockProfile(databasePrefix: "testGetTopSites_withError_completesWithZeroSites")
+        let places = mockProfile.places
 
-        let subject = TopSitesProviderImplementation(placesFetcher: RustPlaces(databasePath: "database"),
-                                                     pinnedSiteFetcher: BrowserHistoryMock(),
+        let subject = TopSitesProviderImplementation(placesFetcher: places,
+                                                     pinnedSiteFetcher: pinnedSiteFetcher,
                                                      prefs: MockProfilePrefs())
 
         subject.getTopSites { sites in
@@ -41,13 +54,16 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_withFrecencyError_completesWithPinnedSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
+        let mockHistory = PinnedSitesMock()
+        let mockProfile = MockProfile(databasePrefix: "testGetTopSites_withFrecencyError_completesWithPinnedSites")
+        let places = mockProfile.places
 
         let cursor = SiteCursorMock()
         cursor.sites = defaultPinnedSites
         mockHistory.pinnedResponse = Maybe(success: cursor)
 
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+        let subject = TopSitesProviderImplementation(placesFetcher: places,
+                                                    pinnedSiteFetcher: mockHistory,
                                                      prefs: MockProfilePrefs())
 
         subject.getTopSites { sites in
@@ -64,13 +80,14 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_withPinnedSitesError_completesWithFrecencySites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
+        let mockHistory = PinnedSitesMock()
+        let mockProfile = MockProfile(databasePrefix: "testGetTopSites_withPinnedSitesError_completesWithFrecencySites")
+        let places = mockProfile.places
+        _ = places.reopenIfClosed()
+        addFrecencySitesToPlaces(defaultFrecencySites, places: places)
 
-        let cursor = SiteCursorMock()
-        cursor.sites = defaultFrecencySites
-        mockHistory.frecencyResponse = Maybe(success: cursor)
-
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+        let subject = TopSitesProviderImplementation(placesFetcher: places,
+                                                     pinnedSiteFetcher: mockHistory,
                                                      prefs: MockProfilePrefs())
 
         subject.getTopSites { sites in
@@ -87,15 +104,19 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_filterHideSearchParam() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
+        let mockHistory = PinnedSitesMock()
+        let mockProfile = MockProfile(databasePrefix: "testGetTopSites_filterHideSearchParam")
+        let places = mockProfile.places
+
+        _ = places.reopenIfClosed()
 
         let cursor = SiteCursorMock()
         let sites = defaultFrecencySites + [Site(url: "https://frecencySponsoredSite.com/page?mfadid=adm",
                                                  title: "A sponsored title")]
-        cursor.sites = sites
-        mockHistory.frecencyResponse = Maybe(success: cursor)
+        addFrecencySitesToPlaces(sites, places: places)
 
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+        let subject = TopSitesProviderImplementation(placesFetcher: places,
+                                                     pinnedSiteFetcher: mockHistory,
                                                      prefs: MockProfilePrefs())
 
         subject.getTopSites { sites in
@@ -112,14 +133,18 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_removesDuplicates() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
+        let mockHistory = PinnedSitesMock()
+        let mockProfile = MockProfile(databasePrefix: "testGetTopSites_removesDuplicates")
+        let places = mockProfile.places
+
+        _ = places.reopenIfClosed()
 
         let cursor = SiteCursorMock()
         let sites = defaultFrecencySites + defaultFrecencySites
-        cursor.sites = sites
-        mockHistory.frecencyResponse = Maybe(success: cursor)
+        addFrecencySitesToPlaces(sites, places: places)
 
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+        let subject = TopSitesProviderImplementation(placesFetcher: places,
+                                                     pinnedSiteFetcher: mockHistory,
                                                      prefs: MockProfilePrefs())
 
         subject.getTopSites { sites in
@@ -136,13 +161,16 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_defaultSitesHavePrecedenceOverFrecency() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
+        let mockHistory = PinnedSitesMock()
+        let mockProfile = MockProfile(databasePrefix: "testGetTopSites_defaultSitesHavePrecedenceOverFrecency")
+        let places = mockProfile.places
+        _ = places.reopenIfClosed()
 
-        let cursor = SiteCursorMock()
-        cursor.sites = [Site(url: "https://facebook.com", title: "Facebook")]
-        mockHistory.frecencyResponse = Maybe(success: cursor)
+        let sites = [Site(url: "https://facebook.com", title: "Facebook")]
+        addFrecencySitesToPlaces(sites, places: places)
 
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+        let subject = TopSitesProviderImplementation(placesFetcher: places,
+                                                     pinnedSiteFetcher: mockHistory,
                                                      prefs: MockProfilePrefs())
 
         subject.getTopSites { sites in
@@ -159,13 +187,17 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_pinnedSitesHasPrecedenceOverDefaultTopSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
+        let mockHistory = PinnedSitesMock()
+        let mockProfile = MockProfile(databasePrefix: "testGetTopSites_pinnedSitesHasPrecedenceOverDefaultTopSites")
+        let places = mockProfile.places
+        _ = places.reopenIfClosed()
 
         let cursor = SiteCursorMock()
         cursor.sites = [PinnedSite(site: Site(url: "https://facebook.com", title: "Facebook"))]
         mockHistory.pinnedResponse = Maybe(success: cursor)
 
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
+        let subject = TopSitesProviderImplementation(placesFetcher: places,
+                                                     pinnedSiteFetcher: mockHistory,
                                                      prefs: MockProfilePrefs())
 
         subject.getTopSites { sites in
@@ -193,6 +225,16 @@ extension TopSitesHelperTests {
         return [Site(url: "https://frecencySite.com/1/", title: "a frecency site"),
                 Site(url: "https://anotherWebSite.com/2/", title: "Another website")]
     }
+    
+    func addFrecencySitesToPlaces(_ sites: [Site], places: RustPlaces) {
+        for site in sites {
+            let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link)
+            // force synchronous call
+            let res = places.applyObservation(visitObservation: visit).value
+            let ff = res.failureValue
+            let x = 0
+        }
+    }
 }
 
 // MARK: - SiteCursorMock
@@ -203,17 +245,11 @@ class SiteCursorMock: Cursor<Site> {
     }
 }
 
-// MARK: - MockableHistory
-class BrowserHistoryMock: MockableHistory {
+// MARK: - MockablePinnedSites
+class PinnedSitesMock: MockablePinnedSites {
+
     class Error: MaybeErrorType {
         var description = "Error"
-    }
-
-    var frecencyResponse: Maybe<Cursor<Site>> = Maybe(failure: Error())
-    override func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        let deferred = Deferred<Maybe<Cursor<Site>>>()
-        deferred.fill(frecencyResponse)
-        return deferred
     }
 
     var pinnedResponse: Maybe<Cursor<Site>> = Maybe(failure: Error())

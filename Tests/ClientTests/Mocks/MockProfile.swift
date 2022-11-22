@@ -74,20 +74,21 @@ class MockFiles: FileAccessor {
 }
 
 open class MockProfile: Client.Profile {
+
     public var rustFxA: RustFirefoxAccounts {
         return RustFirefoxAccounts.shared
     }
 
     // Read/Writeable properties for mocking
-    public var recommendations: HistoryRecommendations
     public var places: RustPlaces
     public var tabs: RustRemoteTabs
     public var files: FileAccessor
-    public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
     public var logins: RustLogins
     public var syncManager: SyncManager!
 
-    fileprivate var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
+    fileprivate var legacyPlaces: Favicons & PinnedSites
+
+    public var pinnedSites: PinnedSites
 
     var database: BrowserDB
     var readingListDB: BrowserDB
@@ -117,8 +118,8 @@ open class MockProfile: Client.Profile {
         tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
         legacyPlaces = SQLiteHistory(database: self.database, prefs: MockProfilePrefs())
-        recommendations = legacyPlaces
-        history = legacyPlaces
+        
+        pinnedSites = legacyPlaces
     }
 
     public func localName() -> String {

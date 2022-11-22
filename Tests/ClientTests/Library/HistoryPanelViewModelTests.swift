@@ -237,7 +237,6 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     private func addSiteVisit(_ profile: MockProfile, url: String, title: String) {
-        let site = Site(url: url, title: title)
         let result = profile.places.applyObservation(visitObservation: VisitObservation(url: url, title: title, visitType: VisitTransition.link))
 
         XCTAssertEqual(true, result.value.isSuccess, "Site added: \(url).")
@@ -277,9 +276,9 @@ class HistoryPanelViewModelTests: XCTestCase {
         var groupSites = [Site]()
         for index in 0...3 {
             let site = Site(url: "http://site\(index).com", title: "Site \(index)")
-            let visit = SiteVisit(site: site, date: timestamp)
             site.latestVisit = Visit(date: timestamp)
-            XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
+            let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link, at: Int64(timestamp) / 1000)
+            XCTAssertTrue(profile.places.applyObservation(visitObservation: visit).value.isSuccess, "Site added: \(site.url).")
             groupSites.append(site)
         }
 

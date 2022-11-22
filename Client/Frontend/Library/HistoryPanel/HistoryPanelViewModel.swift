@@ -294,7 +294,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
                 self.isFetchInProgress = false
                 self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
             }
-            return ret
         }
 
         return ret

@@ -10,6 +10,8 @@ import Storage
 class TopSiteHistoryManager: DataObserver {
     private let profile: Profile
 
+    weak var delegate: DataObserverDelegate?
+
     private let topSiteCacheSize: Int32 = 32
     private let dataQueue = DispatchQueue(label: "com.moz.topSiteHistory.queue")
     private let topSitesProvider: TopSitesProvider
