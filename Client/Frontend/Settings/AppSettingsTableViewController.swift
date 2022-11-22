@@ -222,7 +222,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 ForgetSyncAuthStateDebugSetting(settings: self),
                 SentryIDSetting(settings: self),
                 ChangeToChinaSetting(settings: self),
-                ShowEtpCoverSheet(settings: self),
                 TogglePullToRefresh(settings: self),
                 ResetWallpaperOnboardingPage(settings: self),
                 ToggleInactiveTabs(settings: self),

@@ -109,11 +109,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             }
         }
 
-        // Don't show the ETP Coversheet New page.
-        if launchArguments.contains(LaunchArguments.SkipETPCoverSheet) {
-            profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
-        }
-
         if launchArguments.contains(LaunchArguments.TurnOffTabGroupsInUserPreferences) {
             profile.prefs.setBool(false, forKey: PrefsKeys.FeatureFlags.TabTrayGroups)
         }
