@@ -841,6 +841,12 @@ class ShowIntroductionSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {
             BrowserViewController.foregroundBVC().presentIntroViewController(true)
+
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .settingsMenuShowTour
+            )
         })
     }
 }
