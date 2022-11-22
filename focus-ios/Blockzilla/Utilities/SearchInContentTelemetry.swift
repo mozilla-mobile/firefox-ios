@@ -20,34 +20,12 @@ enum URLType: String {
     case organicSearch
 }
 
-// Our default search engines
-enum DefaultSearchEngine: String, CaseIterable {
-    case google
-    case none
-
-    static func getProviderForUrl(webView: WKWebView) -> DefaultSearchEngine {
-        guard let url = webView.url else { return .none }
-        for provider in DefaultSearchEngine.allCases {
-            if url.baseDomain!.contains(provider.rawValue) { return provider }
-        }
-        return .none
-    }
-
-    static func getCode(searchEngine: DefaultSearchEngine, region: String) -> String {
-        switch searchEngine {
-        case .google:
-            return region
-        case .none:
-            return DefaultSearchEngine.none.rawValue
-        }
-    }
-}
-
 class SearchInContentTelemetry {
     private var code = ""
-    private var provider: DefaultSearchEngine = .none
+    private var provider = ""
     private var urlType: URLType = .regular
     static var shouldSetUrlTypeSearch = false
+    private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
 
     // MARK: - URLBar SAP (Search Access Point)
 
@@ -72,8 +50,8 @@ class SearchInContentTelemetry {
         return false
     }
 
-    func isOrganicSearch(sClientValue: String?, provider: DefaultSearchEngine) -> Bool {
-        if provider == .google && sClientValue != nil { return true }
+    func isOrganicSearch(sClientValue: String?, provider: String) -> Bool {
+        if provider == BasicSearchProvider.google.rawValue && sClientValue != nil { return true }
         return false
     }
 
@@ -84,14 +62,19 @@ class SearchInContentTelemetry {
         return (clientValue, sClientValue)
     }
 
+    func getCode(searchEngine: String, region: String) -> String {
+        if searchEngine == BasicSearchProvider.google.rawValue {
+            return region
+        }
+        return "none"
+    }
+
     func setSearchType(webView: WKWebView) {
-        let provider = DefaultSearchEngine.getProviderForUrl(webView: webView)
-        let code = DefaultSearchEngine.getCode(searchEngine: provider, region:
-                                                Locale.current.regionCode == "US" ?
-                                               SearchPartnerCode.US.rawValue :
-                                                SearchPartnerCode.ROW.rawValue)
-        self.code = code
-        self.provider = provider
+        provider = searchEngineManager.activeEngine.getNameOrCustom().lowercased()
+        code = getCode(searchEngine: provider, region:
+                        Locale.current.regionCode == "US" ?
+                       SearchPartnerCode.US.rawValue :
+                        SearchPartnerCode.ROW.rawValue)
 
         if SearchInContentTelemetry.shouldSetUrlTypeSearch {
             urlType = .search
