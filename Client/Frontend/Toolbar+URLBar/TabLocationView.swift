@@ -46,6 +46,7 @@ class TabLocationView: UIView {
         didSet {
             updateTextWithURL()
             trackingProtectionButton.isHidden = isTrackingProtectionHidden
+            leftPadding.isHidden = !isTrackingProtectionHidden || url == nil
             setNeedsUpdateConstraints()
         }
     }
@@ -117,6 +118,8 @@ class TabLocationView: UIView {
         return reloadButton
     }()
 
+    lazy var leftPadding: UIView = .build()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -131,10 +134,9 @@ class TabLocationView: UIView {
         addGestureRecognizer(longPressRecognizer)
         addGestureRecognizer(tapRecognizer)
 
-        let space1px = UIView.build()
-        space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        leftPadding.widthAnchor.constraint(equalToConstant: 16).isActive = true
 
-        let subviews = [trackingProtectionButton, space1px, urlTextField, readerModeButton, reloadButton]
+        let subviews = [trackingProtectionButton, leftPadding, urlTextField, readerModeButton, reloadButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
