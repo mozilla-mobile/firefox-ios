@@ -40,7 +40,6 @@ extension Analytics {
             tabs,
             settings,
             newTab = "new_tab",
-            shareContent = "share_content",
             blockImages = "block_images",
             searchbar = "searchbar"
         }
@@ -68,16 +67,11 @@ extension Analytics {
         
         enum Browser: String {
             case
-            add,
             open,
-            edit,
-            delete,
             start,
             complete,
             enable,
-            disable,
-            delete_all = "delete_all",
-            sendToFiles = "send_to_files"
+            disable
         }
 
         enum Promo: String {

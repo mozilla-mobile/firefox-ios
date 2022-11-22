@@ -207,7 +207,7 @@ class TopTabsViewController: UIViewController {
 
     @objc func newTabTapped() {
         self.delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
-        Analytics.shared.browser(.add, label: .newTab, property: .toolbar)
+        Analytics.shared.browser(.open, label: .newTab, property: .toolbar)
     }
 
     @objc func togglePrivateModeTapped() {

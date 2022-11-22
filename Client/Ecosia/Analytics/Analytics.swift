@@ -139,14 +139,6 @@ final class Analytics {
                     .value(.init(value: seconds * 1000)))
     }
     
-    func open(topSite: Property.TopSite) {
-        tracker
-            .track(Structured(category: Category.browser.rawValue,
-                              action: Action.open.rawValue)
-                    .label("top_sites")
-                    .property(topSite.rawValue))
-    }
-    
     func openInvitations() {
         tracker
             .track(Structured(category: Category.invitations.rawValue,

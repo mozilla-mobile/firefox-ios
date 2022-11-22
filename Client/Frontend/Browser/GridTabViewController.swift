@@ -411,7 +411,6 @@ extension GridTabViewController {
 
 extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
-        Analytics.shared.browser(.open, label: .tabs)
         if let tab = tabDisplayManager.dataStore.at(index) {
             if tab.isFxHomeTab {
                 notificationCenter.post(name: .TabsTrayDidSelectHomeTab)

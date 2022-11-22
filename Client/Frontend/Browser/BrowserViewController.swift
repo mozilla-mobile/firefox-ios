@@ -1051,6 +1051,15 @@ class BrowserViewController: UIViewController {
         let controller: DismissableNavigationViewController
         controller = DismissableNavigationViewController(rootViewController: libraryViewController)
         self.present(controller, animated: true, completion: nil)
+
+        switch panel {
+        case .bookmarks:
+            Analytics.shared.browser(.open, label: .favourites, property: .home)
+        case .history:
+            Analytics.shared.browser(.open, label: .history, property: .home)
+        case .readingList, .downloads, .none:
+            break
+        }
     }
 
     fileprivate func createSearchControllerIfNeeded() {
@@ -2350,7 +2359,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let bookmarkAction = UIAlertAction(title: .ContextMenuBookmarkLink, style: .default) { _ in
                 self.addBookmark(url: url.absoluteString, title: elements.title)
                 TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
-                Analytics.shared.browser(.add, label: .favourites, property: .menu)
             }
             actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")
 
@@ -2559,7 +2567,6 @@ extension BrowserViewController: TabTrayDelegate {
         let tabState = tab.tabState
         addBookmark(url: url, title: tabState.title, favicon: tabState.favicon)
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .tabTray)
-        Analytics.shared.browser(.add, label: .favourites, property: .toolbar)
     }
 
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
