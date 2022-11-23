@@ -599,6 +599,7 @@ workflows:
   Decision_to_run_UI_Tests:
     steps:
     - script@1:
+        title: Files changed in commit
         inputs:
         - content: |-
             #!/usr/bin/env bash
@@ -620,6 +621,11 @@ workflows:
             if [[ $COMMIT_ON_MAIN_PR == $COMMIT_ON_MAIN_ORIGIN ]]
             then
                 echo "First commit, use origin/main"
+                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+                echo $filesChanged
+            elif [[ $COMMIT_ON_MAIN_PR == $GIT_CLONE_COMMIT_HASH ]]
+            then
+                echo "Merge made by the 'ort' strategy"
                 filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
                 echo $filesChanged
             else
