@@ -6,7 +6,7 @@ import Foundation
 import Fuzi
 
 protocol ImageURLFetcher {
-    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, URLError>) -> ()))
+    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, URLError>) -> Void))
 }
 
 class DefaultImageURLFetcher: ImageURLFetcher {
@@ -16,7 +16,7 @@ class DefaultImageURLFetcher: ImageURLFetcher {
         static let userAgent = ""
     }
 
-    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, URLError>) -> ())) {
+    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, URLError>) -> Void)) {
         fetchDataForURL(siteURL) { [weak self] result in
             switch result {
             case let .success(data):
@@ -29,7 +29,7 @@ class DefaultImageURLFetcher: ImageURLFetcher {
         }
     }
 
-    private func fetchDataForURL(_ url: URL, completion: @escaping ((Result<Data, URLError>) -> ())) {
+    private func fetchDataForURL(_ url: URL, completion: @escaping ((Result<Data, URLError>) -> Void)) {
         let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = ["User-Agent": RequestConstants.userAgent]
         configuration.timeoutIntervalForRequest = RequestConstants.timeout
@@ -45,7 +45,7 @@ class DefaultImageURLFetcher: ImageURLFetcher {
         }.resume()
     }
 
-    private func processHTMLDocument(siteURL: URL, data: Data, completion: @escaping ((Result<URL, URLError>) -> ())) {
+    private func processHTMLDocument(siteURL: URL, data: Data, completion: @escaping ((Result<URL, URLError>) -> Void)) {
         guard let root = try? HTMLDocument(data: data) else {
             completion(.failure(.invalidHTML))
             return
@@ -82,7 +82,7 @@ class DefaultImageURLFetcher: ImageURLFetcher {
 
         // Fallback to the favicon at the root of the domain
         // This is a fall back because it's generally low res
-        if let faviconURL = URL(string: "/favicon.ico", relativeTo: siteURL) {
+        if let faviconURL = URL(string: siteURL.absoluteString + "/favicon.ico") {
             completion(.success(faviconURL))
         }
 
