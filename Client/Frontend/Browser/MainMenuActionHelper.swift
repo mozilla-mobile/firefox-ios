@@ -361,31 +361,16 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
             guard let bvc = self.menuActionDelegate as? InstructionsViewDelegate & DevicePickerViewControllerDelegate
-            else { return }
+                        else { return }
+            let themeColors = self.themeManager.currentTheme.colors
+            let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
+                                                   textColor: themeColors.textPrimary,
+                                                   iconColor: themeColors.iconPrimary)
+            let helper = SendToDeviceHelper(profile: self.profile, colors: colors, delegate: bvc)
+            let viewController = helper.initialViewController()
 
-            if !self.profile.hasAccount() {
-                let colors = self.themeManager.currentTheme.colors
-                let instructionsView = InstructionsView(backgroundColor: colors.layer1,
-                                                        textColor: colors.textPrimary,
-                                                        imageColor: colors.iconPrimary,
-                                                        dismissAction: {
-                    bvc.dismissInstructionsView()
-                })
-                let hostingViewController = UIHostingController(rootView: instructionsView)
-                let navigationController = UINavigationController(rootViewController: hostingViewController)
-                navigationController.modalPresentationStyle = .formSheet
-                self.delegate?.showViewController(viewController: navigationController)
-                return
-            }
-
-            let devicePickerViewController = DevicePickerViewController()
-            devicePickerViewController.pickerDelegate = bvc
-            devicePickerViewController.profile = self.profile
-            devicePickerViewController.profileNeedsShutdown = false
-            let navigationController = UINavigationController(rootViewController: devicePickerViewController)
-            navigationController.modalPresentationStyle = .formSheet
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
-            self.delegate?.showViewController(viewController: navigationController)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice) // Ask Daniela if we should specify instructions / picker
+            self.delegate?.showViewController(viewController: viewController)
         }.items
     }
 
