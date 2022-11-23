@@ -36,7 +36,6 @@ func populateHistoryForFrecencyCalculations(_ places: RustPlaces, siteCount coun
         let site = Site(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
-
         for j in 0..<visitPerSite {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
             addVisitForSite(site, intoPlaces: places, atTime: visitTime)

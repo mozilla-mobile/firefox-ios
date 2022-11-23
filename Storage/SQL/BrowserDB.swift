@@ -247,7 +247,6 @@ open class BrowserDB {
     }
 }
 
-
 /**
  * The sqlite-backed implementation of the history protocol.
  * Currenlty only supports pinned sites and favicons

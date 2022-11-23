@@ -537,6 +537,9 @@ extension RustPlaces {
     public func applyObservation(visitObservation: VisitObservation) -> Success {
         return withWriter { connection in
             return try connection.applyObservation(visitObservation: visitObservation)
+        }.map { result in
+            self.notificationCenter.post(name: .TopSitesUpdated, object: nil)
+            return result
         }
     }
 
@@ -578,7 +581,7 @@ extension RustPlaces {
         let deferred: Deferred<Maybe<[TopFrecentSiteInfo]>> = withReader { connection in
             return try connection.getTopFrecentSiteInfos(numItems: Int32(limit), thresholdOption: thresholdOption)
         }
-        
+
         let ret = Deferred<Maybe<[Site]>>()
         deferred.upon { result in
             guard let result = result.successValue else {

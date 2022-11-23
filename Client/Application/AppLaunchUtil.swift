@@ -64,7 +64,7 @@ class AppLaunchUtil {
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
-        
+
         // We migrate history from browser db to places if it hasn't already
         runAppServicesHistoryMigration()
 

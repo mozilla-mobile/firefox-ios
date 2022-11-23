@@ -54,6 +54,10 @@ class TopSitesProviderImplementation: TopSitesProvider {
         prefs: Prefs
     ) {
         self.placesFetcher = placesFetcher
+        // It's possible that the top sites fetch is the
+        // they very first use of places, lets make sure that
+        // our connection is open
+        _ = self.placesFetcher.reopenIfClosed()
         self.pinnedSiteFetcher = pinnedSiteFetcher
         self.prefs = prefs
     }

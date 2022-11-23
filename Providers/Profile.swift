@@ -294,7 +294,6 @@ open class BrowserProfile: Profile {
         notificationCenter.addObserver(self, selector: #selector(onLocationChange), name: .OnLocationChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched), name: .OnPageMetadataFetched, object: nil)
 
-
         if AppInfo.isChinaEdition {
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
@@ -348,11 +347,6 @@ open class BrowserProfile: Profile {
            let title = notification.userInfo!["title"] as? NSString {
             // Only record local vists if the change notification originated from a non-private tab
             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
-                // We don't record a visit if no type was specified -- that means "ignore me".
-                let site = Site(url: url.absoluteString, title: title as String)
-                let visit = SiteVisit(site: site,
-                                      date: Date().toMicrosecondsSince1970(),
-                                      type: visitType)
                 let result = self.places.applyObservation(
                     visitObservation: VisitObservation(
                         url: url.description,
@@ -425,7 +419,6 @@ open class BrowserProfile: Profile {
     lazy var metadata: Metadata = {
         return SQLiteMetadata(db: self.database)
     }()
-
 
     lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
     lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
@@ -1404,7 +1397,6 @@ open class BrowserProfile: Profile {
             self.syncEverything(why: .scheduled)
             self.profile.pollCommands()
         }
-
 
         public func syncClients() -> SyncResult {
             // TODO: recognize .NotStarted.

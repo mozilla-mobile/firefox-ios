@@ -114,7 +114,7 @@ open class MockProfile: Client.Profile {
         tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
         legacyPlaces = BrowserDBSQLite(database: self.database, prefs: MockProfilePrefs())
-        
+
         pinnedSites = legacyPlaces
     }
 

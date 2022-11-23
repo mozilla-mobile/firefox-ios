@@ -44,7 +44,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     // MARK: - Properties
 
     private let profile: Profile
-    private let historyDeletionUtility: HistoryDeletionUtility
     // Request limit and offset
     private let queryFetchLimit = 100
     // Is not intended to be use in prod code, only on test
@@ -85,7 +84,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     init(profile: Profile) {
         self.profile = profile
-        self.historyDeletionUtility = HistoryDeletionUtility(with: profile)
     }
 
     deinit {
