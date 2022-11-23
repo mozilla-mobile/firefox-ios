@@ -13,7 +13,8 @@ class TestHistory: ProfileTest {
         _ = places.reopenIfClosed()
         let site = Site(url: url, title: title)
         let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link)
-        XCTAssertEqual(bool, places.applyObservation(visitObservation: visit).value.isSuccess, "Site added: \(url).")
+        let res = places.applyObservation(visitObservation: visit).value
+        XCTAssertEqual(bool, res.isSuccess, "Site added: \(url)., error value: \(res.failureValue ?? "wow")")
     }
 
     fileprivate func innerCheckSites(_ places: RustPlaces, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
@@ -77,108 +78,86 @@ class TestHistory: ProfileTest {
 
     func testSearchHistory_WithResults() {
         let expectation = self.expectation(description: "Wait for search history")
-        let mockProfile = MockProfile()
-        mockProfile.reopen()
-        let places = mockProfile.places
+        withTestProfile { profile in
+            let places = profile.places
 
-        let clearTest = {
-            self.clear(places)
-            mockProfile.shutdown()
+            addSite(places, url: "http://amazon.com/", title: "Amazon")
+            addSite(places, url: "http://mozilla.org/", title: "Mozilla")
+            addSite(places, url: "https://apple.com/", title: "Apple")
+            addSite(places, url: "https://apple.developer.com/", title: "Apple Developer")
+
+            places.queryAutocomplete(matchingSearchQuery: "App", limit: 25).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let results = result.successValue!
+                XCTAssertEqual(results.count, 2)
+                expectation.fulfill()
+                self.clear(places)
+            }
+
+            self.waitForExpectations(timeout: 100, handler: nil)
+
         }
-
-        addSite(places, url: "http://amazon.com/", title: "Amazon")
-        addSite(places, url: "http://mozilla.org/", title: "Mozilla")
-        addSite(places, url: "https://apple.com/", title: "Apple")
-        addSite(places, url: "https://apple.developer.com/", title: "Apple Developer")
-
-        places.queryAutocomplete(matchingSearchQuery: "App", limit: 25).upon { result in
-            XCTAssertTrue(result.isSuccess)
-            let results = result.successValue!
-            XCTAssertEqual(results.count, 2)
-            expectation.fulfill()
-            clearTest()
-        }
-
-        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testSearchHistory_WithResultsByTitle() {
         let expectation = self.expectation(description: "Wait for search history")
-        let mockProfile = MockProfile()
-        mockProfile.reopen()
-        let places = mockProfile.places
+        withTestProfile { profile in
+            let places = profile.places
+            addSite(places, url: "http://amazon.com/", title: "Amazon")
+            addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
+            addSite(places, url: "http://mozilla.dev.org/", title: "Internet dev")
+            addSite(places, url: "https://apple.com/", title: "Apple")
 
-        let clearTest = {
-            self.clear(places)
-            mockProfile.shutdown()
+            places.queryAutocomplete(matchingSearchQuery: "int", limit: 25).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let results = result.successValue!
+                XCTAssertEqual(results.count, 2)
+                expectation.fulfill()
+                self.clear(places)
+            }
+
+            self.waitForExpectations(timeout: 100, handler: nil)
         }
-
-        addSite(places, url: "http://amazon.com/", title: "Amazon")
-        addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
-        addSite(places, url: "http://mozilla.dev.org/", title: "Internet dev")
-        addSite(places, url: "https://apple.com/", title: "Apple")
-
-        places.queryAutocomplete(matchingSearchQuery: "int", limit: 25).upon { result in
-            XCTAssertTrue(result.isSuccess)
-            let results = result.successValue!
-            XCTAssertEqual(results.count, 2)
-            expectation.fulfill()
-            clearTest()
-        }
-
-        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testSearchHistory_WithResultsByUrl() {
         let expectation = self.expectation(description: "Wait for search history")
-        let mockProfile = MockProfile()
-        mockProfile.reopen()
-        let places = mockProfile.places
+        withTestProfile { profile in
+            let places = profile.places
+            addSite(places, url: "http://amazon.com/", title: "Amazon")
+            addSite(places, url: "http://mozilla.developer.org/", title: "Mozilla")
+            addSite(places, url: "https://apple.developer.com/", title: "Apple")
 
-        let clearTest = {
-            self.clear(places)
-            mockProfile.shutdown()
+            places.queryAutocomplete(matchingSearchQuery: "dev", limit: 25).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let results = result.successValue!
+                XCTAssertEqual(results.count, 2)
+                expectation.fulfill()
+                self.clear(places)
+            }
+
+            self.waitForExpectations(timeout: 100, handler: nil)
         }
-
-        addSite(places, url: "http://amazon.com/", title: "Amazon")
-        addSite(places, url: "http://mozilla.developer.org/", title: "Mozilla")
-        addSite(places, url: "https://apple.developer.com/", title: "Apple")
-
-        places.queryAutocomplete(matchingSearchQuery: "dev", limit: 25).upon { result in
-            XCTAssertTrue(result.isSuccess)
-            let results = result.successValue!
-            XCTAssertEqual(results.count, 2)
-            expectation.fulfill()
-            clearTest()
-        }
-
-        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testSearchHistory_NoResults() {
         let expectation = self.expectation(description: "Wait for search history")
-        let mockProfile = MockProfile()
-        mockProfile.reopen()
-        let places = mockProfile.places
+        withTestProfile { profile in
+            let places = profile.places
+            addSite(places, url: "http://amazon.com/", title: "Amazon")
+            addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
+            addSite(places, url: "https://apple.com/", title: "Apple")
 
-        let clearTest = {
-            self.clear(places)
-            mockProfile.shutdown()
+            places.queryAutocomplete(matchingSearchQuery: "red", limit: 25).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let results = result.successValue!
+                XCTAssertEqual(results.count, 0)
+                expectation.fulfill()
+                self.clear(places)
+            }
+
+            self.waitForExpectations(timeout: 100, handler: nil)
         }
-
-        addSite(places, url: "http://amazon.com/", title: "Amazon")
-        addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
-        addSite(places, url: "https://apple.com/", title: "Apple")
-
-        places.queryAutocomplete(matchingSearchQuery: "red", limit: 25).upon { result in
-            XCTAssertTrue(result.isSuccess)
-            let results = result.successValue!
-            XCTAssertEqual(results.count, 0)
-            expectation.fulfill()
-            clearTest()
-        }
-
-        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testAboutUrls() {
