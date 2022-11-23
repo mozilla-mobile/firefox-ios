@@ -16,13 +16,12 @@ stages:
     #- build_and_test_2_SmokeTest: {}
     #- build_and_test_3_SmokeTest3: {}
     #- build_and_test_4_SmokeTest4: {}
-    #- build_and_test_5_UnitTest: {}
+    - build_and_test_5_UnitTest: {}
     #- just_build_fennec_to_get_warnings: {}
 workflows:
   configure_build:
     before_run:
     - 1_git_clone_and_post_clone
-    - Decision_to_run_UI_Tests
     - 2_certificate_and_profile
     - 3_provisioning_and_npm_installation
     steps:
@@ -631,7 +630,7 @@ workflows:
                 echo $filesChanged
             fi
 
-            doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*'
+            doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*)'
 
             if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
             then
