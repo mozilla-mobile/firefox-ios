@@ -3,11 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-
-// TODO: Laurie
-enum ImageError: Error {
-    case Error
-}
+import Kingfisher
 
 protocol SiteImageFetcher {
     /// Fetches an image from a specific URL
