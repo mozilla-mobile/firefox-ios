@@ -14,8 +14,8 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/nbhasin2/Fuzi.git", .branch("master")
-        )
+            url: "https://github.com/nbhasin2/Fuzi.git",
+            branch: "master")
     ],
     targets: [
         .target(
