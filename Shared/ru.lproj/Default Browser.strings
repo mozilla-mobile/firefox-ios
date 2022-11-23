@@ -10,6 +10,18 @@
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Настройте автоматическое открытие ссылок с веб-сайтов, из электронных писем и «Сообщений» в Firefox.";
 
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Выберите Firefox в качестве браузера по умолчанию, чтобы получить скорость, безопасность и конфиденциальность.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Улучшите ежедневный просмотр";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ежемесячно блокирует для каждого пользователя в среднем более 3000 трекеров. Сделайте нас своим браузером по умолчанию для спокойствия по поводу конфиденциальности.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox обеспечивает конфиденциальность";
+
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Сменить браузер по умолчанию";
 
