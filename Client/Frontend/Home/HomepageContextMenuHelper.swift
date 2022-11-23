@@ -24,6 +24,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     private var viewModel: HomepageViewModel
+    weak var browserDelegate: BrowserBarViewDelegate?
 
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
@@ -168,7 +169,12 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     private func getShareAction(siteURL: URL, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
-            let controller = helper.createActivityViewController { (_, _) in }
+            let controller = helper.createActivityViewController { (_, activityType) in
+                if activityType == CustomActivityAction.sendToDevice.actionType {
+                    self.showSendToDevice()
+                }
+            }
+
             if UIDevice.current.userInterfaceIdiom == .pad,
                let popoverController = controller.popoverPresentationController,
                let getSourceRect = self.getPopoverSourceRect {
@@ -181,6 +187,22 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
             self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
         }).items
+    }
+
+    private func showSendToDevice() {
+        typealias sendDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
+        guard let delegate = browserDelegate as? sendDelegate else { return }
+
+        let themeColors = viewModel.theme.colors
+
+        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
+                                               textColor: themeColors.textPrimary,
+                                               iconColor: themeColors.iconPrimary)
+        let helper = SendToDeviceHelper(profile: viewModel.profile, colors: colors, delegate: delegate)
+        let viewController = helper.initialViewController()
+
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice) // Ask Daniela if we should specify instructions / picker
+        self.delegate?.presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
     // MARK: - Top sites

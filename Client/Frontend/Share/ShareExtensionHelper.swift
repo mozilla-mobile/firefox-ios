@@ -6,14 +6,13 @@ import Foundation
 import Shared
 import MobileCoreServices
 
+// TODO: Rename if is actually not used by the Share extension
 class ShareExtensionHelper: NSObject {
     private weak var selectedTab: Tab?
 
     private let url: URL
     private var onePasswordExtensionItem: NSExtensionItem!
     private let browserFillIdentifier = "org.appextension.fill-browser-action"
-
-    fileprivate func isFile(url: URL) -> Bool { url.scheme == "file" }
 
     // Can be a file:// or http(s):// url
     init(url: URL, tab: Tab?) {
@@ -24,7 +23,7 @@ class ShareExtensionHelper: NSObject {
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
 
         let activityItems = getActivityItems(url: url)
-        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice)
+        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, url: url)
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: [sendToDeviceActivity])
 
         // Exclude 'Add to Reading List' which currently uses Safari.
@@ -35,9 +34,9 @@ class ShareExtensionHelper: NSObject {
         // This needs to be ready by the time the share menu has been displayed and
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.
-        guard (selectedTab?.webView) != nil else {
-            return activityViewController
-        }
+//        guard (selectedTab?.webView) != nil else {
+//            return activityViewController
+//        }
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
@@ -62,7 +61,7 @@ class ShareExtensionHelper: NSObject {
     /// - Returns: An array of elements to be shared
     private func getActivityItems(url: URL) -> [Any] {
         // If url is file return only url to be shared
-        guard !isFile(url: url) else { return [url] }
+        guard !url.isFile else { return [url] }
 
         var activityItems = [Any]()
         let printInfo = UIPrintInfo(dictionary: nil)
@@ -106,7 +105,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
         if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
         } else if isOpenByCopy(activityType: activityType) {
-            return isFile(url: url) ? kUTTypeFileURL as String : kUTTypeURL as String
+            return url.isFile ? kUTTypeFileURL as String : kUTTypeURL as String
         }
 
         return activityType == nil ? browserFillIdentifier : kUTTypeURL as String

@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import Storage
 import Shared
 
 enum CustomActivityAction {
@@ -37,6 +36,7 @@ enum CustomActivityAction {
 class SendToDeviceActivity: UIActivity {
     var appActivityType: CustomActivityAction
     var activityItems = [Any]()
+    var url: URL
 
     override var activityTitle: String? {
         return appActivityType.title
@@ -54,13 +54,15 @@ class SendToDeviceActivity: UIActivity {
         return .action
     }
 
-    init(activityType: CustomActivityAction) {
+    init(activityType: CustomActivityAction, url: URL) {
         appActivityType = activityType
+        self.url = url
         super.init()
     }
 
+    // Send to device is only available for URL that are files
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
-        return true
+        return !url.isFile
     }
 
     override func prepare(withActivityItems activityItems: [Any]) {

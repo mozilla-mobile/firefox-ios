@@ -202,7 +202,6 @@ class DownloadsPanel: UIViewController,
         return false
     }
 
-    // Swipe to Share
     private func shareDownloadedFile(_ downloadedFile: DownloadedFile, indexPath: IndexPath) {
         let helper = ShareExtensionHelper(url: downloadedFile.path, tab: nil)
         let controller = helper.createActivityViewController { completed, activityType in

@@ -19,6 +19,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     weak var browserBarViewDelegate: BrowserBarViewDelegate? {
         didSet {
             viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
+            contextMenuHelper.browserDelegate = browserBarViewDelegate
         }
     }
 

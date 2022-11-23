@@ -51,6 +51,7 @@ class SendToDeviceHelper {
         devicePickerViewController.pickerDelegate = delegate
         devicePickerViewController.profile = profile
         devicePickerViewController.profileNeedsShutdown = false
+//        devicePickerViewController.shareItem = ShareItem
         let navigationController = UINavigationController(rootViewController: devicePickerViewController)
         navigationController.modalPresentationStyle = .formSheet
         return navigationController

@@ -358,10 +358,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     }
 
     private func getSendToDevice() -> PhotonRowActions {
+        typealias sendDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
-            guard let bvc = self.menuActionDelegate as? InstructionsViewDelegate & DevicePickerViewControllerDelegate
-                        else { return }
+            guard let bvc = self.menuActionDelegate as? sendDelegate else { return }
+
             let themeColors = self.themeManager.currentTheme.colors
             let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                    textColor: themeColors.textPrimary,
@@ -586,7 +587,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
         let controller = helper.createActivityViewController { completed, activityType in
             print("Shared downloaded file: \(completed)")
-            // TODO: handle send to Device
         }
 
         if let popoverPresentationController = controller.popoverPresentationController {

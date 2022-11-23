@@ -1459,7 +1459,6 @@ class BrowserViewController: UIViewController {
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
-    // where???
     func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
         let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
@@ -2614,8 +2613,9 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
     }
 
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
-        guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
-        let shareItem = ShareItem(url: url, title: tab.title, favicon: tab.displayFavicon)
+//        guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
+        guard let shareItem = devicePickerViewController.shareItem else { return }
+
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})
