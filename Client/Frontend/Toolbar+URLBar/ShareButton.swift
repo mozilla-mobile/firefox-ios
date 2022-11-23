@@ -50,9 +50,9 @@ class ShareButton: UIButton {
 
 extension ShareButton: NotificationThemeable {
     func applyTheme() {
-        selectedTintColor = UIColor.Photon.Grey70 //UIColor.theme.toolbarButton.selectedTint
+        selectedTintColor = UIColor.Photon.Grey70
         disabledTintColor = UIColor.Photon.Grey50
-        unselectedTintColor = UIColor.Photon.Grey50 //UIColor.theme.browser.tint
+        unselectedTintColor = UIColor.Photon.Grey50
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }
