@@ -429,12 +429,10 @@ class TabManagerTests: XCTestCase {
         }
 
         let tab0 = addTab(false) // active
-        let tab1 = addTab(true) // inactive
-        let tab2 = addTab(true) // inactive
-        let tab3 = addTab(false) // active
+        let tab1 = addTab(false) // active
 
-        manager.selectTab(tab3)
-        manager.removeTab(tab3)
+        manager.selectTab(tab1)
+        manager.removeTab(tab1)
 
         removeTabAndAssert(tab: manager.selectedTab!) {
             XCTAssertEqual(self.manager.selectedTab, tab0)

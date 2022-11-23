@@ -12,11 +12,15 @@ let package = Package(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(
+            url: "https://github.com/nbhasin2/Fuzi.git",
+            branch: "master")
+    ],
     targets: [
         .target(
             name: "SiteImageView",
-            dependencies: []),
+            dependencies: ["Fuzi"]),
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView"]),
