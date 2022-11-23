@@ -45,6 +45,7 @@ class TabLocationView: UIView {
         didSet {
             updateTextWithURL()
             trackingProtectionButton.isHidden = isTrackingProtectionHidden
+            shareButton.isHidden = isTrackingProtectionHidden
             setNeedsUpdateConstraints()
         }
     }
