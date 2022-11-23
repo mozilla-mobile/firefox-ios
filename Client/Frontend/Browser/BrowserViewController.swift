@@ -1489,29 +1489,15 @@ class BrowserViewController: UIViewController {
     }
 
     private func showSendToDevice() {
-        if !profile.hasAccount() {
-            let colors = self.themeManager.currentTheme.colors
-            let instructionsView = InstructionsView(backgroundColor: colors.layer1,
-                                                    textColor: colors.textPrimary,
-                                                    imageColor: colors.iconPrimary,
-                                                    dismissAction: {
-                self.dismissInstructionsView()
-            })
-            let hostingViewController = UIHostingController(rootView: instructionsView)
-            let navigationController = UINavigationController(rootViewController: hostingViewController)
-            navigationController.modalPresentationStyle = .formSheet
-            showViewController(viewController: navigationController)
-            return
-        }
+        let themeColors = themeManager.currentTheme.colors
+        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
+                                               textColor: themeColors.textPrimary,
+                                               iconColor: themeColors.iconPrimary)
+        let helper = SendToDeviceHelper(profile: profile, colors: colors, delegate: self)
+        let viewController = helper.initialViewController()
 
-        let devicePickerViewController = DevicePickerViewController()
-        devicePickerViewController.pickerDelegate = self
-        devicePickerViewController.profile = profile
-        devicePickerViewController.profileNeedsShutdown = false
-        let navigationController = UINavigationController(rootViewController: devicePickerViewController)
-        navigationController.modalPresentationStyle = .formSheet
-        showViewController(viewController: navigationController)
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice) // Ask Daniela if we should specify instructions / picker
+        showViewController(viewController: viewController)
     }
 
     @objc func openSettings() {
