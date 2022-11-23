@@ -79,6 +79,10 @@ extension BrowserViewController: URLBarDelegate {
         tabManager.selectedTab?.reload()
     }
 
+    func urlBarDidPressShare(_ urlBar: URLBarView) {
+        print("NB -- Share button pressed")
+    }
+
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = self

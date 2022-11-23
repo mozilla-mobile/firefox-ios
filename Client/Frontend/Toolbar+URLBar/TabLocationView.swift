@@ -12,6 +12,7 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
+    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
@@ -26,6 +27,7 @@ struct TabLocationViewUX {
     static let StatusIconSize: CGFloat = 18
     static let TPIconSize: CGFloat = 44
     static let ReaderModeButtonWidth: CGFloat = 34
+    static let ShareButtonWidth: CGFloat = 34
     static let ButtonSize: CGFloat = 44
     static let URLBarPadding = 4
 }
@@ -89,6 +91,12 @@ class TabLocationView: UIView {
         trackingProtectionButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.trackingProtection
     }
 
+    lazy var shareButton: ShareButton = .build { shareButton in
+        shareButton.addTarget(self, action: #selector(self.didPressShareButton(_:)), for: .touchUpInside)
+        shareButton.clipsToBounds = false
+        shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
+    }
+
     private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
         readerModeButton.addTarget(self, action: #selector(self.tapReaderModeButton), for: .touchUpInside)
         readerModeButton.addGestureRecognizer(
@@ -137,7 +145,7 @@ class TabLocationView: UIView {
         let space1px = UIView.build()
         space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
 
-        let subviews = [trackingProtectionButton, space1px, urlTextField, readerModeButton, reloadButton]
+        let subviews = [trackingProtectionButton, space1px, urlTextField, readerModeButton, shareButton, reloadButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -152,6 +160,8 @@ class TabLocationView: UIView {
             readerModeButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ReaderModeButtonWidth),
             readerModeButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             reloadButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ReaderModeButtonWidth),
+            shareButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+            shareButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ShareButtonWidth),
             reloadButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
         ])
 
@@ -171,7 +181,7 @@ class TabLocationView: UIView {
 
     // MARK: - Accessibility
 
-    private lazy var _accessibilityElements = [urlTextField, readerModeButton, reloadButton, trackingProtectionButton]
+    private lazy var _accessibilityElements = [urlTextField, readerModeButton, readerModeButton, reloadButton, trackingProtectionButton]
 
     override var accessibilityElements: [Any]? {
         get {
@@ -222,6 +232,10 @@ class TabLocationView: UIView {
 
     @objc func didPressTPShieldButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapShield(self)
+    }
+
+    @objc func didPressShareButton(_ button: UIButton) {
+        delegate?.tabLocationViewDidTapShare(self)
     }
 
     @objc func readerModeCustomAction() -> Bool {
