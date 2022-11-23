@@ -355,15 +355,8 @@
 		43AFC0DC279678A80039DDF4 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 43AFC0DB279678A80039DDF4 /* XCGLogger */; };
 		43AFC0DE279678F70039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
 		43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
-		43AFC0F227967C0F0039DDF4 /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 43AFC0F127967C0F0039DDF4 /* Fuzi */; };
-		43AFC0F327967C1C0039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
-		43AFC0F427967C2B0039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
-		43AFC0F527967C320039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
-		43AFC0F627967C3E0039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
-		43AFC0F727967C8A0039DDF4 /* Fuzi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; };
 		43AFC117279699530039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
 		43AFC118279699530039DDF4 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		43AFC11927969A820039DDF4 /* Fuzi.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
 		43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
@@ -409,7 +402,11 @@
 		5A430D792853DFDD00782BFF /* OrientationLockUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */; };
 		5A43EC9328CBC25F003155A3 /* Themable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43EC9228CBC25F003155A3 /* Themable.swift */; };
 		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
-		5A65BE19292861C900E841A7 /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 5A65BE18292861C900E841A7 /* SiteImageView */; };
+		5A871488292EA1440039A5BD /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5A871487292EA1440039A5BD /* Fuzi */; };
+		5A87148A292EA1520039A5BD /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5A871489292EA1520039A5BD /* Fuzi */; };
+		5A87148C292EA1640039A5BD /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5A87148B292EA1640039A5BD /* Fuzi */; };
+		5A87148E292EA3270039A5BD /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5A87148D292EA3270039A5BD /* Fuzi */; };
+		5A871490292EA3910039A5BD /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 5A87148F292EA3910039A5BD /* SiteImageView */; };
 		5A9A09D228AFD51900B6F51E /* MockHomepageDataModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D128AFD51900B6F51E /* MockHomepageDataModelDelegate.swift */; };
 		5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */; };
 		5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */; };
@@ -1669,7 +1666,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				43AFC11927969A820039DDF4 /* Fuzi.framework in Copy Frameworks */,
 				4368F85D27966BC30013419B /* Snapkit.framework in Copy Frameworks */,
 				43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */,
 				43AFC118279699530039DDF4 /* XCGLogger.framework in Copy Frameworks */,
@@ -2606,8 +2602,6 @@
 		43AF25CC28B39CB5004A4F86 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/BookmarkPanel.strings"; sourceTree = "<group>"; };
 		43AFC0D9279678920039DDF4 /* XCGLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XCGLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43AFC0DA279678920039DDF4 /* XCGLogger-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "XCGLogger-Info.plist"; sourceTree = "<group>"; };
-		43AFC0EF27967C000039DDF4 /* Fuzi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Fuzi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43AFC0F027967C000039DDF4 /* Fuzi-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Fuzi-Info.plist"; sourceTree = "<group>"; };
 		43B0CE2328EAFC58000500A2 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		43B0CE2428EAFC58000500A2 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
@@ -5225,7 +5219,7 @@
 			files = (
 				4326A3E02849C36D00550F73 /* KingfisherDynamic.framework in Frameworks */,
 				43A878FE27AC39D30071C372 /* RustMozillaAppServices.framework in Frameworks */,
-				43AFC0F527967C320039DDF4 /* Fuzi.framework in Frameworks */,
+				5A87148A292EA1520039A5BD /* Fuzi in Frameworks */,
 				4368F830279665D50013419B /* Sentry.framework in Frameworks */,
 				433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */,
 				C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */,
@@ -5239,10 +5233,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4326A3E32849C50600550F73 /* KingfisherDynamic.framework in Frameworks */,
-				43AFC0F727967C8A0039DDF4 /* Fuzi.framework in Frameworks */,
 				43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */,
 				8AFD6275282C51D300451BC8 /* DynamicSwiftyJson.framework in Frameworks */,
 				43BE581B278BE5AE00491291 /* RustMozillaAppServices.framework in Frameworks */,
+				5A87148C292EA1640039A5BD /* Fuzi in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
 			);
@@ -5273,7 +5267,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43AFC0F327967C1C0039DDF4 /* Fuzi.framework in Frameworks */,
 				4326A3DC2849C34B00550F73 /* KingfisherDynamic.framework in Frameworks */,
 				96C11E962863985E00840E7C /* Dip in Frameworks */,
 				4368F84E279669A60013419B /* Snapkit.framework in Frameworks */,
@@ -5281,8 +5274,8 @@
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
 				8A08EC6227EBDCA400E119C7 /* iAd.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */,
-				5A65BE19292861C900E841A7 /* SiteImageView in Frameworks */,
 				C82043852523DBF600740B71 /* Sync.framework in Frameworks */,
+				5A871490292EA3910039A5BD /* SiteImageView in Frameworks */,
 				C877037A25222F30006E38EB /* Shared.framework in Frameworks */,
 				C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */,
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
@@ -5290,6 +5283,7 @@
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
+				5A871488292EA1440039A5BD /* Fuzi in Frameworks */,
 				1B3D99F1270E89D0006E1264 /* Telemetry in Frameworks */,
 				432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */,
 				0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */,
@@ -5324,7 +5318,6 @@
 			files = (
 				4326A3E62849C57900550F73 /* KingfisherDynamic.framework in Frameworks */,
 				43C6A470279B8AAF00C79856 /* XCGLogger.framework in Frameworks */,
-				43AFC0F627967C3E0039DDF4 /* Fuzi.framework in Frameworks */,
 				4368F839279665EF0013419B /* Sentry.framework in Frameworks */,
 				43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */,
 			);
@@ -5407,14 +5400,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		43AFC0E727967C000039DDF4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43AFC0F227967C0F0039DDF4 /* Fuzi in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		43BE577D278BA4D900491291 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -5487,7 +5472,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43AFC0F427967C2B0039DDF4 /* Fuzi.framework in Frameworks */,
+				5A87148E292EA3270039A5BD /* Fuzi in Frameworks */,
 				4368F85927966A860013419B /* Snapkit.framework in Frameworks */,
 				43BE5827278BE81500491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
@@ -8076,7 +8061,6 @@
 				4368F84B279669740013419B /* Snapkit-Info.plist */,
 				4368F87C27966E810013419B /* SDWebImage-Info.plist */,
 				43AFC0DA279678920039DDF4 /* XCGLogger-Info.plist */,
-				43AFC0F027967C000039DDF4 /* Fuzi-Info.plist */,
 				4302EDBC2819D6260070D373 /* DynamicSwiftyJson-Info.plist */,
 				4326A3BE2849B49800550F73 /* KingfisherDynamic-Info.plist */,
 			);
@@ -8111,7 +8095,6 @@
 				4368F828279665220013419B /* Sentry.framework */,
 				4368F84A279669740013419B /* Snapkit.framework */,
 				43AFC0D9279678920039DDF4 /* XCGLogger.framework */,
-				43AFC0EF27967C000039DDF4 /* Fuzi.framework */,
 				4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */,
 				4326A3BD2849B49800550F73 /* KingfisherDynamic.framework */,
 			);
@@ -8414,6 +8397,7 @@
 			name = WidgetKitExtension;
 			packageProductDependencies = (
 				433F87CF2788ECDD00693368 /* GCDWebServers */,
+				5A871489292EA1520039A5BD /* Fuzi */,
 			);
 			productName = WidgetKitExtension;
 			productReference = 047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */;
@@ -8438,6 +8422,7 @@
 			);
 			name = Sync;
 			packageProductDependencies = (
+				5A87148B292EA1640039A5BD /* Fuzi */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -8739,25 +8724,6 @@
 			productReference = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		43AFC0E327967C000039DDF4 /* Fuzi */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43AFC0EA27967C000039DDF4 /* Build configuration list for PBXNativeTarget "Fuzi" */;
-			buildPhases = (
-				43AFC0E627967C000039DDF4 /* Sources */,
-				43AFC0E727967C000039DDF4 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Fuzi;
-			packageProductDependencies = (
-				43AFC0F127967C0F0039DDF4 /* Fuzi */,
-			);
-			productName = Shared;
-			productReference = 43AFC0EF27967C000039DDF4 /* Fuzi.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		43BE5774278BA4D900491291 /* RustMozillaAppServices */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RustMozillaAppServices" */;
@@ -8952,7 +8918,8 @@
 				435C85EF2788F4D00072B526 /* Glean */,
 				432BD0232790EBD000A0F3C3 /* Adjust */,
 				96C11E952863985E00840E7C /* Dip */,
-				5A65BE18292861C900E841A7 /* SiteImageView */,
+				5A871487292EA1440039A5BD /* Fuzi */,
+				5A87148F292EA3910039A5BD /* SiteImageView */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -8998,6 +8965,7 @@
 			);
 			name = ShareTo;
 			packageProductDependencies = (
+				5A87148D292EA3270039A5BD /* Fuzi */,
 			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
@@ -9318,7 +9286,6 @@
 				7BEB644F1C7345990092C02E /* MarketingUITests */,
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
 				4302EDB02819D6250070D373 /* DynamicSwiftyJson */,
-				43AFC0E327967C000039DDF4 /* Fuzi */,
 				4326A3B22849B49800550F73 /* KingfisherDynamic */,
 				43BE5774278BA4D900491291 /* RustMozillaAppServices */,
 				4368F81C279665220013419B /* Sentry */,
@@ -10157,13 +10124,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		43AFC0D0279678920039DDF4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43AFC0E627967C000039DDF4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -14548,105 +14508,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		43AFC0EB27967C000039DDF4 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Fuzi-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		43AFC0EC27967C000039DDF4 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Fuzi-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		43AFC0ED27967C000039DDF4 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Fuzi-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		43AFC0EE27967C000039DDF4 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Fuzi-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
 		43BE5786278BA4D900491291 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -16062,17 +15923,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		43AFC0EA27967C000039DDF4 /* Build configuration list for PBXNativeTarget "Fuzi" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43AFC0EB27967C000039DDF4 /* Fennec */,
-				43AFC0EC27967C000039DDF4 /* Fennec_Enterprise */,
-				43AFC0ED27967C000039DDF4 /* Firefox */,
-				43AFC0EE27967C000039DDF4 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
 		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RustMozillaAppServices" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -16412,11 +16262,6 @@
 			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
 			productName = XCGLogger;
 		};
-		43AFC0F127967C0F0039DDF4 /* Fuzi */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
-			productName = Fuzi;
-		};
 		43C6A47E27A0679300C79856 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */;
@@ -16426,7 +16271,27 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Places;
 		};
-		5A65BE18292861C900E841A7 /* SiteImageView */ = {
+		5A871487292EA1440039A5BD /* Fuzi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
+			productName = Fuzi;
+		};
+		5A871489292EA1520039A5BD /* Fuzi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
+			productName = Fuzi;
+		};
+		5A87148B292EA1640039A5BD /* Fuzi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
+			productName = Fuzi;
+		};
+		5A87148D292EA3270039A5BD /* Fuzi */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0E027967BFA0039DDF4 /* XCRemoteSwiftPackageReference "Fuzi" */;
+			productName = Fuzi;
+		};
+		5A87148F292EA3910039A5BD /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SiteImageView;
 		};
