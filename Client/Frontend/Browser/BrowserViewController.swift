@@ -13,6 +13,7 @@ import Account
 import MobileCoreServices
 import Telemetry
 import Sentry
+import SwiftUI
 
 struct UrlToOpenModel {
     var url: URL?
@@ -1458,10 +1459,15 @@ class BrowserViewController: UIViewController {
         return navigationController?.topViewController?.presentedViewController as? JSPromptAlertController != nil
     }
 
+    // where???
     func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
+        let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
 
-        let controller = helper.createActivityViewController({ [unowned self] completed, _ in
+            if activityType == CustomActivityAction.sendToDevice.actionType {
+                self.showSendToDevice()
+            }
+
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
 
@@ -1480,6 +1486,32 @@ class BrowserViewController: UIViewController {
         }
 
         presentWithModalDismissIfNeeded(controller, animated: true)
+    }
+
+    private func showSendToDevice() {
+        if !profile.hasAccount() {
+            let colors = self.themeManager.currentTheme.colors
+            let instructionsView = InstructionsView(backgroundColor: colors.layer1,
+                                                    textColor: colors.textPrimary,
+                                                    imageColor: colors.iconPrimary,
+                                                    dismissAction: {
+                self.dismissInstructionsView()
+            })
+            let hostingViewController = UIHostingController(rootView: instructionsView)
+            let navigationController = UINavigationController(rootViewController: hostingViewController)
+            navigationController.modalPresentationStyle = .formSheet
+            showViewController(viewController: navigationController)
+            return
+        }
+
+        let devicePickerViewController = DevicePickerViewController()
+        devicePickerViewController.pickerDelegate = self
+        devicePickerViewController.profile = profile
+        devicePickerViewController.profileNeedsShutdown = false
+        let navigationController = UINavigationController(rootViewController: devicePickerViewController)
+        navigationController.modalPresentationStyle = .formSheet
+        showViewController(viewController: navigationController)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
     }
 
     @objc func openSettings() {

@@ -164,6 +164,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         })
     }
 
+    // Pocket share
     private func getShareAction(siteURL: URL, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)

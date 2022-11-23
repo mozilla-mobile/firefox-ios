@@ -7,11 +7,11 @@ import Shared
 import MobileCoreServices
 
 class ShareExtensionHelper: NSObject {
-    fileprivate weak var selectedTab: Tab?
+    private weak var selectedTab: Tab?
 
-    fileprivate let url: URL
-    fileprivate var onePasswordExtensionItem: NSExtensionItem!
-    fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
+    private let url: URL
+    private var onePasswordExtensionItem: NSExtensionItem!
+    private let browserFillIdentifier = "org.appextension.fill-browser-action"
 
     fileprivate func isFile(url: URL) -> Bool { url.scheme == "file" }
 
@@ -24,10 +24,7 @@ class ShareExtensionHelper: NSObject {
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
 
         let activityItems = getActivityItems(url: url)
-        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, performAction: { item in
-
-            print("YRD item \(item)")
-        })
+        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice)
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: [sendToDeviceActivity])
 
         // Exclude 'Add to Reading List' which currently uses Safari.

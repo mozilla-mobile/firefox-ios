@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import SwiftUI
 import Storage
 import Shared
 
@@ -38,7 +37,7 @@ enum CustomActivityAction {
 class SendToDeviceActivity: UIActivity {
     var appActivityType: CustomActivityAction
     var activityItems = [Any]()
-    var action: (ShareItem) -> Void
+//    var action: (ShareItem) -> Void
 
     override var activityTitle: String? {
         return appActivityType.title
@@ -56,9 +55,9 @@ class SendToDeviceActivity: UIActivity {
         return .action
     }
 
-    init(activityType: CustomActivityAction, performAction: @escaping (ShareItem) -> Void ) {
+    init(activityType: CustomActivityAction/*, performAction: @escaping (ShareItem) -> Void*/) {
         appActivityType = activityType
-        action = performAction
+//        action = performAction
         super.init()
     }
 
@@ -76,14 +75,14 @@ class SendToDeviceActivity: UIActivity {
     override func perform() {
         print("YRD pocket perform \(appActivityType.title)")
 
-        let url = activityItems.first { $0 is URL }
+//        let url = activityItems.first { $0 is URL }
 
-        guard let url = url as? URL else { return }
-
-        let item = ShareItem(url: url.absoluteString,
-                                  title: nil,
-                                  favicon: nil)
-        action(item)
+//        guard let url = url as? URL else { return }
+//
+//        let item = ShareItem(url: url.absoluteString,
+//                                  title: nil,
+//                                  favicon: nil)
+//        action(item)
         activityDidFinish(true)
     }
 }
