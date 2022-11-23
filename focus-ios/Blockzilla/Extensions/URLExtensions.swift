@@ -211,6 +211,7 @@ extension URL {
      :returns: The base domain string for the given host name.
      */
     public var baseDomain: String? {
+        guard host != nil else { return absoluteDisplayString }
         guard !isIPv4 && !isIPv6, let host = host else { return host }
 
         // If this is just a hostname and not a FQDN, use the entire hostname.
