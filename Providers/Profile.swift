@@ -932,7 +932,7 @@ open class BrowserProfile: Profile {
 
             // Run these in order, because they might write to the same DB!
 
-            var remove = [
+            let remove = [
                 profile.remoteClientsAndTabs.onRemovedAccount,
                 profile.logins.resetSync,
                 profile.places.resetBookmarksMetadata,
