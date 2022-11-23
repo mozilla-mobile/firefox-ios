@@ -74,7 +74,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     /// Asks the delegate to open one or more URLs.
     ///
-    /// This method is equialent to AppDelegate's openURL method. We implement deeplinks this way.
+    /// This method is equivalent to AppDelegate's openURL method. We implement deep links this way.
     func scene(
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
