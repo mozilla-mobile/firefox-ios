@@ -2,6 +2,160 @@
   "data": [
     {
       "schemaVersion": "1.10.0",
+      "slug": "message-experiment-default-browser-card",
+      "id": "message-experiment-default-browser-card",
+      "arguments": {},
+      "application": "org.mozilla.ios.Firefox",
+      "appName": "firefox_ios",
+      "appId": "org.mozilla.ios.Firefox",
+      "channel": "release",
+      "userFacingName": "iOS Message Experiment: Default Browser Card",
+      "userFacingDescription": "Experimenting on the messaging in the homepage card for default browser.",
+      "isEnrollmentPaused": false,
+      "isRollout": false,
+      "bucketConfig": {
+        "randomizationUnit": "nimbus_id",
+        "namespace": "ios-messaging-release-1",
+        "start": 1700,
+        "count": 8000,
+        "total": 10000
+      },
+      "featureIds": [
+        "messaging"
+      ],
+      "probeSets": [],
+      "outcomes": [
+        {
+          "slug": "default_browser",
+          "priority": "primary"
+        }
+      ],
+      "branches": [
+        {
+          "slug": "control",
+          "ratio": 1,
+          "feature": {
+            "featureId": "messaging",
+            "enabled": true,
+            "value": {
+              "messages": {
+                "default-browser": {
+                  "trigger": [
+                    "I_AM_NOT_DEFAULT_BROWSER",
+                    "SUPPORTS_DEFAULT_BROWSER"
+                  ],
+                  "style": "FALLBACK",
+                  "title": "Default Browser/DefaultBrowserCard.PeaceOfMind.Title.v108",
+                  "text": "Default Browser/DefaultBrowserCard.PeaceOfMind.Description.v108",
+                  "button-label": "Default Browser/DefaultBrowserCard.Button.v2",
+                  "action": "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL",
+                  "is-control": true
+                }
+              },
+              "message-under-experiment": "default-browser",
+              "on-control": "show-next-message",
+              "actions": {},
+              "triggers": {},
+              "styles": {}
+            }
+          }
+        },
+        {
+          "slug": "treatment-a",
+          "ratio": 1,
+          "feature": {
+            "featureId": "messaging",
+            "enabled": true,
+            "value": {
+              "messages": {
+                "default-browser": {
+                  "trigger": [
+                    "I_AM_NOT_DEFAULT_BROWSER",
+                    "SUPPORTS_DEFAULT_BROWSER"
+                  ],
+                  "style": "FALLBACK",
+                  "title": "Default Browser/DefaultBrowserCard.PeaceOfMind.Title.v108",
+                  "text": "Default Browser/DefaultBrowserCard.PeaceOfMind.Description.v108",
+                  "button-label": "Default Browser/DefaultBrowserCard.Button.v2",
+                  "action": "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL"
+                }
+              },
+              "message-under-experiment": "default-browser",
+              "on-control": "show-next-message",
+              "actions": {},
+              "triggers": {},
+              "styles": {}
+            }
+          }
+        },
+        {
+          "slug": "treatment-b",
+          "ratio": 1,
+          "feature": {
+            "featureId": "messaging",
+            "enabled": true,
+            "value": {
+              "messages": {
+                "default-browser": {
+                  "trigger": [
+                    "I_AM_NOT_DEFAULT_BROWSER",
+                    "SUPPORTS_DEFAULT_BROWSER"
+                  ],
+                  "style": "FALLBACK",
+                  "title": "Default Browser/DefaultBrowserCard.BetterInternet.Title.v108",
+                  "text": "Default Browser/DefaultBrowserCard.BetterInternet.Description.v108",
+                  "button-label": "Default Browser/DefaultBrowserCard.Button.v2",
+                  "action": "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL"
+                }
+              },
+              "message-under-experiment": "default-browser",
+              "on-control": "show-next-message",
+              "actions": {},
+              "triggers": {},
+              "styles": {}
+            }
+          }
+        },
+        {
+          "slug": "treatment-c",
+          "ratio": 1,
+          "feature": {
+            "featureId": "messaging",
+            "enabled": true,
+            "value": {
+              "messages": {
+                "default-browser": {
+                  "trigger": [
+                    "I_AM_NOT_DEFAULT_BROWSER",
+                    "SUPPORTS_DEFAULT_BROWSER"
+                  ],
+                  "style": "FALLBACK",
+                  "title": "Default Browser/DefaultBrowserCard.NextLevel.Title.v108",
+                  "text": "Default Browser/DefaultBrowserCard.NextLevel.Description.v108",
+                  "button-label": "Default Browser/DefaultBrowserCard.Button.v2",
+                  "action": "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL"
+                }
+              },
+              "message-under-experiment": "default-browser",
+              "on-control": "show-next-message",
+              "actions": {},
+              "triggers": {},
+              "styles": {}
+            }
+          }
+        }
+      ],
+      "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('108.!') >= 0)))",
+      "startDate": "2022-11-22",
+      "enrollmentEndDate": "2022-11-29",
+      "endDate": null,
+      "proposedDuration": 14,
+      "proposedEnrollment": 7,
+      "referenceBranch": "control",
+      "featureValidationOptOut": false
+    },
+    {
+      "schemaVersion": "1.10.0",
       "slug": "release-firefox-ios-mr-new-user-onboarding",
       "id": "release-firefox-ios-mr-new-user-onboarding",
       "arguments": {},
