@@ -597,7 +597,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     }
 
     private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
-        let helper = ShareSheetHelper(url: fileURL, tab: selectedTab)
+        let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
         let controller = helper.createActivityViewController { completed, activityType in
             print("Shared downloaded file: \(completed)")
         }

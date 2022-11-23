@@ -22,33 +22,15 @@ class ShareExtensionHelper: NSObject {
     }
 
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
-        var activityItems = [AnyObject]()
 
-        let printInfo = UIPrintInfo(dictionary: nil)
-        printInfo.jobName = (url.absoluteString as NSString).lastPathComponent
-        printInfo.outputType = .general
-        activityItems.append(printInfo)
+        let activityItems = getActivityItems(url: url)
+        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, performAction: { item in
 
-        // when tab is not loaded (webView != nil) don't show print activity
-        if let tab = selectedTab, tab.webView != nil {
-            activityItems.append(TabPrintPageRenderer(tab: tab))
-        }
+            print("YRD item \(item)")
+        })
+        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: [sendToDeviceActivity])
 
-        if let title = selectedTab?.title {
-            activityItems.append(TitleActivityItemProvider(title: title))
-        }
-        activityItems.append(self)
-
-        var activityViewController: UIActivityViewController
-        if isFile(url: url) {
-            activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        } else {
-            activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        }
-
-        // Hide 'Add to Reading List' which currently uses Safari.
-        // We would also hide View Later, if possible, but the exclusion list doesn't currently support
-        // third-party activity types (rdar://19430419).
+        // Exclude 'Add to Reading List' which currently uses Safari.
         activityViewController.excludedActivityTypes = [
             UIActivity.ActivityType.addToReadingList,
         ]
@@ -75,6 +57,33 @@ class ShareExtensionHelper: NSObject {
         }
 
         return activityViewController
+    }
+
+    /// Get the data to be shared if the URL is a file we will share just the url if not we prepare
+    /// UIPrintInfo to get the option to print the page and tab URL and title
+    /// - Parameter url: url from the selected tab
+    /// - Returns: An array of elements to be shared
+    private func getActivityItems(url: URL) -> [Any] {
+        // If url is file return only url to be shared
+        guard !isFile(url: url) else { return [url] }
+
+        var activityItems = [Any]()
+        let printInfo = UIPrintInfo(dictionary: nil)
+        printInfo.jobName = (url.absoluteString as NSString).lastPathComponent
+        printInfo.outputType = .general
+        activityItems.append(printInfo)
+
+        // when tab is not loaded (webView != nil) don't show print activity
+        if let tab = selectedTab, tab.webView != nil {
+            activityItems.append(TabPrintPageRenderer(tab: tab))
+        }
+
+        if let title = selectedTab?.title {
+            activityItems.append(TitleActivityItemProvider(title: title))
+        }
+        activityItems.append(self)
+
+        return activityItems
     }
 }
 
@@ -124,3 +133,4 @@ extension ShareExtensionHelper: UIActivityItemSource {
         return activityType.lowercased().contains("remoteopeninapplication-bycopy")
     }
 }
+
