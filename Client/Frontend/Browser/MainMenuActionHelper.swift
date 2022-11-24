@@ -361,13 +361,23 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         typealias sendDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
-            guard let bvc = self.menuActionDelegate as? sendDelegate else { return }
+            guard let bvc = self.menuActionDelegate as? sendDelegate,
+                  let selectedTab = self.selectedTab,
+                  let url = selectedTab.url
+            else { return }
 
             let themeColors = self.themeManager.currentTheme.colors
             let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                    textColor: themeColors.textPrimary,
                                                    iconColor: themeColors.iconPrimary)
-            let helper = SendToDeviceHelper(profile: self.profile, colors: colors, delegate: bvc)
+
+            let shareItem = ShareItem(url: url.absoluteString,
+                                      title: selectedTab.title,
+                                      favicon: selectedTab.displayFavicon)
+            let helper = SendToDeviceHelper(shareItem: shareItem,
+                                            profile: self.profile,
+                                            colors: colors,
+                                            delegate: bvc)
             let viewController = helper.initialViewController()
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice) // Ask Daniela if we should specify instructions / picker

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import Storage
 import SwiftUI
 import UIKit
 
@@ -21,11 +22,13 @@ class SendToDeviceHelper {
         case picker
     }
 
+    private var shareItem: ShareItem
     private var profile: Profile
     private var colors: Colors
     private var delegate: Delegate
 
-    init(profile: Profile, colors: Colors, delegate: Delegate) {
+    init(shareItem: ShareItem, profile: Profile, colors: Colors, delegate: Delegate) {
+        self.shareItem = shareItem
         self.profile = profile
         self.colors = colors
         self.delegate = delegate
@@ -51,7 +54,7 @@ class SendToDeviceHelper {
         devicePickerViewController.pickerDelegate = delegate
         devicePickerViewController.profile = profile
         devicePickerViewController.profileNeedsShutdown = false
-//        devicePickerViewController.shareItem = ShareItem
+        devicePickerViewController.shareItem = shareItem
         let navigationController = UINavigationController(rootViewController: devicePickerViewController)
         navigationController.modalPresentationStyle = .formSheet
         return navigationController

@@ -104,7 +104,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .pocket)
         let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
-        let shareAction = getShareAction(siteURL: siteURL, sourceView: sourceView)
+        let shareAction = getShareAction(site: site, sourceView: sourceView)
         let bookmarkAction = getBookmarkAction(site: site)
 
         return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
@@ -166,12 +166,14 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     // Pocket share
-    private func getShareAction(siteURL: URL, sourceView: UIView?) -> PhotonRowActions {
+    private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
-            let helper = ShareExtensionHelper(url: siteURL, tab: nil)
+            guard let url = URL(string: site.url) else { return }
+
+            let helper = ShareExtensionHelper(url: url, tab: nil)
             let controller = helper.createActivityViewController { (_, activityType) in
                 if activityType == CustomActivityAction.sendToDevice.actionType {
-                    self.showSendToDevice()
+                    self.showSendToDevice(site: site)
                 }
             }
 
@@ -189,7 +191,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         }).items
     }
 
-    private func showSendToDevice() {
+    private func showSendToDevice(site: Site) {
         typealias sendDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
         guard let delegate = browserDelegate as? sendDelegate else { return }
 
@@ -198,7 +200,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconPrimary)
-        let helper = SendToDeviceHelper(profile: viewModel.profile, colors: colors, delegate: delegate)
+        let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+        let helper = SendToDeviceHelper(shareItem: shareItem,
+                                        profile: viewModel.profile,
+                                        colors: colors,
+                                        delegate: delegate)
         let viewController = helper.initialViewController()
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice) // Ask Daniela if we should specify instructions / picker

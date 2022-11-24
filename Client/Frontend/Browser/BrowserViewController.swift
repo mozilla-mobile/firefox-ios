@@ -1488,11 +1488,21 @@ class BrowserViewController: UIViewController {
     }
 
     private func showSendToDevice() {
+        guard let selectedTab = tabManager.selectedTab,
+            let url = selectedTab.url else { return }
+
         let themeColors = themeManager.currentTheme.colors
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconPrimary)
-        let helper = SendToDeviceHelper(profile: profile, colors: colors, delegate: self)
+        let shareItem = ShareItem(url: url.absoluteString,
+                                  title: selectedTab.title,
+                                  favicon: selectedTab.displayFavicon)
+
+        let helper = SendToDeviceHelper(shareItem: shareItem,
+                                        profile: profile,
+                                        colors: colors,
+                                        delegate: self)
         let viewController = helper.initialViewController()
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice) // Ask Daniela if we should specify instructions / picker
@@ -2613,7 +2623,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
     }
 
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
-//        guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
         guard let shareItem = devicePickerViewController.shareItem else { return }
 
         guard shareItem.isShareable else {
