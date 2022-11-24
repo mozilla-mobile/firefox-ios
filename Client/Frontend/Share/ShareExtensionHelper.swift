@@ -31,18 +31,12 @@ class ShareExtensionHelper: NSObject {
             UIActivity.ActivityType.addToReadingList,
         ]
 
-        // This needs to be ready by the time the share menu has been displayed and
-        // activityViewController(activityViewController:, activityType:) is called,
-        // which is after the user taps the button. So a million cycles away.
-//        guard (selectedTab?.webView) != nil else {
-//            return activityViewController
-//        }
-
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
-            if !completed {
+            guard completed else {
                 completionHandler(completed, activityType)
                 return
             }
+
             // Bug 1392418 - When copying a url using the share extension there are 2 urls in the pasteboard.
             // This is a iOS 11.0 bug. Fixed in 11.2
             if UIPasteboard.general.hasURLs, let url = UIPasteboard.general.urls?.first {

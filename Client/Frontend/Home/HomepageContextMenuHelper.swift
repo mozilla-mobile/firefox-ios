@@ -165,7 +165,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         })
     }
 
-    // Pocket share
+    /// Handles share from Long press on Pocket article
+    /// - Parameters:
+    ///   - site: Site for pocket article
+    ///   - sourceView: View to show the popover
+    /// - Returns: Share action
     private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
             guard let url = URL(string: site.url) else { return }

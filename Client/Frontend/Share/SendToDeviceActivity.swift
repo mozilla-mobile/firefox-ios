@@ -11,7 +11,7 @@ enum CustomActivityAction {
     var title: String {
         switch self {
         case .sendToDevice:
-            return .AppMenu.TouchActions.SendToDeviceTitle
+            return .ShareSheet.SendToDeviceButtonTitle
         }
     }
 
