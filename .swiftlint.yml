@@ -1,5 +1,5 @@
 disabled_rules: # rule identifiers to exclude from running
-# Auto-corretable rules
+# Auto-correctable rules
 - trailing_comma
 
 # Disabled all default rules

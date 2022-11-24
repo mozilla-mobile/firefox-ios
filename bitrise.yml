@@ -13,11 +13,11 @@ stages:
   stage_2:
     workflows:
     - build_and_test_1_SmokeTest2: {}
-    #- build_and_test_2_SmokeTest: {}
-    #- build_and_test_3_SmokeTest3: {}
-    #- build_and_test_4_SmokeTest4: {}
+    - build_and_test_2_SmokeTest: {}
+    - build_and_test_3_SmokeTest3: {}
+    - build_and_test_4_SmokeTest4: {}
     - build_and_test_5_UnitTest: {}
-    #- just_build_fennec_to_get_warnings: {}
+    - just_build_fennec_to_get_warnings: {}
 workflows:
   configure_build:
     before_run:
@@ -159,13 +159,18 @@ workflows:
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_2_SmokeTest:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -178,6 +183,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Test without Building
         inputs:
         - content: |
@@ -192,18 +198,25 @@ workflows:
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
     - custom-test-results-export@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: SmokeTest
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_3_SmokeTest3:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -216,6 +229,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Test without Building
         inputs:
         - content: |
@@ -229,18 +243,25 @@ workflows:
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "Smoketest3" "test-without-building"
     - custom-test-results-export@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: SmokeTest3
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_4_SmokeTest4:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -253,6 +274,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Test without Building
         inputs:
         - content: |
@@ -267,10 +289,12 @@ workflows:
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "Smoketest4" "test-without-building"
     - custom-test-results-export@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: SmokeTest4
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_5_UnitTest:
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
@@ -1451,10 +1475,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '107.0'
+    BITRISE_RELEASE_VERSION: '108.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '107.0'
+    BITRISE_BETA_VERSION: '108.0'
 
 meta:
   bitrise.io:
@@ -1466,7 +1490,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: release/v107.0
+- push_branch: release/v108.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards
