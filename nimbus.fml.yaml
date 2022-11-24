@@ -497,7 +497,7 @@ features:
     defaults:
       - channel: developer
         value: {
-            "move-actions": true,
+            "move-actions": false,
             "toolbar-changes": false
         }
 

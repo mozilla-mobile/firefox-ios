@@ -1489,7 +1489,8 @@ class BrowserViewController: UIViewController {
 
     private func showSendToDevice() {
         guard let selectedTab = tabManager.selectedTab,
-            let url = selectedTab.url else { return }
+            let url = selectedTab.url
+        else { return }
 
         let themeColors = themeManager.currentTheme.colors
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
