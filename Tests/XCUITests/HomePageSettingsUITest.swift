@@ -38,10 +38,33 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
-        XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
+
+        waitForExistence(app.navigationBars["Homepage"])
+        waitForExistence(app.tables.otherElements["OPENING SCREEN"])
+        waitForExistence(app.tables.otherElements["INCLUDE ON HOMEPAGE"])
+        waitForExistence(app.tables.otherElements["CURRENT HOMEPAGE"])
+
+        // Opening Screen
+        XCTAssertFalse(app.tables.cells["StartAtHomeAlways"].isSelected)
+        XCTAssertFalse(app.tables.cells["StartAtHomeDisabled"].isSelected)
+        XCTAssertTrue(app.tables.cells["StartAtHomeAfterFourHours"].isSelected)
+
+        // Include on Homepage
+        XCTAssertTrue(app.tables.cells["TopSitesSettings"].staticTexts["On"].exists)
+        let jumpBackIn = app.tables.cells.switches["Jump Back In"].value
+        XCTAssertEqual("1", jumpBackIn as? String)
+        let recentlySaved = app.tables.cells.switches["Recently Saved"].value
+        XCTAssertEqual("1", recentlySaved as? String)
+        let recentlyVisited = app.tables.cells.switches["Recently Visited"].value
+        XCTAssertEqual("1", recentlyVisited as? String)
+        let recommendedByPocket = app.tables.cells.switches["Recommended by Pocket"].value
+        XCTAssertEqual("1", recommendedByPocket as? String)
+        let sponsoredStories = app.tables.cells.switches["Sponsored stories"].value
+        XCTAssertEqual("1", sponsoredStories as? String)
+
+        // Current Homepage
+        XCTAssertTrue(app.tables.cells["Firefox Home"].isSelected)
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
-        XCTAssert(app.tables.cells["WallpaperSettings"].exists)
-        XCTAssertTrue(app.cells.switches["Recommended by Pocket"].exists)
     }
 
     func testTyping() {
@@ -64,26 +87,30 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Now check open home page should load the previously saved home page
         let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
-        waitForExistence(homePageMenuItem, timeout: 5)
+        waitForExistence(homePageMenuItem, timeout: TIMEOUT)
         homePageMenuItem.tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "example")
     }
 
-    func testClipboard() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        // Check that what's in clipboard is copied
-        UIPasteboard.general.string = websiteUrl1
-        navigator.goto(HomeSettings)
-        app.textFields["HomeAsCustomURLTextField"].tap()
-        app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
-        waitForExistence(app.menuItems["Paste"])
-        app.menuItems["Paste"].tap()
-        waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
-        // Check that the webpage has been correctly copied into the correct field
-        let value = app.textFields["HomeAsCustomURLTextField"].value as! String
-        XCTAssertEqual(value, websiteUrl1)
+    func testClipboard() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("Copy & paste may not work on M1")
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+            // Check that what's in clipboard is copied
+            UIPasteboard.general.string = websiteUrl1
+            navigator.goto(HomeSettings)
+            app.textFields["HomeAsCustomURLTextField"].tap()
+            app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
+            waitForExistence(app.menuItems["Paste"])
+            app.menuItems["Paste"].tap()
+            waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
+            // Check that the webpage has been correctly copied into the correct field
+            let value = app.textFields["HomeAsCustomURLTextField"].value as! String
+            XCTAssertEqual(value, websiteUrl1)
+        }
     }
 
     func testSetFirefoxHomeAsHome() {
@@ -98,7 +125,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.performAction(Action.GoToHomePage)
-        waitForExistence(app.textFields["url"], timeout: 3)
+        waitForExistence(app.textFields["url"], timeout: TIMEOUT)
 
         // Now after setting History, make sure FF home is set
         navigator.goto(SettingsScreen)
@@ -125,14 +152,14 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Workaroud needed after xcode 11.3 update Issue 5937
         // Lets check only that website is open
-        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForExistence(app.textFields["url"], timeout: TIMEOUT)
         waitForValueContains(app.textFields["url"], value: "mozilla")
     }
 
     func testDisableTopSitesSettingsRemovesSection() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         app.staticTexts["Shortcuts"].tap()
@@ -196,13 +223,13 @@ class HomePageSettingsUITests: BaseTestCase {
     func testCustomizeHomepage() {
         if !iPad() {
             navigator.performAction(Action.CloseURLBarOpen)
-            waitForExistence(app.collectionViews.firstMatch, timeout: 5)
+            waitForExistence(app.collectionViews.firstMatch, timeout: TIMEOUT)
             app.collectionViews.firstMatch.swipeUp()
-            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: 5)
+            waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: TIMEOUT)
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
         // Verify default settings
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar], timeout: TIMEOUT_LONG)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always].exists)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled].exists)
         XCTAssertTrue(app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours].exists)
