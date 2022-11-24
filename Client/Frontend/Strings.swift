@@ -56,7 +56,28 @@ private func MZLocalizedString(
 // MARK: - Alerts
 extension String {
     public struct Alerts {
-
+        public struct RestoreTabs {
+            public static let Title = MZLocalizedString(
+                "Alerts.RestoreTabs.Title.v109",
+                tableName: "Alerts",
+                value: "Firefox crashed. Restore your tabs?",
+                comment: "The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed.")
+            public static let Message = MZLocalizedString(
+                "Alerts.RestoreTabs.Message.v109",
+                tableName: "Alerts",
+                value: "Sorry about that. Restore tabs to pick up where you left off.",
+                comment: "The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed.")
+            public static let ButtonNo = MZLocalizedString(
+                "Alerts.RestoreTabs.Button.No.v109",
+                tableName: "Alerts",
+                value: "No",
+                comment: "The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs.")
+            public static let ButtonYes = MZLocalizedString(
+                "Alerts.RestoreTabs.Button.Yes.v109",
+                tableName: "Alerts",
+                value: "Restore tabs",
+                comment: "The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs.")
+        }
     }
 }
 
@@ -1177,6 +1198,14 @@ extension String {
                 tableName: nil,
                 value: "Close All Inactive Tabs",
                 comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
+        }
+
+        public struct Sync {
+            public static let SyncTabs = MZLocalizedString(
+                "TabsTray.SyncTabs.SyncTabsButton.Title.v109",
+                tableName: "TabsTray",
+                value: "Sync Tabs",
+                comment: "Button label to sync tabs in your Firefox Account")
         }
     }
 }
@@ -3464,30 +3493,6 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "Used as a button label for crash dialog prompt")
-}
-
-// MARK: - RestoreTabsAlert
-extension String {
-    public static let RestoreTabsAlertTitle = MZLocalizedString(
-        "Well, this is embarrassing.",
-        tableName: nil,
-        value: nil,
-        comment: "Restore Tabs Prompt Title")
-    public static let RestoreTabsAlertMessage = MZLocalizedString(
-        "Looks like Firefox crashed previously. Would you like to restore your tabs?",
-        tableName: nil,
-        value: nil,
-        comment: "Restore Tabs Prompt Description")
-    public static let RestoreTabsAlertNo = MZLocalizedString(
-        "No",
-        tableName: nil,
-        value: nil,
-        comment: "Restore Tabs Negative Action")
-    public static let RestoreTabsAlertOkay = MZLocalizedString(
-        "Okay",
-        tableName: nil,
-        value: nil,
-        comment: "Restore Tabs Affirmative Action")
 }
 
 // MARK: - ClearPrivateDataAlert
