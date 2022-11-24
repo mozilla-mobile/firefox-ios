@@ -126,10 +126,6 @@ workflows:
         inputs:
         - content: |
             set -euxo pipefail
-
-            echo "remove directory before unziping"
-            ls
-            
             echo "$BITRISE_ARTIFACT_PATHS"
 
             echo "-- unzip -- "
@@ -192,7 +188,7 @@ workflows:
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/* .
+            mv ./Users/vagrant/git/DerivedData .
             ls -la
 
             echo "-- test-without-building --"
@@ -237,7 +233,7 @@ workflows:
             set -ex
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/* .
+            mv ./Users/vagrant/git/DerivedData .
             ls -la
 
             echo "-- test-without-building --"
@@ -283,7 +279,7 @@ workflows:
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/* .
+            mv ./Users/vagrant/git/DerivedData .
             ls -la
 
             echo "-- test-without-building --"
