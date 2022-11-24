@@ -6,7 +6,12 @@ import Foundation
 import Shared
 
 class OpenWithSettingsViewController: ThemedTableViewController {
-    typealias MailtoProviderEntry = (name: String, scheme: String, enabled: Bool)
+    struct MailtoProviderEntry {
+        let name: String
+        let scheme: String
+        let enabled: Bool
+    }
+
     var mailProviderSource = [MailtoProviderEntry]()
 
     fileprivate let prefs: Prefs
@@ -54,9 +59,9 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     func updateCurrentChoice() {
         var previousChoiceAvailable: Bool = false
         if let prefMailtoScheme = self.prefs.stringForKey(PrefsKeys.KeyMailToOption) {
-            mailProviderSource.forEach({ (name, scheme, enabled) in
-                if scheme == prefMailtoScheme {
-                    previousChoiceAvailable = enabled
+            mailProviderSource.forEach({ item in
+                if item.scheme == prefMailtoScheme {
+                    previousChoiceAvailable = item.enabled
                 }
             })
         }
@@ -74,8 +79,10 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
             mailProviderSource = dictRoot.map {  dict in
                 let nsDict = dict as! NSDictionary
-                return (name: nsDict["name"] as! String, scheme: nsDict["scheme"] as! String,
-                        enabled: canOpenMailScheme(nsDict["scheme"] as! String))
+                return (MailtoProviderEntry(
+                    name: nsDict["name"] as! String,
+                    scheme: nsDict["scheme"] as! String,
+                    enabled: canOpenMailScheme(nsDict["scheme"] as! String)))
             }
         }
     }

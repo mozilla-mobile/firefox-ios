@@ -46,34 +46,39 @@ class UtilsTests: XCTestCase {
         XCTAssertFalse(optArrayEqual(z, rhs: y))
     }
 
+    private struct Example {
+        let arr: [Int]
+        let by: Int
+        let expected: [[Int]]
+    }
     func testChunk() {
-        let examples: [([Int], Int, [[Int]])] = [
-            ([], 2, []),
-            ([1, 2], 0, [[1], [2]]),
-            ([1, 2], 1, [[1], [2]]),
-            ([1, 2, 3], 2, [[1, 2], [3]]),
-            ([1, 2], 3, [[1, 2]]),
-            ([1, 2, 3], 1, [[1], [2], [3]]),
+        let examples: [Example] = [
+            Example(arr: [], by: 2, expected: []),
+            Example(arr: [1, 2], by: 0, expected: [[1], [2]]),
+            Example(arr: [1, 2], by: 1, expected: [[1], [2]]),
+            Example(arr: [1, 2, 3], by: 2, expected: [[1, 2], [3]]),
+            Example(arr: [1, 2], by: 3, expected: [[1, 2]]),
+            Example(arr: [1, 2, 3], by: 1, expected: [[1], [2], [3]]),
         ]
-        for (arr, by, expected) in examples {
+        for example in examples {
             // Turn the ArraySlices back into Arrays for comparison.
-            let actual = chunk(arr as [Int], by: by).map { Array($0) }
-            XCTAssertEqual(expected as NSArray, actual as NSArray) // wtf. why is XCTAssert being so weird
+            let actual = chunk(example.arr as [Int], by: example.by).map { Array($0) }
+            XCTAssertEqual(example.expected as NSArray, actual as NSArray) // wtf. why is XCTAssert being so weird
         }
     }
 
     func testChunkCollection() {
-        let examples: [([Int], Int, [[Int]])] = [
-            ([], 2, []),
-            ([1, 2], 0, [[1], [2]]),
-            ([1, 2], 1, [[1], [2]]),
-            ([1, 2, 3], 2, [[1, 2], [3]]),
-            ([1, 2], 3, [[1, 2]]),
-            ([1, 2, 3], 1, [[1], [2], [3]]),
+        let examples: [Example] = [
+            Example(arr: [], by: 2, expected: []),
+            Example(arr: [1, 2], by: 0, expected: [[1], [2]]),
+            Example(arr: [1, 2], by: 1, expected: [[1], [2]]),
+            Example(arr: [1, 2, 3], by: 2, expected: [[1, 2], [3]]),
+            Example(arr: [1, 2], by: 3, expected: [[1, 2]]),
+            Example(arr: [1, 2, 3], by: 1, expected: [[1], [2], [3]]),
             ]
-        for (arr, by, expected) in examples {
-            let actual = chunkCollection(arr, by: by) { xs in [xs] }
-            XCTAssertEqual(expected as NSArray, actual as NSArray)
+        for example in examples {
+            let actual = chunkCollection(example.arr, by: example.by) { xs in [xs] }
+            XCTAssertEqual(example.expected as NSArray, actual as NSArray)
         }
     }
 
