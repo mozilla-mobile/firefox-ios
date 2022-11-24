@@ -29,7 +29,7 @@ struct TabLocationViewUX {
     static let URLBarPadding = 4
 }
 
-class TabLocationView: UIView {
+class TabLocationView: UIView, FeatureFlaggable {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
@@ -44,10 +44,17 @@ class TabLocationView: UIView {
     var url: URL? {
         didSet {
             updateTextWithURL()
-            trackingProtectionButton.isHidden = isTrackingProtectionHidden
-            shareButton.isHidden = isTrackingProtectionHidden
+            trackingProtectionButton.isHidden = isValidHttpUrlProtocol
+            shareButton.isHidden = !shouldEnableShareButtonFeature && isValidHttpUrlProtocol
             setNeedsUpdateConstraints()
         }
+    }
+    
+    var shouldEnableShareButtonFeature: Bool {
+        guard featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) else {
+            return false
+        }
+        return true
     }
 
     var readerModeState: ReaderModeState {
@@ -159,7 +166,7 @@ class TabLocationView: UIView {
             trackingProtectionButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             readerModeButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             readerModeButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            shareButton.heightAnchor.constraint(equalToConstant: bottomAnchor),
+            shareButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             shareButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             reloadButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             reloadButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
@@ -257,7 +264,7 @@ class TabLocationView: UIView {
 
 // MARK: - Private
 private extension TabLocationView {
-    var isTrackingProtectionHidden: Bool {
+    var isValidHttpUrlProtocol: Bool {
         !["https", "http"].contains(url?.scheme ?? "")
     }
 

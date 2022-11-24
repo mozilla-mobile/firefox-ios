@@ -80,7 +80,11 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressShare(_ urlBar: URLBarView) {
-        print("NB -- Share button pressed")
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarLocation,
+                                     value: .awesomebarShareTap,
+                                     extras: nil)
     }
 
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
