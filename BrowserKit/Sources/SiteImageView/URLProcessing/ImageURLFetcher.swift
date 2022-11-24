@@ -9,7 +9,7 @@ import Fuzi
 protocol ImageURLFetcher {
 
     /// Scraptes the HTML at the given url for a favicon image
-    /// - Parameter siteURL: The web address we want to retrireive the favicon for
+    /// - Parameter siteURL: The web address we want to retrieve the favicon for
     /// - Parameter completion: Returns a result type of either a URL on success or a SiteImageError on failure
     func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void))
 }
