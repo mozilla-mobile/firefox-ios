@@ -34,6 +34,7 @@ protocol ThemeColourPalette {
     var layerAccentPrivate: UIColor { get }
     var layerAccentPrivateNonOpaque: UIColor { get }
     var layerLightGrey30: UIColor { get }
+    var layerSepia: UIColor { get }
 
     // MARK: - Actions
     var actionPrimary: UIColor { get }
@@ -48,6 +49,7 @@ protocol ThemeColourPalette {
     // MARK: - Text
     var textPrimary: UIColor { get }
     var textSecondary: UIColor { get }
+    var textSecondaryAction: UIColor { get }
     var textDisabled: UIColor { get }
     var textWarning: UIColor { get }
     var textAccent: UIColor { get }

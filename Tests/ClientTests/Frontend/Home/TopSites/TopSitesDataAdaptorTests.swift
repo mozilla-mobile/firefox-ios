@@ -511,11 +511,9 @@ extension TopSitesDataAdaptorTests {
         let googleManager = GoogleTopSiteManager(prefs: profile.prefs)
         let dispatchGroup = MockDispatchGroup()
 
-        let siteImageHelper = SiteImageHelperMock()
         let subject = TopSitesDataAdaptorImplementation(profile: profile,
                                                         topSiteHistoryManager: historyStub,
                                                         googleTopSiteManager: googleManager,
-                                                        siteImageHelper: siteImageHelper,
                                                         contileProvider: contileProviderMock,
                                                         notificationCenter: notificationCenter,
                                                         dispatchGroup: dispatchGroup)

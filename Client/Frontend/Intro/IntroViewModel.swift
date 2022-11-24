@@ -8,7 +8,6 @@ import Shared
 struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     enum InformationCards: Int, CaseIterable {
         case welcome
-        case wallpapers
         case signSync
 
         case updateWelcome
@@ -16,7 +15,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
         var isOnboardingScreen: Bool {
             switch self {
-            case .welcome, .wallpapers, .signSync:
+            case .welcome, .signSync:
                 return true
             case .updateWelcome, .updateSignSync:
                 return false
@@ -26,7 +25,6 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         var telemetryValue: String {
             switch self {
             case .welcome: return "welcome"
-            case .wallpapers: return "wallpaper"
             case .signSync: return "signToSync"
             case .updateWelcome: return "update.welcome"
             case .updateSignSync: return "update.signToSync"
@@ -36,8 +34,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         var position: Int {
             switch self {
             case .welcome: return 0
-            case .wallpapers: return 1
-            case .signSync: return 2
+            case .signSync: return 1
             case .updateWelcome: return 0
             case .updateSignSync: return 1
             }
@@ -68,13 +65,6 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        primaryAction: .Onboarding.IntroAction,
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
-        case (.wallpapers, _):
-            return OnboardingInfoModel(image: nil,
-                                       title: .Onboarding.WallpaperTitle,
-                                       description: nil,
-                                       primaryAction: .Onboarding.WallpaperAction,
-                                       secondaryAction: .Onboarding.LaterAction,
-                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.wallpapersCard)
         case (.signSync, false):
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
                                        title: .Onboarding.SyncTitle,

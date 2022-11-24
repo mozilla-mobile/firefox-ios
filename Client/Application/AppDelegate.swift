@@ -115,6 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
             self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
+            BrowserViewController.foregroundBVC().loadQueuedTabs()
         }
     }
 

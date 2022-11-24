@@ -42,17 +42,17 @@ body {
 
 .light {
   background-color: #ffffff;
-  color: #222222;
+  color: #15141a;
 }
 
 .dark {
   background-color: #333333;
-  color: #eeeeee;
+  color: #fbfbfe;
 }
 
 .sepia {
-    background-color: #F0E6DC;
-    color: #333333;
+    background-color: #fff4de;
+    color: #15141a;
 }
 
 .sans-serif {
@@ -120,32 +120,6 @@ font-family: -apple-system, sans-serif;
   margin: 0px;
   margin-bottom: 24px;
   font-style: italic;
-}
-
-.light > .header > .domain {
-  color: #ee7600;
-  border-bottom-color: #d0d0d0; 
-}
-
-.light > .header > h1 {
-  color: #222222;
-}
-
-.light > .header > .credits {
-  color: #333333;
-}
-
-.dark > .header > .domain {
-  color: #ff9400;
-  border-bottom-color: #777777; 
-}
-
-.dark > .header > h1 {
-  color: #eeeeee;
-}
-
-.dark > .header > .credits {
-  color: #aaaaaa;
 }
 
 .font-size1 > .header > h1 {
@@ -307,14 +281,14 @@ font-family: -apple-system, sans-serif;
 .light > .content a:visited,
 .light > .content a:hover,
 .light > .content a:active {
-  color: #00acff !important;
+  color: #0060df !important;
 }
 
 .dark > .content a,
 .dark > .content a:visited,
 .dark > .content a:hover,
 .dark > .content a:active {
-  color: #00acff !important;
+  color: #00ddff !important;
 }
 
 .sepia > .content a,

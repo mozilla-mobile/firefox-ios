@@ -32,7 +32,6 @@ class TabEventHandlerTests: XCTestCase {
 //
 //        // Hide intro so it is easier to see the test running and debug it
 //        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-//        profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
 //
 //        let webServer = GCDWebServer()
 //        webServer.addHandler(forMethod: "GET", path: "/blankpopup", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in

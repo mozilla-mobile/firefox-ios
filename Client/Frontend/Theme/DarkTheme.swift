@@ -8,6 +8,7 @@ struct DarkTheme: Theme {
 }
 
 private struct DarkColourPalette: ThemeColourPalette {
+
     // MARK: - Layers
     var layer1: UIColor = FXColors.DarkGrey60
     var layer2: UIColor = FXColors.DarkGrey30
@@ -22,6 +23,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerAccentPrivate: UIColor = FXColors.Purple60
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.3)
     var layerLightGrey30: UIColor = FXColors.LightGrey30
+    var layerSepia: UIColor = FXColors.Orange05
 
     // MARK: - Actions
     var actionPrimary: UIColor = FXColors.Blue20
@@ -36,6 +38,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05
     var textSecondary: UIColor = FXColors.LightGrey40
+    var textSecondaryAction: UIColor = FXColors.DarkGrey90
     var textDisabled: UIColor = FXColors.LightGrey05.withAlphaComponent(0.4)
     var textWarning: UIColor = FXColors.Red20
     var textAccent: UIColor = FXColors.Blue20

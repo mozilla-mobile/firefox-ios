@@ -959,7 +959,7 @@
 "Onboarding.WallpaperTitle.v102" = "Выберыце шпалеры Firefox";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Welcome.Description.v106" = "Firefox ставіць людзей вышэй за прыбытак і па змаўчанні абараняе вашу прыватнасць.";
+"Onboarding.Welcome.Description.v106" = "Firefox ставіць людзей вышэй за прыбытак і заўсёды абараняе вашу прыватнасць.";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for 106 version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v106" = "Сардэчна запрашаем у незалежны інтэрнэт";

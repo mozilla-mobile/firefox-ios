@@ -6,8 +6,6 @@ import Foundation
 import Storage
 
 protocol RecentlySavedDataAdaptor {
-    func getHeroImage(forSite site: Site) -> UIImage?
-    func getFaviconImage(forSite site: Site) -> UIImage?
     func getRecentlySavedData() -> [RecentlySavedItem]
 }
 
@@ -21,31 +19,16 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
     private let bookmarkItemsLimit: UInt = 5
     private let readingListItemsLimit: Int = 5
     private let recentItemsHelper = RecentItemsHelper()
-    private var siteImageHelper: SiteImageHelperProtocol
     private var readingList: ReadingList
     private var bookmarksHandler: BookmarksHandler
     private var recentBookmarks = [RecentlySavedBookmark]()
     private var readingListItems = [ReadingListItem]()
 
-    private var heroImages = [String: UIImage]() {
-        didSet {
-            delegate?.didLoadNewData()
-        }
-    }
-
-    private var faviconImages = [String: UIImage]() {
-        didSet {
-            delegate?.didLoadNewData()
-        }
-    }
-
     weak var delegate: RecentlySavedDelegate?
 
-    init(siteImageHelper: SiteImageHelperProtocol,
-         readingList: ReadingList,
+    init(readingList: ReadingList,
          bookmarksHandler: BookmarksHandler,
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.siteImageHelper = siteImageHelper
         self.notificationCenter = notificationCenter
         self.readingList = readingList
         self.bookmarksHandler = bookmarksHandler
@@ -57,31 +40,6 @@ class RecentlySavedDataAdaptorImplementation: RecentlySavedDataAdaptor, Notifiab
 
         getRecentBookmarks()
         getReadingLists()
-    }
-
-    func getHeroImage(forSite site: Site) -> UIImage? {
-        if let heroImage = heroImages[site.url] {
-            return heroImage
-        }
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .heroImage,
-                                      shouldFallback: true) { image in
-            self.heroImages[site.url] = image
-        }
-        return nil
-    }
-
-    func getFaviconImage(forSite site: Site) -> UIImage? {
-        if let faviconImage = faviconImages[site.url] {
-            return faviconImage
-        }
-
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .favicon,
-                                      shouldFallback: false) { image in
-            self.faviconImages[site.url] = image
-        }
-        return nil
     }
 
     func getRecentlySavedData() -> [RecentlySavedItem] {

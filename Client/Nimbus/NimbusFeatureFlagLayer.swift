@@ -28,8 +28,9 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-//        case .contextualHintForJumpBackInSyncedTab:
-//            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
+        case .contextualHintForToolbar:
+//        .contextualHintForJumpBackInSyncedTab:
+            return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 //
 //        case .copyForJumpBackIn,
 //                .copyForToolbar:
@@ -76,6 +77,10 @@ final class NimbusFeatureFlagLayer {
                 .copyForJumpBackIn,
                 .copyForToolbar:
             return checkNimbusForMR22Feature(for: featureID, using: nimbus)
+
+        case .shareSheetChanges,
+                .shareToolbarChanges:
+            return checkNimbusForShareSheet(for: featureID, from: nimbus)
         }
     }
 
@@ -187,6 +192,7 @@ final class NimbusFeatureFlagLayer {
 
         switch featureID {
         case .contextualHintForJumpBackInSyncedTab: nimbusID = ContextualHint.jumpBackInSyncedTabContextualHint
+        case .contextualHintForToolbar: nimbusID = ContextualHint.toolbarHint
         default: return false
         }
 
@@ -230,6 +236,18 @@ final class NimbusFeatureFlagLayer {
         case .onboardingFreshInstall: return config.firstRunFlow
         default: return false
         }
+    }
+
+    public func checkNimbusForShareSheet(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.shareSheet.value()
+
+            switch featureID {
+            case .shareSheetChanges: return config.moveActions
+            case .shareToolbarChanges: return config.toolbarChanges
+            default: return false
+            }
     }
 
     private func checkTabTrayFeature(for featureID: NimbusFeatureFlagID,
