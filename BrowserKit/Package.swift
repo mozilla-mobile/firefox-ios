@@ -18,7 +18,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            from: "7.2.2"),
+            exact: "7.2.2"),
     ],
     targets: [
         .target(
