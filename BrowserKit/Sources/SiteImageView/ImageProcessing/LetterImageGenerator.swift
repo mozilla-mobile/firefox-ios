@@ -7,8 +7,7 @@ import UIKit
 /// Generate a default letter image from the domain name
 protocol LetterImageGenerator {
 
-    /// Generates a letter image based on the first character in the
-    /// domain name or gets an already-generated icon from the cache.
+    /// Generates a letter image based on the first character in the domain name
     /// - Parameter domain: The string domain name
     /// - Returns: The generated letter image
     func generateLetterImage(domain: String) -> UIImage
@@ -16,24 +15,15 @@ protocol LetterImageGenerator {
 
 class DefaultLetterImageGenerator: LetterImageGenerator {
 
-    // An in-memory cache of "default" images keyed by the
-    // first character of a site's domain name.
-    private var defaultImagesCache = [String: UIImage]()
-
     private let defaultLetter: Character = "#"
 
     func generateLetterImage(domain: String) -> UIImage {
         let letter: Character = domain.first ?? defaultLetter
         let capitalizedLetter = letter.uppercased()
-        // In-memory cache
-        if let cachedImage = defaultImagesCache[capitalizedLetter] {
-            return cachedImage
-        }
 
         let color = generateBackgroundColor(forDomain: domain)
         let image = generateImage(fromLetter: capitalizedLetter,
                                   color: color)
-        defaultImagesCache[capitalizedLetter] = image
         return image
     }
 
