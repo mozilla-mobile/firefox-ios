@@ -6,6 +6,7 @@ import Foundation
 import Shared
 
 class OpenWithSettingsViewController: ThemedTableViewController {
+
     struct MailtoProviderEntry {
         let name: String
         let scheme: String
@@ -76,13 +77,18 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     }
 
     func reloadMailProviderSource() {
-        if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
-            mailProviderSource = dictRoot.map {  dict in
-                let nsDict = dict as! NSDictionary
-                return (MailtoProviderEntry(
-                    name: nsDict["name"] as! String,
-                    scheme: nsDict["scheme"] as! String,
-                    enabled: canOpenMailScheme(nsDict["scheme"] as! String)))
+        if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"),
+           let dictRoot = NSArray(contentsOfFile: path) {
+
+            mailProviderSource = dictRoot.compactMap { dict in
+                guard let nsDict = dict as? NSDictionary,
+                      let name = nsDict["name"] as? String,
+                      let scheme = nsDict["scheme"] as? String
+                else { return nil }
+
+                return (MailtoProviderEntry(name: name,
+                                            scheme: scheme,
+                                            enabled: canOpenMailScheme(scheme)))
             }
         }
     }
