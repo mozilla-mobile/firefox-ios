@@ -197,8 +197,10 @@ class SearchTests: BaseTestCase {
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         // Click on the > button to get to that option only on iPhone
-        if !iPad() {
-            app.menuItems["show.next.items.menu.button"].tap()
+        while !app.collectionViews.menuItems["Search with Firefox"].exists {
+            app.buttons["Forward"].firstMatch.tap()
+            waitForExistence(app.collectionViews.menuItems.firstMatch)
+            waitForExistence(app.buttons["Forward"])
         }
 
         waitForExistence(app.menuItems["Search with Firefox"])
