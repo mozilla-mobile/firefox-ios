@@ -4,7 +4,13 @@
 
 import Foundation
 
-// TODO: Laurie - Determine error cases
-enum ImageError: Error {
-    case error
+enum ImageError: Error, CustomStringConvertible {
+    case unableToDownloadImage(String)
+
+    var description: String {
+        switch self {
+        case .unableToDownloadImage(let error):
+            return "Unable to download image with reason: \(error)"
+        }
+    }
 }
