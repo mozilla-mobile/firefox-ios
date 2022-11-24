@@ -8,30 +8,82 @@ import XCTest
 class ImageURLFetcherTests: XCTestCase {
 
     var subject: DefaultImageURLFetcher!
+    var networkMock: NetworkRequestMock!
 
     override func setUp() {
-        subject = DefaultImageURLFetcher()
+        networkMock = NetworkRequestMock()
+        subject = DefaultImageURLFetcher(network: networkMock)
     }
 
-    func testGetFaviconWithFallbackIcon() {
-        let expectation = self.expectation(description: "Wait for Favicons to be fetched")
-        let url = URL(string: "http://www.google.com")!
-        subject.fetchFaviconURL(siteURL: url) { result in
-            print("Here")
-        }
-        self.waitForExpectations(timeout: 3000, handler: nil)
+    override func tearDown() {
+        networkMock = nil
+        subject = nil
     }
+
+    func testGetFaviconWithExistingIcon() {
+        let url = URL(string: "http://firefox.com")!
+
+        subject.fetchFaviconURL(siteURL: url) { result in
+            switch result {
+            case let .success(url):
+                XCTAssertEqual(url.absoluteString, "http://firefox.com/image.png")
+            default:
+                XCTFail("Failed to retrieve favicon URL")
+            }
+        }
+
+        guard let data = generateHTMLData(string: ImageURLTestHTML.mockHTMLWithIcon) else {
+            XCTFail("Invalid test HTML")
+            return
+        }
+        networkMock.callFetchDataForURLCompletion(with: .success(data))
+    }
+
+    func testGetFaviconWithNoIconFallback() {
+        let url = URL(string: "http://firefox.com")!
+
+        subject.fetchFaviconURL(siteURL: url) { result in
+            switch result {
+            case let .success(url):
+                XCTAssertEqual(url.absoluteString, "http://firefox.com/favicon.ico")
+            default:
+                XCTFail("Failed to retrieve favicon URL")
+            }
+        }
+
+        guard let data = generateHTMLData(string: ImageURLTestHTML.mockHTMLWithNoIcon) else {
+            XCTFail("Invalid test HTML")
+            return
+        }
+        networkMock.callFetchDataForURLCompletion(with: .success(data))
+    }
+
+
+    // MARK: - Private helpers
+
+    private func generateHTMLData(string: String) -> Data? {
+        return string.data(using: .utf8)
+    }
+
 }
-//
-//extension ImageURLFetcherTests {
-//
-//    let mockHTML = """
-//                    <html>
-//                        <head>
-//                            <link rel="icon" href="image.png"></link>
-//                            <title>Page {page}</title>
-//                        </head>
-//                    </html>
-//                    """
-//
-//}
+
+// MARK: - Mock HTML Data
+
+private enum ImageURLTestHTML {
+    static let mockHTMLWithIcon = """
+        <html>
+            <head>
+                <link rel="icon" href="image.png"></link>
+                <title>Firefox</title>
+            </head>
+        </html>
+        """
+
+    static let mockHTMLWithNoIcon = """
+        <html>
+            <head>
+                <title>Firefox</title>
+            </head>
+        </html>
+        """
+}

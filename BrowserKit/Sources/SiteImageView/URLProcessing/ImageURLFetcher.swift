@@ -5,19 +5,25 @@
 import Foundation
 import Fuzi
 
+/// Scrapes the HTML at a given site for images
 protocol ImageURLFetcher {
-    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, URLError>) -> Void))
+
+    /// Scraptes the HTML at the given url for a favicon image
+    /// - Parameter siteURL: The web address we want to retrireive the favicon for
+    /// - Parameter completion: Returns a result type of either a URL on success or a SiteImageError on failure
+    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void))
 }
 
 class DefaultImageURLFetcher: ImageURLFetcher {
 
-    enum RequestConstants {
-        static let timeout: TimeInterval = 5
-        static let userAgent = ""
+    private let network: NetworkRequest
+
+    init(network: NetworkRequest = HTMLDataRequest()) {
+        self.network = network
     }
 
-    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, URLError>) -> Void)) {
-        fetchDataForURL(siteURL) { [weak self] result in
+    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void)) {
+        network.fetchDataForURL(siteURL) { [weak self] result in
             switch result {
             case let .success(data):
                 self?.processHTMLDocument(siteURL: siteURL,
@@ -25,27 +31,11 @@ class DefaultImageURLFetcher: ImageURLFetcher {
                                           completion: completion)
             case let .failure(error):
                 completion(.failure(error))
-            }   
+            }
         }
     }
 
-    private func fetchDataForURL(_ url: URL, completion: @escaping ((Result<Data, URLError>) -> Void)) {
-        let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = ["User-Agent": RequestConstants.userAgent]
-        configuration.timeoutIntervalForRequest = RequestConstants.timeout
-
-        let urlSession = URLSession(configuration: configuration)
-
-        urlSession.dataTask(with: url) { data, _, error in
-            guard let data = data else {
-                completion(.failure(.invalidHTML))
-                return
-            }
-            completion(.success(data))
-        }.resume()
-    }
-
-    private func processHTMLDocument(siteURL: URL, data: Data, completion: @escaping ((Result<URL, URLError>) -> Void)) {
+    private func processHTMLDocument(siteURL: URL, data: Data, completion: @escaping ((Result<URL, SiteImageError>) -> Void)) {
         guard let root = try? HTMLDocument(data: data) else {
             completion(.failure(.invalidHTML))
             return
@@ -63,6 +53,7 @@ class DefaultImageURLFetcher: ImageURLFetcher {
             }
         }
 
+        // Redirect if needed
         if let reloadURL = reloadURL {
             fetchFaviconURL(siteURL: reloadURL, completion: completion)
             return
@@ -74,7 +65,7 @@ class DefaultImageURLFetcher: ImageURLFetcher {
                 continue
             }
 
-            if let faviconURL = URL(string: href, relativeTo: siteURL) {
+            if let faviconURL = URL(string: siteURL.absoluteString + "/" + href) {
                 completion(.success(faviconURL))
                 return
             }
@@ -84,6 +75,7 @@ class DefaultImageURLFetcher: ImageURLFetcher {
         // This is a fall back because it's generally low res
         if let faviconURL = URL(string: siteURL.absoluteString + "/favicon.ico") {
             completion(.success(faviconURL))
+            return
         }
 
         completion(.failure(.noFaviconFound))
