@@ -34,4 +34,14 @@ enum ThemeType: String {
             return "\(name)_dark"
         }
     }
+
+    /// If App Theme is Dark it will return  .dark reader mode theme,
+    /// if not we return the selected ReaderModeTheme defaulting to .light if value is nil
+    /// - Parameter reader mode theme: ReaderModeTheme
+    /// - Returns: ReaderModeTheme based on reader mode theme and App Theme
+    func getReaderMode(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
+        guard self != .dark else { return .dark }
+
+        return theme ?? .light
+    }
 }
