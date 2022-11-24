@@ -116,6 +116,6 @@ public extension String {
             return true
         }
         // Trim and check empty string
-        return (self.trimmingCharacters(in: .whitespaces) == "")
+        return self.trimmingCharacters(in: .whitespaces).isEmpty
     }
 }
