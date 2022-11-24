@@ -124,7 +124,6 @@ class BrowserViewController: UIViewController {
 
     var scrollController = TabScrollingController()
     private var keyboardState: KeyboardState?
-    var hasTriedToPresentETPAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -569,7 +568,9 @@ class BrowserViewController: UIViewController {
     }
 
     private func prepareURLOnboardingContextualHint() {
-        guard contextHintVC.shouldPresentHint() else { return }
+        guard contextHintVC.shouldPresentHint(),
+              featureFlags.isFeatureEnabled(.contextualHintForToolbar, checking: .buildOnly)
+        else { return }
 
         contextHintVC.configure(
             anchor: urlBar,
@@ -1320,10 +1321,8 @@ class BrowserViewController: UIViewController {
         if let url = tab.url {
             if url.isReaderModeURL {
                 showReaderModeBar(animated: false)
-                NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
             } else {
                 hideReaderModeBar(animated: false)
-                NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
             }
 
             updateInContentHomePanel(url as URL, focusUrlBar: focusUrlBar)
@@ -2153,43 +2152,6 @@ extension BrowserViewController {
         }
     }
 
-    func presentETPCoverSheetViewController(_ force: Bool = false) {
-        guard !hasTriedToPresentETPAlready else { return }
-
-        hasTriedToPresentETPAlready = true
-        let cleanInstall = ETPViewModel.isCleanInstall(userPrefs: profile.prefs)
-        let shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall)
-
-        guard force || shouldShow else { return }
-
-        let etpCoverSheetViewController = ETPCoverSheetViewController()
-        if topTabsVisible {
-            etpCoverSheetViewController.preferredContentSize = CGSize(
-                width: ViewControllerConsts.PreferredSize.UpdateViewController.width,
-                height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
-            etpCoverSheetViewController.modalPresentationStyle = .formSheet
-        } else {
-            etpCoverSheetViewController.modalPresentationStyle = .fullScreen
-        }
-        etpCoverSheetViewController.viewModel.startBrowsing = {
-            etpCoverSheetViewController.dismiss(animated: true) {
-                if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                    _ = self.navigationController?.popToRootViewController(animated: true)
-                }
-            }
-        }
-        etpCoverSheetViewController.viewModel.goToSettings = {
-            etpCoverSheetViewController.dismiss(animated: true) {
-                let settingsTableViewController = ContentBlockerSettingViewController(prefs: self.profile.prefs)
-                settingsTableViewController.profile = self.profile
-                settingsTableViewController.tabManager = self.tabManager
-                settingsTableViewController.settingsDelegate = self
-                self.presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: settingsTableViewController, topTabsVisible: self.topTabsVisible)
-            }
-        }
-        present(etpCoverSheetViewController, animated: true, completion: nil)
-    }
-
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
         guard #available(iOS 14.0, *) else { return }
@@ -2584,8 +2546,8 @@ extension BrowserViewController: NotificationThemeable {
             urlBar.locationView.tabDidChangeContentBlocking($0)
         }
 
-        guard let contentScript = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
-        appyThemeForPreferences(profile.prefs, contentScript: contentScript)
+        guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
+        applyThemeForPreferences(profile.prefs, contentScript: contentScript)
     }
 }
 

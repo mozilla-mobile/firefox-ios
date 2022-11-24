@@ -163,6 +163,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
+        tableView.reloadData()
+    }
+
     override func generateSettings() -> [SettingSection] {
         let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
             let id = BlockingStrength.accessibilityId(for: option)

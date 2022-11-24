@@ -45,7 +45,7 @@ public enum PhotonActionSheetIconType {
 }
 
 // MARK: - PhotonActionSheetTitleHeaderView
-class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
+class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCell {
     static let Padding: CGFloat = 18
 
     lazy var titleLabel: UILabel = {
@@ -72,15 +72,15 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
             make.trailing.equalTo(contentView)
-            make.top.equalTo(contentView).offset(PhotonActionSheet.UX.TablePadding)
+            make.top.equalTo(contentView).offset(PhotonActionSheet.UX.tablePadding)
         }
 
         contentView.addSubview(separatorView)
 
         separatorView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheet.UX.TablePadding)
-            make.bottom.equalTo(contentView).inset(PhotonActionSheet.UX.TablePadding)
+            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheet.UX.tablePadding)
+            make.bottom.equalTo(contentView).inset(PhotonActionSheet.UX.tablePadding)
             make.height.equalTo(0.5)
         }
     }
@@ -99,99 +99,8 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-// MARK: - PhotonActionSheetSiteHeaderView
-class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
-    static let Padding: CGFloat = 12
-    static let VerticalPadding: CGFloat = 2
-
-    lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
-        titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 2
-        return titleLabel
-    }()
-
-    lazy var descriptionLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.MediumSizeRegularWeightAS
-        titleLabel.textAlignment = .left
-        titleLabel.numberOfLines = 1
-        return titleLabel
-    }()
-
-    lazy var siteImageView: UIImageView = {
-        let siteImageView = UIImageView()
-        siteImageView.contentMode = .center
-        siteImageView.clipsToBounds = true
-        siteImageView.layer.cornerRadius = PhotonActionSheet.UX.CornerRadius
-        siteImageView.layer.borderColor = PhotonActionSheet.UX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = PhotonActionSheet.UX.BorderWidth
-        return siteImageView
-    }()
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-
-        self.backgroundView = UIView()
-        self.backgroundView?.backgroundColor = .clear
-        contentView.addSubview(siteImageView)
-
-        siteImageView.snp.remakeConstraints { make in
-            make.top.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
-            make.centerY.equalTo(contentView)
-            make.leading.equalTo(contentView).offset(PhotonActionSheetSiteHeaderView.Padding)
-            make.size.equalTo(PhotonActionSheet.UX.SiteImageViewSize)
-        }
-
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel])
-        stackView.spacing = PhotonActionSheetSiteHeaderView.VerticalPadding
-        stackView.alignment = .leading
-        stackView.axis = .vertical
-
-        contentView.addSubview(stackView)
-
-        stackView.snp.makeConstraints { make in
-            make.leading.equalTo(siteImageView.snp.trailing).offset(PhotonActionSheetSiteHeaderView.Padding)
-            make.trailing.equalTo(contentView).inset(PhotonActionSheetSiteHeaderView.Padding)
-            make.centerY.equalTo(siteImageView.snp.centerY)
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.siteImageView.image = nil
-        self.siteImageView.backgroundColor = UIColor.clear
-    }
-
-    func configure(with site: Site) {
-        if site.icon != nil {
-            self.siteImageView.setFavicon(forSite: site) {
-                self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheet.UX.IconSize)
-            }
-        } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            let profile = appDelegate.profile
-            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
-                guard let image = result.successValue else { return }
-
-                self.siteImageView.backgroundColor = .clear
-                self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.IconSize)
-            }
-        }
-        self.titleLabel.text = site.title.isEmpty ? site.url : site.title
-        self.descriptionLabel.text = site.tileURL.baseDomain
-        self.titleLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
-        self.descriptionLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
-
-    }
-}
-
 // MARK: - PhotonActionSheetSeparator
-class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView {
+class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell {
 
     let separatorLineView = UIView()
 
@@ -214,7 +123,7 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView {
 }
 
 // MARK: - PhotonActionSheetSeparator
-class PhotonActionSheetSeparator: UITableViewHeaderFooterView {
+class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)

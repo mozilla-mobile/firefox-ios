@@ -94,7 +94,7 @@ public struct ImageIdentifiers {
     public static let tabTrayDelete = "action_delete"
     public static let tabTrayNewTab = "menu-NewTab"
     public static let trashIcon = "forget"
-    public static let trashIconMonocrome = "trash-icon"
+    public static let trashIconMonochrome = "trash-icon"
     public static let upgradeBackground = "onboardingBackground"
     public static let upgradeCloseButton = "updateCloseButton"
     public static let warning = "menu-warning"

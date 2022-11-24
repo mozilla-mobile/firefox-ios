@@ -151,7 +151,6 @@ class HistoryHighlightsViewModel {
                               value: .historyHighlightsItemOpened)
     }
 
-    // TODO: Good candidate for protocol because is used in JumpBackIn and here
     func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
         siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
             completion(image)
@@ -426,7 +425,10 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 
         cell.configureCell(with: cellOptions, theme: theme)
 
+        let id = Int(arc4random())
+        cell.tag = id
         getFavIcon(for: site) { image in
+            guard cell.tag == id else { return }
             cell.heroImage.image = image
         }
 

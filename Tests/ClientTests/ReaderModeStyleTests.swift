@@ -6,10 +6,18 @@ import XCTest
 @testable import Client
 
 class ReaderModeStyleTests: XCTestCase {
+    var themeManager: ThemeManager!
+
+    override func setUp() {
+        super.setUp()
+
+        themeManager = AppContainer.shared.resolve()
+    }
 
     override func tearDown() {
         super.tearDown()
-        LegacyThemeManager.instance.current = LegacyNormalTheme()
+
+        themeManager = nil
     }
 
     func test_initWithProperties_succeeds() {
@@ -62,26 +70,33 @@ class ReaderModeStyleTests: XCTestCase {
 
     // MARK: - ReaderModeTheme
 
-    func test_defaultReaderModeTheme() {
+    func test_defaultReaderModeTheme_returnsLight() {
+        themeManager.changeCurrentTheme(.light)
         let defaultTheme = ReaderModeTheme.preferredTheme(for: nil)
-        XCTAssertEqual(defaultTheme, .light)
+        XCTAssertEqual(defaultTheme, .light, "Expected light theme (default) if not theme is selected")
     }
 
     func test_appWideThemeDark_returnsDark() {
-        LegacyThemeManager.instance.current = LegacyDarkTheme()
+        themeManager.changeCurrentTheme(.dark)
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.light)
 
-        XCTAssertEqual(theme, .dark)
+        XCTAssertEqual(theme, .dark, "Expected dark theme because of the app theme")
     }
 
     func test_readerThemeSepia_returnsSepia() {
+        themeManager.changeCurrentTheme(.light)
         let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia)
-        XCTAssertEqual(theme, .sepia)
+        XCTAssertEqual(theme, .sepia, "Expected sepia theme if App theme is not dark")
+    }
+
+    func test_readerThemeSepiaWithAppDark_returnsSepia() {
+        themeManager.changeCurrentTheme(.dark)
+        let theme = ReaderModeTheme.preferredTheme(for: ReaderModeTheme.sepia)
+        XCTAssertEqual(theme, .dark, "Expected dark theme if App theme is dark")
     }
 
     func test_preferredColorTheme_changesFromLightToDark() {
-        LegacyThemeManager.instance.current = LegacyDarkTheme()
-
+        themeManager.changeCurrentTheme(.dark)
         var readerModeStyle = ReaderModeStyle(theme: .light,
                                               fontType: .sansSerif,
                                               fontSize: .size1)
