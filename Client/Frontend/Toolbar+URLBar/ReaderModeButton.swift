@@ -13,7 +13,7 @@ class ReaderModeButton: UIButton {
         adjustsImageWhenHighlighted = false
         setImage(UIImage.templateImageNamed("reader"), for: .normal)
         imageView?.contentMode = .scaleAspectFit
-        contentHorizontalAlignment = .left
+        contentHorizontalAlignment = .center
         applyTheme()
     }
 

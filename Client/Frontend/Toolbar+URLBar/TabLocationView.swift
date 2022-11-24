@@ -25,7 +25,7 @@ struct TabLocationViewUX {
     static let BaseURLFontColor = UIColor.Photon.Grey50
     static let Spacing: CGFloat = 8
     static let StatusIconSize: CGFloat = 18
-    static let ButtonSize: CGFloat = 34
+    static let ButtonSize: CGFloat = 40
     static let URLBarPadding = 4
 }
 
@@ -93,7 +93,7 @@ class TabLocationView: UIView {
         shareButton.addTarget(self, action: #selector(self.didPressShareButton(_:)), for: .touchUpInside)
         shareButton.clipsToBounds = false
         shareButton.tintColor = UIColor.Photon.Grey50
-        shareButton.contentHorizontalAlignment = .left
+        shareButton.contentHorizontalAlignment = .center
         shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
     }
 
@@ -120,7 +120,7 @@ class TabLocationView: UIView {
             UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
         reloadButton.tintColor = UIColor.Photon.Grey50
         reloadButton.imageView?.contentMode = .scaleAspectFit
-        reloadButton.contentHorizontalAlignment = .left
+        reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
         reloadButton.isAccessibilityElement = true
@@ -159,7 +159,7 @@ class TabLocationView: UIView {
             trackingProtectionButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             readerModeButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             readerModeButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            shareButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+            shareButton.heightAnchor.constraint(equalToConstant: bottomAnchor),
             shareButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             reloadButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
             reloadButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),

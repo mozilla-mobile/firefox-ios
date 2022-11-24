@@ -37,7 +37,7 @@ class ShareButton: UIButton {
 
         clipsToBounds = false
         setImage(UIImage.templateImageNamed(ImageIdentifiers.share), for: .normal)
-        imageView?.contentMode = .scaleAspectFill
+        imageView?.contentMode = .scaleAspectFit
         adjustsImageWhenHighlighted = false
     }
 
