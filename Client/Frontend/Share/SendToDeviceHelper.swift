@@ -44,9 +44,13 @@ class SendToDeviceHelper {
                 self.delegate.dismissInstructionsView()
             })
             let hostingViewController = UIHostingController(rootView: instructionsView)
+            #if MOZ_TARGET_SHARETO
+            return hostingViewController
+            #else
             let navigationController = UINavigationController(rootViewController: hostingViewController)
             navigationController.modalPresentationStyle = .formSheet
             return navigationController
+            #endif
         }
 
         // Display device picker if the user has an account
@@ -55,9 +59,13 @@ class SendToDeviceHelper {
         devicePickerViewController.profile = profile
         devicePickerViewController.profileNeedsShutdown = false
         devicePickerViewController.shareItem = shareItem
+        #if MOZ_TARGET_SHARETO
+        return devicePickerViewController
+        #else
         let navigationController = UINavigationController(rootViewController: devicePickerViewController)
         navigationController.modalPresentationStyle = .formSheet
         return navigationController
+        #endif
     }
 
     // MARK: - Private

@@ -11,22 +11,25 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
 
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
+    private var profile: Profile {
+        return BrowserProfile(localName: "profile")
+    }
 
     func initialViewController() -> UIViewController {
-        if !hasAccount() {
-            let instructionsView = InstructionsView(backgroundColor: ShareTheme.defaultBackground.color,
-                                                    textColor: ShareTheme.textColor.color,
-                                                    imageColor: ShareTheme.iconColor.color,
-                                                    dismissAction: { [weak self] in
-                self?.dismissInstructionsView()
-            })
-            let hostingViewController = UIHostingController(rootView: instructionsView)
-            return hostingViewController
+        guard let shareItem = sharedItem else {
+            finish()
+            return UIViewController()
         }
-        let devicePickerViewController = DevicePickerViewController()
-        devicePickerViewController.pickerDelegate = self
-        devicePickerViewController.profile = nil // This means the picker will open and close the default profile
-        return devicePickerViewController
+
+        let colors = SendToDeviceHelper.Colors(defaultBackground: ShareTheme.defaultBackground.color,
+                                               textColor: ShareTheme.textColor.color,
+                                               iconColor: ShareTheme.iconColor.color)
+        let helper = SendToDeviceHelper(shareItem: shareItem,
+                                        profile: profile,
+                                        colors: colors,
+                                        delegate: self)
+        let viewController = helper.initialViewController()
+        return viewController
     }
 
     func finish() {
@@ -38,9 +41,8 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
             return finish()
         }
 
-        let profile = BrowserProfile(localName: "profile")
         profile.sendItem(item, toDevices: devices).uponQueue(.main) { _ in
-            profile.shutdown()
+            self.profile.shutdown()
             self.finish()
 
             addAppExtensionTelemetryEvent(forMethod: "send-to-device")
@@ -53,13 +55,5 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
 
     func dismissInstructionsView() {
         finish()
-    }
-
-    private func hasAccount() -> Bool {
-        let profile = BrowserProfile(localName: "profile")
-        defer {
-            profile.shutdown()
-        }
-        return profile.hasAccount()
     }
 }

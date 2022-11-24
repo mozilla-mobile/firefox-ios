@@ -76,6 +76,7 @@
 		21112968289480630082C08B /* HomepageMessageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21112967289480630082C08B /* HomepageMessageCardViewModel.swift */; };
 		211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */; };
 		2128E27B292E624400FB91BE /* SendToDeviceActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */; };
+		2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */; };
 		21371FA428AA7A8D00BC3F37 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */; };
 		213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */; };
@@ -10952,6 +10953,7 @@
 				F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */,
 				EB9407492081353100702E05 /* UXConstants.swift in Sources */,
 				E60D03271D511554002FE3F6 /* SyncStatusResolver.swift in Sources */,
+				2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */,
 				E1CD81C0290C5C9800124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				E1CD81BA290C4ED900124B27 /* AccessibilityIdentifiers.swift in Sources */,
 				E1CD81BF290C5C9500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
