@@ -42,7 +42,10 @@ enum MenuButtonToastAction {
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
 class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemoveQuickActionBookmark {
 
+    // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
+    // swiftlint: disable large_tuple
     typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
+    // swiftlint: enable large_tuple
 
     private let isHomePage: Bool
     private let buttonView: UIButton
