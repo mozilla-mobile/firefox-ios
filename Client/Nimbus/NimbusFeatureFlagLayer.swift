@@ -28,8 +28,8 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-//        case .contextualHintForJumpBackInSyncedTab:
         case .contextualHintForToolbar:
+//        .contextualHintForJumpBackInSyncedTab:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 //
 //        case .copyForJumpBackIn,
