@@ -1,0 +1,41 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
+
+import Kingfisher
+import UIKit
+
+// MARK: - Kingfisher wrappers
+
+/// Image downloader wrapper around Kingfisher image downloader
+/// Used in SiteImageFetcher
+protocol SiteImageDownloader {
+    @discardableResult
+    func downloadImage(
+        with url: URL,
+        completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?
+    ) -> DownloadTask?
+}
+
+extension ImageDownloader: SiteImageDownloader {
+    func downloadImage(with url: URL,
+                       completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?
+    ) -> DownloadTask? {
+        self.downloadImage(with: url, options: nil, completionHandler: { result in
+            switch result {
+            case .success(let value):
+                completionHandler?(.success(value))
+            case .failure(let error):
+                completionHandler?(.failure(error))
+            }
+        })
+    }
+}
+
+/// Image loading result wrapper for Kingfisher type so we have control when testing
+/// Used in SiteImageFetcher
+protocol SiteImageLoadingResult {
+    var image: UIImage { get }
+}
+
+extension ImageLoadingResult: SiteImageLoadingResult {}
