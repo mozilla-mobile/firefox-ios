@@ -66,19 +66,19 @@ extension UIAlertController {
     */
     class func restoreTabsAlert(okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
         let alert = UIAlertController(
-            title: .RestoreTabsAlertTitle,
-            message: .RestoreTabsAlertMessage,
+            title: .Alerts.RestoreTabs.Title,
+            message: .Alerts.RestoreTabs.Message,
             preferredStyle: .alert
         )
 
         let noOption = UIAlertAction(
-            title: .RestoreTabsAlertNo,
+            title: .Alerts.RestoreTabs.ButtonNo,
             style: .cancel,
             handler: noCallback
         )
 
         let okayOption = UIAlertAction(
-            title: .RestoreTabsAlertOkay,
+            title: .Alerts.RestoreTabs.ButtonYes,
             style: .default,
             handler: okayCallback
         )
