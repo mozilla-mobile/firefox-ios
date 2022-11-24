@@ -641,7 +641,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .regular
         trait.overridenVerticalSizeClass = .compact
-        
+
         subject.didLoadNewData()
         let size = CGSize(width: 390, height: 844)
         subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
