@@ -5,14 +5,14 @@
 import XCTest
 @testable import SiteImageView
 
-class ImageURLFetcherTests: XCTestCase {
+class FaviconURLFetcherTests: XCTestCase {
 
-    var subject: DefaultImageURLFetcher!
+    var subject: DefaultFaviconURLFetcher!
     var networkMock: NetworkRequestMock!
 
     override func setUp() {
         networkMock = NetworkRequestMock()
-        subject = DefaultImageURLFetcher(network: networkMock)
+        subject = DefaultFaviconURLFetcher(network: networkMock)
     }
 
     override func tearDown() {
