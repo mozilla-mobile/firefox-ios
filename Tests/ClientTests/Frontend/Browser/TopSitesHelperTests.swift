@@ -110,7 +110,6 @@ class TopSitesHelperTests: XCTestCase {
 
         _ = places.reopenIfClosed()
 
-        let cursor = SiteCursorMock()
         let sites = defaultFrecencySites + [Site(url: "https://frecencySponsoredSite.com/page?mfadid=adm",
                                                  title: "A sponsored title")]
         addFrecencySitesToPlaces(sites, places: places)
@@ -139,7 +138,6 @@ class TopSitesHelperTests: XCTestCase {
 
         _ = places.reopenIfClosed()
 
-        let cursor = SiteCursorMock()
         let sites = defaultFrecencySites + defaultFrecencySites
         addFrecencySitesToPlaces(sites, places: places)
 
