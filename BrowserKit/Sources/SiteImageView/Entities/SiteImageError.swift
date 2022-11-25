@@ -7,4 +7,16 @@ import Foundation
 enum SiteImageError: Error {
     case invalidHTML
     case noFaviconFound
+    case unableToDownloadImage(String)
+
+    var description: String {
+        switch self {
+        case .invalidHTML:
+            return "Failed to decode the data at the url as valid HTML"
+        case .noFaviconFound:
+            return "Failed to find a favicon at the provided url"
+        case .unableToDownloadImage(let error):
+            return "Unable to download image with reason: \(error)"
+        }
+    }
 }
