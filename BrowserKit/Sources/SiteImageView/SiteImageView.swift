@@ -9,6 +9,5 @@ public class SiteImageView: UIImageView {
 
     public func setURL(siteURL: String, type: SiteImageType = .favicon) {
         uniqueID = UUID()
-        backgroundColor = .magenta
     }
 }
