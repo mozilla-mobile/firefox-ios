@@ -58,7 +58,6 @@ class ImageURLFetcherTests: XCTestCase {
         networkMock.callFetchDataForURLCompletion(with: .success(data))
     }
 
-
     // MARK: - Private helpers
 
     private func generateHTMLData(string: String) -> Data? {
