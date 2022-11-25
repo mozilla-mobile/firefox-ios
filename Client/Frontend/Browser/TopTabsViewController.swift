@@ -12,7 +12,7 @@ struct TopTabsUX {
     static let TopTabsPadding: CGFloat = 6
     static let CloseButtonWidth: CGFloat = 38
     static let TopTabsBackgroundShadowWidth: CGFloat = 12
-    static let MinTabWidth: CGFloat = 76
+    static let MinTabWidth: CGFloat = 128
     static let MaxTabWidth: CGFloat = 220
     static let FaderPading: CGFloat = 8
     static let SeparatorWidth: CGFloat = 4
