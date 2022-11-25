@@ -46,9 +46,9 @@ class DefaultImageURLFetcher: ImageURLFetcher {
         // Check if we need to redirect
         for meta in root.xpath("//head/meta") {
             if let refresh = meta["http-equiv"], refresh == "Refresh",
-                let content = meta["content"],
-                let index = content.range(of: "URL="),
-                let url = URL(string: String(content[index.upperBound...])) {
+               let content = meta["content"],
+               let index = content.range(of: "URL="),
+               let url = URL(string: String(content[index.upperBound...])) {
                 reloadURL = url
             }
         }
@@ -61,9 +61,7 @@ class DefaultImageURLFetcher: ImageURLFetcher {
 
         // Search for the first reference to an icon
         for link in root.xpath("//head//link[contains(@rel, 'icon')]") {
-            guard let href = link["href"] else {
-                continue
-            }
+            guard let href = link["href"] else { continue }
 
             if let faviconURL = URL(string: siteURL.absoluteString + "/" + href) {
                 completion(.success(faviconURL))

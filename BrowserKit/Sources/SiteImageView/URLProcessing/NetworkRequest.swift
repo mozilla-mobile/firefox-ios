@@ -24,7 +24,8 @@ class HTMLDataRequest: NetworkRequest {
 
         urlSession.dataTask(with: url) { data, _, error in
             guard let data = data,
-                error != nil else {
+                  error != nil
+            else {
                 completion(.failure(.invalidHTML))
                 return
             }
