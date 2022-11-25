@@ -19,7 +19,7 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
-                                            isIphone: true,
+                                            interfaceIdiom: .phone,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPhone14.width)
 
@@ -32,7 +32,7 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: true,
-                                            isIphone: true,
+                                            interfaceIdiom: .phone,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPhone14.height)
 
@@ -45,7 +45,7 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
-                                            isIphone: false,
+                                            interfaceIdiom: .pad,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPadAir.width)
 
@@ -58,7 +58,7 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: true,
-                                            isIphone: false,
+                                            interfaceIdiom: .pad,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPadAir.height)
 
@@ -72,7 +72,7 @@ class TopSitesDimensionTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         let interface = TopSitesUIInterface(isLandscape: false,
-                                            isIphone: false,
+                                            interfaceIdiom: .pad,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPadAirCompactSplit.width)
 
@@ -86,7 +86,7 @@ class TopSitesDimensionTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
         let interface = TopSitesUIInterface(isLandscape: true,
-                                            isIphone: false,
+                                            interfaceIdiom: .pad,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPadAirCompactSplit.height)
 
@@ -100,7 +100,7 @@ class TopSitesDimensionTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
         let interface = TopSitesUIInterface(isLandscape: false,
-                                            isIphone: false,
+                                            interfaceIdiom: .pad,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPadAir.width)
 
@@ -114,7 +114,7 @@ class TopSitesDimensionTests: XCTestCase {
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
         let interface = TopSitesUIInterface(isLandscape: true,
-                                            isIphone: false,
+                                            interfaceIdiom: .pad,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPadAir.height)
 
@@ -129,7 +129,7 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
-                                            isIphone: true,
+                                            interfaceIdiom: .phone,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPhone14.width)
 
@@ -142,7 +142,7 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
-                                            isIphone: true,
+                                            interfaceIdiom: .phone,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPhone14.width)
 
@@ -155,7 +155,7 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
-                                            isIphone: true,
+                                            interfaceIdiom: .phone,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPhone14.width)
 
@@ -168,7 +168,7 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         let interface = TopSitesUIInterface(isLandscape: false,
-                                            isIphone: true,
+                                            interfaceIdiom: .phone,
                                             trait: trait,
                                             availableWidth: DeviceSize.iPhone14.width)
 

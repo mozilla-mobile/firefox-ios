@@ -11,16 +11,16 @@ struct TopSitesSectionDimension {
 
 struct TopSitesUIInterface {
     var isLandscape: Bool = UIWindow.isLandscape
-    var isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone
+    var interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
     var trait: UITraitCollection
     var availableWidth: CGFloat
 
     init(isLandscape: Bool = UIWindow.isLandscape,
-         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
+         interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
          trait: UITraitCollection,
          availableWidth: CGFloat) {
         self.isLandscape = isLandscape
-        self.isIphone = isIphone
+        self.interfaceIdiom = interfaceIdiom
         self.trait = trait
         self.availableWidth = availableWidth
     }
@@ -80,7 +80,7 @@ class TopSitesDimensionImplementation: TopSitesDimension {
     private func getNumberOfTilesPerRow(for interface: TopSitesUIInterface) -> Int {
         let cellWidth = TopSitesViewModel.UX.cellEstimatedSize.width
         let leadingInset = HomepageViewModel.UX.leadingInset(traitCollection: interface.trait,
-                                                             interfaceIdiom: interface.isIphone ? .phone : .pad)
+                                                             interfaceIdiom: interface.interfaceIdiom)
         var availableWidth = interface.availableWidth - leadingInset * 2
         var numberOfTiles = 0
 
