@@ -17,6 +17,8 @@ class JumpBackInViewModelTests: XCTestCase {
 
     var adaptor: JumpBackInDataAdaptorMock!
 
+    let iPhone14ScreenSize = CGSize(width: 390, height: 844)
+
     override func setUp() {
         super.setUp()
 
@@ -170,8 +172,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: false,
                                                                device: .phone)
         XCTAssertEqual(maxItems.tabsCount, 2)
@@ -190,8 +191,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -213,8 +213,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -235,8 +234,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .compact
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -257,8 +255,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .compact
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -279,8 +276,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .pad)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -301,8 +297,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .pad)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -323,8 +318,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: false, device: .pad)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -346,8 +340,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .compact
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -368,8 +361,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: false, device: .pad)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -391,8 +383,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .compact
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -412,8 +403,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .compact
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .phone)
 
@@ -433,8 +423,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: false, device: .pad)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .pad)
         let maxItems = subject.sectionLayout.maxItemsToDisplay(hasAccount: true,
                                                                device: .pad)
 
@@ -456,19 +445,18 @@ class JumpBackInViewModelTests: XCTestCase {
         portraitTrait.overridenHorizontalSizeClass = .compact
         portraitTrait.overridenVerticalSizeClass = .regular
 
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: portraitTrait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: portraitTrait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
 
         // Mock rotation to landscape
         let landscapeTrait = MockTraitCollection()
         landscapeTrait.overridenHorizontalSizeClass = .regular
         landscapeTrait.overridenVerticalSizeClass = .compact
-        subject.refreshData(for: landscapeTrait, size: size, isPortrait: false, device: .phone)
+        subject.refreshData(for: landscapeTrait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .medium)
 
         // Go back to portrait
-        subject.refreshData(for: portraitTrait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: portraitTrait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
     }
 
@@ -497,8 +485,7 @@ class JumpBackInViewModelTests: XCTestCase {
     func testRefreshData_noData() {
         let subject = createSubject()
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: MockTraitCollection(), size: size)
+        subject.refreshData(for: MockTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 0)
         XCTAssertNil(subject.mostRecentSyncedTab)
@@ -509,8 +496,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let tab1 = createTab(profile: mockProfile, urlString: "www.firefox1.com")
         adaptor.recentTabs = [tab1]
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: MockTraitCollection(), size: size)
+        subject.refreshData(for: MockTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 1)
         XCTAssertNil(subject.mostRecentSyncedTab)
@@ -521,8 +507,7 @@ class JumpBackInViewModelTests: XCTestCase {
         adaptor.syncedTab = JumpBackInSyncedTab(client: remoteClient, tab: remoteTab)
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: MockTraitCollection(), size: size)
+        subject.refreshData(for: MockTraitCollection(), size: iPhone14ScreenSize)
 
         XCTAssertEqual(subject.jumpBackInList.tabs.count, 0)
         XCTAssertNotNil(subject.mostRecentSyncedTab)
@@ -543,8 +528,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
 
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
         let jumpBackIn = subject.jumpBackInList
@@ -565,8 +549,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
 
         XCTAssertEqual(subject.sectionLayout, .compactJumpBackIn)
         let jumpBackIn = subject.jumpBackInList
@@ -588,8 +571,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .regular
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: true, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: true, device: .phone)
 
         let jumpBackIn = subject.jumpBackInList
         XCTAssertEqual(jumpBackIn.tabs.count, 1, "iPhone portrait has 1 tab in it's jumpbackin layout")
@@ -615,8 +597,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .compact
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
 
         let jumpBackIn = subject.jumpBackInList
         XCTAssertEqual(jumpBackIn.tabs.count, 3, "iPhone landscape has 3 tabs in it's jumpbackin layout, up until 4")
@@ -643,8 +624,7 @@ class JumpBackInViewModelTests: XCTestCase {
         trait.overridenVerticalSizeClass = .compact
 
         subject.didLoadNewData()
-        let size = CGSize(width: 390, height: 844)
-        subject.refreshData(for: trait, size: size, isPortrait: false, device: .phone)
+        subject.refreshData(for: trait, size: iPhone14ScreenSize, isPortrait: false, device: .phone)
 
         let jumpBackIn = subject.jumpBackInList
         XCTAssertEqual(jumpBackIn.tabs.count, 2, "iPhone landscape has 2 tabs in it's jumpbackin layout, up until 2")

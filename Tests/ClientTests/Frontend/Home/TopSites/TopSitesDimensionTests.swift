@@ -9,10 +9,19 @@ import Storage
 
 class TopSitesDimensionTests: XCTestCase {
 
+    struct DeviceSize {
+        static let iPhone14 = CGSize(width: 390, height: 844)
+        static let iPadAir = CGSize(width: 820, height: 1180)
+        static let iPadAirCompactSplit = CGSize(width: 320, height: 375)
+    }
+
     func testSectionDimension_portraitIphone_defaultRowNumber() {
         let subject = createSubject()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait, availableWidth: 390)
+        let interface = TopSitesUIInterface(isLandscape: false,
+                                            isIphone: true,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPhone14.width)
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -22,7 +31,10 @@ class TopSitesDimensionTests: XCTestCase {
     func testSectionDimension_landscapeIphone_defaultRowNumber() {
         let subject = createSubject()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: true, isIphone: true, trait: trait, availableWidth: 844)
+        let interface = TopSitesUIInterface(isLandscape: true,
+                                            isIphone: true,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPhone14.height)
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -32,7 +44,10 @@ class TopSitesDimensionTests: XCTestCase {
     func testSectionDimension_portraitiPadRegular_defaultRowNumber() {
         let subject = createSubject()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: false, isIphone: false, trait: trait, availableWidth: 820)
+        let interface = TopSitesUIInterface(isLandscape: false,
+                                            isIphone: false,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPadAir.width)
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -42,7 +57,10 @@ class TopSitesDimensionTests: XCTestCase {
     func testSectionDimension_landscapeiPadRegular_defaultRowNumber() {
         let subject = createSubject()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: true, isIphone: false, trait: trait, availableWidth: 1180)
+        let interface = TopSitesUIInterface(isLandscape: true,
+                                            isIphone: false,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPadAir.height)
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -53,7 +71,10 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
-        let interface = TopSitesUIInterface(isLandscape: false, isIphone: false, trait: trait, availableWidth: 320)
+        let interface = TopSitesUIInterface(isLandscape: false,
+                                            isIphone: false,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPadAirCompactSplit.width)
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -64,7 +85,10 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .compact
-        let interface = TopSitesUIInterface(isLandscape: true, isIphone: false, trait: trait, availableWidth: 375)
+        let interface = TopSitesUIInterface(isLandscape: true,
+                                            isIphone: false,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPadAirCompactSplit.height)
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -75,7 +99,10 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
-        let interface = TopSitesUIInterface(isLandscape: false, isIphone: false, trait: trait, availableWidth: 820)
+        let interface = TopSitesUIInterface(isLandscape: false,
+                                            isIphone: false,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPadAir.width)
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -86,7 +113,10 @@ class TopSitesDimensionTests: XCTestCase {
         let subject = createSubject()
         let trait = MockTraitCollection()
         trait.overridenHorizontalSizeClass = .unspecified
-        let interface = TopSitesUIInterface(isLandscape: true, isIphone: false, trait: trait, availableWidth: 1180)
+        let interface = TopSitesUIInterface(isLandscape: true,
+                                            isIphone: false,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPadAir.height)
 
         let dimension = subject.getSectionDimension(for: createSites(), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -98,7 +128,10 @@ class TopSitesDimensionTests: XCTestCase {
     func testSectionDimension_oneEmptyRow_shouldBeRemoved() {
         let subject = createSubject()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait, availableWidth: 390)
+        let interface = TopSitesUIInterface(isLandscape: false,
+                                            isIphone: true,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPhone14.width)
 
         let dimension = subject.getSectionDimension(for: createSites(count: 4), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 1)
@@ -108,7 +141,10 @@ class TopSitesDimensionTests: XCTestCase {
     func testSectionDimension_twoEmptyRow_shouldBeRemoved() {
         let subject = createSubject()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait, availableWidth: 390)
+        let interface = TopSitesUIInterface(isLandscape: false,
+                                            isIphone: true,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPhone14.width)
 
         let dimension = subject.getSectionDimension(for: createSites(count: 4), numberOfRows: 3, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 1)
@@ -118,7 +154,10 @@ class TopSitesDimensionTests: XCTestCase {
     func testSectionDimension_noEmptyRow_shouldNotBeRemoved() {
         let subject = createSubject()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait, availableWidth: 390)
+        let interface = TopSitesUIInterface(isLandscape: false,
+                                            isIphone: true,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPhone14.width)
 
         let dimension = subject.getSectionDimension(for: createSites(count: 8), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
@@ -128,7 +167,10 @@ class TopSitesDimensionTests: XCTestCase {
     func testSectionDimension_halfFilledRow_shouldNotBeRemoved() {
         let subject = createSubject()
         let trait = MockTraitCollection()
-        let interface = TopSitesUIInterface(isLandscape: false, isIphone: true, trait: trait, availableWidth: 390)
+        let interface = TopSitesUIInterface(isLandscape: false,
+                                            isIphone: true,
+                                            trait: trait,
+                                            availableWidth: DeviceSize.iPhone14.width)
 
         let dimension = subject.getSectionDimension(for: createSites(count: 6), numberOfRows: 2, interface: interface)
         XCTAssertEqual(dimension.numberOfRows, 2)
