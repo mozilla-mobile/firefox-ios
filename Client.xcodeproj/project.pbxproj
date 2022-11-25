@@ -16011,7 +16011,7 @@
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
 				kind = exactVersion;
-				version = 5.0.1;
+				version = 5.6.0;
 			};
 		};
 		43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */ = {
