@@ -45,7 +45,23 @@ class NotificationService: UNNotificationServiceExtension {
         let handler = FxAPushMessageHandler(with: profile)
 
         handler.handle(userInfo: userInfo).upon { res in
-            self.didFinish(res.successValue, with: res.failureValue as? PushMessageError)
+            guard res.isSuccess, let events = res.successValue, let firstEvent = events.first else {
+                self.didFinish(nil, with: res.failureValue as? PushMessageError)
+                return
+            }
+            // We pass the first event to the notification handler, and add the rest directly
+            // to our own handling of send tab if they are send tabs so users don't miss them
+            for (idx, event) in events.enumerated() {
+                if  idx != 0,
+                    case let .commandReceived(tab) = event,
+                    let urlString = tab["url"],
+                    let url = URL(string: urlString),
+                    url.isWebPage(),
+                    let title = tab["title"] {
+                    self.profile?.syncDelegate?.displaySentTab(for: url, title: title, from: tab["deviceName"])
+                }
+            }
+            self.didFinish(firstEvent)
         }
     }
 

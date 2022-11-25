@@ -30,8 +30,8 @@ class AppSyncDelegate: SyncDelegate {
     }
 
     func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-        DispatchQueue.main.sync {
-            if app.applicationState == .active {
+        DispatchQueue.main.async {
+            if self.app.applicationState == .active {
                 BrowserViewController.foregroundBVC().switchToTabForURLOrOpen(url)
                 return
             }
