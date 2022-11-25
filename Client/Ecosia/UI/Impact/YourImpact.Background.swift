@@ -6,7 +6,7 @@ import UIKit
 
 private let height = CGFloat(308)
 
-extension EcosiaHome {
+extension YourImpact {
     final class Background: UIView {
         private weak var layerMask: CAShapeLayer!
         

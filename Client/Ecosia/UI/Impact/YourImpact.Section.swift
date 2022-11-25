@@ -5,7 +5,7 @@
 import CoreGraphics
 import Core
 
-extension EcosiaHome {
+extension YourImpact {
     enum Section: Int, CaseIterable {
         case impact, multiply, explore
 

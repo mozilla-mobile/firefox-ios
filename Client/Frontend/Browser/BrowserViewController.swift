@@ -164,7 +164,7 @@ class BrowserViewController: UIViewController {
 
     // Ecosia
     lazy var ecosiaNavigation: EcosiaNavigation = {
-        .init(rootViewController: EcosiaHome(delegate: self, referrals: referrals))
+        .init(rootViewController: YourImpact(delegate: self, referrals: referrals))
     }()
     
     let referrals = Referrals()
@@ -1917,7 +1917,7 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenImpact() {
-        presentEcosiaWorld { [weak self] in
+        presentYourImpact { [weak self] in
             self?.homepageViewController?.reloadView()
         }
         homepageViewController?.ntpTooltipTapped(nil)

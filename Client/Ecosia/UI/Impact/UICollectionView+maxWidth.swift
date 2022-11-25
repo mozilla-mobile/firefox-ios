@@ -5,7 +5,7 @@
 import UIKit
 
 extension UICollectionView {
-    var ecosiaHomeMaxWidth: CGFloat {
+    var yourImpactMaxWidth: CGFloat {
         let insets = max(max(safeAreaInsets.left, safeAreaInsets.right), 16) * 2
         let maxWidth = bounds.width - insets
         

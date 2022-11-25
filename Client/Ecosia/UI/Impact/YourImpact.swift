@@ -5,12 +5,12 @@
 import UIKit
 import Core
 
-protocol EcosiaHomeDelegate: AnyObject {
-    func ecosiaHome(didSelectURL url: URL)
+protocol YourImpactDelegate: AnyObject {
+    func yourImpact(didSelectURL url: URL)
 }
 
-final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlowLayout, NotificationThemeable {
-    var delegate: EcosiaHomeDelegate?
+final class YourImpact: UICollectionViewController, UICollectionViewDelegateFlowLayout, NotificationThemeable {
+    var delegate: YourImpactDelegate?
     private weak var referrals: Referrals!
     private var disclosed: IndexPath?
     private let images = Images(.init(configuration: .ephemeral))
@@ -18,8 +18,8 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
     private let background = Background()
     private weak var impactCell: MyImpactCell?
 
-    convenience init(delegate: EcosiaHomeDelegate?, referrals: Referrals) {
-        let layout = EcosiaHomeLayout()
+    convenience init(delegate: YourImpactDelegate?, referrals: Referrals) {
+        let layout = YourImpactLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 16
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
@@ -44,7 +44,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
         Section.allCases.forEach {
             collectionView!.register($0.cell, forCellWithReuseIdentifier: String(describing: $0.cell))
         }
-        collectionView!.register(HeaderCell.self, forCellWithReuseIdentifier: .init(describing: HeaderCell.self))
+        collectionView!.register(ImpactHeaderCell.self, forCellWithReuseIdentifier: .init(describing: ImpactHeaderCell.self))
         collectionView.delegate = self
         collectionView.contentInsetAdjustmentBehavior = .scrollableAxes
 
@@ -141,7 +141,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
 
         case .multiply:
             if indexPath.row == 0 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .init(describing: HeaderCell.self), for: indexPath) as! HeaderCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .init(describing: ImpactHeaderCell.self), for: indexPath) as! ImpactHeaderCell
                 cell.title.text = section.title
                 return cell
             } else {
@@ -150,7 +150,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
             }
         case .explore:
             if indexPath.row == 0 {
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .init(describing: HeaderCell.self), for: indexPath) as! HeaderCell
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: .init(describing: ImpactHeaderCell.self), for: indexPath) as! ImpactHeaderCell
                 cell.title.text = section.title
                 return cell
             } else {
@@ -208,7 +208,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
             height = section.height
         }
         
-        return .init(width: collectionView.ecosiaHomeMaxWidth, height: height)
+        return .init(width: collectionView.yourImpactMaxWidth, height: height)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -224,7 +224,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
 
     func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, insetForSectionAt: Int) -> UIEdgeInsets {
         let vertical = insetForSectionAt == Section.explore.rawValue ? 26 : CGFloat()
-        let horizontal = (collectionView.bounds.width - collectionView.ecosiaHomeMaxWidth) / 2
+        let horizontal = (collectionView.bounds.width - collectionView.yourImpactMaxWidth) / 2
         return .init(top: 0, left: horizontal, bottom: vertical, right: horizontal)
     }
     
@@ -283,7 +283,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
     }
 
     @objc private func learnMore(button: UIControl) {
-        delegate?.ecosiaHome(didSelectURL: Environment.current.aboutCounter)
+        delegate?.yourImpact(didSelectURL: Environment.current.aboutCounter)
         Analytics.shared.navigation(.open, label: .counter)
         
         dismiss(animated: true) { [weak self] in
@@ -302,7 +302,7 @@ final class EcosiaHome: UICollectionViewController, UICollectionViewDelegateFlow
     @objc private func explore(button: UIButton) {
         Section.Explore(rawValue: button.tag)
             .map {
-                delegate?.ecosiaHome(didSelectURL: $0.url)
+                delegate?.yourImpact(didSelectURL: $0.url)
                 Analytics.shared.navigation(.open, label: $0.label)
             }
         dismiss(animated: true, completion: nil)

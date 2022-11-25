@@ -85,8 +85,8 @@ extension HomepageViewController: NTPLibraryDelegate {
     }
 }
 
-extension HomepageViewController: EcosiaHomeDelegate {
-    func ecosiaHome(didSelectURL url: URL) {
+extension HomepageViewController: YourImpactDelegate {
+    func yourImpact(didSelectURL url: URL) {
         dismiss(animated: true)
         homePanelDelegate?.homePanel(didSelectURL: url, visitType: .link, isGoogleTopSite: false)
     }

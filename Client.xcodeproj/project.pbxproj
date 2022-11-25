@@ -594,7 +594,6 @@
 		CA4D9CE428C8D801006AFB5D /* SnapKit+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C8B28C8D801006AFB5D /* SnapKit+Ecosia.swift */; };
 		CA4D9CE528C8D801006AFB5D /* Ecosia.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA4D9C8C28C8D801006AFB5D /* Ecosia.xcassets */; };
 		CA4D9CE628C8D801006AFB5D /* EcosiaTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C8D28C8D801006AFB5D /* EcosiaTheme.swift */; };
-		CA4D9CE728C8D801006AFB5D /* EmptyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C8E28C8D801006AFB5D /* EmptyHeader.swift */; };
 		CA4D9CE828C8D801006AFB5D /* NTPLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9028C8D801006AFB5D /* NTPLayout.swift */; };
 		CA4D9CEA28C8D801006AFB5D /* DefaultBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9228C8D801006AFB5D /* DefaultBrowser.swift */; };
 		CA4D9CEC28C8D801006AFB5D /* NTPIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9428C8D801006AFB5D /* NTPIntroViewController.swift */; };
@@ -609,19 +608,19 @@
 		CA4D9CF628C8D801006AFB5D /* EcosiaExploreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C9F28C8D801006AFB5D /* EcosiaExploreCell.swift */; };
 		CA4D9CF728C8D801006AFB5D /* NewsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA028C8D801006AFB5D /* NewsController.swift */; };
 		CA4D9CF828C8D801006AFB5D /* MyImpactCell.Progress.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA128C8D801006AFB5D /* MyImpactCell.Progress.swift */; };
-		CA4D9CF928C8D801006AFB5D /* EcosiaHome.Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA228C8D801006AFB5D /* EcosiaHome.Section.swift */; };
+		CA4D9CF928C8D801006AFB5D /* YourImpact.Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA228C8D801006AFB5D /* YourImpact.Section.swift */; };
 		CA4D9CFA28C8D801006AFB5D /* NewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA328C8D801006AFB5D /* NewsCell.swift */; };
-		CA4D9CFB28C8D801006AFB5D /* EcosiaHomeLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA428C8D801006AFB5D /* EcosiaHomeLayout.swift */; };
+		CA4D9CFB28C8D801006AFB5D /* YourImpactLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA428C8D801006AFB5D /* YourImpactLayout.swift */; };
 		CA4D9CFC28C8D801006AFB5D /* MultiplyImpactDash.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA528C8D801006AFB5D /* MultiplyImpactDash.swift */; };
 		CA4D9CFD28C8D801006AFB5D /* MultiplyImpact.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA628C8D801006AFB5D /* MultiplyImpact.swift */; };
 		CA4D9CFE28C8D801006AFB5D /* EcosiaNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA728C8D801006AFB5D /* EcosiaNavigation.swift */; };
 		CA4D9CFF28C8D801006AFB5D /* UICollectionView+maxWidth.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA828C8D801006AFB5D /* UICollectionView+maxWidth.swift */; };
-		CA4D9D0028C8D801006AFB5D /* EcosiaHomeCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA928C8D801006AFB5D /* EcosiaHomeCells.swift */; };
+		CA4D9D0028C8D801006AFB5D /* MoreButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CA928C8D801006AFB5D /* MoreButtonCell.swift */; };
 		CA4D9D0128C8D801006AFB5D /* MyImpactCell.Indicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CAA28C8D801006AFB5D /* MyImpactCell.Indicator.swift */; };
 		CA4D9D0228C8D801006AFB5D /* MultiplyImpactStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CAB28C8D801006AFB5D /* MultiplyImpactStep.swift */; };
-		CA4D9D0328C8D801006AFB5D /* EcosiaHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CAC28C8D801006AFB5D /* EcosiaHome.swift */; };
+		CA4D9D0328C8D801006AFB5D /* YourImpact.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CAC28C8D801006AFB5D /* YourImpact.swift */; };
 		CA4D9D0428C8D801006AFB5D /* MyImpactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CAD28C8D801006AFB5D /* MyImpactCell.swift */; };
-		CA4D9D0528C8D801006AFB5D /* EcosiaHome.Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CAE28C8D801006AFB5D /* EcosiaHome.Background.swift */; };
+		CA4D9D0528C8D801006AFB5D /* YourImpact.Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CAE28C8D801006AFB5D /* YourImpact.Background.swift */; };
 		CA4D9D0628C8D801006AFB5D /* WelcomeTourPlanet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CB028C8D801006AFB5D /* WelcomeTourPlanet.swift */; };
 		CA4D9D0728C8D801006AFB5D /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CB128C8D801006AFB5D /* Welcome.swift */; };
 		CA4D9D0828C8D801006AFB5D /* WelcomeTour.Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9CB228C8D801006AFB5D /* WelcomeTour.Step.swift */; };
@@ -678,6 +677,8 @@
 		CACF7D1128DC553B00A996A4 /* NTPLibaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CACF7D1028DC553B00A996A4 /* NTPLibaryViewModel.swift */; };
 		CAEB316528D0B00900ADC9DB /* TabManagerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D422110B3CD00F25400 /* TabManagerStore.swift */; };
 		CAEB316728D0B38900ADC9DB /* HomepageViewController+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAEB316628D0B38900ADC9DB /* HomepageViewController+Ecosia.swift */; };
+		CAF35AE3292E7CBF002EF660 /* ImpactHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF35AE2292E7CBF002EF660 /* ImpactHeaderCell.swift */; };
+		CAF35AE4292E7D30002EF660 /* EmptyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4D9C8E28C8D801006AFB5D /* EmptyHeader.swift */; };
 		CD1CE85F24EDE66A00006DFB /* WKWebViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1CE85E24EDE66A00006DFB /* WKWebViewExtensions.swift */; };
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */; };
@@ -3528,19 +3529,19 @@
 		CA4D9C9F28C8D801006AFB5D /* EcosiaExploreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaExploreCell.swift; sourceTree = "<group>"; };
 		CA4D9CA028C8D801006AFB5D /* NewsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsController.swift; sourceTree = "<group>"; };
 		CA4D9CA128C8D801006AFB5D /* MyImpactCell.Progress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyImpactCell.Progress.swift; sourceTree = "<group>"; };
-		CA4D9CA228C8D801006AFB5D /* EcosiaHome.Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaHome.Section.swift; sourceTree = "<group>"; };
+		CA4D9CA228C8D801006AFB5D /* YourImpact.Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YourImpact.Section.swift; sourceTree = "<group>"; };
 		CA4D9CA328C8D801006AFB5D /* NewsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsCell.swift; sourceTree = "<group>"; };
-		CA4D9CA428C8D801006AFB5D /* EcosiaHomeLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaHomeLayout.swift; sourceTree = "<group>"; };
+		CA4D9CA428C8D801006AFB5D /* YourImpactLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YourImpactLayout.swift; sourceTree = "<group>"; };
 		CA4D9CA528C8D801006AFB5D /* MultiplyImpactDash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplyImpactDash.swift; sourceTree = "<group>"; };
 		CA4D9CA628C8D801006AFB5D /* MultiplyImpact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplyImpact.swift; sourceTree = "<group>"; };
 		CA4D9CA728C8D801006AFB5D /* EcosiaNavigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaNavigation.swift; sourceTree = "<group>"; };
 		CA4D9CA828C8D801006AFB5D /* UICollectionView+maxWidth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+maxWidth.swift"; sourceTree = "<group>"; };
-		CA4D9CA928C8D801006AFB5D /* EcosiaHomeCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaHomeCells.swift; sourceTree = "<group>"; };
+		CA4D9CA928C8D801006AFB5D /* MoreButtonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreButtonCell.swift; sourceTree = "<group>"; };
 		CA4D9CAA28C8D801006AFB5D /* MyImpactCell.Indicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyImpactCell.Indicator.swift; sourceTree = "<group>"; };
 		CA4D9CAB28C8D801006AFB5D /* MultiplyImpactStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiplyImpactStep.swift; sourceTree = "<group>"; };
-		CA4D9CAC28C8D801006AFB5D /* EcosiaHome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaHome.swift; sourceTree = "<group>"; };
+		CA4D9CAC28C8D801006AFB5D /* YourImpact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YourImpact.swift; sourceTree = "<group>"; };
 		CA4D9CAD28C8D801006AFB5D /* MyImpactCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyImpactCell.swift; sourceTree = "<group>"; };
-		CA4D9CAE28C8D801006AFB5D /* EcosiaHome.Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EcosiaHome.Background.swift; sourceTree = "<group>"; };
+		CA4D9CAE28C8D801006AFB5D /* YourImpact.Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YourImpact.Background.swift; sourceTree = "<group>"; };
 		CA4D9CB028C8D801006AFB5D /* WelcomeTourPlanet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeTourPlanet.swift; sourceTree = "<group>"; };
 		CA4D9CB128C8D801006AFB5D /* Welcome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
 		CA4D9CB228C8D801006AFB5D /* WelcomeTour.Step.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeTour.Step.swift; sourceTree = "<group>"; };
@@ -3613,6 +3614,7 @@
 		CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListSelectionHelper.swift; sourceTree = "<group>"; };
 		CACF7D1028DC553B00A996A4 /* NTPLibaryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLibaryViewModel.swift; sourceTree = "<group>"; };
 		CAEB316628D0B38900ADC9DB /* HomepageViewController+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomepageViewController+Ecosia.swift"; sourceTree = "<group>"; };
+		CAF35AE2292E7CBF002EF660 /* ImpactHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactHeaderCell.swift; sourceTree = "<group>"; };
 		CB664443A893E97243385395 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		CBA242528C97816D5BCF4473 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		CBD64E6DB514D36802C243A2 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -6361,7 +6363,7 @@
 				CA4D9C9A28C8D801006AFB5D /* Colours.xcassets */,
 				CA4D9C9B28C8D801006AFB5D /* FilterController.swift */,
 				CA4D9C9C28C8D801006AFB5D /* MarketsController.swift */,
-				CA4D9C9D28C8D801006AFB5D /* MyImpact */,
+				CA4D9C9D28C8D801006AFB5D /* Impact */,
 				CA4D9CAF28C8D801006AFB5D /* Onboarding */,
 				CAB544C428F5AE6B00657722 /* PageAction */,
 			);
@@ -6386,26 +6388,21 @@
 			path = NTP;
 			sourceTree = "<group>";
 		};
-		CA4D9C9D28C8D801006AFB5D /* MyImpact */ = {
+		CA4D9C9D28C8D801006AFB5D /* Impact */ = {
 			isa = PBXGroup;
 			children = (
-				CA4D9C9E28C8D801006AFB5D /* MultiplyImpactCell.swift */,
-				CA4D9C9F28C8D801006AFB5D /* EcosiaExploreCell.swift */,
-				CA4D9CA128C8D801006AFB5D /* MyImpactCell.Progress.swift */,
-				CA4D9CA228C8D801006AFB5D /* EcosiaHome.Section.swift */,
-				CA4D9CA428C8D801006AFB5D /* EcosiaHomeLayout.swift */,
-				CA4D9CA528C8D801006AFB5D /* MultiplyImpactDash.swift */,
-				CA4D9CA628C8D801006AFB5D /* MultiplyImpact.swift */,
+				CACC5F12292E3949007C807B /* Views */,
 				CA4D9CA728C8D801006AFB5D /* EcosiaNavigation.swift */,
-				CA4D9CA828C8D801006AFB5D /* UICollectionView+maxWidth.swift */,
-				CA4D9CA928C8D801006AFB5D /* EcosiaHomeCells.swift */,
-				CA4D9CAA28C8D801006AFB5D /* MyImpactCell.Indicator.swift */,
+				CA4D9CA628C8D801006AFB5D /* MultiplyImpact.swift */,
+				CA4D9CA528C8D801006AFB5D /* MultiplyImpactDash.swift */,
 				CA4D9CAB28C8D801006AFB5D /* MultiplyImpactStep.swift */,
-				CA4D9CAC28C8D801006AFB5D /* EcosiaHome.swift */,
-				CA4D9CAD28C8D801006AFB5D /* MyImpactCell.swift */,
-				CA4D9CAE28C8D801006AFB5D /* EcosiaHome.Background.swift */,
+				CA4D9CA828C8D801006AFB5D /* UICollectionView+maxWidth.swift */,
+				CA4D9CAE28C8D801006AFB5D /* YourImpact.Background.swift */,
+				CA4D9CA228C8D801006AFB5D /* YourImpact.Section.swift */,
+				CA4D9CAC28C8D801006AFB5D /* YourImpact.swift */,
+				CA4D9CA428C8D801006AFB5D /* YourImpactLayout.swift */,
 			);
-			path = MyImpact;
+			path = Impact;
 			sourceTree = "<group>";
 		};
 		CA4D9CAF28C8D801006AFB5D /* Onboarding */ = {
@@ -6517,6 +6514,20 @@
 				CAB544C728F6BBFD00657722 /* PageActionsShortcutsHeader.swift */,
 			);
 			path = PageAction;
+			sourceTree = "<group>";
+		};
+		CACC5F12292E3949007C807B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CA4D9C9F28C8D801006AFB5D /* EcosiaExploreCell.swift */,
+				CAF35AE2292E7CBF002EF660 /* ImpactHeaderCell.swift */,
+				CA4D9CA928C8D801006AFB5D /* MoreButtonCell.swift */,
+				CA4D9C9E28C8D801006AFB5D /* MultiplyImpactCell.swift */,
+				CA4D9CAA28C8D801006AFB5D /* MyImpactCell.Indicator.swift */,
+				CA4D9CA128C8D801006AFB5D /* MyImpactCell.Progress.swift */,
+				CA4D9CAD28C8D801006AFB5D /* MyImpactCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		CAEB316A28D0BFC000ADC9DB /* Extensions */ = {
@@ -9074,7 +9085,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA4D9CE728C8D801006AFB5D /* EmptyHeader.swift in Sources */,
 				5FC276552894AEFF00AF2721 /* LibraryPanelHelper.swift in Sources */,
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
@@ -9257,6 +9267,7 @@
 				CA90753824929B22005B794D /* NoLoginsView.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				396CDB55203C5B870034A3A3 /* TabTrayController+KeyCommands.swift in Sources */,
+				CAF35AE4292E7D30002EF660 /* EmptyHeader.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
 				EBB8950C21939E4100EB91A0 /* FirefoxTabContentBlocker.swift in Sources */,
 				211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */,
@@ -9309,7 +9320,7 @@
 				8AE1E1CD27B191110024C45E /* SearchBarSettingsViewModel.swift in Sources */,
 				8A01891C275E9C2A00923EFE /* ClearHistorySheetProvider.swift in Sources */,
 				C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */,
-				CA4D9D0328C8D801006AFB5D /* EcosiaHome.swift in Sources */,
+				CA4D9D0328C8D801006AFB5D /* YourImpact.swift in Sources */,
 				964FA97728A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift in Sources */,
 				E6927EC01C7B6FB800D03F75 /* ErrorToast.swift in Sources */,
 				CA4D9CEA28C8D801006AFB5D /* DefaultBrowser.swift in Sources */,
@@ -9389,10 +9400,11 @@
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
 				C84655FB28879FC600861B4A /* WallpaperStore.swift in Sources */,
 				6025B10D267B6C5400F59F6B /* LoginRecordExtension.swift in Sources */,
+				CAF35AE3292E7CBF002EF660 /* ImpactHeaderCell.swift in Sources */,
 				CACF7D0E28DB3E0000A996A4 /* EcosiaHistory.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */,
-				CA4D9CFB28C8D801006AFB5D /* EcosiaHomeLayout.swift in Sources */,
+				CA4D9CFB28C8D801006AFB5D /* YourImpactLayout.swift in Sources */,
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
 				433396C827ACE92500491049 /* CellWithRoundedButton.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
@@ -9434,13 +9446,13 @@
 				434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */,
 				EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */,
 				E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */,
-				CA4D9D0528C8D801006AFB5D /* EcosiaHome.Background.swift in Sources */,
+				CA4D9D0528C8D801006AFB5D /* YourImpact.Background.swift in Sources */,
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */,
 				C81AC6B626160091007800C5 /* TabTrayViewModel.swift in Sources */,
 				EBB89504219398E500EB91A0 /* TrackingProtectionPageStats.swift in Sources */,
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
-				CA4D9D0028C8D801006AFB5D /* EcosiaHomeCells.swift in Sources */,
+				CA4D9D0028C8D801006AFB5D /* MoreButtonCell.swift in Sources */,
 				28EADE5D1AFC3A78007FB2FB /* UIImageView+Extension.swift in Sources */,
 				CACF7D0F28DB3E6D00A996A4 /* EcosiaFavourites.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
@@ -9504,7 +9516,7 @@
 				43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */,
 				DFF95955279B021700ECC572 /* LegacyWallpaperDataManager.swift in Sources */,
 				D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */,
-				CA4D9CF928C8D801006AFB5D /* EcosiaHome.Section.swift in Sources */,
+				CA4D9CF928C8D801006AFB5D /* YourImpact.Section.swift in Sources */,
 				C869912E28917688007ACC5C /* WallpaperDataService.swift in Sources */,
 				E633E2DA1C21EAF8001FFF6C /* LoginDetailViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
@@ -12847,7 +12859,7 @@
 			baseConfigurationReference = CA8BCC4128D352630020BC50 /* EcosiaBeta.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 66;
-				MARKETING_VERSION = 8.1.0;
+				MARKETING_VERSION = 8.2.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -12860,6 +12872,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = "${inherited}";
 				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -12867,6 +12880,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = "${inherited}";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -13216,7 +13230,7 @@
 			baseConfigurationReference = CA8BCC4228D352640020BC50 /* Ecosia.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 66;
-				MARKETING_VERSION = 8.1.0;
+				MARKETING_VERSION = 8.2.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -13229,6 +13243,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = "${inherited}";
 				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -13236,6 +13251,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = "${inherited}";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -13410,7 +13426,7 @@
 			baseConfigurationReference = CA8BCC4128D352630020BC50 /* EcosiaBeta.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 66;
-				MARKETING_VERSION = 8.1.0;
+				MARKETING_VERSION = 8.2.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -13423,6 +13439,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Beta;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = "${inherited}";
 				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				INFOPLIST_FILE = Client/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -13430,6 +13447,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = "${inherited}";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -13535,7 +13553,7 @@
 			baseConfigurationReference = CA8BCC4328D352640020BC50 /* EcosiaDebug.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 66;
-				MARKETING_VERSION = 8.1.0;
+				MARKETING_VERSION = 8.2.0;
 				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -13549,6 +13567,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "${inherited}";
 				DEVELOPMENT_TEAM = 33YMRSYD2L;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -13556,6 +13575,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				MARKETING_VERSION = "${inherited}";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",

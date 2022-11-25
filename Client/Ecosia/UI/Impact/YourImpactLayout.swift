@@ -4,7 +4,7 @@
 
 import UIKit
 
-final class EcosiaHomeLayout: UICollectionViewFlowLayout {
+final class YourImpactLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let attributes = super.layoutAttributesForElements(in: rect)?.map { $0.copy() } as? [UICollectionViewLayoutAttributes]
         attributes?.reduce([CGFloat: (CGFloat, [UICollectionViewLayoutAttributes])]()) {

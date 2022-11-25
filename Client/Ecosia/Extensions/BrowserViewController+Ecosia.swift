@@ -12,17 +12,17 @@ extension BrowserViewController: HomepageViewControllerDelegate {
     }
 
     func homeDidPressPersonalCounter(_ home: HomepageViewController, completion: (() -> Void)? = nil) {
-        presentEcosiaWorld(completion)
+        presentYourImpact(completion)
     }
 
-    func presentEcosiaWorld(_ completion: (() -> Void)? = nil) {
+    func presentYourImpact(_ completion: (() -> Void)? = nil) {
         ecosiaNavigation.popToRootViewController(animated: false)
         present(ecosiaNavigation, animated: true, completion: completion)
     }
 }
 
-extension BrowserViewController: EcosiaHomeDelegate {
-    func ecosiaHome(didSelectURL url: URL) {
+extension BrowserViewController: YourImpactDelegate {
+    func yourImpact(didSelectURL url: URL) {
         guard let tab = tabManager.selectedTab else { return }
         finishEditingAndSubmit(url, visitType: .link, forTab: tab)
     }
@@ -49,7 +49,7 @@ extension BrowserViewController: PageActionsShortcutsDelegate {
 
     func pageOptionsYourImpact() {
         dismiss(animated: true) {
-            self.presentEcosiaWorld()
+            self.presentYourImpact()
         }
     }
 

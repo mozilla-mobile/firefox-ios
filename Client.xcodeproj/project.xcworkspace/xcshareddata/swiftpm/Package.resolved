@@ -59,7 +59,7 @@
       "location" : "https://github.com/ecosia/ios-core.git",
       "state" : {
         "branch" : "main",
-        "revision" : "72ed8b10bf4e84a4f5d197818db299a23cf7fbb6"
+        "revision" : "d18a6c8552c902e36fef4be1fec0226151db9302"
       }
     },
     {
@@ -86,7 +86,7 @@
       "location" : "https://github.com/nbhasin2/MappaMundi.git",
       "state" : {
         "branch" : "master",
-        "revision" : "7fcd2b7910550227088480490ac19ea66044b3d1"
+        "revision" : "ded1e15d9e3a973f723185e07d0f2573a7fe1034"
       }
     },
     {

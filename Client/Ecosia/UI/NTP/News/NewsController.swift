@@ -12,11 +12,11 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
     private let images = Images(.init(configuration: .ephemeral))
     private let news = News()
     private let identifier = "news"
-    var delegate: EcosiaHomeDelegate?
+    var delegate: YourImpactDelegate?
 
     required init?(coder: NSCoder) { nil }
 
-    init(items: [NewsCell.ViewModel], delegate: EcosiaHomeDelegate?) {
+    init(items: [NewsCell.ViewModel], delegate: YourImpactDelegate?) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
         self.items = items
@@ -56,7 +56,7 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
 
             let section = NSCollectionLayoutSection(group: group)
 
-            let horizontal = (self.collection.bounds.width - self.collection.ecosiaHomeMaxWidth) / 2
+            let horizontal = (self.collection.bounds.width - self.collection.yourImpactMaxWidth) / 2
             section.contentInsets = NSDirectionalEdgeInsets(
                 top: 0,
                 leading: horizontal,
@@ -125,7 +125,7 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
 
     func collectionView(_: UICollectionView, didSelectItemAt: IndexPath) {
         let item = items[didSelectItemAt.row]
-        delegate?.ecosiaHome(didSelectURL: item.targetUrl)
+        delegate?.yourImpact(didSelectURL: item.targetUrl)
         dismiss(animated: true, completion: nil)
         Analytics.shared.navigationOpenNews(item.trackingName)
     }

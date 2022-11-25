@@ -15,7 +15,7 @@ final class EcosiaExploreCell: UICollectionViewCell, NotificationThemeable {
     private weak var disclosure: UIView!
     private weak var learnMoreLabel: UILabel!
     
-    var model: EcosiaHome.Section.Explore? {
+    var model: YourImpact.Section.Explore? {
         didSet {
             guard let model = model, model != oldValue else { return }
             title.text = model.title
@@ -126,7 +126,7 @@ final class EcosiaExploreCell: UICollectionViewCell, NotificationThemeable {
         outline.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
 
         image.centerXAnchor.constraint(equalTo: outline.leftAnchor, constant: 38).isActive = true
-        image.centerYAnchor.constraint(equalTo: outline.topAnchor, constant: EcosiaHome.Section.explore.height / 2).isActive = true
+        image.centerYAnchor.constraint(equalTo: outline.topAnchor, constant: YourImpact.Section.explore.height / 2).isActive = true
         
         title.centerYAnchor.constraint(equalTo: image.centerYAnchor).isActive = true
         title.leadingAnchor.constraint(equalTo: outline.leadingAnchor, constant: 72).isActive = true
@@ -135,7 +135,7 @@ final class EcosiaExploreCell: UICollectionViewCell, NotificationThemeable {
         indicator.centerYAnchor.constraint(equalTo: image.centerYAnchor).isActive = true
         indicator.trailingAnchor.constraint(equalTo: outline.trailingAnchor, constant: -16).isActive = true
         
-        disclosure.topAnchor.constraint(equalTo: outline.topAnchor, constant: EcosiaHome.Section.explore.height).isActive = true
+        disclosure.topAnchor.constraint(equalTo: outline.topAnchor, constant: YourImpact.Section.explore.height).isActive = true
         disclosure.leadingAnchor.constraint(equalTo: outline.leadingAnchor, constant: 16).isActive = true
         disclosure.trailingAnchor.constraint(equalTo: outline.trailingAnchor, constant: -16).isActive = true
         disclosure.bottomAnchor.constraint(equalTo: learnMore.bottomAnchor, constant: 14).isActive = true
@@ -166,7 +166,7 @@ final class EcosiaExploreCell: UICollectionViewCell, NotificationThemeable {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        divider?.isHidden = model == .faq || frame.height > EcosiaHome.Section.explore.height
+        divider?.isHidden = model == .faq || frame.height > YourImpact.Section.explore.height
     }
 
     override func prepareForReuse() {
