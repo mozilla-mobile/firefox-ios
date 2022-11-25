@@ -5,6 +5,4 @@
 import XCTest
 @testable import SiteImageView
 
-final class SiteImageViewTests: XCTestCase {
-    
-}
+final class SiteImageViewTests: XCTestCase {}
