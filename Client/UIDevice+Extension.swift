@@ -36,13 +36,11 @@ extension UIDevice {
             "iPhone8,4": .iPhoneSE,
         ]
 
-        if let model = modelMap[String.init(validatingUTF8: modelCode!)!] {
-            if model == .simulator {
-                if let simModelCode = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
-                    if let simModel = modelMap[String.init(validatingUTF8: simModelCode)!] {
-                        return simModel
-                    }
-                }
+        if let modelCode = modelCode, let model = modelMap[modelCode] {
+            if model == .simulator,
+               let simModelCode = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"],
+               let simModel = modelMap[simModelCode] {
+                return simModel
             }
             return model
         }
