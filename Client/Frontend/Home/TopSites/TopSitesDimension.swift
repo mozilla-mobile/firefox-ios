@@ -15,12 +15,10 @@ struct TopSitesUIInterface {
     var trait: UITraitCollection
     var availableWidth: CGFloat
 
-    init(trait: UITraitCollection, availableWidth: CGFloat) {
-        self.trait = trait
-        self.availableWidth = availableWidth
-    }
-
-    init(isLandscape: Bool, isIphone: Bool, trait: UITraitCollection, availableWidth: CGFloat) {
+    init(isLandscape: Bool = UIWindow.isLandscape,
+         isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone,
+         trait: UITraitCollection,
+         availableWidth: CGFloat) {
         self.isLandscape = isLandscape
         self.isIphone = isIphone
         self.trait = trait
