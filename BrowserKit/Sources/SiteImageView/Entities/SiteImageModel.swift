@@ -4,10 +4,10 @@
 
 import UIKit
 
-public class SiteImageView: UIImageView {
-    private var uniqueID: UUID?
-
-    public func setURL(siteURL: String, type: SiteImageType = .favicon) {
-        uniqueID = UUID()
-    }
+struct SiteImageModel {
+    let expectedImageType: SiteImageType
+    let siteURL: URL
+    let domain: String
+    let faviconURL: URL?
+    let heroImageURL: URL?
 }

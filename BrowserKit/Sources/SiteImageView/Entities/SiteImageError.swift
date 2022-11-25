@@ -2,12 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import UIKit
+import Foundation
 
-public class SiteImageView: UIImageView {
-    private var uniqueID: UUID?
-
-    public func setURL(siteURL: String, type: SiteImageType = .favicon) {
-        uniqueID = UUID()
-    }
+enum SiteImageError: Error {
+    case invalidHTML
+    case noFaviconFound
 }

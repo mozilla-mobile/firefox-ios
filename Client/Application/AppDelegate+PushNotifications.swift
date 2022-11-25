@@ -56,6 +56,8 @@ extension AppDelegate {
                 if newState.localDevice?.pushEndpointExpired ?? false {
                     MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+                    // Our endpoint expired, we should check for missed messages
+                    self.profile.pollCommands(forcePoll: true)
                 }
             }
         }
