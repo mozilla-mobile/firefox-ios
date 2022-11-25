@@ -5,6 +5,8 @@
 
 "use strict";
 
+import { Logic } from "Assets/CC_Script/LoginManager.shared.mjs";
+
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
 window.__firefox__.includeOnce("LoginsHelper", function() {
@@ -179,17 +181,10 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       if (!(element instanceof HTMLInputElement))
         return false;
 
-      var fieldType = (element.hasAttribute("type") ?
-                       element.getAttribute("type").toLowerCase() :
-                       element.type);
-      if (fieldType == "text"  ||
-          fieldType == "email" ||
-          fieldType == "url"   ||
-          fieldType == "tel"   ||
-          fieldType == "number") {
-        return true;
+      if (!Logic.inputTypeIsCompatibleWithUsername(element)) {
+        return false;
       }
-      return false;
+      return true;
     },
 
     /*
