@@ -61,7 +61,7 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
         return .messageCard
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                               heightDimension: .estimated(180))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -96,10 +96,6 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
     var hasData: Bool {
         return shouldDisplayMessageCard
     }
-
-    func refreshData(for traitCollection: UITraitCollection,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 
     func setTheme(theme: Theme) {
         self.theme = theme
