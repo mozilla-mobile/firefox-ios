@@ -6,7 +6,9 @@ import Foundation
 import Shared
 
 protocol LegacyWallpaperDownloadProtocol {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
+    func dataTask(with url: URL,
+                  completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void)
+    -> URLSessionDataTask
 }
 
 extension URLSession: LegacyWallpaperDownloadProtocol {}
