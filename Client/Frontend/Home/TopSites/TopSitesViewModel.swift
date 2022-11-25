@@ -9,9 +9,9 @@ import Storage
 class TopSitesViewModel {
 
     struct UX {
-        static let numberOfItemsPerRowForSizeClassIpad = UXSizeClasses(compact: 3, regular: 4, other: 2)
-        static let cellEstimatedSize: CGSize = CGSize(width: 73, height: 83)
+        static let cellEstimatedSize: CGSize = CGSize(width: 85, height: 94)
         static let cardSpacing: CGFloat = 16
+        static let minCards: Int = 4
     }
 
     weak var delegate: HomepageDataModelDelegate?
@@ -153,7 +153,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
         return numberOfItems
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(UX.cellEstimatedSize.height)
@@ -165,7 +165,7 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             heightDimension: .estimated(UX.cellEstimatedSize.height)
         )
 
-        let interface = TopSitesUIInterface(trait: traitCollection)
+        let interface = TopSitesUIInterface(trait: traitCollection, availableWidth: size.width)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: topSitesDataAdaptor.numberOfRows,
                                                                     interface: interface)
@@ -190,9 +190,11 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func refreshData(for traitCollection: UITraitCollection,
+                     size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
-        let interface = TopSitesUIInterface(trait: traitCollection)
+        let interface = TopSitesUIInterface(trait: traitCollection,
+                                            availableWidth: size.width)
         let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
                                                                     numberOfRows: topSitesDataAdaptor.numberOfRows,
                                                                     interface: interface)
