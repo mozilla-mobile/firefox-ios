@@ -6,6 +6,7 @@ jobs:
       CI: true
     macos:
       xcode: "13.4.1"
+    resource_class: macos.x86.medium.gen2
     steps:
       - checkout
       - restore_cache:
@@ -33,6 +34,7 @@ jobs:
       CI: true
     macos:
       xcode: "13.4.1"
+    resource_class: macos.x86.medium.gen2
     steps:
       - checkout
       - restore_cache:
@@ -60,6 +62,7 @@ jobs:
       CI: true
     macos:
       xcode: "13.4.1"
+    resource_class: macos.x86.medium.gen2
     steps:
       - checkout
       - restore_cache:
