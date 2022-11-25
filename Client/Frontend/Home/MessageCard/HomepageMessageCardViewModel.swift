@@ -97,11 +97,6 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
         return shouldDisplayMessageCard
     }
 
-    func refreshData(for traitCollection: UITraitCollection,
-                     size: CGSize,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
-
     func setTheme(theme: Theme) {
         self.theme = theme
     }
