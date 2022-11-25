@@ -237,6 +237,10 @@ open class MockProfile: Client.Profile {
         return succeed()
     }
 
+    public func pollCommands(forcePoll: Bool) {
+        return
+    }
+
     public func hasSyncedLogins() -> Deferred<Maybe<Bool>> {
         return deferMaybe(true)
     }
