@@ -73,7 +73,7 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             textColor: textColor)
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .absolute(UX.cellWidth),
             heightDimension: .estimated(UX.cellHeight)
@@ -119,10 +119,6 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var hasData: Bool {
         return !recentItems.isEmpty
     }
-
-    func refreshData(for traitCollection: UITraitCollection,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 
     func setTheme(theme: Theme) {
         self.theme = theme

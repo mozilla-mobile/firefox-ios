@@ -22,9 +22,9 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
         static let textSafeSpace: CGFloat = 6
         static let bottomSpace: CGFloat = 8
-        static let imageTopSpace: CGFloat = 11
-        static let imageBottomSpace: CGFloat = 11
-        static let imageLeadingTrailingSpace: CGFloat = 11
+        static let imageTopSpace: CGFloat = 12
+        static let imageBottomSpace: CGFloat = 12
+        static let imageLeadingTrailingSpace: CGFloat = 12
         static let titleFontSize: CGFloat = 12
         static let sponsorFontSize: CGFloat = 11
     }

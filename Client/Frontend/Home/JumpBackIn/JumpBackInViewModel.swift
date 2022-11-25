@@ -431,7 +431,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         return jumpBackInList.itemsToDisplay + (hasSyncedTab ? UX.maxDisplayedSyncedTabs : 0)
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         var section: NSCollectionLayoutSection
         switch sectionLayout {
         case .compactSyncedTab, .compactJumpBackInAndSyncedTab:
@@ -463,6 +463,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
     }
 
     func refreshData(for traitCollection: UITraitCollection,
+                     size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
                      device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
         updateSectionLayout(for: traitCollection,
