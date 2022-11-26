@@ -83,6 +83,10 @@ class AppContainer: ServiceProvider {
                     return RatingPromptManager(profile: try container.resolve())
                 }
 
+                container.register(.singleton) {
+                    return AppSessionManager()
+                }
+
                 try container.bootstrap()
             } catch {
                 os_log(.error, "We couldn't resolve something inside the container!")
