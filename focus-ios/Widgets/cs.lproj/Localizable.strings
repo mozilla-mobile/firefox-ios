@@ -1,0 +1,6 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Přidejte si zkratku aplikace %@ na domovskou obrazovku. Pro úpravu nebo výběr jiné zkratky na widgetu podržte prst.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Rychlé akce";
+
