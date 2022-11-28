@@ -286,7 +286,6 @@ class NavigationTest: BaseTestCase {
             } else {
                 XCTAssertTrue(app.menuItems["Copy"].exists)
                 XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
                 XCTAssertTrue(app.menuItems["Open Link"].exists)
             }
         }
