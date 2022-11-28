@@ -15,6 +15,11 @@ class SendToDeviceActivity: CustomAppActivity {
     override func prepare(withActivityItems activityItems: [Any]) {}
 
     override func perform() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .shareSheet,
+                                             value: .shareSendToDevice,
+                                             extras: nil)
         activityDidFinish(true)
     }
 }

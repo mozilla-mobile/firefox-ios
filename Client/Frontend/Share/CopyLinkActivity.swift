@@ -15,6 +15,11 @@ class CopyLinkActivity: CustomAppActivity {
 
     override func perform() {
         UIPasteboard.general.string = url.absoluteString
+        TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .shareSheet,
+                                             value: .shareCopyLink,
+                                             extras: nil)
         activityDidFinish(true)
     }
 }

@@ -456,6 +456,7 @@ extension TelemetryWrapper {
         case selectedHistoryItem = "selected-history-item"
         case searchHistory = "search-history"
         case deleteHistory = "delete-history"
+        case shareSheet = "share-sheet"
         case sharePageWith = "share-page-with"
         case sendToDevice = "send-to-device"
         case copyAddress = "copy-address"
@@ -503,6 +504,8 @@ extension TelemetryWrapper {
         case readingListPanel = "reading-list-panel"
         case shareExtension = "share-extension"
         case shareMenu = "share-menu"
+        case shareSendToDevice = "share-send-to-device"
+        case shareCopyLink = "share-copy-link"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
         case systemThemeSwitch = "system-theme-switch"
@@ -1282,6 +1285,11 @@ extension TelemetryWrapper {
                     GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
                 )
             }
+        // MARK: - Share sheet actions
+        case (.action, .tap, .shareSheet, .shareSendToDevice, _):
+            GleanMetrics.ShareSheet.sendDeviceTapped.record()
+        case (.action, .tap, .shareSheet, .shareCopyLink, _):
+            GleanMetrics.ShareSheet.copyLinkTapped.record()
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }
