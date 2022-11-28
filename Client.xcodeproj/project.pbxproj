@@ -1154,7 +1154,7 @@
 		E65075A91E37F7AB006961AC /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757A1E37F7AB006961AC /* URLExtensions.swift */; };
 		E65075AA1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757B1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift */; };
 		E65075AB1E37F7AB006961AC /* SetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757C1E37F7AB006961AC /* SetExtensions.swift */; };
-		E65075AC1E37F7AB006961AC /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757D1E37F7AB006961AC /* StringExtensions.swift */; };
+		E65075AC1E37F7AB006961AC /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757D1E37F7AB006961AC /* String+Extension.swift */; };
 		E65075AD1E37F7AB006961AC /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757E1E37F7AB006961AC /* UIColorExtensions.swift */; };
 		E65075AE1E37F7AB006961AC /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650757F1E37F7AB006961AC /* UIImageExtensions.swift */; };
 		E65075B11E37F7AB006961AC /* FSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E65075821E37F7AB006961AC /* FSUtils.m */; };
@@ -4894,7 +4894,7 @@
 		E650757A1E37F7AB006961AC /* URLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
 		E650757B1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLProtectionSpaceExtensions.swift; sourceTree = "<group>"; };
 		E650757C1E37F7AB006961AC /* SetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetExtensions.swift; sourceTree = "<group>"; };
-		E650757D1E37F7AB006961AC /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		E650757D1E37F7AB006961AC /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		E650757E1E37F7AB006961AC /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		E650757F1E37F7AB006961AC /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
 		E65075811E37F7AB006961AC /* FSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSUtils.h; sourceTree = "<group>"; };
@@ -7796,7 +7796,7 @@
 				E650757A1E37F7AB006961AC /* URLExtensions.swift */,
 				E650757B1E37F7AB006961AC /* URLProtectionSpaceExtensions.swift */,
 				E650757C1E37F7AB006961AC /* SetExtensions.swift */,
-				E650757D1E37F7AB006961AC /* StringExtensions.swift */,
+				E650757D1E37F7AB006961AC /* String+Extension.swift */,
 				E650757E1E37F7AB006961AC /* UIColorExtensions.swift */,
 				E650757F1E37F7AB006961AC /* UIImageExtensions.swift */,
 				7B10AA9E1E3A15020002DD08 /* DataExtensions.swift */,
@@ -9836,7 +9836,7 @@
 				7B3D9E651E4CBFDB007A50DA /* NSCoderExtensions.swift in Sources */,
 				E65075931E37F7AB006961AC /* AppConstants.swift in Sources */,
 				E65075B81E37F7AB006961AC /* NotificationConstants.swift in Sources */,
-				E65075AC1E37F7AB006961AC /* StringExtensions.swift in Sources */,
+				E65075AC1E37F7AB006961AC /* String+Extension.swift in Sources */,
 				E65075951E37F7AB006961AC /* GeneralUtils.swift in Sources */,
 				E683F0C21E93D4E90035D990 /* DictionaryExtensions.swift in Sources */,
 				288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */,

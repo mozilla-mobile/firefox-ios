@@ -16,8 +16,17 @@ public extension String {
             .replacingOccurrences(of: "^www\\d*\\.", with: "", options: .regularExpression)
     }
 
+    var asURL: URL? {
+        // Firefox and NSURL disagree about the valid contents of a URL.
+        // Let's escape | for them.
+        // We'd love to use one of the more sophisticated CFURL* or NSString.* functions, but
+        // none seem to be quite suitable.
+        return URL(string: self) ??
+               URL(string: self.stringWithAdditionalEscaping)
+    }
+
     func escape() -> String? {
-        // We can't guaruntee that strings have a valid string encoding, as this is an entry point for tainted data,
+        // We can't guarantee that strings have a valid string encoding, as this is an entry point for tainted data,
         // we should be very careful about forcefully dereferencing optional types.
         // https://stackoverflow.com/questions/33558933/why-is-the-return-value-of-string-addingpercentencoding-optional#33558934
         let queryItemDividers = CharacterSet(charactersIn: "?=&")
@@ -47,19 +56,6 @@ public extension String {
             return String(self[..<index1]) + "…\u{2060}" + String(self[index2...])
         }
         return self
-    }
-
-    private var stringWithAdditionalEscaping: String {
-        return self.replacingOccurrences(of: "|", with: "%7C")
-    }
-
-    var asURL: URL? {
-        // Firefox and NSURL disagree about the valid contents of a URL.
-        // Let's escape | for them.
-        // We'd love to use one of the more sophisticated CFURL* or NSString.* functions, but
-        // none seem to be quite suitable.
-        return URL(string: self) ??
-               URL(string: self.stringWithAdditionalEscaping)
     }
 
     /// Returns a new string made by removing the leading String characters contained
@@ -92,12 +88,6 @@ public extension String {
         return newString
     }
 
-    static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
-        return bundle.path(forResource: name, ofType: type).flatMap {
-            try? String(contentsOfFile: $0, encoding: encoding)
-        }
-    }
-
     func remove(_ string: String?) -> String {
         return self.replacingOccurrences(of: string ?? "", with: "")
     }
@@ -117,5 +107,10 @@ public extension String {
         }
         // Trim and check empty string
         return self.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    // MARK: - Private
+    private var stringWithAdditionalEscaping: String {
+        return self.replacingOccurrences(of: "|", with: "%7C")
     }
 }
