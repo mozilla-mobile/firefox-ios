@@ -451,10 +451,7 @@ class BrowserViewController: UIViewController {
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
-        if !NightModeHelper.isActivated(profile.prefs) && LegacyThemeManager.instance.systemThemeIsOn {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
-        }
+        updateLegacyTheme()
 
         searchTelemetry = SearchTelemetry()
 
@@ -646,12 +643,18 @@ class BrowserViewController: UIViewController {
             themeManager.systemThemeChanged()
         }
 
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), LegacyThemeManager.instance.systemThemeIsOn {
-            let userInterfaceStyle = traitCollection.userInterfaceStyle
-            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateLegacyTheme()
         }
 
         setupMiddleButtonStatus(isLoading: false)
+    }
+
+    private func updateLegacyTheme() {
+        if !NightModeHelper.isActivated(profile.prefs) && LegacyThemeManager.instance.systemThemeIsOn {
+            let userInterfaceStyle = traitCollection.userInterfaceStyle
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
+        }
     }
 
     // MARK: - Constraints
