@@ -38,7 +38,7 @@
 "Menu.RemoveBookmark.AlternateLabel.v99" = "Αφαίρεση σελιδοδείκτη";
 
 /* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
-"Menu.ReportSiteIssueAction.Title" = "Αναφορά ζητήματος σελίδας";
+"Menu.ReportSiteIssueAction.Title" = "Αναφορά ζητήματος ιστοτόπου";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "Προβολή όλων";
