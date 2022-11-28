@@ -1660,6 +1660,12 @@
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "ค้นหาใน Firefox";
 
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "คัดลอก";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "ส่งลิงก์ไปยังอุปกรณ์";
+
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "แสดงข้อเสนอแนะการค้นหา";
 
