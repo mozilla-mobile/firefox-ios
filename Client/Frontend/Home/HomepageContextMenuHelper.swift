@@ -23,8 +23,9 @@ extension HomepageContextMenuHelperDelegate {
 class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
+    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
     private var viewModel: HomepageViewModel
-    weak var browserDelegate: BrowserBarViewDelegate?
+    weak var sendToDeviceDelegate: SendToDeviceDelegate?
 
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
@@ -196,8 +197,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     }
 
     private func showSendToDevice(site: Site) {
-        typealias sendDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
-        guard let delegate = browserDelegate as? sendDelegate else { return }
+        guard let delegate = sendToDeviceDelegate else { return }
 
         let themeColors = viewModel.theme.colors
 

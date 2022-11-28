@@ -46,6 +46,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     // swiftlint: disable large_tuple
     typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
     // swiftlint: enable large_tuple
+    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     private let isHomePage: Bool
     private let buttonView: UIButton
@@ -61,6 +62,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
+    weak var sendToDeviceDelegate: SendToDeviceDelegate?
 
     /// MainMenuActionHelper init
     /// - Parameters:
@@ -358,10 +360,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     }
 
     private func getSendToDevice() -> PhotonRowActions {
-        typealias sendDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
-            guard let bvc = self.menuActionDelegate as? sendDelegate,
+            guard let delegate = self.sendToDeviceDelegate,
                   let selectedTab = self.selectedTab,
                   let url = selectedTab.url
             else { return }
@@ -377,11 +378,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             let helper = SendToDeviceHelper(shareItem: shareItem,
                                             profile: self.profile,
                                             colors: colors,
-                                            delegate: bvc)
-            let viewController = helper.initialViewController()
+                                            delegate: delegate)
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
-            self.delegate?.showViewController(viewController: viewController)
+            self.delegate?.showViewController(viewController: helper.initialViewController())
         }.items
     }
 

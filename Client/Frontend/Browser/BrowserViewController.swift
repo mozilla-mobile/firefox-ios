@@ -948,6 +948,7 @@ class BrowserViewController: UIViewController {
         homepageViewController.homePanelDelegate = self
         homepageViewController.libraryPanelDelegate = self
         homepageViewController.browserBarViewDelegate = self
+        homepageViewController.sendToDeviceDelegate = self
         self.homepageViewController = homepageViewController
         addChild(homepageViewController)
         view.addSubview(homepageViewController.view)
