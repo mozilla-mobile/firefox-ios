@@ -12,7 +12,15 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
     private var profile: Profile {
-        return BrowserProfile(localName: "profile")
+        let profile = BrowserProfile(localName: "profile")
+
+        // Re-open the profile if it was shutdown. This happens when we run from an app extension, where we must
+        // make sure that the profile is only open for brief moments of time.
+        if profile.isShutdown {
+            profile.reopen()
+        }
+
+        return profile
     }
 
     func initialViewController() -> UIViewController {
@@ -28,13 +36,15 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
                                         profile: profile,
                                         colors: colors,
                                         delegate: self)
-        let viewController = helper.initialViewController()
-        return viewController
+        return helper.initialViewController()
     }
 
     func finish() {
+        profile.shutdown()
         delegate?.finish(afterDelay: 0)
     }
+
+    // MARK: - DevicePickerViewControllerDelegate
 
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         guard let item = sharedItem else {
@@ -42,7 +52,6 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
         }
 
         profile.sendItem(item, toDevices: devices).uponQueue(.main) { _ in
-            self.profile.shutdown()
             self.finish()
 
             addAppExtensionTelemetryEvent(forMethod: "send-to-device")
@@ -52,6 +61,8 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
         finish()
     }
+
+    // MARK: - InstructionsViewDelegate
 
     func dismissInstructionsView() {
         finish()

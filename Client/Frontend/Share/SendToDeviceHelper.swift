@@ -54,10 +54,8 @@ class SendToDeviceHelper {
         }
 
         // Display device picker if the user has an account
-        let devicePickerViewController = DevicePickerViewController()
+        let devicePickerViewController = DevicePickerViewController(profile: profile)
         devicePickerViewController.pickerDelegate = delegate
-        devicePickerViewController.profile = profile
-        devicePickerViewController.profileNeedsShutdown = false
         devicePickerViewController.shareItem = shareItem
         #if MOZ_TARGET_SHARETO
         return devicePickerViewController
