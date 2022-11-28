@@ -2,12 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import UIKit
-import Shared
+import Foundation
 
-class SendToDeviceActivity: UIActivity {
+class CopyLinkActivity: UIActivity {
     var appActivityType: CustomActivityAction
-    var activityItems = [Any]()
     var url: URL
 
     override var activityTitle: String? {
@@ -38,10 +36,11 @@ class SendToDeviceActivity: UIActivity {
     }
 
     override func prepare(withActivityItems activityItems: [Any]) {
-        self.activityItems = activityItems
+//        self.activityItems = activityItems
     }
 
     override func perform() {
+        UIPasteboard.general.string = url.absoluteString
         activityDidFinish(true)
     }
 }

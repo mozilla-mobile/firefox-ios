@@ -7,12 +7,27 @@ import Shared
 import MobileCoreServices
 
 // TODO: Rename if is actually not used by the Share extension
-class ShareExtensionHelper: NSObject {
+class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private weak var selectedTab: Tab?
 
     private let url: URL
     private var onePasswordExtensionItem: NSExtensionItem!
     private let browserFillIdentifier = "org.appextension.fill-browser-action"
+
+    var areShareSheetChangesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) && !url.isFile
+    }
+
+    /// Exclude 'Add to Reading List' which currently uses Safari. If share sheet changes are enabled exclude
+    /// Copy from system to provide custom activity
+    private var excludingActivities: [UIActivity.ActivityType] {
+        guard areShareSheetChangesEnabled else {
+            return [UIActivity.ActivityType.addToReadingList]
+        }
+
+        return [UIActivity.ActivityType.addToReadingList,
+                UIActivity.ActivityType.copyToPasteboard]
+    }
 
     // Can be a file:// or http(s):// url
     init(url: URL, tab: Tab?) {
@@ -23,13 +38,11 @@ class ShareExtensionHelper: NSObject {
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
 
         let activityItems = getActivityItems(url: url)
-        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, url: url)
-        let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: [sendToDeviceActivity])
+        let appActivities = getApplicationActivities()
+        let activityViewController = UIActivityViewController(activityItems: activityItems,
+                                                              applicationActivities: appActivities)
 
-        // Exclude 'Add to Reading List' which currently uses Safari.
-        activityViewController.excludedActivityTypes = [
-            UIActivity.ActivityType.addToReadingList,
-        ]
+        activityViewController.excludedActivityTypes = excludingActivities
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             guard completed else {
@@ -74,6 +87,21 @@ class ShareExtensionHelper: NSObject {
         activityItems.append(self)
 
         return activityItems
+    }
+
+    private func getApplicationActivities() -> [UIActivity]? {
+        guard areShareSheetChangesEnabled else {
+            return nil
+        }
+
+        var appActivities = [UIActivity]()
+        let copyLinkActivity = CopyLinkActivity(activityType: .copyLink, url: url)
+        appActivities.append(copyLinkActivity)
+
+        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, url: url)
+        appActivities.append(sendToDeviceActivity)
+
+        return appActivities
     }
 }
 
