@@ -232,6 +232,7 @@ class NavigationTest: BaseTestCase {
 
     func testLongPressOnAddressBar() throws {
         if processIsTranslatedStr() == m1Rosetta {
+            // Long press on the URL requires copy & paste permission
             throw XCTSkip("Copy & paste may not work on M1")
         } else {
             // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
@@ -277,13 +278,11 @@ class NavigationTest: BaseTestCase {
             app.textFields["address"].tap()
             waitForExistence(app.menuItems["Copy"])
             if iPad() {
-                XCTAssertTrue(app.menuItems["Copy"].exists)
                 XCTAssertTrue(app.menuItems["Cut"].exists)
-                XCTAssertTrue(app.menuItems["Paste"].exists)
+                XCTAssertTrue(app.menuItems["Copy"].exists)
                 XCTAssertTrue(app.menuItems["Open Link"].exists)
                 XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
-                XCTAssertTrue(app.menuItems["Share…"].exists)
-                XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+                XCTAssertTrue(app.menuItems["Paste"].exists)
             } else {
                 XCTAssertTrue(app.menuItems["Copy"].exists)
                 XCTAssertTrue(app.menuItems["Cut"].exists)
