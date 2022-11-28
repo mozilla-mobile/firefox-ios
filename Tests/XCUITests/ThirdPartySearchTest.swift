@@ -128,7 +128,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
     }
 
-    func testCustomEngineFromIncorrectTemplate() throws {
+    func testCustomEngineFromIncorrectTemplate() {
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
