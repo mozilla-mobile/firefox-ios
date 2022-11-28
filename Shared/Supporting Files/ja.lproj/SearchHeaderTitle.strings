@@ -1,6 +1,6 @@
 /* When making a new search from the awesome bar, search results appear as the user write new letters in their search. Different sections with results from the selected search engine will appear. This string will be used as a header to separate the selected engine search results from current search query. */
-"Search.EngineSection.Title.v108" = "Buscar con %@";
+"Search.EngineSection.Title.v108" = "%@ 検索";
 
 /* When making a new search from the awesome bar, search results appear as the user write new letters in their search. This string will be used as a header for Google search results listed as suggestions. */
-"Search.Google.Title.v108" = "Búsqueda de Google";
+"Search.Google.Title.v108" = "Google 検索";
 

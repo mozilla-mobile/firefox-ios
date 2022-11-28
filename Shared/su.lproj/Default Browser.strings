@@ -13,8 +13,14 @@
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Pilih Firefox salaku panyungsi baku pikeun ngarah otomatis gancang, aman, jeung pripasi.";
 
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Ronjatkeun Nyungsi Sapopoé";
+
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox meungpeuk rata-rata 3,000+ palacak unggal pamaké unggal bulan. Jadikeun kami panyungsi baku anjeun pikeun katengtreman pripasi.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox Ngajaga Pripasi";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Alihkeun Panyungsi Baku Anjeun";
