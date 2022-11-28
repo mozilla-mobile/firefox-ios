@@ -1,11 +1,13 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
-@testable import ContentBlockerGenLib
+@testable import ContentBlockerGenerator
 
-let blocklist = """
+final class ContentBlockerParserTests: XCTestCase {
+
+    let blocklist = """
 {
 "license": "Copyright 2010-2019 Disconnect, Inc.",
 "categories": {
@@ -17,7 +19,7 @@ let blocklist = """
 }}
 """
 
-let entitylist = """
+    let entitylist = """
 {
 "license": "Copyright 2010-2020 Disconnect, Inc.",
 "entities":
@@ -28,18 +30,20 @@ let entitylist = """
 }
 """
 
-final class ContentBlockerGenTests: XCTestCase {
     func testParsing() throws {
-        let entityJson = try! JSONSerialization.jsonObject(with: entitylist.data(using: .utf8)!, options: []) as! [String: Any]
+        let entityJson = try! JSONSerialization.jsonObject(with: entitylist.data(using: .utf8)!,
+                                                           options: []) as! [String: Any]
 
-        let contentBlocker = ContentBlockerGenLib(entityListJson: entityJson)
+        let subject = ContentBlockerParser()
+        subject.parseEntityList(json: entityJson)
 
-        let json = try! JSONSerialization.jsonObject(with: blocklist.data(using: .utf8)!, options: []) as! [String: Any]
+        let json = try! JSONSerialization.jsonObject(with: blocklist.data(using: .utf8)!,
+                                                     options: []) as! [String: Any]
         let categories = json["categories"]! as! [String: Any]
         let category = categories[CategoryTitle.Advertising.rawValue] as! [Any]
         var result = [String]()
         category.forEach {
-            result += contentBlocker.handleCategoryItem($0, action: .blockAll)
+            result += subject.handleCategoryItem($0, action: .blockAll)
         }
 
         let test = """
@@ -48,9 +52,4 @@ final class ContentBlockerGenTests: XCTestCase {
         XCTAssert(result.first! == test)
     }
 
-    // swiftlint:disable empty_xctest_method
-    static var allTests = [
-        ("testParsing", testParsing),
-    ]
-    // swiftlint:enable empty_xctest_method
 }
