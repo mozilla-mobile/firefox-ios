@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 enum CustomActivityAction {
     case sendToDevice
@@ -34,8 +35,39 @@ enum CustomActivityAction {
         case .copyLink:
             activityType = ".copyLink"
         }
-        let bundle = Bundle.main.bundleIdentifier
-        return UIActivity.ActivityType(rawValue: "\(bundle!)\(activityType)")
+
+        return UIActivity.ActivityType(rawValue: "\(AppInfo.bundleIdentifier)\(activityType)")
     }
 }
 
+protocol AppActivityProtocol: UIActivity {
+    var appActivityType: CustomActivityAction { get }
+    var url: URL { get }
+}
+
+class CustomAppActivity: UIActivity, AppActivityProtocol {
+    var appActivityType: CustomActivityAction
+    var url: URL
+
+    override var activityTitle: String? {
+        return appActivityType.title
+    }
+
+    override var activityImage: UIImage? {
+        return appActivityType.image
+    }
+
+    override var activityType: UIActivity.ActivityType {
+        return appActivityType.actionType
+    }
+
+    override class var activityCategory: UIActivity.Category {
+        return .action
+    }
+
+    init(activityType: CustomActivityAction, url: URL) {
+        self.appActivityType = activityType
+        self.url = url
+        super.init()
+    }
+}
