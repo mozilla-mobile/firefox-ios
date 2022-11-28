@@ -1146,7 +1146,7 @@
 		E650759C1E37F7AB006961AC /* DeferredUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650756C1E37F7AB006961AC /* DeferredUtils.swift */; };
 		E650759D1E37F7AB006961AC /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650756D1E37F7AB006961AC /* DeviceInfo.swift */; };
 		E65075A01E37F7AB006961AC /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075711E37F7AB006961AC /* Array+Extensions.swift */; };
-		E65075A11E37F7AB006961AC /* HashExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075721E37F7AB006961AC /* HashExtensions.swift */; };
+		E65075A11E37F7AB006961AC /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075721E37F7AB006961AC /* Data+Extension.swift */; };
 		E65075A21E37F7AB006961AC /* HexExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075731E37F7AB006961AC /* HexExtensions.swift */; };
 		E65075A31E37F7AB006961AC /* KeychainWrapperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075741E37F7AB006961AC /* KeychainWrapperExtensions.swift */; };
 		E65075A41E37F7AB006961AC /* NSCharacterSetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075751E37F7AB006961AC /* NSCharacterSetExtensions.swift */; };
@@ -4886,7 +4886,7 @@
 		E650756C1E37F7AB006961AC /* DeferredUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredUtils.swift; sourceTree = "<group>"; };
 		E650756D1E37F7AB006961AC /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		E65075711E37F7AB006961AC /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
-		E65075721E37F7AB006961AC /* HashExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashExtensions.swift; sourceTree = "<group>"; };
+		E65075721E37F7AB006961AC /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		E65075731E37F7AB006961AC /* HexExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexExtensions.swift; sourceTree = "<group>"; };
 		E65075741E37F7AB006961AC /* KeychainWrapperExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapperExtensions.swift; sourceTree = "<group>"; };
 		E65075751E37F7AB006961AC /* NSCharacterSetExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCharacterSetExtensions.swift; sourceTree = "<group>"; };
@@ -7788,7 +7788,7 @@
 			children = (
 				E65075711E37F7AB006961AC /* Array+Extensions.swift */,
 				E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */,
-				E65075721E37F7AB006961AC /* HashExtensions.swift */,
+				E65075721E37F7AB006961AC /* Data+Extension.swift */,
 				E65075731E37F7AB006961AC /* HexExtensions.swift */,
 				E65075741E37F7AB006961AC /* KeychainWrapperExtensions.swift */,
 				E65075751E37F7AB006961AC /* NSCharacterSetExtensions.swift */,
@@ -9826,7 +9826,7 @@
 				E65075BB1E37F7AB006961AC /* RollingFileLogger.swift in Sources */,
 				E650759D1E37F7AB006961AC /* DeviceInfo.swift in Sources */,
 				E65075A51E37F7AB006961AC /* NSFileManagerExtensions.swift in Sources */,
-				E65075A11E37F7AB006961AC /* HashExtensions.swift in Sources */,
+				E65075A11E37F7AB006961AC /* Data+Extension.swift in Sources */,
 				3964B09A1EA8F06F00F2EEF4 /* FeatureSwitch.swift in Sources */,
 				E65075981E37F7AB006961AC /* Bytes.swift in Sources */,
 				E65075B11E37F7AB006961AC /* FSUtils.m in Sources */,

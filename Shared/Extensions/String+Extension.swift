@@ -25,6 +25,21 @@ public extension String {
                URL(string: self.stringWithAdditionalEscaping)
     }
 
+    // MARK: - Hashing & Encoding
+    var sha1: Data {
+        let data = data(using: .utf8)!
+        return data.sha1
+    }
+
+    var sha256: Data {
+        let data = data(using: .utf8)!
+        return data.sha256
+    }
+
+    var utf8EncodedData: Data {
+        return data(using: .utf8, allowLossyConversion: false)!
+    }
+
     func escape() -> String? {
         // We can't guarantee that strings have a valid string encoding, as this is an entry point for tainted data,
         // we should be very careful about forcefully dereferencing optional types.
