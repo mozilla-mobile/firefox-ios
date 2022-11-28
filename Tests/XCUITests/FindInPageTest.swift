@@ -162,13 +162,12 @@ class FindInPageTests: BaseTestCase {
         waitForExistence(app.menuItems["Copy"], timeout: 5)
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
-        if app.menuItems["Find in Page"].exists {
-            app.menuItems["Find in Page"].tap()
-        } else {
-            app.menuItems["show.next.items.menu.button"].tap()
-            waitForExistence(app.menuItems["Find in Page"])
-            app.menuItems["Find in Page"].tap()
+        while !app.collectionViews.menuItems["Find in Page"].exists {
+            app.buttons["Forward"].firstMatch.tap()
+            waitForExistence(app.collectionViews.menuItems.firstMatch)
+            waitForExistence(app.buttons["Forward"])
         }
+        app.menuItems["Find in Page"].tap()
         waitForExistence(app.textFields[textToFind])
         XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
         XCTAssertTrue(app.buttons["FindInPage.find_previous"].exists, "Find previous button exists")

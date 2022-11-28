@@ -108,48 +108,52 @@ class SearchTests: BaseTestCase {
         }
     }
 
-    func testCopyPasteComplete() {
-        // Copy, Paste and Go to url
-        navigator.goto(URLBarOpen)
-        typeOnSearchBar(text: "www.mozilla.org")
-        app.textFields["address"].press(forDuration: 5)
-        app.menuItems["Select All"].tap()
-        waitForExistence(app.menuItems["Copy"], timeout: 3)
-        app.menuItems["Copy"].tap()
-        waitForExistence(app.buttons["urlBar-cancel"])
-        app.buttons["urlBar-cancel"].tap()
-
-        navigator.nowAt(HomePanelsScreen)
-        waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
-        waitForExistence(app.textFields["url"], timeout: 3)
-        app.textFields["url"].tap()
-        waitForExistence(app.textFields["address"], timeout: 3)
-        app.textFields["address"].tap()
-
-        waitForExistence(app.menuItems["Paste"])
-        app.menuItems["Paste"].tap()
-
-        // Verify that the Paste shows the search controller with prompt
-        waitForNoExistence(app.staticTexts[LabelPrompt])
-        app.typeText("\r")
-        waitUntilPageLoad()
-
-        // Check that the website is loaded
-        waitForValueContains(app.textFields["url"], value: "www.mozilla.org")
-        waitUntilPageLoad()
-
-        // Go back, write part of moz, check the autocompletion
-        if iPad() {
-            app.buttons["URLBarView.backButton"].tap()
+    func testCopyPasteComplete() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("Copy & paste may not work on M1")
         } else {
-            app.buttons["TabToolbar.backButton"].tap()
+            // Copy, Paste and Go to url
+            navigator.goto(URLBarOpen)
+            typeOnSearchBar(text: "www.mozilla.org")
+            app.textFields["address"].press(forDuration: 5)
+            app.menuItems["Select All"].tap()
+            waitForExistence(app.menuItems["Copy"], timeout: 3)
+            app.menuItems["Copy"].tap()
+            waitForExistence(app.buttons["urlBar-cancel"])
+            app.buttons["urlBar-cancel"].tap()
+
+            navigator.nowAt(HomePanelsScreen)
+            waitForExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
+            waitForExistence(app.textFields["url"], timeout: 3)
+            app.textFields["url"].tap()
+            waitForExistence(app.textFields["address"], timeout: 3)
+            app.textFields["address"].tap()
+
+            waitForExistence(app.menuItems["Paste"])
+            app.menuItems["Paste"].tap()
+
+            // Verify that the Paste shows the search controller with prompt
+            waitForNoExistence(app.staticTexts[LabelPrompt])
+            app.typeText("\r")
+            waitUntilPageLoad()
+
+            // Check that the website is loaded
+            waitForValueContains(app.textFields["url"], value: "www.mozilla.org")
+            waitUntilPageLoad()
+
+            // Go back, write part of moz, check the autocompletion
+            if iPad() {
+                app.buttons["URLBarView.backButton"].tap()
+            } else {
+                app.buttons["TabToolbar.backButton"].tap()
+            }
+            navigator.nowAt(HomePanelsScreen)
+            waitForTabsButton()
+            typeOnSearchBar(text: "moz")
+            waitForValueContains(app.textFields["address"], value: "mozilla.org")
+            let value = app.textFields["address"].value
+            XCTAssertEqual(value as? String, "mozilla.org")
         }
-        navigator.nowAt(HomePanelsScreen)
-        waitForTabsButton()
-        typeOnSearchBar(text: "moz")
-        waitForValueContains(app.textFields["address"], value: "mozilla.org")
-        let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "mozilla.org")
     }
 
     private func changeSearchEngine(searchEngine: String) {
@@ -197,8 +201,10 @@ class SearchTests: BaseTestCase {
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         // Click on the > button to get to that option only on iPhone
-        if !iPad() {
-            app.menuItems["show.next.items.menu.button"].tap()
+        while !app.collectionViews.menuItems["Search with Firefox"].exists {
+            app.buttons["Forward"].firstMatch.tap()
+            waitForExistence(app.collectionViews.menuItems.firstMatch)
+            waitForExistence(app.buttons["Forward"])
         }
 
         waitForExistence(app.menuItems["Search with Firefox"])
@@ -219,55 +225,42 @@ class SearchTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: "google")
     }
 
-    func testSearchIconOnAboutHome() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        waitForTabsButton()
-
-        // Search icon is displayed.
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-
+    func testSearchIconOnAboutHome() throws {
         if iPad() {
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Menu")
+            throw XCTSkip("iPad does not have search icon")
         } else {
+            navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
+
+            // Search icon is displayed.
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Search")
-        }
+            XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
+            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
 
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+            let addressBar = app.textFields["address"]
+            XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+            let keyboardCount = app.keyboards.count
+            XCTAssert(keyboardCount > 0, "The keyboard is not shown")
 
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        let keyboardCount = app.keyboards.count
-        XCTAssert(keyboardCount > 0, "The keyboard is not shown")
+            app.textFields["address"].typeText("www.google.com\n")
+            waitUntilPageLoad()
 
-        app.textFields["address"].typeText("www.google.com\n")
-        waitUntilPageLoad()
-
-        // Reload icon is displayed.
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-
-        // Label is search but Home is shown
-        if iPad() {
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Menu")
-        } else {
+            // Reload icon is displayed.
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
-        }
-
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
-
-        if iPad() {
-            app.buttons["URLBarView.backButton"].tap()
-        } else {
+            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
             app.buttons["TabToolbar.backButton"].tap()
+
+            waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
+            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Search")
+            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+
+            XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+            let keyboardsCount = app.keyboards.count
+            XCTAssert(keyboardsCount > 0, "The keyboard is not shown")
         }
-
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].exists)
-        // Tap on the Search icon.
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
-
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
-        let keyboardsCount = app.keyboards.count
-        XCTAssert(keyboardsCount > 0, "The keyboard is not shown")
     }
 }
