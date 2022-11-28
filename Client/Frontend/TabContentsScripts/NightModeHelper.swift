@@ -56,9 +56,3 @@ class NightModeHelper: TabContentScript {
         return prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
     }
 }
-
-class NightModeAccessors {
-    static func isNightMode(_ prefs: Prefs) -> Bool {
-        return prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
-    }
-}
