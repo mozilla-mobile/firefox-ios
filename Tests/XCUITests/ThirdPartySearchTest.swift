@@ -21,9 +21,13 @@ class ThirdPartySearchTest: BaseTestCase {
         // Perform a search using a custom search engine
         app.textFields["url"].tap()
         waitForExistence(app.buttons["urlBar-cancel"])
-        UIPasteboard.general.string = "window"
-               app.textFields.firstMatch.press(forDuration: 1)
-               app.staticTexts["Paste"].tap()
+        if processIsTranslatedStr() == m1Rosetta {
+            app.textFields.firstMatch.typeText("window")
+        } else {
+            UIPasteboard.general.string = "window"
+            app.textFields.firstMatch.press(forDuration: 1)
+            app.staticTexts["Paste"].tap()
+        }
         app.scrollViews.otherElements.buttons["Mozilla Engine search"].tap()
         waitUntilPageLoad()
 
@@ -46,10 +50,13 @@ class ThirdPartySearchTest: BaseTestCase {
 
         // Perform a search to check
         app.textFields["url"].tap()
-
-        UIPasteboard.general.string = "window"
-        app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste & Go"].tap()
+        if processIsTranslatedStr() == m1Rosetta {
+            app.textFields.firstMatch.typeText("window\n")
+        } else {
+            UIPasteboard.general.string = "window"
+            app.textFields.firstMatch.press(forDuration: 1)
+            app.staticTexts["Paste & Go"].tap()
+        }
 
         waitUntilPageLoad()
 
@@ -69,9 +76,13 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
         app.textFields["url"].tap()
         waitForExistence(app.buttons["urlBar-cancel"])
-        UIPasteboard.general.string = "window"
-        app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+        if processIsTranslatedStr() == m1Rosetta {
+            app.textFields.firstMatch.typeText("window")
+        } else {
+            UIPasteboard.general.string = "window"
+            app.textFields.firstMatch.press(forDuration: 1)
+            app.staticTexts["Paste"].tap()
+        }
         waitForExistence(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
         XCTAssertTrue(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
 
@@ -90,9 +101,13 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForExistence(app.textFields["url"], timeout: 3)
         app.textFields["url"].tap()
         waitForExistence(app.buttons["urlBar-cancel"])
-        UIPasteboard.general.string = "window"
-        app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+        if processIsTranslatedStr() == m1Rosetta {
+            app.textFields.firstMatch.typeText("window")
+        } else {
+            UIPasteboard.general.string = "window"
+            app.textFields.firstMatch.press(forDuration: 1)
+            app.staticTexts["Paste"].tap()
+        }
 
         waitForNoExistence(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
@@ -105,13 +120,6 @@ class ThirdPartySearchTest: BaseTestCase {
         navigator.performAction(Action.AddCustomSearchEngine)
         waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
         app.buttons["customEngineSaveButton"].tap()
-        // Workaround for iOS14 need to wait for those elements and tap again
-        if !iPad() {
-            if #available(iOS 14.0, *) {
-                waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
-                app.navigationBars["Add Search Engine"].buttons["Save"].tap()
-            }
-        }
     }
 
     private func dismissSearchScreen() {
@@ -120,30 +128,34 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
     }
 
-    func testCustomEngineFromIncorrectTemplate() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        waitForTabsButton()
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(AddCustomSearchSettings)
-        app.textViews["customEngineTitle"].tap()
-        app.typeText("Feeling Lucky")
-
-        UIPasteboard.general.string = "http://www.google.com/search?q=&btnI"
-
-        let tablesQuery = app.tables
-        let customengineurlTextView = tablesQuery.textViews["customEngineUrl"].staticTexts["URL (Replace Query with %s)"]
-
-        XCTAssertTrue(customengineurlTextView.exists)
-        customengineurlTextView.tap()
-        customengineurlTextView.press(forDuration: 2.0)
-        app.staticTexts["Paste"].tap()
-
-        waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
-        app.buttons["customEngineSaveButton"].tap()
-        waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
-        app.navigationBars["Add Search Engine"].buttons["Save"].tap()
-
-        waitForExistence(app.alerts.element(boundBy: 0))
-        XCTAssert(app.alerts.element(boundBy: 0).label == "Failed")
+    func testCustomEngineFromIncorrectTemplate() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("Copy & paste may not work on M1")
+        } else {
+            navigator.performAction(Action.CloseURLBarOpen)
+            waitForTabsButton()
+            navigator.nowAt(NewTabScreen)
+            navigator.goto(AddCustomSearchSettings)
+            app.textViews["customEngineTitle"].tap()
+            app.typeText("Feeling Lucky")
+            
+            UIPasteboard.general.string = "http://www.google.com/search?q=&btnI"
+            
+            let tablesQuery = app.tables
+            let customengineurlTextView = tablesQuery.textViews["customEngineUrl"].staticTexts["URL (Replace Query with %s)"]
+            
+            XCTAssertTrue(customengineurlTextView.exists)
+            customengineurlTextView.tap()
+            customengineurlTextView.press(forDuration: 2.0)
+            app.staticTexts["Paste"].tap()
+            
+            waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
+            app.buttons["customEngineSaveButton"].tap()
+            waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
+            app.navigationBars["Add Search Engine"].buttons["Save"].tap()
+            
+            waitForExistence(app.alerts.element(boundBy: 0))
+            XCTAssert(app.alerts.element(boundBy: 0).label == "Failed")
+        }
     }
 }

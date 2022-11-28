@@ -99,11 +99,20 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.share], timeout: 5)
         navigator.performAction(Action.ShareBrowserTabMenuOption)
 
-        // This is not ideal but only way to get the element on iPhone 8
-        // for iPhone 11, that would be boundBy: 2
-        var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
-        if iPad() {
-            waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
+        waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
+        // This is not ideal but only way to get the element on iPhone
+        // for iPhone/iPad 14 (iOS 16.0), that would be boundBy: 1
+        // For iPhone 14 (iOS 16.1), that would be boundBy: 2
+        // For iPad (iOS 16.1), that would be boundBy: 1
+        var fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
+
+        if #available(iOS 16.1, *) {
+            if iPad() {
+                fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+            } else {
+                fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
+            }
+        } else {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
         }
         waitForExistence(fennecElement, timeout: 5)
