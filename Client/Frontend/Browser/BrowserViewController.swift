@@ -13,7 +13,6 @@ import Account
 import MobileCoreServices
 import Telemetry
 import Sentry
-import SwiftUI
 
 struct UrlToOpenModel {
     var url: URL?
@@ -1506,7 +1505,7 @@ class BrowserViewController: UIViewController {
                                         delegate: self)
         let viewController = helper.initialViewController()
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice) // Ask Daniela if we should specify instructions / picker
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
         showViewController(viewController: viewController)
     }
 

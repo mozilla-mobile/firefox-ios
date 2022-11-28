@@ -211,7 +211,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                         delegate: delegate)
         let viewController = helper.initialViewController()
 
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice) // Ask Daniela if we should specify instructions / picker
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
         self.delegate?.presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
