@@ -47,7 +47,6 @@ class FirstRunTourTests: BaseTestCase {
     func testShowTourFromSettings() {
         goToNextScreen()
         tapStartBrowsingButton()
-        app.buttons["urlBar-cancel"].tap()
         navigator.goto(ShowTourInSettings)
         waitForExistence(app.staticTexts["Welcome to an independent internet"])
     }
