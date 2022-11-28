@@ -1666,6 +1666,12 @@
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Zoeken in Firefox";
 
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "Kopiëren";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "Koppeling naar apparaat verzenden";
+
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Zoeksuggesties tonen";
 

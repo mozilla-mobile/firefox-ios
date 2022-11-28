@@ -1666,6 +1666,12 @@
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "在 Firefox 中搜索";
 
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "复制";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "发送链接到设备";
+
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "显示搜索建议";
 
