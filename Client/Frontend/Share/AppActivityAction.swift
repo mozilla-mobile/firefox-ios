@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 
+// App-specific share sheet actions
 enum CustomActivityAction {
     case sendToDevice
     case copyLink
@@ -45,6 +46,7 @@ protocol AppActivityProtocol: UIActivity {
     var url: URL { get }
 }
 
+// Parent class to include share code for activity title, icon and type
 class CustomAppActivity: UIActivity, AppActivityProtocol {
     var appActivityType: CustomActivityAction
     var url: URL

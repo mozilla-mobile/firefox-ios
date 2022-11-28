@@ -1461,7 +1461,6 @@ class BrowserViewController: UIViewController {
     func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
         let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
-
             if activityType == CustomActivityAction.sendToDevice.actionType {
                 self.showSendToDevice()
             }

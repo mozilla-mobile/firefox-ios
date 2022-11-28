@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import MobileCoreServices
 
-// TODO: Rename if is actually not used by the Share extension
 class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private weak var selectedTab: Tab?
 
@@ -48,12 +47,6 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
             guard completed else {
                 completionHandler(completed, activityType)
                 return
-            }
-
-            // Bug 1392418 - When copying a url using the share extension there are 2 urls in the pasteboard.
-            // This is a iOS 11.0 bug. Fixed in 11.2
-            if UIPasteboard.general.hasURLs, let url = UIPasteboard.general.urls?.first {
-                UIPasteboard.general.urls = [url]
             }
 
             completionHandler(completed, activityType)
