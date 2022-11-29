@@ -39,8 +39,8 @@ extension String {
 
 private let HexDigits: [String] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
 
-extension Data {
-    public var hexEncodedString: String {
+public extension Data {
+    var hexEncodedString: String {
         var result = String()
         result.reserveCapacity(count * 2)
         withUnsafeBytes { (p: UnsafeRawBufferPointer) in
@@ -52,7 +52,7 @@ extension Data {
         return String(result)
     }
 
-    public static func randomOfLength(_ length: UInt) -> Data? {
+    static func randomOfLength(_ length: UInt) -> Data? {
         let length = Int(length)
         var data = Data(count: length)
         var result: Int32 = 0
@@ -66,10 +66,8 @@ extension Data {
         }
         return result == 0 ? data : nil
     }
-}
 
-extension Data {
-    public var base64EncodedString: String {
+    var base64EncodedString: String {
         return self.base64EncodedString(options: [])
     }
 }
