@@ -114,6 +114,19 @@
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>%#@invites@</string>
+		<key>invites</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d invitación aceptada</string>
+			<key>many</key>
+			<string>%d invitaciones aceptadas</string>
+			<key>other</key>
+			<string>%d invitaciones aceptadas</string>
+		</dict>
 	</dict>
 </dict>
 </plist>

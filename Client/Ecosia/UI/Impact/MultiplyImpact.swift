@@ -6,6 +6,7 @@ import UIKit
 import Core
 import UniformTypeIdentifiers
 import MobileCoreServices
+import LinkPresentation
 
 final class MultiplyImpact: UIViewController, NotificationThemeable {
     private weak var subtitle: UILabel?
@@ -479,7 +480,8 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
     }
 
     private func share(message: String) {
-        let share = UIActivityViewController(activityItems: [message], applicationActivities: nil)
+        let share = UIActivityViewController(activityItems: [SharingMessage(message: message)],
+                                             applicationActivities: nil)
         share.popoverPresentationController?.sourceView = inviteButton
         share.completionWithItemsHandler = { _, completed, _, _ in
             if completed {
@@ -510,20 +512,53 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         guard let link = inviteLink else { return nil }
         
         return """
-🌳🔗 \(String.localized(.heyThereWantToPlant))
+\(String(format: .localized(.checkThisOut), activeUsers))
 
-\(String.localized(.downloadEcosiaOn))
-https://apps.apple.com/app/apple-store/id670881887?pt=2188920&ct=referrals&mt=8
+\(String.localized(.downloadTheApp))
+https://ecosia.co/install-ios
 
-\(String.localized(.afterInstalling))
+\(String.localized(.useMyInviteLink))
 \(link)
-
-\(String.localized(.letsGrowTogether)) 😊
 """
     }
     
     private var inviteLink: String? {
         guard let code = User.shared.referrals.code else { return nil }
         return "ecosia://\(Referrals.host)/" + code
+    }
+
+    // MARK: Number formatting
+    private var activeUsers: String {
+        let activeUsers = Int(TreeCounter.shared.statistics.activeUsers)
+        let oneMillion = 1000000
+        let million = activeUsers / oneMillion
+        return "\(million)"
+    }
+}
+
+private final class SharingMessage: NSObject, UIActivityItemSource {
+    private let message: String
+
+    init(message: String) {
+        self.message = message
+        super.init()
+    }
+
+    func activityViewControllerPlaceholderItem(_: UIActivityViewController) -> Any {
+        String()
+    }
+
+    func activityViewController(_: UIActivityViewController, itemForActivityType: UIActivity.ActivityType?) -> Any? {
+        message
+    }
+
+    func activityViewController(_: UIActivityViewController, subjectForActivityType: UIActivity.ActivityType?) -> String {
+        .localized(.plantTreesWithMe)
+    }
+    
+    func activityViewControllerLinkMetadata(_ : UIActivityViewController) -> LPLinkMetadata? {
+        let metadata = LPLinkMetadata()
+        metadata.title = .localized(.plantTreesWithMe)
+        return metadata
     }
 }

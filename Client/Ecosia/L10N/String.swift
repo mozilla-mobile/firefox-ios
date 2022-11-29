@@ -124,10 +124,9 @@ extension String {
         case websitesYouHave = "Websites you’ve recently visited will show up here"
         case noDownloadsYet = "No downloads yet"
         case whenYouDownloadFiles = "When you download files they will show up here"
-        case heyThereWantToPlant = "Hey there, want to help plant trees with me? If you get the Ecosia app, we will both be contributing extra trees to be planted!"
-        case downloadEcosiaOn = "(1) Download Ecosia on your iPhone for free (friend invites for Android coming soon!):"
-        case afterInstalling = "(2) After installing the app, click my invitation link so we plant an extra tree each:"
-        case letsGrowTogether = "Let's grow together"
+        case checkThisOut = "Check this out: Ecosia plants trees every time you search the web! 🌳\nJoin me and %@+ others and start planting today."
+        case downloadTheApp = "1. Download the app:"
+        case useMyInviteLink = "2. Use my ✨ invite link ✨ and we will both plant an extra tree 🌳\n(Android coming soon):"
         case seeWhatsNew = "See what's new"
         case ecosiaNewLook = "Ecosia has a new look, and we added an easy way for you to track your trees."
         case discoverEcosia = "Discover the new Ecosia"
@@ -178,5 +177,6 @@ extension String {
         case copy = "Copy"
         case moreSharingMethods = "More sharing methods"
         case copied = "Copied!"
+        case plantTreesWithMe = "Plant trees with me on Ecosia"
     }
 }
