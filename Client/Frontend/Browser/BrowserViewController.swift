@@ -71,7 +71,6 @@ class BrowserViewController: UIViewController {
     var isCrashAlertShowing: Bool = false
     var currentMiddleButtonState: MiddleButtonState?
     fileprivate var customSearchBarButton: UIBarButtonItem?
-    var updateState: TabUpdateState = .coldStart
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
 
