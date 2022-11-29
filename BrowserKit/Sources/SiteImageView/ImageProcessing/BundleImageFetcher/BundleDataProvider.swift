@@ -16,6 +16,8 @@ class DefaultBundleDataProvider: BundleDataProvider {
 
     private var bundle: Bundle {
         var bundle = Bundle.main
+        // Allows us to access bundle from extensions
+        // Taken from: https://stackoverflow.com/questions/26189060/get-the-main-app-bundle-from-within-extension
         if bundle.bundleURL.pathExtension == "appex" {
             // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
             let url = bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent()
