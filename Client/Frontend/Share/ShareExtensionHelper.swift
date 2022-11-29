@@ -6,14 +6,27 @@ import Foundation
 import Shared
 import MobileCoreServices
 
-class ShareExtensionHelper: NSObject {
-    fileprivate weak var selectedTab: Tab?
+class ShareExtensionHelper: NSObject, FeatureFlaggable {
+    private weak var selectedTab: Tab?
 
-    fileprivate let url: URL
-    fileprivate var onePasswordExtensionItem: NSExtensionItem!
-    fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
+    private let url: URL
+    private var onePasswordExtensionItem: NSExtensionItem!
+    private let browserFillIdentifier = "org.appextension.fill-browser-action"
 
-    fileprivate func isFile(url: URL) -> Bool { url.scheme == "file" }
+    var areShareSheetChangesEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) && !url.isFile
+    }
+
+    /// Exclude 'Add to Reading List' which currently uses Safari. If share sheet changes are enabled exclude
+    /// Copy from system to provide custom activity
+    private var excludingActivities: [UIActivity.ActivityType] {
+        guard areShareSheetChangesEnabled else {
+            return [UIActivity.ActivityType.addToReadingList]
+        }
+
+        return [UIActivity.ActivityType.addToReadingList,
+                UIActivity.ActivityType.copyToPasteboard]
+    }
 
     // Can be a file:// or http(s):// url
     init(url: URL, tab: Tab?) {
@@ -22,8 +35,35 @@ class ShareExtensionHelper: NSObject {
     }
 
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
-        var activityItems = [AnyObject]()
 
+        let activityItems = getActivityItems(url: url)
+        let appActivities = getApplicationActivities()
+        let activityViewController = UIActivityViewController(activityItems: activityItems,
+                                                              applicationActivities: appActivities)
+
+        activityViewController.excludedActivityTypes = excludingActivities
+
+        activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+            guard completed else {
+                completionHandler(completed, activityType)
+                return
+            }
+
+            completionHandler(completed, activityType)
+        }
+
+        return activityViewController
+    }
+
+    /// Get the data to be shared if the URL is a file we will share just the url if not we prepare
+    /// UIPrintInfo to get the option to print the page and tab URL and title
+    /// - Parameter url: url from the selected tab
+    /// - Returns: An array of elements to be shared
+    private func getActivityItems(url: URL) -> [Any] {
+        // If url is file return only url to be shared
+        guard !url.isFile else { return [url] }
+
+        var activityItems = [Any]()
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.jobName = (url.absoluteString as NSString).lastPathComponent
         printInfo.outputType = .general
@@ -39,42 +79,22 @@ class ShareExtensionHelper: NSObject {
         }
         activityItems.append(self)
 
-        var activityViewController: UIActivityViewController
-        if isFile(url: url) {
-            activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        } else {
-            activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+        return activityItems
+    }
+
+    private func getApplicationActivities() -> [UIActivity]? {
+        guard areShareSheetChangesEnabled else {
+            return nil
         }
 
-        // Hide 'Add to Reading List' which currently uses Safari.
-        // We would also hide View Later, if possible, but the exclusion list doesn't currently support
-        // third-party activity types (rdar://19430419).
-        activityViewController.excludedActivityTypes = [
-            UIActivity.ActivityType.addToReadingList,
-        ]
+        var appActivities = [UIActivity]()
+        let copyLinkActivity = CopyLinkActivity(activityType: .copyLink, url: url)
+        appActivities.append(copyLinkActivity)
 
-        // This needs to be ready by the time the share menu has been displayed and
-        // activityViewController(activityViewController:, activityType:) is called,
-        // which is after the user taps the button. So a million cycles away.
-        guard (selectedTab?.webView) != nil else {
-            return activityViewController
-        }
+        let sendToDeviceActivity = SendToDeviceActivity(activityType: .sendToDevice, url: url)
+        appActivities.append(sendToDeviceActivity)
 
-        activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
-            if !completed {
-                completionHandler(completed, activityType)
-                return
-            }
-            // Bug 1392418 - When copying a url using the share extension there are 2 urls in the pasteboard.
-            // This is a iOS 11.0 bug. Fixed in 11.2
-            if UIPasteboard.general.hasURLs, let url = UIPasteboard.general.urls?.first {
-                UIPasteboard.general.urls = [url]
-            }
-
-            completionHandler(completed, activityType)
-        }
-
-        return activityViewController
+        return appActivities
     }
 }
 
@@ -100,7 +120,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
         if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
         } else if isOpenByCopy(activityType: activityType) {
-            return isFile(url: url) ? kUTTypeFileURL as String : kUTTypeURL as String
+            return url.isFile ? kUTTypeFileURL as String : kUTTypeURL as String
         }
 
         return activityType == nil ? browserFillIdentifier : kUTTypeURL as String

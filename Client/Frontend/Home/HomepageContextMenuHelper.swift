@@ -23,7 +23,9 @@ extension HomepageContextMenuHelperDelegate {
 class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
+    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
     private var viewModel: HomepageViewModel
+    weak var sendToDeviceDelegate: SendToDeviceDelegate?
 
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
@@ -103,7 +105,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
         let openInNewTabAction = getOpenInNewTabAction(siteURL: siteURL, sectionType: .pocket)
         let openInNewPrivateTabAction = getOpenInNewPrivateTabAction(siteURL: siteURL)
-        let shareAction = getShareAction(siteURL: siteURL, sourceView: sourceView)
+        let shareAction = getShareAction(site: site, sourceView: sourceView)
         let bookmarkAction = getBookmarkAction(site: site)
 
         return [openInNewTabAction, openInNewPrivateTabAction, bookmarkAction, shareAction]
@@ -164,10 +166,22 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         })
     }
 
-    private func getShareAction(siteURL: URL, sourceView: UIView?) -> PhotonRowActions {
+    /// Handles share from Long press on Pocket article
+    /// - Parameters:
+    ///   - site: Site for pocket article
+    ///   - sourceView: View to show the popover
+    /// - Returns: Share action
+    private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle, iconString: ImageIdentifiers.share, tapHandler: { _ in
-            let helper = ShareExtensionHelper(url: siteURL, tab: nil)
-            let controller = helper.createActivityViewController { (_, _) in }
+            guard let url = URL(string: site.url) else { return }
+
+            let helper = ShareExtensionHelper(url: url, tab: nil)
+            let controller = helper.createActivityViewController { (_, activityType) in
+                if activityType == CustomActivityAction.sendToDevice.actionType {
+                    self.showSendToDevice(site: site)
+                }
+            }
+
             if UIDevice.current.userInterfaceIdiom == .pad,
                let popoverController = controller.popoverPresentationController,
                let getSourceRect = self.getPopoverSourceRect {
@@ -180,6 +194,25 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
             self.delegate?.presentWithModalDismissIfNeeded(controller, animated: true)
         }).items
+    }
+
+    private func showSendToDevice(site: Site) {
+        guard let delegate = sendToDeviceDelegate else { return }
+
+        let themeColors = viewModel.theme.colors
+
+        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
+                                               textColor: themeColors.textPrimary,
+                                               iconColor: themeColors.iconPrimary)
+        let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+        let helper = SendToDeviceHelper(shareItem: shareItem,
+                                        profile: viewModel.profile,
+                                        colors: colors,
+                                        delegate: delegate)
+        let viewController = helper.initialViewController()
+
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
+        self.delegate?.presentWithModalDismissIfNeeded(viewController, animated: true)
     }
 
     // MARK: - Top sites

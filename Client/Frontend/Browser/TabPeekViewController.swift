@@ -178,10 +178,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             guard let clientGUIDs = $0.successValue else { return }
 
             self.hasRemoteClients = !clientGUIDs.isEmpty
-            let clientPickerController = DevicePickerViewController()
+            let clientPickerController = DevicePickerViewController(profile: browserProfile)
             clientPickerController.pickerDelegate = clientPickerDelegate
             clientPickerController.profile = browserProfile
-            clientPickerController.profileNeedsShutdown = false
             if let url = tab.url?.absoluteString {
                 clientPickerController.shareItem = ShareItem(url: url, title: tab.title, favicon: nil)
             }

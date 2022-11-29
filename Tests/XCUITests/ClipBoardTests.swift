@@ -74,7 +74,9 @@ class ClipBoardTests: BaseTestCase {
         waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         navigator.goto(BrowserTabMenu)
-        navigator.performAction(Action.CopyAddressPAM)
+        navigator.performAction(Action.ShareBrowserTabMenuOption)
+        waitForExistence(app.buttons["Copy"], timeout: 15)
+        app.buttons["Copy"].tap()
 
         checkCopiedUrl()
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])

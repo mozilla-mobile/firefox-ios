@@ -427,6 +427,10 @@ extension URL {
 // Extensions to deal with ReaderMode URLs
 
 extension URL {
+    public var isFile: Bool {
+        return self.scheme == "file"
+    }
+
     public var isReaderModeURL: Bool {
         let scheme = self.scheme, host = self.host, path = self.path
         return scheme == "http" && host == "localhost" && path == "/reader-mode/page"
