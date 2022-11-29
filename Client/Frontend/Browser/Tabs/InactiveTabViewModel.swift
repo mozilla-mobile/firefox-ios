@@ -17,11 +17,6 @@ struct InactiveTabStates: Codable {
     var nextState: InactiveTabStatus?
 }
 
-enum TabUpdateState {
-    case coldStart
-    case sameSession
-}
-
 struct InactiveTabModel: Codable {
 
     // Contains [TabUUID String : InactiveTabState current or for next launch]
@@ -69,6 +64,13 @@ class InactiveTabViewModel {
     var inactiveTabs = [Tab]()
     var activeTabs = [Tab]()
 
+    private var appSessionManager: AppSessionProvider
+
+    init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve()) {
+        self.appSessionManager = appSessionManager
+
+    }
+
     func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) {
         self.allTabs = tabs
         self.selectedTab = selectedTab
@@ -76,11 +78,8 @@ class InactiveTabViewModel {
 
         inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
 
-        let bvc = BrowserViewController.foregroundBVC()
-        // First time starting up with this feature we'll have cold start as update state
-        // after updating model we can mark tabs that needs to become inactive
-        updateModelState(state: bvc.updateState)
-        bvc.updateState = bvc.updateState == .coldStart ? .sameSession : bvc.updateState
+        updateModelState(state: appSessionManager.tabUpdateState)
+        appSessionManager.tabUpdateState = .sameSession
 
         updateFilteredTabs()
     }
