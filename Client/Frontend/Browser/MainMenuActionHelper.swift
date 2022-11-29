@@ -46,6 +46,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     // swiftlint: disable large_tuple
     typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
     // swiftlint: enable large_tuple
+    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     private let isHomePage: Bool
     private let buttonView: UIButton
@@ -61,6 +62,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
+    weak var sendToDeviceDelegate: SendToDeviceDelegate?
 
     /// MainMenuActionHelper init
     /// - Parameters:
@@ -246,11 +248,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             let shortAction = getShortcutAction()
             append(to: &section, action: shortAction)
 
-            let copyAction = getCopyAction()
-            append(to: &section, action: copyAction)
+            if !featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) {
+                let copyAction = getCopyAction()
+                append(to: &section, action: copyAction)
 
-            let sendToDeviceAction = getSendToDevice()
-            append(to: &section, action: sendToDeviceAction)
+                let sendToDeviceAction = getSendToDevice()
+                append(to: &section, action: sendToDeviceAction)
+            }
 
             let shareAction = getShareAction()
             append(to: &section, action: shareAction)
@@ -358,32 +362,26 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getSendToDevice() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.TouchActions.SendLinkToDeviceTitle,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
-            guard let bvc = self.menuActionDelegate as? InstructionsViewDelegate & DevicePickerViewControllerDelegate
+            guard let delegate = self.sendToDeviceDelegate,
+                  let selectedTab = self.selectedTab,
+                  let url = selectedTab.url
             else { return }
 
-            if !self.profile.hasAccount() {
-                let colors = self.themeManager.currentTheme.colors
-                let instructionsView = InstructionsView(backgroundColor: colors.layer1,
-                                                        textColor: colors.textPrimary,
-                                                        imageColor: colors.iconPrimary,
-                                                        dismissAction: {
-                    bvc.dismissInstructionsView()
-                })
-                let hostingViewController = UIHostingController(rootView: instructionsView)
-                let navigationController = UINavigationController(rootViewController: hostingViewController)
-                navigationController.modalPresentationStyle = .formSheet
-                self.delegate?.showViewController(viewController: navigationController)
-                return
-            }
+            let themeColors = self.themeManager.currentTheme.colors
+            let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
+                                                   textColor: themeColors.textPrimary,
+                                                   iconColor: themeColors.iconPrimary)
 
-            let devicePickerViewController = DevicePickerViewController()
-            devicePickerViewController.pickerDelegate = bvc
-            devicePickerViewController.profile = self.profile
-            devicePickerViewController.profileNeedsShutdown = false
-            let navigationController = UINavigationController(rootViewController: devicePickerViewController)
-            navigationController.modalPresentationStyle = .formSheet
+            let shareItem = ShareItem(url: url.absoluteString,
+                                      title: selectedTab.title,
+                                      favicon: selectedTab.displayFavicon)
+            let helper = SendToDeviceHelper(shareItem: shareItem,
+                                            profile: self.profile,
+                                            colors: colors,
+                                            delegate: delegate)
+
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
-            self.delegate?.showViewController(viewController: navigationController)
+            self.delegate?.showViewController(viewController: helper.initialViewController())
         }.items
     }
 
@@ -594,6 +592,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         }.items
     }
 
+    // Main menu option Share page with when opening a file
     private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
         let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
         let controller = helper.createActivityViewController { completed, activityType in

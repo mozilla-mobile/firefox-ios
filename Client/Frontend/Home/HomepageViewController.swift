@@ -12,6 +12,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
+    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
@@ -19,6 +20,12 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     weak var browserBarViewDelegate: BrowserBarViewDelegate? {
         didSet {
             viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
+        }
+    }
+
+    weak var sendToDeviceDelegate: SendToDeviceDelegate? {
+        didSet {
+            contextMenuHelper.sendToDeviceDelegate = sendToDeviceDelegate
         }
     }
 
