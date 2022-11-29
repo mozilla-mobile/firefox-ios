@@ -7,11 +7,9 @@ import Kingfisher
 
 protocol SiteImageFetcher {
     /// Fetches an image from a specific URL
-    /// - Parameters:
-    ///   - imageURL: Given a certain image URL
-    ///   - completion: The return will be an image or an image error following Result type
-    func fetchImage(imageURL: URL,
-                    completion: @escaping ((Result<UIImage, ImageError>) -> Void))
+    /// - Parameter imageURL: Given a certain image URL
+    /// - Returns: An image or an image error following Result type
+    func fetchImage(from imageURL: URL) async -> Result<UIImage, ImageError>
 }
 
 struct DefaultSiteImageFetcher: SiteImageFetcher {
@@ -22,16 +20,14 @@ struct DefaultSiteImageFetcher: SiteImageFetcher {
         self.imageDownloader = imageDownloader
     }
 
-    func fetchImage(imageURL: URL,
-                    completion: @escaping ((Result<UIImage, ImageError>) -> Void)) {
-        imageDownloader.downloadImage(with: imageURL,
-                                      completionHandler: { result in
-            switch result {
-            case .success(let value):
-                completion(.success(value.image))
-            case .failure(let error):
-                completion(.failure(ImageError.unableToDownloadImage(error.errorDescription ?? "No description")))
-            }
-        })
+    func fetchImage(from imageURL: URL) async -> Result<UIImage, ImageError> {
+        let result = await imageDownloader.downloadImage(with: imageURL)
+
+        switch result {
+        case .success(let value):
+            return .success(value.image)
+        case .failure(let error):
+            return .failure(ImageError.unableToDownloadImage(error.errorDescription ?? "No description"))
+        }
     }
 }
