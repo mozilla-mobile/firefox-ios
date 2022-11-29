@@ -12,7 +12,7 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
-    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView)
+    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
@@ -24,12 +24,12 @@ class TabLocationView: UIView, FeatureFlaggable {
     
     // MARK: UX
     struct UX {
-        static let HostFontColor = UIColor.black
-        static let BaseURLFontColor = UIColor.Photon.Grey50
-        static let Spacing: CGFloat = 8
-        static let StatusIconSize: CGFloat = 18
-        static let ButtonSize: CGFloat = 40
-        static let URLBarPadding = 4
+        static let hostFontColor = UIColor.black
+        static let baseURLFontColor = UIColor.Photon.Grey50
+        static let spacing: CGFloat = 8
+        static let statusIconSize: CGFloat = 18
+        static let buttonSize: CGFloat = 40
+        static let urlBarPadding = 4
     }
 
     // MARK: Variables
@@ -40,15 +40,15 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     private let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
 
-    @objc dynamic var baseURLFontColor: UIColor = UX.BaseURLFontColor {
+    @objc dynamic var baseURLFontColor: UIColor = UX.baseURLFontColor {
         didSet { updateTextWithURL() }
     }
 
     var url: URL? {
         didSet {
             updateTextWithURL()
-            trackingProtectionButton.isHidden = isValidHttpUrlProtocol
-            shareButton.isHidden = !shouldEnableShareButtonFeature && isValidHttpUrlProtocol
+            trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
+            shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
             setNeedsUpdateConstraints()
         }
     }
@@ -165,14 +165,14 @@ class TabLocationView: UIView, FeatureFlaggable {
         contentView.edges(equalTo: self)
 
         NSLayoutConstraint.activate([
-            trackingProtectionButton.widthAnchor.constraint(equalToConstant: UX.ButtonSize),
-            trackingProtectionButton.heightAnchor.constraint(equalToConstant: UX.ButtonSize),
-            readerModeButton.widthAnchor.constraint(equalToConstant: UX.ButtonSize),
-            readerModeButton.heightAnchor.constraint(equalToConstant: UX.ButtonSize),
-            shareButton.heightAnchor.constraint(equalToConstant: UX.ButtonSize),
-            shareButton.widthAnchor.constraint(equalToConstant: UX.ButtonSize),
-            reloadButton.widthAnchor.constraint(equalToConstant: UX.ButtonSize),
-            reloadButton.heightAnchor.constraint(equalToConstant: UX.ButtonSize),
+            trackingProtectionButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            trackingProtectionButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            readerModeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            readerModeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            shareButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            shareButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            reloadButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            reloadButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
         ])
 
         // Setup UIDragInteraction to handle dragging the location
@@ -245,7 +245,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     @objc func didPressShareButton(_ button: UIButton) {
-        delegate?.tabLocationViewDidTapShare(self)
+        delegate?.tabLocationViewDidTapShare(self, button: shareButton)
     }
 
     @objc func readerModeCustomAction() -> Bool {
@@ -268,7 +268,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 // MARK: - Private
 private extension TabLocationView {
     var isValidHttpUrlProtocol: Bool {
-        !["https", "http"].contains(url?.scheme ?? "")
+        ["https", "http"].contains(url?.scheme ?? "")
     }
 
     func setReaderModeState(_ newReaderModeState: ReaderModeState) {
