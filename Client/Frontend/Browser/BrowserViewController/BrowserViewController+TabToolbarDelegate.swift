@@ -88,6 +88,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                                               showFXASyncAction: presentSignInViewController)
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
+        menuHelper.sendToDeviceDelegate = self
 
         menuHelper.getToolbarActions(navigationController: navigationController) { actions in
             let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(trait: self.traitCollection, isBottomSearchBar: self.isBottomSearchBar)
