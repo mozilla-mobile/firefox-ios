@@ -36,6 +36,7 @@ struct DefaultBrowserOnboardingView: View {
                         .padding(.bottom, .firstSubtitleBottomPadding)
                     Text(viewModel.defaultBrowserConfig.secondSubtitle)
                 }
+                .font(.body16)
             }
             .foregroundColor(.secondOnboardingScreenText)
             Spacer()
