@@ -633,18 +633,12 @@ class SearchViewController: SiteTableViewController,
         reloadData()
     }
 
-    func getAttributedBoldSearchSuggestions(searchPhrase: String, query: String) -> NSAttributedString {
-        let boldAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: DynamicFontHelper().DefaultStandardFont.pointSize)]
-        let regularAttributes = [NSAttributedString.Key.font: DynamicFontHelper().DefaultStandardFont]
-        let attributedString = NSMutableAttributedString(string: "", attributes: regularAttributes)
-        let phraseString = NSAttributedString(string: searchPhrase, attributes: regularAttributes)
+    func getAttributedBoldSearchSuggestions(searchPhrase: String, query: String) -> NSAttributedString? {
         let suggestion = searchPhrase.components(separatedBy: query)
-        guard searchPhrase != query, suggestion.count > 1 else { return phraseString }
-        // split suggestion into searchQuery and suggested part
-        let searchString = NSAttributedString(string: query, attributes: regularAttributes)
-        let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: boldAttributes)
-        attributedString.append(searchString)
-        attributedString.append(restOfSuggestion)
+        guard searchPhrase != query, suggestion.count > 1 else { return nil }
+
+        let attributedString = searchPhrase.attributedText(boldString: suggestion[1],
+                                                           font: DynamicFontHelper().DefaultStandardFont)
         return attributedString
     }
 
@@ -654,8 +648,9 @@ class SearchViewController: SiteTableViewController,
         case .searchSuggestions:
             if let site = suggestions?[indexPath.row] {
                 oneLineCell.titleLabel.text = site
-                if Locale.current.languageCode == "en" {
-                    oneLineCell.titleLabel.attributedText = getAttributedBoldSearchSuggestions(searchPhrase: site, query: savedQuery)
+                if Locale.current.languageCode == "en",
+                    let attributedString = getAttributedBoldSearchSuggestions(searchPhrase: site, query: savedQuery) {
+                    oneLineCell.titleLabel.attributedText = attributedString
                 }
                 oneLineCell.leftImageView.contentMode = .center
                 oneLineCell.leftImageView.layer.borderWidth = 0
