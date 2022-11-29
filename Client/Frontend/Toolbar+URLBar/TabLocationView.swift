@@ -21,7 +21,7 @@ protocol TabLocationViewDelegate: AnyObject {
 }
 
 class TabLocationView: UIView, FeatureFlaggable {
-    
+
     // MARK: UX
     struct UX {
         static let hostFontColor = UIColor.black
@@ -52,7 +52,7 @@ class TabLocationView: UIView, FeatureFlaggable {
             setNeedsUpdateConstraints()
         }
     }
-    
+
     var shouldEnableShareButtonFeature: Bool {
         guard featureFlags.isFeatureEnabled(.shareToolbarChanges, checking: .buildOnly) else {
             return false

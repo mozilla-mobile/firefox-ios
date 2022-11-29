@@ -774,7 +774,7 @@ extension URLBarView: TabLocationViewDelegate {
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
     }
-    
+
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton) {
         delegate?.urlBarDidPressShare(self, shareView: button)
     }
