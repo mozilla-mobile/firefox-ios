@@ -96,6 +96,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox screen
         let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
+        waitForExistence(signInToFirefoxStaticText)
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
@@ -194,83 +195,99 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
     // Only testing Share and Copy Link, the other two options are already covered in other tests
-    func testCopyLink() {
-        longPressLinkOptions(optionSelected: "Copy Link")
-        navigator.goto(NewTabScreen)
-        app.textFields["url"].press(forDuration: 2)
-
-        waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.paste].tap()
-        app.buttons["Go"].tap()
-        waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
-    }
-
-    func testCopyLinkPrivateMode() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        longPressLinkOptions(optionSelected: "Copy Link")
-        navigator.goto(NewTabScreen)
-        waitForExistence(app.textFields["url"])
-        app.textFields["url"].press(forDuration: 2)
-
-        app.tables.otherElements[ImageIdentifiers.paste].tap()
-        app.buttons["Go"].tap()
-        waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
-    }
-
-    func testLongPressOnAddressBar() {
-        // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
-        app.textFields["address"].typeText("www.google.com")
-        // Tapping two times when the text is not selected will reveal the menu
-        app.textFields["address"].tap()
-        waitForExistence(app.textFields["address"])
-        app.textFields["address"].tap()
-        waitForExistence(app.menuItems["Select All"])
-        XCTAssertTrue(app.menuItems["Select All"].exists)
-        XCTAssertTrue(app.menuItems["Select"].exists)
-
-        // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
-        app.menuItems["Select All"].tap()
-        waitForExistence(app.menuItems["Copy"])
-        if iPad() {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
+    func testCopyLink() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("Copy & paste may not work on M1")
         } else {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            longPressLinkOptions(optionSelected: "Copy Link")
+            navigator.goto(NewTabScreen)
+            app.textFields["url"].press(forDuration: 2)
+
+            waitForExistence(app.tables["Context Menu"])
+            app.tables.otherElements[ImageIdentifiers.paste].tap()
+            app.buttons["Go"].tap()
+            waitUntilPageLoad()
+            waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
         }
+    }
 
-        app.textFields["address"].typeText("\n")
-        waitUntilPageLoad()
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-
-        app.textFields["url"].press(forDuration: 3)
-        app.tables.otherElements[ImageIdentifiers.copyLink].tap()
-
-        sleep(2)
-        app.textFields["url"].tap()
-        // Since the textField value appears all selected first time is clicked
-        // this workaround is necessary
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        app.textFields["address"].tap()
-        waitForExistence(app.menuItems["Copy"])
-        if iPad() {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
+    func testCopyLinkPrivateMode() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("Copy & paste may not work on M1")
         } else {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            longPressLinkOptions(optionSelected: "Copy Link")
+            navigator.goto(NewTabScreen)
+            waitForExistence(app.textFields["url"])
+            app.textFields["url"].press(forDuration: 2)
+
+            app.tables.otherElements[ImageIdentifiers.paste].tap()
+            app.buttons["Go"].tap()
+            waitUntilPageLoad()
+            waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
+        }
+    }
+
+    func testLongPressOnAddressBar() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            // Long press on the URL requires copy & paste permission
+            throw XCTSkip("Copy & paste may not work on M1")
+        } else {
+            // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
+            app.textFields["address"].typeText("www.google.com")
+            // Tapping two times when the text is not selected will reveal the menu
+            app.textFields["address"].tap()
+            waitForExistence(app.textFields["address"])
+            app.textFields["address"].tap()
+            waitForExistence(app.menuItems["Select All"])
+            XCTAssertTrue(app.menuItems["Select All"].exists)
+            XCTAssertTrue(app.menuItems["Select"].exists)
+
+            // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
+            app.menuItems["Select All"].tap()
+            waitForExistence(app.menuItems["Copy"])
+            if iPad() {
+                XCTAssertTrue(app.menuItems["Copy"].exists)
+                XCTAssertTrue(app.menuItems["Cut"].exists)
+                XCTAssertTrue(app.menuItems["Paste"].exists)
+                XCTAssertTrue(app.menuItems["Open Link"].exists)
+                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
+                XCTAssertTrue(app.menuItems["Share…"].exists)
+                XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+            } else {
+                XCTAssertTrue(app.menuItems["Copy"].exists)
+                XCTAssertTrue(app.menuItems["Cut"].exists)
+                XCTAssertTrue(app.menuItems["Paste"].exists)
+                XCTAssertTrue(app.menuItems["Open Link"].exists)
+            }
+
+            app.textFields["address"].typeText("\n")
+            waitUntilPageLoad()
+            waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+
+            app.textFields["url"].press(forDuration: 3)
+            app.tables.otherElements[ImageIdentifiers.copyLink].tap()
+
+            sleep(2)
+            app.textFields["url"].tap()
+            // Since the textField value appears all selected first time is clicked
+            // this workaround is necessary
+            waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+            app.textFields["address"].tap()
+            waitForExistence(app.menuItems["Copy"])
+            if iPad() {
+                XCTAssertTrue(app.menuItems["Cut"].exists)
+                XCTAssertTrue(app.menuItems["Copy"].exists)
+                XCTAssertTrue(app.menuItems["Open Link"].exists)
+                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
+                XCTAssertTrue(app.menuItems["Paste"].exists)
+            } else {
+                XCTAssertTrue(app.menuItems["Copy"].exists)
+                XCTAssertTrue(app.menuItems["Cut"].exists)
+                XCTAssertTrue(app.menuItems["Open Link"].exists)
+            }
         }
     }
 
