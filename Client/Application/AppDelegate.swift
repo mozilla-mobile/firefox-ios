@@ -68,7 +68,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Ecosia: pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
         // Ecosia: Disable BG sync //backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
-
+        // Ecosia: lifecycle tracking
+        Analytics.shared.activity(.launch)
         return true
     }
 
@@ -171,6 +172,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: browserViewController)
 
         completionHandler(handledShortCutItem)
+    }
+
+    // Ecosia: lifecycle tracking
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        Analytics.shared.activity(.resume)
     }
 }
 
