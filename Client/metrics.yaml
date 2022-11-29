@@ -3019,9 +3019,9 @@ share_sheet:
       Counts the number of times a user taps send to device
       button from Share Sheet actions
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12472
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-5226
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12472
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12526
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
@@ -3031,9 +3031,9 @@ share_sheet:
       Counts the number of times a user taps copy
       button from Share Sheet actions
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12472
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-5226
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12472
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12526
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
