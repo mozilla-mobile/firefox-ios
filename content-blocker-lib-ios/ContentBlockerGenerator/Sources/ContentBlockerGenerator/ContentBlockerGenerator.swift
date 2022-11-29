@@ -2,10 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-// We expect this command to be executed as 'cd <dir of swift package>; swift run',
-// if not, use the fallback path generated from the path to main.swift. Running from
-// an xcodeproj will use fallbackPath.
-
 import Foundation
 
 @main
@@ -20,10 +16,13 @@ public struct ContentBlockerGenerator {
     }
 
     private let fileManager: FileManager
+    // We expect this command to be executed as 'cd <dir of swift package>; swift run',
+    // if not, use the fallback path generated from the path to main.swift. Running from
+    // an xcodeproj will use fallbackPath.
     private let fallbackPath: String = (#file as NSString).deletingLastPathComponent + "/../.."
     private let contentBlockerParser: ContentBlockerParser
     private let outputDir: URL
-    private let rootdir: String
+    private let rootDirectory: String
 
     init(fileManager: FileManager = FileManager.default,
          contentBlockerParser: ContentBlockerParser = ContentBlockerParser()) {
@@ -31,42 +30,60 @@ public struct ContentBlockerGenerator {
         self.contentBlockerParser = contentBlockerParser
 
         let execIsFromCorrectDir = fileManager.fileExists(atPath: fileManager.currentDirectoryPath + "/Package.swift")
-        rootdir = execIsFromCorrectDir ? fileManager.currentDirectoryPath : fallbackPath
-        outputDir = URL(fileURLWithPath: "\(rootdir)/../Lists")
+        self.rootDirectory = execIsFromCorrectDir ? fileManager.currentDirectoryPath : fallbackPath
 
-        let entityList = "\(rootdir)/../../shavar-prod-lists/disconnect-entitylist.json"
-        contentBlockerParser.parseEntityList(json: jsonFrom(filename: entityList))
+        self.outputDir = URL(fileURLWithPath: "\(rootDirectory)/../Lists")
+        let entityList = FileCategory.entity.getPath(rootDirectory: rootDirectory)
+        let jsonList = JsonHelper().jsonEntityListFrom(filename: entityList)
+        contentBlockerParser.parseEntityList(json: jsonList)
 
         createDirectory()
     }
 
     func generateList() {
-        write(to: outputDir, action: .blockAll, categories: [.Advertising, .Analytics, .Social, .Cryptomining])
-        write(to: outputDir, action: .blockCookies, categories: [.Advertising, .Analytics, .Social, .Content])
+        write(to: outputDir, actionType: .blockAll, categories: [.advertising, .analytics, .social, .cryptomining, .fingerprinting])
+        write(to: outputDir, actionType: .blockCookies, categories: [.advertising, .analytics, .social])
     }
 
+    // MARK: - Private
+
+    /// Remove and create the output dir
     private func createDirectory() {
-        // Remove and create the output dir
-        try? fileManager.removeItem(at: outputDir)
-        try! fileManager.createDirectory(at: outputDir, withIntermediateDirectories: false, attributes: nil)
-    }
-
-    private func write(to outputDir: URL, action: Action, categories: [CategoryTitle]) {
-        for categoryTitle in categories {
-            let blocklist = "\(rootdir)/../../shavar-prod-lists/disconnect-blacklist.json"
-            let result = contentBlockerParser.parseBlocklist(json: jsonFrom(filename: blocklist),
-                                                             action: action,
-                                                             categoryTitle: categoryTitle)
-            let actionName = action == .blockAll ? "block" : "block-cookies"
-            let outputFile = "\(outputDir.path)/disconnect-\(actionName)-\(categoryTitle.rawValue.lowercased()).json"
-            let output = "[\n" + result.joined(separator: ",\n") + "\n]"
-            try! output.write(to: URL(fileURLWithPath: outputFile), atomically: true, encoding: .utf8)
+        do {
+            try fileManager.removeItem(at: outputDir)
+            try fileManager.createDirectory(at: outputDir, withIntermediateDirectories: false, attributes: nil)
+        } catch {
+            fatalError("Could not create directory")
         }
     }
 
-    private func jsonFrom(filename: String) -> [String: Any] {
-        let file = URL(fileURLWithPath: filename)
-        let data = try! Data(contentsOf: file)
-        return try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+    private func write(to outputDir: URL,
+                       actionType: ActionType,
+                       categories: [FileCategory]) {
+
+        for categoryTitle in categories {
+            let fileContent = generateFileContent(actionType: actionType, categoryTitle: categoryTitle)
+            let fileLocation = categoryTitle.getOutputFile(outputDirectory: outputDir.path, actionType: actionType)
+            let fileURL = URL(fileURLWithPath: fileContent)
+
+            do {
+                try fileContent.write(to: fileURL, atomically: true, encoding: .utf8)
+            } catch {
+                fatalError("Could not write to file \(categoryTitle.rawValue) with action \(actionType.rawValue)")
+            }
+        }
+    }
+
+    private func generateFileContent(actionType: ActionType,
+                                     categoryTitle: FileCategory) -> String {
+
+        let fileName = categoryTitle.getPath(rootDirectory: rootDirectory)
+        let jsonFile = JsonHelper().jsonListFrom(filename: fileName)
+        let result = contentBlockerParser.newParseFile(json: jsonFile,
+                                                       actionType: actionType,
+                                                       categoryTitle: categoryTitle)
+
+
+        return "[\n" + result.joined(separator: ",\n") + "\n]"
     }
 }
