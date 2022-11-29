@@ -32,12 +32,9 @@ class StartAtHomeHelperTests: XCTestCase {
     }
 
     func testShouldNotSkipStartAtHome() throws {
-        let mockAppSessionManager = MockAppSessionManager()
-        mockAppSessionManager.launchSessionProvider.activationState = .resume
-
-        setupHelper(appSessionManager: mockAppSessionManager)
+        setupHelper()
         let shouldSkip = helper.shouldSkipStartHome
-        
+
         XCTAssertFalse(shouldSkip, "Should not skip StartAtHome")
     }
 
@@ -55,16 +52,6 @@ class StartAtHomeHelperTests: XCTestCase {
         let shouldSkip = helper.shouldSkipStartHome
 
         XCTAssert(shouldSkip, "Expected to skip because the app was opened from an external source.")
-    }
-
-    func test_shouldSkipStartAtHome_appActivationStateIsLaunch() {
-        let mockAppSessionManager = MockAppSessionManager()
-        mockAppSessionManager.launchSessionProvider.activationState = .launch
-
-        setupHelper(appSessionManager: mockAppSessionManager)
-        let shouldSkip = helper.shouldSkipStartHome
-
-        XCTAssert(shouldSkip, "Expected to skip because the activationState is launch.")
     }
 
     func testNotShouldStartAtHome_AfterFourHours() {

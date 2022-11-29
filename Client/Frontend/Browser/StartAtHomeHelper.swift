@@ -24,8 +24,7 @@ class StartAtHomeHelper: FeatureFlaggable {
         return isRunningUITest ||
         DebugSettingsBundleOptions.skipSessionRestore ||
         isRestoringTabs ||
-        launchSessionProvider.openedFromExternalSource ||
-        launchSessionProvider.activationState == .launch
+        launchSessionProvider.openedFromExternalSource
     }
 
     /// Determines whether the Start at Home feature is enabled, how long it has been since

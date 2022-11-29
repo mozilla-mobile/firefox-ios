@@ -5,10 +5,7 @@
 @testable import Client
 import Foundation
 
-
 class MockLaunchSessionProvider: Client.LaunchSessionProviderProtocol {
-
-    var activationState: ActivationState = .launch
 
     var openedFromExternalSource: Bool = false
 

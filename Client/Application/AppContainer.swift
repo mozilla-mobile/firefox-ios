@@ -92,7 +92,7 @@ class AppContainer: ServiceProvider {
                         return DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
                     }
                 }
-                
+
                 container.register(.singleton) { () -> RatingPromptManager in
                     if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
                         return appDelegate.ratingPromptManager
