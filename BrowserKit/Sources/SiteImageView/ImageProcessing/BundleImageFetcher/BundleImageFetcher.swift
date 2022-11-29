@@ -13,7 +13,6 @@ protocol BundleImageFetcher {
 }
 
 // TODO:
-// - Modify to be testable
 // - Add unit tests
 
 class DefaultBundleImageFetcher: BundleImageFetcher {
@@ -32,6 +31,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         var domain: String
     }
 
+    private let bundleDataProvider: BundleDataProvider
     private var bundledImages = [String: FormattedBundledImage]()
 
     // Any time a bundled image couldn't be retrieved for a domain, this will be saved here
@@ -39,7 +39,8 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
     // In case no bundled images could be retrieved, this will be set
     private var emptyImagesError: ImageError?
 
-    init() {
+    init(bundleDataProvider: BundleDataProvider) {
+        self.bundleDataProvider = bundleDataProvider
         bundledImages = retrieveBundledImages()
     }
 
@@ -48,39 +49,23 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
            let image = UIImage(contentsOfFile: bundledImage.filePath) {
             let color = bundledImage.backgroundColor.cgColor.alpha < 0.01 ? UIColor.white : bundledImage.backgroundColor
             return .success(image.withBackgroundAndPadding(color: color))
+
         } else if let imageError = imagesErrors[domain] {
             return .failure(imageError)
+
         } else if let error = emptyImagesError {
             return .failure(error)
         }
-
-        return .failure(ImageError.unableToGetFromBundle("Could not retrieve image from bundle with domain \(domain)"))
-    }
-
-    private var bundle: Bundle {
-        var bundle = Bundle.main
-        if bundle.bundleURL.pathExtension == "appex" {
-            // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
-            let url = bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent()
-            if let otherBundle = Bundle(url: url) {
-                bundle = otherBundle
-            }
-        }
-        return bundle
+        return .failure(ImageError.unableToGetFromBundle(.noImage("Image with domain \(domain) isn't in bundle")))
     }
 
     private func retrieveBundledImages() -> [String: FormattedBundledImage] {
-        guard let filePath = bundle.path(forResource: "top_sites", ofType: "json") else {
-            emptyImagesError = ImageError.unableToGetFromBundle("No json resource could be retrieved")
-            return [:]
-        }
-
         do {
-            let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
+            let data = try bundleDataProvider.getBundleData()
             return decode(from: data)
 
         } catch let error {
-            emptyImagesError = ImageError.unableToGetFromBundle("Decoding from file failed due to: \(error)")
+            emptyImagesError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Decoding from file failed due to: \(error)"))
             return [:]
         }
     }
@@ -101,7 +86,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
             return icons
 
         } catch let error {
-            emptyImagesError = ImageError.unableToGetFromBundle("Decoding BundledImage failed due to: \(error)")
+            emptyImagesError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Decoding BundledImage failed due to: \(error)"))
             return icons
         }
     }
@@ -112,7 +97,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         let color = image.background_color
         let filePath = Bundle.main.path(forResource: "TopSites/" + path, ofType: "png")
         guard let filePath = filePath else {
-            imagesErrors[url] = ImageError.unableToGetFromBundle("No filepath for image path: \(path)")
+            imagesErrors[url] = ImageError.unableToGetFromBundle(.imageFormatting("No filepath for image path: \(path)"))
             return nil
         }
 
@@ -130,7 +115,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
 }
 
 // MARK: - Extension UIImage
-extension UIImage {
+private extension UIImage {
     func withBackgroundAndPadding(color: UIColor, opaque: Bool = true) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, opaque, scale)
 

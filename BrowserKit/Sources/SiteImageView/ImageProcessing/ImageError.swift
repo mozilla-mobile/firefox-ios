@@ -5,8 +5,15 @@
 import Foundation
 
 enum ImageError: Error, CustomStringConvertible {
+
+    enum BundleError {
+        case noBundleRetrieved(String)
+        case imageFormatting(String)
+        case noImage(String)
+    }
+
     case unableToDownloadImage(String)
-    case unableToGetFromBundle(String)
+    case unableToGetFromBundle(BundleError)
 
     var description: String {
         switch self {
