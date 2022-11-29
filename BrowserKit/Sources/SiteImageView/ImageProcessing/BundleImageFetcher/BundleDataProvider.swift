@@ -14,6 +14,14 @@ class DefaultBundleDataProvider: BundleDataProvider {
         case noPath
     }
 
+    func getBundleData() throws -> Data {
+        guard let path = bundle.path(forResource: "top_sites", ofType: "json") else {
+            throw BundleError.noPath
+        }
+
+        return try Data(contentsOf: URL(fileURLWithPath: path))
+    }
+
     private var bundle: Bundle {
         var bundle = Bundle.main
         // Allows us to access bundle from extensions
@@ -26,13 +34,5 @@ class DefaultBundleDataProvider: BundleDataProvider {
             }
         }
         return bundle
-    }
-
-    func getBundleData() throws -> Data {
-        guard let path = bundle.path(forResource: "top_sites", ofType: "json") else {
-            throw BundleError.noPath
-        }
-
-        return try Data(contentsOf: URL(fileURLWithPath: path))
     }
 }

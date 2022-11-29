@@ -34,10 +34,10 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
     private let bundleDataProvider: BundleDataProvider
     private var bundledImages = [String: FormattedBundledImage]()
 
-    // Any time a bundled image couldn't be retrieved for a domain, this will be saved here
+    // Any time a bundled image couldn't be retrieved for a domain, it will be saved here
     private var imagesErrors = [String: ImageError]()
     // In case no bundled images could be retrieved, this will be set
-    private var emptyImagesError: ImageError?
+    private var generalBundleError: ImageError?
 
     init(bundleDataProvider: BundleDataProvider) {
         self.bundleDataProvider = bundleDataProvider
@@ -53,7 +53,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         } else if let imageError = imagesErrors[domain] {
             return .failure(imageError)
 
-        } else if let error = emptyImagesError {
+        } else if let error = generalBundleError {
             return .failure(error)
         }
         return .failure(ImageError.unableToGetFromBundle(.noImage("Image with domain \(domain) isn't in bundle")))
@@ -65,7 +65,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
             return decode(from: data)
 
         } catch let error {
-            emptyImagesError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Decoding from file failed due to: \(error)"))
+            generalBundleError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Decoding from file failed due to: \(error)"))
             return [:]
         }
     }
@@ -86,7 +86,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
             return icons
 
         } catch let error {
-            emptyImagesError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Decoding BundledImage failed due to: \(error)"))
+            generalBundleError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Decoding BundledImage failed due to: \(error)"))
             return icons
         }
     }
