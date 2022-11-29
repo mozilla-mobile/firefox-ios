@@ -45,11 +45,11 @@ class SendToDeviceHelper {
             })
             let hostingViewController = UIHostingController(rootView: instructionsView)
             #if MOZ_TARGET_SHARETO
-            return hostingViewController
+                return hostingViewController
             #else
-            let navigationController = UINavigationController(rootViewController: hostingViewController)
-            navigationController.modalPresentationStyle = .formSheet
-            return navigationController
+                let navigationController = UINavigationController(rootViewController: hostingViewController)
+                navigationController.modalPresentationStyle = .formSheet
+                return navigationController
             #endif
         }
 
