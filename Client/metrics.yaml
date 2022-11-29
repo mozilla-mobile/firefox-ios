@@ -3015,7 +3015,7 @@ awesomebar:
       Counts the number of times a user taps share
       button on the awesomebar
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12472
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-5284
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/12472
     notification_emails:

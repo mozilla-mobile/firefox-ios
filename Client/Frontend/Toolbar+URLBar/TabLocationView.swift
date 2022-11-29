@@ -20,16 +20,19 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 
-struct TabLocationViewUX {
-    static let HostFontColor = UIColor.black
-    static let BaseURLFontColor = UIColor.Photon.Grey50
-    static let Spacing: CGFloat = 8
-    static let StatusIconSize: CGFloat = 18
-    static let ButtonSize: CGFloat = 40
-    static let URLBarPadding = 4
-}
-
 class TabLocationView: UIView, FeatureFlaggable {
+    
+    // MARK: UX
+    struct UX {
+        static let HostFontColor = UIColor.black
+        static let BaseURLFontColor = UIColor.Photon.Grey50
+        static let Spacing: CGFloat = 8
+        static let StatusIconSize: CGFloat = 18
+        static let ButtonSize: CGFloat = 40
+        static let URLBarPadding = 4
+    }
+
+    // MARK: Variables
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
@@ -37,7 +40,7 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     private let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
 
-    @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
+    @objc dynamic var baseURLFontColor: UIColor = UX.BaseURLFontColor {
         didSet { updateTextWithURL() }
     }
 
@@ -51,7 +54,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
     
     var shouldEnableShareButtonFeature: Bool {
-        guard featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) else {
+        guard featureFlags.isFeatureEnabled(.shareToolbarChanges, checking: .buildOnly) else {
             return false
         }
         return true
@@ -162,14 +165,14 @@ class TabLocationView: UIView, FeatureFlaggable {
         contentView.edges(equalTo: self)
 
         NSLayoutConstraint.activate([
-            trackingProtectionButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            trackingProtectionButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            readerModeButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            readerModeButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            shareButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            shareButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            reloadButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            reloadButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+            trackingProtectionButton.widthAnchor.constraint(equalToConstant: UX.ButtonSize),
+            trackingProtectionButton.heightAnchor.constraint(equalToConstant: UX.ButtonSize),
+            readerModeButton.widthAnchor.constraint(equalToConstant: UX.ButtonSize),
+            readerModeButton.heightAnchor.constraint(equalToConstant: UX.ButtonSize),
+            shareButton.heightAnchor.constraint(equalToConstant: UX.ButtonSize),
+            shareButton.widthAnchor.constraint(equalToConstant: UX.ButtonSize),
+            reloadButton.widthAnchor.constraint(equalToConstant: UX.ButtonSize),
+            reloadButton.heightAnchor.constraint(equalToConstant: UX.ButtonSize),
         ])
 
         // Setup UIDragInteraction to handle dragging the location
