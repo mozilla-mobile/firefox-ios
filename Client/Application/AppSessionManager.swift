@@ -5,7 +5,7 @@
 import Foundation
 
 protocol AppSessionProvider {
-    var inactiveTabsSessionProvider: InactiveTabsSessionProvider { get }
+    var tabUpdateState: TabUpdateState { get set }
 }
 
 /// `AppSessionManager` exists to track, mutate and (sometimes) persist session related properties. Each category of
@@ -15,11 +15,6 @@ protocol AppSessionProvider {
 /// into a smörgåsbord of countless properties. Consider all options before adding it here, but if it makes sense, go for it.
 struct AppSessionManager: AppSessionProvider {
 
-    var inactiveTabsSessionProvider: InactiveTabsSessionProvider
+    var tabUpdateState: TabUpdateState = .coldStart
 
-    init(
-        inactiveTabsSessionProvider: InactiveTabsSessionProvider = InactiveTabsSessionProvider()
-    ) {
-        self.inactiveTabsSessionProvider = inactiveTabsSessionProvider
-    }
 }

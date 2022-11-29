@@ -4,13 +4,8 @@
 
 import Foundation
 
+/// `TabUpdateState` relates to the Inactive Tabs feature.
 enum TabUpdateState {
     case coldStart
     case sameSession
-}
-
-class InactiveTabsSessionProvider {
-
-    var tabUpdateState: TabUpdateState = .coldStart
-
 }

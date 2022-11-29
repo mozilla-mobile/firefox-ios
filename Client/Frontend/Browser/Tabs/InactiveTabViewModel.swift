@@ -64,10 +64,10 @@ class InactiveTabViewModel {
     var inactiveTabs = [Tab]()
     var activeTabs = [Tab]()
 
-    private let inactiveTabsSessionProvider: InactiveTabsSessionProvider
+    private var appSessionManager: AppSessionProvider
 
-    init(sessionManager: AppSessionManager = AppContainer.shared.resolve()) {
-        self.inactiveTabsSessionProvider = sessionManager.inactiveTabsSessionProvider
+    init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve()) {
+        self.appSessionManager = appSessionManager
 
     }
 
@@ -78,8 +78,8 @@ class InactiveTabViewModel {
 
         inactiveTabModel.tabWithStatus = InactiveTabModel.get()?.tabWithStatus ?? [String: InactiveTabStates]()
 
-        updateModelState(state: inactiveTabsSessionProvider.tabUpdateState)
-        inactiveTabsSessionProvider.tabUpdateState = .sameSession
+        updateModelState(state: appSessionManager.tabUpdateState)
+        appSessionManager.tabUpdateState = .sameSession
 
         updateFilteredTabs()
     }

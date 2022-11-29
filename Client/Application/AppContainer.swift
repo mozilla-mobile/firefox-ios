@@ -79,12 +79,16 @@ class AppContainer: ServiceProvider {
                     }
                 }
 
-                container.register(.singleton) {
-                    return RatingPromptManager(profile: try container.resolve())
+                container.register(.singleton) { () -> AppSessionProvider in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.appSessionManager
+                    } else {
+                        return AppSessionManager()
+                    }
                 }
 
                 container.register(.singleton) {
-                    return AppSessionManager()
+                    return RatingPromptManager(profile: try container.resolve())
                 }
 
                 try container.bootstrap()
