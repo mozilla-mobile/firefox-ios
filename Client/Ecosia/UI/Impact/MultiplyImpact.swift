@@ -378,6 +378,7 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        User.shared.referralsEntryPointUsed()
         updateInviteLink()
     }
     
