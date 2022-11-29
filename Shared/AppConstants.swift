@@ -108,4 +108,7 @@ public struct AppConstants {
 
     /// Fixed short version for nightly builds
     public static let NIGHTLY_APP_VERSION = "9000"
+
+    /// Time that needs to pass before polling FxA for send tabs again, 86_400_000 milliseconds is 1 day
+    public static let FXA_COMMANDS_INTERVAL = 86_400_000
 }

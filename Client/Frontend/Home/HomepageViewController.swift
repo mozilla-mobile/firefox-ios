@@ -12,6 +12,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
+    typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     // MARK: - Operational Variables
     weak var homePanelDelegate: HomePanelDelegate?
@@ -19,6 +20,12 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     weak var browserBarViewDelegate: BrowserBarViewDelegate? {
         didSet {
             viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
+        }
+    }
+
+    weak var sendToDeviceDelegate: SendToDeviceDelegate? {
+        didSet {
+            contextMenuHelper.sendToDeviceDelegate = sendToDeviceDelegate
         }
     }
 
@@ -140,7 +147,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         wallpaperView.updateImageForOrientationChange()
 
         if UIDevice.current.userInterfaceIdiom == .pad {
-            reloadOnRotation()
+            reloadOnRotation(newSize: size)
         }
     }
 
@@ -150,7 +157,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
         if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            reloadOnRotation()
+            reloadOnRotation(newSize: view.frame.size)
         }
     }
 
@@ -220,7 +227,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
             else { return nil }
-            return viewModel.section(for: layoutEnvironment.traitCollection)
+            return viewModel.section(for: layoutEnvironment.traitCollection, size: self.view.frame.size)
         }
         return layout
     }
@@ -272,13 +279,13 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     /// On iPhone, we call reloadOnRotation when the trait collection has changed, to ensure calculation
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
-    private func reloadOnRotation() {
+    private func reloadOnRotation(newSize: CGSize) {
         if presentedViewController as? PhotonActionSheet != nil {
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
 
-        // Force the entire collectionview to re-layout
-        viewModel.refreshData(for: traitCollection)
+        // Force the entire collection view to re-layout
+        viewModel.refreshData(for: traitCollection, size: newSize)
         collectionView.reloadData()
         collectionView.collectionViewLayout.invalidateLayout()
 
@@ -773,7 +780,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
         ensureMainThread { [weak self] in
             guard let self = self else { return }
 
-            self.viewModel.refreshData(for: self.traitCollection)
+            self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
             self.collectionView.reloadData()
             self.collectionView.collectionViewLayout.invalidateLayout()
         }

@@ -52,8 +52,7 @@ class DevicePickerViewController: UITableViewController {
     }
 
     private var devices = [RemoteDevice]()
-    var profile: Profile?
-    var profileNeedsShutdown = true
+    var profile: Profile
     var pickerDelegate: DevicePickerViewControllerDelegate?
     private var selectedIdentifiers = Set<String>() // Stores Device.id
     private var notification: Any?
@@ -64,6 +63,16 @@ class DevicePickerViewController: UITableViewController {
     // And in this case we need to be able to store the item we are sharing as we may not have access to the
     // url later. Currently used only when sharing an item from the Tab Tray from a Preview Action.
     var shareItem: ShareItem?
+
+    init(profile: Profile) {
+        self.profile = profile
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,7 +103,6 @@ class DevicePickerViewController: UITableViewController {
             self?.refreshControl?.endRefreshing()
         }
 
-        let profile = ensureOpenProfile()
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { accountManager in
             accountManager.deviceConstellation()?.refreshState()
         }
@@ -109,7 +117,6 @@ class DevicePickerViewController: UITableViewController {
     }
 
     private func loadList() {
-        let profile = ensureOpenProfile()
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { [weak self] accountManager in
             guard let state = accountManager.deviceConstellation()?.state() else {
                 self?.loadingState = .loaded
@@ -253,25 +260,6 @@ class DevicePickerViewController: UITableViewController {
         } else {
             return tableView.frame.height
         }
-    }
-
-    fileprivate func ensureOpenProfile() -> Profile {
-        // If we were not given a profile, open the default profile. This happens in case we are called from an app
-        // extension. That also means that we need to shut down the profile, otherwise the app extension will be
-        // terminated when it goes into the background.
-        if let profile = self.profile {
-            // Re-open the profile if it was shutdown. This happens when we run from an app extension, where we must
-            // make sure that the profile is only open for brief moments of time.
-            if profile.isShutdown && Bundle.main.bundleURL.pathExtension == "appex" {
-                profile.reopen()
-            }
-            return profile
-        }
-
-        let profile = BrowserProfile(localName: "profile")
-        self.profile = profile
-        self.profileNeedsShutdown = true
-        return profile
     }
 
     @objc func refresh() {

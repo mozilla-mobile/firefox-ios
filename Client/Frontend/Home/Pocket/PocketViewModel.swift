@@ -137,7 +137,7 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
             textColor: textColor)
     }
 
-    func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+    func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(PocketStandardCell.UX.cellHeight)
@@ -193,10 +193,6 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     var hasData: Bool {
         return !pocketStoriesViewModels.isEmpty
     }
-
-    func refreshData(for traitCollection: UITraitCollection,
-                     isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {}
 
     func screenWasShown() {
         hasSentPocketSectionEvent = false

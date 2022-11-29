@@ -23,13 +23,15 @@ open class PushNotificationSetup {
             self.pushClient?.register(apnsToken) { [weak self] pushRegistration in
                 guard let pushRegistration = pushRegistration else { return }
                 self?.pushRegistration = pushRegistration
-                keychain.set(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
 
                 let subscription = pushRegistration.defaultSubscription
                 let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString,
                                                         publicKey: subscription.p256dhPublicKey,
                                                         authKey: subscription.authKey)
                 accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
+                // We set our apnsToken **after** the call to set the push subscription completes
+                // This helps ensure that if that call fails, we will try again with a new token next time
+                keychain.set(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
                 keychain.set(pushRegistration as NSCoding,
                              forKey: KeychainKey.fxaPushRegistration,
                              withAccessibility: .afterFirstUnlock)
