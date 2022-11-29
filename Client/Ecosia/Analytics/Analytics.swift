@@ -180,6 +180,13 @@ final class Analytics {
                               action: Action.claim.rawValue))
     }
 
+    func inviteCopy() {
+        tracker
+            .track(Structured(category: Category.invitations.rawValue,
+                              action: Action.click.rawValue)
+                    .label("link_copying"))
+    }
+
     func inviteLearnMore() {
         tracker
             .track(Structured(category: Category.invitations.rawValue,

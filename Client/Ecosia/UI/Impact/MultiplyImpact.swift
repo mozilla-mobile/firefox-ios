@@ -163,7 +163,6 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         copyLink.translatesAutoresizingMaskIntoConstraints = false
         copyLink.adjustsFontForContentSizeCategory = true
         copyLink.font = .preferredFont(forTextStyle: .body)
-        copyLink.text = inviteLink ?? "ecosia://invite/"
         copyLink.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         copyLink.numberOfLines = 1
         copyControl.addSubview(copyLink)
@@ -376,6 +375,11 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
 
         applyTheme()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateInviteLink()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -437,6 +441,21 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         navigationController?.navigationBar.backgroundColor = .theme.ecosia.modalHeader
         navigationController?.navigationBar.tintColor = UIColor.Dark.Text.primary
     }
+
+    private func updateInviteLink() {
+        guard let inviteLink = inviteLink else {
+            copyLink?.text = "-"
+            referrals.refresh(createCode: true) {[weak self] error in
+                if let error = error {
+                    self?.showObtainingCode(error)
+                } else {
+                    self?.updateInviteLink()
+                }
+            }
+            return
+        }
+        copyLink?.text = inviteLink
+    }
     
     @objc private func learnMore() {
         delegate?.yourImpact(didSelectURL: URL(string: "https://ecosia.helpscoutdocs.com/article/358-refer-a-friend-ios-only")!)
@@ -463,6 +482,7 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         }
         
         copyText?.text = .localized(.copied)
+        Analytics.shared.inviteCopy()
     }
     
     @objc private func inviteFriends() {
@@ -500,6 +520,17 @@ final class MultiplyImpact: UIViewController, NotificationThemeable {
         alert.addAction(.init(title: .localized(.continueMessage), style: .cancel))
         alert.addAction(.init(title: .localized(.retryMessage), style: .default) { [weak self] _ in
             self?.inviteFriends()
+        })
+        present(alert, animated: true)
+    }
+
+    private func showObtainingCode(_ error: Referrals.Error) {
+        let alert = UIAlertController(title: error.title,
+                                      message: error.message,
+                                      preferredStyle: .alert)
+        alert.addAction(.init(title: .localized(.continueMessage), style: .cancel))
+        alert.addAction(.init(title: .localized(.retryMessage), style: .default) { [weak self] _ in
+            self?.updateInviteLink()
         })
         present(alert, animated: true)
     }
