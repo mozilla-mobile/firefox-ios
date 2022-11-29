@@ -110,18 +110,22 @@ workflows:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
   build_and_test_1_SmokeTest2:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
             set -euxo pipefail
-
             echo "$BITRISE_ARTIFACT_PATHS"
 
             echo "-- unzip -- "
@@ -129,6 +133,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Test without Building
         inputs:
         - content: |
@@ -137,24 +142,31 @@ workflows:
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/* .
+            mv ./Users/vagrant/git/DerivedData .
             ls -la
             echo "-- test-without-building --"
 
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building
     - custom-test-results-export@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: Smoketest2
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_2_SmokeTest:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -167,6 +179,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Test without Building
         inputs:
         - content: |
@@ -175,24 +188,31 @@ workflows:
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/* .
+            mv ./Users/vagrant/git/DerivedData .
             ls -la
 
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
     - custom-test-results-export@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: SmokeTest
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_3_SmokeTest3:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -205,6 +225,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Test without Building
         inputs:
         - content: |
@@ -212,24 +233,31 @@ workflows:
             set -ex
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/* .
+            mv ./Users/vagrant/git/DerivedData .
             ls -la
 
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "Smoketest3" "test-without-building"
     - custom-test-results-export@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: SmokeTest3
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_4_SmokeTest4:
+    before_run:
+    - 1_git_clone_and_post_clone
+    - Decision_to_run_UI_Tests
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Pull artifacts
         inputs:
         - verbose: true
         - artifact_sources: stage_1.*
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
         inputs:
         - content: |
@@ -242,6 +270,7 @@ workflows:
             echo "show dir"
             ls
     - script@1.1:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Test without Building
         inputs:
         - content: |
@@ -250,16 +279,18 @@ workflows:
 
             ls ./Users/vagrant/git/Tests/
             cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/* .
+            mv ./Users/vagrant/git/DerivedData .
             ls -la
 
             echo "-- test-without-building --"
             xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "Smoketest4" "test-without-building"
     - custom-test-results-export@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: SmokeTest4
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
   build_and_test_5_UnitTest:
     steps:
     - git::https://github.com/bitrise-steplib/bitrise-step-artifact-pull.git@main:
@@ -585,6 +616,56 @@ workflows:
                 exit 1
             fi
         is_always_run: true
+  Decision_to_run_UI_Tests:
+    steps:
+    - script@1:
+        title: Files changed in commit
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+
+            echo "Commit on origin/main"
+            COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"`
+            echo $COMMIT_ON_MAIN_ORIGIN
+
+            echo "Files changed with origin"
+            echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+
+            echo "Commit on main branch"
+            echo $GIT_CLONE_COMMIT_HASH
+            COMMIT_ON_MAIN_PR=`git log -n 2 main --pretty=format:"%H" | tail -n 1`
+            echo $COMMIT_ON_MAIN_PR
+
+            filesChanged=""
+            if [[ $COMMIT_ON_MAIN_PR == $COMMIT_ON_MAIN_ORIGIN ]]
+            then
+                echo "First commit, use origin/main"
+                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+                echo $filesChanged
+            elif [[ $COMMIT_ON_MAIN_PR == $GIT_CLONE_COMMIT_HASH ]]
+            then
+                echo "Merge made by the 'ort' strategy"
+                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+                echo $filesChanged
+            else
+                echo "Commits on PR"
+                echo "Files changed betwee commits"
+                echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
+                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
+                echo $filesChanged
+            fi
+
+            doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*)'
+
+            if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
+            then
+                echo "Running UI Tests"
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests
+            else
+                echo "Not Running UI Tests"
+            fi
+
   NewXcodeVersions:
     steps:
     - script@1:
