@@ -697,6 +697,10 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
+
+    func showToast(message: String) {
+        SimpleToast().showAlertWithText(message, bottomContainer: self.view)
+    }
 }
 
 // MARK: - Status Bar Background

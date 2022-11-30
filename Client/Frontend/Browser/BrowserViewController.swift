@@ -1465,8 +1465,14 @@ class BrowserViewController: UIViewController {
     func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
         let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
-            if activityType == CustomActivityAction.sendToDevice.actionType {
+
+            switch activityType {
+            case CustomActivityAction.sendToDevice.actionType:
                 self.showSendToDevice()
+            case CustomActivityAction.copyLink.actionType:
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
+                                                bottomContainer: webViewContainer)
+            default: break
             }
 
             // After dismissing, check to see if there were any prompts we queued up

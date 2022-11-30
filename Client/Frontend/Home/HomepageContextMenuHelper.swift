@@ -11,6 +11,7 @@ protocol HomepageContextMenuHelperDelegate: UIViewController {
     func presentWithModalDismissIfNeeded(_ viewController: UIViewController, animated: Bool)
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption)
+    func showToast(message: String)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -177,8 +178,12 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
             let helper = ShareExtensionHelper(url: url, tab: nil)
             let controller = helper.createActivityViewController { (_, activityType) in
-                if activityType == CustomActivityAction.sendToDevice.actionType {
+                switch activityType {
+                case CustomActivityAction.sendToDevice.actionType:
                     self.showSendToDevice(site: site)
+                case CustomActivityAction.copyLink.actionType:
+                    self.delegate?.showToast(message: .AppMenu.AppMenuCopyURLConfirmMessage)
+                default: break
                 }
             }
 
