@@ -85,13 +85,13 @@ extension BrowserViewController: URLBarDelegate {
                                      object: .awesomebarLocation,
                                      value: .awesomebarShareTap,
                                      extras: nil)
-        let arrowDirection: UIPopoverArrowDirection = isBottomSearchBar ? .down : .up
+
         if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.url {
             presentShareSheet(tabUrl,
                               tab: selectedtab,
                               sourceView: shareView,
                               sourceRect: CGRect.null,
-                              arrowDirection: arrowDirection)
+                              arrowDirection: isBottomSearchBar ? .down : .up)
         }
     }
 
