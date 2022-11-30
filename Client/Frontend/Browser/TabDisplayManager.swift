@@ -650,7 +650,6 @@ extension TabDisplayManager: InactiveTabsDelegate {
         }
 
         collectionView.reloadItems(at: [indexPath])
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
     }
 
     func shouldCloseInactiveTab(tab: Tab) {
