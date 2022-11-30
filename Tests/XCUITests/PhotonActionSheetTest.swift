@@ -34,9 +34,8 @@ class PhotonActionSheetTest: BaseTestCase {
     func testShareOptionIsShown() {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.share], timeout: 3)
-        navigator.performAction(Action.ShareBrowserTabMenuOption)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
 
         // Wait to see the Share options sheet
         waitForExistence(app.buttons["Copy"], timeout: 10)
@@ -45,10 +44,9 @@ class PhotonActionSheetTest: BaseTestCase {
     // Smoketest
     func testShareOptionIsShownFromShortCut() {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
-        navigator.performAction(Action.ShareBrowserTabMenuOption)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
 
         // Wait to see the Share options sheet
         if iPad() {
@@ -62,8 +60,10 @@ class PhotonActionSheetTest: BaseTestCase {
         // User not logged in
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
-        navigator.performAction(Action.SentToDevice)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
+        waitForExistence(app.buttons["Send Link to Device"], timeout: 10)
+        app.buttons["Send Link to Device"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
@@ -95,9 +95,9 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.openURL("example.com")
         waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].otherElements[ImageIdentifiers.share], timeout: 5)
-        navigator.performAction(Action.ShareBrowserTabMenuOption)
+
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.shareButton], timeout: 10)
+        app.buttons[AccessibilityIdentifiers.Toolbar.shareButton].tap()
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
