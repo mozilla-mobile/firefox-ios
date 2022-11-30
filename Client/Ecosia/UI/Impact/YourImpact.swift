@@ -229,7 +229,9 @@ final class YourImpact: UICollectionViewController, UICollectionViewDelegateFlow
     }
     
     func applyTheme() {
-        collectionView.reloadData()
+        collectionView.visibleCells.compactMap({ $0 as? NotificationThemeable }).forEach {
+            $0.applyTheme()
+        }
         view.backgroundColor = UIColor.theme.ecosia.modalBackground
         collectionView.backgroundColor = .clear
         background.backgroundColor = .theme.ecosia.modalHeader

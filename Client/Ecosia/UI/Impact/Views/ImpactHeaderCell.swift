@@ -14,7 +14,6 @@ final class ImpactHeaderCell: UICollectionViewCell, NotificationThemeable {
         self.title = title
 
         super.init(frame: frame)
-        title.textColor = UIColor.theme.ecosia.primaryText
         title.font = .preferredFont(forTextStyle: .headline)
         title.adjustsFontForContentSizeCategory = true
         title.numberOfLines = 0
@@ -29,6 +28,8 @@ final class ImpactHeaderCell: UICollectionViewCell, NotificationThemeable {
         title.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         title.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor).isActive = true
         title.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16).isActive = true
+
+        applyTheme()
     }
 
     func applyTheme() {
