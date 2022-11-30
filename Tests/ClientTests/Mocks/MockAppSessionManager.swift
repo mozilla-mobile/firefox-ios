@@ -5,7 +5,7 @@
 import Foundation
 @testable import Client
 
-class MockAppSessionManager: Client.AppSessionProvider {
+class MockAppSessionManager: AppSessionProvider {
 
     var tabUpdateState: TabUpdateState = .coldStart
     var launchSessionProvider: LaunchSessionProviderProtocol
