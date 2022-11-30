@@ -640,13 +640,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.typeText("Mozilla Engine")
             app.tables.textViews["customEngineUrl"].tap()
 
-            UIPasteboard.general.string = "https://developer.mozilla.org/search?q=%s"
-
+            let searchEngineUrl = "https://developer.mozilla.org/search?q=%s"
             let tablesQuery = app.tables
             let customengineurlTextView = tablesQuery.textViews["customEngineUrl"]
             sleep(1)
-            customengineurlTextView.press(forDuration: 1.0)
-            app.staticTexts["Paste"].tap()
+            if processIsTranslatedStr() == m1Rosetta {
+                customengineurlTextView.typeText(searchEngineUrl)
+            } else {
+                UIPasteboard.general.string = searchEngineUrl
+                customengineurlTextView.press(forDuration: 1.0)
+                app.staticTexts["Paste"].tap()
+            }
         }
         screenState.backAction = navigationControllerBackAction
     }

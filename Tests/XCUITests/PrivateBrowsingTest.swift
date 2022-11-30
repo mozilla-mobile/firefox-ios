@@ -84,7 +84,7 @@ class PrivateBrowsingTest: BaseTestCase {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
 
@@ -105,7 +105,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Go back to private browsing and check that the tab has not been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        waitForExistence(app.cells.staticTexts[url2Label], timeout: 5)
+        waitForExistence(app.cells.staticTexts[url2Label], timeout: TIMEOUT)
         checkOpenTabsBeforeClosingPrivateMode()
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
@@ -115,7 +115,7 @@ class PrivateBrowsingTest: BaseTestCase {
             app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url2Label].tap()
         }
         waitForTabsButton()
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
         closePrivateTabsSwitch.tap()
@@ -220,7 +220,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(url2)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         enableClosePrivateBrowsingOptionWhenLeaving()
         // Leave PM by tapping on PM shourt cut
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)

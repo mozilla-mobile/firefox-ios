@@ -16,7 +16,7 @@ let requestDesktopSiteLabel = "Request Desktop Site"
 class NavigationTest: BaseTestCase {
     func testNavigation() {
         if !iPad() {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         }
         navigator.performAction(Action.CloseURLBarOpen)
         let urlPlaceholder = "Search or enter address"
@@ -96,6 +96,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox screen
         let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
+        waitForExistence(signInToFirefoxStaticText)
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
@@ -109,9 +110,9 @@ class NavigationTest: BaseTestCase {
 
     // Because the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
         app.buttons["EmailSignIn.button"].tap()
-        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
+        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: TIMEOUT_LONG)
 
         let email = app.webViews.textFields.element(boundBy: 0)
         // Verify the placeholdervalues here for the textFields
@@ -129,14 +130,14 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
-        waitForExistence(app.buttons["EmailSignIn.button"], timeout: 10)
+        waitForExistence(app.buttons["EmailSignIn.button"], timeout: TIMEOUT)
         app.buttons["EmailSignIn.button"].tap()
         checkFirefoxSyncScreenShown()
     }
 
     private func checkFirefoxSyncScreenShown() {
         // Disable check, page load issues on iOS13.3 sims, issue #5937
-        waitForExistence(app.webViews.firstMatch, timeout: 20)
+        waitForExistence(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
     }
 
     func testScrollsToTopWithMultipleTabs() {
@@ -167,9 +168,9 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testLongPressLinkOptions() {
         navigator.openURL(path(forTestPage: "test-example.html"))
-        waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
+        waitForExistence(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.otherElements.collectionViews.element(boundBy: 0), timeout: 5)
+        waitForExistence(app.otherElements.collectionViews.element(boundBy: 0), timeout: TIMEOUT)
 
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
@@ -185,92 +186,108 @@ class NavigationTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         navigator.openURL(path(forTestPage: "test-example.html"))
-        waitForExistence(app.webViews.links[website_2["link"]!], timeout: 5)
+        waitForExistence(app.webViews.links[website_2["link"]!], timeout: TIMEOUT)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!], timeout: 3)
+        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!], timeout: TIMEOUT)
         XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
     // Only testing Share and Copy Link, the other two options are already covered in other tests
-    func testCopyLink() {
-        longPressLinkOptions(optionSelected: "Copy Link")
-        navigator.goto(NewTabScreen)
-        app.textFields["url"].press(forDuration: 2)
-
-        waitForExistence(app.tables["Context Menu"])
-        app.tables.otherElements[ImageIdentifiers.paste].tap()
-        app.buttons["Go"].tap()
-        waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
-    }
-
-    func testCopyLinkPrivateMode() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
-        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        longPressLinkOptions(optionSelected: "Copy Link")
-        navigator.goto(NewTabScreen)
-        waitForExistence(app.textFields["url"])
-        app.textFields["url"].press(forDuration: 2)
-
-        app.tables.otherElements[ImageIdentifiers.paste].tap()
-        app.buttons["Go"].tap()
-        waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
-    }
-
-    func testLongPressOnAddressBar() {
-        // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
-        app.textFields["address"].typeText("www.google.com")
-        // Tapping two times when the text is not selected will reveal the menu
-        app.textFields["address"].tap()
-        waitForExistence(app.textFields["address"])
-        app.textFields["address"].tap()
-        waitForExistence(app.menuItems["Select All"])
-        XCTAssertTrue(app.menuItems["Select All"].exists)
-        XCTAssertTrue(app.menuItems["Select"].exists)
-
-        // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
-        app.menuItems["Select All"].tap()
-        waitForExistence(app.menuItems["Copy"])
-        if iPad() {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
+    func testCopyLink() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("Copy & paste may not work on M1")
         } else {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            longPressLinkOptions(optionSelected: "Copy Link")
+            navigator.goto(NewTabScreen)
+            app.textFields["url"].press(forDuration: 2)
+
+            waitForExistence(app.tables["Context Menu"])
+            app.tables.otherElements[ImageIdentifiers.paste].tap()
+            app.buttons["Go"].tap()
+            waitUntilPageLoad()
+            waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
         }
+    }
 
-        app.textFields["address"].typeText("\n")
-        waitUntilPageLoad()
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-
-        app.textFields["url"].press(forDuration: 3)
-        app.tables.otherElements[ImageIdentifiers.copyLink].tap()
-
-        sleep(2)
-        app.textFields["url"].tap()
-        // Since the textField value appears all selected first time is clicked
-        // this workaround is necessary
-        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        app.textFields["address"].tap()
-        waitForExistence(app.menuItems["Copy"])
-        if iPad() {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
+    func testCopyLinkPrivateMode() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            throw XCTSkip("Copy & paste may not work on M1")
         } else {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+            navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+            longPressLinkOptions(optionSelected: "Copy Link")
+            navigator.goto(NewTabScreen)
+            waitForExistence(app.textFields["url"])
+            app.textFields["url"].press(forDuration: 2)
+
+            app.tables.otherElements[ImageIdentifiers.paste].tap()
+            app.buttons["Go"].tap()
+            waitUntilPageLoad()
+            waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
+        }
+    }
+
+    func testLongPressOnAddressBar() throws {
+        if processIsTranslatedStr() == m1Rosetta {
+            // Long press on the URL requires copy & paste permission
+            throw XCTSkip("Copy & paste may not work on M1")
+        } else {
+            // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
+            app.textFields["address"].typeText("www.google.com")
+            // Tapping two times when the text is not selected will reveal the menu
+            app.textFields["address"].tap()
+            waitForExistence(app.textFields["address"])
+            app.textFields["address"].tap()
+            waitForExistence(app.menuItems["Select All"])
+            XCTAssertTrue(app.menuItems["Select All"].exists)
+            XCTAssertTrue(app.menuItems["Select"].exists)
+
+            // Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
+            app.menuItems["Select All"].tap()
+            waitForExistence(app.menuItems["Copy"])
+            if iPad() {
+                XCTAssertTrue(app.menuItems["Copy"].exists)
+                XCTAssertTrue(app.menuItems["Cut"].exists)
+                XCTAssertTrue(app.menuItems["Paste"].exists)
+                XCTAssertTrue(app.menuItems["Open Link"].exists)
+                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
+                XCTAssertTrue(app.menuItems["Share…"].exists)
+                XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+            } else {
+                XCTAssertTrue(app.menuItems["Copy"].exists)
+                XCTAssertTrue(app.menuItems["Cut"].exists)
+                XCTAssertTrue(app.menuItems["Paste"].exists)
+                XCTAssertTrue(app.menuItems["Open Link"].exists)
+            }
+
+            app.textFields["address"].typeText("\n")
+            waitUntilPageLoad()
+            waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+
+            app.textFields["url"].press(forDuration: 3)
+            app.tables.otherElements[ImageIdentifiers.copyLink].tap()
+
+            sleep(2)
+            app.textFields["url"].tap()
+            // Since the textField value appears all selected first time is clicked
+            // this workaround is necessary
+            waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+            app.textFields["address"].tap()
+            waitForExistence(app.menuItems["Copy"])
+            if iPad() {
+                XCTAssertTrue(app.menuItems["Cut"].exists)
+                XCTAssertTrue(app.menuItems["Copy"].exists)
+                XCTAssertTrue(app.menuItems["Open Link"].exists)
+                XCTAssertTrue(app.menuItems["Add to Reading List"].exists)
+                XCTAssertTrue(app.menuItems["Paste"].exists)
+            } else {
+                XCTAssertTrue(app.menuItems["Copy"].exists)
+                XCTAssertTrue(app.menuItems["Cut"].exists)
+                XCTAssertTrue(app.menuItems["Open Link"].exists)
+            }
         }
     }
 
@@ -302,7 +319,7 @@ class NavigationTest: BaseTestCase {
 
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.buttons["Copy"], timeout: 3)
+        waitForExistence(app.buttons["Copy"], timeout: TIMEOUT)
         XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
     }
 
@@ -311,17 +328,17 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.buttons["Copy"], timeout: 3)
+        waitForExistence(app.buttons["Copy"], timeout: TIMEOUT)
         XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
     }
 
     // Smoketest
     func testPopUpBlocker() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
         // Check that it is enabled by default
         navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
         navigator.goto(SettingsScreen)
         waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
         let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
@@ -339,7 +356,7 @@ class NavigationTest: BaseTestCase {
         // Now disable the Block PopUps option
         navigator.goto(BrowserTabMenu)
         navigator.goto(SettingsScreen)
-        waitForExistence(switchBlockPopUps, timeout: 5)
+        waitForExistence(switchBlockPopUps, timeout: TIMEOUT)
         switchBlockPopUps.tap()
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
@@ -354,17 +371,17 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testSSL() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
-        waitForExistence(app.buttons["Advanced"], timeout: 10)
+        waitForExistence(app.buttons["Advanced"], timeout: TIMEOUT)
         app.buttons["Advanced"].tap()
 
         waitForExistence(app.links["Visit site anyway"])
         app.links["Visit site anyway"].tap()
-        waitForExistence(app.webViews.otherElements["expired.badssl.com"], timeout: 10)
+        waitForExistence(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT)
         XCTAssertTrue(app.webViews.otherElements["expired.badssl.com"].exists)
     }
 
@@ -383,14 +400,14 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
-        waitForExistence(app.links["link-created-by-parent"], timeout: 10)
+        waitForExistence(app.links["link-created-by-parent"], timeout: TIMEOUT)
     }
 
     // Smoketest
     func testVerifyBrowserTabMenu() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"])
@@ -412,7 +429,7 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testURLBar() {
         let urlBar = app.textFields["url"]
-        waitForExistence(urlBar, timeout: 15)
+        waitForExistence(urlBar, timeout: TIMEOUT)
         urlBar.tap()
 
         let addressBar = app.textFields["address"]
