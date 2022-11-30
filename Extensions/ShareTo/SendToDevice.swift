@@ -2,45 +2,56 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import UIKit
 import Shared
 import Storage
 import SwiftUI
+import UIKit
 
 class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
 
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
+    private var profile: Profile {
+        let profile = BrowserProfile(localName: "profile")
+
+        // Re-open the profile if it was shutdown. This happens when we run from an app extension, where we must
+        // make sure that the profile is only open for brief moments of time.
+        if profile.isShutdown {
+            profile.reopen()
+        }
+
+        return profile
+    }
 
     func initialViewController() -> UIViewController {
-        if !hasAccount() {
-            let instructionsView = InstructionsView(backgroundColor: ShareTheme.defaultBackground.color,
-                                                    textColor: ShareTheme.textColor.color,
-                                                    imageColor: ShareTheme.iconColor.color,
-                                                    dismissAction: { [weak self] in
-                self?.dismissInstructionsView()
-            })
-            let hostingViewController = UIHostingController(rootView: instructionsView)
-            return hostingViewController
+        guard let shareItem = sharedItem else {
+            finish()
+            return UIViewController()
         }
-        let devicePickerViewController = DevicePickerViewController()
-        devicePickerViewController.pickerDelegate = self
-        devicePickerViewController.profile = nil // This means the picker will open and close the default profile
-        return devicePickerViewController
+
+        let colors = SendToDeviceHelper.Colors(defaultBackground: ShareTheme.defaultBackground.color,
+                                               textColor: ShareTheme.textColor.color,
+                                               iconColor: ShareTheme.iconColor.color)
+        let helper = SendToDeviceHelper(shareItem: shareItem,
+                                        profile: profile,
+                                        colors: colors,
+                                        delegate: self)
+        return helper.initialViewController()
     }
 
     func finish() {
+        profile.shutdown()
         delegate?.finish(afterDelay: 0)
     }
+
+    // MARK: - DevicePickerViewControllerDelegate
 
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         guard let item = sharedItem else {
             return finish()
         }
 
-        let profile = BrowserProfile(localName: "profile")
         profile.sendItem(item, toDevices: devices).uponQueue(.main) { _ in
-            profile.shutdown()
             self.finish()
 
             addAppExtensionTelemetryEvent(forMethod: "send-to-device")
@@ -51,15 +62,9 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
         finish()
     }
 
+    // MARK: - InstructionsViewDelegate
+
     func dismissInstructionsView() {
         finish()
-    }
-
-    private func hasAccount() -> Bool {
-        let profile = BrowserProfile(localName: "profile")
-        defer {
-            profile.shutdown()
-        }
-        return profile.hasAccount()
     }
 }

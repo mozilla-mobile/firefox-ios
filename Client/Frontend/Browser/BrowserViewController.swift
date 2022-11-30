@@ -71,7 +71,6 @@ class BrowserViewController: UIViewController {
     var isCrashAlertShowing: Bool = false
     var currentMiddleButtonState: MiddleButtonState?
     fileprivate var customSearchBarButton: UIBarButtonItem?
-    var updateState: TabUpdateState = .coldStart
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
 
@@ -948,6 +947,7 @@ class BrowserViewController: UIViewController {
         homepageViewController.homePanelDelegate = self
         homepageViewController.libraryPanelDelegate = self
         homepageViewController.browserBarViewDelegate = self
+        homepageViewController.sendToDeviceDelegate = self
         self.homepageViewController = homepageViewController
         addChild(homepageViewController)
         view.addSubview(homepageViewController.view)
@@ -1459,9 +1459,16 @@ class BrowserViewController: UIViewController {
     }
 
     func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        let helper = ShareExtensionHelper(url: url, tab: tab)
+        presentShareSheet(url, tab: tab, sourceView: sourceView, sourceRect: sourceRect, arrowDirection: arrowDirection)
+    }
 
-        let controller = helper.createActivityViewController({ [unowned self] completed, _ in
+    func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
+        let helper = ShareExtensionHelper(url: url, tab: tab)
+        let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
+            if activityType == CustomActivityAction.sendToDevice.actionType {
+                self.showSendToDevice()
+            }
+
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
 
@@ -1480,6 +1487,29 @@ class BrowserViewController: UIViewController {
         }
 
         presentWithModalDismissIfNeeded(controller, animated: true)
+    }
+
+    private func showSendToDevice() {
+        guard let selectedTab = tabManager.selectedTab,
+              let url = selectedTab.url
+        else { return }
+
+        let themeColors = themeManager.currentTheme.colors
+        let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
+                                               textColor: themeColors.textPrimary,
+                                               iconColor: themeColors.iconPrimary)
+        let shareItem = ShareItem(url: url.absoluteString,
+                                  title: selectedTab.title,
+                                  favicon: selectedTab.displayFavicon)
+
+        let helper = SendToDeviceHelper(shareItem: shareItem,
+                                        profile: profile,
+                                        colors: colors,
+                                        delegate: self)
+        let viewController = helper.initialViewController()
+
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
+        showViewController(viewController: viewController)
     }
 
     @objc func openSettings() {
@@ -2596,8 +2626,8 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
     }
 
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
-        guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
-        let shareItem = ShareItem(url: url, title: tab.title, favicon: tab.displayFavicon)
+        guard let shareItem = devicePickerViewController.shareItem else { return }
+
         guard shareItem.isShareable else {
             let alert = UIAlertController(title: .SendToErrorTitle, message: .SendToErrorMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: .SendToErrorOKButton, style: .default) { _ in self.popToBVC()})

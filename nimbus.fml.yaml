@@ -497,8 +497,13 @@ features:
     defaults:
       - channel: developer
         value: {
-            "move-actions": false,
-            "toolbar-changes": false
+            "move-actions": true,
+            "toolbar-changes": true
+        }
+      - channel: beta
+        value: {
+            "move-actions": true,
+            "toolbar-changes": true
         }
 
 types:

@@ -79,6 +79,22 @@ extension BrowserViewController: URLBarDelegate {
         tabManager.selectedTab?.reload()
     }
 
+    func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView) {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .awesomebarLocation,
+                                     value: .awesomebarShareTap,
+                                     extras: nil)
+
+        if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.url {
+            presentShareSheet(tabUrl,
+                              tab: selectedtab,
+                              sourceView: shareView,
+                              sourceRect: CGRect.null,
+                              arrowDirection: isBottomSearchBar ? .down : .up)
+        }
+    }
+
     func urlBarDidPressQRButton(_ urlBar: URLBarView) {
         let qrCodeViewController = QRCodeViewController()
         qrCodeViewController.qrCodeDelegate = self
