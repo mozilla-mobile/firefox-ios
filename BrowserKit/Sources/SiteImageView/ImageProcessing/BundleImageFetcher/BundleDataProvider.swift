@@ -6,7 +6,9 @@ import UIKit
 
 protocol BundleDataProvider {
     func getBundleData() throws -> Data
+
     func getPath(from path: String) -> String?
+
     func getBundleImage(from path: String) -> UIImage?
 }
 

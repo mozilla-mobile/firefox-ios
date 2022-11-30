@@ -151,8 +151,6 @@ private enum MockBundleData {
 """
 }
 
-
-
 private extension BundleImageFetcherTests {
     func generateHTMLData(string: String) -> Data? {
         return string.data(using: .utf8)
@@ -182,34 +180,3 @@ private class MockBundleDataProvider: BundleDataProvider {
         return imageToReturn
     }
 }
-
-
-//func testDefaultFavicons() {
-//    // The amazon case tests a special case for multi-reguin domain lookups
-//    ["http://www.youtube.com", "https://www.taobao.com/", "https://www.amazon.ca"].forEach {
-//        let url = URL(string: $0)!
-//        let icon = FaviconFetcher.getBundledIcon(forUrl: url)
-//        XCTAssertNotNil(icon)
-//    }
-//    }
-
-
-
-
-//{
-//    "title": "google",
-//    "url": "https://www.google.com/",
-//    "image_url": "google-com.png",
-//    "background_color": "#FFF",
-//    "is_multi_region_domain": "true",
-//    "domain": "google"
-//    },
-
-//{
-//    "title": "amazon",
-//    "url": "https://www.amazon.com/",
-//    "image_url": "amazon-com.png",
-//    "background_color": "#FFF",
-//    "is_multi_region_domain": "true",
-//    "domain": "amazon"
-//    },

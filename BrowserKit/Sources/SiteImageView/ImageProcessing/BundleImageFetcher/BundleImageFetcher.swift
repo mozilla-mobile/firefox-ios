@@ -96,7 +96,6 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
 
     private func format(image: BundledImage) -> FormattedBundledImage? {
         let path = image.image_url.replacingOccurrences(of: ".png", with: "")
-        let url = image.domain
         let title = image.title
         let color = image.background_color
         let filePath = bundleDataProvider.getPath(from: path)
