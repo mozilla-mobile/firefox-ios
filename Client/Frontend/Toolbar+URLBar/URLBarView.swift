@@ -46,6 +46,7 @@ protocol URLBarDelegate: AnyObject {
     // Returns either (search query, true) or (url, false).
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView)
+    func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView)
 }
 
 protocol URLBarViewProtocol {
@@ -772,6 +773,10 @@ extension URLBarView: TabLocationViewDelegate {
 
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {
         delegate?.urlBarDidPressReaderMode(self)
+    }
+
+    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton) {
+        delegate?.urlBarDidPressShare(self, shareView: button)
     }
 
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {

@@ -6,6 +6,12 @@ import UIKit
 import Shared
 
 class URLTextField: UITextField {
+
+    // MARK: UX
+    struct UX {
+        static let spacing: CGFloat = 8
+    }
+
     weak var accessibilityActionsSource: AccessibilityActionsSource?
 
     override var accessibilityCustomActions: [UIAccessibilityCustomAction]? {
@@ -22,6 +28,6 @@ class URLTextField: UITextField {
     }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.insetBy(dx: TabLocationViewUX.Spacing, dy: 0)
+        return bounds.insetBy(dx: UX.spacing, dy: 0)
     }
 }

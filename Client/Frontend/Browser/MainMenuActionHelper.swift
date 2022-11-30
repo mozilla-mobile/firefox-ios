@@ -248,6 +248,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             let shortAction = getShortcutAction()
             append(to: &section, action: shortAction)
 
+            // Feature flag for share sheet changes where we moved send to device and copy
+            // away from hamburger menu to the actual system share sheet. When share sheet
+            // changes flag is on we do not append items to the hamburger menu
             if !featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) {
                 let copyAction = getCopyAction()
                 append(to: &section, action: copyAction)
@@ -256,8 +259,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
                 append(to: &section, action: sendToDeviceAction)
             }
 
-            let shareAction = getShareAction()
-            append(to: &section, action: shareAction)
+            // Feature flag for toolbar share action changes where if the toolbar is showing
+            // share action button then we do not show the share button in hamburger menu
+            if !featureFlags.isFeatureEnabled(.shareToolbarChanges, checking: .buildOnly) {
+                let shareAction = getShareAction()
+                append(to: &section, action: shareAction)
+            }
         }
 
         return section

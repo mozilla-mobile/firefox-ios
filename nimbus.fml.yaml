@@ -498,7 +498,12 @@ features:
       - channel: developer
         value: {
             "move-actions": true,
-            "toolbar-changes": false
+            "toolbar-changes": true
+        }
+      - channel: beta
+        value: {
+            "move-actions": true,
+            "toolbar-changes": true
         }
 
 types:
