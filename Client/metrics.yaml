@@ -3049,6 +3049,18 @@ share_sheet:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
+  pocket_action_tapped:
+    type: event
+    description: |
+      Counts the number of times a user taps Pocket actions
+      from Share Sheet
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-5226
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12526
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-06-01"
 
 # Device specific metrics
 

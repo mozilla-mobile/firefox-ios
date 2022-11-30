@@ -12,6 +12,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private let url: URL
     private var onePasswordExtensionItem: NSExtensionItem!
     private let browserFillIdentifier = "org.appextension.fill-browser-action"
+    private let pocketExtensionSchema = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
 
     var areShareSheetChangesEnabled: Bool {
         return featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) && !url.isFile
@@ -44,11 +45,14 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
         activityViewController.excludedActivityTypes = excludingActivities
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
-            guard completed else {
-                completionHandler(completed, activityType)
-                return
-            }
 
+            if completed && activityType?.rawValue == self.pocketExtensionSchema {
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .shareSheet,
+                                             value: .sharePocketAction,
+                                             extras: nil)
+            }
             completionHandler(completed, activityType)
         }
 
