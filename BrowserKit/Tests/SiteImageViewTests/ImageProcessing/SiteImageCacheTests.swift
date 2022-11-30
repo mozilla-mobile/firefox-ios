@@ -25,29 +25,31 @@ final class SiteImageCacheTests: XCTestCase {
     func testGetFromCache_whenError_returnsError() async {
         imageCache.retrievalError = KingfisherError.requestError(reason: .emptyRequest)
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let result = await subject.getImageFromCache(domain: "www.example.com", type: .favicon)
 
-        XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-favicon")
-        switch result {
-        case .success:
-            XCTFail("Should have failed with error")
-        case .failure(let error):
+        do {
+            let _ = try await subject.getImageFromCache(domain: "www.example.com", type: .favicon)
+
+        } catch let error as ImageError {
+            XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-favicon")
             XCTAssertEqual("Unable to retrieve image from cache with reason: The request is empty or `nil`.",
                            error.description)
+        } catch {
+            XCTFail("Should have failed with ImageError type")
         }
     }
 
     func testGetFromCache_whenEmptyImage_returnsError() async {
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let result = await subject.getImageFromCache(domain: "www.example.com", type: .heroImage)
 
-        XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-heroImage")
-        switch result {
-        case .success:
-            XCTFail("Should have failed with error")
-        case .failure(let error):
+        do {
+            let _ = try await subject.getImageFromCache(domain: "www.example.com", type: .heroImage)
+
+        } catch let error as ImageError {
+            XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-heroImage")
             XCTAssertEqual("Unable to retrieve image from cache with reason: Image was nil",
                            error.description)
+        } catch {
+            XCTFail("Should have failed with ImageError type")
         }
     }
 
@@ -55,13 +57,13 @@ final class SiteImageCacheTests: XCTestCase {
         let expectedImage = UIImage()
         imageCache.image = expectedImage
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let result = await subject.getImageFromCache(domain: "www.example2.com", type: .favicon)
 
-        XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example2.com-favicon")
-        switch result {
-        case .success(let image):
-            XCTAssertEqual(expectedImage, image)
-        case .failure:
+        do {
+            let result = try await subject.getImageFromCache(domain: "www.example2.com", type: .favicon)
+            XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example2.com-favicon")
+            XCTAssertEqual(expectedImage, result)
+
+        } catch {
             XCTFail("Should have succeeded with image")
         }
     }
@@ -72,30 +74,30 @@ final class SiteImageCacheTests: XCTestCase {
         let expectedImage = UIImage()
         imageCache.storageError = KingfisherError.requestError(reason: .emptyRequest)
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let result = await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
 
-        XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
-        XCTAssertEqual(imageCache.capturedImage, expectedImage)
-        switch result {
-        case .success:
-            XCTFail("Should have failed with error")
-        case .failure(let error):
-            XCTAssertEqual("Unable to retrieve image from cache with reason: The request is empty or `nil`.",
+        do {
+            let _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
+
+        } catch let error as ImageError {
+            XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
+            XCTAssertEqual(imageCache.capturedImage, expectedImage)
+            XCTAssertEqual("Unable to cache image with reason: The request is empty or `nil`.",
                            error.description)
+        } catch {
+            XCTFail("Should have failed with ImageError type")
         }
     }
 
     func testCacheImage_whenSuccess_returnsSuccess() async {
         let expectedImage = UIImage()
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let result = await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
 
-        XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
-        XCTAssertEqual(imageCache.capturedImage, expectedImage)
-        switch result {
-        case .success:
-            break
-        case .failure:
+        do {
+            let _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
+            XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
+            XCTAssertEqual(imageCache.capturedImage, expectedImage)
+
+        } catch {
             XCTFail("Should have succeeded")
         }
     }
@@ -106,25 +108,25 @@ private class MockDefaultSiteImageCache: DefaultImageCache {
     var image: UIImage?
     var retrievalError: KingfisherError?
     var capturedRetrievalKey: String?
-    func retrieveImage(forKey key: String) async -> Result<UIImage?, Kingfisher.KingfisherError> {
+    func retrieveImage(forKey key: String) async throws -> UIImage? {
         capturedRetrievalKey = key
         if let error = retrievalError {
-            return .failure(error)
+            throw error
         } else {
-            return .success(image)
+            return image
         }
     }
 
     var storageError: KingfisherError?
     var capturedImage: UIImage?
     var capturedStorageKey: String?
-    func store(image: UIImage, forKey key: String) async -> Result<(), Kingfisher.KingfisherError> {
+    func store(image: UIImage, forKey key: String) async throws -> () {
         capturedImage = image
         capturedStorageKey = key
         if let error = storageError {
-            return .failure(error)
+            throw error
         } else {
-            return .success(())
+            return ()
         }
     }
 }

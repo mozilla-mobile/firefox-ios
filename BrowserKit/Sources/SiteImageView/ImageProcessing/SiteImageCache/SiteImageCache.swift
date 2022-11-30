@@ -12,19 +12,19 @@ protocol SiteImageCache {
     /// - Parameters:
     ///   - domain: The domain to retrieve the image from
     ///   - type: The image type to retrieve the image from the cache
-    /// - Returns: The image from the cache or an error if it could not retrieve it
+    /// - Returns: The image from the cache or throws an error if it could not retrieve it
     func getImageFromCache(domain: String,
-                           type: SiteImageType) async -> Result<UIImage, ImageError>
+                           type: SiteImageType) async throws -> UIImage
 
     /// Cache an image into the right cache depending on it's type
     /// - Parameters:
     ///   - image: The image to cache
     ///   - domain: The image domain
     ///   - type: The image type
-    ///   Returns:  Calls completes with success or returns an error why the caching failed
+    ///   Returns:  Calls completes with success or throws an error why the caching failed
     func cacheImage(image: UIImage,
                     domain: String,
-                    type: SiteImageType) async -> Result<(), ImageError>
+                    type: SiteImageType) async throws -> ()
 }
 
 actor DefaultSiteImageCache: SiteImageCache {
@@ -35,32 +35,30 @@ actor DefaultSiteImageCache: SiteImageCache {
         self.imageCache = imageCache
     }
 
-    func getImageFromCache(domain: String, type: SiteImageType) async -> Result<UIImage, ImageError> {
+    func getImageFromCache(domain: String, type: SiteImageType) async throws -> UIImage {
         let key = cacheKey(from: domain, type: type)
-        let result = await imageCache.retrieveImage(forKey: key)
-
-        switch result {
-        case .success(let image):
-            guard let image = image else {
-                return .failure(ImageError.unableToRetrieveFromCache("Image was nil"))
+        do {
+            let result = try await imageCache.retrieveImage(forKey: key)
+            guard let image = result else {
+                throw ImageError.unableToRetrieveFromCache("Image was nil")
             }
-            return .success(image)
+            return image
 
-        case .failure(let error):
-            return .failure(ImageError.unableToRetrieveFromCache(error.errorDescription ?? "No description"))
+        } catch let error as KingfisherError {
+            throw ImageError.unableToRetrieveFromCache(error.errorDescription ?? "No description")
         }
     }
 
-    func cacheImage(image: UIImage, domain: String, type: SiteImageType) async -> Result<(), ImageError> {
+    func cacheImage(image: UIImage, domain: String, type: SiteImageType) async throws -> () {
         let key = cacheKey(from: domain, type: type)
-        let result = await imageCache.store(image: image, forKey: key)
 
-        switch result {
-        case .success:
-            return .success(())
+        do {
+            return try await imageCache.store(image: image, forKey: key)
 
-        case .failure(let error):
-            return .failure(ImageError.unableToRetrieveFromCache(error.errorDescription ?? "No description"))
+        } catch let error as KingfisherError {
+            throw ImageError.unableToCacheImage(error.errorDescription ?? "No description")
+        } catch {
+            throw ImageError.unableToCacheImage("No description")
         }
     }
 

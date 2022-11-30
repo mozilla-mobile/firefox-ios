@@ -10,35 +10,35 @@ import UIKit
 /// Image cache wrapper around Kingfisher image cache
 /// Used in SiteImageCache
 protocol DefaultImageCache {
-    func retrieveImage(forKey key: String) async -> Result<UIImage?, KingfisherError>
+    func retrieveImage(forKey key: String) async throws -> UIImage?
 
-    func store(image: UIImage, forKey key: String) async -> Result<(), KingfisherError>
+    func store(image: UIImage, forKey key: String) async throws -> ()
 }
 
 extension ImageCache: DefaultImageCache {
 
-    func retrieveImage(forKey key: String) async -> Result<UIImage?, Kingfisher.KingfisherError> {
-        await withCheckedContinuation { continuation in
-            retrieveImage(forKey: key, completionHandler: { result in
+    func retrieveImage(forKey key: String) async throws -> UIImage? {
+        return try await withCheckedThrowingContinuation { continuation in
+            retrieveImage(forKey: key) { result in
                 switch result {
                 case .success(let imageResult):
-                    continuation.resume(returning: .success(imageResult.image))
+                    continuation.resume(returning: imageResult.image)
                 case .failure(let error):
-                    continuation.resume(returning: .failure(error))
+                    continuation.resume(throwing: error)
                 }
-            })
+            }
         }
     }
 
-    func store(image: UIImage, forKey key: String) async -> Result<(), KingfisherError> {
-        await withCheckedContinuation { continuation in
+    func store(image: UIImage, forKey key: String) async throws -> () {
+        return try await withCheckedThrowingContinuation { continuation in
             store(image, forKey: key) { result in
                 // memoryCacheResult never fails
                 switch result.diskCacheResult {
                 case .success:
-                    continuation.resume(returning: .success(()))
+                    continuation.resume(returning: ())
                 case .failure(let error):
-                    continuation.resume(returning: .failure(error))
+                    continuation.resume(throwing: error)
                 }
             }
         }
