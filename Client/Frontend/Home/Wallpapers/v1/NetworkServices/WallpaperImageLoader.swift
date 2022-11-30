@@ -4,12 +4,6 @@
 
 import Foundation
 
-/*
- TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4423
- These are brief sketches for what the image loader might look like as I was
- experimenting with async/await. The proper implementation will be done in the
- linked ticket.
-*/
 class WallpaperImageLoader {
 
     enum ImageLoaderError: Error {

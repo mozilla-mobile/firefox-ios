@@ -161,8 +161,9 @@ features:
             use-page-content: false
             search-highlights: false
             position:
-                is-position-feature-enabled: true
-                is-bottom: true
+              is-position-feature-enabled: true
+              is-bottom: true
+              is-toolbar-cfr-on: true
       - channel: developer
         value:
           awesome-bar:
@@ -170,6 +171,7 @@ features:
             position:
               is-position-feature-enabled: true
               is-bottom: false
+              is-toolbar-cfr-on: true
       - channel: beta
         value:
           awesome-bar:
@@ -177,6 +179,7 @@ features:
             position:
               is-position-feature-enabled: true
               is-bottom: false
+              is-toolbar-cfr-on: true
   homescreenFeature:
     description: The homescreen that the user goes to when they press home or new tab.
     variables:
@@ -579,6 +582,7 @@ types:
           default:
             is-position-feature-enabled: true
             is-bottom: true
+            is-toolbar-cfr-on: true
     SearchBarPositionFeature:
       description: "The configuration for the bottom search bar on the homescreen"
       fields:
@@ -589,6 +593,10 @@ types:
         is-bottom:
           type: Boolean
           description: Whether or not the default position is at the bottom
+          default: true
+        is-toolbar-cfr-on:
+          type: Boolean
+          description: Whether or not the toolbar CFR shows. This is a temporary hack for Nimbus
           default: true
 
     SponsoredTiles:
