@@ -12,6 +12,7 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
+    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
@@ -19,18 +20,19 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 
-struct TabLocationViewUX {
-    static let HostFontColor = UIColor.black
-    static let BaseURLFontColor = UIColor.Photon.Grey50
-    static let Spacing: CGFloat = 8
-    static let StatusIconSize: CGFloat = 18
-    static let TPIconSize: CGFloat = 44
-    static let ReaderModeButtonWidth: CGFloat = 34
-    static let ButtonSize: CGFloat = 44
-    static let URLBarPadding = 4
-}
+class TabLocationView: UIView, FeatureFlaggable {
 
-class TabLocationView: UIView {
+    // MARK: UX
+    struct UX {
+        static let hostFontColor = UIColor.black
+        static let baseURLFontColor = UIColor.Photon.Grey50
+        static let spacing: CGFloat = 8
+        static let statusIconSize: CGFloat = 18
+        static let buttonSize: CGFloat = 40
+        static let urlBarPadding = 4
+    }
+
+    // MARK: Variables
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
@@ -38,16 +40,24 @@ class TabLocationView: UIView {
 
     private let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
 
-    @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
+    @objc dynamic var baseURLFontColor: UIColor = UX.baseURLFontColor {
         didSet { updateTextWithURL() }
     }
 
     var url: URL? {
         didSet {
             updateTextWithURL()
-            trackingProtectionButton.isHidden = isTrackingProtectionHidden
+            trackingProtectionButton.isHidden = !isValidHttpUrlProtocol
+            shareButton.isHidden = !(shouldEnableShareButtonFeature && isValidHttpUrlProtocol)
             setNeedsUpdateConstraints()
         }
+    }
+
+    var shouldEnableShareButtonFeature: Bool {
+        guard featureFlags.isFeatureEnabled(.shareToolbarChanges, checking: .buildOnly) else {
+            return false
+        }
+        return true
     }
 
     var readerModeState: ReaderModeState {
@@ -89,6 +99,14 @@ class TabLocationView: UIView {
         trackingProtectionButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.trackingProtection
     }
 
+    lazy var shareButton: ShareButton = .build { shareButton in
+        shareButton.addTarget(self, action: #selector(self.didPressShareButton(_:)), for: .touchUpInside)
+        shareButton.clipsToBounds = false
+        shareButton.tintColor = UIColor.Photon.Grey50
+        shareButton.contentHorizontalAlignment = .center
+        shareButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.shareButton
+    }
+
     private lazy var readerModeButton: ReaderModeButton = .build { readerModeButton in
         readerModeButton.addTarget(self, action: #selector(self.tapReaderModeButton), for: .touchUpInside)
         readerModeButton.addGestureRecognizer(
@@ -112,7 +130,7 @@ class TabLocationView: UIView {
             UILongPressGestureRecognizer(target: self, action: #selector(longPressReloadButton)))
         reloadButton.tintColor = UIColor.Photon.Grey50
         reloadButton.imageView?.contentMode = .scaleAspectFit
-        reloadButton.contentHorizontalAlignment = .left
+        reloadButton.contentHorizontalAlignment = .center
         reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.reloadButton
         reloadButton.isAccessibilityElement = true
@@ -137,7 +155,7 @@ class TabLocationView: UIView {
         let space1px = UIView.build()
         space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
 
-        let subviews = [trackingProtectionButton, space1px, urlTextField, readerModeButton, reloadButton]
+        let subviews = [trackingProtectionButton, space1px, urlTextField, readerModeButton, shareButton, reloadButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -147,12 +165,14 @@ class TabLocationView: UIView {
         contentView.edges(equalTo: self)
 
         NSLayoutConstraint.activate([
-            trackingProtectionButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.TPIconSize),
-            trackingProtectionButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            readerModeButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ReaderModeButtonWidth),
-            readerModeButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
-            reloadButton.widthAnchor.constraint(equalToConstant: TabLocationViewUX.ReaderModeButtonWidth),
-            reloadButton.heightAnchor.constraint(equalToConstant: TabLocationViewUX.ButtonSize),
+            trackingProtectionButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            trackingProtectionButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            readerModeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            readerModeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            shareButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            shareButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            reloadButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
+            reloadButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
         ])
 
         // Setup UIDragInteraction to handle dragging the location
@@ -171,7 +191,7 @@ class TabLocationView: UIView {
 
     // MARK: - Accessibility
 
-    private lazy var _accessibilityElements = [urlTextField, readerModeButton, reloadButton, trackingProtectionButton]
+    private lazy var _accessibilityElements = [urlTextField, readerModeButton, readerModeButton, reloadButton, trackingProtectionButton, shareButton]
 
     override var accessibilityElements: [Any]? {
         get {
@@ -224,6 +244,10 @@ class TabLocationView: UIView {
         delegate?.tabLocationViewDidTapShield(self)
     }
 
+    @objc func didPressShareButton(_ button: UIButton) {
+        delegate?.tabLocationViewDidTapShare(self, button: shareButton)
+    }
+
     @objc func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
@@ -243,8 +267,8 @@ class TabLocationView: UIView {
 
 // MARK: - Private
 private extension TabLocationView {
-    var isTrackingProtectionHidden: Bool {
-        !["https", "http"].contains(url?.scheme ?? "")
+    var isValidHttpUrlProtocol: Bool {
+        ["https", "http"].contains(url?.scheme ?? "")
     }
 
     func setReaderModeState(_ newReaderModeState: ReaderModeState) {

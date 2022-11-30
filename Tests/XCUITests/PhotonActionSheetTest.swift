@@ -45,7 +45,6 @@ class PhotonActionSheetTest: BaseTestCase {
     // Smoketest
     func testShareOptionIsShownFromShortCut() {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        navigator.nowAt(BrowserTab)
         waitUntilPageLoad()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.performAction(Action.ShareBrowserTabMenuOption)
@@ -64,6 +63,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.ShareBrowserTabMenuOption)
+        waitForExistence(app.buttons["Send Link to Device"], timeout: TIMEOUT)
         app.buttons["Send Link to Device"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
