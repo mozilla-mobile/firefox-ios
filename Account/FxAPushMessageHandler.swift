@@ -29,7 +29,9 @@ extension FxAPushMessageHandler {
     /// and then effects changes on the logged in account.
     @discardableResult func handle(userInfo: [AnyHashable: Any]) -> PushMessageResults {
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        guard let pushReg = keychain.object(forKey: KeychainKey.fxaPushRegistration) as? PushRegistration else {
+        guard let pushReg = keychain.object(forKey: KeychainKey.fxaPushRegistration, ofClass: PushRegistration.self) else {
+            // We've somehow lost our push registration, lets also reset our apnsToken so we trigger push registration
+            keychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             return deferMaybe(PushMessageError.accountError)
         }
 

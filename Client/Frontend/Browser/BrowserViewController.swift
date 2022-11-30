@@ -839,6 +839,14 @@ class BrowserViewController: UIViewController {
                     self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
                 }
             }
+
+            if !receivedURLs.isEmpty || cursorCount > 0 {
+                // Because the notification service runs as a seperate process
+                // we need to make sure that our account manager picks up any persisted state
+                // the notification services persisted.
+                self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
+                self.profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
+            }
         }
     }
 

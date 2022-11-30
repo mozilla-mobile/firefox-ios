@@ -7,7 +7,9 @@ import Foundation
 import Shared
 import SwiftyJSON
 
-public class PushRegistration: NSObject, NSCoding {
+public class PushRegistration: NSObject, NSSecureCoding {
+    public static var supportsSecureCoding: Bool = true
+
     let uaid: String
     let secret: String
     // We don't need to have more than one subscription until WebPush is exposed to content Javascript
@@ -30,11 +32,15 @@ public class PushRegistration: NSObject, NSCoding {
     }
 
     @objc public convenience required init?(coder aDecoder: NSCoder) {
-        guard let uaid = aDecoder.decodeObject(forKey: "uaid") as? String,
-            let secret = aDecoder.decodeObject(forKey: "secret") as? String,
-            let subscriptions = aDecoder.decodeObject(forKey: "subscriptions") as? [String: PushSubscription] else {
-                fatalError("Cannot decode registration")
+        guard let uaid = aDecoder.decodeObject(of: NSString.self, forKey: "uaid") as? String,
+              let secret = aDecoder.decodeObject(of: NSString.self, forKey: "secret") as? String,
+              let subscriptions = aDecoder.decodeObject(
+                of: [NSDictionary.self, NSString.self, PushSubscription.self],
+                forKey: "subscriptions"
+              ) as? [String: PushSubscription] else {
+            fatalError("Cannot decode registration")
         }
+
         self.init(uaid: uaid, secret: secret, subscriptions: subscriptions)
     }
 
@@ -60,7 +66,9 @@ public class PushRegistration: NSObject, NSCoding {
 private let defaultSubscriptionID = "defaultSubscription"
 /// Small NSCodable class for persisting a channel subscription.
 /// We use NSCoder because we expect it to be stored in the profile.
-public class PushSubscription: NSObject, NSCoding {
+public class PushSubscription: NSObject, NSSecureCoding {
+    public static var supportsSecureCoding: Bool = true
+
     public let channelID: String
     public let endpoint: URL
 
@@ -90,12 +98,12 @@ public class PushSubscription: NSObject, NSCoding {
     }
 
     @objc public convenience required init?(coder aDecoder: NSCoder) {
-        guard let channelID = aDecoder.decodeObject(forKey: "channelID") as? String,
-            let urlString = aDecoder.decodeObject(forKey: "endpoint") as? String,
+        guard let channelID = aDecoder.decodeObject(of: NSString.self, forKey: "channelID") as? String,
+            let urlString = aDecoder.decodeObject(of: NSString.self, forKey: "endpoint") as? String,
             let endpoint = URL(string: urlString),
-            let p256dhPrivateKey = aDecoder.decodeObject(forKey: "p256dhPrivateKey") as? String,
-            let p256dhPublicKey = aDecoder.decodeObject(forKey: "p256dhPublicKey") as? String,
-            let authKey = aDecoder.decodeObject(forKey: "authKey") as? String else {
+            let p256dhPrivateKey = aDecoder.decodeObject(of: NSString.self, forKey: "p256dhPrivateKey") as? String,
+            let p256dhPublicKey = aDecoder.decodeObject(of: NSString.self, forKey: "p256dhPublicKey") as? String,
+            let authKey = aDecoder.decodeObject(of: NSString.self, forKey: "authKey") as? String else {
             return nil
         }
 
