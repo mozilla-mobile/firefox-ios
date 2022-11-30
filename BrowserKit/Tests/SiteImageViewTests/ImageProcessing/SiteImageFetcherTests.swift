@@ -24,14 +24,15 @@ final class SiteImageFetcherTests: XCTestCase {
         mockImageDownloader.error = KingfisherError.requestError(reason: .emptyRequest)
         let subject = DefaultSiteImageFetcher(imageDownloader: mockImageDownloader)
 
-        let result = await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
-
-        switch result {
-        case .success:
+        do {
+            let _ = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
             XCTFail("Should have failed with error")
-        case .failure(let error):
+
+        } catch let error as ImageError {
             XCTAssertEqual("Unable to download image with reason: The request is empty or `nil`.",
                            error.description)
+        } catch {
+            XCTFail("Should have failed with ImageError type")
         }
     }
 
@@ -40,11 +41,11 @@ final class SiteImageFetcherTests: XCTestCase {
         mockImageDownloader.image = resultImage
         let subject = DefaultSiteImageFetcher(imageDownloader: mockImageDownloader)
 
-        let result = await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
-        switch result {
-        case .success(let value):
-            XCTAssertEqual(resultImage, value)
-        case .failure:
+        do {
+            let result = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
+            XCTAssertEqual(resultImage, result)
+
+        } catch {
             XCTFail("Should have succeeded with image")
         }
     }
