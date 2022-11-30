@@ -167,7 +167,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         return index
     }
 
-    private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
+    private func presentSignToSync(_ fxaOptions: FxALaunchParams,
                                    flowType: FxAPageType = .emailLoginFlow,
                                    referringPage: ReferringPage = .onboarding) {
 
@@ -237,7 +237,8 @@ extension UpdateViewController: OnboardingCardDelegate {
         case .updateWelcome:
             showNextPage(cardType)
         case .updateSignSync:
-            presentSignToSync()
+            let fxaParams = FxALaunchParams(entrypoint: .updateOnboarding, query: [:])
+            presentSignToSync(fxaParams)
         default:
             break
         }
