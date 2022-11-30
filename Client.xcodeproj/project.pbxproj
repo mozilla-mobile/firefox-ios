@@ -16053,7 +16053,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
 				kind = exactVersion;
-				version = 7.30.0;
+				version = 7.31.3;
 			};
 		};
 		4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
