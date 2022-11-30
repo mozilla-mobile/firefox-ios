@@ -12,9 +12,6 @@ protocol BundleImageFetcher {
     func getImageFromBundle(domain: String) throws -> UIImage
 }
 
-// TODO:
-// - Add unit tests
-
 class DefaultBundleImageFetcher: BundleImageFetcher {
 
     private struct BundledImage: Codable {
@@ -28,7 +25,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
     private struct FormattedBundledImage {
         var backgroundColor: UIColor
         var filePath: String
-        var domain: String
+        var title: String
     }
 
     private let bundleDataProvider: BundleDataProvider
@@ -46,7 +43,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
 
     func getImageFromBundle(domain: String) throws -> UIImage {
         if let bundledImage = bundledImages[domain],
-           let image = UIImage(contentsOfFile: bundledImage.filePath) {
+           let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) {
             let color = bundledImage.backgroundColor.cgColor.alpha < 0.01 ? UIColor.white : bundledImage.backgroundColor
             return image.withBackgroundAndPadding(color: color)
 
@@ -81,12 +78,18 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
                     continue
                 }
 
-                icons[image.domain] = image
+                icons[image.title] = image
             }
+
+            if icons.isEmpty {
+                generalBundleError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Bundle was empty"))
+            }
+
             return icons
 
-        } catch let error {
-            generalBundleError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Decoding BundledImage failed due to: \(error)"))
+        } catch {
+            let message = "Decoding BundledImage failed due to: \(error.localizedDescription.debugDescription)"
+            generalBundleError = ImageError.unableToGetFromBundle(.noBundleRetrieved(message))
             return icons
         }
     }
@@ -94,10 +97,11 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
     private func format(image: BundledImage) -> FormattedBundledImage? {
         let path = image.image_url.replacingOccurrences(of: ".png", with: "")
         let url = image.domain
+        let title = image.title
         let color = image.background_color
-        let filePath = Bundle.main.path(forResource: "TopSites/" + path, ofType: "png")
+        let filePath = bundleDataProvider.getPath(from: path)
         guard let filePath = filePath else {
-            imagesErrors[url] = ImageError.unableToGetFromBundle(.imageFormatting("No filepath for image path: \(path)"))
+            imagesErrors[title] = ImageError.unableToGetFromBundle(.imageFormatting("No filepath for image path: \(path)"))
             return nil
         }
 
@@ -110,7 +114,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
 
         return FormattedBundledImage(backgroundColor: backgroundColor,
                                      filePath: filePath,
-                                     domain: url)
+                                     title: title)
     }
 }
 

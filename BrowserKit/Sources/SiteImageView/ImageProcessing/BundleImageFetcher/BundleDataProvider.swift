@@ -2,10 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Foundation
+import UIKit
 
 protocol BundleDataProvider {
     func getBundleData() throws -> Data
+    func getPath(from path: String) -> String?
+    func getBundleImage(from path: String) -> UIImage?
 }
 
 class DefaultBundleDataProvider: BundleDataProvider {
@@ -20,6 +22,14 @@ class DefaultBundleDataProvider: BundleDataProvider {
         }
 
         return try Data(contentsOf: URL(fileURLWithPath: path))
+    }
+
+    func getPath(from path: String) -> String? {
+        return Bundle.main.path(forResource: "TopSites/" + path, ofType: "png")
+    }
+
+    func getBundleImage(from path: String) -> UIImage? {
+        return UIImage(contentsOfFile: path)
     }
 
     private var bundle: Bundle {
