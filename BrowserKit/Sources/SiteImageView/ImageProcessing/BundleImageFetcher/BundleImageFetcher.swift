@@ -8,8 +8,8 @@ protocol BundleImageFetcher {
 
     /// Fetches from the bundle
     /// - Parameter domain: The domain to fetch the image with from the bundle
-    /// - Returns: The image or an error if it fails
-    func getImageFromBundle(domain: String) -> Result<UIImage, ImageError>
+    /// - Returns: The image or throw an error if it fails
+    func getImageFromBundle(domain: String) throws -> UIImage
 }
 
 // TODO:
@@ -44,19 +44,19 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         bundledImages = retrieveBundledImages()
     }
 
-    func getImageFromBundle(domain: String) -> Result<UIImage, ImageError> {
+    func getImageFromBundle(domain: String) throws -> UIImage {
         if let bundledImage = bundledImages[domain],
            let image = UIImage(contentsOfFile: bundledImage.filePath) {
             let color = bundledImage.backgroundColor.cgColor.alpha < 0.01 ? UIColor.white : bundledImage.backgroundColor
-            return .success(image.withBackgroundAndPadding(color: color))
+            return image.withBackgroundAndPadding(color: color)
 
         } else if let imageError = imagesErrors[domain] {
-            return .failure(imageError)
+            throw imageError
 
         } else if let error = generalBundleError {
-            return .failure(error)
+            throw error
         }
-        return .failure(ImageError.unableToGetFromBundle(.noImage("Image with domain \(domain) isn't in bundle")))
+        throw ImageError.unableToGetFromBundle(.noImage("Image with domain \(domain) isn't in bundle"))
     }
 
     private func retrieveBundledImages() -> [String: FormattedBundledImage] {
