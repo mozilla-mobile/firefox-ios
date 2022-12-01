@@ -66,7 +66,7 @@ extension AppDelegate {
         // The notification service extension can clear this token if there is an error, and the main app can detect this and re-register.
         NotificationCenter.default.addObserver(forName: .ProfileDidStartSyncing, object: nil, queue: .main) { _ in
             let kc = MZKeychainWrapper.sharedClientAppContainerKeychain
-            if kc.object(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock) == nil {
+            if kc.string(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock) == nil {
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }
         }

@@ -200,17 +200,17 @@ open class RustFirefoxAccounts {
         // that returns JSON string.
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         let key = "profile.account"
-        keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
+        keychain.ensureDictonaryItemAccessibility(.afterFirstUnlock, forKey: key)
 
         // Ignore this class when de-archiving, it isn't needed.
         NSKeyedUnarchiver.setClass(Unknown.self, forClassName: "Account.FxADeviceRegistration")
 
-        guard let dict = keychain.object(forKey: key) as? [String: AnyObject],
+        guard let dict = keychain.object(forKey: key, ofClass: NSDictionary.self) as? [String: AnyObject],
               let guid = dict["stateKeyLabel"]
         else { return nil }
 
         let key2 = "account.state.\(guid)"
-        keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key2)
+        keychain.ensureDictonaryItemAccessibility(.afterFirstUnlock, forKey: key2)
         guard let jsonData = keychain.data(forKey: key2) else { return nil }
 
         guard let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else { return nil }
