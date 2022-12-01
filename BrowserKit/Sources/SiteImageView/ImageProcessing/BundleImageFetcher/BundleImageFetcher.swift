@@ -32,9 +32,9 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
     private var bundledImages = [String: FormattedBundledImage]()
 
     // Any time a bundled image couldn't be retrieved for a domain, it will be saved here
-    private var imagesErrors = [String: ImageError]()
+    private var imagesErrors = [String: BundleError]()
     // In case no bundled images could be retrieved, this will be set
-    private var generalBundleError: ImageError?
+    private var generalBundleError: BundleError?
 
     init(bundleDataProvider: BundleDataProvider) {
         self.bundleDataProvider = bundleDataProvider
@@ -45,7 +45,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         if let bundledImage = bundledImages[domain],
            let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) {
             let color = bundledImage.backgroundColor.cgColor.alpha < 0.01 ? UIColor.white : bundledImage.backgroundColor
-            return image.withBackgroundAndPadding(color: color)
+            return withBackgroundAndPadding(image: image, color: color)
 
         } else if let imageError = imagesErrors[domain] {
             throw imageError
@@ -53,7 +53,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         } else if let error = generalBundleError {
             throw error
         }
-        throw ImageError.unableToGetFromBundle(.noImage("Image with domain \(domain) isn't in bundle"))
+        throw BundleError.noImage("Image with domain \(domain) isn't in bundle")
     }
 
     private func retrieveBundledImages() -> [String: FormattedBundledImage] {
@@ -62,7 +62,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
             return decode(from: data)
 
         } catch let error {
-            generalBundleError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Decoding from file failed due to: \(error)"))
+            generalBundleError = BundleError.noBundleRetrieved("Decoding from file failed due to: \(error)")
             return [:]
         }
     }
@@ -82,14 +82,14 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
             }
 
             if icons.isEmpty {
-                generalBundleError = ImageError.unableToGetFromBundle(.noBundleRetrieved("Bundle was empty"))
+                generalBundleError = BundleError.noBundleRetrieved("Bundle was empty")
             }
 
             return icons
 
         } catch {
             let message = "Decoding BundledImage failed due to: \(error.localizedDescription.debugDescription)"
-            generalBundleError = ImageError.unableToGetFromBundle(.noBundleRetrieved(message))
+            generalBundleError = BundleError.noBundleRetrieved(message)
             return icons
         }
     }
@@ -100,7 +100,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         let color = image.background_color
         let filePath = bundleDataProvider.getPath(from: path)
         guard let filePath = filePath else {
-            imagesErrors[title] = ImageError.unableToGetFromBundle(.imageFormatting("No filepath for image path: \(path)"))
+            imagesErrors[title] = BundleError.imageFormatting("No filepath for image path: \(path)")
             return nil
         }
 

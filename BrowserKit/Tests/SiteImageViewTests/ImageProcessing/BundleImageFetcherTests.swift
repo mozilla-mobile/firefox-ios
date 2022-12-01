@@ -20,18 +20,18 @@ final class BundleImageFetcherTests: XCTestCase {
     }
 
     func testEmptyDomain_throwsError() {
-        bundleDataProvider.error = ImageError.unableToGetFromBundle(.noBundleRetrieved("Bundle error"))
+        bundleDataProvider.error = BundleError.noBundleRetrieved("Bundle error")
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
 
         do {
             let _ = try subject.getImageFromBundle(domain: "")
             XCTFail("Should fail")
 
-        } catch let error as ImageError {
+        } catch let error as BundleError {
             XCTAssertEqual("Decoding from file failed due to: Bundle error",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with BundleError type")
         }
     }
 
@@ -43,11 +43,11 @@ final class BundleImageFetcherTests: XCTestCase {
             let _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
 
-        } catch let error as ImageError {
+        } catch let error as BundleError {
             XCTAssertEqual("Decoding BundledImage failed due to: \"The data couldn’t be read because it isn’t in the correct format.\"",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with BundleError type")
         }
     }
 
@@ -59,11 +59,11 @@ final class BundleImageFetcherTests: XCTestCase {
             let _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
 
-        } catch let error as ImageError {
+        } catch let error as BundleError {
             XCTAssertEqual("Bundle was empty",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with BundleError type")
         }
     }
 
@@ -75,11 +75,11 @@ final class BundleImageFetcherTests: XCTestCase {
             let _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
 
-        } catch let error as ImageError {
+        } catch let error as BundleError {
             XCTAssertEqual("No filepath for image path: mozilla-com",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with BundleError type")
         }
     }
 
@@ -109,11 +109,11 @@ final class BundleImageFetcherTests: XCTestCase {
             let _ = try subject.getImageFromBundle(domain: "fakedomain")
             XCTFail("Should fail")
 
-        } catch let error as ImageError {
+        } catch let error as BundleError {
             XCTAssertEqual("Image with domain fakedomain isn't in bundle",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with BundleError type")
         }
     }
 
@@ -127,11 +127,11 @@ final class BundleImageFetcherTests: XCTestCase {
             let _ = try subject.getImageFromBundle(domain: "google")
             XCTFail("Should fail")
 
-        } catch let error as ImageError {
+        } catch let error as BundleError {
             XCTAssertEqual("Decoding BundledImage failed due to: \"The data couldn’t be read because it is missing.\"",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with BundleError type")
         }
     }
 }
@@ -161,12 +161,12 @@ private extension BundleImageFetcherTests {
 private class MockBundleDataProvider: BundleDataProvider {
 
     var data: Data?
-    var error: ImageError?
+    var error: BundleError?
     func getBundleData() throws -> Data {
         if let data = data {
             return data
         } else {
-            throw error ?? ImageError.unableToGetFromBundle(.noBundleRetrieved("Mock error not set"))
+            throw error ?? BundleError.noBundleRetrieved("Mock error not set")
         }
     }
 

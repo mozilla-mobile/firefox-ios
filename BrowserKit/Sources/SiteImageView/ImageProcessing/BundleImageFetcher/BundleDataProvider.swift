@@ -14,13 +14,13 @@ protocol BundleDataProvider {
 
 class DefaultBundleDataProvider: BundleDataProvider {
 
-    enum BundleError: Error {
+    enum BundleDataError: Error {
         case noPath
     }
 
     func getBundleData() throws -> Data {
         guard let path = bundle.path(forResource: "top_sites", ofType: "json") else {
-            throw BundleError.noPath
+            throw BundleDataError.noPath
         }
 
         return try Data(contentsOf: URL(fileURLWithPath: path))

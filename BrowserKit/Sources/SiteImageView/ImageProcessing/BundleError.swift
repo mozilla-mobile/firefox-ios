@@ -4,14 +4,15 @@
 
 import Foundation
 
-enum ImageError: Error, CustomStringConvertible {
-
-    case unableToDownloadImage(String)
-
+enum BundleError: Error, CustomStringConvertible {
     var description: String {
         switch self {
-        case .unableToDownloadImage(let error):
-            return "Unable to download image with reason: \(error)"
+        case .noBundleRetrieved(let error), .imageFormatting(let error), .noImage(let error):
+            return error
         }
     }
+
+    case noBundleRetrieved(String)
+    case imageFormatting(String)
+    case noImage(String)
 }
