@@ -1,0 +1,182 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
+
+import XCTest
+@testable import SiteImageView
+
+final class BundleImageFetcherTests: XCTestCase {
+
+    private var bundleDataProvider: MockBundleDataProvider!
+
+    override func setUp() {
+        super.setUp()
+        self.bundleDataProvider = MockBundleDataProvider()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        self.bundleDataProvider = nil
+    }
+
+    func testEmptyDomain_throwsError() {
+        bundleDataProvider.error = BundleError.noBundleRetrieved("Bundle error")
+        let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+
+        do {
+            _ = try subject.getImageFromBundle(domain: "")
+            XCTFail("Should fail")
+
+        } catch let error as BundleError {
+            XCTAssertEqual("Decoding from file failed due to: Bundle error",
+                           error.description)
+        } catch {
+            XCTFail("Should have failed with BundleError type")
+        }
+    }
+
+    func testInvalidData_throwsError() {
+        bundleDataProvider.data = generateHTMLData(string: MockBundleData.invalidData)
+        let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+
+        do {
+            _ = try subject.getImageFromBundle(domain: "mozilla")
+            XCTFail("Should fail")
+
+        } catch let error as BundleError {
+            XCTAssertEqual("Decoding BundledImage failed due to: \"The data couldn’t be read because it isn’t in the correct format.\"",
+                           error.description)
+        } catch {
+            XCTFail("Should have failed with BundleError type")
+        }
+    }
+
+    func testEmptyData_throwsError() {
+        bundleDataProvider.data = generateHTMLData(string: MockBundleData.emptyData)
+        let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+
+        do {
+            _ = try subject.getImageFromBundle(domain: "mozilla")
+            XCTFail("Should fail")
+
+        } catch let error as BundleError {
+            XCTAssertEqual("Bundle was empty",
+                           error.description)
+        } catch {
+            XCTFail("Should have failed with BundleError type")
+        }
+    }
+
+    func testValidData_withoutPath_throwsError() {
+        bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
+        let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+
+        do {
+            _ = try subject.getImageFromBundle(domain: "mozilla")
+            XCTFail("Should fail")
+
+        } catch let error as BundleError {
+            XCTAssertEqual("No filepath for image path: mozilla-com",
+                           error.description)
+        } catch {
+            XCTFail("Should have failed with BundleError type")
+        }
+    }
+
+    func testValidData_returnImage() {
+        let expectedImage = UIImage()
+        bundleDataProvider.imageToReturn = expectedImage
+        bundleDataProvider.pathToReturn = "a/path/to/image"
+        bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
+        let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+
+        do {
+            let result = try subject.getImageFromBundle(domain: "mozilla")
+            XCTAssertEqual(expectedImage, result)
+        } catch {
+            XCTFail("Should have succeeded")
+        }
+    }
+
+    func testValidData_whenDomainNotPresent_throwsError() {
+        let expectedImage = UIImage()
+        bundleDataProvider.imageToReturn = expectedImage
+        bundleDataProvider.pathToReturn = "a/path/to/image"
+        bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
+        let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+
+        do {
+            _ = try subject.getImageFromBundle(domain: "fakedomain")
+            XCTFail("Should fail")
+
+        } catch let error as BundleError {
+            XCTAssertEqual("Image with domain fakedomain isn't in bundle",
+                           error.description)
+        } catch {
+            XCTFail("Should have failed with BundleError type")
+        }
+    }
+
+    func testPartlyValidData() {
+        bundleDataProvider.pathToReturn = "a/path/to/image"
+        bundleDataProvider.data = generateHTMLData(string: MockBundleData.partlyValidData)
+
+        let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+
+        do {
+            _ = try subject.getImageFromBundle(domain: "google")
+            XCTFail("Should fail")
+
+        } catch let error as BundleError {
+            XCTAssertEqual("Decoding BundledImage failed due to: \"The data couldn’t be read because it is missing.\"",
+                           error.description)
+        } catch {
+            XCTFail("Should have failed with BundleError type")
+        }
+    }
+}
+
+private enum MockBundleData {
+
+    static let invalidData = "invalidData"
+
+    static let emptyData = "[]"
+
+    static let validData = """
+[{"title": "mozilla", "url": "https://www.mozilla.com.cn/", "image_url": "mozilla-com.png", "background_color": "#000", "domain": "mozilla.com.cn" },{"title": "google","url": "https://www.google.com/","image_url": "google-com.png","background_color": "#FFF","is_multi_region_domain": "true","domain": "google"}]
+"""
+
+    static let partlyValidData = """
+[{"title": "mozilla", "url": "https://www.mozilla.com.cn/", "image_url": "mozilla-com.png", "background_color": "#000", "domain": "mozilla.com.cn" },{"title": "google","url": "https://www.google.com/","image_url": "google-com.png","background_color": "#FFF","is_multi_region_domain": "true"}]
+"""
+}
+
+private extension BundleImageFetcherTests {
+    func generateHTMLData(string: String) -> Data? {
+        return string.data(using: .utf8)
+    }
+}
+
+// MARK: - MockBundleDataProvider
+private class MockBundleDataProvider: BundleDataProvider {
+
+    var data: Data?
+    var error: BundleError?
+    func getBundleData() throws -> Data {
+        if let data = data {
+            return data
+        } else {
+            throw error ?? BundleError.noBundleRetrieved("Mock error not set")
+        }
+    }
+
+    var pathToReturn: String?
+    func getPath(from path: String) -> String? {
+        return pathToReturn
+    }
+
+    var imageToReturn: UIImage?
+    func getBundleImage(from path: String) -> UIImage? {
+        return imageToReturn
+    }
+}

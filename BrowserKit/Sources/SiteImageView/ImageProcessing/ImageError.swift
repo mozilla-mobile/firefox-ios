@@ -5,6 +5,7 @@
 import Foundation
 
 enum ImageError: Error, CustomStringConvertible {
+
     case unableToDownloadImage(String)
     case unableToCacheImage(String)
     case unableToRetrieveFromCache(String)
