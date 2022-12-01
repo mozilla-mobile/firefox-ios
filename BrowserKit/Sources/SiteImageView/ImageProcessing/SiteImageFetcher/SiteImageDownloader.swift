@@ -15,13 +15,30 @@ protocol SiteImageDownloader {
         with url: URL,
         completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?
     ) -> DownloadTask?
+
+    func downloadImage(with url: URL) async throws -> SiteImageLoadingResult
+}
+
+extension SiteImageDownloader {
+    func downloadImage(with url: URL) async throws -> SiteImageLoadingResult {
+        return try await withCheckedThrowingContinuation { continuation in
+            _ = downloadImage(with: url) { result in
+                switch result {
+                case .success(let imageResult):
+                    continuation.resume(returning: imageResult)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
 
 extension ImageDownloader: SiteImageDownloader {
     func downloadImage(with url: URL,
                        completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?
     ) -> DownloadTask? {
-        self.downloadImage(with: url, options: nil, completionHandler: { result in
+        downloadImage(with: url, options: nil, completionHandler: { result in
             switch result {
             case .success(let value):
                 completionHandler?(.success(value))

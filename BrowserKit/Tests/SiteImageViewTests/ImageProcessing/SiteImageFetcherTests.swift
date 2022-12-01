@@ -20,36 +20,34 @@ final class SiteImageFetcherTests: XCTestCase {
         self.mockImageDownloader = nil
     }
 
-    func testReturnsFailure_onAnyError() {
+    func testReturnsFailure_onAnyError() async {
         mockImageDownloader.error = KingfisherError.requestError(reason: .emptyRequest)
         let subject = DefaultSiteImageFetcher(imageDownloader: mockImageDownloader)
 
-        subject.fetchImage(imageURL: URL(string: "www.mozilla.com")!,
-                           completion: { result in
-            switch result {
-            case .success:
-                XCTFail("Should have failed with error")
-            case .failure(let error):
-                XCTAssertEqual("Unable to download image with reason: The request is empty or `nil`.",
-                               error.description)
-            }
-        })
+        do {
+            let _ = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
+            XCTFail("Should have failed with error")
+
+        } catch let error as ImageError {
+            XCTAssertEqual("Unable to download image with reason: The request is empty or `nil`.",
+                           error.description)
+        } catch {
+            XCTFail("Should have failed with ImageError type")
+        }
     }
 
-    func testReturnsSuccess_onImage() {
+    func testReturnsSuccess_onImage() async {
         let resultImage = UIImage()
         mockImageDownloader.image = resultImage
         let subject = DefaultSiteImageFetcher(imageDownloader: mockImageDownloader)
 
-        subject.fetchImage(imageURL: URL(string: "www.mozilla.com")!,
-                           completion: { result in
-            switch result {
-            case .success(let value):
-                XCTAssertEqual(resultImage, value)
-            case .failure:
-                XCTFail("Should have succeeded with image")
-            }
-        })
+        do {
+            let result = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
+            XCTAssertEqual(resultImage, result)
+
+        } catch {
+            XCTFail("Should have succeeded with image")
+        }
     }
 }
 
