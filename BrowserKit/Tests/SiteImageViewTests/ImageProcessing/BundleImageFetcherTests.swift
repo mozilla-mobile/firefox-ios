@@ -24,7 +24,7 @@ final class BundleImageFetcherTests: XCTestCase {
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
 
         do {
-            let _ = try subject.getImageFromBundle(domain: "")
+            _ = try subject.getImageFromBundle(domain: "")
             XCTFail("Should fail")
 
         } catch let error as BundleError {
@@ -40,7 +40,7 @@ final class BundleImageFetcherTests: XCTestCase {
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
 
         do {
-            let _ = try subject.getImageFromBundle(domain: "mozilla")
+            _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
 
         } catch let error as BundleError {
@@ -56,7 +56,7 @@ final class BundleImageFetcherTests: XCTestCase {
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
 
         do {
-            let _ = try subject.getImageFromBundle(domain: "mozilla")
+            _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
 
         } catch let error as BundleError {
@@ -72,7 +72,7 @@ final class BundleImageFetcherTests: XCTestCase {
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
 
         do {
-            let _ = try subject.getImageFromBundle(domain: "mozilla")
+            _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
 
         } catch let error as BundleError {
@@ -106,7 +106,7 @@ final class BundleImageFetcherTests: XCTestCase {
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
 
         do {
-            let _ = try subject.getImageFromBundle(domain: "fakedomain")
+            _ = try subject.getImageFromBundle(domain: "fakedomain")
             XCTFail("Should fail")
 
         } catch let error as BundleError {
@@ -124,7 +124,7 @@ final class BundleImageFetcherTests: XCTestCase {
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
 
         do {
-            let _ = try subject.getImageFromBundle(domain: "google")
+            _ = try subject.getImageFromBundle(domain: "google")
             XCTFail("Should fail")
 
         } catch let error as BundleError {
