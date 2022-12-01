@@ -27,7 +27,7 @@ final class SiteImageCacheTests: XCTestCase {
         let subject = DefaultSiteImageCache(imageCache: imageCache)
 
         do {
-            let _ = try await subject.getImageFromCache(domain: "www.example.com", type: .favicon)
+            _ = try await subject.getImageFromCache(domain: "www.example.com", type: .favicon)
 
         } catch let error as ImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-favicon")
@@ -42,7 +42,7 @@ final class SiteImageCacheTests: XCTestCase {
         let subject = DefaultSiteImageCache(imageCache: imageCache)
 
         do {
-            let _ = try await subject.getImageFromCache(domain: "www.example.com", type: .heroImage)
+            _ = try await subject.getImageFromCache(domain: "www.example.com", type: .heroImage)
 
         } catch let error as ImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-heroImage")
@@ -76,7 +76,7 @@ final class SiteImageCacheTests: XCTestCase {
         let subject = DefaultSiteImageCache(imageCache: imageCache)
 
         do {
-            let _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
+            _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
 
         } catch let error as ImageError {
             XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
@@ -93,7 +93,7 @@ final class SiteImageCacheTests: XCTestCase {
         let subject = DefaultSiteImageCache(imageCache: imageCache)
 
         do {
-            let _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
+            _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
             XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
             XCTAssertEqual(imageCache.capturedImage, expectedImage)
 
@@ -120,13 +120,11 @@ private class MockDefaultImageCache: DefaultImageCache {
     var storageError: KingfisherError?
     var capturedImage: UIImage?
     var capturedStorageKey: String?
-    func store(image: UIImage, forKey key: String) async throws -> () {
+    func store(image: UIImage, forKey key: String) async throws {
         capturedImage = image
         capturedStorageKey = key
         if let error = storageError {
             throw error
-        } else {
-            return ()
         }
     }
 }
