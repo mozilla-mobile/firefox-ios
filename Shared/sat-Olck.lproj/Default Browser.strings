@@ -16,6 +16,12 @@
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "ᱫᱤᱱ ᱨᱮᱭᱟᱜ ᱵᱽᱨᱟᱣᱡᱤᱝ ᱠᱟᱹᱢᱤ ᱠᱚ ᱵᱚᱰᱷᱟᱣ ᱢᱮ";
 
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ᱫᱚ ᱢᱩᱴ 3,000+ ᱜᱟᱱ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱢᱤᱫ ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱯᱤᱪᱷᱟᱹ ᱡᱷᱚᱛᱚ ᱪᱟᱱᱫᱚ ᱵᱟᱹᱰ ᱮᱫ ᱠᱚᱣᱟᱭ ᱾ ᱯᱨᱟᱭᱣᱮᱥᱤ ᱥᱟᱱᱛ ᱢᱚᱱᱮ ᱞᱟᱹᱜᱤᱫ ᱞᱮ ᱫᱚ ᱟᱢᱟᱜ ᱢᱩᱞ ᱵᱽᱨᱟᱣᱩᱡᱚᱨ ᱞᱮᱠᱷᱟ ᱦᱟᱛᱟᱣ ᱞᱮᱢ ᱾";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox ᱫᱚ ᱯᱨᱟᱭᱣᱮᱥᱤ ᱯᱩᱨᱟᱹᱣ ᱪᱷᱚ ᱠᱮᱜᱼᱟᱭ";
+
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "ᱟᱢᱟᱜ ᱢᱩᱞ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱵᱚᱫᱚᱞ ᱢᱮ";
 
