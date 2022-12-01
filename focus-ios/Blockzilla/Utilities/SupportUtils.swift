@@ -16,7 +16,7 @@ public enum SupportTopic: CaseIterable {
     public var slug: String {
         switch self {
         case .whatsNew:
-            return "whats-new-\(AppInfo.config.productName.lowercased())-ios-\(AppInfo.majorVersion)"
+            return "whats-new-\(AppInfo.config.productName.lowercased())-ios"
         case .searchSuggestions:
             return "search-suggestions-focus-ios"
         case .usageData:
