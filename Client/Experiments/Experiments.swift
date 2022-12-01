@@ -107,6 +107,9 @@ enum Experiments {
         let profilePath: String?
         if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
             profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
+        } else if AppConstants.isRunningUnitTest {
+            let dir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+            profilePath = dir.path
         } else {
             profilePath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
