@@ -25,7 +25,7 @@ final class SiteImageFetcherTests: XCTestCase {
         let subject = DefaultSiteImageFetcher(imageDownloader: mockImageDownloader)
 
         do {
-            let _ = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
+            _ = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
             XCTFail("Should have failed with error")
 
         } catch let error as ImageError {
