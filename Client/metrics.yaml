@@ -3009,6 +3009,18 @@ awesomebar:
       - sync-core@mozilla.com
       - teshaq@mozilla.com
     expires: never
+  share_button_tapped:
+    type: event
+    description: |
+      Counts the number of times a user taps share
+      button on the awesomebar
+    bugs:
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-5284
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12472
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-06-01"
 
 # Share sheet specific metrics
 

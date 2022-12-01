@@ -32,7 +32,7 @@ open class PushNotificationSetup {
                 // We set our apnsToken **after** the call to set the push subscription completes
                 // This helps ensure that if that call fails, we will try again with a new token next time
                 keychain.set(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
-                keychain.set(pushRegistration as NSCoding,
+                keychain.set(pushRegistration,
                              forKey: KeychainKey.fxaPushRegistration,
                              withAccessibility: .afterFirstUnlock)
             }

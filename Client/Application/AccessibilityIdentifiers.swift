@@ -19,6 +19,7 @@ public struct AccessibilityIdentifiers {
         static let trackingProtection = "TabLocationView.trackingProtectionButton"
         static let readerModeButton = "TabLocationView.readerModeButton"
         static let reloadButton = "TabLocationView.reloadButton"
+        static let shareButton = "TabLocationView.shareButton"
     }
 
     struct Browser {
