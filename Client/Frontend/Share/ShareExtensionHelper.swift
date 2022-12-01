@@ -12,7 +12,8 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private let url: URL
     private var onePasswordExtensionItem: NSExtensionItem!
     private let browserFillIdentifier = "org.appextension.fill-browser-action"
-    private let pocketExtensionSchema = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
+    private let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
+    private let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
 
     var areShareSheetChangesEnabled: Bool {
         return featureFlags.isFeatureEnabled(.shareSheetChanges, checking: .buildOnly) && !url.isFile
@@ -45,14 +46,26 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
         activityViewController.excludedActivityTypes = excludingActivities
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
+            guard completed else {
+                completionHandler(completed, activityType)
+                return
+            }
 
-            if completed && activityType?.rawValue == self.pocketExtensionSchema {
+            // Add telemetry for Pocket activityType
+            if activityType?.rawValue == self.pocketIconExtension {
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,
                                              object: .shareSheet,
-                                             value: .sharePocketAction,
+                                             value: .sharePocketIcon,
+                                             extras: nil)
+            } else if activityType?.rawValue == self.pocketActionExtension {
+                TelemetryWrapper.recordEvent(category: .action,
+                                             method: .tap,
+                                             object: .shareSheet,
+                                             value: .shareSaveToPocket,
                                              extras: nil)
             }
+
             completionHandler(completed, activityType)
         }
 
