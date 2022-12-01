@@ -8,11 +8,11 @@ import XCTest
 
 final class SiteImageCacheTests: XCTestCase {
 
-    private var imageCache: MockDefaultSiteImageCache!
+    private var imageCache: MockDefaultImageCache!
 
     override func setUp() {
         super.setUp()
-        self.imageCache = MockDefaultSiteImageCache()
+        self.imageCache = MockDefaultImageCache()
     }
 
     override func tearDown() {
@@ -103,7 +103,7 @@ final class SiteImageCacheTests: XCTestCase {
     }
 }
 
-private class MockDefaultSiteImageCache: DefaultImageCache {
+private class MockDefaultImageCache: DefaultImageCache {
 
     var image: UIImage?
     var retrievalError: KingfisherError?
