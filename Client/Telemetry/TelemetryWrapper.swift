@@ -568,6 +568,7 @@ extension TelemetryWrapper {
         case bookmarkItem = "bookmark-item"
         case searchSuggestion = "search-suggestion"
         case searchHighlights = "search-highlights"
+        case awesomebarShareTap = "awesomebar-share-tap"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -1247,6 +1248,8 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
+        case (.action, .tap, .awesomebarLocation, .awesomebarShareTap, _):
+            GleanMetrics.Awesomebar.shareButtonTapped.record()
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging

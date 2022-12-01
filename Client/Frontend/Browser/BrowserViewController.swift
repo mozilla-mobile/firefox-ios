@@ -839,6 +839,14 @@ class BrowserViewController: UIViewController {
                     self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
                 }
             }
+
+            if !receivedURLs.isEmpty || cursorCount > 0 {
+                // Because the notification service runs as a seperate process
+                // we need to make sure that our account manager picks up any persisted state
+                // the notification services persisted.
+                self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
+                self.profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
+            }
         }
     }
 
@@ -1459,10 +1467,20 @@ class BrowserViewController: UIViewController {
     }
 
     func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
+        presentShareSheet(url, tab: tab, sourceView: sourceView, sourceRect: sourceRect, arrowDirection: arrowDirection)
+    }
+
+    func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
         let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
-            if activityType == CustomActivityAction.sendToDevice.actionType {
+
+            switch activityType {
+            case CustomActivityAction.sendToDevice.actionType:
                 self.showSendToDevice()
+            case CustomActivityAction.copyLink.actionType:
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
+                                                bottomContainer: webViewContainer)
+            default: break
             }
 
             // After dismissing, check to see if there were any prompts we queued up
