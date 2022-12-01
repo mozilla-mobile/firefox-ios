@@ -420,12 +420,12 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_appForeground_NimbusIsCalled() {
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app, value: nil)
-        XCTAssertTrue(try Experiments.shared.createMessageHelper().evalJexl(expression: "'app_cycle.foreground'|eventSum('Minutes', 1, 0) > 0"))
+        XCTAssertTrue(try Experiments.shared.createMessageHelper().evalJexl(expression: "'app_cycle.foreground'|eventSum('Days', 1, 0) > 0"))
     }
 
     func test_syncLogin_NimbusIsCalled() {
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .fxaLoginCompleteWebpage, value: nil)
-        XCTAssertTrue(try Experiments.shared.createMessageHelper().evalJexl(expression: "'sync.login_completed_view'|eventSum('Minutes', 1, 0) > 0"))
+        XCTAssertTrue(try Experiments.shared.createMessageHelper().evalJexl(expression: "'sync.login_completed_view'|eventSum('Days', 1, 0) > 0"))
     }
 }
 
