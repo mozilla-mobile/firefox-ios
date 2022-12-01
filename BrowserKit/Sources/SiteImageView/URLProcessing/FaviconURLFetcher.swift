@@ -14,7 +14,7 @@ protocol FaviconURLFetcher {
     func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void))
 }
 
-class DefaultFaviconURLFetcher: FaviconURLFetcher {
+struct DefaultFaviconURLFetcher: FaviconURLFetcher {
 
     private let network: NetworkRequest
 
@@ -23,10 +23,10 @@ class DefaultFaviconURLFetcher: FaviconURLFetcher {
     }
 
     func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void)) {
-        network.fetchDataForURL(siteURL) { [weak self] result in
+        network.fetchDataForURL(siteURL) { result in
             switch result {
             case let .success(data):
-                self?.processHTMLDocument(siteURL: siteURL,
+                self.processHTMLDocument(siteURL: siteURL,
                                           data: data,
                                           completion: completion)
             case let .failure(error):

@@ -1,0 +1,35 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0
+
+import Foundation
+
+protocol URLCacheFileManager: Actor {
+    func getURLCache() async -> Data?
+    func saveURLCache(data: Data)
+}
+
+actor DefaultURLCacheFileManager: URLCacheFileManager {
+    let fileName = "favicon-url-cache"
+    private let fileManager = FileManager.default
+
+    func getURLCache() async -> Data? {
+        guard fileManager.fileExists(atPath: getCacheDirectory().absoluteString) else { return nil }
+        return try? Data(contentsOf: getCacheDirectory())
+    }
+
+    func saveURLCache(data: Data) {
+        let path = getCacheDirectory()
+        do {
+            try data.write(to: path, options: [])
+        } catch {
+            // Intentionally ignoring failure, a fail to save
+            // is not catastrophic and the cache can always be rebuilt
+        }
+    }
+
+    private func getCacheDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0].appendingPathComponent(fileName)
+    }
+}
