@@ -106,17 +106,16 @@ enum Experiments {
     static var dbPath: String? {
         let profilePath: String?
         if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
-            let delegate = UIApplication.shared.delegate as? UITestAppDelegate
-            profilePath = delegate?.dirForTestProfile
-            log.info("Nimbus::Test:: Delegate: \(delegate); path: \(profilePath)")
+            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
+        } else if AppConstants.isRunningUnitTest {
+            let dir = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+            profilePath = dir.path
         } else {
-            let containerUrl = FileManager.default.containerURL(
+            profilePath = FileManager.default.containerURL(
                 forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier
-            )
-            profilePath = containerUrl?
+            )?
                 .appendingPathComponent("profile.profile")
                 .path
-            log.info("Nimbus::Live:: ContainerUrl: \(containerUrl); path: \(profilePath)")
         }
         let dbPath = profilePath.flatMap {
             URL(fileURLWithPath: $0).appendingPathComponent("nimbus.db").path
