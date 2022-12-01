@@ -950,6 +950,8 @@ extension TelemetryWrapper {
             GleanMetrics.Sync.loginView.record()
         case (.firefoxAccount, .view, .fxaLoginCompleteWebpage, _, _):
             GleanMetrics.Sync.loginCompletedView.record()
+            // record the same event for Nimbus' internal event store
+            Experiments.shared.recordEvent("sync.login_completed_view")
         case (.firefoxAccount, .view, .fxaConfirmSignUpCode, _, _):
             GleanMetrics.Sync.registrationCodeView.record()
         case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
@@ -957,6 +959,8 @@ extension TelemetryWrapper {
         // MARK: App cycle
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()
+            // record the same event for Nimbus' internal event store
+            Experiments.shared.recordEvent("app_cycle.foreground")
         case(.action, .background, .app, _, _):
             GleanMetrics.AppCycle.background.record()
         // MARK: Accessibility

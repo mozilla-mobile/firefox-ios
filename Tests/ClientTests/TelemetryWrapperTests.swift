@@ -415,6 +415,18 @@ class TelemetryWrapperTests: XCTestCase {
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.SettingsMenu.showTourPressed)
     }
+
+    // MARK: - Nimbus Calls
+
+    func test_appForeground_NimbusIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app, value: nil)
+        XCTAssertTrue(try Experiments.shared.createMessageHelper().evalJexl(expression: "'app_cycle.foreground'|eventSum('Days', 1, 0) > 0"))
+    }
+
+    func test_syncLogin_NimbusIsCalled() {
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .fxaLoginCompleteWebpage, value: nil)
+        XCTAssertTrue(try Experiments.shared.createMessageHelper().evalJexl(expression: "'sync.login_completed_view'|eventSum('Days', 1, 0) > 0"))
+    }
 }
 
 // MARK: - Helper functions to test telemetry
