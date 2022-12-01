@@ -115,25 +115,22 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
                                      filePath: filePath,
                                      title: title)
     }
-}
 
-// MARK: - Extension UIImage
-private extension UIImage {
-    func withBackgroundAndPadding(color: UIColor, opaque: Bool = true) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, opaque, scale)
+    private func withBackgroundAndPadding(image: UIImage, color: UIColor, opaque: Bool = true) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(image.size, opaque, image.scale)
 
-        guard let ctx = UIGraphicsGetCurrentContext(), let image = cgImage else { return self }
+        guard let ctx = UIGraphicsGetCurrentContext(), let cgImage = image.cgImage else { return image }
         defer { UIGraphicsEndImageContext() }
 
         // Pad the image in a bit to make the favicons look better
-        let newSize = CGSize(width: size.width - 20, height: size.height - 20)
-        let rect = CGRect(origin: .zero, size: size)
+        let newSize = CGSize(width: image.size.width - 20, height: image.size.height - 20)
+        let rect = CGRect(origin: .zero, size: image.size)
         let imageRect = CGRect(origin: CGPoint(x: 10, y: 10), size: newSize)
         ctx.setFillColor(color.cgColor)
         ctx.fill(rect)
-        ctx.concatenate(CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: size.height))
-        ctx.draw(image, in: imageRect)
+        ctx.concatenate(CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: image.size.height))
+        ctx.draw(cgImage, in: imageRect)
 
-        return UIGraphicsGetImageFromCurrentImageContext() ?? self
+        return UIGraphicsGetImageFromCurrentImageContext() ?? image
     }
 }
