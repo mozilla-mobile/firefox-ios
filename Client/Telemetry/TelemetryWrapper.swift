@@ -506,6 +506,8 @@ extension TelemetryWrapper {
         case shareMenu = "share-menu"
         case shareSendToDevice = "share-send-to-device"
         case shareCopyLink = "share-copy-link"
+        case sharePocketIcon = "share-pocket-icon"
+        case shareSaveToPocket = "save-to-pocket-share-action"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
         case systemThemeSwitch = "system-theme-switch"
@@ -1297,6 +1299,10 @@ extension TelemetryWrapper {
             GleanMetrics.ShareSheet.sendDeviceTapped.record()
         case (.action, .tap, .shareSheet, .shareCopyLink, _):
             GleanMetrics.ShareSheet.copyLinkTapped.record()
+        case (.action, .tap, .shareSheet, .sharePocketIcon, _):
+            GleanMetrics.ShareSheet.pocketActionTapped.record()
+        case (.action, .tap, .shareSheet, .shareSaveToPocket, _):
+            GleanMetrics.ShareSheet.saveToPocketTapped.record()
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }
