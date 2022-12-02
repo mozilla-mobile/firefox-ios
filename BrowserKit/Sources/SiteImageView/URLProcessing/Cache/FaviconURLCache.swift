@@ -17,6 +17,8 @@ actor DefaultFaviconURLCache: FaviconURLCache {
     static let shared = DefaultFaviconURLCache()
     private let fileManager: URLCacheFileManager
     private var urlCache = [String: FaviconURL]()
+    private var preserveTask: Task<Void, Never>?
+    private let preserveDebounceTime: UInt64 = 5_000_000_000 // 5 seconds
 
     init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
         self.fileManager = fileManager
@@ -39,19 +41,19 @@ actor DefaultFaviconURLCache: FaviconURLCache {
                                  faviconURL: faviconURL.absoluteString,
                                  createdAt: Date())
         urlCache[domain] = favicon
-
-        // TODO: Debounce this call FXIOS-5367
-        // Sending this to a task because we don't need to wait for this operation to complete
-        Task {
-            await preserveCache()
-        }
+        preserveCache()
     }
 
-    private func preserveCache() async {
-        guard let data = archiveCacheData() else {
-            return
+    private func preserveCache() {
+        preserveTask?.cancel()
+        preserveTask = Task {
+            try? await Task.sleep(nanoseconds: preserveDebounceTime)
+            guard !Task.isCancelled else { return }
+            guard let data = archiveCacheData() else {
+                return
+            }
+            await fileManager.saveURLCache(data: data)
         }
-        await fileManager.saveURLCache(data: data)
     }
 
     private func archiveCacheData() -> Data? {
