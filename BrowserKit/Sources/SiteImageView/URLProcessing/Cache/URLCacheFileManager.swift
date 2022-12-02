@@ -18,7 +18,7 @@ actor DefaultURLCacheFileManager: URLCacheFileManager {
     }
     
     func getURLCache() async -> Data? {
-        guard fileManager.fileExists(atPath: getCacheDirectory().absoluteString) else { return nil }
+        guard fileManager.fileExists(atPath: getCacheDirectory().path) else { return nil }
         return try? Data(contentsOf: getCacheDirectory())
     }
 
