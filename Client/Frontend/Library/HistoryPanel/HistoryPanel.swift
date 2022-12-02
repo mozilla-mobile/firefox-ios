@@ -765,7 +765,7 @@ extension HistoryPanel {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint),
-              diffableDatasource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel != nil
+              diffableDatasource?.itemIdentifier(for: indexPath) as? HistoryActionablesModel == nil
         else { return }
 
         presentContextMenu(for: indexPath)
