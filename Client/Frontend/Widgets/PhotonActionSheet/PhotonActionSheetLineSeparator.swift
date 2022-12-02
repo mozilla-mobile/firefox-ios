@@ -4,10 +4,10 @@
 
 import UIKit
 
-// MARK: - PhotonActionSheetSeparator
 class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell {
+// MARK: - PhotonActionSheetLineSeparator
 
-    let separatorLineView = UIView()
+    private let separatorLineView = UIView()
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -15,6 +15,7 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell 
         self.backgroundView?.backgroundColor = .clear
         separatorLineView.backgroundColor = UIColor.Photon.Grey40
         self.contentView.addSubview(separatorLineView)
+
         separatorLineView.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.centerY.equalTo(self)

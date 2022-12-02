@@ -12,23 +12,24 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         static let borderColor = UIColor.Photon.Grey30
         static let padding: CGFloat = 12
         static let verticalPadding: CGFloat = 2
+        static let siteImageViewSize: CGFloat = 52
     }
 
-    lazy var labelContainerView: UIView = .build { _ in }
+    private lazy var labelContainerView: UIView = .build { _ in }
 
-    lazy var titleLabel: UILabel = .build { label in
+    private lazy var titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body, size: 17)
         label.textAlignment = .left
         label.numberOfLines = 2
     }
 
-    lazy var descriptionLabel: UILabel = .build { label in
+    private lazy var descriptionLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: 17)
         label.textAlignment = .left
         label.numberOfLines = 1
     }
 
-    lazy var siteImageView: UIImageView = .build { imageView in
+    private lazy var siteImageView: UIImageView = .build { imageView in
         imageView.contentMode = .center
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = PhotonActionSheet.UX.cornerRadius
@@ -48,13 +49,13 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.siteImageView.image = nil
-        self.siteImageView.backgroundColor = UIColor.clear
+        siteImageView.image = nil
+        siteImageView.backgroundColor = UIColor.clear
     }
 
     func configure(with site: Site) {
         if site.icon != nil {
-            self.siteImageView.setFavicon(forSite: site) {
+            siteImageView.setFavicon(forSite: site) {
                 self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheet.UX.iconSize)
             }
         } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
@@ -66,10 +67,10 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
                 self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.iconSize)
             }
         }
-        self.titleLabel.text = site.title.isEmpty ? site.url : site.title
-        self.descriptionLabel.text = site.tileURL.baseDomain
         self.titleLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
         self.descriptionLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
+        titleLabel.text = site.title.isEmpty ? site.url : site.title
+        descriptionLabel.text = site.tileURL.baseDomain
 
     }
 
@@ -87,8 +88,8 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         NSLayoutConstraint.activate([
             siteImageView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: padding),
             siteImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            siteImageView.widthAnchor.constraint(equalToConstant: PhotonActionSheet.UX.siteImageViewSize),
-            siteImageView.heightAnchor.constraint(equalToConstant: PhotonActionSheet.UX.siteImageViewSize),
+            siteImageView.widthAnchor.constraint(equalToConstant: UX.siteImageViewSize),
+            siteImageView.heightAnchor.constraint(equalToConstant: UX.siteImageViewSize),
             siteImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -padding),
             siteImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
@@ -108,7 +109,6 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                   constant: PhotonActionSheetSiteHeaderView.UX.verticalPadding),
             descriptionLabel.bottomAnchor.constraint(equalTo: labelContainerView.bottomAnchor),
-
         ])
     }
 }

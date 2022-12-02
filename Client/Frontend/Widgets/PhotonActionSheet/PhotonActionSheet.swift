@@ -27,7 +27,6 @@ class PhotonActionSheet: UIViewController, Themeable {
         static let padding: CGFloat = 6
         static let rowHeight: CGFloat = 44
         static let cornerRadius: CGFloat = 10
-        static let siteImageViewSize: CGFloat = 52
         static let iconSize = CGSize(width: 24, height: 24)
         static let closeButtonHeight: CGFloat  = 56
         static let tablePadding: CGFloat = 6
