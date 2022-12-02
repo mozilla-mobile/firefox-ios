@@ -37,7 +37,13 @@ class AppContainer: ServiceProvider {
     // MARK: - Misc helpers
 
     /// Prepares the container by registering all services for the app session.
+    ///
+    /// Dependencies that are app-wide (scene independent) are towards the top. Generally, these
+    /// dependencies are initialized in `AppDelegate`. The container searches for dependencies there before
+    /// creating an instance.
+    ///
     /// Insert a dependency when needed, otherwise it floats in memory.
+    ///
     /// - Returns: A bootstrapped `DependencyContainer`.
     private func bootstrapContainer() -> DependencyContainer {
         return DependencyContainer { container in
@@ -45,7 +51,7 @@ class AppContainer: ServiceProvider {
                 unowned let container = container
 
                 /// Since Profile's usage is at the very beginning (and is a dependency for others in this container)
-                /// we give this an `eagerSingleton` scope, forcing the instance to exist ON container boostrap.
+                /// we give this an `eagerSingleton` scope, forcing the instance to exist ON container bootstrap.
                 container.register(.eagerSingleton) { () -> Profile in
                     if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
                         return appDelegate.profile
@@ -71,14 +77,6 @@ class AppContainer: ServiceProvider {
                     }
                 }
 
-                container.register(.singleton) { () -> ThemeManager in
-                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                        return appDelegate.themeManager
-                    } else {
-                        return DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
-                    }
-                }
-
                 container.register(.singleton) { () -> AppSessionProvider in
                     if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
                         return appDelegate.appSessionManager
@@ -87,8 +85,20 @@ class AppContainer: ServiceProvider {
                     }
                 }
 
-                container.register(.singleton) {
-                    return RatingPromptManager(profile: try container.resolve())
+                container.register(.singleton) { () -> ThemeManager in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.themeManager
+                    } else {
+                        return DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
+                    }
+                }
+
+                container.register(.singleton) { () -> RatingPromptManager in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.ratingPromptManager
+                    } else {
+                        return RatingPromptManager(profile: try container.resolve())
+                    }
                 }
 
                 try container.bootstrap()
