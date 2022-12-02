@@ -289,7 +289,6 @@
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
 		3E82980324BE4C31000A59FF /* FxATelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82980124BE4C31000A59FF /* FxATelemetry.swift */; };
 		43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4302EDBE2819D6640070D373 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 4302EDBD2819D6640070D373 /* SwiftyJSON */; };
 		43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		43118CF3251A9CCA00F24376 /* TabDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* TabDataRetriever.swift */; };
 		43118D07251A9CD100F24376 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
@@ -321,20 +320,6 @@
 		435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660423D794B90046EFA2 /* UpdateViewModel.swift */; };
 		435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC4246209AA0043ACB9 /* IntroViewController.swift */; };
 		435E34B3254A6A6000406D92 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650758F1E37F7AB006961AC /* TimeConstants.swift */; };
-		4368F82B279665370013419B /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 4368F82A279665370013419B /* Sentry */; };
-		4368F82C279665C20013419B /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
-		4368F82D279665C20013419B /* Sentry.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4368F830279665D50013419B /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
-		4368F831279665D50013419B /* Sentry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4368F834279665DF0013419B /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
-		4368F835279665DF0013419B /* Sentry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4368F839279665EF0013419B /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
-		4368F84D2796698A0013419B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4368F84C2796698A0013419B /* SnapKit */; };
-		4368F84E279669A60013419B /* Snapkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; };
-		4368F84F279669C90013419B /* Snapkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; };
-		4368F85427966A4F0013419B /* Snapkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; };
-		4368F85927966A860013419B /* Snapkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; };
-		4368F85D27966BC30013419B /* Snapkit.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F84A279669740013419B /* Snapkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		437A857827E43FE100E42764 /* FxAWebViewTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A857727E43FE100E42764 /* FxAWebViewTelemetry.swift */; };
 		437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B672681256800FB41C1 /* InactiveTabCell.swift */; };
 		437A9B6A2681257F00FB41C1 /* InactiveTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */; };
@@ -351,11 +336,6 @@
 		43A878FE27AC39D30071C372 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43AB6FA225DC53D30016B015 /* GoogleTopSiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */; };
 		43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */; };
-		43AFC0DC279678A80039DDF4 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 43AFC0DB279678A80039DDF4 /* XCGLogger */; };
-		43AFC0DE279678F70039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
-		43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
-		43AFC117279699530039DDF4 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
-		43AFC118279699530039DDF4 /* XCGLogger.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
 		43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
@@ -365,9 +345,6 @@
 		43BE5820278BE68100491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43BE5825278BE7EF00491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43BE5827278BE81500491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		43C6A46E279B8A0800C79856 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
-		43C6A46F279B8A3300C79856 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
-		43C6A470279B8AAF00C79856 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */; };
 		43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */ = {isa = PBXBuildFile; productRef = 43C6A47E27A0679300C79856 /* MappaMundi */; };
 		43D6D6A327E535FF00F47485 /* FxALoginRegistrationTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6D6A127E535EE00F47485 /* FxALoginRegistrationTelemetryTests.swift */; };
 		43DB9784292D6846002E0B9F /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DB9783292D6846002E0B9F /* ShareButton.swift */; };
@@ -376,7 +353,6 @@
 		43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F7952425795F69005AEE40 /* SearchTelemetry.swift */; };
 		43F93C2427A8681C009833D9 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		43F93C2527A8682D009833D9 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4368F828279665220013419B /* Sentry.framework */; };
 		43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		45CC573F28AD8B9B006D55AA /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CC573E28AD8B9A006D55AA /* Metrics.swift */; };
 		4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A59BF410BBD9B3BE71F4C7C /* TestHistory.swift */; };
@@ -407,6 +383,21 @@
 		5A87148C292EA1640039A5BD /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5A87148B292EA1640039A5BD /* Fuzi */; };
 		5A87148E292EA3270039A5BD /* Fuzi in Frameworks */ = {isa = PBXBuildFile; productRef = 5A87148D292EA3270039A5BD /* Fuzi */; };
 		5A871490292EA3910039A5BD /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 5A87148F292EA3910039A5BD /* SiteImageView */; };
+		5A8FD0E2293A7B2D00333AA7 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0E1293A7B2D00333AA7 /* XCGLogger */; };
+		5A8FD0E4293A7B4600333AA7 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0E3293A7B4600333AA7 /* XCGLogger */; };
+		5A8FD0E6293A7B5200333AA7 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0E5293A7B5200333AA7 /* XCGLogger */; };
+		5A8FD0E8293A7CD100333AA7 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0E7293A7CD100333AA7 /* XCGLogger */; };
+		5A8FD0EA293A7D0C00333AA7 /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0E9293A7D0C00333AA7 /* XCGLogger */; };
+		5A8FD0EC293A7D5E00333AA7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0EB293A7D5E00333AA7 /* SnapKit */; };
+		5A8FD0EE293A7D6D00333AA7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0ED293A7D6D00333AA7 /* SnapKit */; };
+		5A8FD0F0293A7D7F00333AA7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0EF293A7D7F00333AA7 /* SnapKit */; };
+		5A8FD0F2293A7D9000333AA7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0F1293A7D9000333AA7 /* SnapKit */; };
+		5A8FD0F4293A7E9800333AA7 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0F3293A7E9800333AA7 /* Sentry */; };
+		5A8FD0F6293A7EB900333AA7 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0F5293A7EB900333AA7 /* Sentry */; };
+		5A8FD0F8293A7ECD00333AA7 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0F7293A7ECD00333AA7 /* Sentry */; };
+		5A8FD0FA293A7EDA00333AA7 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0F9293A7EDA00333AA7 /* Sentry */; };
+		5A8FD0FC293A7EE600333AA7 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0FB293A7EE600333AA7 /* Sentry */; };
+		5A8FD0FE293A7F0000333AA7 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 5A8FD0FD293A7F0000333AA7 /* Sentry */; };
 		5A9A09D228AFD51900B6F51E /* MockHomepageDataModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D128AFD51900B6F51E /* MockHomepageDataModelDelegate.swift */; };
 		5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */; };
 		5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */; };
@@ -635,8 +626,6 @@
 		8AEE62CB2756BA34003207D1 /* DownloadHelper.js in Resources */ = {isa = PBXBuildFile; fileRef = 8AEE62C82756BA34003207D1 /* DownloadHelper.js */; };
 		8AF0CFF527A0B0ED00C1A4A2 /* QuickActionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF0CFF427A0B0ED00C1A4A2 /* QuickActionsTests.swift */; };
 		8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */; };
-		8AFD6275282C51D300451BC8 /* DynamicSwiftyJson.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */; };
-		8AFD6276282C51D300451BC8 /* DynamicSwiftyJson.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCD3BCC1ED5B7FA00446D38 /* FxADeepLinkingTests.swift */; };
@@ -1411,13 +1400,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		4302EDC12819D6790070D373 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4302EDB02819D6250070D373;
-			remoteInfo = DynamicSwiftyJson;
-		};
 		43118CDE251A9CAD00F24376 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1431,48 +1413,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F8324A042649A188007E4BFA;
 			remoteInfo = CredentialProvider;
-		};
-		4368F82E279665C20013419B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4368F81C279665220013419B;
-			remoteInfo = Sentry;
-		};
-		4368F832279665D50013419B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4368F81C279665220013419B;
-			remoteInfo = Sentry;
-		};
-		4368F836279665DF0013419B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4368F81C279665220013419B;
-			remoteInfo = Sentry;
-		};
-		4368F851279669C90013419B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4368F83E279669740013419B;
-			remoteInfo = Snapkit;
-		};
-		4368F85627966A4F0013419B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4368F83E279669740013419B;
-			remoteInfo = Snapkit;
-		};
-		4368F85B27966A860013419B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4368F83E279669740013419B;
-			remoteInfo = Snapkit;
 		};
 		5FA2233627F73E28005B3D87 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1630,7 +1570,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4368F831279665D50013419B /* Sentry.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1641,7 +1580,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4368F835279665DF0013419B /* Sentry.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1652,7 +1590,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8AFD6276282C51D300451BC8 /* DynamicSwiftyJson.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1663,10 +1600,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4368F85D27966BC30013419B /* Snapkit.framework in Copy Frameworks */,
 				43017ECB278E0C6700CED011 /* RustMozillaAppServices.framework in Copy Frameworks */,
-				43AFC118279699530039DDF4 /* XCGLogger.framework in Copy Frameworks */,
-				4368F82D279665C20013419B /* Sentry.framework in Copy Frameworks */,
 				C82043C32523DD6A00740B71 /* Sync.framework in Copy Frameworks */,
 				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
 			);
@@ -2418,8 +2352,6 @@
 		430170CC28B903CA007A163A /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/JumpBackIn.strings"; sourceTree = "<group>"; };
 		430170CD28B903CA007A163A /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/ToolbarLocation.strings"; sourceTree = "<group>"; };
 		430170CE28B903CA007A163A /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DynamicSwiftyJson.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4302EDBC2819D6260070D373 /* DynamicSwiftyJson-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DynamicSwiftyJson-Info.plist"; sourceTree = "<group>"; };
 		4306EE1028B39BAF00E3443B /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/JumpBackIn.strings"; sourceTree = "<group>"; };
 		4306EE1128B39BAF00E3443B /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/ToolbarLocation.strings"; sourceTree = "<group>"; };
 		430A161728C6133D00D5B9B6 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/JumpBackIn.strings"; sourceTree = "<group>"; };
@@ -2524,11 +2456,6 @@
 		4368ED3A28B39C1300A50B64 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/JumpBackIn.strings"; sourceTree = "<group>"; };
 		4368ED3B28B39C1300A50B64 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/ToolbarLocation.strings"; sourceTree = "<group>"; };
 		4368EE5B292B95C0005A0673 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
-		4368F828279665220013419B /* Sentry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sentry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4368F829279665220013419B /* Sentry-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Sentry-Info.plist"; sourceTree = "<group>"; };
-		4368F84A279669740013419B /* Snapkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snapkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4368F84B279669740013419B /* Snapkit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Snapkit-Info.plist"; sourceTree = "<group>"; };
-		4368F87C27966E810013419B /* SDWebImage-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SDWebImage-Info.plist"; sourceTree = "<group>"; };
 		43696A66292B9719002C3EAD /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/SearchHeaderTitle.strings"; sourceTree = "<group>"; };
 		436985E428B39FFE00198055 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/JumpBackIn.strings"; sourceTree = "<group>"; };
 		436985E528B39FFE00198055 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/ToolbarLocation.strings"; sourceTree = "<group>"; };
@@ -2602,8 +2529,6 @@
 		43AC3C2228D8864200CCFC52 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		43AC3C2328D8864200CCFC52 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		43AF25CC28B39CB5004A4F86 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/BookmarkPanel.strings"; sourceTree = "<group>"; };
-		43AFC0D9279678920039DDF4 /* XCGLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XCGLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43AFC0DA279678920039DDF4 /* XCGLogger-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "XCGLogger-Info.plist"; sourceTree = "<group>"; };
 		43B0CE2328EAFC58000500A2 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		43B0CE2428EAFC58000500A2 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsPrefs.swift; sourceTree = "<group>"; };
@@ -5229,7 +5154,7 @@
 			files = (
 				43A878FE27AC39D30071C372 /* RustMozillaAppServices.framework in Frameworks */,
 				5A87148A292EA1520039A5BD /* Fuzi in Frameworks */,
-				4368F830279665D50013419B /* Sentry.framework in Frameworks */,
+				5A8FD0F6293A7EB900333AA7 /* Sentry in Frameworks */,
 				433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */,
 				8A48CE35292FCC1C00B32289 /* Kingfisher in Frameworks */,
 				C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */,
@@ -5242,13 +5167,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43AFC0DF2796794F0039DDF4 /* XCGLogger.framework in Frameworks */,
-				8AFD6275282C51D300451BC8 /* DynamicSwiftyJson.framework in Frameworks */,
 				8A48CE3D292FCE1A00B32289 /* Kingfisher in Frameworks */,
 				43BE581B278BE5AE00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				5A87148C292EA1640039A5BD /* Fuzi in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
+				5A8FD0EA293A7D0C00333AA7 /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5266,10 +5190,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				43A878FD27AB4A110071C372 /* RustMozillaAppServices.framework in Frameworks */,
-				43AFC0DE279678F70039DDF4 /* XCGLogger.framework in Frameworks */,
-				4368F834279665DF0013419B /* Sentry.framework in Frameworks */,
 				1B0DFD25274856D60008EB0A /* SwiftyJSON in Frameworks */,
 				8A48CE3B292FCE0800B32289 /* Kingfisher in Frameworks */,
+				5A8FD0E8293A7CD100333AA7 /* XCGLogger in Frameworks */,
+				5A8FD0FE293A7F0000333AA7 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5277,9 +5201,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A8FD0F4293A7E9800333AA7 /* Sentry in Frameworks */,
 				96C11E962863985E00840E7C /* Dip in Frameworks */,
-				4368F84E279669A60013419B /* Snapkit.framework in Frameworks */,
-				4368F82C279665C20013419B /* Sentry.framework in Frameworks */,
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
 				8A08EC6227EBDCA400E119C7 /* iAd.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */,
@@ -5291,6 +5214,7 @@
 				C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */,
 				F8324A7C2649A5A5007E4BFA /* AuthenticationServices.framework in Frameworks */,
 				E6231C051B90A472005ABB0D /* libxml2.2.tbd in Frameworks */,
+				5A8FD0E2293A7B2D00333AA7 /* XCGLogger in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
 				5A871488292EA1440039A5BD /* Fuzi in Frameworks */,
@@ -5300,7 +5224,7 @@
 				435C85F02788F4D00072B526 /* Glean in Frameworks */,
 				433F87CE2788EAB600693368 /* GCDWebServers in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
-				43AFC117279699530039DDF4 /* XCGLogger.framework in Frameworks */,
+				5A8FD0EC293A7D5E00333AA7 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5326,10 +5250,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A8FD0F8293A7ECD00333AA7 /* Sentry in Frameworks */,
 				8A48CE37292FCC2700B32289 /* Kingfisher in Frameworks */,
-				43C6A470279B8AAF00C79856 /* XCGLogger.framework in Frameworks */,
-				4368F839279665EF0013419B /* Sentry.framework in Frameworks */,
 				43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */,
+				5A8FD0E4293A7B4600333AA7 /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5347,8 +5271,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				39409A3F1C90E68300DAE683 /* Shared.framework in Frameworks */,
+				5A8FD0F0293A7D7F00333AA7 /* SnapKit in Frameworks */,
 				3905274C1C874D35007E0BB7 /* NotificationCenter.framework in Frameworks */,
-				4368F84F279669C90013419B /* Snapkit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5367,38 +5291,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4302EDB42819D6250070D373 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4302EDBE2819D6640070D373 /* SwiftyJSON in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F820279665220013419B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4368F82B279665370013419B /* Sentry in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F842279669740013419B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4368F84D2796698A0013419B /* SnapKit in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43AFC0D1279678920039DDF4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43AFC0DC279678A80039DDF4 /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5442,8 +5334,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A48CE39292FCC3400B32289 /* Kingfisher in Frameworks */,
-				43C6A46F279B8A3300C79856 /* XCGLogger.framework in Frameworks */,
-				43C6A46E279B8A0800C79856 /* Sentry.framework in Frameworks */,
+				5A8FD0E6293A7B5200333AA7 /* XCGLogger in Frameworks */,
+				5A8FD0FA293A7EDA00333AA7 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5451,9 +5343,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4368F85427966A4F0013419B /* Snapkit.framework in Frameworks */,
 				43BE5816278BE53E00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				F8324A072649A188007E4BFA /* AuthenticationServices.framework in Frameworks */,
+				5A8FD0F2293A7D9000333AA7 /* SnapKit in Frameworks */,
 				F8324AF62649B540007E4BFA /* Shared.framework in Frameworks */,
 				F8324AFA2649B540007E4BFA /* Sync.framework in Frameworks */,
 			);
@@ -5463,8 +5355,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A8FD0FC293A7EE600333AA7 /* Sentry in Frameworks */,
 				43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */,
-				43F93C2527A8682D009833D9 /* Sentry.framework in Frameworks */,
 				1BE9ECCE271770A600D729BB /* SwiftyJSON in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 			);
@@ -5475,8 +5367,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A87148E292EA3270039A5BD /* Fuzi in Frameworks */,
-				4368F85927966A860013419B /* Snapkit.framework in Frameworks */,
 				43BE5827278BE81500491291 /* RustMozillaAppServices.framework in Frameworks */,
+				5A8FD0EE293A7D6D00333AA7 /* SnapKit in Frameworks */,
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
 				C877039625222FDC006E38EB /* Shared.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
@@ -8111,11 +8003,6 @@
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				E15A8B2B286CFD48004BB2B8 /* Tests */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
-				4368F829279665220013419B /* Sentry-Info.plist */,
-				4368F84B279669740013419B /* Snapkit-Info.plist */,
-				4368F87C27966E810013419B /* SDWebImage-Info.plist */,
-				43AFC0DA279678920039DDF4 /* XCGLogger-Info.plist */,
-				4302EDBC2819D6260070D373 /* DynamicSwiftyJson-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -8145,10 +8032,6 @@
 				047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */,
 				F8324A052649A188007E4BFA /* CredentialProvider.appex */,
 				43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */,
-				4368F828279665220013419B /* Sentry.framework */,
-				4368F84A279669740013419B /* Snapkit.framework */,
-				43AFC0D9279678920039DDF4 /* XCGLogger.framework */,
-				4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -8438,13 +8321,13 @@
 			);
 			dependencies = (
 				43118CDF251A9CAD00F24376 /* PBXTargetDependency */,
-				4368F833279665D50013419B /* PBXTargetDependency */,
 			);
 			name = WidgetKitExtension;
 			packageProductDependencies = (
 				433F87CF2788ECDD00693368 /* GCDWebServers */,
 				5A871489292EA1520039A5BD /* Fuzi */,
 				8A48CE34292FCC1C00B32289 /* Kingfisher */,
+				5A8FD0F5293A7EB900333AA7 /* Sentry */,
 			);
 			productName = WidgetKitExtension;
 			productReference = 047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */;
@@ -8465,12 +8348,12 @@
 			dependencies = (
 				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
 				2F11EE501ABCAE910083902D /* PBXTargetDependency */,
-				4302EDC22819D6790070D373 /* PBXTargetDependency */,
 			);
 			name = Sync;
 			packageProductDependencies = (
 				5A87148B292EA1640039A5BD /* Fuzi */,
 				8A48CE3C292FCE1A00B32289 /* Kingfisher */,
+				5A8FD0E9293A7D0C00333AA7 /* XCGLogger */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -8510,12 +8393,13 @@
 			buildRules = (
 			);
 			dependencies = (
-				4368F837279665DF0013419B /* PBXTargetDependency */,
 			);
 			name = Shared;
 			packageProductDependencies = (
 				1B0DFD24274856D60008EB0A /* SwiftyJSON */,
 				8A48CE3A292FCE0800B32289 /* Kingfisher */,
+				5A8FD0E7293A7CD100333AA7 /* XCGLogger */,
+				5A8FD0FD293A7F0000333AA7 /* Sentry */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -8573,6 +8457,8 @@
 			name = Storage;
 			packageProductDependencies = (
 				8A48CE36292FCC2700B32289 /* Kingfisher */,
+				5A8FD0E3293A7B4600333AA7 /* XCGLogger */,
+				5A8FD0F7293A7ECD00333AA7 /* Sentry */,
 			);
 			productName = Storage;
 			productReference = 2FCAE21A1ABB51F800877008 /* libStorage.a */;
@@ -8613,9 +8499,11 @@
 			);
 			dependencies = (
 				D09A0CED1FAA2C4C009A0273 /* PBXTargetDependency */,
-				4368F852279669C90013419B /* PBXTargetDependency */,
 			);
 			name = Today;
+			packageProductDependencies = (
+				5A8FD0EF293A7D7F00333AA7 /* SnapKit */,
+			);
 			productName = Today;
 			productReference = 3905274A1C874D35007E0BB7 /* Today.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -8677,82 +8565,6 @@
 			productName = XCUITests;
 			productReference = 3BFE4B071D342FB800DDF53F /* XCUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		4302EDB02819D6250070D373 /* DynamicSwiftyJson */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4302EDB62819D6250070D373 /* Build configuration list for PBXNativeTarget "DynamicSwiftyJson" */;
-			buildPhases = (
-				4302EDB32819D6250070D373 /* Sources */,
-				4302EDB42819D6250070D373 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = DynamicSwiftyJson;
-			packageProductDependencies = (
-				4302EDBD2819D6640070D373 /* SwiftyJSON */,
-			);
-			productName = Shared;
-			productReference = 4302EDBB2819D6250070D373 /* DynamicSwiftyJson.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		4368F81C279665220013419B /* Sentry */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4368F823279665220013419B /* Build configuration list for PBXNativeTarget "Sentry" */;
-			buildPhases = (
-				4368F81F279665220013419B /* Sources */,
-				4368F820279665220013419B /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Sentry;
-			packageProductDependencies = (
-				4368F82A279665370013419B /* Sentry */,
-			);
-			productName = Shared;
-			productReference = 4368F828279665220013419B /* Sentry.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		4368F83E279669740013419B /* Snapkit */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4368F845279669740013419B /* Build configuration list for PBXNativeTarget "Snapkit" */;
-			buildPhases = (
-				4368F841279669740013419B /* Sources */,
-				4368F842279669740013419B /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Snapkit;
-			packageProductDependencies = (
-				4368F84C2796698A0013419B /* SnapKit */,
-			);
-			productName = Shared;
-			productReference = 4368F84A279669740013419B /* Snapkit.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		43AFC0CD279678920039DDF4 /* XCGLogger */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43AFC0D4279678920039DDF4 /* Build configuration list for PBXNativeTarget "XCGLogger" */;
-			buildPhases = (
-				43AFC0D0279678920039DDF4 /* Sources */,
-				43AFC0D1279678920039DDF4 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = XCGLogger;
-			packageProductDependencies = (
-				43AFC0DB279678A80039DDF4 /* XCGLogger */,
-			);
-			productName = Shared;
-			productReference = 43AFC0D9279678920039DDF4 /* XCGLogger.framework */;
-			productType = "com.apple.product-type.framework";
 		};
 		43BE5774278BA4D900491291 /* RustMozillaAppServices */ = {
 			isa = PBXNativeTarget;
@@ -8845,6 +8657,8 @@
 			name = SyncTelemetry;
 			packageProductDependencies = (
 				8A48CE38292FCC3400B32289 /* Kingfisher */,
+				5A8FD0E5293A7B5200333AA7 /* XCGLogger */,
+				5A8FD0F9293A7EDA00333AA7 /* Sentry */,
 			);
 			productName = SyncTelemetry;
 			productReference = E69DB0751E97DEA9008A67E6 /* libSyncTelemetry.a */;
@@ -8905,10 +8719,10 @@
 			dependencies = (
 				F8324AF92649B540007E4BFA /* PBXTargetDependency */,
 				F8324AFD2649B540007E4BFA /* PBXTargetDependency */,
-				4368F85727966A4F0013419B /* PBXTargetDependency */,
 			);
 			name = CredentialProvider;
 			packageProductDependencies = (
+				5A8FD0F1293A7D9000333AA7 /* SnapKit */,
 			);
 			productName = CredentialProvider;
 			productReference = F8324A052649A188007E4BFA /* CredentialProvider.appex */;
@@ -8939,7 +8753,6 @@
 				F84B22521A0920C600AAB793 /* PBXTargetDependency */,
 				390527551C874D35007E0BB7 /* PBXTargetDependency */,
 				047F9B3124E1FE1F00CD7DF7 /* PBXTargetDependency */,
-				4368F82F279665C20013419B /* PBXTargetDependency */,
 			);
 			name = Client;
 			packageProductDependencies = (
@@ -8951,6 +8764,9 @@
 				5A871487292EA1440039A5BD /* Fuzi */,
 				5A87148F292EA3910039A5BD /* SiteImageView */,
 				8A48CE32292FCC0800B32289 /* Kingfisher */,
+				5A8FD0E1293A7B2D00333AA7 /* XCGLogger */,
+				5A8FD0EB293A7D5E00333AA7 /* SnapKit */,
+				5A8FD0F3293A7E9800333AA7 /* Sentry */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -8973,6 +8789,7 @@
 			name = ClientTests;
 			packageProductDependencies = (
 				1BE9ECCD271770A600D729BB /* SwiftyJSON */,
+				5A8FD0FB293A7EE600333AA7 /* Sentry */,
 			);
 			productName = ClientTests;
 			productReference = F84B21D31A090F8100AAB793 /* ClientTests.xctest */;
@@ -8992,11 +8809,11 @@
 			dependencies = (
 				D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */,
 				D09A0CF31FAA2C81009A0273 /* PBXTargetDependency */,
-				4368F85C27966A860013419B /* PBXTargetDependency */,
 			);
 			name = ShareTo;
 			packageProductDependencies = (
 				5A87148D292EA3270039A5BD /* Fuzi */,
+				5A8FD0ED293A7D6D00333AA7 /* SnapKit */,
 			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
@@ -9316,13 +9133,9 @@
 				7BEB64401C7345600092C02E /* L10nSnapshotTests */,
 				7BEB644F1C7345990092C02E /* MarketingUITests */,
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
-				4302EDB02819D6250070D373 /* DynamicSwiftyJson */,
 				43BE5774278BA4D900491291 /* RustMozillaAppServices */,
-				4368F81C279665220013419B /* Sentry */,
 				288A2D851AB8B3260023ABC3 /* Shared */,
-				4368F83E279669740013419B /* Snapkit */,
 				2827315D1ABC9BE600AA1954 /* Sync */,
-				43AFC0CD279678920039DDF4 /* XCGLogger */,
 			);
 		};
 /* End PBXProject section */
@@ -10127,34 +9940,6 @@
 				2CB56E3F1E926BFB00AF7586 /* ToolbarTest.swift in Sources */,
 				2C3406C81E719F00000FD889 /* SettingsTest.swift in Sources */,
 				2CF21D0920A4A163000D08B7 /* PocketTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4302EDB32819D6250070D373 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F81F279665220013419B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F841279669740013419B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43AFC0D0279678920039DDF4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11093,11 +10878,6 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 3BFE4B0C1D342FB900DDF53F /* PBXContainerItemProxy */;
 		};
-		4302EDC22819D6790070D373 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4302EDB02819D6250070D373 /* DynamicSwiftyJson */;
-			targetProxy = 4302EDC12819D6790070D373 /* PBXContainerItemProxy */;
-		};
 		43118CDF251A9CAD00F24376 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 288A2D851AB8B3260023ABC3 /* Shared */;
@@ -11107,36 +10887,6 @@
 			isa = PBXTargetDependency;
 			target = F8324A042649A188007E4BFA /* CredentialProvider */;
 			targetProxy = 435A2FF6278F51CD00C94282 /* PBXContainerItemProxy */;
-		};
-		4368F82F279665C20013419B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4368F81C279665220013419B /* Sentry */;
-			targetProxy = 4368F82E279665C20013419B /* PBXContainerItemProxy */;
-		};
-		4368F833279665D50013419B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4368F81C279665220013419B /* Sentry */;
-			targetProxy = 4368F832279665D50013419B /* PBXContainerItemProxy */;
-		};
-		4368F837279665DF0013419B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4368F81C279665220013419B /* Sentry */;
-			targetProxy = 4368F836279665DF0013419B /* PBXContainerItemProxy */;
-		};
-		4368F852279669C90013419B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4368F83E279669740013419B /* Snapkit */;
-			targetProxy = 4368F851279669C90013419B /* PBXContainerItemProxy */;
-		};
-		4368F85727966A4F0013419B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4368F83E279669740013419B /* Snapkit */;
-			targetProxy = 4368F85627966A4F0013419B /* PBXContainerItemProxy */;
-		};
-		4368F85C27966A860013419B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4368F83E279669740013419B /* Snapkit */;
-			targetProxy = 4368F85B27966A860013419B /* PBXContainerItemProxy */;
 		};
 		43EFA63E2786562600400DF0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -13987,105 +13737,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		4302EDB72819D6250070D373 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		4302EDB82819D6250070D373 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		4302EDB92819D6250070D373 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		4302EDBA2819D6250070D373 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "DynamicSwiftyJson-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
 		4354D3E124EEEEC5001184F6 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -14148,303 +13799,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "bitrise org.mozilla.ios.FirefoxBeta.WidgetKit";
 				SKIP_INSTALL = NO;
-			};
-			name = FirefoxBeta;
-		};
-		4368F824279665220013419B /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Sentry-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		4368F825279665220013419B /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Sentry-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		4368F826279665220013419B /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Sentry-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		4368F827279665220013419B /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Sentry-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
-		4368F846279669740013419B /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Snapkit-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		4368F847279669740013419B /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Snapkit-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		4368F848279669740013419B /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Snapkit-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		4368F849279669740013419B /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Snapkit-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = FirefoxBeta;
-		};
-		43AFC0D5279678920039DDF4 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "XCGLogger-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
-		43AFC0D6279678920039DDF4 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "XCGLogger-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		43AFC0D7279678920039DDF4 /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "XCGLogger-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Firefox;
-		};
-		43AFC0D8279678920039DDF4 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "XCGLogger-Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = FirefoxBeta;
 		};
@@ -15808,50 +15162,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		4302EDB62819D6250070D373 /* Build configuration list for PBXNativeTarget "DynamicSwiftyJson" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4302EDB72819D6250070D373 /* Fennec */,
-				4302EDB82819D6250070D373 /* Fennec_Enterprise */,
-				4302EDB92819D6250070D373 /* Firefox */,
-				4302EDBA2819D6250070D373 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		4368F823279665220013419B /* Build configuration list for PBXNativeTarget "Sentry" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4368F824279665220013419B /* Fennec */,
-				4368F825279665220013419B /* Fennec_Enterprise */,
-				4368F826279665220013419B /* Firefox */,
-				4368F827279665220013419B /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		4368F845279669740013419B /* Build configuration list for PBXNativeTarget "Snapkit" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4368F846279669740013419B /* Fennec */,
-				4368F847279669740013419B /* Fennec_Enterprise */,
-				4368F848279669740013419B /* Firefox */,
-				4368F849279669740013419B /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		43AFC0D4279678920039DDF4 /* Build configuration list for PBXNativeTarget "XCGLogger" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43AFC0D5279678920039DDF4 /* Fennec */,
-				43AFC0D6279678920039DDF4 /* Fennec_Enterprise */,
-				43AFC0D7279678920039DDF4 /* Firefox */,
-				43AFC0D8279678920039DDF4 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
 		43BE5785278BA4D900491291 /* Build configuration list for PBXNativeTarget "RustMozillaAppServices" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -16136,11 +15446,6 @@
 			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
 		};
-		4302EDBD2819D6640070D373 /* SwiftyJSON */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1BDA1F8327113788006B2FAB /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
-			productName = SwiftyJSON;
-		};
 		432BD0232790EBD000A0F3C3 /* Adjust */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 432BD0222790EBD000A0F3C3 /* XCRemoteSwiftPackageReference "ios_sdk" */;
@@ -16166,25 +15471,10 @@
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
 		};
-		4368F82A279665370013419B /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
-		};
-		4368F84C2796698A0013419B /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
 		43A878FB27AB498E0071C372 /* MozillaAppServices */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 433F87D62788F34500693368 /* XCRemoteSwiftPackageReference "rust-components-swift" */;
 			productName = MozillaAppServices;
-		};
-		43AFC0DB279678A80039DDF4 /* XCGLogger */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
-			productName = XCGLogger;
 		};
 		43C6A47E27A0679300C79856 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -16218,6 +15508,81 @@
 		5A87148F292EA3910039A5BD /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SiteImageView;
+		};
+		5A8FD0E1293A7B2D00333AA7 /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
+		};
+		5A8FD0E3293A7B4600333AA7 /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
+		};
+		5A8FD0E5293A7B5200333AA7 /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
+		};
+		5A8FD0E7293A7CD100333AA7 /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
+		};
+		5A8FD0E9293A7D0C00333AA7 /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 43AFC0CA2796788B0039DDF4 /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
+		};
+		5A8FD0EB293A7D5E00333AA7 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		5A8FD0ED293A7D6D00333AA7 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		5A8FD0EF293A7D7F00333AA7 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		5A8FD0F1293A7D9000333AA7 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		5A8FD0F3293A7E9800333AA7 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		5A8FD0F5293A7EB900333AA7 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		5A8FD0F7293A7ECD00333AA7 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		5A8FD0F9293A7EDA00333AA7 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		5A8FD0FB293A7EE600333AA7 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		5A8FD0FD293A7F0000333AA7 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 		5FA2233B27F74071005B3D87 /* Glean */ = {
 			isa = XCSwiftPackageProductDependency;
