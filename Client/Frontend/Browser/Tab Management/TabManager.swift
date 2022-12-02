@@ -136,7 +136,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     // MARK: - Initializer
-    init(profile: Profile, imageStore: DiskImageStore?) {
+
+    init(profile: Profile,
+         imageStore: DiskImageStore?
+    ) {
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
@@ -834,15 +837,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
     /// Public interface for checking whether the StartAtHome Feature should run.
     func startAtHomeCheck() {
-        // Do not open a new home page if we come from an external url source
-        guard !BrowserViewController.foregroundBVC().openedUrlFromExternalSource else {
-            // Reset the value for external url source so that
-            // after inactivity we can start at home again
-            BrowserViewController.foregroundBVC().openedUrlFromExternalSource = false
-            return
-        }
-
         let startAtHomeManager = StartAtHomeHelper(isRestoringTabs: isRestoringTabs)
+
         guard !startAtHomeManager.shouldSkipStartHome else { return }
 
         if startAtHomeManager.shouldStartAtHome() {
