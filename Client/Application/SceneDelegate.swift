@@ -22,6 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     let profile: Profile = AppContainer.shared.resolve()
     let tabManager: TabManager = AppContainer.shared.resolve()
+    var sessionManager: AppSessionProvider = AppContainer.shared.resolve()
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -97,6 +98,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             NavigationPath.handle(nav: routerPath, with: self.browserViewController)
         }
 
+        sessionManager.launchSessionProvider.openedFromExternalSource = true
     }
 
     // MARK: - Continuing User Activities
@@ -196,12 +198,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         with connectionOptions: UIScene.ConnectionOptions,
         on scene: UIScene
     ) {
-        /// Handling deeplinks at launch can be handled this way.
         if !connectionOptions.urlContexts.isEmpty {
             self.scene(scene, openURLContexts: connectionOptions.urlContexts)
         }
 
-        /// At launch, shortcut items can be handled this way.
         if let shortcutItem = connectionOptions.shortcutItem {
             QuickActionsImplementation().handleShortCutItem(
                 shortcutItem,
