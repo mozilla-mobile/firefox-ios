@@ -26,7 +26,7 @@ class FaviconURLCacheTests: XCTestCase {
     }
 
     func testGetURLFromCacheWithValuePresent() async {
-        await subject.cacheURL(domain: "firefox", faviconURL: URL(string:"www.firefox.com")!)
+        await subject.cacheURL(domain: "firefox", faviconURL: URL(string: "www.firefox.com")!)
         let result = try? await subject.getURLFromCache(domain: "firefox")
         XCTAssertEqual(result?.absoluteString, "www.firefox.com")
     }
