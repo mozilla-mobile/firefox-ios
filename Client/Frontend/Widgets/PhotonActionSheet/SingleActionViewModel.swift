@@ -4,6 +4,13 @@
 
 import Foundation
 
+public enum PhotonActionSheetIconType {
+    case Image
+    case URL
+    case TabsButton
+    case None
+}
+
 // One row on the PhotonActionSheet table view can contain more than one item
 struct PhotonRowActions {
     var items: [SingleActionViewModel]

@@ -5,6 +5,12 @@
 import Storage
 import UIKit
 
+public enum PresentationStyle {
+    case centered // used in the home panels
+    case bottom // used to display the menu on phone sized devices
+    case popover // when displayed on the iPad
+}
+
 class PhotonActionSheetViewModel {
 
     // MARK: - Properties

@@ -11,12 +11,6 @@ import MapKit
 
 // Misc table components used for the PhotonActionSheet table view.
 
-public enum PresentationStyle {
-    case centered // used in the home panels
-    case bottom // used to display the menu on phone sized devices
-    case popover // when displayed on the iPad
-}
-
 extension UIModalPresentationStyle {
     func getPhotonPresentationStyle() -> PresentationStyle {
         switch self {
@@ -34,12 +28,5 @@ public enum PhotonActionSheetCellAccessoryType {
     case Disclosure
     case Switch
     case Text
-    case None
-}
-
-public enum PhotonActionSheetIconType {
-    case Image
-    case URL
-    case TabsButton
     case None
 }
