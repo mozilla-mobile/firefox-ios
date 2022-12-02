@@ -34,6 +34,7 @@ class StartAtHomeHelperTests: XCTestCase {
     func testShouldNotSkipStartAtHome() throws {
         setupHelper()
         let shouldSkip = helper.shouldSkipStartHome
+
         XCTAssertFalse(shouldSkip, "Should not skip StartAtHome")
     }
 
@@ -41,6 +42,16 @@ class StartAtHomeHelperTests: XCTestCase {
         setupHelper(isRestoringTabs: true)
         let shouldSkip = helper.shouldSkipStartHome
         XCTAssertTrue(shouldSkip, "Expected to skip because is restoring tabs")
+    }
+
+    func test_shouldSkipStartAtHome_openedFromExternalSource() {
+        let mockAppSessionManager = MockAppSessionManager()
+        mockAppSessionManager.launchSessionProvider.openedFromExternalSource = true
+
+        setupHelper(appSessionManager: mockAppSessionManager)
+        let shouldSkip = helper.shouldSkipStartHome
+
+        XCTAssert(shouldSkip, "Expected to skip because the app was opened from an external source.")
     }
 
     func testNotShouldStartAtHome_AfterFourHours() {
@@ -106,9 +117,16 @@ class StartAtHomeHelperTests: XCTestCase {
     }
 
     // MARK: - Private
-    private func setupHelper(isRestoringTabs: Bool = false) {
-        helper = StartAtHomeHelper(isRestoringTabs: isRestoringTabs,
-                                   isRunningUITest: false)
+    private func setupHelper(
+        appSessionManager: MockAppSessionManager = MockAppSessionManager(),
+        isRestoringTabs: Bool = false
+    ) {
+        helper = StartAtHomeHelper(
+            appSessionManager: appSessionManager,
+            isRestoringTabs: isRestoringTabs,
+            isRunningUITest: false
+        )
+
         helper.startAtHomeSetting = .afterFourHours
     }
 

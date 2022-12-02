@@ -9,17 +9,22 @@ class StartAtHomeHelper: FeatureFlaggable {
     // Override only for UI tests to test `shouldSkipStartHome` logic
     private var isRunningUITest: Bool
     lazy var startAtHomeSetting: StartAtHomeSetting? = featureFlags.getCustomState(for: .startAtHome)
+    var launchSessionProvider: LaunchSessionProviderProtocol
 
-    init(isRestoringTabs: Bool,
-         isRunningUITest: Bool = AppConstants.isRunningUITests) {
+    init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve(),
+         isRestoringTabs: Bool,
+         isRunningUITest: Bool = AppConstants.isRunningUITests
+    ) {
+        self.launchSessionProvider = appSessionManager.launchSessionProvider
         self.isRestoringTabs = isRestoringTabs
         self.isRunningUITest = isRunningUITest
     }
 
     var shouldSkipStartHome: Bool {
         return isRunningUITest ||
-              DebugSettingsBundleOptions.skipSessionRestore ||
-              isRestoringTabs
+        DebugSettingsBundleOptions.skipSessionRestore ||
+        isRestoringTabs ||
+        launchSessionProvider.openedFromExternalSource
     }
 
     /// Determines whether the Start at Home feature is enabled, how long it has been since

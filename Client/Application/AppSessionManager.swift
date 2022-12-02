@@ -6,6 +6,7 @@ import Foundation
 
 protocol AppSessionProvider {
     var tabUpdateState: TabUpdateState { get set }
+    var launchSessionProvider: LaunchSessionProviderProtocol { get set }
 }
 
 /// `AppSessionManager` exists to track, mutate and (sometimes) persist session related properties. Each category of
@@ -16,5 +17,11 @@ protocol AppSessionProvider {
 struct AppSessionManager: AppSessionProvider {
 
     var tabUpdateState: TabUpdateState = .coldStart
+    var launchSessionProvider: LaunchSessionProviderProtocol
 
+    init(
+        launchSessionProvider: LaunchSessionProvider = LaunchSessionProvider()
+    ) {
+        self.launchSessionProvider = launchSessionProvider
+    }
 }
