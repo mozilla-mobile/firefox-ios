@@ -66,7 +66,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         }
         return archiver.encodedData
     }
-    
+
     private func retrieveCache() async {
         guard let data = await fileManager.getURLCache(),
               let unarchiver = try? NSKeyedUnarchiver(forReadingFrom: data),
