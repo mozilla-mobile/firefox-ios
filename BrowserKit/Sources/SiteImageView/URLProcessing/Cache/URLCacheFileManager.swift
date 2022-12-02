@@ -11,8 +11,12 @@ protocol URLCacheFileManager: Actor {
 
 actor DefaultURLCacheFileManager: URLCacheFileManager {
     let fileName = "favicon-url-cache"
-    private let fileManager = FileManager.default
+    private let fileManager: FileManagerProtocol
 
+    init(fileManager: FileManagerProtocol = FileManager.default) {
+        self.fileManager = fileManager
+    }
+    
     func getURLCache() async -> Data? {
         guard fileManager.fileExists(atPath: getCacheDirectory().absoluteString) else { return nil }
         return try? Data(contentsOf: getCacheDirectory())
@@ -29,7 +33,7 @@ actor DefaultURLCacheFileManager: URLCacheFileManager {
     }
 
     private func getCacheDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let paths = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0].appendingPathComponent(fileName)
     }
 }

@@ -5,8 +5,8 @@
 import Foundation
 
 protocol FaviconURLCache {
-//    func getURLFromCache(domain: String) -> URL?
-//    func cacheURL(domain: String)
+    func getURLFromCache(domain: String) async throws -> URL
+    func cacheURL(domain: String, faviconURL: URL) async
 }
 
 actor DefaultFaviconURLCache: FaviconURLCache {
@@ -18,7 +18,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
     private let fileManager: URLCacheFileManager
     private var urlCache = [String: FaviconURL]()
 
-    private init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
+    init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
         self.fileManager = fileManager
 
         Task {
@@ -26,7 +26,28 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         }
     }
 
-    @objc private func preserveCache() async {
+    func getURLFromCache(domain: String) async throws -> URL {
+        guard let favicon = urlCache[domain],
+              let url = URL(string: favicon.faviconURL) else {
+            throw SiteImageError.noURLInCache
+        }
+        return url
+    }
+
+    func cacheURL(domain: String, faviconURL: URL) async {
+        let favicon = FaviconURL(domain: domain,
+                                 faviconURL: faviconURL.absoluteString,
+                                 createdAt: Date())
+        urlCache[domain] = favicon
+
+        // TODO: Debounce this call FXIOS-5367
+        // Sending this to a task because we don't need to wait for this operation to complete
+        Task {
+            await preserveCache()
+        }
+    }
+
+    private func preserveCache() async {
         guard let data = archiveCacheData() else {
             return
         }
@@ -59,9 +80,4 @@ actor DefaultFaviconURLCache: FaviconURLCache {
             $0[$1.domain] = $1
         }
     }
-
-    private func debouncePreserveCache() {
-        
-    }
-
 }
