@@ -121,16 +121,3 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell 
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-// MARK: - PhotonActionSheetSeparator
-class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell {
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIColor.theme.tableView.separator
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
