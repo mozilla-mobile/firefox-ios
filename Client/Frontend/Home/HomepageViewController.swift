@@ -203,7 +203,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             contentStackView.topAnchor.constraint(equalTo: view.topAnchor),
             contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
@@ -458,8 +458,8 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
         // Jump back in header specific setup
         if sectionViewModel.sectionType == .jumpBackIn {
             self.viewModel.jumpBackInViewModel.sendImpressionTelemetry()
-            // Delaying CFR presentation because to wait for header view
-            // layout readjust
+            // Moving called after header view gets configured
+            // and delaying to wait for header view layout readjust
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.prepareJumpBackInContextualHint(onView: headerView)
             }
