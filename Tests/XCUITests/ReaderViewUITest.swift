@@ -68,12 +68,15 @@ class ReaderViewTest: BaseTestCase {
     }
 
     func testAddToReadingListPrivateMode() {
+        waitForExistence(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForExistence(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
 
@@ -95,8 +98,10 @@ class ReaderViewTest: BaseTestCase {
         // Check that it appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForExistence(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
     }
