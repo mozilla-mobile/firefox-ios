@@ -70,8 +70,6 @@ class TabCounterTests: BaseTestCase {
         tabsOpen = app.buttons["Show Tabs"].value
         XCTAssertEqual("1", tabsOpen as? String)
 
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.goto(TabTray)
         tabsOpen = app.segmentedControls.buttons.element(boundBy: 0).label
         XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
