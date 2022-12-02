@@ -506,6 +506,8 @@ extension TelemetryWrapper {
         case shareMenu = "share-menu"
         case shareSendToDevice = "share-send-to-device"
         case shareCopyLink = "share-copy-link"
+        case sharePocketIcon = "share-pocket-icon"
+        case shareSaveToPocket = "save-to-pocket-share-action"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
         case systemThemeSwitch = "system-theme-switch"
@@ -950,6 +952,8 @@ extension TelemetryWrapper {
             GleanMetrics.Sync.loginView.record()
         case (.firefoxAccount, .view, .fxaLoginCompleteWebpage, _, _):
             GleanMetrics.Sync.loginCompletedView.record()
+            // record the same event for Nimbus' internal event store
+            Experiments.shared.recordEvent("sync.login_completed_view")
         case (.firefoxAccount, .view, .fxaConfirmSignUpCode, _, _):
             GleanMetrics.Sync.registrationCodeView.record()
         case (.firefoxAccount, .view, .fxaConfirmSignInToken, _, _):
@@ -957,6 +961,8 @@ extension TelemetryWrapper {
         // MARK: App cycle
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()
+            // record the same event for Nimbus' internal event store
+            Experiments.shared.recordEvent("app_cycle.foreground")
         case(.action, .background, .app, _, _):
             GleanMetrics.AppCycle.background.record()
         // MARK: Accessibility
@@ -1293,6 +1299,10 @@ extension TelemetryWrapper {
             GleanMetrics.ShareSheet.sendDeviceTapped.record()
         case (.action, .tap, .shareSheet, .shareCopyLink, _):
             GleanMetrics.ShareSheet.copyLinkTapped.record()
+        case (.action, .tap, .shareSheet, .sharePocketIcon, _):
+            GleanMetrics.ShareSheet.pocketActionTapped.record()
+        case (.action, .tap, .shareSheet, .shareSaveToPocket, _):
+            GleanMetrics.ShareSheet.saveToPocketTapped.record()
         default:
             recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
         }
