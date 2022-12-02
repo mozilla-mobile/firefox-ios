@@ -1047,6 +1047,7 @@
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
 		E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */; };
+		E15DE7C6293A7D7500B32667 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C5293A7D7500B32667 /* UITableView+Extension.swift */; };
 		E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */; };
 		E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */; };
 		E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */; };
@@ -4771,6 +4772,7 @@
 		E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSeparator.swift; sourceTree = "<group>"; };
 		E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetLineSeparator.swift; sourceTree = "<group>"; };
 		E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetTitleHeaderView.swift; sourceTree = "<group>"; };
+		E15DE7C5293A7D7500B32667 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		E1634E1AB9F05311CD6C8C6C /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModelTests.swift; sourceTree = "<group>"; };
 		E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteTableViewHeader.swift; sourceTree = "<group>"; };
@@ -5741,16 +5743,17 @@
 				28EADE381AFC3898007FB2FB /* UIImageView+Extension.swift */,
 				8A56955127C68AE00077A89E /* UILabel+Extension.swift */,
 				A83E5AB61C1D993D0026D912 /* UIPasteboard+Extension.swift */,
+				EBA3B2CC2268F27500728BDB /* UIModalPresentationStyle+Photon.swift */,
+				966B0DC72926F60500A85A7E /* UIResponder+Extensions.swift */,
 				8AD5702E27AB4DEA005BFDC8 /* UIStackView+Extension.swift */,
-				E650754F1E37F6D1006961AC /* URL+Mail.swift */,
+				E15DE7C5293A7D7500B32667 /* UITableView+Extension.swift */,
 				E1390FA728B032AD00C9EF3E /* UIView+Constraints.swift */,
 				E1390FA628B032AD00C9EF3E /* UIView+Extension.swift */,
 				E1390FA828B032AD00C9EF3E /* UIView+Screenshot.swift */,
 				D8D33A7C1FBD080300A20A28 /* UIView+SnapKit.swift */,
 				43446CE92412066500F5C643 /* UIViewController+Extension.swift */,
 				C81A8F2426D3ED1900EBA539 /* UIWindow+Extension.swift */,
-				EBA3B2CC2268F27500728BDB /* UIModalPresentationStyle+Photon.swift */,
-				966B0DC72926F60500A85A7E /* UIResponder+Extensions.swift */,
+				E650754F1E37F6D1006961AC /* URL+Mail.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -10346,6 +10349,7 @@
 				6ACB550C28633860007A6ABD /* TabManagerNavDelegate.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
 				215B457F27D7FD4B00E5E800 /* TabGroupData.swift in Sources */,
+				E15DE7C6293A7D7500B32667 /* UITableView+Extension.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
 				F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */,
