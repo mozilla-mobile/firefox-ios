@@ -20,7 +20,7 @@ extension PhotonActionSheet: Notifiable {
 }
 
 // This file is main table view used for the action sheet
-class PhotonActionSheet: UIViewController {
+class PhotonActionSheet: UIViewController, Themeable {
 
     struct UX {
         static let maxWidth: CGFloat = 414
@@ -42,7 +42,9 @@ class PhotonActionSheet: UIViewController {
     private var tableView = UITableView(frame: .zero, style: .grouped)
     let viewModel: PhotonActionSheetViewModel
     private var constraints = [NSLayoutConstraint]()
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
 
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
@@ -61,8 +63,12 @@ class PhotonActionSheet: UIViewController {
 
     // MARK: - Init
 
-    init(viewModel: PhotonActionSheetViewModel) {
+    init(viewModel: PhotonActionSheetViewModel,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         title = viewModel.title
@@ -85,6 +91,7 @@ class PhotonActionSheet: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        listenForThemeChange()
         view.addSubview(tableView)
         view.accessibilityIdentifier = "Action Sheet"
 
@@ -254,6 +261,31 @@ class PhotonActionSheet: UIViewController {
                                                 maskImage: nil)
         let imageView = UIImageView(image: blurredImage)
         view.insertSubview(imageView, belowSubview: tableView)
+    }
+
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+
+        if viewModel.presentationStyle == .popover {
+            view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
+        } else {
+            tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
+        }
+
+        // Apply or remove the background blur effect
+        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
+            if UIAccessibility.isReduceTransparencyEnabled {
+                // Remove the visual effect and the background alpha
+                visualEffectView.effect = nil
+                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
+            } else {
+                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
+            }
+        }
+
+        viewModel.tintColor = UIColor.theme.actionMenu.foreground
+        closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
+        tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
     }
 
     // MARK: - Actions
@@ -459,32 +491,5 @@ extension UITableView {
             }
         }
         return visibleSectionIndexes
-    }
-}
-
-// MARK: - NotificationThemeable
-extension PhotonActionSheet: NotificationThemeable {
-
-    func applyTheme() {
-        if viewModel.presentationStyle == .popover {
-            view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
-        } else {
-            tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
-        }
-
-        // Apply or remove the background blur effect
-        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
-            if UIAccessibility.isReduceTransparencyEnabled {
-                // Remove the visual effect and the background alpha
-                visualEffectView.effect = nil
-                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
-            } else {
-                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
-            }
-        }
-
-        viewModel.tintColor = UIColor.theme.actionMenu.foreground
-        closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
-        tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
     }
 }
