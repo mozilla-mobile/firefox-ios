@@ -23,10 +23,3 @@ extension UIModalPresentationStyle {
         }
     }
 }
-
-public enum PhotonActionSheetCellAccessoryType {
-    case Disclosure
-    case Switch
-    case Text
-    case None
-}
