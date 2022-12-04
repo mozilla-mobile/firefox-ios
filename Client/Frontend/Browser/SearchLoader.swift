@@ -65,6 +65,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
             currentDeferredHistoryQuery = deferredHistory
             return deferredHistory
         case .new:
+            self.profile.places.interruptReader()
             return self.profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).bind { result in
                 guard let historyItems = result.successValue else {
                     SentryIntegration.shared.sendWithStacktrace(
@@ -95,33 +96,34 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                 return
             }
 
-            profile.places.interruptReader()
             if query.isEmpty {
                 load(Cursor(status: .success, msg: "Empty query"))
                 GleanMetrics.Awesomebar.queryTime.cancel(timerid)
                 return
             }
-
-            let deferredHistory = getHistoryAsSites(matchingSearchQuery: query, limit: 100)
-
             let deferredBookmarks = getBookmarksAsSites(matchingSearchQuery: query, limit: 5)
 
-            all([deferredHistory, deferredBookmarks]).uponQueue(.main) { results in
+            var deferredQueries = [deferredBookmarks]
+            let historyHighlightsEnabled = self.featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly)
+            if !historyHighlightsEnabled {
+                // Lets only add the history query if history highlights are not enabled
+                deferredQueries.append(getHistoryAsSites(matchingSearchQuery: query, limit: 100))
+            }
+
+            all(deferredQueries).uponQueue(.main) { results in
                 defer {
                     self.currentDeferredHistoryQuery = nil
                     GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
                 }
 
-                let cancellableHistory = deferredHistory as? CancellableDeferred
-                if let cancellableHistory = cancellableHistory, cancellableHistory.cancelled {
-                    return
-                }
-
-                let deferredHistorySites = results[0].successValue?.asArray() ?? []
-                let deferredBookmarksSites = results[1].successValue?.asArray() ?? []
+                let deferredBookmarksSites = results[0].successValue?.asArray() ?? []
                 var combinedSites = deferredBookmarksSites
-
-                if !self.featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) {
+                if !historyHighlightsEnabled {
+                    let cancellableHistory = deferredQueries[1] as? CancellableDeferred
+                    if let cancellableHistory = cancellableHistory, cancellableHistory.cancelled {
+                        return
+                    }
+                    let deferredHistorySites = results[1].successValue?.asArray() ?? []
                     combinedSites += deferredHistorySites
                 }
 
