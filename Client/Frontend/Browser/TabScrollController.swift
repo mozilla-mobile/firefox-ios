@@ -4,6 +4,7 @@
 
 import UIKit
 import SnapKit
+import Shared
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
@@ -103,8 +104,24 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     private var lastContentOffset: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     private var toolbarState: ToolbarState = .visible
+
+    private var isSearchBarLocationFeatureEnabled: Bool {
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
+
+        return isFeatureEnabled && !isiPad && !AppConstants.isRunningUITests
+    }
+    private var searchBarPosition: SearchBarPosition {
+        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
+            return .bottom
+        }
+
+        return position
+    }
     private var isBottomSearchBar: Bool {
-        return BrowserViewController.foregroundBVC().isBottomSearchBar
+        guard isSearchBarLocationFeatureEnabled else { return false }
+
+        return searchBarPosition == .bottom
     }
 
     override init() {

@@ -43,12 +43,27 @@ protocol ReaderModeBarViewDelegate: AnyObject {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 
-class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
+class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, FeatureFlaggable {
     weak var delegate: ReaderModeBarViewDelegate?
 
     var parent: UIStackView?
-    private var isBottomPresented: Bool {
-        BrowserViewController.foregroundBVC().isBottomSearchBar
+    private var isSearchBarLocationFeatureEnabled: Bool {
+        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
+        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
+
+        return isFeatureEnabled && !isiPad && !AppConstants.isRunningUITests
+    }
+    private var searchBarPosition: SearchBarPosition {
+        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
+            return .bottom
+        }
+
+        return position
+    }
+    private var isBottomSearchBar: Bool {
+        guard isSearchBarLocationFeatureEnabled else { return false }
+
+        return searchBarPosition == .bottom
     }
     var readStatusButton: UIButton!
     var settingsButton: UIButton!
@@ -105,7 +120,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         context.setLineWidth(0.5)
         context.setStrokeColor(UIColor.Photon.Grey50.cgColor)
         context.beginPath()
-        let yPosition = isBottomPresented ? 0 : frame.height
+        let yPosition = isBottomSearchBar ? 0 : frame.height
         context.move(to: CGPoint(x: 0, y: yPosition))
         context.addLine(to: CGPoint(x: frame.width, y: yPosition))
         context.strokePath()
