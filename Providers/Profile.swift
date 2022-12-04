@@ -430,6 +430,12 @@ open class BrowserProfile: Profile {
     lazy var places: RustPlaces = RustPlaces(databasePath: self.placesDbPath)
 
     public func migrateHistoryToPlaces(callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
+        guard FileManager.default.fileExists(atPath: self.browserDbPath) else {
+            // This is the user's first run of the app, they don't have a browserDB, so lets report a successful
+            // migration with zero visits
+            callback(HistoryMigrationResult(numTotal: 0, numSucceeded: 0, numFailed: 0, totalDuration: 0))
+            return
+        }
         let lastSyncTimestamp = Int64(self.syncManager.lastSyncFinishTime ?? 0)
         self.places.migrateHistory(
             dbPath: self.browserDbPath,
