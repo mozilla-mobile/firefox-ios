@@ -589,7 +589,15 @@ extension RustPlaces {
                 return
             }
             ret.fill(Maybe(success: result.map { info in
-                return Site(url: info.url, title: info.title ?? "")
+                var title: String
+                if let actualTitle = info.title, !actualTitle.isEmpty {
+                    title = actualTitle
+                } else {
+                    // In case there is no title, we use the url
+                    // as the title
+                    title = info.url
+                }
+                return Site(url: info.url, title: title)
             }))
         }
         return ret

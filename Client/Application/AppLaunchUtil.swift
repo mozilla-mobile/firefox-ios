@@ -66,7 +66,9 @@ class AppLaunchUtil {
         initializeExperiments()
 
         // We migrate history from browser db to places if it hasn't already
-        runAppServicesHistoryMigration()
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.runAppServicesHistoryMigration()
+        }
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {

@@ -325,7 +325,12 @@ open class BrowserProfile: Profile {
 
         database.reopenIfClosed()
         _ = logins.reopenIfClosed()
-        _ = places.reopenIfClosed()
+        // it's possible we are going through a history migration
+        // lets make sure that if the places connection is already open
+        // we don't try to reopen it
+        if !places.isOpen {
+            _ = places.reopenIfClosed()
+        }
         _ = tabs.reopenIfClosed()
     }
 
