@@ -4,7 +4,7 @@
 
 import UIKit
 
-// MARK: - NSItemProvider wrappers
+// MARK: - NSItemProvider wrapper
 
 /// Image provider wrapper around NSItemProvider from LPMetadataProvider
 /// Used in HeroImageFetcher
