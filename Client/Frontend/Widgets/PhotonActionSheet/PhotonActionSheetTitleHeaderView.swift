@@ -57,7 +57,7 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCel
     }
 
     func applyTheme(theme: Theme) {
-        separatorView.backgroundColor = theme.colors.layer3 // UIColor.Photon.Grey40
+        separatorView.backgroundColor = theme.colors.layerLightGrey30
         titleLabel.textColor = theme.colors.textSecondary
     }
 }
