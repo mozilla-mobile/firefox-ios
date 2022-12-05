@@ -71,6 +71,7 @@ class TabCounterTests: BaseTestCase {
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.goto(TabTray)
+        waitForExistence(app.navigationBars["Open Tabs"])
         tabsOpen = app.segmentedControls.buttons.element(boundBy: 0).label
         XCTAssertTrue(app.segmentedControls.buttons.element(boundBy: 0).isSelected)
         if !isTablet {
