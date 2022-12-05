@@ -4,8 +4,8 @@
 
 import UIKit
 
-class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell {
 // MARK: - PhotonActionSheetLineSeparator
+class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
 
     private let separatorLineView = UIView()
 
@@ -13,7 +13,6 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell 
         super.init(reuseIdentifier: reuseIdentifier)
         self.backgroundView = UIView()
         self.backgroundView?.backgroundColor = .clear
-        separatorLineView.backgroundColor = UIColor.Photon.Grey40
         self.contentView.addSubview(separatorLineView)
 
         separatorLineView.snp.makeConstraints { make in
@@ -25,5 +24,9 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell 
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme(theme: Theme) {
+        separatorLineView.backgroundColor = theme.colors.layerLightGrey30
     }
 }

@@ -137,14 +137,14 @@ class PhotonActionSheet: UIViewController, Themeable {
         tableView.keyboardDismissMode = .onDrag
         tableView.register(PhotonActionSheetSeparator.self,
                            forHeaderFooterViewReuseIdentifier: PhotonActionSheetSeparator.cellIdentifier)
-        tableView.register(PhotonActionSheetContainerCell.self,
-                           forCellReuseIdentifier: PhotonActionSheetContainerCell.cellIdentifier)
         tableView.register(PhotonActionSheetSiteHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: PhotonActionSheetSiteHeaderView.cellIdentifier)
         tableView.register(PhotonActionSheetTitleHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: PhotonActionSheetTitleHeaderView.cellIdentifier)
         tableView.register(PhotonActionSheetLineSeparator.self,
                            forHeaderFooterViewReuseIdentifier: PhotonActionSheetLineSeparator.cellIdentifier)
+        tableView.register(PhotonActionSheetContainerCell.self,
+                           forCellReuseIdentifier: PhotonActionSheetContainerCell.cellIdentifier)
 
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
@@ -423,12 +423,12 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         if viewModel.isMainMenuInverted {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: rowIsLastInSection)
-
         } else {
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: isLastRow)
         }
 
+        (cell as? ThemeApplicable)?.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
@@ -445,7 +445,9 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return viewModel.getViewHeader(tableView: tableView, section: section)
+        let header = viewModel.getViewHeader(tableView: tableView, section: section)
+        (header as? ThemeApplicable)?.applyTheme(theme: themeManager.currentTheme)
+        return header
     }
 }
 

@@ -5,11 +5,10 @@
 import UIKit
 import Storage
 
-class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell {
+class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
 
     struct UX {
         static let borderWidth: CGFloat = 0.5
-        static let borderColor = UIColor.Photon.Grey30
         static let padding: CGFloat = 12
         static let verticalPadding: CGFloat = 2
         static let siteImageViewSize: CGFloat = 52
@@ -33,7 +32,6 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         imageView.contentMode = .center
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = PhotonActionSheet.UX.cornerRadius
-        imageView.layer.borderColor = UX.borderColor.cgColor
         imageView.layer.borderWidth = UX.borderWidth
     }
 
@@ -67,11 +65,15 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
                 self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.iconSize)
             }
         }
-        self.titleLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
-        self.descriptionLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
         titleLabel.text = site.title.isEmpty ? site.url : site.title
         descriptionLabel.text = site.tileURL.baseDomain
 
+    }
+
+    func applyTheme(theme: Theme) {
+        siteImageView.layer.borderColor = theme.colors.layerLightGrey30.cgColor
+        titleLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor = theme.colors.textPrimary
     }
 
     private func setupLayout() {

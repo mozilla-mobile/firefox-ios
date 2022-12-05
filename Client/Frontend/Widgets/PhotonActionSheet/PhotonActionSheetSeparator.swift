@@ -5,14 +5,17 @@
 import UIKit
 
 // MARK: - PhotonActionSheetSeparator
-class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell {
+class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = UIColor.theme.tableView.separator
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme(theme: Theme) {
+        contentView.backgroundColor = theme.colors.layerLightGrey30
     }
 }

@@ -5,20 +5,18 @@
 import UIKit
 
 // MARK: - PhotonActionSheetTitleHeaderView
-class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCell {
+class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     static let Padding: CGFloat = 18
 
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         titleLabel.numberOfLines = 1
-        titleLabel.textColor = UIColor.theme.tableView.headerTextLight
         return titleLabel
     }()
 
     lazy var separatorView: UIView = {
         let separatorLine = UIView()
-        separatorLine.backgroundColor = UIColor.Photon.Grey40
         return separatorLine
     }()
 
@@ -56,5 +54,10 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCel
     override func prepareForReuse() {
         super.prepareForReuse()
         self.titleLabel.text = nil
+    }
+
+    func applyTheme(theme: Theme) {
+        separatorView.backgroundColor = theme.colors.layer3 // UIColor.Photon.Grey40
+        titleLabel.textColor = theme.colors.textSecondary
     }
 }
