@@ -82,8 +82,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         return label
     }()
 
-    private let toggleSwitch = ToggleSwitch()
-
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.backgroundColor = UX.SelectedOverlayColor
         selectedOverlay.isHidden = true
