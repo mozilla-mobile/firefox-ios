@@ -4,7 +4,6 @@
 
 import UIKit
 import SnapKit
-import Shared
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 
