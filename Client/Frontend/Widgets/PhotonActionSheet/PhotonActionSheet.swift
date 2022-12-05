@@ -416,7 +416,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
             withIdentifier: PhotonActionSheetContainerCell.cellIdentifier,
             for: indexPath) as? PhotonActionSheetContainerCell else { return UITableViewCell() }
         let actions = viewModel.actions[indexPath.section][indexPath.row]
-        cell.configure(actions: actions, viewModel: viewModel)
+        cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.currentTheme)
         cell.delegate = self
 
         if viewModel.isMainMenuInverted {

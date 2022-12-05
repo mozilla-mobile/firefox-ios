@@ -23,6 +23,10 @@ class ToolbarBadge: UIView {
         setupLayout()
     }
 
+    func update(imageName: String) {
+        badge.image = UIImage(imageLiteralResourceName: imageName)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
