@@ -7,19 +7,11 @@ import UIKit
 // MARK: - PhotonActionSheetLineSeparator
 class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
 
-    private let separatorLineView = UIView()
+    private lazy var separatorLineView: UIView = .build { _ in }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        self.backgroundView = UIView()
-        self.backgroundView?.backgroundColor = .clear
-        self.contentView.addSubview(separatorLineView)
-
-        separatorLineView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.centerY.equalTo(self)
-            make.height.equalTo(0.5)
-        }
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -27,6 +19,19 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell,
     }
 
     func applyTheme(theme: Theme) {
+        contentView.backgroundColor = .clear
         separatorLineView.backgroundColor = theme.colors.layerLightGrey30
+    }
+
+    // MARK: - Private
+    private func setupLayout() {
+        contentView.addSubview(separatorLineView)
+
+        NSLayoutConstraint.activate([
+            separatorLineView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            separatorLineView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            separatorLineView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            separatorLineView.heightAnchor.constraint(equalToConstant: 0.5)
+        ])
     }
 }
