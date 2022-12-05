@@ -60,8 +60,8 @@ extension String {
             public static let Title = MZLocalizedString(
                 "Alerts.RestoreTabs.Title.v109",
                 tableName: "Alerts",
-                value: "Firefox crashed. Restore your tabs?",
-                comment: "The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed.")
+                value: "%@ crashed. Restore your tabs?",
+                comment: "The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name.")
             public static let Message = MZLocalizedString(
                 "Alerts.RestoreTabs.Message.v109",
                 tableName: "Alerts",
