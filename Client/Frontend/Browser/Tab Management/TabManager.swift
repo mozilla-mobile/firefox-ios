@@ -882,6 +882,13 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         return selectedTab ?? addTab()
     }
+
+    func relieveMemoryPressure() {
+        for tab in tabs {
+            if tab.isCurrentTab { continue }
+            tab.webView = nil
+        }
+    }
 }
 
 // MARK: - WKNavigationDelegate

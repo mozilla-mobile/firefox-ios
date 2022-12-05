@@ -147,6 +147,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             widgetManager?.writeWidgetKitTopSites()
         }
     }
+
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        tabManager.relieveMemoryPressure()
+    }
 }
 
 extension AppDelegate: Notifiable {
