@@ -65,8 +65,10 @@ extension UIAlertController {
     - returns: UIAlertController for asking the user to restore tabs after a crash
     */
     class func restoreTabsAlert(okayCallback: @escaping UIAlertActionCallback, noCallback: @escaping UIAlertActionCallback) -> UIAlertController {
+        let titleString = String(format: .Alerts.RestoreTabs.Title, AppName.shortName.rawValue)
+
         let alert = UIAlertController(
-            title: .Alerts.RestoreTabs.Title,
+            title: titleString,
             message: .Alerts.RestoreTabs.Message,
             preferredStyle: .alert
         )
