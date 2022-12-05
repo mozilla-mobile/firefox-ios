@@ -305,6 +305,18 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             }
         }
 
+        // Add last 10 tab(s) to recently closed list
+        // Note: The recently closed tab list is only updated when the undo
+        // snackbar disappears and does not update if someone taps on undo button
+        closedTabs.suffix(10).forEach { tab in
+            if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
+                profile.recentlyClosedTabs.addTab(url as URL,
+                                                  title: tab.lastTitle,
+                                                  faviconURL: tab.displayFavicon?.url,
+                                                  lastExecutedTime: tab.lastExecutedTime)
+            }
+        }
+
         // perform remaining tab cleanup related to removing wkwebview
         // observers which can only happen on main thread in close() call
         closedTabs.forEach { tab in
