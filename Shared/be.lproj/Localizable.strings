@@ -176,7 +176,7 @@
 "ContextMenu.CopyImageButtonTitle" = "Капіяваць відарыс";
 
 /* Context menu item for copying an image URL to the clipboard */
-"ContextMenu.CopyImageLinkButtonTitle" = "Скапіяваць спасылку на відарыс";
+"ContextMenu.CopyImageLinkButtonTitle" = "Капіяваць спасылку на відарыс";
 
 /* Context menu item for copying a link URL to the clipboard */
 "ContextMenu.CopyLinkButtonTitle" = "Капіяваць спасылку";
@@ -755,7 +755,7 @@
 "Menu.Bookmarks.Label" = "Закладкі";
 
 /* The title for the button that lets you copy the url from the location bar. */
-"Menu.Copy.Title" = "Скапіяваць адрас";
+"Menu.Copy.Title" = "Капіяваць адрас";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL скапіяваны ў буфер абмену";

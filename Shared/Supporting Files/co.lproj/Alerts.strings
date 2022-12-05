@@ -1,0 +1,12 @@
+/* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
+"Alerts.RestoreTabs.Button.No.v109" = "Nò";
+
+/* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
+"Alerts.RestoreTabs.Button.Yes.v109" = "Risturà l’unghjette";
+
+/* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
+"Alerts.RestoreTabs.Message.v109" = "Chì peccatu ! Risturà l’unghjette per ripiglià induve vi site piantati.";
+
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
+"Alerts.RestoreTabs.Title.v109" = "Firefox s’hè lampatu ! Risturà e vostre unghjette ?";
+
