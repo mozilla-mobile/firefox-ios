@@ -117,9 +117,9 @@ protocol CollapsibleTableViewSection: AnyObject {
 // MARK: - RemoteTabsPanelClientAndTabsDataSource
 class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     struct UX {
-        static let HeaderHeight = SiteTableViewControllerUX.RowHeight
-        static let IconBorderColor = UIColor.Photon.Grey30
-        static let IconBorderWidth: CGFloat = 0.5
+        static let headerHeight = SiteTableViewControllerUX.RowHeight
+        static let iconBorderColor = UIColor.Photon.Grey30
+        static let iconBorderWidth: CGFloat = 0.5
     }
 
     weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
@@ -214,8 +214,8 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         cell.titleLabel.text = tab.title
         cell.descriptionLabel.text = tab.URL.absoluteString
 
-        cell.leftImageView.layer.borderColor = UX.IconBorderColor.cgColor
-        cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        cell.leftImageView.layer.borderColor = UX.iconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.iconBorderWidth
         cell.accessoryView = nil
 
         getFavicon(for: tab) { [weak cell] image in
@@ -248,7 +248,6 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeApplicable {
     weak var remoteTabsPanel: RemoteTabsPanel?
     var error: RemoteTabsError
-    var notLoggedCell: UITableViewCell?
     private var theme: Theme
 
     init(remoteTabsPanel: RemoteTabsPanel,
@@ -256,7 +255,6 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
          theme: Theme) {
         self.remoteTabsPanel = remoteTabsPanel
         self.error = error
-        self.notLoggedCell = nil
         self.theme = theme
     }
 
@@ -269,19 +267,7 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let cell = self.notLoggedCell {
-            cell.updateConstraints()
-        }
-        return tableView.bounds.height
-    }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        // Making the footer height as small as possible because it will disable button tappability if too high.
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView()
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -289,12 +275,10 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
         case .notLoggedIn:
             let cell = RemoteTabsNotLoggedInCell(remoteTabsPanel: remoteTabsPanel,
                                                  theme: theme)
-            self.notLoggedCell = cell
             return cell
         default:
-            let cell = RemoteTabsErrorCell(error: self.error,
+            let cell = RemoteTabsErrorCell(error: error,
                                            theme: theme)
-            self.notLoggedCell = nil
             return cell
         }
     }
@@ -303,100 +287,16 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
         self.theme = theme
     }
 }
-
-// MARK: - RemoteTabsErrorCell
-
-class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
-    struct UX {
-        static let EmptyStateInstructionsWidth = 170
-        static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15
-        static let EmptyTabContentOffset: CGFloat = -180
-    }
-
-    let titleLabel = UILabel()
-    let emptyStateImageView = UIImageView()
-    let instructionsLabel = UILabel()
-    var theme: Theme
-
-    init(error: RemoteTabsError,
-         theme: Theme) {
-        self.theme = theme
-        super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
-        selectionStyle = .none
-
-        separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
-
-        let containerView = UIView()
-        contentView.addSubview(containerView)
-
-        emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
-        containerView.addSubview(emptyStateImageView)
-        emptyStateImageView.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(containerView)
-            make.centerX.equalTo(containerView)
-        }
-
-        titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFont
-        titleLabel.text = .EmptySyncedTabsPanelStateTitle
-        titleLabel.textAlignment = .center
-        containerView.addSubview(titleLabel)
-
-        instructionsLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
-        instructionsLabel.text = error.localizedString()
-        instructionsLabel.textAlignment = .center
-        instructionsLabel.numberOfLines = 0
-        containerView.addSubview(instructionsLabel)
-
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(emptyStateImageView.snp.bottom).offset(UX.EmptyStateTopPaddingInBetweenItems)
-            make.centerX.equalTo(emptyStateImageView)
-        }
-
-        instructionsLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(UX.EmptyStateTopPaddingInBetweenItems / 2)
-            make.centerX.equalTo(containerView)
-            make.width.equalTo(UX.EmptyStateInstructionsWidth)
-        }
-
-        containerView.snp.makeConstraints { make in
-            // Let the container wrap around the content
-            make.top.equalTo(emptyStateImageView.snp.top)
-            make.left.bottom.right.equalTo(instructionsLabel)
-            // And then center it in the overlay view that sits on top of the UITableView
-            make.centerX.equalTo(contentView)
-
-            // Sets proper top constraint for iPhone 6 in portrait and for iPad.
-            make.centerY.equalTo(contentView.snp.centerY).offset(UX.EmptyTabContentOffset).priority(100)
-
-            // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(contentView.snp.top).offset(20).priority(1000)
-        }
-
-        containerView.backgroundColor =  .clear
-
-        applyTheme(theme: theme)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func applyTheme(theme: Theme) {
-        emptyStateImageView.tintColor = theme.colors.textPrimary
-        titleLabel.textColor = theme.colors.textPrimary
-        instructionsLabel.textColor = theme.colors.textPrimary
-        backgroundColor = theme.colors.layer3
-    }
-}
-
 // MARK: - RemoteTabsNotLoggedInCell
 
 class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable {
     struct UX {
-        static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
-        static let EmptyStateSignInButtonHeight = 44
-        static let EmptyStateSignInButtonWidth = 200
-        static let EmptyTabContentOffset: CGFloat = -180
+        static let signInButtonCornerRadius: CGFloat = 4
+        static let signInButtonHeight = 44
+        static let signInButtonWidth = 200
+        static let contentOffset: CGFloat = -180
+        static let instructionsWidth = 170
+        static let topPaddingInBetweenItems: CGFloat = 15
     }
 
     var remoteTabsPanel: RemoteTabsPanel?
@@ -432,7 +332,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
         signInButton.setTitle(.Settings.Sync.ButtonTitle, for: [])
         signInButton.setTitleColor(UIColor.Photon.White100, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        signInButton.layer.cornerRadius = UX.EmptyStateSignInButtonCornerRadius
+        signInButton.layer.cornerRadius = UX.signInButtonCornerRadius
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
@@ -446,7 +346,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
             make.centerX.equalTo(instructionsLabel)
 
             // Sets proper top constraint for iPhone 6 in portrait and for iPad.
-            make.centerY.equalTo(contentView).offset(UX.EmptyTabContentOffset + 30).priority(100)
+            make.centerY.equalTo(contentView).offset(UX.contentOffset + 30).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(contentView.snp.top).priority(1000)
@@ -454,13 +354,13 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(emptyStateImageView.snp.bottom)
-                .offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                .offset(RemoteTabsErrorCell.UX.topPaddingInBetweenItems)
             make.centerX.equalTo(emptyStateImageView)
         }
 
         createAnAccountButton.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(signInButton)
-            make.top.equalTo(signInButton.snp.bottom).offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+            make.top.equalTo(signInButton.snp.bottom).offset(UX.topPaddingInBetweenItems)
         }
 
         applyTheme(theme: theme)
@@ -475,17 +375,17 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
         titleLabel.textColor = theme.colors.textPrimary
         instructionsLabel.textColor = theme.colors.textPrimary
         signInButton.backgroundColor = theme.colors.textAccent
-        backgroundColor = theme.colors.layer4
+        backgroundColor = theme.colors.layer3
     }
 
-    @objc fileprivate func signIn() {
+    @objc private func signIn() {
         if let remoteTabsPanel = self.remoteTabsPanel {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
             remoteTabsPanel.remotePanelDelegate?.remotePanelDidRequestToSignIn()
         }
     }
 
-    @objc fileprivate func createAnAccount() {
+    @objc private func createAnAccount() {
         if let remoteTabsPanel = self.remoteTabsPanel {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncCreateAccount)
             remoteTabsPanel.remotePanelDelegate?.remotePanelDidRequestToCreateAccount()
@@ -496,8 +396,8 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
         if UIWindow.isLandscape && !(DeviceInfo.deviceModel().contains("iPad")) {
             instructionsLabel.snp.remakeConstraints { make in
                 make.top.equalTo(titleLabel.snp.bottom)
-                    .offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
-                make.width.equalTo(RemoteTabsErrorCell.UX.EmptyStateInstructionsWidth)
+                    .offset(UX.topPaddingInBetweenItems)
+                make.width.equalTo(UX.instructionsWidth)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
                 make.left.lessThanOrEqualTo(contentView.snp.left).offset(80).priority(100)
@@ -507,10 +407,10 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
             }
 
             signInButton.snp.remakeConstraints { make in
-                make.height.equalTo(UX.EmptyStateSignInButtonHeight)
-                make.width.equalTo(UX.EmptyStateSignInButtonWidth)
+                make.height.equalTo(UX.signInButtonHeight)
+                make.width.equalTo(UX.signInButtonWidth)
                 make.centerY.equalTo(emptyStateImageView)
-                    .offset(2 * RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                    .offset(2 * UX.topPaddingInBetweenItems)
 
                 // Sets proper landscape layout for bigger phones: iPhone 6 and on.
                 make.right.greaterThanOrEqualTo(contentView.snp.right).offset(-70).priority(100)
@@ -521,17 +421,17 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
         } else {
             instructionsLabel.snp.remakeConstraints { make in
                 make.top.equalTo(titleLabel.snp.bottom)
-                    .offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
+                    .offset(UX.topPaddingInBetweenItems)
                 make.centerX.equalTo(contentView)
-                make.width.equalTo(RemoteTabsErrorCell.UX.EmptyStateInstructionsWidth)
+                make.width.equalTo(UX.instructionsWidth)
             }
 
             signInButton.snp.remakeConstraints { make in
                 make.centerX.equalTo(contentView)
                 make.top.equalTo(instructionsLabel.snp.bottom)
-                    .offset(RemoteTabsErrorCell.UX.EmptyStateTopPaddingInBetweenItems)
-                make.height.equalTo(UX.EmptyStateSignInButtonHeight)
-                make.width.equalTo(UX.EmptyStateSignInButtonWidth)
+                    .offset(RemoteTabsErrorCell.UX.topPaddingInBetweenItems)
+                make.height.equalTo(UX.signInButtonHeight)
+                make.width.equalTo(UX.signInButtonWidth)
             }
         }
         super.updateConstraints()
@@ -541,7 +441,8 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
 // MARK: - RemoteTabsTableViewController
 class RemoteTabsTableViewController: UITableViewController, Themeable {
     struct UX {
-        static let RowHeight = SiteTableViewControllerUX.RowHeight
+        static let rowHeight = SiteTableViewControllerUX.RowHeight
+
     }
 
     weak var remoteTabsPanel: RemoteTabsPanel?
@@ -573,13 +474,14 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.register(SiteTableViewHeader.self,
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
 
-        tableView.rowHeight = UX.RowHeight
+        tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
 
         tableView.tableFooterView = UIView() // prevent extra empty rows at end
@@ -649,26 +551,30 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
-        if clientAndTabs.isEmpty {
-            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+
+        guard !clientAndTabs.isEmpty else {
+            tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
                                                                     error: .noClients,
                                                                     theme: themeManager.currentTheme)
-        } else {
-            let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
-            if nonEmptyClientAndTabs.isEmpty {
-                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                        error: .noTabs,
-                                                                        theme: themeManager.currentTheme)
-            } else {
-                let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
-                                                                                 clientAndTabs: nonEmptyClientAndTabs,
-                                                                                 profile: profile,
-                                                                                 theme: themeManager.currentTheme)
-                tabsPanelDataSource.collapsibleSectionDelegate = self
-                self.tableViewDelegate = tabsPanelDataSource
-            }
+            tableView.reloadData()
+            return
         }
-        self.tableView.reloadData()
+
+        let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
+        // TODO: Remove ! added to test error cases
+        if !nonEmptyClientAndTabs.isEmpty {
+            tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                                    error: .noTabs,
+                                                                    theme: themeManager.currentTheme)
+        } else {
+            let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
+                                                                             clientAndTabs: nonEmptyClientAndTabs,
+                                                                             profile: profile,
+                                                                             theme: themeManager.currentTheme)
+            tabsPanelDataSource.collapsibleSectionDelegate = self
+            tableViewDelegate = tabsPanelDataSource
+        }
+        tableView.reloadData()
     }
 
     func refreshTabs(updateCache: Bool = false, completion: (() -> Void)? = nil) {
