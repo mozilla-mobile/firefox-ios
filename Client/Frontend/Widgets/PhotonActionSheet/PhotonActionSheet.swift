@@ -299,7 +299,7 @@ class PhotonActionSheet: UIViewController, Themeable {
                                of object: Any?,
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {
-        if viewModel.presentationStyle == .popover && !wasHeightOverriden {
+        if viewModel.presentationStyle == .popover && !wasHeightOverridden {
             if #available(iOS 15.4, *) {
                 var size = tableView.contentSize
                 size.height = tableView.contentSize.height - UX.spacing - UX.tablePadding
@@ -336,7 +336,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     }
 
     // Needed to override the preferredContentSize, so key value observer doesn't get called
-    private var wasHeightOverriden = false
+    private var wasHeightOverridden = false
 
     /// Main menu table view height is calculated so if there's not enough space for the menu to be shown completely,
     /// we make sure that the last cell shown is half shown. This indicates to the user that the menu can be scrolled.
@@ -348,7 +348,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         let availableHeight = viewModel.availableMainMenuHeight
         let needsHeightAdjustment = availableHeight - totalCellsHeight < 0
 
-        if needsHeightAdjustment && totalCellsHeight != 0 && !wasHeightOverriden {
+        if needsHeightAdjustment && totalCellsHeight != 0 && !wasHeightOverridden {
             let newHeight: CGFloat
             if viewModel.isAtTopMainMenu {
                 let halfCellHeight = (tableView.visibleCells.last?.frame.height ?? 0) / 2
@@ -359,7 +359,7 @@ class PhotonActionSheet: UIViewController, Themeable {
                 newHeight = totalCellsHeight - aCellAndAHalfHeight
             }
 
-            wasHeightOverriden = true
+            wasHeightOverridden = true
             tableViewHeightConstraint?.constant = newHeight
             tableViewHeightConstraint?.priority = .required
 
