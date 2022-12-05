@@ -30,9 +30,8 @@ actor DefaultFaviconURLCache: FaviconURLCache {
 
     func getURLFromCache(domain: String) async throws -> URL {
         guard let favicon = urlCache[domain],
-              let url = URL(string: favicon.faviconURL) else {
-            throw SiteImageError.noURLInCache
-        }
+              let url = URL(string: favicon.faviconURL)
+        else { throw SiteImageError.noURLInCache }
         return url
     }
 
@@ -48,10 +47,9 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         preserveTask?.cancel()
         preserveTask = Task {
             try? await Task.sleep(nanoseconds: preserveDebounceTime)
-            guard !Task.isCancelled else { return }
-            guard let data = archiveCacheData() else {
-                return
-            }
+            guard !Task.isCancelled,
+                  let data = archiveCacheData()
+            else { return }
             await fileManager.saveURLCache(data: data)
         }
     }
@@ -64,7 +62,6 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         } catch {
             // Intentionally ignoring failure, a fail to save
             // is not catastrophic and the cache can always be rebuilt
-            print("Something went wrong archiving the urls")
         }
         return archiver.encodedData
     }
