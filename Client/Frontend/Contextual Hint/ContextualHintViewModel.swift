@@ -149,8 +149,8 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     }
 
     private func getToolbarLocation() -> String {
-        guard SearchBarSettingsViewModel.isEnabled,
-              SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+        guard isSearchBarLocationFeatureEnabled,
+              isBottomSearchBar
         else { return "ToolbarLocationTop" }
 
         return "ToolbarLocationBottom"
@@ -166,3 +166,5 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
         presentFromTimer = nil
     }
 }
+
+extension ContextualHintViewModel: SearchBarLocationProvider {}

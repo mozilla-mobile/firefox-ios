@@ -102,8 +102,8 @@ class BrowserViewController: UIViewController {
     var bottomContainer: BaseAlphaStackView = .build { _ in }
 
     lazy var isBottomSearchBar: Bool = {
-        guard SearchBarSettingsViewModel.isEnabled else { return false }
-        return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
+        guard isSearchBarLocationFeatureEnabled else { return false }
+        return searchBarPosition == .bottom
     }()
 
     // Alert content that appears on top of the footer should be added to this view.
@@ -1629,6 +1629,8 @@ class BrowserViewController: UIViewController {
         presentWithModalDismissIfNeeded(controller, animated: true)
     }
 }
+
+extension BrowserViewController: SearchBarLocationProvider {}
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
     func shouldDisplay(clipboardBar bar: ButtonToast) {

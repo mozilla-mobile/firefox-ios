@@ -43,30 +43,10 @@ protocol ReaderModeBarViewDelegate: AnyObject {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType)
 }
 
-class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable, FeatureFlaggable {
+class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
     weak var delegate: ReaderModeBarViewDelegate?
 
     var parent: UIStackView?
-    private var isSearchBarLocationFeatureEnabled: Bool {
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
-
-        return isFeatureEnabled && !isiPad && !AppConstants.isRunningUITests
-    }
-
-    private var searchBarPosition: SearchBarPosition {
-        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
-            return .bottom
-        }
-
-        return position
-    }
-
-    private var isBottomSearchBar: Bool {
-        guard isSearchBarLocationFeatureEnabled else { return false }
-
-        return searchBarPosition == .bottom
-    }
 
     var readStatusButton: UIButton!
     var settingsButton: UIButton!
@@ -179,3 +159,5 @@ extension ReaderModeBarView: NotificationThemeable {
         buttonTintColor = UIColor.theme.browser.tint
     }
 }
+
+extension ReaderModeBarView: SearchBarLocationProvider {}

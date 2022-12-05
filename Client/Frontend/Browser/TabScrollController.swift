@@ -105,27 +105,6 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     private var scrollDirection: ScrollDirection = .down
     private var toolbarState: ToolbarState = .visible
 
-    private var isSearchBarLocationFeatureEnabled: Bool {
-        let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-        let isFeatureEnabled = featureFlags.isFeatureEnabled(.bottomSearchBar, checking: .buildOnly)
-
-        return isFeatureEnabled && !isiPad && !AppConstants.isRunningUITests
-    }
-
-    private var searchBarPosition: SearchBarPosition {
-        guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
-            return .bottom
-        }
-
-        return position
-    }
-
-    private var isBottomSearchBar: Bool {
-        guard isSearchBarLocationFeatureEnabled else { return false }
-
-        return searchBarPosition == .bottom
-    }
-
     override init() {
         super.init()
     }
@@ -174,6 +153,8 @@ class TabScrollingController: NSObject, FeatureFlaggable {
         self.lastZoomedScale = 0
     }
 }
+
+extension TabScrollingController: SearchBarLocationProvider {}
 
 // MARK: - Private
 private extension TabScrollingController {
