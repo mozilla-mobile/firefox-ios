@@ -1,8 +1,26 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox をデフォルトウェブブラウザーにすることは、オープンでアクセシブルなインターネットに一票を投じることです。";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "より良いインターネットを選択する";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "手順を見る";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "ウェブサイト、メール、メッセージのリンクを自動的に Firefox で開くように設定します。";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "速さと安全性、プライバシー保護を自動化するには、Firefox をデフォルトウェブブラウザーに選んでください。";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "日々のブラウジングを向上させる";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox はユーザー一人当たり毎月平均 3000 件以上のトラッカーをブロックしています。プライバシー保護と安心のためにデフォルトウェブブラウザーに設定してください。";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox にはプライバシー保護機能があります";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "デフォルトブラウザーを切り替えましょう";
