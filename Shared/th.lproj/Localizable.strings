@@ -547,6 +547,9 @@
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "ค้นหาอีกครั้ง";
 
+/* A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. */
+"Keyboard.Shortcuts.RefreshWithoutCache.v108" = "โหลดซ้ำโดยไม่สนใจแคช";
+
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "ที่คั่นหน้า";
 
@@ -1660,6 +1663,12 @@
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "ค้นหาใน Firefox";
 
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "คัดลอก";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "ส่งลิงก์ไปยังอุปกรณ์";
+
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "แสดงข้อเสนอแนะการค้นหา";
 
@@ -1815,6 +1824,9 @@
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
 "Upgrade.Welcome.Action.v106" = "เริ่มต้นใช้งาน";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v106" = "สีสันใหม่ ความสะดวกสบายใหม่ ให้ความมุ่งมั่นกับผู้คนมากกว่าผลกำไร";
 
 /* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Title.v106" = "ยินดีต้อนรับสู่อินเทอร์เน็ตที่เป็นส่วนตัวมากขึ้น";

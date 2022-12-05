@@ -1666,6 +1666,12 @@
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Firefox で検索";
 
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "コピー";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "リンクを端末へ送信";
+
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "検索語句の候補を表示";
 

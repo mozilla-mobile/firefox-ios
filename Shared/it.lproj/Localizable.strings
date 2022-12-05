@@ -200,7 +200,7 @@
 "ContextualHint.SearchBarPlacement.NewUsers" = "Per facilitare l’inserimento di informazioni, la barra degli strumenti è ora posizionata in basso per impostazione predefinita.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "La pagina iniziale personalizzata di Firefox rende più semplice riprendere da dove avevi interrotto. Puoi trovare le schede recenti, i segnalibri e i risultati delle ricerche.";
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "La pagina iniziale personalizzata di Firefox rende più semplice riprendere da dove eri rimasto. Puoi trovare le schede recenti, i segnalibri e i risultati delle ricerche.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Impostazioni della barra degli strumenti";
@@ -920,7 +920,7 @@
 "Onboarding.LaterAction.v102" = "Non adesso";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Description.v106" = "Recupera le schede e le password dagli altri dispositivi e riprendi esattamente da dove avevi interrotto";
+"Onboarding.Sync.Description.v106" = "Recupera le schede e le password dagli altri dispositivi e riprendi esattamente da dove eri rimasto";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v106" = "Salta";
@@ -1666,6 +1666,12 @@
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Cerca in Firefox";
 
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "Copia";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "Invia link a dispositivo";
+
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Visualizza suggerimenti";
 
@@ -1814,7 +1820,7 @@
 "Upgrade.SyncSign.Action.v106" = "Accedi";
 
 /* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v106" = "Riprendi da dove avevi interrotto con le schede di altri dispositivi, ora disponibili direttamente dalla pagina iniziale.";
+"Upgrade.SyncSign.Description.v106" = "Riprendi da dove eri rimasto con le schede di altri dispositivi, ora disponibili direttamente dalla pagina iniziale.";
 
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Title.v106" = "Passare da uno schermo all’altro è più facile che mai";
