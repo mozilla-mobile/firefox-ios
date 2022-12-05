@@ -1085,7 +1085,7 @@
 "ScanQRCode.View.Title" = "Skenirajte QR-kodo";
 
 /* Open search section of settings */
-"Search" = "Išči";
+"Search" = "Iskanje";
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Iskanje ali naslov strani";
@@ -1665,6 +1665,12 @@
 
 /* Action label on share extension to search for the selected text in Firefox. */
 "ShareExtension.SeachInFirefoxAction.Title" = "Išči v Firefoxu";
+
+/* Button in share sheet to copy the url of the current tab. */
+"ShareSheet.Copy.Title.v108" = "Kopiraj";
+
+/* Button in the share sheet to send the current link to another device. */
+"ShareSheet.SendToDevice.Title.v108" = "Pošlji povezavo na napravo";
 
 /* Label for show search suggestions setting. */
 "Show Search Suggestions" = "Prikaži predloge iskanja";
