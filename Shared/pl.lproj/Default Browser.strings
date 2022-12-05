@@ -1,8 +1,26 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ustawienie Firefoksa jako domyślną przeglądarkę to głos na otwarty, dostępny Internet.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Domyślnie lepszy Internet";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Dowiedz się, jak to zrobić";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Ustaw automatyczne otwieranie odnośników z witryn, wiadomości e-mail i aplikacji Messages w Firefoksie.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Wybierz Firefoksa jako domyślną przeglądarkę, by szybkość, bezpieczeństwo i prywatność były automatyczne.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Podnieś poziom codziennego przeglądania";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox blokuje średnio ponad 3000 elementów śledzących na użytkownika miesięcznie. Ustaw nas jako domyślną przeglądarkę, by cieszyć się prywatnością bez obaw.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox chroni Twoją prywatność";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Przełącz domyślną przeglądarkę";
