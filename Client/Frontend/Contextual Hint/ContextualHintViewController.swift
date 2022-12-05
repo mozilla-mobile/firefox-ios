@@ -267,19 +267,21 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         withArrowDirection arrowDirection: UIPopoverArrowDirection,
         andDelegate delegate: UIPopoverPresentationControllerDelegate,
         presentedUsing presentation: (() -> Void)?,
+        sourceRect: CGRect = CGRect.null,
         withActionBeforeAppearing preAction: (() -> Void)? = nil,
         actionOnDismiss postAction: (() -> Void)? = nil,
         andActionForButton buttonAction: (() -> Void)? = nil,
         andShouldStartTimerRightAway shouldStartTimer: Bool = true
     ) {
         stopTimer()
-        self.modalPresentationStyle = .popover
-        self.popoverPresentationController?.sourceView = anchor
-        self.popoverPresentationController?.permittedArrowDirections = arrowDirection
-        self.popoverPresentationController?.delegate = delegate
-        self.onViewSummoned = preAction
-        self.onViewDismissed = postAction
-        self.onActionTapped = buttonAction
+        modalPresentationStyle = .popover
+        popoverPresentationController?.sourceRect = sourceRect
+        popoverPresentationController?.sourceView = anchor
+        popoverPresentationController?.permittedArrowDirections = arrowDirection
+        popoverPresentationController?.delegate = delegate
+        onViewSummoned = preAction
+        onViewDismissed = postAction
+        onActionTapped = buttonAction
         viewModel.presentFromTimer = presentation
         viewModel.arrowDirection = arrowDirection
 
