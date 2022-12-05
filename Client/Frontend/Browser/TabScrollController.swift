@@ -111,6 +111,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
 
         return isFeatureEnabled && !isiPad && !AppConstants.isRunningUITests
     }
+
     private var searchBarPosition: SearchBarPosition {
         guard let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) else {
             return .bottom
@@ -118,6 +119,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
 
         return position
     }
+
     private var isBottomSearchBar: Bool {
         guard isSearchBarLocationFeatureEnabled else { return false }
 
