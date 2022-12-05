@@ -392,14 +392,20 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
         guard jumpBackInContextualHintViewController.shouldPresentHint(),
-              !viewModel.shouldDisplayHomeTabBanner
+              !viewModel.shouldDisplayHomeTabBanner,
+              !headerView.frame.isEmpty
         else { return }
 
+        // Calculate label header view frame to add as source rect for CFR
+        var rect = headerView.convert(headerView.titleLabel.frame, to: collectionView)
+        rect = collectionView.convert(rect, to: view)
+
         jumpBackInContextualHintViewController.configure(
-            anchor: headerView.titleLabel,
+            anchor: view,
             withArrowDirection: .down,
             andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController) },
+            sourceRect: rect,
             withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackIn) },
             andActionForButton: { self.openTabsSettings() })
     }
@@ -445,15 +451,19 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
               let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
         else { return UICollectionReusableView() }
 
-        // Jump back in header specific setup
-        if sectionViewModel.sectionType == .jumpBackIn {
-            viewModel.jumpBackInViewModel.sendImpressionTelemetry()
-            prepareJumpBackInContextualHint(onView: headerView)
-        }
-
         // Configure header only if section is shown
         let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
         headerView.configure(viewModel: headerViewModel, theme: themeManager.currentTheme)
+
+        // Jump back in header specific setup
+        if sectionViewModel.sectionType == .jumpBackIn {
+            self.viewModel.jumpBackInViewModel.sendImpressionTelemetry()
+            // Moving called after header view gets configured
+            // and delaying to wait for header view layout readjust
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.prepareJumpBackInContextualHint(onView: headerView)
+            }
+        }
         return headerView
     }
 
