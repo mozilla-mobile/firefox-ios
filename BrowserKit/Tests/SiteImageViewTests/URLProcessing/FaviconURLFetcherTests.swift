@@ -11,11 +11,13 @@ class FaviconURLFetcherTests: XCTestCase {
     var networkMock: NetworkRequestMock!
 
     override func setUp() {
+        super.setUp()
         networkMock = NetworkRequestMock()
         subject = DefaultFaviconURLFetcher(network: networkMock)
     }
 
     override func tearDown() {
+        super.tearDown()
         networkMock = nil
         subject = nil
     }

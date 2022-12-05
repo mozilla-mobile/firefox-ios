@@ -11,11 +11,13 @@ class FaviconURLCacheTests: XCTestCase {
     var mockFileManager: MockURLCacheFileManager!
 
     override func setUp() {
+        super.setUp()
         mockFileManager = MockURLCacheFileManager()
         subject = DefaultFaviconURLCache(fileManager: mockFileManager)
     }
 
     override func tearDown() {
+        super.tearDown()
         mockFileManager = nil
         subject = nil
     }

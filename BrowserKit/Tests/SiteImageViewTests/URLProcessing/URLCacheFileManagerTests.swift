@@ -11,11 +11,13 @@ class URLCacheFileManagerTests: XCTestCase {
     var mockFileManager: MockFileManager!
 
     override func setUp() {
+        super.setUp()
         mockFileManager = MockFileManager()
         subject = DefaultURLCacheFileManager(fileManager: mockFileManager)
     }
 
     override func tearDown() {
+        super.tearDown()
         mockFileManager = nil
         subject = nil
     }
@@ -23,7 +25,7 @@ class URLCacheFileManagerTests: XCTestCase {
     func testGetURLCache() async {
         _ = await subject.getURLCache()
         XCTAssertEqual(mockFileManager.fileExistsCalledCount, 1)
-        XCTAssertEqual(mockFileManager.urlsCalledCount, 2)
+        XCTAssertEqual(mockFileManager.urlsCalledCount, 1)
     }
 
     func testSaveURLCache() async {
