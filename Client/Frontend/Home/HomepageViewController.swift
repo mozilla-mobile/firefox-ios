@@ -460,8 +460,8 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
             self.viewModel.jumpBackInViewModel.sendImpressionTelemetry()
             // Moving called after header view gets configured
             // and delaying to wait for header view layout readjust
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.prepareJumpBackInContextualHint(onView: headerView)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.prepareJumpBackInContextualHint(onView: headerView)
             }
         }
         return headerView
