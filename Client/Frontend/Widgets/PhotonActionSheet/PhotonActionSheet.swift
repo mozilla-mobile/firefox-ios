@@ -233,7 +233,6 @@ class PhotonActionSheet: UIViewController, Themeable {
         constraints.append(contentsOf: tableViewConstraints)
 
         applyBackgroundBlur()
-        viewModel.tintColor = UIConstants.SystemBlueColor
     }
 
     // The width used for the .centered and .bottom style

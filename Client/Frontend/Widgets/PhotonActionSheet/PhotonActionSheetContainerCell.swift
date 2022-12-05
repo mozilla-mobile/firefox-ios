@@ -43,7 +43,6 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell {
 
     func configure(actions: PhotonRowActions, viewModel: PhotonActionSheetViewModel) {
         for item in actions.items {
-            item.tintColor = viewModel.tintColor
             item.multipleItemsSetup.isMultiItems = actions.items.count > 1
             configure(with: item)
         }

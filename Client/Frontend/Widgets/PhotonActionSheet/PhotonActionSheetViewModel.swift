@@ -20,7 +20,6 @@ class PhotonActionSheetViewModel {
     var closeButtonTitle: String?
     var site: Site?
     var title: String?
-    var tintColor = UIColor.theme.actionMenu.foreground
 
     var presentationStyle: PresentationStyle {
         return modalStyle.getPhotonPresentationStyle()
@@ -107,7 +106,6 @@ class PhotonActionSheetViewModel {
             guard let site = site else { break }
             let header = tableView.dequeueReusableHeaderFooterView(
                 withIdentifier: PhotonActionSheetSiteHeaderView.cellIdentifier) as! PhotonActionSheetSiteHeaderView
-            header.tintColor = tintColor
             header.configure(with: site)
             return header
 
@@ -119,7 +117,6 @@ class PhotonActionSheetViewModel {
             } else {
                 let header = tableView.dequeueReusableHeaderFooterView(
                     withIdentifier: PhotonActionSheetTitleHeaderView.cellIdentifier) as! PhotonActionSheetTitleHeaderView
-                header.tintColor = tintColor
                 header.configure(with: title)
                 return header
             }
