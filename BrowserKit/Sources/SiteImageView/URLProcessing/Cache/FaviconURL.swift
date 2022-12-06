@@ -2,14 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import UIKit
+import Foundation
 
-struct SiteImageModel {
-    let expectedImageType: SiteImageType
-    let siteURL: URL
+struct FaviconURL: Codable {
     let domain: String
-    let faviconURL: URL?
-    let heroImageURL: URL?
-    let faviconImage: UIImage?
-    let heroImage: UIImage?
+    let faviconURL: String
+    let createdAt: Date
 }
