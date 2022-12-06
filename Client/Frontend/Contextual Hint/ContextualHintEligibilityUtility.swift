@@ -32,7 +32,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
         case .jumpBackInSyncedTab:
             hintTypeShouldBePresented = canPresentJumpBackInSyncedTab
         case .toolbarLocation:
-            hintTypeShouldBePresented = SearchBarSettingsViewModel.isEnabled
+            hintTypeShouldBePresented = isSearchBarLocationFeatureEnabled
         case .inactiveTabs:
             hintTypeShouldBePresented = true
         }
@@ -115,3 +115,5 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     }
 
 }
+
+extension ContextualHintEligibilityUtility: SearchBarLocationProvider {}

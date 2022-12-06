@@ -118,7 +118,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             NoImageModeSetting(settings: self)
            ]
 
-        if SearchBarSettingsViewModel.isEnabled {
+        if isSearchBarLocationFeatureEnabled {
             generalSettings.insert(SearchBarSetting(settings: self), at: 5)
         }
 
@@ -240,3 +240,5 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         return headerView
     }
 }
+
+extension AppSettingsTableViewController: SearchBarLocationProvider {}

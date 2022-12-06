@@ -714,7 +714,9 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 }
 
 // MARK: - Status Bar Background
-private extension HomepageViewController {
+extension HomepageViewController: SearchBarLocationProvider {}
+
+extension HomepageViewController {
 
     var statusBarFrame: CGRect? {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
@@ -744,12 +746,6 @@ private extension HomepageViewController {
             offset = 0
         }
         return offset
-    }
-
-    var isBottomSearchBar: Bool {
-        guard SearchBarSettingsViewModel.isEnabled else { return false }
-
-        return SearchBarSettingsViewModel(prefs: viewModel.profile.prefs).searchBarPosition == .bottom
     }
 
     func updateStatusBar(theme: Theme) {

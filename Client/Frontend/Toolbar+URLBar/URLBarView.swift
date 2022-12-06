@@ -232,11 +232,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         self.searchIconImageView.image = profile.searchEngines.defaultEngine.image
     }
 
-    private func isBottomSearchBar() -> Bool {
-        guard SearchBarSettingsViewModel.isEnabled else { return false }
-        return SearchBarSettingsViewModel(prefs: profile.prefs).searchBarPosition == .bottom
-    }
-
     fileprivate func commonInit() {
         locationContainer.addSubview(locationView)
 
@@ -347,7 +342,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         super.updateConstraints()
 
         line.snp.remakeConstraints { make in
-            if isBottomSearchBar() {
+            if isBottomSearchBar {
                 make.top.equalTo(self).offset(0)
             } else {
                 make.bottom.equalTo(self)
@@ -358,7 +353,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
 
         progressBar.snp.remakeConstraints { make in
-            if isBottomSearchBar() {
+            if isBottomSearchBar {
                 make.bottom.equalTo(snp.top).inset(URLBarViewUX.ProgressBarHeight / 2)
             } else {
                 make.top.equalTo(snp.bottom).inset(URLBarViewUX.ProgressBarHeight / 2)
@@ -879,3 +874,5 @@ extension URLBarView: PrivateModeUI {
         applyTheme()
     }
 }
+
+extension URLBarView: SearchBarLocationProvider {}

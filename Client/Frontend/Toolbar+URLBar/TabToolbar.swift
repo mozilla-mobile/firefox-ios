@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-class TabToolbar: UIView, FeatureFlaggable {
+class TabToolbar: UIView {
 
     // MARK: - Variables
 
@@ -19,16 +19,6 @@ class TabToolbar: UIView, FeatureFlaggable {
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
     let actionButtons: [NotificationThemeable & UIButton]
-
-    private var isBottomSearchBar: Bool {
-        guard SearchBarSettingsViewModel.isEnabled else { return false }
-
-        if let position: SearchBarPosition = featureFlags.getCustomState(for: .searchBarPosition) {
-            return position == .bottom
-        }
-
-        return false
-    }
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge",
                                                      backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
@@ -144,6 +134,9 @@ extension TabToolbar: TabToolbarProtocol {
         tabsButton.updateTabCount(count, animated: animated)
     }
 }
+
+// MARK: - Search Bar location properties
+extension TabToolbar: SearchBarLocationProvider {}
 
 // MARK: - Theme protocols
 

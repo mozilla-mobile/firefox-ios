@@ -103,9 +103,6 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     private var lastContentOffset: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     private var toolbarState: ToolbarState = .visible
-    private var isBottomSearchBar: Bool {
-        return BrowserViewController.foregroundBVC().isBottomSearchBar
-    }
 
     override init() {
         super.init()
@@ -155,6 +152,8 @@ class TabScrollingController: NSObject, FeatureFlaggable {
         self.lastZoomedScale = 0
     }
 }
+
+extension TabScrollingController: SearchBarLocationProvider {}
 
 // MARK: - Private
 private extension TabScrollingController {
