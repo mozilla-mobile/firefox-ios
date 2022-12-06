@@ -35,4 +35,3 @@ actor FaviconURLCacheMock: FaviconURLCache {
         self.faviconURL = faviconURL
     }
 }
-
