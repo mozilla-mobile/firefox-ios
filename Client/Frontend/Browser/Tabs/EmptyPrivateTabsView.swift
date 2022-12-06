@@ -5,6 +5,12 @@
 import UIKit
 import Foundation
 
+struct EmptyPrivateTabsViewModel {
+    var title: String
+    var instructions: String
+    var icon: UIImage
+}
+
 // View we display when there are no private tabs created
 class EmptyPrivateTabsView: UIView {
 

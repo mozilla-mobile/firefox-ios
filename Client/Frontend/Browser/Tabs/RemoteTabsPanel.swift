@@ -561,8 +561,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         }
 
         let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
-        // TODO: Remove ! added to test error cases
-        if !nonEmptyClientAndTabs.isEmpty {
+        if nonEmptyClientAndTabs.isEmpty {
             tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
                                                                     error: .noTabs,
                                                                     theme: themeManager.currentTheme)
@@ -586,7 +585,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         guard profile.hasSyncableAccount() else {
             self.endRefreshing()
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                    error: .notLoggedIn,
+                                                                    error: .failedToSync,
                                                                     theme: themeManager.currentTheme)
             return
         }
