@@ -5,12 +5,6 @@
 import UIKit
 import Foundation
 
-struct EmptyPrivateTabsViewModel {
-    var title: String
-    var instructions: String
-    var icon: UIImage
-}
-
 // View we display when there are no private tabs created
 class EmptyPrivateTabsView: UIView {
 
@@ -20,7 +14,6 @@ class EmptyPrivateTabsView: UIView {
         static let buttonSizeFont: CGFloat = 15
         static let textMargin: CGFloat = 18
         static let learnMoreMargin: CGFloat = 8
-        static let maxDescriptionWidth: CGFloat = 250
         static let minBottomMargin: CGFloat = 10
     }
 
@@ -48,7 +41,6 @@ class EmptyPrivateTabsView: UIView {
                                                                    size: UX.descriptionSizeFont)
         label.textAlignment = .center
         label.numberOfLines = 0
-        label.preferredMaxLayoutWidth = UX.maxDescriptionWidth
         label.text = .TabTrayPrivateBrowsingDescription
     }
 

@@ -98,8 +98,7 @@ enum RemoteTabsError {
 
     func localizedString() -> String {
         switch self {
-        // This does not have a localized string because we have a whole specific screen for it.
-        case .notLoggedIn: return ""
+        case .notLoggedIn: return .EmptySyncedTabsPanelNotSignedInStateDescription
         case .noClients: return .EmptySyncedTabsPanelNullStateDescription
         case .noTabs: return .RemoteTabErrorNoTabs
         case .failedToSync: return .RemoteTabErrorFailedToSync
@@ -243,50 +242,6 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     }
 }
 
-// MARK: - RemoteTabsPanelErrorDataSource
-
-class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeApplicable {
-    weak var remoteTabsPanel: RemoteTabsPanel?
-    var error: RemoteTabsError
-    private var theme: Theme
-
-    init(remoteTabsPanel: RemoteTabsPanel,
-         error: RemoteTabsError,
-         theme: Theme) {
-        self.remoteTabsPanel = remoteTabsPanel
-        self.error = error
-        self.theme = theme
-    }
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch error {
-        case .notLoggedIn:
-            let cell = RemoteTabsNotLoggedInCell(remoteTabsPanel: remoteTabsPanel,
-                                                 theme: theme)
-            return cell
-        default:
-            let cell = RemoteTabsErrorCell(error: error,
-                                           theme: theme)
-            return cell
-        }
-    }
-
-    func applyTheme(theme: Theme) {
-        self.theme = theme
-    }
-}
 // MARK: - RemoteTabsNotLoggedInCell
 
 class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable {
@@ -585,7 +540,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         guard profile.hasSyncableAccount() else {
             self.endRefreshing()
             self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                    error: .failedToSync,
+                                                                    error: .notLoggedIn,
                                                                     theme: themeManager.currentTheme)
             return
         }
