@@ -26,8 +26,8 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerSepia: UIColor = FXColors.Orange05
 
     // MARK: - Actions
-    var actionPrimary: UIColor = FXColors.Blue20
-    var actionPrimaryHover: UIColor = FXColors.Blue10
+    var actionPrimary: UIColor = FXColors.Blue30
+    var actionPrimaryHover: UIColor = FXColors.Blue20
     var actionSecondary: UIColor = FXColors.LightGrey30
     var actionSecondaryHover: UIColor = FXColors.LightGrey20
     var formSurfaceOff: UIColor = FXColors.DarkGrey05
@@ -41,7 +41,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var textSecondaryAction: UIColor = FXColors.DarkGrey90
     var textDisabled: UIColor = FXColors.LightGrey05.withAlphaComponent(0.4)
     var textWarning: UIColor = FXColors.Red20
-    var textAccent: UIColor = FXColors.Blue20
+    var textAccent: UIColor = FXColors.Blue30
     var textOnColor: UIColor = FXColors.LightGrey05
     var textInverted: UIColor = FXColors.DarkGrey90
 
@@ -49,19 +49,19 @@ private struct DarkColourPalette: ThemeColourPalette {
     var iconPrimary: UIColor = FXColors.LightGrey05
     var iconSecondary: UIColor = FXColors.LightGrey40
     var iconDisabled: UIColor = FXColors.LightGrey05.withAlphaComponent(0.4)
-    var iconAction: UIColor = FXColors.Blue20
+    var iconAction: UIColor = FXColors.Blue30
     var iconOnColor: UIColor = FXColors.LightGrey05
     var iconWarning: UIColor = FXColors.Red20
     var iconSpinner: UIColor = FXColors.White
     var iconAccentViolet: UIColor = FXColors.Violet20
-    var iconAccentBlue: UIColor = FXColors.Blue20
+    var iconAccentBlue: UIColor = FXColors.Blue30
     var iconAccentPink: UIColor = FXColors.Pink20
     var iconAccentGreen: UIColor = FXColors.Green20
     var iconAccentYellow: UIColor = FXColors.Yellow20
 
     // MARK: - Border
     var borderPrimary: UIColor = FXColors.DarkGrey05
-    var borderAccent: UIColor = FXColors.Blue20
+    var borderAccent: UIColor = FXColors.Blue30
     var borderAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var borderAccentPrivate: UIColor = FXColors.Purple60
 
