@@ -22,9 +22,24 @@ struct DefaultFaviconURLHandler: FaviconURLHandler {
     func getFaviconURL(site: SiteImageModel, type: SiteImageType) async throws -> SiteImageModel {
         do {
             let url = try await urlCache.getURLFromCache(domain: site.domain)
+            return createSiteImageModel(site, faviconURL: url)
         } catch {
-            
+            do {
+                let url = try await urlFetcher.fetchFaviconURL(siteURL: site.siteURL)
+                await urlCache.cacheURL(domain: site.domain, faviconURL: url)
+                return createSiteImageModel(site, faviconURL: url)
+            } catch {
+                throw SiteImageError.noFaviconURLFound
+            }
         }
-        return site
+    }
+
+    private func createSiteImageModel(_ site: SiteImageModel, faviconURL: URL) -> SiteImageModel {
+        return SiteImageModel(expectedImageType: site.expectedImageType,
+                              siteURL: site.siteURL,
+                              domain: site.domain,
+                              faviconURL: faviconURL,
+                              faviconImage: nil,
+                              heroImage: nil)
     }
 }

@@ -7,6 +7,7 @@ import Foundation
 enum SiteImageError: Error, CustomStringConvertible {
     case invalidHTML
     case noFaviconFound
+    case noFaviconURLFound
     case unableToDownloadImage(String)
     case unableToCacheImage(String)
     case unableToRetrieveFromCache(String)
@@ -18,6 +19,8 @@ enum SiteImageError: Error, CustomStringConvertible {
             return "Failed to decode the data at the url as valid HTML"
         case .noFaviconFound:
             return "Failed to find a favicon at the provided url"
+        case .noFaviconURLFound:
+            return "Failed to find a favicon url in either the cache or from the web"
         case .unableToDownloadImage(let error):
             return "Unable to download image with reason: \(error)"
         case .unableToCacheImage(let error):
