@@ -246,7 +246,7 @@ private extension JumpBackInViewModel {
                                       imageType: .heroImage,
                                       shouldFallback: true) { image in
             guard cell.tag == id else { return }
-            cell.tabHeroImage.image = image
+            cell.heroImage.image = image
         }
         cell.configure(viewModel: cellViewModel, theme: theme)
     }

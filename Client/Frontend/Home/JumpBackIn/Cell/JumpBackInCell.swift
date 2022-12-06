@@ -27,7 +27,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         static let siteFontSize: CGFloat = 12
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
-        static let websiteImageSize = CGSize(width: 24, height: 24)
+        static let websiteIconSize = CGSize(width: 24, height: 24)
     }
 
     // MARK: - Variables
@@ -37,20 +37,20 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - UI Elements
 
-    // contains tabImageContainer and tabContentContainer
-    private let tabStack: UIStackView = .build { stackView in
+    // contains imageContainer and textContainer
+    private let contentStack: UIStackView = .build { stackView in
         stackView.backgroundColor = .clear
         stackView.spacing = 16
         stackView.axis = .horizontal
         stackView.alignment = .leading
     }
 
-    // Contains the tabHeroImage and tabFallbackFaviconImage
-    private var tabImageContainer: UIView = .build { view in
+    // Contains the heroImage and fallbackFaviconImage
+    private var imageContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
 
-    let tabHeroImage: UIImageView = .build { imageView in
+    let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
@@ -59,7 +59,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     }
 
     // Used as a fallback if hero image isn't set
-    private let tabFallbackFaviconImage: UIImageView = .build { imageView in
+    private let fallbackFaviconImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = .clear
@@ -67,17 +67,17 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         imageView.layer.masksToBounds = true
     }
 
-    private var tabFallbackFaviconBackground: UIView = .build { view in
+    private var fallbackFaviconBackground: UIView = .build { view in
         view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
-    // contains tabItemTitle and websiteContainer
-    private let tabContentContainer: UIView = .build { view in
+    // contains itemTitle and websiteContainer
+    private let textContainer: UIView = .build { view in
         view.backgroundColor = .clear
     }
 
-    private let tabItemTitle: UILabel = .build { label in
+    private let itemTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                    size: UX.titleFontSize)
@@ -127,11 +127,11 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        tabHeroImage.image = nil
+        heroImage.image = nil
         websiteImage.image = nil
-        tabFallbackFaviconImage.image = nil
+        fallbackFaviconImage.image = nil
         websiteLabel.text = nil
-        tabItemTitle.text = nil
+        itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
 
         websiteImage.isHidden = false
@@ -149,7 +149,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     func configure(viewModel: JumpBackInCellViewModel, theme: Theme) {
         configureImages(viewModel: viewModel)
 
-        tabItemTitle.text = viewModel.titleText
+        itemTitle.text = viewModel.titleText
         websiteLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
         adjustLayout()
@@ -160,63 +160,63 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     private func configureImages(viewModel: JumpBackInCellViewModel) {
         if viewModel.heroImage == nil {
             // Sets a small favicon in place of the hero image in case there's no hero image
-            tabFallbackFaviconImage.image = viewModel.favIconImage
+            fallbackFaviconImage.image = viewModel.favIconImage
 
         } else if viewModel.heroImage?.size.width == viewModel.heroImage?.size.height {
             // If hero image is a square use it as a favicon
-            tabFallbackFaviconImage.image = viewModel.heroImage
+            fallbackFaviconImage.image = viewModel.heroImage
 
         } else {
             setFallBackFaviconVisibility(isHidden: true)
-            tabHeroImage.image = viewModel.heroImage
+            heroImage.image = viewModel.heroImage
         }
 
         websiteImage.image = viewModel.favIconImage
     }
 
     private func setFallBackFaviconVisibility(isHidden: Bool) {
-        tabFallbackFaviconBackground.isHidden = isHidden
-        tabFallbackFaviconImage.isHidden = isHidden
+        fallbackFaviconBackground.isHidden = isHidden
+        fallbackFaviconImage.isHidden = isHidden
     }
 
     private func setupLayout() {
-        tabFallbackFaviconBackground.addSubviews(tabFallbackFaviconImage)
-        tabImageContainer.addSubviews(tabHeroImage, tabFallbackFaviconBackground)
+        fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
+        imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
         websiteContainer.addSubviews(websiteImage, websiteLabel)
-        tabContentContainer.addSubviews(tabItemTitle, websiteContainer)
-        tabStack.addArrangedSubview(tabImageContainer)
-        tabStack.addArrangedSubview(tabContentContainer)
+        textContainer.addSubviews(itemTitle, websiteContainer)
+        contentStack.addArrangedSubview(imageContainer)
+        contentStack.addArrangedSubview(textContainer)
 
-        contentView.addSubview(tabStack)
+        contentView.addSubview(contentStack)
 
         NSLayoutConstraint.activate([
-            tabStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            tabStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            tabStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            tabStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
 
-            tabItemTitle.leadingAnchor.constraint(equalTo: tabContentContainer.leadingAnchor),
-            tabItemTitle.trailingAnchor.constraint(equalTo: tabContentContainer.trailingAnchor),
-            tabItemTitle.topAnchor.constraint(equalTo: tabContentContainer.topAnchor),
+            itemTitle.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
+            itemTitle.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
+            itemTitle.topAnchor.constraint(equalTo: textContainer.topAnchor),
 
             // Image container, hero image and fallback
-            tabImageContainer.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
-            tabImageContainer.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
+            imageContainer.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
+            imageContainer.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
 
-            tabHeroImage.topAnchor.constraint(equalTo: tabImageContainer.topAnchor),
-            tabHeroImage.leadingAnchor.constraint(equalTo: tabImageContainer.leadingAnchor),
-            tabHeroImage.trailingAnchor.constraint(equalTo: tabImageContainer.trailingAnchor),
-            tabHeroImage.bottomAnchor.constraint(equalTo: tabImageContainer.bottomAnchor),
+            heroImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
+            heroImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
+            heroImage.trailingAnchor.constraint(equalTo: imageContainer.trailingAnchor),
+            heroImage.bottomAnchor.constraint(equalTo: imageContainer.bottomAnchor),
 
-            tabFallbackFaviconBackground.centerXAnchor.constraint(equalTo: tabImageContainer.centerXAnchor),
-            tabFallbackFaviconBackground.centerYAnchor.constraint(equalTo: tabImageContainer.centerYAnchor),
-            tabFallbackFaviconBackground.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
-            tabFallbackFaviconBackground.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
+            fallbackFaviconBackground.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor),
+            fallbackFaviconBackground.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor),
+            fallbackFaviconBackground.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
+            fallbackFaviconBackground.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
 
-            tabFallbackFaviconImage.heightAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.height),
-            tabFallbackFaviconImage.widthAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.width),
-            tabFallbackFaviconImage.centerXAnchor.constraint(equalTo: tabFallbackFaviconBackground.centerXAnchor),
-            tabFallbackFaviconImage.centerYAnchor.constraint(equalTo: tabFallbackFaviconBackground.centerYAnchor),
+            fallbackFaviconImage.heightAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.height),
+            fallbackFaviconImage.widthAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.width),
+            fallbackFaviconImage.centerXAnchor.constraint(equalTo: fallbackFaviconBackground.centerXAnchor),
+            fallbackFaviconImage.centerYAnchor.constraint(equalTo: fallbackFaviconBackground.centerYAnchor),
 
             websiteImage.topAnchor.constraint(equalTo: websiteContainer.topAnchor),
             websiteImage.leadingAnchor.constraint(equalTo: websiteContainer.leadingAnchor),
@@ -228,21 +228,21 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
             websiteLabel.bottomAnchor.constraint(equalTo: websiteContainer.bottomAnchor),
 
             // Website container, it's image and label
-            websiteContainer.topAnchor.constraint(greaterThanOrEqualTo: tabItemTitle.bottomAnchor, constant: 8),
-            websiteContainer.leadingAnchor.constraint(equalTo: tabContentContainer.leadingAnchor),
-            websiteContainer.trailingAnchor.constraint(equalTo: tabContentContainer.trailingAnchor),
-            websiteContainer.bottomAnchor.constraint(equalTo: tabContentContainer.bottomAnchor),
+            websiteContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
+            websiteContainer.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
+            websiteContainer.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
+            websiteContainer.bottomAnchor.constraint(equalTo: textContainer.bottomAnchor),
 
-            websiteImage.heightAnchor.constraint(equalToConstant: UX.websiteImageSize.height),
-            websiteImage.widthAnchor.constraint(equalToConstant: UX.websiteImageSize.width),
+            websiteImage.heightAnchor.constraint(equalToConstant: UX.websiteIconSize.height),
+            websiteImage.widthAnchor.constraint(equalToConstant: UX.websiteIconSize.width),
 
-            tabContentContainer.heightAnchor.constraint(greaterThanOrEqualTo: tabImageContainer.heightAnchor)
+            textContainer.heightAnchor.constraint(greaterThanOrEqualTo: imageContainer.heightAnchor)
         ])
 
         websiteIconCenterConstraint = websiteLabel.centerYAnchor.constraint(equalTo: websiteImage.centerYAnchor).priority(UILayoutPriority(999))
         websiteIconFirstBaselineConstraint = websiteLabel.firstBaselineAnchor.constraint(
             equalTo: websiteImage.bottomAnchor,
-            constant: -UX.websiteImageSize.height / 2)
+            constant: -UX.websiteIconSize.height / 2)
 
         websiteLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
 
@@ -253,9 +253,9 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
         if contentSizeCategory.isAccessibilityCategory {
-            tabStack.axis = .vertical
+            contentStack.axis = .vertical
         } else {
-            tabStack.axis = .horizontal
+            contentStack.axis = .horizontal
         }
 
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
@@ -277,12 +277,12 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 // MARK: - ThemeApplicable
 extension JumpBackInCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        tabItemTitle.textColor = theme.colors.textPrimary
+        itemTitle.textColor = theme.colors.textPrimary
         websiteLabel.textColor = theme.colors.textSecondary
         websiteImage.tintColor = theme.colors.iconPrimary
-        tabFallbackFaviconImage.tintColor = theme.colors.iconPrimary
-        tabFallbackFaviconBackground.backgroundColor = theme.colors.layer1
-        tabFallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
+        fallbackFaviconImage.tintColor = theme.colors.iconPrimary
+        fallbackFaviconBackground.backgroundColor = theme.colors.layer1
+        fallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
         adjustBlur(theme: theme)
     }
 }
