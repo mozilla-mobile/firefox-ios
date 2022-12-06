@@ -70,7 +70,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                         // What we do is simply queue the page in the ReadabilityService and then show our loading
                         // screen, which will periodically call page-exists to see if the readerized content has
                         // become available.
-                        ReadabilityService.sharedInstance.process(url, cache: readerModeCache)
+                        ReadabilityService().process(url, cache: readerModeCache, with: profile)
                         if let readerViewLoadingPath = Bundle.main.path(forResource: "ReaderViewLoading", ofType: "html") {
                             do {
                                 let readerViewLoading = try NSMutableString(contentsOfFile: readerViewLoadingPath, encoding: String.Encoding.utf8.rawValue)
