@@ -714,6 +714,20 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         var toast: ButtonToast?
         let numberOfTabs = recentlyClosedTabs.count
         if numberOfTabs > 0 {
+
+            // Add last 10 tab(s) to recently closed list
+            // Note: The recently closed tab list is only updated when the undo
+            // snackbar disappears and does not update if someone taps on undo button
+            recentlyClosedTabs.suffix(10).forEach { tab in
+                if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
+                    profile.recentlyClosedTabs.addTab(url as URL,
+                                                      title: tab.lastTitle,
+                                                      faviconURL: tab.displayFavicon?.url,
+                                                      lastExecutedTime: tab.lastExecutedTime)
+                }
+            }
+
+            // Toast
             var didPressButton = false
             toast = ButtonToast(
                 labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs),
