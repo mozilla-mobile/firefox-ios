@@ -187,6 +187,9 @@ class HistoryPanel: UIViewController,
 
         bottomStackView.isHidden = !viewModel.isSearchInProgress
         fetchDataAndUpdateLayout()
+        DispatchQueue.main.async {
+            self.refreshRecentlyClosedCell()
+        }
     }
 
     // MARK: - Private helpers
