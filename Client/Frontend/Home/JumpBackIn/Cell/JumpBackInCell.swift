@@ -23,6 +23,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
+        static let cellSpacing: CGFloat = 16
         static let titleFontSize: CGFloat = 15
         static let siteFontSize: CGFloat = 12
         static let heroImageSize =  CGSize(width: 108, height: 80)
@@ -190,10 +191,10 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         contentView.addSubview(contentStack)
 
         NSLayoutConstraint.activate([
-            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.cellSpacing),
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.cellSpacing),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.cellSpacing),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.cellSpacing),
 
             itemTitle.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
             itemTitle.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
