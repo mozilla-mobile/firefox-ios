@@ -4,7 +4,28 @@
 
 import Foundation
 
-enum SiteImageError: Error {
+enum SiteImageError: Error, CustomStringConvertible {
     case invalidHTML
     case noFaviconFound
+    case unableToDownloadImage(String)
+    case unableToCacheImage(String)
+    case unableToRetrieveFromCache(String)
+    case noURLInCache
+
+    var description: String {
+        switch self {
+        case .invalidHTML:
+            return "Failed to decode the data at the url as valid HTML"
+        case .noFaviconFound:
+            return "Failed to find a favicon at the provided url"
+        case .unableToDownloadImage(let error):
+            return "Unable to download image with reason: \(error)"
+        case .unableToCacheImage(let error):
+            return "Unable to cache image with reason: \(error)"
+        case .unableToRetrieveFromCache(let error):
+            return "Unable to retrieve image from cache with reason: \(error)"
+        case .noURLInCache:
+            return "The URL was not found in the cache"
+        }
+    }
 }

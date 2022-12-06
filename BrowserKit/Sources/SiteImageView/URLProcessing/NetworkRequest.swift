@@ -8,7 +8,7 @@ protocol NetworkRequest {
     func fetchDataForURL(_ url: URL, completion: @escaping ((Result<Data, SiteImageError>) -> Void))
 }
 
-class HTMLDataRequest: NetworkRequest {
+struct HTMLDataRequest: NetworkRequest {
 
     enum RequestConstants {
         static let timeout: TimeInterval = 5

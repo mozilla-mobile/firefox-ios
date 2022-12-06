@@ -40,12 +40,12 @@ actor DefaultSiteImageCache: SiteImageCache {
         do {
             let result = try await imageCache.retrieveImage(forKey: key)
             guard let image = result else {
-                throw ImageError.unableToRetrieveFromCache("Image was nil")
+                throw SiteImageError.unableToRetrieveFromCache("Image was nil")
             }
             return image
 
         } catch let error as KingfisherError {
-            throw ImageError.unableToRetrieveFromCache(error.errorDescription ?? "No description")
+            throw SiteImageError.unableToRetrieveFromCache(error.errorDescription ?? "No description")
         }
     }
 
@@ -56,9 +56,9 @@ actor DefaultSiteImageCache: SiteImageCache {
             try await imageCache.store(image: image, forKey: key)
 
         } catch let error as KingfisherError {
-            throw ImageError.unableToCacheImage(error.errorDescription ?? "No description")
+            throw SiteImageError.unableToCacheImage(error.errorDescription ?? "No description")
         } catch {
-            throw ImageError.unableToCacheImage("No description")
+            throw SiteImageError.unableToCacheImage("No description")
         }
     }
 

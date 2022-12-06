@@ -26,9 +26,9 @@ struct DefaultSiteImageFetcher: SiteImageFetcher {
             return result.image
 
         } catch let error as KingfisherError {
-            throw ImageError.unableToDownloadImage(error.errorDescription ?? "No description")
+            throw SiteImageError.unableToDownloadImage(error.errorDescription ?? "No description")
         } catch {
-            throw ImageError.unableToDownloadImage("No description")
+            throw SiteImageError.unableToDownloadImage("No description")
         }
     }
 }

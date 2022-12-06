@@ -28,7 +28,7 @@ final class SiteImageFetcherTests: XCTestCase {
             _ = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
             XCTFail("Should have failed with error")
 
-        } catch let error as ImageError {
+        } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: The request is empty or `nil`.",
                            error.description)
         } catch {
