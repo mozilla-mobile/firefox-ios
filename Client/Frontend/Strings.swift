@@ -58,7 +58,7 @@ extension String {
     public struct Alerts {
         public struct RestoreTabs {
             public static let Title = MZLocalizedString(
-                "Alerts.RestoreTabs.Title.v109",
+                "Alerts.RestoreTabs.Title.v109.v2",
                 tableName: "Alerts",
                 value: "%@ crashed. Restore your tabs?",
                 comment: "The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name.")
