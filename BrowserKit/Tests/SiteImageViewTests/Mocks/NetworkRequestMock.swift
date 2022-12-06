@@ -5,17 +5,18 @@
 import Foundation
 @testable import SiteImageView
 
-class NetworkRequestMock: NetworkRequest {
+class HTMLDataRequestMock: HTMLDataRequest {
 
-    var fetchDataCompletion: ((Result<Data, SiteImageError>) -> Void)?
     var fetchDataForURLCount = 0
+    var data: Data?
+    var error: SiteImageError?
 
-    func callFetchDataForURLCompletion(with result: Result<Data, SiteImageError>) {
-        fetchDataCompletion?(result)
-    }
-
-    func fetchDataForURL(_ url: URL, completion: @escaping ((Result<Data, SiteImageError>) -> Void)) {
+    func fetchDataForURL(_ url: URL) async throws -> Data {
         fetchDataForURLCount += 1
-        fetchDataCompletion = completion
+
+        if let error = error {
+            throw error
+        }
+        return data!
     }
 }
