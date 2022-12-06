@@ -34,7 +34,7 @@ final class SiteImageCacheTests: XCTestCase {
             XCTAssertEqual("Unable to retrieve image from cache with reason: The request is empty or `nil`.",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with SiteImageError type")
         }
     }
 
@@ -49,7 +49,7 @@ final class SiteImageCacheTests: XCTestCase {
             XCTAssertEqual("Unable to retrieve image from cache with reason: Image was nil",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with SiteImageError type")
         }
     }
 
@@ -84,7 +84,7 @@ final class SiteImageCacheTests: XCTestCase {
             XCTAssertEqual("Unable to cache image with reason: The request is empty or `nil`.",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with SiteImageError type")
         }
     }
 
