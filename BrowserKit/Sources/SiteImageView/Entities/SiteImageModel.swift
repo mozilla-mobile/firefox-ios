@@ -10,4 +10,6 @@ struct SiteImageModel {
     let domain: String
     let faviconURL: URL?
     let heroImageURL: URL?
+    let faviconImage: UIImage?
+    let heroImage: UIImage?
 }

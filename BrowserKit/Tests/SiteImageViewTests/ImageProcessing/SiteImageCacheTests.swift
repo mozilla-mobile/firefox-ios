@@ -29,7 +29,7 @@ final class SiteImageCacheTests: XCTestCase {
         do {
             _ = try await subject.getImageFromCache(domain: "www.example.com", type: .favicon)
 
-        } catch let error as ImageError {
+        } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-favicon")
             XCTAssertEqual("Unable to retrieve image from cache with reason: The request is empty or `nil`.",
                            error.description)
@@ -44,7 +44,7 @@ final class SiteImageCacheTests: XCTestCase {
         do {
             _ = try await subject.getImageFromCache(domain: "www.example.com", type: .heroImage)
 
-        } catch let error as ImageError {
+        } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-heroImage")
             XCTAssertEqual("Unable to retrieve image from cache with reason: Image was nil",
                            error.description)
@@ -78,7 +78,7 @@ final class SiteImageCacheTests: XCTestCase {
         do {
             _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
 
-        } catch let error as ImageError {
+        } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
             XCTAssertEqual(imageCache.capturedImage, expectedImage)
             XCTAssertEqual("Unable to cache image with reason: The request is empty or `nil`.",

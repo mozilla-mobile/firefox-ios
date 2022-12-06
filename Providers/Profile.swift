@@ -355,10 +355,6 @@ open class BrowserProfile: Profile {
         log.debug("Reopening profile.")
         isShutdown = false
 
-        if !places.isOpen && !RustFirefoxAccounts.shared.hasAccount() {
-            places.migrateBookmarksIfNeeded(fromBrowserDB: database)
-        }
-
         database.reopenIfClosed()
         _ = logins.reopenIfClosed()
         _ = places.reopenIfClosed()
