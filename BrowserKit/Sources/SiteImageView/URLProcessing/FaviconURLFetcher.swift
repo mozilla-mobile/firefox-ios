@@ -6,7 +6,7 @@ import Foundation
 import Fuzi
 
 /// Scrapes the HTML at a given site for images
-protocol ImageURLFetcher {
+protocol FaviconURLFetcher {
 
     /// Scraptes the HTML at the given url for a favicon image
     /// - Parameter siteURL: The web address we want to retrieve the favicon for
@@ -14,7 +14,7 @@ protocol ImageURLFetcher {
     func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void))
 }
 
-class DefaultImageURLFetcher: ImageURLFetcher {
+struct DefaultFaviconURLFetcher: FaviconURLFetcher {
 
     private let network: NetworkRequest
 
@@ -23,10 +23,10 @@ class DefaultImageURLFetcher: ImageURLFetcher {
     }
 
     func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void)) {
-        network.fetchDataForURL(siteURL) { [weak self] result in
+        network.fetchDataForURL(siteURL) { result in
             switch result {
             case let .success(data):
-                self?.processHTMLDocument(siteURL: siteURL,
+                self.processHTMLDocument(siteURL: siteURL,
                                           data: data,
                                           completion: completion)
             case let .failure(error):
