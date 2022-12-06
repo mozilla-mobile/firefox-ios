@@ -47,7 +47,6 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     private lazy var closeButton: UIButton = .build { button in
         button.setTitle(.CloseButtonTitle, for: .normal)
-        button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = UX.cornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
@@ -281,9 +280,8 @@ class PhotonActionSheet: UIViewController, Themeable {
             }
         }
 
-        viewModel.tintColor = UIColor.theme.actionMenu.foreground
-        closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
-        tableView.headerView(forSection: 0)?.backgroundColor = UIColor.Photon.DarkGrey05
+        closeButton.backgroundColor = theme.colors.layer1
+        closeButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
     }
 
     // MARK: - Actions
