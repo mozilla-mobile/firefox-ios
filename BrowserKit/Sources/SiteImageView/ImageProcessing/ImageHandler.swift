@@ -5,7 +5,7 @@
 import UIKit
 
 protocol ImageHandler {
-    func fetchFavicon(imageURL: URL, domain: String) async throws -> UIImage
+    func fetchFavicon(imageURL: URL?, domain: String) async throws -> UIImage
     func fetchHeroImage(siteURL: URL, domain: String) async throws -> UIImage
 }
 
@@ -29,7 +29,7 @@ class DefaultImageHandler: ImageHandler {
         self.heroImageFetcher = heroImageFetcher
     }
 
-    func fetchFavicon(imageURL: URL, domain: String) async throws -> UIImage {
+    func fetchFavicon(imageURL: URL?, domain: String) async throws -> UIImage {
         do {
             return try bundleImageFetcher.getImageFromBundle(domain: domain)
 
@@ -37,15 +37,24 @@ class DefaultImageHandler: ImageHandler {
             return try await imageCache.getImageFromCache(domain: domain, type: .favicon)
 
         } catch SiteImageError.unableToRetrieveFromCache {
-            let image = try await imageFetcher.fetchImage(from: imageURL)
+            guard let url = imageURL else {
+                return await fallbackLetterFavicon(domain: domain)
+            }
+
+            let image = try await imageFetcher.fetchImage(from: url)
             await imageCache.cacheImage(image: image, domain: domain, type: .favicon)
             return image
 
         } catch {
-            let image = letterImageGenerator.generateLetterImage(domain: domain)
-            await imageCache.cacheImage(image: image, domain: domain, type: .favicon)
-            return image
+            return await fallbackLetterFavicon(domain: domain)
         }
+    }
+
+    // If we have no image URL or all other method fails, then use the letter favicon
+    private func fallbackLetterFavicon(domain: String) async -> UIImage {
+        let image = letterImageGenerator.generateLetterImage(domain: domain)
+        await imageCache.cacheImage(image: image, domain: domain, type: .favicon)
+        return image
     }
 
     func fetchHeroImage(siteURL: URL, domain: String) async throws -> UIImage {
