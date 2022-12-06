@@ -32,7 +32,7 @@ final class SiteImageFetcherTests: XCTestCase {
             XCTAssertEqual("Unable to download image with reason: The request is empty or `nil`.",
                            error.description)
         } catch {
-            XCTFail("Should have failed with ImageError type")
+            XCTFail("Should have failed with SiteImageError type")
         }
     }
 

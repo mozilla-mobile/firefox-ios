@@ -17,12 +17,12 @@ extension NSItemProvider: ImageProvider {
         return try await withCheckedThrowingContinuation { continuation in
             loadObject(ofClass: aClass) { image, error in
                 guard error == nil else {
-                    continuation.resume(throwing: ImageError.unableToDownloadImage(error.debugDescription.description))
+                    continuation.resume(throwing: SiteImageError.unableToDownloadImage(error.debugDescription.description))
                     return
                 }
 
                 guard let image = image as? UIImage else {
-                    continuation.resume(throwing: ImageError.unableToDownloadImage("NSItemProviderReading not an image"))
+                    continuation.resume(throwing: SiteImageError.unableToDownloadImage("NSItemProviderReading not an image"))
                     return
                 }
 
