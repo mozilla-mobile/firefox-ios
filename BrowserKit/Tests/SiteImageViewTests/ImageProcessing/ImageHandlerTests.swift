@@ -10,7 +10,7 @@ final class ImageHandlerTests: XCTestCase {
     private var bundleImageFetcher: MockBundleImageFetcher!
     private var heroImageFetcher: MockHeroImageFetcher!
     private var siteImageCache: MockSiteImageCache!
-    private var siteImageFetcher: MockSiteImageFetcher!
+    private var faviconFetcher: MockFaviconFetcher!
     private var letterImageGenerator: MockLetterImageGenerator!
 
     override func setUp() {
@@ -18,7 +18,7 @@ final class ImageHandlerTests: XCTestCase {
         self.bundleImageFetcher = MockBundleImageFetcher()
         self.heroImageFetcher = MockHeroImageFetcher()
         self.siteImageCache = MockSiteImageCache()
-        self.siteImageFetcher = MockSiteImageFetcher()
+        self.faviconFetcher = MockFaviconFetcher()
         self.letterImageGenerator = MockLetterImageGenerator()
     }
 
@@ -27,7 +27,7 @@ final class ImageHandlerTests: XCTestCase {
         self.bundleImageFetcher = nil
         self.heroImageFetcher = nil
         self.siteImageCache = nil
-        self.siteImageFetcher = nil
+        self.faviconFetcher = nil
         self.letterImageGenerator = nil
     }
 
@@ -48,8 +48,8 @@ final class ImageHandlerTests: XCTestCase {
             XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
             XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
 
-            XCTAssertEqual(siteImageFetcher.fetchImageSucceedCalled, 0)
-            XCTAssertEqual(siteImageFetcher.fetchImageFailedCalled, 0)
+            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
             XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
             XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
@@ -74,8 +74,8 @@ final class ImageHandlerTests: XCTestCase {
             XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
             XCTAssertEqual(siteImageCache.getFromCacheWithType, .favicon)
 
-            XCTAssertEqual(siteImageFetcher.fetchImageSucceedCalled, 0)
-            XCTAssertEqual(siteImageFetcher.fetchImageFailedCalled, 0)
+            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
             XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
             XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
@@ -98,8 +98,8 @@ final class ImageHandlerTests: XCTestCase {
             XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
             XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
 
-            XCTAssertEqual(siteImageFetcher.fetchImageSucceedCalled, 0)
-            XCTAssertEqual(siteImageFetcher.fetchImageFailedCalled, 0)
+            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
@@ -112,7 +112,7 @@ final class ImageHandlerTests: XCTestCase {
 
     func testFavicon_whenImageFetcher_returnsImageFetcherFavicon() async {
         let expectedResult = UIImage()
-        siteImageFetcher.image = expectedResult
+        faviconFetcher.image = expectedResult
         let subject = createSubject()
 
         do {
@@ -125,8 +125,8 @@ final class ImageHandlerTests: XCTestCase {
             XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
             XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
 
-            XCTAssertEqual(siteImageFetcher.fetchImageSucceedCalled, 1)
-            XCTAssertEqual(siteImageFetcher.fetchImageFailedCalled, 0)
+            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 1)
+            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
@@ -150,8 +150,8 @@ final class ImageHandlerTests: XCTestCase {
             XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
             XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
 
-            XCTAssertEqual(siteImageFetcher.fetchImageSucceedCalled, 0)
-            XCTAssertEqual(siteImageFetcher.fetchImageFailedCalled, 1)
+            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 1)
 
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
@@ -235,7 +235,7 @@ private extension ImageHandlerTests {
     func createSubject() -> ImageHandler {
         return DefaultImageHandler(bundleImageFetcher: bundleImageFetcher,
                                    imageCache: siteImageCache,
-                                   imageFetcher: siteImageFetcher,
+                                   faviconFetcher: faviconFetcher,
                                    letterImageGenerator: letterImageGenerator,
                                    heroImageFetcher: heroImageFetcher)
     }
@@ -304,14 +304,14 @@ private class MockSiteImageCache: SiteImageCache {
     }
 }
 
-// MARK: - MockSiteImageFetcher
-private class MockSiteImageFetcher: SiteImageFetcher {
+// MARK: - MockFaviconFetcher
+private class MockFaviconFetcher: FaviconFetcher {
 
     var image: UIImage?
     var fetchImageSucceedCalled = 0
     var fetchImageFailedCalled = 0
 
-    func fetchImage(from imageURL: URL) async throws -> UIImage {
+    func fetchFavicon(from imageURL: URL) async throws -> UIImage {
         if let image = image {
             fetchImageSucceedCalled += 1
             return image
