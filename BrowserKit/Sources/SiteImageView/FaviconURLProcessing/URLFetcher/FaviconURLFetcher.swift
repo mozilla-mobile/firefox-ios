@@ -32,18 +32,6 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
             throw error
         }
     }
-//    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void)) {
-//        network.fetchDataForURL(siteURL) { result in
-//            switch result {
-//            case let .success(data):
-//                self.processHTMLDocument(siteURL: siteURL,
-//                                          data: data,
-//                                          completion: completion)
-//            case let .failure(error):
-//                completion(.failure(error))
-//            }
-//        }
-//    }
 
     private func processHTMLDocument(siteURL: URL, data: Data) async throws -> URL {
         guard let root = try? HTMLDocument(data: data) else {
