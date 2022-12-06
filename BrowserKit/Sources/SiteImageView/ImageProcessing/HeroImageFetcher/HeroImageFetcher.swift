@@ -6,7 +6,7 @@ import LinkPresentation
 import UIKit
 
 protocol HeroImageFetcher {
-    func fetchHeroImage(from imageURL: URL) async throws -> UIImage
+    func fetchHeroImage(from siteURL: URL) async throws -> UIImage
 }
 
 class DefaultHeroImageFetcher: HeroImageFetcher {
@@ -17,11 +17,11 @@ class DefaultHeroImageFetcher: HeroImageFetcher {
         self.metadataProvider = metadataProvider
     }
 
-    func fetchHeroImage(from imageURL: URL) async throws -> UIImage {
+    func fetchHeroImage(from siteURL: URL) async throws -> UIImage {
         do {
-            let metadata = try await metadataProvider.startFetchingMetadata(for: imageURL)
+            let metadata = try await metadataProvider.startFetchingMetadata(for: siteURL)
             guard let imageProvider = metadata.imageProvider else {
-                throw ImageError.unableToDownloadImage("Metadata image provider could not be retrieved.")
+                throw SiteImageError.unableToDownloadImage("Metadata image provider could not be retrieved.")
             }
 
             return try await imageProvider.loadObject(ofClass: UIImage.self)
