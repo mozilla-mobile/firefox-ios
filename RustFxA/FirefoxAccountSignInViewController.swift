@@ -73,7 +73,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.lineBreakMode = .byWordWrapping
         label.textColor = .label
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                       size: UX.signInLabelFontSize)
+                                                                   size: UX.signInLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
 
         let placeholder = "firefox.com/pair"
@@ -174,7 +174,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         accessibilityLabel = "FxASingin.navBar"
 
         setupNotifications(forObserver: self,
-                                   observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged])
         setupLayout()
         applyTheme()
     }
@@ -218,15 +218,15 @@ class FirefoxAccountSignInViewController: UIViewController {
 
             scanButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 24),
             scanButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                       constant: UX.horizontalPadding),
+                                                constant: UX.horizontalPadding),
             scanButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                        constant: -UX.horizontalPadding),
+                                                 constant: -UX.horizontalPadding),
 
             emailButton.topAnchor.constraint(equalTo: scanButton.bottomAnchor, constant: 8),
             emailButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                       constant: UX.horizontalPadding),
+                                                 constant: UX.horizontalPadding),
             emailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                        constant: -UX.horizontalPadding),
+                                                  constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
     }

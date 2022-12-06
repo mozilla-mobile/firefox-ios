@@ -105,7 +105,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         for cardType in viewModel.enabledCards {
             if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
                 cardViewController = OnboardingCardViewController(viewModel: viewModel,
-                                                                      delegate: self)
+                                                                  delegate: self)
                 informationCards.append(cardViewController)
             }
         }

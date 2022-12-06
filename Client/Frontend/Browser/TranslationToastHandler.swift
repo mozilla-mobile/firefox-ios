@@ -75,9 +75,9 @@ class TranslationToastHandler: TabEventHandler {
 
         let service = setting.useTranslationService
         let translationURL = String(format: service.urlTemplate,
-                             pageLanguage,
-                             myLanguage,
-                             urlQueryParam)
+                                    pageLanguage,
+                                    myLanguage,
+                                    urlQueryParam)
 
         if let newURL = URL(string: translationURL) {
             tab.loadRequest(URLRequest(url: newURL))
