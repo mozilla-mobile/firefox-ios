@@ -88,10 +88,23 @@ class UpdateViewModelTests: XCTestCase {
         let currentTestAppVersion = "22.0"
 
         // Setting clean install to false
-        profile.prefs.setString(currentTestAppVersion, forKey: LatestAppVersionProfileKey)
+        profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setString(currentTestAppVersion, forKey: UpdateViewModel.prefsKey)
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
+        XCTAssertFalse(shouldShow)
+    }
+
+    func testShouldNotShowCoverSheet_ForMinorVersionUpgrade() {
+        let olderTestAppVersion = "21.0"
+        let updatedTestAppVersion = "21.1"
+
+        // Setting clean install to false
+        profile.prefs.setString(olderTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
+        profile.prefs.setString(updatedTestAppVersion, forKey: UpdateViewModel.prefsKey)
+
+        let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), updatedTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
@@ -100,7 +113,7 @@ class UpdateViewModelTests: XCTestCase {
         let updatedTestAppVersion = "22.0"
 
         // Setting clean install to false
-        profile.prefs.setString(olderTestAppVersion, forKey: LatestAppVersionProfileKey)
+        profile.prefs.setString(olderTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setString(olderTestAppVersion, forKey: UpdateViewModel.prefsKey)
 
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
@@ -112,7 +125,7 @@ class UpdateViewModelTests: XCTestCase {
         let currentTestAppVersion = "22.0"
 
         // Setting clean install to false
-        profile.prefs.setString(currentTestAppVersion, forKey: LatestAppVersionProfileKey)
+        profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
 
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertTrue(shouldShow)
@@ -121,7 +134,7 @@ class UpdateViewModelTests: XCTestCase {
     func testShouldSaveVersion_CleanInstall() {
         let currentTestAppVersion = "22.0"
 
-        profile.prefs.setString(currentTestAppVersion, forKey: LatestAppVersionProfileKey)
+        profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
         _ = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
     }
