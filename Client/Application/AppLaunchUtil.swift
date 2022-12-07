@@ -124,7 +124,7 @@ class AppLaunchUtil {
             InstallType.set(type: .fresh)
             InstallType.updateCurrentVersion(version: AppInfo.appVersion)
             // Profile setup
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest)
 
         } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
             profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
