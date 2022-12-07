@@ -30,6 +30,14 @@ public struct AccessibilityIdentifiers {
             static let newTabButton = "TopTabsViewController.newTabButton"
             static let privateModeButton = "TopTabsViewController.privateModeButton"
         }
+
+        struct UrlBar {
+            static let scanQRCodeButton = "urlBar-scanQRCode"
+            static let cancelButton = "urlBar-cancel"
+            static let tabsButton = "URLBarView.tabsButton"
+            static let backButton = "URLBarView.backButton"
+            static let searchTextField = "address"
+        }
     }
 
     struct FirefoxHomepage {
