@@ -56,8 +56,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     }
 
     private let syncedTabsButton: UIButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper().preferredFont(withTextStyle: .subheadline,
-                                                                    size: UX.deviceSourceFontSize)
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                                size: UX.deviceSourceFontSize)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.showAllButton
     }
@@ -318,7 +318,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabTapTargetView.topAnchor.constraint(equalTo: tabStack.topAnchor),
             syncedTabTapTargetView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             syncedTabTapTargetView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            tabContentContainer.heightAnchor.constraint(greaterThanOrEqualTo: tabImageContainer.heightAnchor)
         ])
 
         syncedDeviceIconCenterConstraint = syncedDeviceLabel.centerYAnchor.constraint(equalTo: syncedDeviceImage.centerYAnchor).priority(UILayoutPriority(999))

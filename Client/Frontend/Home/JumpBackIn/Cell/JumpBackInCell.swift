@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import Storage
 import UIKit
 
@@ -24,53 +23,40 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8
         static let generalCornerRadius: CGFloat = 12
+        static let cellSpacing: CGFloat = 16
         static let titleFontSize: CGFloat = 15
         static let siteFontSize: CGFloat = 12
         static let heroImageSize =  CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 36, height: 36)
-        static let faviconSize = CGSize(width: 24, height: 24)
+        static let websiteIconSize = CGSize(width: 24, height: 24)
     }
 
-    private var faviconCenterConstraint: NSLayoutConstraint?
-    private var faviconFirstBaselineConstraint: NSLayoutConstraint?
+    // MARK: - Variables
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    private var websiteIconFirstBaselineConstraint: NSLayoutConstraint?
+    private var websiteIconCenterConstraint: NSLayoutConstraint?
 
     // MARK: - UI Elements
+
+    // contains imageContainer and textContainer
+    private let contentStack: UIStackView = .build { stackView in
+        stackView.backgroundColor = .clear
+        stackView.spacing = 16
+        stackView.axis = .horizontal
+        stackView.alignment = .leading
+    }
+
+    // Contains the heroImage and fallbackFaviconImage
+    private var imageContainer: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+
     let heroImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
         imageView.backgroundColor = .clear
-    }
-
-    private let itemTitle: UILabel = .build { label in
-        label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                   size: UX.titleFontSize)
-        label.numberOfLines = 2
-    }
-
-    // Contains the faviconImage and descriptionLabel
-    private var descriptionContainer: UIStackView = .build { stackView in
-        stackView.backgroundColor = .clear
-        stackView.spacing = 8
-        stackView.axis = .horizontal
-        stackView.alignment = .leading
-        stackView.distribution = .fillProportionally
-    }
-
-    let faviconImage: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-    }
-
-    private let descriptionLabel: UILabel = .build { label in
-        label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                                       size: UX.siteFontSize)
-        label.textColor = .label
     }
 
     // Used as a fallback if hero image isn't set
@@ -87,9 +73,36 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
-    // Contains the hero image and fallback favicons
-    private var imageContainer: UIView = .build { view in
+    // contains itemTitle and websiteContainer
+    private let textContainer: UIView = .build { view in
         view.backgroundColor = .clear
+    }
+
+    private let itemTitle: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                   size: UX.titleFontSize)
+        label.numberOfLines = 2
+    }
+
+    // Contains the websiteImage and websiteLabel
+    private var websiteContainer: UIView = .build { view in
+        view.backgroundColor = .clear
+    }
+
+    private let websiteImage: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
+    }
+
+    private var websiteLabel: UILabel = .build { label in
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 2
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
+                                                                       size: UX.siteFontSize)
+        label.textColor = .label
     }
 
     // MARK: - Inits
@@ -100,6 +113,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         isAccessibilityElement = true
         accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell
 
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
         setupLayout()
     }
 
@@ -107,17 +122,20 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
         heroImage.image = nil
-        faviconImage.image = nil
+        websiteImage.image = nil
         fallbackFaviconImage.image = nil
-        descriptionLabel.text = nil
+        websiteLabel.text = nil
         itemTitle.text = nil
         setFallBackFaviconVisibility(isHidden: false)
 
-        faviconImage.isHidden = false
-        descriptionContainer.addArrangedViewToTop(faviconImage)
+        websiteImage.isHidden = false
     }
 
     override func layoutSubviews() {
@@ -133,7 +151,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
         configureImages(viewModel: viewModel)
 
         itemTitle.text = viewModel.titleText
-        descriptionLabel.text = viewModel.descriptionText
+        websiteLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
         adjustLayout()
 
@@ -154,7 +172,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
             heroImage.image = viewModel.heroImage
         }
 
-        faviconImage.image = viewModel.favIconImage
+        websiteImage.image = viewModel.favIconImage
     }
 
     private func setFallBackFaviconVisibility(isHidden: Bool) {
@@ -165,21 +183,26 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     private func setupLayout() {
         fallbackFaviconBackground.addSubviews(fallbackFaviconImage)
         imageContainer.addSubviews(heroImage, fallbackFaviconBackground)
-        descriptionContainer.addArrangedSubview(faviconImage)
-        descriptionContainer.addArrangedSubview(descriptionLabel)
-        contentView.addSubviews(itemTitle, imageContainer, descriptionContainer)
+        websiteContainer.addSubviews(websiteImage, websiteLabel)
+        textContainer.addSubviews(itemTitle, websiteContainer)
+        contentStack.addArrangedSubview(imageContainer)
+        contentStack.addArrangedSubview(textContainer)
+
+        contentView.addSubview(contentStack)
 
         NSLayoutConstraint.activate([
-            itemTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            itemTitle.leadingAnchor.constraint(equalTo: imageContainer.trailingAnchor, constant: 16),
-            itemTitle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            contentStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.cellSpacing),
+            contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.cellSpacing),
+            contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.cellSpacing),
+            contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.cellSpacing),
+
+            itemTitle.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
+            itemTitle.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
+            itemTitle.topAnchor.constraint(equalTo: textContainer.topAnchor),
 
             // Image container, hero image and fallback
-            imageContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             imageContainer.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
             imageContainer.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
-            imageContainer.topAnchor.constraint(equalTo: itemTitle.topAnchor),
-            imageContainer.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16),
 
             heroImage.topAnchor.constraint(equalTo: imageContainer.topAnchor),
             heroImage.leadingAnchor.constraint(equalTo: imageContainer.leadingAnchor),
@@ -196,29 +219,49 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
             fallbackFaviconImage.centerXAnchor.constraint(equalTo: fallbackFaviconBackground.centerXAnchor),
             fallbackFaviconImage.centerYAnchor.constraint(equalTo: fallbackFaviconBackground.centerYAnchor),
 
-            // Description container, it's image and label
-            descriptionContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
-            descriptionContainer.leadingAnchor.constraint(equalTo: itemTitle.leadingAnchor),
-            descriptionContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            descriptionContainer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            websiteImage.topAnchor.constraint(equalTo: websiteContainer.topAnchor),
+            websiteImage.leadingAnchor.constraint(equalTo: websiteContainer.leadingAnchor),
+            websiteImage.bottomAnchor.constraint(lessThanOrEqualTo: websiteContainer.bottomAnchor),
 
-            faviconImage.heightAnchor.constraint(equalToConstant: UX.faviconSize.height),
-            faviconImage.widthAnchor.constraint(equalToConstant: UX.faviconSize.width),
+            websiteLabel.topAnchor.constraint(equalTo: websiteContainer.firstBaselineAnchor),
+            websiteLabel.leadingAnchor.constraint(equalTo: websiteImage.trailingAnchor, constant: 8),
+            websiteLabel.trailingAnchor.constraint(equalTo: websiteContainer.trailingAnchor),
+            websiteLabel.bottomAnchor.constraint(equalTo: websiteContainer.bottomAnchor),
+
+            // Website container, it's image and label
+            websiteContainer.topAnchor.constraint(greaterThanOrEqualTo: itemTitle.bottomAnchor, constant: 8),
+            websiteContainer.leadingAnchor.constraint(equalTo: textContainer.leadingAnchor),
+            websiteContainer.trailingAnchor.constraint(equalTo: textContainer.trailingAnchor),
+            websiteContainer.bottomAnchor.constraint(equalTo: textContainer.bottomAnchor),
+
+            websiteImage.heightAnchor.constraint(equalToConstant: UX.websiteIconSize.height),
+            websiteImage.widthAnchor.constraint(equalToConstant: UX.websiteIconSize.width),
+
+            textContainer.heightAnchor.constraint(greaterThanOrEqualTo: imageContainer.heightAnchor)
         ])
 
-        faviconCenterConstraint = descriptionLabel.centerYAnchor.constraint(equalTo: faviconImage.centerYAnchor).priority(UILayoutPriority(999))
-        faviconFirstBaselineConstraint = descriptionLabel.firstBaselineAnchor.constraint(equalTo: faviconImage.bottomAnchor,
-                                                                                         constant: -UX.faviconSize.height / 2)
+        websiteIconCenterConstraint = websiteLabel.centerYAnchor.constraint(equalTo: websiteImage.centerYAnchor).priority(UILayoutPriority(999))
+        websiteIconFirstBaselineConstraint = websiteLabel.firstBaselineAnchor.constraint(
+            equalTo: websiteImage.bottomAnchor,
+            constant: -UX.websiteIconSize.height / 2)
 
-        descriptionLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
+        websiteLabel.setContentCompressionResistancePriority(UILayoutPriority(1000), for: .vertical)
+
+        adjustLayout()
     }
 
     private func adjustLayout() {
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
 
+        if contentSizeCategory.isAccessibilityCategory {
+            contentStack.axis = .vertical
+        } else {
+            contentStack.axis = .horizontal
+        }
+
         // Center favicon on smaller font sizes. On bigger font sizes align with first baseline
-        faviconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
-        faviconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
+        websiteIconCenterConstraint?.isActive = !contentSizeCategory.isAccessibilityCategory
+        websiteIconFirstBaselineConstraint?.isActive = contentSizeCategory.isAccessibilityCategory
     }
 
     private func setupShadow(theme: Theme) {
@@ -236,8 +279,8 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
 extension JumpBackInCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         itemTitle.textColor = theme.colors.textPrimary
-        descriptionLabel.textColor = theme.colors.textSecondary
-        faviconImage.tintColor = theme.colors.iconPrimary
+        websiteLabel.textColor = theme.colors.textSecondary
+        websiteImage.tintColor = theme.colors.iconPrimary
         fallbackFaviconImage.tintColor = theme.colors.iconPrimary
         fallbackFaviconBackground.backgroundColor = theme.colors.layer1
         fallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
@@ -256,6 +299,19 @@ extension JumpBackInCell: Blurrable {
             contentView.removeVisualEffectView()
             contentView.backgroundColor = theme.colors.layer5
             setupShadow(theme: theme)
+        }
+    }
+}
+
+// MARK: - Notifiable
+extension JumpBackInCell: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        ensureMainThread { [weak self] in
+            switch notification.name {
+            case .DynamicFontChanged:
+                self?.adjustLayout()
+            default: break
+            }
         }
     }
 }
