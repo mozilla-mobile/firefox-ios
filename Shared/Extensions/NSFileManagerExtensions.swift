@@ -27,12 +27,12 @@ public extension FileManager {
             return false
         }
 
-        guard let directoryEnumerator = FileManager.default.enumerator(at: url,
+        guard let directoryEnumerator = FileManager.default.enumerator(
+            at: url,
             includingPropertiesForKeys: prefetchedProperties,
             options: [],
-            errorHandler: errorHandler) else {
-            throw errorWithCode(.enumeratorFailure)
-        }
+            errorHandler: errorHandler)
+        else { throw errorWithCode(.enumeratorFailure) }
 
         // Bail out if we encountered an issue getting the enumerator.
         if let enumeratorError = enumeratorError {

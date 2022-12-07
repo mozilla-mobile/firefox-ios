@@ -26,8 +26,10 @@ public extension UIImageView {
             self.image = UIImage(contentsOfFile: bundledIcon.filePath)
             finish(bgColor: bundledIcon.bgcolor)
         } else if let imageURL = URL(string: icon?.url ?? "") {
-            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: imageURL,
-                                       limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(
+                with: imageURL,
+                limit: ImageLoadingConstants.NoLimitImageSize
+            ) { image, error in
                 guard error == nil, let image = image else {
                     self.image = defaults.image
                     finish(bgColor: nil)

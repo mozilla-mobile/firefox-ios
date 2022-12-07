@@ -367,8 +367,9 @@ class BookmarksPanel: SiteTableViewController,
         }
 
         if let bookmarkCell = node as? BookmarksFolderCell,
-            let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
-                                                    for: indexPath) as? OneLineTableViewCell {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: OneLineTableViewCell.cellIdentifier,
+                for: indexPath) as? OneLineTableViewCell {
 
             // Site is needed on BookmarkItemData to setup cell image
             var site: Site?

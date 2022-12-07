@@ -23,8 +23,8 @@ extension PushCrypto {
         }
 
         let decrypted = try aes128gcm(payload: payload,
-                             decryptWith: rawRecvPrivKey,
-                             authenticateWith: authSecret)
+                                      decryptWith: rawRecvPrivKey,
+                                      authenticateWith: authSecret)
 
         guard let plaintext = decrypted.utf8EncodedString else {
             throw PushCryptoError.utf8EncodingError
@@ -112,9 +112,9 @@ extension PushCrypto {
         }
 
         let decrypted = try aesgcm(ciphertext: ciphertext,
-                          withHeaders: headers,
-                          decryptWith: rawRecvPrivKey,
-                          authenticateWith: authSecret)
+                                   withHeaders: headers,
+                                   decryptWith: rawRecvPrivKey,
+                                   authenticateWith: authSecret)
 
         guard let plaintext = decrypted.utf8EncodedString else {
             throw PushCryptoError.utf8EncodingError
