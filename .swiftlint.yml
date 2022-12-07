@@ -49,7 +49,6 @@ disabled_rules: # rule identifiers to exclude from running
 - unused_control_flow_label
 - unused_enumerated
 - valid_ibinspectable
-- vertical_parameter_alignment
 - weak_delegate
 - xctfail_message
 
