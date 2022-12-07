@@ -7,16 +7,24 @@ The script can either be used with manual versions input, or the script can fetc
 from the App Store.
 
 To use you first need to install python requirements through pip in your virtual environment.
+- python -m venv venv
+- source venv/bin/activate
+- pip install -r requirements.txt   
+
 Then create a `config.py` file that will contain the username and token to access GitHub API with format:
+```
 username = "username"
 token = "123456"
+```
+You can create a Github token following https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
+Once that's done, you can start using the script.
 Two versions can be passed in as arguments:
-- python script.py -o 'oldVersion' -n 'newVersion'
-- python script.py -o 103.1 -n 104.0
+- python github_release.py -o 'oldVersion' -n 'newVersion'
+- python github_release.py -o 107.3 -n 108.0
 
-Or no versions can be passed in, and the script will retrieve the versions from the App Store:
-- python script.py
+Or no versions can be passed in, and the script will retrieve the versions from the App Store (versions needs to be already released for this to work):
+- python github_release.py
 """
 
 import argparse
