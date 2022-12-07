@@ -134,7 +134,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         /// With our well-formed URL, we can handle the action here.
         if url.isWebPage() {
             let bvc = BrowserViewController.foregroundBVC()
-            
+
             // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
             // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
             bvc?.openURLInNewTab(url)
