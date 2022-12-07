@@ -700,7 +700,8 @@ extension URLBarView: TabToolbarProtocol {
 
     func updatePageStatus(_ isWebPage: Bool) {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            multiStateButton.isEnabled = isWebPage
+            // the button should be always enabled so that the search button is enabled on the homepage
+            multiStateButton.isEnabled = true
         }
     }
 
