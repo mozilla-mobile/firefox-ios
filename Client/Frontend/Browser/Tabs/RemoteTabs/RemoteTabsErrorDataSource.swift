@@ -30,8 +30,10 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = RemoteTabsErrorCell(error: error,
+        let viewModel = RemoteTabsErrorCellViewModel(error: error)
+        let cell = RemoteTabsErrorCell(viewModel: viewModel,
                                        theme: theme)
+        cell.configure()
         return cell
     }
 

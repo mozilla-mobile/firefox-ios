@@ -4,6 +4,11 @@
 
 import Foundation
 
+struct RemoteTabsErrorCellViewModel {
+    var error: RemoteTabsError
+    var performAction: (() -> Void)?
+}
+
 class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     struct UX {
@@ -14,7 +19,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     var theme: Theme
-    private var error: RemoteTabsError
+    var viewModel: RemoteTabsErrorCellViewModel
 
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollview in
@@ -48,15 +53,16 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.numberOfLines = 0
     }
 
-    let actionButton: UIButton = .build { button in
+    private let actionButton: UIButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                                 size: UX.buttonSizeFont)
     }
 
-    init(error: RemoteTabsError,
+    init(viewModel: RemoteTabsErrorCellViewModel,
+//        error: RemoteTabsError,
          theme: Theme) {
         self.theme = theme
-        self.error = error
+        self.viewModel = viewModel
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
         selectionStyle = .none
 
@@ -68,11 +74,18 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupLayout() {
+    func configure() {
+        emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
+        titleLabel.text =  .EmptySyncedTabsPanelStateTitle
+        instructionsLabel.text = viewModel.error.localizedString()
+//        .setTitle( .PrivateBrowsingLearnMore, for: [])
+    }
 
+    private func setupLayout() {
         stackView.addArrangedSubview(emptyStateImageView)
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(instructionsLabel)
+        stackView.addArrangedSubview(actionButton)
         contentView.addSubview(stackView)
 
         NSLayoutConstraint.activate([
@@ -84,16 +97,8 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
             emptyStateImageView.widthAnchor.constraint(equalToConstant: 90),
             emptyStateImageView.heightAnchor.constraint(equalToConstant: 60),
         ])
-
-        setupView()
     }
 
-    private func setupView() {
-        emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
-        titleLabel.text =  .EmptySyncedTabsPanelStateTitle
-        instructionsLabel.text = error.localizedString()
-//        .setTitle( .PrivateBrowsingLearnMore, for: [])
-    }
 
     func applyTheme(theme: Theme) {
         emptyStateImageView.tintColor = theme.colors.textPrimary
