@@ -94,7 +94,7 @@ class NavigationRouterTests: XCTestCase {
     func testFxALinks() {
         XCTAssertEqual(
             NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?signin=coolcodes&user=foo&email=bar")!),
-            NavigationPath.fxa(params: FxALaunchParams(query: ["user": "foo", "email": "bar", "signin": "coolcodes"])))
+            NavigationPath.fxa(params: FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: ["user": "foo", "email": "bar", "signin": "coolcodes"])))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://fxa-signin?user=foo&email=bar")!), nil)
     }
 

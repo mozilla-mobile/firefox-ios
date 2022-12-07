@@ -578,7 +578,7 @@ extension TabTrayViewController: RemotePanelDelegate {
 
     // Sign In and Create Account Helper
     func fxaSignInOrCreateAccountHelper() {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        let fxaParams = FxALaunchParams(entrypoint: .homepanel, query: [:])
         let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams,
                                                                                      flowType: .emailLoginFlow,
                                                                                      referringPage: .tabTray,
