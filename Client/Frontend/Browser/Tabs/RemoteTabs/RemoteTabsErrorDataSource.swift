@@ -26,7 +26,7 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        return tableView.frame.height
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

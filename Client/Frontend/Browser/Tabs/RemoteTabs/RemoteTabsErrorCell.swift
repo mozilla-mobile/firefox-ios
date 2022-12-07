@@ -12,7 +12,9 @@ struct RemoteTabsErrorCellViewModel {
 class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     struct UX {
-        static let topPaddingInBetweenItems: CGFloat = 15
+        static let verticalPadding: CGFloat = 100
+        static let horizontalPadding: CGFloat = 24
+        static let paddingInBetweenItems: CGFloat = 15
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
         static let buttonSizeFont: CGFloat = 15
@@ -20,6 +22,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     var theme: Theme
     var viewModel: RemoteTabsErrorCellViewModel
+//    var delegate:
 
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollview in
@@ -28,13 +31,13 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
+        stackView.alignment = .center
         stackView.distribution = .fill
-        stackView.spacing = UX.topPaddingInBetweenItems
+        stackView.spacing = UX.paddingInBetweenItems
     }
 
     private let emptyStateImageView: UIImageView = build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
     }
 
     private let titleLabel: UILabel = .build { label in
@@ -42,24 +45,25 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title2,
                                                                    size: UX.titleSizeFont)
         label.numberOfLines = 0
-        label.textAlignment = .center
+        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private let instructionsLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: UX.descriptionSizeFont)
-        label.textAlignment = .center
         label.numberOfLines = 0
+        label.setContentHuggingPriority(.defaultLow, for: .vertical)
     }
 
     private let actionButton: UIButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                                 size: UX.buttonSizeFont)
+        button.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+        button.isHidden = true
     }
 
     init(viewModel: RemoteTabsErrorCellViewModel,
-//        error: RemoteTabsError,
          theme: Theme) {
         self.theme = theme
         self.viewModel = viewModel
@@ -78,7 +82,11 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
         instructionsLabel.text = viewModel.error.localizedString()
-//        .setTitle( .PrivateBrowsingLearnMore, for: [])
+
+        if viewModel.error == .notLoggedIn {
+            actionButton.setTitle(.Settings.Sync.ButtonTitle, for: [])
+            actionButton.isHidden = false
+        }
     }
 
     private func setupLayout() {
@@ -86,24 +94,52 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(instructionsLabel)
         stackView.addArrangedSubview(actionButton)
-        contentView.addSubview(stackView)
+
+        scrollView.addSubview(stackView)
+        contentView.addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                                constant: UX.horizontalPadding),
+            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                            constant: UX.verticalPadding),
+            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                 constant: -UX.horizontalPadding),
+            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                              constant: -UX.verticalPadding),
+
+            scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+
+            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: stackView.topAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
 
             emptyStateImageView.widthAnchor.constraint(equalToConstant: 90),
             emptyStateImageView.heightAnchor.constraint(equalToConstant: 60),
         ])
     }
 
-
     func applyTheme(theme: Theme) {
         emptyStateImageView.tintColor = theme.colors.textPrimary
         titleLabel.textColor = theme.colors.textPrimary
         instructionsLabel.textColor = theme.colors.textPrimary
+        actionButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
         backgroundColor = theme.colors.layer3
+    }
+
+    @objc private func signIn() {
+        if let remoteTabsPanel = self.remoteTabsPanel {
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
+            remoteTabsPanel.remotePanelDelegate?.remotePanelDidRequestToSignIn()
+        }
+    }
+
+    @objc private func createAnAccount() {
+        if let remoteTabsPanel = self.remoteTabsPanel {
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncCreateAccount)
+            remoteTabsPanel.remotePanelDelegate?.remotePanelDidRequestToCreateAccount()
+        }
     }
 }

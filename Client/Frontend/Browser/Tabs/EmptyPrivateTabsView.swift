@@ -12,9 +12,10 @@ class EmptyPrivateTabsView: UIView {
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
         static let buttonSizeFont: CGFloat = 15
-        static let textMargin: CGFloat = 18
-        static let learnMoreMargin: CGFloat = 8
-        static let minBottomMargin: CGFloat = 10
+        static let paddingInBetweenItems: CGFloat = 15
+        static let verticalPadding: CGFloat = 80
+        static let horizontalPadding: CGFloat = 24
+        static let imageSize: CGSize = CGSize(width: 120, height: 120)
     }
 
     // MARK: - Properties
@@ -73,10 +74,14 @@ class EmptyPrivateTabsView: UIView {
         addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                constant: UX.horizontalPadding),
+            scrollView.topAnchor.constraint(equalTo: topAnchor,
+                                            constant: UX.verticalPadding),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                 constant: -UX.horizontalPadding),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor,
+                                              constant: -UX.verticalPadding),
 
             scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
 
@@ -85,26 +90,28 @@ class EmptyPrivateTabsView: UIView {
             scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
-            iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 80),
+            iconImageView.topAnchor.constraint(equalTo: containerView.topAnchor,
+                                               constant: UX.paddingInBetweenItems),
             iconImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 120),
-            iconImageView.heightAnchor.constraint(equalToConstant: 120),
+            iconImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
+            iconImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
 
-            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor),
+            titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor,
+                                            constant: UX.paddingInBetweenItems),
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                                  constant: UX.textMargin),
+                                                  constant: UX.paddingInBetweenItems),
             descriptionLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
             learnMoreButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor,
-                                                 constant: UX.learnMoreMargin),
+                                                 constant: UX.paddingInBetweenItems),
             learnMoreButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             learnMoreButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             learnMoreButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
-                                                    constant: UX.learnMoreMargin),
+                                                    constant: -UX.paddingInBetweenItems),
         ])
     }
 
