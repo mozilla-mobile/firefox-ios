@@ -659,7 +659,10 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let url = URL(string: "https://www.mozilla.org") else { return }
-        BrowserViewController.foregroundBVC().debugOpen(numberOfNewTabs: 50, at: url)
+
+        // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
+        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
+        BrowserViewController.foregroundBVC()?.debugOpen(numberOfNewTabs: 50, at: url)
     }
 }
 
@@ -820,7 +823,9 @@ class ShowIntroductionSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {
-            BrowserViewController.foregroundBVC().presentIntroViewController(true)
+            // TODO: Temporary.
+            // This instance of foregroundBVC is going to be revisited after having enough telemetry of ShowTour.
+            BrowserViewController.foregroundBVC()?.presentIntroViewController(true)
 
             TelemetryWrapper.recordEvent(
                 category: .action,
