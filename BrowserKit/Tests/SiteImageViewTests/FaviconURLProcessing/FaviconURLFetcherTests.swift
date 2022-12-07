@@ -8,11 +8,11 @@ import XCTest
 class FaviconURLFetcherTests: XCTestCase {
 
     var subject: DefaultFaviconURLFetcher!
-    var networkMock: NetworkRequestMock!
+    var networkMock: HTMLDataRequestMock!
 
     override func setUp() {
         super.setUp()
-        networkMock = NetworkRequestMock()
+        networkMock = HTMLDataRequestMock()
         subject = DefaultFaviconURLFetcher(network: networkMock)
     }
 
@@ -22,42 +22,26 @@ class FaviconURLFetcherTests: XCTestCase {
         subject = nil
     }
 
-    func testGetFaviconWithExistingIcon() {
+    func testGetFaviconWithExistingIcon() async {
         let url = URL(string: "http://firefox.com")!
-
-        subject.fetchFaviconURL(siteURL: url) { result in
-            switch result {
-            case let .success(url):
-                XCTAssertEqual(url.absoluteString, "http://firefox.com/image.png")
-            default:
-                XCTFail("Failed to retrieve favicon URL")
-            }
+        networkMock.data = generateHTMLData(string: ImageURLTestHTML.mockHTMLWithIcon)
+        do {
+            let result = try await subject.fetchFaviconURL(siteURL: url)
+            XCTAssertEqual(result.absoluteString, "http://firefox.com/image.png")
+        } catch {
+            XCTFail("Failed to fetch favicon with existing icon")
         }
-
-        guard let data = generateHTMLData(string: ImageURLTestHTML.mockHTMLWithIcon) else {
-            XCTFail("Invalid test HTML")
-            return
-        }
-        networkMock.callFetchDataForURLCompletion(with: .success(data))
     }
 
-    func testGetFaviconWithNoIconFallback() {
+    func testGetFaviconWithNoIconFallback() async {
         let url = URL(string: "http://firefox.com")!
-
-        subject.fetchFaviconURL(siteURL: url) { result in
-            switch result {
-            case let .success(url):
-                XCTAssertEqual(url.absoluteString, "http://firefox.com/favicon.ico")
-            default:
-                XCTFail("Failed to retrieve favicon URL")
-            }
+        networkMock.data = generateHTMLData(string: ImageURLTestHTML.mockHTMLWithNoIcon)
+        do {
+            let result = try await subject.fetchFaviconURL(siteURL: url)
+            XCTAssertEqual(result.absoluteString, "http://firefox.com/favicon.ico")
+        } catch {
+            XCTFail("Failed to fetch favicon with no icon using fallback ico")
         }
-
-        guard let data = generateHTMLData(string: ImageURLTestHTML.mockHTMLWithNoIcon) else {
-            XCTFail("Invalid test HTML")
-            return
-        }
-        networkMock.callFetchDataForURLCompletion(with: .success(data))
     }
 
     // MARK: - Private helpers
