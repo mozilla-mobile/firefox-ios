@@ -47,9 +47,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
     weak var delegate: ReaderModeBarViewDelegate?
 
     var parent: UIStackView?
-    private var isBottomPresented: Bool {
-        BrowserViewController.foregroundBVC().isBottomSearchBar
-    }
+
     var readStatusButton: UIButton!
     var settingsButton: UIButton!
     var listStatusButton: UIButton!
@@ -105,7 +103,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         context.setLineWidth(0.5)
         context.setStrokeColor(UIColor.Photon.Grey50.cgColor)
         context.beginPath()
-        let yPosition = isBottomPresented ? 0 : frame.height
+        let yPosition = isBottomSearchBar ? 0 : frame.height
         context.move(to: CGPoint(x: 0, y: yPosition))
         context.addLine(to: CGPoint(x: frame.width, y: yPosition))
         context.strokePath()
@@ -161,3 +159,5 @@ extension ReaderModeBarView: NotificationThemeable {
         buttonTintColor = UIColor.theme.browser.tint
     }
 }
+
+extension ReaderModeBarView: SearchBarLocationProvider {}
