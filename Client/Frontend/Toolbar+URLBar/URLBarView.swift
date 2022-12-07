@@ -122,7 +122,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
-        tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
+        tabsButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.tabsButton
         tabsButton.inTopTabs = false
         return tabsButton
     }()
@@ -136,7 +136,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     fileprivate lazy var cancelButton: UIButton = {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(), for: .normal)
-        cancelButton.accessibilityIdentifier = "urlBar-cancel"
+        cancelButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.cancelButton
         cancelButton.accessibilityLabel = AccessibilityIdentifiers.GeneralizedIdentifiers.back
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
@@ -146,7 +146,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     fileprivate lazy var showQRScannerButton: InsetButton = {
         let button = InsetButton()
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
-        button.accessibilityIdentifier = "urlBar-scanQRCode"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.scanQRCodeButton
         button.accessibilityLabel = .ScanQRCodeViewTitle
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
@@ -182,7 +182,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     var backButton: ToolbarButton = {
         let backButton = ToolbarButton()
-        backButton.accessibilityIdentifier = "URLBarView.backButton"
+        backButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.backButton
         return backButton
     }()
 
@@ -429,7 +429,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         locationTextField.returnKeyType = .go
         locationTextField.clearButtonMode = .whileEditing
         locationTextField.textAlignment = .left
-        locationTextField.accessibilityIdentifier = "address"
+        locationTextField.accessibilityIdentifier = AccessibilityIdentifiers.Browser.UrlBar.searchTextField
         locationTextField.accessibilityLabel = .URLBarLocationAccessibilityLabel
         locationTextField.attributedPlaceholder = self.locationView.placeholder
         locationContainer.addSubview(locationTextField)
