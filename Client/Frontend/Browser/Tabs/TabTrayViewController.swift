@@ -117,8 +117,8 @@ class TabTrayViewController: UIViewController, Themeable {
 
     private lazy var fixedSpace: UIBarButtonItem = {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
-                               target: nil,
-                               action: nil)
+                                         target: nil,
+                                         action: nil)
         fixedSpace.width = CGFloat(UX.NavigationMenu.height)
         return fixedSpace
     }()

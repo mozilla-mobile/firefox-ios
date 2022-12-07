@@ -168,7 +168,7 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
 
         do {
             try fileManager.moveItem(at: wallpaperDocumentDirectoryPath,
-                             to: wallpaperAppSupportDirectoryPath)
+                                     to: wallpaperAppSupportDirectoryPath)
             completion(true)
 
         } catch {

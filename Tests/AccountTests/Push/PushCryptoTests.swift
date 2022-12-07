@@ -99,8 +99,8 @@ class PushCryptoTests: XCTestCase {
         for test in tests {
             do {
                 _ = try push.aes128gcm(payload: test.payload,
-                                           decryptWith: test.recvPrivKey,
-                                           authenticateWith: test.authSecret)
+                                       decryptWith: test.recvPrivKey,
+                                       authenticateWith: test.authSecret)
 
                 XCTFail("Somehow, deciphered \(test.plaintext)")
             } catch PushCryptoError.base64DecodeError {
@@ -235,10 +235,13 @@ class PushCryptoTests: XCTestCase {
 
         for test in tests {
             do {
-                _ = try push.aesgcm(ciphertext: test.ciphertext,
-                                 withHeaders: PushCryptoHeaders(encryption: test.encryption, cryptoKey: test.cryptoKey),
-                                 decryptWith: test.recvPrivKey,
-                                 authenticateWith: test.authSecret)
+                _ = try push.aesgcm(
+                    ciphertext: test.ciphertext,
+                    withHeaders: PushCryptoHeaders(
+                        encryption: test.encryption,
+                        cryptoKey: test.cryptoKey),
+                    decryptWith: test.recvPrivKey,
+                    authenticateWith: test.authSecret)
 
                 XCTFail("Somehow, deciphered \(test.plaintext)")
             } catch PushCryptoError.base64DecodeError {

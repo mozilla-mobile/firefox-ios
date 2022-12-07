@@ -888,7 +888,7 @@ class BrowserViewController: UIViewController {
 
     private func updateWallpaperMetadata() {
         let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
-                                              qos: .utility)
+                                          qos: .utility)
         metadataQueue.async {
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()

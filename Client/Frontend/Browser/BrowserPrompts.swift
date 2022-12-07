@@ -43,7 +43,8 @@ struct MessageAlert: JSAlertInfo {
     let completionHandler: () -> Void
 
     func alertController() -> JSPromptAlertController {
-        let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
+        let alertController = JSPromptAlertController(
+            title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
             preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in

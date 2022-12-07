@@ -27,8 +27,8 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
             switch result {
             case let .success(data):
                 self.processHTMLDocument(siteURL: siteURL,
-                                          data: data,
-                                          completion: completion)
+                                         data: data,
+                                         completion: completion)
             case let .failure(error):
                 completion(.failure(error))
             }

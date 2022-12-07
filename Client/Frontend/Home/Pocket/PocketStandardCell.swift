@@ -67,8 +67,9 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .caption1,
-                                                                   size: UX.siteFontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(
+            withTextStyle: .caption1,
+            size: UX.siteFontSize)
     }
 
     // MARK: - Variables
@@ -153,9 +154,9 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
             bottomTextStackView.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: 8),
             bottomTextStackView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             bottomTextStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                       constant: -UX.horizontalMargin),
+                                                          constant: -UX.horizontalMargin),
             bottomTextStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                     constant: -UX.horizontalMargin),
+                                                        constant: -UX.horizontalMargin),
 
             sponsoredIcon.heightAnchor.constraint(equalToConstant: UX.sponsoredIconSize.height),
             sponsoredIcon.widthAnchor.constraint(equalToConstant: UX.sponsoredIconSize.width),

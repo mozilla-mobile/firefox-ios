@@ -37,7 +37,8 @@ struct SimpleToast {
     }
 
     fileprivate func dismiss(_ toast: UIView) {
-        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration,
+        UIView.animate(
+            withDuration: SimpleToastUX.ToastAnimationDuration,
             animations: {
                 var frame = toast.frame
                 frame.origin.y = frame.origin.y + SimpleToastUX.ToastHeight
@@ -51,7 +52,8 @@ struct SimpleToast {
     }
 
     fileprivate func animate(_ toast: UIView) {
-        UIView.animate(withDuration: SimpleToastUX.ToastAnimationDuration,
+        UIView.animate(
+            withDuration: SimpleToastUX.ToastAnimationDuration,
             animations: {
                 var frame = toast.frame
                 frame.origin.y = frame.origin.y - SimpleToastUX.ToastHeight

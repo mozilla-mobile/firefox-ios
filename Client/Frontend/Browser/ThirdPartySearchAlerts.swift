@@ -60,7 +60,7 @@ class ThirdPartySearchAlerts: UIAlertController {
 
     static func incorrectCustomEngineForm() -> UIAlertController {
         return searchAlertWithOK(title: .CustomEngineFormErrorTitle,
-                                      message: .CustomEngineFormErrorMessage)
+                                 message: .CustomEngineFormErrorMessage)
     }
 
     static func duplicateCustomEngine() -> UIAlertController {

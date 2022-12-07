@@ -40,9 +40,9 @@ class WallpaperMigrationUtilityTests: XCTestCase {
         createFolderAt(path: appSupportPath)
 
         XCTAssertTrue(fileManager.fileExists(atPath: docsPath.path,
-                                              isDirectory: &isDirectory))
+                                             isDirectory: &isDirectory))
         XCTAssertTrue(fileManager.fileExists(atPath: appSupportPath.path,
-                                              isDirectory: &isDirectory))
+                                             isDirectory: &isDirectory))
 
     }
 

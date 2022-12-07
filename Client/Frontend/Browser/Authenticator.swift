@@ -122,8 +122,10 @@ class Authenticator {
         }
 
         // Add a button to log in.
-        let action = UIAlertAction(title: .AuthenticatorLogin,
-            style: .default) { (action) -> Void in
+        let action = UIAlertAction(
+            title: .AuthenticatorLogin,
+            style: .default
+        ) { (action) -> Void in
             guard let user = alert.textFields?[0].text,
                   let pass = alert.textFields?[1].text
             else {

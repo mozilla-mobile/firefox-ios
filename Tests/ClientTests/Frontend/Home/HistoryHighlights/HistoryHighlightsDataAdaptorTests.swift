@@ -98,10 +98,10 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
     func testDeleteGroupItem() {
         let item: HighlightItem = HistoryHighlight(score: 0,
-                                                    placeId: 0,
-                                                    url: "www.firefox.com",
-                                                    title: "",
-                                                    previewImageUrl: "")
+                                                   placeId: 0,
+                                                   url: "www.firefox.com",
+                                                   title: "",
+                                                   previewImageUrl: "")
 
         let group: HighlightItem = ASGroup(searchTerm: "foxes",
                                            groupedItems: [item],

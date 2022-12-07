@@ -345,7 +345,7 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
         featureFlags.set(feature: .sponsoredTiles, to: true)
 
         let subject = createSubject(addPinnedSiteCount: 1,
-                                   expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile]))
+                                    expectedContileResult: ContileResult.success([ContileProviderMock.pinnedDuplicateTile]))
 
         subject.recalculateTopSiteData(for: 6)
 

@@ -81,13 +81,13 @@ class LegacyWallpaperResourceManager {
         switch type {
         case .bundled:
             return LegacyWallpaperImageSet(portrait: UIImage(named: imageName.portrait),
-                                     landscape: UIImage(named: imageName.landscape))
+                                           landscape: UIImage(named: imageName.landscape))
 
         case .downloaded:
             let storageUtility = LegacyWallpaperStorageUtility()
 
             return LegacyWallpaperImageSet(portrait: storageUtility.getImageResource(for: imageName.portrait),
-                                     landscape: storageUtility.getImageResource(for: imageName.landscape))
+                                           landscape: storageUtility.getImageResource(for: imageName.landscape))
         }
     }
 
@@ -96,8 +96,8 @@ class LegacyWallpaperResourceManager {
         if UIDevice.current.userInterfaceIdiom == .pad { fileName += "_pad" }
 
         return LegacyWallpaperImageResourceName(folder: wallpaperName,
-                                          portrait: fileName,
-                                          landscape: fileName + "_ls")
+                                                portrait: fileName,
+                                                landscape: fileName + "_ls")
     }
 
     // MARK: - Resource deletion
