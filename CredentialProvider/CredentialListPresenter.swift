@@ -77,5 +77,4 @@ class CredentialListPresenter {
     func cancelRequest() {
         view?.credentialExtensionContext?.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
     }
-
 }

@@ -182,7 +182,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             ]
             NSLayoutConstraint.activate(constraints)
             verticalConstraints += constraints
-
         } else {
 
             let statusBarHeight = UIWindow.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
@@ -194,7 +193,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             ]
             NSLayoutConstraint.activate(constraints)
             verticalConstraints += constraints
-
         }
     }
 

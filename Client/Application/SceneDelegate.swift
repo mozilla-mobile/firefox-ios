@@ -138,7 +138,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 browserViewController.switchToTabForURLOrOpen(url)
             }
         }
-
     }
 
     // MARK: - Performing Tasks
@@ -210,7 +209,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             )
         }
     }
-
 }
 
 @available(iOS 14, *)

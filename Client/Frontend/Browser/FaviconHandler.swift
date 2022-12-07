@@ -59,7 +59,6 @@ class FaviconHandler {
             favicon.height = Int(image.size.height)
             completion(favicon, nil)
         }
-
     }
 
     func loadFaviconURL(_ faviconUrl: String, forTab tab: Tab,

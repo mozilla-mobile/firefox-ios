@@ -46,10 +46,8 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
            let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) {
             let color = bundledImage.backgroundColor.cgColor.alpha < 0.01 ? UIColor.white : bundledImage.backgroundColor
             return withBackgroundAndPadding(image: image, color: color)
-
         } else if let imageError = imagesErrors[domain] {
             throw imageError
-
         } else if let error = generalBundleError {
             throw error
         }
@@ -60,7 +58,6 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         do {
             let data = try bundleDataProvider.getBundleData()
             return decode(from: data)
-
         } catch let error {
             generalBundleError = BundleError.noBundleRetrieved("Decoding from file failed due to: \(error)")
             return [:]
@@ -86,7 +83,6 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
             }
 
             return icons
-
         } catch {
             let message = "Decoding BundledImage failed due to: \(error.localizedDescription.debugDescription)"
             generalBundleError = BundleError.noBundleRetrieved(message)

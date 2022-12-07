@@ -95,7 +95,6 @@ struct WallpaperFilePathProvider: Loggable {
         // folder name. Otherwise, use the file name as the folder name.
         if input.hasSuffix(WallpaperFilenameIdentifiers.thumbnail) {
             return thumbnailsKey
-
         } else {
             return strip(
                 [

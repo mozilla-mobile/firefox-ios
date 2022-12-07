@@ -448,7 +448,6 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
         cell.configureCell(with: cellOptions, theme: theme)
 
         return cell
-
     }
 
     private func configureFillerCell(_ cell: UICollectionViewCell,

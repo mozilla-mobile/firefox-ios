@@ -68,7 +68,6 @@ extension BackForwardListAnimator {
                 }, completion: { (completed) -> Void in
                     transitionContext.completeTransition(completed)
                 })
-
         } else {
             UIView.animate(
                 withDuration: transitionDuration(using: transitionContext),

@@ -143,5 +143,4 @@ class WallpaperSelectorViewModelTests: XCTestCase {
                 heading: nil),
         ]
     }
-
 }

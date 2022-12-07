@@ -6,7 +6,5 @@
 import Foundation
 
 class MockLaunchSessionProvider: Client.LaunchSessionProviderProtocol {
-
     var openedFromExternalSource: Bool = false
-
 }

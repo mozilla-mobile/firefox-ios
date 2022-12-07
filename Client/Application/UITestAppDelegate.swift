@@ -87,7 +87,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 // let output = URL(fileURLWithPath: "\(dirForTestProfile)/\(TabManagerStoreImplementation.storePath)")
                 try! FileManager.default.copyItem(at: input, to: deprecatedOutput)
             }
-
         }
 
         if launchArguments.contains(LaunchArguments.ClearProfile) {

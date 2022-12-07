@@ -128,7 +128,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
                     string: .LoginsListSearchPlaceholderCredential,
                     attributes: [:]) // Set the placeholder text and color
         return searchController
-
     }
 
     private func addViewConstraints() {
@@ -142,7 +141,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
 
             cancelButton.widthAnchor.constraint(equalToConstant: 60)
         ])
-
     }
 
     private func registerCells() {
@@ -162,7 +160,6 @@ extension CredentialListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let presenter = presenter else { return 1 }
         return presenter.numberOfSections()
-
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let presenter = presenter else { return 1 }

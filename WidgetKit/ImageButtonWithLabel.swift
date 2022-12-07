@@ -81,7 +81,6 @@ struct ImageButtonWithLabel: View {
                                     .minimumScaleFactor(0.75)
                                     .layoutPriority(1000)
                             }
-
                         }
                         Spacer()
                         if link == .search && isSmall {

@@ -70,7 +70,6 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         self.descriptionLabel.text = site.tileURL.baseDomain
         self.titleLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
         self.descriptionLabel.textColor = LegacyThemeManager.instance.current.actionMenu.foreground
-
     }
 
     private func setupLayout() {
@@ -108,7 +107,6 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
                                                   constant: PhotonActionSheetSiteHeaderView.UX.verticalPadding),
             descriptionLabel.bottomAnchor.constraint(equalTo: labelContainerView.bottomAnchor),
-
         ])
     }
 }

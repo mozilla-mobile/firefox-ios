@@ -23,7 +23,6 @@ protocol GleanPlumbMessageStoreProtocol {
 
     /// Handle all points of expiry and Telemetry.
     func onMessageExpired(_ message: GleanPlumbMessageMetaData, shouldReport: Bool)
-
 }
 
 class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {

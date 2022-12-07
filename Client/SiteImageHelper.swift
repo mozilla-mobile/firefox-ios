@@ -115,7 +115,6 @@ class SiteImageHelper: SiteImageHelperProtocol {
         // Fetch from cache, if not then fetch with LPMetadataProvider
         if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
             completion(cachedImage, true)
-
         } else {
             guard let url = URL(string: site.url) else {
                 completion(nil, false)

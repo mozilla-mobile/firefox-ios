@@ -22,5 +22,4 @@ class VersionSettingTests: XCTestCase {
         XCTAssertNotNil(appVersionString, "App version not copied")
         XCTAssert(appVersionPredicate, "Pasteboard doesn't contain app version")
     }
-
 }

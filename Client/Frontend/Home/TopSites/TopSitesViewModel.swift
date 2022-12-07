@@ -252,7 +252,6 @@ extension TopSitesViewModel: HomepageSectionHandler {
                            textColor: textColor)
             sendImpressionTelemetry(contentItem, position: indexPath.row)
             return cell
-
         } else if let cell = collectionView.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) {
             cell.applyTheme(theme: theme)
             return cell

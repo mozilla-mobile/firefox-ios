@@ -547,7 +547,6 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 
     struct UX {
         static let RowHeight = SiteTableViewControllerUX.RowHeight
-
     }
 
     weak var remoteTabsPanel: RemoteTabsPanel?

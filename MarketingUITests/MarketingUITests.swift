@@ -99,7 +99,6 @@ class MarketingSnapshotTests: XCTestCase {
         // cancel search
         app.buttons.elementBoundByIndex(1).tap()
     }
-
 }
 
 extension XCUIElementQuery {

@@ -34,7 +34,6 @@ private class DarkURLBarColor: URLBarColor {
     override func textSelectionHighlight(_ isPrivate: Bool) -> TextSelectionHighlight {
         let color = isPrivate ? UIColor.Defaults.MobilePrivatePurple : UIColor(rgb: 0x3d89cc)
         return (labelMode: color.withAlphaComponent(0.25), textFieldMode: color)
-
     }
 
     override func activeBorder(_ isPrivate: Bool) -> UIColor {
@@ -48,9 +47,7 @@ private class DarkBrowserColor: BrowserColor {
 }
 
 // The back/forward/refresh/menu button (bottom toolbar)
-private class DarkToolbarButtonColor: ToolbarButtonColor {
-
-}
+private class DarkToolbarButtonColor: ToolbarButtonColor { }
 
 private class DarkTabTrayColor: TabTrayColor {
     override var tabTitleText: UIColor { return defaultTextAndTint }

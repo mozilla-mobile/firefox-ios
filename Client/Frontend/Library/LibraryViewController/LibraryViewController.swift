@@ -115,7 +115,6 @@ class LibraryViewController: UIViewController, Themeable {
             controllerContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             controllerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-
     }
 
     override func viewDidDisappear(_ animated: Bool) {

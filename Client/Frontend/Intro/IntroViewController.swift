@@ -166,7 +166,6 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 
         pageControl.currentPage = index
         return getNextOnboardingCard(index: index, goForward: true)
-
     }
 }
 

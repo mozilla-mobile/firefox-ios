@@ -7,6 +7,4 @@ import XCTest
 @testable import Client
 import Shared
 
-class FxADeepLinkingTests: XCTestCase {
-
-}
+class FxADeepLinkingTests: XCTestCase { }
