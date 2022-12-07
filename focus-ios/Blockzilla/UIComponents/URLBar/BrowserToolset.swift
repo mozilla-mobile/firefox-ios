@@ -5,47 +5,50 @@
 import UIKit
 import CoreGraphics
 
-protocol BrowserToolsetDelegate: AnyObject {
-    func browserToolsetDidPressBack(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidPressForward(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidPressReload(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidPressStop(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidPressDelete(_ browserToolbar: BrowserToolset)
-    func browserToolsetDidPressContextMenu(_ browserToolbar: BrowserToolset, menuButton: InsetButton)
-}
-
 class BrowserToolset {
     weak var delegate: BrowserToolsetDelegate?
-    let backButton = InsetButton()
-    let forwardButton = InsetButton()
-    let stopReloadButton = InsetButton()
-    let deleteButton = InsetButton()
-    let contextMenuButton = InsetButton()
 
-    init() {
+    lazy var backButton: InsetButton = {
+        let backButton = InsetButton()
         backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
         backButton.isEnabled = false
+        return backButton
+    }()
 
+    lazy var forwardButton: InsetButton = {
+        let forwardButton = InsetButton()
         forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
         forwardButton.isEnabled = false
+        return forwardButton
+    }()
 
+    lazy var stopReloadButton: InsetButton = {
+        let stopReloadButton = InsetButton()
         stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
+        return stopReloadButton
+    }()
 
+    lazy var deleteButton: InsetButton = {
+        let deleteButton = InsetButton()
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
         deleteButton.isEnabled = false
+        return deleteButton
+    }()
 
+    lazy var contextMenuButton: InsetButton = {
+        let contextMenuButton = InsetButton()
         contextMenuButton.setImage(UIImage(named: "icon_hamburger_menu"), for: .normal)
         contextMenuButton.tintColor = .primaryText
         if #available(iOS 14.0, *) {
@@ -59,8 +62,8 @@ class BrowserToolset {
         contextMenuButton.accessibilityIdentifier = "HomeView.settingsButton"
         contextMenuButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         contextMenuButton.imageView?.snp.makeConstraints { $0.size.equalTo(UIConstants.layout.contextMenuIconSize) }
-
-    }
+        return contextMenuButton
+    }()
 
     var canGoBack: Bool = false {
         didSet {
@@ -120,5 +123,4 @@ class BrowserToolset {
     @objc private func didPressContextMenu(_ sender: InsetButton) {
         delegate?.browserToolsetDidPressContextMenu(self, menuButton: sender)
     }
-
 }

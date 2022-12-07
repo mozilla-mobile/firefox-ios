@@ -315,8 +315,8 @@ class BrowserViewController: UIViewController {
             switch version {
             case .v2:
                 return self.tooltipController(
-                    anchoredBy: self.urlBar.shieldIcon,
-                    sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
+                    anchoredBy: self.urlBar.shieldIconAnchor,
+                    sourceRect: CGRect(x: self.urlBar.shieldIconAnchor.bounds.midX, y: self.urlBar.shieldIconAnchor.bounds.midY + 10, width: 0, height: 0),
                     body: UIConstants.strings.tooltipBodyTextForShieldIconV2,
                     dismiss: {
                         [unowned self] in self.onboardingEventsHandler.route = nil
@@ -326,8 +326,8 @@ class BrowserViewController: UIViewController {
 
             case .v1:
                 return self.tooltipController(
-                    anchoredBy: self.urlBar.shieldIcon,
-                    sourceRect: CGRect(x: self.urlBar.shieldIcon.bounds.midX, y: self.urlBar.shieldIcon.bounds.midY + 10, width: 0, height: 0),
+                    anchoredBy: self.urlBar.shieldIconAnchor,
+                    sourceRect: CGRect(x: self.urlBar.shieldIconAnchor.bounds.midX, y: self.urlBar.shieldIconAnchor.bounds.midY + 10, width: 0, height: 0),
                     body: UIConstants.strings.tooltipBodyTextForShieldIcon,
                     dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
                 )
@@ -1364,7 +1364,7 @@ extension BrowserViewController: URLBarDelegate {
         trackingProtectionViewController.delegate = self
         if UIDevice.current.userInterfaceIdiom == .pad {
             trackingProtectionViewController.modalPresentationStyle = .popover
-            trackingProtectionViewController.popoverPresentationController?.sourceView = urlBar.shieldIcon
+            trackingProtectionViewController.popoverPresentationController?.sourceView = urlBar.shieldIconAnchor
             modalDelegate.presentModal(viewController: trackingProtectionViewController, animated: true)
         } else {
             modalDelegate.presentSheet(viewController: trackingProtectionViewController)

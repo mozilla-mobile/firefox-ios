@@ -216,6 +216,9 @@
 		E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E528833B2900328800011920 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528833A2900328800011920 /* SplashViewController.swift */; };
+		E5639E5F2940997700E55B9B /* URLBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5639E5E2940997700E55B9B /* URLBarDelegate.swift */; };
+		E5639E61294099A200E55B9B /* TrackingProtectionBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5639E60294099A200E55B9B /* TrackingProtectionBadge.swift */; };
+		E5639E632940A1C100E55B9B /* BrowserToolsetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5639E622940A1C100E55B9B /* BrowserToolsetDelegate.swift */; };
 		E5A890A9290FB8E2004F95B8 /* WebMenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A890A8290FB8E2004F95B8 /* WebMenuAction.swift */; };
 		E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */; };
 		E5E4504D28CF4548005A01F1 /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504B28CF4548005A01F1 /* TipViewController.swift */; };
@@ -1101,6 +1104,9 @@
 		E4D0AB891E300EFF00DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E528833A2900328800011920 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		E5639E5E2940997700E55B9B /* URLBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBarDelegate.swift; sourceTree = "<group>"; };
+		E5639E60294099A200E55B9B /* TrackingProtectionBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionBadge.swift; sourceTree = "<group>"; };
+		E5639E622940A1C100E55B9B /* BrowserToolsetDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolsetDelegate.swift; sourceTree = "<group>"; };
 		E56FB76D28C0DF96005CF1B9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E56FB76F28C0DF96005CF1B9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		E5A890A8290FB8E2004F95B8 /* WebMenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebMenuAction.swift; sourceTree = "<group>"; };
@@ -1547,9 +1553,8 @@
 			children = (
 				C8D0306527E8AFAF000664DA /* ErrorPage */,
 				D392887E1BC5E47E0016A9A0 /* UIConstants.swift */,
-				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
+				E5639E5D2940991900E55B9B /* URLBar */,
 				D3E2C96E1DA3093D00DEBE3D /* BrowserToolbar.swift */,
-				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				161D90302108085F00C2A74A /* HomeViewToolbar.swift */,
 				E528833A2900328800011920 /* SplashViewController.swift */,
 				D3561B2A1DB5925100A5EEAF /* GradientBackgroundView.swift */,
@@ -1873,6 +1878,18 @@
 				E4BF2DF01BACE92400DA9D68 /* ActionRequestHandler.swift */,
 			);
 			path = ContentBlocker;
+			sourceTree = "<group>";
+		};
+		E5639E5D2940991900E55B9B /* URLBar */ = {
+			isa = PBXGroup;
+			children = (
+				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
+				E5639E5E2940997700E55B9B /* URLBarDelegate.swift */,
+				E5639E60294099A200E55B9B /* TrackingProtectionBadge.swift */,
+				D364DC251DC4163700562991 /* BrowserToolset.swift */,
+				E5639E622940A1C100E55B9B /* BrowserToolsetDelegate.swift */,
+			);
+			path = URLBar;
 			sourceTree = "<group>";
 		};
 		F8324CDE264EA223007E4BFA /* LocalWebServer */ = {
@@ -2585,13 +2602,16 @@
 				E528833B2900328800011920 /* SplashViewController.swift in Sources */,
 				C8958C51280D84EE0064BDF8 /* AutocompleteTextField.swift in Sources */,
 				C8EADCD22742A00300E76AE6 /* MenuActionable.swift in Sources */,
+				E5639E632940A1C100E55B9B /* BrowserToolsetDelegate.swift in Sources */,
 				1D3BEDFB20C5E76B0019B722 /* FindInPageBar.swift in Sources */,
+				E5639E5F2940997700E55B9B /* URLBarDelegate.swift in Sources */,
 				D30DF93E1DC1634F0064736C /* Toast.swift in Sources */,
 				F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */,
 				D33A1AB11BC48FAC0003D929 /* SettingsViewController.swift in Sources */,
 				60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */,
 				D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */,
 				E439815127AAD63200F382B0 /* InternalTelemetrySettingsView.swift in Sources */,
+				E5639E61294099A200E55B9B /* TrackingProtectionBadge.swift in Sources */,
 				D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */,
 				74ACC3B02875A0CC00A9AC3E /* TrackingProtectionManager.swift in Sources */,
 				D364DC261DC4163700562991 /* BrowserToolset.swift in Sources */,
