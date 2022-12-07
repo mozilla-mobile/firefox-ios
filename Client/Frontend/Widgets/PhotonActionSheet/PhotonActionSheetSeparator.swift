@@ -16,6 +16,6 @@ class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell, The
     }
 
     func applyTheme(theme: Theme) {
-        contentView.backgroundColor = theme.colors.layerLightGrey30
+        contentView.backgroundColor = theme.colors.borderPrimary
     }
 }

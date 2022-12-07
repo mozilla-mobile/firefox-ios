@@ -20,7 +20,7 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell,
 
     func applyTheme(theme: Theme) {
         contentView.backgroundColor = .clear
-        separatorLineView.backgroundColor = theme.colors.layerLightGrey30
+        separatorLineView.backgroundColor = theme.colors.borderPrimary
     }
 
     // MARK: - Private

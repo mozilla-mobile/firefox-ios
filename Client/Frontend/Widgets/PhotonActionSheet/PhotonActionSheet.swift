@@ -264,9 +264,9 @@ class PhotonActionSheet: UIViewController, Themeable {
         let theme = themeManager.currentTheme
 
         if viewModel.presentationStyle == .popover {
-            view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
+            view.backgroundColor = theme.colors.layer1.withAlphaComponent(0.7)
         } else {
-            tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
+            tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
         }
 
         // Apply or remove the background blur effect
@@ -274,7 +274,7 @@ class PhotonActionSheet: UIViewController, Themeable {
             if UIAccessibility.isReduceTransparencyEnabled {
                 // Remove the visual effect and the background alpha
                 visualEffectView.effect = nil
-                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
+                tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
             } else {
                 visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
             }

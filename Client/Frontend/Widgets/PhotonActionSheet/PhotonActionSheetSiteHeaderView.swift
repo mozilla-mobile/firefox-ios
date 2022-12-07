@@ -71,7 +71,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     }
 
     func applyTheme(theme: Theme) {
-        siteImageView.layer.borderColor = theme.colors.layerLightGrey30.cgColor
+        siteImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
     }
