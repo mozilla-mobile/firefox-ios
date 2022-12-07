@@ -4,96 +4,30 @@
 
 import Foundation
 
+// TODO: Laurie - Document
 class ContentBlockerParser {
 
-    // Key are the companies (entities) with a list of related domains (properties) as values
-    private var companyToRelatedDomains = [String: [String]]()
+    // Key is each property of an entity, so each resources for an entity is easily accessible
+    private var entities = [String: Entity]()
 
     func parseEntityList(json: [String: Any]) {
-        let entities = json["entities"]! as! [String: Any]
-        entities.forEach {
-            let company = $0.key
-            let related = ($0.value as! [String: [String]])["properties"]!
-            companyToRelatedDomains[company] = related
+        let entitiesRaw = json["entities"]! as! [String: Any]
+        entitiesRaw.forEach {
+            let properties = ($0.value as! [String: [String]])["properties"]!
+            let resources = ($0.value as! [String: [String]])["resources"]!
+            let entity = Entity(properties: properties, resources: resources)
+            properties.forEach {
+                entities[$0] = entity
+            }
         }
     }
 
-    // For unless domain we used company name from black list to map into entity list
-    // TODO: Can we use the domain instead company name for that ? Asked a question to understand this better.
-
-    /// - Parameters:
-    ///   - categoryItem: "Advertisers", "Analytics" etc
-    ///   - actionType: "block" or "block-all"
-    /// - Returns: the webkit format file content for that category item
-    func handleCategoryItem(_ categoryItem: Any,
-                            actionType: ActionType) -> [String] {
-
-        /* example of input
-         {
-         "10Web": {
-         "https://10web.io/": [
-         "10web.io"
-         ]
-         }
-         }
-         */
-        let categoryItem = categoryItem as! [String: [String: Any]]
-        var result = [String]()
-        assert(categoryItem.count == 1)
-
-        // "10Web"
-        let companyName = categoryItem.first!.key
-
-        /* [
-         "10web.io",
-         "example.com"
-         ] */
-        let relatedDomains = companyToRelatedDomains[companyName, default: []]
-        // ["*10web.io","*example.com"]
-        let unlessDomain = buildUnlessDomain(relatedDomains)
-
-        // ["https://10web.io/"]
-        let entry = categoryItem.first!.value.first(where: { $0.key.hasPrefix("http") || $0.key.hasPrefix("www.") })!
-        // ["https://10web.io/"]
-        let domains = entry.value as! [String]
-        domains.forEach {
-            // "^https?://([^/]+\\.)?10web\\.io"
-            let filter = buildUrlFilter($0)
-            let line = buildOutputLine(urlFilter: filter,
-                                       unlessDomain: unlessDomain,
-                                       actionType: actionType)
-            // "action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\.)?10web\\.io","load-type":["third-party"],"unless-domain":["*10web.io","*example.com"]}},
-            result.append(line)
-        }
-        return result
-    }
-
-    func parseFile(json: [String: Any],
-                   actionType: ActionType,
-                   categoryTitle: FileCategory) -> [String] {
-        // all categories json
-        let categories = json["categories"]! as! [String: Any]
-        var result = [String]()
-
-        // takes the category json for "analytics" for example
-        let category = categories[categoryTitle.rawValue] as! [Any]
-        // loops over each item in that category
-        category.forEach {
-            result += handleCategoryItem($0, actionType: actionType)
-        }
-        return result
-    }
-
-    // TODO: New method, assumes for now there's no white listing. Is this proper?
-    // TODO: Rename and document
-    func newParseFile(json: [String],
-                      actionType: ActionType,
-                      categoryTitle: FileCategory) -> [String] {
+    func parseFile(json: [String],
+                   actionType: ActionType) -> [String] {
 
         var result = [String]()
-        for domain in json {
-            let f = buildUrlFilter(domain)
-            let line = buildOutputLine(urlFilter: f, unlessDomain: "", actionType: actionType)
+        for property in json {
+            let line = createLine(for: property, actionType: actionType)
             result.append(line)
         }
         return result
@@ -101,7 +35,29 @@ class ContentBlockerParser {
 
     // MARK: - Private
 
-    // TODO: Needed?
+    /// Create the line for a property, if an entity information is present, we can build the line using unless-domain
+    /// - Parameters:
+    ///   - property: The property of an entity, example "2leep.com"
+    ///   - actionType: "block" or "block-all"
+    /// - Returns: the webkit format file content for that entity property
+    private func createLine(for property: String,
+                            actionType: ActionType) -> String {
+
+        let filter = buildUrlFilter(property)
+        let propertyEntity = entities[property]
+        guard let propertyEntity = propertyEntity else {
+            let line = buildOutputLine(urlFilter: filter,
+                                       unlessDomain: "",
+                                       actionType: actionType)
+            return line
+        }
+
+        let unlessDomain = buildUnlessDomain(propertyEntity.properties)
+        return buildOutputLine(urlFilter: filter,
+                               unlessDomain: unlessDomain,
+                               actionType: actionType)
+    }
+
     private func buildUnlessDomain(_ domains: [String]) -> String {
         guard !domains.isEmpty else { return "" }
         let result = domains.reduce("", { $0 + "\"*\($1)\"," }).dropLast()

@@ -12,9 +12,10 @@ public struct ContentBlockerGenerator {
     // Static main needs to be used for executable, providing a shared instance so we can
     // call it from the terminal, while also keeping the init() for unit tests.
     public static func main() {
-        shared.generateList()
+        shared.generateLists()
     }
 
+    // TODO: Laurie - Path manager
     private let fileManager: FileManager
     // We expect this command to be executed as 'cd <dir of swift package>; swift run',
     // if not, use the fallback path generated from the path to main.swift. Running from
@@ -40,9 +41,16 @@ public struct ContentBlockerGenerator {
         createDirectory()
     }
 
-    func generateList() {
-        write(to: outputDir, actionType: .blockAll, categories: [.advertising, .analytics, .social, .cryptomining, .fingerprinting])
-        write(to: outputDir, actionType: .blockCookies, categories: [.advertising, .analytics, .social])
+    func generateLists() {
+        // Block lists
+        write(to: outputDir,
+              actionType: .blockAll,
+              categories: [.advertising, .analytics, .social, .cryptomining, .fingerprinting])
+
+        // Block cookies lists
+        write(to: outputDir,
+              actionType: .blockCookies,
+              categories: [.advertising, .analytics, .social])
     }
 
     // MARK: - Private
@@ -64,7 +72,7 @@ public struct ContentBlockerGenerator {
         for categoryTitle in categories {
             let fileContent = generateFileContent(actionType: actionType, categoryTitle: categoryTitle)
             let fileLocation = categoryTitle.getOutputFile(outputDirectory: outputDir.path, actionType: actionType)
-            let fileURL = URL(fileURLWithPath: fileContent)
+            let fileURL = URL(fileURLWithPath: fileLocation)
 
             do {
                 try fileContent.write(to: fileURL, atomically: true, encoding: .utf8)
@@ -79,10 +87,8 @@ public struct ContentBlockerGenerator {
 
         let fileName = categoryTitle.getPath(rootDirectory: rootDirectory)
         let jsonFile = JsonHelper().jsonListFrom(filename: fileName)
-        let result = contentBlockerParser.newParseFile(json: jsonFile,
-                                                       actionType: actionType,
-                                                       categoryTitle: categoryTitle)
-
+        let result = contentBlockerParser.parseFile(json: jsonFile,
+                                                    actionType: actionType)
 
         return "[\n" + result.joined(separator: ",\n") + "\n]"
     }

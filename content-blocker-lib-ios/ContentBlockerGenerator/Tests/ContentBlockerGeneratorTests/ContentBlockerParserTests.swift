@@ -7,19 +7,83 @@ import XCTest
 
 final class ContentBlockerParserTests: XCTestCase {
 
-    let blocklist = """
-{
-"license": "Copyright 2010-2019 Disconnect, Inc.",
-"categories": {
-  "Advertising": [
-    {
-        "adnologies": { "http://www.adnologies.com/": [ "adnologies.com" ], "performance": "true" },
+    func testParsingAdsFile() throws {
+        let entityJson = getDictData(from: ParserData.entitylist)
+        let subject = ContentBlockerParser()
+        subject.parseEntityList(json: entityJson)
+
+        let adsList = getListData(from: ParserData.adsTrackDigest256)
+        let result = subject.parseFile(json: adsList,
+                                       actionType: .blockAll)
+
+        let expectedFirstLine = """
+        {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?2leep\\\\.com\",\"load-type\":[\"third-party\"],\"unless-domain\":[\"*2leep.com\"]}}
+        """
+
+        let expectedSecondLine = """
+               {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adnologies\\\\.com\",\"load-type\":[\"third-party\"],\"unless-domain\":[\"*adnologies.com\",\"*heias.com\"]}}
+               """
+
+        let expectedThirdLine = """
+               {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?heias\\\\.com\",\"load-type\":[\"third-party\"],\"unless-domain\":[\"*adnologies.com\",\"*heias.com\"]}}
+               """
+        XCTAssertEqual(result.count, 3)
+        XCTAssertEqual(result[0], expectedFirstLine)
+        XCTAssertEqual(result[1], expectedSecondLine)
+        XCTAssertEqual(result[2], expectedThirdLine)
     }
-  ]
-}}
+
+    func testParsingAdsFile_withoutEntity() throws {
+        let entityJson = getDictData(from: ParserData.emptyEntitylist)
+        let subject = ContentBlockerParser()
+        subject.parseEntityList(json: entityJson)
+
+        let adsList = getListData(from: ParserData.adsTrackDigest256)
+        let result = subject.parseFile(json: adsList,
+                                       actionType: .blockAll)
+
+        let firstLine = """
+        {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\\\.)?2leep\\\\.com","load-type":["third-party"]}}
+        """
+
+        let secondLine = """
+        {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\\\.)?adnologies\\\\.com","load-type":["third-party"]}}
+        """
+
+        let thirdLine = """
+        {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\\\.)?heias\\\\.com","load-type":["third-party"]}}
+        """
+        XCTAssertEqual(result.count, 3)
+        XCTAssertEqual(result[0], firstLine)
+        XCTAssertEqual(result[1], secondLine)
+        XCTAssertEqual(result[2], thirdLine)
+    }
+}
+
+// MARK: - Helpers
+private extension ContentBlockerParserTests {
+    func getDictData(from dict: String) -> [String: Any] {
+        return try! JSONSerialization.jsonObject(with: dict.data(using: .utf8)!,
+                                                 options: []) as! [String: Any]
+    }
+
+    func getListData(from list: String) -> [String] {
+        return try! JSONSerialization.jsonObject(with: list.data(using: .utf8)!,
+                                                 options: []) as! [String]
+    }
+}
+
+// MARK: - Data
+private struct ParserData {
+    static let adsTrackDigest256 = """
+[
+  "2leep.com",
+  "adnologies.com",
+  "heias.com"
+]
 """
 
-    let entitylist = """
+    static let entitylist = """
 {
 "license": "Copyright 2010-2020 Disconnect, Inc.",
 "entities":
@@ -30,26 +94,12 @@ final class ContentBlockerParserTests: XCTestCase {
 }
 """
 
-    func testParsing() throws {
-        let entityJson = try! JSONSerialization.jsonObject(with: entitylist.data(using: .utf8)!,
-                                                           options: []) as! [String: Any]
-
-        let subject = ContentBlockerParser()
-        subject.parseEntityList(json: entityJson)
-
-        let json = try! JSONSerialization.jsonObject(with: blocklist.data(using: .utf8)!,
-                                                     options: []) as! [String: Any]
-        let categories = json["categories"]! as! [String: Any]
-        let category = categories[CategoryTitle.Advertising.rawValue] as! [Any]
-        var result = [String]()
-        category.forEach {
-            result += subject.handleCategoryItem($0, action: .blockAll)
-        }
-
-        let test = """
-               {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\\\.)?adnologies\\\\.com","load-type":["third-party"],"unless-domain":["*adnologies.com","*heias.com"]}}
-               """
-        XCTAssert(result.first! == test)
+    static let emptyEntitylist = """
+{
+"license": "Copyright 2010-2020 Disconnect, Inc.",
+"entities":
+    {
     }
-
+}
+"""
 }
