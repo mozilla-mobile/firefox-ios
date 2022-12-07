@@ -122,8 +122,9 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
         // Setup
         var sectionItems = [Setting]()
 
-        let pocketSponsoredSetting = BoolSetting(with: .sponsoredPocket,
-                                        titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.SponsoredPocket))
+        let pocketSponsoredSetting = BoolSetting(
+            with: .sponsoredPocket,
+            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.SponsoredPocket))
         // This sets whether the cell is enabled or not, and not the setting itself.
         pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(
             .pocket,
@@ -275,7 +276,7 @@ extension HomePageSettingViewController {
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,
-             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+             and tabManager: TabManager = AppContainer.shared.resolve(),
              wallpaperManager: WallpaperManagerInterface = WallpaperManager()
         ) {
             self.settings = settings

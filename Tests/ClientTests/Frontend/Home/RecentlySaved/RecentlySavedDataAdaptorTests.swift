@@ -171,10 +171,10 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
                                   title: "reading2",
                                   addedBy: "")
         let three = ReadingListItem(id: 456,
-                                  lastModified: Date().toTimestamp(),
-                                  url: "www.google.com",
-                                  title: "reading3",
-                                  addedBy: "")
+                                    lastModified: Date().toTimestamp(),
+                                    url: "www.google.com",
+                                    title: "reading3",
+                                    addedBy: "")
         return [one, two, three]
     }
 }

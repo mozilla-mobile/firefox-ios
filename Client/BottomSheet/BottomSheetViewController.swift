@@ -143,7 +143,7 @@ private extension BottomSheetViewController {
             topTapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
-                                             constant: BottomSheetViewController.UX.minVisibleTopSpace),
+                                           constant: BottomSheetViewController.UX.minVisibleTopSpace),
             sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentViewBottomConstraint,
             sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),

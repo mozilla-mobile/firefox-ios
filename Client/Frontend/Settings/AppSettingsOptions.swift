@@ -35,7 +35,8 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+        let fxaParams = FxALaunchParams(entrypoint: .connectSetting, query: [:])
+        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -349,7 +350,8 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
-            let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+            let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
+            let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(controller, animated: true)
             return
@@ -659,7 +661,10 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let url = URL(string: "https://www.mozilla.org") else { return }
-        BrowserViewController.foregroundBVC().debugOpen(numberOfNewTabs: 50, at: url)
+
+        // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
+        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
+        BrowserViewController.foregroundBVC()?.debugOpen(numberOfNewTabs: 50, at: url)
     }
 }
 
@@ -820,7 +825,9 @@ class ShowIntroductionSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {
-            BrowserViewController.foregroundBVC().presentIntroViewController(true)
+            // TODO: Temporary.
+            // This instance of foregroundBVC is going to be revisited after having enough telemetry of ShowTour.
+            BrowserViewController.foregroundBVC()?.presentIntroViewController(true)
 
             TelemetryWrapper.recordEvent(
                 category: .action,

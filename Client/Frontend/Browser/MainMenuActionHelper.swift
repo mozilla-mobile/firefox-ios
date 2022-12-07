@@ -48,7 +48,7 @@ class MainMenuActionHelper:
 
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
     // swiftlint: disable large_tuple
-    typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
+    typealias FXASyncClosure = (params: FxALaunchParams, flowType: FxAPageType, referringPage: ReferringPage)
     // swiftlint: enable large_tuple
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
@@ -489,7 +489,7 @@ class MainMenuActionHelper:
 
     private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonRowActions? {
         let action: (SingleActionViewModel) -> Void = { action in
-            let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
+            let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
             let params = FXASyncClosure(fxaParams, .emailLoginFlow, .appMenu)
             showFxA(params)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)

@@ -100,10 +100,12 @@ class BackForwardTableViewCell: UITableViewCell {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
 
-        var startPoint = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5) + safeAreaInsets.left,
-                                     y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
-        var endPoint   = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5) + safeAreaInsets.left,
-                                     y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
+        var startPoint = CGPoint(
+            x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth) * 0.5) + safeAreaInsets.left,
+            y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
+        var endPoint   = CGPoint(
+            x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth) * 0.5) + safeAreaInsets.left,
+            y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
 
         // flip the x component if RTL
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {

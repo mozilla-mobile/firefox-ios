@@ -888,7 +888,7 @@ class BrowserViewController: UIViewController {
 
     private func updateWallpaperMetadata() {
         let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
-                                              qos: .utility)
+                                          qos: .utility)
         metadataQueue.async {
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()
@@ -1817,12 +1817,12 @@ extension BrowserViewController: TabDelegate {
 // MARK: - LibraryPanelDelegate
 extension BrowserViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToSignIn() {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
         presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
     }
 
     func libraryPanelDidRequestToCreateAccount() {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
         presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
     }
 
@@ -2290,7 +2290,7 @@ extension BrowserViewController {
         }
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
         let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
@@ -2698,11 +2698,20 @@ extension BrowserViewController: FeatureFlaggable {
 extension BrowserViewController {
     /// This method now returns the BrowserViewController associated with the scene.
     /// We currently have a single scene app setup, so this will change as we introduce support for multiple scenes.
-    public static func foregroundBVC() -> BrowserViewController {
-        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else {
-            /// Currently, we have a single scene app. If we're here, there's no scene or window.
-            /// This should be impossible, and fatal.
-            fatalError("Unable to fetch the Scene.")
+    ///
+    /// We're currently seeing crashes from cases of there being no `connectedScene`, or being unable to cast to a SceneDelegate.
+    /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
+    ///
+    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now. 
+    public static func foregroundBVC() -> BrowserViewController? {
+        guard let scene = UIApplication.shared.connectedScenes.first else {
+            SentryIntegration.shared.send(message: "No connected scenes exist.", severity: .fatal)
+            return nil
+        }
+
+        guard let sceneDelegate = scene.delegate as? SceneDelegate else {
+            SentryIntegration.shared.send(message: "Scene could not be cast as SceneDelegate.", severity: .fatal)
+            return nil
         }
 
         return sceneDelegate.browserViewController

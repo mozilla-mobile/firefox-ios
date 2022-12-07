@@ -65,6 +65,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
             currentDeferredHistoryQuery = deferredHistory
             return deferredHistory
         case .new:
+            profile.places.interruptReader()
             return self.profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).bind { result in
                 guard let historyItems = result.successValue else {
                     SentryIntegration.shared.sendWithStacktrace(
@@ -89,39 +90,40 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
     var query: String = "" {
         didSet {
             let timerid = GleanMetrics.Awesomebar.queryTime.start()
-            guard self.profile is BrowserProfile else {
+            guard profile is BrowserProfile else {
                 assertionFailure("nil profile")
                 GleanMetrics.Awesomebar.queryTime.cancel(timerid)
                 return
             }
 
-            profile.places.interruptReader()
             if query.isEmpty {
                 load(Cursor(status: .success, msg: "Empty query"))
                 GleanMetrics.Awesomebar.queryTime.cancel(timerid)
                 return
             }
-
-            let deferredHistory = getHistoryAsSites(matchingSearchQuery: query, limit: 100)
-
             let deferredBookmarks = getBookmarksAsSites(matchingSearchQuery: query, limit: 5)
 
-            all([deferredHistory, deferredBookmarks]).uponQueue(.main) { results in
+            var deferredQueries = [deferredBookmarks]
+            let historyHighlightsEnabled = featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly)
+            if !historyHighlightsEnabled {
+                // Lets only add the history query if history highlights are not enabled
+                deferredQueries.append(getHistoryAsSites(matchingSearchQuery: query, limit: 100))
+            }
+
+            all(deferredQueries).uponQueue(.main) { results in
                 defer {
                     self.currentDeferredHistoryQuery = nil
                     GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
                 }
 
-                let cancellableHistory = deferredHistory as? CancellableDeferred
-                if let cancellableHistory = cancellableHistory, cancellableHistory.cancelled {
-                    return
-                }
-
-                let deferredHistorySites = results[0].successValue?.asArray() ?? []
-                let deferredBookmarksSites = results[1].successValue?.asArray() ?? []
+                let deferredBookmarksSites = results[safe: 0]?.successValue?.asArray() ?? []
                 var combinedSites = deferredBookmarksSites
-
-                if !self.featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly) {
+                if !historyHighlightsEnabled {
+                    let cancellableHistory = deferredQueries[safe: 1] as? CancellableDeferred
+                    if let cancellableHistory = cancellableHistory, cancellableHistory.cancelled {
+                        return
+                    }
+                    let deferredHistorySites = results[safe: 1]?.successValue?.asArray() ?? []
                     combinedSites += deferredHistorySites
                 }
 
