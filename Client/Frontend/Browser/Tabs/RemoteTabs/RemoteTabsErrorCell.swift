@@ -22,7 +22,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     var theme: Theme
     var viewModel: RemoteTabsErrorCellViewModel
-//    var delegate:
+    weak var delegate: RemotePanelDelegate?
 
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollview in
@@ -56,10 +56,15 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.setContentHuggingPriority(.defaultLow, for: .vertical)
     }
 
-    private let actionButton: UIButton = .build { button in
+    private let signInButton: UIButton = .build { button in
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                                 size: UX.buttonSizeFont)
-        button.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+        button.isHidden = true
+    }
+
+    private let createAccountButton: UIButton = .build { button in
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                                size: UX.buttonSizeFont)
         button.isHidden = true
     }
 
@@ -78,14 +83,20 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure() {
+    func configure(delegate: RemotePanelDelegate?) {
+        self.delegate = delegate
         emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
         instructionsLabel.text = viewModel.error.localizedString()
 
         if viewModel.error == .notLoggedIn {
-            actionButton.setTitle(.Settings.Sync.ButtonTitle, for: [])
-            actionButton.isHidden = false
+            signInButton.setTitle(.Settings.Sync.ButtonTitle, for: [])
+            signInButton.isHidden = false
+            signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
+
+            createAccountButton.setTitle(.RemoteTabCreateAccount, for: [])
+            createAccountButton.isHidden = false
+            createAccountButton.addTarget(self, action: #selector(createAnAccount), for: .touchUpInside)
         }
     }
 
@@ -93,7 +104,8 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         stackView.addArrangedSubview(emptyStateImageView)
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(instructionsLabel)
-        stackView.addArrangedSubview(actionButton)
+        stackView.addArrangedSubview(signInButton)
+        stackView.addArrangedSubview(createAccountButton)
 
         scrollView.addSubview(stackView)
         contentView.addSubview(scrollView)
@@ -107,7 +119,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
             scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                  constant: -UX.horizontalPadding),
             scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                              constant: -UX.verticalPadding),
+                                               constant: -UX.verticalPadding),
 
             scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: stackView.widthAnchor),
 
@@ -125,21 +137,22 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         emptyStateImageView.tintColor = theme.colors.textPrimary
         titleLabel.textColor = theme.colors.textPrimary
         instructionsLabel.textColor = theme.colors.textPrimary
-        actionButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
+        signInButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
+        createAccountButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
         backgroundColor = theme.colors.layer3
     }
 
     @objc private func signIn() {
-        if let remoteTabsPanel = self.remoteTabsPanel {
+        if let delegate = self.delegate {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
-            remoteTabsPanel.remotePanelDelegate?.remotePanelDidRequestToSignIn()
+            delegate.remotePanelDidRequestToSignIn()
         }
     }
 
     @objc private func createAnAccount() {
-        if let remoteTabsPanel = self.remoteTabsPanel {
+        if let delegate = self.delegate {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncCreateAccount)
-            remoteTabsPanel.remotePanelDelegate?.remotePanelDidRequestToCreateAccount()
+            delegate.remotePanelDidRequestToCreateAccount()
         }
     }
 }

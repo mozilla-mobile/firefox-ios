@@ -33,7 +33,7 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
         let viewModel = RemoteTabsErrorCellViewModel(error: error)
         let cell = RemoteTabsErrorCell(viewModel: viewModel,
                                        theme: theme)
-        cell.configure()
+        cell.configure(delegate: remoteTabsPanel?.remotePanelDelegate)
         return cell
     }
 
