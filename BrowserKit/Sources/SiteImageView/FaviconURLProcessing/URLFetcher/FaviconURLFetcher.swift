@@ -11,34 +11,31 @@ protocol FaviconURLFetcher {
     /// Scraptes the HTML at the given url for a favicon image
     /// - Parameter siteURL: The web address we want to retrieve the favicon for
     /// - Parameter completion: Returns a result type of either a URL on success or a SiteImageError on failure
-    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void))
+    func fetchFaviconURL(siteURL: URL) async throws -> URL
 }
 
 struct DefaultFaviconURLFetcher: FaviconURLFetcher {
 
-    private let network: NetworkRequest
+    private let network: HTMLDataRequest
 
-    init(network: NetworkRequest = HTMLDataRequest()) {
+    init(network: HTMLDataRequest = DefaultHTMLDataRequest()) {
         self.network = network
     }
 
-    func fetchFaviconURL(siteURL: URL, completion: @escaping ((Result<URL, SiteImageError>) -> Void)) {
-        network.fetchDataForURL(siteURL) { result in
-            switch result {
-            case let .success(data):
-                self.processHTMLDocument(siteURL: siteURL,
-                                         data: data,
-                                         completion: completion)
-            case let .failure(error):
-                completion(.failure(error))
-            }
+    func fetchFaviconURL(siteURL: URL) async throws -> URL {
+        do {
+            let data = try await network.fetchDataForURL(siteURL)
+            let url = try await self.processHTMLDocument(siteURL: siteURL,
+                                                         data: data)
+            return url
+        } catch {
+            throw error
         }
     }
 
-    private func processHTMLDocument(siteURL: URL, data: Data, completion: @escaping ((Result<URL, SiteImageError>) -> Void)) {
+    private func processHTMLDocument(siteURL: URL, data: Data) async throws -> URL {
         guard let root = try? HTMLDocument(data: data) else {
-            completion(.failure(.invalidHTML))
-            return
+            throw SiteImageError.invalidHTML
         }
 
         var reloadURL: URL?
@@ -55,8 +52,7 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
 
         // Redirect if needed
         if let reloadURL = reloadURL {
-            fetchFaviconURL(siteURL: reloadURL, completion: completion)
-            return
+            return try await fetchFaviconURL(siteURL: reloadURL)
         }
 
         // Search for the first reference to an icon
@@ -64,19 +60,16 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
             guard let href = link["href"] else { continue }
 
             if let faviconURL = URL(string: siteURL.absoluteString + "/" + href) {
-                completion(.success(faviconURL))
-                return
+                return faviconURL
             }
         }
 
         // Fallback to the favicon at the root of the domain
         // This is a fall back because it's generally low res
         if let faviconURL = URL(string: siteURL.absoluteString + "/favicon.ico") {
-            completion(.success(faviconURL))
-            return
+            return faviconURL
         }
 
-        completion(.failure(.noFaviconFound))
-        return
+        throw SiteImageError.noFaviconFound
     }
 }
