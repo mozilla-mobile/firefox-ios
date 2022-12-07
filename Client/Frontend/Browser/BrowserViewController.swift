@@ -2698,11 +2698,20 @@ extension BrowserViewController: FeatureFlaggable {
 extension BrowserViewController {
     /// This method now returns the BrowserViewController associated with the scene.
     /// We currently have a single scene app setup, so this will change as we introduce support for multiple scenes.
-    public static func foregroundBVC() -> BrowserViewController {
-        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else {
-            /// Currently, we have a single scene app. If we're here, there's no scene or window.
-            /// This should be impossible, and fatal.
-            fatalError("Unable to fetch the Scene.")
+    ///
+    /// We're currently seeing crashes from cases of there being no `connectedScene`, or being unable to cast to a SceneDelegate.
+    /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
+    ///
+    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now. 
+    public static func foregroundBVC() -> BrowserViewController? {
+        guard let scene = UIApplication.shared.connectedScenes.first else {
+            SentryIntegration.shared.send(message: "No connected scenes exist.", severity: .fatal)
+            return nil
+        }
+
+        guard let sceneDelegate = scene.delegate as? SceneDelegate else {
+            SentryIntegration.shared.send(message: "Scene could not be cast as SceneDelegate.", severity: .fatal)
+            return nil
         }
 
         return sceneDelegate.browserViewController

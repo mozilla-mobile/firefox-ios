@@ -32,7 +32,9 @@ class AppSyncDelegate: SyncDelegate {
     func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         DispatchQueue.main.async {
             if self.app.applicationState == .active {
-                BrowserViewController.foregroundBVC().switchToTabForURLOrOpen(url)
+                // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
+                // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
+                BrowserViewController.foregroundBVC()?.switchToTabForURLOrOpen(url)
                 return
             }
 
