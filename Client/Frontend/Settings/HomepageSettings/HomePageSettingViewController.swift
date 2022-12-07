@@ -275,7 +275,7 @@ extension HomePageSettingViewController {
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,
-             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+             and tabManager: TabManager = AppContainer.shared.resolve(),
              wallpaperManager: WallpaperManagerInterface = WallpaperManager()
         ) {
             self.settings = settings

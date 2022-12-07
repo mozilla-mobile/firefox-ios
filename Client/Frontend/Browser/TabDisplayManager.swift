@@ -606,7 +606,10 @@ extension TabDisplayManager: GroupedTabDelegate {
 
     func newSearchFromGroup(searchTerm: String) {
         let bvc = BrowserViewController.foregroundBVC()
-        bvc.openSearchNewTab(searchTerm)
+
+        // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
+        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
+        bvc?.openSearchNewTab(searchTerm)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTabPerformSearch)
     }
 

@@ -57,7 +57,7 @@ class DownloadContentScript: TabContentScript {
         let browserViewController = BrowserViewController.foregroundBVC()
 
         defer {
-            browserViewController.pendingDownloadWebView = nil
+            browserViewController?.pendingDownloadWebView = nil
             DownloadContentScript.blobUrlForDownload = nil
         }
 
@@ -84,6 +84,9 @@ class DownloadContentScript: TabContentScript {
         }
 
         let download = BlobDownload(filename: filename, mimeType: mimeType, size: size, data: data)
-        browserViewController.downloadQueue.enqueue(download)
+
+        // TODO: Temporary - DownloadQueue access will be moved out of BVC soon.
+        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5290
+        browserViewController?.downloadQueue.enqueue(download)
     }
 }
