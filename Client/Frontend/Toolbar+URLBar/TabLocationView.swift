@@ -38,7 +38,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     var tapRecognizer: UITapGestureRecognizer!
     var contentView: UIStackView!
 
-    private let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
+    private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
     @objc dynamic var baseURLFontColor: UIColor = UX.baseURLFontColor {
         didSet { updateTextWithURL() }
