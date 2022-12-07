@@ -217,8 +217,8 @@
 		E4BF2E121BAD8AC500DA9D68 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BF2E101BAD8AC500DA9D68 /* Settings.swift */; };
 		E528833B2900328800011920 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528833A2900328800011920 /* SplashViewController.swift */; };
 		E5639E5F2940997700E55B9B /* URLBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5639E5E2940997700E55B9B /* URLBarDelegate.swift */; };
-		E5639E61294099A200E55B9B /* TrackingProtectionBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5639E60294099A200E55B9B /* TrackingProtectionBadge.swift */; };
 		E5639E632940A1C100E55B9B /* BrowserToolsetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5639E622940A1C100E55B9B /* BrowserToolsetDelegate.swift */; };
+		E5639E652940B39300E55B9B /* Combine+UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5639E642940B39200E55B9B /* Combine+UIControl.swift */; };
 		E5A890A9290FB8E2004F95B8 /* WebMenuAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A890A8290FB8E2004F95B8 /* WebMenuAction.swift */; };
 		E5CB2ED9288E909800CE6428 /* UIAlertController+Rename.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CB2ED8288E909800CE6428 /* UIAlertController+Rename.swift */; };
 		E5E4504D28CF4548005A01F1 /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E4504B28CF4548005A01F1 /* TipViewController.swift */; };
@@ -1105,8 +1105,8 @@
 		E4D0AB8A1E300F0000DFBEDA /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E528833A2900328800011920 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		E5639E5E2940997700E55B9B /* URLBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBarDelegate.swift; sourceTree = "<group>"; };
-		E5639E60294099A200E55B9B /* TrackingProtectionBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionBadge.swift; sourceTree = "<group>"; };
 		E5639E622940A1C100E55B9B /* BrowserToolsetDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserToolsetDelegate.swift; sourceTree = "<group>"; };
+		E5639E642940B39200E55B9B /* Combine+UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Combine+UIControl.swift"; sourceTree = "<group>"; };
 		E56FB76D28C0DF96005CF1B9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		E56FB76F28C0DF96005CF1B9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		E5A890A8290FB8E2004F95B8 /* WebMenuAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebMenuAction.swift; sourceTree = "<group>"; };
@@ -1885,9 +1885,9 @@
 			children = (
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
 				E5639E5E2940997700E55B9B /* URLBarDelegate.swift */,
-				E5639E60294099A200E55B9B /* TrackingProtectionBadge.swift */,
 				D364DC251DC4163700562991 /* BrowserToolset.swift */,
 				E5639E622940A1C100E55B9B /* BrowserToolsetDelegate.swift */,
+				E5639E642940B39200E55B9B /* Combine+UIControl.swift */,
 			);
 			path = URLBar;
 			sourceTree = "<group>";
@@ -2611,11 +2611,11 @@
 				60CF785927C3DF4F005AAB69 /* InternalOnboardingSettingsView.swift in Sources */,
 				D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */,
 				E439815127AAD63200F382B0 /* InternalTelemetrySettingsView.swift in Sources */,
-				E5639E61294099A200E55B9B /* TrackingProtectionBadge.swift in Sources */,
 				D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */,
 				74ACC3B02875A0CC00A9AC3E /* TrackingProtectionManager.swift in Sources */,
 				D364DC261DC4163700562991 /* BrowserToolset.swift in Sources */,
 				D3E54FD11DEFB063003E1AFF /* SearchEngineManager.swift in Sources */,
+				E5639E652940B39300E55B9B /* Combine+UIControl.swift in Sources */,
 				EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */,
 				D3E3CA7D1DA827AD0079C94B /* HomeViewController.swift in Sources */,
 				840057542735301600E48144 /* SettingsTableViewCell.swift in Sources */,

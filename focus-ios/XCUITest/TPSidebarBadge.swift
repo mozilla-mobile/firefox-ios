@@ -15,7 +15,7 @@ class TrackingProtectionMenu: BaseTestCase {
         waitForWebPageLoad()
 
         // Open the tracking protection sidebar
-        app.otherElements["URLBar.trackingProtectionIcon"].tap()
+        app.buttons["URLBar.trackingProtectionIcon"].tap()
 
         // Disable tracking protection
         waitForExistence(app.switches["BlockerToggle.TrackingProtection"])
@@ -24,7 +24,7 @@ class TrackingProtectionMenu: BaseTestCase {
         // Reopen the tracking protection sidebar
         if !iPad() {
             app.buttons["closeSheetButton"].tap()
-            app.otherElements["URLBar.trackingProtectionIcon"].tap()
+            app.buttons["URLBar.trackingProtectionIcon"].tap()
         }
 
         // Wait for the sidebar to open

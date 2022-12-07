@@ -6,12 +6,22 @@ import UIKit
 import SnapKit
 import Telemetry
 import Glean
+import Combine
 
 enum Source: String {
    case action, shortcut, suggestion, topsite, widget, none
 }
 
+public enum ShieldIconStatus: Equatable {
+    case on
+    case off
+    case connectionNotSecure
+}
+
 class URLBar: UIView {
+    @Published public var connectionState: ShieldIconStatus = .on
+    private var cancellables: Set<AnyCancellable> = []
+
     private lazy var cancelButton: InsetButton = {
         let button = InsetButton()
         button.isHidden = true
@@ -23,24 +33,15 @@ class URLBar: UIView {
         return button
     }()
 
-    private lazy var gestureRecognizer: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer()
-        gestureRecognizer.numberOfTapsRequired = 1
-        gestureRecognizer.cancelsTouchesInView = true
-        gestureRecognizer.addTarget(self, action: #selector(didTapShieldIcon))
-        return gestureRecognizer
-    }()
-
-    private lazy var shieldIcon: TrackingProtectionBadge = {
-        let shieldIcon = TrackingProtectionBadge()
-        shieldIcon.tintColor = .primaryText
-        shieldIcon.contentMode = .center
-        shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
-        shieldIcon.isUserInteractionEnabled = true
-        shieldIcon.addGestureRecognizer(gestureRecognizer)
-        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
-        return shieldIcon
+    private lazy var shieldIcon: UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .primaryText
+        button.setImage(.trackingProtectionOn, for: .normal)
+        button.contentMode = .center
+        button.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        return button
     }()
 
     public var shieldIconAnchor: UIView { shieldIcon }
@@ -400,6 +401,33 @@ class URLBar: UIView {
         showToolsetConstraints.forEach { $0.deactivate() }
         expandedBarConstraints.forEach { $0.activate() }
         updateToolsetConstraints()
+
+        shieldIcon
+            .publisher(event: .touchUpInside)
+            .sink { [unowned self] _ in
+                self.delegate?.urlBarDidTapShield(self)
+            }
+            .store(in: &cancellables)
+
+        $connectionState
+            .removeDuplicates()
+            .map { trackingProtectionStatus -> UIImage in
+                switch trackingProtectionStatus {
+                case .on: return .trackingProtectionOn
+                case .off: return .trackingProtectionOff
+                case .connectionNotSecure: return .connectionNotSecure
+                }
+            }
+            .sink(receiveValue: { [shieldIcon] image in
+                UIView.transition(
+                    with: shieldIcon,
+                    duration: 0.1,
+                    options: .transitionCrossDissolve,
+                    animations: {
+                        shieldIcon.setImage(image, for: .normal)
+                    })
+            })
+            .store(in: &cancellables)
     }
 
     private func addShieldConstraints() {
@@ -772,10 +800,6 @@ class URLBar: UIView {
         delegate?.urlBar(self, didEnterText: "")
     }
 
-    @objc private func didTapShieldIcon() {
-        delegate?.urlBarDidTapShield(self)
-    }
-
     @objc private func displayURLContextMenu(sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             delegate?.urlBarDidLongPress(self)
@@ -862,10 +886,6 @@ class URLBar: UIView {
         }
 
         self.layoutIfNeeded()
-    }
-
-    func updateTrackingProtectionBadge(trackingStatus: TrackingProtectionStatus, shouldDisplayShieldIcon: Bool) {
-        shieldIcon.updateState(trackingStatus: trackingStatus, shouldDisplayShieldIcon: shouldDisplayShieldIcon)
     }
 }
 

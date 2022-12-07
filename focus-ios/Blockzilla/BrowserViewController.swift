@@ -555,7 +555,17 @@ class BrowserViewController: UIViewController {
     }
 
     private func updateLockIcon(trackingProtectionStatus: TrackingProtectionStatus) {
-        urlBar.updateTrackingProtectionBadge(trackingStatus: trackingProtectionStatus, shouldDisplayShieldIcon:  urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true)
+        let isSecureConnection = urlBar.inBrowsingMode ? self.webViewController.connectionIsSecure : true
+        let shieldIconStatus: ShieldIconStatus
+        if isSecureConnection {
+            switch trackingProtectionStatus {
+            case .on: shieldIconStatus = .on
+            case .off: shieldIconStatus = .off
+            }
+        } else {
+            shieldIconStatus = .connectionNotSecure
+        }
+        urlBar.connectionState = shieldIconStatus
     }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
