@@ -21,7 +21,8 @@ class ManageFxAccountSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAWebViewController(pageType: .settingsPage, profile: profile, dismissalStyle: .popToRootVC, deepLinkParams: nil)
+        let fxaParams = FxALaunchParams(entrypoint: .manageFxASetting, query: [:])
+        let viewController = FxAWebViewController(pageType: .settingsPage, profile: profile, dismissalStyle: .popToRootVC, deepLinkParams: fxaParams)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

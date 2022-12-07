@@ -185,7 +185,8 @@ extension IntroViewController: OnboardingCardDelegate {
         case .welcome:
             moveToNextPage(cardType: cardType)
         case .signSync:
-            presentSignToSync()
+            let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
+            presentSignToSync(fxaPrams)
         default:
             break
         }
@@ -200,7 +201,7 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
-    private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
+    private func presentSignToSync(_ fxaOptions: FxALaunchParams,
                                   flowType: FxAPageType = .emailLoginFlow,
                                   referringPage: ReferringPage = .onboarding) {
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
