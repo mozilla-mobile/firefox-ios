@@ -30,7 +30,7 @@ class FaviconURLHandlerTests: XCTestCase {
         await mockCache.setTestResult(url: URL(string: "www.firefox.com/image"))
         let model = createSiteImageModel(siteURL: "www.firefox.com")
         do {
-            let site = try await subject.getFaviconURL(site: model, type: .favicon)
+            let site = try await subject.getFaviconURL(site: model)
             let getURLCount = await mockCache.getURLFromCacheCalledCount
             let cacheURLCount = await mockCache.cacheURLCalledCount
             XCTAssertEqual(getURLCount, 1, "get url should have been called on the cache")
@@ -49,7 +49,7 @@ class FaviconURLHandlerTests: XCTestCase {
         let model = createSiteImageModel(siteURL: "www.firefox.com")
 
         do {
-            let site = try await subject.getFaviconURL(site: model, type: .favicon)
+            let site = try await subject.getFaviconURL(site: model)
             let getURLCount = await mockCache.getURLFromCacheCalledCount
             let cacheURLCount = await mockCache.cacheURLCalledCount
             XCTAssertEqual(getURLCount, 1, "get url should have been called on the cache")
@@ -59,6 +59,20 @@ class FaviconURLHandlerTests: XCTestCase {
             XCTAssertEqual(site.siteURL.absoluteString, "www.firefox.com")
         } catch {
             XCTFail("failed to get fetch favicon")
+        }
+    }
+
+    func testGetFaviconURLErrorNoFaviconFound() async {
+        await mockCache.setTestResult(error: .noURLInCache)
+        mockFetcher.error = .noFaviconFound
+        let model = createSiteImageModel(siteURL: "www.firefox.com")
+
+        do {
+            _ = try await subject.getFaviconURL(site: model)
+            XCTFail("Request should have thrown an error")
+        } catch {
+            let error = error as? SiteImageError
+            XCTAssertEqual(error?.description, SiteImageError.noFaviconURLFound.description)
         }
     }
 
