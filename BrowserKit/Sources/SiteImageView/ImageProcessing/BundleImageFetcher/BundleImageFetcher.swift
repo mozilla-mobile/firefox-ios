@@ -36,7 +36,7 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
     // In case no bundled images could be retrieved, this will be set
     private var generalBundleError: BundleError?
 
-    init(bundleDataProvider: BundleDataProvider) {
+    init(bundleDataProvider: BundleDataProvider = DefaultBundleDataProvider()) {
         self.bundleDataProvider = bundleDataProvider
         bundledImages = retrieveBundledImages()
     }

@@ -70,36 +70,13 @@ final class SiteImageCacheTests: XCTestCase {
 
     // MARK: - Cache image
 
-    func testCacheImage_whenError_returnsError() async {
-        let expectedImage = UIImage()
-        imageCache.storageError = KingfisherError.requestError(reason: .emptyRequest)
-        let subject = DefaultSiteImageCache(imageCache: imageCache)
-
-        do {
-            _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
-
-        } catch let error as SiteImageError {
-            XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
-            XCTAssertEqual(imageCache.capturedImage, expectedImage)
-            XCTAssertEqual("Unable to cache image with reason: The request is empty or `nil`.",
-                           error.description)
-        } catch {
-            XCTFail("Should have failed with SiteImageError type")
-        }
-    }
-
     func testCacheImage_whenSuccess_returnsSuccess() async {
         let expectedImage = UIImage()
         let subject = DefaultSiteImageCache(imageCache: imageCache)
 
-        do {
-            _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
-            XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
-            XCTAssertEqual(imageCache.capturedImage, expectedImage)
-
-        } catch {
-            XCTFail("Should have succeeded")
-        }
+        _ = await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
+        XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
+        XCTAssertEqual(imageCache.capturedImage, expectedImage)
     }
 }
 
@@ -117,14 +94,10 @@ private class MockDefaultImageCache: DefaultImageCache {
         }
     }
 
-    var storageError: KingfisherError?
     var capturedImage: UIImage?
     var capturedStorageKey: String?
-    func store(image: UIImage, forKey key: String) async throws {
+    func store(image: UIImage, forKey key: String) {
         capturedImage = image
         capturedStorageKey = key
-        if let error = storageError {
-            throw error
-        }
     }
 }
