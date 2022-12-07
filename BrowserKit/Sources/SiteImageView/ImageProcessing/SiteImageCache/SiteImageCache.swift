@@ -21,10 +21,9 @@ protocol SiteImageCache {
     ///   - image: The image to cache
     ///   - domain: The image domain
     ///   - type: The image type
-    ///   Returns:  Calls completes with success or throws an error why the caching failed
     func cacheImage(image: UIImage,
                     domain: String,
-                    type: SiteImageType) async throws
+                    type: SiteImageType) async
 }
 
 actor DefaultSiteImageCache: SiteImageCache {
@@ -49,17 +48,9 @@ actor DefaultSiteImageCache: SiteImageCache {
         }
     }
 
-    func cacheImage(image: UIImage, domain: String, type: SiteImageType) async throws {
+    func cacheImage(image: UIImage, domain: String, type: SiteImageType) async {
         let key = cacheKey(from: domain, type: type)
-
-        do {
-            try await imageCache.store(image: image, forKey: key)
-
-        } catch let error as KingfisherError {
-            throw SiteImageError.unableToCacheImage(error.errorDescription ?? "No description")
-        } catch {
-            throw SiteImageError.unableToCacheImage("No description")
-        }
+        imageCache.store(image: image, forKey: key)
     }
 
     private func cacheKey(from domain: String, type: SiteImageType) -> String {
