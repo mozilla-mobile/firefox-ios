@@ -48,10 +48,11 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private lazy var topLeftButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection(),
-                                     style: .plain,
-                                     target: self,
-                                     action: #selector(topLeftButtonAction))
+        let button = UIBarButtonItem(
+            image: UIImage.templateImageNamed(ImageIdentifiers.menuGoBack)?.imageFlippedForRightToLeftLayoutDirection(),
+            style: .plain,
+            target: self,
+            action: #selector(topLeftButtonAction))
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.topLeftButton
         return button
     }()
@@ -244,7 +245,7 @@ class LibraryViewController: UIViewController, Themeable {
         switch viewModel.currentPanelState {
         case .bookmarks(state: .inFolder),
              .history(state: .inFolder):
-            topLeftButton.image = UIImage.templateImageNamed("goBack")?.imageFlippedForRightToLeftLayoutDirection()
+            topLeftButton.image = UIImage.templateImageNamed(ImageIdentifiers.menuGoBack)?.imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
         case .bookmarks(state: .itemEditMode):
             topLeftButton.image = UIImage.templateImageNamed("nav-stop")
