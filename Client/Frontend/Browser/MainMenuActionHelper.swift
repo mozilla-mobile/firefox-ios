@@ -40,7 +40,11 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemoveQuickActionBookmark {
+class MainMenuActionHelper:
+    PhotonActionSheetProtocol,
+    FeatureFlaggable,
+    CanRemoveQuickActionBookmark,
+    AppVersionUpdateCheckerProtocol {
 
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
     // swiftlint: disable large_tuple
@@ -531,7 +535,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         let showBadgeForWhatsNew = shouldShowWhatsNew()
         if showBadgeForWhatsNew {
             // Set the version number of the app, so the What's new will stop showing
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest)
 
             // Redraw the toolbar so the badge hides from the appMenu button.
             delegate?.updateToolbarState()
@@ -549,15 +553,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return whatsNewAction
     }
 
-    // If we do not have the LatestAppVersionProfileKey in the profile, that means that this is a fresh install and we
-    // do not show the What's New. If we do have that value, we compare it to the major version of the running app.
-    // If it is different then this is an upgrade, downgrades are not possible, so we can show the What's New page.
     private func shouldShowWhatsNew() -> Bool {
-        guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
-            return false // Clean install, never show What's New
-        }
-
-        return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
+        return isMajorVersionUpdate(using: profile) && DeviceInfo.hasConnectivity()
     }
 
     // MARK: Share
