@@ -84,7 +84,6 @@ opt_in_rules: # some rules are only opt-in
   - return_arrow_whitespace
   - unused_import
   - vertical_parameter_alignment_on_call
-  - vertical_parameter_alignment
   - vertical_whitespace_closing_braces
   - yoda_condition
 
