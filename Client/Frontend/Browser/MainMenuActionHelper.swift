@@ -518,12 +518,11 @@ class MainMenuActionHelper:
             iconURL = url
         }
         let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
-        let iconTint: UIColor? = needsReAuth ? UIColor.Photon.Yellow60 : nil
         let syncOption = SingleActionViewModel(title: title,
                                                iconString: iconString,
                                                iconURL: iconURL,
                                                iconType: iconType,
-                                               iconTint: iconTint,
+                                               needsIconActionableTint: needsReAuth,
                                                tapHandler: action).items
         return syncOption
     }

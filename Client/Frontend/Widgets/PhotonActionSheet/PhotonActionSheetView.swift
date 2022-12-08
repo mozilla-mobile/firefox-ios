@@ -201,7 +201,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     func configure(with item: SingleActionViewModel, theme: Theme) {
         self.item = item
         setupViews()
-        applyTheme(theme: theme)
 
         titleLabel.text = item.currentTitle
         titleLabel.font = item.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
@@ -226,6 +225,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
         setupBadgeOverlay(action: item)
         addSubBorder(action: item)
+        applyTheme(theme: theme)
     }
 
     func addVerticalBorder(ifShouldBeShown: Bool) {
@@ -255,6 +255,10 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
         badgeOverlay.badge.tintBackground(color: theme.colors.layer1)
         disclosureIndicator.tintColor = theme.colors.iconSecondary
+
+        let iconTint: UIColor? = item?.needsIconActionableTint ?? false ? theme.colors.iconAccentYellow : tintColor
+        statusIcon.tintColor = iconTint
+
     }
 
     // MARK: - Private
@@ -316,20 +320,23 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         case .Image:
             let image = UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
             statusIcon.image = image
-            statusIcon.tintColor = action.iconTint ?? action.tintColor ?? self.tintColor
 
         case .URL:
-            let image = UIImage(named: name)?.createScaled(PhotonActionSheet.UX.iconSize)
+            let image = UIImage(named: name)?
+                .createScaled(PhotonActionSheet.UX.iconSize)
+                .withRenderingMode(.alwaysTemplate)
             statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
             statusIcon.image = image
             if let actionIconUrl = action.iconURL {
-                ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: actionIconUrl,
-                                                                       limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                ImageLoadingHandler.shared.getImageFromCacheOrDownload(
+                    with: actionIconUrl,
+                    limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
                     guard error == nil, let image = image, self.accessibilityLabel == action.currentTitle else {
                         return
                     }
 
                     self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.iconSize)
+                            .withRenderingMode(.alwaysTemplate)
                     self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
                 }
             }
@@ -340,7 +347,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
             let image = UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
             statusIcon.image = image
             statusIcon.addSubview(tabsLabel)
-            statusIcon.tintColor = action.tintColor ?? self.tintColor
 
             NSLayoutConstraint.activate([
                 tabsLabel.centerXAnchor.constraint(equalTo: statusIcon.centerXAnchor),
