@@ -5,7 +5,6 @@
 import XCTest
 
 class MarketingSnapshotTests: XCTestCase {
-
     let loadingTimeout: NSTimeInterval = 60
     let exists = NSPredicate(format: "exists = true")
     let loaded = NSPredicate(format: "value BEGINSWITH '100'")
@@ -50,7 +49,6 @@ class MarketingSnapshotTests: XCTestCase {
     }
 
     func testTakeMarketingScreenshots() {
-
         let app = XCUIApplication()
 
         // dismiss the intro tour
@@ -99,7 +97,6 @@ class MarketingSnapshotTests: XCTestCase {
         // cancel search
         app.buttons.elementBoundByIndex(1).tap()
     }
-
 }
 
 extension XCUIElementQuery {

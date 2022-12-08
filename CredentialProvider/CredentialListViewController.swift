@@ -11,7 +11,6 @@ protocol CredentialListViewProtocol: AnyObject {
 }
 
 class CredentialListViewController: UIViewController, CredentialListViewProtocol, UISearchControllerDelegate {
-
     fileprivate let cellIdentifier = "cellidentifier"
     lazy private var tableView: UITableView = {
         let tableView = UITableView()
@@ -128,7 +127,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
                     string: .LoginsListSearchPlaceholderCredential,
                     attributes: [:]) // Set the placeholder text and color
         return searchController
-
     }
 
     private func addViewConstraints() {
@@ -142,7 +140,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
 
             cancelButton.widthAnchor.constraint(equalToConstant: 60)
         ])
-
     }
 
     private func registerCells() {
@@ -158,11 +155,9 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
 }
 
 extension CredentialListViewController: UITableViewDataSource {
-
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let presenter = presenter else { return 1 }
         return presenter.numberOfSections()
-
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let presenter = presenter else { return 1 }
@@ -170,7 +165,6 @@ extension CredentialListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         switch presenter?.getItemsType(in: indexPath.section, for: indexPath.row) {
         case .emptyCredentialList:
             let cell = tableView.dequeueReusableCell(withIdentifier: EmptyPlaceholderCell.identifier, for: indexPath) as? EmptyPlaceholderCell

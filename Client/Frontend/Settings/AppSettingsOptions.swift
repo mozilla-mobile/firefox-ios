@@ -479,7 +479,6 @@ class FeatureSwitchSetting: BoolSetting {
     override func writeBool(_ control: UISwitch) {
         self.featureSwitch.setMembership(control.isOn, for: self.prefs)
     }
-
 }
 
 class ForceCrashSetting: HiddenSetting {
@@ -652,7 +651,6 @@ class ResetContextualHints: HiddenSetting {
 }
 
 class OpenFiftyTabsDebugOption: HiddenSetting {
-
     override var accessibilityIdentifier: String? { return "OpenFiftyTabsOption.Setting" }
 
     override var title: NSAttributedString? {
@@ -699,7 +697,6 @@ class UseNewHistoryApiOption: HiddenSetting {
                     migrationConfig: .real,
                     callback: { result in
                         Logger.browserLogger.info("Successful Migration took \(result.totalDuration / 1000) seconds")
-
                     }, errCallback: { _ in
                         Logger.browserLogger.debug("Failed migration of history")
                     }
@@ -786,7 +783,6 @@ class LicenseAndAcknowledgementsSetting: Setting {
 
 // Opens the App Store review page of this app
 class AppStoreReviewSetting: Setting {
-
     override var title: NSAttributedString? {
         return NSAttributedString(string: .Settings.About.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
@@ -1216,7 +1212,6 @@ class HomeSetting: Setting {
 }
 
 class TabsSetting: Setting {
-
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
 
     override var accessibilityIdentifier: String? { return "TabsSetting" }
@@ -1254,7 +1249,6 @@ class SiriPageSetting: Setting {
 }
 
 class NoImageModeSetting: BoolSetting {
-
     init(settings: SettingsTableViewController) {
         let noImageEnabled = NoImageModeHelper.isActivated(settings.profile.prefs)
         let didChange = { (isEnabled: Bool) in

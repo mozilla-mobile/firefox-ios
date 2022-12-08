@@ -7,7 +7,6 @@ import Foundation
 // MARK: - FxHomePocketDiscoverMoreCell
 /// A cell to be placed at the last position in the Pocket section
 class PocketDiscoverCell: UICollectionViewCell, ReusableCell {
-
     struct UX {
         static let discoverMoreFontSize: CGFloat = 20
         static let horizontalMargin: CGFloat = 16

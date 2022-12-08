@@ -8,7 +8,6 @@ let NoImageButtonIdentifier = ImageIdentifiers.noImageMode
 let ContextMenuIdentifier = "Context Menu"
 
 class NoImageTests: BaseTestCase {
-
     private func checkShowImages() {
         waitForExistence(app.tables.cells[NoImageButtonIdentifier])
         XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["enabled"].exists)

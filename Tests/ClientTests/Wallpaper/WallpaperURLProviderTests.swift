@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class WallpaperURLProviderTests: XCTestCase {
-
     let testURL = WallpaperURLProvider.testURL
 
     func testMetadataURL() {
@@ -20,7 +19,6 @@ class WallpaperURLProviderTests: XCTestCase {
             XCTAssertEqual(actualURL,
                            expectedURL,
                            "The metadata url builder is returning the wrong url.")
-
         } catch {
             XCTFail("The url provider failed to provide any url: \(error.localizedDescription)")
         }
@@ -37,7 +35,6 @@ class WallpaperURLProviderTests: XCTestCase {
             XCTAssertEqual(actualURL,
                            expectedURL,
                            "The image url builder is returning the wrong url.")
-
         } catch {
             XCTFail("The url provider failed to provide any url: \(error.localizedDescription)")
         }

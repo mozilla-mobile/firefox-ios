@@ -8,7 +8,6 @@ import WebKit
 import XCTest
 
 class WebViewNavigationHandlerTests: XCTestCase {
-
     // MARK: - Data scheme
 
     func testShouldNotHandleNonDataSchemeURL() {
@@ -228,7 +227,6 @@ class WebViewNavigationHandlerTests: XCTestCase {
 
 // MARK: WKNavigationActionMock
 class WKNavigationActionMock: WKNavigationAction {
-
     var overridenTargetFrame: WKFrameInfoMock?
 
     override var targetFrame: WKFrameInfo? {
@@ -238,7 +236,6 @@ class WKNavigationActionMock: WKNavigationAction {
 
 // MARK: WKFrameInfoMock
 class WKFrameInfoMock: WKFrameInfo {
-
     let overridenTargetFrame: Bool
 
     init(isMainFrame: Bool) {

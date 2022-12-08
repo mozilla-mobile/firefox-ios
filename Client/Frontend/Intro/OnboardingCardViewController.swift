@@ -11,7 +11,6 @@ protocol OnboardingCardDelegate: AnyObject {
 }
 
 class OnboardingCardViewController: UIViewController, Themeable {
-
     struct UX {
         static let stackViewSpacing: CGFloat = 16
         static let stackViewSpacingButtons: CGFloat = 40

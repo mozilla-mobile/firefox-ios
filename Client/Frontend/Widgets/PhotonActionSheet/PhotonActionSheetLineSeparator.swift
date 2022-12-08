@@ -6,7 +6,6 @@ import UIKit
 
 // MARK: - PhotonActionSheetLineSeparator
 class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
-
     private lazy var separatorLineView: UIView = .build { _ in }
 
     override init(reuseIdentifier: String?) {

@@ -12,7 +12,6 @@ public enum PresentationStyle {
 }
 
 class PhotonActionSheetViewModel {
-
     // MARK: - Properties
     var actions: [[PhotonRowActions]]
     var modalStyle: UIModalPresentationStyle
@@ -55,7 +54,6 @@ class PhotonActionSheetViewModel {
          modalStyle: UIModalPresentationStyle,
          isMainMenu: Bool = false,
          isMainMenuInverted: Bool = false) {
-
         self.actions = actions
         self.closeButtonTitle = closeButtonTitle
         self.title = title

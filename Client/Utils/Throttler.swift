@@ -6,7 +6,6 @@ import Foundation
 
 /// For any work that needs to be delayed, you can wrap it inside a throttler and specify the delay time, in seconds, and queue.
 class Throttler {
-
     private var task: DispatchWorkItem = DispatchWorkItem(block: {})
     private let defaultDelay = 0.35
 

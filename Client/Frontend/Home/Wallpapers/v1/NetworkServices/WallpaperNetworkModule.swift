@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class WallpaperNetworkingModule: WallpaperNetworking {
-
     private var urlSession: URLSessionProtocol
 
     init(with urlSession: URLSessionProtocol = URLSession.shared) {
@@ -17,7 +16,6 @@ class WallpaperNetworkingModule: WallpaperNetworking {
     func data(from url: URL) async throws -> (Data, URLResponse) {
         return try await withCheckedThrowingContinuation { continuation in
             urlSession.dataTaskWith(url) { data, response, error in
-
                 if let error = error {
                     continuation.resume(throwing: error)
                     return
@@ -36,7 +34,6 @@ class WallpaperNetworkingModule: WallpaperNetworking {
                 }
 
                 continuation.resume(returning: (data, response))
-
             }.resume()
         }
     }

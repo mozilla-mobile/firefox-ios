@@ -5,7 +5,6 @@
 import UIKit
 
 class ItemListCell: UITableViewCell {
-
     static let identifier = "itemListCell"
 
     lazy var titleLabel: UILabel = .build { label in
@@ -47,5 +46,4 @@ class ItemListCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         backgroundColor = selected ? .lightGray : UIColor.CredentialProvider.cellBackgroundColor
     }
-
 }

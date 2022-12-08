@@ -7,7 +7,6 @@ import Foundation
 // Protocol for each section in Firefox Home page view controller
 // to handle click and cell setup
 protocol HomepageSectionHandler {
-
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell
 
@@ -22,7 +21,6 @@ protocol HomepageSectionHandler {
 }
 
 extension HomepageSectionHandler {
-
     // Default configure use the FirefoxHomeSectionType cellIdentifier, when there's only one cell type in that section
     func configure(_ collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let viewModel = self as? HomepageViewModelProtocol else { return UICollectionViewCell() }

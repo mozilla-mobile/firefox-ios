@@ -5,7 +5,6 @@
 import Foundation
 
 struct ReaderModeUtils {
-
     static let DomainPrefixesToSimplify = ["www.", "mobile.", "m.", "blog."]
 
     static func simplifyDomain(_ domain: String) -> String {
@@ -28,6 +27,5 @@ struct ReaderModeUtils {
             .replacingOccurrences(of: "%READER-TITLE%", with: readabilityResult.title)
             .replacingOccurrences(of: "%READER-CREDITS%", with: readabilityResult.credits)
             .replacingOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content)
-
     }
 }

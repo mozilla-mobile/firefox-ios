@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class ThirdPartySearchAlerts: UIAlertController {
-
     /**
     Allows the keyboard to pop back up after an alertview.
     **/
@@ -84,5 +83,4 @@ class ThirdPartySearchAlerts: UIAlertController {
         alert.addAction(okayOption)
         return alert
     }
-
 }

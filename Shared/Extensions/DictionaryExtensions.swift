@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 extension Dictionary {
-
     public func merge(with dictionary: Dictionary) -> Dictionary {
         return self.merging(dictionary) { (_, new) in new }
     }

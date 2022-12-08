@@ -7,7 +7,6 @@ import XCTest
 @testable import SiteImageView
 
 final class HeroImageFetcherTests: XCTestCase {
-
     private var metadataProvider: MetadataProviderFake!
 
     override func setUp() {
@@ -26,7 +25,6 @@ final class HeroImageFetcherTests: XCTestCase {
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
             XCTFail("Should have failed")
-
         } catch let error as TestError {
             XCTAssertEqual("A test error",
                            error.description)
@@ -40,7 +38,6 @@ final class HeroImageFetcherTests: XCTestCase {
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
             XCTFail("Should have failed")
-
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Metadata image provider could not be retrieved.",
                            error.description)
@@ -58,7 +55,6 @@ final class HeroImageFetcherTests: XCTestCase {
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
             XCTFail("Should have failed")
-
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Optional(A test error)",
                            error.description)
@@ -73,7 +69,6 @@ final class HeroImageFetcherTests: XCTestCase {
         do {
             let image = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
             XCTAssertNotNil(image)
-
         } catch {
             XCTFail("Should have succeed with image")
         }
@@ -91,7 +86,6 @@ private extension HeroImageFetcherTests {
 
 // MARK: - MetadataProviderFake
 private class MetadataProviderFake: LPMetadataProvider {
-
     var metadataResult = LPLinkMetadata()
     var errorResult: Error?
     override func startFetchingMetadata(for URL: URL, completionHandler: @escaping (LPLinkMetadata?, Error?) -> Void) {
@@ -101,7 +95,6 @@ private class MetadataProviderFake: LPMetadataProvider {
 
 // MARK: - ItemProviderFake
 private  class ItemProviderFake: NSItemProvider {
-
     var imageResult: UIImage? = UIImage()
     var errorResult: Error?
     override func loadObject(ofClass aClass: NSItemProviderReading.Type, completionHandler: @escaping (NSItemProviderReading?, Error?) -> Void) -> Progress {

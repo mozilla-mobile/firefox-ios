@@ -69,7 +69,6 @@ extension QuickActions {
 }
 
 struct QuickActionsImplementation: QuickActions, Loggable {
-
     // MARK: Administering Quick Actions
     func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
                                                  fromShareItem shareItem: ShareItem,
@@ -128,7 +127,6 @@ struct QuickActionsImplementation: QuickActions, Loggable {
     func handleShortCutItem(_ shortcutItem: UIApplicationShortcutItem,
                             withBrowserViewController bvc: BrowserViewController,
                             completionHandler: @escaping (Bool) -> Void) {
-
         // Verify that the provided `shortcutItem`'s `type` is one handled by the application.
         guard let shortCutType = ShortcutType(fullType: shortcutItem.type) else {
             completionHandler(false)

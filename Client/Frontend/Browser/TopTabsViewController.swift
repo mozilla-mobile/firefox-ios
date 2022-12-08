@@ -28,7 +28,6 @@ protocol TopTabsDelegate: AnyObject {
 }
 
 class TopTabsViewController: UIViewController, Themeable {
-
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
@@ -262,10 +261,8 @@ class TopTabsViewController: UIViewController, Themeable {
         // Check whether first or last tab is being selected.
         if index == 0 {
             topTabFader.setFader(forSides: .right)
-
         } else if index == topTabDisplayManager.dataStore.count - 1 {
             topTabFader.setFader(forSides: .left)
-
         } else if collectionView.contentSize.width <= collectionView.frame.size.width { // all tabs are visible
             topTabFader.setFader(forSides: .none)
         }
@@ -273,7 +270,6 @@ class TopTabsViewController: UIViewController, Themeable {
 }
 
 extension TopTabsViewController: TabDisplayer {
-
     func focusSelectedTab() {
         self.scrollToCurrentTab(true)
         self.handleFadeOutAfterTabSelection()
@@ -332,10 +328,8 @@ extension TopTabsViewController: TopTabsScrollDelegate {
 
         if reachedLeftEnd {
             topTabFader.setFader(forSides: .right)
-
         } else if reachedRightEnd {
             topTabFader.setFader(forSides: .left)
-
         } else {
             topTabFader.setFader(forSides: .both)
         }

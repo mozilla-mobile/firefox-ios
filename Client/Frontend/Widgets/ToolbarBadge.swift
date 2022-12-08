@@ -5,7 +5,6 @@
 import UIKit
 
 class ToolbarBadge: UIView {
-
     // MARK: - Variables
     private let badgeSize: CGFloat
     private let badgeOffset = CGFloat(10)

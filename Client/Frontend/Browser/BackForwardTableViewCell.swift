@@ -7,7 +7,6 @@ import Storage
 import Shared
 
 class BackForwardTableViewCell: UITableViewCell {
-
     private struct BackForwardViewCellUX {
         static let bgColor = UIColor.Photon.Grey50
         static let faviconWidth = 29
@@ -89,7 +88,6 @@ class BackForwardTableViewCell: UITableViewCell {
             label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(BackForwardViewCellUX.labelPadding)),
             label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-BackForwardViewCellUX.labelPadding))
         ])
-
     }
 
     required init(coder aDecoder: NSCoder) {

@@ -9,7 +9,6 @@ import XCTest
 @testable import Client
 
 class SearchTests: XCTestCase {
-
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
         let file = Bundle.main.path(forResource: "google-b-m", ofType: "xml", inDirectory: "SearchPlugins/")
@@ -49,7 +48,6 @@ class SearchTests: XCTestCase {
         checkInvalidURL("javascript:")
         checkInvalidURL("javascript:alert(%22hi%22)")
         checkInvalidURL("ftp:")
-
     }
 
     func testURIFixupPunyCode() {

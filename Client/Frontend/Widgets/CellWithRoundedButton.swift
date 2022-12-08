@@ -12,7 +12,6 @@ struct CellWithRoundedButtonUX {
 }
 
 class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCell {
-
     // MARK: - Properties
     var buttonClosure: (() -> Void)?
 
@@ -27,7 +26,10 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
 
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, weight: .semibold, maxSize: 16)
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(
+            withTextStyle: .body,
+            weight: .semibold,
+            maxSize: 16)
         button.setImage(UIImage(named: ImageIdentifiers.trashIconMonochrome), for: .normal)
         button.tintColor = .black
         button.backgroundColor = .Photon.LightGrey30

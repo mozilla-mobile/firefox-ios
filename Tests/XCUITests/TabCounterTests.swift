@@ -5,7 +5,6 @@
 import XCTest
 
 class TabCounterTests: BaseTestCase {
-
     func testTabIncrement() throws {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.CloseURLBarOpen)

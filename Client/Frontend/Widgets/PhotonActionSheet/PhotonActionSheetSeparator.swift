@@ -6,7 +6,6 @@ import UIKit
 
 // MARK: - PhotonActionSheetSeparator
 class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
-
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
     }

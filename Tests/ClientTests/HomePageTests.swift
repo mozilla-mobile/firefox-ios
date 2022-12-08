@@ -7,7 +7,6 @@ import XCTest
 import Shared
 
 class HomePageTests: XCTestCase {
-
     func testHomePageSettingForInternalURLs() {
         let prefs = NSUserDefaultsPrefs(prefix: "PrefsTests")
         let helper = HomePageHelper(prefs: prefs)

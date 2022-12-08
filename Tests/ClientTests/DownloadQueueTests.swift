@@ -6,7 +6,6 @@
 import XCTest
 
 class DownloadQueueTests: XCTestCase {
-
     let didStartDownload = "downloadQueue(_:didStartDownload:)"
     let didDownloadCombinedBytes = "downloadQueue(_:didDownloadCombinedBytes:combinedTotalBytesExpected:)"
     let didCompleteWithError = "downloadQueue(_:didCompleteWithError:)"
@@ -93,7 +92,6 @@ class DownloadQueueTests: XCTestCase {
         queue.download(download, didCompleteWithError: DownloadTestError.noError("OK"))
         XCTAssertEqual(mockQueueDelegate.methodCalled, didCompleteWithError)
     }
-
 }
 
 private enum DownloadTestError: Error {
@@ -113,7 +111,6 @@ class MockDownload: Download {
     override func cancel() {
         downloadCanceled = true
     }
-
 }
 
 class MockDownloadQueueDelegate: DownloadQueueDelegate {

@@ -9,7 +9,6 @@ import Storage
 import XCTest
 
 class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
-
     private var profile: MockProfile!
     private var contileProviderMock: ContileProviderMock!
     private var notificationCenter: SpyNotificationCenter!
@@ -408,7 +407,6 @@ class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
 
 // MARK: - ContileProviderMock
 class ContileProviderMock: ContileProviderInterface {
-
     private var result: ContileResult
 
     static var defaultSuccessData: [Contile] {
@@ -448,11 +446,9 @@ class ContileProviderMock: ContileProviderInterface {
 }
 
 extension ContileProviderMock {
-
     static func getContiles(contilesCount: Int,
                             duplicateFirstTile: Bool = false,
                             pinnedDuplicateTile: Bool = false) -> [Contile] {
-
         var defaultData = ContileProviderMock.defaultSuccessData
 
         if duplicateFirstTile {
@@ -493,14 +489,12 @@ extension ContileProviderMock {
 
 // MARK: TopSitesManagerTests
 extension TopSitesDataAdaptorTests {
-
     func createSubject(addPinnedSiteCount: Int = 0,
                        siteCount: Int = 10,
                        duplicatePinnedSiteURL: Bool = false,
                        expectedContileResult: ContileResult = .success([]),
                        file: StaticString = #file,
                        line: UInt = #line) -> TopSitesDataAdaptorImplementation {
-
         let historyStub = TopSiteHistoryManagerStub(profile: profile)
         historyStub.siteCount = siteCount
         historyStub.addPinnedSiteCount = addPinnedSiteCount
@@ -529,7 +523,6 @@ extension TopSitesDataAdaptorTests {
 
 // MARK: TopSiteHistoryManagerStub
 class TopSiteHistoryManagerStub: TopSiteHistoryManager {
-
     override func getTopSites(completion: @escaping ([Site]) -> Void) {
         completion(createHistorySites())
     }

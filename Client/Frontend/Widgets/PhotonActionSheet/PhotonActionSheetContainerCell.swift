@@ -11,7 +11,6 @@ protocol PhotonActionSheetContainerCellDelegate: AnyObject {
 
 // A PhotonActionSheet cell
 class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplicable {
-
     weak var delegate: PhotonActionSheetContainerCellDelegate?
     private lazy var containerStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill

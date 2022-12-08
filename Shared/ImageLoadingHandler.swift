@@ -41,7 +41,6 @@ protocol ImageFetcher {
 }
 
 public class ImageLoadingHandler: ImageFetcher {
-
     // MARK: singleton property
     public static let shared = ImageLoadingHandler()
 
@@ -54,7 +53,6 @@ public class ImageLoadingHandler: ImageFetcher {
                                             completion: @escaping (UIImage?, ImageLoadingError?) -> Void) {
         // Check if image is in cache
         guard isImageInCache(url: url) else {
-
             // Download image as its not in cache
             downloadImageOnly(with: url, limit: maxSize) { [unowned self] image, _, error in
                 completion(image, error)
@@ -146,7 +144,6 @@ public class ImageLoadingHandler: ImageFetcher {
 }
 
 extension ImageLoadingHandler: AuthenticationChallengeResponsible {
-
     public func downloader( _ downloader: ImageDownloader,
                             didReceive challenge: URLAuthenticationChallenge,
                             completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {

@@ -7,7 +7,6 @@ import XCTest
 
 // Trivial test for using Deferred.
 class DeferredTests: XCTestCase {
-
     func testDeferred() {
         let d = Deferred<Int>()
         XCTAssertNil(d.peek(), "Value not yet filled.")
@@ -79,7 +78,6 @@ class DeferredTests: XCTestCase {
         myclass = nil
 
         waitForExpectations(timeout: 3, handler: nil)
-
     }
 
     func testFailAccumulate_andDoesntLeak() {
@@ -103,7 +101,6 @@ class DeferredTests: XCTestCase {
 
 // MARK: Helper
 private extension DeferredTests {
-
     class AccumulateTestClass {
         class Error: MaybeErrorType {
             var description = "Error"
@@ -111,9 +108,7 @@ private extension DeferredTests {
 
         let expectation: XCTestExpectation
 
-        init(expectation: XCTestExpectation,
-             accumulateCall: @escaping () -> Success) {
-
+        init(expectation: XCTestExpectation, accumulateCall: @escaping () -> Success) {
             self.expectation = expectation
             accumulate([accumulateCall]).upon { _ in }
         }

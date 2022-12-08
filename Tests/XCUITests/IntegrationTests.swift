@@ -12,7 +12,6 @@ private let loginEntry = "https://accounts.google.com"
 private let tabOpenInDesktop = "http://example.com/"
 
 class IntegrationTests: BaseTestCase {
-
     let testWithDB = ["testFxASyncHistory"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 
@@ -32,7 +31,6 @@ class IntegrationTests: BaseTestCase {
                         LaunchArguments.LoadDatabasePrefix + historyDB,
                         LaunchArguments.SkipContextualHints,
                         LaunchArguments.TurnOffTabGroupsInUserPreferences]
-
      } else if testFxAChinaServer.contains(key) {
         launchArguments = [LaunchArguments.SkipIntro,
                            LaunchArguments.FxAChinaServer,

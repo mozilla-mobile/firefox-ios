@@ -8,7 +8,6 @@ import Glean
 import XCTest
 
 class TelemetryWrapperTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
@@ -329,7 +328,6 @@ class TelemetryWrapperTests: XCTestCase {
         )
 
         testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.createNewTab)
-
     }
 
     func test_viewHistoryPanel_GleanIsCalled() {
@@ -433,13 +431,11 @@ class TelemetryWrapperTests: XCTestCase {
 
 // MARK: - Helper functions to test telemetry
 extension XCTestCase {
-
     func testEventMetricRecordingSuccess<Keys: EventExtraKey, Extras: EventExtras>(
         metric: EventMetricType<Keys, Extras>,
         file: StaticString = #file,
         line: UInt = #line
     ) {
-
         XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
         XCTAssertEqual(metric.testGetValue()!.count, 1, file: file, line: line)
 

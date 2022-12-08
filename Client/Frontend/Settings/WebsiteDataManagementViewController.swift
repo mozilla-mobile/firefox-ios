@@ -87,7 +87,6 @@ class WebsiteDataManagementViewModel {
 
 class WebsiteDataManagementViewController: UIViewController, UITableViewDataSource,
                                            UITableViewDelegate, UISearchBarDelegate, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

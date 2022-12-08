@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class ThrottlerTests: XCTestCase {
-
     func testThrottle_1000SecondsThrottle_doesntCall() {
         let subject = Throttler(seconds: 100000, on: DispatchQueue.global())
         var throttleCalled = 0

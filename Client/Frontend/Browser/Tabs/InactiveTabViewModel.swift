@@ -18,7 +18,6 @@ struct InactiveTabStates: Codable {
 }
 
 struct InactiveTabModel: Codable {
-
     // Contains [TabUUID String : InactiveTabState current or for next launch]
     var tabWithStatus: [String: InactiveTabStates] = [String: InactiveTabStates]()
 
@@ -68,7 +67,6 @@ class InactiveTabViewModel {
 
     init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve()) {
         self.appSessionManager = appSessionManager
-
     }
 
     func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) {

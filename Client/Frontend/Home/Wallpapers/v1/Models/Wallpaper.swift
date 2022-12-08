@@ -90,7 +90,6 @@ struct Wallpaper: Equatable {
             case .landscape:
                 return try storageUtility.fetchImageNamed(landscapeID)
             }
-
         } catch {
             return nil
         }

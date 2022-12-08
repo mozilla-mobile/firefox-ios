@@ -25,7 +25,6 @@ struct PhotonRowActions {
 
 // MARK: - SingleActionViewModel
 class SingleActionViewModel {
-
     enum IconAlignment {
         case left
         case right

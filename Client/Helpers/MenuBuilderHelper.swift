@@ -6,7 +6,6 @@ import UIKit
 import Shared
 
 class MenuBuilderHelper {
-
     struct MenuIdentifiers {
         static let history = UIMenu.Identifier("com.mozilla.firefox.menus.history")
         static let bookmarks = UIMenu.Identifier("com.mozilla.firefox.menus.bookmarks")

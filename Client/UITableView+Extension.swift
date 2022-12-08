@@ -6,7 +6,6 @@ import UIKit
 
 // MARK: - Visible Headers
 extension UITableView {
-
     var visibleHeaders: [UITableViewHeaderFooterView] {
         var visibleHeaders = [UITableViewHeaderFooterView]()
         for sectionIndex in indexesOfVisibleHeaderSections {

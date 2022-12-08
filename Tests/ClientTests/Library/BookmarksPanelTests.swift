@@ -9,7 +9,6 @@ import Shared
 @testable import Client
 
 class BookmarksPanelTests: XCTestCase {
-
     // MARK: Bottom left action
 
     func testBottomLeftAction_ItemEditModeState_DoesNothing() throws {
@@ -174,7 +173,6 @@ class BookmarksPanelTests: XCTestCase {
 }
 
 private extension BookmarksPanelTests {
-
     func createPanel() -> SpyBookmarksPanel {
         let profile = MockProfile()
         let viewModel = BookmarksPanelViewModel(profile: profile, bookmarkFolderGUID: "TestGuid")
@@ -184,7 +182,6 @@ private extension BookmarksPanelTests {
 }
 
 class SpyBookmarksPanel: BookmarksPanel {
-
     // Spying on the present method to catch the presented view controller
     var viewControllerPresented: UIViewController?
     override func present(_ viewControllerToPresent: UIViewController,
@@ -196,7 +193,6 @@ class SpyBookmarksPanel: BookmarksPanel {
 }
 
 class SpyNavigationController: UINavigationController {
-
     var pushedViewController: UIViewController?
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         pushedViewController = viewController

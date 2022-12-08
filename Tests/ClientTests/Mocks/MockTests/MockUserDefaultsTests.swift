@@ -7,7 +7,6 @@ import Foundation
 import XCTest
 
 class MockUserDefaultsTests: XCTestCase {
-
     // MARK: - Properties
     var sut: MockUserDefaults!
 

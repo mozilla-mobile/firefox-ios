@@ -7,7 +7,6 @@ import Storage
 import UIKit
 
 class JumpBackInViewModel: FeatureFlaggable {
-
     struct UX {
         static let jumpBackInCellHeight: CGFloat = 112
         static let syncedTabCellPortraitCompactHeight: CGFloat = 182
@@ -176,7 +175,6 @@ class JumpBackInViewModel: FeatureFlaggable {
 
 // MARK: - Private: Prepare UI data
 private extension JumpBackInViewModel {
-
     private func refreshData(maxItemsToDisplay: JumpBackInDisplayGroupCount) {
         jumpBackInList = createJumpBackInList(
             from: recentTabs,
@@ -229,7 +227,6 @@ private extension JumpBackInViewModel {
 
 // MARK: - Private: Configure UI
 private extension JumpBackInViewModel {
-
     func configureJumpBackInCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell, indexPath: IndexPath) {
         let firstGroupItem = group.groupedItems.first
         let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
@@ -400,7 +397,6 @@ private extension JumpBackInViewModel {
 
 // MARK: HomeViewModelProtocol
 extension JumpBackInViewModel: HomepageViewModelProtocol {
-
     var sectionType: HomepageSectionType {
         return .jumpBackIn
     }
@@ -491,7 +487,6 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
 
 // MARK: FxHomeSectionHandler
 extension JumpBackInViewModel: HomepageSectionHandler {
-
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let jumpBackInItemRow = sectionLayout.indexOfJumpBackInItem(for: indexPath) {
@@ -506,7 +501,6 @@ extension JumpBackInViewModel: HomepageSectionHandler {
                 configureJumpBackInCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
             }
             return jumpBackInCell
-
         } else if hasSyncedTab {
             // SyncedTab cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier,
@@ -538,7 +532,6 @@ extension JumpBackInViewModel: HomepageSectionHandler {
             if jumpBackInItemRow == jumpBackInList.itemsToDisplay - 1,
                let group = jumpBackInList.group {
                 switchTo(group: group)
-
             } else if let tab = jumpBackInList.tabs[safe: jumpBackInItemRow] {
                 switchTo(tab: tab)
             }

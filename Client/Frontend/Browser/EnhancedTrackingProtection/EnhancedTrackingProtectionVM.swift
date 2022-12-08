@@ -6,7 +6,6 @@ import Shared
 import Storage
 
 class EnhancedTrackingProtectionMenuVM {
-
     // MARK: - Variables
     var tab: Tab
     var profile: Profile

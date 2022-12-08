@@ -5,7 +5,6 @@
 import Foundation
 
 class SpyNotificationCenter: NotificationCenter {
-
     var notificationNameSent: NSNotification.Name?
     var notificationObjectSent: Any?
     override func post(name aName: NSNotification.Name, object anObject: Any?) {

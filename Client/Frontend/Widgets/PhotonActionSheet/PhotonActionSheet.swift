@@ -21,7 +21,6 @@ extension PhotonActionSheet: Notifiable {
 
 // This file is main table view used for the action sheet
 class PhotonActionSheet: UIViewController, Themeable {
-
     struct UX {
         static let maxWidth: CGFloat = 414
         static let padding: CGFloat = 6
@@ -386,7 +385,6 @@ class PhotonActionSheet: UIViewController, Themeable {
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let section = viewModel.actions[safe: indexPath.section],
               let action = section[safe: indexPath.row],

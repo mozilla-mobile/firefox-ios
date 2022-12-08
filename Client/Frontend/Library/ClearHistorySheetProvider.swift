@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 
 class ClearHistorySheetProvider {
-
     private let profile: Profile
     private let tabManager: TabManager
 
@@ -23,7 +22,6 @@ class ClearHistorySheetProvider {
         onViewController viewController: UIViewController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
     ) {
-
         let alert = createAlertAndConfigureWithArrowIfNeeded(from: viewController)
         setupActions(for: alert, didComplete: didComplete)
 
@@ -62,18 +60,14 @@ class ClearHistorySheetProvider {
         to alert: UIAlertController,
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
     ) {
-
         typealias DateOptions = HistoryDeletionUtilityDateOptions
-
         [
             // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-4187
 //            (String.ClearHistoryMenuOptionTheLastHour, DateOptions.lastHour),
             (String.ClearHistoryMenuOptionToday, DateOptions.today),
             (String.ClearHistoryMenuOptionTodayAndYesterday, DateOptions.yesterday)
         ].forEach { (name, timeRange) in
-
             let action = UIAlertAction(title: name, style: .destructive) { _ in
-
                 let deletionUtility = HistoryDeletionUtility(with: self.profile)
                 deletionUtility.deleteHistoryFrom(timeRange) { dateOption in
                     NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
@@ -90,7 +84,6 @@ class ClearHistorySheetProvider {
         didComplete: ((HistoryDeletionUtilityDateOptions) -> Void)? = nil
     ) {
         alert.addAction(UIAlertAction(title: .ClearHistoryMenuOptionEverything, style: .destructive) { _ in
-
             let deletionUtilitiy = HistoryDeletionUtility(with: self.profile)
             deletionUtilitiy.deleteHistoryFrom(.allTime) { dateOption in
                 DispatchQueue.main.async {

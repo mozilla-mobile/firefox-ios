@@ -7,7 +7,6 @@ import XCTest
 import MozillaAppServices
 
 class HistoryHighlightsViewModelTests: XCTestCase {
-
     private var subject: HistoryHighlightsViewModel!
     private var profile: MockProfile!
     private var dataAdaptor: MockHistoryHighlightsDataAdaptor!

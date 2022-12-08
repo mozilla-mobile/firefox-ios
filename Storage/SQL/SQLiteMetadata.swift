@@ -54,5 +54,4 @@ extension SQLiteMetadata: Metadata {
         let sql = "DELETE FROM page_metadata WHERE expired_at <= (CAST(strftime('%s', 'now') AS LONG)*1000)"
         return self.db.run(sql)
     }
-
 }

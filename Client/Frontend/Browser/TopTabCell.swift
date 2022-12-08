@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, ReusableCell {
-
     struct UX {
         static let faviconSize: CGFloat = 20
         static let tabCornerRadius: CGFloat = 8

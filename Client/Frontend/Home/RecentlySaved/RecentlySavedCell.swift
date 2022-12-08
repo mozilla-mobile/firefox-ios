@@ -7,7 +7,6 @@ import Storage
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
 class RecentlySavedCell: UICollectionViewCell, ReusableCell {
-
     private struct UX {
         static let bookmarkTitleFontSize: CGFloat = 12
         static let containerSpacing: CGFloat = 16

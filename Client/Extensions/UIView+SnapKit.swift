@@ -6,7 +6,6 @@ import Foundation
 import SnapKit
 
 extension UIView {
-
     var safeArea: ConstraintBasicAttributesDSL {
         return safeAreaLayoutGuide.snp
     }

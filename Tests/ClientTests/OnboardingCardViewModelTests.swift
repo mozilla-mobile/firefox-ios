@@ -8,7 +8,6 @@ import Glean
 @testable import Client
 
 class OnboardingCardViewModelTests: XCTestCase {
-
     var subject: OnboardingCardViewModel!
 
     override func setUp() {
@@ -123,5 +122,4 @@ class OnboardingCardViewModelTests: XCTestCase {
                                    secondaryAction: "Button2",
                                    a11yIdRoot: "A11yId")
     }
-
 }

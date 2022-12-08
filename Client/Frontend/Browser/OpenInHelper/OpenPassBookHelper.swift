@@ -7,7 +7,6 @@ import Shared
 import WebKit
 
 class OpenPassBookHelper {
-
     private enum InvalidPassError: Error {
         case contentsOfURL
         case dataTaskURL
@@ -40,7 +39,6 @@ class OpenPassBookHelper {
         do {
             try openPassWithContentsOfURL()
             completion()
-
         } catch InvalidPassError.contentsOfURL {
             openPassWithCookies { error in
                 if error != nil {
@@ -49,7 +47,6 @@ class OpenPassBookHelper {
                     completion()
                 }
             }
-
         } catch {
             presentErrorAlert(completion: completion)
         }

@@ -8,7 +8,6 @@ import Shared
 
 // Top site UI class, used in the home top site section
 final class TopSite {
-
     var site: Site
     var title: String
 

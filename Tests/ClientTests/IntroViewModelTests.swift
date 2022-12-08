@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 class IntroViewModelTests: XCTestCase {
-
     var viewModel: IntroViewModel!
 
     override func setUp() {

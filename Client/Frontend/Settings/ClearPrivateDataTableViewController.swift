@@ -118,7 +118,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         }
         assert(section == SectionButton)
         return 1
-
     }
 
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {

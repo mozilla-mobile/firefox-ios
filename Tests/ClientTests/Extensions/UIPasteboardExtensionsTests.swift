@@ -7,7 +7,6 @@ import UIKit
 import XCTest
 
 class UIPasteboardExtensionsTests: XCTestCase {
-
     fileprivate var pasteboard: UIPasteboard!
 
     override func setUp() {
@@ -43,5 +42,4 @@ class UIPasteboardExtensionsTests: XCTestCase {
         XCTAssertEqual(pasteboard.items[0][kUTTypeURL as String] as? URL, expectedURL)
         XCTAssertNotNil(pasteboard.items[0][expectedImageTypeKey as String])
     }
-
 }

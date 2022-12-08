@@ -227,7 +227,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
            !tabGroups.isEmpty,
            tabGroups.contains(where: { $0.groupedItems.contains(where: { $0 == tabToFocus }) }) {
             focusGroup(from: tabGroups, with: tabToFocus)
-
         } else {
             focusTab(tabToFocus)
         }
@@ -321,7 +320,6 @@ extension GridTabViewController: TabManagerDelegate {
 }
 
 extension GridTabViewController: TabDisplayer {
-
     func focusSelectedTab() {
         self.focusItem()
     }
@@ -337,7 +335,6 @@ extension GridTabViewController: TabDisplayer {
 }
 
 extension GridTabViewController {
-
     @objc func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         if let langID = Locale.preferredLanguages.first {
@@ -397,7 +394,6 @@ extension GridTabViewController {
         self.navigationController?.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
-
 }
 
 // MARK: - App Notifications
@@ -497,7 +493,6 @@ extension GridTabViewController: TabCellDelegate {
 }
 
 extension GridTabViewController: TabPeekDelegate {
-
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
     }
@@ -510,7 +505,6 @@ extension GridTabViewController: TabPeekDelegate {
         // Tab peek is only available on regular tabs
         if let index = tabDisplayManager.dataStore.index(of: tab),
            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
-
             cell.close()
             NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
         }

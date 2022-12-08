@@ -8,7 +8,6 @@ struct DarkTheme: Theme {
 }
 
 private struct DarkColourPalette: ThemeColourPalette {
-
     // MARK: - Layers
     var layer1: UIColor = FXColors.DarkGrey60
     var layer2: UIColor = FXColors.DarkGrey30

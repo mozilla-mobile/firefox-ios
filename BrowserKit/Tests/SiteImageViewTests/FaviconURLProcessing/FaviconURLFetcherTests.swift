@@ -6,7 +6,6 @@ import XCTest
 @testable import SiteImageView
 
 class FaviconURLFetcherTests: XCTestCase {
-
     var subject: DefaultFaviconURLFetcher!
     var networkMock: HTMLDataRequestMock!
 
@@ -49,7 +48,6 @@ class FaviconURLFetcherTests: XCTestCase {
     private func generateHTMLData(string: String) -> Data? {
         return string.data(using: .utf8)
     }
-
 }
 
 // MARK: - Mock HTML Data

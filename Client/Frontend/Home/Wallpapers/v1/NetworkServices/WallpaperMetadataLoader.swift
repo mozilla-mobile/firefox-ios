@@ -5,7 +5,6 @@
 import Foundation
 
 class WallpaperMetadataLoader: WallpaperMetadataCodableProtocol {
-
     // MARK: - Properties
     private let networkModule: WallpaperNetworking
 

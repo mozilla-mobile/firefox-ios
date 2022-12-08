@@ -111,10 +111,8 @@ extension BrowserViewController {
 
         if backList.count > 1 && backList.last?.url == readerModeURL {
             webView.go(to: backList.last!)
-
         } else if !forwardList.isEmpty && forwardList.first?.url == readerModeURL {
             webView.go(to: forwardList.first!)
-
         } else {
             // Store the readability result in the cache and load it. This will later move to the ReadabilityHelper.
             webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).readerize()") { object, error in
@@ -147,10 +145,8 @@ extension BrowserViewController {
 
         if backList.count > 1 && backList.last?.url == originalURL {
             webView.go(to: backList.last!)
-
         } else if !forwardList.isEmpty && forwardList.first?.url == originalURL {
             webView.go(to: forwardList.first!)
-
         } else if let nav = webView.load(URLRequest(url: originalURL)) {
             ignoreNavigationInTab(tab, navigation: nav)
         }

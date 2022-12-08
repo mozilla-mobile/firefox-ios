@@ -9,7 +9,6 @@ import Storage
 @testable import Client
 
 class ClosedTabsStoreTests: XCTestCase {
-
     func testStoreHasNoTabsAtInit() {
         let store = createStore()
         XCTAssertEqual(store.tabs.count, 0)
@@ -121,7 +120,6 @@ class ClosedTabsStoreTests: XCTestCase {
 
 // MARK: - Helpers
 private extension ClosedTabsStoreTests {
-
     func createStore() -> ClosedTabsStore {
         let mockProfilePrefs = MockProfilePrefs()
         return ClosedTabsStore(prefs: mockProfilePrefs)

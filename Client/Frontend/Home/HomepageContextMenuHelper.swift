@@ -22,7 +22,6 @@ extension HomepageContextMenuHelperDelegate {
 }
 
 class HomepageContextMenuHelper: HomepageContextMenuProtocol {
-
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
     private var viewModel: HomepageViewModel
@@ -50,7 +49,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         var actions = [PhotonRowActions]()
         if sectionType == .topSites, let topSitesActions = getTopSitesActions(site: site) {
             actions = topSitesActions
-
         } else if sectionType == .pocket, let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
         }
@@ -71,7 +69,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                with sourceView: UIView?,
                                sectionType: HomepageSectionType
     ) -> [PhotonRowActions]? {
-
         guard sectionType == .historyHighlights,
               let highlightsActions = getHistoryHighlightsActions(for: highlightItem)
         else { return nil }
@@ -93,7 +90,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         return [SingleActionViewModel(title: .RemoveContextMenuTitle,
                                       iconString: ImageIdentifiers.actionRemove,
                                       tapHandler: { _ in
-
             self.viewModel.historyHighlightsViewModel.delete(highlightItem)
             self.sendHistoryHighlightContextualTelemetry(type: .remove)
         }).items]
@@ -190,7 +186,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             if UIDevice.current.userInterfaceIdiom == .pad,
                let popoverController = controller.popoverPresentationController,
                let getSourceRect = self.getPopoverSourceRect {
-
                 popoverController.sourceView = sourceView
                 popoverController.sourceRect = getSourceRect(sourceView)
                 popoverController.permittedArrowDirections = [.up, .down, .left]
@@ -230,12 +225,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             topSiteActions = [getRemovePinTopSiteAction(site: site),
                               getOpenInNewPrivateTabAction(siteURL: siteURL),
                               getRemoveTopSiteAction(site: site)]
-
         } else if site as? SponsoredTile != nil {
             topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL),
                               getSettingsAction(),
                               getSponsoredContentAction()]
-
         } else {
             topSiteActions = [getPinTopSiteAction(site: site),
                               getOpenInNewPrivateTabAction(siteURL: siteURL),
@@ -249,7 +242,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         return SingleActionViewModel(title: .RemoveContextMenuTitle,
                                      iconString: ImageIdentifiers.actionRemove,
                                      tapHandler: { _ in
-
             self.viewModel.topSiteViewModel.removePinTopSite(site)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
                 self?.viewModel.topSiteViewModel.hideURLFromTopSites(site)

@@ -5,7 +5,6 @@
 @testable import Client
 
 class MockHistoryHighlightsDelegate: HistoryHighlightsDelegate {
-
     var didLoadNewDataCallCount = 0
 
     func didLoadNewData() {

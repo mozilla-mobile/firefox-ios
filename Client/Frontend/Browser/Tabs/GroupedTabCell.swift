@@ -8,7 +8,6 @@ import UIKit
 import Shared
 
 struct GroupedTabCellProperties {
-
     struct CellUX {
         static let titleFontSize: CGFloat = 17
         static let defaultCellHeight: CGFloat = 300
@@ -38,7 +37,6 @@ class GroupedTabCell: UICollectionViewCell,
                       GroupedTabsDelegate,
                       ReusableCell,
                       ThemeApplicable {
-
     var tabDisplayManagerDelegate: GroupedTabDelegate?
     var tabGroups: [ASGroup<Tab>]?
     var selectedTab: Tab?
@@ -173,7 +171,6 @@ class GroupedTabContainerCell: UITableViewCell,
                                TabCellDelegate,
                                ReusableCell,
                                ThemeApplicable {
-
     // Delegate
     var delegate: GroupedTabsDelegate?
 

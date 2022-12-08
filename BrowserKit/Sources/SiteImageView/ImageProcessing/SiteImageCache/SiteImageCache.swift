@@ -7,7 +7,6 @@ import UIKit
 
 /// Handles caching of images. Will cache following the different image type. So for a given domain you can get different image type.
 protocol SiteImageCache {
-
     /// Get the image depending on the image type
     /// - Parameters:
     ///   - domain: The domain to retrieve the image from
@@ -27,7 +26,6 @@ protocol SiteImageCache {
 }
 
 actor DefaultSiteImageCache: SiteImageCache {
-
     private let imageCache: DefaultImageCache
 
     init(imageCache: DefaultImageCache = ImageCache.default) {
@@ -42,7 +40,6 @@ actor DefaultSiteImageCache: SiteImageCache {
                 throw SiteImageError.unableToRetrieveFromCache("Image was nil")
             }
             return image
-
         } catch let error as KingfisherError {
             throw SiteImageError.unableToRetrieveFromCache(error.errorDescription ?? "No description")
         }

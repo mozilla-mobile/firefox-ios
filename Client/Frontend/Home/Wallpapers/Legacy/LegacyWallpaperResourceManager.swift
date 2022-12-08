@@ -35,18 +35,15 @@ struct LegacyWallpaperImageResourceName {
 }
 
 class LegacyWallpaperResourceManager {
-
     // MARK: - Resource verification
     func verifyResources(for specialWallpapers: [LegacyWallpaper]) {
         specialWallpapers.forEach { wallpaper in
             if wallpaper.meetsDateAndLocaleCriteria && !verifyResourceExists(for: wallpaper) {
                 let networkUtility = LegacyWallpaperNetworkUtility()
                 networkUtility.downloadTaskFor(id: getResourceNames(for: wallpaper.name))
-
             } else if !wallpaper.meetsDateAndLocaleCriteria {
                 deleteResources(for: wallpaper)
             }
-
         }
     }
 
@@ -75,7 +72,6 @@ class LegacyWallpaperResourceManager {
     }
 
     private func getResourceOf(type: WallpaperResourceType, for wallpaper: LegacyWallpaper) -> LegacyWallpaperImageSet {
-
         let imageName = getResourceNames(for: wallpaper.name)
 
         switch type {

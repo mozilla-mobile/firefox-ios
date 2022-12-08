@@ -156,14 +156,12 @@ enum NavigationPath {
             } else {
                 return nil
             }
-
         } else if ["http", "https"].contains(scheme) {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
-
         } else {
             return nil
         }
@@ -325,7 +323,6 @@ enum NavigationPath {
     }
 
     private static func handleSettings(settings: SettingsPage, with rootNav: UINavigationController, baseSettingsVC: AppSettingsTableViewController, and bvc: BrowserViewController) {
-
         guard let profile = baseSettingsVC.profile,
               let tabManager = baseSettingsVC.tabManager
         else { return }

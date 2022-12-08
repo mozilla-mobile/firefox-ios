@@ -9,7 +9,6 @@ import Shared
 @testable import Client
 
 class HistoryPanelViewModelTests: XCTestCase {
-
     var subject: HistoryPanelViewModel!
     var profile: MockProfile!
 

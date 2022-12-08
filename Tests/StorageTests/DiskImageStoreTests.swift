@@ -52,7 +52,6 @@ class DiskImageStoreTests: XCTestCase {
 
 // MARK: Helper methods
 private extension DiskImageStoreTests {
-
     func clearStore() {
         _ = store.clearExcluding(Set()).value
     }

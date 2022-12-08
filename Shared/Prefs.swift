@@ -135,7 +135,6 @@ public struct PrefsKeys {
 
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"
-
 }
 
 public struct PrefsDefaults {

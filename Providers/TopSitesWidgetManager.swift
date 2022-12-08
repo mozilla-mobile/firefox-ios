@@ -12,7 +12,6 @@ protocol TopSitesWidget {
 }
 
 class TopSitesWidgetManager: TopSitesWidget {
-
     private let topSitesProvider: TopSitesProvider
 
     init(topSitesProvider: TopSitesProvider) {
@@ -21,7 +20,6 @@ class TopSitesWidgetManager: TopSitesWidget {
 
     @available(iOS 14.0, *)
     func writeWidgetKitTopSites() {
-
         topSitesProvider.getTopSites { sites in
             guard let sites = sites else { return }
 

@@ -5,7 +5,6 @@
 import UIKit
 
 class ToolbarButton: UIButton {
-
     // MARK: - Variables
 
     var selectedTintColor: UIColor!

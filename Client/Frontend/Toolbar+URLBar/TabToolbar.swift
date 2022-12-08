@@ -6,7 +6,6 @@ import UIKit
 import Shared
 
 class TabToolbar: UIView {
-
     // MARK: - Variables
 
     weak var tabToolbarDelegate: TabToolbarDelegate?
@@ -127,9 +126,7 @@ extension TabToolbar: TabToolbarProtocol {
         helper?.setMiddleButtonState(state)
     }
 
-    func updatePageStatus(_ isWebPage: Bool) {
-
-    }
+    func updatePageStatus(_ isWebPage: Bool) { }
 
     func updateTabCount(_ count: Int, animated: Bool) {
         tabsButton.updateTabCount(count, animated: animated)

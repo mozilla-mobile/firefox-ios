@@ -5,7 +5,6 @@
 import UIKit
 
 public struct BottomSheetViewModel {
-
     private struct UX {
         static let cornerRadius: CGFloat = 8
         static let animationTransitionDuration: CGFloat = 0.3

@@ -6,7 +6,6 @@ import UIKit
 import Storage
 
 class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
-
     struct UX {
         static let borderWidth: CGFloat = 0.5
         static let padding: CGFloat = 12
@@ -65,9 +64,9 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
                 self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.iconSize)
             }
         }
+
         titleLabel.text = site.title.isEmpty ? site.url : site.title
         descriptionLabel.text = site.tileURL.baseDomain
-
     }
 
     func applyTheme(theme: Theme) {
