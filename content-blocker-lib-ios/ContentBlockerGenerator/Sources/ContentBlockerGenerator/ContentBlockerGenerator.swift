@@ -44,6 +44,10 @@ public struct ContentBlockerGenerator {
 
         for categoryTitle in categories {
             let fileContent = generateFileContent(actionType: actionType, categoryTitle: categoryTitle)
+            guard !fileContent.isEmpty else {
+                return
+            }
+
             fileManager.write(fileContent: fileContent, categoryTitle: categoryTitle, actionType: actionType)
         }
     }
@@ -55,6 +59,6 @@ public struct ContentBlockerGenerator {
         let fileLines = parser.parseCategoryList(categoryList,
                                                  actionType: actionType)
 
-        return "[\n" + fileLines.joined(separator: ",\n") + "\n]"
+        return fileLines.isEmpty ? "" : "\n" + fileLines.joined(separator: ",\n") + "\n]"
     }
 }

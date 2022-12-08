@@ -7,12 +7,24 @@ import XCTest
 
 final class ContentBlockerParserTests: XCTestCase {
 
+    private var parserData: ParserData!
+
+    override func setUp() {
+        super.setUp()
+        self.parserData = ParserData()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        self.parserData = nil
+    }
+
     func testParsingAdsFile() throws {
-        let entityJson = getDictData(from: ParserData.entitylist)
+        let entityJson = parserData.getDictData(from: .entity)
         let subject = DefaultContentBlockerParser()
         subject.parseEntityList(entityJson)
 
-        let adsList = getListData(from: ParserData.adsTrackDigest256)
+        let adsList = parserData.getListData(from: .ads)
         let result = subject.parseCategoryList(adsList,
                                                actionType: .blockAll)
 
@@ -34,11 +46,11 @@ final class ContentBlockerParserTests: XCTestCase {
     }
 
     func testParsingAdsFile_withoutEntity() throws {
-        let entityJson = getDictData(from: ParserData.emptyEntitylist)
+        let entityJson = parserData.getDictData(from: .emptyEntity)
         let subject = DefaultContentBlockerParser()
         subject.parseEntityList(entityJson)
 
-        let adsList = getListData(from: ParserData.adsTrackDigest256)
+        let adsList = parserData.getListData(from: .ads)
         let result = subject.parseCategoryList(adsList,
                                                actionType: .blockAll)
 
@@ -58,48 +70,4 @@ final class ContentBlockerParserTests: XCTestCase {
         XCTAssertEqual(result[1], secondLine)
         XCTAssertEqual(result[2], thirdLine)
     }
-}
-
-// MARK: - Helpers
-private extension ContentBlockerParserTests {
-    func getDictData(from dict: String) -> [String: Any] {
-        return try! JSONSerialization.jsonObject(with: dict.data(using: .utf8)!,
-                                                 options: []) as! [String: Any]
-    }
-
-    func getListData(from list: String) -> [String] {
-        return try! JSONSerialization.jsonObject(with: list.data(using: .utf8)!,
-                                                 options: []) as! [String]
-    }
-}
-
-// MARK: - Data
-private struct ParserData {
-    static let adsTrackDigest256 = """
-[
-  "2leep.com",
-  "adnologies.com",
-  "heias.com"
-]
-"""
-
-    static let entitylist = """
-{
-"license": "Copyright 2010-2020 Disconnect, Inc.",
-"entities":
-    {
-        "2leep.com": { "properties": [ "2leep.com" ], "resources": [ "2leep.com" ] },
-        "adnologies": { "properties": [ "adnologies.com", "heias.com" ], "resources": [ "adnologies.com", "heias.com" ] }
-    }
-}
-"""
-
-    static let emptyEntitylist = """
-{
-"license": "Copyright 2010-2020 Disconnect, Inc.",
-"entities":
-    {
-    }
-}
-"""
 }

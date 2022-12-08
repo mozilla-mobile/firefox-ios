@@ -16,7 +16,10 @@ class DefaultContentBlockerParser: ContentBlockerParser {
     private var entities = [String: Entity]()
 
     func parseEntityList(_ entitiesList: [String: Any]) {
-        let entitiesRaw = entitiesList["entities"]! as! [String: Any]
+        guard let entitiesRaw = entitiesList["entities"] as? [String: Any] else {
+            return
+        }
+
         entitiesRaw.forEach {
             let properties = ($0.value as! [String: [String]])["properties"]!
             let resources = ($0.value as! [String: [String]])["resources"]!
