@@ -83,6 +83,7 @@ MozBuildID.xcconfig
 __pycache__
 .pytest_cache
 *.pyc
+*venv/
 
 # SQLite
 *.db-shm
