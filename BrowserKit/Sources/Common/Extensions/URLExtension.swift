@@ -18,7 +18,52 @@ extension URL {
         return baseDomain.replacingOccurrences(of: ".\(publicSuffix)", with: "")
     }
 
-    var normalizedHost: String? {
+    /**
+     * Returns just the domain, but with the same scheme, and a trailing '/'.
+     *
+     * E.g., https://m.foo.com/bar/baz?noo=abc#123  => https://foo.com/
+     *
+     * Any failure? Return this URL.
+     */
+    public var domainURL: URL {
+        if let normalized = self.normalizedHost {
+            // Use NSURLComponents instead of NSURL since the former correctly preserves
+            // brackets for IPv6 hosts, whereas the latter escapes them.
+            var components = URLComponents()
+            components.scheme = self.scheme
+            components.port = self.port
+            components.host = normalized
+            components.path = "/"
+            return components.url ?? self
+        }
+        return self
+    }
+
+    /// Creates a short domain version of a link's url
+    /// e.g. url: http://www.foosite.com  =>  "foosite"
+    public var shortDomain: String? {
+        return host.flatMap { shortDomain($0, etld: publicSuffix ?? "") }
+    }
+
+    /**
+    Returns the base domain from a given hostname. The base domain name is defined as the public domain suffix
+    with the base private domain attached to the front. For example, for the URL www.bbc.co.uk, the base domain
+    would be bbc.co.uk. The base domain includes the public suffix (co.uk) + one level down (bbc).
+
+    :returns: The base domain string for the given host name.
+    */
+    public var baseDomain: String? {
+        guard !isIPv6, let host = host else { return nil }
+
+        // If this is just a hostname and not a FQDN, use the entire hostname.
+        if !host.contains(".") {
+            return host
+        }
+
+        return publicSuffixFromHost(host, withAdditionalParts: 1)
+    }
+
+    public var normalizedHost: String? {
         // Use components.host instead of self.host since the former correctly preserves
         // brackets for IPv6 hosts, whereas the latter strips them.
         guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
@@ -34,14 +79,41 @@ extension URL {
         return host
     }
 
+    var normalizedHostAndPath: String? {
+        return normalizedHost.flatMap { $0 + self.path }
+    }
+
     /**
     Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/.
     For example for the url www.bbc.co.uk, based on the entries in the TLD list, the public suffix would return co.uk.
 
     :returns: The public suffix for within the given hostname.
     */
-    var publicSuffix: String? {
+    public var publicSuffix: String? {
         return host.flatMap { publicSuffixFromHost($0, withAdditionalParts: 0) }
+    }
+
+    var isIPv6: Bool {
+        return host?.contains(":") ?? false
+    }
+
+    /// Creates a short domain version of a link's url
+    /// e.g. url: http://www.foosite.com  =>  "foosite"
+    /// - Parameters:
+    ///   - host: hostname
+    ///   - etld: top level domain to remove from host
+    /// - Returns: The short version of the domain
+    func shortDomain(_ host: String, etld: String) -> String? {
+        // Check edge case where the host is either a single or double '.'.
+        if host.isEmpty || NSString(string: host).lastPathComponent == "." {
+            return ""
+        }
+
+        // Clean up the url by removing www.
+        var hostname = host.replacingOccurrences(of: "www.", with: "")
+        hostname = hostname.replacingOccurrences(of: ".\(etld)", with: "")
+
+        return hostname
     }
 
     func publicSuffixFromHost(_ host: String, withAdditionalParts additionalPartCount: Int) -> String? {
