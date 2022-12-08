@@ -40,7 +40,8 @@ enum DictData: String {
 "entities":
     {
         "2leep.com": { "properties": [ "2leep.com" ], "resources": [ "2leep.com" ] },
-        "adnologies": { "properties": [ "adnologies.com", "heias.com" ], "resources": [ "adnologies.com", "heias.com" ] }
+        "adnologies": { "properties": [ "adnologies.com", "heias.com" ], "resources": [ "adnologies.com", "heias.com" ] },
+        "365Media": { "properties": [ "aggregateintelligence.com" ], "resources": [ "365media.com", "aggregateintelligence.com" ] }
     }
 }
 """
@@ -73,7 +74,8 @@ enum ListData: String {
 [
   "2leep.com",
   "adnologies.com",
-  "heias.com"
+  "heias.com",
+  "365media.com"
 ]
 """
 }

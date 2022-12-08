@@ -39,10 +39,15 @@ final class ContentBlockerParserTests: XCTestCase {
         let expectedThirdLine = """
                {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?heias\\\\.com\",\"load-type\":[\"third-party\"],\"unless-domain\":[\"*adnologies.com\",\"*heias.com\"]}}
                """
-        XCTAssertEqual(result.count, 3)
+
+        let expectedFourthLine = """
+               {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?365media\\\\.com\",\"load-type\":[\"third-party\"],\"unless-domain\":[\"*aggregateintelligence.com\"]}}
+               """
+        XCTAssertEqual(result.count, 4)
         XCTAssertEqual(result[0], expectedFirstLine)
         XCTAssertEqual(result[1], expectedSecondLine)
         XCTAssertEqual(result[2], expectedThirdLine)
+        XCTAssertEqual(result[3], expectedFourthLine)
     }
 
     func testParsingAdsFile_withoutEntity() throws {
@@ -65,9 +70,14 @@ final class ContentBlockerParserTests: XCTestCase {
         let thirdLine = """
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\\\.)?heias\\\\.com","load-type":["third-party"]}}
         """
-        XCTAssertEqual(result.count, 3)
+
+        let fourthLine = """
+        {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\\\.)?365media\\\\.com","load-type":["third-party"]}}
+        """
+        XCTAssertEqual(result.count, 4)
         XCTAssertEqual(result[0], firstLine)
         XCTAssertEqual(result[1], secondLine)
         XCTAssertEqual(result[2], thirdLine)
+        XCTAssertEqual(result[3], fourthLine)
     }
 }

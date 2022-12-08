@@ -12,7 +12,7 @@ protocol ContentBlockerParser {
 
 class DefaultContentBlockerParser: ContentBlockerParser {
 
-    // Key is each property of an entity, so each resources for an entity is easily accessible
+    // Key is each resource of an entity, so each properties for an entity's resource is easily accessible
     private var entities = [String: Entity]()
 
     func parseEntityList(_ entitiesList: [String: Any]) {
@@ -24,7 +24,7 @@ class DefaultContentBlockerParser: ContentBlockerParser {
             let properties = ($0.value as! [String: [String]])["properties"]!
             let resources = ($0.value as! [String: [String]])["resources"]!
             let entity = Entity(properties: properties, resources: resources)
-            properties.forEach {
+            resources.forEach {
                 entities[$0] = entity
             }
         }
