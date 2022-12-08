@@ -219,6 +219,17 @@ class BrowserViewController: UIViewController {
         leaveOverlayMode(didCancel: true)
     }
 
+    @objc func openTabNotification(notification: Notification) {
+        guard let openTabObject = notification.object as? OpenTabNotificationObject else {
+            return
+        }
+
+        switch openTabObject.type {
+        case .loadQueuedTabs(let urls):
+            loadQueuedTabs(receivedURLs: urls)
+        }
+    }
+
     @objc func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
@@ -494,6 +505,11 @@ class BrowserViewController: UIViewController {
             self,
             selector: #selector(didTapUndoCloseAllTabToast),
             name: .DidTapUndoCloseAllTabToast,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(openTabNotification),
+            name: .OpenTabNotification,
             object: nil)
     }
 
