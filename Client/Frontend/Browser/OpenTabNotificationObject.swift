@@ -8,7 +8,6 @@ import Foundation
 // a singleton. This is an intermediary step to move towards multiple windows
 // as part of the multitasking epic.
 struct OpenTabNotificationObject {
-
     enum ObjectType {
         case loadQueuedTabs([URL])
     }
