@@ -10,7 +10,7 @@ class BrowserToolset {
 
     lazy var backButton: InsetButton = {
         let backButton = InsetButton()
-        backButton.setImage(#imageLiteral(resourceName: "icon_back_active"), for: .normal)
+        backButton.setImage(.backActive, for: .normal)
         backButton.addTarget(self, action: #selector(didPressBack), for: .touchUpInside)
         backButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         backButton.accessibilityLabel = UIConstants.strings.browserBack
@@ -20,7 +20,7 @@ class BrowserToolset {
 
     lazy var forwardButton: InsetButton = {
         let forwardButton = InsetButton()
-        forwardButton.setImage(#imageLiteral(resourceName: "icon_forward_active"), for: .normal)
+        forwardButton.setImage(.forwardActive, for: .normal)
         forwardButton.addTarget(self, action: #selector(didPressForward), for: .touchUpInside)
         forwardButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         forwardButton.accessibilityLabel = UIConstants.strings.browserForward
@@ -30,7 +30,7 @@ class BrowserToolset {
 
     lazy var stopReloadButton: InsetButton = {
         let stopReloadButton = InsetButton()
-        stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
+        stopReloadButton.setImage(.refreshMenu, for: .normal)
         stopReloadButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
@@ -39,7 +39,7 @@ class BrowserToolset {
 
     lazy var deleteButton: InsetButton = {
         let deleteButton = InsetButton()
-        deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
+        deleteButton.setImage(.delete, for: .normal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIConstants.layout.toolbarButtonInsets
         deleteButton.accessibilityIdentifier = "URLBar.deleteButton"
@@ -49,7 +49,7 @@ class BrowserToolset {
 
     lazy var contextMenuButton: InsetButton = {
         let contextMenuButton = InsetButton()
-        contextMenuButton.setImage(UIImage(named: "icon_hamburger_menu"), for: .normal)
+        contextMenuButton.setImage(.hamburgerMenu, for: .normal)
         contextMenuButton.tintColor = .primaryText
         if #available(iOS 14.0, *) {
             contextMenuButton.showsMenuAsPrimaryAction = true
@@ -82,10 +82,10 @@ class BrowserToolset {
     var isLoading: Bool = false {
         didSet {
             if isLoading {
-                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_stop_menu"), for: .normal)
+                stopReloadButton.setImage(.stopMenu, for: .normal)
                 stopReloadButton.accessibilityLabel = UIConstants.strings.browserStop
             } else {
-                stopReloadButton.setImage(#imageLiteral(resourceName: "icon_refresh_menu"), for: .normal)
+                stopReloadButton.setImage(.refreshMenu, for: .normal)
                 stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
             }
         }

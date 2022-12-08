@@ -36,4 +36,14 @@ public extension UIImage {
     static let privateMode = UIImage(named: "icon_private_mode")!
     static let history = UIImage(named: "icon_history")!
     static let settings = UIImage(named: "icon_settings")!
+
+    // MARK: URLBar
+    static let clear = UIImage(named: "icon_clear")!
+    static let cancel = UIImage(named: "icon_cancel")!
+    static let backActive = UIImage(named: "icon_back_active")!
+    static let forwardActive = UIImage(named: "icon_forward_active")!
+    static let refreshMenu = UIImage(named: "icon_refresh_menu")!
+    static let delete = UIImage(named: "icon_delete")!
+    static let hamburgerMenu = UIImage(named: "icon_hamburger_menu")!
+    static let stopMenu = UIImage(named: "icon_stop_menu")!
 }

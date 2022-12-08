@@ -26,7 +26,7 @@ class URLBar: UIView {
         let button = InsetButton()
         button.isHidden = true
         button.alpha = 0
-        button.setImage(#imageLiteral(resourceName: "icon_cancel"), for: .normal)
+        button.setImage(.cancel, for: .normal)
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         button.accessibilityIdentifier = "URLBar.cancelButton"
@@ -84,7 +84,7 @@ class URLBar: UIView {
         // our own so we can use it as the rightView.
         let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: UIConstants.layout.urlBarClearButtonWidth, height: UIConstants.layout.urlBarClearButtonHeight))
         clearButton.isHidden = true
-        clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
+        clearButton.setImage(.clear, for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
 
         let textField = URLTextField()

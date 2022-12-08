@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import DesignSystem
 
 protocol FindInPageBarDelegate: AnyObject {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String)
@@ -91,7 +92,7 @@ class FindInPageBar: UIView {
         addSubview(nextButton)
 
         let closeButton = UIButton()
-        closeButton.setImage(UIImage(named: "icon_stop_menu"), for: [])
+        closeButton.setImage(.stopMenu, for: [])
         closeButton.setTitleColor(.white, for: [])
         closeButton.accessibilityLabel = UIConstants.strings.findInPageDoneLabel
         closeButton.addTarget(self, action: #selector(didPressClose), for: .touchUpInside)
