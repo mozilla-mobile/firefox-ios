@@ -84,7 +84,7 @@ final class NimbusFeatureFlagLayer {
         case .shareSheetChanges,
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
-        case .creditCardChanges:
+        case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
         }
     }
@@ -234,10 +234,10 @@ final class NimbusFeatureFlagLayer {
     public func checkNimbusForCreditCardAutofill(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus) -> Bool {
-            let config = nimbus.features.creditcardAutofill.value()
+            let config = nimbus.features.creditCardAutofill.value()
 
             switch featureID {
-            case .creditCardChanges: return config.creditcardChanges
+            case .creditCardAutofillStatus: return config.creditCardAutofillStatus
             default: return false
             }
     }

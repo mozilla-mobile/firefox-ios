@@ -508,21 +508,21 @@ features:
             "move-actions": true,
             "toolbar-changes": true
         }
-  creditcard-autofill:
-    description: This property defines whether credit card autofill is enabled / disabled
+  credit-card-autofill:
+    description: This property defines the credit card autofill feature
     variables:
-      creditcard-changes:
+      credit-card-autofill-status:
         description: If true, we will allow user to use the credit autofill feature
         type: Boolean
         default: false
     defaults:
       - channel: developer
         value: {
-            "creditcard-changes:": true,
+            "credit-card-autofill-status:": true,
         }
       - channel: beta
         value: {
-            "creditcard-changes:": true,
+            "credit-card-autofill-status:": true,
         }
 
 types:
