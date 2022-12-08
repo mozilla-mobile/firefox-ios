@@ -82,13 +82,10 @@ extension AppDelegate {
             }
         }
 
-        // Check if the app is foregrounded, _also_ verify the BVC is initialized. Most BVC functions depend on viewDidLoad() having run –if not, they will crash.
+        // Check if the app is foregrounded
         if UIApplication.shared.applicationState == .active {
-            let browserViewController = BrowserViewController.foregroundBVC()
-
-            // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
-            // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
-            browserViewController?.loadQueuedTabs(receivedURLs: receivedUrlsQueue)
+            let object = OpenTabNotificationObject(type: .loadQueuedTabs(receivedUrlsQueue))
+            NotificationCenter.default.post(name: .OpenTabNotification, object: object)
         }
     }
 }
