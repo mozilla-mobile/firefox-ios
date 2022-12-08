@@ -56,6 +56,14 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
             tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        guard recentlyClosedTabsDelegate != nil else {
+            recentlyClosedTabsDelegate = sceneForVC?.browserViewController
+
+            return
+        }
+    }
 }
 
 class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
