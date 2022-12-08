@@ -11,7 +11,6 @@ struct SlideOverUXConstants {
 }
 
 class SlideOverPresentationController: UIPresentationController {
-
     let blurEffectView: UIVisualEffectView!
     var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer()
     var globalETPStatus: Bool

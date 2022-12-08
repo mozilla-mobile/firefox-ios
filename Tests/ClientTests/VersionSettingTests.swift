@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 class VersionSettingTests: XCTestCase {
-
     func testCopyAppVersion() {
         // MARK: - given
         let settingsTable = SettingsTableViewController(style: .grouped)

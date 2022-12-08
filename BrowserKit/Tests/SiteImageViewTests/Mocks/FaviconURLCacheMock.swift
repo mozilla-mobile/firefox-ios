@@ -6,7 +6,6 @@ import Foundation
 @testable import SiteImageView
 
 actor FaviconURLCacheMock: FaviconURLCache {
-
     var url: URL?
     var error: SiteImageError?
 

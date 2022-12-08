@@ -58,7 +58,6 @@ class SearchViewController: SiteTableViewController,
                             LoaderListener,
                             FeatureFlaggable,
                             Notifiable {
-
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
     private var suggestClient: SearchSuggestClient?
@@ -155,7 +154,6 @@ class SearchViewController: SiteTableViewController,
             profile: profile,
             tabs: tabManager.tabs,
             resultCount: 3) { results in
-
             guard let results = results else { return }
             self.searchHighlights = results
             self.tableView.reloadData()
@@ -793,7 +791,6 @@ class SearchViewController: SiteTableViewController,
 // MARK: - Telemetry
 private extension SearchViewController {
     func recordSearchListSelectionTelemetry(type: SearchListSection, isBookmark: Bool = false) {
-
         let key = TelemetryWrapper.EventExtraKey.awesomebarSearchTapType.rawValue
         var extra: String
         switch type {

@@ -153,7 +153,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate: Notifiable {
-
     private func addObservers() {
         setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
                                                           UIApplication.willResignActiveNotification,
@@ -177,7 +176,6 @@ extension AppDelegate: Notifiable {
 
 // This functionality will need to be moved to the SceneDelegate when the time comes
 extension AppDelegate {
-
     // Orientation lock for views that use new modal presenter
     func application(
         _ application: UIApplication,
@@ -201,7 +199,6 @@ extension AppDelegate {
 
 // MARK: - Scenes related methods
 extension AppDelegate {
-
     /// UIKit is responsible for creating & vending Scene instances. This method is especially useful when there
     /// are multiple scene configurations to choose from.  With this method, we can select a configuration
     /// to create a new scene with dynamically (outside of what's in the pList).
@@ -210,7 +207,6 @@ extension AppDelegate {
         configurationForConnecting connectingSceneSession: UISceneSession,
         options: UIScene.ConnectionOptions
     ) -> UISceneConfiguration {
-
         let configuration = UISceneConfiguration(
             name: connectingSceneSession.configuration.name,
             sessionRole: connectingSceneSession.role

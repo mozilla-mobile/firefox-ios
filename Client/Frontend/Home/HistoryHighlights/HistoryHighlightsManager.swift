@@ -39,7 +39,6 @@ extension HistoryHighlightsManagerProtocol {
         shouldGroupHighlights: Bool = false,
         resultCount: Int = defaultHighlightCount,
         completion: @escaping ([HighlightItem]?) -> Void) {
-
         self.getHighlightsData(
             with: profile,
             and: tabs,
@@ -50,7 +49,6 @@ extension HistoryHighlightsManagerProtocol {
 }
 
 class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
-
     // MARK: - Variables
 
     // These variables are defined by PM and Design and will be tweaked based on
@@ -63,12 +61,11 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
         profile: Profile,
         tabs: [Tab],
         resultCount: Int,
-        completion: @escaping ([HighlightItem]?) -> Void) {
-
+        completion: @escaping ([HighlightItem]?) -> Void
+    ) {
         getHighlightsData(with: profile,
                           and: tabs,
                           resultCount: searchLimit) { results in
-
             var searchResults = [HighlightItem]()
 
             guard let results = results else {
@@ -106,10 +103,9 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
         and tabs: [Tab],
         shouldGroupHighlights: Bool = false,
         resultCount: Int = defaultHighlightCount,
-        completion: @escaping ([HighlightItem]?) -> Void) {
-
+        completion: @escaping ([HighlightItem]?) -> Void
+    ) {
         fetchHighlights(with: profile) { highlights in
-
             guard let highlights = highlights, !highlights.isEmpty else {
                 completion(nil)
                 return
@@ -138,11 +134,9 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
         with profile: Profile,
         andLimit limit: Int32 = Int32(searchLimit),
         completion: @escaping ([HistoryHighlight]?) -> Void) {
-
         profile.places.getHighlights(weights: HistoryHighlightWeights(viewTime: defaultViewTimeWeight,
                                                                       frequency: defaultFrequencyWeight),
                                      limit: limit).uponQueue(.main) { result in
-
             guard let ASHighlights = result.successValue, !ASHighlights.isEmpty else { return completion(nil) }
 
             completion(ASHighlights)
@@ -154,8 +148,8 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
     private func buildSearchGroups(
         with profile: Profile,
         and highlights: [HistoryHighlight],
-        completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void) {
-
+        completion: @escaping ([ASGroup<HistoryHighlight>]?, [HistoryHighlight]) -> Void
+    ) {
         SearchTermGroupsUtility.getHighlightGroups(with: profile,
                                                    from: highlights,
                                                    using: .orderedAscending) { groups, filteredItems in
@@ -177,7 +171,6 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
     private func collateForRecentlySaved(
         from groups: [ASGroup<HistoryHighlight>]?,
         and highlights: [HistoryHighlight]) -> [HighlightItem] {
-
         guard let groups = groups, !groups.isEmpty else { return highlights }
 
         var highlightItems: [HighlightItem] = highlights

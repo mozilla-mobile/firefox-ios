@@ -47,7 +47,6 @@ class DownloadsPanel: UIViewController,
                       UITableViewDataSource,
                       LibraryPanel,
                       Themeable {
-
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
     var state: LibraryPanelMainState

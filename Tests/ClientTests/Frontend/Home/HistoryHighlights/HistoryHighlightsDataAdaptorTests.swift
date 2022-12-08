@@ -7,7 +7,6 @@ import XCTest
 import MozillaAppServices
 
 class HistoryHighlightsDataAdaptorTests: XCTestCase {
-
     var subject: HistoryHighlightsDataAdaptor!
     var historyManager: MockHistoryHighlightsManager!
     var notificationCenter: MockNotificationCenter!

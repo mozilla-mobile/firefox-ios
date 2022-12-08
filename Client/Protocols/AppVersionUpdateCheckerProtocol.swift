@@ -11,7 +11,6 @@ protocol AppVersionUpdateCheckerProtocol {
 }
 
 extension AppVersionUpdateCheckerProtocol {
-
     /// If we do not have the PrefsKeys.AppVersion.Latest in the profile, that means that
     /// this is a fresh install. If we do have that value, we compare it to the major
     /// version of the running app. If it is different then this is an upgrade.

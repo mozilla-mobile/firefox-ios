@@ -10,7 +10,6 @@ import Storage
 /// This is our concrete dependency container. It holds all dependencies / services the app would need through
 /// a session.
 class AppContainer: ServiceProvider {
-
     static let shared: ServiceProvider = AppContainer()
 
     /// The item holding registered services.

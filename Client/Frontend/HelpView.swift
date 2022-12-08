@@ -5,7 +5,6 @@
 import SwiftUI
 
 struct HelpView: View {
-
     private struct UX {
         static let padding: CGFloat = 20
         static let textFont = Font.body

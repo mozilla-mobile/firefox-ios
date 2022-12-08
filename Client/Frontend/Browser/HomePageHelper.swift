@@ -13,7 +13,6 @@ struct HomePageConstants {
 }
 
 class HomePageHelper {
-
     let prefs: Prefs
 
     var currentURL: URL? {

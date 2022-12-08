@@ -7,7 +7,6 @@ import Foundation
 @testable import Client
 
 class WallpaperManagerMock: WallpaperManagerInterface {
-
     var currentWallpaper: Wallpaper = Wallpaper(id: "fxDefault",
                                                 textColor: .green,
                                                 cardColor: .purple,

@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class TabEventHandlers {
-
     /// Create handlers that observe specified tab events.
     ///
     /// For anything that needs to react to tab events notifications (see `TabEventLabel`), the

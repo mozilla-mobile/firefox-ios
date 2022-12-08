@@ -5,7 +5,6 @@
 @testable import Client
 
 class MockHomepageDataModelDelegate: HomepageDataModelDelegate {
-
     var reloadViewCallCount = 0
 
     func reloadView() {

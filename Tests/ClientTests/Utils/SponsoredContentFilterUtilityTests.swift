@@ -10,7 +10,6 @@ import WebKit
 @testable import Client
 
 class SponsoredContentFilterUtilityTests: XCTestCase {
-
     private static let sponsoredStandardURL = "www.test.com/?parameter&mfadid=adm"
     private let sessionRestoreURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=https://www.mozilla.org/"
     private let normalURL = "www.test.com/?parameter&parameter"
@@ -136,7 +135,6 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
 
 // MARK: - Helpers
 extension SponsoredContentFilterUtilityTests {
-
     func createSites(normalSitesCount: Int,
                      sponsoredSitesCount: Int) -> [Site] {
         var sites = [Site]()
@@ -184,7 +182,6 @@ extension SponsoredContentFilterUtilityTests {
         sponsoredHighlightsCount: Int,
         sponsoredUrl: String = SponsoredContentFilterUtilityTests.sponsoredStandardURL
     ) -> [HistoryHighlight] {
-
         var highlights = [HistoryHighlight]()
         (0..<normalHighlightsCount).forEach { index in
             let highlight = HistoryHighlight(score: 0,

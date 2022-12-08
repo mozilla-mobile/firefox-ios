@@ -7,7 +7,6 @@ import Storage
 import Shared
 
 class PocketViewModel {
-
     struct UX {
         static let numberOfItemsInColumn = 3
         static let fractionalWidthiPhonePortrait: CGFloat = 0.90
@@ -119,7 +118,6 @@ class PocketViewModel {
 
 // MARK: HomeViewModelProtocol
 extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
-
     var sectionType: HomepageSectionType {
         return .pocket
     }
@@ -205,10 +203,8 @@ extension PocketViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
 // MARK: FxHomeSectionHandler
 extension PocketViewModel: HomepageSectionHandler {
-
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-
         recordSectionHasShown()
 
         if isStoryCell(index: indexPath.row) {
@@ -235,7 +231,6 @@ extension PocketViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-
         if isStoryCell(index: indexPath.row) {
             pocketStoriesViewModels[indexPath.row].onTap(indexPath)
         } else {

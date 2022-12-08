@@ -24,7 +24,6 @@ import Shared
  */
 
 class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissable {
-
     struct UX {
         static let textOffset: CGFloat = 20
         static let textOffsetSmall: CGFloat = 13

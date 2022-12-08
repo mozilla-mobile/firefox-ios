@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class NewTabContentSettingsViewController: SettingsTableViewController {
-
     /* variables for checkmark settings */
     let prefs: Prefs
     var currentChoice: NewTabPage!

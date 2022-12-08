@@ -11,7 +11,6 @@ protocol CredentialListViewProtocol: AnyObject {
 }
 
 class CredentialListViewController: UIViewController, CredentialListViewProtocol, UISearchControllerDelegate {
-
     fileprivate let cellIdentifier = "cellidentifier"
     lazy private var tableView: UITableView = {
         let tableView = UITableView()
@@ -156,7 +155,6 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
 }
 
 extension CredentialListViewController: UITableViewDataSource {
-
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let presenter = presenter else { return 1 }
         return presenter.numberOfSections()
@@ -167,7 +165,6 @@ extension CredentialListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         switch presenter?.getItemsType(in: indexPath.section, for: indexPath.row) {
         case .emptyCredentialList:
             let cell = tableView.dequeueReusableCell(withIdentifier: EmptyPlaceholderCell.identifier, for: indexPath) as? EmptyPlaceholderCell

@@ -15,7 +15,6 @@ struct SafelistedDomains {
 }
 
 extension ContentBlocker {
-
     func safelistFileURL() -> URL? {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil }
         return dir.appendingPathComponent("safelist")

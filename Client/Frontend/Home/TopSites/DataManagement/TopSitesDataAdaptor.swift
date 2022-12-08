@@ -13,7 +13,6 @@ protocol TopSitesManagerDelegate: AnyObject {
 /// Data adaptor to fetch the top sites data asynchronously
 /// The data gets updated from notifications on specific user actions
 protocol TopSitesDataAdaptor {
-
     /// The preferred number of rows by the user, this can be from 1 to 4
     /// Note that this isn't necessarily the number of rows that will appear since empty rows won't show.
     /// In other words, the number of rows shown depends on the actual data and the user preference.
@@ -32,7 +31,6 @@ protocol TopSitesDataAdaptor {
 }
 
 class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, HasNimbusSponsoredTiles {
-
     private let profile: Profile
     private var topSites: [TopSite] = []
     private let dataQueue = DispatchQueue(label: "com.moz.topSitesManager.queue", qos: .userInteractive)
@@ -214,7 +212,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable, 
 
 // MARK: Site Array extension
 private extension Array where Element == Site {
-
     /// Add sponsored tiles to the top sites.
     /// - Parameters:
     ///   - sponsoredTileSpaces: The number of spaces available for sponsored tiles
@@ -226,7 +223,6 @@ private extension Array where Element == Site {
         var siteAddedCount = 0
 
         for (index, _) in contiles.enumerated() {
-
             guard siteAddedCount < sponsoredTileSpaces, let contile = contiles[safe: index] else { return }
             let site = SponsoredTile(contile: contile)
 
@@ -274,7 +270,6 @@ private extension Array where Element == Site {
 
 // MARK: - DataObserverDelegate
 extension TopSitesDataAdaptorImplementation: DataObserverDelegate {
-
     func didInvalidateDataSource(forceRefresh forced: Bool) {
         guard forced else { return }
         loadTopSitesData()

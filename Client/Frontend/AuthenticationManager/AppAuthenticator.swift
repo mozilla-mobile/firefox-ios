@@ -6,7 +6,6 @@ import LocalAuthentication
 import WebKit
 
 class AppAuthenticator {
-
     enum AuthenticationError: Error {
         case failedEvaluation(message: String)
         case failedAutentication(message: String)

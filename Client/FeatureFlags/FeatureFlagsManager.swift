@@ -27,7 +27,6 @@ enum FlaggableFeatureCheckOptions {
 }
 
 class FeatureFlagsManager: HasNimbusFeatureFlags {
-
     /// This Singleton should only be accessed directly in places where the
     /// `FeatureFlaggable` is not available. Otherwise, access to the feature
     /// flags system should be done through the protocol, giving access to the
@@ -70,7 +69,6 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     /// binary state. Further information on return types can be found in
     /// `FlaggableFeatureOptions`
     public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
-
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
         guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
@@ -83,7 +81,6 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
     }
 
     private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
-
         switch featureID {
         case .startAtHome: return .startAtHome
         case .searchBarPosition: return .bottomSearchBar
@@ -107,7 +104,6 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         feature featureID: NimbusFeatureFlagWithCustomOptionsID,
         to desiredState: T
     ) {
-
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
         switch featureID {

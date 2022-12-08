@@ -11,7 +11,6 @@ import UIKit
 import XCTest
 
 class ResetTests: XCTestCase {
-
     func testNoClients() {
         let profile = MockBrowserProfile(localName: "testResetTests_noClient")
         assertNoClients(profile.peekTabs)
@@ -68,7 +67,6 @@ class ResetTests: XCTestCase {
 
 // MARK: - Helper methods
 extension ResetTests {
-
     static let testClientGuid = "abcdefghijkl"
 
     static let testRemoteClient = RemoteClient(guid: ResetTests.testClientGuid,

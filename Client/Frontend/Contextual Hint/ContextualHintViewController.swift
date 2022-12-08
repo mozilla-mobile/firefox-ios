@@ -7,7 +7,6 @@ import UIKit
 import Shared
 
 class ContextualHintViewController: UIViewController, OnViewDismissable {
-
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
         static let closeButtonTrailing: CGFloat = 5
@@ -226,7 +225,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         descriptionLabel.text = viewModel.getCopyFor(.description)
 
         if viewModel.isActionType() {
-
             let textAttributes: [NSAttributedString.Key: Any] = [
                 .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                      maxSize: 28),

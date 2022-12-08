@@ -11,7 +11,6 @@ import WebKit
 @testable import Client
 
 class ClientTests: XCTestCase {
-
     func testSyncUA() {
         let ua = UserAgent.syncUserAgent
         let device = DeviceInfo.deviceModel()

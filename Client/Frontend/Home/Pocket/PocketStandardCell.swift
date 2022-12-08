@@ -8,7 +8,6 @@ import Shared
 // MARK: - PocketStandardCell
 /// A cell used in FxHomeScreen's Pocket section
 class PocketStandardCell: UICollectionViewCell, ReusableCell {
-
     struct UX {
         static let cellHeight: CGFloat = 112
         static let cellWidth: CGFloat = 350

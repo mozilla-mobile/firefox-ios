@@ -11,7 +11,6 @@ import UIKit
 import XCTest
 
 class CustomSearchEnginesTest: XCTestCase {
-
     func testgetSearchTemplate() {
         let profile = MockBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController()

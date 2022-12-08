@@ -6,7 +6,6 @@ import XCTest
 @testable import SiteImageView
 
 final class BundleImageFetcherTests: XCTestCase {
-
     private var bundleDataProvider: MockBundleDataProvider!
 
     override func setUp() {
@@ -131,7 +130,6 @@ final class BundleImageFetcherTests: XCTestCase {
 }
 
 private enum MockBundleData {
-
     static let invalidData = "invalidData"
 
     static let emptyData = "[]"
@@ -153,7 +151,6 @@ private extension BundleImageFetcherTests {
 
 // MARK: - MockBundleDataProvider
 private class MockBundleDataProvider: BundleDataProvider {
-
     var data: Data?
     var error: BundleError?
     func getBundleData() throws -> Data {

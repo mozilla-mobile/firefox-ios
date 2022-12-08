@@ -12,7 +12,6 @@ private let loginEntry = "https://accounts.google.com"
 private let tabOpenInDesktop = "http://example.com/"
 
 class IntegrationTests: BaseTestCase {
-
     let testWithDB = ["testFxASyncHistory"]
     let testFxAChinaServer = ["testFxASyncPageUsingChinaFxA"]
 

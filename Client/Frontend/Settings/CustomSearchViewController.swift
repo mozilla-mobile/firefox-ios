@@ -8,7 +8,6 @@ import SnapKit
 import Storage
 
 class CustomSearchError: MaybeErrorType {
-
     enum Reason {
         case DuplicateEngine, FormInput
     }
@@ -25,7 +24,6 @@ class CustomSearchError: MaybeErrorType {
 }
 
 class CustomSearchViewController: SettingsTableViewController {
-
     fileprivate var urlString: String?
     fileprivate var engineTitle = ""
     fileprivate lazy var spinnerView: UIActivityIndicatorView = {
@@ -122,7 +120,6 @@ class CustomSearchViewController: SettingsTableViewController {
     }
 
     override func generateSettings() -> [SettingSection] {
-
         func URLFromString(_ string: String?) -> URL? {
             guard let string = string else { return nil }
             return URL(string: string)
@@ -180,7 +177,6 @@ class CustomSearchViewController: SettingsTableViewController {
 }
 
 class CustomSearchEngineTextView: Setting, UITextViewDelegate {
-
     fileprivate let Padding: CGFloat = 8
     fileprivate let TextLabelHeight: CGFloat = 44
     fileprivate var TextLabelWidth: CGFloat {

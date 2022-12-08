@@ -6,7 +6,6 @@ import Foundation
 import UIKit
 
 public extension String {
-
     // Returns hostname from URL
     var titleFromHostname: String {
         guard let displayName = self.asURL?.host  else { return self }

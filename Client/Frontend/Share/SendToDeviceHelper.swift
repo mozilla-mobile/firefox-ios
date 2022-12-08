@@ -8,7 +8,6 @@ import SwiftUI
 import UIKit
 
 class SendToDeviceHelper {
-
     typealias Delegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     struct Colors {

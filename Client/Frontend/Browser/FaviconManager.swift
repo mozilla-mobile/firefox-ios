@@ -11,7 +11,6 @@ import Deferred
 import Sync
 
 class FaviconManager: TabContentScript {
-
     let profile: Profile!
     weak var tab: Tab?
 

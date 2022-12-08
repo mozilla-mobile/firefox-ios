@@ -9,7 +9,6 @@ protocol LaunchSessionProviderProtocol {
 }
 
 class LaunchSessionProvider: LaunchSessionProviderProtocol {
-
     init() {
         addObservers()
     }

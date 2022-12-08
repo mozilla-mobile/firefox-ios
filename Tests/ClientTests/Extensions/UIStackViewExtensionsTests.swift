@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class UIStackViewExtensionsTests: XCTestCase {
-
     // MARK: Top
 
     func testAddArrangedViewToTop_whenEmpty() {

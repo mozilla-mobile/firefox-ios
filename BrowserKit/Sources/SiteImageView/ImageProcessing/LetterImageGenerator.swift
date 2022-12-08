@@ -6,7 +6,6 @@ import UIKit
 
 /// Generate a default letter image from the domain name
 protocol LetterImageGenerator {
-
     /// Generates a letter image based on the first character in the domain name
     /// - Parameter domain: The string domain name
     /// - Returns: The generated letter image
@@ -14,7 +13,6 @@ protocol LetterImageGenerator {
 }
 
 class DefaultLetterImageGenerator: LetterImageGenerator {
-
     private let defaultLetter: Character = "#"
 
     func generateLetterImage(domain: String) -> UIImage {

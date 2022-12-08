@@ -18,7 +18,6 @@ struct PhotonRowActions {
 
 // MARK: - SingleActionViewModel
 class SingleActionViewModel {
-
     enum IconAlignment {
         case left
         case right
@@ -68,7 +67,6 @@ class SingleActionViewModel {
          bold: Bool? = false,
          tabCount: String? = nil,
          tapHandler: ((SingleActionViewModel) -> Void)? = nil) {
-
         self.title = title
         self.alternateTitle = alternateTitle
         self.iconString = iconString

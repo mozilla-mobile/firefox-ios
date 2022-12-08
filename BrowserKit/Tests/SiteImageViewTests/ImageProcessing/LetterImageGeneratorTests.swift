@@ -6,7 +6,6 @@ import XCTest
 @testable import SiteImageView
 
 final class LetterImageGeneratorTests: XCTestCase {
-
     func testEmptyDomain_doesntReturnEmptyImage() {
         let subject = DefaultLetterImageGeneratorSpy()
         let result = subject.generateLetterImage(domain: "")
@@ -71,7 +70,6 @@ private extension LetterImageGeneratorTests {
 
 // MARK: - DefaultLetterImageGeneratorSpy
 class DefaultLetterImageGeneratorSpy: DefaultLetterImageGenerator {
-
     var capturedLetter: String?
     var capturedColor: UIColor?
 

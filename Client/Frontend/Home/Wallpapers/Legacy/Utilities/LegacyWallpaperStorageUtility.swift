@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
-
     // MARK: - Variables
     private var userDefaults: UserDefaults
     static let directoryName = "wallpapers"
@@ -40,7 +39,6 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
                        completionHandler: @escaping (Result<Void, Error>) -> Void
     ) {
         if let portrait = imageSet.portrait, let landscape = imageSet.landscape {
-
             do {
                 try store(image: portrait,
                           forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage)
@@ -202,7 +200,6 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
     }
 
     private func folderExists(at directory: URL) -> Bool {
-
         let fileManager = FileManager.default
 
         // Check if the folder exists in the first place. If not, it would indicate that

@@ -336,7 +336,6 @@ fileprivate extension BaseTestCase {
 }
 
 class TopTabsTestIphone: IphoneOnlyTestCase {
-
     func testCloseTabFromLongPressTabsButton() throws {
         throw XCTSkip("This test is failing. Isabel will be looking into it")
 //        if skipPlatform { return }
@@ -463,7 +462,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
     // Tests to check if Tab Counter is updating correctly after opening three tabs by tapping on '+' button and closing the tabs by tapping 'x' button
 class TopTabsTestIpad: IpadOnlyTestCase {
-
     func testUpdateTabCounter() {
         if skipPlatform { return }
         // Open three tabs by tapping on '+' button

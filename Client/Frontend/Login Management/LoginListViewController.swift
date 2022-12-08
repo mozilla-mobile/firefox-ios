@@ -7,7 +7,6 @@ import Storage
 import Shared
 
 class LoginListViewController: SensitiveViewController, Themeable {
-
     static let loginsSettingsSection = 0
 
     var themeManager: ThemeManager
@@ -443,7 +442,6 @@ extension LoginListViewController: UITableViewDelegate {
 
 // MARK: - KeyboardHelperDelegate
 extension LoginListViewController: KeyboardHelperDelegate {
-
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
@@ -456,7 +454,6 @@ extension LoginListViewController: KeyboardHelperDelegate {
 
 // MARK: - SearchInputViewDelegate
 extension LoginListViewController: SearchInputViewDelegate {
-
     func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String) {
         loadLogins(text)
     }
@@ -478,7 +475,6 @@ extension LoginListViewController: SearchInputViewDelegate {
 
 // MARK: - LoginViewModelDelegate
 extension LoginListViewController: LoginViewModelDelegate {
-
     func breachPathDidUpdate() {
         DispatchQueue.main.async {
             self.viewModel.breachIndexPath.forEach {

@@ -22,7 +22,6 @@ protocol InactiveTabsDelegate: AnyObject {
 }
 
 class InactiveTabCell: UICollectionViewCell, ReusableCell {
-
     struct UX {
         static let HeaderAndRowHeight: CGFloat = 48
         static let CloseAllTabRowHeight: CGFloat = 88

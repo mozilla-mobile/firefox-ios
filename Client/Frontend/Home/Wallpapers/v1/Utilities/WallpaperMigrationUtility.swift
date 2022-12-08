@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 struct WallpaperMigrationUtility: Loggable {
-
     private let metadataMigration = PrefsKeys.Wallpapers.v1MigrationCheck
     private let legacyAssetMigration = PrefsKeys.Wallpapers.legacyAssetMigrationCheck
     private let userDefaults: UserDefaultsInterface
@@ -130,7 +129,6 @@ struct WallpaperMigrationUtility: Loggable {
         _ matchingID: String,
         from storageUtility: WallpaperStorageUtility
     ) throws -> Wallpaper? {
-
         if matchingID == oldPromotionID {
             // The new metadata doesn't include the old promotional wallpapers.
             // Thus, we must create a new wallpaper to continue storing

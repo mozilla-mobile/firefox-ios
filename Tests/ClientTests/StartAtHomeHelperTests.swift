@@ -7,7 +7,6 @@
 import XCTest
 
 class StartAtHomeHelperTests: XCTestCase {
-
     var helper: StartAtHomeHelper!
     private var profile: MockProfile!
     private var tabManager: TabManager!

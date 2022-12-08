@@ -6,7 +6,6 @@ import XCTest
 @testable import Sync
 
 class TabsPayloadTests: XCTestCase {
-
     func testFromInvalidJSON() {
         let tabsPayload1 = TabsPayload("")
         XCTAssertFalse(tabsPayload1.isValid())

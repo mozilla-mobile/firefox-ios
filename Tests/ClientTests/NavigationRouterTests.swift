@@ -9,7 +9,6 @@ import WebKit
 import XCTest
 
 class NavigationRouterTests: XCTestCase {
-
     private var tabManager: TabManager!
     private var profile: TabManagerMockProfile!
     private var browserViewController: BrowserViewController!
@@ -171,7 +170,6 @@ class NavigationRouterTests: XCTestCase {
 
 // MARK: - Helper methods
 private extension NavigationRouterTests {
-
     func buildNavigationPath(url: String) -> NavigationPath {
         let appURL = "\(appScheme)://\(url)"
         return NavigationPath(url: URL(string: appURL)!)!

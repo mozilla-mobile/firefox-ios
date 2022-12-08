@@ -5,7 +5,6 @@
 import Foundation
 
 extension String {
-
     /// Handles logic to make part of string bold
     /// - Parameters:
     ///     - boldString: the portion of the string that should be bold. Current string must already include this string.

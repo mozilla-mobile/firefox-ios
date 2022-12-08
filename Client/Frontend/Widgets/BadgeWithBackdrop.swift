@@ -6,7 +6,6 @@ import UIKit
 
 // Puts a backdrop (i.e. dark highlight) circle on the badged button.
 class BadgeWithBackdrop {
-
     struct UX {
         static let backdropAlpha: CGFloat = 0.05
         static let badgeOffset: CGFloat = 10

@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class WallpaperCollectionAvailabilityTests: XCTestCase {
-
     func testFullAvailability() {
         let subject = WallpaperCollectionAvailability(start: nil, end: nil)
         XCTAssertTrue(subject.isAvailable, "Wallpaper collection should be available")

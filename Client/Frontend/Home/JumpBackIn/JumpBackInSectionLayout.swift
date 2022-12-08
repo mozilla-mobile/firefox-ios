@@ -56,7 +56,6 @@ enum JumpBackInSectionLayout: Equatable {
     func maxItemsToDisplay(hasAccount: Bool,
                            device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
     ) -> JumpBackInDisplayGroupCount {
-
         return JumpBackInDisplayGroupCount(
             tabsCount: maxJumpBackInItemsToDisplay(device: device),
             syncedTabCount: hasAccount ? JumpBackInViewModel.UX.maxDisplayedSyncedTabs : 0

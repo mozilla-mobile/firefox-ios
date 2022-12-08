@@ -6,7 +6,6 @@ import Foundation
 import MozillaAppServices
 
 final class NimbusFeatureFlagLayer {
-
     // MARK: - Public methods
     public func checkNimbusConfigFor(_ featureID: NimbusFeatureFlagID,
                                      from nimbus: FxNimbus = FxNimbus.shared

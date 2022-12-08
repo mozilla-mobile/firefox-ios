@@ -259,7 +259,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     fileprivate func setupConstraints() {
-
         scrollToTopButton.snp.makeConstraints { make in
             make.top.equalTo(self)
             make.left.right.equalTo(locationContainer)
@@ -823,7 +822,6 @@ extension URLBarView: AutocompleteTextFieldDelegate {
 
 // MARK: UIAppearance
 extension URLBarView {
-
     @objc dynamic var cancelTintColor: UIColor? {
         get { return cancelButton.tintColor }
         set { return cancelButton.tintColor = newValue }

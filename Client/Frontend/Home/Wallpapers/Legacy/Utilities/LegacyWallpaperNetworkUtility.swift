@@ -14,7 +14,6 @@ protocol LegacyWallpaperDownloadProtocol {
 extension URLSession: LegacyWallpaperDownloadProtocol {}
 
 class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
-
     // MARK: - Variables
     private static let wallpaperURLScheme = "MozWallpaperURLScheme"
     lazy var downloadProtocol: LegacyWallpaperDownloadProtocol = {
@@ -38,7 +37,6 @@ class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
         guard let url = buildURLWith(path: urlPath) else { return }
 
         downloadProtocol.dataTask(with: url) { data, response, error in
-
             if let error = error {
                 self.browserLog.debug("Error fetching wallpaper: \(error.localizedDescription)")
                 return

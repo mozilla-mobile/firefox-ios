@@ -67,7 +67,6 @@ class DefaultBrowserOnboardingTests: XCTestCase {
 }
 
 private extension DefaultBrowserOnboardingTests {
-
     func setTestData(installType: InstallType, sessionCount: Int32, didShowOnboarding: Bool) {
         InstallType.set(type: installType)
         prefs.setInt(sessionCount, forKey: PrefsKeys.SessionCount)

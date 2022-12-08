@@ -7,7 +7,6 @@ import Shared
 @testable import Client
 
 class MockSponsoredPocketAPI: PocketSponsoredStoriesProviding {
-
     init(result: Result<[PocketSponsoredStory], Error>) {
         self.result = result
     }

@@ -12,7 +12,6 @@ import UIKit
 import Storage
 
 class SearchGroupedItemsViewController: UIViewController, Loggable {
-
     // MARK: - Properties
 
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.GroupedList

@@ -152,7 +152,6 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 class ReadingListPanel: UITableViewController,
                         LibraryPanel,
                         Themeable {
-
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
     var state: LibraryPanelMainState

@@ -669,7 +669,6 @@ class JumpBackInViewModelTests: XCTestCase {
 
 // MARK: - Helpers
 extension JumpBackInViewModelTests {
-
     func createSubject(addDelegate: Bool = true) -> JumpBackInViewModel {
         let subject = JumpBackInViewModel(
             isZeroSearch: false,
@@ -722,7 +721,6 @@ extension JumpBackInViewModelTests {
 }
 
 class JumpBackInDataAdaptorMock: JumpBackInDataAdaptor {
-
     var recentTabs = [Tab]()
     func getRecentTabData() -> [Tab] {
         return recentTabs

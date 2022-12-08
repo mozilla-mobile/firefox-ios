@@ -11,7 +11,6 @@ protocol InstructionsViewDelegate: AnyObject {
 }
 
 struct InstructionsView: View {
-
     private struct UX {
         static let padding: CGFloat = 20
         static let textFont = Font.body

@@ -13,7 +13,6 @@ protocol FaviconFetcher {
 }
 
 struct DefaultFaviconFetcher: FaviconFetcher {
-
     private let imageDownloader: SiteImageDownloader
 
     init(imageDownloader: SiteImageDownloader = ImageDownloader.default) {

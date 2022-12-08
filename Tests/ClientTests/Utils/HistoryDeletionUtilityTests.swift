@@ -14,7 +14,6 @@ import Shared
 // These basic cases are not tested here as they are tested in
 // `HistoryHighlightsManagerTests` and `TestHistory` respectively
 class HistoryDeletionUtilityTests: XCTestCase {
-
     struct SiteElements {
         let domain: String
         let path: String
@@ -23,7 +22,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
         init(domain: String,
              path: String = "",
              timeVisited: MicrosecondTimestamp = Date().toMicrosecondsSince1970()) {
-
             self.domain = domain
             self.path = path
             self.timeVisited = timeVisited
@@ -293,7 +291,6 @@ class HistoryDeletionUtilityTests: XCTestCase {
 
 // MARK: - Helper functions
 private extension HistoryDeletionUtilityTests {
-
     func profileSetup(named dbPrefix: String) -> MockProfile {
         let profile = MockProfile(databasePrefix: dbPrefix)
         profile.reopen()

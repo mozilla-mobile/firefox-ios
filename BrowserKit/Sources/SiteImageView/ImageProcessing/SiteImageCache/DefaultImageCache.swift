@@ -16,7 +16,6 @@ protocol DefaultImageCache {
 }
 
 extension ImageCache: DefaultImageCache {
-
     func retrieveImage(forKey key: String) async throws -> UIImage? {
         return try await withCheckedThrowingContinuation { continuation in
             retrieveImage(forKey: key) { result in
