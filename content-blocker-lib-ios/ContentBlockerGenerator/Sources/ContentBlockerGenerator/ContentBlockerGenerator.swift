@@ -59,6 +59,6 @@ public struct ContentBlockerGenerator {
         let fileLines = parser.parseCategoryList(categoryList,
                                                  actionType: actionType)
 
-        return fileLines.isEmpty ? "" : "\n" + fileLines.joined(separator: ",\n") + "\n]"
+        return fileLines.isEmpty ? "" : "[\n" + fileLines.joined(separator: ",\n") + "\n]"
     }
 }

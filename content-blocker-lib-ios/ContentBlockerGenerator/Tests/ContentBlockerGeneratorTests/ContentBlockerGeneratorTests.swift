@@ -40,7 +40,17 @@ final class ContentBlockerGeneratorTests: XCTestCase {
 
         subject.generateLists()
 
+        let expectedFirstContent = """
+               [\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?2leep\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adnologies\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?heias\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?365media\\\\.com\",\"load-type\":[\"third-party\"]}}\n]
+               """
+
+        let expectedSecondContent = """
+               [\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?2leep\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?adnologies\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?heias\\\\.com\",\"load-type\":[\"third-party\"]}},\n{\"action\":{\"type\":\"block-cookies\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?365media\\\\.com\",\"load-type\":[\"third-party\"]}}\n]
+               """
+
         XCTAssertEqual(fileManager.capturedFileContent.count, 2, "Generated 'block' and 'block cookies' ads list")
+        XCTAssertEqual(fileManager.capturedFileContent[0], expectedFirstContent)
+        XCTAssertEqual(fileManager.capturedFileContent[1], expectedSecondContent)
         XCTAssertEqual(fileManager.capturedCategoryTitle.count, 2)
         XCTAssertEqual(fileManager.capturedCategoryTitle[0], .advertising)
         XCTAssertEqual(fileManager.capturedCategoryTitle[1], .advertising)
@@ -53,8 +63,8 @@ final class ContentBlockerGeneratorTests: XCTestCase {
 // MARK: - MockContentBlockerFileManager
 class MockContentBlockerFileManager: ContentBlockerFileManager {
 
-    var entityList = [String : Any]()
-    func getEntityList() -> [String : Any] {
+    var entityList = [String: Any]()
+    func getEntityList() -> [String: Any] {
         return entityList
     }
 
