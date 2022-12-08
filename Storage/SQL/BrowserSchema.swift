@@ -941,7 +941,6 @@ open class BrowserSchema: Schema {
         }
 
         if from == 0 {
-
             // If we're upgrading from `0`, it is likely that we have not yet switched
             // from tracking the schema version using `tableList` to `PRAGMA user_version`.
             // This will write the *previous* version number from `tableList` into

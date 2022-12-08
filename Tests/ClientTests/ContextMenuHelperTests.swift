@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class ContextMenuHelperTests: XCTestCase {
-
     var profile: Profile!
 
     override func setUp() {

@@ -5,7 +5,6 @@
 import UIKit
 
 extension UIView {
-
     /// Makes the edge constraints (`topAnchor`, `bottomAnchor`, `leadingAnchor`, `trailingAnchor`) of a view equaled to the edge constraints of another view.
     /// - Parameters:
     ///   - view: The view that we are constraining the current view's edges to.

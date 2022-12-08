@@ -5,7 +5,6 @@
 import Foundation
 
 extension UIResponder {
-
     /// Use this method to walk the responder chain until you find your desired object.
     func walkChainUntil<T: UIResponder>(visiting responder: T.Type) -> T? {
         return sequence(first: self, next: { $0.next })

@@ -13,7 +13,6 @@ protocol HomepageDataModelDelegate: AnyObject {
 }
 
 class HomepageViewModel: FeatureFlaggable {
-
     struct UX {
         static let spacingBetweenSections: CGFloat = 32
         static let standardInset: CGFloat = 18

@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class TopSitesRowCountSettingsController: SettingsTableViewController {
-
     let prefs: Prefs
     var numberOfRows: Int32
     static let defaultNumberOfRows: Int32 = 2
@@ -23,7 +22,6 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
     }
 
     override func generateSettings() -> [SettingSection] {
-
         let createSetting: (Int32) -> CheckmarkSetting = { num in
             return CheckmarkSetting(title: NSAttributedString(string: "\(num)"), subtitle: nil, isChecked: { return num == self.numberOfRows }, onChecked: {
                 self.numberOfRows = num

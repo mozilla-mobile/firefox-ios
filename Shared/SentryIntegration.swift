@@ -28,7 +28,6 @@ public protocol SentryProtocol {
 }
 
 public class SentryIntegration: SentryProtocol {
-
     enum Environment: String {
         case nightly = "Nightly"
         case production = "Production"

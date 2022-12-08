@@ -17,7 +17,6 @@ protocol InternalSchemeResponse {
 }
 
 class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
-
     static func response(forUrl url: URL) -> URLResponse {
         return URLResponse(url: url, mimeType: "text/html", expectedContentLength: -1, textEncodingName: "utf-8")
     }

@@ -276,7 +276,6 @@ class TabCell: UICollectionViewCell,
 
 // MARK: - Extension Tab Tray Cell protocol
 extension TabTrayCell {
-
     func getA11yTitleLabel(tab: Tab) -> String? {
         let baseName = tab.getTabTrayTitle()
 

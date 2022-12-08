@@ -6,7 +6,6 @@ import Foundation
 import XCTest
 
 extension XCTestCase {
-
     func wait(_ timeout: TimeInterval) {
         let expectation = XCTestExpectation(description: "Waiting for \(timeout) seconds")
         XCTWaiter().wait(for: [expectation], timeout: timeout)

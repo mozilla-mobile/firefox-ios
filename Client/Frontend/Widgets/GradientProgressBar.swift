@@ -14,7 +14,6 @@
 import UIKit
 
 open class GradientProgressBar: UIProgressView {
-
     private struct DefaultValues {
         static let backgroundColor = UIColor.clear
         static let animationDuration = 0.2 // CALayer default animation duration

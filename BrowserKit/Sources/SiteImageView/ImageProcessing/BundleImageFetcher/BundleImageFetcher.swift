@@ -5,7 +5,6 @@
 import UIKit
 
 protocol BundleImageFetcher {
-
     /// Fetches from the bundle
     /// - Parameter domain: The domain to fetch the image with from the bundle
     /// - Returns: The image or throw an error if it fails
@@ -13,7 +12,6 @@ protocol BundleImageFetcher {
 }
 
 class DefaultBundleImageFetcher: BundleImageFetcher {
-
     private struct BundledImage: Codable {
         var title: String
         var url: String?

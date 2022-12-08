@@ -5,7 +5,6 @@
 import Foundation
 
 struct DebugSettingsBundleOptions {
-
     /// Save logs to `~/Documents` folder
     static var saveLogsToDocuments: Bool {
         return UserDefaults.standard.bool(forKey: "SettingsBundleSaveLogsToDocuments")

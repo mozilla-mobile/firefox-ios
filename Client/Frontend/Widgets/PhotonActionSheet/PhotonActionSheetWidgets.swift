@@ -101,7 +101,6 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCel
 
 // MARK: - PhotonActionSheetSeparator
 class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell {
-
     let separatorLineView = UIView()
 
     override init(reuseIdentifier: String?) {
@@ -124,7 +123,6 @@ class PhotonActionSheetLineSeparator: UITableViewHeaderFooterView, ReusableCell 
 
 // MARK: - PhotonActionSheetSeparator
 class PhotonActionSheetSeparator: UITableViewHeaderFooterView, ReusableCell {
-
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor.theme.tableView.separator

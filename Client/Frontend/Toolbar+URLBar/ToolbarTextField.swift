@@ -5,7 +5,6 @@
 import UIKit
 
 class ToolbarTextField: AutocompleteTextField {
-
     // MARK: - Variables
     @objc dynamic var clearButtonTintColor: UIColor? {
         didSet {

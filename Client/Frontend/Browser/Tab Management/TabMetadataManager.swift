@@ -7,7 +7,6 @@ import Shared
 import Storage
 
 class TabMetadataManager {
-
     let metadataObserver: HistoryMetadataObserver
 
     // Tab Groups
@@ -39,7 +38,6 @@ class TabMetadataManager {
     func updateTimerAndObserving(state: TabGroupTimerState,
                                  searchData: TabGroupData = TabGroupData(),
                                  tabTitle: String? = nil, isPrivate: Bool) {
-
         guard !isPrivate else { return }
 
         switch state {

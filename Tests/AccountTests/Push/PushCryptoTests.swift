@@ -6,7 +6,6 @@
 import XCTest
 
 class PushCryptoTests: XCTestCase {
-
     let push = PushCrypto.sharedInstance
 
     func testRoundtrip_base64urlSafe() {

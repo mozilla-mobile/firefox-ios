@@ -45,7 +45,6 @@ public enum ClientType: String {
 }
 
 class DevicePickerViewController: UITableViewController {
-
     private struct UX {
         static let tableHeaderRowHeight: CGFloat = 50
         static let deviceRowHeight: CGFloat = 50

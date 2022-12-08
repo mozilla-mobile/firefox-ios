@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-
     init() {
         super.init(style: .grouped)
 
@@ -18,7 +17,6 @@ class TabsSettingsViewController: SettingsTableViewController, FeatureFlaggable 
     }
 
     override func generateSettings() -> [SettingSection] {
-
         var sectionItems = [SettingSection]()
 
         let inactiveTabsSetting = BoolSetting(with: .inactiveTabs,

@@ -7,7 +7,6 @@ import GCDWebServers
 import Shared
 
 class WebServerUtil {
-
     private var readerModeHander: ReaderModeHandlersProtocol
     private var webServer: WebServerProtocol
     private var profile: Profile

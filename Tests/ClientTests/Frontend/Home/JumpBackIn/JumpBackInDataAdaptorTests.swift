@@ -12,7 +12,6 @@ import WebKit
 // Need protocol to be able to fix this
 
 class JumpBackInDataAdaptorTests: XCTestCase {
-
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
 
@@ -134,7 +133,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
 
 // MARK: Helpers
 extension JumpBackInDataAdaptorTests {
-
     func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
         let dispatchQueue = MockDispatchQueue()
         let siteImageHelper = SiteImageHelperMock()

@@ -61,7 +61,6 @@ class TestSwiftData: XCTestCase {
     }
 
     fileprivate func writeDuringRead(_ safeQuery: Bool = false, closeTimeout: UInt64? = nil) -> MaybeErrorType? {
-
         // Query the database and hold the cursor.
         var c: Cursor<SDRow>!
         let result = swiftData!.withConnection(SwiftData.Flags.readOnly) { db -> Void in

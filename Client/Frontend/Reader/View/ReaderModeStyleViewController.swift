@@ -17,7 +17,6 @@ protocol ReaderModeStyleViewControllerDelegate: AnyObject {
 // MARK: - ReaderModeStyleViewController
 
 class ReaderModeStyleViewController: UIViewController, Themeable {
-
     // UI views
     private var fontTypeButtons: [ReaderModeFontTypeButton]!
     private var fontSizeLabel: ReaderModeFontSizeLabel!

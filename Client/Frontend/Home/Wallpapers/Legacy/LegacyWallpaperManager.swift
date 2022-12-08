@@ -7,7 +7,6 @@ import UIKit
 import Shared
 
 struct LegacyWallpaperManager {
-
     // MARK: - Variables
     private let userDefaults: UserDefaults
     private let dataManager: LegacyWallpaperDataManager
@@ -103,7 +102,6 @@ struct LegacyWallpaperManager {
         using currentIndex: Int?,
         and wallpaperArray: [LegacyWallpaper]
     ) -> Int {
-
         guard let currentIndex = currentIndex else { return 0 }
 
         let newIndex = currentIndex + 1

@@ -97,7 +97,6 @@ extension SearchProviderModel {
 }
 
 class AdsTelemetryHelper: TabContentScript {
-
     fileprivate weak var tab: Tab?
 
     class func name() -> String {

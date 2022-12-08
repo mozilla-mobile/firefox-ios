@@ -29,7 +29,6 @@ struct SyncedTabCellViewModel {
 
 /// A cell used in FxHomeScreen's Jump Back In section
 class SyncedTabCell: UICollectionViewCell, ReusableCell {
-
     struct UX {
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)

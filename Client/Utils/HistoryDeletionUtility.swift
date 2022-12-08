@@ -21,7 +21,6 @@ protocol HistoryDeletionProtocol {
 }
 
 class HistoryDeletionUtility: HistoryDeletionProtocol {
-
     private var profile: Profile
 
     init(with profile: Profile) {
@@ -43,7 +42,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         _ dateOption: HistoryDeletionUtilityDateOptions,
         completion: @escaping (HistoryDeletionUtilityDateOptions) -> Void
     ) {
-
         deleteWKWebsiteDataSince(dateOption, for: WKWebsiteDataStore.allWebsiteDataTypes())
         // For efficiency, we'll delete data in parallel, which is why closures are
         // not encloning each subsequent call
@@ -66,7 +64,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         _ sites: [String],
         completion: @escaping (Bool) -> Void
     ) {
-
         sites.forEach { currentSite in
             profile.places
                 .deleteVisitsFor(url: currentSite)
@@ -85,7 +82,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         _ dateOption: HistoryDeletionUtilityDateOptions,
         for types: Set<String>
     ) {
-
         guard let date = dateFor(dateOption, requiringAllTimeAsPresent: false) else { return }
 
         WKWebsiteDataStore.default().removeData(
@@ -99,7 +95,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         _ dateOption: HistoryDeletionUtilityDateOptions,
         completion: @escaping (Bool?) -> Void
     ) {
-
         switch dateOption {
         case .allTime:
             switch profile.historyApiConfiguration {
@@ -137,7 +132,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
     }
 
     private func deleteProfileMetadataSince(_ dateOption: HistoryDeletionUtilityDateOptions) {
-
         guard let date = dateFor(dateOption) else { return }
         let dateInMilliseconds = date.toMillisecondsSince1970()
 
@@ -145,7 +139,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
     }
 
     private func clearRecentlyClosedTabs(using dateOption: HistoryDeletionUtilityDateOptions) {
-
         switch dateOption {
         case .allTime:
             profile.recentlyClosedTabs.clearTabs()
@@ -161,7 +154,6 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         _ dateOption: HistoryDeletionUtilityDateOptions,
         requiringAllTimeAsPresent: Bool = true
     ) -> Date? {
-
         switch dateOption {
         case .lastHour:
             return Calendar.current.date(byAdding: .hour, value: -1, to: Date())

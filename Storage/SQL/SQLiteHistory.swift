@@ -655,7 +655,6 @@ extension SQLiteHistory: BrowserHistory {
                            limit: Int,
                            offset: Int,
                            completion: @escaping ([Site]) -> Void) {
-
         let query = """
             SELECT hist.* FROM history hist
             INNER JOIN history_fts historyFTS ON

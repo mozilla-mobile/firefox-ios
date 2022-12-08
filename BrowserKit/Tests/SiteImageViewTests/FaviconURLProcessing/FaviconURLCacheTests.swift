@@ -6,7 +6,6 @@ import XCTest
 @testable import SiteImageView
 
 class FaviconURLCacheTests: XCTestCase {
-
     var subject: DefaultFaviconURLCache!
     var mockFileManager: MockURLCacheFileManager!
 
@@ -35,7 +34,6 @@ class FaviconURLCacheTests: XCTestCase {
 }
 
 actor MockURLCacheFileManager: URLCacheFileManager {
-
     func getURLCache() async -> Data? {
         return Data()
     }

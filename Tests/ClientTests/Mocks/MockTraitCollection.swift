@@ -5,7 +5,6 @@
 import UIKit
 
 class MockTraitCollection: UITraitCollection {
-
     var overridenHorizontalSizeClass: UIUserInterfaceSizeClass = .regular
     override var horizontalSizeClass: UIUserInterfaceSizeClass {
         return overridenHorizontalSizeClass

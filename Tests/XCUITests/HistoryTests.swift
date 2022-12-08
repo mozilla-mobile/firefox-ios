@@ -11,7 +11,6 @@ let emptyRecentlyClosedMesg = "Websites you’ve visited recently will show up h
 let bookOfMozilla = ["file": "test-mozilla-book.html", "title": "The Book of Mozilla", "label": "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"]
 
 class HistoryTests: BaseTestCase {
-
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings", "testClearRecentHistory"]

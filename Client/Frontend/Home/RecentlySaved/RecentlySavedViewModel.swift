@@ -12,7 +12,6 @@ struct RecentlySavedCellViewModel {
 }
 
 class RecentlySavedViewModel {
-
     struct UX {
         static let cellWidth: CGFloat = 150
         static let cellHeight: CGFloat = 110
@@ -52,7 +51,6 @@ class RecentlySavedViewModel {
 
 // MARK: HomeViewModelProtocol
 extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
-
     var sectionType: HomepageSectionType {
         return .recentlySaved
     }
@@ -127,10 +125,8 @@ extension RecentlySavedViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
 // MARK: FxHomeSectionHandler
 extension RecentlySavedViewModel: HomepageSectionHandler {
-
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-
         guard let recentlySavedCell = cell as? RecentlySavedCell else { return UICollectionViewCell() }
 
         if let item = recentItems[safe: indexPath.row] {
@@ -174,7 +170,6 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-
         if let item = recentItems[safe: indexPath.row] as? RecentlySavedBookmark {
             guard let url = URIFixup.getURL(item.url) else { return }
 
@@ -187,7 +182,6 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
         } else if let item = recentItems[safe: indexPath.row] as? ReadingListItem,
                   let url = URL(string: item.url),
                   let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
-
             let visitType = VisitType.bookmark
             libraryPanelDelegate?.libraryPanel(didSelectURL: encodedUrl, visitType: visitType)
             TelemetryWrapper.recordEvent(category: .action,

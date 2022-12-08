@@ -6,7 +6,6 @@ import Foundation
 import QuickLook
 
 class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource {
-
     private var previewItem = NSURL()
     private let presenter: Presenter
     private let previewController: QLPreviewController

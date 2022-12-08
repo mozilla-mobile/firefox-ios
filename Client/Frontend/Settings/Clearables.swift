@@ -38,7 +38,6 @@ class HistoryClearable: Clearable {
     var label: String { .ClearableHistory }
 
     func clear() -> Success {
-
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
         switch profile.historyApiConfiguration {
@@ -136,7 +135,6 @@ private func deleteLibraryFolder(_ folder: String) throws {
 
 // Removes all app cache storage.
 class SiteDataClearable: Clearable {
-
     var label: String { .ClearableOfflineData }
 
     func clear() -> Success {
@@ -150,7 +148,6 @@ class SiteDataClearable: Clearable {
 
 // Remove all cookies stored by the site. This includes localStorage, sessionStorage, and WebSQL/IndexedDB.
 class CookiesClearable: Clearable {
-
     var label: String { .ClearableCookies }
 
     func clear() -> Success {

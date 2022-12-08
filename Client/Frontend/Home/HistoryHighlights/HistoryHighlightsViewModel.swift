@@ -42,7 +42,6 @@ struct HistoryHighlightsModel {
     init(shouldHideBottomLine: Bool,
          with corners: CACornerMask? = nil,
          shouldAddShadow: Bool) {
-
         self.init(title: "",
                   description: "",
                   shouldHideBottomLine: shouldHideBottomLine,
@@ -54,7 +53,6 @@ struct HistoryHighlightsModel {
 }
 
 class HistoryHighlightsViewModel {
-
     struct UX {
         static let maxNumberOfItemsPerColumn = 3
         static let maxNumberOfColumns = 3
@@ -170,7 +168,6 @@ class HistoryHighlightsViewModel {
 
 // MARK: HomeViewModelProtocol
 extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggable {
-
     var sectionType: HomepageSectionType {
         return .historyHighlights
     }
@@ -256,7 +253,6 @@ extension HistoryHighlightsViewModel: HomepageViewModelProtocol, FeatureFlaggabl
 
 // MARK: FxHomeSectionHandler
 extension HistoryHighlightsViewModel: HomepageSectionHandler {
-
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
@@ -295,7 +291,6 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-
         if let highlight = historyItems[safe: indexPath.row] {
             switchTo(highlight)
         }
@@ -407,7 +402,6 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                   cornersToRound: CACornerMask?,
                                                   shouldAddShadow: Bool,
                                                   item: HighlightItem) -> UICollectionViewCell {
-
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
         let itemURL = item.siteUrl?.absoluteString ?? ""
@@ -436,7 +430,6 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                              cornersToRound: CACornerMask?,
                                              shouldAddShadow: Bool,
                                              item: HighlightItem) -> UICollectionViewCell {
-
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
         let cellOptions = HistoryHighlightsModel(title: item.displayTitle,
@@ -454,7 +447,6 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                      hideBottomLine: Bool,
                                      cornersToRound: CACornerMask?,
                                      shouldAddShadow: Bool) -> UICollectionViewCell {
-
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
         let cellOptions = HistoryHighlightsModel(shouldHideBottomLine: hideBottomLine,

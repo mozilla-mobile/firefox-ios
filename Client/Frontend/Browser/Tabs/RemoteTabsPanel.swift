@@ -18,7 +18,6 @@ protocol RemotePanelDelegate: AnyObject {
 
 // MARK: - RemoteTabsPanel
 class RemoteTabsPanel: UIViewController, Themeable, Loggable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -117,7 +116,6 @@ protocol CollapsibleTableViewSection: AnyObject {
 
 // MARK: - RemoteTabsPanelClientAndTabsDataSource
 class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
-
     struct UX {
         static let HeaderHeight = SiteTableViewControllerUX.RowHeight
         static let IconBorderColor = UIColor.Photon.Grey30
@@ -309,7 +307,6 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
 // MARK: - RemoteTabsErrorCell
 
 class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
-
     struct UX {
         static let EmptyStateInstructionsWidth = 170
         static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15
@@ -395,7 +392,6 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 // MARK: - RemoteTabsNotLoggedInCell
 
 class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable {
-
     struct UX {
         static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
         static let EmptyStateSignInButtonHeight = 44
@@ -544,7 +540,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell, ReusableCell, ThemeApplicable 
 
 // MARK: - RemoteTabsTableViewController
 class RemoteTabsTableViewController: UITableViewController, Themeable {
-
     struct UX {
         static let RowHeight = SiteTableViewControllerUX.RowHeight
     }
@@ -730,7 +725,6 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 }
 
 extension RemoteTabsTableViewController: CollapsibleTableViewSection {
-
     func hideTableViewSection(_ section: Int) {
         guard let dataSource = tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else { return }
 

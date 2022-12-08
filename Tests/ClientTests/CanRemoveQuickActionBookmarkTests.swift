@@ -8,7 +8,6 @@ import Storage
 @testable import Client
 
 class CanRemoveQuickActionBookmarkTests: XCTestCase {
-
     private var subject: MockCanRemoveQuickActionBookmark!
     private var mockBookmarksHandler: BookmarksHandlerMock!
     private var mockQuickActions: MockQuickActions!
@@ -73,7 +72,6 @@ private class MockCanRemoveQuickActionBookmark: CanRemoveQuickActionBookmark {
 
 // MARK: - MockQuickActions
 class MockQuickActions: QuickActions {
-
     var addFromShareItemCalled = 0
     func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
                                                  fromShareItem shareItem: ShareItem,

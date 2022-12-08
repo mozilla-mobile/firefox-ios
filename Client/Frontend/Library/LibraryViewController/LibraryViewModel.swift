@@ -5,7 +5,6 @@
 import Foundation
 
 class LibraryViewModel {
-
     let profile: Profile
     let tabManager: TabManager
     let panelDescriptors: [LibraryPanelDescriptor]

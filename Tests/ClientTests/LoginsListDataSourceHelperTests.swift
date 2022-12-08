@@ -8,7 +8,6 @@ import Shared
 import XCTest
 
 class LoginListDataSourceHelperTests: XCTestCase {
-
     func testSetDomainLookup() {
         let subject = LoginListDataSourceHelper()
         let login = LoginRecord(fromJSONDict: [

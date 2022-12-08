@@ -29,7 +29,6 @@ extension HasNimbusSponsoredTiles {
 }
 
 class NimbusManager {
-
     // MARK: - Singleton
 
     /// To help with access control, we should use protocols to access the required

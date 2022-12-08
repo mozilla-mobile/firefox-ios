@@ -12,7 +12,6 @@ enum UserFeaturePreference: String, FlaggableFeatureOptions {
 }
 
 final class FeatureFlagUserPrefsMigrationUtility {
-
     // MARK: - Properties
     private var userDefaults: UserDefaults
     private var profile: Profile

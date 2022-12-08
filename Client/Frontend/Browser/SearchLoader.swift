@@ -50,7 +50,6 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
     }
 
     private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-
         switch self.profile.historyApiConfiguration {
         case .old:
             currentDeferredHistoryQuery?.cancel()

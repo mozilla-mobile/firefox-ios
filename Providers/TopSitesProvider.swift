@@ -10,7 +10,6 @@ import SyncTelemetry
 
 /// A provider for frecency and pinned top sites, used for the home page and widgets
 protocol TopSitesProvider {
-
     /// Get top sites from frecency and pinned tiles
     func getTopSites(numberOfMaxItems: Int,
                      completion: @escaping ([Site]?) -> Void)
@@ -26,7 +25,6 @@ protocol TopSitesProvider {
 }
 
 extension TopSitesProvider {
-
     func getTopSites(numberOfMaxItems: Int = Self.numberOfMaxItems,
                      completion: @escaping ([Site]?) -> Void) {
         getTopSites(numberOfMaxItems: numberOfMaxItems, completion: completion)
@@ -42,7 +40,6 @@ extension TopSitesProvider {
 }
 
 class TopSitesProviderImplementation: TopSitesProvider {
-
     private let browserHistoryFetcher: BrowserHistory
     private let prefs: Prefs
 
@@ -57,7 +54,6 @@ class TopSitesProviderImplementation: TopSitesProvider {
 
     func getTopSites(numberOfMaxItems: Int,
                      completion: @escaping ([Site]?) -> Void) {
-
         let group = DispatchGroup()
         getFrecencySites(group: group, numberOfMaxItems: numberOfMaxItems)
         getPinnedSites(group: group)

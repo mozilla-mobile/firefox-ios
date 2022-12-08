@@ -211,7 +211,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {
-
         let defaultWallpaper = [Wallpaper(id: "fxDefault",
                                           textColor: nil,
                                           cardColor: nil,

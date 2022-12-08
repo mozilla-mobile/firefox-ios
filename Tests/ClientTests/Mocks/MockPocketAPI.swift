@@ -6,7 +6,6 @@ import Foundation
 @testable import Client
 
 class MockPocketAPI: PocketStoriesProviding {
-
     init(result: Result<[PocketFeedStory], Error>) {
         self.result = result
     }

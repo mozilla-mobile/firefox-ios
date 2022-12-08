@@ -42,7 +42,6 @@ struct DefaultBrowserOnboardingModel {
 }
 
 class DefaultBrowserOnboardingViewModel {
-
     var goToSettings: (() -> Void)?
     var model: DefaultBrowserOnboardingModel?
 

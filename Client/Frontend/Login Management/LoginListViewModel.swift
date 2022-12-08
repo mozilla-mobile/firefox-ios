@@ -14,7 +14,6 @@ struct NewSearchInProgressError: MaybeErrorType {
 // MARK: - Main View Model
 // Login List View Model
 final class LoginListViewModel {
-
     private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0

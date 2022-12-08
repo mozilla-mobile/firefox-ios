@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-
     // MARK: - Initializers
     init() {
         super.init(style: .grouped)

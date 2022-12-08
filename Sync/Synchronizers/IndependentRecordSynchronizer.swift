@@ -13,7 +13,6 @@ class Uploader {
      * Upload just about anything that can be turned into something we can upload.
      */
     func sequentialPosts<T>(_ items: [T], by: Int, lastTimestamp: Timestamp, storageOp: @escaping ([T], Timestamp) -> DeferredTimestamp) -> DeferredTimestamp {
-
         // This needs to be a real Array, not an ArraySlice,
         // for the types to line up.
         let chunks = chunk(items, by: by).map { Array($0) }
@@ -103,7 +102,6 @@ extension TimestampedSingleCollectionSynchronizer {
         storageClient: Sync15CollectionClient<T>,
         onUpload: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp
     ) -> DeferredTimestamp {
-
         if records.isEmpty {
             log.debug("No modified records to upload.")
             return deferMaybe(lastTimestamp)

@@ -18,7 +18,6 @@ protocol JumpBackInDelegate: AnyObject {
 }
 
 class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggable {
-
     // MARK: Properties
 
     var notificationCenter: NotificationProtocol
@@ -119,7 +118,6 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
             from: self.recentTabs,
             using: .orderedDescending
         ) { [weak self] groups, _ in
-
             self?.recentGroups = groups
             completion()
         }

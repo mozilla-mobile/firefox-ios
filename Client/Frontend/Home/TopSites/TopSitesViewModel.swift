@@ -7,7 +7,6 @@ import Shared
 import Storage
 
 class TopSitesViewModel {
-
     struct UX {
         static let cellEstimatedSize: CGSize = CGSize(width: 85, height: 94)
         static let cardSpacing: CGFloat = 16
@@ -125,7 +124,6 @@ class TopSitesViewModel {
 
 // MARK: HomeViewModelProtocol
 extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
-
     var sectionType: HomepageSectionType {
         return .topSites
     }
@@ -225,7 +223,6 @@ extension TopSitesViewModel: TopSitesManagerDelegate {
 
 // MARK: - FxHomeSectionHandler
 extension TopSitesViewModel: HomepageSectionHandler {
-
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
@@ -269,7 +266,6 @@ extension TopSitesViewModel: HomepageSectionHandler {
     func didSelectItem(at indexPath: IndexPath,
                        homePanelDelegate: HomePanelDelegate?,
                        libraryPanelDelegate: LibraryPanelDelegate?) {
-
         guard let site = topSites[safe: indexPath.row]  else { return }
 
         tilePressed(site: site, position: indexPath.row)

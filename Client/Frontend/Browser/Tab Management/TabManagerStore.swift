@@ -29,7 +29,6 @@ extension TabManagerStore {
 }
 
 class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable {
-
     // MARK: - Variables
     private let tabsKey = "tabs"
     private let prefs: Prefs

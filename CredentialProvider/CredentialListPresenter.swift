@@ -13,7 +13,6 @@ enum CredentialState {
 }
 
 class CredentialListPresenter {
-
     weak var view: CredentialListViewProtocol?
     var loginsData = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()
     private var filteredCredentials = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()

@@ -5,7 +5,6 @@
 import UIKit
 
 class ItemListCell: UITableViewCell {
-
     static let identifier = "itemListCell"
 
     lazy var titleLabel: UILabel = .build { label in

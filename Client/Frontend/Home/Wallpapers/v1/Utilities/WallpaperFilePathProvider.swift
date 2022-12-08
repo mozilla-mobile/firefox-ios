@@ -6,7 +6,6 @@ import Foundation
 
 /// Responsible for providing the required file paths on the disk.
 struct WallpaperFilePathProvider: Loggable {
-
     private var fileManager: FileManagerInterface
     public let metadataKey = "metadata"
     public let thumbnailsKey = "thumbnails"

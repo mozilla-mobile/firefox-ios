@@ -9,7 +9,6 @@ import XCTest
 @testable import Client
 
 class ContileProviderTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         clearState()
@@ -223,7 +222,6 @@ class ContileProviderTests: XCTestCase {
 // MARK: - Helper functions
 
 private extension ContileProviderTests {
-
     func getProvider(file: StaticString = #filePath, line: UInt = #line) -> ContileProvider {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]

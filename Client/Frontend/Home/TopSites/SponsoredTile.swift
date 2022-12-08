@@ -6,7 +6,6 @@ import Foundation
 import Storage
 
 final class SponsoredTile: Site {
-
     var tileId: Int
     var impressionURL: String
     var clickURL: String

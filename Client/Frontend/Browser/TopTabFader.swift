@@ -5,7 +5,6 @@
 import UIKit
 
 class TopTabFader: UIView {
-
     enum ActiveSide {
         case left
         case right

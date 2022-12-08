@@ -5,7 +5,6 @@
 import Shared
 
 class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFlaggable, URLCaching, Loggable {
-
     var endpoint: URL {
         if featureFlags.isCoreFeatureEnabled(.useStagingSponsoredPocketStoriesAPI) {
             return PocketSponsoredConstants.staging

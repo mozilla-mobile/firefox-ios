@@ -17,7 +17,6 @@ public extension Array where Element: Comparable {
 }
 
 public extension Array {
-
     func find(_ f: (Iterator.Element) -> Bool) -> Iterator.Element? {
         for x in self {
             if f(x) {
@@ -64,7 +63,6 @@ public extension Array {
 }
 
 public extension Sequence where Iterator.Element: Hashable {
-
     /// Return a  de-duplicated sequence with the order preserved. `o(N)` complexity.
     func uniqued() -> [Iterator.Element] {
         var seen: Set<Iterator.Element> = []

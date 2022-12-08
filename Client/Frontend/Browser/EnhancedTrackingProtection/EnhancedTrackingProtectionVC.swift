@@ -45,7 +45,6 @@ class ETPSectionView: UIView {
 }
 
 class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

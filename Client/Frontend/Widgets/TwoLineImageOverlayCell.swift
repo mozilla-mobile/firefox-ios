@@ -7,7 +7,6 @@ import UIKit
 class TwoLineImageOverlayCell: UITableViewCell,
                                ReusableCell,
                                ThemeApplicable {
-
     struct UX {
         static let ImageSize: CGFloat = 29
         static let BorderViewMargin: CGFloat = 16

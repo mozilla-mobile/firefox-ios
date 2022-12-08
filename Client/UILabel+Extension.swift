@@ -5,7 +5,6 @@
 import Foundation
 
 extension UILabel {
-
     var isTruncated: Bool {
         guard frame.size.width != 0,
               let text = text,

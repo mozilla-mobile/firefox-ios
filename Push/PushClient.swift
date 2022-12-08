@@ -15,7 +15,6 @@ protocol PushClient {
 }
 
 public class PushClientImplementation: PushClient {
-
     private let log = Logger.browserLogger
 
     /// Bug 1364403 – This is to be put into the push registration
@@ -44,7 +43,6 @@ public class PushClientImplementation: PushClient {
 public extension PushClientImplementation {
     func register(_ apnsToken: String,
                   completion: @escaping (PushRegistration?) -> Void) {
-
         let registerURL = endpointURL.appendingPathComponent("registration")!
         var mutableURLRequest = URLRequest(url: registerURL)
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue

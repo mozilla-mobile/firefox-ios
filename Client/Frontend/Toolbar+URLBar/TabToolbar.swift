@@ -6,7 +6,6 @@ import UIKit
 import Shared
 
 class TabToolbar: UIView {
-
     // MARK: - Variables
 
     weak var tabToolbarDelegate: TabToolbarDelegate?

@@ -8,7 +8,6 @@ import Glean
 // Telemetry for the Sponsored tiles located in the Top sites on the Firefox home page
 // Using Pings to send the telemetry events
 class SponsoredTileTelemetry {
-
     // Source is only new tab at the moment, more source could be added later
     static let source = "newtab"
 

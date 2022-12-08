@@ -10,7 +10,6 @@ import XCTest
 import Shared
 
 class TabEventHandlerTests: XCTestCase {
-
     func testEventDelivery() {
         let tab = Tab(profile: MockProfile(),
                       configuration: WKWebViewConfiguration())

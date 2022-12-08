@@ -15,7 +15,6 @@ class WallpaperURLSessionDataTaskMock: URLSessionDataTaskProtocol {
 }
 
 class WallpaperURLSessionMock: URLSessionProtocol {
-
     var dataTask = WallpaperURLSessionDataTaskMock()
     private let data: Data?
     private let response: URLResponse?

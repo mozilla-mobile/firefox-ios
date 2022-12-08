@@ -19,7 +19,6 @@ enum TabGroupTimerState: String, Codable {
 // We have both Codable and NSCoding protocol conformance since we're currently migrating users to
 // Codable for TabGroupData. We'll be able to remove NSCoding when adoption rate to v106 and greater is high enough.
 class TabGroupData: NSObject, Codable, NSCoding {
-
     var tabAssociatedSearchTerm: String = ""
     var tabAssociatedSearchUrl: String = ""
     var tabAssociatedNextUrl: String = ""

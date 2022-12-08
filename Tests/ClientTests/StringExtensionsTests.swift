@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class StringExtensionsTests: XCTestCase {
-
     func testEllipsize() {
         // Odd maxLength. Note that we ellipsize with a Unicode join character to avoid wrapping.
         XCTAssertEqual("abcd…\u{2060}fgh", "abcdefgh".ellipsize(maxLength: 7))

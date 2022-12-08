@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable, AppVersionUpdateCheckerProtocol {
-
     static let prefsKey: String = PrefsKeys.KeyLastVersionNumber
     let profile: Profile
     var hasSyncableAccount: Bool?

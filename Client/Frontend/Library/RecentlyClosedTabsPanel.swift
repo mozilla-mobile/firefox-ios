@@ -18,7 +18,6 @@ protocol RecentlyClosedPanelDelegate: AnyObject {
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
-
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var state: LibraryPanelMainState = .history(state: .inFolder)
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?

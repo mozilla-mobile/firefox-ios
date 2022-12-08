@@ -132,7 +132,6 @@ fileprivate extension BaseTestCase {
 }
 
 class DragAndDropTestIpad: IpadOnlyTestCase {
-
     let testWithDB = ["testTryDragAndDropHistoryToURLBar", "testTryDragAndDropBookmarkToURLBar", "testDragAndDropBookmarkEntry", "test3DragAndDropHistoryEntry"]
 
         // This DDBB contains those 4 websites listed in the name

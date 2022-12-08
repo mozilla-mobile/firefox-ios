@@ -12,7 +12,6 @@ import Foundation
 /// `.accessibilityIdentifier` identifiers from the client and the tests
 /// should be move here and updated throughout the app.
 public struct AccessibilityIdentifiers {
-
     struct Toolbar {
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
@@ -23,7 +22,6 @@ public struct AccessibilityIdentifiers {
     }
 
     struct Browser {
-
         struct TopTabs {
             static let collectionView = "Top Tabs View"
             static let tabsButton = "TopTabsViewController.tabsButton"
@@ -41,7 +39,6 @@ public struct AccessibilityIdentifiers {
     }
 
     struct FirefoxHomepage {
-
         static let collectionView = "FxCollectionView"
 
         struct HomeTabBanner {

@@ -13,7 +13,6 @@ protocol URLSessionProtocol {
 }
 
 extension URLSession: URLSessionProtocol {
-
     func dataTaskWith(_ url: URL,
                       completionHandler: @escaping DataTaskResult
     ) -> URLSessionDataTaskProtocol {

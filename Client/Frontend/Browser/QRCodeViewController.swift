@@ -12,7 +12,6 @@ protocol QRCodeViewControllerDelegate: AnyObject {
 }
 
 class QRCodeViewController: UIViewController {
-
     private struct UX {
         static let navigationBarBackgroundColor = UIColor.black
         static let navigationBarTitleColor = UIColor.Photon.White100

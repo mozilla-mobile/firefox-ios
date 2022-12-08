@@ -21,7 +21,6 @@ protocol TabLocationViewDelegate: AnyObject {
 }
 
 class TabLocationView: UIView, FeatureFlaggable {
-
     // MARK: UX
     struct UX {
         static let hostFontColor = UIColor.black

@@ -6,7 +6,6 @@ import Foundation
 @testable import SiteImageView
 
 class FaviconURLFetcherMock: FaviconURLFetcher {
-
     var url: URL?
     var error: SiteImageError?
     var fetchFaviconURLCalledCount = 0

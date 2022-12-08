@@ -6,7 +6,6 @@ import Shared
 import Storage
 
 class TabTrayViewModel {
-
     enum Segment: Int, CaseIterable {
         case tabs
         case privateTabs

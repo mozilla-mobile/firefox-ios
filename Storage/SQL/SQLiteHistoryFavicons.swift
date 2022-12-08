@@ -72,7 +72,6 @@ class FaviconDownloadError: MaybeErrorType {
 }
 
 extension SQLiteHistory: Favicons {
-
     public func getFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>> {
         // First, attempt to lookup the favicon from our bundled top sites.
         return getTopSitesFaviconImage(forSite: site).bind { result in

@@ -5,7 +5,6 @@
 import UIKit
 
 class DevicePickerTableViewHeaderCell: UITableViewCell, ReusableCell {
-
     private struct UX {
         static let tableHeaderTextFont = UIFont.systemFont(ofSize: 16)
         static let tableHeaderTextColor = UIColor.Photon.Grey50

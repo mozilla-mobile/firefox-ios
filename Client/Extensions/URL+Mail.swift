@@ -14,7 +14,6 @@ public struct MailToMetadata {
 }
 
 public extension URL {
-
     /**
      Extracts the metadata associated with a mailto: URL according to RFC 2368
      https://tools.ietf.org/html/rfc2368

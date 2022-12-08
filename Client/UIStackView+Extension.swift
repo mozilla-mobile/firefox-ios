@@ -8,7 +8,6 @@ import Shared
 private let log = Logger.browserLogger
 
 extension UIStackView {
-
     func toggleStackViewVisibility(show: Bool) {
         guard show else {
             self.isHidden = true

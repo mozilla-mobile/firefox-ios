@@ -28,7 +28,6 @@ protocol TopTabsDelegate: AnyObject {
 }
 
 class TopTabsViewController: UIViewController, Themeable {
-
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
@@ -271,7 +270,6 @@ class TopTabsViewController: UIViewController, Themeable {
 }
 
 extension TopTabsViewController: TabDisplayer {
-
     func focusSelectedTab() {
         self.scrollToCurrentTab(true)
         self.handleFadeOutAfterTabSelection()

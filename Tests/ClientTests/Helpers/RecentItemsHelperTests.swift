@@ -9,7 +9,6 @@ import Storage
 import Shared
 
 class RecentItemsHelperTests: XCTestCase {
-
     private let bookmarkCutoffDate = 10
     private let readingListCutoffdate = 7
 
@@ -163,7 +162,6 @@ class RecentItemsHelperTests: XCTestCase {
 }
 
 private extension RecentItemsHelperTests {
-
     func createBookmarksItems(count: Int, date: Date = Date()) -> [BookmarkItemData] {
         var items = [BookmarkItemData]()
         for _ in 0..<count {

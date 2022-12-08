@@ -50,7 +50,6 @@ public func == (lhs: SyncDisplayState, rhs: SyncDisplayState) -> Bool {
  * display-oriented state for displaying warnings/errors to the user.
  */
 public struct SyncStatusResolver {
-
     let engineResults: Maybe<EngineResults>
 
     public func resolveResults() -> SyncDisplayState {
@@ -101,7 +100,6 @@ public struct SyncStatusResolver {
         // what might have happened with a particular engine when syncing.
         let aggregate: SyncDisplayState = displayStates.reduce(.good) { carried, displayState in
             switch displayState {
-
             case .bad:
                 return displayState
 

@@ -8,7 +8,6 @@ import WebKit
 @testable import Client
 
 class AccountSyncHandlerTests: XCTestCase {
-
     private var profile: MockProfile!
     private var syncManager: MockSyncManager!
     private var queue: MockDispatchQueue!

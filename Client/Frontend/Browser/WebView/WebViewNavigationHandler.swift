@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 
 protocol WebViewNavigationHandler {
-
     // A completion handler block to call with the results about whether to allow or cancel the WebView navigation.
     var decisionHandler: (WKNavigationActionPolicy) -> Void { get }
 
@@ -28,7 +27,6 @@ protocol WebViewNavigationHandler {
 
 /// Note that this is a work in progress to remove navigation handler code from BrowserViewController+WebViewDelegates
 struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
-
     enum Scheme: String {
         case data
     }
@@ -45,7 +43,6 @@ struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
 
     func filterDataScheme(url: URL,
                           navigationAction: WKNavigationAction) {
-
         // Only filter top-level navigation, not on data URL subframes.
         // If target frame is nil, we filter as well.
         guard navigationAction.targetFrame?.isMainFrame ?? true else {

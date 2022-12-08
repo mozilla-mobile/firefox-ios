@@ -17,7 +17,6 @@ enum CoreFeatureFlagID {
 }
 
 struct CoreFlaggableFeature {
-
     // MARK: - Variables
     private let buildChannels: [AppBuildChannel]
     private var featureID: CoreFeatureFlagID

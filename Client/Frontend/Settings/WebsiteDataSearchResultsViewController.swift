@@ -8,7 +8,6 @@ import Shared
 import WebKit
 
 class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

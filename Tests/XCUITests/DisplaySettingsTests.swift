@@ -5,7 +5,6 @@
 import XCTest
 
 class DisplaySettingTests: BaseTestCase {
-
     func testCheckDisplaySettingsDefault() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
         navigator.performAction(Action.CloseURLBarOpen)

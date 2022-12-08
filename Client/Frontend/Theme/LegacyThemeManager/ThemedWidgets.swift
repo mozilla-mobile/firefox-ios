@@ -39,7 +39,6 @@ class ThemedTableViewCellViewModel {
 }
 
 class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
-
     var viewModel: ThemedTableViewCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -65,7 +64,6 @@ class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
 }
 
 class ThemedTableViewController: UITableViewController, Themeable {
-
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?

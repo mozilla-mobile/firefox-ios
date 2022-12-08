@@ -5,7 +5,6 @@
 import UIKit
 
 class EmptyPlaceholderCell: UITableViewCell {
-
     static let identifier = "emptyPlaceholderCell"
 
     lazy private var titleLabel: UILabel = .build { label in

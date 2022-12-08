@@ -16,7 +16,6 @@ protocol HistoryHighlightsDelegate: AnyObject {
 }
 
 class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
-
     private var historyItems = [HighlightItem]()
     private var historyManager: HistoryHighlightsManagerProtocol
     private var profile: Profile
@@ -61,7 +60,6 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
             with: profile,
             and: tabManager.tabs,
             shouldGroupHighlights: true) { [weak self] highlights in
-
                 self?.historyItems = highlights ?? []
                 self?.delegate?.didLoadNewData()
         }

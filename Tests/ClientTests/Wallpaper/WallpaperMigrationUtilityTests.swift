@@ -9,7 +9,6 @@ import Shared
 @testable import Client
 
 class WallpaperMigrationUtilityTests: XCTestCase {
-
     private let migrationKey = PrefsKeys.LegacyFeatureFlags.WallpaperDirectoryMigrationCheck
 
     override func setUp() {

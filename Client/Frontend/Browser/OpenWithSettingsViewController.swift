@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class OpenWithSettingsViewController: ThemedTableViewController {
-
     struct MailtoProviderEntry {
         let name: String
         let scheme: String
@@ -79,7 +78,6 @@ class OpenWithSettingsViewController: ThemedTableViewController {
     func reloadMailProviderSource() {
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"),
            let dictRoot = NSArray(contentsOfFile: path) {
-
             mailProviderSource = dictRoot.compactMap { dict in
                 guard let nsDict = dict as? NSDictionary,
                       let name = nsDict["name"] as? String,

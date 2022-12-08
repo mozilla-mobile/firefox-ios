@@ -14,7 +14,6 @@ let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on 
  * the user to navigate back to Settings.
  */
 class SettingsContentViewController: UIViewController, WKNavigationDelegate, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

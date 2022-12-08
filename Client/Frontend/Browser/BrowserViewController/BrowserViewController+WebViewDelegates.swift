@@ -151,7 +151,6 @@ extension BrowserViewController: WKUIDelegate {
                        !currentTab.adsTelemetryUrlList.isEmpty,
                        currentTab.adsTelemetryUrlList.contains(adUrl),
                        !currentTab.adsProviderName.isEmpty {
-
                         AdsTelemetryHelper.trackAdsClickedOnPage(providerName: currentTab.adsProviderName)
                         currentTab.adsTelemetryUrlList.removeAll()
                         currentTab.adsTelemetryRedirectUrlList.removeAll()
@@ -461,7 +460,6 @@ extension BrowserViewController: WKNavigationDelegate {
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,
            !tab.adsTelemetryUrlList.isEmpty {
-
             let adUrl = url.absoluteString
             if tab.adsTelemetryUrlList.contains(adUrl) {
                 if !tab.adsProviderName.isEmpty { AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName) }
@@ -734,7 +732,6 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-
         // If this is a certificate challenge, see if the certificate has previously been
         // accepted by the user.
         let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
@@ -783,7 +780,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Only update search term data with valid search term data
         if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
-
             if !tab.adsTelemetryRedirectUrlList.isEmpty,
                !tab.adsProviderName.isEmpty,
                !tab.adsTelemetryUrlList.isEmpty,
@@ -791,7 +787,6 @@ extension BrowserViewController: WKNavigationDelegate {
                let startingRedirectHost = tab.startingSearchUrlWithAds?.host,
                let lastRedirectHost = tab.adsTelemetryRedirectUrlList.last?.host,
                lastRedirectHost != startingRedirectHost {
-
                 AdsTelemetryHelper.trackAdsClickedOnPage(providerName: tab.adsProviderName)
                 tab.adsTelemetryUrlList.removeAll()
                 tab.adsTelemetryRedirectUrlList.removeAll()

@@ -6,7 +6,6 @@ import Foundation
 import Storage
 
 class BookmarksHandlerMock: BookmarksHandler {
-
     var getRecentBookmarksCallCount = 0
     var getRecentBookmarksCompletion: (([BookmarkItemData]) -> Void)?
 

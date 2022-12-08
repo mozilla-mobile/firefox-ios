@@ -49,7 +49,6 @@ private var etldEntries: TLDEntryMap? = {
 
 // MARK: - Local Resource URL Extensions
 extension URL {
-
     public func allocatedFileSize() -> Int64 {
         // First try to get the total allocated size and in failing that, get the file allocated size
         return getResourceLongLongForKey(URLResourceKey.totalFileAllocatedSizeKey.rawValue)
@@ -184,7 +183,6 @@ private let permanentURISchemes = ["aaa",
                                    "z39.50s"]
 
 extension URL {
-
     public func withQueryParams(_ params: [URLQueryItem]) -> URL {
         var components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
         var items = (components.queryItems ?? [])
@@ -467,7 +465,6 @@ extension URL {
 // MARK: - Exported URL Schemes
 
 extension URL {
-
     public static var mozPublicScheme: String = {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozPublicURLScheme") as? String, !string.isEmpty else {
             // Something went wrong/weird, fall back to hard-coded.
@@ -605,7 +602,6 @@ public struct InternalURL {
 
 // MARK: Private Helpers
 private extension URL {
-
     /// Creates a short domain version of a link's url
     /// e.g. url: http://www.foosite.com  =>  "foosite"
     /// - Parameters:

@@ -1,7 +1,6 @@
 import XCTest
 
 class FirstRunTourTests: BaseTestCase {
-
     let onboardingAccessibilityId = [AccessibilityIdentifiers.Onboarding.welcomeCard,
                                      AccessibilityIdentifiers.Onboarding.signSyncCard]
     var currentScreen = 0

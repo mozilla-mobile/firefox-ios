@@ -24,7 +24,6 @@ extension PocketStoriesProviding {
 }
 
 class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
-
     private class PocketError: MaybeErrorType {
         var description = "Failed to load from API"
     }
@@ -66,7 +65,6 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     }
 
     private func getGlobalFeed(items: Int, completion: @escaping (StoryResult) -> Void) {
-
         guard let request = createGlobalFeedRequest(items: items) else {
             return completion(.failure(Error.failure))
         }

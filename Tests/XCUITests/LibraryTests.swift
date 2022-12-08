@@ -5,7 +5,6 @@
 import XCTest
 
 class LibraryTestsIpad: IpadOnlyTestCase {
-
     func testLibraryShortcut() {
         if skipPlatform {return}
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)

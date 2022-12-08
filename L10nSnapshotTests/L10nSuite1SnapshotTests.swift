@@ -5,7 +5,6 @@
 import XCTest
 
 class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
-
     var noSkipIntroTest = ["testIntro"]
 
     let onboardingAccessibilityId = [AccessibilityIdentifiers.Onboarding.welcomeCard,

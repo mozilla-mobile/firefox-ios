@@ -18,7 +18,6 @@ struct JumpBackInCellViewModel {
 // MARK: - JumpBackInCell
 /// A cell used in Home page Jump Back In section
 class JumpBackInCell: UICollectionViewCell, ReusableCell {
-
     struct UX {
         static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
         static let interGroupSpacing: CGFloat = 8

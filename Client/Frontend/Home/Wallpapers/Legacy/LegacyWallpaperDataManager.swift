@@ -86,7 +86,6 @@ struct LegacyWallpaperDataManager {
         from collection: [LegacyWallpaperCollection]?,
         ignoringEligibility shouldIgnoreEligibility: Bool = false
     ) -> [LegacyWallpaper]? {
-
         guard let collection = collection else { return nil }
 
         var wallpapers = [LegacyWallpaper]()
@@ -94,7 +93,6 @@ struct LegacyWallpaperDataManager {
         collection.forEach { collection in
             wallpapers.append(
                 contentsOf: collection.wallpaperIDs.compactMap { wallpaperID in
-
                     let wallpaper = LegacyWallpaper(named: wallpaperID.name,
                                                     ofType: collection.type,
                                                     withAccessibiltyLabel: wallpaperID.accessibilityLabel,
@@ -111,7 +109,6 @@ struct LegacyWallpaperDataManager {
     }
 
     private func allWallpaperCollections() -> [LegacyWallpaperCollection] {
-
         var allCollections = firefoxDefaultCollection()
 
         if let specialCollections = allSpecialCollections() {

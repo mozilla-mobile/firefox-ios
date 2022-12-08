@@ -11,7 +11,6 @@ public enum Model: String {
 }
 
 extension UIDevice {
-
     // returns true when device is an iPhone SE 1st gen
     var isTinyFormFactor: Bool {
         return UIDevice().type == .iPhoneSE

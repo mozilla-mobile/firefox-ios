@@ -11,7 +11,6 @@ import Shared
 @testable import Client
 
 class UIImageViewExtensionsTests: XCTestCase {
-
     func testsetIcon() {
         let url = URL(string: "http://mozilla.com")
         let imageView = UIImageView()

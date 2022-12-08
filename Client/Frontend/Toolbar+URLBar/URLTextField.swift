@@ -6,7 +6,6 @@ import UIKit
 import Shared
 
 class URLTextField: UITextField {
-
     // MARK: UX
     struct UX {
         static let spacing: CGFloat = 8

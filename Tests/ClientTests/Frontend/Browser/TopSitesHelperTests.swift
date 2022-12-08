@@ -9,7 +9,6 @@ import Shared
 import XCTest
 
 class TopSitesHelperTests: XCTestCase {
-
     func testGetTopSites_withError_completesWithZeroSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
 
@@ -173,7 +172,6 @@ class TopSitesHelperTests: XCTestCase {
 
 // MARK: - Tests data
 extension TopSitesHelperTests {
-
     var defaultPinnedSites: [PinnedSite] {
         return [PinnedSite(site: Site(url: "https://apinnedsite.com/", title: "a pinned site title")),
                 PinnedSite(site: Site(url: "https://apinnedsite2.com/", title: "a pinned site title2"))]
@@ -187,7 +185,6 @@ extension TopSitesHelperTests {
 
 // MARK: - SiteCursorMock
 class SiteCursorMock: Cursor<Site> {
-
     var sites = [Site]()
     override func asArray() -> [Site] {
         return sites
@@ -196,7 +193,6 @@ class SiteCursorMock: Cursor<Site> {
 
 // MARK: - MockableHistory
 class BrowserHistoryMock: MockableHistory {
-
     class Error: MaybeErrorType {
         var description = "Error"
     }

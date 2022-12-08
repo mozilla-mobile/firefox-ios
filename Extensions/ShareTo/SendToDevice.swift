@@ -8,7 +8,6 @@ import SwiftUI
 import UIKit
 
 class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
-
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
     private var profile: Profile {

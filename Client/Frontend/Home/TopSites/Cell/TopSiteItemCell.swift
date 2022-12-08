@@ -9,7 +9,6 @@ import UIKit
 
 /// The TopSite cell that appears in the ASHorizontalScrollView.
 class TopSiteItemCell: UICollectionViewCell, ReusableCell {
-
     // MARK: - Variables
 
     private var homeTopSite: TopSite?

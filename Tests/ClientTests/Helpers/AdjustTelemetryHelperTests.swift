@@ -8,7 +8,6 @@ import Glean
 @testable import Client
 
 class AdjustTelemetryHelperTests: XCTestCase {
-
     var telemetryHelper: AdjustTelemetryHelper!
 
     override func setUp() {
@@ -46,7 +45,6 @@ class AdjustTelemetryHelperTests: XCTestCase {
         let expectation = expectation(description: "The first session ping was sent")
 
         GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-
             XCTAssertEqual("campaign", GleanMetrics.Adjust.campaign.testGetValue())
             XCTAssertEqual("adGroup", GleanMetrics.Adjust.adGroup.testGetValue())
             XCTAssertEqual("creative", GleanMetrics.Adjust.creative.testGetValue())
@@ -74,7 +72,6 @@ class AdjustTelemetryHelperTests: XCTestCase {
 
         let expectation = expectation(description: "The first session ping was sent")
         GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
-
             self.testEventMetricRecordingSuccess(metric: GleanMetrics.Adjust.deeplinkReceived)
 
             self.testStringMetricSuccess(metric: GleanMetrics.Adjust.campaign,

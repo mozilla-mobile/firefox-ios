@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class WallpaperNetworkingTests: XCTestCase {
-
     var networking: NetworkingMock!
 
     override func setUp() {

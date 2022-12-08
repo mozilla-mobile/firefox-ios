@@ -5,7 +5,6 @@
 import UIKit
 
 class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
-
     private struct UX {
         static let cornerRadius: CGFloat = 10
         static let borderWidth: CGFloat = 1
@@ -92,7 +91,6 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
 
 // MARK: - Private
 private extension WallpaperCollectionViewCell {
-
     func updateContent() {
         guard let viewModel = viewModel else { return }
         imageView.image = viewModel.image
@@ -133,7 +131,6 @@ private extension WallpaperCollectionViewCell {
 
 // MARK: - ThemeApplicable
 extension WallpaperCollectionViewCell: ThemeApplicable {
-
     func applyTheme(theme: Theme) {
         contentView.backgroundColor = theme.colors.layer2
         borderView.layer.borderColor = theme.colors.borderPrimary.cgColor

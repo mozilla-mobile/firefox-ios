@@ -491,7 +491,6 @@ open class Sync15StorageClient {
     }
 
     fileprivate func doOp<T>(_ op: (URL, @escaping URLSessionCompletion) -> Void, path: String, function: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
-
         let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
         if self.checkBackoff(deferred) {
@@ -537,7 +536,6 @@ open class Sync15StorageClient {
     }
 
     fileprivate func putResource<T>(_ URL: Foundation.URL, body: JSON, ifUnmodifiedSince: Timestamp?, parser: @escaping (String) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
-
         let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
         if self.checkBackoff(deferred) {
             return deferred

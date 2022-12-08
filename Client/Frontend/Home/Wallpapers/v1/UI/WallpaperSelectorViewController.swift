@@ -5,7 +5,6 @@
 import UIKit
 
 class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
-
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
@@ -118,7 +117,6 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
 
 // MARK: - CollectionView Data Source
 extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.numberOfWallpapers
     }
@@ -141,7 +139,6 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
 
 // MARK: - Private
 private extension WallpaperSelectorViewController {
-
     func setupView() {
         configureCollectionView()
 

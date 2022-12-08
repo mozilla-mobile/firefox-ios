@@ -13,7 +13,6 @@ protocol BundleDataProvider {
 }
 
 class DefaultBundleDataProvider: BundleDataProvider {
-
     enum BundleDataError: Error {
         case noPath
     }

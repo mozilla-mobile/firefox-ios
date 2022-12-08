@@ -8,7 +8,6 @@ import MozillaAppServices
 import Shared
 
 protocol GleanPlumbMessageManagerProtocol {
-
     /// Performs the bookkeeping and preparation of messages for their respective surfaces.
     /// We can build our collection of eligible messages for a surface in here.
     func onStartup()
@@ -49,7 +48,6 @@ protocol GleanPlumbMessageManagerProtocol {
 ///     - malformed message
 ///     - expiration (handled in the store)
 class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
-
     // MARK: - Properties
     static let shared = GleanPlumbMessageManager()
 
@@ -174,7 +172,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     /// - Returns: All well-formed, non-expired messages for a surface in descending priority order for a specified surface.
     private func getAllValidMessagesFor(_ surface: MessageSurfaceId, with feature: Messaging) -> [GleanPlumbMessage] {
-
         /// All these are non-expired, well formed, and descending priority messages for a requested surface.
         let messages = feature.messages.compactMap { key, messageData -> GleanPlumbMessage? in
             guard let message = self.createMessage(messageId: key,
@@ -199,8 +196,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// We assemble one message at a time. If there's any issue with it, return `nil`.
     /// Reporting a malformed message is done at the call site when reacting to a `nil`.
     private func createMessage(messageId: String, message: MessageData, lookupTables: Messaging) -> GleanPlumbMessage? {
-
-        /// Guard against a message with a blank `text` property. 
+        /// Guard against a message with a blank `text` property.
         guard !message.text.isEmpty else { return nil }
 
         /// Ascertain a Message's style, to know priority and max impressions.

@@ -5,7 +5,6 @@
 @testable import Client
 
 class MockHistoryHighlightsDataAdaptor: HistoryHighlightsDataAdaptor {
-
     var mockHistoryItems = [HighlightItem]()
     var delegate: HistoryHighlightsDelegate?
     var deleteCallCount = 0

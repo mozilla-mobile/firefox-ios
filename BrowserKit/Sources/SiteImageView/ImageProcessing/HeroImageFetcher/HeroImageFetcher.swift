@@ -10,7 +10,6 @@ protocol HeroImageFetcher {
 }
 
 class DefaultHeroImageFetcher: HeroImageFetcher {
-
     private let metadataProvider: LPMetadataProvider
 
     init(metadataProvider: LPMetadataProvider = LPMetadataProvider()) {

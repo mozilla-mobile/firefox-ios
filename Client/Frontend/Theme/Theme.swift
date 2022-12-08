@@ -19,7 +19,6 @@ struct Gradient {
 /// Based on the official themes in https://www.figma.com/file/pEyGeE4KV5ytYHeXMfLcEr/Mobile-Styles?node-id=889%3A46413
 /// Do not add any named colours in here unless it's part of the official theme
 protocol ThemeColourPalette {
-
     // MARK: - Layers
     var layer1: UIColor { get }
     var layer2: UIColor { get }

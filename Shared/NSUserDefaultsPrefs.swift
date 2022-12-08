@@ -5,7 +5,6 @@
 import Foundation
 
 open class NSUserDefaultsPrefs: Prefs {
-
     fileprivate let prefixWithDot: String
     fileprivate let userDefaults: UserDefaults
 

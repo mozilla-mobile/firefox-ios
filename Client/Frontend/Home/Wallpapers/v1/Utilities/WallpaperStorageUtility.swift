@@ -16,7 +16,6 @@ enum WallpaperStorageError: Error {
 
 /// Responsible for writing or deleting wallpaper data to/from memory.
 struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
-
     private var userDefaults: UserDefaultsInterface
     private var fileManager: FileManagerInterface
 

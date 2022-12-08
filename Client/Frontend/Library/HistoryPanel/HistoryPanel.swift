@@ -19,7 +19,6 @@ class HistoryPanel: UIViewController,
                     LibraryPanel,
                     Loggable,
                     Themeable {
-
     struct UX {
         static let WelcomeScreenItemWidth = 170
         static let IconSize = 23
@@ -272,7 +271,6 @@ class HistoryPanel: UIViewController,
 
     private func showClearRecentHistory() {
         clearHistoryHelper.showClearRecentHistory(onViewController: self) { [weak self] dateOption in
-
             // Delete groupings that belong to THAT section.
             switch dateOption {
             case .today, .yesterday:
@@ -377,7 +375,6 @@ class HistoryPanel: UIViewController,
     }
 
     private func configureHistoryActionableCell(_ historyActionable: HistoryActionablesModel, _ cell: OneLineTableViewCell) -> OneLineTableViewCell {
-
         cell.leftImageView.tintColor = themeManager.currentTheme.colors.textPrimary
         cell.leftImageView.backgroundColor = .clear
 
@@ -488,7 +485,6 @@ class HistoryPanel: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-
         // For UX consistency, every cell in history panel SHOULD have a trailing action.
         let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
             guard let self = self else {
@@ -567,7 +563,6 @@ class HistoryPanel: UIViewController,
 // MARK: - UITableViewDelegate related helpers
 
 extension HistoryPanel: UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
@@ -781,7 +776,6 @@ extension HistoryPanel {
 }
 
 extension HistoryPanel: UITableViewDataSourcePrefetching {
-
     // Happens WAY too often. We should consider fetching the next set when the user HITS the bottom instead.
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard !viewModel.isFetchInProgress, indexPaths.contains(where: shouldLoadRow) else { return }

@@ -7,7 +7,6 @@ import XCTest
 @testable import SiteImageView
 
 final class HeroImageFetcherTests: XCTestCase {
-
     private var metadataProvider: MetadataProviderFake!
 
     override func setUp() {
@@ -87,7 +86,6 @@ private extension HeroImageFetcherTests {
 
 // MARK: - MetadataProviderFake
 private class MetadataProviderFake: LPMetadataProvider {
-
     var metadataResult = LPLinkMetadata()
     var errorResult: Error?
     override func startFetchingMetadata(for URL: URL, completionHandler: @escaping (LPLinkMetadata?, Error?) -> Void) {
@@ -97,7 +95,6 @@ private class MetadataProviderFake: LPMetadataProvider {
 
 // MARK: - ItemProviderFake
 private  class ItemProviderFake: NSItemProvider {
-
     var imageResult: UIImage? = UIImage()
     var errorResult: Error?
     override func loadObject(ofClass aClass: NSItemProviderReading.Type, completionHandler: @escaping (NSItemProviderReading?, Error?) -> Void) -> Progress {

@@ -6,7 +6,6 @@ import Foundation
 
 /// A view whose primary modifiable layer is a gradient layer
 public class ConfigurableGradientView: UIView {
-
     init() {
         super.init(frame: .zero)
     }

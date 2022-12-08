@@ -5,7 +5,6 @@
 @testable import Client
 
 class MockTelemetryWrapper: TelemetryWrapperProtocol {
-
     var recordEventCallCount = 0
     var recordedCategories = [TelemetryWrapper.EventCategory]()
     var recordedMethods = [TelemetryWrapper.EventMethod]()
@@ -16,7 +15,6 @@ class MockTelemetryWrapper: TelemetryWrapperProtocol {
                      object: TelemetryWrapper.EventObject,
                      value: TelemetryWrapper.EventValue?,
                      extras: [String: Any]?) {
-
         recordEventCallCount += 1
         recordedCategories.append(category)
         recordedMethods.append(method)

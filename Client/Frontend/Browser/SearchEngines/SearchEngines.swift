@@ -26,7 +26,6 @@ import Storage
 /// The search engines are backed by a write-through cache into a ProfilePrefs instance.  This class
 /// is not thread-safe -- you should only access it on a single thread (usually, the main thread)!
 class SearchEngines {
-
     private let prefs: Prefs
     private let fileAccessor: FileAccessor
     private let orderedEngineNames = "search.orderedEngineNames"

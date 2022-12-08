@@ -6,7 +6,6 @@ import Foundation
 import Storage
 
 struct InactiveTabItemCellModel {
-
     struct UX {
         static let ImageSize: CGFloat = 28
         static let BorderViewMargin: CGFloat = 16

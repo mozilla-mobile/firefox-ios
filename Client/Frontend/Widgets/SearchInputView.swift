@@ -6,7 +6,6 @@ import Foundation
 import SnapKit
 
 private struct SearchInputViewUX {
-
     static let horizontalSpacing: CGFloat = 16
     static let titleFont = UIFont.systemFont(ofSize: 16)
     static let borderLineWidth: CGFloat = 0.5
@@ -14,7 +13,6 @@ private struct SearchInputViewUX {
 }
 
 @objc protocol SearchInputViewDelegate: AnyObject {
-
     func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String)
 
     func searchInputViewBeganEditing(_ searchView: SearchInputView)
@@ -23,7 +21,6 @@ private struct SearchInputViewUX {
 }
 
 class SearchInputView: UIView, NotificationThemeable {
-
     weak var delegate: SearchInputViewDelegate?
 
     var showBottomBorder: Bool = true {
@@ -171,7 +168,6 @@ class SearchInputView: UIView, NotificationThemeable {
 
 // MARK: - Selectors
 extension SearchInputView {
-
     @objc func tappedSearch() {
         isEditing = true
         inputField.becomeFirstResponder()
@@ -192,7 +188,6 @@ extension SearchInputView {
 
 // MARK: - UITextFieldDelegate
 extension SearchInputView: UITextFieldDelegate {
-
     func textFieldDidEndEditing(_ textField: UITextField) {
         // If there is no text, go back to showing the title view
         if textField.text?.isEmpty ?? true {

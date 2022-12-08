@@ -248,7 +248,6 @@ open class BaseCollectionSynchronizer {
  * remote changes, and exposes a method to fast-forward after upload.
  */
 open class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer, SingleCollectionSynchronizer {
-
     var lastFetched: Timestamp {
         get {
             return prefs.unsignedLongForKey("lastFetched") ?? 0

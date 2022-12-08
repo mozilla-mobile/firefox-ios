@@ -5,7 +5,6 @@
 import Foundation
 
 struct ReaderModeUtils {
-
     static let DomainPrefixesToSimplify = ["www.", "mobile.", "m.", "blog."]
 
     static func simplifyDomain(_ domain: String) -> String {

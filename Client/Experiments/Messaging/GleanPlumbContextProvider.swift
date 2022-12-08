@@ -7,7 +7,6 @@ import Shared
 import Storage
 
 class GleanPlumbContextProvider {
-
     enum ContextKey: String {
         case todayDate = "date_string"
         case isDefaultBrowser = "is_default_browser"

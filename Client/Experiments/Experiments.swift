@@ -44,7 +44,6 @@ private let NIMBUS_USE_PREVIEW_COLLECTION_KEY = "nimbus_use_preview_collection"
 ///
 /// Rust errors are not expected, but will be reported via Sentry.
 enum Experiments {
-
     /// `InitializationOptions` controls how we initially initialize Nimbus.
     ///
     /// - **preload**: includes a file URL that stores the initial experiments document.

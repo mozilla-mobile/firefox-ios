@@ -7,7 +7,6 @@ import XCTest
 @testable import SiteImageView
 
 final class SiteImageCacheTests: XCTestCase {
-
     private var imageCache: MockDefaultImageCache!
 
     override func setUp() {
@@ -78,7 +77,6 @@ final class SiteImageCacheTests: XCTestCase {
 }
 
 private class MockDefaultImageCache: DefaultImageCache {
-
     var image: UIImage?
     var retrievalError: KingfisherError?
     var capturedRetrievalKey: String?

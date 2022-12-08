@@ -36,7 +36,6 @@ extension PlacesApiConfiguration {
 }
 
 class AppLaunchUtil {
-
     private var log: RollingFileLogger
     private var adjustHelper: AdjustHelper
     private var profile: Profile
@@ -108,7 +107,6 @@ class AppLaunchUtil {
     }
 
     func setUpPostLaunchDependencies() {
-
         let persistedCurrentVersion = InstallType.persistedCurrentVersion()
         let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
         // upgrade install - Intro screen shown & persisted current version does not match

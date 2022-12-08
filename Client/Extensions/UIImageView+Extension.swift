@@ -8,7 +8,6 @@ import Shared
 import Kingfisher
 
 public extension UIImageView {
-
     func setImageAndBackground(forIcon icon: Favicon?, website: URL?, completion: @escaping () -> Void) {
         func finish(bgColor: UIColor?) {
             if let bgColor = bgColor {

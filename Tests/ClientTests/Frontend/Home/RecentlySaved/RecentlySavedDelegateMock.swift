@@ -5,7 +5,6 @@
 @testable import Client
 
 class RecentlySavedDelegateMock: RecentlySavedDelegate {
-
     var didLoadNewDataCallCount = 0
 
     func didLoadNewData() {

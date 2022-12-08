@@ -8,7 +8,6 @@ import Fuzi
 
 // Extension of FaviconFetcher that handles fetching non-bundled, non-letter favicons
 extension FaviconFetcher {
-
     class func getForURL(_ url: URL, profile: Profile) -> Deferred<Maybe<[Favicon]>> {
         let favicon = FaviconFetcher()
         return favicon.loadFavicons(url, profile: profile)
@@ -120,7 +119,6 @@ extension FaviconFetcher {
                 with: url,
                 limit: ImageLoadingConstants.MaximumFaviconSize
             ) { image, error in
-
                 guard error == nil else {
                     deferred.fill(Maybe(failure: FaviconError()))
                     return

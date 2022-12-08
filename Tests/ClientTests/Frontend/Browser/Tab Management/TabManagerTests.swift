@@ -97,7 +97,6 @@ open class MockTabManagerDelegate: TabManagerDelegate {
 }
 
 class TabManagerTests: XCTestCase {
-
     let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:isRestoring:)")
     let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:placeNextToParentTab:isRestoring:)")
     let didSelect = MethodSpy(functionName: spyDidSelectedTabChange)
@@ -521,7 +520,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testRemoveTabSelectedTabShouldChangeIndex() {
-
         let tab1 = manager.addTab()
         manager.addTab()
         let tab3 = manager.addTab()
@@ -536,7 +534,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testRemoveTabRemovingLastNormalTabShouldNotSwitchToPrivateTab() {
-
         let tab0 = manager.addTab()
         let tab1 = manager.addTab(isPrivate: true)
 
@@ -552,7 +549,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testRemoveAllShouldRemoveAllTabs() {
-
         let tab0 = manager.addTab()
         let tab1 = manager.addTab()
 
@@ -581,7 +577,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testRemoveTabAndUpdateSelectedIndexIsSelectedParentTabAfterRemoval() {
-
         func addTab(_ visit: Bool) -> Tab {
             let tab = manager.addTab()
             if visit {
@@ -603,7 +598,6 @@ class TabManagerTests: XCTestCase {
     }
 
     func testTabsIndexClosingFirst() {
-
         // We add 2 tabs. Then a private one before adding another normal tab and selecting the first.
         // Make sure that when the last one is deleted we dont switch to the private tab
         let deleted = manager.addTab()
@@ -685,7 +679,6 @@ class TabManagerTests: XCTestCase {
 
 // MARK: - Helper methods
 private extension TabManagerTests {
-
     func removeTabAndAssert(tab: Tab, completion: @escaping () -> Void) {
         let expectation = self.expectation(description: "Tab is removed")
         manager.removeTab(tab) {

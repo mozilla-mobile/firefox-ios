@@ -7,7 +7,6 @@ import UIKit
 import Shared
 
 class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
-
     // Update view UX constants
     struct UX {
         static let closeButtonTopPadding: CGFloat = 32
@@ -170,7 +169,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     private func presentSignToSync(_ fxaOptions: FxALaunchParams,
                                    flowType: FxAPageType = .emailLoginFlow,
                                    referringPage: ReferringPage = .onboarding) {
-
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
             flowType: flowType,
@@ -201,7 +199,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 // MARK: UIPageViewControllerDataSource & UIPageViewControllerDelegate
 extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
               return nil
@@ -273,7 +270,6 @@ extension UpdateViewController {
 
 // MARK: - NotificationThemeable and Notifiable
 extension UpdateViewController: NotificationThemeable, Notifiable {
-
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:

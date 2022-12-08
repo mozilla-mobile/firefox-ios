@@ -8,7 +8,6 @@ import Storage
 @testable import Client
 
 class TopSitesDimensionTests: XCTestCase {
-
     struct DeviceSize {
         static let iPhone14 = CGSize(width: 390, height: 844)
         static let iPadAir = CGSize(width: 820, height: 1180)

@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 open class ClosedTabsStore {
-
     private let prefs: Prefs
     private let maxNumberOfStoredClosedTabs = 10
     enum KeyedArchiverKeys: String {
@@ -60,7 +59,6 @@ open class ClosedTabsStore {
 }
 
 open class ClosedTab: NSObject, NSCoding {
-
     enum CodingKeys: String {
         case url, title, faviconURL, lastExecutedTime
     }

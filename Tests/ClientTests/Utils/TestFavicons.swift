@@ -9,7 +9,6 @@ import Storage
 import Shared
 
 class TestFavicons: ProfileTest {
-
     func testFaviconFetcherParse() {
         let expectation = self.expectation(description: "Wait for Favicons to be fetched")
 

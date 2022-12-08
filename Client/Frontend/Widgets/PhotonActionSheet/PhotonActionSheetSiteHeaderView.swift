@@ -6,7 +6,6 @@ import UIKit
 import Storage
 
 class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell {
-
     struct UX {
         static let borderWidth: CGFloat = 0.5
         static let borderColor = UIColor.Photon.Grey30

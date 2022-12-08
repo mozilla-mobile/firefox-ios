@@ -58,7 +58,6 @@ struct RecentlySavedBookmark: RecentlySavedItem {
 }
 
 class RecentItemsHelper {
-
     private let calendar = Calendar.current
 
     /// Filter `RecenlySavedItems` that are a older than a `numberOfDaysBeforeStale` count.

@@ -68,7 +68,6 @@ private func == (param1: NSURLQueryItem, param2: NSURLQueryItem) -> Bool {
 private let miniConfig = InfoConfiguration(maxRequestBytes: 1_048_576, maxPostRecords: 2, maxPostBytes: 1_048_576, maxTotalRecords: 10, maxTotalBytes: 104_857_600)
 
 class Sync15BatchClientTests: XCTestCase {
-
     func testAddLargeRecordFails() {
         let uploader: BatchUploadFunction = { _, _, _  in deferEmptyResponse(lastModified: 10_000) }
         let serializeRecord = { massivify($0)?.stringify() }

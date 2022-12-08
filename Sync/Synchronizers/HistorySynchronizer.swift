@@ -150,7 +150,6 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
         fromStorage storage: SyncableHistory,
         withServer storageClient: Sync15CollectionClient<HistoryPayload>
     ) -> DeferredTimestamp {
-
         let records = guids.map(makeDeletedHistoryRecord)
 
         // Deletions are smaller, so upload 100 at a time.
@@ -204,7 +203,6 @@ open class HistorySynchronizer: IndependentRecordSynchronizer, Synchronizer {
      * we hadn't yet downloaded.
      */
     fileprivate func go(_ info: InfoCollections, greenLight: @escaping () -> Bool, downloader: BatchingDownloader<HistoryPayload>, history: SyncableHistory) -> SyncResult {
-
         if !greenLight() {
             log.info("Green light turned red. Stopping history download.")
             return deferMaybe(.partial(self.statsSession))

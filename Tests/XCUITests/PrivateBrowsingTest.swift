@@ -13,7 +13,6 @@ let url1And3Label = "Example Domain"
 let url2Label = "Internet for people, not profit — Mozilla"
 
 class PrivateBrowsingTest: BaseTestCase {
-
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     func testPrivateTabDoesNotTrackHistory() {
@@ -211,7 +210,6 @@ fileprivate extension BaseTestCase {
 }
 
 class PrivateBrowsingTestIpad: IpadOnlyTestCase {
-
     typealias HistoryPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
 
     // This test is only enabled for iPad. Shortcut does not exists on iPhone

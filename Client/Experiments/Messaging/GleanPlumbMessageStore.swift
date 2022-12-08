@@ -8,7 +8,6 @@ import Foundation
 /// will primarily help us determine if messages are expired, and perhaps what caused expiry.
 
 protocol GleanPlumbMessageStoreProtocol {
-
     /// Return associated metadata for preexisting or new messages.
     func getMessageMetadata(messageId: String) -> GleanPlumbMessageMetaData
 
@@ -26,7 +25,6 @@ protocol GleanPlumbMessageStoreProtocol {
 }
 
 class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
-
     // MARK: - Properties
 
     private let decoder = JSONDecoder()
@@ -38,7 +36,6 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
 
     /// Returns the metadata that persists on system. If there's none, it returns default data.
     func getMessageMetadata(messageId: String) -> GleanPlumbMessageMetaData {
-
         /// Return preexisting Message Metadata.
         if let metadata = get(key: messageId) { return metadata }
 
@@ -107,7 +104,6 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
 
     /// Return persisted message metadata.
     private func get(key: String) -> GleanPlumbMessageMetaData? {
-
         /// Return a persisted message's metadata.
         if let decodableMessageMetaData = UserDefaults.standard.data(forKey: generateKey(from: key)),
            let decodedData = try? decoder.decode(GleanPlumbMessageMetaData.self, from: decodableMessageMetaData) {

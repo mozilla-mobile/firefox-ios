@@ -5,7 +5,6 @@
 import Shared
 
 class MockPocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding {
-
     func fetchSponsoredStories(timestamp: Timestamp = Date.now(), completion: @escaping (Result<[PocketSponsoredStory], Error>) -> Void) {
         let path = Bundle(for: type(of: self)).path(forResource: "pocketsponsoredfeed", ofType: "json")
         let data = try! Data(contentsOf: URL(fileURLWithPath: path!))

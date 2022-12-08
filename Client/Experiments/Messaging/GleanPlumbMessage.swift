@@ -23,7 +23,6 @@ extension StyleData: StyleDataProtocol {}
 
 /// Message is a representation of `MessageData` from `GleanPlumb` that we can better utilize.
 struct GleanPlumbMessage {
-
     /// The message Key, a unique identifier.
     let id: String
 
@@ -61,7 +60,6 @@ struct GleanPlumbMessage {
 
 /// `MessageMeta` is where we store parts of the message that help us aggregate, query and determine non-expired messages.
 class GleanPlumbMessageMetaData: Codable {
-
     /// The message Key.
     let id: String
 

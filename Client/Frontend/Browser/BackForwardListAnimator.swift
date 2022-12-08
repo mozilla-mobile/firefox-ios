@@ -5,7 +5,6 @@
 import UIKit
 
 class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-
     var presenting: Bool = false
     let animationDuration = 0.4
 

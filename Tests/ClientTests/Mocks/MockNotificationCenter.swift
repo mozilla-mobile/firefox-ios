@@ -6,7 +6,6 @@
 import Foundation
 
 class MockNotificationCenter: NotificationProtocol {
-
     var postCallCount = 0
     var addObserverCallCount = 0
     var removeObserverCallCount = 0

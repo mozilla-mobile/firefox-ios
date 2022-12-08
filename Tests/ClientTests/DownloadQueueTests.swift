@@ -6,7 +6,6 @@
 import XCTest
 
 class DownloadQueueTests: XCTestCase {
-
     let didStartDownload = "downloadQueue(_:didStartDownload:)"
     let didDownloadCombinedBytes = "downloadQueue(_:didDownloadCombinedBytes:combinedTotalBytesExpected:)"
     let didCompleteWithError = "downloadQueue(_:didCompleteWithError:)"

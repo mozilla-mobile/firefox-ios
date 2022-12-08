@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class HomeLogoHeaderViewModel {
-
     struct UX {
         static let bottomSpacing: CGFloat = 12
     }
@@ -23,7 +22,6 @@ class HomeLogoHeaderViewModel {
 
 // MARK: HomeViewModelProtocol
 extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
-
     var sectionType: HomepageSectionType {
         return .logoHeader
     }
@@ -67,7 +65,6 @@ extension HomeLogoHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 }
 
 extension HomeLogoHeaderViewModel: HomepageSectionHandler {
-
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let logoHeaderCell = cell as? HomeLogoHeaderCell else { return UICollectionViewCell() }
         logoHeaderCell.applyTheme(theme: theme)

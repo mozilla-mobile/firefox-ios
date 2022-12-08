@@ -7,7 +7,6 @@
 import XCTest
 
 class SyncedTabCellTests: XCTestCase {
-
     func testConfigureSyncTab_hasNoLeaks() {
         let testUrl = URL(string: "www.test.com")!
 

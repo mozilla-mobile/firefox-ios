@@ -10,7 +10,6 @@ protocol TabDataRetriever {
 }
 
 struct TabDataRetrieverImplementation: TabDataRetriever {
-
     var tabsStateArchivePath: URL?
     let fileManager: TabFileManager
 

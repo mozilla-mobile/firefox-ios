@@ -7,7 +7,6 @@ import UIKit
 import XCTest
 
 class UIPasteboardExtensionsTests: XCTestCase {
-
     fileprivate var pasteboard: UIPasteboard!
 
     override func setUp() {

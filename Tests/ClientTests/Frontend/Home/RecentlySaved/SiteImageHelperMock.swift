@@ -8,7 +8,6 @@ import LinkPresentation
 import Storage
 
 class SiteImageHelperMock: SiteImageHelperProtocol {
-
     var getfetchImageForCallCount = 0
     var getfetchImageForCompletion: ((UIImage?) -> Void)?
 

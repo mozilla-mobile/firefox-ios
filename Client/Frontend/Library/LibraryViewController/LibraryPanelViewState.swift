@@ -104,7 +104,6 @@ class LibraryPanelViewState {
         let changingPanels = state.panelIsDifferentFrom(newState)
         storeCurrentState()
         switch newState {
-
         // All cases where we have substates must use the `updateStateVariables`
         // function in order to check if it's a legal update
         case .bookmarks(let newSubviewState):

@@ -12,7 +12,6 @@ struct CellWithRoundedButtonUX {
 }
 
 class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCell {
-
     // MARK: - Properties
     var buttonClosure: (() -> Void)?
 

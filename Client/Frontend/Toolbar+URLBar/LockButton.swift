@@ -5,7 +5,6 @@
 import Foundation
 
 class LockButton: UIButton {
-
     // MARK: - Variables
 
     var selectedTintColor: UIColor!

@@ -13,7 +13,6 @@ protocol MessageCardDelegate: AnyObject {
 }
 
 class MessageCardDataAdaptorImplementation: MessageCardDataAdaptor {
-
     private var message: GleanPlumbMessage?
     private let messagingManager: GleanPlumbMessageManagerProtocol
 

@@ -12,7 +12,6 @@ enum ReloadButtonState: String {
 }
 
 class StatefulButton: UIButton {
-
     // MARK: - Initializers
 
     convenience init(frame: CGRect, state: ReloadButtonState) {

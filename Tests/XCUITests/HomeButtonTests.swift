@@ -5,7 +5,6 @@
 import XCTest
 
 class HomeButtonTests: BaseTestCase {
-
     override func tearDown() {
         XCUIDevice.shared.orientation = .portrait
         super.tearDown()

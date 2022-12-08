@@ -9,7 +9,6 @@ import Shared
 
 /// Methods here can be considered as tools for extracting certain information from a message.
 class GleanPlumbMessageUtility: Loggable {
-
     // MARK: - Properties
 
     /// Holds evaluations of JEXLS seen so far.

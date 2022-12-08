@@ -22,7 +22,6 @@ public protocol Command {
 // We need a way to log out the account.
 // So when we sync commands, we're gonna need a delegate of some kind.
 open class WipeCommand: Command {
-
     public init?(command: String, args: [JSON]) {
         return nil
     }
@@ -226,7 +225,6 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     }
 
     fileprivate func syncClientCommands(_ clientGUID: GUID, commands: [SyncCommand], clientsAndTabs: RemoteClientsAndTabs, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
-
         let deleteCommands: () -> Success = {
             return clientsAndTabs.deleteCommands(clientGUID).bind({ x in return succeed() })
         }
@@ -275,7 +273,6 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
      * our own notes tell us we're due to reupload.
      */
     fileprivate func maybeUploadOurRecord(_ should: Bool, ifUnmodifiedSince: Timestamp?, toServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
-
         let lastUpload = self.clientRecordLastUpload
         let expired = lastUpload < (Date.now() - (2 * OneDayInMilliseconds))
         log.debug("Should we upload our client record? Caller = \(should), expired = \(expired).")

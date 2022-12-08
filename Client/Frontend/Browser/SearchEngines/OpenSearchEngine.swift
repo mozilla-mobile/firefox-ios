@@ -5,7 +5,6 @@
 import UIKit
 
 class OpenSearchEngine: NSObject, NSCoding {
-
     struct UX {
         static let preferredIconSize = 30
     }

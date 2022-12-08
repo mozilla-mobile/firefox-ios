@@ -21,7 +21,6 @@ struct LabelButtonHeaderViewModel {
 
 // Firefox home view controller header view
 class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
-
     struct UX {
         static let titleLabelTextSize: CGFloat = 20
         static let moreButtonTextSize: CGFloat = 15

@@ -158,7 +158,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     /// Commits the completion by setting the text and removing the highlight.
     fileprivate func applyCompletion() {
-
         // Clear the current completion, then set the text without the attributed style.
         let text = (self.text ?? "") + (self.autocompleteTextLabel?.text ?? "")
         let didRemoveCompletion = removeCompletion()

@@ -13,7 +13,6 @@ private struct BackForwardViewUX {
 }
 
 class BackForwardListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
-
     fileprivate let BackForwardListCellIdentifier = "BackForwardListViewController"
     fileprivate var profile: Profile
     fileprivate lazy var sites = [String: Site]()
@@ -170,7 +169,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         }
         self.verticalConstraints = []
         if snappedToBottom {
-
             let keyboardContainerHeight = bvc.overKeyboardContainer.frame.height
             let toolbarContainerheight = bvc.bottomContainer.frame.height
             let offset = keyboardContainerHeight + toolbarContainerheight
@@ -183,7 +181,6 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             NSLayoutConstraint.activate(constraints)
             verticalConstraints += constraints
         } else {
-
             let statusBarHeight = UIWindow.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
             tableViewTopAnchor = tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: bvc.header.frame.height + statusBarHeight)
             let constraints: [NSLayoutConstraint] = [

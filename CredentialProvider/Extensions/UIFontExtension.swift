@@ -5,7 +5,6 @@
 import UIKit
 
 extension UIFont {
-
     /** Returns a font to be used for a button in a navigation bar.
      *
      * Note: the font does *not* scale for different dynamic type settings.

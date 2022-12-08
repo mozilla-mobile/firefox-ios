@@ -8,7 +8,6 @@ import Shared
 typealias ContileResult = Swift.Result<[Contile], Error>
 
 protocol ContileProviderInterface {
-
     /// Fetch contiles either from cache or backend
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
@@ -24,7 +23,6 @@ extension ContileProviderInterface {
 
 /// `Contile` is short for contextual tiles. This provider returns data that is used in Shortcuts (Top Sites) section on the Firefox home page.
 class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFlaggable {
-
     static let contileProdResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
     static let contileStagingResourceEndpoint = "https://contile-stage.topsites.nonprod.cloudops.mozgcp.net/v1/tiles"
 

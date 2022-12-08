@@ -8,7 +8,6 @@ import Storage
 /// `AccountSyncHandler` exists to observe certain `TabEventLabel` notifications,
 /// and react accordingly.
 class AccountSyncHandler: TabEventHandler, Loggable {
-
     private let throttler: Throttler
     private let profile: Profile
 

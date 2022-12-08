@@ -4,7 +4,6 @@
 
 import XCTest
 class NightModeTests: BaseTestCase {
-
     private func checkNightModeOn() {
         waitForExistence(app.tables.otherElements[ImageIdentifiers.nightMode])
     }

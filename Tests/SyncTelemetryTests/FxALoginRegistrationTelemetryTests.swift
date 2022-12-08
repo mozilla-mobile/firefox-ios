@@ -16,7 +16,6 @@ struct MockFxAUrls {
 }
 
 class SyncTelemetryTests: XCTestCase {
-
     var fxaWebViewTelemetry: FxAWebViewTelemetry!
 
     override func setUp() {

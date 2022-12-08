@@ -190,7 +190,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
 // MARK: - ToolbarActionMenuDelegate
 extension BrowserViewController: ToolBarActionMenuDelegate {
-
     func updateToolbarState() {
         updateToolbarStateForTraitCollection(view.traitCollection)
     }

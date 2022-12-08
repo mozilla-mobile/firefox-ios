@@ -5,7 +5,6 @@
 import UIKit
 
 class SelectPasswordCell: UITableViewCell {
-
     static let identifier = "selectPasswordCell"
 
     lazy private var selectLabel: UILabel = .build { label in

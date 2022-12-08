@@ -5,7 +5,6 @@
 import Foundation
 
 class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
-
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
     private let baseView: UIView = .build { view in }

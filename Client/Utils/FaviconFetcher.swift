@@ -65,7 +65,6 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     // Default favicons and background colors provided via mozilla/tippy-top-sites
     private class func getBundledIcons() -> [String: BundledIconType] {
-
         // Allows us to access bundle from extensions
         // Also found in `SentryIntegration`. Taken from: https://stackoverflow.com/questions/26189060/get-the-main-app-bundle-from-within-extension
         var bundle = Bundle.main

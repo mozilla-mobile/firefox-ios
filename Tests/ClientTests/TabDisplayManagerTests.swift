@@ -9,7 +9,6 @@ import Shared
 import XCTest
 
 class TabDisplayManagerTests: XCTestCase {
-
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
 
     var mockDataStore: WeakListMock<Tab>!
@@ -240,7 +239,6 @@ class TabDisplayManagerTests: XCTestCase {
 
 // Helper methods
 extension TabDisplayManagerTests {
-
     func removeTabAndAssert(tab: Tab, completion: @escaping () -> Void) {
         let expectation = self.expectation(description: "Tab is removed")
         manager.removeTab(tab) {
@@ -277,7 +275,6 @@ extension TabDisplayManagerTests {
 }
 
 extension TabDisplayManagerTests: TabDisplayer {
-
     func focusSelectedTab() {}
 
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
@@ -289,7 +286,6 @@ extension TabDisplayManagerTests: TabDisplayer {
 }
 
 class WeakListMock<T: AnyObject>: WeakList<T> {
-
     var countToReturn: Int = 0
     override var count: Int {
         return countToReturn
@@ -301,7 +297,6 @@ class WeakListMock<T: AnyObject>: WeakList<T> {
 }
 
 class MockCollectionView: UICollectionView {
-
     override init(frame: CGRect, collectionViewLayout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: collectionViewLayout)
 

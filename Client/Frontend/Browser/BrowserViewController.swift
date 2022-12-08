@@ -35,7 +35,6 @@ protocol BrowserBarViewDelegate: AnyObject {
 }
 
 class BrowserViewController: UIViewController {
-
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -811,12 +810,10 @@ class BrowserViewController: UIViewController {
     fileprivate func dequeueQueuedTabs(receivedURLs: [URL]) {
         assert(!Thread.current.isMainThread, "This must be called in the background.")
         self.profile.queue.getQueuedTabs() >>== { cursor in
-
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
             let cursorCount = cursor.count
             if cursorCount > 0 {
-
                 // Filter out any tabs received by a push notification to prevent dupes.
                 let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
                 if !urls.isEmpty {
@@ -1181,7 +1178,6 @@ class BrowserViewController: UIViewController {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .addBookmarkToast)
         if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
-
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
                   let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
             else { return }
@@ -1287,7 +1283,6 @@ class BrowserViewController: UIViewController {
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
             if tab.url?.origin == webView.url?.origin {
-
                 tab.url = webView.url
 
                 if tab === tabManager.selectedTab && !tab.isRestoring {
@@ -1469,7 +1464,6 @@ class BrowserViewController: UIViewController {
     func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
         let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
-
             switch activityType {
             case CustomActivityAction.sendToDevice.actionType:
                 self.showSendToDevice()
@@ -1708,7 +1702,6 @@ extension BrowserViewController {
 
 // MARK: - TabDelegate
 extension BrowserViewController: TabDelegate {
-
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
@@ -2625,7 +2618,6 @@ extension BrowserViewController: TopTabsDelegate {
 }
 
 extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
-
     func dismissInstructionsView() {
         self.navigationController?.presentedViewController?.dismiss(animated: true)
         self.popToBVC()
@@ -2656,7 +2648,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 // MARK: - Reopen last closed tab
 
 extension BrowserViewController: FeatureFlaggable {
-
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if featureFlags.isFeatureEnabled(.shakeToRestore, checking: .buildOnly) {
             homePanelDidRequestToRestoreClosedTab(motion)

@@ -5,7 +5,6 @@
 import UIKit
 
 class ThemedNavigationController: DismissableNavigationViewController, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

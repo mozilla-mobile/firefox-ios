@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
-
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
@@ -79,7 +78,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     private func customizeHomeSettingSection() -> SettingSection {
-
         // The Home button and the New Tab page can be set independently
         self.currentNewTabChoice = NewTabAccessors.getHomePage(self.prefs)
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
@@ -118,7 +116,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     private func customizeFirefoxSettingSection() -> SettingSection {
-
         // Setup
         var sectionItems = [Setting]()
 
@@ -266,7 +263,6 @@ extension HomePageSettingViewController {
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
     class WallpaperSettings: Setting, FeatureFlaggable {
-
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface

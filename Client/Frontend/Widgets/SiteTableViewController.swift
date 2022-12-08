@@ -164,7 +164,6 @@ class SiteTableViewController: UIViewController,
 }
 
 extension SiteTableViewController: UITableViewDragDelegate {
-
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         guard let panelVC = self as? LibraryPanelContextMenu,
               let site = panelVC.getSiteDetails(for: indexPath),

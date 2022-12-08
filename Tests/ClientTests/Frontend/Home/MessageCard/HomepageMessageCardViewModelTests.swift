@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class HomepageMessageCardViewModelTests: XCTestCase {
-
     private var adaptor: MockMessageCardDataAdaptor!
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var dismissClosureCalled = 0
@@ -126,7 +125,6 @@ class HomepageMessageCardViewModelTests: XCTestCase {
 
 // MARK: - Helpers
 extension HomepageMessageCardViewModelTests {
-
     func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> HomepageMessageCardViewModel {
         let subject = HomepageMessageCardViewModel(dataAdaptor: adaptor,
@@ -153,7 +151,6 @@ extension HomepageMessageCardViewModelTests {
 
 // MARK: - MockMessageCardDataAdaptor
 class MockMessageCardDataAdaptor: MessageCardDataAdaptor {
-
     var message: GleanPlumbMessage?
 
     func getMessageCardData() -> GleanPlumbMessage? {

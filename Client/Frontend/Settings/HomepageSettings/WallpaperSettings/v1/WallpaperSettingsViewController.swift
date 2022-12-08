@@ -5,7 +5,6 @@
 import UIKit
 
 class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Themeable {
-
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
@@ -94,7 +93,6 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Th
 
 // MARK: - CollectionView Data Source
 extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return viewModel.numberOfSections
     }
@@ -142,7 +140,6 @@ extension WallpaperSettingsViewController: UICollectionViewDelegate, UICollectio
 
 // MARK: - Private
 private extension WallpaperSettingsViewController {
-
     func setupView() {
         configureCollectionView()
 
@@ -218,7 +215,6 @@ private extension WallpaperSettingsViewController {
             labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
             buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button,
             completion: { buttonPressed in
-
             if buttonPressed { self.dismissView() }
         })
 
@@ -270,7 +266,6 @@ private extension WallpaperSettingsViewController {
 
 // MARK: - Notifiable
 extension WallpaperSettingsViewController: Notifiable {
-
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:

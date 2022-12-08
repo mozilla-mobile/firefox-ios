@@ -6,7 +6,6 @@ import XCTest
 @testable import SiteImageView
 
 class FaviconURLHandlerTests: XCTestCase {
-
     var subject: DefaultFaviconURLHandler!
     var mockFetcher: FaviconURLFetcherMock!
     var mockCache: FaviconURLCacheMock!

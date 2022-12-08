@@ -10,7 +10,6 @@ import XCTest
 
 @available(iOS 13.4, *)
 class KeyboardPressesHandlerTests: XCTestCase {
-
     func testDefaultsPressedAreFalse() {
         let handler = KeyboardPressesHandler()
         XCTAssertEqual(handler.isOnlyCmdPressed, false)
@@ -244,7 +243,6 @@ extension KeyboardPressesHandlerTests {
 
 @available(iOS 13.4, *)
 class MockKey: UIKey {
-
     let mockKeyCode: UIKeyboardHIDUsage
     override var keyCode: UIKeyboardHIDUsage {
         return mockKeyCode
@@ -262,7 +260,6 @@ class MockKey: UIKey {
 
 @available(iOS 13.4, *)
 class MockPress: UIPress {
-
     let mockKey: MockKey
     override var key: UIKey {
         return mockKey

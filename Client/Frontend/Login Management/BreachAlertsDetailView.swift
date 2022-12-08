@@ -7,7 +7,6 @@ import Shared
 
 // TODO: FXIOS-4995 - BreachAlertsManager theming
 class BreachAlertsDetailView: UIView {
-
     private let textColor = UIColor.white
     private let titleIconSize: CGFloat = 24
     private lazy var titleIconContainerSize: CGFloat = {

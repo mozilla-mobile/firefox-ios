@@ -28,7 +28,6 @@ class StoryProvider: FeatureFlaggable {
         into globalFeed: [PocketStory],
         indices: [Int]
     ) -> [PocketStory] {
-
         var global = globalFeed
         var sponsored = sponsoredStories
         for index in indices {

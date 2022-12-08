@@ -5,7 +5,6 @@
 import UIKit
 
 class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell {
-
     private var viewModel: InactiveTabItemCellModel?
 
     private var selectedView: UIView = {

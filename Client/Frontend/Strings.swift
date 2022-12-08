@@ -84,7 +84,6 @@ extension String {
 // MARK: - Bookmarks Menu
 extension String {
     public struct Bookmarks {
-
         public struct Menu {
             public static let DesktopBookmarks = MZLocalizedString(
                 "Bookmarks.Menu.DesktopBookmarks",
@@ -114,7 +113,6 @@ extension String {
 // MARK: - Contextual Hints
 extension String {
     public struct ContextualHints {
-
         public static let ContextualHintsCloseAccessibility = MZLocalizedString(
             "ContextualHintsCloseButtonAccessibility.v105",
             tableName: nil,
@@ -195,7 +193,6 @@ extension String {
 extension String {
     /// Identifiers of all new strings should begin with `FirefoxHome.`
     public struct FirefoxHomepage {
-
         public struct Common {
             public static let SitesCount = MZLocalizedString(
                 "FirefoxHomepage.Common.SitesCount.v101",
@@ -527,7 +524,6 @@ extension String {
 extension String {
     /// Identifiers of all new strings should begin with `LibraryPanel.{PanelName}.`
     public struct LibraryPanel {
-
         public struct Sections {
             public static let Today = MZLocalizedString(
                 "Today",
@@ -788,7 +784,6 @@ extension String {
 // MARK: - Settings screen
 extension String {
     public struct Settings {
-
         public struct About {
             public static let RateOnAppStore = MZLocalizedString(
                 "Ratings.Settings.RateOnAppStore",
@@ -806,7 +801,6 @@ extension String {
         }
 
         public struct Homepage {
-
             public struct Current {
                 public static let Description = MZLocalizedString(
                     "Settings.Home.Current.Description.v101",
@@ -1157,7 +1151,6 @@ extension String {
 // MARK: Tabs Tray
 extension String {
     public struct TabsTray {
-
         public struct InactiveTabs {
             public static let TabsTrayInactiveTabsSectionClosedAccessibilityTitle = MZLocalizedString(
                 "TabsTray.InactiveTabs.SectionTitle.Closed.Accessibility.v103",
@@ -1646,7 +1639,6 @@ extension String {
 
 // MARK: - Firefox Logins
 extension String {
-
     // Prompts
     public static let SaveLoginUsernamePrompt = MZLocalizedString(
         "LoginsHelper.PromptSaveLogin.Title",

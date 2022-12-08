@@ -7,7 +7,6 @@ import XCTest
 import Storage
 
 class RecentlySavedDataAdaptorTests: XCTestCase {
-
     let oneDay: TimeInterval = 86400
     var subject: RecentlySavedDataAdaptor!
     var mockSiteImageHelper: SiteImageHelperMock!

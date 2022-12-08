@@ -18,7 +18,6 @@ struct WallpaperSettingsHeaderViewModel {
 }
 
 class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
-
     private struct UX {
         static let stackViewSpacing: CGFloat = 4.0
         static let topBottomSpacing: CGFloat = 16.0
@@ -112,7 +111,6 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
 
 // MARK: - Private
 private extension WallpaperSettingsHeaderView {
-
     func setupView() {
         contentStackView.addArrangedSubview(titleLabel)
         addSubview(contentStackView)
@@ -128,7 +126,6 @@ private extension WallpaperSettingsHeaderView {
 
 // MARK: - Themable
 extension WallpaperSettingsHeaderView: ThemeApplicable {
-
     func applyTheme(theme: Theme) {
         contentStackView.backgroundColor = theme.colors.layer5
         titleLabel.textColor = theme.colors.textPrimary

@@ -13,7 +13,6 @@ class DateExtensionsTests: XCTestCase {
     }
 
     func testDateToMillisecondsSince1970() {
-
         guard let dates = createMillisecondAndDateDictionary() else {
             XCTFail("Error creating dates array")
             return
@@ -45,7 +44,6 @@ class DateExtensionsTests: XCTestCase {
         minute: Int,
         second: Int
     ) -> Date? {
-
         var dateComponents = DateComponents()
         dateComponents.timeZone = TimeZone(secondsFromGMT: 0)
         dateComponents.year = year

@@ -15,7 +15,6 @@ import XCTest
  */
 
 class ProfileTest: XCTestCase {
-
     var profile: MockProfile?
 
     override func setUp() {

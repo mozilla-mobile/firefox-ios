@@ -17,7 +17,6 @@ enum FxASignInParentType {
 
 /// ViewController handling Sign In through QR Code or Email address
 class FirefoxAccountSignInViewController: UIViewController {
-
     struct UX {
         static let horizontalPadding: CGFloat = 16
         static let buttonVerticalInset: CGFloat = 12
@@ -282,7 +281,6 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
 
 // MARK: - FxA SignIn Flow
 extension FirefoxAccountSignInViewController {
-
     /// This function is called to determine if FxA sign in flow or settings page should be shown
     /// - Parameters:
     ///     - deepLinkParams: FxALaunchParams from deeplink query
@@ -327,7 +325,6 @@ extension FirefoxAccountSignInViewController {
 
 // MARK: - Notifiable
 extension FirefoxAccountSignInViewController: Notifiable {
-
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:

@@ -29,7 +29,6 @@ open class SQLiteReadingList {
 }
 
 extension SQLiteReadingList: ReadingList {
-
     public func getAvailableRecords(completion: @escaping ([ReadingListItem]) -> Void) {
         let sql = "SELECT \(allColumns) FROM items ORDER BY client_last_modified DESC"
         let deferredResponse = db.runQuery(sql, args: nil, factory: SQLiteReadingList.ReadingListItemFactory) >>== { cursor in

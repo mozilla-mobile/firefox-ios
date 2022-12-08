@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 class PocketDataAdaptorTests: XCTestCase {
-
     var mockNotificationCenter: MockNotificationCenter!
     var mockPocketAPI: MockPocketAPI!
 
@@ -68,7 +67,6 @@ private extension PocketDataAdaptorTests {
                        dataCompletion: (() -> Void)? = nil,
                        file: StaticString = #file,
                        line: UInt = #line) -> PocketDataAdaptorImplementation {
-
         let pocketSponsoredAPI = MockSponsoredPocketAPI(result: .success([]))
 
         let expectation = expectation(description: "Expect pocket adaptor to be created and fetch data")

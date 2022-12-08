@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class MessageCardDataAdaptorImplementationTests: XCTestCase {
-
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var didLoadNewDataCalled = 0
 
@@ -61,7 +60,6 @@ extension MessageCardDataAdaptorImplementationTests: MessageCardDelegate {
 
 // MARK: - Helpers
 extension MessageCardDataAdaptorImplementationTests {
-
     func createSubject(file: StaticString = #file,
                        line: UInt = #line) -> MessageCardDataAdaptorImplementation {
         let subject = MessageCardDataAdaptorImplementation(messagingManager: messageManager)

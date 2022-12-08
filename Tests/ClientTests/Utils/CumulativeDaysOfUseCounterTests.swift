@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class CumulativeDaysOfUseCounterTests: XCTestCase {
-
     private var calendar: Calendar!
     private var counter: CumulativeDaysOfUseCounter!
 

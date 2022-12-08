@@ -5,7 +5,6 @@
 import UIKit
 
 class WallpaperBackgroundView: UIView {
-
     // MARK: - UI Elements
     private lazy var pictureView: UIImageView = .build { imageView in
         imageView.image = nil
