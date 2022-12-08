@@ -4,11 +4,6 @@
 
 import Foundation
 
-struct RemoteTabsErrorCellViewModel {
-    var error: RemoteTabsError
-    var performAction: (() -> Void)?
-}
-
 class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     struct UX {
@@ -18,10 +13,11 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
         static let buttonSizeFont: CGFloat = 15
+        static let imageSize: CGSize = CGSize(width: 90, height: 60)
     }
 
     var theme: Theme
-    var viewModel: RemoteTabsErrorCellViewModel
+    var error: RemoteTabsErrorDataSource.ErrorType
     weak var delegate: RemotePanelDelegate?
 
     // MARK: - UI
@@ -62,16 +58,10 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         button.isHidden = true
     }
 
-    private let createAccountButton: UIButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
-                                                                                size: UX.buttonSizeFont)
-        button.isHidden = true
-    }
-
-    init(viewModel: RemoteTabsErrorCellViewModel,
+    init(error: RemoteTabsErrorDataSource.ErrorType,
          theme: Theme) {
+        self.error = error
         self.theme = theme
-        self.viewModel = viewModel
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
         selectionStyle = .none
 
@@ -87,16 +77,13 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.delegate = delegate
         emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
-        instructionsLabel.text = viewModel.error.localizedString()
+        instructionsLabel.text = error.localizedString()
 
-        if viewModel.error == .notLoggedIn {
+        // Show signIn button only for notLoggedIn case
+        if error == .notLoggedIn {
             signInButton.setTitle(.Settings.Sync.ButtonTitle, for: [])
             signInButton.isHidden = false
-            signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
-
-            createAccountButton.setTitle(.RemoteTabCreateAccount, for: [])
-            createAccountButton.isHidden = false
-            createAccountButton.addTarget(self, action: #selector(createAnAccount), for: .touchUpInside)
+            signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
         }
     }
 
@@ -105,8 +92,6 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(instructionsLabel)
         stackView.addArrangedSubview(signInButton)
-        stackView.addArrangedSubview(createAccountButton)
-
         scrollView.addSubview(stackView)
         contentView.addSubview(scrollView)
 
@@ -128,8 +113,8 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
             scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
             scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
 
-            emptyStateImageView.widthAnchor.constraint(equalToConstant: 90),
-            emptyStateImageView.heightAnchor.constraint(equalToConstant: 60),
+            emptyStateImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
+            emptyStateImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
         ])
     }
 
@@ -138,21 +123,13 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         titleLabel.textColor = theme.colors.textPrimary
         instructionsLabel.textColor = theme.colors.textPrimary
         signInButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
-        createAccountButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
         backgroundColor = theme.colors.layer3
     }
 
-    @objc private func signIn() {
+    @objc private func presentSignIn() {
         if let delegate = self.delegate {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
             delegate.remotePanelDidRequestToSignIn()
-        }
-    }
-
-    @objc private func createAnAccount() {
-        if let delegate = self.delegate {
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncCreateAccount)
-            delegate.remotePanelDidRequestToCreateAccount()
         }
     }
 }

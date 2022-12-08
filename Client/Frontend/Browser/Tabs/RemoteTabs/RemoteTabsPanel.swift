@@ -3,11 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import Account
-import Shared
-import SnapKit
 import Storage
-import Sync
 
 protocol RemotePanelDelegate: AnyObject {
     func remotePanelDidRequestToSignIn()
@@ -90,156 +86,11 @@ class RemoteTabsPanel: UIViewController, Themeable, Loggable {
     }
 }
 
-enum RemoteTabsError {
-    case notLoggedIn
-    case noClients
-    case noTabs
-    case failedToSync
-
-    func localizedString() -> String {
-        switch self {
-        case .notLoggedIn: return .EmptySyncedTabsPanelNotSignedInStateDescription
-        case .noClients: return .EmptySyncedTabsPanelNullStateDescription
-        case .noTabs: return .RemoteTabErrorNoTabs
-        case .failedToSync: return .RemoteTabErrorFailedToSync
-        }
-    }
-}
-
 protocol RemoteTabsPanelDataSource: UITableViewDataSource, UITableViewDelegate {
 }
 
 protocol CollapsibleTableViewSection: AnyObject {
     func hideTableViewSection(_ section: Int)
-}
-
-// MARK: - RemoteTabsPanelClientAndTabsDataSource
-class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
-    struct UX {
-        static let headerHeight = SiteTableViewControllerUX.RowHeight
-        static let iconBorderColor = UIColor.Photon.Grey30
-        static let iconBorderWidth: CGFloat = 0.5
-    }
-
-    weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
-    weak var remoteTabPanel: RemoteTabsPanel?
-    var clientAndTabs: [ClientAndTabs]
-    var hiddenSections = Set<Int>()
-    private let siteImageHelper: SiteImageHelper
-    private var theme: Theme
-
-    init(remoteTabPanel: RemoteTabsPanel,
-         clientAndTabs: [ClientAndTabs],
-         profile: Profile,
-         theme: Theme) {
-        self.remoteTabPanel = remoteTabPanel
-        self.clientAndTabs = clientAndTabs
-        self.siteImageHelper = SiteImageHelper(profile: profile)
-        self.theme = theme
-    }
-
-    @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
-        guard let section = sender.view?.tag else { return }
-        collapsibleSectionDelegate?.hideTableViewSection(section)
-    }
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return self.clientAndTabs.count
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.hiddenSections.contains(section) {
-            return 0
-        }
-
-        return self.clientAndTabs[section].tabs.count
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }
-        let clientTabs = self.clientAndTabs[section]
-        let client = clientTabs.client
-
-        let isCollapsed = hiddenSections.contains(section)
-        let viewModel = SiteTableViewHeaderModel(title: client.name,
-                                                 isCollapsible: true,
-                                                 collapsibleState:
-                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
-        headerView.configure(viewModel)
-        headerView.showBorder(for: .bottom, true)
-        headerView.showBorder(for: .top, section != 0)
-
-        // Configure tap to collapse/expand section
-        headerView.tag = section
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
-        headerView.addGestureRecognizer(tapGesture)
-        headerView.applyTheme(theme: theme)
-        /*
-        * A note on timestamps.
-        * We have access to two timestamps here: the timestamp of the remote client record,
-        * and the set of timestamps of the client's tabs.
-        * Neither is "last synced". The client record timestamp changes whenever the remote
-        * client uploads its record (i.e., infrequently), but also whenever another device
-        * sends a command to that client -- which can be much later than when that client
-        * last synced.
-        * The client's tabs haven't necessarily changed, but it can still have synced.
-        * Ideally, we should save and use the modified time of the tabs record itself.
-        * This will be the real time that the other client uploaded tabs.
-        */
-        return headerView
-    }
-
-    func tabAtIndexPath(_ indexPath: IndexPath) -> RemoteTab {
-        return clientAndTabs[indexPath.section].tabs[indexPath.item]
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
-                                                       for: indexPath) as? TwoLineImageOverlayCell
-        else {
-            return UITableViewCell()
-        }
-
-        let tab = tabAtIndexPath(indexPath)
-        cell.titleLabel.text = tab.title
-        cell.descriptionLabel.text = tab.URL.absoluteString
-
-        cell.leftImageView.layer.borderColor = UX.iconBorderColor.cgColor
-        cell.leftImageView.layer.borderWidth = UX.iconBorderWidth
-        cell.accessoryView = nil
-
-        getFavicon(for: tab) { [weak cell] image in
-            cell?.leftImageView.image = image
-            cell?.leftImageView.backgroundColor = .clear
-        }
-
-        cell.applyTheme(theme: theme)
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
-        let tab = tabAtIndexPath(indexPath)
-        // Remote panel delegate for cell selection
-        remoteTabPanel?.remotePanelDelegate?.remotePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
-    }
-
-    private func getFavicon(for remoteTab: RemoteTab, completion: @escaping (UIImage?) -> Void) {
-        let faviconUrl = remoteTab.URL.absoluteString
-        let site = Site(url: faviconUrl, title: remoteTab.title)
-        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
-            completion(image)
-        }
-    }
 }
 
 // MARK: - RemoteTabsTableViewController
@@ -319,7 +170,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 
     func applyTheme() {
         tableView.separatorColor = themeManager.currentTheme.colors.layerLightGrey30
-        if let delegate = tableViewDelegate as? RemoteTabsPanelErrorDataSource {
+        if let delegate = tableViewDelegate as? RemoteTabsErrorDataSource {
             delegate.applyTheme(theme: themeManager.currentTheme)
         }
     }
@@ -357,23 +208,23 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
 
         guard !clientAndTabs.isEmpty else {
-            tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                    error: .noClients,
-                                                                    theme: themeManager.currentTheme)
+            tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                          error: .noClients,
+                                                          theme: themeManager.currentTheme)
             tableView.reloadData()
             return
         }
 
         let nonEmptyClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty }
         if nonEmptyClientAndTabs.isEmpty {
-            tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                    error: .noTabs,
-                                                                    theme: themeManager.currentTheme)
+            tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                          error: .noTabs,
+                                                          theme: themeManager.currentTheme)
         } else {
-            let tabsPanelDataSource = RemoteTabsPanelClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
-                                                                             clientAndTabs: nonEmptyClientAndTabs,
-                                                                             profile: profile,
-                                                                             theme: themeManager.currentTheme)
+            let tabsPanelDataSource = RemoteTabsClientAndTabsDataSource(remoteTabPanel: remoteTabsPanel,
+                                                                        clientAndTabs: nonEmptyClientAndTabs,
+                                                                        profile: profile,
+                                                                        theme: themeManager.currentTheme)
             tabsPanelDataSource.collapsibleSectionDelegate = self
             tableViewDelegate = tabsPanelDataSource
         }
@@ -388,7 +239,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         // Short circuit if the user is not logged in
         guard profile.hasSyncableAccount() else {
             self.endRefreshing()
-            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+            self.tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
                                                                     error: .notLoggedIn,
                                                                     theme: themeManager.currentTheme)
             return
@@ -398,9 +249,9 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
             guard let clientAndTabs = result.successValue else {
                 self.endRefreshing()
-                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                        error: .failedToSync,
-                                                                        theme: self.themeManager.currentTheme)
+                self.tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                                   error: .failedToSync,
+                                                                   theme: self.themeManager.currentTheme)
                 return
             }
 
@@ -435,7 +286,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 
 extension RemoteTabsTableViewController: CollapsibleTableViewSection {
     func hideTableViewSection(_ section: Int) {
-        guard let dataSource = tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else { return }
+        guard let dataSource = tableViewDelegate as? RemoteTabsClientAndTabsDataSource else { return }
 
         if dataSource.hiddenSections.contains(section) {
             dataSource.hiddenSections.remove(section)
@@ -456,13 +307,13 @@ extension RemoteTabsTableViewController: LibraryPanelContextMenu {
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        guard let tab = (tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource)?.tabAtIndexPath(indexPath) else {
+        guard let tab = (tableViewDelegate as? RemoteTabsClientAndTabsDataSource)?.tabAtIndexPath(indexPath) else {
             return nil
         }
         return Site(url: String(describing: tab.URL), title: tab.title)
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonRowActions]? {
-        return getRemoteTabContexMenuActions(for: site, remotePanelDelegate: remoteTabsPanel?.remotePanelDelegate)
+        return getRemoteTabContextMenuActions(for: site, remotePanelDelegate: remoteTabsPanel?.remotePanelDelegate)
     }
 }

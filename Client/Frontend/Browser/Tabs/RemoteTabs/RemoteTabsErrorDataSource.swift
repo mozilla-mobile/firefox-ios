@@ -4,13 +4,30 @@
 
 import Foundation
 
-class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeApplicable {
+class RemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeApplicable {
+
+    enum ErrorType {
+        case notLoggedIn
+        case noClients
+        case noTabs
+        case failedToSync
+
+        func localizedString() -> String {
+            switch self {
+            case .notLoggedIn: return .EmptySyncedTabsPanelNotSignedInStateDescription
+            case .noClients: return .EmptySyncedTabsPanelNullStateDescription
+            case .noTabs: return .RemoteTabErrorNoTabs
+            case .failedToSync: return .RemoteTabErrorFailedToSync
+            }
+        }
+    }
+
     weak var remoteTabsPanel: RemoteTabsPanel?
-    var error: RemoteTabsError
+    var error: ErrorType
     private var theme: Theme
 
     init(remoteTabsPanel: RemoteTabsPanel,
-         error: RemoteTabsError,
+         error: ErrorType,
          theme: Theme) {
         self.remoteTabsPanel = remoteTabsPanel
         self.error = error
@@ -30,8 +47,7 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource, Theme
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let viewModel = RemoteTabsErrorCellViewModel(error: error)
-        let cell = RemoteTabsErrorCell(viewModel: viewModel,
+        let cell = RemoteTabsErrorCell(error: error,
                                        theme: theme)
         cell.configure(delegate: remoteTabsPanel?.remotePanelDelegate)
         return cell
