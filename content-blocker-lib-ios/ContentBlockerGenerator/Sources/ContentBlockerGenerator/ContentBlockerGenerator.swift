@@ -30,11 +30,11 @@ public struct ContentBlockerGenerator {
     func generateLists() {
         // Block lists
         generate(actionType: .blockAll,
-                 categories: [.advertising, .analytics, .social, .cryptomining, .fingerprinting])
+                 categories: [.advertising, .analytics, .social, .cryptomining, .fingerprinting, .content])
 
         // Block cookies lists
         generate(actionType: .blockCookies,
-                 categories: [.advertising, .analytics, .social])
+                 categories: [.advertising, .analytics, .social, .content])
     }
 
     // MARK: - Private

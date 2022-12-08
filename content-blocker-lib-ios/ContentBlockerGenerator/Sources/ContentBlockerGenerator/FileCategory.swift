@@ -9,10 +9,11 @@ enum FileCategory: String {
 
     case advertising
     case analytics
-    case social
+    case content
     case cryptomining
-    case fingerprinting
     case entity
+    case fingerprinting
+    case social
 
     func getPath(inputDirectory: String) -> String {
         return "\(inputDirectory)/\(location)"
@@ -24,14 +25,16 @@ enum FileCategory: String {
             return "normalized-lists/ads-track-digest256.json"
         case .analytics:
             return "normalized-lists/analytics-track-digest256.json"
-        case .social:
-            return "normalized-lists/social-track-digest256.json"
+        case .content:
+            return "normalized-lists/content-track-digest256.json"
         case .cryptomining:
             return "normalized-lists/base-cryptomining-track-digest256.json"
-        case .fingerprinting:
-            return "normalized-lists/base-fingerprinting-track-digest256.json"
         case .entity:
             return "disconnect-entitylist.json"
+        case .fingerprinting:
+            return "normalized-lists/base-fingerprinting-track-digest256.json"
+        case .social:
+            return "normalized-lists/social-track-digest256.json"
         }
     }
 
