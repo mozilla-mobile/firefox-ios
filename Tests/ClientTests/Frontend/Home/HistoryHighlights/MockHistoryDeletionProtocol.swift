@@ -5,7 +5,6 @@
 @testable import Client
 
 class MockHistoryDeletionProtocol: HistoryDeletionProtocol {
-
     var deleteCallCount = 0
     var deleteCompletion: ((Bool) -> Void)?
 

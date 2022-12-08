@@ -35,7 +35,8 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+        let fxaParams = FxALaunchParams(entrypoint: .connectSetting, query: [:])
+        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -349,7 +350,8 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
-            let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+            let fxaParams = FxALaunchParams(entrypoint: .accountStatusSettingReauth, query: [:])
+            let controller = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: fxaParams)
             TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(controller, animated: true)
             return
@@ -477,7 +479,6 @@ class FeatureSwitchSetting: BoolSetting {
     override func writeBool(_ control: UISwitch) {
         self.featureSwitch.setMembership(control.isOn, for: self.prefs)
     }
-
 }
 
 class ForceCrashSetting: HiddenSetting {
@@ -650,7 +651,6 @@ class ResetContextualHints: HiddenSetting {
 }
 
 class OpenFiftyTabsDebugOption: HiddenSetting {
-
     override var accessibilityIdentifier: String? { return "OpenFiftyTabsOption.Setting" }
 
     override var title: NSAttributedString? {
@@ -659,7 +659,10 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard let url = URL(string: "https://www.mozilla.org") else { return }
-        BrowserViewController.foregroundBVC().debugOpen(numberOfNewTabs: 50, at: url)
+
+        // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
+        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
+        BrowserViewController.foregroundBVC()?.debugOpen(numberOfNewTabs: 50, at: url)
     }
 }
 
@@ -694,7 +697,6 @@ class UseNewHistoryApiOption: HiddenSetting {
                     migrationConfig: .real,
                     callback: { result in
                         Logger.browserLogger.info("Successful Migration took \(result.totalDuration / 1000) seconds")
-
                     }, errCallback: { _ in
                         Logger.browserLogger.debug("Failed migration of history")
                     }
@@ -781,7 +783,6 @@ class LicenseAndAcknowledgementsSetting: Setting {
 
 // Opens the App Store review page of this app
 class AppStoreReviewSetting: Setting {
-
     override var title: NSAttributedString? {
         return NSAttributedString(string: .Settings.About.RateOnAppStore, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
@@ -820,7 +821,9 @@ class ShowIntroductionSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {
-            BrowserViewController.foregroundBVC().presentIntroViewController(true)
+            // TODO: Temporary.
+            // This instance of foregroundBVC is going to be revisited after having enough telemetry of ShowTour.
+            BrowserViewController.foregroundBVC()?.presentIntroViewController(true)
 
             TelemetryWrapper.recordEvent(
                 category: .action,
@@ -1209,7 +1212,6 @@ class HomeSetting: Setting {
 }
 
 class TabsSetting: Setting {
-
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
 
     override var accessibilityIdentifier: String? { return "TabsSetting" }
@@ -1247,7 +1249,6 @@ class SiriPageSetting: Setting {
 }
 
 class NoImageModeSetting: BoolSetting {
-
     init(settings: SettingsTableViewController) {
         let noImageEnabled = NoImageModeHelper.isActivated(settings.profile.prefs)
         let didChange = { (isEnabled: Bool) in

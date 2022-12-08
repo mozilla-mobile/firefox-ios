@@ -6,7 +6,6 @@ import UIKit
 import Shared
 
 class TabToolbar: UIView {
-
     // MARK: - Variables
 
     weak var tabToolbarDelegate: TabToolbarDelegate?
@@ -20,10 +19,11 @@ class TabToolbar: UIView {
     let multiStateButton = ToolbarButton()
     let actionButtons: [NotificationThemeable & UIButton]
 
-    private let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge",
+    private let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
                                                      backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
-    private let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
-    private let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
+    private let appMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge)
+    private let warningMenuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuWarning,
+                                                     imageMask: ImageIdentifiers.menuWarningMask)
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -126,9 +126,7 @@ extension TabToolbar: TabToolbarProtocol {
         helper?.setMiddleButtonState(state)
     }
 
-    func updatePageStatus(_ isWebPage: Bool) {
-
-    }
+    func updatePageStatus(_ isWebPage: Bool) { }
 
     func updateTabCount(_ count: Int, animated: Bool) {
         tabsButton.updateTabCount(count, animated: animated)

@@ -223,7 +223,6 @@ class ErrorPageHandler: InternalSchemeResponse {
 }
 
 class ErrorPageHelper {
-
     fileprivate weak var certStore: CertStore?
 
     init(certStore: CertStore?) {

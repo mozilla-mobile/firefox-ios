@@ -45,7 +45,6 @@ class ETPSectionView: UIView {
 }
 
 class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -93,7 +92,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private let connectionDetailArrow: UIImageView = .build { image in
-        image.image = UIImage(imageLiteralResourceName: "goBack").withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
+        image.image = UIImage(imageLiteralResourceName: ImageIdentifiers.menuGoBack).withRenderingMode(.alwaysTemplate).imageFlippedForRightToLeftLayoutDirection()
         image.transform = CGAffineTransform(rotationAngle: .pi)
     }
 

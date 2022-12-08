@@ -8,7 +8,6 @@ import XCTest
 import Shared
 
 class SearchEnginesTests: XCTestCase {
-
     private let defaultSearchEngineName = "Google"
     private let expectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "eBay", "Wikipedia"]
 

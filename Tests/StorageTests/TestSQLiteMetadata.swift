@@ -21,7 +21,6 @@ class TestSQLiteMetadata: XCTestCase {
     }
 
     override func tearDown() {
-
         removeAllMetadata(self.db).succeeded()
         super.tearDown()
     }

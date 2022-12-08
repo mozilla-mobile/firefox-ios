@@ -20,7 +20,6 @@ protocol TabTrayViewDelegate: UIViewController {
 // swiftlint:enable class_delegate_protocol
 
 class TabTrayViewController: UIViewController, Themeable {
-
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
@@ -117,8 +116,8 @@ class TabTrayViewController: UIViewController, Themeable {
 
     private lazy var fixedSpace: UIBarButtonItem = {
         let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace,
-                               target: nil,
-                               action: nil)
+                                         target: nil,
+                                         action: nil)
         fixedSpace.width = CGFloat(UX.NavigationMenu.height)
         return fixedSpace
     }()
@@ -466,9 +465,11 @@ class TabTrayViewController: UIViewController, Themeable {
         return button
     }
 
-    private func createSegmentedControl(items: [Any],
-                               action: Selector,
-                               a11yId: String) -> UISegmentedControl {
+    private func createSegmentedControl(
+        items: [Any],
+        action: Selector,
+        a11yId: String
+    ) -> UISegmentedControl {
         let segmentedControl = UISegmentedControl(items: items)
         segmentedControl.translatesAutoresizingMaskIntoConstraints = true
         segmentedControl.accessibilityIdentifier = a11yId
@@ -578,7 +579,7 @@ extension TabTrayViewController: RemotePanelDelegate {
 
     // Sign In and Create Account Helper
     func fxaSignInOrCreateAccountHelper() {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        let fxaParams = FxALaunchParams(entrypoint: .homepanel, query: [:])
         let controller = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaParams,
                                                                                      flowType: .emailLoginFlow,
                                                                                      referringPage: .tabTray,

@@ -8,7 +8,6 @@ import Foundation
 import Storage
 
 class SearchGroupedItemsViewModel {
-
     // MARK: - Properties
 
     var asGroup: ASGroup<Site>

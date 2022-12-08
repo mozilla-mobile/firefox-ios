@@ -5,7 +5,6 @@
 import UIKit
 
 class ReaderModeButton: UIButton {
-
     // MARK: - Initializers
 
     override init(frame: CGRect) {

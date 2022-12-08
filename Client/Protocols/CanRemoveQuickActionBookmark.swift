@@ -12,7 +12,6 @@ protocol CanRemoveQuickActionBookmark {
 
 // Extension to easily remove a bookmark from the quick actions
 extension CanRemoveQuickActionBookmark {
-
     func removeBookmarkShortcut(quickAction: QuickActions = QuickActionsImplementation()) {
         // Get most recent bookmark
         bookmarksHandler.getRecentBookmarks(limit: 1) { bookmarkItems in

@@ -33,7 +33,6 @@ class ChevronView: UIView {
             case .angular:
                 lineCapStyle = .butt
                 lineJoinStyle = .miter
-
             }
         }
     }
@@ -66,13 +65,25 @@ class ChevronView: UIView {
 
         switch direction {
         case .left:
-            path = drawLeftChevronAt(CGPoint(x: rect.size.width - (strokeLength + Padding), y: strokeLength + Padding), strokeLength: strokeLength)
+            path = drawLeftChevronAt(
+                CGPoint(x: rect.size.width - (strokeLength + Padding),
+                        y: strokeLength + Padding),
+                strokeLength: strokeLength)
         case .up:
-            path = drawUpChevronAt(CGPoint(x: (rect.size.width - Padding) - strokeLength, y: (strokeLength / 2) + Padding), strokeLength: strokeLength)
+            path = drawUpChevronAt(
+                CGPoint(x: (rect.size.width - Padding) - strokeLength,
+                        y: (strokeLength / 2) + Padding),
+                strokeLength: strokeLength)
         case .right:
-            path = drawRightChevronAt(CGPoint(x: rect.size.width - Padding, y: strokeLength + Padding), strokeLength: strokeLength)
+            path = drawRightChevronAt(
+                CGPoint(x: rect.size.width - Padding,
+                        y: strokeLength + Padding),
+                strokeLength: strokeLength)
         case .down:
-            path = drawDownChevronAt(CGPoint(x: (rect.size.width - Padding) - strokeLength, y: (strokeLength * 1.5) + Padding), strokeLength: strokeLength)
+            path = drawDownChevronAt(
+                CGPoint(x: (rect.size.width - Padding) - strokeLength,
+                        y: (strokeLength * 1.5) + Padding),
+                strokeLength: strokeLength)
         }
 
         tintColor.set()
@@ -85,27 +96,31 @@ class ChevronView: UIView {
     }
 
     fileprivate func drawUpChevronAt(_ origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {
-        return drawChevron(CGPoint(x: origin.x-strokeLength, y: origin.y+strokeLength),
+        return drawChevron(
+            CGPoint(x: origin.x - strokeLength, y: origin.y + strokeLength),
             head: CGPoint(x: origin.x, y: origin.y),
-            rightTip: CGPoint(x: origin.x+strokeLength, y: origin.y+strokeLength))
+            rightTip: CGPoint(x: origin.x + strokeLength, y: origin.y + strokeLength))
     }
 
     fileprivate func drawDownChevronAt(_ origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {
-        return drawChevron(CGPoint(x: origin.x-strokeLength, y: origin.y-strokeLength),
+        return drawChevron(
+            CGPoint(x: origin.x - strokeLength, y: origin.y - strokeLength),
             head: CGPoint(x: origin.x, y: origin.y),
-            rightTip: CGPoint(x: origin.x+strokeLength, y: origin.y-strokeLength))
+            rightTip: CGPoint(x: origin.x + strokeLength, y: origin.y - strokeLength))
     }
 
     fileprivate func drawLeftChevronAt(_ origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {
-        return drawChevron(CGPoint(x: origin.x+strokeLength, y: origin.y-strokeLength),
+        return drawChevron(
+            CGPoint(x: origin.x + strokeLength, y: origin.y - strokeLength),
             head: CGPoint(x: origin.x, y: origin.y),
-            rightTip: CGPoint(x: origin.x+strokeLength, y: origin.y+strokeLength))
+            rightTip: CGPoint(x: origin.x + strokeLength, y: origin.y + strokeLength))
     }
 
     fileprivate func drawRightChevronAt(_ origin: CGPoint, strokeLength: CGFloat) -> UIBezierPath {
-        return drawChevron(CGPoint(x: origin.x-strokeLength, y: origin.y+strokeLength),
+        return drawChevron(
+            CGPoint(x: origin.x - strokeLength, y: origin.y + strokeLength),
             head: CGPoint(x: origin.x, y: origin.y),
-            rightTip: CGPoint(x: origin.x-strokeLength, y: origin.y-strokeLength))
+            rightTip: CGPoint(x: origin.x - strokeLength, y: origin.y - strokeLength))
     }
 
     fileprivate func drawChevron(_ leftTip: CGPoint, head: CGPoint, rightTip: CGPoint) -> UIBezierPath {

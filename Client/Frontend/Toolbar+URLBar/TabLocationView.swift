@@ -21,7 +21,6 @@ protocol TabLocationViewDelegate: AnyObject {
 }
 
 class TabLocationView: UIView, FeatureFlaggable {
-
     // MARK: UX
     struct UX {
         static let hostFontColor = UIColor.black
@@ -38,7 +37,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     var tapRecognizer: UITapGestureRecognizer!
     var contentView: UIStackView!
 
-    private let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
+    private let menuBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.menuBadge, backdropCircleSize: 32)
 
     @objc dynamic var baseURLFontColor: UIColor = UX.baseURLFontColor {
         didSet { updateTextWithURL() }
@@ -356,7 +355,6 @@ extension TabLocationView: TabEventHandler {
         let imageID = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
         if !(tab.webView?.hasOnlySecureContent ?? false) {
             lockImage = UIImage(imageLiteralResourceName: imageID)
-
         } else if let tintColor = trackingProtectionButton.tintColor {
             lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed)
                 .withTintColor(tintColor, renderingMode: .alwaysTemplate)

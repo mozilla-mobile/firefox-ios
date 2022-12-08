@@ -12,7 +12,6 @@ protocol QRCodeViewControllerDelegate: AnyObject {
 }
 
 class QRCodeViewController: UIViewController {
-
     private struct UX {
         static let navigationBarBackgroundColor = UIColor.black
         static let navigationBarTitleColor = UIColor.Photon.White100
@@ -284,7 +283,6 @@ class QRCodeViewController: UIViewController {
         view.layer.addSublayer(videoPreviewLayer)
         self.videoPreviewLayer = videoPreviewLayer
         captureSession.startRunning()
-
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

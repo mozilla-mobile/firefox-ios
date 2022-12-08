@@ -12,7 +12,6 @@ struct SiteTableViewHeaderModel {
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
-
     struct UX {
         static let titleTrailingLeadingMargin: CGFloat = 16
         static let titleTopBottomMargin: CGFloat = 12
@@ -84,9 +83,9 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
                                                 constant: UX.titleTrailingLeadingMargin),
             titleTrailingConstraint,
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                                constant: UX.titleTopBottomMargin),
+                                            constant: UX.titleTopBottomMargin),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                                constant: -UX.titleTopBottomMargin),
+                                               constant: -UX.titleTopBottomMargin),
 
             collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,

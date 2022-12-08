@@ -33,7 +33,7 @@ class FxAWebViewController: UIViewController {
      - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part of a UINavigationController stack it will pop to the root.
      - parameter deepLinkParams: URL args passed in from deep link that propagate to FxA web view
      */
-    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, deepLinkParams: FxALaunchParams?) {
+    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, deepLinkParams: FxALaunchParams) {
         self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile, deepLinkParams: deepLinkParams)
 
         self.dismissType = dismissalStyle
@@ -132,7 +132,6 @@ class FxAWebViewController: UIViewController {
 
 // MARK: - WKNavigationDelegate
 extension FxAWebViewController: WKNavigationDelegate {
-
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
         decisionHandler(decision)
@@ -161,7 +160,6 @@ extension FxAWebViewController: WKScriptMessageHandler {
 
 // MARK: - WKUIDelegate
 extension FxAWebViewController: WKUIDelegate {
-
     /// Blank target links (support links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard helpBrowser == nil else { return nil }
@@ -214,7 +212,6 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
 
 // MARK: - Observe value
 extension FxAWebViewController {
-
     override func observeValue(forKeyPath keyPath: String?, of object: Any?,
                                change: [NSKeyValueChangeKey: Any]?,
                                context: UnsafeMutableRawPointer?) {

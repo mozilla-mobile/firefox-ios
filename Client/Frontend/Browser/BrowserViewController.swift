@@ -35,7 +35,6 @@ protocol BrowserBarViewDelegate: AnyObject {
 }
 
 class BrowserViewController: UIViewController {
-
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
         static let ActionSheetTitleMaxLength = 120
@@ -299,10 +298,8 @@ class BrowserViewController: UIViewController {
             header.addArrangedViewToTop(topTabsViewController.view)
             self.topTabsViewController = topTabsViewController
             topTabsViewController.applyTheme()
-
         } else if showTopTabs, topTabsViewController != nil {
             topTabsViewController?.applyTheme()
-
         } else {
             if let topTabsView = topTabsViewController?.view {
                 header.removeArrangedView(topTabsView)
@@ -813,12 +810,10 @@ class BrowserViewController: UIViewController {
     fileprivate func dequeueQueuedTabs(receivedURLs: [URL]) {
         assert(!Thread.current.isMainThread, "This must be called in the background.")
         self.profile.queue.getQueuedTabs() >>== { cursor in
-
             // This assumes that the DB returns rows in some kind of sane order.
             // It does in practice, so WFM.
             let cursorCount = cursor.count
             if cursorCount > 0 {
-
                 // Filter out any tabs received by a push notification to prevent dupes.
                 let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
                 if !urls.isEmpty {
@@ -888,7 +883,7 @@ class BrowserViewController: UIViewController {
 
     private func updateWallpaperMetadata() {
         let metadataQueue = DispatchQueue(label: "com.moz.wallpaperVerification.queue",
-                                              qos: .utility)
+                                          qos: .utility)
         metadataQueue.async {
             let wallpaperManager = WallpaperManager()
             wallpaperManager.checkForUpdates()
@@ -1008,11 +1003,9 @@ class BrowserViewController: UIViewController {
 
             if userHasPressedHomeButton {
                 userHasPressedHomeButton = false
-
             } else if focusUrlBar && !contextHintVC.shouldPresentHint() {
                 enterOverlayMode()
             }
-
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideHomepage()
             urlBar.shouldHideReloadButton(shouldUseiPadSetup())
@@ -1185,7 +1178,6 @@ class BrowserViewController: UIViewController {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .addBookmarkToast)
         if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
-
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
                   let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
             else { return }
@@ -1291,7 +1283,6 @@ class BrowserViewController: UIViewController {
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
             if tab.url?.origin == webView.url?.origin {
-
                 tab.url = webView.url
 
                 if tab === tabManager.selectedTab && !tab.isRestoring {
@@ -1473,7 +1464,6 @@ class BrowserViewController: UIViewController {
     func presentShareSheet(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
         let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
-
             switch activityType {
             case CustomActivityAction.sendToDevice.actionType:
                 self.showSendToDevice()
@@ -1712,7 +1702,6 @@ extension BrowserViewController {
 
 // MARK: - TabDelegate
 extension BrowserViewController: TabDelegate {
-
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
@@ -1817,12 +1806,12 @@ extension BrowserViewController: TabDelegate {
 // MARK: - LibraryPanelDelegate
 extension BrowserViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToSignIn() {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
         presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
     }
 
     func libraryPanelDidRequestToCreateAccount() {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
         presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
     }
 
@@ -2290,7 +2279,7 @@ extension BrowserViewController {
         }
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
         let vcToPresent = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage, profile: profile)
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
@@ -2298,7 +2287,6 @@ extension BrowserViewController {
     @objc func dismissSignInViewController() {
         self.dismiss(animated: true, completion: nil)
     }
-
 }
 
 extension BrowserViewController: ContextMenuHelperDelegate {
@@ -2417,7 +2405,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
                     application.endBackgroundTask(taskId)
                 }.resume()
-
             }
             actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
 
@@ -2631,7 +2618,6 @@ extension BrowserViewController: TopTabsDelegate {
 }
 
 extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
-
     func dismissInstructionsView() {
         self.navigationController?.presentedViewController?.dismiss(animated: true)
         self.popToBVC()
@@ -2662,7 +2648,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 // MARK: - Reopen last closed tab
 
 extension BrowserViewController: FeatureFlaggable {
-
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if featureFlags.isFeatureEnabled(.shakeToRestore, checking: .buildOnly) {
             homePanelDidRequestToRestoreClosedTab(motion)
@@ -2698,11 +2683,20 @@ extension BrowserViewController: FeatureFlaggable {
 extension BrowserViewController {
     /// This method now returns the BrowserViewController associated with the scene.
     /// We currently have a single scene app setup, so this will change as we introduce support for multiple scenes.
-    public static func foregroundBVC() -> BrowserViewController {
-        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else {
-            /// Currently, we have a single scene app. If we're here, there's no scene or window.
-            /// This should be impossible, and fatal.
-            fatalError("Unable to fetch the Scene.")
+    ///
+    /// We're currently seeing crashes from cases of there being no `connectedScene`, or being unable to cast to a SceneDelegate.
+    /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
+    ///
+    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now. 
+    public static func foregroundBVC() -> BrowserViewController? {
+        guard let scene = UIApplication.shared.connectedScenes.first else {
+            SentryIntegration.shared.send(message: "No connected scenes exist.", severity: .fatal)
+            return nil
+        }
+
+        guard let sceneDelegate = scene.delegate as? SceneDelegate else {
+            SentryIntegration.shared.send(message: "Scene could not be cast as SceneDelegate.", severity: .fatal)
+            return nil
         }
 
         return sceneDelegate.browserViewController

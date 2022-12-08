@@ -21,7 +21,6 @@ extension PhotonActionSheet: Notifiable {
 
 // This file is main table view used for the action sheet
 class PhotonActionSheet: UIViewController {
-
     struct UX {
         static let maxWidth: CGFloat = 414
         static let padding: CGFloat = 6
@@ -358,7 +357,6 @@ class PhotonActionSheet: UIViewController {
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let section = viewModel.actions[safe: indexPath.section],
               let action = section[safe: indexPath.row],
@@ -392,7 +390,6 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         if viewModel.isMainMenuInverted {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: rowIsLastInSection)
-
         } else {
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: isLastRow)
@@ -431,7 +428,6 @@ extension PhotonActionSheet: PhotonActionSheetContainerCellDelegate {
 
 // MARK: - Visible Headers
 extension UITableView {
-
     var visibleHeaders: [UITableViewHeaderFooterView] {
         var visibleHeaders = [UITableViewHeaderFooterView]()
         for sectionIndex in indexesOfVisibleHeaderSections {
@@ -464,7 +460,6 @@ extension UITableView {
 
 // MARK: - NotificationThemeable
 extension PhotonActionSheet: NotificationThemeable {
-
     func applyTheme() {
         if viewModel.presentationStyle == .popover {
             view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)

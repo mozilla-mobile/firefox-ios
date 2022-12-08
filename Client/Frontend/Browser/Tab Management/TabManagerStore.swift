@@ -29,7 +29,6 @@ extension TabManagerStore {
 }
 
 class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable {
-
     // MARK: - Variables
     private let tabsKey = "tabs"
     private let prefs: Prefs
@@ -194,7 +193,6 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
                 return savedTabError(description: message)
             }
             return tabs
-
         } catch let error {
             return savedTabError(description: error.localizedDescription)
         }

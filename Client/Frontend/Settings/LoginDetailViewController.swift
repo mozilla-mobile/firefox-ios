@@ -48,7 +48,6 @@ private class CenteredDetailCell: ThemedTableViewCell, ReusableCell {
 }
 
 class LoginDetailViewController: SensitiveViewController, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -148,7 +147,6 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
 
 // MARK: - UITableViewDataSource
 extension LoginDetailViewController: UITableViewDataSource {
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InfoItem(rawValue: indexPath.row)! {
         case .breachItem:
@@ -328,7 +326,6 @@ extension LoginDetailViewController: UITableViewDelegate {
 
 // MARK: - KeyboardHelperDelegate
 extension LoginDetailViewController: KeyboardHelperDelegate {
-
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight
@@ -341,7 +338,6 @@ extension LoginDetailViewController: KeyboardHelperDelegate {
 
 // MARK: - Selectors
 extension LoginDetailViewController {
-
     @objc func dismissAlertController() {
         deleteAlert?.dismiss(animated: false, completion: nil)
     }

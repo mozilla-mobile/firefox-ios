@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class CalendarExtensionsTests: XCTestCase {
-
     // MARK: add(numberOfDays:to)
 
     func testAddZeroDay_returnSameDate() {

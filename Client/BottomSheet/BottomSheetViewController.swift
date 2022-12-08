@@ -10,7 +10,6 @@ protocol BottomSheetChild {
 }
 
 class BottomSheetViewController: UIViewController {
-
     private struct UX {
         static let minVisibleTopSpace: CGFloat = 40
         static let closeButtonWidthHeight: CGFloat = 30
@@ -121,7 +120,6 @@ class BottomSheetViewController: UIViewController {
 }
 
 private extension BottomSheetViewController {
-
     func setupView() {
         if viewModel.shouldDismissForTapOutside {
             topTapView.addGestureRecognizer(UITapGestureRecognizer.init(target: self,
@@ -143,7 +141,7 @@ private extension BottomSheetViewController {
             topTapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
-                                             constant: BottomSheetViewController.UX.minVisibleTopSpace),
+                                           constant: BottomSheetViewController.UX.minVisibleTopSpace),
             sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentViewBottomConstraint,
             sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -234,7 +232,6 @@ private extension BottomSheetViewController {
 }
 
 extension BottomSheetViewController: UIGestureRecognizerDelegate {
-
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                   shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
         ) -> Bool {
@@ -244,7 +241,6 @@ extension BottomSheetViewController: UIGestureRecognizerDelegate {
 
 // MARK: - Themable & Notifiable
 extension BottomSheetViewController: NotificationThemeable, Notifiable {
-
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:

@@ -9,7 +9,6 @@ import Shared
 @testable import Client
 
 class BookmarksPanelViewModelTests: XCTestCase {
-
     private var profile: MockProfile!
 
     override func setUp() {
@@ -135,7 +134,6 @@ class BookmarksPanelViewModelTests: XCTestCase {
 }
 
 extension BookmarksPanelViewModelTests {
-
     func createSubject(guid: GUID) -> BookmarksPanelViewModel {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarkFolderGUID: guid)

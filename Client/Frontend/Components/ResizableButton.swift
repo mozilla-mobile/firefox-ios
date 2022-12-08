@@ -5,7 +5,6 @@
 import UIKit
 
 class ResizableButton: UIButton {
-
     struct UX {
         static let buttonEdgeSpacing: CGFloat = 8
     }

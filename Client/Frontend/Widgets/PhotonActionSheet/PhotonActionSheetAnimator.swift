@@ -5,7 +5,6 @@
 import UIKit
 
 class PhotonActionSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-
     var presenting: Bool = false
     let animationDuration = 0.4
 
@@ -66,7 +65,6 @@ extension PhotonActionSheetAnimator {
                 }, completion: { (completed) -> Void in
                     transitionContext.completeTransition(completed)
                 })
-
         } else {
             UIView.animate(
                 withDuration: transitionDuration(using: transitionContext),

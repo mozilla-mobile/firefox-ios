@@ -57,7 +57,6 @@ enum TabUrlType: String {
 }
 
 class Tab: NSObject {
-
     static let privateModeKey = "PrivateModeKey"
     fileprivate var _isPrivate: Bool = false
     internal fileprivate(set) var isPrivate: Bool {
@@ -124,7 +123,6 @@ class Tab: NSObject {
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,
            let siteURL = URL(string: string) {
-
             // If the canonical URL from the page metadata doesn't contain the
             // "#" fragment, check if the tab's URL has a fragment and if so,
             // append it to the canonical URL.
@@ -830,7 +828,6 @@ extension Tab: UIGestureRecognizerDelegate, Loggable {
             TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
         }
     }
-
 }
 
 extension Tab: TabWebViewDelegate {
@@ -965,7 +962,6 @@ class TabWebView: WKWebView, MenuHelperInterface {
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
-
 }
 
 ///

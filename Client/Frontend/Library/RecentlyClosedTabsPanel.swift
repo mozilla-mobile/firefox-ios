@@ -18,7 +18,6 @@ protocol RecentlyClosedPanelDelegate: AnyObject {
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
-
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     var state: LibraryPanelMainState = .history(state: .inFolder)
     var recentlyClosedTabsDelegate: RecentlyClosedPanelDelegate?
@@ -133,7 +132,6 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     func handleDoneButton() {
         // no implementation needed
     }
-
 }
 
 extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMenu {

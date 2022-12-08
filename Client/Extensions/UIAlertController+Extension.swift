@@ -9,7 +9,6 @@ typealias UIAlertActionCallback = (UIAlertAction) -> Void
 
 // MARK: - Extension methods for building specific UIAlertController instances used across the app
 extension UIAlertController {
-
     /**
     Builds the Alert view that asks the user if they wish to opt into crash reporting.
 
@@ -24,7 +23,6 @@ extension UIAlertController {
         _ sendReportCallback: @escaping UIAlertActionCallback,
         alwaysSendCallback: @escaping UIAlertActionCallback,
         dontSendCallback: @escaping UIAlertActionCallback) -> UIAlertController {
-
         let alert = UIAlertController(
             title: .CrashOptInAlertTitle,
             message: .CrashOptInAlertMessage,
@@ -206,7 +204,6 @@ extension UIAlertController {
     class func deleteLoginAlertWithDeleteCallback(
         _ deleteCallback: @escaping UIAlertActionCallback,
         hasSyncedLogins: Bool) -> UIAlertController {
-
         let deleteAlert: UIAlertController
         if hasSyncedLogins {
             deleteAlert = UIAlertController(title: .DeleteLoginAlertTitle, message: .DeleteLoginAlertSyncedMessage, preferredStyle: .alert)

@@ -5,7 +5,6 @@
 import UIKit
 
 extension UIView {
-
     /// Takes a screenshot of the view with the given size.
     func screenshot(_ size: CGSize, offset: CGPoint? = nil, quality: CGFloat = 1) -> UIImage? {
         guard 0...1 ~= quality else { return nil }

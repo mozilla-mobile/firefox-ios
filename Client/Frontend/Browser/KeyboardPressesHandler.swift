@@ -14,7 +14,6 @@ import UIKit
 /// https://developer.apple.com/documentation/uikit/pointer_interactions/integrating_pointer_interactions_into_your_ipad_app
 @available(iOS 13.4, *)
 class KeyboardPressesHandler {
-
     private lazy var keysPressed: [UIKeyboardHIDUsage] = []
 
     var isOnlyCmdPressed: Bool {

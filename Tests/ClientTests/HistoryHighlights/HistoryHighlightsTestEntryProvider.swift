@@ -9,7 +9,6 @@ import Storage
 import XCTest
 
 class HistoryHighlightsTestEntryProvider {
-
     private var profile: MockProfile!
     private var tabManager: TabManager!
 

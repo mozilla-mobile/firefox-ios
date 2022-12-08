@@ -88,10 +88,11 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
                                          placeholder: .SettingsAdvancedAccountCustomFxAContentServerURI,
                                          accessibilityIdentifier: "CustomFxAContentServer")
 
-        let customSyncTokenServerURISetting = CustomURLSetting(prefs: prefs,
-                                        prefKey: PrefsKeys.KeyCustomSyncTokenServerOverride,
-                                        placeholder: .SettingsAdvancedAccountCustomSyncTokenServerURI,
-                                        accessibilityIdentifier: "CustomSyncTokenServerURISetting")
+        let customSyncTokenServerURISetting = CustomURLSetting(
+            prefs: prefs,
+            prefKey: PrefsKeys.KeyCustomSyncTokenServerOverride,
+            placeholder: .SettingsAdvancedAccountCustomSyncTokenServerURI,
+            accessibilityIdentifier: "CustomSyncTokenServerURISetting")
 
         let autoconfigSettings = [
             CustomFxAContentServerEnableSetting(prefs: prefs) { isOn in

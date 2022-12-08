@@ -8,7 +8,6 @@ import Storage
 @testable import Client
 
 class RemoteTabsPanelTests: XCTestCase {
-
     // MARK: States of panel
 
     func testHasNoSyncAccount() throws {
@@ -119,7 +118,6 @@ private extension RemoteTabsPanelTests {
                      clientAndTabs: [ClientAndTabs] = [],
                      file: StaticString = #file,
                      line: UInt = #line) -> RemoteTabsPanel {
-
         let profile = MockProfile()
         profile.hasSyncableAccountMock = hasAccount
         profile.mockClientAndTabs = clientAndTabs

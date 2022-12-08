@@ -10,7 +10,6 @@ private let iPadFactor: CGFloat = 1.06
 private let iPhoneFactor: CGFloat = 0.88
 
 class DynamicFontHelper: NSObject {
-
     static var defaultHelper: DynamicFontHelper {
         struct Singleton {
             static let instance = DynamicFontHelper()

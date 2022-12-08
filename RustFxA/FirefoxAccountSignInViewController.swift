@@ -17,7 +17,6 @@ enum FxASignInParentType {
 
 /// ViewController handling Sign In through QR Code or Email address
 class FirefoxAccountSignInViewController: UIViewController {
-
     struct UX {
         static let horizontalPadding: CGFloat = 16
         static let buttonVerticalInset: CGFloat = 12
@@ -31,7 +30,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     var shouldReload: (() -> Void)?
 
     private let profile: Profile
-    private var deepLinkParams: FxALaunchParams?
+    private let deepLinkParams: FxALaunchParams
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     /// This variable is used to track parent page that launched this sign in VC.
@@ -73,7 +72,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.lineBreakMode = .byWordWrapping
         label.textColor = .label
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
-                                                                       size: UX.signInLabelFontSize)
+                                                                   size: UX.signInLabelFontSize)
         label.adjustsFontForContentSizeCategory = true
 
         let placeholder = "firefox.com/pair"
@@ -136,7 +135,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     ///   - profile: User Profile info
     ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
     ///   - deepLinkParams: URL args passed in from deep link that propagate to FxA web view
-    init(profile: Profile, parentType: FxASignInParentType, deepLinkParams: FxALaunchParams?) {
+    init(profile: Profile, parentType: FxASignInParentType, deepLinkParams: FxALaunchParams) {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
         switch parentType {
@@ -155,7 +154,6 @@ class FirefoxAccountSignInViewController: UIViewController {
         case .tabTray:
             self.telemetryObject = .tabTray
             self.fxaDismissStyle = .popToTabTray
-
         }
         super.init(nibName: nil, bundle: nil)
     }
@@ -174,7 +172,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         accessibilityLabel = "FxASingin.navBar"
 
         setupNotifications(forObserver: self,
-                                   observing: [.DisplayThemeChanged])
+                           observing: [.DisplayThemeChanged])
         setupLayout()
         applyTheme()
     }
@@ -218,15 +216,15 @@ class FirefoxAccountSignInViewController: UIViewController {
 
             scanButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 24),
             scanButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                       constant: UX.horizontalPadding),
+                                                constant: UX.horizontalPadding),
             scanButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                        constant: -UX.horizontalPadding),
+                                                 constant: -UX.horizontalPadding),
 
             emailButton.topAnchor.constraint(equalTo: scanButton.bottomAnchor, constant: 8),
             emailButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor,
-                                                       constant: UX.horizontalPadding),
+                                                 constant: UX.horizontalPadding),
             emailButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                        constant: -UX.horizontalPadding),
+                                                  constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
     }
@@ -283,14 +281,18 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
 
 // MARK: - FxA SignIn Flow
 extension FirefoxAccountSignInViewController {
-
     /// This function is called to determine if FxA sign in flow or settings page should be shown
     /// - Parameters:
     ///     - deepLinkParams: FxALaunchParams from deeplink query
     ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
     ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
     ///     - profile:
-    static func getSignInOrFxASettingsVC(_ deepLinkParams: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage, profile: Profile) -> UIViewController {
+    static func getSignInOrFxASettingsVC(
+        _ deepLinkParams: FxALaunchParams,
+        flowType: FxAPageType,
+        referringPage: ReferringPage,
+        profile: Profile
+    ) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let parentType: FxASignInParentType
         let object: TelemetryWrapper.EventObject
@@ -323,7 +325,6 @@ extension FirefoxAccountSignInViewController {
 
 // MARK: - Notifiable
 extension FirefoxAccountSignInViewController: Notifiable {
-
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:

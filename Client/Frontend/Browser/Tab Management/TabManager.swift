@@ -47,7 +47,6 @@ protocol TabManagerProtocol {
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
-
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
     private let store: TabManagerStore
@@ -88,7 +87,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
                 return false
-
             } else if let lastKnownUrl = tab.lastKnownUrl {
                 if lastKnownUrl.absoluteString.hasPrefix("internal://") { return false }
                 return true
@@ -488,7 +486,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         var placeNextToParentTab = false
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
-
         } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
             placeNextToParentTab = true
             insertIndex += 1
@@ -667,7 +664,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         let previousSelectedTabUUID = selectedTab?.tabUUID ?? ""
         // moved closing of multiple tabs to background thread
         DispatchQueue.global(qos: .background).async { [unowned self] in
-
             let tabsToRemove = isPrivate ? self.privateTabs : self.normalTabs
 
             if isPrivate && self.privateTabs.count < 1 {
@@ -714,7 +710,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         var toast: ButtonToast?
         let numberOfTabs = recentlyClosedTabs.count
         if numberOfTabs > 0 {
-
             // Add last 10 tab(s) to recently closed list
             // Note: The recently closed tab list is only updated when the undo
             // snackbar disappears and does not update if someone taps on undo button
@@ -900,7 +895,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
 // MARK: - WKNavigationDelegate
 extension TabManager: WKNavigationDelegate {
-
     // Note the main frame JSContext (i.e. document, window) is not available yet.
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         if let tab = self[webView], let blocker = tab.contentBlocker {
@@ -975,7 +969,6 @@ extension TabManager: TabEventHandler {
 
 // MARK: - Test cases helpers
 extension TabManager {
-
     func testRemoveAll() {
         assert(AppConstants.isRunningTest)
         removeTabs(self.tabs)

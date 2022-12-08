@@ -12,11 +12,10 @@ import UIKit
 protocol DefaultImageCache {
     func retrieveImage(forKey key: String) async throws -> UIImage?
 
-    func store(image: UIImage, forKey key: String) async throws
+    func store(image: UIImage, forKey key: String)
 }
 
 extension ImageCache: DefaultImageCache {
-
     func retrieveImage(forKey key: String) async throws -> UIImage? {
         return try await withCheckedThrowingContinuation { continuation in
             retrieveImage(forKey: key) { result in
@@ -30,17 +29,7 @@ extension ImageCache: DefaultImageCache {
         }
     }
 
-    func store(image: UIImage, forKey key: String) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
-            store(image, forKey: key) { result in
-                // memoryCacheResult never fails
-                switch result.diskCacheResult {
-                case .success:
-                    continuation.resume()
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+    func store(image: UIImage, forKey key: String) {
+        self.store(image, forKey: key)
     }
 }

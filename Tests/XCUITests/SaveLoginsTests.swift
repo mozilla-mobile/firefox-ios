@@ -20,7 +20,6 @@ let defaultNumRowsLoginsList = 2
 let defaultNumRowsEmptyFilterList = 0
 
 class SaveLoginTest: BaseTestCase {
-
     private func saveLogin(givenUrl: String) {
         if iPad() {
             waitForTabsButton()

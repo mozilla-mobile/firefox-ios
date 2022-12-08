@@ -297,7 +297,6 @@ class BoolSetting: Setting, FeatureFlaggable {
                                          object: .setting,
                                          extras: ["pref": featureFlagName.rawValue as Any,
                                                   "to": control.isOn])
-
         } else {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .change,
@@ -319,7 +318,6 @@ class BoolSetting: Setting, FeatureFlaggable {
     func writeBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
             featureFlags.set(feature: featureFlagName, to: control.isOn)
-
         } else {
             guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
@@ -684,7 +682,6 @@ protocol SettingsDelegate: AnyObject {
 
 // The base settings view controller.
 class SettingsTableViewController: ThemedTableViewController {
-
     typealias SettingsGenerator = (SettingsTableViewController, SettingsDelegate?) -> [SettingSection]
 
     fileprivate let Identifier = "CellIdentifier"

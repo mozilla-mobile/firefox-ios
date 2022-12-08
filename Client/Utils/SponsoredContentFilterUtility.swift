@@ -8,7 +8,6 @@ import Shared
 
 // Utility to filter sponsored content out of certain data type
 struct SponsoredContentFilterUtility {
-
     /// Hide with search param is defined by adMarketplace, indicates this URL was registered through sponsored clicks
     /// and should not show in top sites, jump back in or recently visited sections on the homepage
     private var hideWithSearchParam: String {

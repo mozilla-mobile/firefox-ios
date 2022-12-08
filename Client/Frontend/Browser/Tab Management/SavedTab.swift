@@ -8,7 +8,6 @@ import Shared
 // We have both Codable and NSCoding protocol conformance since we're currently migrating users to
 // Codable for SavedTab. We'll be able to remove NSCoding when adoption rate to v106 and greater is high enough.
 class SavedTab: NSObject, Codable, NSCoding {
-
     var isSelected: Bool
     var title: String?
     var url: URL?

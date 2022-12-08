@@ -86,7 +86,9 @@ extension AppDelegate {
         if UIApplication.shared.applicationState == .active {
             let browserViewController = BrowserViewController.foregroundBVC()
 
-            browserViewController.loadQueuedTabs(receivedURLs: receivedUrlsQueue)
+            // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
+            // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
+            browserViewController?.loadQueuedTabs(receivedURLs: receivedUrlsQueue)
         }
     }
 }
@@ -103,7 +105,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-
         if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
             profile.removeAccount()
 

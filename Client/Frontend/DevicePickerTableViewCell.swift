@@ -5,7 +5,6 @@
 import UIKit
 
 class DevicePickerTableViewCell: UITableViewCell, ReusableCell {
-
     private struct UX {
         static let deviceRowTextFont = UIFont.systemFont(ofSize: 16)
         static let deviceRowTextPaddingLeft: CGFloat = 72

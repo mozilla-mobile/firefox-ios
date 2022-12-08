@@ -15,7 +15,6 @@ protocol AppSessionProvider {
 /// DO NOT treat this as your go to solution for session property management. It will turn this session manager
 /// into a smörgåsbord of countless properties. Consider all options before adding it here, but if it makes sense, go for it.
 struct AppSessionManager: AppSessionProvider {
-
     var tabUpdateState: TabUpdateState = .coldStart
     var launchSessionProvider: LaunchSessionProviderProtocol
 

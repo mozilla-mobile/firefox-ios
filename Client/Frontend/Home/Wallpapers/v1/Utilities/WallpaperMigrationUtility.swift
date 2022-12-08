@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 struct WallpaperMigrationUtility: Loggable {
-
     private let metadataMigration = PrefsKeys.Wallpapers.v1MigrationCheck
     private let legacyAssetMigration = PrefsKeys.Wallpapers.legacyAssetMigrationCheck
     private let userDefaults: UserDefaultsInterface
@@ -66,7 +65,6 @@ struct WallpaperMigrationUtility: Loggable {
                       with: storageUtility)
 
             markLegacyAssetMigrationComplete()
-
         } catch {
             browserLog.error("Migration error: \(error.localizedDescription)")
         }
@@ -94,7 +92,6 @@ struct WallpaperMigrationUtility: Loggable {
                       with: storageUtility)
 
             markMetadataMigrationComplete()
-
         } catch {
             browserLog.error("Migration error: \(error.localizedDescription)")
         }
@@ -132,7 +129,6 @@ struct WallpaperMigrationUtility: Loggable {
         _ matchingID: String,
         from storageUtility: WallpaperStorageUtility
     ) throws -> Wallpaper? {
-
         if matchingID == oldPromotionID {
             // The new metadata doesn't include the old promotional wallpapers.
             // Thus, we must create a new wallpaper to continue storing
@@ -140,7 +136,6 @@ struct WallpaperMigrationUtility: Loggable {
                              textColor: UIColor(colorString: "FBFBFE"),
                              cardColor: nil,
                              logoTextColor: UIColor(colorString: "FBFBFE"))
-
         } else {
             guard let metadata = try storageUtility.fetchMetadata(),
                   let matchingWallpaper = metadata.collections
@@ -150,7 +145,6 @@ struct WallpaperMigrationUtility: Loggable {
 
             return matchingWallpaper
         }
-
     }
 
     private func markMetadataMigrationComplete() {

@@ -12,7 +12,6 @@ import Account
 import MozillaAppServices
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
 
     /// This is temporary. We don't want to continue treating App / Scene delegates as containers for certain session specific properties.
@@ -138,7 +137,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 browserViewController.switchToTabForURLOrOpen(url)
             }
         }
-
     }
 
     // MARK: - Performing Tasks
@@ -210,7 +208,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             )
         }
     }
-
 }
 
 @available(iOS 14, *)

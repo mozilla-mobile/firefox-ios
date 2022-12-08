@@ -46,11 +46,9 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         if indexPath.section == LoginListViewController.loginsSettingsSection,
            let cell = tableView.dequeueReusableCell(withIdentifier: LoginListTableViewSettingsCell.cellIdentifier,
                                                     for: indexPath) as? LoginListTableViewSettingsCell {
-
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
             setting.onConfigureCell(cell, theme: viewModel.theme)
@@ -67,7 +65,6 @@ class LoginDataSource: NSObject, UITableViewDataSource {
                 }
             }
             return cell
-
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: LoginListTableViewCell.cellIdentifier,
                                                            for: indexPath) as? LoginListTableViewCell {
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }

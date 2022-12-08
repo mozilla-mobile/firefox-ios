@@ -7,7 +7,6 @@ import Foundation
 /// The history panel has a fixed first section and cells. In this case, we'll only need some properties of that to serve as our model.
 
 struct HistoryActionablesModel: Hashable {
-
     // MARK: - Properties
 
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
@@ -61,5 +60,4 @@ struct HistoryActionablesModel: Hashable {
                                 a11yId: a11y.recentlyClosedCell,
                                 itemIdentity: .recentlyClosed)
     ]
-
 }

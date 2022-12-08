@@ -34,7 +34,6 @@ struct NewTabAccessors {
         }
         return option
     }
-
 }
 
 /// Enum to encode what should happen when the user opens a new tab without a URL.

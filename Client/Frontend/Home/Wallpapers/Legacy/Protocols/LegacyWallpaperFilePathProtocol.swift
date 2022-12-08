@@ -7,7 +7,6 @@ import Foundation
 protocol LegacyWallpaperFilePathProtocol: Loggable {}
 
 extension LegacyWallpaperFilePathProtocol {
-
     /// Given a key, creates a URL pointing to the
     /// `.../wallpaper/key-as-folder/key-as-filePath` of the application's document directory.
     ///

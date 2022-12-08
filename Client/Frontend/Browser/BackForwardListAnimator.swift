@@ -5,7 +5,6 @@
 import UIKit
 
 class BackForwardListAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-
     var presenting: Bool = false
     let animationDuration = 0.4
 
@@ -68,7 +67,6 @@ extension BackForwardListAnimator {
                 }, completion: { (completed) -> Void in
                     transitionContext.completeTransition(completed)
                 })
-
         } else {
             UIView.animate(
                 withDuration: transitionDuration(using: transitionContext),

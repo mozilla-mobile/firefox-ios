@@ -7,7 +7,6 @@ import UIKit
 import Shared
 
 class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
-
     // Update view UX constants
     struct UX {
         static let closeButtonTopPadding: CGFloat = 32
@@ -105,7 +104,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         for cardType in viewModel.enabledCards {
             if let viewModel = viewModel.getCardViewModel(cardType: cardType) {
                 cardViewController = OnboardingCardViewController(viewModel: viewModel,
-                                                                      delegate: self)
+                                                                  delegate: self)
                 informationCards.append(cardViewController)
             }
         }
@@ -167,10 +166,9 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         return index
     }
 
-    private func presentSignToSync(_ fxaOptions: FxALaunchParams? = nil,
+    private func presentSignToSync(_ fxaOptions: FxALaunchParams,
                                    flowType: FxAPageType = .emailLoginFlow,
                                    referringPage: ReferringPage = .onboarding) {
-
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(
             fxaOptions,
             flowType: flowType,
@@ -201,7 +199,6 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 // MARK: UIPageViewControllerDataSource & UIPageViewControllerDelegate
 extension UpdateViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
               return nil
@@ -237,7 +234,8 @@ extension UpdateViewController: OnboardingCardDelegate {
         case .updateWelcome:
             showNextPage(cardType)
         case .updateSignSync:
-            presentSignToSync()
+            let fxaParams = FxALaunchParams(entrypoint: .updateOnboarding, query: [:])
+            presentSignToSync(fxaParams)
         default:
             break
         }
@@ -272,7 +270,6 @@ extension UpdateViewController {
 
 // MARK: - NotificationThemeable and Notifiable
 extension UpdateViewController: NotificationThemeable, Notifiable {
-
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:

@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class SearchBarSettingsViewController: SettingsTableViewController {
-
     private let viewModel: SearchBarSettingsViewModel
 
     init(viewModel: SearchBarSettingsViewModel) {

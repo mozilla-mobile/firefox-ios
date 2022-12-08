@@ -62,8 +62,8 @@ struct LegacyWallpaperDataManager {
         var wallpapers: [LegacyWallpaper] = []
         // Default wallpaper should always be first in the array.
         wallpapers.append(LegacyWallpaper(named: "defaultBackground",
-                                    ofType: .defaultBackground,
-                                    withAccessibiltyLabel: accessibilityIDs.DefaultWallpaper))
+                                          ofType: .defaultBackground,
+                                          withAccessibiltyLabel: accessibilityIDs.DefaultWallpaper))
 
         if let themedWallpapers = getWallpapers(from: allWallpaperCollections()) {
             wallpapers.append(contentsOf: themedWallpapers)
@@ -86,7 +86,6 @@ struct LegacyWallpaperDataManager {
         from collection: [LegacyWallpaperCollection]?,
         ignoringEligibility shouldIgnoreEligibility: Bool = false
     ) -> [LegacyWallpaper]? {
-
         guard let collection = collection else { return nil }
 
         var wallpapers = [LegacyWallpaper]()
@@ -94,24 +93,22 @@ struct LegacyWallpaperDataManager {
         collection.forEach { collection in
             wallpapers.append(
                 contentsOf: collection.wallpaperIDs.compactMap { wallpaperID in
-
                     let wallpaper = LegacyWallpaper(named: wallpaperID.name,
-                                              ofType: collection.type,
-                                              withAccessibiltyLabel: wallpaperID.accessibilityLabel,
-                                              expiringOn: collection.expiryDate,
-                                              limitedToLocale: collection.locales)
+                                                    ofType: collection.type,
+                                                    withAccessibiltyLabel: wallpaperID.accessibilityLabel,
+                                                    expiringOn: collection.expiryDate,
+                                                    limitedToLocale: collection.locales)
 
                     if shouldIgnoreEligibility { return wallpaper }
                     let shouldShowWallpaper = wallpaper.meetsDateAndLocaleCriteria && resourceManager.verifyResourceExists(for: wallpaper)
                     return shouldShowWallpaper ? wallpaper : nil
-            })
+                })
         }
 
         return wallpapers
     }
 
     private func allWallpaperCollections() -> [LegacyWallpaperCollection] {
-
         var allCollections = firefoxDefaultCollection()
 
         if let specialCollections = allSpecialCollections() {
@@ -127,11 +124,11 @@ struct LegacyWallpaperDataManager {
                                              accessibilityLabel: accessibilityIDs.FxSunriseWallpaper)],
             ofType: .themed(type: .firefox)),
                 LegacyWallpaperCollection(
-            wallpaperFileNames: [WallpaperID(name: "fxCerulean",
-                                             accessibilityLabel: accessibilityIDs.FxCeruleanWallpaper),
-                                 WallpaperID(name: "fxAmethyst",
-                                             accessibilityLabel: accessibilityIDs.FxAmethystWallpaper)],
-            ofType: .themed(type: .firefoxOverlay))]
+                    wallpaperFileNames: [WallpaperID(name: "fxCerulean",
+                                                     accessibilityLabel: accessibilityIDs.FxCeruleanWallpaper),
+                                         WallpaperID(name: "fxAmethyst",
+                                                     accessibilityLabel: accessibilityIDs.FxAmethystWallpaper)],
+                    ofType: .themed(type: .firefoxOverlay))]
     }
 
     private func allSpecialCollections() -> [LegacyWallpaperCollection]? {

@@ -7,7 +7,6 @@ import Storage
 import Shared
 
 class BackForwardTableViewCell: UITableViewCell {
-
     private struct BackForwardViewCellUX {
         static let bgColor = UIColor.Photon.Grey50
         static let faviconWidth = 29
@@ -89,7 +88,6 @@ class BackForwardTableViewCell: UITableViewCell {
             label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(BackForwardViewCellUX.labelPadding)),
             label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-BackForwardViewCellUX.labelPadding))
         ])
-
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -100,10 +98,12 @@ class BackForwardTableViewCell: UITableViewCell {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else { return }
 
-        var startPoint = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5) + safeAreaInsets.left,
-                                     y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
-        var endPoint   = CGPoint(x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth)*0.5) + safeAreaInsets.left,
-                                     y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
+        var startPoint = CGPoint(
+            x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth) * 0.5) + safeAreaInsets.left,
+            y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
+        var endPoint   = CGPoint(
+            x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth) * 0.5) + safeAreaInsets.left,
+            y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
 
         // flip the x component if RTL
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {

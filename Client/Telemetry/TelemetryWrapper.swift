@@ -301,7 +301,6 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             // https://mozilla.github.io/glean/book/reference/metrics/index.html#label-format)
             GleanMetrics.WallpaperAnalytics.themedWallpaper[currentWallpaper.id.lowercased()].add()
         }
-
     }
 
     @objc func uploadError(notification: NSNotification) {
@@ -691,12 +690,10 @@ extension TelemetryWrapper {
                 let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? String {
                 GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to,
                                                                                               preference: preference))
-
             } else if let preference = extras?[EventExtraKey.preference.rawValue] as? String,
                         let to = ((extras?[EventExtraKey.preferenceChanged.rawValue]) ?? "undefined") as? Bool {
                 GleanMetrics.Preferences.changed.record(GleanMetrics.Preferences.ChangedExtra(changedTo: to.description,
                                                                                               preference: preference))
-
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
@@ -1213,7 +1210,6 @@ extension TelemetryWrapper {
                         wallpaperType: type
                     )
                 )
-
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
@@ -1322,7 +1318,6 @@ extension TelemetryWrapper {
 
 // MARK: - Firefox Home Page
 extension TelemetryWrapper {
-
     /// Bundle the extras dictionary for the home page origin
     static func getOriginExtras(isZeroSearch: Bool) -> [String: String] {
         let origin = isZeroSearch ? TelemetryWrapper.EventValue.fxHomepageOriginZeroSearch : TelemetryWrapper.EventValue.fxHomepageOriginOther

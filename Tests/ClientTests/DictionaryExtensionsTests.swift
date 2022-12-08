@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 class DictionaryExtensionsTests: XCTestCase {
-
     // MARK: merge:withDictionary
 
     func test_mergeTwoEmptyDict_returnEmptyDict() {

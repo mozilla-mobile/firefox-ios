@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 class VersionSettingTests: XCTestCase {
-
     func testCopyAppVersion() {
         // MARK: - given
         let settingsTable = SettingsTableViewController(style: .grouped)
@@ -22,5 +21,4 @@ class VersionSettingTests: XCTestCase {
         XCTAssertNotNil(appVersionString, "App version not copied")
         XCTAssert(appVersionPredicate, "Pasteboard doesn't contain app version")
     }
-
 }

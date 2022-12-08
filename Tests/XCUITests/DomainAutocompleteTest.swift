@@ -9,7 +9,6 @@ let website = ["url": "mozilla.org", "value": "mozilla.org", "subDomain": "https
 let websiteExample = ["url": "www.example.com", "value": "www.example.com"]
 
 class DomainAutocompleteTest: BaseTestCase {
-
     let testWithDB = ["test1Autocomplete", "test3AutocompleteDeletingChars", "test5NoMatches", "testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
 
     // This DB contains 3 entries mozilla.com/github.com/git.es

@@ -6,8 +6,7 @@ import XCTest
 import Kingfisher
 @testable import SiteImageView
 
-final class SiteImageFetcherTests: XCTestCase {
-
+final class FaviconFetcherTests: XCTestCase {
     private var mockImageDownloader: MockSiteImageDownloader!
 
     override func setUp() {
@@ -22,12 +21,11 @@ final class SiteImageFetcherTests: XCTestCase {
 
     func testReturnsFailure_onAnyError() async {
         mockImageDownloader.error = KingfisherError.requestError(reason: .emptyRequest)
-        let subject = DefaultSiteImageFetcher(imageDownloader: mockImageDownloader)
+        let subject = DefaultFaviconFetcher(imageDownloader: mockImageDownloader)
 
         do {
-            _ = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
+            _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
             XCTFail("Should have failed with error")
-
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: The request is empty or `nil`.",
                            error.description)
@@ -39,12 +37,11 @@ final class SiteImageFetcherTests: XCTestCase {
     func testReturnsSuccess_onImage() async {
         let resultImage = UIImage()
         mockImageDownloader.image = resultImage
-        let subject = DefaultSiteImageFetcher(imageDownloader: mockImageDownloader)
+        let subject = DefaultFaviconFetcher(imageDownloader: mockImageDownloader)
 
         do {
-            let result = try await subject.fetchImage(from: URL(string: "www.mozilla.com")!)
+            let result = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
             XCTAssertEqual(resultImage, result)
-
         } catch {
             XCTFail("Should have succeeded with image")
         }
@@ -53,7 +50,6 @@ final class SiteImageFetcherTests: XCTestCase {
 
 // MARK: - MockSiteImageDownloader
 private class MockSiteImageDownloader: SiteImageDownloader {
-
     var image: UIImage?
     var error: KingfisherError?
 

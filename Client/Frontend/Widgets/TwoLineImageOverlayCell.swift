@@ -7,7 +7,6 @@ import UIKit
 class TwoLineImageOverlayCell: UITableViewCell,
                                ReusableCell,
                                ThemeApplicable {
-
     struct UX {
         static let ImageSize: CGFloat = 29
         static let BorderViewMargin: CGFloat = 16
@@ -89,12 +88,12 @@ class TwoLineImageOverlayCell: UITableViewCell,
             leftImageView.heightAnchor.constraint(equalToConstant: 28),
             leftImageView.widthAnchor.constraint(equalToConstant: 28),
             leftImageView.trailingAnchor.constraint(equalTo: stackView.leadingAnchor,
-                                                   constant: -16),
+                                                    constant: -16),
 
             leftOverlayImageView.trailingAnchor.constraint(equalTo: leftImageView.trailingAnchor,
-                                                          constant: 8),
+                                                           constant: 8),
             leftOverlayImageView.bottomAnchor.constraint(equalTo: leftImageView.bottomAnchor,
-                                                        constant: 8),
+                                                         constant: 8),
             leftOverlayImageView.heightAnchor.constraint(equalToConstant: 22),
             leftOverlayImageView.widthAnchor.constraint(equalToConstant: 22),
 
@@ -103,7 +102,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
             stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor,
                                               constant: -8),
             stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor,
-                                                    constant: -8),
+                                                constant: -8),
         ])
 
         selectedBackgroundView = selectedView

@@ -27,7 +27,6 @@ enum LoginTableViewCellStyle {
 }
 
 class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
-
     fileprivate lazy var labelContainer: UIView = .build { _ in }
 
     weak var delegate: LoginDetailTableViewCellDelegate?
@@ -190,7 +189,6 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
 
 // MARK: - Menu Selectors
 extension LoginDetailTableViewCell: MenuHelperInterface {
-
     func menuHelperReveal() {
         displayDescriptionAsPassword = false
     }

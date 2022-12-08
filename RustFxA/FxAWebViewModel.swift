@@ -30,7 +30,7 @@ private enum RemoteCommand: String {
 class FxAWebViewModel {
     fileprivate let pageType: FxAPageType
     fileprivate let profile: Profile
-    fileprivate var deepLinkParams: FxALaunchParams?
+    fileprivate var deepLinkParams: FxALaunchParams
     fileprivate(set) var baseURL: URL?
     let fxAWebViewTelemetry = FxAWebViewTelemetry()
 
@@ -55,7 +55,7 @@ class FxAWebViewModel {
      - parameter profile: a Profile.
      - parameter deepLinkParams: url parameters that originate from a deep link
      */
-    required init(pageType: FxAPageType, profile: Profile, deepLinkParams: FxALaunchParams?) {
+    required init(pageType: FxAPageType, profile: Profile, deepLinkParams: FxALaunchParams) {
         self.pageType = pageType
         self.profile = profile
         self.deepLinkParams = deepLinkParams
@@ -73,13 +73,14 @@ class FxAWebViewModel {
 
     func setupFirstPage(completion: @escaping (URLRequest, TelemetryWrapper.EventMethod?) -> Void) {
         profile.rustFxA.accountManager.uponQueue(.main) { accountManager in
-            accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
+            let entrypoint = self.deepLinkParams.entrypoint.rawValue
+            accountManager.getManageAccountURL(entrypoint: "ios_settings_\(entrypoint)") { [weak self] result in
                 guard let self = self else { return }
 
                 // Handle authentication with either the QR code login flow, email login flow, or settings page flow
                 switch self.pageType {
                 case .emailLoginFlow:
-                    accountManager.beginAuthentication(entrypoint: "emailLoginFlow") { [weak self] result in
+                    accountManager.beginAuthentication(entrypoint: "email_\(entrypoint)") { [weak self] result in
                         guard let self = self else { return }
 
                         if case .success(let url) = result {
@@ -88,7 +89,7 @@ class FxAWebViewModel {
                         }
                     }
                 case let .qrCode(url):
-                    accountManager.beginPairingAuthentication(pairingUrl: url, entrypoint: "qrCode") { [weak self] result in
+                    accountManager.beginPairingAuthentication(pairingUrl: url, entrypoint: "pairing_\(entrypoint)") { [weak self] result in
                         guard let self = self else { return }
 
                         if case .success(let url) = result {
@@ -107,16 +108,14 @@ class FxAWebViewModel {
     }
 
     private func makeRequest(_ url: URL) -> URLRequest {
-        if let query = deepLinkParams?.query {
-            let args = query.filter { $0.key.starts(with: "utm_") }.map {
-                return URLQueryItem(name: $0.key, value: $0.value)
-            }
+        let args = deepLinkParams.query.filter { $0.key.starts(with: "utm_") }.map {
+            return URLQueryItem(name: $0.key, value: $0.value)
+        }
 
-            var comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            comp?.queryItems?.append(contentsOf: args)
-            if let url = comp?.url {
-                return URLRequest(url: url)
-            }
+        var comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        comp?.queryItems?.append(contentsOf: args)
+        if let url = comp?.url {
+            return URLRequest(url: url)
         }
 
         return URLRequest(url: url)

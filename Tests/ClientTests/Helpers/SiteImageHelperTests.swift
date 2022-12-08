@@ -10,7 +10,6 @@ import Shared
 import LinkPresentation
 
 class SiteImageHelperTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         SiteImageHelper.clearCacheData()
@@ -164,7 +163,6 @@ class SiteImageHelperTests: XCTestCase {
 
 // MARK: Helper tests
 extension SiteImageHelperTests {
-
     enum TestError: Error, CustomStringConvertible {
         var description: String { "A test error" }
 
@@ -177,7 +175,6 @@ extension SiteImageHelperTests {
                     isExpectationInverted: Bool = false,
                     metadataProvider: LPMetadataProvider = LPMetadataProvider(),
                     completion: @escaping (UIImage?) -> Void) {
-
         let site = Site(url: siteName, title: "Website")
         let expectation = self.expectation(description: "Completion is called when fetched image")
         expectation.isInverted = isExpectationInverted
@@ -218,7 +215,6 @@ class FaviconFetcherMock: Favicons {
 }
 
 class MetadataProviderFake: LPMetadataProvider {
-
     var metadataResult = LPLinkMetadata()
     var errorResult: Error?
     override func startFetchingMetadata(for URL: URL, completionHandler: @escaping (LPLinkMetadata?, Error?) -> Void) {
@@ -227,7 +223,6 @@ class MetadataProviderFake: LPMetadataProvider {
 }
 
 class ItemProviderFake: NSItemProvider {
-
     var imageResult: UIImage? = UIImage()
     var errorResult: Error?
     override func loadObject(ofClass aClass: NSItemProviderReading.Type, completionHandler: @escaping (NSItemProviderReading?, Error?) -> Void) -> Progress {

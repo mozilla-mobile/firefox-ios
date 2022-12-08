@@ -9,7 +9,6 @@ import XCTest
 @testable import Client
 
 class PocketStoriesTests: XCTestCase {
-
     var pocketAPI: String!
     var webServer: GCDWebServer!
 
@@ -76,5 +75,4 @@ class PocketStoriesTests: XCTestCase {
         }
         waitForExpectations(timeout: 10, handler: nil)
     }
-
 }

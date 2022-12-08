@@ -40,11 +40,14 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemoveQuickActionBookmark {
-
+class MainMenuActionHelper:
+    PhotonActionSheetProtocol,
+    FeatureFlaggable,
+    CanRemoveQuickActionBookmark,
+    AppVersionUpdateCheckerProtocol {
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
     // swiftlint: disable large_tuple
-    typealias FXASyncClosure = (params: FxALaunchParams?, flowType: FxAPageType, referringPage: ReferringPage)
+    typealias FXASyncClosure = (params: FxALaunchParams, flowType: FxAPageType, referringPage: ReferringPage)
     // swiftlint: enable large_tuple
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
@@ -75,7 +78,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
          buttonView: UIButton,
          showFXASyncAction: @escaping (FXASyncClosure) -> Void,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-
         self.profile = profile
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager
@@ -102,9 +104,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             ])
 
             completion(actions)
-
         } else {
-
             // Actions on site page need specific data to be loaded
             updateData(dataLoadingCompletion: {
                 actions.append(contentsOf: [
@@ -243,7 +243,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         if isFileURL {
             let shareFileAction = getShareFileAction()
             append(to: &section, action: shareFileAction)
-
         } else {
             let shortAction = getShortcutAction()
             append(to: &section, action: shortAction)
@@ -295,7 +294,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getNewTabAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.NewTab,
                                      iconString: ImageIdentifiers.newTab) { _ in
-
             let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
             self.delegate?.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false, searchFor: nil)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .createNewTab)
@@ -337,7 +335,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
             toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestDesktopSite : ImageIdentifiers.requestMobileSite
             siteTypeTelemetryObject = .requestDesktopSite
-
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
             toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestMobileSite : ImageIdentifiers.requestDesktopSite
@@ -357,7 +354,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getCopyAction() -> PhotonRowActions? {
         return SingleActionViewModel(title: .AppMenu.AppMenuCopyLinkTitleString,
                                      iconString: ImageIdentifiers.copyLink) { _ in
-
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .copyAddress)
             if let url = self.selectedTab?.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
@@ -406,7 +402,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getHelpAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.Help,
                                      iconString: ImageIdentifiers.help) { _ in
-
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
             }
@@ -485,7 +480,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
     private func syncMenuButton(showFxA: @escaping (FXASyncClosure) -> Void) -> PhotonRowActions? {
         let action: (SingleActionViewModel) -> Void = { action in
-            let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
+            let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
             let params = FXASyncClosure(fxaParams, .emailLoginFlow, .appMenu)
             showFxA(params)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
@@ -531,7 +526,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         let showBadgeForWhatsNew = shouldShowWhatsNew()
         if showBadgeForWhatsNew {
             // Set the version number of the app, so the What's new will stop showing
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest)
 
             // Redraw the toolbar so the badge hides from the appMenu button.
             delegate?.updateToolbarState()
@@ -549,15 +544,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return whatsNewAction
     }
 
-    // If we do not have the LatestAppVersionProfileKey in the profile, that means that this is a fresh install and we
-    // do not show the What's New. If we do have that value, we compare it to the major version of the running app.
-    // If it is different then this is an upgrade, downgrades are not possible, so we can show the What's New page.
     private func shouldShowWhatsNew() -> Bool {
-        guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
-            return false // Clean install, never show What's New
-        }
-
-        return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
+        return isMajorVersionUpdate(using: profile) && DeviceInfo.hasConnectivity()
     }
 
     // MARK: Share
@@ -565,7 +553,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getShareFileAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.AppMenuSharePageTitleString,
                                      iconString: ImageIdentifiers.share) { _ in
-
             guard let tab = self.selectedTab,
                   let url = tab.url,
                   let presentableVC = self.menuActionDelegate as? PresentableVC
@@ -578,7 +565,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .AppMenu.Share,
                                      iconString: ImageIdentifiers.share) { _ in
-
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
@@ -646,7 +632,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return SingleActionViewModel(title: .AppMenu.AddReadingList,
                                      alternateTitle: .AppMenu.AddReadingListAlternateTitle,
                                      iconString: ImageIdentifiers.addToReadingList) { _ in
-
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL
             else { return }
@@ -661,7 +646,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return SingleActionViewModel(title: .AppMenu.RemoveReadingList,
                                      alternateTitle: .AppMenu.RemoveReadingListAlternateTitle,
                                      iconString: ImageIdentifiers.removeFromReadingList) { _ in
-
             guard let url = self.tabUrl?.displayURL?.absoluteString,
                   let record = self.profile.readingList.getRecordWithURL(url).value.successValue
             else { return }
@@ -701,7 +685,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return SingleActionViewModel(title: .AppMenu.AddBookmark,
                                      alternateTitle: .AppMenu.AddBookmarkAlternateTitle,
                                      iconString: ImageIdentifiers.addToBookmark) { _ in
-
             guard let tab = self.selectedTab,
                   let url = tab.canonicalURL?.displayURL
             else { return }
@@ -716,7 +699,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         return SingleActionViewModel(title: .AppMenu.RemoveBookmark,
                                      alternateTitle: .AppMenu.RemoveBookmarkAlternateTitle,
                                      iconString: ImageIdentifiers.removeFromBookmark) { _ in
-
             guard let url = self.tabUrl?.displayURL else { return }
 
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
@@ -738,7 +720,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getAddShortcutAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AddToShortcutsActionTitle,
                                      iconString: ImageIdentifiers.addShortcut) { _ in
-
             guard let url = self.selectedTab?.url?.displayURL,
                   let sql = self.profile.history as? SQLiteHistory
             else { return }
@@ -748,7 +729,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
                     return succeed()
                 }
                 return self.profile.history.addPinnedTopSite(site)
-
             }.uponQueue(.main) { result in
                 guard result.isSuccess else { return }
                 self.delegate?.showToast(message: .AppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage, url: nil)
@@ -761,7 +741,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
     private func getRemoveShortcutAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.RemoveFromShortcuts,
                                      iconString: ImageIdentifiers.removeFromShortcut) { _ in
-
             guard let url = self.selectedTab?.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
             sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
@@ -791,7 +770,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
                                      iconString: ImageIdentifiers.key,
                                      iconType: .Image,
                                      iconAlignment: .left) { _ in
-
             let navigationHandler: NavigationHandlerType = { url in
                 UIWindow.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
@@ -803,7 +781,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
                 } else {
                     self.showLoginListVC(navigationHandler: navigationHandler, navigationController: navigationController)
                 }
-
             } else {
                 let rootViewController = DevicePasscodeRequiredViewController(shownFromAppMenu: true)
                 let navController = ThemedNavigationController(rootViewController: rootViewController)

@@ -6,7 +6,6 @@ import Foundation
 import Shared
 
 class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
-
     // MARK: - Variables
     /* variables for checkmark settings */
     let prefs: Prefs
@@ -79,7 +78,6 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     private func customizeHomeSettingSection() -> SettingSection {
-
         // The Home button and the New Tab page can be set independently
         self.currentNewTabChoice = NewTabAccessors.getHomePage(self.prefs)
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
@@ -118,12 +116,12 @@ class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggab
     }
 
     private func customizeFirefoxSettingSection() -> SettingSection {
-
         // Setup
         var sectionItems = [Setting]()
 
-        let pocketSponsoredSetting = BoolSetting(with: .sponsoredPocket,
-                                        titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.SponsoredPocket))
+        let pocketSponsoredSetting = BoolSetting(
+            with: .sponsoredPocket,
+            titleText: NSAttributedString(string: .Settings.Homepage.CustomizeFirefoxHome.SponsoredPocket))
         // This sets whether the cell is enabled or not, and not the setting itself.
         pocketSponsoredSetting.enabled = featureFlags.isFeatureEnabled(
             .pocket,
@@ -265,7 +263,6 @@ extension HomePageSettingViewController {
 // MARK: - WallpaperSettings
 extension HomePageSettingViewController {
     class WallpaperSettings: Setting, FeatureFlaggable {
-
         var settings: SettingsTableViewController
         var tabManager: TabManager
         var wallpaperManager: WallpaperManagerInterface
@@ -275,7 +272,7 @@ extension HomePageSettingViewController {
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController,
-             and tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager,
+             and tabManager: TabManager = AppContainer.shared.resolve(),
              wallpaperManager: WallpaperManagerInterface = WallpaperManager()
         ) {
             self.settings = settings

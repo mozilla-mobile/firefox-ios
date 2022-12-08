@@ -8,7 +8,6 @@ import Storage
 
 // Manage the specific Google top site case
 class GoogleTopSiteManager {
-
     struct Constants {
         // A guid is required in the case the site might become a pinned site
         static let googleGUID = "DefaultGoogleGUID"

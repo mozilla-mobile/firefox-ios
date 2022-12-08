@@ -7,7 +7,6 @@ import XCTest
 @testable import SiteImageView
 
 final class SiteImageCacheTests: XCTestCase {
-
     private var imageCache: MockDefaultImageCache!
 
     override func setUp() {
@@ -28,7 +27,6 @@ final class SiteImageCacheTests: XCTestCase {
 
         do {
             _ = try await subject.getImageFromCache(domain: "www.example.com", type: .favicon)
-
         } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-favicon")
             XCTAssertEqual("Unable to retrieve image from cache with reason: The request is empty or `nil`.",
@@ -43,7 +41,6 @@ final class SiteImageCacheTests: XCTestCase {
 
         do {
             _ = try await subject.getImageFromCache(domain: "www.example.com", type: .heroImage)
-
         } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-heroImage")
             XCTAssertEqual("Unable to retrieve image from cache with reason: Image was nil",
@@ -62,7 +59,6 @@ final class SiteImageCacheTests: XCTestCase {
             let result = try await subject.getImageFromCache(domain: "www.example2.com", type: .favicon)
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example2.com-favicon")
             XCTAssertEqual(expectedImage, result)
-
         } catch {
             XCTFail("Should have succeeded with image")
         }
@@ -70,41 +66,17 @@ final class SiteImageCacheTests: XCTestCase {
 
     // MARK: - Cache image
 
-    func testCacheImage_whenError_returnsError() async {
-        let expectedImage = UIImage()
-        imageCache.storageError = KingfisherError.requestError(reason: .emptyRequest)
-        let subject = DefaultSiteImageCache(imageCache: imageCache)
-
-        do {
-            _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
-
-        } catch let error as SiteImageError {
-            XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
-            XCTAssertEqual(imageCache.capturedImage, expectedImage)
-            XCTAssertEqual("Unable to cache image with reason: The request is empty or `nil`.",
-                           error.description)
-        } catch {
-            XCTFail("Should have failed with SiteImageError type")
-        }
-    }
-
     func testCacheImage_whenSuccess_returnsSuccess() async {
         let expectedImage = UIImage()
         let subject = DefaultSiteImageCache(imageCache: imageCache)
 
-        do {
-            _ = try await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
-            XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
-            XCTAssertEqual(imageCache.capturedImage, expectedImage)
-
-        } catch {
-            XCTFail("Should have succeeded")
-        }
+        _ = await subject.cacheImage(image: expectedImage, domain: "www.firefox.com", type: .favicon)
+        XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
+        XCTAssertEqual(imageCache.capturedImage, expectedImage)
     }
 }
 
 private class MockDefaultImageCache: DefaultImageCache {
-
     var image: UIImage?
     var retrievalError: KingfisherError?
     var capturedRetrievalKey: String?
@@ -117,14 +89,10 @@ private class MockDefaultImageCache: DefaultImageCache {
         }
     }
 
-    var storageError: KingfisherError?
     var capturedImage: UIImage?
     var capturedStorageKey: String?
-    func store(image: UIImage, forKey key: String) async throws {
+    func store(image: UIImage, forKey key: String) {
         capturedImage = image
         capturedStorageKey = key
-        if let error = storageError {
-            throw error
-        }
     }
 }

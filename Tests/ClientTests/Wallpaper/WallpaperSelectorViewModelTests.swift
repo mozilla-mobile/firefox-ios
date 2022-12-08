@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class WallpaperSelectorViewModelTests: XCTestCase {
-
     private var wallpaperManager: WallpaperManagerInterface!
 
     override func setUp() {
@@ -143,5 +142,4 @@ class WallpaperSelectorViewModelTests: XCTestCase {
                 heading: nil),
         ]
     }
-
 }

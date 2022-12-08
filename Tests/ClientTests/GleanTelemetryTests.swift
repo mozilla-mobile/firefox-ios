@@ -32,7 +32,6 @@ class MockBrowserSyncManager: BrowserProfile.BrowserSyncManager {
 }
 
 class GleanTelemetryTests: XCTestCase {
-
     override func setUp() {
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()

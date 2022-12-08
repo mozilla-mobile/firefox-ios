@@ -29,7 +29,6 @@ struct SyncedTabCellViewModel {
 
 /// A cell used in FxHomeScreen's Jump Back In section
 class SyncedTabCell: UICollectionViewCell, ReusableCell {
-
     struct UX {
         static let heroImageSize = CGSize(width: 108, height: 80)
         static let fallbackFaviconSize = CGSize(width: 56, height: 56)
@@ -56,8 +55,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     }
 
     private let syncedTabsButton: UIButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper().preferredFont(withTextStyle: .subheadline,
-                                                                    size: UX.deviceSourceFontSize)
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+                                                                                size: UX.deviceSourceFontSize)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.showAllButton
     }
@@ -213,11 +212,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         if viewModel.heroImage == nil {
             // Sets a small favicon in place of the hero image in case there's no hero image
             tabFallbackFaviconImage.image = viewModel.fallbackFaviconImage
-
         } else if viewModel.heroImage?.size.width == viewModel.heroImage?.size.height {
             // If hero image is a square use it as a favicon
             tabFallbackFaviconImage.image = viewModel.heroImage
-
         } else {
             setFallBackFaviconVisibility(isHidden: true)
             tabHeroImage.image = viewModel.heroImage
@@ -318,7 +315,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabTapTargetView.topAnchor.constraint(equalTo: tabStack.topAnchor),
             syncedTabTapTargetView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             syncedTabTapTargetView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            syncedTabTapTargetView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+
+            tabContentContainer.heightAnchor.constraint(greaterThanOrEqualTo: tabImageContainer.heightAnchor)
         ])
 
         syncedDeviceIconCenterConstraint = syncedDeviceLabel.centerYAnchor.constraint(equalTo: syncedDeviceImage.centerYAnchor).priority(UILayoutPriority(999))
@@ -350,7 +349,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let isPhoneInLandscape = UIDevice.current.userInterfaceIdiom == .phone && UIWindow.isLandscape
         if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             tabStackTopAnchorConstant = UX.tabStackTopAnchorCompactPhoneConstant
-
         }
         tabStackTopConstraint.constant = tabStackTopAnchorConstant
     }

@@ -10,7 +10,6 @@ protocol HeroImageFetcher {
 }
 
 class DefaultHeroImageFetcher: HeroImageFetcher {
-
     private let metadataProvider: LPMetadataProvider
 
     init(metadataProvider: LPMetadataProvider = LPMetadataProvider()) {
@@ -25,7 +24,6 @@ class DefaultHeroImageFetcher: HeroImageFetcher {
             }
 
             return try await imageProvider.loadObject(ofClass: UIImage.self)
-
         } catch {
             throw error
         }

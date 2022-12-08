@@ -8,7 +8,6 @@ import Storage
 import MozillaAppServices
 
 class SearchTermGroupsUtility {
-
     public static func getHighlightGroups(
         with profile: Profile,
         from highlights: [HistoryHighlight],
@@ -78,7 +77,6 @@ class SearchTermGroupsUtility {
     /// - Parameter ASMetadata: An array of `HistoryMetadata` used for splitting groups
     /// - Returns: A dictionary whose keys are search terms used for grouping
     private static func buildMetadataGroups(from ASMetadata: [HistoryMetadata]) -> [String: [HistoryMetadata]] {
-
         let searchTerms = Set(ASMetadata.map({ return $0.searchTerm }))
         var searchTermMetaDataGroup: [String: [HistoryMetadata]] = [:]
 
@@ -100,7 +98,6 @@ class SearchTermGroupsUtility {
     ///   - searchTermMetadata: Application Services provided metadata
     /// - Returns: A tuple with a filtered dictionary of groups and a tracking array
     private static func createGroupDictionaryAndSoloItems<T: Equatable>(from items: [T], and searchTermMetadata: [String: [HistoryMetadata]]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
-
         let (groupedItems, itemsInGroups) = buildItemGroups(from: items, and: searchTermMetadata)
         let (filteredGroupData, filtereditems) = filter(items: itemsInGroups, from: groupedItems, and: items)
 
@@ -198,7 +195,6 @@ class SearchTermGroupsUtility {
     private static func filterDuplicate<T: Equatable>(itemsInGroups: [T], from items: [T]) -> [T] {
         // 4. Filter the tabs so it doesn't include same tabs as tab groups
         return items.filter { item in !itemsInGroups.contains(item) }
-
     }
 
     /// Takes a dictionary and creates ASGroups from it.
@@ -235,12 +231,10 @@ class SearchTermGroupsUtility {
                 let firstTabTimestamp = firstTab.firstCreatedTime ?? 0
                 let secondTabTimestamp = secondTab.firstCreatedTime ?? 0
                 return firstTabTimestamp < secondTabTimestamp
-
             } else if let firstSite = $0 as? Site, let secondSite = $1 as? Site {
                 let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
                 let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
                 return firstSiteATimestamp < secondSiteTimestamp
-
             } else if let firstHighlight = $0 as? HistoryHighlight, let secondHighlight = $1 as? HistoryHighlight {
                 return firstHighlight.score > secondHighlight.score
             } else {

@@ -101,38 +101,21 @@ class MockTabToolbar: TabToolbarProtocol {
     var multiStateButton: ToolbarButton { return _multiStateButton }
     var actionButtons: [NotificationThemeable & UIButton] { return [] }
 
-    func updateBackStatus(_ canGoBack: Bool) {
+    func updateBackStatus(_ canGoBack: Bool) { }
 
-    }
+    func updateForwardStatus(_ canGoForward: Bool) { }
 
-    func updateForwardStatus(_ canGoForward: Bool) {
+    func updateMiddleButtonState(_ state: MiddleButtonState) { }
 
-    }
+    func updateReloadStatus(_ isLoading: Bool) { }
 
-    func updateMiddleButtonState(_ state: MiddleButtonState) {
+    func updatePageStatus(_ isWebPage: Bool) { }
 
-    }
+    func updateTabCount(_ count: Int, animated: Bool) { }
 
-    func updateReloadStatus(_ isLoading: Bool) {
-    }
+    func privateModeBadge(visible: Bool) { }
 
-    func updatePageStatus(_ isWebPage: Bool) {
+    func appMenuBadge(setVisible: Bool) { }
 
-    }
-
-    func updateTabCount(_ count: Int, animated: Bool) {
-
-    }
-
-    func privateModeBadge(visible: Bool) {
-
-    }
-
-    func appMenuBadge(setVisible: Bool) {
-
-    }
-
-    func warningMenuBadge(setVisible: Bool) {
-
-    }
+    func warningMenuBadge(setVisible: Bool) { }
 }

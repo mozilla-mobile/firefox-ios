@@ -4,7 +4,6 @@
 import Foundation
 
 class ShareButton: UIButton {
-
     // MARK: - Variables
 
     var selectedTintColor: UIColor!

@@ -8,7 +8,6 @@ import Shared
 /// Responsible for tracking whether or not the wallpaper system should perform
 /// a variety of checks, such as whether it should fetch data from the server.
 class WallpaperMetadataUtility: Loggable {
-
     // MARK: - Properties
     /// Will return `true` under two conditions:
     /// 1. Has never performed a check
@@ -47,12 +46,10 @@ class WallpaperMetadataUtility: Loggable {
                 try attemptToStore(freshMetadata)
                 markLastUpdatedDate(with: Date())
                 return true
-
             } else {
                 markLastUpdatedDate(with: Date())
                 return false
             }
-
         } catch {
             browserLog.error("Failed to fetch new metadata: \(error.localizedDescription)")
             return false
@@ -85,7 +82,6 @@ class WallpaperMetadataUtility: Loggable {
     }
 
     private func oldMetadataIsDifferentThanNew(_ metadata: WallpaperMetadata) -> Bool {
-
         do {
             let storageUtility = WallpaperStorageUtility()
             guard let oldMetadata = try storageUtility.fetchMetadata() else { return true }

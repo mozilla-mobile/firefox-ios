@@ -13,7 +13,6 @@ enum CredentialState {
 }
 
 class CredentialListPresenter {
-
     weak var view: CredentialListViewProtocol?
     var loginsData = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()
     private var filteredCredentials = [(ASPasswordCredentialIdentity, ASPasswordCredential)]()
@@ -77,5 +76,4 @@ class CredentialListPresenter {
     func cancelRequest() {
         view?.credentialExtensionContext?.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
     }
-
 }

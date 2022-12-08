@@ -13,7 +13,6 @@ struct HomePageConstants {
 }
 
 class HomePageHelper {
-
     let prefs: Prefs
 
     var currentURL: URL? {
@@ -47,5 +46,4 @@ class HomePageHelper {
         }
         tab.loadRequest(URLRequest(url: url))
     }
-
 }

@@ -9,14 +9,12 @@ protocol LaunchSessionProviderProtocol {
 }
 
 class LaunchSessionProvider: LaunchSessionProviderProtocol {
-
     init() {
         addObservers()
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var openedFromExternalSource = false
-
 }
 
 extension LaunchSessionProvider: Notifiable {
@@ -34,5 +32,4 @@ extension LaunchSessionProvider: Notifiable {
         default: break
         }
     }
-
 }

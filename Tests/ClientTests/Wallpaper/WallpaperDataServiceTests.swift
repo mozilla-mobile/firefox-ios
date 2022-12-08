@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
-
     // MARK: - Properties
     var networking: NetworkingMock!
 
@@ -141,7 +140,6 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
         do {
             _ = try await subject.getMetadata()
             XCTFail("We should fail the extraction process")
-
         } catch let error {
             XCTAssertEqual(error.localizedDescription,
                            "The data couldn’t be read because it isn’t in the correct format.",
@@ -166,5 +164,4 @@ class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
             XCTFail("We should not fail the extraction process despite bad text color, but did with error: \(error)")
         }
     }
-
 }

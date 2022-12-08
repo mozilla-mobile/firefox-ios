@@ -62,7 +62,6 @@ struct TabDisplayOrder: Codable {
 }
 
 class TabDisplayManager: NSObject, FeatureFlaggable {
-
     // MARK: - Variables
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
@@ -222,7 +221,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     private func setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: [Tab], completion: @escaping ([ASGroup<Tab>]?, [Tab]) -> Void) {
-
         // no groups for when we have less than 2 active tabs
         guard shouldEnableGroupedTabs, tabsToBuildFrom.count > 1 else {
             tabsSetupHelper(tabGroups: nil, filteredTabs: tabsToBuildFrom)
@@ -235,7 +233,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             SearchTermGroupsUtility.getTabGroups(with: profile,
                                                  from: tabsToBuildFrom,
                                                  using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-
                 ensureMainThread { [weak self] in
                     self?.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
                     completion(tabGroups, filteredActiveTabs)
@@ -263,10 +260,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         // Inactive tabs - disabled
         if !shouldEnableInactiveTabs {
-
             // check if groups are enabled and setup from normal tabs
             setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, completion: completion)
-
         } else {
             // Inactive tabs - enabled
             guard let inactiveViewModel = inactiveViewModel else {
@@ -486,7 +481,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
            !isPrivate,
            let tabGroups = tabGroups,
            !tabGroups.isEmpty {
-
             let groupWithTwoTabs = tabGroups.filter { $0.groupedItems.count == 2 }.count
             let groupsWithTwoMoreTab = tabGroups.filter { $0.groupedItems.count > 2 }.count
             let tabsInAllGroup = tabsInAllGroups?.count ?? 0
@@ -534,7 +528,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                       withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
                                                                       for: indexPath) as? LabelButtonHeaderView {
-
             let viewModel = LabelButtonHeaderViewModel(leadingInset: 15,
                                                        title: .TabTrayOtherTabsSectionHeader,
                                                        titleA11yIdentifier: AccessibilityIdentifiers.TabTray.filteredTabs,
@@ -603,10 +596,12 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
 // MARK: - GroupedTabDelegate
 extension TabDisplayManager: GroupedTabDelegate {
-
     func newSearchFromGroup(searchTerm: String) {
         let bvc = BrowserViewController.foregroundBVC()
-        bvc.openSearchNewTab(searchTerm)
+
+        // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
+        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
+        bvc?.openSearchNewTab(searchTerm)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .groupedTabPerformSearch)
     }
 
@@ -631,7 +626,6 @@ extension TabDisplayManager: GroupedTabDelegate {
 
 // MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
-
     // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
         // Remove inactive tabs from tab manager
@@ -741,8 +735,11 @@ extension TabDisplayManager: UIDropInteractionDelegate {
 extension TabDisplayManager: UICollectionViewDragDelegate {
     // This is called when the user has long-pressed on a cell, please note that `collectionView.hasActiveDrag` is not true
     // until the user's finger moves. This problem is mitigated by checking the collectionView for activated long press gesture recognizers.
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-
+    func collectionView(
+        _ collectionView: UICollectionView,
+        itemsForBeginning session: UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
         let section = TabDisplaySection(rawValue: indexPath.section)
         guard tabDisplayType == .TopTabTray || section == .regularTabs else { return [] }
         guard let tab = dataStore.at(indexPath.item) else { return [] }
@@ -834,7 +831,6 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-
         let forbiddenOperation = UICollectionViewDropProposal(operation: .forbidden)
         guard let indexPath = destinationIndexPath else {
             return forbiddenOperation
@@ -859,7 +855,6 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension TabDisplayManager: TabEventHandler {
-
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
         updateCellFor(tab: tab, selectedTabChanged: false)
     }
@@ -1050,7 +1045,6 @@ extension TabDisplayManager: TabManagerDelegate {
 }
 
 extension TabDisplayManager: Notifiable {
-
     // MARK: - Notifiable protocol
     func handleNotifications(_ notification: Notification) {
         switch notification.name {

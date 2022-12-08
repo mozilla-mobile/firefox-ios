@@ -12,7 +12,6 @@ import UIKit
 import Storage
 
 class SearchGroupedItemsViewController: UIViewController, Loggable {
-
     // MARK: - Properties
 
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.GroupedList
@@ -183,7 +182,6 @@ extension SearchGroupedItemsViewController: UITableViewDelegate {
         if let site = item as? Site {
             handleSiteItemTapped(site: site)
         }
-
     }
 
     private func handleSiteItemTapped(site: Site) {

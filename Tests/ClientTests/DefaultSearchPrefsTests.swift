@@ -9,7 +9,6 @@ import UIKit
 import XCTest
 
 class DefaultSearchPrefsTests: XCTestCase {
-
     func testParsing_hasAllInfo_succeeds() {
         // setup the list json
         let searchPrefs = DefaultSearchPrefs(with: Bundle.main.resourceURL!.appendingPathComponent("SearchPlugins").appendingPathComponent("list.json"))!

@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class ContextualHintViewModelTests: XCTestCase {
-
     typealias CFRPrefsKeys = PrefsKeys.ContextualHints
 
     private var profile: MockProfile!

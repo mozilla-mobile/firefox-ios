@@ -42,7 +42,6 @@ extension SiteImageHelperProtocol {
 
 /// A helper that'll fetch an image, and fallback to other image options if specified.
 class SiteImageHelper: SiteImageHelperProtocol {
-
     private static let cache = NSCache<NSString, UIImage>()
     private let throttler = Throttler(seconds: 0.5, on: DispatchQueue.main)
     private let faviconFetcher: Favicons
@@ -115,7 +114,6 @@ class SiteImageHelper: SiteImageHelperProtocol {
         // Fetch from cache, if not then fetch with LPMetadataProvider
         if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
             completion(cachedImage, true)
-
         } else {
             guard let url = URL(string: site.url) else {
                 completion(nil, false)
