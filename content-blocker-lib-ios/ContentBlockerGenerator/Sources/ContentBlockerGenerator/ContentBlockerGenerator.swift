@@ -15,81 +15,46 @@ public struct ContentBlockerGenerator {
         shared.generateLists()
     }
 
-    // TODO: Laurie - Path manager
-    private let fileManager: FileManager
-    // We expect this command to be executed as 'cd <dir of swift package>; swift run',
-    // if not, use the fallback path generated from the path to main.swift. Running from
-    // an xcodeproj will use fallbackPath.
-    private let fallbackPath: String = (#file as NSString).deletingLastPathComponent + "/../.."
-    private let contentBlockerParser: ContentBlockerParser
-    private let outputDir: URL
-    private let rootDirectory: String
+    private let fileManager: ContentBlockerFileManager
+    private let parser: ContentBlockerParser
 
-    init(fileManager: FileManager = FileManager.default,
-         contentBlockerParser: ContentBlockerParser = ContentBlockerParser()) {
+    init(fileManager: ContentBlockerFileManager = DefaultContentBlockerFileManager(),
+         parser: ContentBlockerParser = DefaultContentBlockerParser()) {
         self.fileManager = fileManager
-        self.contentBlockerParser = contentBlockerParser
+        self.parser = parser
 
-        let execIsFromCorrectDir = fileManager.fileExists(atPath: fileManager.currentDirectoryPath + "/Package.swift")
-        self.rootDirectory = execIsFromCorrectDir ? fileManager.currentDirectoryPath : fallbackPath
-
-        self.outputDir = URL(fileURLWithPath: "\(rootDirectory)/../Lists")
-        let entityList = FileCategory.entity.getPath(rootDirectory: rootDirectory)
-        let jsonList = JsonHelper().jsonEntityListFrom(filename: entityList)
-        contentBlockerParser.parseEntityList(json: jsonList)
-
-        createDirectory()
+        let entityList = fileManager.getEntityList()
+        parser.parseEntityList(entityList)
     }
 
     func generateLists() {
         // Block lists
-        write(to: outputDir,
-              actionType: .blockAll,
-              categories: [.advertising, .analytics, .social, .cryptomining, .fingerprinting])
+        generate(actionType: .blockAll,
+                 categories: [.advertising, .analytics, .social, .cryptomining, .fingerprinting])
 
         // Block cookies lists
-        write(to: outputDir,
-              actionType: .blockCookies,
-              categories: [.advertising, .analytics, .social])
+        generate(actionType: .blockCookies,
+                 categories: [.advertising, .analytics, .social])
     }
 
     // MARK: - Private
 
-    /// Remove and create the output dir
-    private func createDirectory() {
-        do {
-            try fileManager.removeItem(at: outputDir)
-            try fileManager.createDirectory(at: outputDir, withIntermediateDirectories: false, attributes: nil)
-        } catch {
-            fatalError("Could not create directory")
-        }
-    }
-
-    private func write(to outputDir: URL,
-                       actionType: ActionType,
-                       categories: [FileCategory]) {
+    private func generate(actionType: ActionType,
+                          categories: [FileCategory]) {
 
         for categoryTitle in categories {
             let fileContent = generateFileContent(actionType: actionType, categoryTitle: categoryTitle)
-            let fileLocation = categoryTitle.getOutputFile(outputDirectory: outputDir.path, actionType: actionType)
-            let fileURL = URL(fileURLWithPath: fileLocation)
-
-            do {
-                try fileContent.write(to: fileURL, atomically: true, encoding: .utf8)
-            } catch {
-                fatalError("Could not write to file \(categoryTitle.rawValue) with action \(actionType.rawValue)")
-            }
+            fileManager.write(fileContent: fileContent, categoryTitle: categoryTitle, actionType: actionType)
         }
     }
 
     private func generateFileContent(actionType: ActionType,
                                      categoryTitle: FileCategory) -> String {
 
-        let fileName = categoryTitle.getPath(rootDirectory: rootDirectory)
-        let jsonFile = JsonHelper().jsonListFrom(filename: fileName)
-        let result = contentBlockerParser.parseFile(json: jsonFile,
-                                                    actionType: actionType)
+        let categoryList = fileManager.getCategoryFile(categoryTitle: categoryTitle)
+        let fileLines = parser.parseCategoryList(categoryList,
+                                                 actionType: actionType)
 
-        return "[\n" + result.joined(separator: ",\n") + "\n]"
+        return "[\n" + fileLines.joined(separator: ",\n") + "\n]"
     }
 }

@@ -9,12 +9,12 @@ final class ContentBlockerParserTests: XCTestCase {
 
     func testParsingAdsFile() throws {
         let entityJson = getDictData(from: ParserData.entitylist)
-        let subject = ContentBlockerParser()
-        subject.parseEntityList(json: entityJson)
+        let subject = DefaultContentBlockerParser()
+        subject.parseEntityList(entityJson)
 
         let adsList = getListData(from: ParserData.adsTrackDigest256)
-        let result = subject.parseFile(json: adsList,
-                                       actionType: .blockAll)
+        let result = subject.parseCategoryList(adsList,
+                                               actionType: .blockAll)
 
         let expectedFirstLine = """
         {\"action\":{\"type\":\"block\"},\"trigger\":{\"url-filter\":\"^https?://([^/]+\\\\.)?2leep\\\\.com\",\"load-type\":[\"third-party\"],\"unless-domain\":[\"*2leep.com\"]}}
@@ -35,12 +35,12 @@ final class ContentBlockerParserTests: XCTestCase {
 
     func testParsingAdsFile_withoutEntity() throws {
         let entityJson = getDictData(from: ParserData.emptyEntitylist)
-        let subject = ContentBlockerParser()
-        subject.parseEntityList(json: entityJson)
+        let subject = DefaultContentBlockerParser()
+        subject.parseEntityList(entityJson)
 
         let adsList = getListData(from: ParserData.adsTrackDigest256)
-        let result = subject.parseFile(json: adsList,
-                                       actionType: .blockAll)
+        let result = subject.parseCategoryList(adsList,
+                                               actionType: .blockAll)
 
         let firstLine = """
         {"action":{"type":"block"},"trigger":{"url-filter":"^https?://([^/]+\\\\.)?2leep\\\\.com","load-type":["third-party"]}}

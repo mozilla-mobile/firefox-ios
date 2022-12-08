@@ -4,14 +4,19 @@
 
 import Foundation
 
-// TODO: Laurie - Document
-class ContentBlockerParser {
+/// Content Blocker Parser ingests the entity list first to then be able to parse the different file categories.
+protocol ContentBlockerParser {
+    func parseEntityList(_ entitiesList: [String: Any])
+    func parseCategoryList(_ categoryList: [String], actionType: ActionType) -> [String]
+}
+
+class DefaultContentBlockerParser: ContentBlockerParser {
 
     // Key is each property of an entity, so each resources for an entity is easily accessible
     private var entities = [String: Entity]()
 
-    func parseEntityList(json: [String: Any]) {
-        let entitiesRaw = json["entities"]! as! [String: Any]
+    func parseEntityList(_ entitiesList: [String: Any]) {
+        let entitiesRaw = entitiesList["entities"]! as! [String: Any]
         entitiesRaw.forEach {
             let properties = ($0.value as! [String: [String]])["properties"]!
             let resources = ($0.value as! [String: [String]])["resources"]!
@@ -22,15 +27,15 @@ class ContentBlockerParser {
         }
     }
 
-    func parseFile(json: [String],
-                   actionType: ActionType) -> [String] {
+    func parseCategoryList(_ categoryList: [String],
+                           actionType: ActionType) -> [String] {
 
-        var result = [String]()
-        for property in json {
+        var lines = [String]()
+        for property in categoryList {
             let line = createLine(for: property, actionType: actionType)
-            result.append(line)
+            lines.append(line)
         }
-        return result
+        return lines
     }
 
     // MARK: - Private
@@ -60,8 +65,8 @@ class ContentBlockerParser {
 
     private func buildUnlessDomain(_ domains: [String]) -> String {
         guard !domains.isEmpty else { return "" }
-        let result = domains.reduce("", { $0 + "\"*\($1)\"," }).dropLast()
-        return "[" + result + "]"
+        let unlessDomain = domains.reduce("", { $0 + "\"*\($1)\"," }).dropLast()
+        return "[" + unlessDomain + "]"
     }
 
     private func buildUrlFilter(_ domain: String) -> String {
@@ -73,9 +78,9 @@ class ContentBlockerParser {
                                  unlessDomain: String,
                                  actionType: ActionType) -> String {
         let unlessDomainSection = unlessDomain.isEmpty ? "" : ",\"unless-domain\":\(unlessDomain)"
-        let result = """
+        let line = """
                     {"action":{"type":\(actionType.webKitFormat)},"trigger":{"url-filter":"\(urlFilter)","load-type":["third-party"]\(unlessDomainSection)}}
                     """
-        return result
+        return line
     }
 }
