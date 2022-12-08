@@ -92,7 +92,6 @@ extension String {
                 value: "Desktop Bookmarks",
                 comment: "A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'.")
         }
-
     }
 }
 
@@ -100,16 +99,13 @@ extension String {
 extension String {
     public struct BVC {
         public struct General {
-
         }
 
         public struct MenuItems {
             public struct Hamburger {
-
             }
 
             public struct LongPressGesture {
-
             }
         }
     }
@@ -192,9 +188,7 @@ extension String {
 
 // MARK: - Enhanced Tracking Protection screen
 extension String {
-    public struct ETPMenu {
-
-    }
+    public struct ETPMenu { }
 }
 
 // MARK: - Firefox Homepage
@@ -319,9 +313,7 @@ extension String {
                 comment: "This string will show under the description on pocket story, indicating that the story is sponsored.")
         }
 
-        public struct RecentlySaved {
-
-        }
+        public struct RecentlySaved { }
 
         public struct HistoryHighlights {
             public static let Title = MZLocalizedString(
@@ -344,9 +336,7 @@ extension String {
                 comment: "This string will show under a shortcuts tile on the firefox home page, indicating that the tile is a sponsored tile. Space is limited, please keep as short as possible.")
         }
 
-        public struct YourLibrary {
-
-        }
+        public struct YourLibrary { }
 
         public struct ContextualMenu {
             public static let Settings = MZLocalizedString(
@@ -530,7 +520,6 @@ extension String {
                 value: "Window",
                 comment: "A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details.")
         }
-
     }
 }
 
@@ -567,9 +556,7 @@ extension String {
                 comment: "This label is meant to signify the section containing a group of items that are older than thirty days.")
         }
 
-        public struct Bookmarks {
-
-        }
+        public struct Bookmarks { }
 
         public struct History {
             public static let HistoryPanelClearHistoryButtonTitle = MZLocalizedString(
@@ -629,13 +616,9 @@ extension String {
                 comment: "Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item.")
         }
 
-        public struct ReadingList {
+        public struct ReadingList { }
 
-        }
-
-        public struct Downloads {
-
-        }
+        public struct Downloads { }
     }
 }
 
@@ -778,9 +761,7 @@ extension String {
 
 // MARK: - Passwords and Logins
 extension String {
-    public struct PasswordsAndLogins {
-
-    }
+    public struct PasswordsAndLogins { }
 }
 
 // MARK: - Search
@@ -1143,7 +1124,6 @@ extension String {
                     value: "Sync and Save Data",
                     comment: "Title for the page where the user sign in to their Firefox Sync account.")
             }
-
         }
     }
 }
@@ -1166,16 +1146,12 @@ extension String {
 
 // MARK: - Switch Default Browser Screen
 extension String {
-    public struct SwitchDefaultBrowser {
-
-    }
+    public struct SwitchDefaultBrowser { }
 }
 
 // MARK: - Sync Screen
 extension String {
-    public struct SyncScreen {
-
-    }
+    public struct SyncScreen { }
 }
 
 // MARK: Tabs Tray
@@ -3140,7 +3116,6 @@ extension String {
         tableName: nil,
         value: "Loading in Firefox",
         comment: "Share extension label shown after user has performed 'Load in Background' action.")
-
 }
 
 // MARK: - Translation bar

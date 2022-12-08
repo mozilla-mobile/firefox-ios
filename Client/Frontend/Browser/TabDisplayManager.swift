@@ -266,7 +266,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
             // check if groups are enabled and setup from normal tabs
             setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: tabManager.normalTabs, completion: completion)
-
         } else {
             // Inactive tabs - enabled
             guard let inactiveViewModel = inactiveViewModel else {

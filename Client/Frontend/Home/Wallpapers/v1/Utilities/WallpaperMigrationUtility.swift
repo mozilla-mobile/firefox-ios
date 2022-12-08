@@ -66,7 +66,6 @@ struct WallpaperMigrationUtility: Loggable {
                       with: storageUtility)
 
             markLegacyAssetMigrationComplete()
-
         } catch {
             browserLog.error("Migration error: \(error.localizedDescription)")
         }
@@ -94,7 +93,6 @@ struct WallpaperMigrationUtility: Loggable {
                       with: storageUtility)
 
             markMetadataMigrationComplete()
-
         } catch {
             browserLog.error("Migration error: \(error.localizedDescription)")
         }
@@ -140,7 +138,6 @@ struct WallpaperMigrationUtility: Loggable {
                              textColor: UIColor(colorString: "FBFBFE"),
                              cardColor: nil,
                              logoTextColor: UIColor(colorString: "FBFBFE"))
-
         } else {
             guard let metadata = try storageUtility.fetchMetadata(),
                   let matchingWallpaper = metadata.collections
@@ -150,7 +147,6 @@ struct WallpaperMigrationUtility: Loggable {
 
             return matchingWallpaper
         }
-
     }
 
     private func markMetadataMigrationComplete() {

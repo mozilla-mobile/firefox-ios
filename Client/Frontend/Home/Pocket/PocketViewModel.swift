@@ -238,7 +238,6 @@ extension PocketViewModel: HomepageSectionHandler {
 
         if isStoryCell(index: indexPath.row) {
             pocketStoriesViewModels[indexPath.row].onTap(indexPath)
-
         } else {
             showDiscoverMore()
         }

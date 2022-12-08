@@ -51,7 +51,6 @@ class UserScriptManager {
                 let userScript = WKUserScript.createInPageContentWorld(source: wrappedSource, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
                 compiledUserScripts[webcompatName] = userScript
             }
-
         }
 
         self.compiledUserScripts = compiledUserScripts

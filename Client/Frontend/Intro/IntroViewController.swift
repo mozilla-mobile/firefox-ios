@@ -166,7 +166,6 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 
         pageControl.currentPage = index
         return getNextOnboardingCard(index: index, goForward: true)
-
     }
 }
 
@@ -201,9 +200,11 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
-    private func presentSignToSync(_ fxaOptions: FxALaunchParams,
-                                  flowType: FxAPageType = .emailLoginFlow,
-                                  referringPage: ReferringPage = .onboarding) {
+    private func presentSignToSync(
+        _ fxaOptions: FxALaunchParams,
+        flowType: FxAPageType = .emailLoginFlow,
+        referringPage: ReferringPage = .onboarding
+    ) {
         let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
                                                                                        flowType: flowType,
                                                                                        referringPage: referringPage,

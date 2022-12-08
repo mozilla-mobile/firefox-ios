@@ -27,7 +27,6 @@ final class FaviconFetcherTests: XCTestCase {
         do {
             _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
             XCTFail("Should have failed with error")
-
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: The request is empty or `nil`.",
                            error.description)
@@ -44,7 +43,6 @@ final class FaviconFetcherTests: XCTestCase {
         do {
             let result = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
             XCTAssertEqual(resultImage, result)
-
         } catch {
             XCTFail("Should have succeeded with image")
         }

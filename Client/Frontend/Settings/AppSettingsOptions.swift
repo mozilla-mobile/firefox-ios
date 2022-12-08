@@ -479,7 +479,6 @@ class FeatureSwitchSetting: BoolSetting {
     override func writeBool(_ control: UISwitch) {
         self.featureSwitch.setMembership(control.isOn, for: self.prefs)
     }
-
 }
 
 class ForceCrashSetting: HiddenSetting {
@@ -699,7 +698,6 @@ class UseNewHistoryApiOption: HiddenSetting {
                     migrationConfig: .real,
                     callback: { result in
                         Logger.browserLogger.info("Successful Migration took \(result.totalDuration / 1000) seconds")
-
                     }, errCallback: { _ in
                         Logger.browserLogger.debug("Failed migration of history")
                     }

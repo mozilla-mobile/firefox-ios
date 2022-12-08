@@ -84,5 +84,4 @@ class ThirdPartySearchAlerts: UIAlertController {
         alert.addAction(okayOption)
         return alert
     }
-
 }

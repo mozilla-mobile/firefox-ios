@@ -83,5 +83,4 @@ class BackgroundSyncUtil {
 
         profile.shutdown()
     }
-
 }

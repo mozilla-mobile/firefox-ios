@@ -46,7 +46,7 @@ class UpdateViewModel: OnboardingViewModelProtocol, FeatureFlaggable, AppVersion
         }
 
         // we check if there is a version number already saved
-        guard let savedVersion = profile.prefs.stringForKey(UpdateViewModel.prefsKey) else {
+        guard profile.prefs.stringForKey(UpdateViewModel.prefsKey) != nil else {
             saveAppVersion(for: appVersion)
             return true
         }

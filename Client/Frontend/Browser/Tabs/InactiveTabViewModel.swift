@@ -68,7 +68,6 @@ class InactiveTabViewModel {
 
     init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve()) {
         self.appSessionManager = appSessionManager
-
     }
 
     func updateInactiveTabs(with selectedTab: Tab?, tabs: [Tab]) {

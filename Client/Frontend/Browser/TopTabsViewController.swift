@@ -262,10 +262,8 @@ class TopTabsViewController: UIViewController, Themeable {
         // Check whether first or last tab is being selected.
         if index == 0 {
             topTabFader.setFader(forSides: .right)
-
         } else if index == topTabDisplayManager.dataStore.count - 1 {
             topTabFader.setFader(forSides: .left)
-
         } else if collectionView.contentSize.width <= collectionView.frame.size.width { // all tabs are visible
             topTabFader.setFader(forSides: .none)
         }
@@ -332,10 +330,8 @@ extension TopTabsViewController: TopTabsScrollDelegate {
 
         if reachedLeftEnd {
             topTabFader.setFader(forSides: .right)
-
         } else if reachedRightEnd {
             topTabFader.setFader(forSides: .left)
-
         } else {
             topTabFader.setFader(forSides: .both)
         }

@@ -393,7 +393,6 @@ class BookmarksPanel: SiteTableViewController,
             cell.configure(viewModel: viewModel)
             cell.applyTheme(theme: themeManager.currentTheme)
             return cell
-
         } else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.cellIdentifier,
                                                         for: indexPath) as? SeparatorTableViewCell {

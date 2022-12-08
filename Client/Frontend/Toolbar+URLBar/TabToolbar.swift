@@ -127,9 +127,7 @@ extension TabToolbar: TabToolbarProtocol {
         helper?.setMiddleButtonState(state)
     }
 
-    func updatePageStatus(_ isWebPage: Bool) {
-
-    }
+    func updatePageStatus(_ isWebPage: Bool) { }
 
     func updateTabCount(_ count: Int, animated: Bool) {
         tabsButton.updateTabCount(count, animated: animated)

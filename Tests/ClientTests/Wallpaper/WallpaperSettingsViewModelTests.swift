@@ -163,5 +163,4 @@ class WallpaperSettingsViewModelTests: XCTestCase {
                 heading: nil)
         ]
     }
-
 }

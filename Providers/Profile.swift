@@ -200,7 +200,6 @@ extension Profile {
             }
         }
         return deferred
-
     }
 
     func clearCredentialStore() -> Deferred<Result<Void, Error>> {

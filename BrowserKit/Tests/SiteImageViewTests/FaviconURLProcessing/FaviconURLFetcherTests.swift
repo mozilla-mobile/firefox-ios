@@ -49,7 +49,6 @@ class FaviconURLFetcherTests: XCTestCase {
     private func generateHTMLData(string: String) -> Data? {
         return string.data(using: .utf8)
     }
-
 }
 
 // MARK: - Mock HTML Data

@@ -392,7 +392,6 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
         if viewModel.isMainMenuInverted {
             let rowIsLastInSection = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: rowIsLastInSection)
-
         } else {
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: isLastRow)

@@ -42,7 +42,6 @@ actor DefaultSiteImageCache: SiteImageCache {
                 throw SiteImageError.unableToRetrieveFromCache("Image was nil")
             }
             return image
-
         } catch let error as KingfisherError {
             throw SiteImageError.unableToRetrieveFromCache(error.errorDescription ?? "No description")
         }

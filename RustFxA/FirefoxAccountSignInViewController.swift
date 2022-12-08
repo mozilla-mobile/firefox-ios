@@ -155,7 +155,6 @@ class FirefoxAccountSignInViewController: UIViewController {
         case .tabTray:
             self.telemetryObject = .tabTray
             self.fxaDismissStyle = .popToTabTray
-
         }
         super.init(nibName: nil, bundle: nil)
     }

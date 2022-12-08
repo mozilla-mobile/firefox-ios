@@ -50,7 +50,6 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         var actions = [PhotonRowActions]()
         if sectionType == .topSites, let topSitesActions = getTopSitesActions(site: site) {
             actions = topSitesActions
-
         } else if sectionType == .pocket, let pocketActions = getPocketActions(site: site, with: sourceView) {
             actions = pocketActions
         }
@@ -230,12 +229,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             topSiteActions = [getRemovePinTopSiteAction(site: site),
                               getOpenInNewPrivateTabAction(siteURL: siteURL),
                               getRemoveTopSiteAction(site: site)]
-
         } else if site as? SponsoredTile != nil {
             topSiteActions = [getOpenInNewPrivateTabAction(siteURL: siteURL),
                               getSettingsAction(),
                               getSponsoredContentAction()]
-
         } else {
             topSiteActions = [getPinTopSiteAction(site: site),
                               getOpenInNewPrivateTabAction(siteURL: siteURL),

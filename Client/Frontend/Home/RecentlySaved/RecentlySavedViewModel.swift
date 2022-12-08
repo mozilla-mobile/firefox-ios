@@ -184,7 +184,6 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
                                          object: .firefoxHomepage,
                                          value: .recentlySavedBookmarkItemAction,
                                          extras: TelemetryWrapper.getOriginExtras(isZeroSearch: isZeroSearch))
-
         } else if let item = recentItems[safe: indexPath.row] as? ReadingListItem,
                   let url = URL(string: item.url),
                   let encodedUrl = url.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {

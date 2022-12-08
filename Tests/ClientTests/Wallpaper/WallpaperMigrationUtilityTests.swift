@@ -43,7 +43,6 @@ class WallpaperMigrationUtilityTests: XCTestCase {
                                              isDirectory: &isDirectory))
         XCTAssertTrue(fileManager.fileExists(atPath: appSupportPath.path,
                                              isDirectory: &isDirectory))
-
     }
 
     func testMigrationKeyDoesntExist() {

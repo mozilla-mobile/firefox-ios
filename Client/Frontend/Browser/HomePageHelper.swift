@@ -47,5 +47,4 @@ class HomePageHelper {
         }
         tab.loadRequest(URLRequest(url: url))
     }
-
 }

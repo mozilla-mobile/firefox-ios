@@ -92,5 +92,4 @@ extension WKUserScript {
             return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly)
         }
     }
-
 }

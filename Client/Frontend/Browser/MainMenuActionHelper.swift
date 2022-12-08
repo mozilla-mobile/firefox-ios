@@ -106,7 +106,6 @@ class MainMenuActionHelper:
             ])
 
             completion(actions)
-
         } else {
 
             // Actions on site page need specific data to be loaded
@@ -247,7 +246,6 @@ class MainMenuActionHelper:
         if isFileURL {
             let shareFileAction = getShareFileAction()
             append(to: &section, action: shareFileAction)
-
         } else {
             let shortAction = getShortcutAction()
             append(to: &section, action: shortAction)
@@ -341,7 +339,6 @@ class MainMenuActionHelper:
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
             toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestDesktopSite : ImageIdentifiers.requestMobileSite
             siteTypeTelemetryObject = .requestDesktopSite
-
         } else {
             toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
             toggleActionIcon = tab.changedUserAgent ? ImageIdentifiers.requestMobileSite : ImageIdentifiers.requestDesktopSite
@@ -745,7 +742,6 @@ class MainMenuActionHelper:
                     return succeed()
                 }
                 return self.profile.history.addPinnedTopSite(site)
-
             }.uponQueue(.main) { result in
                 guard result.isSuccess else { return }
                 self.delegate?.showToast(message: .AppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage, url: nil)
@@ -800,7 +796,6 @@ class MainMenuActionHelper:
                 } else {
                     self.showLoginListVC(navigationHandler: navigationHandler, navigationController: navigationController)
                 }
-
             } else {
                 let rootViewController = DevicePasscodeRequiredViewController(shownFromAppMenu: true)
                 let navController = ThemedNavigationController(rootViewController: rootViewController)

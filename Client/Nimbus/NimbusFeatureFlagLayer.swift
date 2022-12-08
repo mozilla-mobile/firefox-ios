@@ -270,8 +270,9 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkGroupingFeature(for featureID: NimbusFeatureFlagID,
-                                     from nimbus: FxNimbus
+    private func checkGroupingFeature(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus
     ) -> Bool {
         let config = nimbus.features.searchTermGroupsFeature.value()
         var nimbusID: SearchTermGroups

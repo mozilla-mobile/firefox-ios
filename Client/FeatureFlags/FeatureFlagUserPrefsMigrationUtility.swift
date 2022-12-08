@@ -80,15 +80,12 @@ final class FeatureFlagUserPrefsMigrationUtility {
 
         if existingPreference == UserFeaturePreference.enabled.rawValue {
             profile.prefs.setBool(true, forKey: newKey)
-
         } else if existingPreference == UserFeaturePreference.disabled.rawValue {
             profile.prefs.setBool(false, forKey: newKey)
-
         } else if existingPreference == StartAtHomeSetting.afterFourHours.rawValue
                     || existingPreference == StartAtHomeSetting.always.rawValue
                     || existingPreference == StartAtHomeSetting.disabled.rawValue {
             profile.prefs.setString(existingPreference, forKey: newKey)
-
         } else if existingPreference == SearchBarPosition.bottom.rawValue
                     || existingPreference == SearchBarPosition.top.rawValue {
             profile.prefs.setString(existingPreference, forKey: newKey)

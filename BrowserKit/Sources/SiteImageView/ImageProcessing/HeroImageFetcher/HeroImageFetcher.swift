@@ -25,7 +25,6 @@ class DefaultHeroImageFetcher: HeroImageFetcher {
             }
 
             return try await imageProvider.loadObject(ofClass: UIImage.self)
-
         } catch {
             throw error
         }

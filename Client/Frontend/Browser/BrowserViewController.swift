@@ -299,10 +299,8 @@ class BrowserViewController: UIViewController {
             header.addArrangedViewToTop(topTabsViewController.view)
             self.topTabsViewController = topTabsViewController
             topTabsViewController.applyTheme()
-
         } else if showTopTabs, topTabsViewController != nil {
             topTabsViewController?.applyTheme()
-
         } else {
             if let topTabsView = topTabsViewController?.view {
                 header.removeArrangedView(topTabsView)
@@ -1008,11 +1006,9 @@ class BrowserViewController: UIViewController {
 
             if userHasPressedHomeButton {
                 userHasPressedHomeButton = false
-
             } else if focusUrlBar && !contextHintVC.shouldPresentHint() {
                 enterOverlayMode()
             }
-
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideHomepage()
             urlBar.shouldHideReloadButton(shouldUseiPadSetup())
@@ -2298,7 +2294,6 @@ extension BrowserViewController {
     @objc func dismissSignInViewController() {
         self.dismiss(animated: true, completion: nil)
     }
-
 }
 
 extension BrowserViewController: ContextMenuHelperDelegate {
@@ -2417,7 +2412,6 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
                     application.endBackgroundTask(taskId)
                 }.resume()
-
             }
             actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
 

@@ -57,7 +57,6 @@ struct GleanPlumbMessage {
 
         return id == experimentKey
     }
-
 }
 
 /// `MessageMeta` is where we store parts of the message that help us aggregate, query and determine non-expired messages.

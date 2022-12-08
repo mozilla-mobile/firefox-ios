@@ -33,5 +33,4 @@ class WallpaperCollectionAvailabilityTests: XCTestCase {
         let subject = WallpaperCollectionAvailability(start: nil, end: Date.yesterday)
         XCTAssertFalse(subject.isAvailable, "Wallpaper collection should not be available")
     }
-
 }

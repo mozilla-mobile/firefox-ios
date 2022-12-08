@@ -63,7 +63,6 @@ class SnackButton: UIButton {
             make.top.bottom.equalTo(self)
         }
     }
-
 }
 
 class SnackBar: UIView {

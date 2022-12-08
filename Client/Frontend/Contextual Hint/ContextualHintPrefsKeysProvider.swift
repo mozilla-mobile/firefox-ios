@@ -20,5 +20,4 @@ extension ContextualHintPrefsKeysProvider {
         case .toolbarLocation: return CFRPrefsKeys.toolbarOnboardingKey.rawValue
         }
     }
-
 }

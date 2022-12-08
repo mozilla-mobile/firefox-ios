@@ -88,7 +88,6 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFl
             var contiles = rootNote.tiles
             contiles.sort { $0.position ?? 0 < $1.position ?? 0 }
             completion(.success(contiles))
-
         } catch let error {
             browserLog.error("Unable to parse with error: \(error)")
             completion(.failure(Error.failure))

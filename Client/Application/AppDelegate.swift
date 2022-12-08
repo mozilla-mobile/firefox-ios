@@ -185,7 +185,6 @@ extension AppDelegate {
     ) -> UIInterfaceOrientationMask {
         return self.orientationLock
     }
-
 }
 
 // MARK: - Key Commands
@@ -222,5 +221,4 @@ extension AppDelegate {
 
         return configuration
     }
-
 }

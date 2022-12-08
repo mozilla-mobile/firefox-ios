@@ -64,7 +64,6 @@ open class Site: Identifiable {
     open func setBookmarked(_ bookmarked: Bool) {
         self.bookmarked = bookmarked
     }
-
 }
 
 // MARK: - Hashable
@@ -76,5 +75,4 @@ extension Site: Hashable {
      public static func == (lhs: Site, rhs: Site) -> Bool {
          lhs.url == rhs.url
      }
-
  }

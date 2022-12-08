@@ -6,6 +6,4 @@ import Foundation
 @testable import Client
 import MozillaAppServices
 
-class NimbusMock: FxNimbus {
-
-}
+class NimbusMock: FxNimbus { }

@@ -28,6 +28,5 @@ struct ReaderModeUtils {
             .replacingOccurrences(of: "%READER-TITLE%", with: readabilityResult.title)
             .replacingOccurrences(of: "%READER-CREDITS%", with: readabilityResult.credits)
             .replacingOccurrences(of: "%READER-CONTENT%", with: readabilityResult.content)
-
     }
 }

@@ -123,5 +123,4 @@ class OnboardingCardViewModelTests: XCTestCase {
                                    secondaryAction: "Button2",
                                    a11yIdRoot: "A11yId")
     }
-
 }

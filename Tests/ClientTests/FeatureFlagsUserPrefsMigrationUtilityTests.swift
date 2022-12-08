@@ -117,7 +117,6 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
                     XCTAssertEqual(string, UserFeaturePreference.disabled.rawValue)
                 }
                 XCTAssertNil(profile.prefs.boolForKey(newKey))
-
             } else {
                 XCTAssertNil(profile.prefs.boolForKey(oldKey))
                 XCTAssertNil(profile.prefs.boolForKey(newKey))

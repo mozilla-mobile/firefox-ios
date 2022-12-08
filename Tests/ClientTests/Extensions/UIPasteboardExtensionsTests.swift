@@ -43,5 +43,4 @@ class UIPasteboardExtensionsTests: XCTestCase {
         XCTAssertEqual(pasteboard.items[0][kUTTypeURL as String] as? URL, expectedURL)
         XCTAssertNotNil(pasteboard.items[0][expectedImageTypeKey as String])
     }
-
 }

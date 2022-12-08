@@ -30,7 +30,6 @@ class RustLoginsTests: XCTestCase {
 
             logins = RustLogins(sqlCipherDatabasePath: sqlCipherDatabasePath, databasePath: databasePath)
             _ = logins.reopenIfClosed()
-
         } else {
             XCTFail("Could not retrieve root directory")
         }

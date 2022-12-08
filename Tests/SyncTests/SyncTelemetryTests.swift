@@ -135,5 +135,4 @@ extension SyncTelemetryTests {
         XCTAssertTrue(os["version"] is String)
         XCTAssertTrue(os["locale"] is String)
     }
-
 }

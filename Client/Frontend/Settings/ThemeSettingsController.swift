@@ -60,7 +60,6 @@ class ThemeSettingsController: ThemedTableViewController {
 
     override func applyTheme() {
         super.applyTheme()
-
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

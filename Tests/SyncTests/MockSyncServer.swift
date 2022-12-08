@@ -308,7 +308,6 @@ class MockSyncServer {
                     ic[collection] = Double(timestamp) / 1000
                     lastModified = max(lastModified, timestamp)
                 }
-
             }
             let body = JSON(ic).stringify()
             let bodyData = body?.utf8EncodedData

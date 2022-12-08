@@ -66,5 +66,4 @@ extension CustomizeHomepageSectionViewModel: HomepageSectionHandler {
         customizeHomeCell.configure(onTapAction: onTapAction, theme: theme)
         return customizeHomeCell
     }
-
 }

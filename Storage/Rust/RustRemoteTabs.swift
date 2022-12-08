@@ -155,7 +155,6 @@ public class RustRemoteTabs {
 
         return deferred
     }
-
 }
 
 public extension RemoteTabRecord {

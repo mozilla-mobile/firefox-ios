@@ -198,7 +198,6 @@ class TabsButton: UIButton {
         } else {
             completion(true)
         }
-
     }
     @objc func cloneDidClickTabs() {
         sendActions(for: .touchUpInside)

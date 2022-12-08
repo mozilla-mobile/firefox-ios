@@ -830,7 +830,6 @@ extension Tab: UIGestureRecognizerDelegate, Loggable {
             TelemetryWrapper.recordEvent(category: .action, method: .swipe, object: .navigateTabHistoryBackSwipe)
         }
     }
-
 }
 
 extension Tab: TabWebViewDelegate {
@@ -965,7 +964,6 @@ class TabWebView: WKWebView, MenuHelperInterface {
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
-
 }
 
 ///

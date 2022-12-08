@@ -133,7 +133,6 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     func handleDoneButton() {
         // no implementation needed
     }
-
 }
 
 extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMenu {

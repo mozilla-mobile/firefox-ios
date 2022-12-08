@@ -78,7 +78,6 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
 
         if let data = fileManager.contents(atPath: filePath.path) {
             return try decodeMetadata(from: data)
-
         } else {
             throw WallpaperStorageError.noDataAtFilePath
         }

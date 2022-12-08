@@ -61,5 +61,4 @@ struct HistoryActionablesModel: Hashable {
                                 a11yId: a11y.recentlyClosedCell,
                                 itemIdentity: .recentlyClosed)
     ]
-
 }

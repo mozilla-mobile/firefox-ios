@@ -45,10 +45,8 @@ class BookmarksPanelViewModel {
 
         if bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID {
             setupMobileFolderData(completion: completion)
-
         } else if bookmarkFolderGUID == LocalDesktopFolder.localDesktopFolderGuid {
             setupLocalDesktopFolderData(completion: completion)
-
         } else {
             setupSubfolderData(completion: completion)
         }

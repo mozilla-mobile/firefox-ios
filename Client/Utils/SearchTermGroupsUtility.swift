@@ -198,7 +198,6 @@ class SearchTermGroupsUtility {
     private static func filterDuplicate<T: Equatable>(itemsInGroups: [T], from items: [T]) -> [T] {
         // 4. Filter the tabs so it doesn't include same tabs as tab groups
         return items.filter { item in !itemsInGroups.contains(item) }
-
     }
 
     /// Takes a dictionary and creates ASGroups from it.
@@ -235,12 +234,10 @@ class SearchTermGroupsUtility {
                 let firstTabTimestamp = firstTab.firstCreatedTime ?? 0
                 let secondTabTimestamp = secondTab.firstCreatedTime ?? 0
                 return firstTabTimestamp < secondTabTimestamp
-
             } else if let firstSite = $0 as? Site, let secondSite = $1 as? Site {
                 let firstSiteATimestamp = TimeInterval.fromMicrosecondTimestamp(firstSite.latestVisit?.date ?? 0)
                 let secondSiteTimestamp = TimeInterval.fromMicrosecondTimestamp(secondSite.latestVisit?.date ?? 0)
                 return firstSiteATimestamp < secondSiteTimestamp
-
             } else if let firstHighlight = $0 as? HistoryHighlight, let secondHighlight = $1 as? HistoryHighlight {
                 return firstHighlight.score > secondHighlight.score
             } else {

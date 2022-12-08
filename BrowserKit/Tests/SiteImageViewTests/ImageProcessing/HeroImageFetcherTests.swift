@@ -26,7 +26,6 @@ final class HeroImageFetcherTests: XCTestCase {
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
             XCTFail("Should have failed")
-
         } catch let error as TestError {
             XCTAssertEqual("A test error",
                            error.description)
@@ -40,7 +39,6 @@ final class HeroImageFetcherTests: XCTestCase {
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
             XCTFail("Should have failed")
-
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Metadata image provider could not be retrieved.",
                            error.description)
@@ -58,7 +56,6 @@ final class HeroImageFetcherTests: XCTestCase {
         do {
             _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
             XCTFail("Should have failed")
-
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Optional(A test error)",
                            error.description)
@@ -73,7 +70,6 @@ final class HeroImageFetcherTests: XCTestCase {
         do {
             let image = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
             XCTAssertNotNil(image)
-
         } catch {
             XCTFail("Should have succeed with image")
         }

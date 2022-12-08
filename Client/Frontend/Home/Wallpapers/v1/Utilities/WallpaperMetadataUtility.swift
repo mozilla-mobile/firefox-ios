@@ -47,12 +47,10 @@ class WallpaperMetadataUtility: Loggable {
                 try attemptToStore(freshMetadata)
                 markLastUpdatedDate(with: Date())
                 return true
-
             } else {
                 markLastUpdatedDate(with: Date())
                 return false
             }
-
         } catch {
             browserLog.error("Failed to fetch new metadata: \(error.localizedDescription)")
             return false

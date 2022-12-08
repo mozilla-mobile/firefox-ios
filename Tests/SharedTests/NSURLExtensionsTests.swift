@@ -346,7 +346,6 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:\(AppInfo.webserverPort)/reader-mode/page",
             "https://127.0.0.1:\(AppInfo.webserverPort)/sessionrestore.html",
             "data://:\(AppInfo.webserverPort)/sessionrestore.html"
-
         ]
         let badurls = [
             "about://google.com",
@@ -383,7 +382,6 @@ class NSURLExtensionsTests: XCTestCase {
         let badurls = [
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html?url=http%3A//localhost%3A\(AppInfo.webserverPort)/about/home/%23panel%3D1",
             "http://localhost:\(AppInfo.webserverPort)/errors/error.html",
-
         ]
 
         goodurls.forEach { XCTAssertEqual(URL(string: $0.0)!.displayURL?.absoluteString, $0.1) }
@@ -413,7 +411,6 @@ class NSURLExtensionsTests: XCTestCase {
             ("https://user:pass@m.foo.com/bar/baz?noo=abc#123", "foo"),
             ("https://accounts.foo.com/bar/baz?noo=abc#123", "accounts.foo"),
             ("https://accounts.what.foo.co.za/bar/baz?noo=abc#123", "accounts.what.foo"),
-
         ]
         urls.forEach { XCTAssertEqual(URL(string: $0.0)!.shortDisplayString, $0.1) }
     }
@@ -501,7 +498,5 @@ class NSURLExtensionsTests: XCTestCase {
 
             XCTAssertEqual(0, newMatches.count, "\(modified) is not a valid URL")
         }
-
     }
-
 }

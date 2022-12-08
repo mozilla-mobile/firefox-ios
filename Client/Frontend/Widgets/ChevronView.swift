@@ -33,7 +33,6 @@ class ChevronView: UIView {
             case .angular:
                 lineCapStyle = .butt
                 lineJoinStyle = .miter
-
             }
         }
     }

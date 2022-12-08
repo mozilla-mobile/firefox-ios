@@ -115,7 +115,6 @@ class NavigationRouterTests: XCTestCase {
             NavigationPath(url: URL(string: "https://deep-link?url=/settings/newTab")!),
             NavigationPath.url(webURL: URL(string: "https://deep-link?url=/settings/newTab")!,
                                isPrivate: false))
-
     }
 
     // MARK: - Widget

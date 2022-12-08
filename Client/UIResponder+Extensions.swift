@@ -11,5 +11,4 @@ extension UIResponder {
         return sequence(first: self, next: { $0.next })
             .first(where: { $0 is T }) as? T
     }
-
 }

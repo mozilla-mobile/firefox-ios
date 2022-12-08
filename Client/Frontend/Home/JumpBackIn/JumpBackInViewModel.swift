@@ -506,7 +506,6 @@ extension JumpBackInViewModel: HomepageSectionHandler {
                 configureJumpBackInCellForTab(item: item, cell: jumpBackInCell, indexPath: indexPath)
             }
             return jumpBackInCell
-
         } else if hasSyncedTab {
             // SyncedTab cell
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SyncedTabCell.cellIdentifier,
@@ -538,7 +537,6 @@ extension JumpBackInViewModel: HomepageSectionHandler {
             if jumpBackInItemRow == jumpBackInList.itemsToDisplay - 1,
                let group = jumpBackInList.group {
                 switchTo(group: group)
-
             } else if let tab = jumpBackInList.tabs[safe: jumpBackInItemRow] {
                 switchTo(tab: tab)
             }

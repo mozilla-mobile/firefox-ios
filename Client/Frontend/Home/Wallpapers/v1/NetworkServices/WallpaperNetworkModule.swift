@@ -36,7 +36,6 @@ class WallpaperNetworkingModule: WallpaperNetworking {
                 }
 
                 continuation.resume(returning: (data, response))
-
             }.resume()
         }
     }

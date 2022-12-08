@@ -671,7 +671,6 @@ private extension HomepageViewController {
                                          method: .tap,
                                          object: .firefoxHomepage,
                                          value: .historyHighlightsShowAll)
-
         }
     }
 

@@ -27,7 +27,6 @@ class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
         if UIDevice.current.orientation.isLandscape {
             downloadResourceFrom(urlPath: id.landscapePath, andLocalPath: id.landscape)
             downloadResourceFrom(urlPath: id.portraitPath, andLocalPath: id.portrait)
-
         } else {
             downloadResourceFrom(urlPath: id.portraitPath, andLocalPath: id.portrait)
             downloadResourceFrom(urlPath: id.landscapePath, andLocalPath: id.landscape)
@@ -60,11 +59,9 @@ class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
             let storageUtility = LegacyWallpaperStorageUtility()
             do {
                 try storageUtility.store(image: image, forKey: localPath)
-
             } catch let error {
                 self.browserLog.error("Error saving downloaded image - \(error.localizedDescription)")
             }
-
         }.resume()
     }
 

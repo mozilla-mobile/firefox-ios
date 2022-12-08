@@ -48,11 +48,9 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
                           forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape)
 
                 completionHandler(.success(()))
-
             } catch let error {
                 completionHandler(.failure(error))
             }
-
         } else {
             guard let portraitPath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImage),
                   let landscapePath = filePath(forKey: PrefsKeys.WallpaperManagerCurrentWallpaperImageLandscape)
@@ -90,7 +88,6 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
             }
 
             try pngRepresentation.write(to: saveFilePath, options: .atomic)
-
         } catch let error {
             browserLog.debug("Wallpaper - error writing file to disk: \(error)")
             throw error
@@ -170,7 +167,6 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
             try fileManager.moveItem(at: wallpaperDocumentDirectoryPath,
                                      to: wallpaperAppSupportDirectoryPath)
             completion(true)
-
         } catch {
             manualMigration(from: wallpaperDocumentDirectoryPath,
                             to: wallpaperAppSupportDirectoryPath,

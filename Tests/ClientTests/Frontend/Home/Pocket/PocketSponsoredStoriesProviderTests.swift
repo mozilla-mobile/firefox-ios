@@ -151,7 +151,6 @@ class PocketSponsoredStoriesProviderTests: XCTestCase {
 
         waitForExpectations(timeout: 1.0, handler: nil)
     }
-
 }
 
 // MARK: - Helper functions

@@ -194,7 +194,6 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
                 return savedTabError(description: message)
             }
             return tabs
-
         } catch let error {
             return savedTabError(description: error.localizedDescription)
         }
