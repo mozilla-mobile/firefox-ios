@@ -106,12 +106,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
             self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
-
-            // TODO: Temporary.
-            // Although `sceneDidBecomeActive` doesn't result in the same behavior as applicationDidBecomeActive,
-            // we can possibly observe UIApplication.didBecomeActiveNotification inside SceneDelegate and invoke
-            // loadQueuedTabs there. That can cut a foregroundBVC call.
-            BrowserViewController.foregroundBVC()?.loadQueuedTabs()
         }
     }
 
