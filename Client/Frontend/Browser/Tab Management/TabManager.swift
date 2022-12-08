@@ -88,7 +88,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
                 return false
-
             } else if let lastKnownUrl = tab.lastKnownUrl {
                 if lastKnownUrl.absoluteString.hasPrefix("internal://") { return false }
                 return true
@@ -488,7 +487,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         var placeNextToParentTab = false
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
-
         } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
             placeNextToParentTab = true
             insertIndex += 1

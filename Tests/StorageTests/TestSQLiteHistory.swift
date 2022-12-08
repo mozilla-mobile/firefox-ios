@@ -1637,7 +1637,6 @@ class TestSQLiteHistory: XCTestCase {
         waitForExpectations(timeout: 10.0) { error in
             return
         }
-
     }
 
     func testPinnedTopSitesDuplicateDomains() {

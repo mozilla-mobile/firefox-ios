@@ -183,7 +183,6 @@ extension SearchGroupedItemsViewController: UITableViewDelegate {
         if let site = item as? Site {
             handleSiteItemTapped(site: site)
         }
-
     }
 
     private func handleSiteItemTapped(site: Site) {

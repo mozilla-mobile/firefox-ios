@@ -14,7 +14,6 @@ protocol HomepageContextMenuProtocol {
     func getContextMenuActions(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType) -> [PhotonRowActions]?
     func presentContextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType)
     func presentContextMenu(for highlightItem: HighlightItem, with sourceView: UIView?, sectionType: HomepageSectionType, completionHandler: @escaping () -> PhotonActionSheet?)
-
 }
 
 extension HomepageContextMenuProtocol {

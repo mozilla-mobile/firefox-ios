@@ -113,7 +113,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
 
         return hintConfigured
     }
-
 }
 
 extension ContextualHintEligibilityUtility: SearchBarLocationProvider {}

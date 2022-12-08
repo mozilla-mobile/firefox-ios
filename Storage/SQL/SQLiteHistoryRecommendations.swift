@@ -63,5 +63,4 @@ extension SQLiteHistory: HistoryRecommendations {
             return succeed()
         }
     }
-
 }

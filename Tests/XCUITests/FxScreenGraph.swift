@@ -207,7 +207,6 @@ class Action {
     static let OpenWhatsNewPage = "OpenWhatsNewPage"
     static let OpenSearchBarFromSearchButton = "OpenSearchBarFromSearchButton"
     static let CloseURLBarOpen = "CloseURLBarOpen"
-
 }
 
 @objcMembers
@@ -446,7 +445,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.CloseURLBarOpen, transitionTo: HomePanelsScreen) {_ in
             app.buttons["urlBar-cancel"].tap()
         }
-
     }
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
@@ -499,7 +497,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(HomePanel_TopSites) { screenState in
         let topSites = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         screenState.press(topSites.cells.matching(identifier: AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell).element(boundBy: 0), to: TopSitesPanelContextMenu)
-
     }
 
     map.addScreenState(LibraryPanel_History) { screenState in

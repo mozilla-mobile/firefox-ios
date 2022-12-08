@@ -851,6 +851,5 @@ extension BrowserViewController: WKNavigationDelegate {
             state: .tabNavigatedToDifferentUrl,
             searchData: searchData,
             isPrivate: isPrivate)
-
     }
 }

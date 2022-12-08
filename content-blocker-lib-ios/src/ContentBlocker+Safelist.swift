@@ -53,7 +53,6 @@ extension ContentBlocker {
             self.compileListsNotInStore {
                 completion?()
                 NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
-
             }
         }
 

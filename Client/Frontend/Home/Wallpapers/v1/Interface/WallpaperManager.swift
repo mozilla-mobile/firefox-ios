@@ -117,7 +117,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
             NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
             completion(.success(()))
-
         } catch {
             browserLog.error("Failed to set wallpaper: \(error.localizedDescription)")
             completion(.failure(WallpaperManagerError.other(error)))
@@ -226,7 +225,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
                                         wallpapers: defaultWallpaper,
                                         description: nil,
                                         heading: nil)]
-
         } else if let classicCollection = availableCollections.first(where: { $0.type == .classic }) {
             let newWallpapers = defaultWallpaper + classicCollection.wallpapers
             let newClassic = WallpaperCollection(id: classicCollection.id,
@@ -238,7 +236,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
                                                  heading: classicCollection.heading)
 
             return [newClassic] + availableCollections.filter { $0.type != .classic }
-
         } else {
             return availableCollections
         }

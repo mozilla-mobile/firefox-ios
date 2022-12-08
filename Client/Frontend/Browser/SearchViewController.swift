@@ -753,7 +753,6 @@ class SearchViewController: SiteTableViewController,
         default:
             return false
         }
-
     }
 
     func append(_ sender: UIButton) {

@@ -161,5 +161,4 @@ class Authenticator {
         viewController.present(alert, animated: true) { () -> Void in }
         return deferred
     }
-
 }

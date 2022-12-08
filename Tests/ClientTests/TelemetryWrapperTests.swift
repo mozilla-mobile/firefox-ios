@@ -329,7 +329,6 @@ class TelemetryWrapperTests: XCTestCase {
         )
 
         testCounterMetricRecordingSuccess(metric: GleanMetrics.PageActionMenu.createNewTab)
-
     }
 
     func test_viewHistoryPanel_GleanIsCalled() {

@@ -48,5 +48,4 @@ class AccountSyncHandler: TabEventHandler, Loggable {
             _ = self?.profile.syncManager.syncNamedCollections(why: .user, names: ["tabs"])
         }
     }
-
 }

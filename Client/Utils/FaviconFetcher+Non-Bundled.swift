@@ -89,7 +89,6 @@ extension FaviconFetcher {
                     let icon = Favicon(url: absoluteString)
                     icons = [icon]
                 }
-
             }
             return deferMaybe(icons)
         })

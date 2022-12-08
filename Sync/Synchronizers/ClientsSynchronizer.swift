@@ -415,7 +415,6 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                     >>> { self.wipeIfNecessary(localClients)
                                 >>> { self.applyStorageResponse(response, toLocalClients: localClients, withServer: clientsClient) }
                     }
-
             }
             >>> { deferMaybe(self.completedWithStats) }
     }

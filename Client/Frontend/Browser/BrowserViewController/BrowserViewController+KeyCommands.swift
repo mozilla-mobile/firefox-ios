@@ -341,7 +341,6 @@ extension BrowserViewController {
             UIKeyCommand(action: #selector(selectTabSix), input: "6", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabSeven), input: "7", modifierFlags: .command),
             UIKeyCommand(action: #selector(selectTabEight), input: "8", modifierFlags: .command),
-
         ] + windowShortcuts
 
         let isEditingText = tabManager.selectedTab?.isEditing ?? false

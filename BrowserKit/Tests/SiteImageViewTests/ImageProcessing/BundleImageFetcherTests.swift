@@ -26,7 +26,6 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: "")
             XCTFail("Should fail")
-
         } catch let error as BundleError {
             XCTAssertEqual("Decoding from file failed due to: Bundle error",
                            error.description)
@@ -42,7 +41,6 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
-
         } catch let error as BundleError {
             XCTAssertEqual("Decoding BundledImage failed due to: \"The data couldn’t be read because it isn’t in the correct format.\"",
                            error.description)
@@ -58,7 +56,6 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
-
         } catch let error as BundleError {
             XCTAssertEqual("Bundle was empty",
                            error.description)
@@ -74,7 +71,6 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: "mozilla")
             XCTFail("Should fail")
-
         } catch let error as BundleError {
             XCTAssertEqual("No filepath for image path: mozilla-com",
                            error.description)
@@ -108,7 +104,6 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: "fakedomain")
             XCTFail("Should fail")
-
         } catch let error as BundleError {
             XCTAssertEqual("Image with domain fakedomain isn't in bundle",
                            error.description)
@@ -126,7 +121,6 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: "google")
             XCTFail("Should fail")
-
         } catch let error as BundleError {
             XCTAssertEqual("Decoding BundledImage failed due to: \"The data couldn’t be read because it is missing.\"",
                            error.description)

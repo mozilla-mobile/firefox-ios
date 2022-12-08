@@ -59,6 +59,5 @@ extension Tab {
                 print("Couldn't write file: \(error)")
             }
         }
-
     }
 }

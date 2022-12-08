@@ -67,7 +67,6 @@ class LoginDataSource: NSObject, UITableViewDataSource {
                 }
             }
             return cell
-
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: LoginListTableViewCell.cellIdentifier,
                                                            for: indexPath) as? LoginListTableViewCell {
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }

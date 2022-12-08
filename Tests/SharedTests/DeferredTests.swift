@@ -79,7 +79,6 @@ class DeferredTests: XCTestCase {
         myclass = nil
 
         waitForExpectations(timeout: 3, handler: nil)
-
     }
 
     func testFailAccumulate_andDoesntLeak() {

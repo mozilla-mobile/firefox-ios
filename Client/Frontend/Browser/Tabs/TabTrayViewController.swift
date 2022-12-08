@@ -466,9 +466,11 @@ class TabTrayViewController: UIViewController, Themeable {
         return button
     }
 
-    private func createSegmentedControl(items: [Any],
-                               action: Selector,
-                               a11yId: String) -> UISegmentedControl {
+    private func createSegmentedControl(
+        items: [Any],
+        action: Selector,
+        a11yId: String
+    ) -> UISegmentedControl {
         let segmentedControl = UISegmentedControl(items: items)
         segmentedControl.translatesAutoresizingMaskIntoConstraints = true
         segmentedControl.accessibilityIdentifier = a11yId

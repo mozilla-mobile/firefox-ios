@@ -76,5 +76,4 @@ class PocketStoriesTests: XCTestCase {
         }
         waitForExpectations(timeout: 10, handler: nil)
     }
-
 }

@@ -89,7 +89,6 @@ class BackForwardTableViewCell: UITableViewCell {
             label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(BackForwardViewCellUX.labelPadding)),
             label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-BackForwardViewCellUX.labelPadding))
         ])
-
     }
 
     required init(coder aDecoder: NSCoder) {

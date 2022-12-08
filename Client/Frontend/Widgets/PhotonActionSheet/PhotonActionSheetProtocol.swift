@@ -102,5 +102,4 @@ extension PhotonActionSheetProtocol {
             return [toggleDesktopSite]
         }
     }
-
 }

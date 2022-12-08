@@ -185,7 +185,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             }
 
             return message
-
         }.filter { message in
             !message.isExpired
         }.filter { message in

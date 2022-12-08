@@ -284,7 +284,6 @@ class QRCodeViewController: UIViewController {
         view.layer.addSublayer(videoPreviewLayer)
         self.videoPreviewLayer = videoPreviewLayer
         captureSession.startRunning()
-
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

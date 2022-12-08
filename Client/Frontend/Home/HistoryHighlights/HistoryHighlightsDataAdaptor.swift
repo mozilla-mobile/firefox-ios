@@ -71,7 +71,6 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         var urls = [String]()
         if item.type == .item, let url = item.siteUrl?.absoluteString {
             urls = [url]
-
         } else if item.type == .group, let items = item.group {
             items.forEach { groupedItem in
                 if let url = groupedItem.siteUrl?.absoluteString { urls.append(url) }

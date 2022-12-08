@@ -103,7 +103,5 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             return shouldShowNew ? CFRStrings.Toolbar.SearchBarBottomPlacement : CFRStrings.Toolbar.SearchBarPlacementForNewUsers
         default: return ""
         }
-
     }
-
 }

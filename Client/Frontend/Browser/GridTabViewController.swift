@@ -227,7 +227,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
            !tabGroups.isEmpty,
            tabGroups.contains(where: { $0.groupedItems.contains(where: { $0 == tabToFocus }) }) {
             focusGroup(from: tabGroups, with: tabToFocus)
-
         } else {
             focusTab(tabToFocus)
         }
@@ -397,7 +396,6 @@ extension GridTabViewController {
         self.navigationController?.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
-
 }
 
 // MARK: - App Notifications

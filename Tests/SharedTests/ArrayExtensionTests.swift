@@ -58,5 +58,4 @@ class ArrayExtensionTests: XCTestCase {
         XCTAssertFalse(l.sameElements(m))
         XCTAssertTrue((n?.sameElements(k))!)
     }
-
 }

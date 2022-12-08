@@ -213,11 +213,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         if viewModel.heroImage == nil {
             // Sets a small favicon in place of the hero image in case there's no hero image
             tabFallbackFaviconImage.image = viewModel.fallbackFaviconImage
-
         } else if viewModel.heroImage?.size.width == viewModel.heroImage?.size.height {
             // If hero image is a square use it as a favicon
             tabFallbackFaviconImage.image = viewModel.heroImage
-
         } else {
             setFallBackFaviconVisibility(isHidden: true)
             tabHeroImage.image = viewModel.heroImage
@@ -352,7 +350,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         let isPhoneInLandscape = UIDevice.current.userInterfaceIdiom == .phone && UIWindow.isLandscape
         if traitCollection.horizontalSizeClass == .compact, !isPhoneInLandscape {
             tabStackTopAnchorConstant = UX.tabStackTopAnchorCompactPhoneConstant
-
         }
         tabStackTopConstraint.constant = tabStackTopAnchorConstant
     }

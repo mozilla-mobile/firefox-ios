@@ -47,5 +47,4 @@ class ItemListCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         backgroundColor = selected ? .lightGray : UIColor.CredentialProvider.cellBackgroundColor
     }
-
 }

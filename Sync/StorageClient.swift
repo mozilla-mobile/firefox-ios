@@ -752,7 +752,6 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
                 }
             } catch {
                 log.warning("Couldn't parse JSON response. \(error)")
-
             }
 
             deferred.fill(Maybe(failure: RecordParseError()))

@@ -49,7 +49,6 @@ disabled_rules: # rule identifiers to exclude from running
 - unused_control_flow_label
 - unused_enumerated
 - valid_ibinspectable
-- vertical_parameter_alignment
 - weak_delegate
 - xctfail_message
 
@@ -85,6 +84,7 @@ opt_in_rules: # some rules are only opt-in
   - return_arrow_whitespace
   - unused_import
   - vertical_parameter_alignment_on_call
+  - vertical_whitespace_closing_braces
   - yoda_condition
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
