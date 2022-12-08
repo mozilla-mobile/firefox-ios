@@ -7,7 +7,6 @@ import UIKit
 import Shared
 
 class ContextualHintViewController: UIViewController, OnViewDismissable {
-
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
         static let closeButtonTrailing: CGFloat = 5
