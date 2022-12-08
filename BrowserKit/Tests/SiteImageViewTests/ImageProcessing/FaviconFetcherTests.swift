@@ -7,7 +7,6 @@ import Kingfisher
 @testable import SiteImageView
 
 final class FaviconFetcherTests: XCTestCase {
-
     private var mockImageDownloader: MockSiteImageDownloader!
 
     override func setUp() {
@@ -51,7 +50,6 @@ final class FaviconFetcherTests: XCTestCase {
 
 // MARK: - MockSiteImageDownloader
 private class MockSiteImageDownloader: SiteImageDownloader {
-
     var image: UIImage?
     var error: KingfisherError?
 

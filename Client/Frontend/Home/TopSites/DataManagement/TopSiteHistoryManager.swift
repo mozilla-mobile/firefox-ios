@@ -8,7 +8,6 @@ import Storage
 
 // Manages the top site
 class TopSiteHistoryManager: DataObserver {
-
     private let profile: Profile
 
     weak var delegate: DataObserverDelegate?

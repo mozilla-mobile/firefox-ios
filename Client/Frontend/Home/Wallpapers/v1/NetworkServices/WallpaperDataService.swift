@@ -7,7 +7,6 @@ import Shared
 
 ///  Responsible for fetching data from the server.
 class WallpaperDataService {
-
     // MARK: - Properties
     enum DataServiceError: Error {
         case noBundledURL

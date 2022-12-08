@@ -30,7 +30,6 @@ struct TopSitesUIInterface {
 /// on which device it's showing, if it's landscape or portrait. The dimension should also
 /// excludes empty rows from showing. TopSitesDimension support those calculation.
 protocol TopSitesDimension {
-
     /// Get the top sites section dimension to show in the homepage
     /// - Parameters:
     ///   - sites: The top sites that we need to show
@@ -44,7 +43,6 @@ protocol TopSitesDimension {
 }
 
 class TopSitesDimensionImplementation: TopSitesDimension {
-
     func getSectionDimension(for sites: [TopSite],
                              numberOfRows: Int,
                              interface: TopSitesUIInterface

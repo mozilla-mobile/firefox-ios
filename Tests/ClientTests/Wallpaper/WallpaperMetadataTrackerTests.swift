@@ -10,7 +10,6 @@ import XCTest
 @testable import Client
 
 class WallpaperMetadataTrackerTests: XCTestCase, WallpaperJSONTestProvider {
-
     // MARK: - Properties
     var sut: WallpaperMetadataUtility!
     var mockUserDefaults: MockUserDefaults!

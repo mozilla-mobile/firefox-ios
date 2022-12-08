@@ -220,7 +220,6 @@ extension ContentBlocker {
     // If any blocker files are newer than the date saved in prefs,
     // remove all the content blockers and reload them.
     func removeOldListsByDateFromStore(completion: @escaping () -> Void) {
-
             guard let fileDate = dateOfMostRecentBlockerFile() else {
             completion()
             return

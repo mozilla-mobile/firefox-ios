@@ -15,7 +15,6 @@ protocol PhotonActionSheetViewDelegate: AnyObject {
 // This is the view contained in PhotonActionSheetContainerCell in the PhotonActionSheet table view.
 // More than one PhotonActionSheetView can be in the parent container cell.
 class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
-
     // MARK: - PhotonActionSheetViewUX
     struct UX {
         static let StatusIconSize = CGSize(width: 24, height: 24)
@@ -189,7 +188,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
            item.multipleItemsSetup.isMultiItems,
            item.multipleItemsSetup.axis != .vertical,
            titleLabel.isTruncated {
-
             // Disabling this multipleItemsSetup feature for now - will rework to improve
 //            item.multipleItemsSetup.axis = .vertical
 //            delegate?.layoutChanged(item: item)

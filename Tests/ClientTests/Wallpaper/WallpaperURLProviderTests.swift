@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class WallpaperURLProviderTests: XCTestCase {
-
     let testURL = WallpaperURLProvider.testURL
 
     func testMetadataURL() {

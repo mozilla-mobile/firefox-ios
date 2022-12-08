@@ -63,7 +63,6 @@ class TopSitesViewModelTests: XCTestCase {
 
 // MARK: Helper methods
 extension TopSitesViewModelTests {
-
     func createViewModel(overridenSiteCount: Int = 40, overridenNumberOfRows: Int = 2) -> TopSitesViewModel {
         let viewModel = TopSitesViewModel(profile: self.profile,
                                           isZeroSearch: false,

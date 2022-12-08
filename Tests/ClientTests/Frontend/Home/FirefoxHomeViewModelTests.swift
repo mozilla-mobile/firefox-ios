@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class FirefoxHomeViewModelTests: XCTestCase {
-
     var profile: MockProfile!
 
     override func setUp() {

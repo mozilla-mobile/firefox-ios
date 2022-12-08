@@ -5,7 +5,6 @@
 import Foundation
 
 struct TabsQuantityTelemetry {
-
     static func trackTabsQuantity(tabManager: TabManager) {
         let privateExtra = [TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: Int64(tabManager.privateTabs.count)]
         TelemetryWrapper.recordEvent(category: .information,

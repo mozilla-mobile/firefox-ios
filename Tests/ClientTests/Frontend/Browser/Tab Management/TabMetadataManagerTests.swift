@@ -9,7 +9,6 @@ import Shared
 @testable import Storage
 
 class TabMetadataManagerTests: XCTestCase {
-
     private var metadataObserver: HistoryMetadataObserverMock!
     private var manager: TabMetadataManager!
 
@@ -155,7 +154,6 @@ class TabMetadataManagerTests: XCTestCase {
 }
 
 class HistoryMetadataObserverMock: HistoryMetadataObserver {
-
     var key: HistoryMetadataKey?
     var observation: HistoryMetadataObservation?
 

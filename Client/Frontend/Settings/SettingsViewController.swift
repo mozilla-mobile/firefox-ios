@@ -5,7 +5,6 @@
 import UIKit
 
 class SettingsViewController: UIViewController, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

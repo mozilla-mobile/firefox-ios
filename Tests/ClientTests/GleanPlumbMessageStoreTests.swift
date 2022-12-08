@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class GleanPlumbMessageStoreTests: XCTestCase {
-
     var subject: GleanPlumbMessageStore!
     let messageId = "testId"
 

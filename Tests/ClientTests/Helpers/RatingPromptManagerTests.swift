@@ -10,7 +10,6 @@ import Storage
 @testable import Client
 
 class RatingPromptManagerTests: XCTestCase {
-
     var urlOpenerSpy: URLOpenerSpy!
     var promptManager: RatingPromptManager!
     var mockProfile: MockProfile!
@@ -162,7 +161,6 @@ class RatingPromptManagerTests: XCTestCase {
 // MARK: - Places helpers
 
 private extension RatingPromptManagerTests {
-
     func createFolders(folderCount: Int, withRoot root: String, file: StaticString = #filePath, line: UInt = #line) {
         (1...folderCount).forEach { index in
             mockProfile.places.createFolder(parentGUID: root, title: "Folder \(index)", position: nil).uponQueue(.main) { guid in
@@ -241,7 +239,6 @@ private extension RatingPromptManagerTests {
 // MARK: - Setup helpers
 
 private extension RatingPromptManagerTests {
-
     func setupEnvironment(numberOfSession: Int32 = 5,
                           hasCumulativeDaysOfUse: Bool = true,
                           isBrowserDefault: Bool = false,
@@ -277,7 +274,6 @@ private extension RatingPromptManagerTests {
 
 // MARK: - CumulativeDaysOfUseCounterMock
 class CumulativeDaysOfUseCounterMock: CumulativeDaysOfUseCounter {
-
     private let hasMockRequiredDaysOfUse: Bool
     init(_ hasRequiredCumulativeDaysOfUse: Bool) {
         self.hasMockRequiredDaysOfUse = hasRequiredCumulativeDaysOfUse
@@ -299,7 +295,6 @@ class CrashingMockSentryClient: SentryProtocol {
 
 // MARK: - URLOpenerSpy
 class URLOpenerSpy: URLOpenerProtocol {
-
     var capturedURL: URL?
     var openURLCount = 0
     func open(_ url: URL) {

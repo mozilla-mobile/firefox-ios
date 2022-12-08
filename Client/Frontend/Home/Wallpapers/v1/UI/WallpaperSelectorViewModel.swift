@@ -14,7 +14,6 @@ public enum WallpaperSelectorError: Error {
 }
 
 class WallpaperSelectorViewModel {
-
     enum WallpaperSelectorLayout: Equatable {
         case compact
         case regular
@@ -134,7 +133,6 @@ class WallpaperSelectorViewModel {
 }
 
 private extension WallpaperSelectorViewModel {
-
     var initialSelectedIndexPath: IndexPath? {
         if let index = wallpaperItems.firstIndex(where: {$0.wallpaper == wallpaperManager.currentWallpaper}) {
             return IndexPath(row: index, section: 0)

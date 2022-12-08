@@ -8,7 +8,6 @@ import Glean
 @testable import Client
 
 class GleanPlumbMessageManagerTests: XCTestCase {
-
     var subject: GleanPlumbMessageManager!
     var messagingStore: MockGleanPlumbMessageStore!
     let messageId = "testId"
@@ -90,7 +89,6 @@ class GleanPlumbMessageManagerTests: XCTestCase {
 
 // MARK: - MockGleanPlumbMessageStore
 class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
-
     private var metadata: GleanPlumbMessageMetaData
     var messageId: String
 

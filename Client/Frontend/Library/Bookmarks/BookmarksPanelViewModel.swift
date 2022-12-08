@@ -7,7 +7,6 @@ import Storage
 import Shared
 
 class BookmarksPanelViewModel {
-
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }

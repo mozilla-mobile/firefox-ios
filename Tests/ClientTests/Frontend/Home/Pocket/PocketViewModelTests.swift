@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
-
     private var adaptor: MockPocketDataAdaptor!
     private var profile: MockProfile!
 
@@ -226,7 +225,6 @@ extension PocketViewModelTests {
 
 // MARK: MockPocketDataAdaptor
 class MockPocketDataAdaptor: PocketDataAdaptor {
-
     var pocketStories = [PocketStory]()
     func getPocketData() -> [PocketStory] {
         return pocketStories

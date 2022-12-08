@@ -5,7 +5,6 @@
 import UIKit
 
 class ThemedDefaultNavigationController: DismissableNavigationViewController, Themeable {
-
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
@@ -13,7 +12,6 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
     init(rootViewController: UIViewController,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(rootViewController: rootViewController)

@@ -22,7 +22,6 @@ protocol AdjustTelemetryProtocol {
 }
 
 class AdjustTelemetryHelper: AdjustTelemetryProtocol {
-
     func sendDeeplinkTelemetry(url: URL, attribution: AdjustTelemetryData?) {
         let extra = GleanMetrics.Adjust.DeeplinkReceivedExtra(receivedUrl: url.absoluteString)
         GleanMetrics.Adjust.deeplinkReceived.record(extra)

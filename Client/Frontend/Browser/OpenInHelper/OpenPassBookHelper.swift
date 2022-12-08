@@ -7,7 +7,6 @@ import Shared
 import WebKit
 
 class OpenPassBookHelper {
-
     private enum InvalidPassError: Error {
         case contentsOfURL
         case dataTaskURL

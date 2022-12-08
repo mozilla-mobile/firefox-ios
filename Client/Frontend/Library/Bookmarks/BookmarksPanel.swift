@@ -18,7 +18,6 @@ class BookmarksPanel: SiteTableViewController,
                       LibraryPanel,
                       CanRemoveQuickActionBookmark,
                       Loggable {
-
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -370,7 +369,6 @@ class BookmarksPanel: SiteTableViewController,
             let cell = tableView.dequeueReusableCell(
                 withIdentifier: OneLineTableViewCell.cellIdentifier,
                 for: indexPath) as? OneLineTableViewCell {
-
             // Site is needed on BookmarkItemData to setup cell image
             var site: Site?
             if let node = node as? BookmarkItemData {
@@ -519,7 +517,6 @@ extension BookmarksPanel: LibraryPanelContextMenu {
 
 // MARK: - Notifiable
 extension BookmarksPanel: Notifiable {
-
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged:

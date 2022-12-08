@@ -37,7 +37,6 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     }
 
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
-
         let activityItems = getActivityItems(url: url)
         let appActivities = getApplicationActivities()
         let activityViewController = UIActivityViewController(activityItems: activityItems,
@@ -121,7 +120,6 @@ extension ShareExtensionHelper: UIActivityItemSource {
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-
         if isPasswordManager(activityType: activityType) {
             return onePasswordExtensionItem
         } else if isOpenByCopy(activityType: activityType) {

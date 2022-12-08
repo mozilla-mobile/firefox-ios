@@ -323,7 +323,6 @@ enum NavigationPath {
     }
 
     private static func handleSettings(settings: SettingsPage, with rootNav: UINavigationController, baseSettingsVC: AppSettingsTableViewController, and bvc: BrowserViewController) {
-
         guard let profile = baseSettingsVC.profile,
               let tabManager = baseSettingsVC.tabManager
         else { return }

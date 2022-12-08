@@ -6,7 +6,6 @@ import XCTest
 @testable import SiteImageView
 
 class URLCacheFileManagerTests: XCTestCase {
-
     var subject: DefaultURLCacheFileManager!
     var mockFileManager: MockFileManager!
 
@@ -35,7 +34,6 @@ class URLCacheFileManagerTests: XCTestCase {
 }
 
 class MockFileManager: FileManagerProtocol {
-
     var urls = [URL(string: "firefox")!]
     var fileExists = true
     var fileExistsCalledCount = 0

@@ -5,7 +5,6 @@
 import UIKit
 
 class CustomizeHomepageSectionCell: UICollectionViewCell, ReusableCell {
-
     typealias a11y = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons
 
     private struct UX {

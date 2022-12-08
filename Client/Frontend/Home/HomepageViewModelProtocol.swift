@@ -6,7 +6,6 @@ import Foundation
 
 // Protocol for each section view model in Firefox Home page view controller
 protocol HomepageViewModelProtocol {
-
     var sectionType: HomepageSectionType { get }
 
     // Layout section so FirefoxHomeViewController view controller can setup the section

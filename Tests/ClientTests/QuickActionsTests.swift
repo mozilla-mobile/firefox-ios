@@ -8,7 +8,6 @@ import UIKit
 import XCTest
 
 class QuickActionsTest: XCTestCase {
-
     private var browserViewController: SpyBrowserViewController!
     private var quickActions: QuickActions!
     private var profile: TabManagerMockProfile!

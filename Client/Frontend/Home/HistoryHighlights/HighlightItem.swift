@@ -18,7 +18,6 @@ protocol HighlightItem {
 }
 
 extension HistoryHighlight: HighlightItem {
-
     var group: [HighlightItem]? {
         return nil
     }

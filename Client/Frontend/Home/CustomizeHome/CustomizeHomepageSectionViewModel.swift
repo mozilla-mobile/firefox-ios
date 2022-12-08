@@ -16,7 +16,6 @@ class CustomizeHomepageSectionViewModel {
 
 // MARK: HomeViewModelProtocol
 extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
-
     var sectionType: HomepageSectionType {
         return .customizeHome
     }
@@ -59,7 +58,6 @@ extension CustomizeHomepageSectionViewModel: HomepageViewModelProtocol {
 
 // MARK: FxHomeSectionHandler
 extension CustomizeHomepageSectionViewModel: HomepageSectionHandler {
-
     func configure(_ cell: UICollectionViewCell,
                    at indexPath: IndexPath) -> UICollectionViewCell {
         guard let customizeHomeCell = cell as? CustomizeHomepageSectionCell else { return UICollectionViewCell() }

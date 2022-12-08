@@ -10,7 +10,6 @@ import Glean
 private let log = Logger.browserLogger
 
 final class AdjustHelper: FeatureFlaggable {
-
     private static let adjustAppTokenKey = "AdjustAppToken"
     private let profile: Profile
     private let telemetryHelper: AdjustTelemetryProtocol
@@ -95,7 +94,6 @@ final class AdjustHelper: FeatureFlaggable {
 
 // MARK: - AdjustDelegate
 extension AdjustHelper: AdjustDelegate {
-
     /// This is called when Adjust has figured out the attribution. It will call us with a summary
     /// of all the things it knows. Like the campaign ID. We simply save a boolean that attribution
     /// has changed so we know the single attribution ping to Adjust was done.

@@ -9,7 +9,6 @@ import Kingfisher
 private let log = Logger.browserLogger
 
 class UITestAppDelegate: AppDelegate, FeatureFlaggable {
-
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
     private var internalProfile: Profile?
@@ -143,7 +142,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
     }
 
     override func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-
         // If the app is running from a XCUITest reset all settings in the app
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
             resetApplication()

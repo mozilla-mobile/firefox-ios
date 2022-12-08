@@ -6,7 +6,6 @@ import Foundation
 
 // MARK: - Toolbar Button Actions
 extension LibraryViewController {
-
     @objc func topLeftButtonAction() {
         guard let navController = children.first as? UINavigationController else { return }
 

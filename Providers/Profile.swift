@@ -89,7 +89,6 @@ class CommandStoringSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: AnyObject {
-
     typealias HistoryFetcher = BrowserHistory & SyncableHistory & ResettableSyncStorage
 
     var places: RustPlaces { get }
@@ -156,7 +155,6 @@ protocol Profile: AnyObject {
 }
 
 extension Profile {
-
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>> {
         let deferred = Deferred<Result<Void, Error>>()
         self.clearCredentialStore().upon { clearResult in
@@ -218,7 +216,6 @@ extension Profile {
 }
 
 open class BrowserProfile: Profile {
-
     fileprivate let name: String
     fileprivate let keychain: MZKeychainWrapper
     var isShutdown = false
@@ -325,7 +322,6 @@ open class BrowserProfile: Profile {
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
         if AppInfo.isChinaEdition {
-
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
 
@@ -1281,7 +1277,6 @@ open class BrowserProfile: Profile {
          * While a sync is ongoing, each engine from successive calls to this method will only be called once.
          */
         fileprivate func syncSeveral(why: SyncReason, synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
-
             guard let (profile, deviceID) = self.getProfileAndDeviceId() else {
                 return deferMaybe(NoAccountError())
             }

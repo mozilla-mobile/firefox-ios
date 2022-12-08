@@ -9,7 +9,6 @@ import Shared
 @testable import Client
 
 class SearchBarSettingsViewModelTests: XCTestCase {
-
     var prefs: Prefs!
 
     override func setUp() {
@@ -147,7 +146,6 @@ class SearchBarSettingsViewModelTests: XCTestCase {
 
 // MARK: - Helper methods
 private extension SearchBarSettingsViewModelTests {
-
     func createViewModel(notificationCenter: NotificationCenter = NotificationCenter.default,
                          file: StaticString = #file,
                          line: UInt = #line) -> SearchBarSettingsViewModel {
@@ -166,7 +164,6 @@ private extension SearchBarSettingsViewModelTests {
                             expectedPosition: SearchBarPosition,
                             file: StaticString = #filePath,
                             line: UInt = #line) {
-
         guard let name = name,
               let dict = object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition
@@ -182,7 +179,6 @@ private extension SearchBarSettingsViewModelTests {
 
 // MARK: - SearchBarPreferenceDelegateMock
 private class SearchBarPreferenceDelegateMock: SearchBarPreferenceDelegate {
-
     var completion: () -> Void
 
     init(completion: @escaping () -> Void) {

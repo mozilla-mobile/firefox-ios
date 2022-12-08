@@ -8,7 +8,6 @@ import Shared
 @testable import Client
 
 class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
-
     // MARK: - Properties
     typealias legacyFlags = PrefsKeys.LegacyFeatureFlags
     typealias newFlags = PrefsKeys.FeatureFlags
@@ -72,7 +71,6 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
     }
 
     func testMigrateSearchBarPreferences() {
-
         let position = SearchBarPosition.bottom.rawValue
         // Save position to the old key
         profile.prefs.setString(position,
@@ -99,7 +97,6 @@ class FeatureFlagsUserPrefsMigrationUtilityTests: XCTestCase {
             let randomSetting = randomSettingOptions.randomElement()
 
             if let temp = randomSetting, let currentSetting = temp {
-
                 if currentSetting {
                     profile.prefs.setString(UserFeaturePreference.enabled.rawValue, forKey: oldKey)
                 } else {

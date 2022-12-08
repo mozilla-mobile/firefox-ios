@@ -8,7 +8,6 @@ import Foundation
  *  System helper methods written in Swift.
  */
 public struct SystemUtils {
-
     /**
      Returns an accurate version of the system uptime even while the device is asleep.
      http://stackoverflow.com/questions/12488481/getting-ios-system-uptime-that-doesnt-pause-when-asleep

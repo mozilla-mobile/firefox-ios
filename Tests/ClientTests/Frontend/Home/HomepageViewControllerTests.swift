@@ -7,7 +7,6 @@
 import XCTest
 
 class HomepageViewControllerTests: XCTestCase {
-
     var profile: MockProfile!
 
     override func setUp() {

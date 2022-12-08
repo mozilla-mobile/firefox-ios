@@ -8,7 +8,6 @@ import Storage
 import MozillaAppServices
 
 class SearchTermGroupsUtility {
-
     public static func getHighlightGroups(
         with profile: Profile,
         from highlights: [HistoryHighlight],
@@ -78,7 +77,6 @@ class SearchTermGroupsUtility {
     /// - Parameter ASMetadata: An array of `HistoryMetadata` used for splitting groups
     /// - Returns: A dictionary whose keys are search terms used for grouping
     private static func buildMetadataGroups(from ASMetadata: [HistoryMetadata]) -> [String: [HistoryMetadata]] {
-
         let searchTerms = Set(ASMetadata.map({ return $0.searchTerm }))
         var searchTermMetaDataGroup: [String: [HistoryMetadata]] = [:]
 
@@ -100,7 +98,6 @@ class SearchTermGroupsUtility {
     ///   - searchTermMetadata: Application Services provided metadata
     /// - Returns: A tuple with a filtered dictionary of groups and a tracking array
     private static func createGroupDictionaryAndSoloItems<T: Equatable>(from items: [T], and searchTermMetadata: [String: [HistoryMetadata]]) -> (itemGroupData: [String: [T]], itemsInGroups: [T]) {
-
         let (groupedItems, itemsInGroups) = buildItemGroups(from: items, and: searchTermMetadata)
         let (filteredGroupData, filtereditems) = filter(items: itemsInGroups, from: groupedItems, and: items)
 

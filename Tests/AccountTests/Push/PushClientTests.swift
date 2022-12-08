@@ -8,7 +8,6 @@ import Shared
 import XCTest
 
 class PushClientTests: XCTestCase {
-
     var endpointURL: NSURL {
         return FennecPushConfiguration().endpointURL
     }

@@ -6,7 +6,6 @@ import UIKit
 
 /// A cell used in FxHomeScreen's History Highlights section.
 class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
-
     struct UX {
         static let verticalSpacing: CGFloat = 20
         static let horizontalSpacing: CGFloat = 16
@@ -165,7 +164,6 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
 // MARK: - ThemeApplicable
 extension HistoryHighlightsCell: ThemeApplicable {
-
     func applyTheme(theme: Theme) {
         heroImage.tintColor = theme.colors.iconPrimary
         bottomLine.backgroundColor = theme.colors.borderPrimary
@@ -178,7 +176,6 @@ extension HistoryHighlightsCell: ThemeApplicable {
 
 // MARK: - Blurrable
 extension HistoryHighlightsCell: Blurrable {
-
     func adjustBlur(theme: Theme) {
         // If blur is disabled set background color
         if shouldApplyWallpaperBlur {

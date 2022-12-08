@@ -10,7 +10,6 @@ protocol ContextualHintEligibilityUtilityProtocol {
 }
 
 struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtocol, ContextualHintPrefsKeysProvider {
-
     var profile: Profile
     var device: UIDeviceInterface
 
@@ -98,7 +97,6 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     ///
     /// This is a workaround for hints becoming aware of each other until we have a proper CFR system in place.
     private func hasHintBeenConfigured(_ hintType: ContextualHintType) -> Bool {
-
         var hintConfigured = false
 
         switch hintType {

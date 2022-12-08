@@ -9,7 +9,6 @@ import SyncTelemetry
 import MozillaAppServices
 
 class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable {
-
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
@@ -222,7 +221,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { [weak self]
             (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-
             guard let self = self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
@@ -444,7 +442,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 // MARK: - CollectionView Data Source
 
 extension HomepageViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
               let headerView = collectionView.dequeueReusableSupplementaryView(
@@ -495,10 +492,8 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
 // MARK: - Actions Handling
 
 private extension HomepageViewController {
-
     // Setup all the tap and long press actions on cells in each sections
     private func setupSectionsAction() {
-
         // Header view
         viewModel.headerViewModel.onTapAction = { _ in
             // No action currently set if the logo button is tapped.
@@ -719,7 +714,6 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 extension HomepageViewController: SearchBarLocationProvider {}
 
 extension HomepageViewController {
-
     var statusBarFrame: CGRect? {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
 
@@ -763,7 +757,6 @@ extension HomepageViewController {
 // MARK: - Popover Presentation Delegate
 
 extension HomepageViewController: UIPopoverPresentationControllerDelegate {
-
     // Dismiss the popover if the device is being rotated.
     // This is used by the Share UIActivityViewController action sheet on iPad
     func popoverPresentationController(

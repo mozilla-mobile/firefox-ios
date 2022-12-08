@@ -35,7 +35,6 @@ struct LegacyWallpaperImageResourceName {
 }
 
 class LegacyWallpaperResourceManager {
-
     // MARK: - Resource verification
     func verifyResources(for specialWallpapers: [LegacyWallpaper]) {
         specialWallpapers.forEach { wallpaper in
@@ -73,7 +72,6 @@ class LegacyWallpaperResourceManager {
     }
 
     private func getResourceOf(type: WallpaperResourceType, for wallpaper: LegacyWallpaper) -> LegacyWallpaperImageSet {
-
         let imageName = getResourceNames(for: wallpaper.name)
 
         switch type {

@@ -226,7 +226,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
         descriptionLabel.text = viewModel.getCopyFor(.description)
 
         if viewModel.isActionType() {
-
             let textAttributes: [NSAttributedString.Key: Any] = [
                 .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                      maxSize: 28),

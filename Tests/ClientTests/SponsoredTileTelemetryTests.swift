@@ -8,7 +8,6 @@ import Glean
 import XCTest
 
 class SponsoredTileTelemetryTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         clearTest()
@@ -51,7 +50,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
-
             self.testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contileImpression)
 
             self.testQuantityMetricSuccess(metric: GleanMetrics.TopSites.contileTileId,
@@ -83,7 +81,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
-
             self.testEventMetricRecordingSuccess(metric: GleanMetrics.TopSites.contileClick)
 
             self.testQuantityMetricSuccess(metric: GleanMetrics.TopSites.contileTileId,
@@ -113,7 +110,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
         let expectation = expectation(description: "The top sites ping was sent")
         GleanMetrics.Pings.shared.topsitesImpression.testBeforeNextSubmit { _ in
-
             guard let contextId =  SponsoredTileTelemetry.contextId,
                     let uuid = UUID(uuidString: contextId) else {
                 XCTFail("Expected contextId to be configured")
@@ -133,7 +129,6 @@ class SponsoredTileTelemetryTests: XCTestCase {
 
 // MARK: Helper methods
 extension SponsoredTileTelemetryTests {
-
     func clearTest() {
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()

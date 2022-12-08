@@ -12,7 +12,6 @@ struct SiteTableViewHeaderModel {
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, ReusableCell {
-
     struct UX {
         static let titleTrailingLeadingMargin: CGFloat = 16
         static let titleTopBottomMargin: CGFloat = 12

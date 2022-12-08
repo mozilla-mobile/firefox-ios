@@ -5,7 +5,6 @@
 import XCTest
 
 class PocketTest: BaseTestCase {
-
     func testPocketEnabledByDefault() throws {
         throw XCTSkip("Disabled due to #7855")
 //        navigator.goto(NewTabScreen)

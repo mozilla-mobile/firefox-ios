@@ -17,7 +17,6 @@ protocol BookmarksFolderCell {
 }
 
 extension BookmarkFolderData: BookmarksFolderCell {
-
     func getViewModel(forSite site: Site?,
                       profile: Profile?,
                       completion: ((OneLineTableViewCellViewModel) -> Void)?)
@@ -53,11 +52,11 @@ extension BookmarkFolderData: BookmarksFolderCell {
 }
 
 extension BookmarkItemData: BookmarksFolderCell {
-    func getViewModel(forSite site: Site?,
-                      profile: Profile?,
-                      completion: ((OneLineTableViewCellViewModel) -> Void)?)
-    -> OneLineTableViewCellViewModel {
-
+    func getViewModel(
+        forSite site: Site?,
+        profile: Profile?,
+        completion: ((OneLineTableViewCellViewModel) -> Void)?
+    ) -> OneLineTableViewCellViewModel {
         var title: String
         if self.title.isEmpty {
             title = url
@@ -97,7 +96,6 @@ extension BookmarkItemData: BookmarksFolderCell {
 
 // MARK: FxBookmarkNode viewModel helper
 extension FxBookmarkNode {
-
     var leftImageView: UIImage? {
         return LegacyThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
     }

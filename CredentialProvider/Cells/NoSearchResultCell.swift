@@ -5,7 +5,6 @@
 import UIKit
 
 class NoSearchResultCell: UITableViewCell {
-
     static let identifier = "noSearchResultCell"
 
     lazy private var titleLabel: UILabel = .build { label in

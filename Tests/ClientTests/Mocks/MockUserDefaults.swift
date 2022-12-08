@@ -7,7 +7,6 @@ import Foundation
 @testable import Client
 
 class MockUserDefaults: UserDefaultsInterface {
-
     // MARK: - Properties
     public var savedData: [String: Any?]
 

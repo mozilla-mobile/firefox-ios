@@ -10,7 +10,6 @@ import XCTest
 
 class FxAPushMessageTest: XCTestCase {
     func createHandler(_ profile: Profile = MockProfile()) -> FxAPushMessageHandler {
-
         return FxAPushMessageHandler(with: profile)
     }
 }

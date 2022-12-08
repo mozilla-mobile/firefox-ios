@@ -39,7 +39,6 @@ extension NotificationCenter: NotificationProtocol {
 extension Notifiable {
     func setupNotifications(forObserver observer: Any,
                             observing notifications: [Notification.Name]) {
-
         notifications.forEach {
             notificationCenter.addObserver(observer,
                                            selector: #selector(handleNotifications),

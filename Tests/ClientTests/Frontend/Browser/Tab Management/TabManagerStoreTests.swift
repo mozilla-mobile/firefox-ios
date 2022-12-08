@@ -11,7 +11,6 @@ import WebKit
 import XCTest
 
 class TabManagerStoreTests: XCTestCase {
-
     private var profile: MockProfile!
     private var fileManager: MockFileManager!
     private var serialQueue: MockDispatchQueue!
@@ -248,7 +247,6 @@ class TabManagerStoreTests: XCTestCase {
 
 // MARK: - Helper methods
 private extension TabManagerStoreTests {
-
     func createManager(file: StaticString = #file,
                        line: UInt = #line) -> TabManagerStoreImplementation {
         let manager = TabManagerStoreImplementation(prefs: profile.prefs,
@@ -300,7 +298,6 @@ private extension TabManagerStoreTests {
 }
 
 class MockFileManager: TabFileManager {
-
     var remoteItemCalledCount = 0
     func removeItem(at URL: URL) throws {
         remoteItemCalledCount += 1

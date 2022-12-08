@@ -14,7 +14,6 @@ private class FetchInProgressError: MaybeErrorType {
 }
 
 class HistoryPanelViewModel: Loggable, FeatureFlaggable {
-
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
         case today
@@ -392,7 +391,6 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     }
 
     private func getDeletableSection(for dateOption: HistoryDeletionUtilityDateOptions) -> [Sections]? {
-
         switch dateOption {
         case .today:
             return [.today]

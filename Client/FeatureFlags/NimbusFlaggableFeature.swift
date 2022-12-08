@@ -49,7 +49,6 @@ enum NimbusFeatureFlagWithCustomOptionsID {
 }
 
 struct NimbusFlaggableFeature: HasNimbusSearchBar {
-
     // MARK: - Variables
     private let profile: Profile
     private var featureID: NimbusFeatureFlagID

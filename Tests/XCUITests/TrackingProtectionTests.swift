@@ -11,7 +11,6 @@ let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
 
 class TrackingProtectionTests: BaseTestCase {
-
     // Smoketest
     func testTrackingProtection() {
         navigator.goto(URLBarOpen)

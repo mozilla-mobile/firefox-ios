@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 class PocketSponsoredStoriesProviderTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         clearState()
@@ -156,7 +155,6 @@ class PocketSponsoredStoriesProviderTests: XCTestCase {
 // MARK: - Helper functions
 
 private extension PocketSponsoredStoriesProviderTests {
-
     func getProvider(file: StaticString = #filePath, line: UInt = #line) -> PocketSponsoredStoriesProviding {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.protocolClasses = [URLProtocolStub.self]

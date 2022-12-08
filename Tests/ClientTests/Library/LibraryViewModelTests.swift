@@ -6,7 +6,6 @@ import XCTest
 @testable import Client
 
 class LibraryViewModelTests: XCTestCase {
-
     private var subject: LibraryViewModel!
     private var profile: MockProfile!
     private var tabManager: TabManager!

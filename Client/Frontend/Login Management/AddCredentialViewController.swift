@@ -17,7 +17,6 @@ enum AddCredentialField: Int {
 }
 
 class AddCredentialViewController: UIViewController, Themeable {
-
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -131,10 +130,8 @@ class AddCredentialViewController: UIViewController, Themeable {
 
 // MARK: - UITableViewDataSource
 extension AddCredentialViewController: UITableViewDataSource {
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch AddCredentialField(rawValue: indexPath.row)! {
-
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = .LoginDetailUsername
@@ -200,7 +197,6 @@ extension AddCredentialViewController: UITableViewDelegate {
 
 // MARK: - KeyboardHelperDelegate
 extension AddCredentialViewController: KeyboardHelperDelegate {
-
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         let coveredHeight = state.intersectionHeightForView(tableView)
         tableView.contentInset.bottom = coveredHeight

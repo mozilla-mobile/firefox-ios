@@ -15,10 +15,11 @@ class FaviconHandler {
 
     func getFaviconIconFrom(url faviconUrl: String,
                             domainLevelIconUrl: String,
-                            completion: @escaping (Favicon?, ImageLoadingError?) -> Void ) {
-
+                            completion: @escaping (Favicon?, ImageLoadingError?) -> Void
+    ) {
         guard let faviconUrl = URL(string: faviconUrl),
-              let domainLevelIconUrl = URL(string: domainLevelIconUrl) else {
+              let domainLevelIconUrl = URL(string: domainLevelIconUrl)
+        else {
             completion(nil, ImageLoadingError.iconUrlNotFound)
             return
         }
@@ -26,9 +27,10 @@ class FaviconHandler {
         ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: faviconUrl,
                                                                limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
             guard error == nil else {
-
-                ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: domainLevelIconUrl, limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
-
+                ImageLoadingHandler.shared.getImageFromCacheOrDownload(
+                    with: domainLevelIconUrl,
+                    limit: ImageLoadingConstants.MaximumFaviconSize
+                ) { image, error in
                     guard error == nil else {
                         completion(nil, ImageLoadingError.unableToFetchImage)
                         return
@@ -62,8 +64,7 @@ class FaviconHandler {
     }
 
     func loadFaviconURL(_ faviconUrl: String, forTab tab: Tab,
-                        completion: @escaping (Favicon?, ImageLoadingError?) -> Void ) {
-
+                        completion: @escaping (Favicon?, ImageLoadingError?) -> Void) {
         guard let currentUrl = tab.url, !faviconUrl.isEmpty else {
             completion(nil, ImageLoadingError.iconUrlNotFound)
             return

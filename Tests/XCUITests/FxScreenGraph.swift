@@ -448,7 +448,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
-
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
                 app.buttons["Done"].tap()
@@ -757,7 +756,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(TabTray) { screenState in
-
         // Both iPad and iPhone use the same accessibility identifiers for buttons,
         // even thought they may be in separate locations design wise.
         screenState.tap(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton],
@@ -986,7 +984,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 }
 
 extension MMNavigator where T == FxUserState {
-
     func openURL(_ urlString: String, waitForLoading: Bool = true) {
         UIPasteboard.general.string = urlString
         userState.url = urlString

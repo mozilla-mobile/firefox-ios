@@ -13,7 +13,6 @@ protocol PocketDelegate: AnyObject {
 }
 
 class PocketDataAdaptorImplementation: PocketDataAdaptor, FeatureFlaggable {
-
     var notificationCenter: NotificationProtocol
 
     private let pocketAPI: PocketStoriesProviding

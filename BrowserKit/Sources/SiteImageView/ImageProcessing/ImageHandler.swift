@@ -5,7 +5,6 @@
 import UIKit
 
 protocol ImageHandler {
-
     /// The ImageHandler will fetch the favicon with the following precedence:
     ///     1. Tries to fetch from the bundle.
     ///     2. Tries to fetch from the cache.
@@ -36,7 +35,6 @@ protocol ImageHandler {
 }
 
 class DefaultImageHandler: ImageHandler {
-
     private let bundleImageFetcher: BundleImageFetcher
     private let imageCache: SiteImageCache
     private let faviconFetcher: FaviconFetcher
@@ -94,7 +92,6 @@ class DefaultImageHandler: ImageHandler {
             let image = try await faviconFetcher.fetchFavicon(from: url)
             await imageCache.cacheImage(image: image, domain: domain, type: .favicon)
             return image
-
         } catch {
             return await fallbackToLetterFavicon(domain: domain)
         }
@@ -106,7 +103,6 @@ class DefaultImageHandler: ImageHandler {
             let image = try await heroImageFetcher.fetchHeroImage(from: siteURL)
             await imageCache.cacheImage(image: image, domain: domain, type: .heroImage)
             return image
-
         } catch {
             throw SiteImageError.noHeroImage
         }

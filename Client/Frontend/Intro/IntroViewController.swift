@@ -7,7 +7,6 @@ import UIKit
 import Shared
 
 class IntroViewController: UIViewController, OnboardingViewControllerProtocol, Themeable {
-
     private var viewModel: IntroViewModel
     private let profile: Profile
     private var onboardingCards = [OnboardingCardViewController]()
@@ -146,7 +145,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
-
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
               return nil
@@ -158,7 +156,6 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController) -> UIViewController? {
-
         guard let onboardingVC = viewController as? OnboardingCardViewController,
               let index = getCardIndex(viewController: onboardingVC) else {
               return nil

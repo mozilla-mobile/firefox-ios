@@ -9,7 +9,6 @@ import Foundation
 import XCTest
 
 class TabTrayViewControllerTests: XCTestCase {
-
     var profile: TabManagerMockProfile!
     var manager: TabManager!
     var tabTray: TabTrayViewController!

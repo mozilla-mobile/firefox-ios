@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 class WallpaperDataServiceTests: XCTestCase, WallpaperTestDataProvider {
-
     // MARK: - Properties
     var networking: NetworkingMock!
 

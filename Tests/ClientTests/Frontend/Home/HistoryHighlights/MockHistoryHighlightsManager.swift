@@ -5,7 +5,6 @@
 @testable import Client
 
 class MockHistoryHighlightsManager: HistoryHighlightsManagerProtocol {
-
     var getHighlightsDataCallCount = 0
     var getHighlightsDataCompletion: (([HighlightItem]?) -> Void)?
 

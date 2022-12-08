@@ -153,7 +153,6 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
 }
 
 extension ReaderModeBarView: NotificationThemeable {
-
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
         buttonTintColor = UIColor.theme.browser.tint

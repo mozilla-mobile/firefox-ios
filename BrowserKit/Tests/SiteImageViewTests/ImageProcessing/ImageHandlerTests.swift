@@ -6,7 +6,6 @@ import XCTest
 @testable import SiteImageView
 
 final class ImageHandlerTests: XCTestCase {
-
     private var bundleImageFetcher: MockBundleImageFetcher!
     private var heroImageFetcher: MockHeroImageFetcher!
     private var siteImageCache: MockSiteImageCache!
@@ -79,7 +78,6 @@ final class ImageHandlerTests: XCTestCase {
 
             XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
             XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
-
         } catch {
             XCTFail("Should have succeeded with cache image")
         }
@@ -104,7 +102,6 @@ final class ImageHandlerTests: XCTestCase {
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
             XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
-
         } catch {
             XCTFail("Should have succeeded with fallback letter image")
         }
@@ -131,7 +128,6 @@ final class ImageHandlerTests: XCTestCase {
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
             XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
-
         } catch {
             XCTFail("Should have succeeded with fallback letter image")
         }
@@ -156,7 +152,6 @@ final class ImageHandlerTests: XCTestCase {
             XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
             XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
             XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
-
         } catch {
             XCTFail("Should have succeeded with fallback letter image")
         }
@@ -180,7 +175,6 @@ final class ImageHandlerTests: XCTestCase {
 
             XCTAssertEqual(heroImageFetcher.fetchHeroImageSucceedCalled, 0)
             XCTAssertEqual(heroImageFetcher.fetchHeroImageFailedCalled, 0)
-
         } catch {
             XCTFail("Should have succeeded with fallback letter image")
         }
@@ -201,7 +195,6 @@ final class ImageHandlerTests: XCTestCase {
 
             XCTAssertEqual(heroImageFetcher.fetchHeroImageSucceedCalled, 1)
             XCTAssertEqual(heroImageFetcher.fetchHeroImageFailedCalled, 0)
-
         } catch {
             XCTFail("Should have succeeded with fallback letter image")
         }
@@ -215,7 +208,6 @@ final class ImageHandlerTests: XCTestCase {
                                                  domain: "Mozilla")
 
             XCTFail("Should have failed with SiteImageError.noHeroImage")
-
         } catch let error as SiteImageError {
             XCTAssertEqual(error.description, "No hero image was found")
             XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
@@ -224,7 +216,6 @@ final class ImageHandlerTests: XCTestCase {
 
             XCTAssertEqual(heroImageFetcher.fetchHeroImageSucceedCalled, 0)
             XCTAssertEqual(heroImageFetcher.fetchHeroImageFailedCalled, 1)
-
         } catch {
             XCTFail("Should have failed with SiteImageError.noHeroImage")
         }
@@ -243,7 +234,6 @@ private extension ImageHandlerTests {
 
 // MARK: - MockBundleImageFetcher
 private class MockBundleImageFetcher: BundleImageFetcher {
-
     var image: UIImage?
     var getImageFromBundleSucceedCalled = 0
     var getImageFromBundleFailedCalled = 0
@@ -261,7 +251,6 @@ private class MockBundleImageFetcher: BundleImageFetcher {
 
 // MARK: - MockHeroImageFetcher
 private class MockHeroImageFetcher: HeroImageFetcher {
-
     var image: UIImage?
     var fetchHeroImageSucceedCalled = 0
     var fetchHeroImageFailedCalled = 0
@@ -279,7 +268,6 @@ private class MockHeroImageFetcher: HeroImageFetcher {
 
 // MARK: - MockSiteImageCache
 private class MockSiteImageCache: SiteImageCache {
-
     var image: UIImage?
     var getImageFromCacheSucceedCalled = 0
     var getImageFromCacheFailedCalled = 0
@@ -306,7 +294,6 @@ private class MockSiteImageCache: SiteImageCache {
 
 // MARK: - MockFaviconFetcher
 private class MockFaviconFetcher: FaviconFetcher {
-
     var image: UIImage?
     var fetchImageSucceedCalled = 0
     var fetchImageFailedCalled = 0
@@ -324,7 +311,6 @@ private class MockFaviconFetcher: FaviconFetcher {
 
 // MARK: - MockLetterImageGenerator
 private class MockLetterImageGenerator: LetterImageGenerator {
-
     var image: UIImage = UIImage()
     var generateLetterImageCalled = 0
 

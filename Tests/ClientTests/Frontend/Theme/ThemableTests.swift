@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 
 class ThemableTests: XCTestCaseRootViewController {
-
     private var tableViewDelegate: TestsTableView!
     private var testThemable: TestsThemeable!
 
@@ -67,7 +66,6 @@ class ThemableTests: XCTestCaseRootViewController {
 
 // MARK: - TestsTableViewDataSource
 class TestsTableView: NSObject, UITableViewDataSource, UITableViewDelegate {
-
     static let testCellId = "TestCell"
     static let numberOfRows = 3
 

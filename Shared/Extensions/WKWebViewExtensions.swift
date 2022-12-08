@@ -10,7 +10,6 @@ import WebKit
 private let USE_NEW_SANDBOX_APIS = true
 
 extension WKWebView {
-
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version
     ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
     ///  - If below iOS14, evaluates Javascript without sandboxed environment

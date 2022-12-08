@@ -7,7 +7,6 @@ import Storage
 import Shared
 
 class ReadingListMock: ReadingList {
-
     var getAvailableRecordsCallCount = 0
     var getAvailableRecordsCompletion: (([ReadingListItem]) -> Void)?
 

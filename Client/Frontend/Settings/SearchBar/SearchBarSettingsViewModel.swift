@@ -54,7 +54,6 @@ extension SearchBarLocationProvider {
 }
 
 final class SearchBarSettingsViewModel: FeatureFlaggable {
-
     var title: String = .Settings.Toolbar.Toolbar
     weak var delegate: SearchBarPreferenceDelegate?
 
@@ -98,7 +97,6 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 
 // MARK: Private
 private extension SearchBarSettingsViewModel {
-
     func saveSearchBarPosition(_ searchBarPosition: SearchBarPosition) {
         featureFlags.set(feature: .searchBarPosition, to: searchBarPosition)
         delegate?.didUpdateSearchBarPositionPreference()
@@ -120,7 +118,6 @@ private extension SearchBarSettingsViewModel {
 
 // MARK: Telemetry
 extension SearchBarSettingsViewModel {
-
     static func recordLocationTelemetry(for searchbarPosition: SearchBarPosition) {
         let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: searchbarPosition.rawValue]
         TelemetryWrapper.recordEvent(category: .information, method: .view, object: .awesomebarLocation, extras: extras)

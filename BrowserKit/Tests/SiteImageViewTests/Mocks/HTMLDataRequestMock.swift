@@ -6,7 +6,6 @@ import Foundation
 @testable import SiteImageView
 
 class HTMLDataRequestMock: HTMLDataRequest {
-
     var fetchDataForURLCount = 0
     var data: Data?
     var error: SiteImageError?

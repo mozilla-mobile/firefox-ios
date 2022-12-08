@@ -6,7 +6,6 @@ import Foundation
 import BackgroundTasks
 
 class BackgroundSyncUtil {
-
     let profile: Profile
     let application: UIApplication
 

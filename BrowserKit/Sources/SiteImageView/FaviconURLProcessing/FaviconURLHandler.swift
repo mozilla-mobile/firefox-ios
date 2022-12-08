@@ -9,7 +9,6 @@ protocol FaviconURLHandler {
 }
 
 struct DefaultFaviconURLHandler: FaviconURLHandler {
-
     private let urlFetcher: FaviconURLFetcher
     private let urlCache: FaviconURLCache
 
