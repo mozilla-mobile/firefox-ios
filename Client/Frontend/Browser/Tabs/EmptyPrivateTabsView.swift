@@ -45,7 +45,6 @@ class EmptyPrivateTabsView: UIView {
         label.text = .TabTrayPrivateBrowsingDescription
     }
 
-    // TODO: Add completion to set to private
     let learnMoreButton: UIButton = .build { button in
         button.setTitle( .PrivateBrowsingLearnMore, for: [])
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
