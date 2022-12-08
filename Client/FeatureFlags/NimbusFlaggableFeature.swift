@@ -15,6 +15,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case copyForToolbar
     case contextualHintForJumpBackInSyncedTab
     case contextualHintForToolbar
+    case creditCardChanges
     case historyHighlights
     case historyGroups
     case inactiveTabs
@@ -92,6 +93,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .contextualHintForToolbar,
                 .copyForJumpBackIn,
                 .copyForToolbar,
+                .creditCardChanges,
                 .jumpBackInSyncedTab,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
