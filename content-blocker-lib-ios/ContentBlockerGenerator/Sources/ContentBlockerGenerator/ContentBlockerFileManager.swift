@@ -15,11 +15,12 @@ struct DefaultContentBlockerFileManager: ContentBlockerFileManager {
     private let jsonHelper: JsonHelper
     private let fileManager: FileManager
     // We expect this command to be executed as 'cd <dir of swift package>; swift run',
-    // if not, use the fallback path generated from the path to main.swift. Running from
+    // if not, use the fallback path generated from the path to the current swift file. Running from
     // an xcodeproj will use fallbackPath.
-    private let fallbackPath: String = (#file as NSString).deletingLastPathComponent + "/../.."
-    private let outputDir: URL
+    private let fallbackRootDirectoryPath: String = (#file as NSString).deletingLastPathComponent + "/../.."
+    private let outputDirectory: URL
     private let rootDirectory: String
+    private let inputDirectory: String
 
     init(fileManager: FileManager = FileManager.default,
          jsonHelper: JsonHelper = JsonHelper()) {
@@ -27,24 +28,25 @@ struct DefaultContentBlockerFileManager: ContentBlockerFileManager {
         self.jsonHelper = jsonHelper
 
         let execIsFromCorrectDir = fileManager.fileExists(atPath: fileManager.currentDirectoryPath + "/Package.swift")
-        self.rootDirectory = execIsFromCorrectDir ? fileManager.currentDirectoryPath : fallbackPath
-        self.outputDir = URL(fileURLWithPath: "\(rootDirectory)/../Lists")
+        self.rootDirectory = execIsFromCorrectDir ? fileManager.currentDirectoryPath : fallbackRootDirectoryPath
+        self.outputDirectory = URL(fileURLWithPath: "\(rootDirectory)/../Lists")
+        self.inputDirectory = "\(rootDirectory)/../../shavar-prod-lists"
 
         createDirectory()
     }
 
     func getEntityList() -> [String: Any] {
-        let entityPath = FileCategory.entity.getPath(rootDirectory: rootDirectory)
+        let entityPath = FileCategory.entity.getPath(inputDirectory: inputDirectory)
         return jsonHelper.jsonEntityListFrom(filename: entityPath)
     }
 
     func getCategoryFile(categoryTitle: FileCategory) -> [String] {
-        let fileName = categoryTitle.getPath(rootDirectory: rootDirectory)
+        let fileName = categoryTitle.getPath(inputDirectory: inputDirectory)
         return jsonHelper.jsonListFrom(filename: fileName)
     }
 
     func write(fileContent: String, categoryTitle: FileCategory, actionType: ActionType) {
-        let fileLocation = categoryTitle.getOutputFile(outputDirectory: outputDir.path, actionType: actionType)
+        let fileLocation = categoryTitle.getOutputFile(outputDirectory: outputDirectory.path, actionType: actionType)
         let fileURL = URL(fileURLWithPath: fileLocation)
 
         do {
@@ -57,8 +59,8 @@ struct DefaultContentBlockerFileManager: ContentBlockerFileManager {
     /// Remove and create the output dir
     private func createDirectory() {
         do {
-            try fileManager.removeItem(at: outputDir)
-            try fileManager.createDirectory(at: outputDir, withIntermediateDirectories: false, attributes: nil)
+            try fileManager.removeItem(at: outputDirectory)
+            try fileManager.createDirectory(at: outputDirectory, withIntermediateDirectories: false, attributes: nil)
         } catch {
             fatalError("Could not create directory")
         }

@@ -13,7 +13,7 @@ struct JsonHelper {
             let data = try Data(contentsOf: file)
             return try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         } catch {
-            fatalError("Could not find entity file \(filename)")
+            fatalError("Could not find entity file \(filename) at file \(file)")
         }
     }
 
@@ -24,7 +24,7 @@ struct JsonHelper {
             let data = try Data(contentsOf: file)
             return try JSONSerialization.jsonObject(with: data, options: []) as! [String]
         } catch {
-            fatalError("Could not find list file \(filename)")
+            fatalError("Could not find list file \(filename) at file \(file)")
         }
     }
 }

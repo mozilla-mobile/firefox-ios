@@ -14,8 +14,8 @@ enum FileCategory: String {
     case fingerprinting
     case entity
 
-    func getPath(rootDirectory: String) -> String {
-        return "\(rootDirectory)/../../\(location)"
+    func getPath(inputDirectory: String) -> String {
+        return "\(inputDirectory)/\(location)"
     }
 
     private var location: String {
