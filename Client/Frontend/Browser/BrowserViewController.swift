@@ -149,7 +149,7 @@ class BrowserViewController: UIViewController {
     // download of the next request through the `WKNavigationDelegate` that matches this web view.
     weak var pendingDownloadWebView: WKWebView?
 
-    let downloadQueue = DownloadQueue()
+    let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
     private var themeManager: ThemeManager
@@ -169,13 +169,15 @@ class BrowserViewController: UIViewController {
         profile: Profile,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve()
+        ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
+        downloadQueue: DownloadQueue = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.ratingPromptManager = ratingPromptManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
+        self.downloadQueue = downloadQueue
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
