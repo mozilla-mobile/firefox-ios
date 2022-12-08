@@ -35,15 +35,15 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.clientAndTabs.count
+        return clientAndTabs.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.hiddenSections.contains(section) {
+        if hiddenSections.contains(section) {
             return 0
         }
 
-        return self.clientAndTabs[section].tabs.count
+        return clientAndTabs[section].tabs.count
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -57,7 +57,8 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }
-        let clientTabs = self.clientAndTabs[section]
+
+        let clientTabs = clientAndTabs[section]
         let client = clientTabs.client
 
         let isCollapsed = hiddenSections.contains(section)

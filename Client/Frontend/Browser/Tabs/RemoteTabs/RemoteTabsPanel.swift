@@ -18,7 +18,7 @@ class RemoteTabsPanel: UIViewController, Themeable, Loggable {
     var notificationCenter: NotificationProtocol
     var remotePanelDelegate: RemotePanelDelegate?
     var profile: Profile
-    lazy var tableViewController = RemoteTabsTableViewController()
+    var tableViewController: RemoteTabsTableViewController
 
     init(profile: Profile,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -26,6 +26,7 @@ class RemoteTabsPanel: UIViewController, Themeable, Loggable {
         self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.tableViewController = RemoteTabsTableViewController(profile: profile)
 
         super.init(nibName: nil, bundle: nil)
         notificationCenter.addObserver(self,
@@ -44,10 +45,9 @@ class RemoteTabsPanel: UIViewController, Themeable, Loggable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableViewController.profile = profile
         tableViewController.remoteTabsPanel = self
         addChild(tableViewController)
-        self.view.addSubview(tableViewController.view)
+        view.addSubview(tableViewController.view)
 
         tableViewController.view.snp.makeConstraints { make in
             make.top.left.right.bottom.equalTo(self.view)
@@ -99,7 +99,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
     }
 
     weak var remoteTabsPanel: RemoteTabsPanel?
-    var profile: Profile!
+    private var profile: Profile!
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -114,8 +114,10 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(profile: Profile,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.profile = profile
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
@@ -244,34 +246,40 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         }
 
         // Get cached tabs.
-        self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
+        profile.getCachedClientsAndTabs().uponQueue(.main) { [weak self] result in
             guard let clientAndTabs = result.successValue else {
-                self.endRefreshing()
-                self.tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                   error: .failedToSync,
-                                                                   theme: self.themeManager.currentTheme)
+                self?.endRefreshing()
+                self?.showFailedToSync()
                 return
             }
 
             // Update UI with cached data.
-            self.updateDelegateClientAndTabData(clientAndTabs)
+            self?.updateDelegateClientAndTabData(clientAndTabs)
 
             if updateCache {
                 // Fetch updated tabs.
-                self.profile.getClientsAndTabs().uponQueue(.main) { result in
+                self?.profile.getClientsAndTabs().uponQueue(.main) { result in
                     if let clientAndTabs = result.successValue {
                         // Update UI with updated tabs.
-                        self.updateDelegateClientAndTabData(clientAndTabs)
+                        self?.updateDelegateClientAndTabData(clientAndTabs)
                     }
 
-                    self.endRefreshing()
+                    self?.endRefreshing()
                     completion?()
                 }
             } else {
-                self.endRefreshing()
+                self?.endRefreshing()
                 completion?()
             }
         }
+    }
+
+    private func showFailedToSync() {
+        guard let remoteTabsPanel = remoteTabsPanel else { return }
+
+        self.tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
+                                                           error: .failedToSync,
+                                                           theme: themeManager.currentTheme)
     }
 
     @objc private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -301,7 +309,8 @@ extension RemoteTabsTableViewController: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath,
                             completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
-        self.present(contextMenu, animated: true, completion: nil)
+
+        present(contextMenu, animated: true, completion: nil)
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
