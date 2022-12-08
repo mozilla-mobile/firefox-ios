@@ -6,7 +6,6 @@ import UIKit
 import Storage
 
 class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
-
     struct UX {
         static let headerHeight = SiteTableViewControllerUX.RowHeight
         static let iconBorderColor = UIColor.Photon.Grey30

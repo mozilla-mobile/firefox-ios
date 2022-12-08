@@ -7,7 +7,6 @@ import Storage
 
 protocol RemotePanelDelegate: AnyObject {
     func remotePanelDidRequestToSignIn()
-    func remotePanelDidRequestToCreateAccount()
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func remotePanel(didSelectURL url: URL, visitType: VisitType)
 }
@@ -97,7 +96,6 @@ protocol CollapsibleTableViewSection: AnyObject {
 class RemoteTabsTableViewController: UITableViewController, Themeable {
     struct UX {
         static let rowHeight = SiteTableViewControllerUX.RowHeight
-
     }
 
     weak var remoteTabsPanel: RemoteTabsPanel?
@@ -240,8 +238,8 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         guard profile.hasSyncableAccount() else {
             self.endRefreshing()
             self.tableViewDelegate = RemoteTabsErrorDataSource(remoteTabsPanel: remoteTabsPanel,
-                                                                    error: .notLoggedIn,
-                                                                    theme: themeManager.currentTheme)
+                                                               error: .notLoggedIn,
+                                                               theme: themeManager.currentTheme)
             return
         }
 

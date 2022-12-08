@@ -5,9 +5,8 @@
 import Foundation
 
 class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
-
     struct UX {
-        static let verticalPadding: CGFloat = 100
+        static let verticalPadding: CGFloat = 60
         static let horizontalPadding: CGFloat = 24
         static let paddingInBetweenItems: CGFloat = 15
         static let titleSizeFont: CGFloat = 22
@@ -41,7 +40,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title2,
                                                                    size: UX.titleSizeFont)
         label.numberOfLines = 0
-        label.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        label.textAlignment = .center
     }
 
     private let instructionsLabel: UILabel = .build { label in
@@ -49,7 +48,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: UX.descriptionSizeFont)
         label.numberOfLines = 0
-        label.setContentHuggingPriority(.defaultLow, for: .vertical)
+        label.textAlignment = .center
     }
 
     private let signInButton: UIButton = .build { button in
@@ -96,7 +95,6 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         contentView.addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-
             scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                 constant: UX.horizontalPadding),
             scrollView.topAnchor.constraint(equalTo: contentView.topAnchor,

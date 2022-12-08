@@ -5,7 +5,6 @@
 import Foundation
 
 class RemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeApplicable {
-
     enum ErrorType {
         case notLoggedIn
         case noClients

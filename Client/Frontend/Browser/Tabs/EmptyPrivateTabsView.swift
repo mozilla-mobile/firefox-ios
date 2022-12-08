@@ -7,15 +7,14 @@ import Foundation
 
 // View we display when there are no private tabs created
 class EmptyPrivateTabsView: UIView {
-
     struct UX {
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
         static let buttonSizeFont: CGFloat = 15
         static let paddingInBetweenItems: CGFloat = 15
-        static let verticalPadding: CGFloat = 80
+        static let verticalPadding: CGFloat = 100
         static let horizontalPadding: CGFloat = 24
-        static let imageSize: CGSize = CGSize(width: 120, height: 120)
+        static let imageSize: CGSize = CGSize(width: 90, height: 90)
     }
 
     // MARK: - Properties
@@ -52,7 +51,7 @@ class EmptyPrivateTabsView: UIView {
     }
 
     private let iconImageView: UIImageView = .build { imageView in
-        imageView.image = UIImage.templateImageNamed("largePrivateMask")
+        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.largePrivateTabsMask)
     }
 
     // MARK: - Inits
@@ -80,7 +79,7 @@ class EmptyPrivateTabsView: UIView {
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor,
                                                  constant: -UX.horizontalPadding),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor,
-                                              constant: -UX.verticalPadding),
+                                               constant: -UX.verticalPadding),
 
             scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: containerView.widthAnchor),
 
