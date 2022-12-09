@@ -887,7 +887,7 @@ class URLBar: UIView {
         delegate?.urlBarDidPressScrollTop(self, tap: sender)
     }
 
-    /// Show the URL toolset buttons if we're on iPad/landscape and not editing; hide them otherwise.
+    /// Show the URL toolset buttons if we're on iPad/landscape; hide them otherwise.
     /// This method is intended to be called inside `UIView.animate` block.
     private func updateToolsetConstraints() {
         let isHidden: Bool
@@ -897,15 +897,10 @@ class URLBar: UIView {
             isHidden = true
             showToolset = false
             centerURLBar = false
-        case .browsing:
+        case .browsing, .editing:
             isHidden = !shouldShowToolset
-            showToolset = !isHidden
+            showToolset = !isHidden && inBrowsingMode
             centerURLBar = shouldShowToolset
-        case .editing:
-            let isiPadLayoutWhileBrowsing = isIPadRegularDimensions && inBrowsingMode
-            isHidden =  isiPadLayoutWhileBrowsing ? !shouldShowToolset : true
-            showToolset = isiPadLayoutWhileBrowsing ? !isHidden : false
-            centerURLBar = false
         }
 
         backButton.animateHidden(isHidden, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
