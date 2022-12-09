@@ -5,7 +5,6 @@
 import Foundation
 
 extension URL {
-
     /// Returns a shorter displayable string for a domain
     /// E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
     /// https://accounts.foo.com/bar/baz?noo=abc#123  => accounts.foo
@@ -15,8 +14,6 @@ extension URL {
         }
         return baseDomain.replacingOccurrences(of: ".\(publicSuffix)", with: "")
     }
-
-
 
     /// Returns just the domain, but with the same scheme, and a trailing '/'.
     /// E.g., https://m.foo.com/bar/baz?noo=abc#123  => https://foo.com/
@@ -40,7 +37,6 @@ extension URL {
     public var shortDomain: String? {
         return host.flatMap { shortDomain($0, etld: publicSuffix ?? "") }
     }
-
 
     /// Returns the base domain from a given hostname. The base domain name is defined as the public domain suffix
     /// with the base private domain attached to the front. For example, for the URL www.bbc.co.uk, the base domain
