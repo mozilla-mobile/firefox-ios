@@ -242,9 +242,10 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         guard let data = tabStateData, let path = path else { return }
         do {
             try data.write(to: path, options: [])
+            browserLog.debug("PreserveTabs write succeeded with bytes count: \(data.count)")
         } catch {
             // Failure could happen when restoring
-            self.browserLog.debug("PreserveTabs write failed with bytes count: \(data.count)")
+            browserLog.debug("PreserveTabs write failed with bytes count: \(data.count)")
         }
     }
 

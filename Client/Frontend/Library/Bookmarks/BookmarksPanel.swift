@@ -287,13 +287,16 @@ class BookmarksPanel: SiteTableViewController,
 
     private func flashRow(at indexPath: IndexPath) {
         guard indexPathIsValid(indexPath) else {
+            browserLog.debug("Flash row indexPath invalid")
             return
         }
 
+        browserLog.debug("Flash row by selecting at \(indexPath)")
         tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
             if self.indexPathIsValid(indexPath) {
+                self.browserLog.debug("Flash row by deselecting row at \(indexPath)")
                 self.tableView.deselectRow(at: indexPath, animated: true)
             }
         }
@@ -476,6 +479,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         guard let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row],
               let bookmarkItem = bookmarkNode as? BookmarkItemData
         else {
+            self.browserLog.debug("Could not get site details for indexPath \(indexPath)")
             return nil
         }
 
@@ -494,6 +498,8 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                 if result.isSuccess {
                     SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage,
                                                     bottomContainer: self.view)
+                } else {
+                    self.browserLog.debug("Could not add pinned top site")
                 }
             }
         }).items
