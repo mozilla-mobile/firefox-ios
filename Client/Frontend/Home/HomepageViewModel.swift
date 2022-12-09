@@ -75,7 +75,7 @@ class HomepageViewModel: FeatureFlaggable {
     }
 
     /// Record view appeared is sent multiple times, this avoids recording telemetry multiple times for one appearance
-    private var viewAppeared: Bool = false
+    var viewAppeared: Bool = false
 
     var shownSections = [HomepageSectionType]()
     weak var delegate: HomepageViewModelDelegate?
