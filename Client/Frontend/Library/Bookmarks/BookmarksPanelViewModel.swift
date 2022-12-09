@@ -6,7 +6,7 @@ import Foundation
 import Storage
 import Shared
 
-class BookmarksPanelViewModel {
+class BookmarksPanelViewModel: Loggable {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }
@@ -38,6 +38,7 @@ class BookmarksPanelViewModel {
     func reloadData(completion: @escaping () -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown {
+            browserLog.debug("Profile was shutdown")
             completion()
             return
         }
@@ -57,6 +58,7 @@ class BookmarksPanelViewModel {
 
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         guard let bookmarkNode = bookmarkNodes[safe: sourceIndexPath.row] else {
+            browserLog.debug("Could not move row from \(sourceIndexPath) to \(destinationIndexPath)")
             return
         }
 
@@ -85,6 +87,7 @@ class BookmarksPanelViewModel {
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
                 guard let mobileFolder = result.successValue as? BookmarkFolderData else {
+                    self.browserLog.debug("Mobile folder data setup failed \(String(describing: result.failureValue))")
                     self.setErrorCase()
                     completion()
                     return
@@ -117,6 +120,7 @@ class BookmarksPanelViewModel {
         profile.places.getBookmarksTree(rootGUID: bookmarkFolderGUID,
                                         recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
+                self.browserLog.debug("Sublfolder data setup failed \(String(describing: result.failureValue))")
                 self.setErrorCase()
                 completion()
                 return
