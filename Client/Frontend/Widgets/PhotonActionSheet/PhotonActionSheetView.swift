@@ -29,7 +29,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     // MARK: - Variables
 
     // we use a placeholder image so we can set the theme correctly, the image is updated later
-    private var badgeOverlay: BadgeWithBackdrop = BadgeWithBackdrop(imageName: "privateModeBadge")
+    private var badgeOverlay: BadgeWithBackdrop = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge)
     private var item: SingleActionViewModel?
     weak var delegate: PhotonActionSheetViewDelegate?
 
@@ -88,7 +88,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
 
     private lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate)
+        disclosureIndicator.image = UIImage(named: ImageIdentifiers.menuChevron)?.withRenderingMode(.alwaysTemplate)
         return disclosureIndicator
     }()
 

@@ -49,7 +49,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         button.layer.cornerRadius = UX.cornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
         button.addTarget(self, action: #selector(self.dismiss), for: .touchUpInside)
-        button.accessibilityIdentifier = "PhotonMenu.close"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.Photon.closeButton
     }
 
     var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
@@ -90,7 +90,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         super.viewDidLoad()
         listenForThemeChange()
         view.addSubview(tableView)
-        view.accessibilityIdentifier = "Action Sheet"
+        view.accessibilityIdentifier = AccessibilityIdentifiers.Photon.view
 
         tableView.backgroundColor = .clear
         tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
@@ -147,7 +147,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         tableView.separatorColor = UIColor.clear
         tableView.separatorInset = .zero
         tableView.cellLayoutMarginsFollowReadableWidth = false
-        tableView.accessibilityIdentifier = "Context Menu"
+        tableView.accessibilityIdentifier = AccessibilityIdentifiers.Photon.tableView
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
         if viewModel.isMainMenuInverted {
@@ -408,7 +408,7 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
             withIdentifier: PhotonActionSheetContainerCell.cellIdentifier,
             for: indexPath) as? PhotonActionSheetContainerCell
         else { return UITableViewCell() }
-        
+
         let actions = viewModel.actions[indexPath.section][indexPath.row]
         cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.currentTheme)
         cell.delegate = self
