@@ -32,6 +32,7 @@ class OpenPassBookHelper {
     static func shouldOpenWithPassBook(response: URLResponse,
                                        forceDownload: Bool) -> Bool {
         guard let mimeType = response.mimeType, response.url != nil else { return false }
+
         return mimeType == MIMEType.Passbook && PKAddPassesViewController.canAddPasses() && !forceDownload
     }
 

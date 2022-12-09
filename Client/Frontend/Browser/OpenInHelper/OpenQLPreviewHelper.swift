@@ -19,6 +19,7 @@ class OpenQLPreviewHelper: NSObject, QLPreviewControllerDataSource {
     static func shouldOpenPreviewHelper(response: URLResponse,
                                         forceDownload: Bool) -> Bool {
         guard let mimeType = response.mimeType else { return false }
+
         return (mimeType == MIMEType.USDZ || mimeType == MIMEType.Reality) && !forceDownload
     }
 
