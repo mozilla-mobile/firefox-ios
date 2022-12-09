@@ -14,7 +14,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
 
     // MARK: - Operational Variables
-    weak var homePanelDelegate: HomePanelDelegate?
+    weak var homePanelDelegate: HomePanelDelegate? {
+        didSet {
+            viewModel.messageCardViewModel.homepanelDelegate = homePanelDelegate
+        }
+    }
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     weak var browserBarViewDelegate: BrowserBarViewDelegate? {
         didSet {
@@ -428,7 +432,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         // TODO: Temporary
         // This is one case where foregroundBVC is accessed to check the existance of a property.
         // See https://mozilla-hub.atlassian.net/browse/FXIOS-5286
-        guard BrowserViewController.foregroundBVC()?.searchController == nil, canModalBePresented else {
+        guard viewModel.viewAppeared, canModalBePresented else {
             contextualHintViewController.stopTimer()
             return
         }

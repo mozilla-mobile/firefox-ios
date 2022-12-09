@@ -149,7 +149,7 @@ class BrowserViewController: UIViewController {
     // download of the next request through the `WKNavigationDelegate` that matches this web view.
     weak var pendingDownloadWebView: WKWebView?
 
-    let downloadQueue = DownloadQueue()
+    let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
     private var themeManager: ThemeManager
@@ -169,13 +169,15 @@ class BrowserViewController: UIViewController {
         profile: Profile,
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve()
+        ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
+        downloadQueue: DownloadQueue = AppContainer.shared.resolve()
     ) {
         self.profile = profile
         self.tabManager = tabManager
         self.themeManager = themeManager
         self.ratingPromptManager = ratingPromptManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
+        self.downloadQueue = downloadQueue
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -217,6 +219,21 @@ class BrowserViewController: UIViewController {
 
     @objc func didTapUndoCloseAllTabToast(notification: Notification) {
         leaveOverlayMode(didCancel: true)
+    }
+
+    @objc func openTabNotification(notification: Notification) {
+        guard let openTabObject = notification.object as? OpenTabNotificationObject else {
+            return
+        }
+
+        switch openTabObject.type {
+        case .loadQueuedTabs(let urls):
+            loadQueuedTabs(receivedURLs: urls)
+        case .openSearchNewTab(let searchTerm):
+            openSearchNewTab(searchTerm)
+        case .switchToTabForURLOrOpen(let url):
+            switchToTabForURLOrOpen(url)
+        }
     }
 
     @objc func searchBarPositionDidChange(notification: Notification) {
@@ -392,6 +409,12 @@ class BrowserViewController: UIViewController {
 
         tabManager.startAtHomeCheck()
         updateWallpaperMetadata()
+
+        /// When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
+        /// So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
+            self?.loadQueuedTabs()
+        }
     }
 
     // MARK: - Lifecycle
@@ -488,6 +511,11 @@ class BrowserViewController: UIViewController {
             self,
             selector: #selector(didTapUndoCloseAllTabToast),
             name: .DidTapUndoCloseAllTabToast,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(openTabNotification),
+            name: .OpenTabNotification,
             object: nil)
     }
 
@@ -1099,6 +1127,7 @@ class BrowserViewController: UIViewController {
         }
 
         homepageViewController?.view?.isHidden = true
+        homepageViewController?.homepageWillDisappear()
 
         searchController.didMove(toParent: self)
     }
@@ -1108,7 +1137,9 @@ class BrowserViewController: UIViewController {
         searchController.willMove(toParent: nil)
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
+
         homepageViewController?.view?.isHidden = false
+        homepageViewController?.homepageWillAppear(isZeroSearch: false)
 
         keyboardBackdrop?.removeFromSuperview()
         keyboardBackdrop = nil

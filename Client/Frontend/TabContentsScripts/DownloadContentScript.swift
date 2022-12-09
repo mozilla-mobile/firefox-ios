@@ -12,13 +12,16 @@ class DownloadContentScript: TabContentScript {
     // Non-blob URLs use the webview to download, by navigating in the webview to the requested URL.
     // Blobs however, use the JS content script to download using XHR
     fileprivate static var blobUrlForDownload: URL?
+    private let downloadQueue: DownloadQueue
 
     class func name() -> String {
         return "DownloadContentScript"
     }
 
-    required init(tab: Tab) {
+    required init(tab: Tab,
+                  downloadQueue: DownloadQueue = AppContainer.shared.resolve()) {
         self.tab = tab
+        self.downloadQueue = downloadQueue
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -84,9 +87,6 @@ class DownloadContentScript: TabContentScript {
         }
 
         let download = BlobDownload(filename: filename, mimeType: mimeType, size: size, data: data)
-
-        // TODO: Temporary - DownloadQueue access will be moved out of BVC soon.
-        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5290
-        browserViewController?.downloadQueue.enqueue(download)
+        downloadQueue.enqueue(download)
     }
 }
