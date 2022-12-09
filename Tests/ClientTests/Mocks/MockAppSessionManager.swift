@@ -9,10 +9,13 @@ class MockAppSessionManager: AppSessionProvider {
 
     var tabUpdateState: TabUpdateState = .coldStart
     var launchSessionProvider: LaunchSessionProviderProtocol
+    var downloadQueue: DownloadQueue
 
     init(
-        launchSessionProvider: LaunchSessionProviderProtocol = MockLaunchSessionProvider()
+        launchSessionProvider: LaunchSessionProviderProtocol = MockLaunchSessionProvider(),
+        downloadQueue: DownloadQueue = DownloadQueue()
     ) {
         self.launchSessionProvider = launchSessionProvider
+        self.downloadQueue = downloadQueue
     }
 }

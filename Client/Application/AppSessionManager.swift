@@ -7,6 +7,7 @@ import Foundation
 protocol AppSessionProvider {
     var tabUpdateState: TabUpdateState { get set }
     var launchSessionProvider: LaunchSessionProviderProtocol { get set }
+    var downloadQueue: DownloadQueue { get }
 }
 
 /// `AppSessionManager` exists to track, mutate and (sometimes) persist session related properties. Each category of
@@ -18,10 +19,13 @@ struct AppSessionManager: AppSessionProvider {
 
     var tabUpdateState: TabUpdateState = .coldStart
     var launchSessionProvider: LaunchSessionProviderProtocol
+    var downloadQueue: DownloadQueue
 
     init(
-        launchSessionProvider: LaunchSessionProvider = LaunchSessionProvider()
+        launchSessionProvider: LaunchSessionProvider = LaunchSessionProvider(),
+        downloadQueue: DownloadQueue = DownloadQueue()
     ) {
         self.launchSessionProvider = launchSessionProvider
+        self.downloadQueue = downloadQueue
     }
 }

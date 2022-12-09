@@ -23,6 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let profile: Profile = AppContainer.shared.resolve()
     let tabManager: TabManager = AppContainer.shared.resolve()
     var sessionManager: AppSessionProvider = AppContainer.shared.resolve()
+    var downloadQueue: DownloadQueue = AppContainer.shared.resolve()
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -58,7 +59,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard !AppConstants.isRunningUnitTest else { return }
 
         /// Resume previously stopped downloads for, and on, THIS scene only.
-        browserViewController.downloadQueue.resumeAll()
+        downloadQueue.resumeAll()
     }
 
     // MARK: - Transitioning to Background
@@ -68,7 +69,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to reduce the scene's memory usage, clear claims to resources & dependencies / services.
     /// UIKit takes a snapshot of the scene for the app switcher after this method returns.
     func sceneDidEnterBackground(_ scene: UIScene) {
-        browserViewController.downloadQueue.pauseAll()
+        downloadQueue.pauseAll()
     }
 
     // MARK: - Opening URLs
