@@ -229,6 +229,8 @@ class BrowserViewController: UIViewController {
         switch openTabObject.type {
         case .loadQueuedTabs(let urls):
             loadQueuedTabs(receivedURLs: urls)
+        case .openSearchNewTab(let searchTerm):
+            openSearchNewTab(searchTerm)
         case .switchToTabForURLOrOpen(let url):
             switchToTabForURLOrOpen(url)
         }
