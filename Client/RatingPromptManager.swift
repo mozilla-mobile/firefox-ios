@@ -15,7 +15,6 @@ final class RatingPromptManager {
     private var hasMinimumMobileBookmarksCount = false
     private let minimumMobileBookmarksCount = 5
     private let sentry: SentryProtocol?
-    private let group: DispatchGroupInterface
 
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
 
@@ -33,12 +32,10 @@ final class RatingPromptManager {
     ///   - sentry: Sentry protocol to override in Unit test
     init(profile: Profile,
          daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
-         sentry: SentryProtocol = SentryIntegration.shared,
-         group: DispatchGroupInterface = DispatchGroup()) {
+         sentry: SentryProtocol = SentryIntegration.shared) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
         self.sentry = sentry
-        self.group = group
     }
 
     /// Show the in-app rating prompt if needed
@@ -54,6 +51,7 @@ final class RatingPromptManager {
     func updateData(dataLoadingCompletion: (() -> Void)? = nil) {
         daysOfUseCounter.updateCounter()
 
+        let group = DispatchGroup()
         updateBookmarksCount(group: group)
 
         group.notify(queue: dataQueue) {
@@ -131,7 +129,7 @@ final class RatingPromptManager {
         SKStoreReviewController.requestReview()
     }
 
-    private func updateBookmarksCount(group: DispatchGroupInterface) {
+    private func updateBookmarksCount(group: DispatchGroup) {
         group.enter()
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { [weak self] result in
             guard let strongSelf = self,

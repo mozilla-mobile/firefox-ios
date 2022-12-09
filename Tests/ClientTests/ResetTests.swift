@@ -10,44 +10,39 @@ import UIKit
 
 import XCTest
 
-// Task to re-enable tests FXIOS-5412
 class ResetTests: XCTestCase {
     func testNoClients() {
-        _ = XCTSkip("flakey test")
-//        let profile = MockBrowserProfile(localName: "testResetTests_noClient")
-//        assertNoClients(profile.peekTabs)
+        let profile = MockBrowserProfile(localName: "testResetTests_noClient")
+        assertNoClients(profile.peekTabs)
     }
 
     func testAddClient() {
-        _ = XCTSkip("flakey test")
-//        let profile = MockBrowserProfile(localName: "testResetTests_addClient")
-//        assertAddClient(tabs: profile.peekTabs)
+        let profile = MockBrowserProfile(localName: "testResetTests_addClient")
+        assertAddClient(tabs: profile.peekTabs)
     }
 
     func testReplaceRemoteDevices() {
-        _ = XCTSkip("flakey test")
-//        let profile = MockBrowserProfile(localName: "testResetTests_replaceRemote")
-//        // Replace remote device
-//        assertReplaceRemoteDevices(tabs: profile.peekTabs)
+        let profile = MockBrowserProfile(localName: "testResetTests_replaceRemote")
+        // Replace remote device
+        assertReplaceRemoteDevices(tabs: profile.peekTabs)
     }
 
     func testClientHaveGUIDsFromStorage() {
-        _ = XCTSkip("flakey test")
-//        let profile = MockBrowserProfile(localName: "testResetTests_haveGuids")
-//        assertAddClient(tabs: profile.peekTabs)
-//        assertReplaceRemoteDevices(tabs: profile.peekTabs)
-//
-//        let getClientExpectation = expectation(description: "Get client fulfilled")
-//
-//        // Verify that it's there.
-//        profile.peekTabs.getClients().uponQueue(.main) { result in
-//            let recs = result.successValue
-//            XCTAssertNotNil(recs)
-//            XCTAssertEqual([ResetTests.testClientGuid], recs!.map { $0.guid! })
-//            getClientExpectation.fulfill()
-//        }
-//
-//        wait(for: [getClientExpectation], timeout: 5.0)
+        let profile = MockBrowserProfile(localName: "testResetTests_haveGuids")
+        assertAddClient(tabs: profile.peekTabs)
+        assertReplaceRemoteDevices(tabs: profile.peekTabs)
+
+        let getClientExpectation = expectation(description: "Get client fulfilled")
+
+        // Verify that it's there.
+        profile.peekTabs.getClients().uponQueue(.main) { result in
+            let recs = result.successValue
+            XCTAssertNotNil(recs)
+            XCTAssertEqual([ResetTests.testClientGuid], recs!.map { $0.guid! })
+            getClientExpectation.fulfill()
+        }
+
+        wait(for: [getClientExpectation], timeout: 5.0)
     }
 
     func testActionsOnEngine() throws {
