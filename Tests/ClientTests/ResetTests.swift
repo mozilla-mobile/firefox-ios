@@ -10,6 +10,7 @@ import UIKit
 
 import XCTest
 
+// Task to re-enable tests FXIOS-5412
 class ResetTests: XCTestCase {
     func testNoClients() {
         _ = XCTSkip("flakey test")

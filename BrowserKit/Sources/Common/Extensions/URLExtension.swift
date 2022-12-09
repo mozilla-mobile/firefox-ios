@@ -5,12 +5,10 @@
 import Foundation
 
 extension URL {
-    /**
-     * Returns a shorter displayable string for a domain
-     *
-     * E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
-     *       https://accounts.foo.com/bar/baz?noo=abc#123  => accounts.foo
-     **/
+
+    /// Returns a shorter displayable string for a domain
+    /// E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
+    /// https://accounts.foo.com/bar/baz?noo=abc#123  => accounts.foo
     public var shortDisplayString: String {
         guard let publicSuffix = self.publicSuffix, let baseDomain = self.normalizedHost else {
             return self.normalizedHost ?? self.absoluteString
@@ -18,13 +16,11 @@ extension URL {
         return baseDomain.replacingOccurrences(of: ".\(publicSuffix)", with: "")
     }
 
-    /**
-     * Returns just the domain, but with the same scheme, and a trailing '/'.
-     *
-     * E.g., https://m.foo.com/bar/baz?noo=abc#123  => https://foo.com/
-     *
-     * Any failure? Return this URL.
-     */
+
+
+    /// Returns just the domain, but with the same scheme, and a trailing '/'.
+    /// E.g., https://m.foo.com/bar/baz?noo=abc#123  => https://foo.com/
+    /// Any failure? Return this URL.
     public var domainURL: URL {
         if let normalized = self.normalizedHost {
             // Use NSURLComponents instead of NSURL since the former correctly preserves
@@ -45,13 +41,11 @@ extension URL {
         return host.flatMap { shortDomain($0, etld: publicSuffix ?? "") }
     }
 
-    /**
-    Returns the base domain from a given hostname. The base domain name is defined as the public domain suffix
-    with the base private domain attached to the front. For example, for the URL www.bbc.co.uk, the base domain
-    would be bbc.co.uk. The base domain includes the public suffix (co.uk) + one level down (bbc).
 
-    :returns: The base domain string for the given host name.
-    */
+    /// Returns the base domain from a given hostname. The base domain name is defined as the public domain suffix
+    /// with the base private domain attached to the front. For example, for the URL www.bbc.co.uk, the base domain
+    /// would be bbc.co.uk. The base domain includes the public suffix (co.uk) + one level down (bbc).
+    /// :returns: The base domain string for the given host name.
     public var baseDomain: String? {
         guard !isIPv6, let host = host else { return nil }
 
@@ -83,12 +77,9 @@ extension URL {
         return normalizedHost.flatMap { $0 + self.path }
     }
 
-    /**
-    Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/.
-    For example for the url www.bbc.co.uk, based on the entries in the TLD list, the public suffix would return co.uk.
-
-    :returns: The public suffix for within the given hostname.
-    */
+    /// Returns the public portion of the host name determined by the public suffix list found here: https://publicsuffix.org/list/.
+    /// For example for the url www.bbc.co.uk, based on the entries in the TLD list, the public suffix would return co.uk.
+    /// :returns: The public suffix for within the given hostname.
     public var publicSuffix: String? {
         return host.flatMap { publicSuffixFromHost($0, withAdditionalParts: 0) }
     }
@@ -236,7 +227,7 @@ private struct ETLDEntry: CustomStringConvertible {
         self.isException = entry.hasPrefix("!")
     }
 
-    fileprivate var description: String {
+    var description: String {
         return "{ Entry: \(entry), isWildcard: \(isWild), isException: \(isException) }"
     }
 }

@@ -7,6 +7,7 @@ import Storage
 
 @testable import Client
 
+// Task to re-enable tests FXIOS-5411
 class RemoteTabsPanelTests: XCTestCase {
     // MARK: States of panel
 
