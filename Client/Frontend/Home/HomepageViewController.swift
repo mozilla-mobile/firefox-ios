@@ -428,7 +428,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         // TODO: Temporary
         // This is one case where foregroundBVC is accessed to check the existance of a property.
         // See https://mozilla-hub.atlassian.net/browse/FXIOS-5286
-        guard BrowserViewController.foregroundBVC()?.searchController == nil, canModalBePresented else {
+        guard viewModel.viewAppeared, canModalBePresented else {
             contextualHintViewController.stopTimer()
             return
         }
