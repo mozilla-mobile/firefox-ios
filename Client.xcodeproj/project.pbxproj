@@ -6167,6 +6167,13 @@
 			path = RecentlySaved;
 			sourceTree = "<group>";
 		};
+		5A6AD22529428942000A9654 /* DownloadQueue */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = DownloadQueue;
+			sourceTree = "<group>";
+		};
 		5AF6254128A5799D00A90253 /* HistoryHighlights */ = {
 			isa = PBXGroup;
 			children = (
@@ -6637,6 +6644,7 @@
 		965C3C8B29313949006499ED /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				5A6AD22529428942000A9654 /* DownloadQueue */,
 				965C3C9029324AF2006499ED /* AppSession */,
 			);
 			name = Services;

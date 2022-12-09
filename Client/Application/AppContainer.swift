@@ -100,6 +100,14 @@ class AppContainer: ServiceProvider {
                     }
                 }
 
+                container.register(.singleton) { () -> DownloadQueue in
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        return appDelegate.appSessionManager.downloadQueue
+                    } else {
+                        return DownloadQueue()
+                    }
+                }
+
                 try container.bootstrap()
             } catch {
                 os_log(.error, "We couldn't resolve something inside the container!")
