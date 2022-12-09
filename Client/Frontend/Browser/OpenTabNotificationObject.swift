@@ -11,6 +11,7 @@ struct OpenTabNotificationObject {
     enum ObjectType {
         case loadQueuedTabs([URL])
         case openSearchNewTab(String)
+        case switchToTabForURLOrOpen(URL)
     }
 
     var type: ObjectType

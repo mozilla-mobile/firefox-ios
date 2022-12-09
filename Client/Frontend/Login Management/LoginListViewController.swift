@@ -169,6 +169,8 @@ class LoginListViewController: SensitiveViewController, Themeable {
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
         guard settingsDelegate != nil else {
             settingsDelegate = sceneForVC?.browserViewController
 

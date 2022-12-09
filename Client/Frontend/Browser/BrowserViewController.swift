@@ -231,6 +231,8 @@ class BrowserViewController: UIViewController {
             loadQueuedTabs(receivedURLs: urls)
         case .openSearchNewTab(let searchTerm):
             openSearchNewTab(searchTerm)
+        case .switchToTabForURLOrOpen(let url):
+            switchToTabForURLOrOpen(url)
         }
     }
 
@@ -1125,6 +1127,7 @@ class BrowserViewController: UIViewController {
         }
 
         homepageViewController?.view?.isHidden = true
+        homepageViewController?.homepageWillDisappear()
 
         searchController.didMove(toParent: self)
     }
@@ -1134,7 +1137,9 @@ class BrowserViewController: UIViewController {
         searchController.willMove(toParent: nil)
         searchController.view.removeFromSuperview()
         searchController.removeFromParent()
+
         homepageViewController?.view?.isHidden = false
+        homepageViewController?.homepageWillAppear(isZeroSearch: false)
 
         keyboardBackdrop?.removeFromSuperview()
         keyboardBackdrop = nil
