@@ -83,6 +83,8 @@ final class NimbusFeatureFlagLayer {
         case .shareSheetChanges,
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
+        case .creditCardAutofillStatus:
+            return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
         }
     }
 
@@ -226,6 +228,17 @@ final class NimbusFeatureFlagLayer {
     private func checkSponsoredTilesFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.homescreenFeature.value()
         return config.sponsoredTiles.status
+    }
+
+    public func checkNimbusForCreditCardAutofill(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.creditCardAutofill.value()
+
+            switch featureID {
+            case .creditCardAutofillStatus: return config.creditCardAutofillStatus
+            default: return false
+            }
     }
 
     private func checkNimbusForOnboardingFeature(

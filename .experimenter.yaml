@@ -10,6 +10,14 @@ contextual-hint-feature:
     hint-copy:
       type: json
       description: This set allows us to experiment with changing hint descriptions.
+credit-card-autofill:
+  description: This property defines the credit card autofill feature
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    credit-card-autofill-status:
+      type: boolean
+      description: "If true, we will allow user to use the credit autofill feature"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true
