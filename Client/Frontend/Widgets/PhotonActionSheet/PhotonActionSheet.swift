@@ -94,13 +94,6 @@ class PhotonActionSheet: UIViewController, Themeable {
 
         tableView.backgroundColor = .clear
         tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
-        // In a popover the popover provides the blur background
-        // Not using a background color allows the view to style correctly with the popover arrow
-        if self.popoverPresentationController == nil {
-            let blurEffect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            tableView.backgroundView = blurEffectView
-        }
 
         if viewModel.presentationStyle == .bottom {
             setupBottomStyle()
@@ -262,20 +255,23 @@ class PhotonActionSheet: UIViewController, Themeable {
     func applyTheme() {
         let theme = themeManager.currentTheme
 
+        // In a popover the popover provides the blur background
         if viewModel.presentationStyle == .popover {
-            view.backgroundColor = theme.colors.layer1.withAlphaComponent(0.7)
-        } else {
+            tableView.backgroundColor = theme.colors.layer1.withAlphaComponent(0.7)
+        } else if UIAccessibility.isReduceTransparencyEnabled {
+            // Remove the visual effect and the background alpha
+            (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
             tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
-        }
+        } else {
+            // Not using a background color allows the view to style correctly with the popover arrow
+            tableView.backgroundView?.backgroundColor = .clear
+            let blurEffect = theme.type == .dark ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
 
-        // Apply or remove the background blur effect
-        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
-            if UIAccessibility.isReduceTransparencyEnabled {
-                // Remove the visual effect and the background alpha
-                visualEffectView.effect = nil
-                tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
+            if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
+                visualEffectView.effect = blurEffect
             } else {
-                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
+                let blurEffectView = UIVisualEffectView(effect: blurEffect)
+                tableView.backgroundView = blurEffectView
             }
         }
 
@@ -410,7 +406,9 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: PhotonActionSheetContainerCell.cellIdentifier,
-            for: indexPath) as? PhotonActionSheetContainerCell else { return UITableViewCell() }
+            for: indexPath) as? PhotonActionSheetContainerCell
+        else { return UITableViewCell() }
+        
         let actions = viewModel.actions[indexPath.section][indexPath.row]
         cell.configure(actions: actions, viewModel: viewModel, theme: themeManager.currentTheme)
         cell.delegate = self
@@ -422,8 +420,6 @@ extension PhotonActionSheet: UITableViewDataSource, UITableViewDelegate {
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.hideBottomBorder(isHidden: isLastRow)
         }
-
-        (cell as? ThemeApplicable)?.applyTheme(theme: themeManager.currentTheme)
         return cell
     }
 
