@@ -404,7 +404,6 @@
 		5A9A09D428B01D8700B6F51E /* MockTelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D328B01D8700B6F51E /* MockTelemetryWrapper.swift */; };
 		5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */; };
 		5A9A09D828B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D728B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift */; };
-		5A9FF8492942454600DF9FBB /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A9FF8482942454600DF9FBB /* Common */; };
 		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
 		5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
 		5AC40329291AFBDB002BF91C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
@@ -813,6 +812,7 @@
 		C8CE38BB265E71FE0009B09E /* ItemListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B3265E71FE0009B09E /* ItemListCell.swift */; };
 		C8CE38BD265E71FE0009B09E /* UIFontExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */; };
 		C8CE38BF265E71FE0009B09E /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */; };
+		C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */; };
 		C8D0D6F2281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D0D6F1281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift */; };
 		C8D0D6F4281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */; };
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
@@ -4127,6 +4127,7 @@
 		C8CE38B3265E71FE0009B09E /* ItemListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListCell.swift; sourceTree = "<group>"; };
 		C8CE38B6265E71FE0009B09E /* UIFontExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFontExtension.swift; sourceTree = "<group>"; };
 		C8CE38B8265E71FE0009B09E /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = effective_tld_names.swift; sourceTree = "<group>"; };
 		C8D0D6F1281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagUserPrefsMigrationUtility.swift; sourceTree = "<group>"; };
 		C8D0D6F3281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsUserPrefsMigrationUtilityTests.swift; sourceTree = "<group>"; };
 		C8D3475789EF0BC1B4457F1A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
@@ -5285,7 +5286,6 @@
 				8A48CE3B292FCE0800B32289 /* Kingfisher in Frameworks */,
 				5A8FD0E8293A7CD100333AA7 /* XCGLogger in Frameworks */,
 				5A8FD0FE293A7F0000333AA7 /* Sentry in Frameworks */,
-				5A9FF8492942454600DF9FBB /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7709,6 +7709,7 @@
 				968645798276FD71A15F01E5 /* Default Browser.strings */,
 				E650756C1E37F7AB006961AC /* DeferredUtils.swift */,
 				E650756D1E37F7AB006961AC /* DeviceInfo.swift */,
+				C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */,
 				904F48CABE595981535FCCEB /* ErrorPages.strings */,
 				E650756F1E37F7AB006961AC /* Extensions */,
 				3964B0991EA8F06F00F2EEF4 /* FeatureSwitch.swift */,
@@ -8502,7 +8503,6 @@
 				8A48CE3A292FCE0800B32289 /* Kingfisher */,
 				5A8FD0E7293A7CD100333AA7 /* XCGLogger */,
 				5A8FD0FD293A7F0000333AA7 /* Sentry */,
-				5A9FF8482942454600DF9FBB /* Common */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -9818,6 +9818,7 @@
 				D053D6742211CD53006C6B64 /* KeychainStore.swift in Sources */,
 				E65075C01E37F7AB006961AC /* WeakList.swift in Sources */,
 				E65075AE1E37F7AB006961AC /* UIImageExtensions.swift in Sources */,
+				C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */,
 				E65075A21E37F7AB006961AC /* HexExtensions.swift in Sources */,
 				288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */,
 				EB912B9B22722B6300DF585A /* ReadWriteLock.swift in Sources */,
@@ -14133,11 +14134,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Xlinker",
-					"-no_application_extension",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Firefox;
@@ -14431,11 +14428,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Xlinker",
-					"-no_application_extension",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Enterprise;
@@ -14695,11 +14688,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Xlinker",
-					"-no_application_extension",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = FirefoxBeta;
@@ -15184,11 +15173,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Xlinker",
-					"-no_application_extension",
-				);
+				OTHER_LDFLAGS = "$(inherited)";
 				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;
@@ -15806,10 +15791,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4368F811279611AC0013419B /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
-		};
-		5A9FF8482942454600DF9FBB /* Common */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Common;
 		};
 		5FA2233B27F74071005B3D87 /* Glean */ = {
 			isa = XCSwiftPackageProductDependency;

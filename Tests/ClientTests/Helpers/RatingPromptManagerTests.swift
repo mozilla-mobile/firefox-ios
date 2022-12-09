@@ -15,7 +15,6 @@ class RatingPromptManagerTests: XCTestCase {
     var mockProfile: MockProfile!
     var createdGuids: [String] = []
     var sentry: CrashingMockSentryClient!
-    var mockDispatchGroup: MockDispatchGroup!
 
     override func setUp() {
         super.setUp()
@@ -104,10 +103,9 @@ class RatingPromptManagerTests: XCTestCase {
     }
 
     func testShouldShowPrompt_hasMinimumMobileBookmarksCount_returnsTrue() {
-        _ = XCTSkip("flakey test")
-//        setupEnvironment()
-//        createBookmarks(bookmarkCount: 5, withRoot: BookmarkRoots.MobileFolderGUID)
-//        updateData(expectedRatingPromptOpenCount: 1)
+        setupEnvironment()
+        createBookmarks(bookmarkCount: 5, withRoot: BookmarkRoots.MobileFolderGUID)
+        updateData(expectedRatingPromptOpenCount: 1)
     }
 
     func testShouldShowPrompt_hasOtherBookmarksCount_returnsFalse() {
@@ -256,11 +254,9 @@ private extension RatingPromptManagerTests {
     func setupPromptManager(hasCumulativeDaysOfUse: Bool) {
         let mockCounter = CumulativeDaysOfUseCounterMock(hasCumulativeDaysOfUse)
         sentry = CrashingMockSentryClient()
-        mockDispatchGroup = MockDispatchGroup()
         promptManager = RatingPromptManager(profile: mockProfile,
                                             daysOfUseCounter: mockCounter,
-                                            sentry: sentry,
-                                            group: mockDispatchGroup)
+                                            sentry: sentry)
     }
 
     func createSite(number: Int) -> Site {

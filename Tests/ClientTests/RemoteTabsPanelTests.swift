@@ -7,7 +7,6 @@ import Storage
 
 @testable import Client
 
-// Task to re-enable tests FXIOS-5411
 class RemoteTabsPanelTests: XCTestCase {
     // MARK: States of panel
 
@@ -19,73 +18,69 @@ class RemoteTabsPanelTests: XCTestCase {
     }
 
     func testHasNoClients() {
-        _ = XCTSkip("Flakey test")
-//        let panel = createPanel()
-//
-//        panelRefreshWithExpectation(panel: panel) {
-//            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource else {
-//                XCTFail("Should have error data source")
-//                return
-//            }
-//
-//            XCTAssertEqual(dataSource.error, .noClients)
-//        }
+        let panel = createPanel()
+
+        panelRefreshWithExpectation(panel: panel) {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource else {
+                XCTFail("Should have error data source")
+                return
+            }
+
+            XCTAssertEqual(dataSource.error, .noClients)
+        }
     }
 
     func testHasNoTabs() {
-        _ = XCTSkip("Flakey test")
-//        let clientAndTabs = ClientAndTabs(client: remoteClient,
-//                                          tabs: [])
-//        let panel = createPanel(clientAndTabs: [clientAndTabs])
-//
-//        panelRefreshWithExpectation(panel: panel) {
-//            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource else {
-//                XCTFail("Should have error data source")
-//                return
-//            }
-//
-//            XCTAssertEqual(dataSource.error, .noTabs)
-//        }
+        let clientAndTabs = ClientAndTabs(client: remoteClient,
+                                          tabs: [])
+        let panel = createPanel(clientAndTabs: [clientAndTabs])
+
+        panelRefreshWithExpectation(panel: panel) {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource else {
+                XCTFail("Should have error data source")
+                return
+            }
+
+            XCTAssertEqual(dataSource.error, .noTabs)
+        }
     }
 
     func testHasTabs() {
-        _ = XCTSkip("Flakey test")
-//        let clientAndTabs = ClientAndTabs(client: remoteClient,
-//                                          tabs: remoteTabs)
-//        let panel = createPanel(clientAndTabs: [clientAndTabs])
-//
-//        panelRefreshWithExpectation(panel: panel) {
-//            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else {
-//                XCTFail("Should have panel and tabs data source")
-//                return
-//            }
-//
-//            XCTAssertEqual(dataSource.clientAndTabs.count, 1)
-//            XCTAssertEqual(dataSource.clientAndTabs[0].tabs.count, 1)
-//        }
+        let clientAndTabs = ClientAndTabs(client: remoteClient,
+                                          tabs: remoteTabs)
+        let panel = createPanel(clientAndTabs: [clientAndTabs])
+
+        panelRefreshWithExpectation(panel: panel) {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else {
+                XCTFail("Should have panel and tabs data source")
+                return
+            }
+
+            XCTAssertEqual(dataSource.clientAndTabs.count, 1)
+            XCTAssertEqual(dataSource.clientAndTabs[0].tabs.count, 1)
+        }
     }
 
     // MARK: Collapsing of section
 
     func testSectionCanCollapseAndReopen() {
-        _ = XCTSkip("Flakey test")
-//        let clientAndTabs = ClientAndTabs(client: remoteClient,
-//                                          tabs: remoteTabs)
-//
-//        let panel = createPanel(clientAndTabs: [clientAndTabs])
-//
-//        panelRefreshWithExpectation(panel: panel) {
-//            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else {
-//                XCTFail("Should have panel and tabs data source")
-//                return
-//            }
-//
-//            XCTAssertEqual(dataSource.hiddenSections.count, 0, "Has no collapsible section at first")
-//            dataSource.collapsibleSectionDelegate?.hideTableViewSection(0)
-//            XCTAssertEqual(dataSource.hiddenSections.count, 1, "Has collapsed")
-//            dataSource.collapsibleSectionDelegate?.hideTableViewSection(0)
-//            XCTAssertEqual(dataSource.hiddenSections.count, 0, "Has been reopened")
-//        }
+        let clientAndTabs = ClientAndTabs(client: remoteClient,
+                                          tabs: remoteTabs)
+
+        let panel = createPanel(clientAndTabs: [clientAndTabs])
+
+        panelRefreshWithExpectation(panel: panel) {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else {
+                XCTFail("Should have panel and tabs data source")
+                return
+            }
+
+            XCTAssertEqual(dataSource.hiddenSections.count, 0, "Has no collapsible section at first")
+            dataSource.collapsibleSectionDelegate?.hideTableViewSection(0)
+            XCTAssertEqual(dataSource.hiddenSections.count, 1, "Has collapsed")
+            dataSource.collapsibleSectionDelegate?.hideTableViewSection(0)
+            XCTAssertEqual(dataSource.hiddenSections.count, 0, "Has been reopened")
+        }
     }
 }
 
