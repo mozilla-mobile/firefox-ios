@@ -8,6 +8,9 @@ import MozillaAppServices
 import Shared
 
 protocol GleanPlumbMessageManagerProtocol {
+    /// Delegate protocol to open Glean message when pressed
+    var pressedDelegate: GleanPlumbMessagePressedDelegate? { get set }
+
     /// Performs the bookkeeping and preparation of messages for their respective surfaces.
     /// We can build our collection of eligible messages for a surface in here.
     func onStartup()
@@ -34,6 +37,10 @@ protocol GleanPlumbMessageManagerProtocol {
     func onMalformedMessage(messageKey: String)
 }
 
+protocol GleanPlumbMessagePressedDelegate: AnyObject {
+    func openURLInNewTab(url: URL)
+}
+
 /// To the surface that requests messages, it provides valid and triggered messages in priority order.
 ///
 /// Note: The term "valid" in `GleanPlumbMessage` context means a well-formed, non-expired, priority ordered message.
@@ -54,6 +61,8 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     private let messagingUtility: GleanPlumbMessageUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
     private let feature = FxNimbus.shared.features.messaging.value()
+
+    weak var pressedDelegate: GleanPlumbMessagePressedDelegate?
 
     // MARK: - Inits
 
@@ -131,11 +140,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         /// With our well-formed URL, we can handle the action here.
         if url.isWebPage() {
-            let bvc = BrowserViewController.foregroundBVC()
-
-            // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
-            // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
-            bvc?.openURLInNewTab(url)
+            pressedDelegate?.openURLInNewTab(url: url)
         } else {
             UIApplication.shared.open(url, options: [:])
         }

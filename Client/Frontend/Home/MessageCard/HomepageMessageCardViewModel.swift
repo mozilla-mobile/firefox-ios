@@ -13,9 +13,10 @@ protocol MessageSurfaceProtocol {
 
 class HomepageMessageCardViewModel: MessageSurfaceProtocol {
     private let dataAdaptor: MessageCardDataAdaptor
-    private let messagingManager: GleanPlumbMessageManagerProtocol
+    private var messagingManager: GleanPlumbMessageManagerProtocol
 
     weak var delegate: HomepageDataModelDelegate?
+    weak var homepanelDelegate: HomePanelDelegate?
     var message: GleanPlumbMessage?
     var dismissClosure: (() -> Void)?
     var theme: Theme
@@ -27,6 +28,7 @@ class HomepageMessageCardViewModel: MessageSurfaceProtocol {
         self.dataAdaptor = dataAdaptor
         self.theme = theme
         self.messagingManager = messagingManager
+        self.messagingManager.pressedDelegate = self
     }
 
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
@@ -122,5 +124,12 @@ extension HomepageMessageCardViewModel: MessageCardDelegate {
             self.delegate?.reloadView()
             self.handleMessageDisplayed()
         }
+    }
+}
+
+// MARK: - GleanPlumbMessagePressedDelegate
+extension HomepageMessageCardViewModel: GleanPlumbMessagePressedDelegate {
+    func openURLInNewTab(url: URL) {
+        homepanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: false, selectNewTab: true)
     }
 }

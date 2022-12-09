@@ -54,7 +54,7 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
 
     /// For the MVP, we always expire the message.
     func onMessagePressed(_ message: GleanPlumbMessage) {
-       onMessageExpired(message.metadata, shouldReport: false)
+        onMessageExpired(message.metadata, shouldReport: false)
 
         set(key: message.id, metadata: message.metadata)
     }
