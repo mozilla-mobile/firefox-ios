@@ -8,7 +8,6 @@ import MozillaAppServices
 import Shared
 
 protocol GleanPlumbMessageManagerProtocol {
-
     /// Delegate protocol to open Glean message when pressed
     var pressedDelegate: GleanPlumbMessagePressedDelegate? { get set }
 
