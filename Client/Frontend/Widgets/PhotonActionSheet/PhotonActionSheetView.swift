@@ -27,9 +27,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     }
 
     // MARK: - Variables
-
-    // we use a placeholder image so we can set the theme correctly, the image is updated later
-    private var badgeOverlay: BadgeWithBackdrop = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge)
+    private var badgeOverlay: BadgeWithBackdrop?
     private var item: SingleActionViewModel?
     weak var delegate: PhotonActionSheetViewDelegate?
 
@@ -251,7 +249,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         verticalBorder.backgroundColor = theme.colors.layer4
         bottomBorder.backgroundColor = theme.colors.layer4
 
-        badgeOverlay.badge.tintBackground(color: theme.colors.layer1)
+        badgeOverlay?.badge.tintBackground(color: theme.colors.layer1)
         disclosureIndicator.tintColor = theme.colors.iconSecondary
 
         let iconTint: UIColor? = item?.needsIconActionableTint ?? false ? theme.colors.iconAccentYellow : tintColor
@@ -374,9 +372,9 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
               let parent = statusIcon.superview
         else { return }
 
-        badgeOverlay.badge.update(imageName: name)
-        badgeOverlay.add(toParent: parent)
-        badgeOverlay.layout(onButton: statusIcon)
-        badgeOverlay.show(true)
+        badgeOverlay = BadgeWithBackdrop(imageName: name)
+        badgeOverlay?.add(toParent: parent)
+        badgeOverlay?.layout(onButton: statusIcon)
+        badgeOverlay?.show(true)
     }
 }
