@@ -40,8 +40,7 @@ enum MenuButtonToastAction {
 ///     - The home page menu, determined with isHomePage variable
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
-class MainMenuActionHelper:
-    PhotonActionSheetProtocol,
+class MainMenuActionHelper: PhotonActionSheetProtocol,
     FeatureFlaggable,
     CanRemoveQuickActionBookmark,
     AppVersionUpdateCheckerProtocol {

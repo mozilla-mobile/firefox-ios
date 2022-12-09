@@ -754,7 +754,6 @@ extension HistoryPanel {
         let nextController = RecentlyClosedTabsPanel(profile: profile)
         nextController.title = .RecentlyClosedTabsPanelTitle
         nextController.libraryPanelDelegate = libraryPanelDelegate
-        nextController.recentlyClosedTabsDelegate = BrowserViewController.foregroundBVC()
         refreshControl?.endRefreshing()
         navigationController?.pushViewController(nextController, animated: true)
     }
