@@ -257,14 +257,12 @@ class PhotonActionSheet: UIViewController, Themeable {
 
         // In a popover the popover provides the blur background
         if viewModel.presentationStyle == .popover {
-            tableView.backgroundColor = theme.colors.layer1.withAlphaComponent(0.7)
+            view.backgroundColor = theme.colors.layer1.withAlphaComponent(0.7)
         } else if UIAccessibility.isReduceTransparencyEnabled {
             // Remove the visual effect and the background alpha
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
             tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
         } else {
-            // Not using a background color allows the view to style correctly with the popover arrow
-            tableView.backgroundView?.backgroundColor = .clear
             let blurEffect = theme.type == .dark ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
 
             if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
@@ -273,6 +271,7 @@ class PhotonActionSheet: UIViewController, Themeable {
                 let blurEffectView = UIVisualEffectView(effect: blurEffect)
                 tableView.backgroundView = blurEffectView
             }
+            tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
         }
 
         closeButton.backgroundColor = theme.colors.layer1
