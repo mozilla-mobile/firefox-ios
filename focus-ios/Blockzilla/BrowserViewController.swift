@@ -32,12 +32,15 @@ class BrowserViewController: UIViewController {
 
     var modalDelegate: ModalDelegate?
     private var keyboardState: KeyboardState?
-    private let browserToolbar = BrowserToolbar()
     private var homeViewController: HomeViewController!
     private let overlayView = OverlayView()
     private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     private let urlBarContainer = UIView()
+
     private var urlBar: URLBar!
+    private lazy var browserToolbar = BrowserToolbar(viewModel: urlBarViewModel)
+    private lazy var urlBarViewModel = URLBarViewModel()
+
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
     private var fillerView: UIView?
@@ -195,7 +198,6 @@ class BrowserViewController: UIViewController {
 
         browserToolbar.isHidden = true
         browserToolbar.alpha = 0
-        browserToolbar.delegate = self
         browserToolbar.translatesAutoresizingMaskIntoConstraints = false
         mainContainerView.addSubview(browserToolbar)
 
@@ -336,7 +338,7 @@ class BrowserViewController: UIViewController {
         case .trash(let version):
             switch version {
             case .v2:
-                let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
+                let sourceButton = showsToolsetInURLBar ? urlBar.deleteButtonAnchor : browserToolbar.deleteButtonAnchor
                 let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
                 CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
                 return self.tooltipController(
@@ -347,7 +349,7 @@ class BrowserViewController: UIViewController {
                 )
 
             case .v1:
-                let sourceButton = showsToolsetInURLBar ? urlBar.deleteButton : browserToolbar.deleteButton
+                let sourceButton = showsToolsetInURLBar ? urlBar.deleteButtonAnchor : browserToolbar.deleteButtonAnchor
                 let sourceRect = showsToolsetInURLBar ? CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.maxY - 10, width: 0, height: 0) :
                 CGRect(x: sourceButton.bounds.midX, y: sourceButton.bounds.minY + 10, width: 0, height: 0)
                 return self.tooltipController(
@@ -416,8 +418,8 @@ class BrowserViewController: UIViewController {
 
         case .menu:
             return self.tooltipController(
-                anchoredBy: self.urlBar.contextMenuButton,
-                sourceRect: CGRect(x: self.urlBar.contextMenuButton.bounds.maxX, y: self.urlBar.contextMenuButton.bounds.midY + 12, width: 0, height: 0),
+                anchoredBy: self.urlBar.contextMenuButtonAnchor,
+                sourceRect: CGRect(x: self.urlBar.contextMenuButtonAnchor.bounds.maxX, y: self.urlBar.contextMenuButtonAnchor.bounds.midY + 12, width: 0, height: 0),
                 body: UIConstants.strings.tootipBodyTextForContextMenuIcon,
                 dismiss: { [unowned self] in self.onboardingEventsHandler.route = nil }
             )
@@ -565,7 +567,7 @@ class BrowserViewController: UIViewController {
         } else {
             shieldIconStatus = .connectionNotSecure
         }
-        urlBar.connectionState = shieldIconStatus
+        urlBarViewModel.connectionState = shieldIconStatus
     }
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
@@ -620,22 +622,58 @@ class BrowserViewController: UIViewController {
     private func createHomeView() {
         homeViewController = HomeViewController(tipManager: tipManager)
         homeViewController.delegate = self
-        homeViewController.toolbar.toolset.delegate = self
         homeViewController.onboardingEventsHandler = onboardingEventsHandler
         install(homeViewController, on: homeViewContainer)
     }
 
     private func createURLBar() {
-
-        urlBar = URLBar()
+        urlBar = URLBar(viewModel: urlBarViewModel)
+        bindUrlBarViewModel()
         urlBar.delegate = self
-        urlBar.toolsetDelegate = self
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
         addURLBarConstraints()
+    }
 
+    private func bindUrlBarViewModel() {
+        urlBarViewModel.viewActionPublisher
+            .sink { [weak self] action in
+                guard let self = self else { return }
+
+                switch action {
+                    case .contextMenuTap(let anchor):
+                        self.updateFindInPageVisibility(visible: false)
+                        self.presentContextMenu(from: anchor)
+
+                    case .backButtonTap:
+                        self.webViewController.goBack()
+
+                    case .forwardButtonTap:
+                        self.webViewController.goForward()
+
+                    case .deleteButtonTap:
+                        self.updateFindInPageVisibility(visible: false)
+                        self.urlBarViewModel.resetToDefaults()
+                        self.resetBrowser()
+
+                    case .shieldIconButtonTap:
+                        self.urlBarDidTapShield(self.urlBar)
+
+                    case .stopButtonTap:
+                        self.webViewController.stop()
+
+                    case .reloadButtonTap:
+                        self.webViewController.reload()
+
+                    case .dragInteractionStarted:
+                        GleanMetrics.UrlInteraction.dragStarted.record()
+
+                    case .pasteAndGo:
+                        GleanMetrics.UrlInteraction.pasteAndGo.record()
+                }
+            }.store(in: &cancellables)
     }
 
     private func addURLBarConstraints() {
@@ -780,9 +818,9 @@ class BrowserViewController: UIViewController {
         webViewController.reset()
         webViewContainer.isHidden = true
         browserToolbar.isHidden = true
-        browserToolbar.canGoBack = false
-        browserToolbar.canGoForward = false
-        browserToolbar.canDelete = false
+        urlBarViewModel.canGoBack = false
+        urlBarViewModel.canGoForward = false
+        urlBarViewModel.canDelete = false
         urlBar.dismiss()
         urlBar.removeFromSuperview()
         urlBarContainer.alpha = 0
@@ -914,8 +952,7 @@ class BrowserViewController: UIViewController {
         onboardingEventsHandler.route = nil
         onboardingEventsHandler.send(.startBrowsing)
 
-        urlBar.canDelete = true
-        browserToolbar.canDelete = true
+        urlBarViewModel.canDelete = true
         guard let savedUrl = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return }
         if let currentDomain = url.baseDomain, let savedDomain = URL(string: savedUrl)?.baseDomain, currentDomain == savedDomain {
             userActivity = SiriShortcuts().getActivity(for: .openURL)
@@ -1136,7 +1173,7 @@ class BrowserViewController: UIViewController {
         return actions
     }
 
-    func presentContextMenu(from sender: InsetButton) {
+    func presentContextMenu(from sender: UIButton) {
         if #available(iOS 14, *) {
             sender.showsMenuAsPrimaryAction = true
             sender.menu = UIMenu(children: buildActions(for: sender))
@@ -1436,61 +1473,6 @@ extension BrowserViewController: TrackingProtectionDelegate {
     }
 }
 
-extension BrowserViewController: BrowserToolsetDelegate {
-    func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
-        webViewController.goBack()
-    }
-
-    private func handleNavigationBack() {
-        // Check if the previous site we were on was AMP
-        guard let navigatingFromAmpSite = SearchHistoryUtils.pullSearchFromStack()?.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else {
-            return
-        }
-
-        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
-        SearchHistoryUtils.isFromURLBar = true
-
-        // This function is now getting called after our new url is set!!
-        if !navigatingFromAmpSite {
-            SearchHistoryUtils.goBack()
-        }
-    }
-
-    func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
-        webViewController.goForward()
-    }
-
-    private func handleNavigationForward() {
-        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
-        SearchHistoryUtils.isFromURLBar = true
-
-        // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally grabbing the NEW url
-        guard let navigatingToAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
-
-        if !navigatingToAmpSite {
-            SearchHistoryUtils.goForward()
-        }
-    }
-
-    func browserToolsetDidPressReload(_ browserToolset: BrowserToolset) {
-        webViewController.reload()
-    }
-
-    func browserToolsetDidPressStop(_ browserToolset: BrowserToolset) {
-        webViewController.stop()
-    }
-
-    func browserToolsetDidPressDelete(_ browserToolbar: BrowserToolset) {
-        updateFindInPageVisibility(visible: false)
-        self.resetBrowser()
-    }
-
-    func browserToolsetDidPressContextMenu(_ browserToolbar: BrowserToolset, menuButton: InsetButton) {
-        updateFindInPageVisibility(visible: false)
-        presentContextMenu(from: menuButton)
-    }
-}
-
 extension BrowserViewController: HomeViewControllerDelegate {
     func homeViewControllerDidTouchEmptyArea(_ controller: HomeViewController) {
         urlBar.dismiss()
@@ -1657,14 +1639,14 @@ extension BrowserViewController: WebControllerDelegate {
         SearchHistoryUtils.isReload = false
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
-        urlBar.isLoading = true
+        urlBarViewModel.isLoading = true
         toggleURLBarBackground(isBright: false)
         updateURLBar()
     }
 
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
-        urlBar.isLoading = false
+        urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
@@ -1686,19 +1668,17 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
-        urlBar.isLoading = false
+        urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: true)
         urlBar.progressBar.hideProgressBar()
     }
 
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
-        urlBar.canGoBack = canGoBack
-        browserToolbar.canGoBack = canGoBack
+        urlBarViewModel.canGoBack = canGoBack
     }
 
     func webController(_ controller: WebController, didUpdateCanGoForward canGoForward: Bool) {
-        urlBar.canGoForward = canGoForward
-        browserToolbar.canGoForward = canGoForward
+        urlBarViewModel.canGoForward = canGoForward
     }
 
     func webController(_ controller: WebController, didUpdateEstimatedProgress estimatedProgress: Double) {
@@ -1794,6 +1774,33 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webControllerDidNavigateForward(_ controller: WebController) {
         handleNavigationForward()
+    }
+
+    private func handleNavigationBack() {
+        // Check if the previous site we were on was AMP
+        guard let navigatingFromAmpSite = SearchHistoryUtils.pullSearchFromStack()?.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else {
+            return
+        }
+
+        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
+        SearchHistoryUtils.isFromURLBar = true
+
+        // This function is now getting called after our new url is set!!
+        if !navigatingFromAmpSite {
+            SearchHistoryUtils.goBack()
+        }
+    }
+
+    private func handleNavigationForward() {
+        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
+        SearchHistoryUtils.isFromURLBar = true
+
+        // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally grabbing the NEW url
+        guard let navigatingToAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
+
+        if !navigatingToAmpSite {
+            SearchHistoryUtils.goForward()
+        }
     }
 
     func webController(_ controller: WebController, didUpdateTrackingProtectionStatus trackingStatus: TrackingProtectionStatus, oldTrackingProtectionStatus: TrackingProtectionStatus) {
@@ -1892,7 +1899,7 @@ extension BrowserViewController: UIPopoverPresentationControllerDelegate {
         guard let menuSheet = popoverPresentationController.presentedViewController as? PhotonActionSheet, !(menuSheet.popoverPresentationController?.sourceView is ShortcutView) else {
             return
         }
-        view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButton : browserToolbar.contextMenuButton
+        view.pointee = self.showsToolsetInURLBar ? urlBar.contextMenuButtonAnchor : browserToolbar.contextMenuButtonAnchor
     }
 }
 

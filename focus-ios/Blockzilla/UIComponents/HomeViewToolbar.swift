@@ -5,7 +5,6 @@
 import UIKit
 
 class HomeViewToolbar: UIView {
-    let toolset = BrowserToolset()
     private let stackView = UIStackView()
 
     init() {
@@ -25,11 +24,5 @@ class HomeViewToolbar: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    weak var delegate: BrowserToolsetDelegate? {
-        didSet {
-            toolset.delegate = delegate
-        }
     }
 }
