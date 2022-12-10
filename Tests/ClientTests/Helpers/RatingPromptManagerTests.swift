@@ -104,10 +104,9 @@ class RatingPromptManagerTests: XCTestCase {
     }
 
     func testShouldShowPrompt_hasMinimumMobileBookmarksCount_returnsTrue() {
-        _ = XCTSkip("flakey test")
-//        setupEnvironment()
-//        createBookmarks(bookmarkCount: 5, withRoot: BookmarkRoots.MobileFolderGUID)
-//        updateData(expectedRatingPromptOpenCount: 1)
+        setupEnvironment()
+        createBookmarks(bookmarkCount: 5, withRoot: BookmarkRoots.MobileFolderGUID)
+        updateData(expectedRatingPromptOpenCount: 1)
     }
 
     func testShouldShowPrompt_hasOtherBookmarksCount_returnsFalse() {
