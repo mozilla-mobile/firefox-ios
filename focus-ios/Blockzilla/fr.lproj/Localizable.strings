@@ -155,7 +155,7 @@
 "ExternalLink.cancelButton" = "Annuler";
 
 /* Button label in mailto: dialog to send an email. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
-"ExternalLink.emailButton" = "Envoyer un courriel";
+"ExternalLink.emailButton" = "Envoyer un e-mail";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
 "FindInPage.Done" = "Arrêter de rechercher dans la page";
