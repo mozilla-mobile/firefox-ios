@@ -14,10 +14,10 @@ class ImageButtonWithLabel: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        performLayout()
+        setupLayout()
     }
 
-    fileprivate func performLayout() {
+    private func setupLayout() {
         addSubview(button)
         addSubview(label)
         button.imageView?.contentMode = .scaleAspectFill
