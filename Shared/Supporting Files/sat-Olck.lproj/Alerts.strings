@@ -7,6 +7,3 @@
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
 "Alerts.RestoreTabs.Message.v109" = "ᱚᱱᱟ ᱠᱷᱟᱹᱛᱤᱨ ᱤᱠᱟᱹ ᱾ ᱡᱟᱦᱟᱸ ᱠᱷᱚᱱ ᱮᱢ ᱵᱟᱹᱜᱤ ᱠᱮᱜᱼᱟ ᱚᱱᱰᱮ ᱠᱷᱚᱱ ᱴᱮᱵᱽ ᱠᱚ ᱫᱩᱦᱲᱟᱹ ᱫᱚᱦᱚᱭ ᱢᱮ ᱾";
 
-/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Title.v109" = "Firefox ᱰᱤᱜᱟᱹᱣ ᱮᱱᱟ ᱾ ᱟᱢᱟᱜ ᱴᱮᱵᱽ ᱠᱚ ᱫᱩᱦᱲᱟᱹ ᱫᱚᱦᱚᱭᱟ ᱥᱮ ?";
-

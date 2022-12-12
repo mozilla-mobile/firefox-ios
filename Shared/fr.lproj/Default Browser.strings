@@ -8,7 +8,7 @@
 "DefaultBrowserCard.Button.v2" = "Me montrer comment";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Description" = "Faites en sorte que les liens des sites web, des courriels et des messages s’ouvrent automatiquement dans Firefox.";
+"DefaultBrowserCard.Description" = "Faites en sorte que les liens des sites web, des e-mails et des messages s’ouvrent automatiquement dans Firefox.";
 
 /* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Description.v108" = "Choisissez Firefox comme navigateur par défaut pour rendre la vitesse, la sécurité et la confidentialité automatiques.";

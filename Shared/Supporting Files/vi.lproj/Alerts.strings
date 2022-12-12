@@ -7,6 +7,6 @@
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
 "Alerts.RestoreTabs.Message.v109" = "Xin lỗi vì điều đó. Khôi phục các thẻ để tiếp tục từ nơi bạn đã dừng lại.";
 
-/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Title.v109" = "Firefox đã bị đổ vỡ. Khôi phục các thẻ của bạn?";
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ bị lỗi. Khôi phục các thẻ của bạn?";
 
