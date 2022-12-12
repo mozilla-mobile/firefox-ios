@@ -68,6 +68,12 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
     func changeCurrentTheme(_ newTheme: ThemeType) {
         guard currentTheme.type != newTheme else { return }
         currentTheme = newThemeForType(newTheme)
+
+        // overwrite the user interface style on the window attached to our scene
+        // once we have multiple scenes we need to update all of them
+        UIWindow.keyWindow?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
+
+        // old way of updating the theme. We should pass in and save sceneDelegate instead of appDelegate
         appDelegate?.window??.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
 
         ensureMainThread { [weak self] in

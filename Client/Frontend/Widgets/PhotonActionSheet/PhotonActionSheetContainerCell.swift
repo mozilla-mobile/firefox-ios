@@ -10,7 +10,7 @@ protocol PhotonActionSheetContainerCellDelegate: AnyObject {
 }
 
 // A PhotonActionSheet cell
-class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell {
+class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell, ThemeApplicable {
     weak var delegate: PhotonActionSheetContainerCellDelegate?
     private lazy var containerStackView: UIStackView = .build { stackView in
         stackView.alignment = .fill
@@ -40,12 +40,12 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell {
 
     // MARK: Table view
 
-    func configure(actions: PhotonRowActions, viewModel: PhotonActionSheetViewModel) {
+    func configure(actions: PhotonRowActions, viewModel: PhotonActionSheetViewModel, theme: Theme) {
         for item in actions.items {
-            item.tintColor = viewModel.tintColor
             item.multipleItemsSetup.isMultiItems = actions.items.count > 1
-            configure(with: item)
+            configure(with: item, theme: theme)
         }
+        applyTheme(theme: theme)
     }
 
     // MARK: - Setup
@@ -59,9 +59,9 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell {
         ])
     }
 
-    func configure(with item: SingleActionViewModel) {
+    func configure(with item: SingleActionViewModel, theme: Theme) {
         let childView = PhotonActionSheetView()
-        childView.configure(with: item)
+        childView.configure(with: item, theme: theme)
         childView.addVerticalBorder(ifShouldBeShown: !containerStackView.arrangedSubviews.isEmpty)
         childView.delegate = self
         containerStackView.addArrangedSubview(childView)
@@ -73,6 +73,8 @@ class PhotonActionSheetContainerCell: UITableViewCell, ReusableCell {
           .compactMap { $0 as? PhotonActionSheetView }
           .forEach { $0.bottomBorder.isHidden = isHidden }
     }
+
+    func applyTheme(theme: Theme) { }
 }
 
 // MARK: - PhotonActionSheetViewDelegate

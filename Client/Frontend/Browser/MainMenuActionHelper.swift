@@ -41,9 +41,9 @@ enum MenuButtonToastAction {
 ///     - The file URL menu, shown when the user is on a url of type `file://`
 ///     - The site menu, determined by the absence of isHomePage and isFileURL
 class MainMenuActionHelper: PhotonActionSheetProtocol,
-    FeatureFlaggable,
-    CanRemoveQuickActionBookmark,
-    AppVersionUpdateCheckerProtocol {
+                            FeatureFlaggable,
+                            CanRemoveQuickActionBookmark,
+                            AppVersionUpdateCheckerProtocol {
     // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5323
     // swiftlint: disable large_tuple
     typealias FXASyncClosure = (params: FxALaunchParams, flowType: FxAPageType, referringPage: ReferringPage)
@@ -508,12 +508,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             iconURL = url
         }
         let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
-        let iconTint: UIColor? = needsReAuth ? UIColor.Photon.Yellow60 : nil
         let syncOption = SingleActionViewModel(title: title,
                                                iconString: iconString,
                                                iconURL: iconURL,
                                                iconType: iconType,
-                                               iconTint: iconTint,
+                                               needsIconActionableTint: needsReAuth,
                                                tapHandler: action).items
         return syncOption
     }
