@@ -398,7 +398,7 @@
 "fxa.signin.ready-to-scan" = "Prêt·e à scanner";
 
 /* FxA sign in view email login button */
-"fxa.signin.use-email-instead" = "Utiliser plutôt une adresse électronique";
+"fxa.signin.use-email-instead" = "Utiliser plutôt une adresse e-mail";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "Synchroniser maintenant";
@@ -1490,7 +1490,7 @@
 "Settings.OfferClipboardBar.Title" = "Proposer d’ouvrir les liens copiés";
 
 /* Title for Open With Settings */
-"Settings.OpenWith.PageTitle" = "Ouvrir les liens des courriels avec";
+"Settings.OpenWith.PageTitle" = "Ouvrir les liens des e-mails avec";
 
 /* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
 "Settings.OpenWith.SectionName" = "Appli de messagerie électronique";

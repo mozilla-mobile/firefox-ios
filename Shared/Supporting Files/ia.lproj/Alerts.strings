@@ -7,6 +7,6 @@
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
 "Alerts.RestoreTabs.Message.v109" = "Desolate. Restaura le schedas pro reprender de ubi tu era.";
 
-/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Title.v109" = "Firefox iva in crash. Restaurar tu schedas?";
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ iva in crash. Restaurar tu schedas?";
 

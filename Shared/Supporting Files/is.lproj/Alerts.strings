@@ -7,6 +7,6 @@
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
 "Alerts.RestoreTabs.Message.v109" = "Þetta var leiðinlegt. Endurheimtu flipa til að halda áfram þar sem frá var horfið.";
 
-/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Title.v109" = "Firefox hrundi. Endurheimta flipana þína?";
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ hrundi. Endurheimta flipana þína?";
 
