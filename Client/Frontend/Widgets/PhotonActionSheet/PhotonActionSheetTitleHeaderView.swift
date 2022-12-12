@@ -6,41 +6,22 @@ import UIKit
 
 // MARK: - PhotonActionSheetTitleHeaderView
 class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
-    static let Padding: CGFloat = 18
+    struct UX {
+        static let padding: CGFloat = 18
+    }
 
-    lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        titleLabel.numberOfLines = 1
-        return titleLabel
-    }()
+    lazy var titleLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1, size: 12)
+        label.numberOfLines = 1
+    }
 
-    lazy var separatorView: UIView = {
-        let separatorLine = UIView()
-        return separatorLine
-    }()
+    lazy var separatorView: UIView = .build { _ in }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        self.backgroundView = UIView()
-        self.backgroundView?.backgroundColor = .clear
-        contentView.addSubview(titleLabel)
-
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).offset(PhotonActionSheetTitleHeaderView.Padding)
-            make.trailing.equalTo(contentView)
-            make.top.equalTo(contentView).offset(PhotonActionSheet.UX.tablePadding)
-        }
-
-        contentView.addSubview(separatorView)
-
-        separatorView.snp.makeConstraints { make in
-            make.leading.trailing.equalTo(self)
-            make.top.equalTo(titleLabel.snp.bottom).offset(PhotonActionSheet.UX.tablePadding)
-            make.bottom.equalTo(contentView).inset(PhotonActionSheet.UX.tablePadding)
-            make.height.equalTo(0.5)
-        }
+        backgroundColor = .clear
+        setupLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -48,16 +29,37 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCel
     }
 
     func configure(with title: String) {
-        self.titleLabel.text = title
+        titleLabel.text = title
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.titleLabel.text = nil
+        titleLabel.text = nil
     }
 
     func applyTheme(theme: Theme) {
         separatorView.backgroundColor = theme.colors.borderPrimary
         titleLabel.textColor = theme.colors.textSecondary
+    }
+
+    // MARK: - Private
+    private func setupLayout() {
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(separatorView)
+
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.padding),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                            constant: PhotonActionSheet.UX.tablePadding),
+
+            separatorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            separatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            separatorView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                               constant: PhotonActionSheet.UX.tablePadding),
+            separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                                  constant: PhotonActionSheet.UX.tablePadding),
+            separatorView.heightAnchor.constraint(equalToConstant: 0.5)
+        ])
     }
 }
