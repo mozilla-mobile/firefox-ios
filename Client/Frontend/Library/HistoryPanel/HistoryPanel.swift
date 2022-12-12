@@ -485,6 +485,11 @@ class HistoryPanel: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if let item = diffableDatasource?.itemIdentifier(for: indexPath),
+           let actionable = item as? HistoryActionablesModel {
+            return nil
+        }
+
         // For UX consistency, every cell in history panel SHOULD have a trailing action.
         let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
             guard let self = self else {
