@@ -11,6 +11,8 @@ let package = Package(
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
+        .library(name: "Common",
+                 targets: ["Common"]),
     ],
     dependencies: [
         .package(
@@ -23,9 +25,13 @@ let package = Package(
     targets: [
         .target(
             name: "SiteImageView",
-            dependencies: ["Fuzi", "Kingfisher"]),
+            dependencies: ["Fuzi", "Kingfisher", "Common"]),
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView"]),
+        .target(name: "Common"),
+        .testTarget(
+            name: "CommonTests",
+            dependencies: ["Common"]),
     ]
 )
