@@ -6,6 +6,7 @@ import UIKit
 
 /// Used to fill in information throughout the lifetime of an image request inside SiteImageView
 struct SiteImageModel {
+    let id: UUID
     let expectedImageType: SiteImageType
     let siteURL: URL
     let domain: String
