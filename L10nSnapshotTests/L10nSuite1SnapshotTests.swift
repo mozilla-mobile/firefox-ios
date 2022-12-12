@@ -81,9 +81,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        navigator.goto(BasicAuthDialog)
+        navigator.nowAt(BasicAuthDialog)
         snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
-        navigator.back()
     }
 
     func test3ReloadButtonContextMenu() {
