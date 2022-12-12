@@ -13,7 +13,7 @@ class RemoteTabsPanelTests: XCTestCase {
     func testHasNoSyncAccount() throws {
         let panel = createPanel(hasAccount: false)
 
-        let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource)
+        let dataSource = try XCTUnwrap(panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource)
         XCTAssertEqual(dataSource.error, .notLoggedIn)
     }
 
@@ -21,7 +21,7 @@ class RemoteTabsPanelTests: XCTestCase {
         let panel = createPanel()
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource else {
                 XCTFail("Should have error data source")
                 return
             }
@@ -36,7 +36,7 @@ class RemoteTabsPanelTests: XCTestCase {
         let panel = createPanel(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelErrorDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsErrorDataSource else {
                 XCTFail("Should have error data source")
                 return
             }
@@ -51,7 +51,7 @@ class RemoteTabsPanelTests: XCTestCase {
         let panel = createPanel(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsClientAndTabsDataSource else {
                 XCTFail("Should have panel and tabs data source")
                 return
             }
@@ -70,7 +70,7 @@ class RemoteTabsPanelTests: XCTestCase {
         let panel = createPanel(clientAndTabs: [clientAndTabs])
 
         panelRefreshWithExpectation(panel: panel) {
-            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsPanelClientAndTabsDataSource else {
+            guard let dataSource = panel.tableViewController.tableViewDelegate as? RemoteTabsClientAndTabsDataSource else {
                 XCTFail("Should have panel and tabs data source")
                 return
             }
