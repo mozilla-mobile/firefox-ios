@@ -18,7 +18,8 @@ import Common
 public class SiteImageView: UIView {
     // MARK: - Properties
     private var uniqueID: UUID?
-    private var imageFetcher: SiteImageFetcher = DefaultSiteImageFetcher()
+    private var imageFetcher: SiteImageFetcher
+    private var completionHandler: (() -> Void)?
 
     private lazy var faviconView: UIImageView = .build { imageView in
         imageView.layer.masksToBounds = true
@@ -42,6 +43,20 @@ public class SiteImageView: UIView {
     private lazy var fallbackFaviconBackground: UIView = .build { view in }
 
     // MARK: - Init
+
+    public override init(frame: CGRect) {
+        self.imageFetcher = DefaultSiteImageFetcher()
+        super.init(frame: frame)
+    }
+
+    // Internal init used in unit tests only
+    init(frame: CGRect,
+         imageFetcher: SiteImageFetcher,
+         completionHandler: @escaping () -> Void) {
+        self.imageFetcher = imageFetcher
+        self.completionHandler = completionHandler
+        super.init(frame: frame)
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -84,6 +99,7 @@ public class SiteImageView: UIView {
             case .favicon:
                 setupFaviconImage(imageModel)
             }
+            completionHandler?()
         }
     }
 
