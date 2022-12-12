@@ -561,10 +561,6 @@ extension TabTrayViewController: RemotePanelDelegate {
         fxaSignInOrCreateAccountHelper()
     }
 
-    func remotePanelDidRequestToCreateAccount() {
-        fxaSignInOrCreateAccountHelper()
-    }
-
     func remotePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         TelemetryWrapper.recordEvent(category: .action, method: .open, object: .syncTab)
         self.openInNewTab?(url, isPrivate)
