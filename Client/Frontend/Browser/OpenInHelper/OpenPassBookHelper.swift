@@ -51,8 +51,8 @@ class OpenPassBookHelper {
         do {
             try openPassWithContentsOfURL()
             completion()
-        } catch InvalidPassError.contentsOfURL {
-            sendLogError(errorType: InvalidPassError.contentsOfURL)
+        } catch let error as InvalidPassError {
+            sendLogError(with: error.description)
             openPassWithCookies { error in
                 if error != nil {
                     self.presentErrorAlert(completion: completion)
@@ -61,7 +61,7 @@ class OpenPassBookHelper {
                 }
             }
         } catch {
-            sendLogError(errorType: InvalidPassError.openError)
+            sendLogError(with: error.localizedDescription)
             presentErrorAlert(completion: completion)
         }
     }
@@ -82,7 +82,7 @@ class OpenPassBookHelper {
             do {
                 try self.open(passData: data)
             } catch {
-                self.sendLogError(errorType: InvalidPassError.dataTaskURL)
+                self.sendLogError(with: error.localizedDescription)
                 completion(InvalidPassError.dataTaskURL)
             }
         })
@@ -125,7 +125,7 @@ class OpenPassBookHelper {
         do {
             try open(passData: passData)
         } catch {
-            sendLogError(errorType: InvalidPassError.contentsOfURL)
+            sendLogError(with: error.localizedDescription)
             throw InvalidPassError.contentsOfURL
         }
     }
@@ -143,7 +143,7 @@ class OpenPassBookHelper {
                 presenter.present(addController, animated: true, completion: nil)
             }
         } catch {
-            sendLogError(errorType: InvalidPassError.openError)
+            sendLogError(with: error.localizedDescription)
             throw InvalidPassError.openError
         }
     }
@@ -160,10 +160,10 @@ class OpenPassBookHelper {
         })
     }
 
-    private func sendLogError(errorType: InvalidPassError) {
+    private func sendLogError(with errorDescription: String) {
         // Log error on sentry to help debug https://github.com/mozilla-mobile/firefox-ios/issues/12331
         SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when adding pass to Apple Wallet",
                                                     severity: .error,
-                                                    description: "Error type \(errorType.description)")
+                                                    description: errorDescription)
     }
 }
