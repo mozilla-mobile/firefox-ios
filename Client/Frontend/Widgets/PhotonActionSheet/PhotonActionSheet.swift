@@ -263,7 +263,7 @@ class PhotonActionSheet: UIViewController, Themeable {
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
             tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
         } else {
-            let blurEffect = theme.type == .dark ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
+            let blurEffect = UIBlurEffect(style: .regular)
 
             if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
                 visualEffectView.effect = blurEffect
@@ -333,7 +333,7 @@ class PhotonActionSheet: UIViewController, Themeable {
     /// we make sure that the last cell shown is half shown. This indicates to the user that the menu can be scrolled.
     private func setMainMenuTableViewHeight() {
         let visibleCellsHeight = getViewsHeightSum(views: tableView.visibleCells)
-        let headerCellsHeight = getViewsHeightSum(views: tableView.visibleHeaders)
+        let headerCellsHeight = getViewsHeightSum(views: visibleTableViewHeaders)
 
         let totalCellsHeight = visibleCellsHeight + headerCellsHeight
         let availableHeight = viewModel.availableMainMenuHeight
@@ -375,6 +375,35 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     private func getViewsHeightSum(views: [UIView]) -> CGFloat {
         return views.map { $0.frame.height }.reduce(0, +)
+    }
+
+    private var visibleTableViewHeaders: [UITableViewHeaderFooterView] {
+        var visibleHeaders = [UITableViewHeaderFooterView]()
+        for sectionIndex in indexesOfVisibleHeaderSections {
+            guard let sectionHeader = tableView.headerView(forSection: sectionIndex) else { continue }
+            visibleHeaders.append(sectionHeader)
+        }
+
+        return visibleHeaders
+    }
+
+    private var indexesOfVisibleHeaderSections: [Int] {
+        var visibleSectionIndexes = [Int]()
+
+        (0..<tableView.numberOfSections).forEach { index in
+            let headerRect = tableView.rect(forSection: index)
+
+            // The "visible part" of the tableView is based on the content offset and the tableView's size.
+            let visiblePartOfTableView = CGRect(x: tableView.contentOffset.x,
+                                                y: tableView.contentOffset.y,
+                                                width: tableView.bounds.size.width,
+                                                height: tableView.bounds.size.height)
+
+            if visiblePartOfTableView.intersects(headerRect) {
+                visibleSectionIndexes.append(index)
+            }
+        }
+        return visibleSectionIndexes
     }
 }
 

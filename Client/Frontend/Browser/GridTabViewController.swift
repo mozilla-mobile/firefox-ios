@@ -57,13 +57,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         return true
     }
 
-    fileprivate lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
+    private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
         return emptyView
     }()
 
-    fileprivate lazy var tabLayoutDelegate: TabLayoutDelegate = {
+    private lazy var tabLayoutDelegate: TabLayoutDelegate = {
         let delegate = TabLayoutDelegate(tabDisplayManager: self.tabDisplayManager,
                                          traitCollection: self.traitCollection,
                                          scrollView: self.collectionView)
@@ -366,11 +366,11 @@ extension GridTabViewController {
     }
 
     func closeTabsTrayHelper() {
-        if self.tabDisplayManager.isPrivate {
-            self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-            if !self.emptyPrivateTabsView.isHidden {
+        if tabDisplayManager.isPrivate {
+            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+            if !emptyPrivateTabsView.isHidden {
                 // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
-                self.emptyPrivateTabsView.alpha = 0
+                emptyPrivateTabsView.alpha = 0
                 UIView.animate(
                     withDuration: 0.5,
                     animations: {
