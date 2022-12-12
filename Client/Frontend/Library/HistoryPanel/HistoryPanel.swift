@@ -486,8 +486,7 @@ class HistoryPanel: UIViewController,
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if let item = diffableDatasource?.itemIdentifier(for: indexPath),
-           let actionable = item as? HistoryActionablesModel,
-           actionable.itemIdentity == .recentlyClosed {
+           let actionable = item as? HistoryActionablesModel {
             return nil
         }
 
