@@ -48,15 +48,18 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testURLBarContextMenu() {
+        if #unavailable(iOS 16.0) {
         // Long press with nothing on the clipboard
         navigator.goto(URLBarLongPressMenu)
         snapshot("LocationBarContextMenu-01-no-url")
-        navigator.back()
+            // Skip from here on iOS 16 due to the AllowPaste API message
+            navigator.back()
 
-        // Long press with a URL on the clipboard
-        UIPasteboard.general.string = "https://www.mozilla.com"
-        navigator.goto(URLBarLongPressMenu)
-        snapshot("LocationBarContextMenu-02-with-url")
+            // Long press with a URL on the clipboard
+            UIPasteboard.general.string = "https://www.mozilla.com"
+            navigator.goto(URLBarLongPressMenu)
+            snapshot("LocationBarContextMenu-02-with-url")
+        }
     }
 
     func testMenuOnWebPage() {
