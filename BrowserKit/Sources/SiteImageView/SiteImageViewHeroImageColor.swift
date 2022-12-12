@@ -4,7 +4,7 @@
 
 import UIKit
 
-public struct SiteImageViewColor {
+public struct SiteImageViewHeroImageColor {
     let faviconTintColor: UIColor
     let faviconBackgroundColor: UIColor
     let faviconBorderColor: UIColor

@@ -5,7 +5,6 @@
 import UIKit
 
 extension UIView {
-
     /// Convenience function to ease creating new views.
     ///
     /// Calling this function creates a new view with `translatesAutoresizingMaskIntoConstraints`

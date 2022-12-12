@@ -5,7 +5,6 @@
 import UIKit
 
 extension UIView {
-
     // Wait for contentView bounds to be correct and check if is has been added before
     var shouldAddBlur: Bool {
         guard !bounds.isEmpty else { return false }
