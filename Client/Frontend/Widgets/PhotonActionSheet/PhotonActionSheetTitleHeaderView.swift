@@ -6,13 +6,12 @@ import UIKit
 
 // MARK: - PhotonActionSheetTitleHeaderView
 class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
-
     struct UX {
         static let padding: CGFloat = 18
     }
 
     lazy var titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1, size: 12)
         label.numberOfLines = 1
     }
 
@@ -21,10 +20,7 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCel
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        // ???
-        backgroundView = UIView()
-        backgroundView?.backgroundColor = .clear
-
+        backgroundColor = .clear
         setupLayout()
     }
 
