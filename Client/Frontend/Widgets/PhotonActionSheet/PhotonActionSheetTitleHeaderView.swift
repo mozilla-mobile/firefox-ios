@@ -48,12 +48,12 @@ class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView, ReusableCel
     }
 
     func configure(with title: String) {
-        self.titleLabel.text = title
+        titleLabel.text = title
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.titleLabel.text = nil
+        titleLabel.text = nil
     }
 
     func applyTheme(theme: Theme) {
