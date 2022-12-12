@@ -617,11 +617,11 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if OpenPassBookHelper.shouldOpenWithPassBook(response: response,
                                                      forceDownload: forceDownload) {
-            self.passBookHelper = OpenPassBookHelper(response: response,
-                                                     cookieStore: cookieStore,
-                                                     presenter: self)
+            passBookHelper = OpenPassBookHelper(response: response,
+                                                cookieStore: cookieStore,
+                                                presenter: self)
             // Open our helper and nullifies the helper when done with it
-            self.passBookHelper?.open {
+            passBookHelper?.open {
                 self.passBookHelper = nil
             }
 
