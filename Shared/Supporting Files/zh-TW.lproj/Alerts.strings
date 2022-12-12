@@ -7,6 +7,6 @@
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
 "Alerts.RestoreTabs.Message.v109" = "很抱歉發生錯誤，您可以還原分頁，從原本的頁面繼續上網。";
 
-/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Title.v109" = "Firefox 發生錯誤，是否要還原您開啟過的分頁？";
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ 發生錯誤，是否要還原您開啟過的分頁？";
 
