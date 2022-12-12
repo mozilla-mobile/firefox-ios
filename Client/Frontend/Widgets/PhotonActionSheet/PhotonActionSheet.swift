@@ -263,7 +263,7 @@ class PhotonActionSheet: UIViewController, Themeable {
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
             tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
         } else {
-            let blurEffect = theme.type == .dark ? UIBlurEffect(style: .dark) : UIBlurEffect(style: .light)
+            let blurEffect = UIBlurEffect(style: .regular)
 
             if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
                 visualEffectView.effect = blurEffect
