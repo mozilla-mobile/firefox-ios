@@ -46,16 +46,24 @@ class RemoteTabsPanel: UIViewController, Themeable, Loggable {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableViewController.remoteTabsPanel = self
+
+        listenForThemeChange()
+        setupLayout()
+        applyTheme()
+    }
+
+    private func setupLayout() {
+        tableViewController.view.translatesAutoresizingMaskIntoConstraints = false
         addChild(tableViewController)
         view.addSubview(tableViewController.view)
-
-        tableViewController.view.snp.makeConstraints { make in
-            make.top.left.right.bottom.equalTo(self.view)
-        }
-
         tableViewController.didMove(toParent: self)
-        listenForThemeChange()
-        applyTheme()
+
+        NSLayoutConstraint.activate([
+            tableViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            tableViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
     }
 
     func applyTheme() {
