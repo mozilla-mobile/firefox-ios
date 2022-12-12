@@ -10274,7 +10274,6 @@
 				6ACB550C28633860007A6ABD /* TabManagerNavDelegate.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
 				215B457F27D7FD4B00E5E800 /* TabGroupData.swift in Sources */,
-				E15DE7C6293A7D7500B32667 /* UITableView+Extension.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
 				F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */,
