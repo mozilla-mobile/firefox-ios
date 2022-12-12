@@ -55,7 +55,7 @@ class TopSitesProviderImplementation: TopSitesProvider {
     ) {
         self.placesFetcher = placesFetcher
         // It's possible that the top sites fetch is the
-        // they very first use of places, lets make sure that
+        // very first use of places, lets make sure that
         // our connection is open
         if !self.placesFetcher.isOpen {
             _ = self.placesFetcher.reopenIfClosed()

@@ -6,9 +6,7 @@ import Foundation
 import Storage
 import Shared
 
-/*
- * A class that adheres to all the requirements for a profile's pinned sites
- */
+/// A class that adheres to all the requirements for a profile's pinned sites
 class MockablePinnedSites: PinnedSites {
     func removeFromPinnedTopSites(_ site: Site) -> Success { fatalError() }
     func isPinnedTopSite(_ url: String) -> Deferred<Maybe<Bool>> { fatalError()}

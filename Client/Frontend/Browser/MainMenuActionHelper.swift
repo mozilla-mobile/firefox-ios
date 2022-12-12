@@ -721,10 +721,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getAddShortcutAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AddToShortcutsActionTitle,
                                      iconString: ImageIdentifiers.addShortcut) { _ in
-
-            guard let url = self.selectedTab?.url?.displayURL else { return }
-
-            self.profile.pinnedSites.addPinnedTopSite(Site(url: url.absoluteString, title: self.selectedTab?.title ?? "")).uponQueue(.main) { result in
+            guard let url = self.selectedTab?.url?.displayURL,
+                  let title = self.selectedTab?.displayTitle else { return }
+            let site = Site(url: url.absoluteString, title: title)
+            self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
                 guard result.isSuccess else { return }
                 self.delegate?.showToast(message: .AppMenu.AddPinToShortcutsConfirmMessage, toastAction: .pinPage, url: nil)
             }
@@ -736,9 +736,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getRemoveShortcutAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.RemoveFromShortcuts,
                                      iconString: ImageIdentifiers.removeFromShortcut) { _ in
-
-            guard let url = self.selectedTab?.url?.displayURL else { return }
-            self.profile.pinnedSites.removeFromPinnedTopSites(Site(url: url.absoluteString, title: self.selectedTab?.title ?? "")).uponQueue(.main) { result in
+            guard let url = self.selectedTab?.url?.displayURL,
+                  let title = self.selectedTab?.displayTitle else { return }
+            let site = Site(url: url.absoluteString, title: title)
+            self.profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
                 if result.isSuccess {
                     self.delegate?.showToast(message: .AppMenu.RemovePinFromShortcutsConfirmMessage, toastAction: .removePinPage, url: nil)
                 }

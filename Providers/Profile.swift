@@ -403,7 +403,7 @@ open class BrowserProfile: Profile {
     }()
 
     /**
-     * Favicons, and pinned sites, and are stored in one intermeshed
+     * Favicons and pinned sites are stored in one intermeshed
      * collection of tables.
      *
      * Any other class that needs to access any one of these should ensure
@@ -430,15 +430,15 @@ open class BrowserProfile: Profile {
     lazy var places: RustPlaces = RustPlaces(databasePath: self.placesDbPath)
 
     public func migrateHistoryToPlaces(callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
-        guard FileManager.default.fileExists(atPath: self.browserDbPath) else {
+        guard FileManager.default.fileExists(atPath: browserDbPath) else {
             // This is the user's first run of the app, they don't have a browserDB, so lets report a successful
             // migration with zero visits
             callback(HistoryMigrationResult(numTotal: 0, numSucceeded: 0, numFailed: 0, totalDuration: 0))
             return
         }
-        let lastSyncTimestamp = Int64(self.syncManager.lastSyncFinishTime ?? 0)
-        self.places.migrateHistory(
-            dbPath: self.browserDbPath,
+        let lastSyncTimestamp = Int64(syncManager.lastSyncFinishTime ?? 0)
+        places.migrateHistory(
+            dbPath: browserDbPath,
             lastSyncTimestamp: lastSyncTimestamp,
             completion: callback,
             errCallback: errCallback
@@ -537,8 +537,11 @@ open class BrowserProfile: Profile {
     }
 
     public func cleanupHistoryIfNeeded() {
-        // TODO: we should run this on interval!
-        self.places.runMaintenance()
+        // currently a no-op, but we should call
+        // places.runMaintenace here. At the time of writing this comment,
+        // it was run in Android once a day when the device is idle
+        // we should do something similar in iOS
+        // https://github.com/mozilla-mobile/firefox-ios/issues/12680
     }
 
     public func sendQueuedSyncEvents() {
@@ -1435,22 +1438,6 @@ open class BrowserProfile: Profile {
 
         public func syncHistory() -> SyncResult {
             return self.sync("history", function: syncHistoryWithDelegate)
-        }
-
-        /**
-         * Return a thunk that continues to return true so long as an ongoing sync
-         * should continue.
-         */
-        func greenLight() -> () -> Bool {
-            let start = Date.now()
-
-            // Give it two minutes to run before we stop.
-            let stopBy = start + (2 * OneMinuteInMilliseconds)
-            log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
-            return {
-                Date.now() < stopBy &&
-                self.profile.hasSyncableAccount()
-            }
         }
     }
 }

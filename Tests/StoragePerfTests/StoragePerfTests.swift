@@ -14,7 +14,7 @@ class MockFiles: FileAccessor {
     }
 }
 
-class TestHistoryFrecencyPerf: XCTestCase {
+class HistoryFrecencyPerfTests: XCTestCase {
     func testFrecencyPerf() {
         let files = MockFiles()
         let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path

@@ -4,9 +4,8 @@
 
 import Shared
 
-/**
- * A protocol to manage pinned sites in BrowserDB
- */
+
+/// A protocol to manage pinned sites in BrowserDB
 public protocol PinnedSites {
     // Pinning top sites
     func removeFromPinnedTopSites(_ site: Site) -> Success

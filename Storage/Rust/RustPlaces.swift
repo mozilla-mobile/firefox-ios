@@ -199,9 +199,9 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         reader?.interrupt()
     }
 
-    public func runMaintenance() {
+    public func runMaintenance(dbSizeLimit: UInt32) {
         _ = withWriter { connection in
-            try connection.runMaintenance()
+            try connection.runMaintenance(dbSizeLimit: dbSizeLimit)
         }
     }
 
@@ -582,13 +582,13 @@ extension RustPlaces {
             return try connection.getTopFrecentSiteInfos(numItems: Int32(limit), thresholdOption: thresholdOption)
         }
 
-        let ret = Deferred<Maybe<[Site]>>()
+        let returnValue = Deferred<Maybe<[Site]>>()
         deferred.upon { result in
             guard let result = result.successValue else {
-                ret.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
+                returnValue.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
                 return
             }
-            ret.fill(Maybe(success: result.map { info in
+            returnValue.fill(Maybe(success: result.map { info in
                 var title: String
                 if let actualTitle = info.title, !actualTitle.isEmpty {
                     title = actualTitle
@@ -600,7 +600,7 @@ extension RustPlaces {
                 return Site(url: info.url, title: title)
             }))
         }
-        return ret
+        return returnValue
     }
 
     public func getSitesWithBound(limit: Int, offset: Int, excludedTypes: VisitTransitionSet) -> Deferred<Maybe<Cursor<Site>>> {

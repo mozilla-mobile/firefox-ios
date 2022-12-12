@@ -82,7 +82,7 @@ class BookmarksPanelViewModelTests: XCTestCase {
     func testShouldReload_whenMenuFolder() {
         // The test passes without a clean database, however
         // it fails when run with all of ClientTest. We give it a
-        // seperate databasePrefix so it isn't affected by other tests
+        // separate databasePrefix so it isn't affected by other tests
         profile = MockProfile(databasePrefix: "testShouldReload_whenMenuFolder")
         let subject = createSubject(guid: BookmarkRoots.MenuFolderGUID)
         let expectation = expectation(description: "Subject reloaded")

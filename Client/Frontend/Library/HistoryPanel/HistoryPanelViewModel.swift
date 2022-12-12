@@ -283,20 +283,22 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
             excludedTypes: VisitTransitionSet(0)
         )
 
-        let ret = Deferred<Maybe<Cursor<Site>>>()
+        let historySites = Deferred<Maybe<Cursor<Site>>>()
         deferred.upon { sites in
-            ret.fill(sites)
+            historySites.fill(sites)
             guard sites.isSuccess else {
                 self.isFetchInProgress = false
                 return
             }
+            // Force 100ms delay between resolution of the last batch of results
+            // and the next time `fetchData()` can be called.
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
                 self.isFetchInProgress = false
                 self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
             }
         }
 
-        return ret
+        return historySites
     }
 
     private func resetHistory() {
