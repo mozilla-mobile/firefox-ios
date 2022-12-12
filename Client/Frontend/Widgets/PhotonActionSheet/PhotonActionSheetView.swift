@@ -14,7 +14,7 @@ protocol PhotonActionSheetViewDelegate: AnyObject {
 
 // This is the view contained in PhotonActionSheetContainerCell in the PhotonActionSheet table view.
 // More than one PhotonActionSheetView can be in the parent container cell.
-class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
+class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicable {
     // MARK: - PhotonActionSheetViewUX
     struct UX {
         static let StatusIconSize = CGSize(width: 24, height: 24)
@@ -27,7 +27,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     }
 
     // MARK: - Variables
-
     private var badgeOverlay: BadgeWithBackdrop?
     private var item: SingleActionViewModel?
     weak var delegate: PhotonActionSheetViewDelegate?
@@ -80,8 +79,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         return label
     }()
 
-    private let toggleSwitch = ToggleSwitch()
-
     private lazy var selectedOverlay: UIView = .build { selectedOverlay in
         selectedOverlay.backgroundColor = UX.SelectedOverlayColor
         selectedOverlay.isHidden = true
@@ -89,8 +86,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
 
     private lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate)
-        disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
+        disclosureIndicator.image = UIImage(named: ImageIdentifiers.menuChevron)?.withRenderingMode(.alwaysTemplate)
         return disclosureIndicator
     }()
 
@@ -107,6 +103,10 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         textStackView.alignment = .fill
         textStackView.axis = .vertical
         textStackView.distribution = .fill
+    }
+
+    private lazy var tabsLabel: UILabel = .build { label in
+        label.font = UIFont.boldSystemFont(ofSize: UIConstants.DefaultChromeSmallSize)
     }
 
     lazy var bottomBorder: UIView = .build { _ in }
@@ -194,10 +194,9 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
-    func configure(with item: SingleActionViewModel) {
+    func configure(with item: SingleActionViewModel, theme: Theme) {
         self.item = item
         setupViews()
-        applyTheme()
 
         titleLabel.text = item.currentTitle
         titleLabel.font = item.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.SemiMediumRegularWeightAS
@@ -222,14 +221,15 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
 
         setupBadgeOverlay(action: item)
         addSubBorder(action: item)
+        applyTheme(theme: theme)
     }
 
     func addVerticalBorder(ifShouldBeShown: Bool) {
         guard ifShouldBeShown else { return }
+
         titleLabel.setContentHuggingPriority(.required, for: .horizontal)
         textStackView.setContentHuggingPriority(.required, for: .horizontal)
 
-        verticalBorder.backgroundColor = UIColor.theme.tableView.separator
         addSubview(verticalBorder)
 
         NSLayoutConstraint.activate([
@@ -240,6 +240,23 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         ])
     }
 
+    func applyTheme(theme: Theme) {
+        tintColor = theme.colors.textPrimary
+        titleLabel.textColor = theme.colors.textPrimary
+        subtitleLabel.textColor = theme.colors.textPrimary
+        tabsLabel.textColor = theme.colors.textPrimary
+
+        verticalBorder.backgroundColor = theme.colors.layer4
+        bottomBorder.backgroundColor = theme.colors.layer4
+
+        badgeOverlay?.badge.tintBackground(color: theme.colors.layer1)
+        disclosureIndicator.tintColor = theme.colors.iconSecondary
+
+        let iconTint: UIColor? = item?.needsIconActionableTint ?? false ? theme.colors.iconAccentYellow : tintColor
+        statusIcon.tintColor = iconTint
+    }
+
+    // MARK: - Private
     private func setupViews() {
         isAccessibilityElement = true
         translatesAutoresizingMaskIntoConstraints = false
@@ -278,7 +295,6 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
     }
 
     private func addSubBorder(action: SingleActionViewModel) {
-        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
         addSubview(bottomBorder)
 
         // Determine if border should be at top or bottom when flipping
@@ -299,38 +315,37 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         case .Image:
             let image = UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
             statusIcon.image = image
-            statusIcon.tintColor = action.iconTint ?? action.tintColor ?? self.tintColor
 
         case .URL:
-            let image = UIImage(named: name)?.createScaled(PhotonActionSheet.UX.iconSize)
+            let image = UIImage(named: name)?
+                .createScaled(PhotonActionSheet.UX.iconSize)
+                .withRenderingMode(.alwaysTemplate)
             statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
             statusIcon.image = image
             if let actionIconUrl = action.iconURL {
-                ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: actionIconUrl,
-                                                                       limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                ImageLoadingHandler.shared.getImageFromCacheOrDownload(
+                    with: actionIconUrl,
+                    limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
                     guard error == nil, let image = image, self.accessibilityLabel == action.currentTitle else {
                         return
                     }
 
                     self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.iconSize)
+                            .withRenderingMode(.alwaysTemplate)
                     self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
                 }
             }
 
         case .TabsButton:
-            let label = UILabel(frame: CGRect())
-            label.text = action.tabCount
-            label.font = UIFont.boldSystemFont(ofSize: UIConstants.DefaultChromeSmallSize)
-            label.textColor = UIColor.theme.textField.textAndTint
-            label.translatesAutoresizingMaskIntoConstraints = false
+            tabsLabel.text = action.tabCount
+
             let image = UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
             statusIcon.image = image
-            statusIcon.addSubview(label)
-            statusIcon.tintColor = action.tintColor ?? self.tintColor
+            statusIcon.addSubview(tabsLabel)
 
             NSLayoutConstraint.activate([
-                label.centerXAnchor.constraint(equalTo: statusIcon.centerXAnchor),
-                label.centerYAnchor.constraint(equalTo: statusIcon.centerYAnchor),
+                tabsLabel.centerXAnchor.constraint(equalTo: statusIcon.centerXAnchor),
+                tabsLabel.centerYAnchor.constraint(equalTo: statusIcon.centerYAnchor),
             ])
 
         case .None:
@@ -361,18 +376,5 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate {
         badgeOverlay?.add(toParent: parent)
         badgeOverlay?.layout(onButton: statusIcon)
         badgeOverlay?.show(true)
-
-        // Custom dark theme tint needed here, it is overkill to create a '.theme' color just for this.
-        let customDarkTheme = UIColor(white: 0.3, alpha: 1)
-        let color = LegacyThemeManager.instance.currentName == .dark ? customDarkTheme : UIColor.theme.actionMenu.closeButtonBackground
-        badgeOverlay?.badge.tintBackground(color: color)
-    }
-}
-
-extension PhotonActionSheetView: NotificationThemeable {
-    func applyTheme() {
-        titleLabel.textColor = UIColor.theme.tableView.rowText
-        titleLabel.textColor = titleLabel.textColor
-        subtitleLabel.textColor = UIColor.theme.tableView.rowText
     }
 }

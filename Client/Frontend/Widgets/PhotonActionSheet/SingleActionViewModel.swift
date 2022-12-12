@@ -4,6 +4,13 @@
 
 import Foundation
 
+public enum PhotonActionSheetIconType {
+    case Image
+    case URL
+    case TabsButton
+    case None
+}
+
 // One row on the PhotonActionSheet table view can contain more than one item
 struct PhotonRowActions {
     var items: [SingleActionViewModel]
@@ -29,7 +36,7 @@ class SingleActionViewModel {
     private(set) var iconURL: URL?
     private(set) var iconType: PhotonActionSheetIconType
     private(set) var iconAlignment: IconAlignment
-    private(set) var iconTint: UIColor?
+    private(set) var needsIconActionableTint: Bool
 
     var isEnabled: Bool // Used by toggles like night mode to switch tint color
     private(set) var bold: Bool = false
@@ -41,8 +48,6 @@ class SingleActionViewModel {
     // Both cells and tableview are flipped so content already appears at bottom when the menu is opened.
     // This avoids having to scroll the table view.
     public var isFlipped: Bool = false
-
-    public var tintColor: UIColor?
 
     // Enable title customization beyond what the interface provides,
     public var customRender: ((_ title: UILabel, _ contentView: UIView) -> Void)?
@@ -61,7 +66,7 @@ class SingleActionViewModel {
          iconURL: URL? = nil,
          iconType: PhotonActionSheetIconType = .Image,
          iconAlignment: IconAlignment = .left,
-         iconTint: UIColor? = nil,
+         needsIconActionableTint: Bool = false,
          isEnabled: Bool = false,
          badgeIconNamed: String? = nil,
          bold: Bool? = false,
@@ -73,6 +78,7 @@ class SingleActionViewModel {
         self.iconURL = iconURL
         self.iconType = iconType
         self.iconAlignment = iconAlignment
+        self.needsIconActionableTint = needsIconActionableTint
         self.isEnabled = isEnabled
         self.tapHandler = tapHandler
         self.text = text

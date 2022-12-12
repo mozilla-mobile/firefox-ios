@@ -245,4 +245,10 @@ public struct AccessibilityIdentifiers {
             static let bottomMessageLabel = "bottomMessageLabel"
         }
     }
+
+    struct Photon {
+        static let closeButton = "PhotonMenu.close"
+        static let view = "Action Sheet"
+        static let tableView = "Context Menu"
+    }
 }

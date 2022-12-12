@@ -172,9 +172,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let window = UIWindow(windowScene: windowScene)
 
-        if !LegacyThemeManager.instance.systemThemeIsOn {
-            window.overrideUserInterfaceStyle = LegacyThemeManager.instance.userInterfaceStyle
-        }
+        // Setting the initial theme correctly as we don't have a window attached yet to let ThemeManager set it
+        let themeManager: ThemeManager = AppContainer.shared.resolve()
+        window.overrideUserInterfaceStyle = themeManager.currentTheme.type.getInterfaceStyle()
 
         return window
     }
