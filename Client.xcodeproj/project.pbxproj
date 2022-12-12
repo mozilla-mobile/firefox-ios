@@ -72,6 +72,7 @@
 		1DFE57FB27B2CB870025DE58 /* HighlightItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */; };
 		1DFE57FD27BADD7D0025DE58 /* HomepageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FC27BADD7C0025DE58 /* HomepageViewModel.swift */; };
 		1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */; };
+		210887CC293E8800000AB4EE /* RemoteTabsErrorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */; };
 		2109478928AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */; };
 		21112968289480630082C08B /* HomepageMessageCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21112967289480630082C08B /* HomepageMessageCardViewModel.swift */; };
 		211F00AC27F4D918001D9189 /* HistoryPanel+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */; };
@@ -79,6 +80,8 @@
 		2128E27C2930216F00FB91BE /* SendToDeviceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */; };
 		2128E27E2934F78600FB91BE /* CustomAppActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27D2934F78600FB91BE /* CustomAppActivity.swift */; };
 		2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */; };
+		21357F2D293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */; };
+		21357F2F294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */; };
 		21371FA428AA7A8D00BC3F37 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */; };
 		213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */; };
@@ -1900,12 +1903,15 @@
 		20C24CE7AEFE559B0B06390C /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		20C6401CAC4ACAA189D446BC /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Today.strings; sourceTree = "<group>"; };
 		20F2414BA51A5BFAF5098D35 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/Menu.strings; sourceTree = "<group>"; };
+		210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsErrorCell.swift; sourceTree = "<group>"; };
 		2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		21112967289480630082C08B /* HomepageMessageCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardViewModel.swift; sourceTree = "<group>"; };
 		211F00AB27F4D918001D9189 /* HistoryPanel+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HistoryPanel+Search.swift"; sourceTree = "<group>"; };
 		2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendToDeviceActivity.swift; sourceTree = "<group>"; };
 		2128E27D2934F78600FB91BE /* CustomAppActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppActivity.swift; sourceTree = "<group>"; };
 		2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyLinkActivity.swift; sourceTree = "<group>"; };
+		21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsErrorDataSource.swift; sourceTree = "<group>"; };
+		21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsClientAndTabsDataSource.swift; sourceTree = "<group>"; };
 		21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewModelTests.swift; sourceTree = "<group>"; };
 		21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelper.swift; sourceTree = "<group>"; };
@@ -5532,6 +5538,17 @@
 			path = TopSites;
 			sourceTree = "<group>";
 		};
+		21357F2B293FDB07004BF9FD /* RemoteTabs */ = {
+			isa = PBXGroup;
+			children = (
+				2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */,
+				210887CB293E8800000AB4EE /* RemoteTabsErrorCell.swift */,
+				21357F2C293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift */,
+				21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */,
+			);
+			path = RemoteTabs;
+			sourceTree = "<group>";
+		};
 		2178A69D291453CC002EC290 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -5570,11 +5587,11 @@
 		23F2C365244E44FA00FA4496 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
+				21357F2B293FDB07004BF9FD /* RemoteTabs */,
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
 				DA3A4FE8254A781A00C4A9C9 /* TabTableViewHeader.swift */,
 				DA52E1D925F5961F0092204C /* TabTrayViewController.swift */,
 				C81AC6B526160091007800C5 /* TabTrayViewModel.swift */,
-				2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */,
 				437A9B672681256800FB41C1 /* InactiveTabCell.swift */,
 				437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */,
 				C889569927E8D1AC00E3779E /* InactiveTabHeader.swift */,
@@ -10212,6 +10229,7 @@
 				EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				E1A6AB4628CA6A4C00EBEBDD /* String+Extension.swift in Sources */,
+				210887CC293E8800000AB4EE /* RemoteTabsErrorCell.swift in Sources */,
 				F85C7F0F271DD154004BDBA4 /* AppAuthenticator.swift in Sources */,
 				D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */,
 				C8BA0E7627F20B8E00DD8214 /* HistoryDeletionUtility.swift in Sources */,
@@ -10559,6 +10577,7 @@
 				D04D1B92209790B60074B35F /* Toast.swift in Sources */,
 				8AD5702F27AB4DEA005BFDC8 /* UIStackView+Extension.swift in Sources */,
 				8AE80BBA2891C0C300BC12EA /* JumpBackInSectionLayout.swift in Sources */,
+				21357F2D293FDB60004BF9FD /* RemoteTabsErrorDataSource.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				DFACDFAA274D489B00A94EEC /* HistoryHighlightsViewModel.swift in Sources */,
 				C84655FF2887A06B00861B4A /* WallpaperFilePathProvider.swift in Sources */,
@@ -10699,6 +10718,7 @@
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
 				C8954A522729AD9D001C7283 /* Theme.swift in Sources */,
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
+				21357F2F294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				C849E46126B9C39B00260F0B /* EnhancedTrackingProtectionVC.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,

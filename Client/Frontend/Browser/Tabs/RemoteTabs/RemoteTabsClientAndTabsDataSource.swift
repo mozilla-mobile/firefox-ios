@@ -1,0 +1,135 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import UIKit
+import Storage
+
+class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
+    struct UX {
+        static let headerHeight = SiteTableViewControllerUX.RowHeight
+        static let iconBorderColor = UIColor.Photon.Grey30
+        static let iconBorderWidth: CGFloat = 0.5
+    }
+
+    weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
+    weak var remoteTabPanel: RemoteTabsPanel?
+    var clientAndTabs: [ClientAndTabs]
+    var hiddenSections = Set<Int>()
+    private let siteImageHelper: SiteImageHelper
+    private var theme: Theme
+
+    init(remoteTabPanel: RemoteTabsPanel,
+         clientAndTabs: [ClientAndTabs],
+         profile: Profile,
+         theme: Theme) {
+        self.remoteTabPanel = remoteTabPanel
+        self.clientAndTabs = clientAndTabs
+        self.siteImageHelper = SiteImageHelper(profile: profile)
+        self.theme = theme
+    }
+
+    @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
+        guard let section = sender.view?.tag else { return }
+        collapsibleSectionDelegate?.hideTableViewSection(section)
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return clientAndTabs.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if hiddenSections.contains(section) {
+            return 0
+        }
+
+        return clientAndTabs[section].tabs.count
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: SiteTableViewHeader.cellIdentifier) as? SiteTableViewHeader else { return nil }
+
+        let clientTabs = clientAndTabs[section]
+        let client = clientTabs.client
+
+        let isCollapsed = hiddenSections.contains(section)
+        let viewModel = SiteTableViewHeaderModel(title: client.name,
+                                                 isCollapsible: true,
+                                                 collapsibleState:
+                                                    isCollapsed ? ExpandButtonState.right : ExpandButtonState.down)
+        headerView.configure(viewModel)
+        headerView.showBorder(for: .bottom, true)
+        headerView.showBorder(for: .top, section != 0)
+
+        // Configure tap to collapse/expand section
+        headerView.tag = section
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(sectionHeaderTapped(sender:)))
+        headerView.addGestureRecognizer(tapGesture)
+        headerView.applyTheme(theme: theme)
+        /*
+        * A note on timestamps.
+        * We have access to two timestamps here: the timestamp of the remote client record,
+        * and the set of timestamps of the client's tabs.
+        * Neither is "last synced". The client record timestamp changes whenever the remote
+        * client uploads its record (i.e., infrequently), but also whenever another device
+        * sends a command to that client -- which can be much later than when that client
+        * last synced.
+        * The client's tabs haven't necessarily changed, but it can still have synced.
+        * Ideally, we should save and use the modified time of the tabs record itself.
+        * This will be the real time that the other client uploaded tabs.
+        */
+        return headerView
+    }
+
+    func tabAtIndexPath(_ indexPath: IndexPath) -> RemoteTab {
+        return clientAndTabs[indexPath.section].tabs[indexPath.item]
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+                                                       for: indexPath) as? TwoLineImageOverlayCell
+        else {
+            return UITableViewCell()
+        }
+
+        let tab = tabAtIndexPath(indexPath)
+        cell.titleLabel.text = tab.title
+        cell.descriptionLabel.text = tab.URL.absoluteString
+
+        cell.leftImageView.layer.borderColor = UX.iconBorderColor.cgColor
+        cell.leftImageView.layer.borderWidth = UX.iconBorderWidth
+        cell.accessoryView = nil
+
+        getFavicon(for: tab) { [weak cell] image in
+            cell?.leftImageView.image = image
+            cell?.leftImageView.backgroundColor = .clear
+        }
+
+        cell.applyTheme(theme: theme)
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        let tab = tabAtIndexPath(indexPath)
+        // Remote panel delegate for cell selection
+        remoteTabPanel?.remotePanelDelegate?.remotePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
+    }
+
+    private func getFavicon(for remoteTab: RemoteTab, completion: @escaping (UIImage?) -> Void) {
+        let faviconUrl = remoteTab.URL.absoluteString
+        let site = Site(url: faviconUrl, title: remoteTab.title)
+        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
+            completion(image)
+        }
+    }
+}
