@@ -10,10 +10,14 @@ private let log = Logger.browserLogger
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
+    struct UX {
+        static let leadingTrailingSpacing: CGFloat = 5
+    }
+
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
 
-    fileprivate func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
+    private func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
         let imageButton = ImageButtonWithLabel()
         imageButton.label.text = buttonLabel
         let button = imageButton.button
@@ -28,21 +32,21 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         return imageButton
     }
 
-    fileprivate lazy var newTabButton: ImageButtonWithLabel = {
+    private lazy var newTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
         button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
+    private lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewPrivateTabButtonLabel, buttonImageName: "private-search")
         button.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
+    private lazy var openCopiedLinkButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabelV2, buttonImageName: "go-to-copied-link")
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -51,14 +55,14 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     // MARK: Feature for V29
     // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed until next release V29
-    fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
+    private lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.ClosePrivateTabsLabelV2, buttonImageName: "close-private-tabs")
         button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    fileprivate lazy var buttonStackView: UIStackView = {
+    private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .top
@@ -179,8 +183,10 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
             effectView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             buttonStackView.topAnchor.constraint(equalTo: widgetView.topAnchor),
-            buttonStackView.leadingAnchor.constraint(equalTo: widgetView.leadingAnchor, constant: 5),
-            buttonStackView.trailingAnchor.constraint(equalTo: widgetView.trailingAnchor, constant: -5),
+            buttonStackView.leadingAnchor.constraint(equalTo: widgetView.leadingAnchor,
+                                                     constant: UX.leadingTrailingSpacing),
+            buttonStackView.trailingAnchor.constraint(equalTo: widgetView.trailingAnchor,
+                                                      constant: -UX.leadingTrailingSpacing),
             buttonStackView.bottomAnchor.constraint(equalTo: widgetView.bottomAnchor),
         ])
     }
