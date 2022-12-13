@@ -4,11 +4,12 @@
 
 import UIKit
 
+/// Used to fill in information throughout the lifetime of an image request inside SiteImageView
 struct SiteImageModel {
     let expectedImageType: SiteImageType
     let siteURL: URL
     let domain: String
     let faviconURL: URL?
-    let faviconImage: UIImage?
-    let heroImage: UIImage?
+    var faviconImage: UIImage?
+    var heroImage: UIImage?
 }
