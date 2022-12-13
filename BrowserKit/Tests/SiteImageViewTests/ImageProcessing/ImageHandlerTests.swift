@@ -37,24 +37,20 @@ final class ImageHandlerTests: XCTestCase {
         bundleImageFetcher.image = expectedResult
         let subject = createSubject()
 
-        do {
-            let result = try await subject.fetchFavicon(imageURL: URL(string: "www.mozilla.com")!,
-                                                        domain: "Mozilla")
-            XCTAssertEqual(expectedResult, result)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 1)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 0)
+        let result = await subject.fetchFavicon(imageURL: URL(string: "www.mozilla.com")!,
+                                                domain: "Mozilla")
+        XCTAssertEqual(expectedResult, result)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 1)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 0)
 
-            XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
-            XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
+        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
+        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
 
-            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
-            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
-            XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
-        } catch {
-            XCTFail("Should have succeeded with bundle image")
-        }
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
+        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
     }
 
     func testFavicon_whenImageInCache_returnsCacheImage() async {
@@ -62,49 +58,41 @@ final class ImageHandlerTests: XCTestCase {
         siteImageCache.image = expectedResult
         let subject = createSubject()
 
-        do {
-            let result = try await subject.fetchFavicon(imageURL: URL(string: "www.mozilla.com")!,
-                                                        domain: "Mozilla")
-            XCTAssertEqual(expectedResult, result)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
+        let result = await subject.fetchFavicon(imageURL: URL(string: "www.mozilla.com")!,
+                                                domain: "Mozilla")
+        XCTAssertEqual(expectedResult, result)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
-            XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 1)
-            XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
-            XCTAssertEqual(siteImageCache.getFromCacheWithType, .favicon)
+        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 1)
+        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
+        XCTAssertEqual(siteImageCache.getFromCacheWithType, .favicon)
 
-            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
-            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
-            XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
-        } catch {
-            XCTFail("Should have succeeded with cache image")
-        }
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
+        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
     }
 
     func testFavicon_whenNoUrl_returnsFallbackLetterFavicon() async {
         let subject = createSubject()
 
-        do {
-            let result = try await subject.fetchFavicon(imageURL: nil,
-                                                        domain: "Mozilla")
-            XCTAssertEqual(letterImageGenerator.image, result)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
+        let result = await subject.fetchFavicon(imageURL: nil,
+                                                domain: "Mozilla")
+        XCTAssertEqual(letterImageGenerator.image, result)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
-            XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
-            XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
+        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
+        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
 
-            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
-            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-            XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
-            XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
-        } catch {
-            XCTFail("Should have succeeded with fallback letter image")
-        }
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
+        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
     }
 
     func testFavicon_whenImageFetcher_returnsImageFetcherFavicon() async {
@@ -112,49 +100,41 @@ final class ImageHandlerTests: XCTestCase {
         faviconFetcher.image = expectedResult
         let subject = createSubject()
 
-        do {
-            let result = try await subject.fetchFavicon(imageURL: URL(string: "www.mozilla.com")!,
-                                                        domain: "Mozilla")
-            XCTAssertEqual(expectedResult, result)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
+        let result = await subject.fetchFavicon(imageURL: URL(string: "www.mozilla.com")!,
+                                                domain: "Mozilla")
+        XCTAssertEqual(expectedResult, result)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
-            XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
-            XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
+        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
+        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
 
-            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 1)
-            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 1)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
-            XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
-            XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
-        } catch {
-            XCTFail("Should have succeeded with fallback letter image")
-        }
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
+        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
     }
 
     func testFavicon_whenNoImages_returnsFallbackLetterFavicon() async {
         let subject = createSubject()
 
-        do {
-            let result = try await subject.fetchFavicon(imageURL: URL(string: "www.mozilla.com")!,
-                                                        domain: "Mozilla")
-            XCTAssertEqual(letterImageGenerator.image, result)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-            XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
+        let result = await subject.fetchFavicon(imageURL: URL(string: "www.mozilla.com")!,
+                                                domain: "Mozilla")
+        XCTAssertEqual(letterImageGenerator.image, result)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
+        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
-            XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
-            XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
+        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
+        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
 
-            XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
-            XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 1)
+        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 1)
 
-            XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
-            XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
-            XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
-        } catch {
-            XCTFail("Should have succeeded with fallback letter image")
-        }
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
+        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
     }
 
     // MARK: - Hero image
