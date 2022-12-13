@@ -9,21 +9,6 @@ channels:
   - beta
   - release
 features:
-  mr2022:
-    description: Features for MR 2022.
-    variables:
-      sections-enabled:
-        description: "This property provides a lookup table of whether or not the given section should be enabled."
-        type: MR2022Section
-        default:
-        {
-          "onboarding-first-run-flow": true,
-          "onboarding-upgrade-flow": true,
-          "sync-cfr": true,
-          "jump-back-in-cfr-update": true,
-          "toolbar-cfr-update": true,
-          "wallpaper-onboarding-sheet": true,
-        }
   general-app-features:
     description: The feature that contains feature flags for the entire application
     variables:
@@ -527,34 +512,6 @@ features:
 
 types:
   objects:
-    MR2022Section:
-      description: "The configuration for the MR 2022 feature"
-      fields:
-        onboarding-first-run-flow:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
-        onboarding-upgrade-flow:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
-        sync-cfr:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
-        jump-back-in-cfr-update:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
-        toolbar-cfr-update:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
-        wallpaper-onboarding-sheet:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
-
     GeneralFeature:
       description: "The configuration for the a feature that can be enabled or disabled"
       fields:
