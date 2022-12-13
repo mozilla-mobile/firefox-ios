@@ -81,12 +81,12 @@ features:
         description: >
           If true, we show the Upgrade onboarding screen when the user upgrades the version.
         type: Boolean
-        default: true
+        default: false
       first-run-flow:
         description: >
           If true, we show the new Onboarding screen when the user for v106 version.
         type: Boolean
-        default: true
+        default: false
     defaults:
       - channel: beta
         value: {
@@ -287,15 +287,15 @@ features:
         type: Map<ContextualHint, Boolean>
         default:
         {
-          "jump-back-in-synced-tab-contextual-hint": true,
+          "jump-back-in-synced-tab-contextual-hint": false,
           "toolbar-hint": false
         }
       hint-copy:
         description: This set allows us to experiment with changing hint descriptions.
         type: HintCopy
         default: {
-          "jump-back-in": true,
-          "toolbar": true
+          "jump-back-in": false,
+          "toolbar": false
         }
     defaults:
       - channel: developer
@@ -437,7 +437,7 @@ features:
       onboarding-sheet:
         description: This property defines whether the wallpaper onboarding is shown or not
         type: Boolean
-        default: true
+        default: false
     defaults:
       - channel: beta
         value: {
