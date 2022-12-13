@@ -4,7 +4,7 @@
 
 import UIKit
 
-public struct SiteImageViewFaviconModel {
+public struct FaviconImageViewModel {
     let siteURL: URL
     let type: SiteImageType
     let faviconCornerRadius: CGFloat

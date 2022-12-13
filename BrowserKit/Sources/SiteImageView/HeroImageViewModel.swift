@@ -4,7 +4,7 @@
 
 import UIKit
 
-public struct SiteImageViewHeroImageModel {
+public struct HeroImageViewModel {
     let siteURL: URL
     let type: SiteImageType
     let generalCornerRadius: CGFloat

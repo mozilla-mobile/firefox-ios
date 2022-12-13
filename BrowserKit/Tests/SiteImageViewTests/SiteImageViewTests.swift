@@ -21,9 +21,9 @@ final class SiteImageViewTests: XCTestCase {
     func testFaviconSetup() {
         let expectation = expectation(description: "Completed image setup")
         let url = URL(string: "https://www.firefox.com")!
-        let viewModel = SiteImageViewFaviconModel(siteURL: url,
-                                                  faviconCornerRadius: 8)
-        let subject = SiteImageView(frame: .zero, imageFetcher: imageFetcher) {
+        let viewModel = FaviconImageViewModel(siteURL: url,
+                                              faviconCornerRadius: 8)
+        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {
             expectation.fulfill()
         }
         subject.setFavicon(viewModel)
@@ -36,13 +36,13 @@ final class SiteImageViewTests: XCTestCase {
     func testHeroImageSetup() {
         let expectation = expectation(description: "Completed image setup")
         let url = URL(string: "https://www.firefox.com")!
-        let viewModel = SiteImageViewHeroImageModel(siteURL: url,
-                                                    generalCornerRadius: 8,
-                                                    faviconCornerRadius: 4,
-                                                    faviconBorderWidth: 0.5,
-                                                    heroImageSize: CGSize(),
-                                                    fallbackFaviconSize: CGSize())
-        let subject = SiteImageView(frame: .zero, imageFetcher: imageFetcher)  {
+        let viewModel = HeroImageViewModel(siteURL: url,
+                                           generalCornerRadius: 8,
+                                           faviconCornerRadius: 4,
+                                           faviconBorderWidth: 0.5,
+                                           heroImageSize: CGSize(),
+                                           fallbackFaviconSize: CGSize())
+        let subject = HeroImageView(frame: .zero, imageFetcher: imageFetcher)  {
             expectation.fulfill()
         }
         subject.setHeroImage(viewModel)
