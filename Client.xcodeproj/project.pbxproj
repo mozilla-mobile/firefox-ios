@@ -21,8 +21,6 @@
 		048B4C7E24A53EA8001B56E8 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B4C7C24A53EA8001B56E8 /* TodayViewModel.swift */; };
 		048B4C8024A53EEB001B56E8 /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B4C7F24A53EEB001B56E8 /* ImageButtonWithLabel.swift */; };
 		048B4C8124A53EEB001B56E8 /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B4C7F24A53EEB001B56E8 /* ImageButtonWithLabel.swift */; };
-		048B4C8324A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B4C8224A53F26001B56E8 /* ButtonWithSublabel.swift */; };
-		048B4C8424A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B4C8224A53F26001B56E8 /* ButtonWithSublabel.swift */; };
 		048B4C8624A53F3E001B56E8 /* TodayUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B4C8524A53F3E001B56E8 /* TodayUX.swift */; };
 		048B4C8724A53F3E001B56E8 /* TodayUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B4C8524A53F3E001B56E8 /* TodayUX.swift */; };
 		048B4C8924A53F81001B56E8 /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048B4C8824A53F81001B56E8 /* UIButtonExtensions.swift */; };
@@ -1670,7 +1668,6 @@
 		048B4C7824A53E7B001B56E8 /* TodayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayModel.swift; sourceTree = "<group>"; };
 		048B4C7C24A53EA8001B56E8 /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
 		048B4C7F24A53EEB001B56E8 /* ImageButtonWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonWithLabel.swift; sourceTree = "<group>"; };
-		048B4C8224A53F26001B56E8 /* ButtonWithSublabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithSublabel.swift; sourceTree = "<group>"; };
 		048B4C8524A53F3E001B56E8 /* TodayUX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayUX.swift; sourceTree = "<group>"; };
 		048B4C8824A53F81001B56E8 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
 		04B74519812CAFDEDCF45E97 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
@@ -5953,11 +5950,10 @@
 			children = (
 				391AEFD11C8F11ED00691F84 /* Images.xcassets */,
 				390527531C874D35007E0BB7 /* Info.plist */,
-				3905274E1C874D35007E0BB7 /* TodayViewController.swift */,
-				048B4C7824A53E7B001B56E8 /* TodayModel.swift */,
-				048B4C7C24A53EA8001B56E8 /* TodayViewModel.swift */,
 				048B4C7F24A53EEB001B56E8 /* ImageButtonWithLabel.swift */,
-				048B4C8224A53F26001B56E8 /* ButtonWithSublabel.swift */,
+				048B4C7824A53E7B001B56E8 /* TodayModel.swift */,
+				3905274E1C874D35007E0BB7 /* TodayViewController.swift */,
+				048B4C7C24A53EA8001B56E8 /* TodayViewModel.swift */,
 				048B4C8524A53F3E001B56E8 /* TodayUX.swift */,
 				048B4C8824A53F81001B56E8 /* UIButtonExtensions.swift */,
 			);
@@ -10001,7 +9997,6 @@
 				3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */,
 				048B4C8A24A53F81001B56E8 /* UIButtonExtensions.swift in Sources */,
 				048B4C7A24A53E7B001B56E8 /* TodayModel.swift in Sources */,
-				048B4C8424A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */,
 				E1442FDB294782F9003680B0 /* UIPasteboard+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10257,7 +10252,6 @@
 				E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
-				048B4C8324A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */,
 				435D660323D793DF0046EFA2 /* OnboardingInfoModel.swift in Sources */,
 				8AD40FCB27BADC4B00672675 /* StatefulButton.swift in Sources */,
 				C84655E62887398700861B4A /* WallpaperCollection.swift in Sources */,
