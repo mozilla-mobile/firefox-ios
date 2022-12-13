@@ -14,25 +14,30 @@ class ImageButtonWithLabel: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        performLayout()
+        setupLayout()
     }
 
-    fileprivate func performLayout() {
+    private func setupLayout() {
         addSubview(button)
         addSubview(label)
-        button.imageView?.contentMode = .scaleAspectFill
-        button.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.right.left.equalToSuperview()
-            make.height.equalTo(70)
-        }
 
-        label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(3)
-            make.leading.equalTo(button.snp.leading)
-            make.trailing.equalTo(button.snp.trailing)
-            make.bottom.equalTo(self)
-        }
+        button.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        button.imageView?.contentMode = .scaleAspectFill
+
+        NSLayoutConstraint.activate([
+            button.centerXAnchor.constraint(equalTo: centerXAnchor),
+            button.topAnchor.constraint(equalTo: topAnchor),
+            button.leadingAnchor.constraint(equalTo: leadingAnchor),
+            button.trailingAnchor.constraint(equalTo: trailingAnchor),
+            button.heightAnchor.constraint(equalToConstant: 70),
+
+            label.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 3),
+            label.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            label.trailingAnchor.constraint(equalTo: button.trailingAnchor),
+            label.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
 
         label.numberOfLines = 0
         label.textAlignment = .center
