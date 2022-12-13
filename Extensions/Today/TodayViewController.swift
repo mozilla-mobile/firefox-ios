@@ -5,7 +5,6 @@
 import UIKit
 import NotificationCenter
 import Shared
-import SnapKit
 
 private let log = Logger.browserLogger
 
@@ -32,26 +31,30 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
         button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewPrivateTabButtonLabel, buttonImageName: "private-search")
         button.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabelV2, buttonImageName: "go-to-copied-link")
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     // MARK: Feature for V29
-    // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
+    // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed until next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.ClosePrivateTabsLabelV2, buttonImageName: "close-private-tabs")
         button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
@@ -61,36 +64,34 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         stackView.alignment = .top
         stackView.spacing = TodayUX.buttonStackViewSpacing
         stackView.distribution = UIStackView.Distribution.fillEqually
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
+    }()
+
+    private lazy var effectView: UIVisualEffectView = {
+        let view = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let widgetView: UIView!
+
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
         viewModel.setViewDelegate(todayViewDelegate: self)
-        NotificationCenter.default.addObserver(self, selector: #selector(preferredContentSizeChanged(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
 
-        let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(preferredContentSizeChanged(_:)),
+            name: UIContentSizeCategory.didChangeNotification,
+            object: nil)
 
-        self.view.addSubview(effectView)
-        effectView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view)
-        }
-        widgetView = effectView.contentView
-        buttonStackView.addArrangedSubview(newTabButton)
-        buttonStackView.addArrangedSubview(newPrivateTabButton)
-        buttonStackView.addArrangedSubview(closePrivateTabsButton)
-        widgetView.addSubview(buttonStackView)
-        buttonStackView.snp.makeConstraints { make in
-            make.top.equalTo(widgetView)
-            make.left.equalTo(widgetView).offset(5)
-            make.right.equalTo(widgetView).offset(-5)
-        }
+        setupLayout()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
         if UIPasteboard.general.hasStrings {
             buttonStackView.addArrangedSubview(openCopiedLinkButton)
         } else {
@@ -159,5 +160,28 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
+    }
+
+    // MARK: - Private
+    private func setupLayout() {
+        view.addSubview(effectView)
+        buttonStackView.addArrangedSubview(newTabButton)
+        buttonStackView.addArrangedSubview(newPrivateTabButton)
+        buttonStackView.addArrangedSubview(closePrivateTabsButton)
+
+        let widgetView = effectView.contentView
+        widgetView.addSubview(buttonStackView)
+
+        NSLayoutConstraint.activate([
+            effectView.topAnchor.constraint(equalTo: view.topAnchor),
+            effectView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            effectView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            effectView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            buttonStackView.topAnchor.constraint(equalTo: widgetView.topAnchor),
+            buttonStackView.leadingAnchor.constraint(equalTo: widgetView.leadingAnchor, constant: 5),
+            buttonStackView.trailingAnchor.constraint(equalTo: widgetView.trailingAnchor, constant: -5),
+            buttonStackView.bottomAnchor.constraint(equalTo: widgetView.bottomAnchor),
+        ])
     }
 }
