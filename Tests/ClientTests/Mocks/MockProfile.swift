@@ -70,7 +70,6 @@ class MockFiles: FileAccessor {
 }
 
 open class MockProfile: Client.Profile {
-
     public var rustFxA: RustFirefoxAccounts {
         return RustFirefoxAccounts.shared
     }

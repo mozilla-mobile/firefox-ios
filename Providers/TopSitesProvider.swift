@@ -40,7 +40,6 @@ extension TopSitesProvider {
 }
 
 class TopSitesProviderImplementation: TopSitesProvider {
-
     private let pinnedSiteFetcher: PinnedSites
     private let placesFetcher: RustPlaces
     private let prefs: Prefs

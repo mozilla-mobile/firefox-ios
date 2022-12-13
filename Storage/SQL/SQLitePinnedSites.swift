@@ -78,7 +78,7 @@ extension BrowserDBSQLite: PinnedSites {
         guard let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid site \(site.url)"))
         }
-        
+
         // We insert a dummy guid for backward compatability.
         // in the past, the guid was required, but we removed that requirement.
         // if we do not insert a guid, users who downgrade their version of firefox will

@@ -176,7 +176,6 @@ class AppLaunchUtil {
     // MARK: - Application Services History Migration
 
     private func runAppServicesHistoryMigration() {
-
         let browserProfile = self.profile as? BrowserProfile
 
         let migrationRan = UserDefaults.standard.bool(forKey: PrefsKeys.HistoryMigratedToPlacesKey)

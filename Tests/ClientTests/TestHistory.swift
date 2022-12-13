@@ -95,7 +95,6 @@ class TestHistory: ProfileTest {
             }
 
             self.waitForExpectations(timeout: 100, handler: nil)
-
         }
     }
 

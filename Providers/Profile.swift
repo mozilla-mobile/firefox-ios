@@ -77,7 +77,6 @@ class CommandStoringSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: AnyObject {
-
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }

@@ -4,7 +4,6 @@
 
 import Shared
 
-
 /// A protocol to manage pinned sites in BrowserDB
 public protocol PinnedSites {
     // Pinning top sites
