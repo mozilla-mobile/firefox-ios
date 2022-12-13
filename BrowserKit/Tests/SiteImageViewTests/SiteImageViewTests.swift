@@ -42,7 +42,7 @@ final class SiteImageViewTests: XCTestCase {
                                            faviconBorderWidth: 0.5,
                                            heroImageSize: CGSize(),
                                            fallbackFaviconSize: CGSize())
-        let subject = HeroImageView(frame: .zero, imageFetcher: imageFetcher)  {
+        let subject = HeroImageView(frame: .zero, imageFetcher: imageFetcher) {
             expectation.fulfill()
         }
         subject.setHeroImage(viewModel)

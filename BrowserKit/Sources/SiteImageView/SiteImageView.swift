@@ -16,7 +16,6 @@ protocol SiteImageView: UIView {
 }
 
 extension SiteImageView {
-
     func updateImage(url: URL, type: SiteImageType, id: UUID) {
         Task {
             let imageModel = await imageFetcher.getImage(siteURL: url, type: type, id: id)

@@ -77,13 +77,13 @@ public class HeroImageView: UIView, SiteImageView {
     }
 
     func setImage(imageModel: SiteImageModel) {
-        setHeroImageImage(imageModel)
+        setHeroImage(imageModel: imageModel)
         completionHandler?()
     }
 
     // MARK: - Hero image
 
-    private func setHeroImageImage(_ imageModel: SiteImageModel) {
+    private func setHeroImage(imageModel: SiteImageModel) {
         if let heroImage = imageModel.heroImage {
             // If hero image is a square use it as a favicon
             guard heroImage.size.width == heroImage.size.height else {
