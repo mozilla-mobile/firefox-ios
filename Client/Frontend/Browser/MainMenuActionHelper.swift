@@ -61,6 +61,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     var bookmarksHandler: BookmarksHandler
     let profile: Profile
     let tabManager: TabManager
+    let readerModeCache: ReaderModeCache
 
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
@@ -75,12 +76,14 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     init(profile: Profile,
          tabManager: TabManager,
          buttonView: UIButton,
+         readerModeCache: ReaderModeCache,
          showFXASyncAction: @escaping (FXASyncClosure) -> Void,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.profile = profile
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager
         self.buttonView = buttonView
+        self.readerModeCache = readerModeCache
         self.showFXASyncAction = showFXASyncAction
 
         self.selectedTab = tabManager.selectedTab
@@ -629,12 +632,14 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getAddReadingListAction() -> SingleActionViewModel {
         return SingleActionViewModel(title: .AppMenu.AddReadingList,
                                      alternateTitle: .AppMenu.AddReadingListAlternateTitle,
-                                     iconString: ImageIdentifiers.addToReadingList) { _ in
+                                     iconString: ImageIdentifiers.addToReadingList) { [weak self]  _ in
+            guard let self = self else { return }
             guard let tab = self.selectedTab,
                   let url = self.tabUrl?.displayURL
             else { return }
 
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
+            ReadabilityService().process(url, cache: self.readerModeCache, with: self.profile)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
             self.delegate?.showToast(message: .AppMenu.AddToReadingListConfirmMessage, toastAction: .addToReadingList, url: nil)
         }

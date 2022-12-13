@@ -85,6 +85,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let menuHelper = MainMenuActionHelper(profile: profile,
                                               tabManager: tabManager,
                                               buttonView: button,
+                                              readerModeCache: readerModeCache,
                                               showFXASyncAction: presentSignInViewController)
         menuHelper.delegate = self
         menuHelper.menuActionDelegate = self
