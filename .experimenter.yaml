@@ -75,14 +75,6 @@ messaging:
     triggers:
       type: json
       description: "A collection of out the box trigger expressions. Each entry maps to a valid JEXL expression.\n"
-mr2022:
-  description: Features for MR 2022.
-  hasExposure: true
-  exposureDescription: ""
-  variables:
-    sections-enabled:
-      type: json
-      description: This property provides a lookup table of whether or not the given section should be enabled.
 onboarding-feature:
   description: The feature that controls whether to show or not Upgrade onboarding
   hasExposure: true
