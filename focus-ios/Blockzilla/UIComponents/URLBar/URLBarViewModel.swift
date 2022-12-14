@@ -29,14 +29,16 @@ public class URLBarViewModel {
     @Published public var canDelete: Bool = false
     @Published public var isLoading: Bool = false
     @Published public var connectionState: ShieldIconStatus = .on
+    @Published public var loadingProgres: Double = 0
 
     internal var viewActionSubject = PassthroughSubject<URLViewAction, Never>()
     public var viewActionPublisher: AnyPublisher<URLViewAction, Never> { viewActionSubject.eraseToAnyPublisher() }
 
     public func resetToDefaults() {
-        isLoading = false
         canGoBack = false
         canGoForward = false
         canDelete = false
+        isLoading = false
+        loadingProgres = 0
     }
 }

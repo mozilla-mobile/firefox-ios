@@ -655,8 +655,8 @@ class BrowserViewController: UIViewController {
 
                     case .deleteButtonTap:
                         self.updateFindInPageVisibility(visible: false)
-                        self.urlBarViewModel.resetToDefaults()
                         self.resetBrowser()
+                        self.urlBarViewModel.resetToDefaults()
 
                     case .shieldIconButtonTap:
                         self.urlBarDidTapShield(self.urlBar)
@@ -1647,8 +1647,8 @@ extension BrowserViewController: WebControllerDelegate {
     func webControllerDidFinishNavigation(_ controller: WebController) {
         updateURLBar()
         urlBarViewModel.isLoading = false
+        urlBarViewModel.loadingProgres = 1
         toggleURLBarBackground(isBright: !urlBar.isEditing)
-        urlBar.progressBar.hideProgressBar()
         GleanMetrics.Browser.totalUriCount.add()
         webViewController.evaluateDocumentContentType { documentType in
             if documentType == "application/pdf" {
@@ -1668,9 +1668,9 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {
         urlBar.url = webViewController.url
-        urlBarViewModel.isLoading = false
         toggleURLBarBackground(isBright: true)
-        urlBar.progressBar.hideProgressBar()
+        urlBarViewModel.isLoading = false
+        urlBarViewModel.loadingProgres = 1
     }
 
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool) {
@@ -1686,9 +1686,7 @@ extension BrowserViewController: WebControllerDelegate {
         // from catching the global progress events.
         guard urlBar.inBrowsingMode else { return }
 
-        urlBar.progressBar.alpha = 1
-        urlBar.progressBar.isHidden = false
-        urlBar.progressBar.setProgress(Float(estimatedProgress), animated: true)
+        urlBarViewModel.loadingProgres = estimatedProgress
     }
 
     func webController(_ controller: WebController, scrollViewWillBeginDragging scrollView: UIScrollView) {

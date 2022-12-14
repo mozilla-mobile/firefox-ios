@@ -169,7 +169,7 @@ class URLBar: UIView {
         return collapsedUrlAndLockWrapper
     }()
 
-    lazy var progressBar: GradientProgressBar = {
+    private lazy var progressBar: GradientProgressBar = {
         let progressBar = GradientProgressBar(progressViewStyle: .bar)
         progressBar.isHidden = true
         progressBar.alpha = 0
@@ -574,6 +574,18 @@ class URLBar: UIView {
                     stopReloadButton.setImage(.refreshMenu, for: .normal)
                     stopReloadButton.accessibilityLabel = UIConstants.strings.browserReload
                 }
+            }
+            .store(in: &cancellables)
+
+        viewModel
+            .$loadingProgres
+            .dropFirst()
+            .map(Float.init)
+            .filter { 0 <= $0 && $0 <= 1 }
+            .sink { [progressBar] in
+                progressBar.alpha = 1
+                progressBar.isHidden = false
+                progressBar.setProgress($0, animated: true)
             }
             .store(in: &cancellables)
     }
