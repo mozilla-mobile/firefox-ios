@@ -7,8 +7,6 @@ import Storage
 
 struct RecentlySavedCellViewModel {
     let site: Site
-    var heroImage: UIImage?
-    var favIconImage: UIImage?
 }
 
 class RecentlySavedViewModel {
@@ -131,36 +129,7 @@ extension RecentlySavedViewModel: HomepageSectionHandler {
 
         if let item = recentItems[safe: indexPath.row] {
             let site = Site(url: item.url, title: item.title, bookmarked: true)
-
-            let id = Int(arc4random())
-            cell.tag = id
-            var heroImage: UIImage?
-            var favicon: UIImage?
-            let viewModel = RecentlySavedCellViewModel(site: site,
-                                                       heroImage: heroImage,
-                                                       favIconImage: favicon)
-            siteImageHelper.fetchImageFor(site: site,
-                                          imageType: .heroImage,
-                                          shouldFallback: true) { image in
-                guard cell.tag == id else { return }
-                heroImage = image
-                let viewModel = RecentlySavedCellViewModel(site: site,
-                                                           heroImage: heroImage,
-                                                           favIconImage: favicon)
-                recentlySavedCell.configure(viewModel: viewModel, theme: self.theme)
-            }
-
-            siteImageHelper.fetchImageFor(site: site,
-                                          imageType: .favicon,
-                                          shouldFallback: true) { image in
-                guard cell.tag == id else { return }
-                favicon = image
-                let viewModel = RecentlySavedCellViewModel(site: site,
-                                                           heroImage: heroImage,
-                                                           favIconImage: favicon)
-                recentlySavedCell.configure(viewModel: viewModel, theme: self.theme)
-            }
-
+            let viewModel = RecentlySavedCellViewModel(site: site)
             recentlySavedCell.configure(viewModel: viewModel, theme: theme)
         }
 

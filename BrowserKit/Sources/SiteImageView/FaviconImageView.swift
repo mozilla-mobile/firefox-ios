@@ -15,6 +15,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - Properties
     var uniqueID: UUID?
     var imageFetcher: SiteImageFetcher
+    var requestStartedWith: String?
     private var completionHandler: (() -> Void)?
 
     // MARK: - Init
@@ -46,10 +47,12 @@ public class FaviconImageView: UIImageView, SiteImageView {
 
     // MARK: - SiteImageView
 
-    func setURL(_ siteURL: URL, type: SiteImageType) {
+    func setURL(_ urlStringRequest: String, type: SiteImageType) {
+        guard canMakeRequest(with: urlStringRequest) else { return }
+
         let id = UUID()
         uniqueID = id
-        updateImage(url: siteURL, type: type, id: id)
+        updateImage(url: urlStringRequest, type: type, id: id)
     }
 
     func setImage(imageModel: SiteImageModel) {

@@ -109,7 +109,7 @@ class DefaultImageHandler: ImageHandler {
     }
 
     private func fallbackToLetterFavicon(domain: String) async -> UIImage {
-        let image = letterImageGenerator.generateLetterImage(domain: domain)
+        let image = await letterImageGenerator.generateLetterImage(domain: domain)
         await imageCache.cacheImage(image: image, domain: domain, type: .favicon)
         return image
     }

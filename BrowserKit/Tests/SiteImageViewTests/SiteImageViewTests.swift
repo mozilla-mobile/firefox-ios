@@ -20,7 +20,7 @@ final class SiteImageViewTests: XCTestCase {
 
     func testFaviconSetup() {
         let expectation = expectation(description: "Completed image setup")
-        let url = URL(string: "https://www.firefox.com")!
+        let url = "https://www.firefox.com"
         let viewModel = FaviconImageViewModel(siteURL: url,
                                               faviconCornerRadius: 8)
         let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {
@@ -29,13 +29,13 @@ final class SiteImageViewTests: XCTestCase {
         subject.setFavicon(viewModel)
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(imageFetcher.capturedSiteURL, url)
+        XCTAssertEqual(imageFetcher.capturedStringRequest, url)
         XCTAssertEqual(imageFetcher.capturedType, .favicon)
     }
 
     func testHeroImageSetup() {
         let expectation = expectation(description: "Completed image setup")
-        let url = URL(string: "https://www.firefox.com")!
+        let url = "https://www.firefox.com"
         let viewModel = HeroImageViewModel(siteURL: url,
                                            generalCornerRadius: 8,
                                            faviconCornerRadius: 4,
@@ -48,7 +48,7 @@ final class SiteImageViewTests: XCTestCase {
         subject.setHeroImage(viewModel)
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(imageFetcher.capturedSiteURL, url)
+        XCTAssertEqual(imageFetcher.capturedStringRequest, url)
         XCTAssertEqual(imageFetcher.capturedType, .heroImage)
     }
 }
@@ -56,15 +56,16 @@ final class SiteImageViewTests: XCTestCase {
 class MockSiteImageFetcher: SiteImageFetcher {
     var image = UIImage()
     var capturedType: SiteImageType?
-    var capturedSiteURL: URL?
-    func getImage(siteURL: URL,
+    var capturedStringRequest: String?
+    func getImage(urlStringRequest: String,
                   type: SiteImageType,
                   id: UUID) async -> SiteImageModel {
-        capturedSiteURL = siteURL
+        capturedStringRequest = urlStringRequest
         capturedType = type
         return SiteImageModel(id: id,
                               expectedImageType: type,
-                              siteURL: siteURL,
+                              urlStringRequest: urlStringRequest,
+                              siteURL: URL(string: urlStringRequest)!,
                               domain: "",
                               faviconURL: nil,
                               faviconImage: image,

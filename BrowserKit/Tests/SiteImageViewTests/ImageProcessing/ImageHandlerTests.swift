@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
+import LinkPresentation
 @testable import SiteImageView
 
 final class ImageHandlerTests: XCTestCase {
@@ -235,7 +236,9 @@ private class MockHeroImageFetcher: HeroImageFetcher {
     var fetchHeroImageSucceedCalled = 0
     var fetchHeroImageFailedCalled = 0
 
-    func fetchHeroImage(from siteURL: URL) async throws -> UIImage {
+    func fetchHeroImage(from siteURL: URL,
+                        metadataProvider: LPMetadataProvider = LPMetadataProvider()
+    ) async throws -> UIImage {
         if let image = image {
             fetchHeroImageSucceedCalled += 1
             return image
