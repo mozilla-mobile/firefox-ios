@@ -62,7 +62,10 @@ class WebViewController: UIViewController, WebController {
 
     weak var delegate: WebControllerDelegate?
 
-    var browserView: WKWebView!
+    var browserView: WKWebView! {
+        didSet { configureRefreshControl() }
+    }
+
     private var progressObserver: NSKeyValueObservation?
     private var currentBackForwardItem: WKBackForwardListItem?
     private let trackingProtectionManager: TrackingProtectionManager
@@ -192,6 +195,18 @@ class WebViewController: UIViewController, WebController {
         ContentBlockerHelper.shared.getBlockLists { [weak self] lists in
             guard let self = self else { return }
             self.reloadBlockers(lists)
+        }
+    }
+
+    private func configureRefreshControl() {
+        scrollView.refreshControl = UIRefreshControl()
+        scrollView.refreshControl?.addTarget(self, action: #selector(reloadPage), for: .valueChanged)
+    }
+
+    @objc private func reloadPage() {
+        reload()
+        DispatchQueue.main.async {
+            self.scrollView.refreshControl?.endRefreshing()
         }
     }
 
