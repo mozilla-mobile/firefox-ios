@@ -69,18 +69,21 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
         guard let domain = imageModel.domain else {
             // If no domain, we generate the favicon from the urlStringRequest
             return await imageHandler.fetchFavicon(imageURL: imageModel.faviconURL,
-                                                   domain: imageModel.urlStringRequest)
+                                                   domain: imageModel.urlStringRequest,
+                                                   expectedType: imageModel.expectedImageType)
         }
 
         do {
             // Try to fetch the favicon URL
             let faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
             return await imageHandler.fetchFavicon(imageURL: faviconURLImageModel.faviconURL,
-                                                   domain: domain)
+                                                   domain: domain,
+                                                   expectedType: imageModel.expectedImageType)
         } catch {
             // If no favicon URL, generate favicon without it
             return await imageHandler.fetchFavicon(imageURL: imageModel.faviconURL,
-                                                   domain: domain)
+                                                   domain: domain,
+                                                   expectedType: imageModel.expectedImageType)
         }
     }
 

@@ -44,6 +44,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         itemTitle.text = nil
+        heroImageView.prepareForReuse()
     }
 
     override func layoutSubviews() {
