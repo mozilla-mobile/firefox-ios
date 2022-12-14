@@ -21,7 +21,8 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
 
     func getImage(siteURL: URL, type: SiteImageType, id: UUID) async -> SiteImageModel {
         let domain = generateDomainURL(siteURL: siteURL)
-        var imageModel = SiteImageModel(expectedImageType: type,
+        var imageModel = SiteImageModel(id: id,
+                                        expectedImageType: type,
                                         siteURL: siteURL,
                                         domain: domain,
                                         faviconURL: nil,

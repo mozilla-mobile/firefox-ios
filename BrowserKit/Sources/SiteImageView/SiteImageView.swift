@@ -3,11 +3,27 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
+import Common
 
-public class SiteImageView: UIImageView {
-    private var uniqueID: UUID?
+/// Used in HeroImageView and FaviconImageView to update their image using the SiteImageFetcher
+protocol SiteImageView: UIView {
+    var uniqueID: UUID? { get set }
+    var imageFetcher: SiteImageFetcher { get set }
 
-    public func setURL(siteURL: String, type: SiteImageType = .favicon) {
-        uniqueID = UUID()
+    func setURL(_ siteURL: URL, type: SiteImageType)
+    func updateImage(url: URL, type: SiteImageType, id: UUID)
+    func setImage(imageModel: SiteImageModel)
+}
+
+extension SiteImageView {
+    func updateImage(url: URL, type: SiteImageType, id: UUID) {
+        Task {
+            let imageModel = await imageFetcher.getImage(siteURL: url, type: type, id: id)
+            guard uniqueID == imageModel.id else { return }
+
+            DispatchQueue.main.async { [weak self] in
+                self?.setImage(imageModel: imageModel)
+            }
+        }
     }
 }
