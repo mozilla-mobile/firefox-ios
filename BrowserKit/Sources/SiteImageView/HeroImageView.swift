@@ -60,7 +60,7 @@ public class HeroImageView: UIView, SiteImageView {
 
     public func setHeroImage(_ viewModel: HeroImageViewModel) {
         setupHeroImageLayout(viewModel: viewModel)
-        setURL(viewModel.siteURL, type: viewModel.type)
+        setURL(viewModel.urlStringRequest, type: viewModel.type)
     }
 
     public func updateHeroImageTheme(with colors: HeroImageViewColor) {

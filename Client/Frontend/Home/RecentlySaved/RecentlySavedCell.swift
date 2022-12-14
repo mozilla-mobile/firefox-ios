@@ -53,7 +53,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     }
 
     func configure(viewModel: RecentlySavedCellViewModel, theme: Theme) {
-        let heroImageViewModel = HeroImageViewModel(siteURL: viewModel.site.url,
+        let heroImageViewModel = HeroImageViewModel(urlStringRequest: viewModel.site.url,
                                                     generalCornerRadius: HomepageViewModel.UX.generalCornerRadius,
                                                     faviconCornerRadius: HomepageViewModel.UX.generalCornerRadius,
                                                     faviconBorderWidth: HomepageViewModel.UX.generalBorderWidth,

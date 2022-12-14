@@ -16,10 +16,10 @@ struct SiteImageModel {
     let urlStringRequest: String
 
     /// URL can be nil in case the urlStringRequest cannot be used to build a URL
-    let siteURL: URL?
+    var siteURL: URL?
 
     /// Domain can be nil in case we don't have a siteURL to get the domain from
-    let domain: String?
+    var domain: String?
 
     /// The favicon URL scrapped from the webpage, high resolution found at preference
     var faviconURL: URL?

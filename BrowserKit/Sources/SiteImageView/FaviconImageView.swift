@@ -42,7 +42,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
 
     public func setFavicon(_ viewModel: FaviconImageViewModel) {
         setupFaviconLayout(viewModel: viewModel)
-        setURL(viewModel.siteURL, type: viewModel.type)
+        setURL(viewModel.urlStringRequest, type: viewModel.type)
     }
 
     // MARK: - SiteImageView

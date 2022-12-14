@@ -5,7 +5,7 @@
 import UIKit
 
 public struct HeroImageViewModel {
-    let siteURL: String
+    let urlStringRequest: String
     let type: SiteImageType
     let generalCornerRadius: CGFloat
     let faviconCornerRadius: CGFloat
@@ -13,14 +13,14 @@ public struct HeroImageViewModel {
     let heroImageSize: CGSize
     let fallbackFaviconSize: CGSize
 
-    public init(siteURL: String,
+    public init(urlStringRequest: String,
                 generalCornerRadius: CGFloat,
                 faviconCornerRadius: CGFloat,
                 faviconBorderWidth: CGFloat,
                 heroImageSize: CGSize,
                 fallbackFaviconSize: CGSize) {
         self.type = .heroImage
-        self.siteURL = siteURL
+        self.urlStringRequest = urlStringRequest
         self.generalCornerRadius = generalCornerRadius
         self.faviconCornerRadius = faviconCornerRadius
         self.faviconBorderWidth = faviconBorderWidth

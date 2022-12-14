@@ -20,19 +20,7 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
     }
 
     func getImage(urlStringRequest: String, type: SiteImageType, id: UUID) async -> SiteImageModel {
-        var imageModel: SiteImageModel
-        if let siteURL = URL(string: urlStringRequest) {
-            let domain = generateDomainURL(siteURL: siteURL)
-            imageModel = SiteImageModel(id: id,
-                                        expectedImageType: type,
-                                        urlStringRequest: urlStringRequest,
-                                        siteURL: siteURL,
-                                        domain: domain,
-                                        faviconURL: nil,
-                                        faviconImage: nil,
-                                        heroImage: nil)
-        } else {
-            imageModel = SiteImageModel(id: id,
+        var imageModel = SiteImageModel(id: id,
                                         expectedImageType: type,
                                         urlStringRequest: urlStringRequest,
                                         siteURL: nil,
@@ -40,6 +28,12 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
                                         faviconURL: nil,
                                         faviconImage: nil,
                                         heroImage: nil)
+
+        // urlStringRequest possibly cannot be a URL
+        if let siteURL = URL(string: urlStringRequest) {
+            let domain = generateDomainURL(siteURL: siteURL)
+            imageModel.siteURL = siteURL
+            imageModel.domain = domain
         }
 
         do {
@@ -72,7 +66,11 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
     }
 
     private func getFaviconImage(imageModel: SiteImageModel) async -> UIImage {
-        let domain = imageModel.domain ?? imageModel.urlStringRequest
+        guard let domain = imageModel.domain else {
+            // If no domain, we generate the favicon from the urlStringRequest
+            return await imageHandler.fetchFavicon(imageURL: imageModel.faviconURL,
+                                                   domain: imageModel.urlStringRequest)
+        }
 
         do {
             // Try to fetch the favicon URL

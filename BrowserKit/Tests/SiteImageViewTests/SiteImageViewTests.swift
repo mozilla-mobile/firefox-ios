@@ -21,7 +21,7 @@ final class SiteImageViewTests: XCTestCase {
     func testFaviconSetup() {
         let expectation = expectation(description: "Completed image setup")
         let url = "https://www.firefox.com"
-        let viewModel = FaviconImageViewModel(siteURL: url,
+        let viewModel = FaviconImageViewModel(urlStringRequest: url,
                                               faviconCornerRadius: 8)
         let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {
             expectation.fulfill()
@@ -36,7 +36,7 @@ final class SiteImageViewTests: XCTestCase {
     func testHeroImageSetup() {
         let expectation = expectation(description: "Completed image setup")
         let url = "https://www.firefox.com"
-        let viewModel = HeroImageViewModel(siteURL: url,
+        let viewModel = HeroImageViewModel(urlStringRequest: url,
                                            generalCornerRadius: 8,
                                            faviconCornerRadius: 4,
                                            faviconBorderWidth: 0.5,
