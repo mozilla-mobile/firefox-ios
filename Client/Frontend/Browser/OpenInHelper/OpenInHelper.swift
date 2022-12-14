@@ -103,15 +103,21 @@ class DownloadHelper: NSObject {
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 
         var filenameItem: SingleActionViewModel
+        var modelText = host
+
         if let expectedSize = expectedSize {
-            let expectedSizeAndHost = "\(expectedSize) — \(host)"
-            filenameItem = SingleActionViewModel(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
-        } else {
-            filenameItem = SingleActionViewModel(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
+            modelText = "\(expectedSize) — \(host)"
         }
+
+        filenameItem = SingleActionViewModel(title: download.filename,
+                                             text: modelText,
+                                             iconString: "file",
+                                             iconAlignment: .right,
+                                             bold: true)
         filenameItem.customHeight = { _ in
             return 80
         }
+
         filenameItem.customRender = { label, contentView in
             label.numberOfLines = 2
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
