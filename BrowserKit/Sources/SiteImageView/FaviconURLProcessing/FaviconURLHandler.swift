@@ -34,7 +34,8 @@ struct DefaultFaviconURLHandler: FaviconURLHandler {
     }
 
     private func createSiteImageModel(_ site: SiteImageModel, faviconURL: URL) -> SiteImageModel {
-        return SiteImageModel(expectedImageType: site.expectedImageType,
+        return SiteImageModel(id: site.id,
+                              expectedImageType: site.expectedImageType,
                               siteURL: site.siteURL,
                               domain: site.domain,
                               faviconURL: faviconURL,

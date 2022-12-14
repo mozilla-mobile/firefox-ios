@@ -129,7 +129,8 @@ private class MockFaviconURLHandler: FaviconURLHandler {
 
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel {
         capturedImageModel = site
-        return SiteImageModel(expectedImageType: site.expectedImageType,
+        return SiteImageModel(id: site.id,
+                              expectedImageType: site.expectedImageType,
                               siteURL: site.siteURL,
                               domain: site.domain,
                               faviconURL: faviconURL)
