@@ -6,8 +6,8 @@ import UIKit
 import Storage
 import Shared
 
-class BackForwardTableViewCell: UITableViewCell {
-    private struct BackForwardViewCellUX {
+class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
+    private struct UX {
         static let bgColor = UIColor.Photon.Grey50
         static let faviconWidth = 29
         static let faviconPadding: CGFloat = 20
@@ -18,6 +18,7 @@ class BackForwardTableViewCell: UITableViewCell {
         static let fontSize: CGFloat = 12.0
         static let textColor = UIColor.Photon.Grey80
     }
+
     lazy var faviconView: UIImageView = .build { imageView in
         imageView.image = FaviconFetcher.defaultFavicon
         imageView.backgroundColor = UIColor.Photon.White100
@@ -30,7 +31,7 @@ class BackForwardTableViewCell: UITableViewCell {
 
     lazy var label: UILabel = .build { label in
         label.text = " "
-        label.font = label.font.withSize(BackForwardViewCellUX.fontSize)
+        label.font = label.font.withSize(UX.fontSize)
         label.textColor = UIColor.theme.tabTray.tabTitleText
     }
 
@@ -40,7 +41,7 @@ class BackForwardTableViewCell: UITableViewCell {
     var isCurrentTab = false {
         didSet {
             if isCurrentTab {
-                label.font = UIFont.boldSystemFont(ofSize: BackForwardViewCellUX.fontSize)
+                label.font = UIFont.boldSystemFont(ofSize: UX.fontSize)
             }
         }
     }
@@ -51,12 +52,12 @@ class BackForwardTableViewCell: UITableViewCell {
                 faviconView.setFavicon(forSite: site) { [weak self] in
                     if InternalURL.isValid(url: site.tileURL) {
                         self?.faviconView.image = UIImage(named: "faviconFox")
-                        self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
+                        self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: UX.IconSize, height: UX.IconSize))
                         self?.faviconView.backgroundColor = UIColor.Photon.White100
                         return
                     }
 
-                    self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
+                    self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: UX.IconSize, height: UX.IconSize))
                     if self?.faviconView.backgroundColor == .clear {
                         self?.faviconView.backgroundColor = .white
                     }
@@ -80,13 +81,14 @@ class BackForwardTableViewCell: UITableViewCell {
         contentView.addSubview(label)
 
         NSLayoutConstraint.activate([
-            faviconView.heightAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
-            faviconView.widthAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
+            faviconView.heightAnchor.constraint(equalToConstant: CGFloat(UX.faviconWidth)),
+            faviconView.widthAnchor.constraint(equalToConstant: CGFloat(UX.faviconWidth)),
             faviconView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            faviconView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: CGFloat(BackForwardViewCellUX.faviconPadding)),
+            faviconView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: CGFloat(UX.faviconPadding)),
+
             label.centerYAnchor.constraint(equalTo: centerYAnchor),
-            label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(BackForwardViewCellUX.labelPadding)),
-            label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-BackForwardViewCellUX.labelPadding))
+            label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(UX.labelPadding)),
+            label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-UX.labelPadding))
         ])
     }
 
@@ -99,10 +101,10 @@ class BackForwardTableViewCell: UITableViewCell {
         guard let context = UIGraphicsGetCurrentContext() else { return }
 
         var startPoint = CGPoint(
-            x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth) * 0.5) + safeAreaInsets.left,
+            x: rect.origin.x + UX.faviconPadding + CGFloat(Double(UX.faviconWidth) * 0.5) + safeAreaInsets.left,
             y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
         var endPoint   = CGPoint(
-            x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth) * 0.5) + safeAreaInsets.left,
+            x: rect.origin.x + UX.faviconPadding + CGFloat(Double(UX.faviconWidth) * 0.5) + safeAreaInsets.left,
             y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
 
         // flip the x component if RTL
@@ -113,7 +115,7 @@ class BackForwardTableViewCell: UITableViewCell {
 
         context.saveGState()
         context.setLineCap(.square)
-        context.setStrokeColor(BackForwardViewCellUX.bgColor.cgColor)
+        context.setStrokeColor(UX.bgColor.cgColor)
         context.setLineWidth(1.0)
         context.move(to: startPoint)
         context.addLine(to: endPoint)
@@ -134,6 +136,10 @@ class BackForwardTableViewCell: UITableViewCell {
         connectingForwards = true
         connectingBackwards = true
         isCurrentTab = false
-        label.font = UIFont.systemFont(ofSize: BackForwardViewCellUX.fontSize)
+        label.font = UIFont.systemFont(ofSize: UX.fontSize)
+    }
+
+    func applyTheme(theme: Theme) {
+        print("YRD apply theme on cell")
     }
 }

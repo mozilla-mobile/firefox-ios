@@ -12,16 +12,25 @@ private struct BackForwardViewUX {
     static let BackgroundColor = UIColor.Photon.Grey10A40
 }
 
-class BackForwardListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate {
-    fileprivate let BackForwardListCellIdentifier = "BackForwardListViewController"
-    fileprivate var profile: Profile
-    fileprivate lazy var sites = [String: Site]()
-    fileprivate var dismissing = false
-    fileprivate var currentRow = 0
-    fileprivate var verticalConstraints: [NSLayoutConstraint] = []
+class BackForwardListViewController: UIViewController,
+                                     UITableViewDataSource,
+                                     UITableViewDelegate,
+                                     UIGestureRecognizerDelegate,
+                                     Themeable {
+    private let BackForwardListCellIdentifier = "BackForwardListViewController"
+    private var profile: Profile
+    private lazy var sites = [String: Site]()
+    private var dismissing = false
+    private var currentRow = 0
+    private var verticalConstraints: [NSLayoutConstraint] = []
     var tableViewTopAnchor: NSLayoutConstraint!
     var tableViewBottomAnchor: NSLayoutConstraint!
     var tableViewHeightAnchor: NSLayoutConstraint!
+
+    // MARK: - Theme
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     lazy var tableView: UITableView = .build { tableView in
         tableView.separatorStyle = .none
@@ -58,8 +67,13 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
 
     var snappedToBottom: Bool = true
 
-    init(profile: Profile, backForwardList: WKBackForwardList) {
+    init(profile: Profile,
+         backForwardList: WKBackForwardList,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.profile = profile
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         loadSites(backForwardList)
@@ -68,6 +82,14 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        listenForThemeChange()
+        setupLayout()
+        scrollTableViewToIndex(currentRow)
+        setupDismissTap()
+    }
+
+    private func setupLayout() {
         view.addSubview(shadow)
         view.addSubview(tableView)
 
@@ -84,8 +106,10 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
         ])
         remakeVerticalConstraints()
         view.layoutIfNeeded()
-        scrollTableViewToIndex(currentRow)
-        setupDismissTap()
+    }
+
+    func applyTheme() {
+        print("YRD apply theme was called")
     }
 
     func loadSitesFromProfile() {
