@@ -2,36 +2,33 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import UIKit
 
 class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
     struct UX {
         static let verticalPadding: CGFloat = 60
         static let horizontalPadding: CGFloat = 24
         static let paddingInBetweenItems: CGFloat = 15
+        static let buttonCornerRadius: CGFloat = 13
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
-        static let buttonSizeFont: CGFloat = 15
+        static let buttonSizeFont: CGFloat = 16
         static let imageSize: CGSize = CGSize(width: 90, height: 60)
+        static let buttonVerticalInset: CGFloat = 12
     }
 
-    var theme: Theme
-    var error: RemoteTabsErrorDataSource.ErrorType
     weak var delegate: RemotePanelDelegate?
 
     // MARK: - UI
-    private let scrollView: UIScrollView = .build { scrollview in
-        scrollview.backgroundColor = .clear
-    }
 
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.alignment = .center
+        stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.spacing = UX.paddingInBetweenItems
     }
 
-    private let emptyStateImageView: UIImageView = build { imageView in
+    private let emptyStateImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
     }
 
@@ -51,36 +48,40 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.textAlignment = .center
     }
 
-    private let signInButton: UIButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
+    private let signInButton: ResizableButton = .build { button in
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
                                                                                 size: UX.buttonSizeFont)
-        button.isHidden = true
+        button.setTitle(.Settings.Sync.ButtonTitle, for: [])
+        button.layer.cornerRadius = UX.buttonCornerRadius
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
+                                                left: UX.buttonVerticalInset,
+                                                bottom: UX.buttonVerticalInset,
+                                                right: UX.buttonVerticalInset)
     }
 
-    init(error: RemoteTabsErrorDataSource.ErrorType,
-         theme: Theme) {
-        self.error = error
-        self.theme = theme
-        super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
 
         setupLayout()
-        applyTheme(theme: theme)
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(delegate: RemotePanelDelegate?) {
+    func configure(error: RemoteTabsErrorDataSource.ErrorType,
+                   theme: Theme,
+                   delegate: RemotePanelDelegate?) {
         self.delegate = delegate
+        applyTheme(theme: theme)
+
         emptyStateImageView.image = UIImage.templateImageNamed(ImageIdentifiers.emptySyncImageName)
         titleLabel.text =  .EmptySyncedTabsPanelStateTitle
         instructionsLabel.text = error.localizedString()
 
         // Show signIn button only for notLoggedIn case
         if error == .notLoggedIn {
-            signInButton.setTitle(.Settings.Sync.ButtonTitle, for: [])
             signInButton.isHidden = false
             signInButton.addTarget(self, action: #selector(presentSignIn), for: .touchUpInside)
         }
@@ -91,25 +92,18 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(instructionsLabel)
         stackView.addArrangedSubview(signInButton)
-        scrollView.addSubview(stackView)
-        contentView.addSubview(scrollView)
+        contentView.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
-                                                constant: UX.horizontalPadding),
-            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                            constant: UX.verticalPadding),
-            scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
-                                                 constant: -UX.horizontalPadding),
-            scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
-                                               constant: -UX.verticalPadding),
-
-            scrollView.frameLayoutGuide.widthAnchor.constraint(equalTo: stackView.widthAnchor),
-
-            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
-            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: stackView.topAnchor),
-            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+                                               constant: UX.horizontalPadding),
+            stackView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor,
+                                           constant: UX.verticalPadding),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
+                                                constant: -UX.horizontalPadding),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
+                                              constant: -UX.verticalPadding).priority(.defaultLow),
 
             emptyStateImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
             emptyStateImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
@@ -120,7 +114,8 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         emptyStateImageView.tintColor = theme.colors.textPrimary
         titleLabel.textColor = theme.colors.textPrimary
         instructionsLabel.textColor = theme.colors.textPrimary
-        signInButton.setTitleColor(theme.colors.borderAccentPrivate, for: [])
+        signInButton.setTitleColor(theme.colors.textInverted, for: .normal)
+        signInButton.backgroundColor = theme.colors.actionPrimary
         backgroundColor = theme.colors.layer3
     }
 
