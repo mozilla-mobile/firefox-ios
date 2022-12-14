@@ -87,15 +87,12 @@ public class HeroImageView: UIView, SiteImageView {
         if let heroImage = imageModel.heroImage {
             // If hero image is a square use it as a favicon
             guard heroImage.size.width == heroImage.size.height else {
-                setFallBackFaviconVisibility(isHidden: true)
-                heroImageView.image = heroImage
+                setHeroImage(image: heroImage)
                 return
             }
-            setFallBackFaviconVisibility(isHidden: false)
-            fallbackFaviconImageView.image = heroImage
+            setFallbackFavicon(image: heroImage)
         } else if let faviconImage = imageModel.faviconImage {
-            setFallBackFaviconVisibility(isHidden: false)
-            fallbackFaviconImageView.image = faviconImage
+            setFallbackFavicon(image: faviconImage)
         }
     }
 
@@ -127,6 +124,18 @@ public class HeroImageView: UIView, SiteImageView {
             fallbackFaviconImageView.centerXAnchor.constraint(equalTo: fallbackFaviconBackground.centerXAnchor),
             fallbackFaviconImageView.centerYAnchor.constraint(equalTo: fallbackFaviconBackground.centerYAnchor),
         ])
+    }
+
+    // MARK: - Conveniance methods
+
+    private func setHeroImage(image: UIImage) {
+        setFallBackFaviconVisibility(isHidden: true)
+        heroImageView.image = image
+    }
+
+    private func setFallbackFavicon(image: UIImage) {
+        setFallBackFaviconVisibility(isHidden: false)
+        fallbackFaviconImageView.image = image
     }
 
     private func setFallBackFaviconVisibility(isHidden: Bool) {
