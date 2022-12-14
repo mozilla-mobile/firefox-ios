@@ -108,3 +108,6 @@ nimbus-fml/
 # bundler
 vendor/bundle
 .bundle/config
+
+# transifex
+/tx

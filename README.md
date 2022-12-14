@@ -136,9 +136,12 @@ sudo pip3 install transifex-client
 
 ```bash
 [https://www.transifex.com]
-hostname = https://www.transifex.com
-password = ...
-username = ...
+api_hostname  = https://api.transifex.com
+hostname      = https://www.transifex.com
+username      = <vault secret>
+password      = <vault secret>
+rest_hostname = https://rest.api.transifex.com
+token         = <vault secret>
 ```
 
 ### Translations need to be pulled and commited manually
@@ -146,7 +149,7 @@ username = ...
 Pulling translation from the web
 
 ```bash
-tx pull -afs
+tx pull -fs
 ```
 
 Test and commit the new translations. There exists schemes for testing other languages in the simulator.
@@ -160,7 +163,7 @@ Test and commit the new translations. There exists schemes for testing other lan
 3. Push it to Transifex
 
 ```bash
-tx pull -afs
+tx pull -fs
 tx push -s
 ```
 
