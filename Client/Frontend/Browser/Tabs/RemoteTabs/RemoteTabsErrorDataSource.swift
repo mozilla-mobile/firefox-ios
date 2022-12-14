@@ -42,13 +42,20 @@ class RemoteTabsErrorDataSource: NSObject, RemoteTabsPanelDataSource, ThemeAppli
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return tableView.frame.height
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = RemoteTabsErrorCell(error: error,
-                                       theme: theme)
-        cell.configure(delegate: remoteTabsPanel?.remotePanelDelegate)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RemoteTabsErrorCell.cellIdentifier,
+                                                       for: indexPath) as? RemoteTabsErrorCell
+        else {
+            return UITableViewCell()
+        }
+
+        tableView.separatorStyle = .none
+        cell.configure(error: error,
+                       theme: theme,
+                       delegate: remoteTabsPanel?.remotePanelDelegate)
         return cell
     }
 
