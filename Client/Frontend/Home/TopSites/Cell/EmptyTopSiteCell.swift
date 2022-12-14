@@ -21,7 +21,7 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
             emptyBG.topAnchor.constraint(equalTo: contentView.topAnchor),
             emptyBG.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             emptyBG.widthAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.width),
-            emptyBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height),
+            emptyBG.heightAnchor.constraint(equalToConstant: TopSiteItemCell.UX.imageBackgroundSize.height).priority(.defaultHigh),
             emptyBG.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
         ])
     }

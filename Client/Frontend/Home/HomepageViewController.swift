@@ -91,6 +91,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
         applyTheme()
         setupSectionsAction()
         reloadView()
+
+        viewModel.recordViewAppeared()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

@@ -25,11 +25,11 @@ extension HomepageViewController {
 
     func updateTreesCell() {
         guard let impactCell = viewModel.impactViewModel.cell else { return }
-        impactCell.display(treesCellModel)
+        impactCell.display(treesCellModel, animated: false)
     }
 
     var treesCellModel: NTPImpactCell.Model {
-        .init(trees: User.shared.impact, searches: personalCounter.state!, style: .ntp)
+        .init(impact: User.shared.impact, searches: personalCounter.state!, trees: TreeCounter.shared.statistics.treesAt(.init()))
     }
 
     @objc func allNews() {

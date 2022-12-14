@@ -15,6 +15,8 @@ class LegacyThemeManager {
 
     var current: LegacyTheme = themeFrom(name: UserDefaults.standard.string(forKey: LegacyThemeManagerPrefs.themeName.rawValue)) {
         didSet {
+            guard oldValue.isDark != current.isDark else { return }
+
             UserDefaults.standard.set(current.name, forKey: LegacyThemeManagerPrefs.themeName.rawValue)
             NotificationCenter.default.post(name: .DisplayThemeChanged, object: nil)
         }

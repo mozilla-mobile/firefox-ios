@@ -653,7 +653,6 @@
 		CA8BCC3828D1FB900020BC50 /* HighlightItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */; };
 		CA8BCC3928D1FBBC0020BC50 /* HistoryHighlightsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA51480275FFEE500266AA0 /* HistoryHighlightsManager.swift */; };
 		CA8BCC3B28D218830020BC50 /* NTPImpactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8BCC3A28D218830020BC50 /* NTPImpactViewModel.swift */; };
-		CA8BCC3E28D30A070020BC50 /* NTPImpactCell.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8BCC3D28D30A070020BC50 /* NTPImpactCell.Model.swift */; };
 		CA8BCC4028D340AF0020BC50 /* TabCell+Ecosia.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8BCC3F28D340AF0020BC50 /* TabCell+Ecosia.swift */; };
 		CA8BCC4E28D35E7A0020BC50 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		CA8BCC5028D35E910020BC50 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
@@ -3594,7 +3593,6 @@
 		CA8A48B3291BBA62008BE12F /* NewsCell.ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.ViewModel.swift; sourceTree = "<group>"; };
 		CA8A48B5291BBBD1008BE12F /* Core.Promo.Variants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Core.Promo.Variants.swift; sourceTree = "<group>"; };
 		CA8BCC3A28D218830020BC50 /* NTPImpactViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPImpactViewModel.swift; sourceTree = "<group>"; };
-		CA8BCC3D28D30A070020BC50 /* NTPImpactCell.Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NTPImpactCell.Model.swift; sourceTree = "<group>"; };
 		CA8BCC3F28D340AF0020BC50 /* TabCell+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabCell+Ecosia.swift"; sourceTree = "<group>"; };
 		CA8BCC4128D352630020BC50 /* EcosiaBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = EcosiaBeta.xcconfig; path = Configuration/EcosiaBeta.xcconfig; sourceTree = "<group>"; };
 		CA8BCC4228D352640020BC50 /* Ecosia.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Ecosia.xcconfig; path = Configuration/Ecosia.xcconfig; sourceTree = "<group>"; };
@@ -6490,7 +6488,6 @@
 				CA4D9C9928C8D801006AFB5D /* NTPLogoCell.swift */,
 				CA506BA928D1E96E0064072B /* NTPLibraryCell.swift */,
 				CA4D9C9528C8D801006AFB5D /* NTPImpactCell.swift */,
-				CA8BCC3D28D30A070020BC50 /* NTPImpactCell.Model.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -9168,7 +9165,6 @@
 				DFACDFAF274D4D6D00A94EEC /* ReusableCell.swift in Sources */,
 				1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
-				CA8BCC3E28D30A070020BC50 /* NTPImpactCell.Model.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				D5D052EF2645ACBF00759F85 /* View.swift in Sources */,
 				39F819C61FD70F5D009E31E4 /* TabEventHandlers.swift in Sources */,

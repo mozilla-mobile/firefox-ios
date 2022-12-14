@@ -124,10 +124,13 @@ class HomepageViewModel: FeatureFlaggable {
                 Analytics.shared.promo(action: .view, for: .treestore)
             }
         }
+        
+        impactViewModel.startCounter()
     }
 
     func recordViewDisappeared() {
         viewAppeared = false
+        impactViewModel.stopCounter()
     }
 
     // MARK: - Manage sections

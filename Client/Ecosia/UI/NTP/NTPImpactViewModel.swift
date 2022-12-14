@@ -17,11 +17,27 @@ class NTPImpactViewModel {
         self.personalCounter = personalCounter
     }
 
-    fileprivate var treesCellModel: NTPImpactCell.Model {
-        .init(trees: User.shared.impact, searches: personalCounter.state!, style: .ntp)
+    var treesCellModel: NTPImpactCell.Model {
+        .init(impact: User.shared.impact, searches: personalCounter.state!, trees: TreeCounter.shared.statistics.treesAt(.init()))
     }
 
     weak var cell: NTPImpactCell?
+
+    func startCounter() {
+        guard !UIAccessibility.isReduceMotionEnabled else {
+            cell?.display(treesCellModel, animated: false)
+            return
+        }
+
+        TreeCounter.shared.subscribe(self) { [weak self] count in
+            guard let cell = self?.cell, let model = self?.treesCellModel else { return }
+            cell.display(model, animated: true)
+        }
+    }
+
+    func stopCounter() {
+        TreeCounter.shared.unsubscribe(self)
+    }
 }
 
 // MARK: HomeViewModelProtocol
@@ -56,7 +72,7 @@ extension NTPImpactViewModel: HomepageViewModelProtocol {
         // Adding a header if needed
         if ntpLayoutHighlightText() != nil {
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                          heightDimension: .absolute(1.0))
+                                                    heightDimension: .absolute(1.0))
             let header = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: headerSize,
                 elementKind: UICollectionView.elementKindSectionHeader,
@@ -84,7 +100,7 @@ extension NTPImpactViewModel: HomepageSectionHandler {
 
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = cell as? NTPImpactCell else { return UICollectionViewCell() }
-        cell.display(treesCellModel)
+        cell.display(treesCellModel, animated: false)
         self.cell = cell
         return cell
     }

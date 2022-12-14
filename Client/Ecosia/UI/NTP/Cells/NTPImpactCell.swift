@@ -7,6 +7,12 @@ import Core
 
 final class NTPImpactCell: UICollectionViewCell, NotificationThemeable, ReusableCell {
 
+    struct Model {
+        let impact: Int
+        let searches: Int
+        let trees: Int
+    }
+
     static let topMargin = CGFloat(10)
 
     private(set) var model: Model?
@@ -65,37 +71,28 @@ final class NTPImpactCell: UICollectionViewCell, NotificationThemeable, Reusable
         applyTheme()
     }
 
-    func display(_ model: Model) {
+    func display(_ model: Model, animated: Bool) {
         self.model = model
 
         currentProgress.value = User.shared.progress
 
         if #available(iOS 15.0, *) {
-            treesCount.text = model.trees.formatted()
+            treesCount.text = model.impact.formatted()
         } else {
-            treesCount.text = "\(model.trees)"
+            treesCount.text = "\(model.impact)"
         }
 
-        updateGlobalCount()
-    }
-
-    private func updateGlobalCount() {
-        // don't subscribe and animate for reduced motion
-        guard !UIAccessibility.isReduceMotionEnabled else {
-            TreeCounter.shared.unsubscribe(self)
-            let count = TreeCounter.shared.statistics.treesAt(.init())
-            self.globalCount.text = self.formatter.string(from: .init(value: count))
-            return
+        // animated counter
+        if animated {
+            let animation: CATransition = CATransition()
+            animation.isRemovedOnCompletion = true
+            animation.duration = 0.65
+            animation.type = .fade
+            animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            globalCount.layer.add(animation, forKey: "changeTextTransition")
         }
-
-        TreeCounter.shared.subscribe(self) { [weak self] count in
-            guard let self = self else { return }
-
-            UIView.transition(with: self.globalCount, duration: 0.65, options: .transitionCrossDissolve, animations: {
-                self.globalCount.text = self.formatter.string(from: .init(value: count))
-            })
-            self.model.map({ self.display($0) })
-        }
+        
+        globalCount.text = formatter.string(from: .init(value: model.trees))
     }
 
     private func addImpact() {
@@ -274,8 +271,8 @@ final class NTPImpactCell: UICollectionViewCell, NotificationThemeable, Reusable
     func applyTheme() {
         background.backgroundColor = UIColor.theme.ecosia.primaryBackground
 
-        let backgroundColor: UIColor = model?.style == .ntp ? .theme.ecosia.ntpImpactBackground : .theme.ecosia.impactBackground
-        let selectedBackgroundColor: UIColor = model?.style == .ntp ? .theme.ecosia.primarySelectedBackground : .theme.ecosia.secondarySelectedBackground
+        let backgroundColor: UIColor = .theme.ecosia.ntpImpactBackground
+        let selectedBackgroundColor: UIColor =  .theme.ecosia.primarySelectedBackground
         impactBackground.backgroundColor = (isHighlighted || isSelected) ? selectedBackgroundColor : backgroundColor
 
         globalCountDescription.textColor = .theme.ecosia.secondaryText
