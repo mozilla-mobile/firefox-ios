@@ -143,11 +143,12 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
                            forHeaderFooterViewReuseIdentifier: SiteTableViewHeader.cellIdentifier)
         tableView.register(TwoLineImageOverlayCell.self,
                            forCellReuseIdentifier: TwoLineImageOverlayCell.cellIdentifier)
+        tableView.register(RemoteTabsErrorCell.self,
+                           forCellReuseIdentifier: RemoteTabsErrorCell.cellIdentifier)
 
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
 
-        tableView.tableFooterView = UIView() // prevent extra empty rows at end
         tableView.delegate = nil
         tableView.dataSource = nil
 
