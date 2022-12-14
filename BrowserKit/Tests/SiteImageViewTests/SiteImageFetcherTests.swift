@@ -144,7 +144,7 @@ private class MockImageHandler: ImageHandler {
     var capturedFaviconURL: URL?
     var capturedDomain: String?
 
-    func fetchFavicon(imageURL: URL?, domain: String) async -> UIImage {
+    func fetchFavicon(imageURL: URL?, domain: String, expectedType: SiteImageType) async -> UIImage {
         capturedFaviconURL = imageURL
         capturedDomain = domain
         return faviconImage
