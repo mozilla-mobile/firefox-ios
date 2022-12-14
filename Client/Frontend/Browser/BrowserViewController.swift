@@ -233,6 +233,8 @@ class BrowserViewController: UIViewController {
             openSearchNewTab(searchTerm)
         case .switchToTabForURLOrOpen(let url):
             switchToTabForURLOrOpen(url)
+        case .debugOption(let numberOfTabs, let url):
+            debugOpen(numberOfNewTabs: numberOfTabs, at: url)
         }
     }
 
@@ -1380,6 +1382,23 @@ class BrowserViewController: UIViewController {
     }
 
     // MARK: Opening New Tabs
+
+    /// ⚠️ !! WARNING !! ⚠️
+    /// This function opens up x number of new tabs in the background.
+    /// This is meant to test memory overflows with tabs on a device.
+    /// DO NOT USE unless you're explicitly testing this feature.
+    /// It should only be used from the debug menu.
+    func debugOpen(numberOfNewTabs: Int?, at url: URL) {
+        guard let numberOfNewTabs = numberOfNewTabs,
+              numberOfNewTabs > 0
+        else { return }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+            self.tabManager.addTab(URLRequest(url: url))
+            self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
+        })
+    }
+
     func switchToPrivacyMode(isPrivate: Bool) {
         if let tabTrayController = self.gridTabTrayController, tabTrayController.tabDisplayManager.isPrivate != isPrivate {
             tabTrayController.didTogglePrivateMode(isPrivate)

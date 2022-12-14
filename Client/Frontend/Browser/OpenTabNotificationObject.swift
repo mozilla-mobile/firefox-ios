@@ -12,6 +12,7 @@ struct OpenTabNotificationObject {
         case loadQueuedTabs([URL])
         case openSearchNewTab(String)
         case switchToTabForURLOrOpen(URL)
+        case debugOption(Int, URL)
     }
 
     var type: ObjectType

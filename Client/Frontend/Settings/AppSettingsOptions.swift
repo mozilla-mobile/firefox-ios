@@ -660,9 +660,8 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         guard let url = URL(string: "https://www.mozilla.org") else { return }
 
-        // TODO: Temporary. foregrounding BVC to open tabs is going to be addressed soon.
-        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5289
-        BrowserViewController.foregroundBVC()?.debugOpen(numberOfNewTabs: 50, at: url)
+        let object = OpenTabNotificationObject(type: .debugOption(50, url))
+        NotificationCenter.default.post(name: .OpenTabNotification, object: object)
     }
 }
 
@@ -1399,23 +1398,5 @@ class SearchBarSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = SearchBarSettingsViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
-extension BrowserViewController {
-    /// ⚠️ !! WARNING !! ⚠️
-    /// This function opens up x number of new tabs in the background.
-    /// This is meant to test memory overflows with tabs on a device.
-    /// DO NOT USE unless you're explicitly testing this feature.
-    /// It should only be used from the debug menu.
-    func debugOpen(numberOfNewTabs: Int?, at url: URL) {
-        guard let numberOfNewTabs = numberOfNewTabs,
-              numberOfNewTabs > 0
-        else { return }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-            self.tabManager.addTab(URLRequest(url: url))
-            self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
-        })
     }
 }
