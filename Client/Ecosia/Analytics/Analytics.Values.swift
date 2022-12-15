@@ -12,6 +12,7 @@ extension Analytics {
         invitations,
         ntp,
         menu,
+        menuStatus = "menu_status",
         settings
     }
     
@@ -103,5 +104,12 @@ extension Analytics {
         favourites,
         history,
         exception
+    }
+
+    enum ShareContent: String {
+        case
+        ntp,
+        web,
+        file
     }
 }

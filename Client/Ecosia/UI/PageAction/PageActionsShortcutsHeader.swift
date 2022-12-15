@@ -89,16 +89,12 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
         switch sender.tag {
         case 0:
             delegate?.pageOptionsOpenHome()
-            Analytics.shared.menuClick(label: "home")
         case 1:
             delegate?.pageOptionsNewTab()
-            Analytics.shared.menuClick(label: "new_tab")
         case 2:
             delegate?.pageOptionsYourImpact()
-            Analytics.shared.menuClick(label: "your_impact")
         case 3:
             delegate?.pageOptionsShare()
-            Analytics.shared.menuClick(label: "share")
         default:
             break
         }

@@ -209,13 +209,26 @@ final class Analytics {
                 .property(position))
     }
 
-    func menuClick(label: String, toggle: Bool? = nil) {
+    func menuClick(_ item: String) {
         let event = Structured(category: Category.menu.rawValue,
                                action: Action.click.rawValue)
-            .label(label)
-        toggle.map {
-            event.value = .init(value: $0)
-        }
+            .label(item)
+        tracker.track(event)
+    }
+
+    func menuStatus(changed item: String, to: Bool) {
+        let event = Structured(category: Category.menuStatus.rawValue,
+                               action: Action.click.rawValue)
+            .label(item)
+            .value(.init(value: to))
+        tracker.track(event)
+    }
+
+    func menuShare(_ content: ShareContent) {
+        let event = Structured(category: Category.menu.rawValue,
+                               action: Action.click.rawValue)
+            .label("share")
+            .property(content.rawValue)
         tracker.track(event)
     }
 
