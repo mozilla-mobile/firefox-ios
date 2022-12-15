@@ -75,7 +75,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     private lazy var syncTabButtonIpad: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .FxASyncNow,
+        let button = UIBarButtonItem(title: .TabsTray.Sync.SyncTabs,
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapSyncTabs))
@@ -85,7 +85,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }()
 
     private lazy var syncTabButtonIphone: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: .FxASyncNow,
+        let button = UIBarButtonItem(title: .TabsTray.Sync.SyncTabs,
                                      style: .plain,
                                      target: self,
                                      action: #selector(didTapSyncTabs))
@@ -391,11 +391,11 @@ class TabTrayViewController: UIViewController, Themeable {
                 guard let self = self else { return }
 
                 self.syncTabButtonIpad.customView = nil
-                self.syncTabButtonIpad.title = .FxASyncNow
+                self.syncTabButtonIpad.title = .TabsTray.Sync.SyncTabs
                 self.syncTabButtonIpad.isEnabled = true
 
                 self.syncTabButtonIphone.customView = nil
-                self.syncTabButtonIphone.title = .FxASyncNow
+                self.syncTabButtonIphone.title = .TabsTray.Sync.SyncTabs
                 self.syncTabButtonIphone.isEnabled = true
             }
         default:
