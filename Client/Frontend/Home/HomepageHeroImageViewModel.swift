@@ -13,10 +13,4 @@ struct HomepageHeroImageViewModel: HeroImageViewModel {
     let faviconBorderWidth: CGFloat = HomepageViewModel.UX.generalBorderWidth
     let heroImageSize: CGSize
     let fallbackFaviconSize: CGSize = HomepageViewModel.UX.fallbackFaviconSize
-
-    init(urlStringRequest: String,
-         heroImageSize: CGSize) {
-        self.urlStringRequest = urlStringRequest
-        self.heroImageSize = heroImageSize
-    }
 }
