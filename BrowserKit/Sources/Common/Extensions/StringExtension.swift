@@ -4,13 +4,8 @@
 
 import Foundation
 
-enum BundleError: Error, CustomStringConvertible {
-    var description: String {
-        switch self {
-        case .noImage(let error):
-            return error
-        }
+extension String {
+    public func remove(_ string: String?) -> String {
+        return self.replacingOccurrences(of: string ?? "", with: "")
     }
-
-    case noImage(String)
 }

@@ -4,13 +4,8 @@
 
 import Foundation
 
-enum BundleError: Error, CustomStringConvertible {
-    var description: String {
-        switch self {
-        case .noImage(let error):
-            return error
-        }
-    }
-
-    case noImage(String)
+// TODO: Laurie - documentation
+struct ImageDomain: Codable {
+    var baseDomain: String
+    var bundleDomains: [String]
 }

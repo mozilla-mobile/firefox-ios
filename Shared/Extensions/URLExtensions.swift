@@ -193,20 +193,6 @@ extension URL {
         return "\(scheme)://\(hostPort)"
     }
 
-    public var absoluteDisplayString: String {
-        var urlString = self.absoluteString
-        // For http URLs, get rid of the trailing slash if the path is empty or '/'
-        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.hasSuffix("/") {
-            urlString = String(urlString[..<urlString.index(urlString.endIndex, offsetBy: -1)])
-        }
-        // If it's basic http, strip out the string but leave anything else in
-        if urlString.hasPrefix("http://") {
-            return String(urlString[urlString.index(urlString.startIndex, offsetBy: 7)...])
-        } else {
-            return urlString
-        }
-    }
-
     /// String suitable for displaying outside of the app, for example in notifications, were Data Detectors will
     /// linkify the text and make it into a openable-in-Safari link.
     public var absoluteDisplayExternalString: String {

@@ -10,14 +10,14 @@ protocol LetterImageGenerator {
     /// Runs main thread due to UILabel.initWithFrame(:)
     /// - Parameter domain: The string domain name
     /// - Returns: The generated letter image
-    @MainActor func generateLetterImage(domain: String) async -> UIImage
+    @MainActor func generateLetterImage(domain: ImageDomain) async -> UIImage
 }
 
 class DefaultLetterImageGenerator: LetterImageGenerator {
     private let defaultLetter: Character = "#"
 
-    @MainActor func generateLetterImage(domain: String) async -> UIImage {
-        let letter: Character = domain.first ?? defaultLetter
+    @MainActor func generateLetterImage(domain: ImageDomain) async -> UIImage {
+        let letter: Character = domain.baseDomain.first ?? defaultLetter
         let capitalizedLetter = letter.uppercased()
 
         let color = generateBackgroundColor(forDomain: domain)
@@ -44,8 +44,8 @@ class DefaultLetterImageGenerator: LetterImageGenerator {
         return image
     }
 
-    private func generateBackgroundColor(forDomain domain: String) -> UIColor {
-        let index = abs(stableHash(domain)) % (defaultBackgroundColors.count - 1)
+    private func generateBackgroundColor(forDomain domain: ImageDomain) -> UIColor {
+        let index = abs(stableHash(domain.baseDomain)) % (defaultBackgroundColors.count - 1)
         let colorHex = defaultBackgroundColors[index]
         return UIColor(colorString: colorHex)
     }

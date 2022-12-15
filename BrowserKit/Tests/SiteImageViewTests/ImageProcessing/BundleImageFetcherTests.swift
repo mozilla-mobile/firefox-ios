@@ -19,14 +19,15 @@ final class BundleImageFetcherTests: XCTestCase {
     }
 
     func testEmptyDomain_throwsError() {
-        bundleDataProvider.error = BundleError.noBundleRetrieved("Bundle error")
+        bundleDataProvider.error = BundleError.noImage("Bundle error")
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+        let domain = ImageDomain(baseDomain: "", bundleDomains: [])
 
         do {
-            _ = try subject.getImageFromBundle(domain: "")
+            _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
         } catch let error as BundleError {
-            XCTAssertEqual("Decoding from file failed due to: Bundle error",
+            XCTAssertEqual("Couldn't get bundleDomain from domain ''",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -36,12 +37,13 @@ final class BundleImageFetcherTests: XCTestCase {
     func testInvalidData_throwsError() {
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.invalidData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+        let domain = ImageDomain(baseDomain: "mozilla", bundleDomains: ["mozilla"])
 
         do {
-            _ = try subject.getImageFromBundle(domain: "mozilla")
+            _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
         } catch let error as BundleError {
-            XCTAssertEqual("Decoding BundledImage failed due to: \"The data couldn’t be read because it isn’t in the correct format.\"",
+            XCTAssertEqual("Couldn't get bundleDomain from domain 'mozilla'",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -51,12 +53,13 @@ final class BundleImageFetcherTests: XCTestCase {
     func testEmptyData_throwsError() {
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.emptyData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+        let domain = ImageDomain(baseDomain: "mozilla", bundleDomains: ["mozilla"])
 
         do {
-            _ = try subject.getImageFromBundle(domain: "mozilla")
+            _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
         } catch let error as BundleError {
-            XCTAssertEqual("Bundle was empty",
+            XCTAssertEqual("Couldn't get bundleDomain from domain 'mozilla'",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -66,12 +69,13 @@ final class BundleImageFetcherTests: XCTestCase {
     func testValidData_withoutPath_throwsError() {
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+        let domain = ImageDomain(baseDomain: "mozilla", bundleDomains: ["mozilla"])
 
         do {
-            _ = try subject.getImageFromBundle(domain: "mozilla")
+            _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
         } catch let error as BundleError {
-            XCTAssertEqual("No filepath for image path: mozilla-com",
+            XCTAssertEqual("Couldn't get bundleDomain from domain 'mozilla'",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -84,9 +88,10 @@ final class BundleImageFetcherTests: XCTestCase {
         bundleDataProvider.pathToReturn = "a/path/to/image"
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+        let domain = ImageDomain(baseDomain: "mozilla", bundleDomains: ["mozilla"])
 
         do {
-            let result = try subject.getImageFromBundle(domain: "mozilla")
+            let result = try subject.getImageFromBundle(domain: domain)
             XCTAssertEqual(expectedImage, result)
         } catch {
             XCTFail("Should have succeeded")
@@ -99,12 +104,13 @@ final class BundleImageFetcherTests: XCTestCase {
         bundleDataProvider.pathToReturn = "a/path/to/image"
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+        let domain = ImageDomain(baseDomain: "fakedomain", bundleDomains: ["fakedomain"])
 
         do {
-            _ = try subject.getImageFromBundle(domain: "fakedomain")
+            _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
         } catch let error as BundleError {
-            XCTAssertEqual("Image with domain fakedomain isn't in bundle",
+            XCTAssertEqual("Couldn't get bundleDomain from domain 'fakedomain'",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -116,12 +122,13 @@ final class BundleImageFetcherTests: XCTestCase {
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.partlyValidData)
 
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
+        let domain = ImageDomain(baseDomain: "google", bundleDomains: ["google"])
 
         do {
-            _ = try subject.getImageFromBundle(domain: "google")
+            _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
         } catch let error as BundleError {
-            XCTAssertEqual("Decoding BundledImage failed due to: \"The data couldn’t be read because it is missing.\"",
+            XCTAssertEqual("Couldn't get bundleDomain from domain 'google'",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -157,7 +164,7 @@ private class MockBundleDataProvider: BundleDataProvider {
         if let data = data {
             return data
         } else {
-            throw error ?? BundleError.noBundleRetrieved("Mock error not set")
+            throw error ?? BundleError.noImage("Mock error not set")
         }
     }
 
