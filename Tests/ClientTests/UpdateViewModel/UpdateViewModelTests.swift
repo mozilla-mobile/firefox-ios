@@ -124,11 +124,8 @@ class UpdateViewModelTests: XCTestCase {
     func testShouldShowCoverSheetForVersionNil() {
         let currentTestAppVersion = "22.0"
 
-        // Setting clean install to false
-        profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
-
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
-        XCTAssertTrue(shouldShow)
+        XCTAssertFalse(shouldShow)
     }
 
     func testShouldSaveVersion_CleanInstall() {
