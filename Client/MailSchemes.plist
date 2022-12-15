@@ -9,6 +9,12 @@
 		<string>mailto:</string>
 	</dict>
 	<dict>
+		<key>name</key>
+		<string>ProtonMail</string>
+		<key>scheme</key>
+		<string>protonmail://</string>
+	</dict>
+	<dict>
 		<key>scheme</key>
 		<string>ms-outlook://</string>
 		<key>name</key>
