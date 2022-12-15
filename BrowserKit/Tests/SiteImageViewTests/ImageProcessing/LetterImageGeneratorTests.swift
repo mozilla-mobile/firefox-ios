@@ -6,36 +6,36 @@ import XCTest
 @testable import SiteImageView
 
 final class LetterImageGeneratorTests: XCTestCase {
-    func testEmptyDomain_doesntReturnEmptyImage() {
+    func testEmptyDomain_doesntReturnEmptyImage() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let result = subject.generateLetterImage(domain: "")
+        let result = await subject.generateLetterImage(domain: "")
 
         XCTAssertEqual(subject.capturedLetter, "#")
         XCTAssertNotEqual(result, UIImage())
         testColor(subject: subject, red: 0.850, green: 0.133, blue: 0.082, alpha: 1.0)
     }
 
-    func testDomain1_returnsExpectedLetterAndColor() {
+    func testDomain1_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let result = subject.generateLetterImage(domain: "mozilla.com")
+        let result = await subject.generateLetterImage(domain: "mozilla.com")
 
         XCTAssertEqual(subject.capturedLetter, "M")
         XCTAssertNotEqual(result, UIImage())
         testColor(subject: subject, red: 0.223, green: 0.576, blue: 0.125, alpha: 1.0)
     }
 
-    func testDomain2_returnsExpectedLetterAndColor() {
+    func testDomain2_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let result = subject.generateLetterImage(domain: "firefox.com")
+        let result = await subject.generateLetterImage(domain: "firefox.com")
 
         XCTAssertEqual(subject.capturedLetter, "F")
         XCTAssertNotEqual(result, UIImage())
         testColor(subject: subject, red: 0.584, green: 0.803, blue: 1.0, alpha: 1.0)
     }
 
-    func testFakeDomain_returnsExpectedLetterAndColor() {
+    func testFakeDomain_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let result = subject.generateLetterImage(domain: "?$%^")
+        let result = await subject.generateLetterImage(domain: "?$%^")
 
         XCTAssertEqual(subject.capturedLetter, "?")
         XCTAssertNotEqual(result, UIImage())

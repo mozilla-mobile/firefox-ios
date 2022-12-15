@@ -496,6 +496,7 @@
 		8A2366FA28A302E500846D1B /* MockSponsoredPocketAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2366F928A302E500846D1B /* MockSponsoredPocketAPI.swift */; };
 		8A2783F1275FFDC50080D29D /* KeyboardPressesHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */; };
 		8A2825352760399B00395E66 /* KeyboardPressesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */; };
+		8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A285B07294A5D4C00149B0F /* HomepageHeroImageViewModel.swift */; };
 		8A28C628291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */; };
 		8A2B1A5D28216C4D0061216B /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5A28216C4C0061216B /* Debug.xcconfig */; };
 		8A2B1A5E28216C4D0061216B /* Common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8A2B1A5B28216C4C0061216B /* Common.xcconfig */; };
@@ -3309,6 +3310,7 @@
 		8A2366F928A302E500846D1B /* MockSponsoredPocketAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSponsoredPocketAPI.swift; sourceTree = "<group>"; };
 		8A2783F0275FFDC50080D29D /* KeyboardPressesHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandler.swift; sourceTree = "<group>"; };
 		8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardPressesHandlerTests.swift; sourceTree = "<group>"; };
+		8A285B07294A5D4C00149B0F /* HomepageHeroImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageHeroImageViewModel.swift; sourceTree = "<group>"; };
 		8A28C627291028870078A81A /* CanRemoveQuickActionBookmarkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanRemoveQuickActionBookmarkTests.swift; sourceTree = "<group>"; };
 		8A2B1A5A28216C4C0061216B /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Debug.xcconfig; path = Configuration/Debug.xcconfig; sourceTree = "<group>"; };
 		8A2B1A5B28216C4C0061216B /* Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Common.xcconfig; path = Configuration/Common.xcconfig; sourceTree = "<group>"; };
@@ -8382,6 +8384,7 @@
 				DF036E41274FD3FC002E834E /* HistoryHighlights */,
 				8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */,
 				8AB8574527D97CB00075C173 /* HomepageContextMenuProtocol.swift */,
+				8A285B07294A5D4C00149B0F /* HomepageHeroImageViewModel.swift */,
 				8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */,
 				1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */,
 				3BB50E1F1D627539004B33DF /* HomepageViewController.swift */,
@@ -10420,6 +10423,7 @@
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				E1442FD3294782D9003680B0 /* UIView+Constraints.swift in Sources */,
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
+				8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */,
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetView.swift in Sources */,
 				E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */,

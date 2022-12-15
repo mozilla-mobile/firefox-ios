@@ -6,17 +6,27 @@ import LinkPresentation
 import UIKit
 
 protocol HeroImageFetcher {
-    func fetchHeroImage(from siteURL: URL) async throws -> UIImage
+    /// FetchHeroImage using metadataProvider needs the main thread, hence using @MainActor for it.
+    /// LPMetadataProvider is also a one shot object that we need to throw away once used.
+    /// - Parameters:
+    ///   - siteURL: the url to fetch the hero image with
+    ///   - metadataProvider: LPMetadataProvider
+    /// - Returns: the hero image
+    @MainActor func fetchHeroImage(from siteURL: URL, metadataProvider: LPMetadataProvider) async throws -> UIImage
+}
+
+extension HeroImageFetcher {
+    @MainActor func fetchHeroImage(from siteURL: URL,
+                                   metadataProvider: LPMetadataProvider = LPMetadataProvider()
+    ) async throws -> UIImage {
+        try await fetchHeroImage(from: siteURL, metadataProvider: metadataProvider)
+    }
 }
 
 class DefaultHeroImageFetcher: HeroImageFetcher {
-    private let metadataProvider: LPMetadataProvider
-
-    init(metadataProvider: LPMetadataProvider = LPMetadataProvider()) {
-        self.metadataProvider = metadataProvider
-    }
-
-    func fetchHeroImage(from siteURL: URL) async throws -> UIImage {
+    @MainActor func fetchHeroImage(from siteURL: URL,
+                                   metadataProvider: LPMetadataProvider = LPMetadataProvider()
+    ) async throws -> UIImage {
         do {
             let metadata = try await metadataProvider.startFetchingMetadata(for: siteURL)
             guard let imageProvider = metadata.imageProvider else {

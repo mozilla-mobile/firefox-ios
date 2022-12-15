@@ -19,27 +19,25 @@ struct DefaultFaviconURLHandler: FaviconURLHandler {
     }
 
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel {
+        // Don't fetch favicon URL if we don't have a URL or domain for it
+        guard let siteURL = site.siteURL, let domain = site.domain else {
+            throw SiteImageError.noFaviconURLFound
+        }
+
+        var imageModel = site
         do {
-            let url = try await urlCache.getURLFromCache(domain: site.domain)
-            return createSiteImageModel(site, faviconURL: url)
+            let url = try await urlCache.getURLFromCache(domain: domain)
+            imageModel.faviconURL = url
+            return imageModel
         } catch {
             do {
-                let url = try await urlFetcher.fetchFaviconURL(siteURL: site.siteURL)
-                await urlCache.cacheURL(domain: site.domain, faviconURL: url)
-                return createSiteImageModel(site, faviconURL: url)
+                let url = try await urlFetcher.fetchFaviconURL(siteURL: siteURL)
+                await urlCache.cacheURL(domain: domain, faviconURL: url)
+                imageModel.faviconURL = url
+                return imageModel
             } catch {
                 throw SiteImageError.noFaviconURLFound
             }
         }
-    }
-
-    private func createSiteImageModel(_ site: SiteImageModel, faviconURL: URL) -> SiteImageModel {
-        return SiteImageModel(id: site.id,
-                              expectedImageType: site.expectedImageType,
-                              siteURL: site.siteURL,
-                              domain: site.domain,
-                              faviconURL: faviconURL,
-                              faviconImage: nil,
-                              heroImage: nil)
     }
 }

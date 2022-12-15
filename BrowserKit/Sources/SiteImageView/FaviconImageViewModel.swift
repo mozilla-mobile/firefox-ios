@@ -5,13 +5,13 @@
 import UIKit
 
 public struct FaviconImageViewModel {
-    let siteURL: URL
+    let urlStringRequest: String
     let type: SiteImageType
     let faviconCornerRadius: CGFloat
 
-    public init(siteURL: URL, faviconCornerRadius: CGFloat) {
+    public init(urlStringRequest: String, faviconCornerRadius: CGFloat) {
         self.type = .favicon
-        self.siteURL = siteURL
+        self.urlStringRequest = urlStringRequest
         self.faviconCornerRadius = faviconCornerRadius
     }
 }

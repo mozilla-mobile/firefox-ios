@@ -4,23 +4,33 @@
 
 import UIKit
 
-public struct HeroImageViewModel {
-    let siteURL: URL
-    let type: SiteImageType
-    let generalCornerRadius: CGFloat
-    let faviconCornerRadius: CGFloat
-    let faviconBorderWidth: CGFloat
-    let heroImageSize: CGSize
-    let fallbackFaviconSize: CGSize
+public protocol HeroImageViewModel {
+    var urlStringRequest: String { get }
+    var type: SiteImageType { get }
+    var generalCornerRadius: CGFloat { get }
+    var faviconCornerRadius: CGFloat { get }
+    var faviconBorderWidth: CGFloat { get }
+    var heroImageSize: CGSize { get }
+    var fallbackFaviconSize: CGSize { get }
+}
 
-    public init(siteURL: URL,
+public struct DefaultHeroImageViewModel: HeroImageViewModel {
+    public var urlStringRequest: String
+    public var type: SiteImageType
+    public var generalCornerRadius: CGFloat
+    public var faviconCornerRadius: CGFloat
+    public var faviconBorderWidth: CGFloat
+    public var heroImageSize: CGSize
+    public var fallbackFaviconSize: CGSize
+
+    public init(urlStringRequest: String,
                 generalCornerRadius: CGFloat,
                 faviconCornerRadius: CGFloat,
                 faviconBorderWidth: CGFloat,
                 heroImageSize: CGSize,
                 fallbackFaviconSize: CGSize) {
         self.type = .heroImage
-        self.siteURL = siteURL
+        self.urlStringRequest = urlStringRequest
         self.generalCornerRadius = generalCornerRadius
         self.faviconCornerRadius = faviconCornerRadius
         self.faviconBorderWidth = faviconBorderWidth

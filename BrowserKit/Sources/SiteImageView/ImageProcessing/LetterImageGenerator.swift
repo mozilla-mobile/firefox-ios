@@ -7,15 +7,16 @@ import UIKit
 /// Generate a default letter image from the domain name
 protocol LetterImageGenerator {
     /// Generates a letter image based on the first character in the domain name
+    /// Runs main thread due to UILabel.initWithFrame(:)
     /// - Parameter domain: The string domain name
     /// - Returns: The generated letter image
-    func generateLetterImage(domain: String) -> UIImage
+    @MainActor func generateLetterImage(domain: String) async -> UIImage
 }
 
 class DefaultLetterImageGenerator: LetterImageGenerator {
     private let defaultLetter: Character = "#"
 
-    func generateLetterImage(domain: String) -> UIImage {
+    @MainActor func generateLetterImage(domain: String) async -> UIImage {
         let letter: Character = domain.first ?? defaultLetter
         let capitalizedLetter = letter.uppercased()
 
