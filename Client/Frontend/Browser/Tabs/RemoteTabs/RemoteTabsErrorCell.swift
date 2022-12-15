@@ -24,7 +24,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private lazy var stackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.distribution = .fillProportionally
         stackView.spacing = UX.paddingInBetweenItems
     }
 
