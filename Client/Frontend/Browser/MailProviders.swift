@@ -154,3 +154,18 @@ class FastmailIntegration: MailProvider {
         return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }
+
+class ProtonMailIntegration: MailProvider {
+    var beginningScheme = "protonmail://"
+    var supportedHeaders = [
+        "to",
+        "cc",
+        "bcc",
+        "subject",
+        "body"
+    ]
+
+    func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
+        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+    }
+}
