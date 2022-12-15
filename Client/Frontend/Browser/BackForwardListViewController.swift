@@ -9,7 +9,6 @@ import Storage
 
 private struct BackForwardViewUX {
     static let RowHeight: CGFloat = 50
-    static let BackgroundColor = UIColor.Photon.Grey10A40
 }
 
 class BackForwardListViewController: UIViewController,
@@ -38,16 +37,10 @@ class BackForwardListViewController: UIViewController,
         tableView.delegate = self
         tableView.alwaysBounceVertical = false
         tableView.register(BackForwardTableViewCell.self, forCellReuseIdentifier: self.BackForwardListCellIdentifier)
-        tableView.backgroundColor = UIColor.theme.tabTray.cellTitleBackground.withAlphaComponent(0.4)
-        let blurEffect = UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        tableView.backgroundView = blurEffectView
         tableView.showsHorizontalScrollIndicator = false
     }
 
-    lazy var shadow: UIView = .build { view in
-        view.backgroundColor = UIColor(white: 0, alpha: 0.2)
-    }
+    lazy var shadow: UIView = .build { view in }
 
     var tabManager: TabManager!
     weak var bvc: BrowserViewController?
@@ -110,6 +103,11 @@ class BackForwardListViewController: UIViewController,
 
     func applyTheme() {
         print("YRD apply theme was called")
+        tableView.backgroundColor = UIColor.theme.tabTray.cellTitleBackground.withAlphaComponent(0.4)
+        let blurEffect = UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        tableView.backgroundView = blurEffectView
+        view.backgroundColor = UIColor(white: 0, alpha: 0.2)
     }
 
     func loadSitesFromProfile() {

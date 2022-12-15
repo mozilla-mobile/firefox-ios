@@ -16,23 +16,18 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
         static let borderBold = 5
         static let IconSize = 23
         static let fontSize: CGFloat = 12.0
-        static let textColor = UIColor.Photon.Grey80
     }
 
     lazy var faviconView: UIImageView = .build { imageView in
         imageView.image = FaviconFetcher.defaultFavicon
-        imageView.backgroundColor = UIColor.Photon.White100
         imageView.layer.cornerRadius = 6
         imageView.layer.borderWidth = 0.5
-        imageView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
         imageView.layer.masksToBounds = true
         imageView.contentMode = .center
     }
 
     lazy var label: UILabel = .build { label in
-        label.text = " "
         label.font = label.font.withSize(UX.fontSize)
-        label.textColor = UIColor.theme.tabTray.tabTitleText
     }
 
     var connectingForwards = true
@@ -74,6 +69,10 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupLayout()
+    }
+
+    func setupLayout() {
         backgroundColor = UIColor.clear
         selectionStyle = .none
 
@@ -141,5 +140,9 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         print("YRD apply theme on cell")
+
+//        imageView.backgroundColor = UIColor.Photon.White100
+//        imageView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
+        label.textColor = theme.colors.textPrimary
     }
 }
