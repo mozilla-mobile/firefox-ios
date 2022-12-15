@@ -39,7 +39,12 @@ class BrowserViewController: UIViewController {
 
     private var urlBar: URLBar!
     private lazy var browserToolbar = BrowserToolbar(viewModel: urlBarViewModel)
-    private lazy var urlBarViewModel = URLBarViewModel()
+    private lazy var urlBarViewModel = URLBarViewModel(
+        enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+        getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+        setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) },
+        enableDomainAutocomplete: { Settings.getToggle(.enableDomainAutocomplete) }
+    )
 
     private let searchSuggestClient = SearchSuggestClient()
     private var findInPageBar: FindInPageBar?
@@ -1253,7 +1258,11 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
         // Add the URL to the autocomplete list:
-        let autocompleteSource = CustomCompletionSource()
+        let autocompleteSource = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
 
         switch autocompleteSource.add(suggestion: url.absoluteString) {
         case .failure(.duplicateDomain):
@@ -1555,7 +1564,11 @@ extension BrowserViewController: OverlayViewDelegate {
     func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
         urlBar.dismiss()
 
-        let autocompleteSource = CustomCompletionSource()
+        let autocompleteSource = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
         switch autocompleteSource.add(suggestion: query) {
         case .failure(.duplicateDomain):
             Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()

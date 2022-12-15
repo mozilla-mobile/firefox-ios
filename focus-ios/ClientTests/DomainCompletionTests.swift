@@ -38,43 +38,63 @@ class DomainCompletionTests: XCTestCase {
     func testAddCustomDomainDuplicate() {
         Settings.setCustomDomainSetting(domains: [SIMPLE_DOMAIN])
         [WWWW_DOMAIN, TEST_CASE_INSENSITIVE].forEach {
-            switch CustomCompletionSource().add(suggestion: $0) {
-            case .failure(let error):
-                XCTAssertEqual(error, .duplicateDomain)
-            case .success:
-                XCTFail()
+            let sut = CustomCompletionSource(
+                enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+                getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+                setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+            )
+            switch sut.add(suggestion: $0) {
+                case .failure(let error):
+                    XCTAssertEqual(error, .duplicateDomain)
+                case .success:
+                    XCTFail()
             }
         }
     }
     
     func testRemoveCustomDomain() {
         Settings.setCustomDomainSetting(domains: [SIMPLE_DOMAIN])
-        switch CustomCompletionSource().remove(at: 0) {
-        case .failure:
-            XCTFail()
-        case .success:
-            XCTAssertEqual(0, Settings.getCustomDomainSetting().count)
+        let sut = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
+        switch sut.remove(at: 0) {
+            case .failure:
+                XCTFail()
+            case .success:
+                XCTAssertEqual(0, Settings.getCustomDomainSetting().count)
         }
     }
     
     func testAddCustomDomainWithoutPeriod() {
         Settings.setCustomDomainSetting(domains: [])
-        switch CustomCompletionSource().add(suggestion: TEST_NO_PERIOD) {
-        case .failure(let error):
-            XCTAssertEqual(error, .invalidUrl)
-        case .success:
-            XCTFail()
+        let sut = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
+        switch sut.add(suggestion: TEST_NO_PERIOD) {
+            case .failure(let error):
+                XCTAssertEqual(error, .invalidUrl)
+            case .success:
+                XCTFail()
         }
     }
-    
+
     private func addADomain(domain: String) {
         Settings.setCustomDomainSetting(domains: [])
-        switch CustomCompletionSource().add(suggestion: domain) {
-        case .failure:
-            XCTFail()
-        case .success:
-            let domains = Settings.getCustomDomainSetting()
-            XCTAssertEqual(domains.count, 1)
+        let sut = CustomCompletionSource(
+            enableCustomDomainAutocomplete: { Settings.getToggle(.enableCustomDomainAutocomplete) },
+            getCustomDomainSetting: { Settings.getCustomDomainSetting() },
+            setCustomDomainSetting: { Settings.setCustomDomainSetting(domains: $0) }
+        )
+        switch sut.add(suggestion: domain) {
+            case .failure:
+                XCTFail()
+            case .success:
+                let domains = Settings.getCustomDomainSetting()
+                XCTAssertEqual(domains.count, 1)
         }
     }
 }

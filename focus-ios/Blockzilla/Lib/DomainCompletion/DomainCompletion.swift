@@ -4,42 +4,50 @@
 
 import Foundation
 
-typealias AutoCompleteSuggestions = [String]
+public typealias AutoCompleteSuggestions = [String]
 
-protocol AutocompleteSource {
+public protocol AutocompleteSource {
     var enabled: Bool { get }
     func getSuggestions() -> AutoCompleteSuggestions
 }
 
-enum CompletionSourceError: Error {
+public enum CompletionSourceError: Error {
     case invalidUrl
     case duplicateDomain
     case indexOutOfRange
-
-    var message: String {
-        guard case .invalidUrl = self else { return "" }
-
-        return UIConstants.strings.autocompleteAddCustomUrlError
-    }
 }
 
-typealias CustomCompletionResult = Result<Void, CompletionSourceError>
+public typealias CustomCompletionResult = Result<Void, CompletionSourceError>
 
-protocol CustomAutocompleteSource: AutocompleteSource {
+public protocol CustomAutocompleteSource: AutocompleteSource {
     func add(suggestion: String) -> CustomCompletionResult
     func add(suggestion: String, atIndex: Int) -> CustomCompletionResult
     func remove(at index: Int) -> CustomCompletionResult
 }
 
-class CustomCompletionSource: CustomAutocompleteSource {
+public class CustomCompletionSource: CustomAutocompleteSource {
     private lazy var regex = try! NSRegularExpression(pattern: "^(\\s+)?(?:https?:\\/\\/)?(?:www\\.)?", options: [.caseInsensitive])
-    var enabled: Bool { return Settings.getToggle(.enableCustomDomainAutocomplete) }
+    var enableCustomDomainAutocomplete: () -> Bool
+    var getCustomDomainSetting: () -> AutoCompleteSuggestions
+    var setCustomDomainSetting: ([String]) -> Void
 
-    func getSuggestions() -> AutoCompleteSuggestions {
-        return Settings.getCustomDomainSetting()
+    public init(
+        enableCustomDomainAutocomplete: @escaping () -> Bool,
+        getCustomDomainSetting: @escaping () -> AutoCompleteSuggestions,
+        setCustomDomainSetting: @escaping ([String]) -> Void
+    ) {
+        self.enableCustomDomainAutocomplete = enableCustomDomainAutocomplete
+        self.getCustomDomainSetting = getCustomDomainSetting
+        self.setCustomDomainSetting = setCustomDomainSetting
     }
 
-    func add(suggestion: String) -> CustomCompletionResult {
+    public var enabled: Bool { return enableCustomDomainAutocomplete() }
+
+    public func getSuggestions() -> AutoCompleteSuggestions {
+        return getCustomDomainSetting()
+    }
+
+    public func add(suggestion: String) -> CustomCompletionResult {
         var sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSRange(location: 0, length: suggestion.count), withTemplate: "")
 
         guard !sanitizedSuggestion.isEmpty else { return .failure(.invalidUrl) }
@@ -57,12 +65,12 @@ class CustomCompletionSource: CustomAutocompleteSource {
         }) else { return .failure(.duplicateDomain) }
 
         domains.append(sanitizedSuggestion)
-        Settings.setCustomDomainSetting(domains: domains)
+        setCustomDomainSetting(domains)
 
         return .success(())
     }
 
-    func add(suggestion: String, atIndex: Int) -> CustomCompletionResult {
+    public func add(suggestion: String, atIndex: Int) -> CustomCompletionResult {
         let sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSRange(location: 0, length: suggestion.count), withTemplate: "")
 
         guard !sanitizedSuggestion.isEmpty else { return .failure(.invalidUrl) }
@@ -71,24 +79,31 @@ class CustomCompletionSource: CustomAutocompleteSource {
         guard !domains.contains(sanitizedSuggestion) else { return .failure(.duplicateDomain) }
 
         domains.insert(sanitizedSuggestion, at: atIndex)
-        Settings.setCustomDomainSetting(domains: domains)
+        setCustomDomainSetting(domains)
 
         return .success(())
     }
 
-    func remove(at index: Int) -> CustomCompletionResult {
+    public func remove(at index: Int) -> CustomCompletionResult {
         var domains = getSuggestions()
 
         guard domains.count > index else { return .failure(.indexOutOfRange) }
         domains.remove(at: index)
-        Settings.setCustomDomainSetting(domains: domains)
+        setCustomDomainSetting(domains)
 
         return .success(())
     }
 }
 
 class TopDomainsCompletionSource: AutocompleteSource {
-    var enabled: Bool { return Settings.getToggle(.enableDomainAutocomplete) }
+    var enableDomainAutocomplete: () -> Bool
+
+    init(
+        enableDomainAutocomplete: @escaping () -> Bool
+    ) {
+        self.enableDomainAutocomplete = enableDomainAutocomplete
+    }
+    var enabled: Bool { return  enableDomainAutocomplete() }
 
     private lazy var topDomains: [String] = {
         let filePath = Bundle.main.path(forResource: "topdomains", ofType: "txt")

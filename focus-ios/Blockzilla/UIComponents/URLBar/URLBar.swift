@@ -220,7 +220,6 @@ class URLBar: UIView {
 
     private let leftBarViewLayoutGuide = UILayoutGuide()
     private let rightBarViewLayoutGuide = UILayoutGuide()
-    private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
     var draggableUrlTextView: UIView { return urlTextField }
 
     var centerURLBar = false {
@@ -1068,7 +1067,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
         if let oldValue = userInputText, oldValue.count < text.count {
-            let completion = domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
+            let completion = viewModel.domainCompletion.autocompleteTextFieldCompletionSource(autocompleteTextField, forText: text)
             autocompleteTextField.setAutocompleteSuggestion(completion)
         }
 

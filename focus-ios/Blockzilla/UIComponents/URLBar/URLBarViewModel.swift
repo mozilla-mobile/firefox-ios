@@ -34,6 +34,33 @@ public class URLBarViewModel {
     internal var viewActionSubject = PassthroughSubject<URLViewAction, Never>()
     public var viewActionPublisher: AnyPublisher<URLViewAction, Never> { viewActionSubject.eraseToAnyPublisher() }
 
+    lazy var domainCompletion = DomainCompletion(
+        completionSources: [
+            TopDomainsCompletionSource(enableDomainAutocomplete: enableDomainAutocomplete),
+            CustomCompletionSource(
+                enableCustomDomainAutocomplete: enableCustomDomainAutocomplete,
+                getCustomDomainSetting: getCustomDomainSetting,
+                setCustomDomainSetting: setCustomDomainSetting)
+        ]
+    )
+
+    var enableCustomDomainAutocomplete: () -> Bool
+    var getCustomDomainSetting: () -> AutoCompleteSuggestions
+    var setCustomDomainSetting: ([String]) -> Void
+    var enableDomainAutocomplete: () -> Bool
+
+    public init(
+        enableCustomDomainAutocomplete: @escaping () -> Bool,
+        getCustomDomainSetting: @escaping () -> AutoCompleteSuggestions,
+        setCustomDomainSetting: @escaping ([String]) -> Void,
+        enableDomainAutocomplete: @escaping () -> Bool
+    ) {
+        self.enableCustomDomainAutocomplete = enableCustomDomainAutocomplete
+        self.getCustomDomainSetting = getCustomDomainSetting
+        self.setCustomDomainSetting = setCustomDomainSetting
+        self.enableDomainAutocomplete = enableDomainAutocomplete
+    }
+
     public func resetToDefaults() {
         canGoBack = false
         canGoForward = false
