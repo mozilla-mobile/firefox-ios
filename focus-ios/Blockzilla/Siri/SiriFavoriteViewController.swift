@@ -7,42 +7,38 @@ import Intents
 import IntentsUI
 
 class SiriFavoriteViewController: UIViewController {
-    private let inputLabel = SmartLabel()
-    private let textInput: UITextField = InsetTextField(insetBy: UIConstants.layout.settingsTextPadding)
-    private let inputDescription = SmartLabel()
-    private let editView = EditView()
-    private var addedToSiri: Bool = false {
-        didSet {
-            editView.isHidden = !addedToSiri
-            setUpRightBarButton()
-        }
-    }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        SiriShortcuts().hasAddedActivity(type: .openURL) { (result: Bool) in
-            self.addedToSiri = result
-        }
-    }
+    private lazy var cancelButton: UIBarButtonItem = {
+        let cancelButton = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
+        cancelButton.tintColor = .accent
+        return cancelButton
+    }()
 
-    override func viewDidLoad() {
-        self.edgesForExtendedLayout = []
-        setUpInputUI()
-        setUpEditUI()
-    }
+    private lazy var nextButton: UIBarButtonItem = {
+       let nextButton = UIBarButtonItem(title: UIConstants.strings.NextIntroButtonTitle, style: .done, target: self, action: #selector(SiriFavoriteViewController.nextTapped))
+        nextButton.accessibilityIdentifier = "nextButton"
+        nextButton.tintColor = .accent
+        return nextButton
+    }()
 
-    private func setUpInputUI() {
-        title = UIConstants.strings.favoriteUrlTitle
-        navigationController?.navigationBar.tintColor = .accent
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.defaultFont]
-        navigationController?.navigationBar.isTranslucent = false
-        view.backgroundColor = .systemGroupedBackground
+    private lazy var doneButton: UIBarButtonItem = {
+        let doneButton = UIBarButtonItem(title: UIConstants.strings.Done, style: .done, target: self, action: #selector(SiriFavoriteViewController.doneTapped))
+        doneButton.accessibilityIdentifier = "doneButton"
+        doneButton.tintColor = .accent
+        return doneButton
+    }()
 
+    private lazy var inputLabel: SmartLabel = {
+        let inputLabel = SmartLabel()
         inputLabel.text = UIConstants.strings.urlToOpen
         inputLabel.font = .body18
         inputLabel.textColor = .primaryText
-        view.addSubview(inputLabel)
+        inputLabel.translatesAutoresizingMaskIntoConstraints = false
+        return inputLabel
+    }()
 
+    private lazy var textInput: UITextField = {
+        let textInput: UITextField = InsetTextField(insetBy: UIConstants.layout.settingsTextPadding)
         textInput.backgroundColor = .secondarySystemGroupedBackground
         textInput.keyboardType = .URL
         textInput.autocapitalizationType = .none
@@ -60,97 +56,127 @@ class SiriFavoriteViewController: UIViewController {
 
         textInput.accessibilityIdentifier = "urlInput"
         textInput.becomeFirstResponder()
-        view.addSubview(textInput)
+        textInput.translatesAutoresizingMaskIntoConstraints = false
+        return textInput
+    }()
 
+    private lazy var inputDescription: SmartLabel = {
+        let inputDescription = SmartLabel()
         inputDescription.text = UIConstants.strings.autocompleteAddCustomUrlExample
         inputDescription.textColor = .primaryText
         inputDescription.font = .footnote12
+        inputDescription.translatesAutoresizingMaskIntoConstraints = false
+        return inputDescription
+    }()
+
+    private lazy var editView: EditView = {
+        let editView = EditView()
+        editView.backgroundColor = .systemGroupedBackground
+        editView.translatesAutoresizingMaskIntoConstraints = false
+        return editView
+    }()
+
+    private lazy var editLabel: UILabel = {
+        let editLabel = UILabel()
+        editLabel.text = UIConstants.strings.editOpenUrl
+        editLabel.textColor = .accent
+        editLabel.translatesAutoresizingMaskIntoConstraints = false
+        return editLabel
+    }()
+
+    private lazy var topBorder: UIView = {
+        let topBorder = UIView()
+        topBorder.backgroundColor = .systemGray
+        topBorder.translatesAutoresizingMaskIntoConstraints = false
+        return topBorder
+    }()
+
+    private lazy var bottomBorder: UIView = {
+        let bottomBorder = UIView()
+        bottomBorder.backgroundColor = .systemGray
+        bottomBorder.translatesAutoresizingMaskIntoConstraints = false
+        return bottomBorder
+    }()
+
+    private var addedToSiri: Bool = false {
+        didSet {
+            editView.isHidden = !addedToSiri
+            setUpRightBarButton()
+        }
+    }
+
+    override func viewDidLoad() {
+        self.edgesForExtendedLayout = []
+        setUpInputUI()
+        setUpEditUI()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        SiriShortcuts().hasAddedActivity(type: .openURL) { (result: Bool) in
+            self.addedToSiri = result
+        }
+    }
+
+    private func setUpInputUI() {
+        title = UIConstants.strings.favoriteUrlTitle
+        navigationController?.navigationBar.tintColor = .accent
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.defaultFont]
+        navigationController?.navigationBar.isTranslucent = false
+        view.backgroundColor = .systemGroupedBackground
+
+        view.addSubview(inputLabel)
+        view.addSubview(textInput)
         view.addSubview(inputDescription)
 
-        inputLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(UIConstants.layout.siriUrlSectionPadding)
-            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(UIConstants.layout.settingsItemOffset)
-        }
+        self.navigationItem.leftBarButtonItem = cancelButton
 
-        addConstraintsForLandscape()
+        NSLayoutConstraint.activate([
+            inputLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: UIConstants.layout.siriUrlSectionPadding),
+            inputLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            inputLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.layout.settingsItemOffset),
 
-        inputDescription.snp.remakeConstraints { make in
-            make.top.equalTo(textInput.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
-            make.leading.equalTo(inputLabel)
-        }
+            textInput.heightAnchor.constraint(equalToConstant:  UIConstants.layout.settingsSectionHeight),
+            textInput.topAnchor.constraint(equalTo: inputLabel.bottomAnchor, constant: UIConstants.layout.settingsTextPadding),
+            textInput.leadingAnchor.constraint(equalTo: inputLabel.leadingAnchor, constant: -UIConstants.layout.settingsTextPadding),
+            textInput.trailingAnchor.constraint(equalTo: inputLabel.trailingAnchor, constant: -UIConstants.layout.settingsTextPadding),
 
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(SiriFavoriteViewController.cancelTapped))
-        self.navigationItem.leftBarButtonItem?.tintColor = .accent
-    }
-
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        addConstraintsForLandscape()
-    }
-
-    private func addConstraintsForLandscape() {
-
-        textInput.snp.remakeConstraints { make in
-            make.height.equalTo(UIConstants.layout.settingsSectionHeight)
-            make.top.equalTo(inputLabel.snp.bottom).offset(UIConstants.layout.settingsTextPadding)
-
-            switch (UIDevice.current.userInterfaceIdiom, UIDevice.current.orientation) {
-            case (.phone, .landscapeRight), (.phone, .landscapeLeft):
-                make.leading.trailing.equalTo(inputLabel).offset(-UIConstants.layout.settingsTextPadding)
-            default:
-                make.leading.trailing.equalToSuperview().inset(UIConstants.layout.settingsItemInset)
-
-            }
-        }
+            inputDescription.topAnchor.constraint(equalTo: textInput.bottomAnchor, constant: UIConstants.layout.settingsTextPadding),
+            inputDescription.leadingAnchor.constraint(equalTo: inputLabel.leadingAnchor)
+        ])
     }
 
     private func setUpEditUI() {
-        editView.backgroundColor = .systemGroupedBackground
+
         view.addSubview(editView)
+        editView.addSubview(topBorder)
+        editView.addSubview(editLabel)
+        editView.addSubview(bottomBorder)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(SiriFavoriteViewController.editTapped))
         editView.addGestureRecognizer(tap)
 
-        editView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(UIConstants.layout.settingsSectionHeight)
-            make.top.equalTo(inputDescription.snp.bottom).offset(UIConstants.layout.siriUrlSectionPadding)
-        }
+        NSLayoutConstraint.activate([
+            editView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            editView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            editView.heightAnchor.constraint(equalToConstant: UIConstants.layout.settingsSectionHeight),
+            editView.topAnchor.constraint(equalTo: inputDescription.bottomAnchor, constant: UIConstants.layout.siriUrlSectionPadding),
 
-        let editLabel = UILabel()
-        editLabel.text = UIConstants.strings.editOpenUrl
-        editLabel.textColor = .accent
+            editLabel.leadingAnchor.constraint(equalTo: inputLabel.leadingAnchor, constant: -UIConstants.layout.settingsTextPadding),
+            editLabel.centerYAnchor.constraint(equalTo: editView.centerYAnchor),
 
-        editView.addSubview(editLabel)
-        editLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(UIConstants.layout.settingsTextPadding)
-            make.centerY.equalToSuperview()
-        }
+            topBorder.heightAnchor.constraint(equalToConstant: UIConstants.layout.separatorHeight),
+            topBorder.widthAnchor.constraint(equalTo: editView.widthAnchor),
+            topBorder.topAnchor.constraint(equalTo: editView.topAnchor),
 
-        let topBorder = UIView()
-        topBorder.backgroundColor = .systemGray
-        editView.addSubview(topBorder)
-        topBorder.snp.makeConstraints { make in
-            make.height.equalTo(UIConstants.layout.separatorHeight)
-            make.top.width.equalToSuperview()
-        }
-
-        let bottomBorder = UIView()
-        bottomBorder.backgroundColor = .systemGray
-        editView.addSubview(bottomBorder)
-        bottomBorder.snp.makeConstraints { make in
-            make.height.equalTo(UIConstants.layout.separatorHeight)
-            make.width.bottom.equalToSuperview()
-        }
+            bottomBorder.heightAnchor.constraint(equalToConstant: UIConstants.layout.separatorHeight),
+            bottomBorder.widthAnchor.constraint(equalTo: editView.widthAnchor),
+            bottomBorder.bottomAnchor.constraint(equalTo: editView.bottomAnchor)
+        ])
     }
 
     private func setUpRightBarButton() {
-        let nextButton = UIBarButtonItem(title: UIConstants.strings.NextIntroButtonTitle, style: .done, target: self, action: #selector(SiriFavoriteViewController.nextTapped))
-        nextButton.accessibilityIdentifier = "nextButton"
-        let doneButton = UIBarButtonItem(title: UIConstants.strings.Done, style: .done, target: self, action: #selector(SiriFavoriteViewController.doneTapped))
-        nextButton.accessibilityIdentifier = "doneButton"
         self.navigationItem.rightBarButtonItem = addedToSiri ? doneButton : nextButton
-        self.navigationItem.rightBarButtonItem?.tintColor = .accent
     }
 
     @objc func cancelTapped() {

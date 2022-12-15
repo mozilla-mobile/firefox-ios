@@ -35,10 +35,18 @@ class ThemeViewController: UIViewController {
         tableView.separatorStyle = .singleLine
         tableView.allowsMultipleSelection = false
         tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
     }()
+
+    lazy private var tableViewConstraints = [
+        tableView.topAnchor.constraint(equalTo: view.topAnchor),
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+    ]
 
     private var sections: [ThemeSection] {
         let tableSections: [ThemeSection] = themeManager.selectedTheme == .unspecified ? [.systemTheme] : [.systemTheme, .themePicker]
@@ -61,9 +69,7 @@ class ThemeViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .accent
 
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        NSLayoutConstraint.activate(tableViewConstraints)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
