@@ -10,19 +10,28 @@ protocol SiteImageView: UIView {
     var uniqueID: UUID? { get set }
     var imageFetcher: SiteImageFetcher { get set }
 
-    func setURL(_ siteURL: URL, type: SiteImageType)
-    func updateImage(url: URL, type: SiteImageType, id: UUID)
+    func setURL(_ urlStringRequest: String, type: SiteImageType)
+    func updateImage(url: String, type: SiteImageType, id: UUID)
     func setImage(imageModel: SiteImageModel)
+
+    // Avoid multiple image loading in parallel. Only start a new request if the URL string has changed
+    var requestStartedWith: String? { get set }
+    func canMakeRequest(with urlStringRequest: String) -> Bool
 }
 
 extension SiteImageView {
-    func updateImage(url: URL, type: SiteImageType, id: UUID) {
+    func canMakeRequest(with urlStringRequest: String) -> Bool {
+        return requestStartedWith != urlStringRequest
+    }
+
+    func updateImage(url: String, type: SiteImageType, id: UUID) {
         Task {
-            let imageModel = await imageFetcher.getImage(siteURL: url, type: type, id: id)
+            let imageModel = await imageFetcher.getImage(urlStringRequest: url, type: type, id: id)
             guard uniqueID == imageModel.id else { return }
 
             DispatchQueue.main.async { [weak self] in
                 self?.setImage(imageModel: imageModel)
+                self?.requestStartedWith = nil
             }
         }
     }

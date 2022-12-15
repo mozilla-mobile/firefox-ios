@@ -28,6 +28,7 @@ class HomepageViewModel: FeatureFlaggable {
         static let generalCornerRadius: CGFloat = 8
         static let generalBorderWidth: CGFloat = 0.5
         static let generalIconCornerRadius: CGFloat = 4
+        static let fallbackFaviconSize = CGSize(width: 36, height: 36)
 
         static func leadingInset(traitCollection: UITraitCollection,
                                  interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> CGFloat {
