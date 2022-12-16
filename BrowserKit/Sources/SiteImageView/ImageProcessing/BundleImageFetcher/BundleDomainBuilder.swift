@@ -12,21 +12,15 @@ import Foundation
 // of its baseDomain (amazon.com)
 // TODO: Laurie - tests
 struct BundleDomainBuilder {
-    private let multiRegionDomains = ["craigslist", "google", "amazon"]
-
     func buildDomains(for siteURL: URL) -> [String] {
         let shortURL = siteURL.shortDisplayString
-        var domains = [String]()
-        if multiRegionDomains.contains(shortURL) {
-            domains.append(shortURL)
-        }
-
-        if let name = siteURL.baseDomain {
-            domains.append(name)
-        }
-
         let absoluteURL = siteURL.absoluteDisplayString.remove("\(siteURL.scheme ?? "")://")
-        domains.append(absoluteURL)
+        var domains = [shortURL, absoluteURL]
+
+        if let baseDomain = siteURL.baseDomain {
+            domains.append(baseDomain)
+        }
+
         return domains
     }
 }
