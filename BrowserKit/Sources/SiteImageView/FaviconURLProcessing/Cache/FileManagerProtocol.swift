@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol FileManagerProtocol {
+public protocol FileManagerProtocol {
     func fileExists(atPath path: String) -> Bool
     func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL]
 }

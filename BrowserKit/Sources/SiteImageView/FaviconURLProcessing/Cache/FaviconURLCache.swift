@@ -4,23 +4,23 @@
 
 import Foundation
 
-protocol FaviconURLCache {
+public protocol FaviconURLCache {
     func getURLFromCache(domain: String) async throws -> URL
     func cacheURL(domain: String, faviconURL: URL) async
 }
 
-actor DefaultFaviconURLCache: FaviconURLCache {
+public actor DefaultFaviconURLCache: FaviconURLCache {
     private enum CacheConstants {
         static let cacheKey = "favicon-url-cache"
     }
 
-    static let shared = DefaultFaviconURLCache()
+    public static let shared = DefaultFaviconURLCache()
     private let fileManager: URLCacheFileManager
     private var urlCache = [String: FaviconURL]()
     private var preserveTask: Task<Void, Never>?
     private let preserveDebounceTime: UInt64 = 5_000_000_000 // 5 seconds
 
-    init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
+    public init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
         self.fileManager = fileManager
 
         Task {
@@ -28,14 +28,14 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         }
     }
 
-    func getURLFromCache(domain: String) async throws -> URL {
+    public func getURLFromCache(domain: String) async throws -> URL {
         guard let favicon = urlCache[domain],
               let url = URL(string: favicon.faviconURL)
         else { throw SiteImageError.noURLInCache }
         return url
     }
 
-    func cacheURL(domain: String, faviconURL: URL) async {
+    public func cacheURL(domain: String, faviconURL: URL) async {
         let favicon = FaviconURL(domain: domain,
                                  faviconURL: faviconURL.absoluteString,
                                  createdAt: Date())

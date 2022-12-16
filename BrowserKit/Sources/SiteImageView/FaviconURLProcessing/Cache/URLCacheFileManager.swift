@@ -4,26 +4,26 @@
 
 import Foundation
 
-protocol URLCacheFileManager: Actor {
+public protocol URLCacheFileManager: Actor {
     func getURLCache() async -> Data?
     func saveURLCache(data: Data)
 }
 
-actor DefaultURLCacheFileManager: URLCacheFileManager {
+public actor DefaultURLCacheFileManager: URLCacheFileManager {
     let fileName = "favicon-url-cache"
     private let fileManager: FileManagerProtocol
 
-    init(fileManager: FileManagerProtocol = FileManager.default) {
+    public init(fileManager: FileManagerProtocol = FileManager.default) {
         self.fileManager = fileManager
     }
 
-    func getURLCache() async -> Data? {
+    public func getURLCache() async -> Data? {
         let directory = getCacheDirectory()
         guard fileManager.fileExists(atPath: directory.path) else { return nil }
         return try? Data(contentsOf: directory)
     }
 
-    func saveURLCache(data: Data) {
+    public func saveURLCache(data: Data) {
         let path = getCacheDirectory()
         do {
             try data.write(to: path, options: [])
