@@ -10,7 +10,7 @@ class JumpBackInTests: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
     }
-
+    
     override func setUp() {
         super.setUp()
 
