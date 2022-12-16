@@ -692,13 +692,6 @@ class SettingsTableViewController: ThemedTableViewController {
     var profile: Profile!
     var tabManager: TabManager!
 
-    /// Used to calculate cell heights.
-    fileprivate lazy var dummyToggleCell: UITableViewCell = {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
-        cell.accessoryView = UISwitch()
-        return cell
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -86,6 +86,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             clearButton = cell
         } else if indexPath.section == SectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
+            cell.textLabel?.numberOfLines = 0
             let control = UISwitch()
             control.onTintColor = themeManager.currentTheme.colors.actionPrimary
             control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
