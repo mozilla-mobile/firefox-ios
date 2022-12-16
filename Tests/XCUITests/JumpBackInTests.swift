@@ -73,7 +73,11 @@ class JumpBackInTests: BaseTestCase {
         waitForExistence(app.staticTexts["Jump Back In"])
         // No "Test3" group is shown, but "Test2" group is shown.
         app.cells["JumpBackInCell"].staticTexts["Test2"].tap()
-        waitForExistence(app.staticTexts["Open Tabs"])
+        if isTablet {
+            waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
+        } else {
+            waitForExistence(app.navigationBars.staticTexts["Open Tabs"])
+        }
         waitForExistence(app.staticTexts["Test2"])
         waitForExistence(app.staticTexts["Test3"])
     }
@@ -149,7 +153,11 @@ class JumpBackInTests: BaseTestCase {
 
         // Close the amazon tab.
         navigator.goto(TabTray)
-        waitForExistence(app.staticTexts["Open Tabs"])
+        if isTablet {
+            waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
+        } else {
+            waitForExistence(app.navigationBars.staticTexts["Open Tabs"])
+        }
         app.cells["Amazon.com. Spend less. Smile more."].buttons["tab close"].tap()
 
         // Revisit the "Jump Back In" section
