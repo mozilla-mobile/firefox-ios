@@ -19,15 +19,15 @@ final class BundleImageFetcherTests: XCTestCase {
     }
 
     func testEmptyDomain_throwsError() {
-        bundleDataProvider.error = BundleError.noImage("Bundle error")
+        bundleDataProvider.error = SiteImageError.noImageInBundle
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
         let domain = ImageDomain(baseDomain: "", bundleDomains: [])
 
         do {
             _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
-        } catch let error as BundleError {
-            XCTAssertEqual("Couldn't get bundleDomain from domain ''",
+        } catch let error as SiteImageError {
+            XCTAssertEqual("No image in bundle was found",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -42,8 +42,8 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
-        } catch let error as BundleError {
-            XCTAssertEqual("Couldn't get bundleDomain from domain 'mozilla'",
+        } catch let error as SiteImageError {
+            XCTAssertEqual("No image in bundle was found",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -58,8 +58,8 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
-        } catch let error as BundleError {
-            XCTAssertEqual("Couldn't get bundleDomain from domain 'mozilla'",
+        } catch let error as SiteImageError {
+            XCTAssertEqual("No image in bundle was found",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -74,8 +74,8 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
-        } catch let error as BundleError {
-            XCTAssertEqual("Couldn't get bundleDomain from domain 'mozilla'",
+        } catch let error as SiteImageError {
+            XCTAssertEqual("No image in bundle was found",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -109,8 +109,8 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
-        } catch let error as BundleError {
-            XCTAssertEqual("Couldn't get bundleDomain from domain 'fakedomain'",
+        } catch let error as SiteImageError {
+            XCTAssertEqual("No image in bundle was found",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -127,8 +127,8 @@ final class BundleImageFetcherTests: XCTestCase {
         do {
             _ = try subject.getImageFromBundle(domain: domain)
             XCTFail("Should fail")
-        } catch let error as BundleError {
-            XCTAssertEqual("Couldn't get bundleDomain from domain 'google'",
+        } catch let error as SiteImageError {
+            XCTAssertEqual("No image in bundle was found",
                            error.description)
         } catch {
             XCTFail("Should have failed with BundleError type")
@@ -159,12 +159,12 @@ private extension BundleImageFetcherTests {
 // MARK: - MockBundleDataProvider
 private class MockBundleDataProvider: BundleDataProvider {
     var data: Data?
-    var error: BundleError?
+    var error: SiteImageError?
     func getBundleData() throws -> Data {
         if let data = data {
             return data
         } else {
-            throw error ?? BundleError.noImage("Mock error not set")
+            throw error ?? SiteImageError.noImageInBundle
         }
     }
 

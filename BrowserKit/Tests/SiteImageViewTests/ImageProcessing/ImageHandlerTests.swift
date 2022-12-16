@@ -287,7 +287,7 @@ private class MockBundleImageFetcher: BundleImageFetcher {
             return image
         } else {
             getImageFromBundleFailedCalled += 1
-            throw BundleError.noImage("")
+            throw SiteImageError.noImageInBundle
         }
     }
 }

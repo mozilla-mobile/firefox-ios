@@ -36,12 +36,12 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
 
     func getImageFromBundle(domain: ImageDomain) throws -> UIImage {
         guard let bundleDomain = getBundleDomain(domain: domain) else {
-            throw BundleError.noImage("Couldn't get bundleDomain from domain '\(domain.baseDomain)'")
+            throw SiteImageError.noImageInBundle
         }
 
         guard let bundledImage = bundledImages[bundleDomain],
               let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) else {
-            throw BundleError.noImage("Image with domain \(bundleDomain) isn't in bundle")
+            throw SiteImageError.noImageInBundle
         }
 
         let color = bundledImage.backgroundColor.cgColor.alpha < 0.01 ? UIColor.white : bundledImage.backgroundColor
