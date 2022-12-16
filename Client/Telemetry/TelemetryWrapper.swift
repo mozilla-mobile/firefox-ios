@@ -438,7 +438,8 @@ extension TelemetryWrapper {
         case pocketStory = "pocket-story"
         case pocketSectionImpression = "pocket-section-impression"
         // MARK: - App menu
-        case menuToolbar = "menu-toolbar"
+        case homePageMenu = "homepage-menu"
+        case siteMenu = "site-menu"
         case library = "library"
         case home = "home-page"
         case homeTabBanner = "home-tab-banner"
@@ -1043,8 +1044,10 @@ extension TelemetryWrapper {
                     extras: extras)
             }
         // MARK: App menu
-        case (.action, .tap, .menuToolbar, _, _):
-            GleanMetrics.AppMenu.menuTap.add()
+        case (.action, .tap, .homePageMenu, _, _):
+            GleanMetrics.AppMenu.homepageMenu.add()
+        case (.action, .tap, .siteMenu, _, _):
+            GleanMetrics.AppMenu.siteMenu.add()
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
         case (.action, .tap, .signIntoSync, _, _):
