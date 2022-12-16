@@ -82,6 +82,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         libraryDrawerViewController?.close(immediately: true)
 
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .menuToolbar)
         let menuHelper = MainMenuActionHelper(profile: profile,
                                               tabManager: tabManager,
                                               buttonView: button,
