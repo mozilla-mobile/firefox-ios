@@ -38,6 +38,9 @@ class JumpBackInTests: BaseTestCase {
 
         // "Jump Back In" section is displayed
         waitForExistence(app.staticTexts["Jump Back In"])
+
+        // The contextual hint box is not displayed consistently, so
+        // I don't test for its existence.
     }
 
     func testGroupedTabs() {
@@ -68,7 +71,8 @@ class JumpBackInTests: BaseTestCase {
 
         // Tap on the "test3" from "Jump Back In" section
         waitForExistence(app.staticTexts["Jump Back In"])
-        app.staticTexts["Test2"].tap() // No "Test3" group is shown, but "Test2" group is shown.
+        // No "Test3" group is shown, but "Test2" group is shown.
+        app.cells["JumpBackInCell"].staticTexts["Test2"].tap()
         waitForExistence(app.staticTexts["Open Tabs"])
         waitForExistence(app.staticTexts["Test2"])
         waitForExistence(app.staticTexts["Test3"])
@@ -87,7 +91,7 @@ class JumpBackInTests: BaseTestCase {
         // Twitter tab is visible in the "Jump Back In" section
         waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
-        waitForExistence(app.cells["JumpBackInCell"].firstMatch.staticTexts["Twitter"])
+        waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
 
         // Open private browsing
         navigator.goto(TabTray)
