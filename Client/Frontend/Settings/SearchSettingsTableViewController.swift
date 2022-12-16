@@ -92,6 +92,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.imageView?.layer.masksToBounds = true
             case ItemDefaultSuggestions:
                 cell.textLabel?.text = .SearchSettingsShowSearchSuggestions
+                cell.textLabel?.numberOfLines = 0
                 let toggle = UISwitch()
                 toggle.onTintColor = themeManager.currentTheme.colors.actionPrimary
                 toggle.addTarget(self, action: #selector(didToggleSearchSuggestions), for: .valueChanged)
@@ -120,6 +121,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
                 cell.textLabel?.text = engine.shortName
                 cell.textLabel?.adjustsFontSizeToFitWidth = true
                 cell.textLabel?.minimumScaleFactor = 0.5
+                cell.textLabel?.numberOfLines = 0
                 cell.imageView?.image = engine.image.createScaled(IconSize)
                 cell.imageView?.layer.cornerRadius = 4
                 cell.imageView?.layer.masksToBounds = true

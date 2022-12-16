@@ -21,9 +21,10 @@ final class HeroImageFetcherTests: XCTestCase {
 
     func testHeroImageLoading_whenError_throwsError() async {
         metadataProvider.errorResult = TestError.invalidResult
-        let subject = DefaultHeroImageFetcher(metadataProvider: metadataProvider)
+        let subject = DefaultHeroImageFetcher()
         do {
-            _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
+            _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
+                                                 metadataProvider: metadataProvider)
             XCTFail("Should have failed")
         } catch let error as TestError {
             XCTAssertEqual("A test error",
@@ -34,9 +35,10 @@ final class HeroImageFetcherTests: XCTestCase {
     }
 
     func testHeroImageLoads_whenEmptyMetadata_throwsError() async {
-        let subject = DefaultHeroImageFetcher(metadataProvider: metadataProvider)
+        let subject = DefaultHeroImageFetcher()
         do {
-            _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
+            _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
+                                                 metadataProvider: metadataProvider)
             XCTFail("Should have failed")
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Metadata image provider could not be retrieved.",
@@ -51,9 +53,10 @@ final class HeroImageFetcherTests: XCTestCase {
         providerFake.errorResult = TestError.invalidResult
         providerFake.imageResult = nil
         metadataProvider.metadataResult.imageProvider = providerFake
-        let subject = DefaultHeroImageFetcher(metadataProvider: metadataProvider)
+        let subject = DefaultHeroImageFetcher()
         do {
-            _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
+            _ = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
+                                                 metadataProvider: metadataProvider)
             XCTFail("Should have failed")
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Optional(A test error)",
@@ -65,9 +68,10 @@ final class HeroImageFetcherTests: XCTestCase {
 
     func testHeroImageLoads_whenImage_returnsImage() async {
         metadataProvider.metadataResult.imageProvider = ItemProviderFake()
-        let subject = DefaultHeroImageFetcher(metadataProvider: metadataProvider)
+        let subject = DefaultHeroImageFetcher()
         do {
-            let image = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!)
+            let image = try await subject.fetchHeroImage(from: URL(string: "www.example.com")!,
+                                                         metadataProvider: metadataProvider)
             XCTAssertNotNil(image)
         } catch {
             XCTFail("Should have succeed with image")

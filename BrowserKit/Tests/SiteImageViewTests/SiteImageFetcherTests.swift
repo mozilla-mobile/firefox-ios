@@ -24,15 +24,15 @@ final class SiteImageFetcherTests: XCTestCase {
     // MARK: - Favicon
 
     func testFavicon_noFaviconURLFound_generatesFavicon() async {
-        let siteURL = URL(string: "https://www.example.hello.com")!
+        let siteURL = "https://www.example.hello.com"
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(siteURL: siteURL,
+        let result = await subject.getImage(urlStringRequest: siteURL,
                                             type: .favicon,
                                             id: UUID())
 
         XCTAssertEqual(result.domain, "example.hello")
-        XCTAssertEqual(result.siteURL, siteURL)
+        XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .favicon)
         XCTAssertNil(result.heroImage)
@@ -45,10 +45,10 @@ final class SiteImageFetcherTests: XCTestCase {
 
     func testFavicon_wrongURL_useFallbackDomain() async {
         // URL without https://
-        let siteURL = URL(string: "www.example.hello.com")!
+        let siteURL = "www.example.hello.com"
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(siteURL: siteURL,
+        let result = await subject.getImage(urlStringRequest: siteURL,
                                             type: .favicon,
                                             id: UUID())
 
@@ -58,16 +58,16 @@ final class SiteImageFetcherTests: XCTestCase {
 
     func testFavicon_faviconURLFound_generateFavicon() async {
         let faviconURL = URL(string: "www.mozilla.com/resource")!
-        let siteURL = URL(string: "https://www.mozilla.com")!
+        let siteURL = "https://www.mozilla.com"
         urlHandler.faviconURL = faviconURL
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(siteURL: siteURL,
+        let result = await subject.getImage(urlStringRequest: siteURL,
                                             type: .favicon,
                                             id: UUID())
 
         XCTAssertEqual(result.domain, "mozilla")
-        XCTAssertEqual(result.siteURL, siteURL)
+        XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .favicon)
         XCTAssertNil(result.heroImage)
@@ -83,13 +83,13 @@ final class SiteImageFetcherTests: XCTestCase {
     func testHeroImage_heroImageNotFound_returnsFavicon() async {
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let siteURL = URL(string: "https://www.firefox.com")!
-        let result = await subject.getImage(siteURL: siteURL,
+        let siteURL = "https://www.firefox.com"
+        let result = await subject.getImage(urlStringRequest: siteURL,
                                             type: .heroImage,
                                             id: UUID())
 
         XCTAssertEqual(result.domain, "firefox")
-        XCTAssertEqual(result.siteURL, siteURL)
+        XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .heroImage)
         XCTAssertNil(result.heroImage)
@@ -97,20 +97,20 @@ final class SiteImageFetcherTests: XCTestCase {
 
         XCTAssertNil(imageHandler.capturedFaviconURL)
         XCTAssertEqual(imageHandler.capturedDomain, "firefox")
-        XCTAssertEqual(imageHandler.capturedSiteURL, siteURL)
+        XCTAssertEqual(imageHandler.capturedSiteURL, URL(string: siteURL))
     }
 
     func testHeroImage_heroImageFound_returnsHeroImage() async {
         imageHandler.heroImage = UIImage()
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let siteURL = URL(string: "https://www.focus.com")!
-        let result = await subject.getImage(siteURL: siteURL,
+        let siteURL = "https://www.focus.com"
+        let result = await subject.getImage(urlStringRequest: siteURL,
                                             type: .heroImage,
                                             id: UUID())
 
         XCTAssertEqual(result.domain, "focus")
-        XCTAssertEqual(result.siteURL, siteURL)
+        XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .heroImage)
         XCTAssertNotNil(result.heroImage)
@@ -118,7 +118,7 @@ final class SiteImageFetcherTests: XCTestCase {
 
         XCTAssertNil(imageHandler.capturedFaviconURL)
         XCTAssertEqual(imageHandler.capturedDomain, "focus")
-        XCTAssertEqual(imageHandler.capturedSiteURL, siteURL)
+        XCTAssertEqual(imageHandler.capturedSiteURL, URL(string: siteURL))
     }
 }
 
@@ -131,6 +131,7 @@ private class MockFaviconURLHandler: FaviconURLHandler {
         capturedImageModel = site
         return SiteImageModel(id: site.id,
                               expectedImageType: site.expectedImageType,
+                              urlStringRequest: site.urlStringRequest,
                               siteURL: site.siteURL,
                               domain: site.domain,
                               faviconURL: faviconURL)
@@ -143,7 +144,7 @@ private class MockImageHandler: ImageHandler {
     var capturedFaviconURL: URL?
     var capturedDomain: String?
 
-    func fetchFavicon(imageURL: URL?, domain: String) async -> UIImage {
+    func fetchFavicon(imageURL: URL?, domain: String, expectedType: SiteImageType) async -> UIImage {
         capturedFaviconURL = imageURL
         capturedDomain = domain
         return faviconImage

@@ -16,6 +16,7 @@ public class HeroImageView: UIView, SiteImageView {
     // MARK: - Properties
     var uniqueID: UUID?
     var imageFetcher: SiteImageFetcher
+    var requestStartedWith: String?
     private var completionHandler: (() -> Void)?
 
     private lazy var heroImageView: UIImageView = .build { imageView in
@@ -59,7 +60,7 @@ public class HeroImageView: UIView, SiteImageView {
 
     public func setHeroImage(_ viewModel: HeroImageViewModel) {
         setupHeroImageLayout(viewModel: viewModel)
-        setURL(viewModel.siteURL, type: viewModel.type)
+        setURL(viewModel.urlStringRequest, type: viewModel.type)
     }
 
     public func updateHeroImageTheme(with colors: HeroImageViewColor) {
@@ -68,12 +69,19 @@ public class HeroImageView: UIView, SiteImageView {
         fallbackFaviconBackground.layer.borderColor = colors.faviconBorderColor.cgColor
     }
 
+    public func prepareForReuse() {
+        heroImageView.image = nil
+        setFallBackFaviconVisibility(isHidden: false)
+    }
+
     // MARK: - SiteImageView
 
-    func setURL(_ siteURL: URL, type: SiteImageType) {
+    func setURL(_ urlStringRequest: String, type: SiteImageType) {
+        guard canMakeRequest(with: urlStringRequest) else { return }
+
         let id = UUID()
         uniqueID = id
-        updateImage(url: siteURL, type: type, id: id)
+        updateImage(url: urlStringRequest, type: type, id: id)
     }
 
     func setImage(imageModel: SiteImageModel) {
