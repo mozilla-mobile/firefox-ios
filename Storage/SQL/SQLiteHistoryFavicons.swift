@@ -77,7 +77,7 @@ extension SQLiteHistory: Favicons {
         // First, attempt to lookup the favicon from our bundled top sites.
         return getTopSitesFaviconImage(forSite: site) { result in
             guard let image = result else {
-                self.test(forSite: site, completionHandler: completionHandler)
+                self.retrieveFavicon(forSite: site, completionHandler: completionHandler)
                 return
             }
 
@@ -88,7 +88,7 @@ extension SQLiteHistory: Favicons {
     // Note: "Attempt to lookup the favicon URL from the database" was removed as part of FXIOS-5164 and
     // FXIOS-5294. This DefaultFaviconURLCache is an attempt to mitigate problems caused by this removal,
     // which is documented in issue FXIOS-5391
-    private func test(forSite site: Site, completionHandler: @escaping (UIImage) -> Void) {
+    private func retrieveFavicon(forSite site: Site, completionHandler: @escaping (UIImage) -> Void) {
         Task {
             do {
                 let faviconURL = try await DefaultFaviconURLCache.shared.getURLFromCache(domain: site.url)
