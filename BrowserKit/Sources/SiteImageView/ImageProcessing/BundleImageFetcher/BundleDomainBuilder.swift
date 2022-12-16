@@ -4,13 +4,11 @@
 
 import Foundation
 
-// TODO: Laurie - documentation
-// Problem: Sites like amazon exist with .ca/.de and many other tlds.
-// We sometimes also have prefix like m. or mobile. in front of the domain.
-// Solution: They are stored as "amazon" instead of "amazon.com" this allows us to have favicons for every tld."
-// Here, If the site is in the multiRegionDomain array look it up via its second level domain (amazon) instead
-// of its baseDomain (amazon.com)
-// TODO: Laurie - tests
+// Problem: Sites like amazon exist with .ca/.de and many other tlds. There's sometimes also prefixes like m. or mobile.
+// in front of the domain. The bundled favicon doesn't support all of those domain formats, we need a
+// standard way to retrieve.
+// Solution: Favicons are stored as "amazon" instead of "amazon.com" or "facebook" instead of "m.facebook" in the
+// bundle. This allows us to have favicons for every tld.
 struct BundleDomainBuilder {
     func buildDomains(for siteURL: URL) -> [String] {
         let shortURL = siteURL.shortDisplayString

@@ -188,9 +188,9 @@ extension URL {
     }
 
     public var absoluteDisplayString: String {
-        var urlString = self.absoluteString
+        var urlString = absoluteString
         // For http URLs, get rid of the trailing slash if the path is empty or '/'
-        if (self.scheme == "http" || self.scheme == "https") && (self.path == "/") && urlString.hasSuffix("/") {
+        if (scheme == "http" || scheme == "https") && (path == "/") && urlString.hasSuffix("/") {
             urlString = String(urlString[..<urlString.index(urlString.endIndex, offsetBy: -1)])
         }
         // If it's basic http, strip out the string but leave anything else in

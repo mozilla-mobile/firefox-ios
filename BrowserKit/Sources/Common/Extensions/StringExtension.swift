@@ -6,6 +6,6 @@ import Foundation
 
 extension String {
     public func remove(_ string: String?) -> String {
-        return self.replacingOccurrences(of: string ?? "", with: "")
+        return replacingOccurrences(of: string ?? "", with: "")
     }
 }
