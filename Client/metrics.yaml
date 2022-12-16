@@ -146,7 +146,7 @@ app_menu:
         Counts the number of times a user taps in the menu toolbar
         on the homepage
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5442
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12697
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/12716
     notification_emails:
@@ -158,7 +158,7 @@ app_menu:
         Counts the number of times a user taps in the menu toolbar
         from a website
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5442
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12697
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/12716
     notification_emails:
@@ -264,7 +264,7 @@ app_menu:
     description: |
         Counts the number of times a user taps Help in the app menu
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5442
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12697
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/12716
     notification_emails:
@@ -276,7 +276,7 @@ app_menu:
         Counts the number of times a user taps Customize Homepage
         in the app menu
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5442
+      - https://github.com/mozilla-mobile/firefox-ios/issues/12697
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/12716
     notification_emails:
