@@ -102,12 +102,15 @@ class BackForwardListViewController: UIViewController,
     }
 
     func applyTheme() {
-        print("YRD apply theme was called")
-        tableView.backgroundColor = UIColor.theme.tabTray.cellTitleBackground.withAlphaComponent(0.4)
-        let blurEffect = UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur)
+        let theme = themeManager.currentTheme
+
+        tableView.backgroundColor = theme.colors.layer1.withAlphaComponent(0.4)
+        let blurEffect = UIBlurEffect(style: .extraLight)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         tableView.backgroundView = blurEffectView
-        view.backgroundColor = UIColor(white: 0, alpha: 0.2)
+//        view.backgroundColor = UIColor(white: 0, alpha: 0.2)
+        view.backgroundColor = theme.colors.layer2.withAlphaComponent(0.2)
+        shadow.backgroundColor = .clear
     }
 
     func loadSitesFromProfile() {
@@ -244,6 +247,7 @@ class BackForwardListViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: BackForwardListCellIdentifier, for: indexPath) as! BackForwardTableViewCell
+
         let item = listData[indexPath.item]
         let urlString = { () -> String in
             guard let url = InternalURL(item.url),
@@ -253,19 +257,20 @@ class BackForwardListViewController: UIViewController,
             return extracted.absoluteString
         }()
 
-        cell.isCurrentTab = listData[indexPath.item] == self.currentItem
-        cell.connectingBackwards = indexPath.item != listData.count-1
-        cell.connectingForwards = indexPath.item != 0
-
         let isAboutHomeURL = InternalURL(item.url)?.isAboutHomeURL ?? false
-        guard !isAboutHomeURL else {
-            cell.site = Site(url: item.url.absoluteString, title: .FirefoxHomePage)
-            return cell
+        var site: Site
+        if !isAboutHomeURL {
+            site = Site(url: item.url.absoluteString, title: .FirefoxHomePage)
+        } else {
+            site = sites[urlString] ?? Site(url: urlString, title: item.title ?? "")
         }
 
-        cell.site = sites[urlString] ?? Site(url: urlString, title: item.title ?? "")
-        cell.setNeedsDisplay()
+        let viewModel = BackForwardCellViewModel(site: site,
+                                                 connectingForwards: indexPath.item != 0,
+                                                 connectingBackwards: indexPath.item != listData.count-1,
+                                                 isCurrentTab: listData[indexPath.item] == currentItem)
 
+        cell.configure(viewModel: viewModel, theme: themeManager.currentTheme)
         return cell
     }
 

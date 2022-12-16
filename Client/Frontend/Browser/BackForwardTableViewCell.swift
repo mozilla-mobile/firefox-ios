@@ -6,15 +6,26 @@ import UIKit
 import Storage
 import Shared
 
+struct BackForwardCellViewModel {
+    var site: Site
+    var connectingForwards: Bool
+    var connectingBackwards: Bool
+    var strokeBackgroundColor = UIColor.white
+    var isCurrentTab: Bool
+
+    var cellTittle: String {
+        return !site.title.isEmpty ? site.title : site.url
+    }
+}
+
 class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
     private struct UX {
-        static let bgColor = UIColor.Photon.Grey50
         static let faviconWidth = 29
         static let faviconPadding: CGFloat = 20
         static let labelPadding = 20
         static let borderSmall = 2
         static let borderBold = 5
-        static let IconSize = 23
+        static let iconSize = CGSize(width: 23, height: 23)
         static let fontSize: CGFloat = 12.0
     }
 
@@ -30,42 +41,7 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
         label.font = label.font.withSize(UX.fontSize)
     }
 
-    var connectingForwards = true
-    var connectingBackwards = true
-
-    var isCurrentTab = false {
-        didSet {
-            if isCurrentTab {
-                label.font = UIFont.boldSystemFont(ofSize: UX.fontSize)
-            }
-        }
-    }
-
-    var site: Site? {
-        didSet {
-            if let site = site {
-                faviconView.setFavicon(forSite: site) { [weak self] in
-                    if InternalURL.isValid(url: site.tileURL) {
-                        self?.faviconView.image = UIImage(named: "faviconFox")
-                        self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: UX.IconSize, height: UX.IconSize))
-                        self?.faviconView.backgroundColor = UIColor.Photon.White100
-                        return
-                    }
-
-                    self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: UX.IconSize, height: UX.IconSize))
-                    if self?.faviconView.backgroundColor == .clear {
-                        self?.faviconView.backgroundColor = .white
-                    }
-                }
-                var title = site.title
-                if title.isEmpty {
-                    title = site.url
-                }
-                label.text = title
-                setNeedsLayout()
-            }
-        }
-    }
+    var viewModel: BackForwardCellViewModel!
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -101,10 +77,10 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
 
         var startPoint = CGPoint(
             x: rect.origin.x + UX.faviconPadding + CGFloat(Double(UX.faviconWidth) * 0.5) + safeAreaInsets.left,
-            y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
+            y: rect.origin.y + (viewModel.connectingForwards ?  0 : rect.size.height/2))
         var endPoint   = CGPoint(
             x: rect.origin.x + UX.faviconPadding + CGFloat(Double(UX.faviconWidth) * 0.5) + safeAreaInsets.left,
-            y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
+            y: rect.origin.y + rect.size.height - (viewModel.connectingBackwards  ? 0 : rect.size.height/2))
 
         // flip the x component if RTL
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
@@ -114,7 +90,7 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
 
         context.saveGState()
         context.setLineCap(.square)
-        context.setStrokeColor(UX.bgColor.cgColor)
+        context.setStrokeColor(viewModel.strokeBackgroundColor.cgColor)
         context.setLineWidth(1.0)
         context.move(to: startPoint)
         context.addLine(to: endPoint)
@@ -132,17 +108,29 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        connectingForwards = true
-        connectingBackwards = true
-        isCurrentTab = false
         label.font = UIFont.systemFont(ofSize: UX.fontSize)
     }
 
-    func applyTheme(theme: Theme) {
-        print("YRD apply theme on cell")
+    func configure(viewModel: BackForwardCellViewModel, theme: Theme) {
+        self.viewModel = viewModel
 
-//        imageView.backgroundColor = UIColor.Photon.White100
-//        imageView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
+        faviconView.setFavicon(forSite: viewModel.site) { [weak self] in
+            if InternalURL.isValid(url: viewModel.site.tileURL) {
+                self?.faviconView.image = UIImage(named: "faviconFox")
+                self?.faviconView.image = self?.faviconView.image?.createScaled(UX.iconSize)
+                return
+            }
+
+            self?.faviconView.image = self?.faviconView.image?.createScaled(UX.iconSize)
+        }
+
+        label.text = viewModel.cellTittle
+        setNeedsLayout()
+        applyTheme(theme: theme)
+    }
+
+    func applyTheme(theme: Theme) {
         label.textColor = theme.colors.textPrimary
+        viewModel.strokeBackgroundColor = theme.colors.layer5
     }
 }
