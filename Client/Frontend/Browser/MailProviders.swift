@@ -41,6 +41,27 @@ private func constructEmailURLString(_ beginningURLString: String, metadata: Mai
     return finalURLString
 }
 
+private func constructEmailURLStringProtonMail(_ beginningURLString: String, metadata: MailToMetadata, supportedHeaders: [String], bodyHName: String = "body", toHName: String = "to") -> String {
+    var lowercasedHeaders = [String: String]()
+    metadata.headers.forEach { (hname, hvalue) in
+        lowercasedHeaders[hname.lowercased()] = hvalue
+    }
+    let toHValue = lowercasedHeaders["to"]
+    lowercasedHeaders.removeValue(forKey: "to")
+
+    var queryParams: [String] = []
+    lowercasedHeaders.forEach({ (hname, hvalue) in
+        if supportedHeaders.contains(hname) {
+            queryParams.append("\(hname)=\(hvalue)")
+        } else if hname == "body" {
+            queryParams.append("\(bodyHName)=\(hvalue)")
+        }
+    })
+    let stringParams = queryParams.joined(separator: "&")
+    let finalURLString = beginningURLString + toHValue + "?" + (stringParams.isEmpty ? toParam : [toParam, stringParams].joined(separator: "&"))
+    return finalURLString
+}
+
 class ReaddleSparkIntegration: MailProvider {
     var beginningScheme = "readdle-spark://compose?"
     var supportedHeaders = [
@@ -156,7 +177,7 @@ class FastmailIntegration: MailProvider {
 }
 
 class ProtonMailIntegration: MailProvider {
-    var beginningScheme = "protonmail://"
+    var beginningScheme = "protonmail://mailto:"
     var supportedHeaders = [
         "to",
         "cc",
@@ -166,6 +187,6 @@ class ProtonMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+        return constructEmailURLStringProtonMail(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }
