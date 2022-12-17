@@ -24,6 +24,10 @@ class JumpBackInTests: BaseTestCase {
         }
 
         // "Jump Back In" is enabled by default. See Settings -> Homepage
+        navigator.goto(HomeSettings)
+        XCTAssertEqual(app.switches["Jump Back In"].value as! String, "1")
+
+        navigator.goto(NewTabScreen)
     }
 
     func testJumpBackInSection() {
@@ -45,8 +49,6 @@ class JumpBackInTests: BaseTestCase {
 
     func testGroupedTabs() {
         // Enable "Tab Groups" from Settings -> Tabs
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(SettingsScreen)
         navigator.goto(TabsSettings)
         navigator.performAction(Action.ToggleTabGroups)
         navigator.goto(SettingsScreen)
@@ -56,7 +58,7 @@ class JumpBackInTests: BaseTestCase {
         // Create 3 groups in tab tray
         let groups = ["test1", "test2", "test3"]
         for group in groups {
-            for _ in 1...2 {
+            for _ in 1...3 {
                 navigator.goto(TabTray)
                 navigator.performAction(Action.OpenNewTabFromTabTray)
                 navigator.openURL(group)
@@ -71,14 +73,12 @@ class JumpBackInTests: BaseTestCase {
 
         // Tap on the "test3" from "Jump Back In" section
         waitForExistence(app.staticTexts["Jump Back In"])
-        // No "Test3" group is shown, but "Test2" group is shown.
-        app.cells["JumpBackInCell"].staticTexts["Test2"].tap()
+        app.cells["JumpBackInCell"].staticTexts["Test3"].tap()
         if isTablet {
             waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
         } else {
             waitForExistence(app.navigationBars.staticTexts["Open Tabs"])
         }
-        waitForExistence(app.staticTexts["Test2"])
         waitForExistence(app.staticTexts["Test3"])
     }
 
@@ -144,11 +144,11 @@ class JumpBackInTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
 
-        // Check the "Jump Back In Section".
+        // Check the "Jump Back In Section"
         waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
 
-        // Amazon is visible in "Jump Back In".
+        // Amazon is visible in "Jump Back In"
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Amazon"])
 
         // Close the amazon tab.
