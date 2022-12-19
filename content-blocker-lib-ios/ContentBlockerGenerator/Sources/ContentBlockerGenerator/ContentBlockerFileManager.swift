@@ -60,9 +60,14 @@ struct DefaultContentBlockerFileManager: ContentBlockerFileManager {
     private func createDirectory() {
         do {
             try fileManager.removeItem(at: outputDirectory)
+        } catch {
+            // Possibly can't remove and this is fine. Creating directory is the crutial part here.
+        }
+
+        do {
             try fileManager.createDirectory(at: outputDirectory, withIntermediateDirectories: false, attributes: nil)
         } catch {
-            fatalError("Could not create directory")
+            fatalError("Could not create directory at \(outputDirectory)")
         }
     }
 }
