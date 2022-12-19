@@ -101,6 +101,10 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Go back to regular browser
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        app.cells.staticTexts["Homepage"].tap()
+        navigator.nowAt(NewTabScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        navigator.performAction(Action.CloseURLBarOpen)
 
         // Go back to private browsing and check that the tab has not been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -123,6 +127,10 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Go back to regular browsing and check that the private tab has been closed and that the initial Private Browsing message appears when going back to Private Browsing
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        app.cells.staticTexts["Homepage"].tap()
+        navigator.nowAt(NewTabScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        navigator.performAction(Action.CloseURLBarOpen)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         waitForNoExistence(app.cells.staticTexts["Internet for people, not profit — Mozilla. Currently selected tab."])
