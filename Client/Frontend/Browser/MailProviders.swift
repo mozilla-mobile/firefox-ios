@@ -8,7 +8,7 @@ import Shared
 // mailto headers: subject, body, cc, bcc
 
 protocol MailProvider {
-    var beginningScheme: String {get set}
+    var urlFormat: String {get set}
     var supportedHeaders: [String] {get set}
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL?
 }
@@ -75,7 +75,7 @@ extension MailProvider {
 }
 
 class ReaddleSparkIntegration: MailProvider {
-    var beginningScheme = "readdle-spark://compose?%@&%@"
+    var urlFormat = "readdle-spark://compose?%@&%@"
     var supportedHeaders = [
         "subject",
         "recipient",
@@ -86,7 +86,7 @@ class ReaddleSparkIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme,
+        return constructEmailURLString(urlFormat,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders,
                                        bodyHName: "textbody",
@@ -95,7 +95,7 @@ class ReaddleSparkIntegration: MailProvider {
 }
 
 class AirmailIntegration: MailProvider {
-    var beginningScheme = "airmail://compose?%@&%@"
+    var urlFormat = "airmail://compose?%@&%@"
     var supportedHeaders = [
         "subject",
         "from",
@@ -107,7 +107,7 @@ class AirmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme,
+        return constructEmailURLString(urlFormat,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders,
                                        bodyHName: "htmlBody").asURL
@@ -115,7 +115,7 @@ class AirmailIntegration: MailProvider {
 }
 
 class MyMailIntegration: MailProvider {
-    var beginningScheme = "mymail-mailto://?%@&%@"
+    var urlFormat = "mymail-mailto://?%@&%@"
     var supportedHeaders = [
         "to",
         "subject",
@@ -125,7 +125,7 @@ class MyMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme,
+        return constructEmailURLString(urlFormat,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders).asURL
     }
@@ -134,12 +134,12 @@ class MyMailIntegration: MailProvider {
 class MailRuIntegration: MyMailIntegration {
     override init() {
         super.init()
-        self.beginningScheme = "mailru-mailto://?%@&%@"
+        self.urlFormat = "mailru-mailto://?%@&%@"
     }
 }
 
 class MSOutlookIntegration: MailProvider {
-    var beginningScheme = "ms-outlook://emails/new?%@&%@"
+    var urlFormat = "ms-outlook://emails/new?%@&%@"
     var supportedHeaders = [
         "to",
         "cc",
@@ -149,14 +149,14 @@ class MSOutlookIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme,
+        return constructEmailURLString(urlFormat,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders).asURL
     }
 }
 
 class YMailIntegration: MailProvider {
-    var beginningScheme = "ymail://mail/any/compose?%@&%@"
+    var urlFormat = "ymail://mail/any/compose?%@&%@"
     var supportedHeaders = [
         "to",
         "cc",
@@ -165,14 +165,14 @@ class YMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme,
+        return constructEmailURLString(urlFormat,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders).asURL
     }
 }
 
 class GoogleGmailIntegration: MailProvider {
-    var beginningScheme = "googlegmail:///co?%@&%@"
+    var urlFormat = "googlegmail:///co?%@&%@"
     var supportedHeaders = [
         "to",
         "cc",
@@ -182,14 +182,14 @@ class GoogleGmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme,
+        return constructEmailURLString(urlFormat,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders).asURL
     }
 }
 
 class FastmailIntegration: MailProvider {
-    var beginningScheme = "fastmail://mail/compose?%@&%@"
+    var urlFormat = "fastmail://mail/compose?%@&%@"
     var supportedHeaders = [
         "to",
         "cc",
@@ -199,14 +199,14 @@ class FastmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme,
+        return constructEmailURLString(urlFormat,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders).asURL
     }
 }
 
 class ProtonMailIntegration: MailProvider {
-    var beginningScheme = "protonmail://%@?%@"
+    var urlFormat = "protonmail://%@?%@"
     var supportedHeaders = [
         "to",
         "cc",
@@ -216,7 +216,7 @@ class ProtonMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(beginningScheme,
+        return constructEmailURLString(urlFormat,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders,
                                        toHName: "mailto",
