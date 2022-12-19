@@ -76,7 +76,7 @@ extension HomepageMessageCardViewModel: HomepageViewModelProtocol {
         let horizontalInset = HomepageViewModel.UX.leadingInset(traitCollection: traitCollection)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0,
                                                         leading: horizontalInset,
-                                                        bottom: 16,
+                                                        bottom: HomepageViewModel.UX.spacingBetweenSections,
                                                         trailing: horizontalInset)
 
         return section
