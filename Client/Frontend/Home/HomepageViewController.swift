@@ -252,7 +252,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     }
 
     // MARK: - Homepage view cycle
-    /// Normal viewcontroller view cycles cannot be relied on the homepage since the current way of showing and hiding the homepage is through alpha.
+    /// Normal view controller view cycles cannot be relied on the homepage since the current way of showing and hiding the homepage is through alpha.
     /// This is a problem that need to be fixed but until then we have to rely on the methods here.
 
     func homepageWillAppear(isZeroSearch: Bool) {
