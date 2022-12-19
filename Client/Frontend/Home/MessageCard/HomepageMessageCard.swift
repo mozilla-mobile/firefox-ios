@@ -129,9 +129,9 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
 
         NSLayoutConstraint.activate([
             cardView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor),
-            cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: UX.topCardSafeSpace),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor),
             cardView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
-            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.bottomCardSafeSpace),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             cardView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             cardView.widthAnchor.constraint(equalToConstant: UX.cardSizeMaxWidth).priority(.defaultHigh),
 

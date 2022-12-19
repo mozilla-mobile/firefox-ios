@@ -384,6 +384,8 @@ extension TelemetryWrapper {
         case url = "url"
         case searchText = "searchText"
         case whatsNew = "whats-new"
+        case help = "menu-help"
+        case customizeHomePage = "menu-customize-home-page"
         case dismissUpdateCoverSheetAndStartBrowsing = "dismissed-update-cover_sheet_and_start_browsing"
         case dismissedUpdateCoverSheet = "dismissed-update-cover-sheet"
         case dismissedETPCoverSheet = "dismissed-etp-sheet"
@@ -435,6 +437,9 @@ extension TelemetryWrapper {
         case historyHighlightContextualMenu = "history-highlights-contextual-menu"
         case pocketStory = "pocket-story"
         case pocketSectionImpression = "pocket-section-impression"
+        // MARK: - App menu
+        case homePageMenu = "homepage-menu"
+        case siteMenu = "site-menu"
         case library = "library"
         case home = "home-page"
         case homeTabBanner = "home-tab-banner"
@@ -1039,6 +1044,10 @@ extension TelemetryWrapper {
                     extras: extras)
             }
         // MARK: App menu
+        case (.action, .tap, .homePageMenu, _, _):
+            GleanMetrics.AppMenu.homepageMenu.add()
+        case (.action, .tap, .siteMenu, _, _):
+            GleanMetrics.AppMenu.siteMenu.add()
         case (.action, .tap, .logins, _, _):
             GleanMetrics.AppMenu.logins.add()
         case (.action, .tap, .signIntoSync, _, _):
@@ -1057,6 +1066,10 @@ extension TelemetryWrapper {
             GleanMetrics.AppMenu.nightModeDisabled.add()
         case (.action, .open, .whatsNew, _, _):
             GleanMetrics.AppMenu.whatsNew.add()
+        case (.action, .tap, .help, _, _):
+            GleanMetrics.AppMenu.help.add()
+        case (.action, .tap, .customizeHomePage, _, _):
+            GleanMetrics.AppMenu.customizeHomepage.add()
         case (.action, .open, .settings, _, _):
             GleanMetrics.AppMenu.settings.add()
 

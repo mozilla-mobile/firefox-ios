@@ -7,6 +7,7 @@ import Shared
 
 protocol TabToolbarProtocol: AnyObject {
     var tabToolbarDelegate: TabToolbarDelegate? { get set }
+
     var addNewTabButton: ToolbarButton { get }
     var tabsButton: TabsButton { get }
     var appMenuButton: ToolbarButton { get }
