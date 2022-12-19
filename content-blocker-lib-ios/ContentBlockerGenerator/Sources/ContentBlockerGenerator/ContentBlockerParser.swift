@@ -11,7 +11,6 @@ protocol ContentBlockerParser {
 }
 
 class DefaultContentBlockerParser: ContentBlockerParser {
-
     // Key is each resource of an entity, so each properties for an entity's resource is easily accessible
     private var entities = [String: Entity]()
 
@@ -32,7 +31,6 @@ class DefaultContentBlockerParser: ContentBlockerParser {
 
     func parseCategoryList(_ categoryList: [String],
                            actionType: ActionType) -> [String] {
-
         var lines = [String]()
         for property in categoryList {
             let line = createLine(for: property, actionType: actionType)
@@ -50,7 +48,6 @@ class DefaultContentBlockerParser: ContentBlockerParser {
     /// - Returns: the webkit format file content for that entity resource
     private func createLine(for resource: String,
                             actionType: ActionType) -> String {
-
         let filter = buildUrlFilter(resource)
         let entity = entities[resource]
         if let entity = entity {

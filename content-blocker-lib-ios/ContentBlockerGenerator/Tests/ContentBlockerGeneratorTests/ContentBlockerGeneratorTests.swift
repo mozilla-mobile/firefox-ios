@@ -6,7 +6,6 @@ import XCTest
 @testable import ContentBlockerGenerator
 
 final class ContentBlockerGeneratorTests: XCTestCase {
-
     private var fileManager: MockContentBlockerFileManager!
     private var parserData: ParserData!
 
@@ -62,7 +61,6 @@ final class ContentBlockerGeneratorTests: XCTestCase {
 
 // MARK: - MockContentBlockerFileManager
 class MockContentBlockerFileManager: ContentBlockerFileManager {
-
     var entityList = [String: Any]()
     func getEntityList() -> [String: Any] {
         return entityList

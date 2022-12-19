@@ -11,7 +11,6 @@ protocol ContentBlockerFileManager {
 }
 
 struct DefaultContentBlockerFileManager: ContentBlockerFileManager {
-
     private let jsonHelper: JsonHelper
     private let fileManager: FileManager
     // We expect this command to be executed as 'cd <dir of swift package>; swift run',

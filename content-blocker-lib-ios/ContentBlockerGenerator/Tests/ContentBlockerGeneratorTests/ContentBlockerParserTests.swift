@@ -6,7 +6,6 @@ import XCTest
 @testable import ContentBlockerGenerator
 
 final class ContentBlockerParserTests: XCTestCase {
-
     private var parserData: ParserData!
 
     override func setUp() {

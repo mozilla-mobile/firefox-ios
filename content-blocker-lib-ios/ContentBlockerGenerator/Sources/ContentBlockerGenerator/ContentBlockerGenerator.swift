@@ -6,7 +6,6 @@ import Foundation
 
 @main
 public struct ContentBlockerGenerator {
-
     static let shared = ContentBlockerGenerator()
 
     // Static main needs to be used for executable, providing a shared instance so we can
@@ -41,7 +40,6 @@ public struct ContentBlockerGenerator {
 
     private func generate(actionType: ActionType,
                           categories: [FileCategory]) {
-
         for categoryTitle in categories {
             let fileContent = generateFileContent(actionType: actionType, categoryTitle: categoryTitle)
             guard !fileContent.isEmpty else {
@@ -54,7 +52,6 @@ public struct ContentBlockerGenerator {
 
     private func generateFileContent(actionType: ActionType,
                                      categoryTitle: FileCategory) -> String {
-
         let categoryList = fileManager.getCategoryFile(categoryTitle: categoryTitle)
         let fileLines = parser.parseCategoryList(categoryList,
                                                  actionType: actionType)

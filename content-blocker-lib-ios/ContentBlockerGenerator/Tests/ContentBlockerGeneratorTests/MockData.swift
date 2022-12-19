@@ -19,7 +19,6 @@ struct ParserData {
 
 // MARK: - DictData
 enum DictData: String {
-
     case entity
     case emptyEntity
 
@@ -59,7 +58,6 @@ enum DictData: String {
 
 // MARK: - ListData
 enum ListData: String {
-
     case ads
 
     func getData() -> Data {

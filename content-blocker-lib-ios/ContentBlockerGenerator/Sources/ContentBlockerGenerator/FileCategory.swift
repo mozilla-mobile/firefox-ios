@@ -6,7 +6,6 @@ import Foundation
 
 /// Those are the raw files taken as input for this script
 enum FileCategory: String {
-
     case advertising
     case analytics
     case content

@@ -5,7 +5,6 @@
 import Foundation
 
 struct JsonHelper {
-
     func jsonEntityListFrom(filename: String) -> [String: Any] {
         let file = URL(fileURLWithPath: filename)
 
