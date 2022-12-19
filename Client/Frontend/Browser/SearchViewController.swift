@@ -632,10 +632,13 @@ class SearchViewController: SiteTableViewController,
     }
 
     func getAttributedBoldSearchSuggestions(searchPhrase: String, query: String) -> NSAttributedString? {
-        let suggestion = searchPhrase.components(separatedBy: query)
-        guard searchPhrase != query, suggestion.count > 1 else { return nil }
+        // the search term (query) stays normal weight
+        // everything past the search term (query) will be bold
+        let range = searchPhrase.range(of: query)
+        guard searchPhrase != query, let upperBound = range?.upperBound else { return nil }
 
-        let attributedString = searchPhrase.attributedText(boldString: suggestion[1],
+        let boldString = String(searchPhrase[upperBound..<searchPhrase.endIndex])
+        let attributedString = searchPhrase.attributedText(boldString: boldString,
                                                            font: DynamicFontHelper().DefaultStandardFont)
         return attributedString
     }
