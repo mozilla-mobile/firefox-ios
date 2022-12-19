@@ -43,27 +43,39 @@ class DefaultContentBlockerParser: ContentBlockerParser {
 
     // MARK: - Private
 
-    /// Create the line for a property, if an entity information is present, we can build the line using unless-domain
+    /// Create the line for a propertie's resource if an entity information is present, we can build the line using unless-domain (whitelisting).
     /// - Parameters:
-    ///   - property: The property of an entity, example "2leep.com"
+    ///   - property: The resource of an entity, example "2leep.com"
     ///   - actionType: "block" or "block-all"
-    /// - Returns: the webkit format file content for that entity property
-    private func createLine(for property: String,
+    /// - Returns: the webkit format file content for that entity resource
+    private func createLine(for resource: String,
                             actionType: ActionType) -> String {
 
-        let filter = buildUrlFilter(property)
-        let propertyEntity = entities[property]
-        guard let propertyEntity = propertyEntity else {
-            let line = buildOutputLine(urlFilter: filter,
-                                       unlessDomain: "",
-                                       actionType: actionType)
-            return line
+        let filter = buildUrlFilter(resource)
+        let entity = entities[resource]
+        if let entity = entity {
+            return buildOutput(with: entity, urlFilter: filter, actionType: actionType)
+        } else if let entity = findEntity(for: resource) {
+            return buildOutput(with: entity, urlFilter: filter, actionType: actionType)
         }
 
-        let unlessDomain = buildUnlessDomain(propertyEntity.properties)
-        return buildOutputLine(urlFilter: filter,
-                               unlessDomain: unlessDomain,
-                               actionType: actionType)
+        // No entity found for resource, create line without unless-domain
+        let line = buildOutputLine(urlFilter: filter,
+                                   unlessDomain: "",
+                                   actionType: actionType)
+        return line
+    }
+
+    private func findEntity(for resource: String) -> Entity? {
+        // Since there was no direct mapping of the resource to find the entity, we need to check if any
+        // the entities keys is contained as part of the resource we're creating the line for
+        var foundEntity: Entity?
+        for keyResource in entities.keys where resource.contains(keyResource) {
+            foundEntity = entities[keyResource]
+            break
+        }
+
+        return foundEntity
     }
 
     private func buildUnlessDomain(_ domains: [String]) -> String {
@@ -75,6 +87,13 @@ class DefaultContentBlockerParser: ContentBlockerParser {
     private func buildUrlFilter(_ domain: String) -> String {
         let prefix = "^https?://([^/]+\\\\.)?"
         return prefix + domain.replacingOccurrences(of: ".", with: "\\\\.")
+    }
+
+    private func buildOutput(with entity: Entity, urlFilter: String, actionType: ActionType) -> String {
+        let unlessDomain = buildUnlessDomain(entity.properties)
+        return buildOutputLine(urlFilter: urlFilter,
+                               unlessDomain: unlessDomain,
+                               actionType: actionType)
     }
 
     private func buildOutputLine(urlFilter: String,

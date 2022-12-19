@@ -41,7 +41,8 @@ enum DictData: String {
     {
         "2leep.com": { "properties": [ "2leep.com" ], "resources": [ "2leep.com" ] },
         "adnologies": { "properties": [ "adnologies.com", "heias.com" ], "resources": [ "adnologies.com", "heias.com" ] },
-        "365Media": { "properties": [ "aggregateintelligence.com" ], "resources": [ "365media.com", "aggregateintelligence.com" ] }
+        "365Media": { "properties": [ "aggregateintelligence.com" ], "resources": [ "365media.com", "aggregateintelligence.com" ] },
+        "Yandex": { "properties": [ "kinopoisk.ru", "moikrug.ru", "yadi.sk", "yandex.by", "yandex.com", "yandex.com.tr", "yandex.ru", "yandex.st", "yandex.ua" ], "resources": [ "api-maps.yandex.ru", "moikrug.ru", "web-visor.com", "webvisor.org", "yandex.by", "yandex.com", "yandex.com.tr", "yandex.ru", "yandex.st", "yandex.ua" ] }
     }
 }
 """
@@ -75,7 +76,8 @@ enum ListData: String {
   "2leep.com",
   "adnologies.com",
   "heias.com",
-  "365media.com"
+  "365media.com",
+  "adfox.yandex.ru"
 ]
 """
 }
