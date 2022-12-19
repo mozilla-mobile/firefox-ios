@@ -16,6 +16,9 @@
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Բարձրացրեք ամենօրյա զննարկումը";
 
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox-ն ամեն ամիս արգելափակում է 3000+ թրեքեր մեկ օգտատիրոջ համար: Դարձրեք մեզ ձեր լռելյայն զննարկիչը՝ գաղտնիության խաղաղության համար:";
+
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox֊ի գաղտնիության ծանուցում";
 
