@@ -1,3 +1,6 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Å gjere Firefox til din standardnettlesar er ei stemme for eit ope, tilgjengeleg internett.";
+
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Standard for eit betre internet";
 
