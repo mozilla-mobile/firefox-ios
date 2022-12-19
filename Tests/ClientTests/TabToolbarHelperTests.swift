@@ -4,6 +4,7 @@
 
 @testable import Client
 
+import Glean
 import XCTest
 
 class TabToolbarHelperTests: XCTestCase {
@@ -21,6 +22,7 @@ class TabToolbarHelperTests: XCTestCase {
         super.setUp()
         mockToolbar = MockTabToolbar()
         subject = TabToolbarHelper(toolbar: mockToolbar)
+        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
@@ -42,6 +44,11 @@ class TabToolbarHelperTests: XCTestCase {
     func testTapHome() {
         subject.setMiddleButtonState(.home)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), imageHome)
+    }
+
+    func testTelemetryForSiteMenu() {
+        mockToolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(mockToolbar, button: mockToolbar.appMenuButton)
+        testCounterMetricRecordingSuccess(metric: GleanMetrics.AppMenu.siteMenu)
     }
 }
 
@@ -66,8 +73,12 @@ class MockToolbarButton: ToolbarButton {
 }
 
 class MockTabToolbar: TabToolbarProtocol {
+    var profile: MockProfile!
+    var tabManager: TabManager!
+
+    var _tabToolBarDelegate: TabToolbarDelegate?
     var tabToolbarDelegate: TabToolbarDelegate? {
-        get { return nil }
+        get { return _tabToolBarDelegate }
         // swiftlint:disable unused_setter_value
         set { }
         // swiftlint:enable unused_setter_value
@@ -100,6 +111,13 @@ class MockTabToolbar: TabToolbarProtocol {
     var _multiStateButton = MockToolbarButton()
     var multiStateButton: ToolbarButton { return _multiStateButton }
     var actionButtons: [NotificationThemeable & UIButton] { return [] }
+
+    init() {
+        profile = MockProfile()
+        tabManager = TabManager(profile: profile, imageStore: nil)
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        _tabToolBarDelegate = BrowserViewController(profile: profile, tabManager: tabManager)
+    }
 
     func updateBackStatus(_ canGoBack: Bool) { }
 

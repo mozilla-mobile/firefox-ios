@@ -404,6 +404,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             if let url = URL(string: "https://support.mozilla.org/products/ios") {
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
             }
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .help)
         }.items
     }
 
@@ -411,6 +412,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         return SingleActionViewModel(title: .AppMenu.CustomizeHomePage,
                                      iconString: ImageIdentifiers.edit) { _ in
             self.delegate?.showCustomizeHomePage()
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .customizeHomePage)
         }.items
     }
 
