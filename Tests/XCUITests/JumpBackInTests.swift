@@ -61,7 +61,7 @@ class JumpBackInTests: BaseTestCase {
         for group in groups {
             for _ in 1...3 {
                 navigator.goto(TabTray)
-                waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT))
+                waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
                 navigator.performAction(Action.OpenNewTabFromTabTray)
                 navigator.openURL(group)
                 waitUntilPageLoad()
@@ -70,7 +70,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Open a new tab
         navigator.goto(TabTray)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT))
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
 
@@ -93,7 +93,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Open a new tab and check the "Jump Back In" section
         navigator.goto(TabTray)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT))
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
 
@@ -129,7 +129,7 @@ class JumpBackInTests: BaseTestCase {
         waitUntilPageLoad()
 
         navigator.goto(TabTray)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT))
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
 
@@ -150,7 +150,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Open a new tab in normal browsing
         navigator.goto(TabTray)
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT))
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
 
@@ -172,7 +172,7 @@ class JumpBackInTests: BaseTestCase {
         app.cells["Amazon.com. Spend less. Smile more."].buttons["tab close"].tap()
 
         // Revisit the "Jump Back In" section
-        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT))
+        waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
 
