@@ -131,7 +131,7 @@ class Action {
     static let ToggleNightMode = "ToggleNightMode"
     static let ToggleTrackingProtection = "ToggleTrackingProtection"
     static let ToggleNoImageMode = "ToggleNoImageMode"
-    
+
     static let ToggleInactiveTabs = "ToggleInactiveTabs"
     static let ToggleTabGroups = "ToggleTabGroups"
 
