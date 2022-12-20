@@ -1189,7 +1189,7 @@ class BrowserViewController: UIViewController {
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                  let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
+                  let bookmarkNode = bookmarkFolder.children?.last as? FxBookmarkNode // Ecosia: bookmarks are added to the end of the list
             else { return }
 
             let detailController = BookmarkDetailPanel(profile: self.profile,
