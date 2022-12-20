@@ -71,15 +71,17 @@ extension BookmarkItemData: BookmarksFolderCell {
                                                       accessoryType: .disclosureIndicator)
 
         if let site = site {
-            profile?.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
+            profile?.favicons.getFaviconImage(forSite: site) { result in
                 // Check that we successfully retrieved an image (should always happen)
                 // and ensure that the cell we were fetching for is still on-screen.
-                guard let image = result.successValue else { return }
+                guard let image = result else { return }
 
-                viewModel.leftImageView = image
-                viewModel.leftImageViewContentView = .scaleAspectFill
+                DispatchQueue.main.async {
+                    viewModel.leftImageView = image
+                    viewModel.leftImageViewContentView = .scaleAspectFill
 
-                completion?(viewModel)
+                    completion?(viewModel)
+                }
             }
         }
 
