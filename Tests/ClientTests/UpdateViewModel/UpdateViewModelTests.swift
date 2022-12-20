@@ -118,7 +118,7 @@ class UpdateViewModelTests: XCTestCase {
 
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
         XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), updatedTestAppVersion)
-        XCTAssertTrue(shouldShow)
+        XCTAssertFalse(shouldShow)
     }
 
     func testShouldShowCoverSheetForVersionNil() {
