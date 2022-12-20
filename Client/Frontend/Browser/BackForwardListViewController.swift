@@ -40,7 +40,7 @@ class BackForwardListViewController: UIViewController,
         tableView.showsHorizontalScrollIndicator = false
     }
 
-    lazy var shadow: UIView = .build { view in }
+    lazy var shadow: UIView = .build { _ in }
 
     var tabManager: TabManager!
     weak var bvc: BrowserViewController?
