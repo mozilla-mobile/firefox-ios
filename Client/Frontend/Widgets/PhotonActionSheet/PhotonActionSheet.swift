@@ -52,8 +52,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Photon.closeButton
     }
 
-    private lazy var blurredImageView: UIImageView = .build { image in
-    }
+    private lazy var blurredImageView: UIImageView = .build { _ in }
 
     private var windowScreenshot: UIImage?
 
