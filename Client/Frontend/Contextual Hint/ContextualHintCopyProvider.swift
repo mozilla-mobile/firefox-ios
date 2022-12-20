@@ -52,22 +52,13 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             descriptionCopy = CFRStrings.TabsTray.InactiveTabs.Body
 
         case .jumpBackIn:
-            let shouldShowNew = featureFlags.isFeatureEnabled(.copyForJumpBackIn, checking: .buildOnly)
-
-            if shouldShowNew {
                 descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHome
-            } else {
-                descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy
-            }
 
         case .jumpBackInSyncedTab:
             descriptionCopy = CFRStrings.FirefoxHomepage.JumpBackIn.SyncedTab
 
-            /// Toolbar description copy depends on the arrow direction.
         case .toolbarLocation:
-            let shouldShowNew = featureFlags.isFeatureEnabled(.copyForToolbar, checking: .buildOnly)
-
-            return getToolbarDescriptionCopy(with: arrowDirection, and: shouldShowNew)
+            return getToolbarDescriptionCopy(with: arrowDirection)
         }
 
         return descriptionCopy
@@ -91,16 +82,17 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
     // MARK: - Private helpers
 
-    private func getToolbarDescriptionCopy(with arrowDirection: UIPopoverArrowDirection?, and shouldShowNew: Bool) -> String {
+    /// Toolbar description copy depends on the arrow direction.
+    private func getToolbarDescriptionCopy(with arrowDirection: UIPopoverArrowDirection?) -> String {
         /// Toolbar description should never be empty! If it is, find where this struct is being
         /// created for toolbar and ensure there's an arrowDirection passed.
         guard let arrowDirection = arrowDirection else { return "" }
 
         switch arrowDirection {
         case .up:
-            return shouldShowNew ? CFRStrings.Toolbar.SearchBarTopPlacement : CFRStrings.Toolbar.SearchBarPlacementForExistingUsers
+            return CFRStrings.Toolbar.SearchBarTopPlacement
         case .down:
-            return shouldShowNew ? CFRStrings.Toolbar.SearchBarBottomPlacement : CFRStrings.Toolbar.SearchBarPlacementForNewUsers
+            return CFRStrings.Toolbar.SearchBarBottomPlacement
         default: return ""
         }
     }
