@@ -121,11 +121,6 @@ extension String {
 
         public struct FirefoxHomepage {
             public struct JumpBackIn {
-                public static let PersonalizedHomeOldCopy = MZLocalizedString(
-                    "ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106",
-                    tableName: nil,
-                    value: "Your personalized Firefox homepage now makes it easier to pick up where you left off. Find your recent tabs, bookmarks, and search results.",
-                    comment: "Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature.")
                 public static let PersonalizedHome = MZLocalizedString(
                     "ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHome",
                     tableName: "JumpBackIn",
@@ -155,16 +150,6 @@ extension String {
         }
 
         public struct Toolbar {
-            public static let SearchBarPlacementForNewUsers = MZLocalizedString(
-                "ContextualHint.SearchBarPlacement.NewUsers",
-                tableName: nil,
-                value: "To make entering info easier, the toolbar is now at the bottom by default.",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device.")
-            public static let SearchBarPlacementForExistingUsers = MZLocalizedString(
-                "ContextualHint.SearchBarPlacement.ExistingUsers",
-                tableName: nil,
-                value: "Now you can move the toolbar to the bottom, so it’s easier to enter info",
-                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen.")
             public static let SearchBarPlacementButtonText = MZLocalizedString(
                 "ContextualHints.SearchBarPlacement.CallToAction",
                 tableName: nil,

@@ -7,9 +7,6 @@ contextual-hint-feature:
     features-enabled:
       type: json
       description: This property provides a lookup table of whether specific contextual hints are enabled.
-    hint-copy:
-      type: json
-      description: This set allows us to experiment with changing hint descriptions.
 credit-card-autofill:
   description: This property defines the credit card autofill feature
   hasExposure: true

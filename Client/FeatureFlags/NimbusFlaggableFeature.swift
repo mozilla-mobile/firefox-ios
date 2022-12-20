@@ -11,8 +11,6 @@ import UIKit
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
     case bottomSearchBar
-    case copyForJumpBackIn
-    case copyForToolbar
     case contextualHintForJumpBackInSyncedTab
     case contextualHintForToolbar
     case creditCardAutofillStatus
@@ -90,8 +88,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForJumpBackInSyncedTab,
                 .contextualHintForToolbar,
-                .copyForJumpBackIn,
-                .copyForToolbar,
                 .creditCardAutofillStatus,
                 .jumpBackInSyncedTab,
                 .onboardingUpgrade,
