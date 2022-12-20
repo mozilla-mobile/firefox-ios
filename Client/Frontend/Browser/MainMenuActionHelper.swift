@@ -507,7 +507,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
      */
 
     // MARK: Whats New
-
+    /*
     private func getWhatsNewAction() -> PhotonRowActions? {
         var whatsNewAction: PhotonRowActions?
         let showBadgeForWhatsNew = shouldShowWhatsNew()
@@ -530,7 +530,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
         }.items
         return whatsNewAction
     }
-
+     
     // If we do not have the LatestAppVersionProfileKey in the profile, that means that this is a fresh install and we
     // do not show the What's New. If we do have that value, we compare it to the major version of the running app.
     // If it is different then this is an upgrade, downgrades are not possible, so we can show the What's New page.
@@ -541,7 +541,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol, FeatureFlaggable, CanRemo
 
         return latestMajorAppVersion != AppInfo.majorAppVersion && DeviceInfo.hasConnectivity()
     }
-
+    */
     // MARK: Share
 
     func getSharingAction() -> PhotonRowActions {
