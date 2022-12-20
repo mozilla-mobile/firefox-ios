@@ -151,7 +151,7 @@ class PhotonActionSheetViewModel {
     // On iPhone there's never an arrow
     func getPossibleArrowDirections(trait: UITraitCollection) -> UIPopoverArrowDirection {
         let isSmallSize = PhotonActionSheetViewModel.isSmallSizeForTraitCollection(trait: trait)
-        return isSmallSize ? UIPopoverArrowDirection.init(rawValue: 0) : .any
+        return isSmallSize ? UIPopoverArrowDirection(rawValue: 0) : .any
     }
 
     func getMainMenuPopOverMargins(trait: UITraitCollection, view: UIView, presentedOn viewController: UIViewController) -> UIEdgeInsets {
@@ -168,7 +168,7 @@ class PhotonActionSheetViewModel {
         availableMainMenuHeight = viewControllerHeight - PhotonActionSheet.UX.bigSpacing * 2
         isAtTopMainMenu = true
 
-        return UIEdgeInsets.init(equalInset: PhotonActionSheet.UX.bigSpacing)
+        return UIEdgeInsets(equalInset: PhotonActionSheet.UX.bigSpacing)
     }
 
     // Small size is either iPhone or iPad in multitasking mode

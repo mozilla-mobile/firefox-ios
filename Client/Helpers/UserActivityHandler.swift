@@ -128,7 +128,7 @@ extension UserActivityHandler {
 
         if let numDays = spotlightConfig.keepForDays {
             let day: TimeInterval = 60 * 60 * 24
-            item.expirationDate = Date.init(timeIntervalSinceNow: Double(numDays) * day)
+            item.expirationDate = Date(timeIntervalSinceNow: Double(numDays) * day)
         }
         searchableIndex.indexSearchableItems([item]) { error in
             if let error = error {

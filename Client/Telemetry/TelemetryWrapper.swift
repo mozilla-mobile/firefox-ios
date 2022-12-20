@@ -1117,7 +1117,7 @@ extension TelemetryWrapper {
 
         // MARK: Tab Groups
         case (.action, .view, .tabTray, .tabGroupWithExtras, let extras):
-           let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra.init(
+           let groupedTabExtras = GleanMetrics.Tabs.GroupedTabExtra(
             averageTabsInAllGroups: extras?["\(EventExtraKey.averageTabsInAllGroups)"] as? Int32,
             groupsTwoTabsOnly: extras?["\(EventExtraKey.groupsWithTwoTabsOnly)"] as? Int32,
             groupsWithMoreThanTwoTab: extras?["\(EventExtraKey.groupsWithTwoMoreTab)"] as? Int32,

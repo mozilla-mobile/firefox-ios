@@ -122,8 +122,8 @@ class BottomSheetViewController: UIViewController {
 private extension BottomSheetViewController {
     func setupView() {
         if viewModel.shouldDismissForTapOutside {
-            topTapView.addGestureRecognizer(UITapGestureRecognizer.init(target: self,
-                                                                        action: #selector(self.closeTapped)))
+            topTapView.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                                   action: #selector(self.closeTapped)))
         }
         scrollView.addSubview(scrollContentView)
         sheetView.addSubview(contentView)
@@ -187,7 +187,7 @@ private extension BottomSheetViewController {
             childViewController.view.topAnchor.constraint(equalTo: childSuperView.topAnchor),
             childViewController.view.leftAnchor.constraint(equalTo: childSuperView.leftAnchor),
             childViewController.view.rightAnchor.constraint(equalTo: childSuperView.rightAnchor)
-            ])
+        ])
 
         childViewController.view.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -232,9 +232,10 @@ private extension BottomSheetViewController {
 }
 
 extension BottomSheetViewController: UIGestureRecognizerDelegate {
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                                  shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-        ) -> Bool {
+    public func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
         return false
     }
 }
