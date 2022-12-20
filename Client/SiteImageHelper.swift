@@ -59,8 +59,6 @@ class SiteImageHelper: SiteImageHelperProtocol {
                        shouldFallback: Bool,
                        metadataProvider: LPMetadataProvider = LPMetadataProvider(),
                        completion: @escaping (UIImage?) -> Void) {
-        var imageType = imageType
-
         switch imageType {
         case .heroImage:
             fetchHeroImage(for: site, metadataProvider: metadataProvider) { [weak self] image, result in
