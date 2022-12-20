@@ -86,7 +86,7 @@ class JumpBackInTests: BaseTestCase {
         // Tap on the "test3" from "Jump Back In" section
         scrollDown()
         print(app.debugDescription)
-        waitForExistence(app.collectionViews.otherElements.staticTexts["jumpBackInTitle"], timeout: TIMEOUT)
+        waitForExistence(app.cells["JumpBackInCell"].firstMatch, timeout: TIMEOUT)
         app.cells["JumpBackInCell"].staticTexts["Test3"].tap()
         if isTablet {
             waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
@@ -166,8 +166,8 @@ class JumpBackInTests: BaseTestCase {
 
         // Check the "Jump Back In Section"
         scrollDown()
-        waitForExistence(app.staticTexts["Jump Back In"])
-        waitForExistence(app.cells["JumpBackInCell"])
+//        waitForExistence(app.staticTexts["Jump Back In"])
+        waitForExistence(app.cells["JumpBackInCell"].firstMatch)
 
         // Amazon is visible in "Jump Back In"
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Amazon"])
