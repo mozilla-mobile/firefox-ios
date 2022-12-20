@@ -25,7 +25,6 @@ class RecentlySavedViewModel {
     private var recentlySavedDataAdaptor: RecentlySavedDataAdaptor
     private var recentItems = [RecentlySavedItem]()
     private var wallpaperManager: WallpaperManager
-    private var siteImageHelper: SiteImageHelperProtocol
     var headerButtonAction: ((UIButton) -> Void)?
 
     weak var delegate: HomepageDataModelDelegate?
@@ -37,7 +36,6 @@ class RecentlySavedViewModel {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
-        self.siteImageHelper = SiteImageHelper(profile: profile)
         let adaptor = RecentlySavedDataAdaptorImplementation(readingList: profile.readingList,
                                                              bookmarksHandler: profile.places)
         self.recentlySavedDataAdaptor = adaptor

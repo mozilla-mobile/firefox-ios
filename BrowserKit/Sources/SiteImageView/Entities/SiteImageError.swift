@@ -13,6 +13,7 @@ enum SiteImageError: Error, CustomStringConvertible {
     case unableToRetrieveFromCache(String)
     case noURLInCache
     case noHeroImage
+    case noImageInBundle
 
     var description: String {
         switch self {
@@ -32,6 +33,8 @@ enum SiteImageError: Error, CustomStringConvertible {
             return "The URL was not found in the cache"
         case .noHeroImage:
             return "No hero image was found"
+        case .noImageInBundle:
+            return "No image in bundle was found"
         }
     }
 }

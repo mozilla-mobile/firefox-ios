@@ -68,8 +68,9 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
     private func getFaviconImage(imageModel: SiteImageModel) async -> UIImage {
         guard let domain = imageModel.domain else {
             // If no domain, we generate the favicon from the urlStringRequest
+            let domain = ImageDomain(baseDomain: imageModel.urlStringRequest, bundleDomains: [])
             return await imageHandler.fetchFavicon(imageURL: imageModel.faviconURL,
-                                                   domain: imageModel.urlStringRequest,
+                                                   domain: domain,
                                                    expectedType: imageModel.expectedImageType)
         }
 
@@ -87,7 +88,9 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
         }
     }
 
-    private func generateDomainURL(siteURL: URL) -> String {
-        return siteURL.shortDomain ?? siteURL.shortDisplayString
+    private func generateDomainURL(siteURL: URL) -> ImageDomain {
+        let bundleDomains = BundleDomainBuilder().buildDomains(for: siteURL)
+        let baseDomain = siteURL.shortDomain ?? siteURL.shortDisplayString
+        return ImageDomain(baseDomain: baseDomain, bundleDomains: bundleDomains)
     }
 }
