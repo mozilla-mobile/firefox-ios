@@ -137,7 +137,7 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
         label.textColor = theme.colors.textPrimary
         viewModel.strokeBackgroundColor = theme.colors.iconPrimary
         faviconView.layer.borderColor = theme.colors.borderPrimary.cgColor
-        // setFavIcon applies a color background to the imageView
+        // setFavicon applies a color background to the imageView
         // if the color is clear we default to white background
         if faviconView.backgroundColor == nil || faviconView.backgroundColor == .clear {
             faviconView.backgroundColor = theme.colors.layer6
