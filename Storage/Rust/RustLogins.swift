@@ -170,7 +170,7 @@ public extension EncryptedLogin {
             record: record,
             fields: fields,
             secFields: SecureLoginFields(password: password,
-                                              username: username))
+                                         username: username))
 
         self.init(
             record: record,
