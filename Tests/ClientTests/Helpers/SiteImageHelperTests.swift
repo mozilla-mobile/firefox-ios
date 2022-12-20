@@ -223,10 +223,18 @@ class MetadataProviderFake: LPMetadataProvider {
 }
 
 class ItemProviderFake: NSItemProvider {
-    var imageResult: UIImage? = UIImage()
+    var imageResult: UIImage?
     var errorResult: Error?
     override func loadObject(ofClass aClass: NSItemProviderReading.Type, completionHandler: @escaping (NSItemProviderReading?, Error?) -> Void) -> Progress {
+        imageResult = generateFakeImage()
         completionHandler(imageResult, errorResult)
         return Progress()
+    }
+
+    private func generateFakeImage() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 50, height: 50), true, 0)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
 }
