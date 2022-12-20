@@ -24,7 +24,7 @@ struct DefaultHTMLDataRequest: HTMLDataRequest {
         return try await withCheckedThrowingContinuation { continuation in
             urlSession.dataTask(with: url) { data, _, error in
                 guard let data = data,
-                      error != nil
+                      error == nil
                 else {
                     continuation.resume(throwing: SiteImageError.invalidHTML)
                     return
