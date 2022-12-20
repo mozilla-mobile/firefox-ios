@@ -7,6 +7,7 @@ import DesignSystem
 import UIComponents
 import Combine
 
+@available(iOS 14, *)
 public class ShortcutView: UIView {
     public var contextMenuIsDisplayed = false
     public private(set) var viewModel: ShortcutViewModel
@@ -101,6 +102,7 @@ public class ShortcutView: UIView {
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
         self.addGestureRecognizer(tap)
+        self.addInteraction(UIPointerInteraction(delegate: self))
 
         addSubview(outerView)
 
@@ -134,6 +136,17 @@ public class ShortcutView: UIView {
 
     @objc private func didTap() {
         viewModel.send(action: .tapped)
+    }
+}
+
+@available(iOS 14, *)
+extension ShortcutView: UIPointerInteractionDelegate {
+    public func pointerInteraction(_ interaction: UIPointerInteraction, styleFor region: UIPointerRegion) -> UIPointerStyle? {
+        interaction
+            .view
+            .map { UITargetedPreview(view: $0) }
+            .map { UIPointerEffect.lift($0) }
+            .map { UIPointerStyle(effect: $0) }
     }
 }
 

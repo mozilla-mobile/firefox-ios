@@ -16,14 +16,15 @@ class URLBar: UIView {
     fileprivate var viewModel: URLBarViewModel
     private var cancellables: Set<AnyCancellable> = []
 
-    private lazy var cancelButton: InsetButton = {
-        let button = InsetButton()
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton()
         button.isHidden = true
         button.alpha = 0
         button.setImage(.cancel, for: .normal)
         button.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         button.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         button.accessibilityIdentifier = "URLBar.cancelButton"
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -35,6 +36,7 @@ class URLBar: UIView {
         button.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -104,6 +106,7 @@ class URLBar: UIView {
         button.setImage(.delete, for: .normal)
         button.accessibilityIdentifier = "URLBar.deleteButton"
         button.isEnabled = false
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -121,6 +124,7 @@ class URLBar: UIView {
         button.accessibilityIdentifier = "HomeView.settingsButton"
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setContentHuggingPriority(.required, for: .horizontal)
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -130,6 +134,7 @@ class URLBar: UIView {
         button.setImage(.backActive, for: .normal)
         button.accessibilityLabel = UIConstants.strings.browserBack
         button.isEnabled = false
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -139,6 +144,7 @@ class URLBar: UIView {
         button.setImage(.forwardActive, for: .normal)
         button.accessibilityLabel = UIConstants.strings.browserForward
         button.isEnabled = false
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
@@ -148,6 +154,7 @@ class URLBar: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(.refreshMenu, for: .normal)
         button.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
+        button.isPointerInteractionEnabled = true
         return button
     }()
 
