@@ -67,7 +67,7 @@ class JumpBackInTests: BaseTestCase {
                 waitUntilPageLoad()
             }
         }
-
+        waitForTabsButton()
         // Open a new tab
         navigator.goto(TabTray)
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
@@ -75,7 +75,7 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // Tap on the "test3" from "Jump Back In" section
-        scrollDown()
+//        scrollDown()
         waitForExistence(app.staticTexts["Jump Back In"])
         app.cells["JumpBackInCell"].staticTexts["Test3"].tap()
         if isTablet {
@@ -98,7 +98,7 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // Twitter tab is visible in the "Jump Back In" section
-        scrollDown()
+//        scrollDown()
         waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])

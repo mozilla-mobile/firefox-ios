@@ -12,12 +12,12 @@ stages:
     - configure_build: {}
   stage_2:
     workflows:
-    - build_and_test_1_SmokeTest2: {}
-    - build_and_test_2_SmokeTest: {}
+    #- build_and_test_1_SmokeTest2: {}
+    #- build_and_test_2_SmokeTest: {}
     - build_and_test_3_SmokeTest3: {}
-    - build_and_test_4_SmokeTest4: {}
-    - build_and_test_5_UnitTest: {}
-    - just_build_fennec_to_get_warnings: {}
+    #- build_and_test_4_SmokeTest4: {}
+    #- build_and_test_5_UnitTest: {}
+    #- just_build_fennec_to_get_warnings: {}
 workflows:
   configure_build:
     before_run:
