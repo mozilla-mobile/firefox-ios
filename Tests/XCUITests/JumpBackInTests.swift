@@ -13,7 +13,6 @@ class JumpBackInTests: BaseTestCase {
     }
 
     func scrollDown() {
-        waitForExistence(app.staticTexts["Switch Your Default Browser"], timeout: TIMEOUT)
         if !isTablet {
             app.collectionViews["FxCollectionView"].swipeUp()
             while app.staticTexts["Switch Your Default Browser"].exists || app.buttons["Learn How"].exists {
@@ -45,8 +44,7 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // "Jump Back In" section is displayed
-        waitForExistence(app.staticTexts["Jump Back In"])
-
+        waitForExistence(app.cells["JumpBackInCell"].firstMatch, timeout: TIMEOUT)
         // The contextual hint box is not displayed consistently, so
         // I don't test for its existence.
     }
@@ -59,8 +57,7 @@ class JumpBackInTests: BaseTestCase {
         app.navigationBars.buttons["Done"].tap()
         navigator.nowAt(NewTabScreen)
 
-        // Create 3 groups in tab tray
-//        let groups = ["test1", "test2", "test3"]
+        // Create 1 group in tab tray
         let groups = ["test3"]
         for group in groups {
             for _ in 1...3 {
@@ -72,20 +69,15 @@ class JumpBackInTests: BaseTestCase {
             }
         }
         waitForTabsButton()
-        print("Before going to Tab Tray")
         // Open a new tab
         navigator.goto(TabTray)
-        print("Last time in tab Tray")
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        print("Before closing url-bar")
         closeKeyboard()
         waitForTabsButton()
-        print("On homescreen")
 
         // Tap on the "test3" from "Jump Back In" section
         scrollDown()
-        print(app.debugDescription)
         waitForExistence(app.cells["JumpBackInCell"].firstMatch, timeout: TIMEOUT)
         app.cells["JumpBackInCell"].staticTexts["Test3"].tap()
         if isTablet {
@@ -109,8 +101,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Twitter tab is visible in the "Jump Back In" section
         scrollDown()
-//        waitForExistence(app.staticTexts["Jump Back In"])
-        waitForExistence(app.cells["JumpBackInCell"])
+        waitForExistence(app.cells["JumpBackInCell"].firstMatch)
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
 
         // Open private browsing
@@ -129,8 +120,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Twitter should be in "Jump Back In"
         scrollDown()
-//        waitForExistence(app.staticTexts["Jump Back In"])
-        waitForExistence(app.cells["JumpBackInCell"])
+        waitForExistence(app.cells["JumpBackInCell"].firstMatch)
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
         waitForNoExistence(app.cells["JumpBackInCell"].staticTexts["YouTube"])
 
@@ -145,8 +135,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Amazon and Tiwtter are visible in the "Jump Back In" section
         scrollDown()
-//        waitForExistence(app.staticTexts["Jump Back In"])
-        waitForExistence(app.cells["JumpBackInCell"])
+        waitForExistence(app.cells["JumpBackInCell"].firstMatch)
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Amazon"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
         waitForNoExistence(app.cells["JumpBackInCell"].staticTexts["YouTube"])
@@ -166,7 +155,6 @@ class JumpBackInTests: BaseTestCase {
 
         // Check the "Jump Back In Section"
         scrollDown()
-//        waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"].firstMatch)
 
         // Amazon is visible in "Jump Back In"
@@ -188,8 +176,7 @@ class JumpBackInTests: BaseTestCase {
 
         // The "Jump Back In" section is still here with twitter listed
         scrollDown()
-        waitForExistence(app.staticTexts["Jump Back In"])
-        waitForExistence(app.cells["JumpBackInCell"])
+        waitForExistence(app.cells["JumpBackInCell"].firstMatch)
         // FXIOS-5448 - Amazon should not be listed because we've closed the Amazon tab
         // waitForNoExistence(app.cells["JumpBackInCell"].staticTexts["Amazon"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
