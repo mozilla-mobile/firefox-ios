@@ -86,16 +86,16 @@ features:
         description: >
           If true, we show the new Onboarding screen when the user for v106 version.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value: {
-          "upgrade-flow": true,
+          "upgrade-flow": false,
           "first-run-flow": true
         }
       - channel: developer
         value: {
-          "upgrade-flow": true,
+          "upgrade-flow": false,
           "first-run-flow": true
         }
   spotlight-search:
@@ -287,15 +287,8 @@ features:
         type: Map<ContextualHint, Boolean>
         default:
         {
-          "jump-back-in-synced-tab-contextual-hint": false,
+          "jump-back-in-synced-tab-contextual-hint": true,
           "toolbar-hint": false
-        }
-      hint-copy:
-        description: This set allows us to experiment with changing hint descriptions.
-        type: HintCopy
-        default: {
-          "jump-back-in": false,
-          "toolbar": false
         }
     defaults:
       - channel: developer
@@ -303,10 +296,6 @@ features:
           "features-enabled": {
             "jump-back-in-synced-tab-contextual-hint": true,
             "toolbar-hint": true
-          },
-          "hint-copy": {
-            "jump-back-in": true,
-            "toolbar": true
           }
         }
       - channel: beta
@@ -314,10 +303,6 @@ features:
           "features-enabled": {
             "jump-back-in-synced-tab-contextual-hint": true,
             "toolbar-hint": true
-          },
-          "hint-copy": {
-            "jump-back-in": true,
-            "toolbar": true
           }
         }
 
@@ -437,7 +422,7 @@ features:
       onboarding-sheet:
         description: This property defines whether the wallpaper onboarding is shown or not
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value: {
@@ -445,7 +430,7 @@ features:
             "status": true,
             "version": v1,
           },
-          "onboarding-sheet": false
+          "onboarding-sheet": true
         }
       - channel: developer
         value: {
@@ -518,18 +503,6 @@ types:
         status:
           type: Boolean
           description: Whether or not the feature is enabled
-          default: false
-
-    HintCopy:
-      description: The hint and its associated description text.
-      fields:
-        jump-back-in:
-          description: If true, we show the new copy for the hint description.
-          type: Boolean
-          default: false
-        toolbar:
-          description: If true, we show the new copy for the hint description.
-          type: Boolean
           default: false
 
     AwesomeBar:

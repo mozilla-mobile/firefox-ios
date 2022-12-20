@@ -34,10 +34,6 @@ final class NimbusFeatureFlagLayer {
         case .contextualHintForJumpBackInSyncedTab:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
-        case .copyForJumpBackIn,
-                .copyForToolbar:
-            return checkHintCopyFeature(for: featureID, from: nimbus)
-
         case .jumpBackInSyncedTab:
             return checkNimbusForJumpBackInSyncedTabFeature(using: nimbus)
 
@@ -132,19 +128,6 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
-    }
-
-    private func checkHintCopyFeature(
-        for featureID: NimbusFeatureFlagID,
-        from nimbus: FxNimbus
-    ) -> Bool {
-        let config = nimbus.features.contextualHintFeature.value().hintCopy
-
-        switch featureID {
-        case .copyForJumpBackIn: return config.jumpBackIn
-        case .copyForToolbar: return config.toolbar
-        default: return false
-        }
     }
 
     private func checkNimbusForJumpBackInSyncedTabFeature(using nimbus: FxNimbus) -> Bool {
