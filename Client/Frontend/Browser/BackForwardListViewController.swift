@@ -16,7 +16,6 @@ class BackForwardListViewController: UIViewController,
                                      UITableViewDelegate,
                                      UIGestureRecognizerDelegate,
                                      Themeable {
-    private let BackForwardListCellIdentifier = "BackForwardListViewController"
     private var profile: Profile
     private lazy var sites = [String: Site]()
     private var dismissing = false
@@ -36,7 +35,8 @@ class BackForwardListViewController: UIViewController,
         tableView.dataSource = self
         tableView.delegate = self
         tableView.alwaysBounceVertical = false
-        tableView.register(BackForwardTableViewCell.self, forCellReuseIdentifier: self.BackForwardListCellIdentifier)
+        tableView.register(BackForwardTableViewCell.self,
+                           forCellReuseIdentifier: BackForwardTableViewCell.cellIdentifier)
         tableView.showsHorizontalScrollIndicator = false
     }
 
@@ -266,7 +266,11 @@ class BackForwardListViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: BackForwardListCellIdentifier, for: indexPath) as! BackForwardTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BackForwardTableViewCell.cellIdentifier,
+                                                       for: indexPath) as? BackForwardTableViewCell
+        else {
+            return UITableViewCell()
+        }
 
         let item = listData[indexPath.item]
         let urlString = { () -> String in

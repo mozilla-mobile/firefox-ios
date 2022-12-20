@@ -18,7 +18,7 @@ struct BackForwardCellViewModel {
     }
 }
 
-class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
+class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let faviconWidth: CGFloat = 29
         static let faviconPadding: CGFloat = 20
@@ -113,7 +113,7 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
 
         faviconView.setFavicon(forSite: viewModel.site) { [weak self] in
             if InternalURL.isValid(url: viewModel.site.tileURL) {
-                self?.faviconView.image = UIImage(named: ImageIdentifiers.firefoxFavIcon)
+                self?.faviconView.image = UIImage(named: ImageIdentifiers.firefoxFavicon)
                 self?.faviconView.image = self?.faviconView.image?.createScaled(UX.iconSize)
                 return
             }
