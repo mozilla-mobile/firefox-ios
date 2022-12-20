@@ -141,11 +141,12 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             guard let self = self else { return }
             self.loadingView.isHidden = self.viewModel.state != .loading
 
+            /* Ecosia: MOB-1703: don't toggle showMore on model change
             // Show either 10, 8 or 6 records initially depending on the screen size.
             let height = max(self.view.frame.width, self.view.frame.height)
             let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
             self.showMoreButtonEnabled = self.viewModel.siteRecords.count > numberOfInitialRecords
-
+             */
             self.searchResultsViewController.reloadData()
             self.tableView.reloadData()
         }
@@ -313,7 +314,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         case .sites:
             return UITableView.automaticDimension
         case .showMore:
-            return 0
+            return 10
         }
     }
 
