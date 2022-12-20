@@ -232,10 +232,7 @@ class ItemProviderFake: NSItemProvider {
     }
 
     private func generateFakeImage() -> UIImage? {
-        //let rect = CGRectMake(0, 0, 50, 50)
-
         UIGraphicsBeginImageContextWithOptions(CGSize(width: 50, height: 50), true, 0)
-        //UIRectFill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
