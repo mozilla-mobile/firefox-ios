@@ -34,26 +34,26 @@ enum DictData: String {
     }
 
     static let entitylist = """
-{
-"license": "Copyright 2010-2020 Disconnect, Inc.",
-"entities":
     {
-        "2leep.com": { "properties": [ "2leep.com" ], "resources": [ "2leep.com" ] },
-        "adnologies": { "properties": [ "adnologies.com", "heias.com" ], "resources": [ "adnologies.com", "heias.com" ] },
-        "365Media": { "properties": [ "aggregateintelligence.com" ], "resources": [ "365media.com", "aggregateintelligence.com" ] },
-        "Yandex": { "properties": [ "kinopoisk.ru", "moikrug.ru", "yadi.sk", "yandex.by", "yandex.com", "yandex.com.tr", "yandex.ru", "yandex.st", "yandex.ua" ], "resources": [ "api-maps.yandex.ru", "moikrug.ru", "web-visor.com", "webvisor.org", "yandex.by", "yandex.com", "yandex.com.tr", "yandex.ru", "yandex.st", "yandex.ua" ] }
+    "license": "Copyright 2010-2020 Disconnect, Inc.",
+    "entities":
+        {
+            "2leep.com": { "properties": [ "2leep.com" ], "resources": [ "2leep.com" ] },
+            "adnologies": { "properties": [ "adnologies.com", "heias.com" ], "resources": [ "adnologies.com", "heias.com" ] },
+            "365Media": { "properties": [ "aggregateintelligence.com" ], "resources": [ "365media.com", "aggregateintelligence.com" ] },
+            "Yandex": { "properties": [ "kinopoisk.ru", "moikrug.ru", "yadi.sk", "yandex.by", "yandex.com", "yandex.com.tr", "yandex.ru", "yandex.st", "yandex.ua" ], "resources": [ "api-maps.yandex.ru", "moikrug.ru", "web-visor.com", "webvisor.org", "yandex.by", "yandex.com", "yandex.com.tr", "yandex.ru", "yandex.st", "yandex.ua" ] }
+        }
     }
-}
-"""
+    """
 
     static let emptyEntitylist = """
-{
-"license": "Copyright 2010-2020 Disconnect, Inc.",
-"entities":
     {
+    "license": "Copyright 2010-2020 Disconnect, Inc.",
+    "entities":
+        {
+        }
     }
-}
-"""
+    """
 }
 
 // MARK: - ListData
@@ -70,12 +70,12 @@ enum ListData: String {
     }
 
     static let adsTrackDigest256 = """
-[
-  "2leep.com",
-  "adnologies.com",
-  "heias.com",
-  "365media.com",
-  "adfox.yandex.ru"
-]
-"""
+    [
+      "2leep.com",
+      "adnologies.com",
+      "heias.com",
+      "365media.com",
+      "adfox.yandex.ru"
+    ]
+    """
 }
