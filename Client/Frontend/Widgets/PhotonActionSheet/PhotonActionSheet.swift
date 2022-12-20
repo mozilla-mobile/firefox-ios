@@ -52,6 +52,11 @@ class PhotonActionSheet: UIViewController, Themeable {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Photon.closeButton
     }
 
+    private lazy var blurredImageView: UIImageView = .build { image in
+    }
+
+    private var windowScreenshot: UIImage?
+
     var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
         didSet {
             transitioningDelegate = photonTransitionDelegate
@@ -72,6 +77,11 @@ class PhotonActionSheet: UIViewController, Themeable {
         modalPresentationStyle = viewModel.modalStyle
         closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
         tableView.estimatedRowHeight = UX.rowHeight
+
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+              let screenshot = sceneDelegate.window?.screenshot() {
+            windowScreenshot = screenshot
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -178,6 +188,8 @@ class PhotonActionSheet: UIViewController, Themeable {
             setupCenteredStyle()
         }
 
+        view.insertSubview(blurredImageView, belowSubview: tableView)
+
         tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
         tableViewHeightConstraint?.isActive = true
         NSLayoutConstraint.activate(constraints)
@@ -226,8 +238,6 @@ class PhotonActionSheet: UIViewController, Themeable {
             tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
         ]
         constraints.append(contentsOf: tableViewConstraints)
-
-        applyBackgroundBlur()
     }
 
     // The width used for the .centered and .bottom style
@@ -244,20 +254,24 @@ class PhotonActionSheet: UIViewController, Themeable {
     }
 
     private func applyBackgroundBlur() {
-        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
-              let screenshot = sceneDelegate.window?.screenshot() else { return }
+        guard let screenshot = windowScreenshot else { return }
 
+        let blurType: BlurType = UIAccessibility.isReduceTransparencyEnabled ? NOBLUR : BOXFILTER
         let blurredImage = screenshot.applyBlur(withRadius: 5,
-                                                blurType: BOXFILTER,
+                                                blurType: blurType,
                                                 tintColor: UIColor.black.withAlphaComponent(0.2),
                                                 saturationDeltaFactor: 1.8,
                                                 maskImage: nil)
-        let imageView = UIImageView(image: blurredImage)
-        view.insertSubview(imageView, belowSubview: tableView)
+        blurredImageView.image = blurredImage
     }
 
     func applyTheme() {
         let theme = themeManager.currentTheme
+
+        if viewModel.presentationStyle != .bottom, viewModel.presentationStyle != .popover {
+            // update background blur
+            applyBackgroundBlur()
+        }
 
         // In a popover the popover provides the blur background
         if viewModel.presentationStyle == .popover {
