@@ -1,12 +1,12 @@
 /* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
-"Alerts.RestoreTabs.Button.No.v109" = "ਨਹੀਂ";
+"Alerts.RestoreTabs.Button.No.v109" = "Ոչ";
 
 /* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
-"Alerts.RestoreTabs.Button.Yes.v109" = "ਟੈਬਾਂ ਨੂੰ ਬਹਾਲ ਕਰੋ";
+"Alerts.RestoreTabs.Button.Yes.v109" = "Վերականգնել ներդիրները";
 
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Message.v109" = "ਉਸ ਲਈ ਅਫ਼਼ਸੋਸ ਹੈ। ਟੈਬਾਂ ਨੂੰ ਬਹਾਲ ਕਰਨ ਨਾਲ, ਜਿੱਥੇ ਤੁਸੀ ਛੱਡਿਆ ਸੀ, ਓਥੋਂ ਸ਼ੁਰੂ ਕਰਦੇ ਹੋ।";
+"Alerts.RestoreTabs.Message.v109" = "Ցավում եմ. Վերականգնեք ներդիրները, որպեսզի շարունակեք այնտեղ, որտեղ թողել եք:";
 
 /* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
-"Alerts.RestoreTabs.Title.v109.v2" = "%@ ਕਰੈਸ਼ ਹੋਇਆ। ਆਪਣੀਆਂ ਟੈਬਾਂ ਬਹਾਲ ਕਰਨੀਆਂ ਹਨ?";
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ վթարվել է: Վերականգնե՞լ ձեր ներդիրները:";
 

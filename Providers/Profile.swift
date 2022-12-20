@@ -32,6 +32,7 @@ public protocol SyncManager {
 
     func endTimedSyncs()
     func applicationDidBecomeActive()
+    func applicationDidEnterBackground()
 
     @discardableResult func onRemovedAccount() -> Success
     @discardableResult func onAddedAccount() -> Success
@@ -777,7 +778,7 @@ open class BrowserProfile: Profile {
         }
 
         public func applicationDidBecomeActive() {
-            self.backgrounded = false
+            backgrounded = false
 
             guard self.profile.hasSyncableAccount() else { return }
 
@@ -796,6 +797,10 @@ open class BrowserProfile: Profile {
             if since > SyncConstants.SyncOnForegroundMinimumDelayMillis {
                 self.syncEverythingSoon()
             }
+        }
+
+        public func applicationDidEnterBackground() {
+            backgrounded = true
         }
 
         public var isSyncing: Bool {
@@ -834,7 +839,7 @@ open class BrowserProfile: Profile {
                 }
             #endif
 
-            // Dont notify if we are performing a sync in the background. This prevents more db access from happening
+            // Don't notify if we are performing a sync in the background. This prevents more db access from happening
             if !self.backgrounded {
                 notifySyncing(notification: .ProfileDidFinishSyncing)
             }

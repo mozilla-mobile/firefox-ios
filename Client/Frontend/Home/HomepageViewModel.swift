@@ -14,7 +14,7 @@ protocol HomepageDataModelDelegate: AnyObject {
 
 class HomepageViewModel: FeatureFlaggable {
     struct UX {
-        static let spacingBetweenSections: CGFloat = 32
+        static let spacingBetweenSections: CGFloat = 62
         static let standardInset: CGFloat = 18
         static let iPadInset: CGFloat = 50
         static let iPadTopSiteInset: CGFloat = 25
@@ -28,6 +28,7 @@ class HomepageViewModel: FeatureFlaggable {
         static let generalCornerRadius: CGFloat = 8
         static let generalBorderWidth: CGFloat = 0.5
         static let generalIconCornerRadius: CGFloat = 4
+        static let fallbackFaviconSize = CGSize(width: 36, height: 36)
 
         static func leadingInset(traitCollection: UITraitCollection,
                                  interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) -> CGFloat {

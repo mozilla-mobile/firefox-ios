@@ -8,4 +8,12 @@ public struct HeroImageViewColor {
     let faviconTintColor: UIColor
     let faviconBackgroundColor: UIColor
     let faviconBorderColor: UIColor
+
+    public init(faviconTintColor: UIColor,
+                faviconBackgroundColor: UIColor,
+                faviconBorderColor: UIColor) {
+        self.faviconTintColor = faviconTintColor
+        self.faviconBackgroundColor = faviconBackgroundColor
+        self.faviconBorderColor = faviconBorderColor
+    }
 }

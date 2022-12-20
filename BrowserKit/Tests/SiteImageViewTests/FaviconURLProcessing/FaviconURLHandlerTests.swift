@@ -36,7 +36,7 @@ class FaviconURLHandlerTests: XCTestCase {
             XCTAssertEqual(cacheURLCount, 0, "cache url should not have been called")
             XCTAssertEqual(mockFetcher.fetchFaviconURLCalledCount, 0, "fetch favicon url should not have been called")
             XCTAssertEqual(site.faviconURL?.absoluteString, "www.firefox.com/image")
-            XCTAssertEqual(site.siteURL.absoluteString, "www.firefox.com")
+            XCTAssertEqual(site.siteURL?.absoluteString, "www.firefox.com")
         } catch {
             XCTFail("failed to get favicon url from cache")
         }
@@ -55,7 +55,7 @@ class FaviconURLHandlerTests: XCTestCase {
             XCTAssertEqual(cacheURLCount, 1, "cache url should have been called")
             XCTAssertEqual(mockFetcher.fetchFaviconURLCalledCount, 1, "fetch favicon url should have been called")
             XCTAssertEqual(site.faviconURL?.absoluteString, "www.firefox.com/image")
-            XCTAssertEqual(site.siteURL.absoluteString, "www.firefox.com")
+            XCTAssertEqual(site.siteURL?.absoluteString, "www.firefox.com")
         } catch {
             XCTFail("failed to get fetch favicon")
         }
@@ -78,6 +78,7 @@ class FaviconURLHandlerTests: XCTestCase {
     private func createSiteImageModel(siteURL: String) -> SiteImageModel {
         return SiteImageModel(id: UUID(),
                               expectedImageType: .favicon,
+                              urlStringRequest: siteURL,
                               siteURL: URL(string: siteURL)!,
                               domain: "domain",
                               faviconURL: nil,

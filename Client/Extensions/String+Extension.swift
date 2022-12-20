@@ -15,7 +15,7 @@ extension String {
 
         var boldFont = UIFont.boldSystemFont(ofSize: font.pointSize)
 
-        // if we have a text syle, we are using dynamic text so the attributed text should do too
+        // if we have a text style, we are using dynamic text so the attributed text should do too
         if let textStyle = font.fontDescriptor.fontAttributes[.textStyle] as? UIFont.TextStyle {
             boldFont = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: textStyle,
                                                                          size: font.pointSize)

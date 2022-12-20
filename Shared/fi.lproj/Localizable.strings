@@ -1520,7 +1520,7 @@
 "Settings.SendUsage.Link" = "Lue lisää.";
 
 /* A short description that explains why mozilla collects usage data. */
-"Settings.SendUsage.Message" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia ja auttavat kehittämään Firefoxia.";
+"Settings.SendUsage.Message" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia ja auttavat Firefoxin kehittämisessä.";
 
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Lähetä käyttötilastoja";
