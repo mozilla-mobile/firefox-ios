@@ -43,7 +43,11 @@ class ToolbarTests: BaseTestCase {
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
-        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].isEnabled)
+        if iPad() {
+            XCTAssertTrue(app.buttons["Reload"].isEnabled)
+        } else {
+            XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].isEnabled)
+        }
 
         navigator.openURL(website2)
         waitUntilPageLoad()
