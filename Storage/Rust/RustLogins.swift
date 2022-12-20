@@ -35,9 +35,9 @@ public extension EncryptedLogin {
         let httpRealm = protectionSpace.realm
         let username = credentials.user ?? ""
         let password = credentials.password ?? ""
-        let fields = LoginFields.init(origin: hostname, httpRealm: httpRealm, formActionOrigin: "", usernameField: "", passwordField: "")
-        let record = RecordFields.init(id: "", timesUsed: 0, timeCreated: 0, timeLastUsed: 0, timePasswordChanged: 0)
-        let login = Login.init(record: record, fields: fields, secFields: SecureLoginFields.init(password: password, username: username))
+        let fields = LoginFields(origin: hostname, httpRealm: httpRealm, formActionOrigin: "", usernameField: "", passwordField: "")
+        let record = RecordFields(id: "", timesUsed: 0, timeCreated: 0, timeLastUsed: 0, timePasswordChanged: 0)
+        let login = Login(record: record, fields: fields, secFields: SecureLoginFields(password: password, username: username))
 
         self.init(
             record: record,
@@ -153,24 +153,24 @@ public extension EncryptedLogin {
         let password = dict["password"] as? String ?? ""
         let username = dict["username"] as? String ?? ""
 
-        let fields = LoginFields.init(
+        let fields = LoginFields(
             origin: dict["hostname"] as? String ?? "",
             httpRealm: dict["httpRealm"] as? String,
             formActionOrigin: dict["formSubmitUrl"] as? String,
             usernameField: dict["usernameField"] as? String ?? "",
             passwordField: dict["passwordField"] as? String ?? "")
 
-        let record = RecordFields.init(
+        let record = RecordFields(
             id: dict["id"] as? String ?? "",
             timesUsed: (dict["timesUsed"] as? Int64) ?? 0,
             timeCreated: (dict["timeCreated"] as? Int64) ?? 0,
             timeLastUsed: (dict["timeLastUsed"] as? Int64) ?? 0,
             timePasswordChanged: (dict["timePasswordChanged"] as? Int64) ?? 0)
-        let login = Login.init(
+        let login = Login(
             record: record,
             fields: fields,
-            secFields: SecureLoginFields.init(password: password,
-                                              username: username))
+            secFields: SecureLoginFields(password: password,
+                                         username: username))
 
         self.init(
             record: record,
@@ -248,11 +248,11 @@ public extension LoginEntry {
         let httpRealm = protectionSpace.realm
         let username = credentials.user
         let password = credentials.password
-        let fields = LoginFields.init(origin: hostname, httpRealm: httpRealm, formActionOrigin: "", usernameField: "", passwordField: "")
+        let fields = LoginFields(origin: hostname, httpRealm: httpRealm, formActionOrigin: "", usernameField: "", passwordField: "")
 
         self.init(
             fields: fields,
-            secFields: SecureLoginFields.init(password: password ?? "", username: username ?? "")
+            secFields: SecureLoginFields(password: password ?? "", username: username ?? "")
         )
     }
 
@@ -260,7 +260,7 @@ public extension LoginEntry {
         let password = dict["password"] as? String ?? ""
         let username = dict["username"] as? String ?? ""
 
-        let fields = LoginFields.init(
+        let fields = LoginFields(
             origin: dict["hostname"] as? String ?? "",
             httpRealm: dict["httpRealm"] as? String,
             formActionOrigin: dict["formSubmitUrl"] as? String,
@@ -269,7 +269,7 @@ public extension LoginEntry {
 
         self.init(
             fields: fields,
-            secFields: SecureLoginFields.init(password: password, username: username)
+            secFields: SecureLoginFields(password: password, username: username)
         )
     }
 
