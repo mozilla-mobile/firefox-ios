@@ -48,7 +48,6 @@ class BackForwardListViewController: UIViewController,
     var listData = [WKBackForwardListItem]()
 
     var tableHeight: CGFloat {
-        assert(Thread.isMainThread, "tableHeight interacts with UIKit components - cannot call from background thread.")
         return min(BackForwardViewUX.RowHeight * CGFloat(listData.count), self.view.frame.height/2)
     }
 
@@ -78,8 +77,12 @@ class BackForwardListViewController: UIViewController,
 
         listenForThemeChange()
         setupLayout()
+        applyTheme()
         scrollTableViewToIndex(currentRow)
         setupDismissTap()
+
+        setupNotifications(forObserver: self,
+                           observing: [UIAccessibility.reduceTransparencyStatusDidChangeNotification])
     }
 
     private func setupLayout() {
@@ -94,6 +97,7 @@ class BackForwardListViewController: UIViewController,
             tableViewHeightAnchor,
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+
             shadow.leftAnchor.constraint(equalTo: view.leftAnchor),
             shadow.rightAnchor.constraint(equalTo: view.rightAnchor),
         ])
@@ -107,8 +111,10 @@ class BackForwardListViewController: UIViewController,
         if UIAccessibility.isReduceTransparencyEnabled {
             // Remove the visual effect and the background alpha
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
-            tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
+            tableView.backgroundView?.backgroundColor = theme.colors.layer1
+            tableView.backgroundColor = theme.colors.layer1
         } else {
+            tableView.backgroundColor = .clear
             let blurEffect = UIBlurEffect(style: .regular)
             if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
                 visualEffectView.effect = blurEffect
@@ -249,6 +255,11 @@ class BackForwardListViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    @objc func reduceTransparencyChanged() {
+        // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
+        applyTheme()
+    }
+
     // MARK: - Table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return listData.count
@@ -280,7 +291,7 @@ class BackForwardListViewController: UIViewController,
                                                  isCurrentTab: listData[indexPath.item] == currentItem,
                                                  strokeBackgroundColor: themeManager.currentTheme.colors.iconPrimary)
 
-        cell.configure(viewModel: viewModel)
+        cell.configure(viewModel: viewModel, theme: themeManager.currentTheme)
         return cell
     }
 
@@ -291,5 +302,15 @@ class BackForwardListViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, heightForRowAt  indexPath: IndexPath) -> CGFloat {
         return BackForwardViewUX.RowHeight
+    }
+}
+
+extension BackForwardListViewController: Notifiable {
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIAccessibility.reduceTransparencyStatusDidChangeNotification:
+            reduceTransparencyChanged()
+        default: break
+        }
     }
 }
