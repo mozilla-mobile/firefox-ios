@@ -77,7 +77,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: viewModel.leadingInset),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: moreButton.leadingAnchor, constant: -UX.inBetweenSpace),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace)
+            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.bottomSpace, priority: .init(999))
         ])
 
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)

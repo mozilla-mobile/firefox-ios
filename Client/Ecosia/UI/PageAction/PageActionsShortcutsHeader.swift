@@ -43,7 +43,7 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
 
         NSLayoutConstraint.activate([
             mainView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
-            mainView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            mainView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8, priority: .defaultHigh),
             mainView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             mainView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
