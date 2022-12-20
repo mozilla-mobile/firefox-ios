@@ -104,13 +104,22 @@ class BackForwardListViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.currentTheme
 
-        tableView.backgroundColor = theme.colors.layer1.withAlphaComponent(0.4)
-        let blurEffect = UIBlurEffect(style: .extraLight)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        tableView.backgroundView = blurEffectView
-//        view.backgroundColor = UIColor(white: 0, alpha: 0.2)
-        view.backgroundColor = theme.colors.layer2.withAlphaComponent(0.2)
-        shadow.backgroundColor = .clear
+        if UIAccessibility.isReduceTransparencyEnabled {
+            // Remove the visual effect and the background alpha
+            (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
+            tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
+        } else {
+            let blurEffect = UIBlurEffect(style: .regular)
+            if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
+                visualEffectView.effect = blurEffect
+            } else {
+                let blurEffectView = UIVisualEffectView(effect: blurEffect)
+                tableView.backgroundView = blurEffectView
+            }
+            tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
+        }
+
+        shadow.backgroundColor = theme.colors.shadowDefault
     }
 
     func loadSitesFromProfile() {
@@ -259,7 +268,7 @@ class BackForwardListViewController: UIViewController,
 
         let isAboutHomeURL = InternalURL(item.url)?.isAboutHomeURL ?? false
         var site: Site
-        if !isAboutHomeURL {
+        if isAboutHomeURL {
             site = Site(url: item.url.absoluteString, title: .FirefoxHomePage)
         } else {
             site = sites[urlString] ?? Site(url: urlString, title: item.title ?? "")
@@ -268,9 +277,10 @@ class BackForwardListViewController: UIViewController,
         let viewModel = BackForwardCellViewModel(site: site,
                                                  connectingForwards: indexPath.item != 0,
                                                  connectingBackwards: indexPath.item != listData.count-1,
-                                                 isCurrentTab: listData[indexPath.item] == currentItem)
+                                                 isCurrentTab: listData[indexPath.item] == currentItem,
+                                                 strokeBackgroundColor: themeManager.currentTheme.colors.iconPrimary)
 
-        cell.configure(viewModel: viewModel, theme: themeManager.currentTheme)
+        cell.configure(viewModel: viewModel)
         return cell
     }
 

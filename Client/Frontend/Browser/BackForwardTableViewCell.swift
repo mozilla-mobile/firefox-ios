@@ -10,8 +10,8 @@ struct BackForwardCellViewModel {
     var site: Site
     var connectingForwards: Bool
     var connectingBackwards: Bool
-    var strokeBackgroundColor = UIColor.white
     var isCurrentTab: Bool
+    var strokeBackgroundColor: UIColor
 
     var cellTittle: String {
         return !site.title.isEmpty ? site.title : site.url
@@ -37,9 +37,7 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
         imageView.contentMode = .center
     }
 
-    lazy var label: UILabel = .build { label in
-        label.font = label.font.withSize(UX.fontSize)
-    }
+    lazy var label: UILabel = .build { _ in }
 
     var viewModel: BackForwardCellViewModel!
 
@@ -108,15 +106,15 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        label.font = UIFont.systemFont(ofSize: UX.fontSize)
+        label.text = nil
     }
 
-    func configure(viewModel: BackForwardCellViewModel, theme: Theme) {
+    func configure(viewModel: BackForwardCellViewModel) {
         self.viewModel = viewModel
 
         faviconView.setFavicon(forSite: viewModel.site) { [weak self] in
             if InternalURL.isValid(url: viewModel.site.tileURL) {
-                self?.faviconView.image = UIImage(named: "faviconFox")
+                self?.faviconView.image = UIImage(named: ImageIdentifiers.firefoxFavIcon)
                 self?.faviconView.image = self?.faviconView.image?.createScaled(UX.iconSize)
                 return
             }
@@ -125,12 +123,17 @@ class BackForwardTableViewCell: UITableViewCell, ThemeApplicable {
         }
 
         label.text = viewModel.cellTittle
+        label.font = viewModel.isCurrentTab ? UIFont.boldSystemFont(ofSize: UX.fontSize) : UIFont.systemFont(ofSize: UX.fontSize)
         setNeedsLayout()
-        applyTheme(theme: theme)
     }
 
     func applyTheme(theme: Theme) {
         label.textColor = theme.colors.textPrimary
-        viewModel.strokeBackgroundColor = theme.colors.layer5
+        viewModel.strokeBackgroundColor = theme.colors.iconPrimary
+        // setFavIcon applies a color background to the imageView
+        // if the color is clear we default to white background
+        if faviconView.backgroundColor == nil {
+            faviconView.backgroundColor = theme.colors.layer6
+        }
     }
 }
