@@ -19,7 +19,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
     private let fileManager: URLCacheFileManager
     private var urlCache = [String: FaviconURL]()
     private var preserveTask: Task<Void, Never>?
-    private let preserveDebounceTime: UInt64 = 5_000_000_000 // 5 seconds
+    private let preserveDebounceTime: UInt64 = 10_000_000_000 // 10 seconds
 
     init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
         self.fileManager = fileManager
@@ -34,7 +34,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
               let url = URL(string: favicon.faviconURL)
         else { throw SiteImageError.noURLInCache }
 
-        // Update the element in the cache so it's time to expire is rest
+        // Update the element in the cache so it's time to expire is reset
         await cacheURL(domain: domain, faviconURL: url)
 
         return url
