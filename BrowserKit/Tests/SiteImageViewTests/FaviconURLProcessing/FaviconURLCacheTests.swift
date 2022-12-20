@@ -33,6 +33,53 @@ class FaviconURLCacheTests: XCTestCase {
         let result = try? await subject.getURLFromCache(domain: domain)
         XCTAssertEqual(result?.absoluteString, "www.firefox.com")
     }
+
+    func testRetrieveCacheNotExpired() async throws {
+        let fileManager = DefaultURLCacheFileManager()
+        let googleDomain = ImageDomain(baseDomain: "google", bundleDomains: [])
+        let testFavicons = [FaviconURL(domain: googleDomain, faviconURL: "www.google.com", createdAt: Date())]
+        await fileManager.saveURLCache(data: getTestData(items: testFavicons))
+
+        subject = DefaultFaviconURLCache(fileManager: fileManager)
+
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+
+        let result = try? await subject.getURLFromCache(domain: googleDomain)
+        XCTAssertEqual(result?.absoluteString, "www.google.com")
+    }
+
+    func testRetrieveCacheWithExpired() async throws {
+        let fileManager = DefaultURLCacheFileManager()
+        guard let expiredDate = Calendar.current.date(byAdding: .day, value: -31, to: Date()) else {
+            XCTFail("Something went wrong generating a date in the past")
+            return
+        }
+        let amazonDomain = ImageDomain(baseDomain: "amazon", bundleDomains: [])
+        let firefoxDomain = ImageDomain(baseDomain: "firefox", bundleDomains: [])
+        let testFavicons = [FaviconURL(domain: amazonDomain, faviconURL: "www.amazon.com", createdAt: Date()),
+                            FaviconURL(domain: firefoxDomain, faviconURL: "www.firefox.com", createdAt: expiredDate)]
+        await fileManager.saveURLCache(data: getTestData(items: testFavicons))
+
+        subject = DefaultFaviconURLCache(fileManager: fileManager)
+
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+
+        let result1 = try? await subject.getURLFromCache(domain: amazonDomain)
+        XCTAssertEqual(result1?.absoluteString, "www.amazon.com")
+
+        let result2 = try? await subject.getURLFromCache(domain: firefoxDomain)
+        XCTAssertNil(result2)
+    }
+
+    private func getTestData(items: [FaviconURL], file: String = #file, line: UInt = #line) -> Data {
+        let archiver = NSKeyedArchiver(requiringSecureCoding: false)
+        do {
+            try archiver.encodeEncodable(items, forKey: "favicon-url-cache")
+        } catch {
+            XCTFail("Something went wrong generating mock favicon data, file: \(file), line: \(line)")
+        }
+        return archiver.encodedData
+    }
 }
 
 actor MockURLCacheFileManager: URLCacheFileManager {

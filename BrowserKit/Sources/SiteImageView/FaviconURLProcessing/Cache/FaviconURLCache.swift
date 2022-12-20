@@ -12,13 +12,14 @@ protocol FaviconURLCache {
 actor DefaultFaviconURLCache: FaviconURLCache {
     private enum CacheConstants {
         static let cacheKey = "favicon-url-cache"
+        static let daysToExpiration = 30
     }
 
     static let shared = DefaultFaviconURLCache()
     private let fileManager: URLCacheFileManager
     private var urlCache = [String: FaviconURL]()
     private var preserveTask: Task<Void, Never>?
-    private let preserveDebounceTime: UInt64 = 5_000_000_000 // 5 seconds
+    private let preserveDebounceTime: UInt64 = 10_000_000_000 // 10 seconds
 
     init(fileManager: URLCacheFileManager = DefaultURLCacheFileManager()) {
         self.fileManager = fileManager
@@ -32,6 +33,10 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         guard let favicon = urlCache[domain.baseDomain],
               let url = URL(string: favicon.faviconURL)
         else { throw SiteImageError.noURLInCache }
+
+        // Update the element in the cache so it's time to expire is reset
+        await cacheURL(domain: domain, faviconURL: url)
+
         return url
     }
 
@@ -75,8 +80,22 @@ actor DefaultFaviconURLCache: FaviconURLCache {
             // is not catastrophic and the cache can always be rebuilt
             return
         }
+
+        // Ignore elements that are past the expiration time
+        let today = Date()
         urlCache = cacheList.reduce(into: [String: FaviconURL]()) {
+            if numberOfDaysBetween(start: $1.createdAt, end: today) >= CacheConstants.daysToExpiration {
+                return
+            }
             $0[$1.domain.baseDomain] = $1
         }
+    }
+
+    private func numberOfDaysBetween(start: Date, end: Date) -> Int {
+        let calendar = NSCalendar.current
+        let startDate = calendar.startOfDay(for: start)
+        let endDate = calendar.startOfDay(for: end)
+        let numberOfDays = calendar.dateComponents([.day], from: startDate, to: endDate)
+        return numberOfDays.day ?? 0
     }
 }

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SiteImageView"
-               BuildableName = "SiteImageView"
-               BlueprintName = "SiteImageView"
+               BlueprintIdentifier = "Common"
+               BuildableName = "Common"
+               BlueprintName = "Common"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "SiteImageView"
-            BuildableName = "SiteImageView"
-            BlueprintName = "SiteImageView"
+            BlueprintIdentifier = "Common"
+            BuildableName = "Common"
+            BlueprintName = "Common"
             ReferencedContainer = "container:">
          </BuildableReference>
       </CodeCoverageTargets>
@@ -43,9 +43,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "SiteImageViewTests"
-               BuildableName = "SiteImageViewTests"
-               BlueprintName = "SiteImageViewTests"
+               BlueprintIdentifier = "CommonTests"
+               BuildableName = "CommonTests"
+               BlueprintName = "CommonTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -71,9 +71,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "SiteImageView"
-            BuildableName = "SiteImageView"
-            BlueprintName = "SiteImageView"
+            BlueprintIdentifier = "Common"
+            BuildableName = "Common"
+            BlueprintName = "Common"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
