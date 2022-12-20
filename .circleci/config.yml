@@ -5,7 +5,7 @@ jobs:
     environment:
       CI: true
     macos:
-      xcode: "13.4.1"
+      xcode: "14.1.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - checkout
@@ -33,7 +33,7 @@ jobs:
     environment:
       CI: true
     macos:
-      xcode: "13.4.1"
+      xcode: "14.1.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - checkout
@@ -61,7 +61,7 @@ jobs:
     environment:
       CI: true
     macos:
-      xcode: "13.4.1"
+      xcode: "14.1.0"
     resource_class: macos.x86.medium.gen2
     steps:
       - checkout
