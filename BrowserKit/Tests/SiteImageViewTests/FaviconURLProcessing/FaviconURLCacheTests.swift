@@ -22,13 +22,15 @@ class FaviconURLCacheTests: XCTestCase {
     }
 
     func testGetURLFromCacheWithEmptyCache() async {
-        let result = try? await subject.getURLFromCache(domain: "firefox")
+        let domain = ImageDomain(baseDomain: "firefox.com", bundleDomains: [])
+        let result = try? await subject.getURLFromCache(domain: domain)
         XCTAssertNil(result)
     }
 
     func testGetURLFromCacheWithValuePresent() async {
-        await subject.cacheURL(domain: "firefox", faviconURL: URL(string: "www.firefox.com")!)
-        let result = try? await subject.getURLFromCache(domain: "firefox")
+        let domain = ImageDomain(baseDomain: "firefox.com", bundleDomains: [])
+        await subject.cacheURL(domain: domain, faviconURL: URL(string: "www.firefox.com")!)
+        let result = try? await subject.getURLFromCache(domain: domain)
         XCTAssertEqual(result?.absoluteString, "www.firefox.com")
     }
 }

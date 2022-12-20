@@ -102,10 +102,6 @@ public extension String {
         return newString
     }
 
-    func remove(_ string: String?) -> String {
-        return self.replacingOccurrences(of: string ?? "", with: "")
-    }
-
     func replaceFirstOccurrence(of original: String, with replacement: String) -> String {
         guard let range = self.range(of: original) else {
             return self

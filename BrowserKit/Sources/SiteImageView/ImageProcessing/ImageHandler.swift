@@ -18,7 +18,7 @@ protocol ImageHandler {
     ///   - domain: The domain this favicon will be associated with
     /// - Returns: The favicon image
     func fetchFavicon(imageURL: URL?,
-                      domain: String,
+                      domain: ImageDomain,
                       expectedType: SiteImageType) async -> UIImage
 
     /// The ImageHandler will fetch the hero image with the following precedence
@@ -32,7 +32,7 @@ protocol ImageHandler {
     ///   - domain: The domain this hero image will be associated with
     /// - Returns: The hero image
     func fetchHeroImage(siteURL: URL,
-                        domain: String) async throws -> UIImage
+                        domain: ImageDomain) async throws -> UIImage
 }
 
 class DefaultImageHandler: ImageHandler {
@@ -55,7 +55,7 @@ class DefaultImageHandler: ImageHandler {
     }
 
     func fetchFavicon(imageURL: URL?,
-                      domain: String,
+                      domain: ImageDomain,
                       expectedType type: SiteImageType) async -> UIImage {
         do {
             return try bundleImageFetcher.getImageFromBundle(domain: domain)
@@ -65,7 +65,7 @@ class DefaultImageHandler: ImageHandler {
     }
 
     func fetchHeroImage(siteURL: URL,
-                        domain: String) async throws -> UIImage {
+                        domain: ImageDomain) async throws -> UIImage {
         do {
             return try await imageCache.getImageFromCache(domain: domain, type: .heroImage)
         } catch {
@@ -76,7 +76,7 @@ class DefaultImageHandler: ImageHandler {
     // MARK: Private
 
     private func fetchFaviconFromCache(imageURL: URL?,
-                                       domain: String,
+                                       domain: ImageDomain,
                                        expectedType type: SiteImageType) async -> UIImage {
         do {
             return try await imageCache.getImageFromCache(domain: domain, type: type)
@@ -86,7 +86,7 @@ class DefaultImageHandler: ImageHandler {
     }
 
     private func fetchFaviconFromFetcher(imageURL: URL?,
-                                         domain: String,
+                                         domain: ImageDomain,
                                          expectedType type: SiteImageType) async -> UIImage {
         do {
             guard let url = imageURL else {
@@ -102,7 +102,7 @@ class DefaultImageHandler: ImageHandler {
     }
 
     private func fetchHeroImageFromFetcher(siteURL: URL,
-                                           domain: String) async throws -> UIImage {
+                                           domain: ImageDomain) async throws -> UIImage {
         do {
             let image = try await heroImageFetcher.fetchHeroImage(from: siteURL)
             await imageCache.cacheImage(image: image, domain: domain, type: .heroImage)
@@ -112,7 +112,7 @@ class DefaultImageHandler: ImageHandler {
         }
     }
 
-    private func fallbackToLetterFavicon(domain: String, expectedType type: SiteImageType) async -> UIImage {
+    private func fallbackToLetterFavicon(domain: ImageDomain, expectedType type: SiteImageType) async -> UIImage {
         let image = await letterImageGenerator.generateLetterImage(domain: domain)
         await imageCache.cacheImage(image: image, domain: domain, type: type)
         return image

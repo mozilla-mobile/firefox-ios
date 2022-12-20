@@ -4,8 +4,8 @@
 
 import Foundation
 
-struct FaviconURL: Codable {
-    let domain: ImageDomain
-    let faviconURL: String
-    let createdAt: Date
+extension String {
+    public func remove(_ string: String?) -> String {
+        return replacingOccurrences(of: string ?? "", with: "")
+    }
 }

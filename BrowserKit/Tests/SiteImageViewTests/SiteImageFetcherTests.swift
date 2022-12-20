@@ -31,7 +31,7 @@ final class SiteImageFetcherTests: XCTestCase {
                                             type: .favicon,
                                             id: UUID())
 
-        XCTAssertEqual(result.domain, "example.hello")
+        XCTAssertEqual(result.domain?.baseDomain, "example.hello")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .favicon)
@@ -39,7 +39,7 @@ final class SiteImageFetcherTests: XCTestCase {
         XCTAssertNotNil(result.faviconImage)
 
         XCTAssertNil(imageHandler.capturedFaviconURL)
-        XCTAssertEqual(imageHandler.capturedDomain, "example.hello")
+        XCTAssertEqual(imageHandler.capturedDomain?.baseDomain, "example.hello")
         XCTAssertNil(imageHandler.capturedSiteURL)
     }
 
@@ -52,8 +52,8 @@ final class SiteImageFetcherTests: XCTestCase {
                                             type: .favicon,
                                             id: UUID())
 
-        XCTAssertEqual(result.domain, "www.example.hello.com")
-        XCTAssertEqual(imageHandler.capturedDomain, "www.example.hello.com")
+        XCTAssertEqual(result.domain?.baseDomain, "www.example.hello.com")
+        XCTAssertEqual(imageHandler.capturedDomain?.baseDomain, "www.example.hello.com")
     }
 
     func testFavicon_faviconURLFound_generateFavicon() async {
@@ -66,7 +66,7 @@ final class SiteImageFetcherTests: XCTestCase {
                                             type: .favicon,
                                             id: UUID())
 
-        XCTAssertEqual(result.domain, "mozilla")
+        XCTAssertEqual(result.domain?.baseDomain, "mozilla")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .favicon)
@@ -74,7 +74,7 @@ final class SiteImageFetcherTests: XCTestCase {
         XCTAssertNotNil(result.faviconImage)
 
         XCTAssertEqual(imageHandler.capturedFaviconURL, faviconURL)
-        XCTAssertEqual(imageHandler.capturedDomain, "mozilla")
+        XCTAssertEqual(imageHandler.capturedDomain?.baseDomain, "mozilla")
         XCTAssertNil(imageHandler.capturedSiteURL)
     }
 
@@ -88,7 +88,7 @@ final class SiteImageFetcherTests: XCTestCase {
                                             type: .heroImage,
                                             id: UUID())
 
-        XCTAssertEqual(result.domain, "firefox")
+        XCTAssertEqual(result.domain?.baseDomain, "firefox")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .heroImage)
@@ -96,7 +96,7 @@ final class SiteImageFetcherTests: XCTestCase {
         XCTAssertNotNil(result.faviconImage)
 
         XCTAssertNil(imageHandler.capturedFaviconURL)
-        XCTAssertEqual(imageHandler.capturedDomain, "firefox")
+        XCTAssertEqual(imageHandler.capturedDomain?.baseDomain, "firefox")
         XCTAssertEqual(imageHandler.capturedSiteURL, URL(string: siteURL))
     }
 
@@ -109,7 +109,7 @@ final class SiteImageFetcherTests: XCTestCase {
                                             type: .heroImage,
                                             id: UUID())
 
-        XCTAssertEqual(result.domain, "focus")
+        XCTAssertEqual(result.domain?.baseDomain, "focus")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .heroImage)
@@ -117,7 +117,7 @@ final class SiteImageFetcherTests: XCTestCase {
         XCTAssertNil(result.faviconImage)
 
         XCTAssertNil(imageHandler.capturedFaviconURL)
-        XCTAssertEqual(imageHandler.capturedDomain, "focus")
+        XCTAssertEqual(imageHandler.capturedDomain?.baseDomain, "focus")
         XCTAssertEqual(imageHandler.capturedSiteURL, URL(string: siteURL))
     }
 }
@@ -142,9 +142,9 @@ private class MockFaviconURLHandler: FaviconURLHandler {
 private class MockImageHandler: ImageHandler {
     var faviconImage = UIImage()
     var capturedFaviconURL: URL?
-    var capturedDomain: String?
+    var capturedDomain: ImageDomain?
 
-    func fetchFavicon(imageURL: URL?, domain: String, expectedType: SiteImageType) async -> UIImage {
+    func fetchFavicon(imageURL: URL?, domain: ImageDomain, expectedType: SiteImageType) async -> UIImage {
         capturedFaviconURL = imageURL
         capturedDomain = domain
         return faviconImage
@@ -153,7 +153,7 @@ private class MockImageHandler: ImageHandler {
     var capturedSiteURL: URL?
     var heroImage: UIImage?
 
-    func fetchHeroImage(siteURL: URL, domain: String) async throws -> UIImage {
+    func fetchHeroImage(siteURL: URL, domain: ImageDomain) async throws -> UIImage {
         capturedSiteURL = siteURL
         capturedDomain = domain
         if let image = heroImage {

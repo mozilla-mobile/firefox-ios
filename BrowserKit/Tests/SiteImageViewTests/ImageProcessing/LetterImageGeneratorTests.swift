@@ -8,7 +8,8 @@ import XCTest
 final class LetterImageGeneratorTests: XCTestCase {
     func testEmptyDomain_doesntReturnEmptyImage() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let result = await subject.generateLetterImage(domain: "")
+        let domain = ImageDomain(baseDomain: "", bundleDomains: [])
+        let result = await subject.generateLetterImage(domain: domain)
 
         XCTAssertEqual(subject.capturedLetter, "#")
         XCTAssertNotEqual(result, UIImage())
@@ -17,7 +18,8 @@ final class LetterImageGeneratorTests: XCTestCase {
 
     func testDomain1_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let result = await subject.generateLetterImage(domain: "mozilla.com")
+        let domain = ImageDomain(baseDomain: "mozilla.com", bundleDomains: [])
+        let result = await subject.generateLetterImage(domain: domain)
 
         XCTAssertEqual(subject.capturedLetter, "M")
         XCTAssertNotEqual(result, UIImage())
@@ -26,7 +28,8 @@ final class LetterImageGeneratorTests: XCTestCase {
 
     func testDomain2_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let result = await subject.generateLetterImage(domain: "firefox.com")
+        let domain = ImageDomain(baseDomain: "firefox.com", bundleDomains: [])
+        let result = await subject.generateLetterImage(domain: domain)
 
         XCTAssertEqual(subject.capturedLetter, "F")
         XCTAssertNotEqual(result, UIImage())
@@ -35,7 +38,8 @@ final class LetterImageGeneratorTests: XCTestCase {
 
     func testFakeDomain_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let result = await subject.generateLetterImage(domain: "?$%^")
+        let domain = ImageDomain(baseDomain: "?$%^", bundleDomains: [])
+        let result = await subject.generateLetterImage(domain: domain)
 
         XCTAssertEqual(subject.capturedLetter, "?")
         XCTAssertNotEqual(result, UIImage())

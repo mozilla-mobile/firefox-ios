@@ -12,7 +12,7 @@ protocol SiteImageCache {
     ///   - domain: The domain to retrieve the image from
     ///   - type: The image type to retrieve the image from the cache
     /// - Returns: The image from the cache or throws an error if it could not retrieve it
-    func getImageFromCache(domain: String,
+    func getImageFromCache(domain: ImageDomain,
                            type: SiteImageType) async throws -> UIImage
 
     /// Cache an image into the right cache depending on it's type
@@ -21,7 +21,7 @@ protocol SiteImageCache {
     ///   - domain: The image domain
     ///   - type: The image type
     func cacheImage(image: UIImage,
-                    domain: String,
+                    domain: ImageDomain,
                     type: SiteImageType) async
 }
 
@@ -32,7 +32,7 @@ actor DefaultSiteImageCache: SiteImageCache {
         self.imageCache = imageCache
     }
 
-    func getImageFromCache(domain: String, type: SiteImageType) async throws -> UIImage {
+    func getImageFromCache(domain: ImageDomain, type: SiteImageType) async throws -> UIImage {
         let key = cacheKey(from: domain, type: type)
         do {
             let result = try await imageCache.retrieveImage(forKey: key)
@@ -45,12 +45,12 @@ actor DefaultSiteImageCache: SiteImageCache {
         }
     }
 
-    func cacheImage(image: UIImage, domain: String, type: SiteImageType) async {
+    func cacheImage(image: UIImage, domain: ImageDomain, type: SiteImageType) async {
         let key = cacheKey(from: domain, type: type)
         imageCache.store(image: image, forKey: key)
     }
 
-    private func cacheKey(from domain: String, type: SiteImageType) -> String {
-        return "\(domain)-\(type.rawValue)"
+    private func cacheKey(from domain: ImageDomain, type: SiteImageType) -> String {
+        return "\(domain.baseDomain)-\(type.rawValue)"
     }
 }

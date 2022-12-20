@@ -186,6 +186,20 @@ extension URL {
 
         return baseDomain
     }
+
+    public var absoluteDisplayString: String {
+        var urlString = absoluteString
+        // For http URLs, get rid of the trailing slash if the path is empty or '/'
+        if (scheme == "http" || scheme == "https") && (path == "/") && urlString.hasSuffix("/") {
+            urlString = String(urlString[..<urlString.index(urlString.endIndex, offsetBy: -1)])
+        }
+        // If it's basic http, strip out the string but leave anything else in
+        if urlString.hasPrefix("http://") {
+            return String(urlString[urlString.index(urlString.startIndex, offsetBy: 7)...])
+        } else {
+            return urlString
+        }
+    }
 }
 
 private struct ETLDEntry: CustomStringConvertible {

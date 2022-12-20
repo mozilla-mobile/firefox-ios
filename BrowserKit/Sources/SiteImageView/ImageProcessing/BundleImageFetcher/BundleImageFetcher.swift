@@ -8,7 +8,7 @@ protocol BundleImageFetcher {
     /// Fetches from the bundle
     /// - Parameter domain: The domain to fetch the image with from the bundle
     /// - Returns: The image or throw an error if it fails
-    func getImageFromBundle(domain: String) throws -> UIImage
+    func getImageFromBundle(domain: ImageDomain) throws -> UIImage
 }
 
 class DefaultBundleImageFetcher: BundleImageFetcher {
@@ -29,35 +29,36 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
     private let bundleDataProvider: BundleDataProvider
     private var bundledImages = [String: FormattedBundledImage]()
 
-    // Any time a bundled image couldn't be retrieved for a domain, it will be saved here
-    private var imagesErrors = [String: BundleError]()
-    // In case no bundled images could be retrieved, this will be set
-    private var generalBundleError: BundleError?
-
     init(bundleDataProvider: BundleDataProvider = DefaultBundleDataProvider()) {
         self.bundleDataProvider = bundleDataProvider
         bundledImages = retrieveBundledImages()
     }
 
-    func getImageFromBundle(domain: String) throws -> UIImage {
-        if let bundledImage = bundledImages[domain],
-           let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) {
-            let color = bundledImage.backgroundColor.cgColor.alpha < 0.01 ? UIColor.white : bundledImage.backgroundColor
-            return withBackgroundAndPadding(image: image, color: color)
-        } else if let imageError = imagesErrors[domain] {
-            throw imageError
-        } else if let error = generalBundleError {
-            throw error
+    func getImageFromBundle(domain: ImageDomain) throws -> UIImage {
+        guard let bundleDomain = getBundleDomain(domain: domain) else {
+            throw SiteImageError.noImageInBundle
         }
-        throw BundleError.noImage("Image with domain \(domain) isn't in bundle")
+
+        guard let bundledImage = bundledImages[bundleDomain],
+              let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) else {
+            throw SiteImageError.noImageInBundle
+        }
+
+        let color = bundledImage.backgroundColor.cgColor.alpha < 0.01 ? UIColor.white : bundledImage.backgroundColor
+        return withBackgroundAndPadding(image: image, color: color)
+    }
+
+    // MARK: - Private
+
+    private func getBundleDomain(domain: ImageDomain) -> String? {
+        return domain.bundleDomains.first(where: { bundledImages[$0] != nil })
     }
 
     private func retrieveBundledImages() -> [String: FormattedBundledImage] {
         do {
             let data = try bundleDataProvider.getBundleData()
             return decode(from: data)
-        } catch let error {
-            generalBundleError = BundleError.noBundleRetrieved("Decoding from file failed due to: \(error)")
+        } catch {
             return [:]
         }
     }
@@ -76,14 +77,8 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
                 icons[image.title] = image
             }
 
-            if icons.isEmpty {
-                generalBundleError = BundleError.noBundleRetrieved("Bundle was empty")
-            }
-
             return icons
         } catch {
-            let message = "Decoding BundledImage failed due to: \(error.localizedDescription.debugDescription)"
-            generalBundleError = BundleError.noBundleRetrieved(message)
             return icons
         }
     }
@@ -94,7 +89,6 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         let color = image.background_color
         let filePath = bundleDataProvider.getPath(from: path)
         guard let filePath = filePath else {
-            imagesErrors[title] = BundleError.imageFormatting("No filepath for image path: \(path)")
             return nil
         }
 

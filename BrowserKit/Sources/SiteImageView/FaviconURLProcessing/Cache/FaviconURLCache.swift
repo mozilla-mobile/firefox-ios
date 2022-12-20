@@ -5,8 +5,8 @@
 import Foundation
 
 protocol FaviconURLCache {
-    func getURLFromCache(domain: String) async throws -> URL
-    func cacheURL(domain: String, faviconURL: URL) async
+    func getURLFromCache(domain: ImageDomain) async throws -> URL
+    func cacheURL(domain: ImageDomain, faviconURL: URL) async
 }
 
 actor DefaultFaviconURLCache: FaviconURLCache {
@@ -28,18 +28,18 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         }
     }
 
-    func getURLFromCache(domain: String) async throws -> URL {
-        guard let favicon = urlCache[domain],
+    func getURLFromCache(domain: ImageDomain) async throws -> URL {
+        guard let favicon = urlCache[domain.baseDomain],
               let url = URL(string: favicon.faviconURL)
         else { throw SiteImageError.noURLInCache }
         return url
     }
 
-    func cacheURL(domain: String, faviconURL: URL) async {
+    func cacheURL(domain: ImageDomain, faviconURL: URL) async {
         let favicon = FaviconURL(domain: domain,
                                  faviconURL: faviconURL.absoluteString,
                                  createdAt: Date())
-        urlCache[domain] = favicon
+        urlCache[domain.baseDomain] = favicon
         preserveCache()
     }
 
@@ -76,7 +76,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
             return
         }
         urlCache = cacheList.reduce(into: [String: FaviconURL]()) {
-            $0[$1.domain] = $1
+            $0[$1.domain.baseDomain] = $1
         }
     }
 }

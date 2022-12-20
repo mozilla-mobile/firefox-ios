@@ -19,7 +19,7 @@ struct SiteImageModel {
     var siteURL: URL?
 
     /// Domain can be nil in case we don't have a siteURL to get the domain from
-    var domain: String?
+    var domain: ImageDomain?
 
     /// The favicon URL scrapped from the webpage, high resolution found at preference
     var faviconURL: URL?
