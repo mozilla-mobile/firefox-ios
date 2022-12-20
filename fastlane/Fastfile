@@ -86,8 +86,7 @@ platform :ios do
     gym(
       scheme: "Ecosia",
       export_method: "app-store",
-      configuration: "Release",
-      include_bitcode: true
+      configuration: "Release"
     )
     pilot(
       skip_waiting_for_build_processing: true, 
