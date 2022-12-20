@@ -36,14 +36,15 @@ class FaviconURLCacheTests: XCTestCase {
 
     func testRetrieveCacheNotExpired() async throws {
         let fileManager = DefaultURLCacheFileManager()
-        let testFavicons = [FaviconURL(domain: "google", faviconURL: "www.google.com", createdAt: Date())]
+        let googleDomain = ImageDomain(baseDomain: "google", bundleDomains: [])
+        let testFavicons = [FaviconURL(domain: googleDomain, faviconURL: "www.google.com", createdAt: Date())]
         await fileManager.saveURLCache(data: getTestData(items: testFavicons))
 
         subject = DefaultFaviconURLCache(fileManager: fileManager)
 
         try await Task.sleep(nanoseconds: 1_000_000_000)
 
-        let result = try? await subject.getURLFromCache(domain: "google")
+        let result = try? await subject.getURLFromCache(domain: googleDomain)
         XCTAssertEqual(result?.absoluteString, "www.google.com")
     }
 
@@ -53,18 +54,20 @@ class FaviconURLCacheTests: XCTestCase {
             XCTFail("Something went wrong generating a date in the past")
             return
         }
-        let testFavicons = [FaviconURL(domain: "amazon", faviconURL: "www.amazon.com", createdAt: Date()),
-                            FaviconURL(domain: "firefox", faviconURL: "www.firefox.com", createdAt: expiredDate)]
+        let amazonDomain = ImageDomain(baseDomain: "amazon", bundleDomains: [])
+        let firefoxDomain = ImageDomain(baseDomain: "firefox", bundleDomains: [])
+        let testFavicons = [FaviconURL(domain: amazonDomain, faviconURL: "www.amazon.com", createdAt: Date()),
+                            FaviconURL(domain: firefoxDomain, faviconURL: "www.firefox.com", createdAt: expiredDate)]
         await fileManager.saveURLCache(data: getTestData(items: testFavicons))
 
         subject = DefaultFaviconURLCache(fileManager: fileManager)
 
         try await Task.sleep(nanoseconds: 1_000_000_000)
 
-        let result1 = try? await subject.getURLFromCache(domain: "amazon")
+        let result1 = try? await subject.getURLFromCache(domain: amazonDomain)
         XCTAssertEqual(result1?.absoluteString, "www.amazon.com")
 
-        let result2 = try? await subject.getURLFromCache(domain: "firefox")
+        let result2 = try? await subject.getURLFromCache(domain: firefoxDomain)
         XCTAssertNil(result2)
     }
 
