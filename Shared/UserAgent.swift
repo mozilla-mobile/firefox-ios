@@ -9,6 +9,7 @@ open class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"
     public static let uaBitMobile = "Mobile/15E148"
     public static let uaBitFx = "FxiOS/\(AppInfo.appVersion)"
+    public static let uaBitEcosia = "(Ecosia ios@\(AppInfo.ecosiaAppVersion).\(AppInfo.buildNumber))"
     public static let product = "Mozilla/5.0"
     public static let platform = "AppleWebKit/605.1.15"
     public static let platformDetails = "(KHTML, like Gecko)"
@@ -68,6 +69,9 @@ open class UserAgent {
     public static func getUserAgent(domain: String, platform: UserAgentPlatform) -> String {
         switch platform {
         case .Desktop:
+            if let customUA = CustomUserAgentConstant.customDesktopUAFor[domain] {
+                return customUA
+            }
             return desktopUserAgent()
         case .Mobile:
             if let customUA = CustomUserAgentConstant.customUAFor[domain] {
@@ -98,6 +102,7 @@ public struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
     private static let ecosiaMobileUA = UserAgentBuilder.ecosiaMobileUserAgent().userAgent()
+    private static let ecosiaDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "(Ecosia ios@\(AppInfo.ecosiaAppVersion).\(AppInfo.buildNumber))")
 
 
     public static let customUAFor = [
@@ -105,6 +110,9 @@ public struct CustomUserAgentConstant {
         "yahoo.com": defaultMobileUA,
         "disneyplus.com": customDesktopUA,
         "ecosia.org": ecosiaMobileUA ]
+
+    public static let customDesktopUAFor = [
+        "ecosia.org": "\(UserAgent.desktopUserAgent()) \(UserAgent.uaBitEcosia)" ]
 }
 
 public struct UserAgentBuilder {
@@ -157,6 +165,6 @@ public struct UserAgentBuilder {
     }
 
     public static func ecosiaMobileUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "\(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari) (Ecosia ios@\(AppInfo.ecosiaAppVersion).\(AppInfo.buildNumber))")
+        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "\(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari) \(UserAgent.uaBitEcosia)")
     }
 }
