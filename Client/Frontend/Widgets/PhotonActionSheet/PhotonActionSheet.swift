@@ -265,8 +265,10 @@ class PhotonActionSheet: UIViewController, Themeable {
         } else if UIAccessibility.isReduceTransparencyEnabled {
             // Remove the visual effect and the background alpha
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
-            tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
+            tableView.backgroundView?.backgroundColor = theme.colors.layer1
+            tableView.backgroundColor = theme.colors.layer1
         } else {
+            tableView.backgroundColor = .clear
             let blurEffect = UIBlurEffect(style: .regular)
 
             if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
