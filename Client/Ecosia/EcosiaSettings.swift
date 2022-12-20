@@ -169,3 +169,24 @@ class EcosiaTermsSetting: Setting {
         Analytics.shared.navigation(.open, label: .terms)
     }
 }
+
+class TopSitesSetting: BoolSetting {
+    convenience init(prefs: Prefs) {
+        self.init(prefs: prefs, prefKey: "", defaultValue: true,
+                titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle,
+                statusText: nil, settingDidChange: { value in
+
+                    User.shared.topSites = value
+
+                })
+    }
+
+    override func displayBool(_ control: UISwitch) {
+        control.isOn = User.shared.topSites
+    }
+
+    override func writeBool(_ control: UISwitch) {
+        User.shared.topSites = control.isOn
+    }
+}
+

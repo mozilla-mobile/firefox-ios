@@ -28,16 +28,17 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
     // MARK: - Methods
     override func generateSettings() -> [SettingSection] {
         var sections = [Setting]()
-        let topSitesSetting = BoolSetting(with: .topSites,
-                                          titleText: NSAttributedString(string: .Settings.Homepage.Shortcuts.ShortcutsToggle))
+        // Ecosia: custom top site setting
+        let topSitesSetting = TopSitesSetting(prefs: profile.prefs)
         sections.append(topSitesSetting)
 
+        /* Ecosia: no sponsored tiles
         if featureFlags.isFeatureEnabled(.sponsoredTiles, checking: .buildOnly) {
             let sponsoredShortcutSetting = BoolSetting(with: .sponsoredTiles,
                                                        titleText: NSAttributedString(string: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle))
             sections.append(sponsoredShortcutSetting)
         }
-
+         */
         let toggleSection = SettingSection(title: nil,
                                            children: sections)
 

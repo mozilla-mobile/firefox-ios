@@ -70,7 +70,7 @@ extension NTPImpactViewModel: HomepageViewModelProtocol {
             trailing: insets)
 
         // Adding a header if needed
-        if ntpLayoutHighlightText() != nil {
+        if NTPTooltip.highlight(for: User.shared)?.text != nil {
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                     heightDimension: .absolute(1.0))
             let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -107,11 +107,5 @@ extension NTPImpactViewModel: HomepageSectionHandler {
 
     func didSelectItem(at indexPath: IndexPath, homePanelDelegate: HomePanelDelegate?, libraryPanelDelegate: LibraryPanelDelegate?) {
         homePanelDelegate?.homePanelDidRequestToOpenImpact()
-    }
-}
-
-extension NTPImpactViewModel: NTPLayoutHighlightDataSource {
-    func ntpLayoutHighlightText() -> String? {
-        return NTPTooltip.highlight(for: User.shared)?.text
     }
 }

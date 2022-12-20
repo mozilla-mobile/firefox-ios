@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Core
 
 class HomePageSettingViewController: SettingsTableViewController, FeatureFlaggable {
 
@@ -242,7 +243,7 @@ extension HomePageSettingViewController {
         override var style: UITableViewCell.CellStyle { return .value1 }
 
         override var status: NSAttributedString {
-            let areShortcutsOn = featureFlags.isFeatureEnabled(.topSites, checking: .userOnly)
+            let areShortcutsOn = User.shared.topSites // Ecosia: featureFlags.isFeatureEnabled(.topSites, checking: .userOnly)
             let status: String = areShortcutsOn ? .Settings.Homepage.Shortcuts.ToggleOn : .Settings.Homepage.Shortcuts.ToggleOff
             return NSAttributedString(string: String(format: status))
         }

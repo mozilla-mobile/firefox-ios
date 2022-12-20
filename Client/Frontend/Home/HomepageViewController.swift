@@ -163,7 +163,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
             else { return nil }
             return viewModel.section(for: layoutEnvironment.traitCollection)
         }
-        layout.highlightDataSource = viewModel.impactViewModel
+        layout.highlightDataSource = viewModel
         return layout
     }
 
@@ -315,7 +315,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
         else { return UICollectionReusableView() }
 
         // tooltip for impact
-        if sectionViewModel.sectionType == .impact, let text = viewModel.impactViewModel.ntpLayoutHighlightText(), kind == UICollectionView.elementKindSectionHeader {
+        if sectionViewModel.sectionType == .impact, let text = viewModel.ntpLayoutHighlightText(), kind == UICollectionView.elementKindSectionHeader {
             let tooltip = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: NTPTooltip.key, for: indexPath) as! NTPTooltip
             tooltip.setText(text)
             tooltip.delegate = self

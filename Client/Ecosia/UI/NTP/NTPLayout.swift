@@ -7,6 +7,7 @@ import Shared
 
 protocol NTPLayoutHighlightDataSource: AnyObject {
     func ntpLayoutHighlightText() -> String?
+    func getSectionViewModel(shownSection: Int) -> HomepageViewModelProtocol?
 }
 
 class NTPLayout: UICollectionViewCompositionalLayout {
@@ -16,14 +17,11 @@ class NTPLayout: UICollectionViewCompositionalLayout {
         guard let attr = super.layoutAttributesForElements(in: rect) else { return nil}
 
         guard let impact = attr.first(where: {
-            $0.representedElementCategory == .cell &&
-            $0.indexPath.section == HomepageSectionType.impact.rawValue
+            $0.representedElementCategory == .cell && highlightDataSource?.getSectionViewModel(shownSection: $0.indexPath.section)?.sectionType == .impact
         }), let tooltip = attr.first(where: {
             $0.representedElementCategory == .supplementaryView &&
-            $0.indexPath.section == HomepageSectionType.impact.rawValue
+            highlightDataSource?.getSectionViewModel(shownSection: $0.indexPath.section)?.sectionType == .impact
         }) else { return attr }
-
-
 
         if let text = highlightDataSource?.ntpLayoutHighlightText() {
             let font = UIFont.preferredFont(forTextStyle: .callout)

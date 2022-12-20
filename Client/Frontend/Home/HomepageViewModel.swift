@@ -13,7 +13,7 @@ protocol HomepageDataModelDelegate: AnyObject {
     func reloadView()
 }
 
-class HomepageViewModel: FeatureFlaggable {
+class HomepageViewModel: FeatureFlaggable, NTPLayoutHighlightDataSource {
 
     struct UX {
         static let spacingBetweenSections: CGFloat = 32
@@ -156,6 +156,11 @@ class HomepageViewModel: FeatureFlaggable {
         guard let actualSectionNumber = shownSections[safe: shownSection]?.rawValue else { return nil }
         return childViewModels[safe: actualSectionNumber]
     }
+
+    func ntpLayoutHighlightText() -> String? {
+        return NTPTooltip.highlight(for: User.shared)?.text
+    }
+
 }
 
 // MARK: - HomepageDataModelDelegate
