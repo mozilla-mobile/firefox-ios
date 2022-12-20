@@ -7,15 +7,8 @@ import Shared
 import Storage
 
 enum SiteImageType: Int {
-    case heroImage = 0, favicon
-
-    func peek() -> Self? {
-        return SiteImageType(rawValue: rawValue + 1)
-    }
-
-    mutating func next() -> Self? {
-        return SiteImageType(rawValue: rawValue + 1)
-    }
+    case heroImage
+    case favicon
 }
 
 protocol SiteImageHelperProtocol {
@@ -43,7 +36,6 @@ extension SiteImageHelperProtocol {
 /// A helper that'll fetch an image, and fallback to other image options if specified.
 class SiteImageHelper: SiteImageHelperProtocol {
     private static let cache = NSCache<NSString, UIImage>()
-    private let throttler = Throttler(seconds: 0.5, on: DispatchQueue.main)
     private let faviconFetcher: Favicons
 
     convenience init(profile: Profile) {
@@ -67,14 +59,19 @@ class SiteImageHelper: SiteImageHelperProtocol {
                        shouldFallback: Bool,
                        metadataProvider: LPMetadataProvider = LPMetadataProvider(),
                        completion: @escaping (UIImage?) -> Void) {
-        var didCompleteFetch = false
         var imageType = imageType
 
         switch imageType {
         case .heroImage:
-            fetchHeroImage(for: site, metadataProvider: metadataProvider) { image, result in
-                guard let heroImage = image else { return }
-                didCompleteFetch = result ?? false
+            fetchHeroImage(for: site, metadataProvider: metadataProvider) { [weak self] image, result in
+                guard let heroImage = image, result == true else {
+                    if !shouldFallback { return }
+                    self?.fetchImageFor(site: site,
+                                        imageType: .favicon,
+                                        shouldFallback: shouldFallback,
+                                        completion: completion)
+                    return
+                }
                 DispatchQueue.main.async {
                     completion(heroImage)
                     return
@@ -83,22 +80,11 @@ class SiteImageHelper: SiteImageHelperProtocol {
         case .favicon:
             fetchFavicon(for: site) { image, result in
                 guard let favicon = image else { return }
-                didCompleteFetch = result ?? false
                 DispatchQueue.main.async {
                     completion(favicon)
                     return
                 }
             }
-        }
-
-        throttler.throttle { [weak self] in
-            if !didCompleteFetch && imageType.peek() != nil,
-               let updatedImageType = imageType.next(), shouldFallback {
-                self?.fetchImageFor(site: site,
-                                    imageType: updatedImageType,
-                                    shouldFallback: shouldFallback,
-                                    completion: completion)
-            } else { return }
         }
     }
 
@@ -108,11 +94,17 @@ class SiteImageHelper: SiteImageHelperProtocol {
 
     // MARK: - Private
 
-    private func fetchHeroImage(for site: Site, metadataProvider: LPMetadataProvider, completion: @escaping (UIImage?, Bool?) -> Void) {
+    private func fetchHeroImage(for site: Site, metadataProvider: LPMetadataProvider, completion: @escaping (UIImage?, Bool) -> Void) {
         let heroImageCacheKey = NSString(string: "\(site.url)\(SiteImageType.heroImage.rawValue)")
 
         // Fetch from cache, if not then fetch with LPMetadataProvider
         if let cachedImage = SiteImageHelper.cache.object(forKey: heroImageCacheKey) {
+            // Hack, if the image height is zero it's an empty placeholder image to indicate
+            // the page has no hero image so don't re-check
+            if cachedImage.size.height == 0 {
+                completion(nil, false)
+                return
+            }
             completion(cachedImage, true)
         } else {
             guard let url = URL(string: site.url) else {
@@ -130,7 +122,7 @@ class SiteImageHelper: SiteImageHelperProtocol {
     private func fetchFromMetaDataProvider(heroImageCacheKey: NSString,
                                            url: URL,
                                            metadataProvider: LPMetadataProvider,
-                                           completion: @escaping (UIImage?, Bool?) -> Void) {
+                                           completion: @escaping (UIImage?, Bool) -> Void) {
         // LPMetadataProvider must be interacted with on the main thread or it can crash
         // The closure will return on a non-main thread
         ensureMainThread {
@@ -139,12 +131,18 @@ class SiteImageHelper: SiteImageHelperProtocol {
                       let imageProvider = metadata.imageProvider,
                         error == nil
                 else {
+                    // Temporary hack fix to reduce spamming, store an empty image when there is no
+                    // hero image to stop re-checking the page on every reload
+                    SiteImageHelper.cache.setObject(UIImage(), forKey: heroImageCacheKey)
                     completion(nil, false)
                     return
                 }
 
                 imageProvider.loadObject(ofClass: UIImage.self) { image, error in
                     guard error == nil, let image = image as? UIImage else {
+                        // Temporary hack fix to reduce spamming, store an empty image when there is no
+                        // hero image to stop re-checking the page on every reload
+                        SiteImageHelper.cache.setObject(UIImage(), forKey: heroImageCacheKey)
                         completion(nil, false)
                         return
                     }
