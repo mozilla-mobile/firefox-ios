@@ -33,6 +33,50 @@ class FaviconURLCacheTests: XCTestCase {
         let result = try? await subject.getURLFromCache(domain: domain)
         XCTAssertEqual(result?.absoluteString, "www.firefox.com")
     }
+
+    func testRetrieveCacheNotExpired() async throws {
+        let fileManager = DefaultURLCacheFileManager()
+        let testFavicons = [FaviconURL(domain: "google", faviconURL: "www.google.com", createdAt: Date())]
+        await fileManager.saveURLCache(data: getTestData(items: testFavicons))
+
+        subject = DefaultFaviconURLCache(fileManager: fileManager)
+
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+
+        let result = try? await subject.getURLFromCache(domain: "google")
+        XCTAssertEqual(result?.absoluteString, "www.google.com")
+    }
+
+    func testRetrieveCacheWithExpired() async throws {
+        let fileManager = DefaultURLCacheFileManager()
+        guard let expiredDate = Calendar.current.date(byAdding: .day, value: -31, to: Date()) else {
+            XCTFail("Something went wrong generating a date in the past")
+            return
+        }
+        let testFavicons = [FaviconURL(domain: "amazon", faviconURL: "www.amazon.com", createdAt: Date()),
+                            FaviconURL(domain: "firefox", faviconURL: "www.firefox.com", createdAt: expiredDate)]
+        await fileManager.saveURLCache(data: getTestData(items: testFavicons))
+
+        subject = DefaultFaviconURLCache(fileManager: fileManager)
+
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+
+        let result1 = try? await subject.getURLFromCache(domain: "amazon")
+        XCTAssertEqual(result1?.absoluteString, "www.amazon.com")
+
+        let result2 = try? await subject.getURLFromCache(domain: "firefox")
+        XCTAssertNil(result2)
+    }
+
+    private func getTestData(items: [FaviconURL]) -> Data {
+        let archiver = NSKeyedArchiver(requiringSecureCoding: false)
+        do {
+            try archiver.encodeEncodable(items, forKey: "favicon-url-cache")
+        } catch {
+            XCTFail("Something went wrong generating mock favicon data")
+        }
+        return archiver.encodedData
+    }
 }
 
 actor MockURLCacheFileManager: URLCacheFileManager {
