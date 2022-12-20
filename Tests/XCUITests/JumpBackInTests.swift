@@ -57,7 +57,8 @@ class JumpBackInTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         // Create 3 groups in tab tray
-        let groups = ["test1", "test2", "test3"]
+//        let groups = ["test1", "test2", "test3"]
+        let groups = ["test3"]
         for group in groups {
             for _ in 1...3 {
                 navigator.goto(TabTray)
@@ -68,11 +69,16 @@ class JumpBackInTests: BaseTestCase {
             }
         }
         waitForTabsButton()
+        print("Before going to Tab Tray")
         // Open a new tab
         navigator.goto(TabTray)
+        print("Last time in tab Tray")
         waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        print("Before closing url-bar")
         closeKeyboard()
+        waitForTabsButton()
+        print("On homescreen")
 
         // Tap on the "test3" from "Jump Back In" section
 //        scrollDown()
@@ -118,7 +124,7 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // Twitter should be in "Jump Back In"
-        scrollDown()
+//        scrollDown()
         waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
@@ -134,7 +140,7 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // Amazon and Tiwtter are visible in the "Jump Back In" section
-        scrollDown()
+//        scrollDown()
         waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Amazon"])
@@ -155,7 +161,7 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // Check the "Jump Back In Section"
-        scrollDown()
+//        scrollDown()
         waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
 
@@ -177,7 +183,7 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // The "Jump Back In" section is still here with twitter listed
-        scrollDown()
+//        scrollDown()
         waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
         // FXIOS-5448 - Amazon should not be listed because we've closed the Amazon tab
