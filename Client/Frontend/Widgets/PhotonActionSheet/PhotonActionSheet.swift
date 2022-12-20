@@ -95,17 +95,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         tableView.backgroundColor = .clear
         tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
 
-        if viewModel.presentationStyle == .bottom {
-            setupBottomStyle()
-        } else if viewModel.presentationStyle == .popover {
-            setupPopoverStyle()
-        } else {
-            setupCenteredStyle()
-        }
-
-        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
-        tableViewHeightConstraint?.isActive = true
-        NSLayoutConstraint.activate(constraints)
+        setupLayout()
 
         setupNotifications(forObserver: self, observing: [.ProfileDidFinishSyncing,
                                                           .ProfileDidStartSyncing,
@@ -178,6 +168,20 @@ class PhotonActionSheet: UIViewController, Themeable {
     }
 
     // MARK: - Setup
+
+    private func setupLayout() {
+        if viewModel.presentationStyle == .bottom {
+            setupBottomStyle()
+        } else if viewModel.presentationStyle == .popover {
+            setupPopoverStyle()
+        } else {
+            setupCenteredStyle()
+        }
+
+        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+        tableViewHeightConstraint?.isActive = true
+        NSLayoutConstraint.activate(constraints)
+    }
 
     private func setupBottomStyle() {
         self.view.addSubview(closeButton)
