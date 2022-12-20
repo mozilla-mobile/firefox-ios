@@ -9,11 +9,13 @@ class JumpBackInTests: BaseTestCase {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
     }
 
     func scrollDown() {
         waitForExistence(app.staticTexts["Switch Your Default Browser"], timeout: TIMEOUT)
         if !isTablet {
+            app.collectionViews["FxCollectionView"].swipeUp()
             while app.staticTexts["Switch Your Default Browser"].exists || app.buttons["Learn How"].exists {
                 app.collectionViews["FxCollectionView"].swipeUp()
             }
@@ -83,7 +85,8 @@ class JumpBackInTests: BaseTestCase {
 
         // Tap on the "test3" from "Jump Back In" section
         scrollDown()
-        waitForExistence(app.staticTexts["Jump Back In"])
+        print(app.debugDescription)
+        waitForExistence(app.collectionViews.otherElements.staticTexts["jumpBackInTitle"], timeout: TIMEOUT)
         app.cells["JumpBackInCell"].staticTexts["Test3"].tap()
         if isTablet {
             waitForExistence(app.navigationBars.segmentedControls["navBarTabTray"])
@@ -106,7 +109,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Twitter tab is visible in the "Jump Back In" section
         scrollDown()
-        waitForExistence(app.staticTexts["Jump Back In"])
+//        waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
 
@@ -126,7 +129,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Twitter should be in "Jump Back In"
         scrollDown()
-        waitForExistence(app.staticTexts["Jump Back In"])
+//        waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
         waitForNoExistence(app.cells["JumpBackInCell"].staticTexts["YouTube"])
@@ -142,7 +145,7 @@ class JumpBackInTests: BaseTestCase {
 
         // Amazon and Tiwtter are visible in the "Jump Back In" section
         scrollDown()
-        waitForExistence(app.staticTexts["Jump Back In"])
+//        waitForExistence(app.staticTexts["Jump Back In"])
         waitForExistence(app.cells["JumpBackInCell"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Amazon"])
         waitForExistence(app.cells["JumpBackInCell"].staticTexts["Twitter"])
