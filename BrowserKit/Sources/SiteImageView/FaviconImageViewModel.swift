@@ -4,14 +4,16 @@
 
 import UIKit
 
-public struct FaviconImageViewModel {
-    let urlStringRequest: String
-    let faviconCornerRadius: CGFloat
-    let usesIndirectDomain: Bool
+public protocol FaviconImageViewModel {
+    var urlStringRequest: String { get }
+    var faviconCornerRadius: CGFloat { get }
+}
 
-    public init(urlStringRequest: String,
-                faviconCornerRadius: CGFloat,
-                usesIndirectDomain: Bool = false) {
+public struct DefaultFaviconImageViewModel: FaviconImageViewModel {
+    public let urlStringRequest: String
+    public let faviconCornerRadius: CGFloat
+
+    public init(urlStringRequest: String, faviconCornerRadius: CGFloat) {
         self.urlStringRequest = urlStringRequest
         self.faviconCornerRadius = faviconCornerRadius
         self.usesIndirectDomain = usesIndirectDomain
