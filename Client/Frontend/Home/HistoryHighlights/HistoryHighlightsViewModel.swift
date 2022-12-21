@@ -9,7 +9,7 @@ import UIKit
 struct HistoryHighlightsModel {
     let title: String
     let description: String?
-    let favIconImage: UIImage?
+    let urlString: String?
     let corners: CACornerMask?
     let hideBottomLine: Bool
     let isFillerCell: Bool
@@ -24,16 +24,16 @@ struct HistoryHighlightsModel {
 
     init(title: String,
          description: String?,
+         urlString: String? = nil,
          shouldHideBottomLine: Bool,
          with corners: CACornerMask? = nil,
-         and heroImage: UIImage? = nil,
          andIsFillerCell: Bool = false,
          shouldAddShadow: Bool = false) {
         self.title = title
         self.description = description
+        self.urlString = urlString
         self.hideBottomLine = shouldHideBottomLine
         self.corners = corners
-        self.favIconImage = heroImage
         self.isFillerCell = andIsFillerCell
         self.shouldAddShadow = shouldAddShadow
     }
@@ -46,7 +46,6 @@ struct HistoryHighlightsModel {
                   description: "",
                   shouldHideBottomLine: shouldHideBottomLine,
                   with: corners,
-                  and: nil,
                   andIsFillerCell: true,
                   shouldAddShadow: shouldAddShadow)
     }
@@ -67,7 +66,6 @@ class HistoryHighlightsViewModel {
     private var profile: Profile
     private var isPrivate: Bool
     private var urlBar: URLBarViewProtocol
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var hasSentSectionEvent = false
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
@@ -147,12 +145,6 @@ class HistoryHighlightsViewModel {
                               method: .tap,
                               object: .firefoxHomepage,
                               value: .historyHighlightsItemOpened)
-    }
-
-    func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
-            completion(image)
-        }
     }
 
     func getItemDetailsAt(index: Int) -> HighlightItem? {
@@ -404,23 +396,14 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
                                                   item: HighlightItem) -> UICollectionViewCell {
         guard let cell = cell as? HistoryHighlightsCell else { return UICollectionViewCell() }
 
-        let itemURL = item.siteUrl?.absoluteString ?? ""
-        let site = Site(url: itemURL, title: item.displayTitle)
-
         let cellOptions = HistoryHighlightsModel(title: item.displayTitle,
                                                  description: nil,
+                                                 urlString: item.urlString,
                                                  shouldHideBottomLine: hideBottomLine,
                                                  with: cornersToRound,
                                                  shouldAddShadow: shouldAddShadow)
 
         cell.configureCell(with: cellOptions, theme: theme)
-
-        let id = Int(arc4random())
-        cell.tag = id
-        getFavIcon(for: site) { image in
-            guard cell.tag == id else { return }
-            cell.heroImage.image = image
-        }
 
         return cell
     }
