@@ -11,6 +11,7 @@ public enum SentryTag: String {
     case rustPlaces = "RustPlaces"
     case rustLogins = "RustLogins"
     case rustRemoteTabs = "RustRemoteTabs"
+    case rustAutofill = "RustAutofill"
     case rustLog = "RustLog"
     case fxaClient = "FxAClient"
     case notificationService = "NotificationService"
