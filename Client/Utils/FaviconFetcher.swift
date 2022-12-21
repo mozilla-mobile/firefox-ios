@@ -84,8 +84,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         do {
             decoded = try decoder.decode([BundledIcon].self, from: file)
         } catch {
-            print(error)
-            assert(false)
+            assertionFailure("Failed with error: \(error)")
             return icons
         }
 

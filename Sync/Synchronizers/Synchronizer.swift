@@ -193,7 +193,7 @@ open class BaseCollectionSynchronizer {
     }
 
     var storageVersion: Int {
-        assert(false, "Override me!")
+        assertionFailure("Override me!")
         return 0
     }
 

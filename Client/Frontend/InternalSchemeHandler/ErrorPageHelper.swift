@@ -188,7 +188,7 @@ class ErrorPageHandler: InternalSchemeResponse {
                   let comp = URLComponents(url: url, resolvingAgainstBaseURL: false),
                   let certError = comp.valueForQuery("certerror")
             else {
-                assert(false)
+                assertionFailure("Error unwrapping the cert error")
                 return nil
             }
 
@@ -209,7 +209,7 @@ class ErrorPageHandler: InternalSchemeResponse {
 
         let response = InternalSchemeHandler.response(forUrl: originalUrl)
         guard let file = asset, var html = try? String(contentsOfFile: file) else {
-            assert(false)
+            assertionFailure("Error unwrapping html from file contents")
             return nil
         }
 
