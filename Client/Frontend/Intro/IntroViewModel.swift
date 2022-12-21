@@ -50,29 +50,15 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
-        switch (cardType, isv106Version) {
-        case (.welcome, false):
-            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcome),
-                                       title: .CardTitleWelcome,
-                                       description: .Onboarding.IntroDescriptionPart2,
-                                       primaryAction: .Onboarding.IntroAction,
-                                       secondaryAction: nil,
-                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
-        case (.welcome, true):
+        switch cardType {
+        case .welcome:
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
                                        title: .Onboarding.IntroWelcomeTitle,
                                        description: .Onboarding.IntroWelcomeDescription,
                                        primaryAction: .Onboarding.IntroAction,
                                        secondaryAction: nil,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.welcomeCard)
-        case (.signSync, false):
-            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSync),
-                                       title: .Onboarding.SyncTitle,
-                                       description: .Onboarding.SyncDescription,
-                                       primaryAction: .Onboarding.SyncAction,
-                                       secondaryAction: .WhatsNew.RecentButtonTitle,
-                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
-        case (.signSync, true):
+        case .signSync:
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
                                        title: .Onboarding.IntroSyncTitle,
                                        description: .Onboarding.IntroSyncDescription,
