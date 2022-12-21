@@ -41,7 +41,7 @@ class FxAWebViewModel {
         guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"),
               let source = try? String(contentsOfFile: path, encoding: .utf8)
         else {
-            assert(false)
+            assertionFailure("Error unwrapping contents of file to set up user script")
             return
         }
 

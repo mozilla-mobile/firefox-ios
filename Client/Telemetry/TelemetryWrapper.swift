@@ -221,7 +221,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
     @objc func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
-        guard let profile = self.profile else { assert(false); return; }
+        guard let profile = self.profile else {
+            assertionFailure("Error unwrapping profile")
+            return
+        }
 
         // Record default search engine setting
         let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
