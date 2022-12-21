@@ -124,11 +124,14 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     var headerViewModel: LabelButtonHeaderViewModel {
+        /* Ecosia: no header for top sites
         // Only show a header if the firefox browser logo isn't showing
         let shouldShow = !featureFlags.isFeatureEnabled(.wallpapers, checking: .buildOnly)
         return LabelButtonHeaderViewModel(title: shouldShow ? HomepageSectionType.topSites.title: nil,
                                           titleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.topSites,
                                           isButtonHidden: true)
+         */
+        .emptyHeader
     }
 
     var isEnabled: Bool {
@@ -140,21 +143,23 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     }
 
     func section(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let interface = TopSitesUIInterface(trait: traitCollection)
+        let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
+                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
+                                                                    interface: interface)
+
+
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
+            widthDimension: .fractionalWidth(1.0/CGFloat(sectionDimension.numberOfTilesPerRow)),
             heightDimension: .estimated(UX.cellEstimatedSize.height)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(UX.cellEstimatedSize.height)
+            heightDimension: .estimated(UX.cellEstimatedSize.height * CGFloat(sectionDimension.numberOfRows))
         )
 
-        let interface = TopSitesUIInterface(trait: traitCollection)
-        let sectionDimension = dimensionManager.getSectionDimension(for: topSites,
-                                                                    numberOfRows: topSitesDataAdaptor.numberOfRows,
-                                                                    interface: interface)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: sectionDimension.numberOfTilesPerRow)
         let section = NSCollectionLayoutSection(group: group)
 
