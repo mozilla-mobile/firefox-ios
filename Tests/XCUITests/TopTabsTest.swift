@@ -240,7 +240,7 @@ class TopTabsTest: BaseTestCase {
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
-        XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
+        waitForExistence(app.staticTexts["Private Browsing"], timeout: TIMEOUT)
     }
 
     // Smoketest
