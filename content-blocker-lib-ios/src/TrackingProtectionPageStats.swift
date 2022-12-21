@@ -158,15 +158,17 @@ class TPStatsBlocklists {
 
             for rule in list {
                 guard let trigger = rule["trigger"] as? [String: AnyObject],
-                    let filter = trigger["url-filter"] as? String else {
-                        assertionFailure("Blocklists error: Rule has unexpected format.")
-                        continue
+                      let filter = trigger["url-filter"] as? String
+                else {
+                    assertionFailure("Blocklists error: Rule has unexpected format.")
+                    continue
                 }
 
                 guard let loc = filter.range(of: standardPrefix) else {
-                    assert(false, "url-filter code needs updating for new list format")
+                    assertionFailure("url-filter code needs updating for new list format")
                     return
                 }
+
                 let baseDomain = String(filter[loc.upperBound...]).replacingOccurrences(of: "\\.", with: ".")
                 assert(!baseDomain.isEmpty)
 

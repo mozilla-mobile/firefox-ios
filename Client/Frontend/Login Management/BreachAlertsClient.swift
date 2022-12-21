@@ -40,7 +40,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
             }
             guard let etag = response.allHeaderFields["Etag"] as Any as? String else {
                 completion(nil)
-                assert(false)
+                assertionFailure("Error unpacking the etag header field")
                 return
             }
             DispatchQueue.main.async {
@@ -69,7 +69,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
             guard let data = data else {
                 completion(Maybe(failure: BreachAlertsError(description: "invalid data")))
                 SentryIntegration.shared.send(message: "BreachAlerts: fetchData: invalid data")
-                assert(false)
+                assertionFailure("Error unwrapping data")
                 return
             }
 

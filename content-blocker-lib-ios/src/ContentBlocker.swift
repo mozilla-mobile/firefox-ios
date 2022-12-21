@@ -165,7 +165,7 @@ extension ContentBlocker {
             guard let path = Bundle.main.path(forResource: file, ofType: "json"),
                   let source = try? String(contentsOfFile: path, encoding: .utf8)
             else {
-                assert(false)
+                assertionFailure("Error unwrapping the resource contents")
                 return
             }
 
@@ -286,8 +286,7 @@ extension ContentBlocker {
                     str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
                     self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
                         if let error = error {
-                            print("Content blocker error: \(error)")
-                            assert(false)
+                            assertionFailure("Content blocker error: \(error)")
                         }
                         assert(rule != nil)
 

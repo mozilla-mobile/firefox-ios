@@ -76,8 +76,10 @@ opt_in_rules: # some rules are only opt-in
   - empty_string
   - empty_xctest_method
   - explicit_init
+  - discouraged_assert
   - duplicate_imports
   - duplicate_enum_cases
+  - last_where
   - multiline_arguments
   - opening_brace
   - return_arrow_whitespace
