@@ -57,11 +57,13 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
             }
         } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
             let profile = appDelegate.profile
-            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
-                guard let image = result.successValue else { return }
+            profile.favicons.getFaviconImage(forSite: site) { result in
+                guard let image = result else { return }
 
-                self.siteImageView.backgroundColor = .clear
-                self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.iconSize)
+                DispatchQueue.main.async {
+                    self.siteImageView.backgroundColor = .clear
+                    self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.iconSize)
+                }
             }
         }
 

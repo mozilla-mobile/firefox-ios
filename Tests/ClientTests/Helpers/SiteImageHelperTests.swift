@@ -200,17 +200,9 @@ extension SiteImageHelperTests {
 }
 
 class FaviconFetcherMock: Favicons {
-    func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>> {
-        return deferMaybe(0)
-    }
-
-    func addFavicon(_ icon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>> {
-        return deferMaybe(0)
-    }
-
     var shouldSucceed = true
-    func getFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>> {
-        return shouldSucceed ? deferMaybe(UIImage()) : Deferred(value: Maybe(failure: SiteImageHelperTests.TestError.invalidResult))
+    func getFaviconImage(forSite site: Storage.Site, completionHandler: @escaping (UIImage?) -> Void) {
+        completionHandler(shouldSucceed ? UIImage() : nil)
     }
 }
 

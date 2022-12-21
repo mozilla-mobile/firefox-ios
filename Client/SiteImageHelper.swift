@@ -159,11 +159,14 @@ class SiteImageHelper: SiteImageHelperProtocol {
         if let cachedImage = SiteImageHelper.cache.object(forKey: faviconCacheKey) {
             completion(cachedImage, true)
         } else {
-            faviconFetcher.getFaviconImage(forSite: site).uponQueue(.main, block: { result in
-                guard let image = result.successValue else { return }
-                SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
-                completion(image, true)
-            })
+            faviconFetcher.getFaviconImage(forSite: site) { result in
+                guard let image = result else { return }
+
+                DispatchQueue.main.async {
+                    SiteImageHelper.cache.setObject(image, forKey: faviconCacheKey)
+                    completion(image, true)
+                }
+            }
         }
     }
 }
