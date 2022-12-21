@@ -30,6 +30,7 @@ final class NTPTooltip: UICollectionReusableView, NotificationThemeable {
     }
 
     private func commonInit() {
+        translatesAutoresizingMaskIntoConstraints = false
         let background = UIView()
         background.translatesAutoresizingMaskIntoConstraints = false
         addSubview(background)
@@ -38,7 +39,7 @@ final class NTPTooltip: UICollectionReusableView, NotificationThemeable {
         background.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         background.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         background.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        background.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Self.margin).isActive = true
+        background.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Self.margin, priority: .init(999)).isActive = true
 
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
