@@ -4,40 +4,36 @@
 
 import Foundation
 
-struct ButtonToastUX {
-    static let ToastHeight: CGFloat = 55.0
-    static let ToastPadding: CGFloat = 15.0
-    static let ToastButtonPadding: CGFloat = 10.0
-    static let ToastDelay = DispatchTimeInterval.milliseconds(900)
-    static let ToastButtonBorderRadius: CGFloat = 5
-    static let ToastButtonBorderWidth: CGFloat = 1
-    static let ToastLabelFont = UIFont.systemFont(ofSize: 15, weight: .semibold)
-    static let ToastDescriptionFont = UIFont.systemFont(ofSize: 13)
-
-    struct ToastButtonPaddedView {
-        static let WidthOffset: CGFloat = 20.0
-        static let TopOffset: CGFloat = 5.0
-        static let BottomOffset: CGFloat = 20.0
+class HighlightableButton: UIButton {
+    override var isHighlighted: Bool {
+        didSet {
+            backgroundColor = isHighlighted ? .white : .clear
+        }
     }
 }
 
 class ButtonToast: Toast {
-    class HighlightableButton: UIButton {
-        override var isHighlighted: Bool {
-            didSet {
-                backgroundColor = isHighlighted ? .white : .clear
-            }
-        }
+    struct UX {
+        static let ToastPadding: CGFloat = 15.0
+        static let ToastButtonPadding: CGFloat = 10.0
+        static let ToastDelay = DispatchTimeInterval.milliseconds(900)
+        static let ToastButtonBorderRadius: CGFloat = 5
+        static let ToastButtonBorderWidth: CGFloat = 1
+        static let ToastDescriptionFont = UIFont.systemFont(ofSize: 13)
+        // Padded View
+        static let WidthOffset: CGFloat = 20.0
+        static let TopOffset: CGFloat = 5.0
+        static let BottomOffset: CGFloat = 20.0
     }
 
-    init(
-        labelText: String,
-        descriptionText: String? = nil,
-        imageName: String? = nil,
-        buttonText: String? = nil,
-        backgroundColor: UIColor = SimpleToastUX.ToastDefaultColor,
-        textAlignment: NSTextAlignment = .left,
-        completion: ((_ buttonPressed: Bool) -> Void)? = nil, autoDismissCompletion: (() -> Void)? = nil
+    init(labelText: String,
+         descriptionText: String? = nil,
+         imageName: String? = nil,
+         buttonText: String? = nil,
+         backgroundColor: UIColor = SimpleToast.UX.toastDefaultColor,
+         textAlignment: NSTextAlignment = .left,
+         completion: ((_ buttonPressed: Bool) -> Void)? = nil,
+         autoDismissCompletion: (() -> Void)? = nil
     ) {
         super.init(frame: .zero)
 
@@ -59,10 +55,11 @@ class ButtonToast: Toast {
             toastView.trailingAnchor.constraint(equalTo: trailingAnchor),
             toastView.heightAnchor.constraint(equalTo: heightAnchor),
 
-            heightAnchor.constraint(greaterThanOrEqualToConstant: ButtonToastUX.ToastHeight)
+            heightAnchor.constraint(greaterThanOrEqualToConstant: Toast.UX.toastHeight)
         ])
 
-        animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: ButtonToastUX.ToastHeight)
+        animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
+                                                             constant: Toast.UX.toastHeight)
         animationConstraint?.isActive = true
     }
 
@@ -70,11 +67,11 @@ class ButtonToast: Toast {
         fatalError("init(coder:) has not been implemented")
     }
 
-    fileprivate func createView(_ labelText: String, descriptionText: String?, imageName: String?, buttonText: String?, textAlignment: NSTextAlignment) -> UIView {
+    private func createView(_ labelText: String, descriptionText: String?, imageName: String?, buttonText: String?, textAlignment: NSTextAlignment) -> UIView {
         let horizontalStackView: UIStackView = .build { stackView in
             stackView.axis = .horizontal
             stackView.alignment = .center
-            stackView.spacing = ButtonToastUX.ToastPadding
+            stackView.spacing = UX.ToastPadding
         }
 
         if let imageName = imageName {
@@ -91,7 +88,7 @@ class ButtonToast: Toast {
         let titleLabel: UILabel = .build { label in
             label.textAlignment = textAlignment
             label.textColor = UIColor.Photon.White100
-            label.font = ButtonToastUX.ToastLabelFont
+            label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
             label.text = labelText
             label.lineBreakMode = .byWordWrapping
             label.numberOfLines = 0
@@ -108,7 +105,7 @@ class ButtonToast: Toast {
             descriptionLabel = .build { label in
                 label.textAlignment = textAlignment
                 label.textColor = UIColor.Photon.White100
-                label.font = ButtonToastUX.ToastDescriptionFont
+                label.font = UX.ToastDescriptionFont
                 label.text = descriptionText
                 label.lineBreakMode = .byTruncatingTail
             }
@@ -128,11 +125,11 @@ class ButtonToast: Toast {
         NSLayoutConstraint.activate([
             labelStackView.centerYAnchor.constraint(equalTo: horizontalStackView.centerYAnchor),
 
-            horizontalStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: ButtonToastUX.ToastPadding),
+            horizontalStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: UX.ToastPadding),
             horizontalStackView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor),
             horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
             horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
-            horizontalStackView.heightAnchor.constraint(equalToConstant: ButtonToastUX.ToastHeight),
+            horizontalStackView.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
         ])
         return toastView
     }
@@ -146,12 +143,13 @@ class ButtonToast: Toast {
 
         let roundedButton = HighlightableButton()
         roundedButton.translatesAutoresizingMaskIntoConstraints = false
-        roundedButton.layer.cornerRadius = ButtonToastUX.ToastButtonBorderRadius
-        roundedButton.layer.borderWidth = ButtonToastUX.ToastButtonBorderWidth
+        roundedButton.layer.cornerRadius = UX.ToastButtonBorderRadius
+        roundedButton.layer.borderWidth = UX.ToastButtonBorderWidth
         roundedButton.layer.borderColor = UIColor.Photon.White100.cgColor
         roundedButton.setTitle(buttonText, for: [])
         roundedButton.setTitleColor(toastView.backgroundColor, for: .highlighted)
-        roundedButton.titleLabel?.font = SimpleToastUX.ToastFont
+        roundedButton.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                                       size: Toast.UX.fontSize)
         roundedButton.titleLabel?.numberOfLines = 1
         roundedButton.titleLabel?.lineBreakMode = .byClipping
         roundedButton.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -159,14 +157,14 @@ class ButtonToast: Toast {
         paddedView.addSubview(roundedButton)
 
         NSLayoutConstraint.activate([
-            roundedButton.heightAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * ButtonToastUX.ToastButtonPadding),
-            roundedButton.widthAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * ButtonToastUX.ToastButtonPadding),
+            roundedButton.heightAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * UX.ToastButtonPadding),
+            roundedButton.widthAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.ToastButtonPadding),
             roundedButton.centerYAnchor.constraint(equalTo: paddedView.centerYAnchor),
             roundedButton.centerXAnchor.constraint(equalTo: paddedView.centerXAnchor),
 
             paddedView.topAnchor.constraint(equalTo: stackView.topAnchor),
             paddedView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-            paddedView.widthAnchor.constraint(equalTo: roundedButton.widthAnchor, constant: ButtonToastUX.ToastButtonPaddedView.WidthOffset)
+            paddedView.widthAnchor.constraint(equalTo: roundedButton.widthAnchor, constant: UX.WidthOffset)
         ])
 
         roundedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
@@ -175,8 +173,8 @@ class ButtonToast: Toast {
     }
 
     override func showToast(viewController: UIViewController? = nil,
-                            delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore,
-                            duration: DispatchTimeInterval? = SimpleToastUX.ToastDismissAfter,
+                            delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+                            duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter,
                             updateConstraintsOn: @escaping (Toast) -> [NSLayoutConstraint]) {
         super.showToast(viewController: viewController, delay: delay, duration: duration, updateConstraintsOn: updateConstraintsOn)
     }

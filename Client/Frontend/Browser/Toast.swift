@@ -5,7 +5,15 @@
 import Foundation
 import UIKit
 
-class Toast: UIView {
+class Toast: UIView, ThemeApplicable {
+    struct UX {
+        static let toastHeight: CGFloat = 56
+        static let toastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
+        static let toastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
+        static let toastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
+        static let fontSize: CGFloat = 15
+    }
+
     var animationConstraint: NSLayoutConstraint?
     var completionHandler: ((Bool) -> Void)?
     var didDismissWithoutTapHandler: (() -> Void)?
@@ -21,7 +29,7 @@ class Toast: UIView {
     }()
 
     lazy var toastView: UIView = .build { view in
-        view.backgroundColor = SimpleToastUX.ToastDefaultColor
+        view.backgroundColor = SimpleToast.UX.toastDefaultColor
     }
 
     override func didMoveToSuperview() {
@@ -45,7 +53,7 @@ class Toast: UIView {
             self.layoutIfNeeded()
 
             UIView.animate(
-                withDuration: SimpleToastUX.ToastAnimationDuration,
+                withDuration: SimpleToast.UX.toastAnimationDuration,
                 animations: {
                     self.animationConstraint?.constant = 0
                     self.layoutIfNeeded()
@@ -62,13 +70,14 @@ class Toast: UIView {
 
     func dismiss(_ buttonPressed: Bool) {
         guard !dismissed else { return }
+
         dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
 
         UIView.animate(
-            withDuration: SimpleToastUX.ToastAnimationDuration,
+            withDuration: SimpleToast.UX.toastAnimationDuration,
             animations: {
-                self.animationConstraint?.constant = SimpleToastUX.ToastHeight
+                self.animationConstraint?.constant = Toast.UX.toastHeight
                 self.layoutIfNeeded()
             }) { finished in
                 self.removeFromSuperview()
@@ -80,5 +89,9 @@ class Toast: UIView {
 
     @objc func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
         dismiss(false)
+    }
+
+    func applyTheme(theme: Theme) {
+        print("YRD apply theme on toast")
     }
 }

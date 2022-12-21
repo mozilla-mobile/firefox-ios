@@ -221,8 +221,8 @@ private extension WallpaperSettingsViewController {
         })
 
         toast.showToast(viewController: self,
-                        delay: SimpleToastUX.ToastDelayBefore,
-                        duration: SimpleToastUX.ToastDismissAfter) { toast in
+                        delay: Toast.UX.toastDelayBefore,
+                        duration: Toast.UX.toastDismissAfter) { toast in
             [
                 toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),

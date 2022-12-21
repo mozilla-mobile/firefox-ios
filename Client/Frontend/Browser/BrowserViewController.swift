@@ -570,7 +570,7 @@ class BrowserViewController: UIViewController {
 
         if let toast = self.pendingToast {
             self.pendingToast = nil
-            show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
+            show(toast: toast, afterWaiting: ButtonToast.UX.ToastDelay)
         }
         showQueuedAlertIfAvailable()
 
@@ -2131,12 +2131,12 @@ extension BrowserViewController: TabManagerDelegate {
         urlFromAnotherApp = nil
     }
 
-    func show(toast: Toast, afterWaiting delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore, duration: DispatchTimeInterval? = SimpleToastUX.ToastDismissAfter) {
+    func show(toast: Toast, afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore, duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
         if let downloadToast = toast as? DownloadToast {
             self.downloadToast = downloadToast
         }
 
-        // If BVC isnt visible hold on to this toast until viewDidAppear
+        // If BVC isn't visible hold on to this toast until viewDidAppear
         if self.view.window == nil {
             self.pendingToast = toast
             return
@@ -2153,7 +2153,7 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard let toast = toast, !(tabManager.selectedTab?.isPrivate ?? false) else { return }
-        show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
+        show(toast: toast, afterWaiting: ButtonToast.UX.ToastDelay)
     }
 
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
