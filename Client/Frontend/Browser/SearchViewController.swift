@@ -727,13 +727,17 @@ class SearchViewController: SiteTableViewController,
             twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
             twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
             twoLineCell.leftImageView.contentMode = .center
-            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) {
-                [weak twoLineCell] result in
+            profile.favicons.getFaviconImage(forSite: site) { [weak twoLineCell] result in
                 // Check that we successfully retrieved an image (should always happen)
                 // and ensure that the cell we were fetching for is still on-screen.
-                guard let image = result.successValue else { return }
-                twoLineCell?.leftImageView.image = image
-                twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                guard let image = result else { return }
+
+                DispatchQueue.main.async {
+                    twoLineCell?.leftImageView.image = image
+                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?
+                        .createScaled(CGSize(width: SearchViewControllerUX.IconSize,
+                                             height: SearchViewControllerUX.IconSize))
+                }
             }
             twoLineCell.accessoryView = nil
             cell = twoLineCell

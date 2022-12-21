@@ -7,5 +7,5 @@ import UIKit
 
 /// The base favicons protocol. To be deprecated soon, do not use for new code
 public protocol Favicons {
-    func getFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>>
+    func getFaviconImage(forSite site: Site, completionHandler: @escaping (UIImage?) -> Void)
 }
