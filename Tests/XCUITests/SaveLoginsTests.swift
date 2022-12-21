@@ -21,12 +21,6 @@ let defaultNumRowsEmptyFilterList = 0
 
 class SaveLoginTest: BaseTestCase {
     private func saveLogin(givenUrl: String) {
-        if iPad() {
-            waitForTabsButton()
-            navigator.goto(TabTray)
-            navigator.performAction(Action.OpenNewTabFromTabTray)
-            navigator.nowAt(URLBarOpen)
-        }
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
         waitForExistence(app.buttons["submit"], timeout: 10)
@@ -105,10 +99,6 @@ class SaveLoginTest: BaseTestCase {
     }
 
     func testDoNotSaveLogin() {
-        if iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-        }
         navigator.openURL(testLoginPage)
         waitUntilPageLoad()
         app.buttons["submit"].tap()
