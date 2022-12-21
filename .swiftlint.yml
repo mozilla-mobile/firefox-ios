@@ -78,6 +78,7 @@ opt_in_rules: # some rules are only opt-in
   - explicit_init
   - duplicate_imports
   - duplicate_enum_cases
+  - last_where
   - multiline_arguments
   - opening_brace
   - return_arrow_whitespace
