@@ -103,6 +103,7 @@
         "IntegrationTests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
+        "JumpBackInTests",
         "LibraryTestsIpad",
         "LibraryTestsIphone",
         "MailAppSettingsTests",

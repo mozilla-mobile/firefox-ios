@@ -306,6 +306,9 @@
                   Identifier = "IntegrationTests/testFxASyncBookmark()">
                </Test>
                <Test
+                  Identifier = "JumpBackInTests">
+               </Test>
+               <Test
                   Identifier = "NavigationTest/testLongPressLinkOptions()">
                </Test>
                <Test
