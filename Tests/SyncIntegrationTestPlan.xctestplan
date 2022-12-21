@@ -62,6 +62,7 @@
         "HomePageSettingsUITests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
+        "JumpBackInTests",
         "LibraryTestsIpad",
         "LibraryTestsIphone",
         "MailAppSettingsTests",

@@ -29,6 +29,7 @@ let HomeSettings = "HomeSettings"
 let SiriSettings = "SiriSettings"
 let SearchSettings = "SearchSettings"
 let NewTabSettings = "NewTabSettings"
+let TabsSettings = "TabsSettings"
 let ClearPrivateDataSettings = "ClearPrivateDataSettings"
 let WebsiteDataSettings = "WebsiteDataSettings"
 let WebsiteSearchDataSettings = "WebsiteSearchDataSettings"
@@ -130,6 +131,9 @@ class Action {
     static let ToggleNightMode = "ToggleNightMode"
     static let ToggleTrackingProtection = "ToggleTrackingProtection"
     static let ToggleNoImageMode = "ToggleNoImageMode"
+
+    static let ToggleInactiveTabs = "ToggleInactiveTabs"
+    static let ToggleTabGroups = "ToggleTabGroups"
 
     static let Bookmark = "Bookmark"
     static let BookmarkThreeDots = "BookmarkThreeDots"
@@ -552,6 +556,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Search.searchNavigationBar], to: SearchSettings)
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Homepage.homeSettings], to: HomeSettings)
+        screenState.tap(table.cells["Tabs"], to: TabsSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
@@ -978,6 +983,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction
+    }
+
+    map.addScreenState(TabsSettings) { screenState in
+        screenState.tap(app.switches.element(boundBy: 0), forAction: Action.ToggleInactiveTabs)
+        screenState.tap(app.switches.element(boundBy: 1), forAction: Action.ToggleTabGroups)
+        screenState.tap(app.navigationBars.buttons["Settings"], to: SettingsScreen)
     }
 
     return map

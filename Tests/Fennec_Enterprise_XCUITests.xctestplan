@@ -67,6 +67,8 @@
         "HomePageUITest",
         "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",
+        "JumpBackInTests\/testGroupedTabs()",
+        "JumpBackInTests\/testPrivateTab()",
         "NavigationTest\/testLongPressLinkOptions()",
         "NavigationTest\/testNavigationPreservesDesktopSiteOnSameHost()",
         "NavigationTest\/testPopUpBlocker()",
