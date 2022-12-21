@@ -66,7 +66,8 @@ class MockSiteImageFetcher: SiteImageFetcher {
                               expectedImageType: type,
                               urlStringRequest: urlStringRequest,
                               siteURL: URL(string: urlStringRequest)!,
-                              domain: ImageDomain(baseDomain: "", bundleDomains: []),
+                              cacheKey: "",
+                              domain: ImageDomain(bundleDomains: []),
                               faviconURL: nil,
                               faviconImage: image,
                               heroImage: image)

@@ -8,7 +8,7 @@ protocol BundleImageFetcher {
     /// Fetches from the bundle
     /// - Parameter domain: The domain to fetch the image with from the bundle
     /// - Returns: The image or throw an error if it fails
-    func getImageFromBundle(domain: ImageDomain) throws -> UIImage
+    func getImageFromBundle(domain: ImageDomain?) throws -> UIImage
 }
 
 class DefaultBundleImageFetcher: BundleImageFetcher {
@@ -34,8 +34,9 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
         bundledImages = retrieveBundledImages()
     }
 
-    func getImageFromBundle(domain: ImageDomain) throws -> UIImage {
-        guard let bundleDomain = getBundleDomain(domain: domain) else {
+    func getImageFromBundle(domain: ImageDomain?) throws -> UIImage {
+        guard let domain = domain,
+              let bundleDomain = getBundleDomain(domain: domain) else {
             throw SiteImageError.noImageInBundle
         }
 
