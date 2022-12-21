@@ -6,73 +6,45 @@ import UIKit
 import Storage
 import Shared
 
-class BackForwardTableViewCell: UITableViewCell {
-    private struct BackForwardViewCellUX {
-        static let bgColor = UIColor.Photon.Grey50
-        static let faviconWidth = 29
-        static let faviconPadding: CGFloat = 20
-        static let labelPadding = 20
-        static let borderSmall = 2
-        static let borderBold = 5
-        static let IconSize = 23
-        static let fontSize: CGFloat = 12.0
-        static let textColor = UIColor.Photon.Grey80
+struct BackForwardCellViewModel {
+    var site: Site
+    var connectingForwards: Bool
+    var connectingBackwards: Bool
+    var isCurrentTab: Bool
+    var strokeBackgroundColor: UIColor
+
+    var cellTittle: String {
+        return !site.title.isEmpty ? site.title : site.url
     }
-    lazy var faviconView: UIImageView = .build { imageView in
+}
+
+class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
+    private struct UX {
+        static let faviconWidth: CGFloat = 29
+        static let faviconPadding: CGFloat = 20
+        static let labelPadding: CGFloat = 20
+        static let iconSize = CGSize(width: 23, height: 23)
+        static let fontSize: CGFloat = 12
+    }
+
+    private lazy var faviconView: UIImageView = .build { imageView in
         imageView.image = FaviconFetcher.defaultFavicon
-        imageView.backgroundColor = UIColor.Photon.White100
         imageView.layer.cornerRadius = 6
         imageView.layer.borderWidth = 0.5
-        imageView.layer.borderColor = UIColor(white: 0, alpha: 0.1).cgColor
         imageView.layer.masksToBounds = true
         imageView.contentMode = .center
     }
 
-    lazy var label: UILabel = .build { label in
-        label.text = " "
-        label.font = label.font.withSize(BackForwardViewCellUX.fontSize)
-        label.textColor = UIColor.theme.tabTray.tabTitleText
-    }
+    lazy var label: UILabel = .build { _ in }
 
-    var connectingForwards = true
-    var connectingBackwards = true
-
-    var isCurrentTab = false {
-        didSet {
-            if isCurrentTab {
-                label.font = UIFont.boldSystemFont(ofSize: BackForwardViewCellUX.fontSize)
-            }
-        }
-    }
-
-    var site: Site? {
-        didSet {
-            if let site = site {
-                faviconView.setFavicon(forSite: site) { [weak self] in
-                    if InternalURL.isValid(url: site.tileURL) {
-                        self?.faviconView.image = UIImage(named: "faviconFox")
-                        self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
-                        self?.faviconView.backgroundColor = UIColor.Photon.White100
-                        return
-                    }
-
-                    self?.faviconView.image = self?.faviconView.image?.createScaled(CGSize(width: BackForwardViewCellUX.IconSize, height: BackForwardViewCellUX.IconSize))
-                    if self?.faviconView.backgroundColor == .clear {
-                        self?.faviconView.backgroundColor = .white
-                    }
-                }
-                var title = site.title
-                if title.isEmpty {
-                    title = site.url
-                }
-                label.text = title
-                setNeedsLayout()
-            }
-        }
-    }
+    var viewModel: BackForwardCellViewModel!
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupLayout()
+    }
+
+    func setupLayout() {
         backgroundColor = UIColor.clear
         selectionStyle = .none
 
@@ -80,13 +52,15 @@ class BackForwardTableViewCell: UITableViewCell {
         contentView.addSubview(label)
 
         NSLayoutConstraint.activate([
-            faviconView.heightAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
-            faviconView.widthAnchor.constraint(equalToConstant: CGFloat(BackForwardViewCellUX.faviconWidth)),
+            faviconView.heightAnchor.constraint(equalToConstant: UX.faviconWidth),
+            faviconView.widthAnchor.constraint(equalToConstant: UX.faviconWidth),
             faviconView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            faviconView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: CGFloat(BackForwardViewCellUX.faviconPadding)),
+            faviconView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor,
+                                                 constant: UX.faviconPadding),
+
             label.centerYAnchor.constraint(equalTo: centerYAnchor),
-            label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: CGFloat(BackForwardViewCellUX.labelPadding)),
-            label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: CGFloat(-BackForwardViewCellUX.labelPadding))
+            label.leadingAnchor.constraint(equalTo: faviconView.trailingAnchor, constant: UX.labelPadding),
+            label.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -UX.labelPadding)
         ])
     }
 
@@ -99,11 +73,11 @@ class BackForwardTableViewCell: UITableViewCell {
         guard let context = UIGraphicsGetCurrentContext() else { return }
 
         var startPoint = CGPoint(
-            x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth) * 0.5) + safeAreaInsets.left,
-            y: rect.origin.y + (connectingForwards ?  0 : rect.size.height/2))
+            x: rect.origin.x + UX.faviconPadding + UX.faviconWidth * 0.5 + safeAreaInsets.left,
+            y: rect.origin.y + (viewModel.connectingForwards ?  0 : rect.size.height/2))
         var endPoint   = CGPoint(
-            x: rect.origin.x + BackForwardViewCellUX.faviconPadding + CGFloat(Double(BackForwardViewCellUX.faviconWidth) * 0.5) + safeAreaInsets.left,
-            y: rect.origin.y + rect.size.height - (connectingBackwards  ? 0 : rect.size.height/2))
+            x: rect.origin.x + UX.faviconPadding + UX.faviconWidth * 0.5 + safeAreaInsets.left,
+            y: rect.origin.y + rect.size.height - (viewModel.connectingBackwards ? 0 : rect.size.height/2))
 
         // flip the x component if RTL
         if UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft {
@@ -113,7 +87,7 @@ class BackForwardTableViewCell: UITableViewCell {
 
         context.saveGState()
         context.setLineCap(.square)
-        context.setStrokeColor(BackForwardViewCellUX.bgColor.cgColor)
+        context.setStrokeColor(viewModel.strokeBackgroundColor.cgColor)
         context.setLineWidth(1.0)
         context.move(to: startPoint)
         context.addLine(to: endPoint)
@@ -131,9 +105,42 @@ class BackForwardTableViewCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        connectingForwards = true
-        connectingBackwards = true
-        isCurrentTab = false
-        label.font = UIFont.systemFont(ofSize: BackForwardViewCellUX.fontSize)
+        label.text = nil
+    }
+
+    func configure(viewModel: BackForwardCellViewModel, theme: Theme) {
+        self.viewModel = viewModel
+
+        faviconView.setFavicon(forSite: viewModel.site) { [weak self] in
+            if InternalURL.isValid(url: viewModel.site.tileURL) {
+                self?.faviconView.image = UIImage(named: ImageIdentifiers.firefoxFavicon)
+                self?.faviconView.image = self?.faviconView.image?.createScaled(UX.iconSize)
+                return
+            }
+
+            self?.faviconView.image = self?.faviconView.image?.createScaled(UX.iconSize)
+        }
+
+        label.text = viewModel.cellTittle
+        if viewModel.isCurrentTab {
+            label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+                                                                           size: UX.fontSize)
+        } else {
+            label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                       size: UX.fontSize)
+        }
+        setNeedsLayout()
+        applyTheme(theme: theme)
+    }
+
+    func applyTheme(theme: Theme) {
+        label.textColor = theme.colors.textPrimary
+        viewModel.strokeBackgroundColor = theme.colors.borderPrimary
+        faviconView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        // setFavicon applies a color background to the imageView
+        // if the color is clear we default to white background
+        if faviconView.backgroundColor == nil || faviconView.backgroundColor == .clear {
+            faviconView.backgroundColor = theme.colors.layer6
+        }
     }
 }
