@@ -52,6 +52,10 @@ class PhotonActionSheet: UIViewController, Themeable {
         button.accessibilityIdentifier = AccessibilityIdentifiers.Photon.closeButton
     }
 
+    private lazy var blurredImageView: UIImageView = .build { _ in }
+
+    private var windowScreenshot: UIImage?
+
     var photonTransitionDelegate: UIViewControllerTransitioningDelegate? {
         didSet {
             transitioningDelegate = photonTransitionDelegate
@@ -72,6 +76,11 @@ class PhotonActionSheet: UIViewController, Themeable {
         modalPresentationStyle = viewModel.modalStyle
         closeButton.setTitle(viewModel.closeButtonTitle, for: .normal)
         tableView.estimatedRowHeight = UX.rowHeight
+
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+              let screenshot = sceneDelegate.window?.screenshot() {
+            windowScreenshot = screenshot
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -95,17 +104,7 @@ class PhotonActionSheet: UIViewController, Themeable {
         tableView.backgroundColor = .clear
         tableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
 
-        if viewModel.presentationStyle == .bottom {
-            setupBottomStyle()
-        } else if viewModel.presentationStyle == .popover {
-            setupPopoverStyle()
-        } else {
-            setupCenteredStyle()
-        }
-
-        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
-        tableViewHeightConstraint?.isActive = true
-        NSLayoutConstraint.activate(constraints)
+        setupLayout()
 
         setupNotifications(forObserver: self, observing: [.ProfileDidFinishSyncing,
                                                           .ProfileDidStartSyncing,
@@ -179,6 +178,22 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     // MARK: - Setup
 
+    private func setupLayout() {
+        if viewModel.presentationStyle == .bottom {
+            setupBottomStyle()
+        } else if viewModel.presentationStyle == .popover {
+            setupPopoverStyle()
+        } else {
+            setupCenteredStyle()
+        }
+
+        view.insertSubview(blurredImageView, belowSubview: tableView)
+
+        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+        tableViewHeightConstraint?.isActive = true
+        NSLayoutConstraint.activate(constraints)
+    }
+
     private func setupBottomStyle() {
         self.view.addSubview(closeButton)
 
@@ -222,8 +237,6 @@ class PhotonActionSheet: UIViewController, Themeable {
             tableView.widthAnchor.constraint(equalToConstant: centeredAndBottomWidth),
         ]
         constraints.append(contentsOf: tableViewConstraints)
-
-        applyBackgroundBlur()
     }
 
     // The width used for the .centered and .bottom style
@@ -240,20 +253,24 @@ class PhotonActionSheet: UIViewController, Themeable {
     }
 
     private func applyBackgroundBlur() {
-        guard let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
-              let screenshot = sceneDelegate.window?.screenshot() else { return }
+        guard let screenshot = windowScreenshot else { return }
 
+        let blurType: BlurType = UIAccessibility.isReduceTransparencyEnabled ? NOBLUR : BOXFILTER
         let blurredImage = screenshot.applyBlur(withRadius: 5,
-                                                blurType: BOXFILTER,
+                                                blurType: blurType,
                                                 tintColor: UIColor.black.withAlphaComponent(0.2),
                                                 saturationDeltaFactor: 1.8,
                                                 maskImage: nil)
-        let imageView = UIImageView(image: blurredImage)
-        view.insertSubview(imageView, belowSubview: tableView)
+        blurredImageView.image = blurredImage
     }
 
     func applyTheme() {
         let theme = themeManager.currentTheme
+
+        if viewModel.presentationStyle != .bottom, viewModel.presentationStyle != .popover {
+            // update background blur
+            applyBackgroundBlur()
+        }
 
         // In a popover the popover provides the blur background
         if viewModel.presentationStyle == .popover {
@@ -261,8 +278,10 @@ class PhotonActionSheet: UIViewController, Themeable {
         } else if UIAccessibility.isReduceTransparencyEnabled {
             // Remove the visual effect and the background alpha
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
-            tableView.backgroundView?.backgroundColor = theme.colors.layer1.withAlphaComponent(0.9)
+            tableView.backgroundView?.backgroundColor = theme.colors.layer1
+            tableView.backgroundColor = theme.colors.layer1
         } else {
+            tableView.backgroundColor = .clear
             let blurEffect = UIBlurEffect(style: .regular)
 
             if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
