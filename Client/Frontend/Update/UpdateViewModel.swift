@@ -16,7 +16,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         return enabledCards.count == 1
     }
 
-    var isv106Version: Bool {
+    var isFeatureEnabled: Bool {
         return true
     }
 

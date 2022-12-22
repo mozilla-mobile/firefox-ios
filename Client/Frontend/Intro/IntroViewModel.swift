@@ -41,7 +41,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
-    var isv106Version: Bool {
+    var isFeatureEnabled: Bool {
         return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
     }
 
@@ -75,7 +75,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
 
         return OnboardingCardViewModel(cardType: cardType,
                                        infoModel: infoModel,
-                                       isv106Version: isv106Version)
+                                       isFeatureEnabled: isFeatureEnabled)
     }
 
     func sendCloseButtonTelemetry(index: Int) {
