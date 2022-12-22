@@ -36,9 +36,8 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
 
     func getImageFromBundle(domain: ImageDomain?) throws -> UIImage {
         guard let domain = domain,
-              let bundleDomain = getBundleDomain(domain: domain) else {
-            throw SiteImageError.noImageInBundle
-        }
+              let bundleDomain = getBundleDomain(domain: domain)
+        else { throw SiteImageError.noImageInBundle }
 
         guard let bundledImage = bundledImages[bundleDomain],
               let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) else {
