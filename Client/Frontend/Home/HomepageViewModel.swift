@@ -116,15 +116,6 @@ class HomepageViewModel: FeatureFlaggable, NTPLayoutHighlightDataSource {
             Analytics.shared.showInvitePromo()
         }
 
-        if let variant = Promo.variant(for: .shared, using: .shared) {
-            switch variant {
-            case .test:
-                Analytics.shared.promo(action: .view, for: .treecard)
-            case .control:
-                Analytics.shared.promo(action: .view, for: .treestore)
-            }
-        }
-        
         impactViewModel.startCounter()
     }
 

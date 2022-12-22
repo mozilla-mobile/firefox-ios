@@ -642,12 +642,9 @@
 		CA506BAE28D1EA080064072B /* NTPLibraryShortcutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA506BAD28D1EA080064072B /* NTPLibraryShortcutView.swift */; };
 		CA506BAF28D1EBAB0064072B /* HomeLogoHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8573627D951640075C173 /* HomeLogoHeaderViewModel.swift */; };
 		CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */; };
-		CA5A64D729263C4F006E916A /* EcosiaNTPNewsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5A64D629263C4F006E916A /* EcosiaNTPNewsViewModelTests.swift */; };
 		CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */; };
 		CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */; };
 		CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */; };
-		CA8A48B4291BBA62008BE12F /* NewsCell.ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8A48B3291BBA62008BE12F /* NewsCell.ViewModel.swift */; };
-		CA8A48B6291BBBD1008BE12F /* Core.Promo.Variants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8A48B5291BBBD1008BE12F /* Core.Promo.Variants.swift */; };
 		CA8BCC3628D1FB7D0020BC50 /* HistoryHighlightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFACDFA9274D489B00A94EEC /* HistoryHighlightsViewModel.swift */; };
 		CA8BCC3728D1FB840020BC50 /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
 		CA8BCC3828D1FB900020BC50 /* HighlightItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */; };
@@ -3584,14 +3581,11 @@
 		CA506BA928D1E96E0064072B /* NTPLibraryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLibraryCell.swift; sourceTree = "<group>"; };
 		CA506BAD28D1EA080064072B /* NTPLibraryShortcutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPLibraryShortcutView.swift; sourceTree = "<group>"; };
 		CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
-		CA5A64D629263C4F006E916A /* EcosiaNTPNewsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EcosiaNTPNewsViewModelTests.swift; sourceTree = "<group>"; };
 		CA734AC9B9629155033B810B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Search.strings; sourceTree = "<group>"; };
 		CA774043B34B7F86DA31B93A /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsManager.swift; sourceTree = "<group>"; };
 		CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListDataSourceHelper.swift; sourceTree = "<group>"; };
 		CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListTableViewCell.swift; sourceTree = "<group>"; };
-		CA8A48B3291BBA62008BE12F /* NewsCell.ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCell.ViewModel.swift; sourceTree = "<group>"; };
-		CA8A48B5291BBBD1008BE12F /* Core.Promo.Variants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Core.Promo.Variants.swift; sourceTree = "<group>"; };
 		CA8BCC3A28D218830020BC50 /* NTPImpactViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NTPImpactViewModel.swift; sourceTree = "<group>"; };
 		CA8BCC3F28D340AF0020BC50 /* TabCell+Ecosia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabCell+Ecosia.swift"; sourceTree = "<group>"; };
 		CA8BCC4128D352630020BC50 /* EcosiaBeta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = EcosiaBeta.xcconfig; path = Configuration/EcosiaBeta.xcconfig; sourceTree = "<group>"; };
@@ -6473,9 +6467,7 @@
 		CA8A48B0291BB8CA008BE12F /* News */ = {
 			isa = PBXGroup;
 			children = (
-				CA8A48B5291BBBD1008BE12F /* Core.Promo.Variants.swift */,
 				CA4D9CA328C8D801006AFB5D /* NewsCell.swift */,
-				CA8A48B3291BBA62008BE12F /* NewsCell.ViewModel.swift */,
 				CA4D9CA028C8D801006AFB5D /* NewsController.swift */,
 				CA1453C0290943270000957F /* NTPNewsViewModel.swift */,
 			);
@@ -6499,7 +6491,6 @@
 				CAA6AC4428E470BB00A13DE9 /* EcosiaBookmarkMigrationTests.swift */,
 				CAA6AC4728E4732A00A13DE9 /* EcosiaTabMigrationTests.swift */,
 				CAA6AC4928E473D500A13DE9 /* EcosiaNTPTooltipHighlightTests.swift */,
-				CA5A64D629263C4F006E916A /* EcosiaNTPNewsViewModelTests.swift */,
 			);
 			path = Ecosia;
 			sourceTree = "<group>";
@@ -9390,7 +9381,6 @@
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
 				CA220A6D28D071C2000E66E6 /* NimbusFlaggableFeature.swift in Sources */,
 				CA8BCC3828D1FB900020BC50 /* HighlightItem.swift in Sources */,
-				CA8A48B4291BBA62008BE12F /* NewsCell.ViewModel.swift in Sources */,
 				E65075511E37F6D1006961AC /* URL+Mail.swift in Sources */,
 				D83822001FC7961D00303C12 /* DispatchQueueHelper.swift in Sources */,
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
@@ -9549,7 +9539,6 @@
 				CA220A6C28D070FE000E66E6 /* FeatureFlagsManager.swift in Sources */,
 				CAEB316728D0B38900ADC9DB /* HomepageViewController+Ecosia.swift in Sources */,
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
-				CA8A48B6291BBBD1008BE12F /* Core.Promo.Variants.swift in Sources */,
 				F85C7EDD27109241004BDBA4 /* LoginOnboardingViewController.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
@@ -9605,7 +9594,6 @@
 				CAA6AC4528E470BB00A13DE9 /* EcosiaBookmarkMigrationTests.swift in Sources */,
 				8A2366FA28A302E500846D1B /* MockSponsoredPocketAPI.swift in Sources */,
 				8A8A05E42746ACAC004267A0 /* TabDisplayManagerTests.swift in Sources */,
-				CA5A64D729263C4F006E916A /* EcosiaNTPNewsViewModelTests.swift in Sources */,
 				CACF7CF628D9E72900A996A4 /* MockProfile.swift in Sources */,
 				C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */,
 				8ABA9C8D28931223002C0077 /* MockDispatchQueue.swift in Sources */,

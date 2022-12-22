@@ -182,28 +182,17 @@ final class NewsCell: UICollectionViewCell, NotificationThemeable, ReusableCell 
         }
     }
     
-    func configure(_ item: ViewModel, images: Images, positions: Positions) {
-        title.text = item.text.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
+    func configure(_ model: NewsModel, images: Images, positions: Positions) {
+        title.text = model.text.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
+        bottomLabel.text = RelativeDateTimeFormatter().localizedString(for: model.publishDate, relativeTo: .init())
+        bottomIcon.isHidden = true
+        highlightLabel.isHidden = true
 
-        if let model = item.model {
-            bottomLabel.text = RelativeDateTimeFormatter().localizedString(for: model.publishDate, relativeTo: .init())
-            bottomIcon.isHidden = true
-            highlightLabel.isHidden = true
-
-            imageUrl = model.imageUrl
-            image.image = nil
-            images.load(self, url: model.imageUrl) { [weak self] in
-                guard self?.imageUrl == $0.url else { return }
-                self?.updateImage($0.data)
-            }
-        } else if let promo = item.promo {
-            imageUrl = nil
-            updateImage(UIImage(named: promo.image)!.pngData()!)
-            bottomLabel.text = promo.description
-            bottomIcon.isHidden = false
-            bottomIcon.image = UIImage(named: promo.icon)
-            highlightLabel.isHidden = promo.highlight == nil
-            highlightLabel.text = promo.highlight
+        imageUrl = model.imageUrl
+        image.image = nil
+        images.load(self, url: model.imageUrl) { [weak self] in
+            guard self?.imageUrl == $0.url else { return }
+            self?.updateImage($0.data)
         }
 
         border.isHidden = positions.contains(.bottom)

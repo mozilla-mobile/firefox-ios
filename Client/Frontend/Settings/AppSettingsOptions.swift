@@ -811,41 +811,6 @@ final class AddClaim: HiddenSetting {
     }
 }
 
-final class ResetFlags: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Reset Goodall flags", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        Goodall.shared.reset()
-        Goodall.shared.refresh(force: true)
-        Goodall.shared.loading.notify(queue: .main) { [weak self] in
-
-            self?.settings.tableView.reloadData()
-            NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
-
-            let alertTitle = "New variants assigned."
-            let alert = AlertController(title: alertTitle, message: "Restart App to see effect in UI.", preferredStyle: .alert)
-            navigationController?.topViewController?.present(alert, animated: true) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    alert.dismiss(animated: true)
-                }
-            }
-        }
-    }
-}
-
-
-final class PromoFlag: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Promo Variant", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        return NSAttributedString(string: Goodall.shared.variant(for: .promo)?.rawValue ?? "Flag off", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-}
-
 final class ResetSearchCount: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Set search count to 0", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])

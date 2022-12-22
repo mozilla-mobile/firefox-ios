@@ -8,7 +8,7 @@ import UIKit
 final class NewsController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,
     UICollectionViewDelegateFlowLayout, NotificationThemeable {
     private weak var collection: UICollectionView!
-    private var items = [NewsCell.ViewModel]()
+    private var items = [NewsModel]()
     private let images = Images(.init(configuration: .ephemeral))
     private let news = News()
     private let identifier = "news"
@@ -16,7 +16,7 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
 
     required init?(coder: NSCoder) { nil }
 
-    init(items: [NewsCell.ViewModel], delegate: YourImpactDelegate?) {
+    init(items: [NewsModel], delegate: YourImpactDelegate?) {
         super.init(nibName: nil, bundle: nil)
         self.delegate = delegate
         self.items = items
@@ -78,7 +78,7 @@ final class NewsController: UIViewController, UICollectionViewDelegate, UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         news.subscribeAndReceive(self) { [weak self] in
-            self?.items = $0.map { .init(model: $0, promo: nil) }
+            self?.items = $0
             self?.collection.reloadData()
             self?.collection.backgroundView = nil
         }

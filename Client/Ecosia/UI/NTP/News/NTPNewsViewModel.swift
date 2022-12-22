@@ -12,39 +12,16 @@ class NTPNewsViewModel {
     }
 
     private let news = News()
-    private (set) var items = [NewsCell.ViewModel]()
+    private (set) var items = [NewsModel]()
     private let images = Images(.init(configuration: .ephemeral))
-    private let goodall = Goodall.shared
     weak var delegate: HomepageDataModelDelegate?
 
     init() {
         news.subscribeAndReceive(self) { [weak self] in
             guard let self = self else { return }
-            var items = $0.map({ NewsCell.ViewModel(model: $0, promo: nil) })
-
-            if let promo = Promo.current(for: .shared, using: .shared) {
-                items.insert(.init(model: nil, promo: promo), at: 0)
-
-                // filter out duplicate tree store item
-                if Promo.variant(for: .shared, using: .shared) == .control {
-                    items = Self.filter(items: items, excluding: "TreeStoreBFCM22")
-                }
-            }
-
-            self.items = items
+            self.items = $0
             self.delegate?.reloadView()
         }
-
-        NotificationCenter.default.addObserver(self, selector: #selector(localeDidChange), name: NSLocale.currentLocaleDidChangeNotification, object: nil)
-
-    }
-
-    @objc func localeDidChange() {
-        Goodall.shared.refresh(force: true)
-    }
-
-    static func filter(items: [NewsCell.ViewModel], excluding trackingName: String) -> [NewsCell.ViewModel] {
-        items.filter({ !$0.trackingName.hasSuffix(trackingName) })
     }
 
 }
@@ -96,8 +73,7 @@ extension NTPNewsViewModel: HomepageViewModelProtocol {
     }
 
     func numberOfItemsInSection() -> Int {
-        let num = Promo.isEnabled(for: .shared, using: .shared) ? 4 : 3
-        return min(num, items.count)
+        return min(3, items.count)
     }
 
     var hasData: Bool {
@@ -129,13 +105,7 @@ extension NTPNewsViewModel: HomepageSectionHandler {
         guard index >= 0, items.count > index else { return }
         let item = items[index]
         homePanelDelegate?.homePanel(didSelectURL: item.targetUrl, visitType: .link, isGoogleTopSite: false)
+        Analytics.shared.navigationOpenNews(item.trackingName)
 
-        if item.promo != nil {
-            Analytics.Label.Navigation(rawValue: item.trackingName).map {
-                Analytics.shared.promo(action: .click, for: $0)
-            }
-        } else {
-            Analytics.shared.navigationOpenNews(item.trackingName)
-        }
     }
 }
