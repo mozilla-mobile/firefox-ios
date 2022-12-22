@@ -9,4 +9,5 @@ struct HomepageFaviconImageViewModel: FaviconImageViewModel {
     var urlStringRequest: String
     var type: SiteImageView.SiteImageType = .favicon
     var faviconCornerRadius: CGFloat = HomepageViewModel.UX.generalIconCornerRadius
+    var usesIndirectDomain = false
 }
