@@ -64,11 +64,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        if let libraryDrawerViewController = self.libraryDrawerViewController, libraryDrawerViewController.isOpen {
-            libraryDrawerViewController.close()
-        } else {
-            showLibrary(panel: .bookmarks)
-        }
+        showLibrary(panel: .bookmarks)
     }
 
     func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -80,7 +76,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // Ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-        libraryDrawerViewController?.close(immediately: true)
 
         // Logs homePageMenu or siteMenu depending if HomePage is open or not
         let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false

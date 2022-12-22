@@ -878,7 +878,6 @@
 		D0E17FB6201F847600F1FCB5 /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = D0E17FA7201F847600F1FCB5 /* FxASignIn.js */; };
 		D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */; };
 		D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E89A2820910917001CE5C7 /* DownloadsPanel.swift */; };
-		D0EAE0E2228B3762001C875A /* DrawerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EAE0E1228B3762001C875A /* DrawerViewController.swift */; };
 		D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */; };
 		D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */; };
 		D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8041FE4772D004A7995 /* MainFrameAtDocumentEnd.js */; };
@@ -4267,7 +4266,6 @@
 		D0E17FA7201F847600F1FCB5 /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FxASignIn.js; sourceTree = "<group>"; };
 		D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormPostHelper.swift; sourceTree = "<group>"; };
 		D0E89A2820910917001CE5C7 /* DownloadsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPanel.swift; sourceTree = "<group>"; };
-		D0EAE0E1228B3762001C875A /* DrawerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawerViewController.swift; sourceTree = "<group>"; };
 		D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserScriptManager.swift; sourceTree = "<group>"; };
 		D0FCF7F61FE45E5D004A7995 /* PrintHandler.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = PrintHandler.js; sourceTree = "<group>"; };
 		D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = AllFramesAtDocumentEnd.js; sourceTree = "<group>"; };
@@ -7369,7 +7367,6 @@
 				EBA3B2D12268F57E00728BDB /* BadgeWithBackdrop.swift */,
 				433396C727ACE92500491049 /* CellWithRoundedButton.swift */,
 				7B844E3C1BBDDB9D00E733A2 /* ChevronView.swift */,
-				D0EAE0E1228B3762001C875A /* DrawerViewController.swift */,
 				E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */,
 				D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */,
 				0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */,
@@ -10439,7 +10436,6 @@
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetView.swift in Sources */,
 				E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */,
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
-				D0EAE0E2228B3762001C875A /* DrawerViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
 				E1FF93E428A2E74600E6360E /* WallpaperSelectorViewModel.swift in Sources */,
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
