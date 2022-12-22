@@ -19,11 +19,13 @@ class MailAppSettingsTests: BaseTestCase {
         XCTAssertTrue(app.tables.staticTexts["OPEN MAIL LINKS WITH"].exists)
         XCTAssertFalse(app.tables.cells.staticTexts["Mail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Outlook"].isSelected)
+        XCTAssertFalse(app.tables.cells.staticTexts["ProtonMail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["myMail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Spark"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["YMail!"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Gmail"].isSelected)
+        XCTAssertFalse(app.tables.cells.staticTexts["Fastmail"].isSelected)
 
         // Check that tapping on an element does nothing
         waitForExistence(app.tables["OpenWithPage.Setting.Options"])
