@@ -29,6 +29,8 @@ open class MailtoLinkHandler {
                         providerDict[scheme] = ReaddleSparkIntegration()
                     } else if scheme == "mymail-mailto://" {
                         providerDict[scheme] = MyMailIntegration()
+                    } else if scheme == "protonmail://" {
+                        providerDict[scheme] = ProtonMailIntegration()
                     } else if scheme == "mailru-mailto://" {
                         providerDict[scheme] = MailRuIntegration()
                     } else if scheme == "airmail://" {
