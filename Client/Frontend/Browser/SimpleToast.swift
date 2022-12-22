@@ -12,14 +12,14 @@ struct SimpleToast: ThemeApplicable {
     }
 
     private let toastLabel: UILabel = .build { label in
-        label.textColor = UIColor.Photon.White100
-        label.backgroundColor = UX.toastDefaultColor
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: Toast.UX.fontSize)
         label.textAlignment = .center
     }
 
-    func showAlertWithText(_ text: String, bottomContainer: UIView) {
+    func showAlertWithText(_ text: String,
+                           bottomContainer: UIView,
+                           theme: Theme) {
         toastLabel.text = text
         bottomContainer.addSubview(toastLabel)
         NSLayoutConstraint.activate([
@@ -28,11 +28,13 @@ struct SimpleToast: ThemeApplicable {
             toastLabel.bottomAnchor.constraint(equalTo: bottomContainer.bottomAnchor),
             toastLabel.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
         ])
+        applyTheme(theme: theme)
         animate(toastLabel)
     }
 
     func applyTheme(theme: Theme) {
-        print("YRD apply theme in Simple Toast")
+        toastLabel.textColor = theme.colors.textInverted
+        toastLabel.backgroundColor = theme.colors.actionPrimary
     }
 
     private func dismiss(_ toast: UIView) {

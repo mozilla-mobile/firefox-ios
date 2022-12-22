@@ -152,7 +152,7 @@ class BrowserViewController: UIViewController {
     let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
-    private var themeManager: ThemeManager
+    var themeManager: ThemeManager
 
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
@@ -1502,7 +1502,8 @@ class BrowserViewController: UIViewController {
                 self.showSendToDevice()
             case CustomActivityAction.copyLink.actionType:
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: webViewContainer)
+                                                bottomContainer: webViewContainer,
+                                                theme: themeManager.currentTheme)
             default: break
             }
 
@@ -2638,7 +2639,9 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
+                                                bottomContainer: self.webViewContainer,
+                                                theme: self.themeManager.currentTheme)
             }
         }
     }

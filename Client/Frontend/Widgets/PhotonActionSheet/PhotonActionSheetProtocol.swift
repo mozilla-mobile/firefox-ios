@@ -10,6 +10,7 @@ import UIKit
 protocol PhotonActionSheetProtocol {
     var tabManager: TabManager { get }
     var profile: Profile { get }
+    var themeManager: ThemeManager { get }
 }
 
 extension PhotonActionSheetProtocol {
@@ -55,7 +56,8 @@ extension PhotonActionSheetProtocol {
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: webViewContainer)
+                                                bottomContainer: webViewContainer,
+                                                theme: themeManager.currentTheme)
             }
         }.items
 

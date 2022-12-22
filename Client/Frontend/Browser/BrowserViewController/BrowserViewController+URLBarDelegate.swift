@@ -177,7 +177,9 @@ extension BrowserViewController: URLBarDelegate {
         switch result.value {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageSuccessAcessibilityLabel)
-            SimpleToast().showAlertWithText(.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
+            SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
+                                            bottomContainer: self.webViewContainer,
+                                            theme: themeManager.currentTheme)
         case .failure(let error):
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
             print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
