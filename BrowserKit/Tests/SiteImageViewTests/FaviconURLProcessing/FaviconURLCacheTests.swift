@@ -22,29 +22,29 @@ class FaviconURLCacheTests: XCTestCase {
     }
 
     func testGetURLFromCacheWithEmptyCache() async {
-        let domain = ImageDomain(baseDomain: "firefox.com", bundleDomains: [])
-        let result = try? await subject.getURLFromCache(domain: domain)
+        let cacheKey = "firefox.com"
+        let result = try? await subject.getURLFromCache(cacheKey: cacheKey)
         XCTAssertNil(result)
     }
 
     func testGetURLFromCacheWithValuePresent() async {
-        let domain = ImageDomain(baseDomain: "firefox.com", bundleDomains: [])
-        await subject.cacheURL(domain: domain, faviconURL: URL(string: "www.firefox.com")!)
-        let result = try? await subject.getURLFromCache(domain: domain)
+        let cacheKey = "firefox.com"
+        await subject.cacheURL(cacheKey: cacheKey, faviconURL: URL(string: "www.firefox.com")!)
+        let result = try? await subject.getURLFromCache(cacheKey: cacheKey)
         XCTAssertEqual(result?.absoluteString, "www.firefox.com")
     }
 
     func testRetrieveCacheNotExpired() async throws {
         let fileManager = DefaultURLCacheFileManager()
-        let googleDomain = ImageDomain(baseDomain: "google", bundleDomains: [])
-        let testFavicons = [FaviconURL(domain: googleDomain, faviconURL: "www.google.com", createdAt: Date())]
+        let cacheKey = "google"
+        let testFavicons = [FaviconURL(cacheKey: cacheKey, faviconURL: "www.google.com", createdAt: Date())]
         await fileManager.saveURLCache(data: getTestData(items: testFavicons))
 
         subject = DefaultFaviconURLCache(fileManager: fileManager)
 
         try await Task.sleep(nanoseconds: 1_000_000_000)
 
-        let result = try? await subject.getURLFromCache(domain: googleDomain)
+        let result = try? await subject.getURLFromCache(cacheKey: cacheKey)
         XCTAssertEqual(result?.absoluteString, "www.google.com")
     }
 
@@ -54,20 +54,18 @@ class FaviconURLCacheTests: XCTestCase {
             XCTFail("Something went wrong generating a date in the past")
             return
         }
-        let amazonDomain = ImageDomain(baseDomain: "amazon", bundleDomains: [])
-        let firefoxDomain = ImageDomain(baseDomain: "firefox", bundleDomains: [])
-        let testFavicons = [FaviconURL(domain: amazonDomain, faviconURL: "www.amazon.com", createdAt: Date()),
-                            FaviconURL(domain: firefoxDomain, faviconURL: "www.firefox.com", createdAt: expiredDate)]
+        let testFavicons = [FaviconURL(cacheKey: "amazon", faviconURL: "www.amazon.com", createdAt: Date()),
+                            FaviconURL(cacheKey: "firefox", faviconURL: "www.firefox.com", createdAt: expiredDate)]
         await fileManager.saveURLCache(data: getTestData(items: testFavicons))
 
         subject = DefaultFaviconURLCache(fileManager: fileManager)
 
         try await Task.sleep(nanoseconds: 1_000_000_000)
 
-        let result1 = try? await subject.getURLFromCache(domain: amazonDomain)
+        let result1 = try? await subject.getURLFromCache(cacheKey: "amazon")
         XCTAssertEqual(result1?.absoluteString, "www.amazon.com")
 
-        let result2 = try? await subject.getURLFromCache(domain: firefoxDomain)
+        let result2 = try? await subject.getURLFromCache(cacheKey: "firefox")
         XCTAssertNil(result2)
     }
 

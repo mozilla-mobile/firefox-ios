@@ -20,19 +20,19 @@ struct DefaultFaviconURLHandler: FaviconURLHandler {
 
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel {
         // Don't fetch favicon URL if we don't have a URL or domain for it
-        guard let siteURL = site.siteURL, let domain = site.domain else {
+        guard let siteURL = site.siteURL else {
             throw SiteImageError.noFaviconURLFound
         }
 
         var imageModel = site
         do {
-            let url = try await urlCache.getURLFromCache(domain: domain)
+            let url = try await urlCache.getURLFromCache(cacheKey: imageModel.cacheKey)
             imageModel.faviconURL = url
             return imageModel
         } catch {
             do {
                 let url = try await urlFetcher.fetchFaviconURL(siteURL: siteURL)
-                await urlCache.cacheURL(domain: domain, faviconURL: url)
+                await urlCache.cacheURL(cacheKey: imageModel.cacheKey, faviconURL: url)
                 imageModel.faviconURL = url
                 return imageModel
             } catch {

@@ -42,17 +42,20 @@ public class FaviconImageView: UIImageView, SiteImageView {
 
     public func setFavicon(_ viewModel: FaviconImageViewModel) {
         setupFaviconLayout(viewModel: viewModel)
-        setURL(viewModel.urlStringRequest, type: viewModel.type)
+        setURL(viewModel)
     }
 
     // MARK: - SiteImageView
 
-    func setURL(_ urlStringRequest: String, type: SiteImageType) {
-        guard canMakeRequest(with: urlStringRequest) else { return }
+    func setURL(_ viewModel: FaviconImageViewModel) {
+        guard canMakeRequest(with: viewModel.urlStringRequest) else { return }
 
         let id = UUID()
         uniqueID = id
-        updateImage(url: urlStringRequest, type: type, id: id)
+        updateImage(url: viewModel.urlStringRequest,
+                    type: .favicon,
+                    id: id,
+                    usesIndirectDomain: viewModel.usesIndirectDomain)
     }
 
     func setImage(imageModel: SiteImageModel) {

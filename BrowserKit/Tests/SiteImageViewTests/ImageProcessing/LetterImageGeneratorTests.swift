@@ -8,8 +8,8 @@ import XCTest
 final class LetterImageGeneratorTests: XCTestCase {
     func testEmptyDomain_doesntReturnEmptyImage() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let domain = ImageDomain(baseDomain: "", bundleDomains: [])
-        let result = await subject.generateLetterImage(domain: domain)
+        let siteString = ""
+        let result = await subject.generateLetterImage(siteString: siteString)
 
         XCTAssertEqual(subject.capturedLetter, "#")
         XCTAssertNotEqual(result, UIImage())
@@ -18,8 +18,8 @@ final class LetterImageGeneratorTests: XCTestCase {
 
     func testDomain1_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let domain = ImageDomain(baseDomain: "mozilla.com", bundleDomains: [])
-        let result = await subject.generateLetterImage(domain: domain)
+        let siteString = "mozilla.com"
+        let result = await subject.generateLetterImage(siteString: siteString)
 
         XCTAssertEqual(subject.capturedLetter, "M")
         XCTAssertNotEqual(result, UIImage())
@@ -28,8 +28,8 @@ final class LetterImageGeneratorTests: XCTestCase {
 
     func testDomain2_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let domain = ImageDomain(baseDomain: "firefox.com", bundleDomains: [])
-        let result = await subject.generateLetterImage(domain: domain)
+        let siteString = "firefox.com"
+        let result = await subject.generateLetterImage(siteString: siteString)
 
         XCTAssertEqual(subject.capturedLetter, "F")
         XCTAssertNotEqual(result, UIImage())
@@ -38,8 +38,8 @@ final class LetterImageGeneratorTests: XCTestCase {
 
     func testFakeDomain_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
-        let domain = ImageDomain(baseDomain: "?$%^", bundleDomains: [])
-        let result = await subject.generateLetterImage(domain: domain)
+        let siteString = "?$%^"
+        let result = await subject.generateLetterImage(siteString: siteString)
 
         XCTAssertEqual(subject.capturedLetter, "?")
         XCTAssertNotEqual(result, UIImage())

@@ -21,7 +21,7 @@ final class BundleImageFetcherTests: XCTestCase {
     func testEmptyDomain_throwsError() {
         bundleDataProvider.error = SiteImageError.noImageInBundle
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
-        let domain = ImageDomain(baseDomain: "", bundleDomains: [])
+        let domain = ImageDomain(bundleDomains: [])
 
         do {
             _ = try subject.getImageFromBundle(domain: domain)
@@ -37,7 +37,7 @@ final class BundleImageFetcherTests: XCTestCase {
     func testInvalidData_throwsError() {
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.invalidData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
-        let domain = ImageDomain(baseDomain: "mozilla", bundleDomains: ["mozilla"])
+        let domain = ImageDomain(bundleDomains: ["mozilla"])
 
         do {
             _ = try subject.getImageFromBundle(domain: domain)
@@ -53,7 +53,7 @@ final class BundleImageFetcherTests: XCTestCase {
     func testEmptyData_throwsError() {
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.emptyData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
-        let domain = ImageDomain(baseDomain: "mozilla", bundleDomains: ["mozilla"])
+        let domain = ImageDomain(bundleDomains: ["mozilla"])
 
         do {
             _ = try subject.getImageFromBundle(domain: domain)
@@ -69,7 +69,7 @@ final class BundleImageFetcherTests: XCTestCase {
     func testValidData_withoutPath_throwsError() {
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
-        let domain = ImageDomain(baseDomain: "mozilla", bundleDomains: ["mozilla"])
+        let domain = ImageDomain(bundleDomains: ["mozilla"])
 
         do {
             _ = try subject.getImageFromBundle(domain: domain)
@@ -88,7 +88,7 @@ final class BundleImageFetcherTests: XCTestCase {
         bundleDataProvider.pathToReturn = "a/path/to/image"
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
-        let domain = ImageDomain(baseDomain: "mozilla", bundleDomains: ["mozilla"])
+        let domain = ImageDomain(bundleDomains: ["mozilla"])
 
         do {
             let result = try subject.getImageFromBundle(domain: domain)
@@ -104,7 +104,7 @@ final class BundleImageFetcherTests: XCTestCase {
         bundleDataProvider.pathToReturn = "a/path/to/image"
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.validData)
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
-        let domain = ImageDomain(baseDomain: "fakedomain", bundleDomains: ["fakedomain"])
+        let domain = ImageDomain(bundleDomains: ["fakedomain"])
 
         do {
             _ = try subject.getImageFromBundle(domain: domain)
@@ -122,7 +122,7 @@ final class BundleImageFetcherTests: XCTestCase {
         bundleDataProvider.data = generateHTMLData(string: MockBundleData.partlyValidData)
 
         let subject = DefaultBundleImageFetcher(bundleDataProvider: bundleDataProvider)
-        let domain = ImageDomain(baseDomain: "google", bundleDomains: ["google"])
+        let domain = ImageDomain(bundleDomains: ["google"])
 
         do {
             _ = try subject.getImageFromBundle(domain: domain)

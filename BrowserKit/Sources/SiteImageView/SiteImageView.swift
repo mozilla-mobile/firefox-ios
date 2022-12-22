@@ -10,8 +10,10 @@ protocol SiteImageView: UIView {
     var uniqueID: UUID? { get set }
     var imageFetcher: SiteImageFetcher { get set }
 
-    func setURL(_ urlStringRequest: String, type: SiteImageType)
-    func updateImage(url: String, type: SiteImageType, id: UUID)
+    func updateImage(url: String,
+                     type: SiteImageType,
+                     id: UUID,
+                     usesIndirectDomain: Bool)
     func setImage(imageModel: SiteImageModel)
 
     // Avoid multiple image loading in parallel. Only start a new request if the URL string has changed
@@ -24,9 +26,15 @@ extension SiteImageView {
         return requestStartedWith != urlStringRequest
     }
 
-    func updateImage(url: String, type: SiteImageType, id: UUID) {
+    func updateImage(url: String,
+                     type: SiteImageType,
+                     id: UUID,
+                     usesIndirectDomain: Bool) {
         Task {
-            let imageModel = await imageFetcher.getImage(urlStringRequest: url, type: type, id: id)
+            let imageModel = await imageFetcher.getImage(urlStringRequest: url,
+                                                         type: type,
+                                                         id: id,
+                                                         usesIndirectDomain: usesIndirectDomain)
             guard uniqueID == imageModel.id else { return }
 
             DispatchQueue.main.async { [weak self] in

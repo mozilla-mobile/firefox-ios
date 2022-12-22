@@ -24,10 +24,10 @@ final class SiteImageCacheTests: XCTestCase {
     func testGetFromCache_whenError_returnsError() async {
         imageCache.retrievalError = KingfisherError.requestError(reason: .emptyRequest)
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let domain = ImageDomain(baseDomain: "www.example.com", bundleDomains: [])
+        let cacheKey = "www.example.com"
 
         do {
-            _ = try await subject.getImageFromCache(domain: domain, type: .favicon)
+            _ = try await subject.getImageFromCache(cacheKey: cacheKey, type: .favicon)
         } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-favicon")
             XCTAssertEqual("Unable to retrieve image from cache with reason: The request is empty or `nil`.",
@@ -39,10 +39,10 @@ final class SiteImageCacheTests: XCTestCase {
 
     func testGetFromCache_whenEmptyImage_returnsError() async {
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let domain = ImageDomain(baseDomain: "www.example.com", bundleDomains: [])
+        let cacheKey = "www.example.com"
 
         do {
-            _ = try await subject.getImageFromCache(domain: domain, type: .heroImage)
+            _ = try await subject.getImageFromCache(cacheKey: cacheKey, type: .heroImage)
         } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-heroImage")
             XCTAssertEqual("Unable to retrieve image from cache with reason: Image was nil",
@@ -56,10 +56,10 @@ final class SiteImageCacheTests: XCTestCase {
         let expectedImage = UIImage()
         imageCache.image = expectedImage
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let domain = ImageDomain(baseDomain: "www.example2.com", bundleDomains: [])
+        let cacheKey = "www.example2.com"
 
         do {
-            let result = try await subject.getImageFromCache(domain: domain, type: .favicon)
+            let result = try await subject.getImageFromCache(cacheKey: cacheKey, type: .favicon)
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example2.com-favicon")
             XCTAssertEqual(expectedImage, result)
         } catch {
@@ -72,9 +72,9 @@ final class SiteImageCacheTests: XCTestCase {
     func testCacheImage_whenSuccess_returnsSuccess() async {
         let expectedImage = UIImage()
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        let domain = ImageDomain(baseDomain: "www.firefox.com", bundleDomains: [])
+        let cacheKey = "www.firefox.com"
 
-        _ = await subject.cacheImage(image: expectedImage, domain: domain, type: .favicon)
+        _ = await subject.cacheImage(image: expectedImage, cacheKey: cacheKey, type: .favicon)
         XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
         XCTAssertEqual(imageCache.capturedImage, expectedImage)
     }

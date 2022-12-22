@@ -12,7 +12,7 @@ actor FaviconURLCacheMock: FaviconURLCache {
     var getURLFromCacheCalledCount = 0
     var cacheURLCalledCount = 0
 
-    var domain: ImageDomain?
+    var cacheKey: String?
     var faviconURL: URL?
 
     func setTestResult(url: URL? = nil, error: SiteImageError? = nil) {
@@ -20,7 +20,7 @@ actor FaviconURLCacheMock: FaviconURLCache {
         self.error = error
     }
 
-    func getURLFromCache(domain: ImageDomain) async throws -> URL {
+    func getURLFromCache(cacheKey: String) async throws -> URL {
         getURLFromCacheCalledCount += 1
         if let error = error {
             throw error
@@ -28,9 +28,9 @@ actor FaviconURLCacheMock: FaviconURLCache {
         return url!
     }
 
-    func cacheURL(domain: ImageDomain, faviconURL: URL) async {
+    func cacheURL(cacheKey: String, faviconURL: URL) async {
         cacheURLCalledCount += 1
-        self.domain = domain
+        self.cacheKey = cacheKey
         self.faviconURL = faviconURL
     }
 }

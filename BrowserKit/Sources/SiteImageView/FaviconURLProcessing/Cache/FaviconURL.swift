@@ -5,7 +5,7 @@
 import Foundation
 
 struct FaviconURL: Codable {
-    let domain: ImageDomain
+    let cacheKey: String
     let faviconURL: String
     var createdAt: Date
 }

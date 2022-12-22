@@ -6,9 +6,6 @@ import Foundation
 
 /// The domains associated with the image
 struct ImageDomain: Codable {
-    /// Used to cache and retrieve from cache
-    var baseDomain: String
-
     /// Used to retrieve from the bundle, more than one domain can be used to retrieve. See `BundleDomainBuilder`
     var bundleDomains: [String]
 }
