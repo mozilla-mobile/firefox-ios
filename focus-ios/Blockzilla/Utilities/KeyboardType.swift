@@ -21,7 +21,7 @@ enum KeyboardType: String {
 
     static func identifyKeyboardNameTelemetry() {
         guard UIApplication.textInputMode?.responds(to: NSSelectorFromString("identifier")) == true else { return }
-        (UIApplication.textInputMode?.perform(NSSelectorFromString("identifier")).takeRetainedValue() as? String)
+        (UIApplication.textInputMode?.perform(NSSelectorFromString("identifier")).takeUnretainedValue() as? String)
             .map { KeyboardType.init(identifier: $0).gleanDescription(identifier: $0) }
             .map { description in
                 GleanMetrics.App.keyboardType.set(description)
