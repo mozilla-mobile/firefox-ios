@@ -148,8 +148,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
-        libraryDrawerViewController?.close()
-
         guard let tab = tabManager.selectedTab,
               let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
         else { return }
@@ -323,7 +321,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
-        libraryDrawerViewController?.close()
         urlBar.updateSearchEngineImage()
         guard let profile = profile as? BrowserProfile else { return }
 

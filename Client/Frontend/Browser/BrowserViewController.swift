@@ -51,7 +51,6 @@ class BrowserViewController: UIViewController {
 
     var homepageViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
-    var libraryDrawerViewController: DrawerViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var urlBarHeightConstraint: Constraint!
@@ -268,17 +267,6 @@ class BrowserViewController: UIViewController {
         return newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
     }
 
-    fileprivate func constraintsForLibraryDrawerView(_ make: SnapKit.ConstraintMaker) {
-        guard libraryDrawerViewController?.view.superview != nil else { return }
-        if self.topTabsVisible {
-            make.top.equalTo(webViewContainer)
-        } else {
-            make.top.equalTo(view)
-        }
-
-        make.right.bottom.left.equalToSuperview()
-    }
-
     @objc fileprivate func appMenuBadgeUpdate() {
         let actionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = actionNeeded
@@ -336,8 +324,6 @@ class BrowserViewController: UIViewController {
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
         }
-
-        libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
     }
 
     func dismissVisibleMenus() {
@@ -1870,12 +1856,10 @@ extension BrowserViewController: LibraryPanelDelegate {
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
         if  #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
-            libraryDrawerViewController?.close()
             return
         }
 
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
-        libraryDrawerViewController?.close()
     }
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
@@ -1905,7 +1889,6 @@ extension BrowserViewController: LibraryPanelDelegate {
 extension BrowserViewController: RecentlyClosedPanelDelegate {
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
         tabTrayOpenRecentlyClosedTab(url)
-        libraryDrawerViewController?.close()
     }
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
@@ -2019,8 +2002,6 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
-        libraryDrawerViewController?.close(immediately: true)
-
         // Reset the scroll position for the ActivityStreamPanel so that it
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
@@ -2612,8 +2593,7 @@ extension BrowserViewController: NotificationThemeable {
         let ui: [NotificationThemeable?] = [urlBar,
                                             toolbar,
                                             readerModeBar,
-                                            topTabsViewController,
-                                            libraryDrawerViewController]
+                                            topTabsViewController]
         ui.forEach { $0?.applyTheme() }
 
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
@@ -2645,24 +2625,20 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
-        libraryDrawerViewController?.close(immediately: true)
         urlBar.leaveOverlayMode(didCancel: true)
         self.urlBarDidPressTabs(urlBar)
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        libraryDrawerViewController?.close(immediately: true)
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
     }
 
     func topTabsDidTogglePrivateMode() {
-        libraryDrawerViewController?.close(immediately: true)
         guard tabManager.selectedTab != nil else { return }
         urlBar.leaveOverlayMode()
     }
 
     func topTabsDidChangeTab() {
-        libraryDrawerViewController?.close()
         urlBar.leaveOverlayMode(didCancel: true)
     }
 }
