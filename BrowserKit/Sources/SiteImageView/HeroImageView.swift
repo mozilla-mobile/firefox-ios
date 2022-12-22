@@ -81,7 +81,10 @@ public class HeroImageView: UIView, SiteImageView {
 
         let id = UUID()
         uniqueID = id
-        updateImage(url: urlStringRequest, type: type, id: id)
+        updateImage(url: urlStringRequest,
+                    type: type,
+                    id: id,
+                    usesIndirectDomain: true)
     }
 
     func setImage(imageModel: SiteImageModel) {

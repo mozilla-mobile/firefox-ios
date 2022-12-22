@@ -6,7 +6,10 @@ import UIKit
 import Common
 
 protocol SiteImageFetcher {
-    func getImage(urlStringRequest: String, type: SiteImageType, id: UUID) async -> SiteImageModel
+    func getImageModel(urlStringRequest: String,
+                       type: SiteImageType,
+                       id: UUID,
+                       usesIndirectDomain: Bool) async -> SiteImageModel
 }
 
 class DefaultSiteImageFetcher: SiteImageFetcher {
@@ -19,7 +22,10 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
         self.imageHandler = imageHandler
     }
 
-    func getImage(urlStringRequest: String, type: SiteImageType, id: UUID) async -> SiteImageModel {
+    func getImageModel(urlStringRequest: String,
+                       type: SiteImageType,
+                       id: UUID,
+                       usesIndirectDomain: Bool) async -> SiteImageModel {
         var imageModel = SiteImageModel(id: id,
                                         expectedImageType: type,
                                         urlStringRequest: urlStringRequest,
@@ -30,12 +36,16 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
                                         faviconImage: nil,
                                         heroImage: nil)
 
+
+
         // urlStringRequest possibly cannot be a URL
         if let siteURL = URL(string: urlStringRequest) {
             let domain = generateDomainURL(siteURL: siteURL)
             imageModel.siteURL = siteURL
             imageModel.domain = domain
-            imageModel.cacheKey = siteURL.shortDomain ?? siteURL.shortDisplayString
+            imageModel.cacheKey = generateCacheKey(siteURL: siteURL,
+                                                   type: type,
+                                                   usesIndirectDomain: usesIndirectDomain)
         }
 
         do {
@@ -54,6 +64,15 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
     }
 
     // MARK: - Private
+
+    private func generateCacheKey(siteURL: URL,
+                                  type: SiteImageType,
+                                  usesIndirectDomain: Bool) -> String {
+        guard usesIndirectDomain else {
+            return siteURL.shortDomain ?? siteURL.shortDisplayString
+        }
+        return siteURL.absoluteString
+    }
 
     private func getHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {

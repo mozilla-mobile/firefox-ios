@@ -27,9 +27,10 @@ final class SiteImageFetcherTests: XCTestCase {
         let siteURL = "https://www.example.hello.com"
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .favicon,
-                                            id: UUID())
+        let result = await subject.getImageModel(urlStringRequest: siteURL,
+                                                 type: .favicon,
+                                                 id: UUID(),
+                                                 usesIndirectDomain: false)
 
         XCTAssertEqual(result.cacheKey, "example.hello")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
@@ -47,9 +48,10 @@ final class SiteImageFetcherTests: XCTestCase {
         let siteURL = "www.example.hello.com"
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .favicon,
-                                            id: UUID())
+        let result = await subject.getImageModel(urlStringRequest: siteURL,
+                                                 type: .favicon,
+                                                 id: UUID(),
+                                                 usesIndirectDomain: false)
 
         XCTAssertEqual(result.cacheKey, "www.example.hello.com")
         XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "www.example.hello.com")
@@ -61,9 +63,10 @@ final class SiteImageFetcherTests: XCTestCase {
         urlHandler.faviconURL = faviconURL
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .favicon,
-                                            id: UUID())
+        let result = await subject.getImageModel(urlStringRequest: siteURL,
+                                                 type: .favicon,
+                                                 id: UUID(),
+                                                 usesIndirectDomain: false)
 
         XCTAssertEqual(result.cacheKey, "mozilla")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
@@ -76,17 +79,40 @@ final class SiteImageFetcherTests: XCTestCase {
         XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "mozilla")
     }
 
+    func testFaviconIndirectDomain_faviconURLFound_generateFavicon() async {
+        let faviconURL = URL(string: "www.mozilla.com/resource")!
+        let siteURL = "https://www.mozilla.com"
+        urlHandler.faviconURL = faviconURL
+        let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
+                                              imageHandler: imageHandler)
+        let result = await subject.getImageModel(urlStringRequest: siteURL,
+                                                 type: .favicon,
+                                                 id: UUID(),
+                                                 usesIndirectDomain: true)
+
+        XCTAssertEqual(result.cacheKey, "https://www.mozilla.com")
+        XCTAssertEqual(result.siteURL, URL(string: siteURL))
+        XCTAssertEqual(result.faviconURL, nil)
+        XCTAssertEqual(result.expectedImageType, .favicon)
+        XCTAssertNil(result.heroImage)
+        XCTAssertNotNil(result.faviconImage)
+
+        XCTAssertEqual(imageHandler.capturedSite?.faviconURL, faviconURL)
+        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "https://www.mozilla.com")
+    }
+
     // MARK: - Hero image
 
     func testHeroImage_heroImageNotFound_returnsFavicon() async {
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
         let siteURL = "https://www.firefox.com"
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .heroImage,
-                                            id: UUID())
+        let result = await subject.getImageModel(urlStringRequest: siteURL,
+                                                 type: .heroImage,
+                                                 id: UUID(),
+                                                 usesIndirectDomain: true)
 
-        XCTAssertEqual(result.cacheKey, "firefox")
+        XCTAssertEqual(result.cacheKey, "https://www.firefox.com")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .heroImage)
@@ -94,7 +120,7 @@ final class SiteImageFetcherTests: XCTestCase {
         XCTAssertNotNil(result.faviconImage)
 
         XCTAssertNil(imageHandler.capturedSite?.faviconURL)
-        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "firefox")
+        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "https://www.firefox.com")
         XCTAssertEqual(imageHandler.capturedSite?.siteURL, URL(string: siteURL))
     }
 
@@ -103,11 +129,12 @@ final class SiteImageFetcherTests: XCTestCase {
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
         let siteURL = "https://www.focus.com"
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .heroImage,
-                                            id: UUID())
+        let result = await subject.getImageModel(urlStringRequest: siteURL,
+                                                 type: .heroImage,
+                                                 id: UUID(),
+                                                 usesIndirectDomain: true)
 
-        XCTAssertEqual(result.cacheKey, "focus")
+        XCTAssertEqual(result.cacheKey, "https://www.focus.com")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL, nil)
         XCTAssertEqual(result.expectedImageType, .heroImage)
@@ -115,7 +142,7 @@ final class SiteImageFetcherTests: XCTestCase {
         XCTAssertNil(result.faviconImage)
 
         XCTAssertNil(imageHandler.capturedSite?.faviconURL)
-        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "focus")
+        XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "https://www.focus.com")
         XCTAssertEqual(imageHandler.capturedSite?.siteURL, URL(string: siteURL))
     }
 }

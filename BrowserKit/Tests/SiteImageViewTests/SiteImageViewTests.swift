@@ -57,9 +57,10 @@ class MockSiteImageFetcher: SiteImageFetcher {
     var image = UIImage()
     var capturedType: SiteImageType?
     var capturedStringRequest: String?
-    func getImage(urlStringRequest: String,
-                  type: SiteImageType,
-                  id: UUID) async -> SiteImageModel {
+    func getImageModel(urlStringRequest: String,
+                       type: SiteImageType,
+                       id: UUID,
+                       usesIndirectDomain: Bool) async -> SiteImageModel {
         capturedStringRequest = urlStringRequest
         capturedType = type
         return SiteImageModel(id: id,
