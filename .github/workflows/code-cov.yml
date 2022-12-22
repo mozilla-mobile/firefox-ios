@@ -11,4 +11,4 @@ jobs:
       - name: Test
         uses: actions/checkout@v1
       - name: Build and Test
-        run:  xcodebuild test -project Client.xcodeproj -scheme Fennec -destination 'platform=iOS Simulator,name=iPhone 13,OS=14.3' build test
+        run:  xcodebuild test -project Client.xcodeproj -scheme Fennec -destination 'platform=iOS Simulator,name=iPhone 13,OS=16' build test
