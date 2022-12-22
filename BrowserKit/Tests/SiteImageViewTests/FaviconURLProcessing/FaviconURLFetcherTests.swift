@@ -56,7 +56,7 @@ private enum ImageURLTestHTML {
     static let mockHTMLWithIcon = """
         <html>
             <head>
-                <link rel="icon" href="image.png"></link>
+                <link rel="icon" href="http://firefox.com/image.png"></link>
                 <title>Firefox</title>
             </head>
         </html>
