@@ -80,7 +80,8 @@ class FaviconURLHandlerTests: XCTestCase {
                               expectedImageType: .favicon,
                               urlStringRequest: siteURL,
                               siteURL: URL(string: siteURL)!,
-                              domain: ImageDomain(baseDomain: "domain", bundleDomains: []),
+                              cacheKey: "domain",
+                              domain: ImageDomain(bundleDomains: []),
                               faviconURL: nil,
                               faviconImage: nil,
                               heroImage: nil)

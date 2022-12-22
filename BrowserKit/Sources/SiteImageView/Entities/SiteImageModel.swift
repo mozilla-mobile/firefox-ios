@@ -18,6 +18,9 @@ struct SiteImageModel {
     /// URL can be nil in case the urlStringRequest cannot be used to build a URL
     var siteURL: URL?
 
+    /// Used to cache any resources related to this request
+    var cacheKey: String
+
     /// Domain can be nil in case we don't have a siteURL to get the domain from
     var domain: ImageDomain?
 

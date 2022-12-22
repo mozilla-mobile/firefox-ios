@@ -59,14 +59,16 @@ class MockSiteImageFetcher: SiteImageFetcher {
     var capturedStringRequest: String?
     func getImage(urlStringRequest: String,
                   type: SiteImageType,
-                  id: UUID) async -> SiteImageModel {
+                  id: UUID,
+                  usesIndirectDomain: Bool) async -> SiteImageModel {
         capturedStringRequest = urlStringRequest
         capturedType = type
         return SiteImageModel(id: id,
                               expectedImageType: type,
                               urlStringRequest: urlStringRequest,
                               siteURL: URL(string: urlStringRequest)!,
-                              domain: ImageDomain(baseDomain: "", bundleDomains: []),
+                              cacheKey: "",
+                              domain: ImageDomain(bundleDomains: []),
                               faviconURL: nil,
                               faviconImage: image,
                               heroImage: image)

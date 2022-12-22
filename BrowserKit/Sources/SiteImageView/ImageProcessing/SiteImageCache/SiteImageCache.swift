@@ -12,7 +12,7 @@ protocol SiteImageCache {
     ///   - domain: The domain to retrieve the image from
     ///   - type: The image type to retrieve the image from the cache
     /// - Returns: The image from the cache or throws an error if it could not retrieve it
-    func getImageFromCache(domain: ImageDomain,
+    func getImageFromCache(cacheKey: String,
                            type: SiteImageType) async throws -> UIImage
 
     /// Cache an image into the right cache depending on it's type
@@ -21,7 +21,7 @@ protocol SiteImageCache {
     ///   - domain: The image domain
     ///   - type: The image type
     func cacheImage(image: UIImage,
-                    domain: ImageDomain,
+                    cacheKey: String,
                     type: SiteImageType) async
 }
 
@@ -32,8 +32,9 @@ actor DefaultSiteImageCache: SiteImageCache {
         self.imageCache = imageCache
     }
 
-    func getImageFromCache(domain: ImageDomain, type: SiteImageType) async throws -> UIImage {
-        let key = cacheKey(from: domain, type: type)
+    func getImageFromCache(cacheKey: String,
+                           type: SiteImageType) async throws -> UIImage {
+        let key = self.cacheKey(cacheKey, type: type)
         do {
             let result = try await imageCache.retrieveImage(forKey: key)
             guard let image = result else {
@@ -45,12 +46,12 @@ actor DefaultSiteImageCache: SiteImageCache {
         }
     }
 
-    func cacheImage(image: UIImage, domain: ImageDomain, type: SiteImageType) async {
-        let key = cacheKey(from: domain, type: type)
+    func cacheImage(image: UIImage, cacheKey: String, type: SiteImageType) async {
+        let key = self.cacheKey(cacheKey, type: type)
         imageCache.store(image: image, forKey: key)
     }
 
-    private func cacheKey(from domain: ImageDomain, type: SiteImageType) -> String {
-        return "\(domain.baseDomain)-\(type.rawValue)"
+    private func cacheKey(_ cacheKey: String, type: SiteImageType) -> String {
+        return "\(cacheKey)-\(type.rawValue)"
     }
 }

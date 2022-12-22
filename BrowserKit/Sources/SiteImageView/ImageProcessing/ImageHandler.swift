@@ -17,9 +17,7 @@ protocol ImageHandler {
     ///   - imageURL: The image URL, can be nil if it could not be retrieved from the site
     ///   - domain: The domain this favicon will be associated with
     /// - Returns: The favicon image
-    func fetchFavicon(imageURL: URL?,
-                      domain: ImageDomain,
-                      expectedType: SiteImageType) async -> UIImage
+    func fetchFavicon(site: SiteImageModel) async -> UIImage
 
     /// The ImageHandler will fetch the hero image with the following precedence
     ///     1. Tries to fetch from the cache.
@@ -31,8 +29,7 @@ protocol ImageHandler {
     ///   - siteURL: The site URL to fetch the hero image from
     ///   - domain: The domain this hero image will be associated with
     /// - Returns: The hero image
-    func fetchHeroImage(siteURL: URL,
-                        domain: ImageDomain) async throws -> UIImage
+    func fetchHeroImage(site: SiteImageModel) async throws -> UIImage
 }
 
 class DefaultImageHandler: ImageHandler {
@@ -54,67 +51,62 @@ class DefaultImageHandler: ImageHandler {
         self.heroImageFetcher = heroImageFetcher
     }
 
-    func fetchFavicon(imageURL: URL?,
-                      domain: ImageDomain,
-                      expectedType type: SiteImageType) async -> UIImage {
+    func fetchFavicon(site: SiteImageModel) async -> UIImage {
         do {
-            return try bundleImageFetcher.getImageFromBundle(domain: domain)
+            return try bundleImageFetcher.getImageFromBundle(domain: site.domain)
         } catch {
-            return await fetchFaviconFromCache(imageURL: imageURL, domain: domain, expectedType: type)
+            return await fetchFaviconFromCache(site: site)
         }
     }
 
-    func fetchHeroImage(siteURL: URL,
-                        domain: ImageDomain) async throws -> UIImage {
+    func fetchHeroImage(site: SiteImageModel) async throws -> UIImage {
         do {
-            return try await imageCache.getImageFromCache(domain: domain, type: .heroImage)
+            return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: .heroImage)
         } catch {
-            return try await fetchHeroImageFromFetcher(siteURL: siteURL, domain: domain)
+            return try await fetchHeroImageFromFetcher(site: site)
         }
     }
 
     // MARK: Private
 
-    private func fetchFaviconFromCache(imageURL: URL?,
-                                       domain: ImageDomain,
-                                       expectedType type: SiteImageType) async -> UIImage {
+    private func fetchFaviconFromCache(site: SiteImageModel) async -> UIImage {
         do {
-            return try await imageCache.getImageFromCache(domain: domain, type: type)
+            return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: site.expectedImageType)
         } catch {
-            return await fetchFaviconFromFetcher(imageURL: imageURL, domain: domain, expectedType: type)
+            return await fetchFaviconFromFetcher(site: site)
         }
     }
 
-    private func fetchFaviconFromFetcher(imageURL: URL?,
-                                         domain: ImageDomain,
-                                         expectedType type: SiteImageType) async -> UIImage {
+    private func fetchFaviconFromFetcher(site: SiteImageModel) async -> UIImage {
         do {
-            guard let url = imageURL else {
-                return await fallbackToLetterFavicon(domain: domain, expectedType: type)
+            guard let url = site.faviconURL else {
+                return await fallbackToLetterFavicon(site: site)
             }
 
             let image = try await faviconFetcher.fetchFavicon(from: url)
-            await imageCache.cacheImage(image: image, domain: domain, type: type)
+            await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: site.expectedImageType)
             return image
         } catch {
-            return await fallbackToLetterFavicon(domain: domain, expectedType: type)
+            return await fallbackToLetterFavicon(site: site)
         }
     }
 
-    private func fetchHeroImageFromFetcher(siteURL: URL,
-                                           domain: ImageDomain) async throws -> UIImage {
+    private func fetchHeroImageFromFetcher(site: SiteImageModel) async throws -> UIImage {
+        guard let siteURL = site.siteURL else {
+            throw SiteImageError.noHeroImage
+        }
         do {
             let image = try await heroImageFetcher.fetchHeroImage(from: siteURL)
-            await imageCache.cacheImage(image: image, domain: domain, type: .heroImage)
+            await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: .heroImage)
             return image
         } catch {
             throw SiteImageError.noHeroImage
         }
     }
 
-    private func fallbackToLetterFavicon(domain: ImageDomain, expectedType type: SiteImageType) async -> UIImage {
-        let image = await letterImageGenerator.generateLetterImage(domain: domain)
-        await imageCache.cacheImage(image: image, domain: domain, type: type)
+    private func fallbackToLetterFavicon(site: SiteImageModel) async -> UIImage {
+        let image = await letterImageGenerator.generateLetterImage(siteString: site.cacheKey)
+        await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: site.expectedImageType)
         return image
     }
 }

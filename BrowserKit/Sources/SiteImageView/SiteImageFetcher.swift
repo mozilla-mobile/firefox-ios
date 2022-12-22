@@ -6,7 +6,10 @@ import UIKit
 import Common
 
 protocol SiteImageFetcher {
-    func getImage(urlStringRequest: String, type: SiteImageType, id: UUID) async -> SiteImageModel
+    func getImage(urlStringRequest: String,
+                  type: SiteImageType,
+                  id: UUID,
+                  usesIndirectDomain: Bool) async -> SiteImageModel
 }
 
 class DefaultSiteImageFetcher: SiteImageFetcher {
@@ -19,11 +22,15 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
         self.imageHandler = imageHandler
     }
 
-    func getImage(urlStringRequest: String, type: SiteImageType, id: UUID) async -> SiteImageModel {
+    func getImage(urlStringRequest: String,
+                  type: SiteImageType,
+                  id: UUID,
+                  usesIndirectDomain: Bool) async -> SiteImageModel {
         var imageModel = SiteImageModel(id: id,
                                         expectedImageType: type,
                                         urlStringRequest: urlStringRequest,
                                         siteURL: nil,
+                                        cacheKey: "",
                                         domain: nil,
                                         faviconURL: nil,
                                         faviconImage: nil,
@@ -34,6 +41,9 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
             let domain = generateDomainURL(siteURL: siteURL)
             imageModel.siteURL = siteURL
             imageModel.domain = domain
+            imageModel.cacheKey = generateCacheKey(siteURL: siteURL,
+                                                   type: type,
+                                                   usesIndirectDomain: usesIndirectDomain)
         }
 
         do {
@@ -53,44 +63,36 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
 
     // MARK: - Private
 
-    private func getHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
-        guard let siteURL = imageModel.siteURL,
-              let domain = imageModel.domain else { throw SiteImageError.noHeroImage }
+    private func generateCacheKey(siteURL: URL,
+                                  type: SiteImageType,
+                                  usesIndirectDomain: Bool) -> String {
+        guard usesIndirectDomain else {
+            return siteURL.shortDomain ?? siteURL.shortDisplayString
+        }
+        return siteURL.absoluteString
+    }
 
+    private func getHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {
-            return try await imageHandler.fetchHeroImage(siteURL: siteURL,
-                                                         domain: domain)
+            return try await imageHandler.fetchHeroImage(site: imageModel)
         } catch {
             throw error
         }
     }
 
     private func getFaviconImage(imageModel: SiteImageModel) async -> UIImage {
-        guard let domain = imageModel.domain else {
-            // If no domain, we generate the favicon from the urlStringRequest
-            let domain = ImageDomain(baseDomain: imageModel.urlStringRequest, bundleDomains: [])
-            return await imageHandler.fetchFavicon(imageURL: imageModel.faviconURL,
-                                                   domain: domain,
-                                                   expectedType: imageModel.expectedImageType)
-        }
-
         do {
             // Try to fetch the favicon URL
             let faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
-            return await imageHandler.fetchFavicon(imageURL: faviconURLImageModel.faviconURL,
-                                                   domain: domain,
-                                                   expectedType: imageModel.expectedImageType)
+            return await imageHandler.fetchFavicon(site: faviconURLImageModel)
         } catch {
             // If no favicon URL, generate favicon without it
-            return await imageHandler.fetchFavicon(imageURL: imageModel.faviconURL,
-                                                   domain: domain,
-                                                   expectedType: imageModel.expectedImageType)
+            return await imageHandler.fetchFavicon(site: imageModel)
         }
     }
 
     private func generateDomainURL(siteURL: URL) -> ImageDomain {
         let bundleDomains = BundleDomainBuilder().buildDomains(for: siteURL)
-        let baseDomain = siteURL.shortDomain ?? siteURL.shortDisplayString
-        return ImageDomain(baseDomain: baseDomain, bundleDomains: bundleDomains)
+        return ImageDomain(bundleDomains: bundleDomains)
     }
 }

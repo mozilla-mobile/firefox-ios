@@ -6,12 +6,14 @@ import UIKit
 
 public struct FaviconImageViewModel {
     let urlStringRequest: String
-    let type: SiteImageType
     let faviconCornerRadius: CGFloat
+    let usesIndirectDomain: Bool
 
-    public init(urlStringRequest: String, faviconCornerRadius: CGFloat) {
-        self.type = .favicon
+    public init(urlStringRequest: String,
+                faviconCornerRadius: CGFloat,
+                usesIndirectDomain: Bool = false) {
         self.urlStringRequest = urlStringRequest
         self.faviconCornerRadius = faviconCornerRadius
+        self.usesIndirectDomain = usesIndirectDomain
     }
 }

@@ -5,8 +5,8 @@
 import Foundation
 
 protocol FaviconURLCache {
-    func getURLFromCache(domain: ImageDomain) async throws -> URL
-    func cacheURL(domain: ImageDomain, faviconURL: URL) async
+    func getURLFromCache(cacheKey: String) async throws -> URL
+    func cacheURL(cacheKey: String, faviconURL: URL) async
 }
 
 actor DefaultFaviconURLCache: FaviconURLCache {
@@ -29,22 +29,25 @@ actor DefaultFaviconURLCache: FaviconURLCache {
         }
     }
 
-    func getURLFromCache(domain: ImageDomain) async throws -> URL {
-        guard let favicon = urlCache[domain.baseDomain],
+    func getURLFromCache(cacheKey: String) async throws -> URL {
+        guard let favicon = urlCache[cacheKey],
               let url = URL(string: favicon.faviconURL)
         else { throw SiteImageError.noURLInCache }
 
         // Update the element in the cache so it's time to expire is reset
-        await cacheURL(domain: domain, faviconURL: url)
+        // We don't need to wait for this to finish
+        Task {
+            await cacheURL(cacheKey: cacheKey, faviconURL: url)
+        }
 
         return url
     }
 
-    func cacheURL(domain: ImageDomain, faviconURL: URL) async {
-        let favicon = FaviconURL(domain: domain,
+    func cacheURL(cacheKey: String, faviconURL: URL) async {
+        let favicon = FaviconURL(cacheKey: cacheKey,
                                  faviconURL: faviconURL.absoluteString,
                                  createdAt: Date())
-        urlCache[domain.baseDomain] = favicon
+        urlCache[cacheKey] = favicon
         preserveCache()
     }
 
@@ -87,7 +90,7 @@ actor DefaultFaviconURLCache: FaviconURLCache {
             if numberOfDaysBetween(start: $1.createdAt, end: today) >= CacheConstants.daysToExpiration {
                 return
             }
-            $0[$1.domain.baseDomain] = $1
+            $0[$1.cacheKey] = $1
         }
     }
 
