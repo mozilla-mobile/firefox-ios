@@ -42,12 +42,14 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
 
     // MARK: - Init
 
-    init(userDefaults: UserDefaultsInterface? = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier),
+    init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          appDelegate: UIApplicationDelegate?) {
-        self.userDefaults = userDefaults ?? UserDefaults.standard
+        self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
         self.appDelegate = appDelegate
+
+        migrateDefaultsToUseStandard()
 
         self.userDefaults.register(defaults: [ThemeKeys.systemThemeIsOn: true,
                                               ThemeKeys.NightMode.isOn: NSNumber(value: false)])
@@ -128,7 +130,7 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
         var themeType = getSystemThemeType()
 
         // TODO: Temporarily use user defaults directly until we figure out how to manage these values FXIOS-5058
-        if let savedThemeDescription = UserDefaults.standard.string(forKey: ThemeKeys.themeName),
+        if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
            let savedTheme = ThemeType(rawValue: savedThemeDescription) {
             themeType = savedTheme
         }
@@ -166,6 +168,23 @@ final class DefaultThemeManager: ThemeManager, Notifiable {
             changeCurrentTheme(.dark)
         } else {
             changeCurrentTheme(.light)
+        }
+    }
+
+    private func migrateDefaultsToUseStandard() {
+        guard let oldDefaultsStore = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) else { return }
+
+        if let systemThemeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.systemThemeIsOn) {
+            userDefaults.set(systemThemeIsOn, forKey: ThemeKeys.systemThemeIsOn)
+        }
+        if let nightModeIsOn = oldDefaultsStore.value(forKey: ThemeKeys.NightMode.isOn) {
+            userDefaults.set(nightModeIsOn, forKey: ThemeKeys.NightMode.isOn)
+        }
+        if let automaticBrightnessIsOn = oldDefaultsStore.value(forKey: ThemeKeys.AutomaticBrightness.isOn) {
+            userDefaults.set(automaticBrightnessIsOn, forKey: ThemeKeys.AutomaticBrightness.isOn)
+        }
+        if let automaticBrighnessValue = oldDefaultsStore.value(forKey: ThemeKeys.AutomaticBrightness.thresholdValue) {
+            userDefaults.set(automaticBrighnessValue, forKey: ThemeKeys.AutomaticBrightness.thresholdValue)
         }
     }
 
