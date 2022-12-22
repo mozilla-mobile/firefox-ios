@@ -543,7 +543,8 @@ class SearchViewController: SiteTableViewController,
                 }
             }
         case .searchHighlights:
-            if let url = searchHighlights[indexPath.row].siteUrl {
+            if let urlString = searchHighlights[indexPath.row].urlString,
+                let url = URL(string: urlString) {
                 recordSearchListSelectionTelemetry(type: .searchHighlights)
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
@@ -718,7 +719,7 @@ class SearchViewController: SiteTableViewController,
             }
         case .searchHighlights:
             let highlightItem = searchHighlights[indexPath.row]
-            let urlString = highlightItem.siteUrl?.absoluteString ?? ""
+            let urlString = highlightItem.urlString ?? ""
             let site = Site(url: urlString, title: highlightItem.displayTitle)
             cell = twoLineCell
             twoLineCell.descriptionLabel.isHidden = false

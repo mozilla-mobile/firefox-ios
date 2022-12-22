@@ -73,7 +73,7 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
                 return
             }
             for site in results {
-                let urlString = site.siteUrl?.absoluteString ?? ""
+                let urlString = site.urlString ?? ""
                 if site.displayTitle.lowercased().contains(searchQuery) ||
                     urlString.lowercased().contains(searchQuery) {
                     searchResults.append(site)

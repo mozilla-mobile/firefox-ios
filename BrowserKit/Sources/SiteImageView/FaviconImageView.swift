@@ -23,6 +23,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
     public override init(frame: CGRect) {
         self.imageFetcher = DefaultSiteImageFetcher()
         super.init(frame: frame)
+        setupUI()
     }
 
     // Internal init used in unit tests only
@@ -32,6 +33,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
         self.imageFetcher = imageFetcher
         self.completionHandler = completionHandler
         super.init(frame: frame)
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
@@ -67,10 +69,15 @@ public class FaviconImageView: UIImageView, SiteImageView {
 
     private func setupFaviconImage(_ viewModel: SiteImageModel) {
         image = viewModel.faviconImage
-        layer.masksToBounds = true
     }
 
     private func setupFaviconLayout(viewModel: FaviconImageViewModel) {
         layer.cornerRadius = viewModel.faviconCornerRadius
+    }
+
+    private func setupUI() {
+        layer.masksToBounds = true
+        contentMode = .scaleAspectFit
+        clipsToBounds = true
     }
 }
