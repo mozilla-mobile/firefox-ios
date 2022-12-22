@@ -67,11 +67,11 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
 
     private func extractDeletableURLs(from item: HighlightItem) -> [String] {
         var urls = [String]()
-        if item.type == .item, let url = item.siteUrl?.absoluteString {
+        if item.type == .item, let url = item.urlString {
             urls = [url]
         } else if item.type == .group, let items = item.group {
             items.forEach { groupedItem in
-                if let url = groupedItem.siteUrl?.absoluteString { urls.append(url) }
+                if let url = groupedItem.urlString { urls.append(url) }
             }
         }
 

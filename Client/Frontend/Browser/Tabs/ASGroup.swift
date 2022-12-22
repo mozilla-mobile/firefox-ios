@@ -40,4 +40,8 @@ extension ASGroup: HighlightItem {
     var siteUrl: URL? {
         return nil
     }
+
+    var urlString: String? {
+        return nil
+    }
 }

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import SiteImageView
 
 /// A cell used in FxHomeScreen's History Highlights section.
 class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
@@ -13,13 +14,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - UI Elements
-    let heroImage: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
-    }
+    let imageView: FaviconImageView = .build { imageView in }
 
     let itemTitle: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
@@ -50,7 +45,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     var isFillerCell: Bool = false {
         didSet {
             itemTitle.isHidden = isFillerCell
-            heroImage.isHidden = isFillerCell
+            imageView.isHidden = isFillerCell
             bottomLine.isHidden = isFillerCell
         }
     }
@@ -87,7 +82,12 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         isFillerCell = options.isFillerCell
         accessibilityLabel = options.accessibilityLabel
 
-        heroImage.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
+        if let url = options.urlString {
+            let faviconViewModel = HomepageFaviconImageViewModel(urlStringRequest: url)
+            imageView.setFavicon(faviconViewModel)
+        } else {
+            imageView.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
+        }
 
         applyTheme(theme: theme)
     }
@@ -95,7 +95,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        heroImage.image = nil
+        imageView.image = nil
         itemDescription.isHidden = true
 
         contentView.layer.shadowRadius = 0.0
@@ -105,18 +105,18 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Setup Helper methods
     private func setupLayout() {
-        contentView.addSubview(heroImage)
+        contentView.addSubview(imageView)
         contentView.addSubview(textStack)
         contentView.addSubview(bottomLine)
 
         NSLayoutConstraint.activate([
-            heroImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                constant: UX.horizontalSpacing),
-            heroImage.heightAnchor.constraint(equalToConstant: UX.heroImageDimension),
-            heroImage.widthAnchor.constraint(equalToConstant: UX.heroImageDimension),
-            heroImage.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: UX.heroImageDimension),
+            imageView.widthAnchor.constraint(equalToConstant: UX.heroImageDimension),
+            imageView.centerYAnchor.constraint(equalTo: textStack.centerYAnchor),
 
-            textStack.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor,
+            textStack.leadingAnchor.constraint(equalTo: imageView.trailingAnchor,
                                                constant: UX.horizontalSpacing),
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                 constant: -UX.horizontalSpacing),
@@ -165,7 +165,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
 // MARK: - ThemeApplicable
 extension HistoryHighlightsCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
-        heroImage.tintColor = theme.colors.iconPrimary
+        imageView.tintColor = theme.colors.iconPrimary
         bottomLine.backgroundColor = theme.colors.borderPrimary
         itemTitle.textColor = theme.colors.textPrimary
         itemDescription.textColor = theme.colors.textSecondary

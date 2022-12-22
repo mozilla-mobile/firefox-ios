@@ -13,6 +13,7 @@ protocol HighlightItem {
     var displayTitle: String { get }
     var description: String? { get }
     var siteUrl: URL? { get }
+    var urlString: String? { get }
     var type: HighlightItemType { get }
     var group: [HighlightItem]? { get }
 }
@@ -36,5 +37,9 @@ extension HistoryHighlight: HighlightItem {
 
     var siteUrl: URL? {
         return URL(string: url)
+    }
+
+    var urlString: String? {
+        return url
     }
 }

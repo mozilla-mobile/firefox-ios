@@ -59,8 +59,8 @@ extension HomepageContextMenuProtocol {
 
         switch highlightItem.type {
         case .item:
-            guard let url = highlightItem.siteUrl?.absoluteString else { return nil }
-            let site = Site(url: url, title: highlightItem.displayTitle)
+            guard let urlString = highlightItem.urlString else { return nil }
+            let site = Site(url: urlString, title: highlightItem.displayTitle)
 
             viewModel = PhotonActionSheetViewModel(actions: [actions],
                                                    site: site,
