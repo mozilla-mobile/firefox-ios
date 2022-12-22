@@ -31,10 +31,10 @@ extension SiteImageView {
                      id: UUID,
                      usesIndirectDomain: Bool) {
         Task {
-            let imageModel = await imageFetcher.getImageModel(urlStringRequest: url,
-                                                              type: type,
-                                                              id: id,
-                                                              usesIndirectDomain: usesIndirectDomain)
+            let imageModel = await imageFetcher.getImage(urlStringRequest: url,
+                                                         type: type,
+                                                         id: id,
+                                                         usesIndirectDomain: usesIndirectDomain)
             guard uniqueID == imageModel.id else { return }
 
             DispatchQueue.main.async { [weak self] in

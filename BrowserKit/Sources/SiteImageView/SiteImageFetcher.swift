@@ -6,10 +6,10 @@ import UIKit
 import Common
 
 protocol SiteImageFetcher {
-    func getImageModel(urlStringRequest: String,
-                       type: SiteImageType,
-                       id: UUID,
-                       usesIndirectDomain: Bool) async -> SiteImageModel
+    func getImage(urlStringRequest: String,
+                  type: SiteImageType,
+                  id: UUID,
+                  usesIndirectDomain: Bool) async -> SiteImageModel
 }
 
 class DefaultSiteImageFetcher: SiteImageFetcher {
@@ -22,10 +22,10 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
         self.imageHandler = imageHandler
     }
 
-    func getImageModel(urlStringRequest: String,
-                       type: SiteImageType,
-                       id: UUID,
-                       usesIndirectDomain: Bool) async -> SiteImageModel {
+    func getImage(urlStringRequest: String,
+                  type: SiteImageType,
+                  id: UUID,
+                  usesIndirectDomain: Bool) async -> SiteImageModel {
         var imageModel = SiteImageModel(id: id,
                                         expectedImageType: type,
                                         urlStringRequest: urlStringRequest,
@@ -35,8 +35,6 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
                                         faviconURL: nil,
                                         faviconImage: nil,
                                         heroImage: nil)
-
-
 
         // urlStringRequest possibly cannot be a URL
         if let siteURL = URL(string: urlStringRequest) {
