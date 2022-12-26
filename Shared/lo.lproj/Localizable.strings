@@ -193,15 +193,6 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ແບ່ງປັນລີ້ງ";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
-"ContextualHint.SearchBarPlacement.ExistingUsers" = "ຕອນນີ້ທ່ານສາມາດຍ້າຍແຖບເຄື່ອງມືໄປໄວ້ຢູ່ລຸ່ມສຸດໄດ້ ດັ່ງນັ້ນມັນຈຶ່ງງ່າຍຕໍ່ການໃສ່ຂໍ້ມູນ.";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
-"ContextualHint.SearchBarPlacement.NewUsers" = "ເພື່ອເຮັດໃຫ້ການປ້ອນຂໍ້ມູນງ່າຍຂື້ນ ຕອນນີ້ໄດ້ປັບໃຫ້ແທບເຄືອງມືໄປຢູ່ດ້ານແລ້ວ.";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "ຕອນນີ້ຫນ້າທໍາອິດຂອງ Firefox ທີ່ໄດ້ຮັບການປັບແຕ່ງຕາມແບບຂອງທ່ານຈະເຮັດໃຫ້ທ່ານສາມາດກັບໄປເບິງຫນ້າເວັບທີ່ໄດ້ເປີດປະໄວ້ໄດ້ງ່າຍຂື້ນແລ້ວ. ຊອກຫາແທັບ, ບຸກມາກ, ແລະ ຜົນການຄົ້ນຫາຫຼ້າສຸດຂອງທ່ານ.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "ການຕັ້ງຄ່າແທບເຄື່ອງມື";
 

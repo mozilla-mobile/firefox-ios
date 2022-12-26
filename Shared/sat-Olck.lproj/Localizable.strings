@@ -193,15 +193,6 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "ᱞᱤᱝᱠ ᱦᱟᱹᱴᱤᱧᱟᱜ ᱢᱮ";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
-"ContextualHint.SearchBarPlacement.ExistingUsers" = "ᱱᱤᱛᱚᱜ ᱫᱚ ᱟᱢ ᱦᱟᱹᱛᱤᱭᱟᱨ ᱵᱟᱨ ᱞᱟᱛᱟᱨ ᱥᱮᱫ ᱩᱪᱟᱹᱲ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ, ᱢᱮᱱᱠᱷᱟᱱ ᱡᱤᱱᱤᱥ ᱟᱫᱮᱨ ᱟᱞᱜᱟᱜᱼᱟ ᱾";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
-"ContextualHint.SearchBarPlacement.NewUsers" = "ᱡᱤᱱᱤᱥ ᱟᱫᱮᱨ ᱟᱞᱜᱟ ᱛᱮᱭᱟᱨ ᱞᱟᱹᱜᱤᱫ, ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ ᱫᱚ ᱢᱩᱞ ᱦᱤᱥᱟᱹᱵᱽ ᱛᱮ ᱞᱟᱛᱟᱨ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "ᱟᱢᱟᱜ ᱢᱚᱱᱮᱛᱮᱭᱟᱜ Firefox ᱚᱲᱟᱜᱥᱟᱦᱴᱟ ᱫᱚ ᱱᱤᱛᱚᱜ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱲᱟᱜ ᱠᱟᱜᱼᱟᱢ ᱚᱱᱰᱮ ᱜᱮ ᱤᱫᱤ ᱢᱮᱭᱟᱭ ᱾ ᱟᱢᱟᱜ ᱱᱤᱛᱚᱜᱟᱜ ᱴᱮᱵᱽ ᱠᱚ, ᱵᱩᱠᱢᱟᱨᱠ ᱠᱚ ᱟᱨ ᱥᱮᱸᱫᱽᱨᱟ ᱠᱚ ᱯᱟᱱᱛᱮ ᱛᱟᱢ ᱾";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "ᱦᱟᱹᱛᱤᱭᱟᱹᱨ ᱵᱟᱨ ᱨᱮᱭᱟᱜ ᱥᱟᱡᱟᱣ ᱠᱚ";
 
