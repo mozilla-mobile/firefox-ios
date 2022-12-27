@@ -407,6 +407,7 @@ extension TelemetryWrapper {
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case settingsMenuShowTour = "show-tour"
+        case creditCardAutofillSettings = "creditCardAutofillSettings"
         // MARK: New Onboarding
         case onboardingClose = "onboarding-close"
         case onboardingCardView = "onboarding-card-view"
@@ -755,6 +756,9 @@ extension TelemetryWrapper {
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
 
+        // MARK: - QR Codes
+        case(.action, .tap, .creditCardAutofillSettings, _, _):
+            GleanMetrics.CreditCard.autofillSettingsTapped.record()
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
