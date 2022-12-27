@@ -7,7 +7,6 @@ import UIKit
 import Fuzi
 import SwiftyJSON
 import Shared
-import SiteImageView
 
 private let log = Logger.syncLogger
 
