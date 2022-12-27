@@ -34,7 +34,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     var recentGroups: [ASGroup<Tab>]?
     var recentSyncedTab: JumpBackInSyncedTab?
 
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
 
     var isZeroSearch: Bool
@@ -229,22 +228,11 @@ private extension JumpBackInViewModel {
 private extension JumpBackInViewModel {
     func configureJumpBackInCellForGroups(group: ASGroup<Tab>, cell: JumpBackInCell, indexPath: IndexPath) {
         let firstGroupItem = group.groupedItems.first
-        let site = Site(url: firstGroupItem?.lastKnownUrl?.absoluteString ?? "", title: firstGroupItem?.lastTitle ?? "")
-
+        let siteURL = firstGroupItem?.lastKnownUrl?.absoluteString ?? ""
         let descriptionText = String.localizedStringWithFormat(.FirefoxHomepage.JumpBackIn.GroupSiteCount, group.groupedItems.count)
-        let faviconImage = UIImage(imageLiteralResourceName: ImageIdentifiers.stackedTabsIcon).withRenderingMode(.alwaysTemplate)
         let cellViewModel = JumpBackInCellViewModel(titleText: group.searchTerm.localizedCapitalized,
                                                     descriptionText: descriptionText,
-                                                    favIconImage: faviconImage,
-                                                    heroImage: nil)
-        let id = Int(arc4random())
-        cell.tag = id
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .heroImage,
-                                      shouldFallback: true) { image in
-            guard cell.tag == id else { return }
-            cell.heroImage.image = image
-        }
+                                                    siteURL: siteURL)
         cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
@@ -252,38 +240,9 @@ private extension JumpBackInViewModel {
         let itemURL = item.lastKnownUrl?.absoluteString ?? ""
         let site = Site(url: itemURL, title: item.displayTitle)
         let descriptionText = site.tileURL.shortDisplayString.capitalized
-
-        let id = Int(arc4random())
-        cell.tag = id
-        var heroImage: UIImage?
-        var favicon: UIImage?
-
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .favicon,
-                                      shouldFallback: false) { image in
-            guard cell.tag == id else { return }
-            favicon = image
-            let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
-                                                        descriptionText: descriptionText,
-                                                        favIconImage: favicon,
-                                                        heroImage: heroImage)
-            cell.configure(viewModel: cellViewModel, theme: self.theme)
-        }
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .heroImage,
-                                      shouldFallback: true) { image in
-            guard cell.tag == id else { return }
-            heroImage = image
-            let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
-                                                        descriptionText: descriptionText,
-                                                        favIconImage: favicon,
-                                                        heroImage: heroImage)
-            cell.configure(viewModel: cellViewModel, theme: self.theme)
-        }
         let cellViewModel = JumpBackInCellViewModel(titleText: site.title,
                                                     descriptionText: descriptionText,
-                                                    favIconImage: favicon,
-                                                    heroImage: heroImage)
+                                                    siteURL: itemURL)
         cell.configure(viewModel: cellViewModel, theme: theme)
     }
 
@@ -298,25 +257,8 @@ private extension JumpBackInViewModel {
             titleText: site.title,
             descriptionText: descriptionText,
             url: item.tab.URL,
-            syncedDeviceImage: image,
-            heroImage: nil,
-            fallbackFaviconImage: nil
+            syncedDeviceImage: image
         )
-
-        let id = Int(arc4random())
-        cell.tag = id
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .favicon,
-                                      shouldFallback: false) { image in
-            guard cell.tag == id else { return }
-            cell.tabFallbackFaviconImage.image = image
-        }
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .heroImage,
-                                      shouldFallback: true) { image in
-            guard cell.tag == id else { return }
-            cell.tabHeroImage.image = image
-        }
 
         cell.configure(
             viewModel: cellViewModel,
