@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import SiteImageView
 
 // MARK: - PocketStandardCell
 /// A cell used in FxHomeScreen's Pocket section
@@ -24,13 +25,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - UI Elements
-    private lazy var heroImageView: UIImageView = .build { image in
-        image.contentMode = .scaleAspectFill
-        image.clipsToBounds = true
-        image.layer.masksToBounds = true
-        image.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        image.backgroundColor = .clear
-    }
+    private var heroImageView: HeroImageView = .build { _ in }
 
     private lazy var titleLabel: UILabel = .build { title in
         title.adjustsFontForContentSizeCategory = true
@@ -92,7 +87,6 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        heroImageView.image = nil
         descriptionLabel.text = nil
         titleLabel.text = nil
     }
@@ -103,16 +97,10 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         accessibilityLabel = viewModel.accessibilityLabel
-        tag = viewModel.tag
 
-        ImageLoadingHandler.shared.getImageFromCacheOrDownload(
-            with: viewModel.imageURL,
-            limit: ImageLoadingConstants.NoLimitImageSize
-        ) { [weak self] image, error in
-            guard error == nil, let image = image, self?.tag == viewModel.tag else { return }
-            self?.heroImageView.image = image
-        }
-
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.imageURL.absoluteString,
+                                                            heroImageSize: UX.heroImageSize)
+        heroImageView.setHeroImage(heroImageViewModel)
         sponsoredStack.isHidden = viewModel.shouldHideSponsor
         descriptionLabel.font = viewModel.shouldHideSponsor
         ? DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .caption1,
