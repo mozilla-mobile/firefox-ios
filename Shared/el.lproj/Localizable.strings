@@ -193,15 +193,6 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Κοινή χρήση συνδέσμου";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
-"ContextualHint.SearchBarPlacement.ExistingUsers" = "Μπορείτε πλέον να μετακινήσετε τη γραμμή εργαλείων στο κάτω μέρος, για ευκολότερη εισαγωγή πληροφοριών";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
-"ContextualHint.SearchBarPlacement.NewUsers" = "Για την ευκολότερη εισαγωγή πληροφοριών, η γραμμή εργαλείων βρίσκεται πλέον στο κάτω μέρος από προεπιλογή.";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "Η εξατομικευμένη αρχική σελίδα του Firefox διευκολύνει την επιστροφή στο σημείο που σταματήσατε. Βρείτε τις πρόσφατες καρτέλες, τους σελιδοδείκτες και τα αποτελέσματα αναζήτησής σας.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "Ρυθμίσεις γραμμής εργαλείων";
 
@@ -1034,7 +1025,7 @@
 "Reading list" = "Λίστα ανάγνωσης";
 
 /* Title for the Recently Closed Tabs Panel */
-"RecentlyClosedTabsPanel.Title" = "Έκλεισα πρόσφατα";
+"RecentlyClosedTabsPanel.Title" = "Έκλεισαν πρόσφατα";
 
 /* More button text for Recently Saved items at the home page. */
 "RecentlySaved.Actions.More" = "Εμφάνιση όλων";
