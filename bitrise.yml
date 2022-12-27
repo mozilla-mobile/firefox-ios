@@ -45,7 +45,7 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
-
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Detect number of warnings
@@ -105,7 +105,26 @@ workflows:
             set -euxo pipefail
             echo "-- compress --"
 
-            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/Client.xcodeproj" "$BITRISE_SOURCE_DIR/Tests/SmokeXCUITests.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest2.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" "$BITRISE_SOURCE_DIR/xcodebuild.log" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator15.2-x86_64.xctestrun" "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" "$BITRISE_SOURCE_DIR/Client/" "$BITRISE_SOURCE_DIR/Tests/XCUITests"
+            exec zip -0 -qr "${BITRISE_SOURCE_DIR}/DerivedData.zip" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/Client.app" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/XCUITests-Runner.app" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_iphonesimulator15.2-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/Client.xcodeproj" \
+            "$BITRISE_SOURCE_DIR/Tests/SmokeXCUITests.xctestplan" \
+            "$BITRISE_SOURCE_DIR/Tests/Smoketest2.xctestplan" \
+            "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" \
+            "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" \
+            "$BITRISE_SOURCE_DIR/xcodebuild.log" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Fennec_Enterprise_XCUITests_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest3_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest4_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
+            "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
+            "$BITRISE_SOURCE_DIR/Client/" \
+            "$BITRISE_SOURCE_DIR/Tests/XCUITests"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
@@ -145,8 +164,7 @@ workflows:
             mv ./Users/vagrant/git/DerivedData .
             ls -la
             echo "-- test-without-building --"
-
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "Smoketest2" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator16.1-x86_64.xctestrun"
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -192,7 +210,7 @@ workflows:
             ls -la
 
             echo "-- test-without-building --"
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "SmokeXCUITests" "test-without-building"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator16.1-x86_64.xctestrun"
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -237,7 +255,7 @@ workflows:
             ls -la
 
             echo "-- test-without-building --"
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "Smoketest3" "test-without-building"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest3_iphonesimulator16.1-x86_64.xctestrun"
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -283,7 +301,7 @@ workflows:
             ls -la
 
             echo "-- test-without-building --"
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -testPlan "Smoketest4" "test-without-building"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest4_iphonesimulator16.1-x86_64.xctestrun"
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -326,7 +344,7 @@ workflows:
             pwd
             echo "-- test-without-building --"
 
-            xcodebuild -project "Client.xcodeproj" -scheme "Fennec_Enterprise_XCUITests" -resultBundlePath "xcodebuild.xcresult" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" -derivedDataPath "/Users/vagrant/git/DerivedData" -testPlan "UnitTest" "test-without-building"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
     - script@1.1:
         title: Compress Result Bundle
         is_always_run: true
