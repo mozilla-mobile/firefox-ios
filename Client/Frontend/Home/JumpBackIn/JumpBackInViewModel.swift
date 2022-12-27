@@ -34,7 +34,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     var recentGroups: [ASGroup<Tab>]?
     var recentSyncedTab: JumpBackInSyncedTab?
 
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var jumpBackInDataAdaptor: JumpBackInDataAdaptor
 
     var isZeroSearch: Bool
@@ -258,25 +257,8 @@ private extension JumpBackInViewModel {
             titleText: site.title,
             descriptionText: descriptionText,
             url: item.tab.URL,
-            syncedDeviceImage: image,
-            heroImage: nil,
-            fallbackFaviconImage: nil
+            syncedDeviceImage: image
         )
-
-        let id = Int(arc4random())
-        cell.tag = id
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .favicon,
-                                      shouldFallback: false) { image in
-            guard cell.tag == id else { return }
-            cell.tabFallbackFaviconImage.image = image
-        }
-        siteImageHelper.fetchImageFor(site: site,
-                                      imageType: .heroImage,
-                                      shouldFallback: true) { image in
-            guard cell.tag == id else { return }
-            cell.tabHeroImage.image = image
-        }
 
         cell.configure(
             viewModel: cellViewModel,

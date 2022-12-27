@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import SiteImageView
 
 struct SyncedTabCellViewModel {
     let profile: Profile
@@ -11,8 +12,6 @@ struct SyncedTabCellViewModel {
     let descriptionText: String
     let url: URL
     var syncedDeviceImage: UIImage?
-    var heroImage: UIImage?
-    var fallbackFaviconImage: UIImage?
     var accessibilityLabel: String {
         return "\(cardTitleText): \(titleText), \(descriptionText)"
     }
@@ -31,7 +30,6 @@ struct SyncedTabCellViewModel {
 class SyncedTabCell: UICollectionViewCell, ReusableCell {
     struct UX {
         static let heroImageSize = CGSize(width: 108, height: 80)
-        static let fallbackFaviconSize = CGSize(width: 56, height: 56)
         static let syncedDeviceImageSize = CGSize(width: 24, height: 24)
         static let tabStackTopAnchorConstant: CGFloat = 72
         static let tabStackTopAnchorCompactPhoneConstant: CGFloat = 24
@@ -47,6 +45,8 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
     private var openSyncedTabAction: (() -> Void)?
 
     // MARK: - UI Elements
+    private var tabHeroImage: HeroImageView = .build { _ in }
+
     private let cardTitle: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .headline,
@@ -69,33 +69,9 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         stackView.alignment = .leading
     }
 
-    // Contains the tabHeroImage and tabFallbackFaviconImage
+    // Contains the tabHeroImage
     private var tabImageContainer: UIView = .build { view in
         view.backgroundColor = .clear
-    }
-
-    let tabHeroImage: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        imageView.backgroundColor = .clear
-        imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.heroImage
-    }
-
-    // Used as a fallback if hero image isn't set
-    let tabFallbackFaviconImage: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.backgroundColor = .clear
-        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
-        imageView.layer.masksToBounds = true
-        imageView.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.SyncedTab.fallbackFavIconImage
-    }
-
-    private var tabFallbackFaviconBackground: UIView = .build { view in
-        view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
     // contains tabItemTitle and syncedDeviceContainer
@@ -169,7 +145,12 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         syncedDeviceLabel.text = viewModel.descriptionText
         accessibilityLabel = viewModel.accessibilityLabel
         cardTitle.text = viewModel.cardTitleText
-        configureImages(viewModel: viewModel)
+
+        syncedDeviceImage.image = viewModel.syncedDeviceImage
+
+        let heroViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.url.absoluteString,
+                                                       heroImageSize: UX.heroImageSize)
+        tabHeroImage.setHeroImage(heroViewModel)
 
         let textAttributes: [NSAttributedString.Key: Any] = [ .underlineStyle: NSUnderlineStyle.single.rawValue ]
         let attributeString = NSMutableAttributedString(
@@ -208,39 +189,14 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         openSyncedTabAction?()
     }
 
-    private func configureImages(viewModel: SyncedTabCellViewModel) {
-        if viewModel.heroImage == nil {
-            // Sets a small favicon in place of the hero image in case there's no hero image
-            tabFallbackFaviconImage.image = viewModel.fallbackFaviconImage
-        } else if viewModel.heroImage?.size.width == viewModel.heroImage?.size.height {
-            // If hero image is a square use it as a favicon
-            tabFallbackFaviconImage.image = viewModel.heroImage
-        } else {
-            setFallBackFaviconVisibility(isHidden: true)
-            tabHeroImage.image = viewModel.heroImage
-        }
-
-        syncedDeviceImage.image = viewModel.syncedDeviceImage
-    }
-
-    private func setFallBackFaviconVisibility(isHidden: Bool) {
-        tabFallbackFaviconBackground.isHidden = isHidden
-        tabFallbackFaviconImage.isHidden = isHidden
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
-        tabHeroImage.image = nil
-        syncedDeviceImage.image = nil
-        tabFallbackFaviconImage.image = nil
         syncedDeviceLabel.text = nil
         tabItemTitle.text = nil
-        setFallBackFaviconVisibility(isHidden: false)
     }
 
     private func setupLayout() {
-        tabFallbackFaviconBackground.addSubviews(tabFallbackFaviconImage)
-        tabImageContainer.addSubviews(tabHeroImage, tabFallbackFaviconBackground)
+        tabImageContainer.addSubviews(tabHeroImage)
         syncedDeviceContainer.addSubviews(syncedDeviceImage, syncedDeviceLabel)
         tabContentContainer.addSubviews(tabItemTitle, syncedDeviceContainer)
         tabStack.addArrangedSubview(tabImageContainer)
@@ -283,16 +239,6 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             tabHeroImage.leadingAnchor.constraint(equalTo: tabImageContainer.leadingAnchor),
             tabHeroImage.trailingAnchor.constraint(equalTo: tabImageContainer.trailingAnchor),
             tabHeroImage.bottomAnchor.constraint(equalTo: tabImageContainer.bottomAnchor),
-
-            tabFallbackFaviconBackground.centerXAnchor.constraint(equalTo: tabImageContainer.centerXAnchor),
-            tabFallbackFaviconBackground.centerYAnchor.constraint(equalTo: tabImageContainer.centerYAnchor),
-            tabFallbackFaviconBackground.heightAnchor.constraint(equalToConstant: UX.heroImageSize.height),
-            tabFallbackFaviconBackground.widthAnchor.constraint(equalToConstant: UX.heroImageSize.width),
-
-            tabFallbackFaviconImage.heightAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.height),
-            tabFallbackFaviconImage.widthAnchor.constraint(equalToConstant: UX.fallbackFaviconSize.width),
-            tabFallbackFaviconImage.centerXAnchor.constraint(equalTo: tabFallbackFaviconBackground.centerXAnchor),
-            tabFallbackFaviconImage.centerYAnchor.constraint(equalTo: tabFallbackFaviconBackground.centerYAnchor),
 
             syncedDeviceImage.topAnchor.constraint(equalTo: syncedDeviceContainer.topAnchor),
             syncedDeviceImage.leadingAnchor.constraint(equalTo: syncedDeviceContainer.leadingAnchor),
@@ -373,9 +319,10 @@ extension SyncedTabCell: ThemeApplicable {
         syncedTabsButton.tintColor = theme.colors.iconPrimary
         syncedDeviceImage.image = syncedDeviceImage.image?.tinted(withColor: theme.colors.iconSecondary)
 
-        tabFallbackFaviconImage.tintColor = theme.colors.iconPrimary
-        tabFallbackFaviconBackground.backgroundColor = theme.colors.layer1
-        tabFallbackFaviconBackground.layer.borderColor = theme.colors.layer1.cgColor
+        let heroImageColors = HeroImageViewColor(faviconTintColor: theme.colors.iconPrimary,
+                                                 faviconBackgroundColor: theme.colors.layer1,
+                                                 faviconBorderColor: theme.colors.layer1)
+        tabHeroImage.updateHeroImageTheme(with: heroImageColors)
 
         adjustBlur(theme: theme)
     }
