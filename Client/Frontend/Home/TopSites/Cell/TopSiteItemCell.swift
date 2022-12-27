@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SiteImageView
 import Storage
 import UIKit
 
@@ -33,10 +34,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
     }
 
-    lazy var imageView: UIImageView = .build { imageView in
-        imageView.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
-        imageView.layer.masksToBounds = true
-    }
+    lazy var imageView: FaviconImageView = .build { _ in }
 
     // Holds the title and the pin image of the top site
     private lazy var titlePinWrapper: UIStackView = .build { stackView in
@@ -142,7 +140,6 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
     // MARK: - Public methods
 
     func configure(_ topSite: TopSite,
-                   favicon: UIImage?,
                    position: Int,
                    theme: Theme,
                    textColor: UIColor?) {
@@ -150,7 +147,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
 
-        imageView.image = favicon
+        let viewModel = HomepageFaviconImageViewModel(urlStringRequest: topSite.site.url)
+        imageView.setFavicon(viewModel)
         self.textColor = textColor
 
         configurePinnedSite(topSite)
