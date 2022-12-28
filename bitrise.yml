@@ -358,6 +358,10 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/TestResults.zip"
+    - codecov@3:
+        inputs:
+        - OS: iOS
+        - CODECOV_TOKEN: $CODECOV_TOKEN
     - custom-test-results-export@0:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
