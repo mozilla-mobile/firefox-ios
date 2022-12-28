@@ -80,7 +80,6 @@ extension ToolbarTextField: NotificationThemeable {
 extension ToolbarTextField {
     override var keyCommands: [UIKeyCommand]? {
         let commands = [
-            // Navigate the suggestions
             UIKeyCommand(action: #selector(handleKeyboardArrowKey(sender:)),
                          input: UIKeyCommand.inputRightArrow),
             UIKeyCommand(action: #selector(handleKeyboardArrowKey(sender:)),
