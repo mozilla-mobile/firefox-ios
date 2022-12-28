@@ -4,6 +4,7 @@
 
 @testable import Client
 import Foundation
+import Common
 
 class MockNotificationCenter: NotificationProtocol {
     var postCallCount = 0

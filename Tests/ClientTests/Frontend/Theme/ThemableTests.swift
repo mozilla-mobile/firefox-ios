@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-
-@testable import Client
+import Common
+@testable import Shared
 
 class ThemableTests: XCTestCaseRootViewController {
     private var tableViewDelegate: TestsTableView!
@@ -84,7 +84,7 @@ class TestsTableView: NSObject, UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - TestsThemeable
 class TestsThemeable: UIViewController, Themeable {
-    var themeManager: ThemeManager = AppContainer.shared.resolve()
+    var themeManager: ThemeManager = DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
 

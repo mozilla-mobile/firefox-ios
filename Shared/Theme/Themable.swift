@@ -30,7 +30,7 @@ extension Themeable {
         themeViews.forEach { $0.applyTheme(theme: themeManager.currentTheme) }
     }
 
-    private func getAllSubviews<T>(for view: UIView, ofType type: T.Type) -> [T] {
+    public func getAllSubviews<T>(for view: UIView, ofType type: T.Type) -> [T] {
         var secondLevelSubviews = [T]()
         let firstLevelSubviews: [T] = view.subviews.compactMap { childView in
             secondLevelSubviews = secondLevelSubviews + getAllSubviews(for: childView, ofType: type)
