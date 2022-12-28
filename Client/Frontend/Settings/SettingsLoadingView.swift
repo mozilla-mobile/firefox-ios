@@ -4,6 +4,7 @@
 
 import UIKit
 import SnapKit
+import Shared
 
 class SettingsLoadingView: UIView, ThemeApplicable {
     var searchBarHeight: CGFloat = 0 {

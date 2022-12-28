@@ -4,6 +4,7 @@
 
 import UIKit
 import Storage
+import Shared
 
 class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     struct UX {

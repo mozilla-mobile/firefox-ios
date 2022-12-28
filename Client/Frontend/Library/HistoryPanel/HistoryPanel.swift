@@ -7,6 +7,7 @@ import Shared
 import Storage
 import WebKit
 import os.log
+import Common
 
 private class FetchInProgressError: MaybeErrorType {
     internal var description: String {

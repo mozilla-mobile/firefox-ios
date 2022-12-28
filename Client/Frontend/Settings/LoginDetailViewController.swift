@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import Shared
+import Common
 
 enum InfoItem: Int {
     case breachItem = 0

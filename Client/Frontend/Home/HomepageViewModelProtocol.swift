@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 // Protocol for each section view model in Firefox Home page view controller
 protocol HomepageViewModelProtocol {

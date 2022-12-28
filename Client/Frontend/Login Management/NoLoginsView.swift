@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Shared
 
 /// Empty state view when there is no logins to display.
 class NoLoginsView: UIView, ThemeApplicable {

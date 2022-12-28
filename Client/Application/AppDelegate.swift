@@ -6,6 +6,7 @@ import Shared
 import Storage
 import CoreSpotlight
 import UIKit
+import Common
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     private let log = Logger.browserLogger

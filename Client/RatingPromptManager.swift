@@ -6,6 +6,7 @@ import Foundation
 import StoreKit
 import Shared
 import Storage
+import Common
 
 // The `RatingPromptManager` handles app store review requests and the internal logic of when they can be presented to a user.
 final class RatingPromptManager {

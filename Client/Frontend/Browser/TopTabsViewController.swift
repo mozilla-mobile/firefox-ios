@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Storage
 import WebKit
+import Common
 
 struct TopTabsUX {
     static let TopTabsViewHeight: CGFloat = 44

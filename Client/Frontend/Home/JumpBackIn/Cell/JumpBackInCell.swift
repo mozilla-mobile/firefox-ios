@@ -5,6 +5,8 @@
 import Storage
 import UIKit
 import SiteImageView
+import Common
+import Shared
 
 struct JumpBackInCellViewModel {
     let titleText: String

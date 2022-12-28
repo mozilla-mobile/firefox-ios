@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import Common
 
 // MARK: - ReaderModeStyleViewControllerDelegate
 

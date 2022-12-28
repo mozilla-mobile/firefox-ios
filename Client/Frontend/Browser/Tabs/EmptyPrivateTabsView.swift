@@ -4,6 +4,7 @@
 
 import UIKit
 import Foundation
+import Shared
 
 // View we display when there are no private tabs created
 class EmptyPrivateTabsView: UIView {

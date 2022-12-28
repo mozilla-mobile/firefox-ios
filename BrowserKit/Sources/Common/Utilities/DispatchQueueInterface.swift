@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol DispatchQueueInterface {
+public protocol DispatchQueueInterface {
     func async(group: DispatchGroup?,
                qos: DispatchQoS,
                flags: DispatchWorkItemFlags,
@@ -20,21 +20,21 @@ protocol DispatchQueueInterface {
 }
 
 extension DispatchQueueInterface {
-    func async(group: DispatchGroup? = nil,
-               qos: DispatchQoS = .unspecified,
-               flags: DispatchWorkItemFlags = [],
-               execute work: @escaping @convention(block) () -> Void) {
+    public func async(group: DispatchGroup? = nil,
+                      qos: DispatchQoS = .unspecified,
+                      flags: DispatchWorkItemFlags = [],
+                      execute work: @escaping @convention(block) () -> Void) {
         async(group: group, qos: qos, flags: flags, execute: work)
     }
 
-    func asyncAfter(deadline: DispatchTime,
-                    qos: DispatchQoS = .unspecified,
-                    flags: DispatchWorkItemFlags = [],
-                    execute work: @escaping @convention(block) () -> Void) {
+    public func asyncAfter(deadline: DispatchTime,
+                           qos: DispatchQoS = .unspecified,
+                           flags: DispatchWorkItemFlags = [],
+                           execute work: @escaping @convention(block) () -> Void) {
         asyncAfter(deadline: deadline, qos: qos, flags: flags, execute: work)
     }
 
-    func ensureMainThread(execute work: @escaping @convention(block) () -> Swift.Void) {
+    public func ensureMainThread(execute work: @escaping @convention(block) () -> Swift.Void) {
         if Thread.isMainThread {
             work()
         } else {
