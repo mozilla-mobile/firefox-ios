@@ -8,6 +8,7 @@ import Shared
 import Storage
 import UIKit
 import SwiftUI
+import Common
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()

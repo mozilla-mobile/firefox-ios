@@ -12,7 +12,7 @@ class ReaderModeStyleTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        themeManager = AppContainer.shared.resolve()
+        themeManager = DefaultThemeManager(appDelegate: UIApplication.shared.delegate)
     }
 
     override func tearDown() {
