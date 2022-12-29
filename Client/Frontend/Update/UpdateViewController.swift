@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import Shared
+import Common
 
 class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     // Update view UX constants

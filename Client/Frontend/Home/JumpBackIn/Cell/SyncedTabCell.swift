@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import SiteImageView
+import Common
 
 struct SyncedTabCellViewModel {
     let profile: Profile

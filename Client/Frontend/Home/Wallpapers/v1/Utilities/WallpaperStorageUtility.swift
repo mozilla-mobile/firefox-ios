@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 enum WallpaperStorageError: Error {
     case fileDoesNotExistError

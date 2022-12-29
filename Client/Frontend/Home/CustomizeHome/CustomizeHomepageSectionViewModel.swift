@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 /// Customize button is always present at the bottom of the page
 class CustomizeHomepageSectionViewModel {

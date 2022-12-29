@@ -7,6 +7,7 @@ import Shared
 import Storage
 import Glean
 import Telemetry
+import Common
 
 private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions

@@ -4,6 +4,8 @@
 
 import UIKit
 import Storage
+import Common
+import Shared
 
 protocol RemotePanelDelegate: AnyObject {
     func remotePanelDidRequestToSignIn()

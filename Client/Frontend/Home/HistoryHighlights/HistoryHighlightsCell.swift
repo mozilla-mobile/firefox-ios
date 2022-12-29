@@ -4,6 +4,7 @@
 
 import UIKit
 import SiteImageView
+import Shared
 
 /// A cell used in FxHomeScreen's History Highlights section.
 class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {

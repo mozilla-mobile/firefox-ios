@@ -3,8 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import UIKit
+import Common
 
-protocol Themeable: UIViewController {
+public protocol Themeable: UIViewController {
     var themeManager: ThemeManager { get }
     var themeObserver: NSObjectProtocol? { get set }
     var notificationCenter: NotificationProtocol { get set }
@@ -14,7 +16,7 @@ protocol Themeable: UIViewController {
 }
 
 extension Themeable {
-    func listenForThemeChange() {
+    public func listenForThemeChange() {
         let mainQueue = OperationQueue.main
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
                                                        queue: mainQueue) { [weak self] _ in
@@ -23,12 +25,12 @@ extension Themeable {
         }
     }
 
-    func updateThemeApplicableSubviews() {
+    public func updateThemeApplicableSubviews() {
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
         themeViews.forEach { $0.applyTheme(theme: themeManager.currentTheme) }
     }
 
-    func getAllSubviews<T>(for view: UIView, ofType type: T.Type) -> [T] {
+    public func getAllSubviews<T>(for view: UIView, ofType type: T.Type) -> [T] {
         var secondLevelSubviews = [T]()
         let firstLevelSubviews: [T] = view.subviews.compactMap { childView in
             secondLevelSubviews = secondLevelSubviews + getAllSubviews(for: childView, ofType: type)
@@ -39,6 +41,6 @@ extension Themeable {
 }
 
 // Used to pass in a theme to a view or cell to apply a theme
-protocol ThemeApplicable {
+public protocol ThemeApplicable {
     func applyTheme(theme: Theme)
 }

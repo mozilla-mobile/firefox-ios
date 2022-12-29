@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Common
 
 /// `AccountSyncHandler` exists to observe certain `TabEventLabel` notifications,
 /// and react accordingly.

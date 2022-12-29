@@ -4,6 +4,7 @@
 
 import UIKit
 import Storage
+import Shared
 
 struct SiteTableViewHeaderModel {
     let title: String

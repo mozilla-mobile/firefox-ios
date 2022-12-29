@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 struct WallpaperMigrationUtility: Loggable {
     private let metadataMigration = PrefsKeys.Wallpapers.v1MigrationCheck

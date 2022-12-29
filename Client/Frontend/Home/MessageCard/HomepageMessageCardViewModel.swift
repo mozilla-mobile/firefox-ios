@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 protocol MessageSurfaceProtocol {
     func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage?

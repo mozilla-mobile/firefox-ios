@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 protocol PhotonActionSheetContainerCellDelegate: AnyObject {
     func didClick(item: SingleActionViewModel?)

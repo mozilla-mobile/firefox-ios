@@ -4,6 +4,7 @@
 
 import Shared
 import UIKit
+import Common
 
 struct ETPMenuUX {
     struct Fonts {

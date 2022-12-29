@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import WebKit
+import Common
 
 class WebsiteDataManagementViewModel {
     enum State {

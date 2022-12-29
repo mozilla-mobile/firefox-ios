@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import Storage
+import Common
 
 private struct DownloadsPanelUX {
     static let WelcomeScreenTopPadding: CGFloat = 120

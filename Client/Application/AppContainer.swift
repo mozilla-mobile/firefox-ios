@@ -6,6 +6,7 @@ import Foundation
 import os.log
 import Dip
 import Storage
+import Shared
 
 /// This is our concrete dependency container. It holds all dependencies / services the app would need through
 /// a session.

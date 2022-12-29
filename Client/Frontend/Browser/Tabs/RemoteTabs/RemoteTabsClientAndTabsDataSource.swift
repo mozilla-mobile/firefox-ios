@@ -4,6 +4,7 @@
 
 import UIKit
 import Storage
+import Shared
 
 class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     struct UX {
