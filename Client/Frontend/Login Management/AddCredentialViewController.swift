@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import Storage
+import Common
 
 enum AddCredentialField: Int {
     case websiteItem

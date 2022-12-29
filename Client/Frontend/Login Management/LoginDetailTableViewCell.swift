@@ -3,8 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-
 import Storage
+import Shared
 
 protocol LoginDetailTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)

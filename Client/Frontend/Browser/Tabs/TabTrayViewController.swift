@@ -6,6 +6,7 @@ import Shared
 import Storage
 import Foundation
 import UIKit
+import Common
 
 enum TabTrayViewAction {
     case addTab

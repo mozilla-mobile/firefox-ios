@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Common
 
 /// For any work that needs to be delayed, you can wrap it inside a throttler and specify the delay time, in seconds, and queue.
 class Throttler {

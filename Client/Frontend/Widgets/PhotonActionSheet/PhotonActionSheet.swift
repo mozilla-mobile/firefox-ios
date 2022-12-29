@@ -6,6 +6,7 @@ import Foundation
 import Storage
 import Shared
 import UIKit
+import Common
 
 extension PhotonActionSheet: Notifiable {
     func handleNotifications(_ notification: Notification) {

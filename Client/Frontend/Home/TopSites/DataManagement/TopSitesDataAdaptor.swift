@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Storage
+import Common
 
 protocol TopSitesManagerDelegate: AnyObject {
     func didLoadNewData()

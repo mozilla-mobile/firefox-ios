@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 // An empty cell to show when a row is incomplete
 class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {

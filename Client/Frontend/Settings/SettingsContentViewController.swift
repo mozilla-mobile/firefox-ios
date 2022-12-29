@@ -6,6 +6,7 @@ import Shared
 import SnapKit
 import UIKit
 import WebKit
+import Common
 
 let DefaultTimeoutTimeInterval = 10.0 // Seconds.  We'll want some telemetry on load times in the wild.
 

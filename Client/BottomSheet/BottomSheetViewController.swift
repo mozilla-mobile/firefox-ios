@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
+import Common
 
 protocol BottomSheetChild {
     /// Tells the child that the bottom sheet will get dismissed

@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import Common
 
 struct GridTabTrayControllerUX {
     static let CornerRadius = CGFloat(6.0)

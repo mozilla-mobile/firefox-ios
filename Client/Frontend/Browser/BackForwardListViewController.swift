@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import WebKit
 import Storage
+import Common
 
 private struct BackForwardViewUX {
     static let RowHeight: CGFloat = 50

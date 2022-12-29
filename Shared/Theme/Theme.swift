@@ -2,15 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import UIKit
+
 /// The `Theme` protocol, which contains the implementation of themes,
 /// which comprise of a set of standardized colours (including light and
 /// dark mode) and fonts for the application.
-protocol Theme {
+public protocol Theme {
     var type: ThemeType { get }
     var colors: ThemeColourPalette { get }
 }
 
-struct Gradient {
+public struct Gradient {
     var start: UIColor
     var end: UIColor
 }
@@ -18,7 +20,7 @@ struct Gradient {
 /// The colour palette for a theme.
 /// Based on the official themes in https://www.figma.com/file/pEyGeE4KV5ytYHeXMfLcEr/Mobile-Styles?node-id=889%3A46413
 /// Do not add any named colours in here unless it's part of the official theme
-protocol ThemeColourPalette {
+public protocol ThemeColourPalette {
     // MARK: - Layers
     var layer1: UIColor { get }
     var layer2: UIColor { get }

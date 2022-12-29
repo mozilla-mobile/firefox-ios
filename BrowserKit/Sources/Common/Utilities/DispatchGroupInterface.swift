@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol DispatchGroupInterface {
+public protocol DispatchGroupInterface {
     func enter()
     func leave()
     func notify(qos: DispatchQoS,
@@ -19,20 +19,20 @@ protocol DispatchGroupInterface {
 }
 
 extension DispatchGroupInterface {
-    func notify(qos: DispatchQoS = .unspecified,
-                flags: DispatchWorkItemFlags = [],
-                queue: DispatchQueue,
-                execute work: @escaping @convention(block) () -> Void) {
+    public func notify(qos: DispatchQoS = .unspecified,
+                       flags: DispatchWorkItemFlags = [],
+                       queue: DispatchQueue,
+                       execute work: @escaping @convention(block) () -> Void) {
         notify(qos: qos,
                flags: flags,
                queue: queue,
                execute: work)
     }
 
-    func notify(qos: DispatchQoS = .unspecified,
-                flags: DispatchWorkItemFlags = [],
-                queue: DispatchQueueInterface,
-                execute work: @escaping @convention(block) () -> Void) {
+    public func notify(qos: DispatchQoS = .unspecified,
+                       flags: DispatchWorkItemFlags = [],
+                       queue: DispatchQueueInterface,
+                       execute work: @escaping @convention(block) () -> Void) {
         notify(qos: qos,
                flags: flags,
                queue: queue,
@@ -41,10 +41,10 @@ extension DispatchGroupInterface {
 }
 
 extension DispatchGroup: DispatchGroupInterface {
-    func notify(qos: DispatchQoS,
-                flags: DispatchWorkItemFlags,
-                queue: DispatchQueueInterface,
-                execute work: @escaping @convention(block) () -> Void) {
+    public func notify(qos: DispatchQoS,
+                       flags: DispatchWorkItemFlags,
+                       queue: DispatchQueueInterface,
+                       execute work: @escaping @convention(block) () -> Void) {
         guard let queue = queue as? DispatchQueue else { return }
         notify(qos: qos, flags: flags, queue: queue, execute: work)
     }

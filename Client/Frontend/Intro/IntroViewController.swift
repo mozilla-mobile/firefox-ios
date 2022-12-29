@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import Shared
+import Common
 
 class IntroViewController: UIViewController, OnboardingViewControllerProtocol, Themeable {
     private var viewModel: IntroViewModel

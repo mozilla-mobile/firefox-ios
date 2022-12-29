@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import Common
 
 class LoginListViewController: SensitiveViewController, Themeable {
     static let loginsSettingsSection = 0

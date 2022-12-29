@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol UserDefaultsInterface {
+public protocol UserDefaultsInterface {
     func set(_ value: Any?, forKey defaultName: String)
     func object(forKey defaultName: String) -> Any?
 

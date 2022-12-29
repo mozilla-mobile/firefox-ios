@@ -5,6 +5,7 @@
 import Shared
 import UIKit
 import Storage
+import Common
 
 extension LibraryViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {

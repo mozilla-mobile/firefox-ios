@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import SiteImageView
+import Shared
 
 /// A cell used in FxHomeScreen's Recently Saved section. It holds bookmarks and reading list items.
 class RecentlySavedCell: UICollectionViewCell, ReusableCell {

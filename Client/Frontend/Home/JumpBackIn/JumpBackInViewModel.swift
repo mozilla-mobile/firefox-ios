@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import UIKit
+import Shared
 
 class JumpBackInViewModel: FeatureFlaggable {
     struct UX {

@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Shared
 
 struct RecentlySavedCellViewModel {
     let site: Site

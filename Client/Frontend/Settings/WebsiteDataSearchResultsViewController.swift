@@ -6,6 +6,7 @@ import UIKit
 import SnapKit
 import Shared
 import WebKit
+import Common
 
 class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, Themeable {
     var themeManager: ThemeManager

@@ -7,6 +7,7 @@ import UIKit
 import Storage
 import SyncTelemetry
 import MozillaAppServices
+import Common
 
 class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable {
     // MARK: - Typealiases

@@ -2,9 +2,13 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-struct DarkTheme: Theme {
-    var type: ThemeType = .dark
-    var colors: ThemeColourPalette = DarkColourPalette()
+import UIKit
+
+public struct DarkTheme: Theme {
+    public var type: ThemeType = .dark
+    public var colors: ThemeColourPalette = DarkColourPalette()
+
+    public init() {}
 }
 
 private struct DarkColourPalette: ThemeColourPalette {

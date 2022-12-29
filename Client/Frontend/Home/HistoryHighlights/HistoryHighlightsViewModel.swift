@@ -5,6 +5,8 @@
 import Foundation
 import Storage
 import UIKit
+import Shared
+import Common
 
 struct HistoryHighlightsModel {
     let title: String

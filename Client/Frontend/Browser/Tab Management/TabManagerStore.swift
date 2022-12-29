@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import Shared
+import Common
 
 protocol TabManagerStore {
     var isRestoringTabs: Bool { get }

@@ -32,7 +32,8 @@ enum ReaderModeTheme: String {
 
     static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-        return themeManager.currentTheme.type.getReaderMode(for: theme)
+        guard themeManager.currentTheme.type != .dark else { return .dark }
+        return theme ?? .light
     }
 }
 

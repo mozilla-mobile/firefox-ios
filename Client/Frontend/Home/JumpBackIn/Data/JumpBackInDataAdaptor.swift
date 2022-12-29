@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Common
 
 protocol JumpBackInDataAdaptor {
     var hasSyncedTabFeatureEnabled: Bool { get }

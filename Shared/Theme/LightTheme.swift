@@ -4,9 +4,11 @@
 
 import UIKit
 
-struct LightTheme: Theme {
-    var type: ThemeType = .light
-    var colors: ThemeColourPalette = LightColourPalette()
+public struct LightTheme: Theme {
+    public var type: ThemeType = .light
+    public var colors: ThemeColourPalette = LightColourPalette()
+
+    public init() {}
 }
 
 private struct LightColourPalette: ThemeColourPalette {

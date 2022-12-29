@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import Shared
+import Common
 
 enum WallpaperManagerError: Error {
     case downloadFailed(Error)

@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import Common
 
 let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
