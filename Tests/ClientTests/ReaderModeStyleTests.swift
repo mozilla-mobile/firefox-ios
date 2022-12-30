@@ -4,6 +4,7 @@
 
 import XCTest
 import Shared
+import Common
 @testable import Client
 
 class ReaderModeStyleTests: XCTestCase {
@@ -11,13 +12,13 @@ class ReaderModeStyleTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-
+        DependencyHelperMock().bootstrapDependencies()
         themeManager = AppContainer.shared.resolve()
     }
 
     override func tearDown() {
         super.tearDown()
-
+        AppContainer.shared.reset()
         themeManager = nil
     }
 

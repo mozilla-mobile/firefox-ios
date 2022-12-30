@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import WebKit
+import Common
 
 class DownloadContentScript: TabContentScript {
     fileprivate weak var tab: Tab?

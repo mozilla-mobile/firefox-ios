@@ -11,6 +11,7 @@ This ViewController is meant to show a tableView of STG items in a flat list wit
 import UIKit
 import Storage
 import Shared
+import Common
 
 class SearchGroupedItemsViewController: UIViewController, Loggable {
     // MARK: - Properties

@@ -26,9 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             namespace: "TabManagerScreenshots",
             quality: UIConstants.ScreenshotQuality)
     )
+
     lazy var themeManager: ThemeManager = DefaultThemeManager(appDelegate: self)
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
-    var appSessionManager: AppSessionProvider = AppSessionManager()
+    lazy var appSessionManager: AppSessionProvider = AppSessionManager()
 
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
@@ -42,6 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        // It's important this is the first thing that happens when the app is run
+        DependencyHelper().bootstrapDependencies()
+
         log.info("startApplication begin")
 
         appLaunchUtil = AppLaunchUtil(profile: profile)

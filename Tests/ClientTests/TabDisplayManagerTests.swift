@@ -7,6 +7,7 @@
 import WebKit
 import Shared
 import XCTest
+import Common
 
 class TabDisplayManagerTests: XCTestCase {
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
@@ -19,6 +20,7 @@ class TabDisplayManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         mockDataStore = WeakListMock<Tab>()
         dataStore = WeakList<Tab>()
         profile = TabManagerMockProfile()
@@ -28,7 +30,7 @@ class TabDisplayManagerTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-
+        AppContainer.shared.reset()
         profile.shutdown()
         manager.testRemoveAll()
         manager.testClearArchive()

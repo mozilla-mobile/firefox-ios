@@ -8,6 +8,7 @@ import Storage
 import SnapKit
 import Account
 import SwiftUI
+import Common
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)

@@ -5,18 +5,21 @@
 @testable import Client
 
 import XCTest
+import Common
 
 class HomepageViewControllerTests: XCTestCase {
     var profile: MockProfile!
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
         super.tearDown()
+        AppContainer.shared.reset()
         profile = nil
     }
 

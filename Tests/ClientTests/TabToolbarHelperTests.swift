@@ -6,6 +6,7 @@
 
 import Glean
 import XCTest
+import Common
 
 class TabToolbarHelperTests: XCTestCase {
     var subject: TabToolbarHelper!
@@ -20,6 +21,7 @@ class TabToolbarHelperTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         mockToolbar = MockTabToolbar()
         subject = TabToolbarHelper(toolbar: mockToolbar)
         Glean.shared.resetGlean(clearStores: true)
@@ -27,6 +29,7 @@ class TabToolbarHelperTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        AppContainer.shared.reset()
         mockToolbar = nil
         subject = nil
     }

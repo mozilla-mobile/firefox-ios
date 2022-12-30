@@ -7,10 +7,18 @@ import Shared
 import Storage
 import Sync
 import UIKit
-
+import Common
 import XCTest
 
 class CustomSearchEnginesTest: XCTestCase {
+    override func setUp() {
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        AppContainer.shared.reset()
+    }
+
     func testgetSearchTemplate() {
         let profile = MockBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController()
