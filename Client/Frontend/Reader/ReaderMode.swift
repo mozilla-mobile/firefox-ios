@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import WebKit
+import Common
 
 private let log = Logger.browserLogger
 let ReaderModeProfileKeyStyle = "readermode.style"

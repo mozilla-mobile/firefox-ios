@@ -7,6 +7,7 @@ import XCTest
 import WebKit
 import Storage
 import Shared
+import Common
 
 class JumpBackInViewModelTests: XCTestCase {
     var mockProfile: MockProfile!
@@ -22,6 +23,7 @@ class JumpBackInViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        DependencyHelperMock().bootstrapDependencies()
         adaptor = JumpBackInDataAdaptorMock()
         mockProfile = MockProfile()
         mockTabManager = MockTabManager()
@@ -36,6 +38,7 @@ class JumpBackInViewModelTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        AppContainer.shared.reset()
         adaptor = nil
         stubBrowserViewController = nil
         mockBrowserBarViewDelegate = nil

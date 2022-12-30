@@ -13,7 +13,7 @@ private var appDelegate: String?
 if AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
     appDelegate = NSStringFromClass(UITestAppDelegate.self)
 } else if AppConstants.isRunningTest {
-    appDelegate = nil
+    appDelegate = NSStringFromClass(UnitTestAppDelegate.self)
 } else {
     appDelegate = NSStringFromClass(AppDelegate.self)
 }

@@ -13,6 +13,7 @@ import Account
 import MobileCoreServices
 import Telemetry
 import Sentry
+import Common
 
 struct UrlToOpenModel {
     var url: URL?

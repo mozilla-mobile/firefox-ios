@@ -4,10 +4,18 @@
 
 import XCTest
 import Storage
-
+import Common
 @testable import Client
 
 class RemoteTabsPanelTests: XCTestCase {
+    override func setUp() {
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        AppContainer.shared.reset()
+    }
+
     // MARK: States of panel
 
     func testHasNoSyncAccount() throws {

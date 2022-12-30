@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 /// The history panel has a fixed first section and cells. In this case, we'll only need some properties of that to serve as our model.
 

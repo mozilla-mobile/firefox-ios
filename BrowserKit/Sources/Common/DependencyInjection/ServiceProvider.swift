@@ -10,11 +10,15 @@ import Dip
 /// For any container based approach, we need:
 /// - to create the container and make it accessible
 /// - register our services
+/// - have the client easily register them
 /// - have the client easily resolve them
 ///
 /// These are minimum requirements. Container creation varies based on the framework
 /// used - that detail can be kept out of here. However, every service provider is expected
 /// to resolve services. 
-protocol ServiceProvider {
+public protocol ServiceProvider {
     func resolve<T>() -> T
+    func register<T>(service: T)
+    func bootstrap()
+    func reset()
 }

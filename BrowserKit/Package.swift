@@ -11,8 +11,9 @@ let package = Package(
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
-        .library(name: "Common",
-                 targets: ["Common"]),
+        .library(
+            name: "Common",
+            targets: ["Common"]),
     ],
     dependencies: [
         .package(
@@ -21,6 +22,9 @@ let package = Package(
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
             exact: "7.2.2"),
+        .package(
+            url: "https://github.com/AliSoftware/Dip.git",
+            exact: "7.1.1"),
     ],
     targets: [
         .target(
@@ -29,7 +33,9 @@ let package = Package(
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView"]),
-        .target(name: "Common"),
+        .target(
+            name: "Common",
+            dependencies: ["Dip"]),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),

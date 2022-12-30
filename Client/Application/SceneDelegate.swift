@@ -10,6 +10,7 @@ import Sync
 import UserNotifications
 import Account
 import MozillaAppServices
+import Common
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?

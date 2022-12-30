@@ -4,7 +4,7 @@
 
 import UIKit
 @testable import Client
-
+import Common
 import XCTest
 
 class QuickActionsTest: XCTestCase {
@@ -15,6 +15,7 @@ class QuickActionsTest: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         profile = TabManagerMockProfile()
         tabManager = TabManager(profile: profile, imageStore: nil)
         browserViewController = SpyBrowserViewController(profile: profile, tabManager: tabManager)
@@ -24,6 +25,7 @@ class QuickActionsTest: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        AppContainer.shared.reset()
         profile = nil
         tabManager = nil
         browserViewController = nil

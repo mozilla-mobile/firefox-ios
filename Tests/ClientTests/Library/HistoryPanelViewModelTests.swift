@@ -5,7 +5,7 @@
 import XCTest
 import Storage
 import Shared
-
+import Common
 @testable import Client
 
 class HistoryPanelViewModelTests: XCTestCase {
@@ -15,6 +15,7 @@ class HistoryPanelViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "HistoryPanelViewModelTest")
         profile.reopen()
         subject = HistoryPanelViewModel(profile: profile)
@@ -23,6 +24,7 @@ class HistoryPanelViewModelTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
+        AppContainer.shared.reset()
         clear(profile: profile)
         profile.shutdown()
         profile = nil

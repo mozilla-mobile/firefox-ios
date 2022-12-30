@@ -14,7 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AliSoftware/Dip.git",
       "state" : {
-        "revision" : "7ec008a5c09520b67f07669ad5a753d757f05bbe"
+        "revision" : "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
+        "version" : "7.1.1"
       }
     },
     {
