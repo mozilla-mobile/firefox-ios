@@ -14000,6 +14000,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
@@ -14015,6 +14016,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
@@ -14028,6 +14030,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
@@ -14744,6 +14747,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Tests/XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";

@@ -5,7 +5,6 @@
 import UIKit
 
 class UnitTestSceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
 
     func scene(_ scene: UIScene,
