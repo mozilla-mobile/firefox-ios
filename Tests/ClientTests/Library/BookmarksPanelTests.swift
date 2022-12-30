@@ -5,10 +5,19 @@
 import XCTest
 import Storage
 import Shared
+import Common
 
 @testable import Client
 
 class BookmarksPanelTests: XCTestCase {
+    override func setUp() {
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        AppContainer.shared.reset()
+    }
+
     // MARK: Bottom left action
 
     func testBottomLeftAction_ItemEditModeState_DoesNothing() throws {

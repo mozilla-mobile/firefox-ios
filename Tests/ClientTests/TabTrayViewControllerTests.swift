@@ -7,6 +7,7 @@ import Foundation
 @testable import Client
 
 import XCTest
+import Common
 
 class TabTrayViewControllerTests: XCTestCase {
     var profile: TabManagerMockProfile!
@@ -17,6 +18,7 @@ class TabTrayViewControllerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        DependencyHelperMock().bootstrapDependencies()
         profile = TabManagerMockProfile()
         manager = TabManager(profile: profile, imageStore: nil)
         tabTray = TabTrayViewController(tabTrayDelegate: nil, profile: profile, tabToFocus: nil, tabManager: manager)
@@ -27,6 +29,7 @@ class TabTrayViewControllerTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
 
+        AppContainer.shared.reset()
         profile = nil
         manager = nil
         tabTray = nil

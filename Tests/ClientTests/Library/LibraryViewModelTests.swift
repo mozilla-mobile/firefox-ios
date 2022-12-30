@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 @testable import Client
 
 class LibraryViewModelTests: XCTestCase {
@@ -13,6 +14,7 @@ class LibraryViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile.reopen()
         tabManager = TabManager(profile: profile, imageStore: nil)
@@ -21,7 +23,7 @@ class LibraryViewModelTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-
+        AppContainer.shared.reset()
         profile.shutdown()
         profile = nil
         tabManager = nil

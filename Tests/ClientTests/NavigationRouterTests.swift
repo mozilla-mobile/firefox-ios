@@ -5,7 +5,7 @@
 import Foundation
 @testable import Client
 import WebKit
-
+import Common
 import XCTest
 
 class NavigationRouterTests: XCTestCase {
@@ -16,6 +16,7 @@ class NavigationRouterTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         profile = TabManagerMockProfile()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         tabManager = TabManager(profile: profile, imageStore: nil)
@@ -26,6 +27,7 @@ class NavigationRouterTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        AppContainer.shared.reset()
         tabManager = nil
         profile = nil
         browserViewController = nil
