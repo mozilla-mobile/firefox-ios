@@ -74,3 +74,21 @@ extension ToolbarTextField: NotificationThemeable {
        textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
     }
 }
+
+// MARK: - Key commands
+
+extension ToolbarTextField {
+    override var keyCommands: [UIKeyCommand]? {
+        let commands = [
+            UIKeyCommand(action: #selector(handleKeyboardArrowKey(sender:)),
+                         input: UIKeyCommand.inputRightArrow),
+            UIKeyCommand(action: #selector(handleKeyboardArrowKey(sender:)),
+                         input: UIKeyCommand.inputLeftArrow),
+        ]
+        return commands
+    }
+
+    @objc private func handleKeyboardArrowKey(sender: UIKeyCommand) {
+        self.selectedTextRange = nil
+    }
+}
