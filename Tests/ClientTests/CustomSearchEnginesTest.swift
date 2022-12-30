@@ -31,37 +31,38 @@ class CustomSearchEnginesTest: XCTestCase {
         XCTAssertNil(badTemplate)
    }
 
-    func testaddSearchEngine() {
+    @MainActor
+    func testaddSearchEngine() async {
         let profile = MockBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController()
         customSearchEngineForm.profile = profile
         let q = "http://www.google.ca/?#q=%s"
         let title = "YASE"
 
-        let expectation = self.expectation(description: "Waiting on favicon fetching")
-        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(.main) { result in
-            XCTAssertNotNil(result.successValue, "Make sure the new engine is not nil")
-            let engine = result.successValue!
+        do {
+            let engine = try await customSearchEngineForm.createEngine(query: q, name: title)
+
             XCTAssertEqual(engine.shortName, title)
             XCTAssertNotNil(engine.image)
             XCTAssertEqual(engine.searchTemplate, "http://www.google.ca/?#q={searchTerms}")
-            expectation.fulfill()
+        } catch {
+            XCTFail("Failed to create engine \(error)")
         }
-        waitForExpectations(timeout: 5, handler: nil)
     }
 
-    func testaddSearchEngineFailure() {
+    @MainActor
+    func testaddSearchEngineFailure() async {
         let profile = MockBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController()
         customSearchEngineForm.profile = profile
         let q = "isthisvalid.com/hhh%s"
         let title = "YASE"
 
-        let expectation = self.expectation(description: "Waiting on favicon fetching")
-        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(.main) { result in
-            XCTAssertNil(result.successValue, "Make sure the new engine is nil")
-            expectation.fulfill()
+        do {
+            _ = try await customSearchEngineForm.createEngine(query: q, name: title)
+            XCTFail("Test should have failed to create the engine")
+        } catch {
+            XCTAssertEqual((error as? CustomSearchError)?.reason, CustomSearchError(.FormInput).reason)
         }
-        waitForExpectations(timeout: 5, handler: nil)
     }
 }
