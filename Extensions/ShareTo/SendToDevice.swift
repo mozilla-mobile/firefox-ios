@@ -10,6 +10,7 @@ import UIKit
 class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate {
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
+    private let themeManager = DefaultThemeManager()
     private var profile: Profile {
         let profile = BrowserProfile(localName: "profile")
 
@@ -28,9 +29,9 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewDelegate
             return UIViewController()
         }
 
-        let colors = SendToDeviceHelper.Colors(defaultBackground: ShareTheme.defaultBackground.color,
-                                               textColor: ShareTheme.textColor.color,
-                                               iconColor: ShareTheme.iconColor.color)
+        let colors = SendToDeviceHelper.Colors(defaultBackground: themeManager.currentTheme.colors.layer2,
+                                               textColor: themeManager.currentTheme.colors.textPrimary,
+                                               iconColor: themeManager.currentTheme.colors.iconPrimary)
         let helper = SendToDeviceHelper(shareItem: shareItem,
                                         profile: profile,
                                         colors: colors,

@@ -45,7 +45,7 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
 
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
-                appDelegate: UIApplicationDelegate?,
+                appDelegate: UIApplicationDelegate? = nil,
                 mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
