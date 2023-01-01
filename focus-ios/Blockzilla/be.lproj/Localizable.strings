@@ -253,6 +253,9 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "Так";
 
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Для атрымання прапаноў %@ павінен адпраўляць тое, што вы ўводзіце ў адрасны радок, у вашую пошукавую сістэму.";
+
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Паказваць прапановы пошуку?";
 
@@ -325,6 +328,9 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "Прыклад: searchengine.example.com/search/?q=%s";
 
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "Устаўце або ўвядзіце запыт для пошуку. Пры неабходнасці замяніце яго на: %s.";
+
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Пошукавая сістэма";
 
@@ -342,6 +348,9 @@
 
 /* Label title for set as default browser row */
 "Settings.setAsDefaultBrowser" = "Зрабіць прадвызначаным браўзерам";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Наладзьце аўтаматычнае адкрыццё спасылак з сайтаў, пошты і паведамленняў у %@.";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Сістэмная тэма";
@@ -517,6 +526,9 @@
 /* Text for a label that indicates the title for release tip. */
 "Tip.Release.Title" = "Чаму б і так, мы маем новы выгляд!";
 
+/* Text for a label that indicates the description for request desktop tip. */
+"Tip.RequestDesktop.Description" = "Дзеянні старонкі > Поўная версія сайта";
+
 /* Text for a label that indicates the title for request desktop tip. */
 "Tip.RequestDesktop.Title" = "Хочаце пабачыць поўную версію сайта?";
 
@@ -552,6 +564,9 @@
 
 /* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
 "TodayWidget.SearchInApp.Instruction" = "Шукаць у %@";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Перайдзіце ў Налады, каб кіраваць пэўнымі параметрамі прыватнасці і бяспекі.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Гэтыя прадвызначаныя налады забяспечваюць надзейную абарону. Але вы лёгка можаце змяніць іх у адпаведнасці з вашымі патрэбамі.";
@@ -627,6 +642,9 @@
 
 /* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
 "WidgetOnboardingCard.ActionButton" = "Паказаць мне як";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "Мы пакінем вас у рэжыме прыватнага аглядання, але ў наступны раз пачніце хутчэй з дапамогай віджэта %@ на галоўным экране.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Гісторыя аглядання выдалена! 🎉";

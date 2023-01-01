@@ -16,6 +16,9 @@
 /* Button to skip onboarding in Focus */
 "Intro.Slides.Skip.Button" = "Прапусціць";
 
+/* Description for the 'Welcome' panel in the First Run tour. */
+"Intro.Slides.Welcome.Description" = "Перайдзіце на новы ўзровень прыватнага аглядання. Блакіруйце рэкламу і іншы змест, які можа сачыць за вамі на сайтах і запавольваць загрузку старонак.";
+
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title" = "Узмацніце сваю прыватнасць";
 

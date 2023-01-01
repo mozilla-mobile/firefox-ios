@@ -1,4 +1,7 @@
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "Дадайце цэтлік %@ на галоўны экран. Пасля дадавання віджэта, націсніце і ўтрымлівайце, каб адрэдагаваць яго і выбраць іншы цэтлік.";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
 "TodayWidget.QuickActionGalleryDescriptionV2" = "Пачніце прыватны пошук у %@ з дапамогай прадвызначанай пошукавай сістэмы.";
 
 /* Quick Actions title when widget enters edit mode */

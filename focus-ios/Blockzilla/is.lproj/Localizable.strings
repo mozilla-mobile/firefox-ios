@@ -314,7 +314,7 @@
 "Settings.Search.NameToDisplay" = "Heiti sem birtist";
 
 /* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Ný leitarvél bætt við.";
+"Settings.Search.NewSearchEngineAdded" = "Nýrri leitarvél bætt við.";
 
 /* Label for button to bring deleted default engines back */
 "Settings.Search.RestoreEngine" = "Endurheimta upprunalegar leitarvélar";
@@ -377,7 +377,7 @@
 "Settings.toggleBlockSocial2" = "Samfélagsmiðlar";
 
 /* Label for toggle on settings screen */
-"Settings.toggleFaceID" = "Nota andlitsauðkenningu til að aflæsa smáforrit";
+"Settings.toggleFaceID" = "Nota andlitsauðkenningu til að aflæsa smáforriti";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Andlitsauðkenning getur aflæst %@ ef URL er nú þegar opið í smáforritinu";
@@ -395,7 +395,7 @@
 "Settings.toggleStudies" = "Kannanir";
 
 /* Label for toggle on settings screen */
-"Settings.toggleTouchID" = "Nota fingrafara auðkenningu til að aflæsa smáforrit";
+"Settings.toggleTouchID" = "Nota fingrafaraauðkenningu til að aflæsa smáforriti";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Fingrafara auðkenning getur aflæst %@ ef URL er nú þegar opið í smáforritinu";
