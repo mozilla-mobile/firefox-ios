@@ -4,3 +4,9 @@
 /* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
 "Alerts.RestoreTabs.Button.Yes.v109" = "පටිති ප්‍රත්‍යර්පණය";
 
+/* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
+"Alerts.RestoreTabs.Message.v109" = "සමාවන්න. නවතන ලද තැනින් අතට ගැනීමට පටිති ප්‍රත්‍යර්පණය කරන්න.";
+
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ බිඳ වැටුණි. පටිති ප්‍රත්‍යර්පණය කරන්නද?";
+
