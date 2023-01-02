@@ -1053,6 +1053,29 @@ extension String {
                 comment: "In the settings menu, in the Toolbar customization section, this label indicates that selecting this will make the toolbar appear at the bottom of the screen.")
         }
 
+        public struct Autoplay {
+            public static let Autoplay = MZLocalizedString(
+                "Settings.Autoplay.SettingsTitle",
+                tableName: nil,
+                value: "Autoplay",
+                comment: "In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour.")
+            public static let AllowAudioAndVideo = MZLocalizedString(
+                "Settings.Autoplay.AllowAudioAndVideo",
+                tableName: nil,
+                value: "Allow Audio and Video",
+                comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay.")
+            public static let BlockAudio = MZLocalizedString(
+                "Settings.Autoplay.BlockAudio",
+                tableName: nil,
+                value: "Block Audio",
+                comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying.")
+            public static let BlockAudioAndVideo = MZLocalizedString(
+                "Settings.Autoplay.BlockAudioAndVideo",
+                tableName: nil,
+                value: "Block Audio and Video",
+                comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying.")
+        }
+
         public struct Toggle {
             public static let NoImageMode = MZLocalizedString(
                 "Settings.NoImageModeBlockImages.Label.v99",

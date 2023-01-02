@@ -1400,3 +1400,30 @@ class SearchBarSetting: Setting {
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
+
+class AutoplaySetting: Setting {
+    let profile: Profile
+
+    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+
+    override var accessibilityIdentifier: String? { return "AutoplaySettings" }
+
+    override var status: NSAttributedString {
+        return NSAttributedString(string: AutoplayAccessors.getAutoplayAction(profile.prefs).settingTitle)
+    }
+
+    override var style: UITableViewCell.CellStyle { return .value1 }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: .Settings.Autoplay.Autoplay,
+                                             attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = AutoplaySettingsViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}

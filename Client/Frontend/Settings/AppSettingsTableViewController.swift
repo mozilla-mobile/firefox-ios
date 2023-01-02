@@ -108,6 +108,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
             SiriPageSetting(settings: self),
+            AutoplaySetting(settings: self),
             BoolSetting(
                 prefs: prefs,
                 theme: themeManager.currentTheme,

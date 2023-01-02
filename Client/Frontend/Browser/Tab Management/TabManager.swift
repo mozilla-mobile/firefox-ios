@@ -184,6 +184,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         configuration.processPool = WKProcessPool()
         let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
+        configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(prefs);
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
         configuration.ignoresViewportScaleLimits = true
@@ -764,6 +765,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             // The default tab configurations also need to change.
             self.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
             self.privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
+            
+            self.configuration.mediaTypesRequiringUserActionForPlayback = AutoplayAccessors.getMediaTypesRequiringUserActionForPlayback(self.profile.prefs);
         }
     }
 
