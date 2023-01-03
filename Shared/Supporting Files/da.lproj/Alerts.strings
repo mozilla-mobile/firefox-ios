@@ -7,3 +7,6 @@
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
 "Alerts.RestoreTabs.Message.v109" = "Det må du undskylde. Gendan faneblade for at fortsætte, hvor du var.";
 
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ gik ned. Gendan dine faneblade?";
+

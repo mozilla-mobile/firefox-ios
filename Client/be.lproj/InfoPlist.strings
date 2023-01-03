@@ -5,7 +5,7 @@
 "New Tab" = "Новая картка";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Firefox выкарыстоўвае камеру, каб сканаваць QR-коды, здымаць фота і відэа.";
+"NSCameraUsageDescription" = "Firefox выкарыстоўвае камеру, каб сканіраваць QR-коды, здымаць фота і відэа.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox патрабуе Face ID для доступу да захаваных лагінаў.";
@@ -20,5 +20,5 @@
 "NSPhotoLibraryAddUsageDescription" = "Гэта дазваляе захоўваць фота.";
 
 /* (No Comment) */
-"Scan QR Code" = "Сканаваць QR-код";
+"Scan QR Code" = "Сканіраваць QR-код";
 
