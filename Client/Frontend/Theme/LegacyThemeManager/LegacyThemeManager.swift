@@ -50,7 +50,14 @@ class LegacyThemeManager {
         UserDefaults.standard.register(defaults: [LegacyThemeManagerPrefs.systemThemeIsOn.rawValue: true])
         systemThemeIsOn = UserDefaults.standard.bool(forKey: LegacyThemeManagerPrefs.systemThemeIsOn.rawValue)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(brightnessChanged),
+                                               name: UIScreen.brightnessDidChangeNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
     }
 
     // UIViewControllers / UINavigationControllers need to have `preferredStatusBarStyle` and call this.
@@ -82,6 +89,14 @@ class LegacyThemeManager {
     @objc private func brightnessChanged() {
         guard automaticBrightnessIsOn else { return }
         updateCurrentThemeBasedOnScreenBrightness()
+    }
+
+    @objc private func applicationDidBecomeActive() {
+        let nightMode = UserDefaults.standard.bool(forKey: "profile.NightModeStatus")
+        if !nightMode && LegacyThemeManager.instance.systemThemeIsOn {
+            let userInterfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
+            LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
+        }
     }
 }
 
