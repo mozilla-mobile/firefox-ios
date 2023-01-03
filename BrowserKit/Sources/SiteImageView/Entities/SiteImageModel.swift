@@ -5,7 +5,7 @@
 import UIKit
 
 /// Used to fill in information throughout the lifetime of an image request inside SiteImageView
-struct SiteImageModel {
+public struct SiteImageModel {
     /// A unique ID to tie the request to a certain image view
     let id: UUID
 
@@ -28,7 +28,7 @@ struct SiteImageModel {
     var faviconURL: URL?
 
     /// The fetched or generated favicon image
-    var faviconImage: UIImage?
+    public var faviconImage: UIImage?
 
     /// The fetched hero image
     var heroImage: UIImage?
