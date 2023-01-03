@@ -5,7 +5,7 @@
 import Foundation
 import SiteImageView
 
-struct HomepageFaviconImageViewModel: FaviconImageViewModel {
+struct DefaultFaviconImageViewModel: FaviconImageViewModel {
     var urlStringRequest: String
     var type: SiteImageView.SiteImageType = .favicon
     var faviconCornerRadius: CGFloat = HomepageViewModel.UX.generalIconCornerRadius
