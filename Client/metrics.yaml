@@ -3428,9 +3428,9 @@ credit_card:
       Recorded when the user taps on credit card autofill
       settings item in settings screen.
     bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5394
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12813
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12813/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/12813
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-09-01"
