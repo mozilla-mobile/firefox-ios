@@ -193,15 +193,6 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "සබැඳිය බෙදාගන්න";
 
-/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to existing users. It tells them that the search bar can now be moved to the bottom of the screen. */
-"ContextualHint.SearchBarPlacement.ExistingUsers" = "දැන් ඔබට මෙවලම් තීරුව පහළට ගෙන යා හැකිය, එබැවින් තොරතුරු යෙදීමට පහසුය";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one introduces search bar placement to new users. It tells them that by default, the search bar will appear at the bottom of the device. */
-"ContextualHint.SearchBarPlacement.NewUsers" = "තොරතුරු ඇතුල් කිරීම පහසු කිරීමට, මෙවලම් තීරුව පෙරනිමි ලෙස පහළ ඇත.";
-
-/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the more personalized home feature. */
-"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHomeOldCopy.v106" = "ඔබගේ පුද්ගලීකරණය කළ ෆයර්ෆොක්ස් මුල් පිටුව දැන් ඔබ නතර කළ තැනින් අතට ගැනීමට පහසු කරයි. ඔබගේ මෑත පටිති, පොත්යොමු සහ සෙවුම් ප්‍රතිඵල සොයා ගන්න.";
-
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "මෙවලම් තීරුවේ සැකසුම්";
 
@@ -1086,6 +1077,9 @@
 
 /* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
 "Search.Awesomebar.SwitchToTab" = "පටිත්තට මාරුවන්න";
+
+/* When making a new search from the awesome bar, suggestions appear to the user as they write new letters in their search. Different types of suggestions can appear. This string will be used as a header to separate Firefox suggestions from normal suggestions. */
+"Search.SuggestSectionTitle.v102" = "ෆයර්ෆොක්ස් යෝජනා";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "නව සෙවුම් යන්ත්‍රය ඉක්මන් සෙවුම් තීරුවේ දිස්වනු ඇත.";

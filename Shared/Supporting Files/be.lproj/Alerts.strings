@@ -8,5 +8,5 @@
 "Alerts.RestoreTabs.Message.v109" = "Прабачце за гэта. Аднавіце карткі, каб працягнуць з таго месца, дзе вы спыніліся.";
 
 /* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
-"Alerts.RestoreTabs.Title.v109.v2" = "Збой %@. Аднавіць карткі?";
+"Alerts.RestoreTabs.Title.v109.v2" = "Адбыўся збой %@. Аднавіць карткі?";
 
