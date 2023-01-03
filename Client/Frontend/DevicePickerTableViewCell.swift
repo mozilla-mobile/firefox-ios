@@ -3,8 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Shared
 
-class DevicePickerTableViewCell: UITableViewCell, ReusableCell {
+class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let deviceRowTextFont = UIFont.systemFont(ofSize: 16)
         static let deviceRowTextPaddingLeft: CGFloat = 72
@@ -48,5 +49,11 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell {
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme(theme: Theme) {
+        nameLabel.textColor = theme.colors.textPrimary
+        imageView?.image = imageView?.image?.withRenderingMode(.alwaysTemplate)
+        imageView?.tintColor = theme.colors.textPrimary
     }
 }

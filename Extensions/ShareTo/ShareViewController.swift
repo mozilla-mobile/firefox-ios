@@ -73,6 +73,7 @@ class ShareViewController: UIViewController {
     private var actionRowHeights = [NSLayoutConstraint]()
     private var pageInfoRowTitleLabel: UILabel?
     private var pageInfoRowUrlLabel: UILabel?
+    private let themeManager = DefaultThemeManager()
 
     weak var delegate: ShareControllerDelegate?
 
@@ -86,7 +87,7 @@ class ShareViewController: UIViewController {
     }
 
     func setupUI() {
-        view.backgroundColor = ShareTheme.defaultBackground.color
+        view.backgroundColor = themeManager.currentTheme.colors.layer2
         view.subviews.forEach({ $0.removeFromSuperview() })
 
         setupNavBar()
@@ -144,7 +145,7 @@ class ShareViewController: UIViewController {
     private func makeSeparator(addTo parent: UIStackView) {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ShareTheme.separator.color
+        view.backgroundColor = themeManager.currentTheme.colors.borderPrimary
         parent.addArrangedSubview(view)
         NSLayoutConstraint.activate([
             view.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
@@ -214,13 +215,13 @@ class ShareViewController: UIViewController {
 
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
         icon.contentMode = .scaleAspectFit
-        icon.tintColor = ShareTheme.actionRowTextAndIcon.color
+        icon.tintColor = themeManager.currentTheme.colors.iconPrimary
         icon.translatesAutoresizingMaskIntoConstraints = false
 
         let title = UILabel()
         title.font = UX.baseFont
         title.handleLongLabels()
-        title.textColor = ShareTheme.actionRowTextAndIcon.color
+        title.textColor = themeManager.currentTheme.colors.textPrimary
         title.text = label
         [icon, title].forEach { row.addArrangedSubview($0) }
         icon.widthAnchor.constraint(equalToConstant: CGFloat(UX.actionRowIconSize)).isActive = true
@@ -228,7 +229,7 @@ class ShareViewController: UIViewController {
         if hasNavigation {
             let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
             navButton.contentMode = .scaleAspectFit
-            navButton.tintColor = ShareTheme.actionRowTextAndIcon.color
+            navButton.tintColor = themeManager.currentTheme.colors.textPrimary
             navButton.translatesAutoresizingMaskIntoConstraints = false
             row.addArrangedSubview(navButton)
             navButton.widthAnchor.constraint(equalToConstant: 14).isActive = true
@@ -264,7 +265,7 @@ class ShareViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addBackground(color: ShareTheme.doneLabelBackground.color)
+        stackView.addBackground(color: themeManager.currentTheme.colors.iconAction)
         stackView.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(stackView)
         stackView.heightAnchor.constraint(equalToConstant: CGFloat(UX.pageInfoRowHeight)).isActive = true
@@ -291,7 +292,7 @@ class ShareViewController: UIViewController {
     private func setupNavBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
-        appearance.backgroundColor = ShareTheme.defaultBackground.color
+        appearance.backgroundColor = themeManager.currentTheme.colors.layer2
         appearance.shadowColor = .clear
         appearance.shadowImage = UIImage()
 

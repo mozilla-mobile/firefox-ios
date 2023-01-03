@@ -35,6 +35,8 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
         standardAppearance.backgroundColor = themeManager.currentTheme.colors.layer1
         standardAppearance.shadowColor = nil
         standardAppearance.shadowImage = UIImage()
+        standardAppearance.titleTextAttributes = [.foregroundColor: themeManager.currentTheme.colors.textPrimary]
+        standardAppearance.largeTitleTextAttributes = [.foregroundColor: themeManager.currentTheme.colors.textPrimary]
 
         navigationBar.standardAppearance = standardAppearance
         navigationBar.compactAppearance = standardAppearance

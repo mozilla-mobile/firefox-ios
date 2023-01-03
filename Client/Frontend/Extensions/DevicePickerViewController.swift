@@ -8,7 +8,6 @@ import Storage
 import SnapKit
 import Account
 import SwiftUI
-import Common
 
 protocol DevicePickerViewControllerDelegate: AnyObject {
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
@@ -57,6 +56,7 @@ class DevicePickerViewController: UITableViewController {
     private var selectedIdentifiers = Set<String>() // Stores Device.id
     private var notification: Any?
     private var loadingState = LoadingState.loading
+    private let themeManager = DefaultThemeManager()
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to
     // provide Share To functionality
@@ -193,20 +193,15 @@ class DevicePickerViewController: UITableViewController {
                 if let id = item.id {
                     clientCell.checked = selectedIdentifiers.contains(id)
                 }
+                clientCell.applyTheme(theme: themeManager.currentTheme)
                 cell = clientCell
             }
         } else {
             if loadingState == .loaded,
                 let hostingCell = tableView.dequeueReusableCell(
                 withIdentifier: HostingTableViewCell<HelpView>.cellIdentifier) as? HostingTableViewCell<HelpView> {
-                #if MOZ_TARGET_SHARETO
-                let textColor = ShareTheme.textColor.color
-                let imageColor = ShareTheme.iconColor.color
-                #else
-                let themeManager: ThemeManager = AppContainer.shared.resolve()
                 let textColor = themeManager.currentTheme.colors.textPrimary
                 let imageColor = themeManager.currentTheme.colors.iconPrimary
-                #endif
 
                 let emptyView = HelpView(textColor: textColor,
                                          imageColor: imageColor,
@@ -288,7 +283,7 @@ class DevicePickerViewController: UITableViewController {
         // Replace the Send button with a loading indicator since it takes a while to sync
         // up our changes to the server.
         let loadingIndicator = UIActivityIndicatorView(frame: CGRect(width: 25, height: 25))
-        loadingIndicator.color = UIColor.Photon.Grey60
+        loadingIndicator.color = themeManager.currentTheme.colors.iconSpinner
         loadingIndicator.startAnimating()
         let customBarButton = UIBarButtonItem(customView: loadingIndicator)
         self.navigationItem.rightBarButtonItem = customBarButton

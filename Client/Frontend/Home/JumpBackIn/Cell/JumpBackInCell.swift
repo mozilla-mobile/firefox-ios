@@ -117,7 +117,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
     // MARK: - Helpers
 
     func configure(viewModel: JumpBackInCellViewModel, theme: Theme) {
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.siteURL ?? "",
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.siteURL,
                                                             heroImageSize: UX.heroImageSize)
         heroImage.setHeroImage(heroImageViewModel)
 
