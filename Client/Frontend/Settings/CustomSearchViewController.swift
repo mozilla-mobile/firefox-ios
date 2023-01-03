@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import SnapKit
 import Storage
+import SiteImageView
 
 class CustomSearchError: MaybeErrorType {
     enum Reason {
@@ -24,14 +25,25 @@ class CustomSearchError: MaybeErrorType {
 }
 
 class CustomSearchViewController: SettingsTableViewController {
-    fileprivate var urlString: String?
-    fileprivate var engineTitle = ""
-    fileprivate lazy var spinnerView: UIActivityIndicatorView = {
+    private let faviconFetcher: SiteImageFetcher
+    private var urlString: String?
+    private var engineTitle = ""
+    var successCallback: (() -> Void)?
+    private lazy var spinnerView: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.color = themeManager.currentTheme.colors.iconSpinner
         spinner.hidesWhenStopped = true
         return spinner
     }()
+
+    init(faviconFetcher: SiteImageFetcher = DefaultSiteImageFetcher.factory()) {
+        self.faviconFetcher = faviconFetcher
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,60 +54,68 @@ class CustomSearchViewController: SettingsTableViewController {
         }
     }
 
-    var successCallback: (() -> Void)?
-
-    fileprivate func addSearchEngine(_ searchQuery: String, title: String) {
+    private func addSearchEngine(_ searchQuery: String, title: String) {
         spinnerView.startAnimating()
 
         let trimmedQuery = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        createEngine(forQuery: trimmedQuery, andName: trimmedTitle).uponQueue(.main) { result in
-            self.spinnerView.stopAnimating()
-            guard let engine = result.successValue else {
+        Task {
+            do {
+                let engine = try await createEngine(query: trimmedQuery, name: trimmedTitle)
+                self.spinnerView.stopAnimating()
+                self.profile.searchEngines.addSearchEngine(engine)
+
+                CATransaction.begin() // Use transaction to call callback after animation has been completed
+                CATransaction.setCompletionBlock(self.successCallback)
+                _ = self.navigationController?.popViewController(animated: true)
+                CATransaction.commit()
+            } catch {
+                self.spinnerView.stopAnimating()
                 let alert: UIAlertController
-                let error = result.failureValue as? CustomSearchError
+                let error = error as? CustomSearchError
 
                 alert = (error?.reason == .DuplicateEngine) ?
                     ThirdPartySearchAlerts.duplicateCustomEngine() : ThirdPartySearchAlerts.incorrectCustomEngineForm()
 
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
                 self.present(alert, animated: true, completion: nil)
-                return
             }
-            self.profile.searchEngines.addSearchEngine(engine)
-
-            CATransaction.begin() // Use transaction to call callback after animation has been completed
-            CATransaction.setCompletionBlock(self.successCallback)
-            _ = self.navigationController?.popViewController(animated: true)
-            CATransaction.commit()
         }
     }
 
-    func createEngine(forQuery query: String, andName name: String) -> Deferred<Maybe<OpenSearchEngine>> {
-        let deferred = Deferred<Maybe<OpenSearchEngine>>()
+    func createEngine(query: String, name: String) async throws -> OpenSearchEngine {
         guard let template = getSearchTemplate(withString: query),
-            let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!), url.isWebPage() else {
-                deferred.fill(Maybe(failure: CustomSearchError(.FormInput)))
-                return deferred
+              let encodedTemplate = template.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed),
+              let url = URL(string: encodedTemplate),
+              url.isWebPage()
+        else {
+            throw CustomSearchError(.FormInput)
         }
 
         // ensure we haven't already stored this template
         guard engineExists(name: name, template: template) == false else {
-            deferred.fill(Maybe(failure: CustomSearchError(.DuplicateEngine)))
-            return deferred
+            throw CustomSearchError(.DuplicateEngine)
         }
 
-        FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(.main) { result in
-            let image = result.successValue ?? FaviconFetcher.letter(forUrl: url)
-            let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
+        let result = await faviconFetcher.getImage(urlStringRequest: url.absoluteString,
+                                                   type: .favicon,
+                                                   id: UUID(),
+                                                   usesIndirectDomain: false)
 
-            // Make sure a valid scheme is used
-            let url = engine.searchURLForQuery("test")
-            let maybe = (url == nil) ? Maybe(failure: CustomSearchError(.FormInput)) : Maybe(success: engine)
-            deferred.fill(maybe)
+        let engine = OpenSearchEngine(engineID: nil,
+                                      shortName: name,
+                                      image: result.faviconImage ?? UIImage(),
+                                      searchTemplate: template,
+                                      suggestTemplate: nil,
+                                      isCustomEngine: true)
+
+        // Make sure a valid scheme is used
+        guard engine.searchURLForQuery("test") != nil else {
+            throw CustomSearchError(.FormInput)
         }
-        return deferred
+
+        return engine
     }
 
     private func engineExists(name: String, template: String) -> Bool {

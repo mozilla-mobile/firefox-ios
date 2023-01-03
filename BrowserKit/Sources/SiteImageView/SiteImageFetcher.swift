@@ -5,16 +5,20 @@
 import UIKit
 import Common
 
-protocol SiteImageFetcher {
+public protocol SiteImageFetcher {
     func getImage(urlStringRequest: String,
                   type: SiteImageType,
                   id: UUID,
                   usesIndirectDomain: Bool) async -> SiteImageModel
 }
 
-class DefaultSiteImageFetcher: SiteImageFetcher {
+public class DefaultSiteImageFetcher: SiteImageFetcher {
     private let urlHandler: FaviconURLHandler
     private let imageHandler: ImageHandler
+
+    public static func factory() -> DefaultSiteImageFetcher {
+        return DefaultSiteImageFetcher()
+    }
 
     init(urlHandler: FaviconURLHandler = DefaultFaviconURLHandler(),
          imageHandler: ImageHandler = DefaultImageHandler()) {
@@ -22,10 +26,10 @@ class DefaultSiteImageFetcher: SiteImageFetcher {
         self.imageHandler = imageHandler
     }
 
-    func getImage(urlStringRequest: String,
-                  type: SiteImageType,
-                  id: UUID,
-                  usesIndirectDomain: Bool) async -> SiteImageModel {
+    public func getImage(urlStringRequest: String,
+                         type: SiteImageType,
+                         id: UUID,
+                         usesIndirectDomain: Bool) async -> SiteImageModel {
         var imageModel = SiteImageModel(id: id,
                                         expectedImageType: type,
                                         urlStringRequest: urlStringRequest,
