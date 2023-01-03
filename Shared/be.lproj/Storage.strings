@@ -2,7 +2,7 @@
 "Bookmarks Menu" = "Меню закладак";
 
 /* The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android. */
-"Bookmarks Toolbar" = "Паліца закладак";
+"Bookmarks Toolbar" = "Панэль закладак";
 
 /* The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android. */
 "Mobile Bookmarks" = "Мабільныя закладкі";
