@@ -114,4 +114,7 @@ public struct AppConstants {
 
     /// The maximum number of times we should attempt to migrated the History to Application Services Places DB
     public static let MAX_HISTORY_MIGRATION_ATTEMPT = 5
+
+    /// The maximum size of the places DB in bytes
+    public static let DB_SIZE_LIMIT_IN_BYTES: UInt32 = 75 * 1024 * 1024 // corresponds to 75MiB (in bytes)
 }

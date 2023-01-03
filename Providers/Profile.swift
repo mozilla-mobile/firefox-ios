@@ -536,11 +536,11 @@ open class BrowserProfile: Profile {
     }
 
     public func cleanupHistoryIfNeeded() {
-        // currently a no-op, but we should call
-        // places.runMaintenace here. At the time of writing this comment,
-        // it was run in Android once a day when the device is idle
-        // we should do something similar in iOS
-        // https://github.com/mozilla-mobile/firefox-ios/issues/12680
+        // We run the cleanup in the background, this is a low priority task
+        // that compacts the places db and reduces it's size to be under the limit.
+        DispatchQueue.global(qos: .background).async {
+            self.places.runMaintenance(dbSizeLimit: AppConstants.DB_SIZE_LIMIT_IN_BYTES)
+        }
     }
 
     public func sendQueuedSyncEvents() {

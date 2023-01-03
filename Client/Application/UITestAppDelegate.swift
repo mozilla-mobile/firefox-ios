@@ -62,7 +62,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 try! FileManager.default.copyItem(at: input, to: output)
 
                 // Tests currently load a browserdb history, we make sure we migrate it everytime
-                UserDefaults.standard.setValue(false, forKey: PrefsKeys.HistoryMigratedToPlacesKey)
+                UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
             }
 
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
