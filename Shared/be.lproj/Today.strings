@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Закрыць\nпрыватныя карткі";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Дадайце цэтлікі Firefox на Хатні экран.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Дадайце ярлыкі Firefox на Хатні экран.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Перайсці па скапіяванай спасылцы";
@@ -29,16 +29,16 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Прыватны пошук";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Дадайце цэтлік Firefox на Хатні экран. Пасля дадання віджэта, націсніце і ўтрымлівайце, каб адрэдагаваць яго і выбраць іншы цэтлік.";
+"TodayWidget.QuickActionGalleryDescription" = "Дадайце ярлыкі Firefox на Хатні экран. Пасля дадавання віджэта, націсніце і ўтрымлівайце, каб адрэдагаваць яго і выбраць іншы ярлык.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Хуткія дзеянні";
 
 /* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
-"TodayWidget.QuickActionsGalleryTitleV2" = "Цэтлікі Firefox";
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ярлыкі Firefox";
 
 /* Description for Quick View widget in Gallery View where user can add it to home screen */
-"TodayWidget.QuickViewGalleryDescriptionV2" = "Дадайце цэтлікі на адкрытыя карткі.";
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Дадайце ярлыкі на адкрытыя карткі.";
 
 /* Title for Quick View widget in Gallery View where user can add it to home screen */
 "TodayWidget.QuickViewGalleryTitle" = "Хуткі прагляд";
@@ -50,11 +50,11 @@
 "TodayWidget.SearchInPrivateTabLabelV2" = "Шукаць у\nпрыватнай картцы";
 
 /* Description for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryDescription" = "Дадайце цэтлікі на сайты, якія часта наведваюцца і на нядаўна наведаныя сайты.";
+"TodayWidget.TopSitesGalleryDescription" = "Дадайце ярлыкі на сайты, якія часта наведваюцца і на нядаўна наведаныя сайты.";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
 "TodayWidget.TopSitesGalleryTitle" = "Папулярныя сайты";
 
 /* Title for top sites widget to add Firefox top sites shotcuts to home screen */
-"TodayWidget.TopSitesGalleryTitleV2" = "Цэтлікі вэб-сайтаў";
+"TodayWidget.TopSitesGalleryTitleV2" = "Ярлыкі вэб-сайтаў";
 
