@@ -652,12 +652,8 @@ class BrowserViewController: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             themeManager.systemThemeChanged()
-        }
-
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             updateLegacyTheme()
         }
-
         setupMiddleButtonStatus(isLoading: false)
     }
 

@@ -127,8 +127,6 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
             return .dark
         }
         var themeType = getSystemThemeType()
-
-        // TODO: Temporarily use user defaults directly until we figure out how to manage these values FXIOS-5058
         if let savedThemeDescription = userDefaults.string(forKey: ThemeKeys.themeName),
            let savedTheme = ThemeType(rawValue: savedThemeDescription) {
             themeType = savedTheme
