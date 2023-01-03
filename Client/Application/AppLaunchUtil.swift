@@ -178,9 +178,10 @@ class AppLaunchUtil {
     private func runAppServicesHistoryMigration() {
         let browserProfile = self.profile as? BrowserProfile
 
-        let migrationRan = UserDefaults.standard.bool(forKey: PrefsKeys.HistoryMigratedToPlacesKey)
-        UserDefaults.standard.setValue(true, forKey: PrefsKeys.HistoryMigratedToPlacesKey)
-        if !migrationRan {
+        let migrationSucceeded = UserDefaults.standard.bool(forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
+        let migrationAttemptNumber = UserDefaults.standard.integer(forKey: PrefsKeys.HistoryMigrationAttemptNumber)
+        UserDefaults.standard.setValue(migrationAttemptNumber + 1, forKey: PrefsKeys.HistoryMigrationAttemptNumber)
+        if !migrationSucceeded && migrationAttemptNumber < AppConstants.MAX_HISTORY_MIGRATION_ATTEMPT {
             log.info("Migrating Application services history")
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started
@@ -197,6 +198,7 @@ class AppLaunchUtil {
                 self.log.info("Migrated \(result.numSucceeded) entries")
                 GleanMetrics.PlacesHistoryMigration.numToMigrate.set(Int64(result.numTotal))
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
+                UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
             },
             errCallback: { err in
                 let errDescription = err?.localizedDescription ?? "Unknown error during History migration"
@@ -209,7 +211,7 @@ class AppLaunchUtil {
                 SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
             })
         } else {
-            log.info("History Migration skipped, already migrated")
+            log.info("History Migration skipped")
         }
     }
 }

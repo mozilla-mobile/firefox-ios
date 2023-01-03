@@ -111,4 +111,7 @@ public struct AppConstants {
 
     /// Time that needs to pass before polling FxA for send tabs again, 86_400_000 milliseconds is 1 day
     public static let FXA_COMMANDS_INTERVAL = 86_400_000
+
+    /// The maximum number of times we should attempt to migrated the History to Application Services Places DB
+    public static let MAX_HISTORY_MIGRATION_ATTEMPT = 5
 }
