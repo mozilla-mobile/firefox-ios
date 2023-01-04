@@ -74,17 +74,3 @@ class MockSiteImageFetcher: SiteImageFetcher {
                               heroImage: image)
     }
 }
-
-struct DefaultFaviconImageViewModel: FaviconImageViewModel {
-    public let urlStringRequest: String
-    public let faviconCornerRadius: CGFloat
-    public let usesIndirectDomain: Bool
-
-    public init(urlStringRequest: String,
-                faviconCornerRadius: CGFloat,
-                usesIndirectDomain: Bool = false) {
-        self.urlStringRequest = urlStringRequest
-        self.faviconCornerRadius = faviconCornerRadius
-        self.usesIndirectDomain = usesIndirectDomain
-    }
-}
