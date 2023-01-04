@@ -7591,8 +7591,6 @@
 				45D5EDA629269F7500311934 /* DataObserver.swift */,
 				8A4AC0ED28C929DD00439F83 /* URLSession */,
 				8A7368AC27924AAF005D7704 /* CanRemoveQuickActionBookmark.swift */,
-				8AE80BB22891AD9200BC12EA /* DispatchGroupInterface.swift */,
-				8ABA9C8828931197002C0077 /* DispatchQueueInterface.swift */,
 				C87DC85D27B2CA49006EFCE2 /* Loggable.swift */,
 				8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */,
 				DFACDFAE274D4D6D00A94EEC /* ReusableCell.swift */,
@@ -15658,7 +15656,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 96.1.3;
+				version = 96.2.1;
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
