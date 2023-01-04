@@ -648,7 +648,7 @@ class SearchViewController: SiteTableViewController,
 
     private func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell,
                                    oneLineCell: OneLineTableViewCell,
-                                   for section: SearchListSection, 
+                                   for section: SearchListSection,
                                    _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
