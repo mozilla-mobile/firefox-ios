@@ -6,8 +6,6 @@ import Foundation
 
 protocol DataObserver {
     var delegate: DataObserverDelegate? { get set }
-
-    func refreshIfNeeded(forceRefresh forced: Bool)
 }
 
 protocol DataObserverDelegate: AnyObject {

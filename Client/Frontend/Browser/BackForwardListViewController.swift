@@ -70,7 +70,6 @@ class BackForwardListViewController: UIViewController,
         super.init(nibName: nil, bundle: nil)
 
         loadSites(backForwardList)
-        loadSitesFromProfile()
     }
 
     override func viewDidLoad() {
@@ -127,26 +126,6 @@ class BackForwardListViewController: UIViewController,
         }
 
         shadow.backgroundColor = theme.colors.shadowDefault
-    }
-
-    func loadSitesFromProfile() {
-        let sql = profile.favicons as! SQLiteHistory
-        let urls: [String] = listData.compactMap {
-            guard let internalUrl = InternalURL($0.url) else { return $0.url.absoluteString }
-
-            return internalUrl.extractedUrlParam?.absoluteString
-        }
-
-        sql.getSites(forURLs: urls).uponQueue(.main) { result in
-            guard let results = result.successValue else { return }
-            // Add all results into the sites dictionary
-            results.compactMap({$0}).forEach({site in
-                if let url = site?.url {
-                    self.sites[url] = site
-                }
-            })
-            self.tableView.reloadData()
-        }
     }
 
     func homeAndNormalPagesOnly(_ bfList: WKBackForwardList) {

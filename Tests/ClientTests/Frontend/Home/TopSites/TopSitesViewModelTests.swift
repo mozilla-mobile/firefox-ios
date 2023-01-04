@@ -30,7 +30,8 @@ class TopSitesViewModelTests: XCTestCase {
                                           isZeroSearch: false,
                                           theme: LightTheme(),
                                           wallpaperManager: WallpaperManager())
-        let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+        let topSitesProvider = TopSitesProviderImplementation(placesFetcher: profile.places,
+                                                              pinnedSiteFetcher: profile.pinnedSites,
                                                               prefs: profile.prefs)
 
         let siteToDelete = topSitesProvider.defaultTopSites(profile.prefs)[0]
@@ -48,7 +49,8 @@ class TopSitesViewModelTests: XCTestCase {
                                           isZeroSearch: false,
                                           theme: LightTheme(),
                                           wallpaperManager: WallpaperManager())
-        let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
+        let topSitesProvider = TopSitesProviderImplementation(placesFetcher: profile.places,
+                                                              pinnedSiteFetcher: profile.pinnedSites,
                                                               prefs: profile.prefs)
 
         let defaultSites = topSitesProvider.defaultTopSites(profile.prefs)

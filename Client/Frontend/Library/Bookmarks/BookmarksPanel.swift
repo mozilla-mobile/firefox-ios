@@ -495,7 +495,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         let pinTopSite = SingleActionViewModel(title: .AddToShortcutsActionTitle,
                                                iconString: ImageIdentifiers.addShortcut,
                                                tapHandler: { _ in
-            self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
+            self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
                     SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage,
                                                     bottomContainer: self.view)

@@ -273,56 +273,6 @@ Hvh5x7fjl1ID52qumFNQl8zkB75C8XK25alXqwvRR6/AQSP+BgQ==\\\",\\\"IV\\\":\\\"v/0BFgi
         }
     }
 
-    func testHistoryPayload() {
-        let payloadJSON = """
-{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://bugzilla.mozilla.org/show_bug.cgi?id=1154\
-549\",\"title\":\"1154549 – Encapsulate synced profile data within an account-centric \
-object\",\"visits\":[{\"date\":1429061233163240,\"type\":1}]}
-"""
-        let json = JSON(parseJSON: payloadJSON)
-        if let payload = HistoryPayload.fromJSON(json) {
-            XCTAssertEqual("--DzSJTCw-zb", payload["id"].stringValue)
-            XCTAssertEqual("1154549 – Encapsulate synced profile data within an account-centric object", payload["title"].stringValue)
-            XCTAssertEqual(1, payload.visits[0].type.rawValue)
-            XCTAssertEqual(1429061233163240, payload.visits[0].date)
-
-            let v = payload.visits[0]
-            let j = v.toJSON()
-            XCTAssertEqual(1, j["type"] as! Int)
-            XCTAssertEqual(1429061233163240, j["date"] as! Int64)
-        } else {
-            XCTFail("Should have parsed.")
-        }
-    }
-
-    func testHistoryPayloadWithNoURL() {
-        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":null,\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
-        let json = JSON(parseJSON: payloadJSON)
-        XCTAssertNil(HistoryPayload.fromJSON(json))
-    }
-
-    func testHistoryPayloadWithNoTitle() {
-        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
-        let json = JSON(parseJSON: payloadJSON)
-        if let payload = HistoryPayload.fromJSON(json) {
-            // Missing fields are null-valued in SwiftyJSON.
-            XCTAssertTrue(payload["title"].isNull())
-            XCTAssertEqual("", payload.title)
-        } else {
-            XCTFail("Should have parsed.")
-        }
-    }
-
-    func testHistoryPayloadWithNullTitle() {
-        let payloadJSON = "{\"id\":\"--DzSJTCw-zb\",\"histUri\":\"https://foo.com/\",\"title\":null,\"visits\":[{\"date\":1429061233163240,\"type\":1}]}"
-        let json = JSON(parseJSON: payloadJSON)
-        if let payload = HistoryPayload.fromJSON(json) {
-            XCTAssertEqual("", payload.title)
-        } else {
-            XCTFail("Should have parsed.")
-        }
-    }
-
     func testLoginPayload() {
         let input = JSON([
             "id": "abcdefabcdef",

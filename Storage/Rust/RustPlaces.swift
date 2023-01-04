@@ -199,9 +199,9 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         reader?.interrupt()
     }
 
-    public func runMaintenance() {
+    public func runMaintenance(dbSizeLimit: UInt32) {
         _ = withWriter { connection in
-            try connection.runMaintenance()
+            try connection.runMaintenance(dbSizeLimit: dbSizeLimit)
         }
     }
 
@@ -537,6 +537,9 @@ extension RustPlaces {
     public func applyObservation(visitObservation: VisitObservation) -> Success {
         return withWriter { connection in
             return try connection.applyObservation(visitObservation: visitObservation)
+        }.map { result in
+            self.notificationCenter.post(name: .TopSitesUpdated, object: nil)
+            return result
         }
     }
 
@@ -574,9 +577,55 @@ extension RustPlaces {
         }
     }
 
-    public func getTopFrecentSiteInfos(limit: Int, thresholdOption: FrecencyThresholdOption) -> Deferred<Maybe<[TopFrecentSiteInfo]>> {
-        return withReader { connection in
+    public func getTopFrecentSiteInfos(limit: Int, thresholdOption: FrecencyThresholdOption) -> Deferred<Maybe<[Site]>> {
+        let deferred: Deferred<Maybe<[TopFrecentSiteInfo]>> = withReader { connection in
             return try connection.getTopFrecentSiteInfos(numItems: Int32(limit), thresholdOption: thresholdOption)
         }
+
+        let returnValue = Deferred<Maybe<[Site]>>()
+        deferred.upon { result in
+            guard let result = result.successValue else {
+                returnValue.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
+                return
+            }
+            returnValue.fill(Maybe(success: result.map { info in
+                var title: String
+                if let actualTitle = info.title, !actualTitle.isEmpty {
+                    title = actualTitle
+                } else {
+                    // In case there is no title, we use the url
+                    // as the title
+                    title = info.url
+                }
+                return Site(url: info.url, title: title)
+            }))
+        }
+        return returnValue
+    }
+
+    public func getSitesWithBound(limit: Int, offset: Int, excludedTypes: VisitTransitionSet) -> Deferred<Maybe<Cursor<Site>>> {
+        let deferred = getVisitPageWithBound(limit: limit, offset: offset, excludedTypes: excludedTypes)
+        let result = Deferred<Maybe<Cursor<Site>>>()
+        deferred.upon { visitInfos in
+            guard let visitInfos = visitInfos.successValue else {
+                result.fill(Maybe(failure: visitInfos.failureValue ?? "Unknown Error"))
+                return
+            }
+            let sites = visitInfos.infos.map { info -> Site in
+                var title: String
+                if let actualTitle = info.title, !actualTitle.isEmpty {
+                    title = actualTitle
+                } else {
+                    // In case there is no title, we use the url
+                    // as the title
+                    title = info.url
+                }
+                let site = Site(url: info.url, title: title)
+                site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000)
+                return site
+            }.uniqued()
+            result.fill(Maybe(success: ArrayCursor(data: sites)))
+        }
+        return result
     }
 }

@@ -112,3 +112,8 @@ class StorageClientTests: XCTestCase {
         XCTAssertTrue(result.value.failureValue is RecordTooLargeError)
     }
 }
+
+class MockSyncDelegate: SyncDelegate {
+    func displaySentTab(for url: URL, title: String, from deviceName: String?) {
+    }
+}

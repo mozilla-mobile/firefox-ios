@@ -141,36 +141,23 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     func performSearch(term: String, completion: @escaping (Bool) -> Void) {
         isFetchInProgress = true
 
-        switch self.profile.historyApiConfiguration {
-        case .old:
-            profile.history.getHistory(
-                matching: term,
-                limit: searchQueryFetchLimit,
-                offset: searchCurrentFetchOffset
-            ) { results in
-                self.isFetchInProgress = false
-                self.searchResultSites = results
-                completion(!results.isEmpty)
-            }
-        case .new:
-            profile.places.interruptReader()
-            profile.places.queryAutocomplete(matchingSearchQuery: term, limit: searchQueryFetchLimit).uponQueue(.main) { result in
-                self.isFetchInProgress = false
+        profile.places.interruptReader()
+        profile.places.queryAutocomplete(matchingSearchQuery: term, limit: searchQueryFetchLimit).uponQueue(.main) { result in
+            self.isFetchInProgress = false
 
-                guard result.isSuccess else {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Error searching history panel",
-                        tag: .rustPlaces,
-                        severity: .error,
-                        description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
-                    )
-                    completion(false)
-                    return
-                }
-                if let result = result.successValue {
-                    self.searchResultSites = result.map { Site(url: $0.url, title: $0.title) }
-                    completion(!result.isEmpty)
-                }
+            guard result.isSuccess else {
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Error searching history panel",
+                    tag: .rustPlaces,
+                    severity: .error,
+                    description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
+                )
+                completion(false)
+                return
+            }
+            if let result = result.successValue {
+                self.searchResultSites = result.map { Site(url: $0.url, title: $0.title) }
+                completion(!result.isEmpty)
             }
         }
     }
@@ -290,55 +277,28 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
         isFetchInProgress = true
 
-        switch profile.historyApiConfiguration {
-        case .old:
-            return profile.history.getSitesByLastVisit(limit: queryFetchLimit, offset: currentFetchOffset) >>== { result in
-                // Force 100ms delay between resolution of the last batch of results
-                // and the next time `fetchData()` can be called.
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                    self.isFetchInProgress = false
-                    self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
-                }
-                return deferMaybe(result)
+        let deferred = profile.places.getSitesWithBound(
+            limit: queryFetchLimit,
+            offset: currentFetchOffset,
+            excludedTypes: VisitTransitionSet(0)
+        )
+
+        let historySites = Deferred<Maybe<Cursor<Site>>>()
+        deferred.upon { sites in
+            historySites.fill(sites)
+            guard sites.isSuccess else {
+                self.isFetchInProgress = false
+                return
             }
-        case .new:
-            let deferred = profile.places.getVisitPageWithBound(
-                limit: queryFetchLimit,
-                offset: currentFetchOffset,
-                excludedTypes: VisitTransitionSet(0)
-            )
-            let ret = Deferred<Maybe<Cursor<Site>>>()
-            deferred.upon { result in
-                guard let result = result.successValue else {
-                    // It's possible for our query to be interrupted
-                    // either by triggering the interrupt or by the user leaving putting the application
-                    // in the background
-                    // we should make sure we re-set the fetching flag
-                    self.isFetchInProgress = false
-                    ret.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
-                    return
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
-                    self.isFetchInProgress = false
-                    self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
-                }
-                let sites = result.infos.map { info -> Site in
-                    var title: String
-                    if let actualTitle = info.title, !actualTitle.isEmpty {
-                        title = actualTitle
-                    } else {
-                        // In case there is no title, we use the url
-                        // as the title
-                        title = info.url
-                    }
-                    let site = Site(url: info.url, title: title)
-                    site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000)
-                    return site
-                }.uniqued()
-                ret.fill(Maybe(success: ArrayCursor(data: sites)))
+            // Force 100ms delay between resolution of the last batch of results
+            // and the next time `fetchData()` can be called.
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                self.isFetchInProgress = false
+                self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
             }
-            return ret
         }
+
+        return historySites
     }
 
     private func resetHistory() {
@@ -380,9 +340,8 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     private func deleteSingle(site: Site) {
         groupedSites.remove(site)
-        profile.history.removeHistoryForURL(site.url)
-        if profile.historyApiConfiguration == .new {
-            _ = profile.places.deleteVisitsFor(site.url)
+        self.profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { _ in
+            NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)
         }
 
         if isSearchInProgress, let indexToRemove = searchResultSites.firstIndex(of: site) {

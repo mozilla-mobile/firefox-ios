@@ -9,11 +9,53 @@ import Shared
 import XCTest
 
 class TopSitesHelperTests: XCTestCase {
+    private var profile: MockProfile!
+    private func deleteDatabases() {
+        do {
+            try profile.files.remove("TopSitesHelperTests.db")
+        } catch {}
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        self.deleteDatabases()
+        self.profile = nil
+    }
+
+    override func setUp() {
+        super.setUp()
+        self.profile = MockProfile(databasePrefix: "TopSitesHelperTests")
+        // Just in case tearDown didn't run or succeed last time!
+        self.deleteDatabases()
+    }
+
+    func createSubject(
+        mockPinnedSites: Bool,
+        frecencySitesToAdd: [Site] = [],
+        pinnedSites: [PinnedSite] = []
+    ) -> TopSitesProviderImplementation {
+        let pinnedSiteFetcher: PinnedSites
+        if mockPinnedSites {
+            let mock = PinnedSitesMock()
+            let cursor = SiteCursorMock()
+            cursor.sites = pinnedSites
+            mock.pinnedResponse = Maybe(success: cursor)
+            pinnedSiteFetcher = mock
+        } else {
+            pinnedSiteFetcher = profile.pinnedSites
+        }
+        let places = profile.places
+        addFrecencySitesToPlaces(frecencySitesToAdd, places: places)
+
+        let subject = TopSitesProviderImplementation(placesFetcher: places,
+                                                     pinnedSiteFetcher: pinnedSiteFetcher,
+                                                     prefs: profile.prefs)
+        return subject
+    }
+
     func testGetTopSites_withError_completesWithZeroSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: BrowserHistoryMock(),
-                                                     prefs: MockProfilePrefs())
+        let subject = createSubject(mockPinnedSites: false)
 
         subject.getTopSites { sites in
             guard let sites = sites else {
@@ -29,14 +71,7 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_withFrecencyError_completesWithPinnedSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
-
-        let cursor = SiteCursorMock()
-        cursor.sites = defaultPinnedSites
-        mockHistory.pinnedResponse = Maybe(success: cursor)
-
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                     prefs: MockProfilePrefs())
+        let subject = createSubject(mockPinnedSites: true, pinnedSites: defaultPinnedSites)
 
         subject.getTopSites { sites in
             guard let sites = sites else {
@@ -52,14 +87,10 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_withPinnedSitesError_completesWithFrecencySites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
-
-        let cursor = SiteCursorMock()
-        cursor.sites = defaultFrecencySites
-        mockHistory.frecencyResponse = Maybe(success: cursor)
-
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                     prefs: MockProfilePrefs())
+        let subject = createSubject(
+            mockPinnedSites: true,
+            frecencySitesToAdd: defaultFrecencySites
+        )
 
         subject.getTopSites { sites in
             guard let sites = sites else {
@@ -75,16 +106,9 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_filterHideSearchParam() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
-
-        let cursor = SiteCursorMock()
         let sites = defaultFrecencySites + [Site(url: "https://frecencySponsoredSite.com/page?mfadid=adm",
                                                  title: "A sponsored title")]
-        cursor.sites = sites
-        mockHistory.frecencyResponse = Maybe(success: cursor)
-
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                     prefs: MockProfilePrefs())
+        let subject = createSubject(mockPinnedSites: true, frecencySitesToAdd: sites)
 
         subject.getTopSites { sites in
             guard let sites = sites else {
@@ -100,15 +124,9 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_removesDuplicates() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
-
-        let cursor = SiteCursorMock()
         let sites = defaultFrecencySites + defaultFrecencySites
-        cursor.sites = sites
-        mockHistory.frecencyResponse = Maybe(success: cursor)
 
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                     prefs: MockProfilePrefs())
+        let subject = createSubject(mockPinnedSites: true, frecencySitesToAdd: sites)
 
         subject.getTopSites { sites in
             guard let sites = sites else {
@@ -124,14 +142,8 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_defaultSitesHavePrecedenceOverFrecency() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
-
-        let cursor = SiteCursorMock()
-        cursor.sites = [Site(url: "https://facebook.com", title: "Facebook")]
-        mockHistory.frecencyResponse = Maybe(success: cursor)
-
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                     prefs: MockProfilePrefs())
+        let sites = [Site(url: "https://facebook.com", title: "Facebook")]
+        let subject = createSubject(mockPinnedSites: true, frecencySitesToAdd: sites)
 
         subject.getTopSites { sites in
             guard let sites = sites else {
@@ -147,14 +159,7 @@ class TopSitesHelperTests: XCTestCase {
 
     func testGetTopSites_pinnedSitesHasPrecedenceOverDefaultTopSites() {
         let expectation = expectation(description: "Expect top sites to be fetched")
-        let mockHistory = BrowserHistoryMock()
-
-        let cursor = SiteCursorMock()
-        cursor.sites = [PinnedSite(site: Site(url: "https://facebook.com", title: "Facebook"))]
-        mockHistory.pinnedResponse = Maybe(success: cursor)
-
-        let subject = TopSitesProviderImplementation(browserHistoryFetcher: mockHistory,
-                                                     prefs: MockProfilePrefs())
+        let subject = createSubject(mockPinnedSites: true, pinnedSites: [PinnedSite(site: Site(url: "https://facebook.com", title: "Facebook"))])
 
         subject.getTopSites { sites in
             guard let sites = sites else {
@@ -181,6 +186,14 @@ extension TopSitesHelperTests {
         return [Site(url: "https://frecencySite.com/1/", title: "a frecency site"),
                 Site(url: "https://anotherWebSite.com/2/", title: "Another website")]
     }
+
+    func addFrecencySitesToPlaces(_ sites: [Site], places: RustPlaces) {
+        for site in sites {
+            let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link)
+            // force synchronous call
+            _ = places.applyObservation(visitObservation: visit).value
+        }
+    }
 }
 
 // MARK: - SiteCursorMock
@@ -191,17 +204,10 @@ class SiteCursorMock: Cursor<Site> {
     }
 }
 
-// MARK: - MockableHistory
-class BrowserHistoryMock: MockableHistory {
+// MARK: - MockablePinnedSites
+class PinnedSitesMock: MockablePinnedSites {
     class Error: MaybeErrorType {
         var description = "Error"
-    }
-
-    var frecencyResponse: Maybe<Cursor<Site>> = Maybe(failure: Error())
-    override func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        let deferred = Deferred<Maybe<Cursor<Site>>>()
-        deferred.fill(frecencyResponse)
-        return deferred
     }
 
     var pinnedResponse: Maybe<Cursor<Site>> = Maybe(failure: Error())

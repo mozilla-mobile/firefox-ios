@@ -68,8 +68,8 @@ class HistoryHighlightsTestEntryProvider {
     // MARK: - Helper methods
 
     private func add(site: Site) {
-        let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
-        XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).")
+        let visit = VisitObservation(url: site.url, title: site.title, visitType: nil)
+        XCTAssertTrue(profile.places.applyObservation(visitObservation: visit).value.isSuccess, "Site added: \(site.url).")
     }
 
     private func createWebsiteEntry(named name: String, with sufix: String = "") -> Site {

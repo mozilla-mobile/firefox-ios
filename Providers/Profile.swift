@@ -22,8 +22,6 @@ public protocol SyncManager {
     var lastSyncFinishTime: Timestamp? { get set }
     var syncDisplayState: SyncDisplayState? { get }
 
-    func hasSyncedHistory() -> Deferred<Maybe<Bool>>
-
     func syncClients() -> SyncResult
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
@@ -39,17 +37,6 @@ public protocol SyncManager {
 }
 
 typealias SyncFunction = (SyncDelegate, Prefs, Ready, SyncReason) -> SyncResult
-
-public enum HistoryMigrationConfiguration {
-    case disabled
-    case dryRun
-    case real
-}
-
-public enum HistoryAPIConfiguration {
-    case old
-    case new
-}
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -90,20 +77,16 @@ class CommandStoringSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: AnyObject {
-    typealias HistoryFetcher = BrowserHistory & SyncableHistory & ResettableSyncStorage
-
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
-    var history: HistoryFetcher { get }
-    var recommendations: HistoryRecommendations { get }
+    var pinnedSites: PinnedSites { get }
     var favicons: Favicons { get }
     var logins: RustLogins { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
-    var historyApiConfiguration: HistoryAPIConfiguration { get }
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE
         var readingList: ReadingList { get }
@@ -229,8 +212,6 @@ open class BrowserProfile: Profile {
 
     var syncDelegate: SyncDelegate?
 
-    var historyApiConfiguration: HistoryAPIConfiguration
-
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
      *
@@ -243,17 +224,12 @@ open class BrowserProfile: Profile {
      * A SyncDelegate can be provided in this initializer, or once the profile is initialized.
      * However, if we provide it here, it's assumed that we're initializing it from the application.
      */
-    init(localName: String, syncDelegate: SyncDelegate? = nil, clear: Bool = false, isNewHistoryPlacesAPI: Bool = false) {
+    init(localName: String, syncDelegate: SyncDelegate? = nil, clear: Bool = false) {
         log.debug("Initing profile \(localName) on thread \(Thread.current).")
         self.name = localName
         self.files = ProfileFileAccessor(localName: localName)
         self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         self.syncDelegate = syncDelegate
-        if isNewHistoryPlacesAPI {
-            self.historyApiConfiguration = .new
-        } else {
-            self.historyApiConfiguration = .old
-        }
 
         if clear {
             do {
@@ -317,11 +293,6 @@ open class BrowserProfile: Profile {
         notificationCenter.addObserver(self, selector: #selector(onLocationChange), name: .OnLocationChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched), name: .OnPageMetadataFetched, object: nil)
 
-        // Always start by needing invalidation.
-        // This is the same as self.history.setTopSitesNeedsInvalidation, but without the
-        // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
-        prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
-
         if AppInfo.isChinaEdition {
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
@@ -353,7 +324,12 @@ open class BrowserProfile: Profile {
 
         database.reopenIfClosed()
         _ = logins.reopenIfClosed()
-        _ = places.reopenIfClosed()
+        // it's possible we are going through a history migration
+        // lets make sure that if the places connection is already open
+        // we don't try to reopen it
+        if !places.isOpen {
+            _ = places.reopenIfClosed()
+        }
         _ = tabs.reopenIfClosed()
     }
 
@@ -375,30 +351,20 @@ open class BrowserProfile: Profile {
            let title = notification.userInfo!["title"] as? NSString {
             // Only record local vists if the change notification originated from a non-private tab
             if !(notification.userInfo!["isPrivate"] as? Bool ?? false) {
-                // We don't record a visit if no type was specified -- that means "ignore me".
-                let site = Site(url: url.absoluteString, title: title as String)
-                let visit = SiteVisit(site: site,
-                                      date: Date().toMicrosecondsSince1970(),
-                                      type: visitType)
-                history.addLocalVisit(visit)
-                if self.historyApiConfiguration == .new {
-                    let result = self.places.applyObservation(
-                        visitObservation: VisitObservation(
-                            url: url.description,
-                            title: title as String,
-                            visitType: VisitTransition.fromVisitType(visitType: visitType)
-                        )
+                let result = self.places.applyObservation(
+                    visitObservation: VisitObservation(
+                        url: url.description,
+                        title: title as String,
+                        visitType: VisitTransition.fromVisitType(visitType: visitType)
                     )
-                    result.upon { result in
-                        guard result.isSuccess else {
-                            SentryIntegration.shared.sendWithStacktrace(message: result.failureValue?.localizedDescription ?? "Unknown error adding history visit", tag: .rustPlaces, severity: .error)
-                            return
-                        }
+                )
+                result.upon { result in
+                    guard result.isSuccess else {
+                        SentryIntegration.shared.sendWithStacktrace(message: result.failureValue?.localizedDescription ?? "Unknown error adding history visit", tag: .rustPlaces, severity: .error)
+                        return
                     }
                 }
             }
-
-            history.setTopSitesNeedsInvalidation()
         } else {
             log.debug("Ignoring navigation.")
         }
@@ -430,27 +396,27 @@ open class BrowserProfile: Profile {
     }
 
     lazy var queue: TabQueue = {
-        withExtendedLifetime(self.history) {
+        withExtendedLifetime(self.legacyPlaces) {
             return SQLiteQueue(db: self.database)
         }
     }()
 
     /**
-     * Favicons, history, and tabs are all stored in one intermeshed
+     * Favicons and pinned sites are stored in one intermeshed
      * collection of tables.
      *
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var legacyPlaces: Favicons & Profile.HistoryFetcher & HistoryRecommendations  = {
-        return SQLiteHistory(database: self.database, prefs: self.prefs)
+    private lazy var legacyPlaces: Favicons & PinnedSites  = {
+        return BrowserDBSQLite(database: self.database, prefs: self.prefs)
     }()
 
     var favicons: Favicons {
         return self.legacyPlaces
     }
 
-    var history: Profile.HistoryFetcher {
+    var pinnedSites: PinnedSites {
         return self.legacyPlaces
     }
 
@@ -458,42 +424,24 @@ open class BrowserProfile: Profile {
         return SQLiteMetadata(db: self.database)
     }()
 
-    var recommendations: HistoryRecommendations {
-        return self.legacyPlaces
-    }
-
     lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
     lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
     lazy var places: RustPlaces = RustPlaces(databasePath: self.placesDbPath)
 
-    public func migrateHistoryToPlaces(migrationConfig: HistoryMigrationConfiguration, callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
-        let lastSyncTimestamp = Int64(self.syncManager.lastSyncFinishTime ?? 0)
-        switch migrationConfig {
-        case .disabled:
-            break
-        case .dryRun:
-            let dryRunPath = URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("dry-run-places.db").path
-            RustPlaces(databasePath: dryRunPath)
-                .migrateHistory(
-                    dbPath: self.browserDbPath,
-                    lastSyncTimestamp: lastSyncTimestamp,
-                    completion: { result in
-                    do {
-                        try FileManager.default.removeItem(atPath: dryRunPath)
-                    } catch {
-                        log.error("Unable do delete dry run database")
-                    }
-                    callback(result)
-                },
-                errCallback: errCallback)
-        case .real:
-            self.places.migrateHistory(
-                dbPath: self.browserDbPath,
-                lastSyncTimestamp: lastSyncTimestamp,
-                completion: callback,
-                errCallback: errCallback
-            )
+    public func migrateHistoryToPlaces(callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
+        guard FileManager.default.fileExists(atPath: browserDbPath) else {
+            // This is the user's first run of the app, they don't have a browserDB, so lets report a successful
+            // migration with zero visits
+            callback(HistoryMigrationResult(numTotal: 0, numSucceeded: 0, numFailed: 0, totalDuration: 0))
+            return
         }
+        let lastSyncTimestamp = Int64(syncManager.lastSyncFinishTime ?? 0)
+        places.migrateHistory(
+            dbPath: browserDbPath,
+            lastSyncTimestamp: lastSyncTimestamp,
+            completion: callback,
+            errCallback: errCallback
+        )
     }
 
     lazy var tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("tabs.db").path
@@ -588,7 +536,11 @@ open class BrowserProfile: Profile {
     }
 
     public func cleanupHistoryIfNeeded() {
-        recommendations.cleanupHistoryIfNeeded()
+        // We run the cleanup in the background, this is a low priority task
+        // that compacts the places db and reduces it's size to be under the limit.
+        DispatchQueue.global(qos: .background).async {
+            self.places.runMaintenance(dbSizeLimit: AppConstants.DB_SIZE_LIMIT_IN_BYTES)
+        }
     }
 
     public func sendQueuedSyncEvents() {
@@ -970,12 +922,7 @@ open class BrowserProfile: Profile {
                 return self.profile.tabs.resetSync() >>> { ClientsSynchronizer.resetClientsWithStorage(self.profile.remoteClientsAndTabs, basePrefs: self.prefsForSync) }
 
             case "history":
-                switch self.profile.historyApiConfiguration {
-                case .old:
-                    return HistorySynchronizer.resetSynchronizerWithStorage(self.profile.history, basePrefs: self.prefsForSync, collection: "history")
-                case .new:
-                    return self.profile.places.resetHistoryMetadata()
-                }
+                return self.profile.places.resetHistoryMetadata()
             case "passwords":
                 return self.profile.logins.resetSync()
             case "forms":
@@ -998,18 +945,12 @@ open class BrowserProfile: Profile {
 
             // Run these in order, because they might write to the same DB!
 
-            var remove = [
+            let remove = [
                 profile.remoteClientsAndTabs.onRemovedAccount,
                 profile.logins.resetSync,
                 profile.places.resetBookmarksMetadata,
+                profile.places.resetHistoryMetadata,
             ]
-            switch profile.historyApiConfiguration {
-            case .old:
-                remove.append(profile.history.onRemovedAccount)
-            case .new:
-                remove.append(profile.places.resetHistoryMetadata)
-            }
-
             let clearPrefs: () -> Success = {
                 withExtendedLifetime(self) {
                     // Clear prefs after we're done clearing everything else -- just in case
@@ -1083,12 +1024,6 @@ open class BrowserProfile: Profile {
                 accountManager.deviceConstellation()?.refreshState()
                 return deferMaybe(result)
             }
-        }
-
-        fileprivate func syncLegacyHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
-            log.debug("Syncing history to storage.")
-            let historySynchronizer = ready.synchronizer(HistorySynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
         public class ScopedKeyError: MaybeErrorType {
@@ -1419,16 +1354,11 @@ open class BrowserProfile: Profile {
                 return Success()
             }
 
-            var historySynchronizer = self.syncLegacyHistoryWithDelegate
-            if self.profile.historyApiConfiguration == .new {
-                historySynchronizer = self.syncHistoryWithDelegate
-            }
-
             let synchronizers = [
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
                 ("bookmarks", self.syncBookmarksWithDelegate),
-                ("history", historySynchronizer),
+                ("history", self.syncHistoryWithDelegate),
                 ("logins", self.syncLoginsWithDelegate)
             ]
 
@@ -1469,13 +1399,7 @@ open class BrowserProfile: Profile {
                 case "tabs": return ("tabs", self.syncTabsWithDelegate)
                 case "logins": return ("logins", self.syncLoginsWithDelegate)
                 case "bookmarks": return ("bookmarks", self.syncBookmarksWithDelegate)
-                case "history":
-                    switch self.profile.historyApiConfiguration {
-                    case .old:
-                        return ("history", self.syncLegacyHistoryWithDelegate)
-                    case .new:
-                        return ("history", self.syncHistoryWithDelegate)
-                    }
+                case "history": return ("history", self.syncHistoryWithDelegate)
                 default: return nil
                 }
             }
@@ -1485,10 +1409,6 @@ open class BrowserProfile: Profile {
         @objc func syncOnTimer() {
             self.syncEverything(why: .scheduled)
             self.profile.pollCommands()
-        }
-
-        public func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
-            return self.profile.history.hasSyncedHistory()
         }
 
         public func syncClients() -> SyncResult {
@@ -1516,28 +1436,7 @@ open class BrowserProfile: Profile {
         }
 
         public func syncHistory() -> SyncResult {
-            switch self.profile.historyApiConfiguration {
-            case .old:
-                return self.sync("history", function: syncLegacyHistoryWithDelegate)
-            case .new:
-                return self.sync("history", function: syncHistoryWithDelegate)
-            }
-        }
-
-        /**
-         * Return a thunk that continues to return true so long as an ongoing sync
-         * should continue.
-         */
-        func greenLight() -> () -> Bool {
-            let start = Date.now()
-
-            // Give it two minutes to run before we stop.
-            let stopBy = start + (2 * OneMinuteInMilliseconds)
-            log.debug("Checking green light. Backgrounded: \(self.backgrounded).")
-            return {
-                Date.now() < stopBy &&
-                self.profile.hasSyncableAccount()
-            }
+            return self.sync("history", function: syncHistoryWithDelegate)
         }
     }
 }

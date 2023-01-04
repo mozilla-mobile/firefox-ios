@@ -246,3 +246,19 @@ open class BrowserDB {
           >>== { deferMaybe($0[0] ?? true) }
     }
 }
+
+/// The sqlite-backed implementation of the history protocol.
+/// Currenlty only supports pinned sites and favicons
+open class BrowserDBSQLite {
+    let database: BrowserDB
+    let prefs: Prefs
+    let notificationCenter: NotificationCenter
+
+    required public init(database: BrowserDB,
+                         prefs: Prefs,
+                         notificationCenter: NotificationCenter = NotificationCenter.default) {
+        self.database = database
+        self.prefs = prefs
+        self.notificationCenter = notificationCenter
+    }
+}

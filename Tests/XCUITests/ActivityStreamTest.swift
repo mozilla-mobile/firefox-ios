@@ -83,8 +83,8 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
-        waitForExistence(app.cells.staticTexts["Mozilla"], timeout: 15)
-        XCTAssertTrue(app.cells.staticTexts["Mozilla"].exists)
+        waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: 15)
+        XCTAssertTrue(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         // A new site has been added to the top sites
         if iPad() {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
@@ -103,7 +103,7 @@ class ActivityStreamTest: BaseTestCase {
             navigator.goto(HomePanelsScreen)
         }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
-        XCTAssertFalse(app.cells.staticTexts["Mozilla"].exists)
+        XCTAssertFalse(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
     }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {

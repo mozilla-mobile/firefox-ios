@@ -738,7 +738,7 @@ extension HistoryPanel {
 
     /// When long pressed, a menu appears giving the choice of pinning as a Top Site.
     func pinToTopSites(_ site: Site) {
-        profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
+        profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
             if result.isSuccess {
                 SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage, bottomContainer: self.view)
             }

@@ -440,22 +440,6 @@ features:
           },
           "onboarding-sheet": true
         }
-  places-history:
-    description: |
-            This feature defines the migration to using application services places history
-            for history in iOS
-    variables:
-        migration:
-            description: |
-                The migration configuration. This is either a dry-run, a real migration or
-                disabled
-            type: PlacesMigrationConfiguration
-            default: disabled
-        api:
-            description: |
-                The api configuration, determines whether we use the new api or the old one
-            type: PlacesAPIConfiguration
-            default: old
   share-sheet:
     description: This feature define the redesign of the share sheet
     variables:
@@ -494,6 +478,9 @@ features:
         value: {
             "credit-card-autofill-status:": true,
         }
+
+
+        
 
 types:
   objects:
@@ -731,19 +718,3 @@ types:
           description: The legacy wallpaper version
         v1:
           description: The 2022 MR version
-    PlacesMigrationConfiguration:
-      description: An enum representing the migration configuration for places history
-      variants:
-        dry-run:
-            description: A dry run. This will migrate the database to a fake database and collect metrics
-        real:
-            description: A real migration. This will migrate the database to the real places.db
-        disabled:
-            description: The migration is disabled. migration is a no-op.
-    PlacesAPIConfiguration:
-      description: An enum representing the API configuration for places history
-      variants:
-        old:
-            description: Use the old API reading/writing to Browser.db
-        new:
-            description: Use the new API reading/writing to/from places.db, once the migration is complete.

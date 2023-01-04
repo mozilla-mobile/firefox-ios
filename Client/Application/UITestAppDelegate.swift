@@ -60,6 +60,9 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                 }
 
                 try! FileManager.default.copyItem(at: input, to: output)
+
+                // Tests currently load a browserdb history, we make sure we migrate it everytime
+                UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
             }
 
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
@@ -188,6 +191,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Speed up the animations to 100 times as fast.
         defer { UIWindow.keyWindow?.layer.speed = 100.0 }
+
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 

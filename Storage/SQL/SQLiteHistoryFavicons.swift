@@ -71,7 +71,7 @@ class FaviconDownloadError: MaybeErrorType {
     }
 }
 
-extension SQLiteHistory: Favicons {
+extension BrowserDBSQLite: Favicons {
     public func getFaviconImage(forSite site: Site, completionHandler: @escaping (UIImage?) -> Void) {
         // First, attempt to lookup the favicon from our bundled top sites.
         return getTopSitesFaviconImage(forSite: site) { result in
