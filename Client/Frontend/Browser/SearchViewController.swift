@@ -648,7 +648,8 @@ class SearchViewController: SiteTableViewController,
 
     private func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell,
                                    oneLineCell: OneLineTableViewCell,
-                                   for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
+                                   for section: SearchListSection, 
+                                   _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
         case .searchSuggestions:
