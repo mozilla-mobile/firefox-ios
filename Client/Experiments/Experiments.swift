@@ -227,7 +227,7 @@ enum Experiments {
 
         // We should immediately calculate the experiment enrollments
         // that we've just acquired from the fileURL, or we fetched last run.
-        nimbus.applyPendingExperiments()
+        _ = nimbus.applyPendingExperiments()
 
         // if we're not testing, we should download the next version of the experiments
         // document. This happens in the background
