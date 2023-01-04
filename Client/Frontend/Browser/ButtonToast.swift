@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Shared
 
 class HighlightableButton: UIButton {
     override var isHighlighted: Bool {
@@ -10,6 +11,15 @@ class HighlightableButton: UIButton {
             backgroundColor = isHighlighted ? .white : .clear
         }
     }
+}
+
+struct ButtonToastViewModel {
+    var labelText: String
+    var descriptionText: String?
+    var imageName: String?
+    var buttonText: String?
+    var backgroundColor: UIColor = ButtonToast.UX.toastDefaultColor
+    var textAlignment: NSTextAlignment = .left
 }
 
 class ButtonToast: Toast {
@@ -20,18 +30,17 @@ class ButtonToast: Toast {
         static let ToastButtonBorderRadius: CGFloat = 5
         static let ToastButtonBorderWidth: CGFloat = 1
         static let ToastDescriptionFont = UIFont.systemFont(ofSize: 13)
+        static let toastDefaultColor = UIColor.Photon.Blue40
         // Padded View
         static let WidthOffset: CGFloat = 20.0
         static let TopOffset: CGFloat = 5.0
         static let BottomOffset: CGFloat = 20.0
     }
 
-    init(labelText: String,
-         descriptionText: String? = nil,
-         imageName: String? = nil,
-         buttonText: String? = nil,
-         backgroundColor: UIColor = SimpleToast.UX.toastDefaultColor,
-         textAlignment: NSTextAlignment = .left,
+    // Pass themeManager to call on init
+    init(
+         viewModel: ButtonToastViewModel,
+//         theme: Theme,
          completion: ((_ buttonPressed: Bool) -> Void)? = nil,
          autoDismissCompletion: (() -> Void)? = nil
     ) {
@@ -41,13 +50,10 @@ class ButtonToast: Toast {
         self.didDismissWithoutTapHandler = autoDismissCompletion
 
         self.clipsToBounds = true
-        let createdToastView = createView(labelText,
-                                          descriptionText: descriptionText,
-                                          imageName: imageName,
-                                          buttonText: buttonText,
-                                          textAlignment: textAlignment)
+        let createdToastView = createView(viewModel: viewModel)
         self.addSubview(createdToastView)
 
+        // TODO: Handle on applyTheme
         self.toastView.backgroundColor = backgroundColor
 
         NSLayoutConstraint.activate([
@@ -67,14 +73,14 @@ class ButtonToast: Toast {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func createView(_ labelText: String, descriptionText: String?, imageName: String?, buttonText: String?, textAlignment: NSTextAlignment) -> UIView {
+    private func createView(viewModel: ButtonToastViewModel) -> UIView {
         let horizontalStackView: UIStackView = .build { stackView in
             stackView.axis = .horizontal
             stackView.alignment = .center
             stackView.spacing = UX.ToastPadding
         }
 
-        if let imageName = imageName {
+        if let imageName = viewModel.imageName {
             let icon = UIImageView(image: UIImage.templateImageNamed(imageName))
             icon.tintColor = UIColor.Photon.White100
             horizontalStackView.addArrangedSubview(icon)
@@ -86,10 +92,10 @@ class ButtonToast: Toast {
         }
 
         let titleLabel: UILabel = .build { label in
-            label.textAlignment = textAlignment
+            label.textAlignment = viewModel.textAlignment
             label.textColor = UIColor.Photon.White100
             label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-            label.text = labelText
+            label.text = viewModel.labelText
             label.lineBreakMode = .byWordWrapping
             label.numberOfLines = 0
         }
@@ -97,13 +103,13 @@ class ButtonToast: Toast {
         labelStackView.addArrangedSubview(titleLabel)
 
         var descriptionLabel: UILabel?
-        if let descriptionText = descriptionText {
+        if let descriptionText = viewModel.descriptionText {
             titleLabel.lineBreakMode = .byClipping
             titleLabel.numberOfLines = 1 // if showing a description we cant wrap to the second line
             titleLabel.adjustsFontSizeToFitWidth = true
 
             descriptionLabel = .build { label in
-                label.textAlignment = textAlignment
+                label.textAlignment = viewModel.textAlignment
                 label.textColor = UIColor.Photon.White100
                 label.font = UX.ToastDescriptionFont
                 label.text = descriptionText
@@ -114,10 +120,10 @@ class ButtonToast: Toast {
         }
 
         horizontalStackView.addArrangedSubview(labelStackView)
-        setupPaddedButton(stackView: horizontalStackView, buttonText: buttonText)
+        setupPaddedButton(stackView: horizontalStackView, buttonText: viewModel.buttonText)
         toastView.addSubview(horizontalStackView)
 
-        if textAlignment == .center {
+        if viewModel.textAlignment == .center {
             titleLabel.centerXAnchor.constraint(equalTo: toastView.centerXAnchor).isActive = true
             descriptionLabel?.centerXAnchor.constraint(equalTo: toastView.centerXAnchor).isActive = true
         }
@@ -172,12 +178,12 @@ class ButtonToast: Toast {
         paddedView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
     }
 
-    override func showToast(viewController: UIViewController? = nil,
-                            delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
-                            duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter,
-                            updateConstraintsOn: @escaping (Toast) -> [NSLayoutConstraint]) {
-        super.showToast(viewController: viewController, delay: delay, duration: duration, updateConstraintsOn: updateConstraintsOn)
-    }
+//    override func showToast(viewController: UIViewController? = nil,
+//                            delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+//                            duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter,
+//                            updateConstraintsOn: @escaping (Toast) -> [NSLayoutConstraint]) {
+//        super.showToast(viewController: viewController, delay: delay, duration: duration, updateConstraintsOn: updateConstraintsOn)
+//    }
 
     // MARK: - Button action
     @objc func buttonPressed() {

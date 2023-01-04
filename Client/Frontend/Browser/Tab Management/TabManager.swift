@@ -724,9 +724,12 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
             // Toast
             var didPressButton = false
-            toast = ButtonToast(
+            let viewModel = ButtonToastViewModel(
                 labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs),
-                buttonText: .TabsDeleteAllUndoAction,
+                buttonText: .TabsDeleteAllUndoAction)
+            toast = ButtonToast(
+                viewModel: viewModel,
+//                theme:
                 completion: { buttonPressed in
                     if buttonPressed {
                         self.reAddTabs(tabsToAdd: recentlyClosedTabs,
@@ -734,7 +737,8 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
                         NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
                     }
                     didPressButton = true
-                }, autoDismissCompletion: {
+                },
+                autoDismissCompletion: {
                     guard !didPressButton else { return }
                     DispatchQueue.global(qos: .background).async { [unowned self] in
                         let previousTab = tabs.filter {

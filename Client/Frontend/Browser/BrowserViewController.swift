@@ -1171,9 +1171,10 @@ class BrowserViewController: UIViewController {
     }
 
     private func showBookmarksToast() {
-        let toast = ButtonToast(labelText: .AppMenu.AddBookmarkConfirmMessage,
-                                buttonText: .BookmarksEdit,
-                                textAlignment: .left) { isButtonTapped in
+        let viewModel = ButtonToastViewModel(labelText: .AppMenu.AddBookmarkConfirmMessage,
+                                             buttonText: .BookmarksEdit,
+                                             textAlignment: .left)
+        let toast = ButtonToast(viewModel: viewModel) { isButtonTapped in
             isButtonTapped ? self.openBookmarkEditPanel() : nil
         }
         self.show(toast: toast)
@@ -1657,8 +1658,18 @@ class BrowserViewController: UIViewController {
 extension BrowserViewController: SearchBarLocationProvider {}
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
-    func shouldDisplay(clipboardBar bar: ButtonToast) {
-        show(toast: bar, duration: ClipboardBarToastUX.ToastDelay)
+    func shouldDisplay(clipBoardURL url: URL) {
+        let viewModel = ButtonToastViewModel(labelText: .GoToCopiedLink,
+                                             descriptionText: url.absoluteDisplayString,
+                                             buttonText: .GoButtonTittle)
+        let toast = ButtonToast(viewModel: viewModel,
+                                completion: { buttonPressed in
+            if buttonPressed {
+                self.settingsOpenURLInNewTab(url)
+            }
+        })
+        clipboardBarDisplayHandler?.clipboardToast = toast
+        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
     }
 }
 
@@ -1874,7 +1885,9 @@ extension BrowserViewController: LibraryPanelDelegate {
         // If in overlay mode switching doesnt correctly dismiss the homepanels
         guard !topTabsVisible, !self.urlBar.inOverlayMode else { return }
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-        let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+        let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                             buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+        let toast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
             }
@@ -1928,7 +1941,9 @@ extension BrowserViewController: HomePanelDelegate {
         guard !topTabsVisible else { return }
 
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-        let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+        let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                             buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+        let toast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
             }
@@ -2132,7 +2147,9 @@ extension BrowserViewController: TabManagerDelegate {
         urlFromAnotherApp = nil
     }
 
-    func show(toast: Toast, afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore, duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
+    func show(toast: Toast,
+              afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+              duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
         if let downloadToast = toast as? DownloadToast {
             self.downloadToast = downloadToast
         }
@@ -2316,7 +2333,9 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
                 guard !self.topTabsVisible else { return }
                 // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+                let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                                     buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+                let toast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
                     if buttonPressed {
                         self.tabManager.selectTab(tab)
                     }

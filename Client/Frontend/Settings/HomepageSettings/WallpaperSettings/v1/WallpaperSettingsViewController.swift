@@ -213,9 +213,10 @@ private extension WallpaperSettingsViewController {
     }
 
     func showToast() {
+        let viewModel = ButtonToastViewModel(labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
+                                             buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button)
         let toast = ButtonToast(
-            labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
-            buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button,
+            viewModel: viewModel,
             completion: { buttonPressed in
             if buttonPressed { self.dismissView() }
         })

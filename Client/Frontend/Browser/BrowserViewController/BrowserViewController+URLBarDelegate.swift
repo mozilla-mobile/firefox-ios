@@ -46,7 +46,8 @@ extension BrowserViewController: URLBarDelegate {
             // If in overlay mode switching doesnt correctly dismiss the homepanels
             guard !self.topTabsVisible, !self.urlBar.inOverlayMode else { return }
             // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-            let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+            let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+            let toast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
                 if buttonPressed {
                     self.tabManager.selectTab(tab)
                 }

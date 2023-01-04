@@ -6,14 +6,10 @@ import Foundation
 import Shared
 
 struct SimpleToast: ThemeApplicable {
-    struct UX {
-        static let toastAnimationDuration = 0.5
-        static let toastDefaultColor = UIColor.Photon.Blue40
-    }
-
     private let toastLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                    size: Toast.UX.fontSize)
+        label.numberOfLines = 0
         label.textAlignment = .center
     }
 
@@ -39,7 +35,7 @@ struct SimpleToast: ThemeApplicable {
 
     private func dismiss(_ toast: UIView) {
         UIView.animate(
-            withDuration: UX.toastAnimationDuration,
+            withDuration: Toast.UX.toastAnimationDuration,
             animations: {
                 var frame = toast.frame
                 frame.origin.y = frame.origin.y + Toast.UX.toastHeight
@@ -54,7 +50,7 @@ struct SimpleToast: ThemeApplicable {
 
     private func animate(_ toast: UIView) {
         UIView.animate(
-            withDuration: UX.toastAnimationDuration,
+            withDuration: Toast.UX.toastAnimationDuration,
             animations: {
                 var frame = toast.frame
                 frame.origin.y = frame.origin.y - Toast.UX.toastHeight

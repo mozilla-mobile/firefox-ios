@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 class Toast: UIView, ThemeApplicable {
     struct UX {
@@ -11,6 +12,7 @@ class Toast: UIView, ThemeApplicable {
         static let toastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
         static let toastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
         static let toastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
+        static let toastAnimationDuration = 0.5
         static let fontSize: CGFloat = 15
     }
 
@@ -28,9 +30,7 @@ class Toast: UIView, ThemeApplicable {
         return gestureRecognizer
     }()
 
-    lazy var toastView: UIView = .build { view in
-        view.backgroundColor = SimpleToast.UX.toastDefaultColor
-    }
+    lazy var toastView: UIView = .build { view in }
 
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
@@ -53,7 +53,7 @@ class Toast: UIView, ThemeApplicable {
             self.layoutIfNeeded()
 
             UIView.animate(
-                withDuration: SimpleToast.UX.toastAnimationDuration,
+                withDuration: UX.toastAnimationDuration,
                 animations: {
                     self.animationConstraint?.constant = 0
                     self.layoutIfNeeded()
@@ -75,9 +75,9 @@ class Toast: UIView, ThemeApplicable {
         superview?.removeGestureRecognizer(gestureRecognizer)
 
         UIView.animate(
-            withDuration: SimpleToast.UX.toastAnimationDuration,
+            withDuration: UX.toastAnimationDuration,
             animations: {
-                self.animationConstraint?.constant = Toast.UX.toastHeight
+                self.animationConstraint?.constant = UX.toastHeight
                 self.layoutIfNeeded()
             }) { finished in
                 self.removeFromSuperview()
@@ -93,5 +93,6 @@ class Toast: UIView, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         print("YRD apply theme on toast")
+        toastView.backgroundColor = theme.colors.actionPrimary
     }
 }
