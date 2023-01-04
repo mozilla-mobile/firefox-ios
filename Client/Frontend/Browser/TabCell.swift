@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import Shared
+import SiteImageView
 
 // MARK: - Tab Tray Cell Protocol
 protocol TabTrayCell where Self: UICollectionViewCell {
@@ -47,26 +48,14 @@ class TabCell: UICollectionViewCell,
         view.isUserInteractionEnabled = false
     }
 
-    lazy var smallFaviconView: UIImageView = .build { view in
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        view.isUserInteractionEnabled = false
-        view.backgroundColor = UIColor.clear
-        view.layer.cornerRadius = HomepageViewModel.UX.generalIconCornerRadius
-        view.layer.masksToBounds = true
-    }
-
     lazy var titleText: UILabel = .build { label in
         label.isUserInteractionEnabled = false
         label.numberOfLines = 1
         label.font = DynamicFontHelper.defaultHelper.DefaultSmallFontBold
     }
 
-    lazy var favicon: UIImageView = .build { favicon in
-        favicon.backgroundColor = UIColor.clear
-        favicon.layer.cornerRadius = 2.0
-        favicon.layer.masksToBounds = true
-    }
+    lazy var smallFaviconView: FaviconImageView = .build { _ in }
+    lazy var favicon: FaviconImageView = .build { _ in }
 
     lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
@@ -175,13 +164,8 @@ class TabCell: UICollectionViewCell,
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
 
         favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)
-
-        if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
-            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
-                                                                   limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-                guard error == nil, let image = image else { return }
-                self.favicon.image = image
-            }
+        if !tab.isFxHomeTab {
+            favicon.setFavicon(FaviconImageViewModel(urlStringRequest: tab.url?.absoluteString ?? ""))
         }
 
         if selected {
@@ -202,7 +186,9 @@ class TabCell: UICollectionViewCell,
         // Favicon or letter image when home screenshot is present for a regular (non-internal) url
         } else if let url = tab.url, (!url.absoluteString.starts(with: "internal") &&
             tab.hasHomeScreenshot) {
-            setFaviconImage(for: tab, with: smallFaviconView)
+            smallFaviconView.image = UIImage(named: ImageIdentifiers.defaultFavicon)
+            faviconBG.isHidden = false
+            screenshotView.image = nil
 
         // Tab screenshot when available
         } else if let tabScreenshot = tab.screenshot {
@@ -210,7 +196,9 @@ class TabCell: UICollectionViewCell,
 
         // Favicon or letter image when tab screenshot isn't available
         } else {
-            setFaviconImage(for: tab, with: smallFaviconView)
+            smallFaviconView.setFavicon(FaviconImageViewModel(urlStringRequest: tab.url?.absoluteString ?? ""))
+            faviconBG.isHidden = false
+            screenshotView.image = nil
         }
     }
 
@@ -263,14 +251,6 @@ class TabCell: UICollectionViewCell,
         layer.shadowOffset = CGSize(width: -TabCell.borderWidth, height: -TabCell.borderWidth)
         let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
         layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabTrayControllerUX.CornerRadius+TabCell.borderWidth).cgPath
-    }
-
-    func setFaviconImage(for tab: Tab, with imageView: UIImageView) {
-        if let url = tab.url?.domainURL ?? tab.sessionData?.urls.last?.domainURL {
-            imageView.setImageAndBackground(forIcon: tab.displayFavicon, website: url) {}
-            faviconBG.isHidden = false
-            screenshotView.image = nil
-        }
     }
 }
 

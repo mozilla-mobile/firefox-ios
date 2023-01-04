@@ -578,7 +578,6 @@
 		8AB5958828413F6C0090F4AE /* RecentlySavedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB5958728413F6C0090F4AE /* RecentlySavedCell.swift */; };
 		8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */; };
 		8AB5958C28414DF60090F4AE /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB5958B28414DF60090F4AE /* ActionButton.swift */; };
-		8AB6962F29536F4F003F1E48 /* HomepageFaviconImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB6962E29536F4F003F1E48 /* HomepageFaviconImageViewModel.swift */; };
 		8AB8571D27D929350075C173 /* TopSitesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571C27D929350075C173 /* TopSitesViewModel.swift */; };
 		8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */; };
 		8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */; };
@@ -3400,7 +3399,6 @@
 		8AB5958728413F6C0090F4AE /* RecentlySavedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlySavedCell.swift; sourceTree = "<group>"; };
 		8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageSectionHandler.swift; sourceTree = "<group>"; };
 		8AB5958B28414DF60090F4AE /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
-		8AB6962E29536F4F003F1E48 /* HomepageFaviconImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageFaviconImageViewModel.swift; sourceTree = "<group>"; };
 		8AB8571C27D929350075C173 /* TopSitesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesViewModel.swift; sourceTree = "<group>"; };
 		8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTopSiteCell.swift; sourceTree = "<group>"; };
 		8AB8572827D9411A0075C173 /* DataObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataObserver.swift; sourceTree = "<group>"; };
@@ -8411,7 +8409,6 @@
 				DF036E41274FD3FC002E834E /* HistoryHighlights */,
 				8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */,
 				8AB8574527D97CB00075C173 /* HomepageContextMenuProtocol.swift */,
-				8AB6962E29536F4F003F1E48 /* HomepageFaviconImageViewModel.swift */,
 				8A285B07294A5D4C00149B0F /* HomepageHeroImageViewModel.swift */,
 				8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */,
 				1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */,
@@ -10759,7 +10756,6 @@
 				966B0DC82926F60500A85A7E /* UIResponder+Extensions.swift in Sources */,
 				4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */,
 				E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */,
-				8AB6962F29536F4F003F1E48 /* HomepageFaviconImageViewModel.swift in Sources */,
 				8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */,
 				C8501F4F2850FB72003B09AB /* LegacyWallpaperMigrationUtility.swift in Sources */,
 				C8741FE928C4D30F00030029 /* FileManagerInterface.swift in Sources */,

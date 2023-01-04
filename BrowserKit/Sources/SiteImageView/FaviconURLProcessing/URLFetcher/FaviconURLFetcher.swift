@@ -56,7 +56,7 @@ struct DefaultFaviconURLFetcher: FaviconURLFetcher {
         // Search for the first reference to an icon
         for link in root.xpath("//head//link[contains(@rel, 'icon')]") {
             guard let href = link["href"] else { continue }
-            if let faviconURL = URL(string: href) {
+            if let faviconURL = URL(string: href, relativeTo: siteURL) {
                 return faviconURL
             }
         }
