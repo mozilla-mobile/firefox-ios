@@ -275,7 +275,7 @@ class PhotonActionSheet: UIViewController, Themeable {
 
         // In a popover the popover provides the blur background
         if viewModel.presentationStyle == .popover {
-            view.backgroundColor = theme.colors.layer1.withAlphaComponent(0.7)
+            view.backgroundColor = theme.colors.layer1
         } else if UIAccessibility.isReduceTransparencyEnabled {
             // Remove the visual effect and the background alpha
             (tableView.backgroundView as? UIVisualEffectView)?.effect = nil
