@@ -84,7 +84,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         accessibilityLabel = options.accessibilityLabel
 
         if let url = options.urlString {
-            let faviconViewModel = HomepageFaviconImageViewModel(urlStringRequest: url)
+            let faviconViewModel = FaviconImageViewModel(urlStringRequest: url)
             imageView.setFavicon(faviconViewModel)
         } else {
             imageView.image = UIImage.templateImageNamed(ImageIdentifiers.stackedTabsIcon)
