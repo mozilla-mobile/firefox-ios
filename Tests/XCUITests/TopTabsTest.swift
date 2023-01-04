@@ -468,17 +468,15 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         app.buttons["TopTabsViewController.newTabButton"].tap()
         app.buttons["TopTabsViewController.newTabButton"].tap()
         waitForExistence(app.buttons["TopTabsViewController.tabsButton"])
-        let numTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("3", numTab)
+        waitForExistence(app.buttons["Show Tabs"].staticTexts["3"], timeout: TIMEOUT)
+        waitForValueContains(app.buttons["Show Tabs"], value: "3")
         // Remove one tab by tapping on 'x' button
         app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "Homepage").element(boundBy: 1).buttons["Remove page — Homepage"].tap()
-        waitForExistence(app.buttons["Show Tabs"])
-        let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("2", numTabAfterRemovingThirdTab)
+        waitForExistence(app.buttons["Show Tabs"].staticTexts["2"], timeout: TIMEOUT)
+        waitForValueContains(app.buttons["Show Tabs"], value: "2")
         app.collectionViews["Top Tabs View"].children(matching: .cell).element(boundBy: 1).buttons["Remove page — Homepage"].tap()
-        waitForExistence(app.buttons["Show Tabs"])
-        let numTabAfterRemovingSecondTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("1", numTabAfterRemovingSecondTab)
+        waitForExistence(app.buttons["Show Tabs"].staticTexts["1"], timeout: TIMEOUT)
+        waitForValueContains(app.buttons["Show Tabs"], value: "1")
     }
 
     func cellIsSelectedTab(index: Int, url: String, title: String) {
