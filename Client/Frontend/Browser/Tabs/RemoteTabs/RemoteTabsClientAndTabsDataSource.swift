@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import SiteImageView
 
 class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     struct UX {
@@ -17,7 +18,6 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     weak var remoteTabPanel: RemoteTabsPanel?
     var clientAndTabs: [ClientAndTabs]
     var hiddenSections = Set<Int>()
-    private let siteImageHelper: SiteImageHelper
     private var theme: Theme
 
     init(remoteTabPanel: RemoteTabsPanel,
@@ -26,7 +26,6 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
          theme: Theme) {
         self.remoteTabPanel = remoteTabPanel
         self.clientAndTabs = clientAndTabs
-        self.siteImageHelper = SiteImageHelper(profile: profile)
         self.theme = theme
     }
 
@@ -105,16 +104,10 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
         let tab = tabAtIndexPath(indexPath)
         cell.titleLabel.text = tab.title
         cell.descriptionLabel.text = tab.URL.absoluteString
-
+        cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: tab.URL.absoluteString))
         cell.leftImageView.layer.borderColor = UX.iconBorderColor.cgColor
         cell.leftImageView.layer.borderWidth = UX.iconBorderWidth
         cell.accessoryView = nil
-
-        getFavicon(for: tab) { [weak cell] image in
-            cell?.leftImageView.image = image
-            cell?.leftImageView.backgroundColor = .clear
-        }
-
         cell.applyTheme(theme: theme)
         return cell
     }
@@ -124,13 +117,5 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
         let tab = tabAtIndexPath(indexPath)
         // Remote panel delegate for cell selection
         remoteTabPanel?.remotePanelDelegate?.remotePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
-    }
-
-    private func getFavicon(for remoteTab: RemoteTab, completion: @escaping (UIImage?) -> Void) {
-        let faviconUrl = remoteTab.URL.absoluteString
-        let site = Site(url: faviconUrl, title: remoteTab.title)
-        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
-            completion(image)
-        }
     }
 }

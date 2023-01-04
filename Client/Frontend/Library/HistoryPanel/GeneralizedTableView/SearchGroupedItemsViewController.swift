@@ -12,6 +12,7 @@ import UIKit
 import Storage
 import Shared
 import Common
+import SiteImageView
 
 class SearchGroupedItemsViewController: UIViewController, Loggable {
     // MARK: - Properties
@@ -25,7 +26,6 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
     let profile: Profile
     let viewModel: SearchGroupedItemsViewModel
     var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     private var themeManager: ThemeManager
 
     lazy private var tableView: UITableView = .build { [weak self] tableView in
@@ -126,22 +126,13 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
                 cell.descriptionLabel.isHidden = false
                 cell.leftImageView.layer.borderColor = self.themeManager.currentTheme.colors.layer4.cgColor
                 cell.leftImageView.layer.borderWidth = 0.5
-                self.getFavIcon(for: site) { [weak cell] image in
-                    cell?.leftImageView.image = image
-                    cell?.leftImageView.backgroundColor = UIColor.theme.general.faviconBackground
-                }
+                cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
 
                 return cell
             }
 
             // This shouldn't happen! An empty row!
             return UITableViewCell()
-        }
-    }
-
-    private func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
-            completion(image)
         }
     }
 

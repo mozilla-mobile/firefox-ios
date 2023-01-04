@@ -8,6 +8,7 @@ import Storage
 import WebKit
 import os.log
 import Common
+import SiteImageView
 
 private class FetchInProgressError: MaybeErrorType {
     internal var description: String {
@@ -39,7 +40,6 @@ class HistoryPanel: UIViewController,
     let viewModel: HistoryPanelViewModel
     private let clearHistoryHelper: ClearHistorySheetProvider
     var keyboardState: KeyboardState?
-    private lazy var siteImageHelper = SiteImageHelper(profile: profile)
     var chevronImage = UIImage(named: ImageIdentifiers.menuChevron)
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -398,19 +398,10 @@ class HistoryPanel: UIViewController,
         cell.descriptionLabel.isHidden = false
         cell.leftImageView.layer.borderColor = themeManager.currentTheme.colors.borderPrimary.cgColor
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
+        cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
         cell.accessoryView = nil
-        getFavIcon(for: site) { [weak cell] image in
-            cell?.leftImageView.image = image
-            cell?.leftImageView.backgroundColor = .clear
-        }
         cell.applyTheme(theme: themeManager.currentTheme)
         return cell
-    }
-
-    private func getFavIcon(for site: Site, completion: @escaping (UIImage?) -> Void) {
-        siteImageHelper.fetchImageFor(site: site, imageType: .favicon, shouldFallback: false) { image in
-            completion(image)
-        }
     }
 
     private func configureASGroupCell(_ asGroup: ASGroup<Site>, _ cell: TwoLineImageOverlayCell) -> TwoLineImageOverlayCell {

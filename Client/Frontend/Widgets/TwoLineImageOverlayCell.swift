@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import SiteImageView
 
 class TwoLineImageOverlayCell: UITableViewCell,
                                ReusableCell,
@@ -24,7 +25,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
         view.backgroundColor = .clear
     }
 
-    lazy var leftImageView: UIImageView = .build { imageView in
+    lazy var leftImageView: FaviconImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 5.0
         imageView.clipsToBounds = true

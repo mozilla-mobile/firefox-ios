@@ -8,6 +8,7 @@ import Storage
 import Glean
 import Telemetry
 import Common
+import SiteImageView
 
 private enum SearchListSection: Int, CaseIterable {
     case searchSuggestions
@@ -645,7 +646,10 @@ class SearchViewController: SiteTableViewController,
         return attributedString
     }
 
-    private func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell, oneLineCell: OneLineTableViewCell, for section: SearchListSection, _ indexPath: IndexPath) -> UITableViewCell {
+    private func getCellForSection(_ twoLineCell: TwoLineImageOverlayCell,
+                                   oneLineCell: OneLineTableViewCell,
+                                   for section: SearchListSection,
+                                   _ indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         switch section {
         case .searchSuggestions:
@@ -677,10 +681,8 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                twoLineCell.leftImageView.contentMode = .center
-                twoLineCell.leftImageView.setImageAndBackground(forIcon: openedTab.displayFavicon, website: openedTab.url) { [weak twoLineCell] in
-                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                }
+                let urlString = openedTab.url?.absoluteString ?? ""
+                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: urlString))
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
@@ -694,10 +696,8 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.leftOverlayImageView.image = openAndSyncTabBadge
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                twoLineCell.leftImageView.contentMode = .center
-                twoLineCell.leftImageView.setImageAndBackground(forIcon: nil, website: remoteTab.URL) { [weak twoLineCell] in
-                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                }
+                let urlString = remoteTab.URL.absoluteString
+                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: urlString))
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
@@ -711,10 +711,7 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.leftOverlayImageView.image = isBookmark ? self.bookmarkedBadge : nil
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                twoLineCell.leftImageView.contentMode = .center
-                twoLineCell.leftImageView.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak twoLineCell] in
-                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                }
+                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
@@ -728,19 +725,7 @@ class SearchViewController: SiteTableViewController,
             twoLineCell.descriptionLabel.text = urlString
             twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
             twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-            twoLineCell.leftImageView.contentMode = .center
-            profile.favicons.getFaviconImage(forSite: site) { [weak twoLineCell] result in
-                // Check that we successfully retrieved an image (should always happen)
-                // and ensure that the cell we were fetching for is still on-screen.
-                guard let image = result else { return }
-
-                DispatchQueue.main.async {
-                    twoLineCell?.leftImageView.image = image
-                    twoLineCell?.leftImageView.image = twoLineCell?.leftImageView.image?
-                        .createScaled(CGSize(width: SearchViewControllerUX.IconSize,
-                                             height: SearchViewControllerUX.IconSize))
-                }
-            }
+            twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
             twoLineCell.accessoryView = nil
             cell = twoLineCell
         }
