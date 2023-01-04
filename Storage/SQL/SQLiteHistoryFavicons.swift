@@ -7,6 +7,7 @@ import UIKit
 import Fuzi
 import SwiftyJSON
 import Shared
+import SiteImageView
 
 private let log = Logger.syncLogger
 
@@ -72,60 +73,63 @@ class FaviconDownloadError: MaybeErrorType {
 }
 
 extension SQLiteHistory: Favicons {
-    public func getFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>> {
+    public func getFaviconImage(forSite site: Site, completionHandler: @escaping (UIImage?) -> Void) {
         // First, attempt to lookup the favicon from our bundled top sites.
-        return getTopSitesFaviconImage(forSite: site).bind { result in
-            guard let image = result.successValue else {
+        return getTopSitesFaviconImage(forSite: site) { result in
+            guard let image = result else {
                 // Note: "Attempt to lookup the favicon URL from the database" was removed as part of FXIOS-5164 and
-                // FXIOS-5294. This means at the moment we don't save nor retrieve favicon URLs from the database.
+                // FXIOS-5294. This code will be removed soon as part of the SiteImageView replacement solution,
+                // but we're still supporting it in the meantime.
 
                 // Attempt to scrape its URL from the web page.
-                return self.lookupFaviconURLFromWebPage(forSite: site).bind { result in
-                    guard let faviconURL = result.successValue else {
+                return self.lookupFaviconURLFromWebPage(forSite: site) { result in
+                    guard let faviconURL = result else {
                         // Otherwise, get the default favicon image.
-                        return self.generateDefaultFaviconImage(forSite: site)
+                        self.generateDefaultFaviconImage(forSite: site, completionHandler: completionHandler)
+                        return
                     }
                     // Try to get the favicon from the URL scraped from the web page.
-                    return self.retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: faviconURL).bind { result in
+                    return self.retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: faviconURL) { result in
                         // If the favicon could not be downloaded, use the generated "default" favicon.
-                        guard let image = result.successValue else {
-                            return self.generateDefaultFaviconImage(forSite: site)
+                        guard let image = result else {
+                            self.generateDefaultFaviconImage(forSite: site, completionHandler: completionHandler)
+                            return
                         }
 
-                        return deferMaybe(image)
+                        completionHandler(image)
+                        return
                     }
                 }
             }
 
-            return deferMaybe(image)
+            completionHandler(image)
         }
     }
 
     // Downloads a favicon image from the web or retrieves it from the cache.
-    fileprivate func retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: URL) -> Deferred<Maybe<UIImage>> {
-        let deferred = CancellableDeferred<Maybe<UIImage>>()
-
+    fileprivate func retrieveTopSiteSQLiteHistoryFaviconImage(faviconURL: URL,
+                                                              completionHandler: @escaping (UIImage?) -> Void) {
         ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: faviconURL,
                                                                limit: ImageLoadingConstants.MaximumFaviconSize) { image, error in
             guard error == nil, let image = image else {
-                deferred.fill(Maybe(failure: FaviconDownloadError(faviconURL: faviconURL.absoluteString)))
+                completionHandler(nil)
                 return
             }
 
-            deferred.fill(Maybe(success: image))
+            completionHandler(image)
         }
-
-        return deferred
     }
 
-    fileprivate func getTopSitesFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>> {
+    fileprivate func getTopSitesFaviconImage(forSite site: Site, completionHandler: (UIImage?) -> Void) {
         guard let url = URL(string: site.url) else {
-            return deferMaybe(FaviconLookupError(siteURL: site.url))
+            completionHandler(nil)
+            return
         }
 
-        func imageFor(icon: (color: UIColor, fileURL: URL)) -> Deferred<Maybe<UIImage>> {
+        func imageFor(icon: (color: UIColor, fileURL: URL), completionHandler: (UIImage?) -> Void) {
             guard let image = UIImage(contentsOfFile: icon.fileURL.path) else {
-                return deferMaybe(FaviconLookupError(siteURL: site.url))
+                completionHandler(nil)
+                return
             }
 
             UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
@@ -133,7 +137,8 @@ extension SQLiteHistory: Favicons {
 
             guard let context = UIGraphicsGetCurrentContext(),
                 let cgImage = image.cgImage else {
-                return deferMaybe(image)
+                completionHandler(image)
+                return
             }
 
             let rect = CGRect(origin: .zero, size: image.size)
@@ -143,70 +148,68 @@ extension SQLiteHistory: Favicons {
             context.draw(cgImage, in: rect)
 
             guard let imageWithBackground = UIGraphicsGetImageFromCurrentImageContext() else {
-                return deferMaybe(image)
+                completionHandler(image)
+                return
             }
 
-            return deferMaybe(imageWithBackground)
+            completionHandler(imageWithBackground)
         }
 
         let domain = url.shortDisplayString
         if multiRegionTopSitesDomains.contains(domain), let icon = topSitesIcons[domain] {
-            return imageFor(icon: icon)
+            imageFor(icon: icon, completionHandler: completionHandler)
+            return
         }
 
         let urlWithoutScheme = url.absoluteDisplayString.remove("\(url.scheme ?? "")://")
         if let baseDomain = url.baseDomain, let icon = topSitesIcons[baseDomain] ?? topSitesIcons[urlWithoutScheme] {
-            return imageFor(icon: icon)
+            imageFor(icon: icon, completionHandler: completionHandler)
+            return
         }
 
-        return deferMaybe(FaviconLookupError(siteURL: site.url))
+        completionHandler(nil)
     }
 
     // Retrieve's a site's favicon URL from the web.
-    fileprivate func lookupFaviconURLFromWebPage(forSite site: Site) -> Deferred<Maybe<URL>> {
+    fileprivate func lookupFaviconURLFromWebPage(forSite site: Site, completionHandler: @escaping (URL?) -> Void) {
         guard let url = URL(string: site.url) else {
-            return deferMaybe(FaviconLookupError(siteURL: site.url))
+            completionHandler(nil)
+            return
         }
 
-        let deferred = CancellableDeferred<Maybe<URL>>()
-        getFaviconURLsFromWebPage(url: url).upon { result in
-            guard let faviconURLs = result.successValue,
+        getFaviconURLsFromWebPage(url: url) { result in
+            guard let faviconURLs = result,
                 let faviconURL = faviconURLs.first else {
-                deferred.fill(Maybe(failure: FaviconLookupError(siteURL: site.url)))
+                completionHandler(nil)
                 return
             }
 
-            deferred.fill(Maybe(success: faviconURL))
+            completionHandler(faviconURL)
         }
-
-        return deferred
     }
 
     // Scrapes an HTMLDocument DOM from a web page URL.
-    fileprivate func getHTMLDocumentFromWebPage(url: URL) -> Deferred<Maybe<HTMLDocument>> {
-        let deferred = CancellableDeferred<Maybe<HTMLDocument>>()
-
-        // getHTMLDocumentFromWebPage can be called from getFaviconURLsFromWebPage, and that function is off-main. 
+    fileprivate func getHTMLDocumentFromWebPage(url: URL, completionHandler: @escaping (HTMLDocument?) -> Void) {
+        // getHTMLDocumentFromWebPage can be called from getFaviconURLsFromWebPage, and that function is off-main.
         DispatchQueue.main.async {
             urlSession.dataTask(with: url) { (data, response, error) in
                 guard error == nil,
-                    let data = data,
-                    let document = try? HTMLDocument(data: data) else {
-                        deferred.fill(Maybe(failure: FaviconLookupError(siteURL: url.absoluteString)))
-                        return
+                      let data = data,
+                      let document = try? HTMLDocument(data: data) else {
+                    completionHandler(nil)
+                    return
                 }
-                deferred.fill(Maybe(success: document))
+                completionHandler(document)
             }.resume()
         }
-
-        return deferred
     }
 
     // Scrapes the web page at the specified URL for its favicon URLs.
-    fileprivate func getFaviconURLsFromWebPage(url: URL) -> Deferred<Maybe<[URL]>> {
-        return getHTMLDocumentFromWebPage(url: url).bind { result in
-            guard let document = result.successValue else {
-                return deferMaybe(FaviconLookupError(siteURL: url.absoluteString))
+    fileprivate func getFaviconURLsFromWebPage(url: URL, completionHandler: @escaping ([URL]?) -> Void) {
+        return getHTMLDocumentFromWebPage(url: url) { result in
+            guard let document = result else {
+                completionHandler(nil)
+                return
             }
 
             // If we were redirected via a <meta> tag on the page to a different
@@ -217,7 +220,8 @@ extension SQLiteHistory: Favicons {
                     let index = content.range(of: "URL="),
                     let reloadURL = URL(string: String(content[index.upperBound...])),
                     reloadURL != url {
-                    return self.getFaviconURLsFromWebPage(url: reloadURL)
+                    self.getFaviconURLsFromWebPage(url: reloadURL, completionHandler: completionHandler)
+                    return
                 }
             }
 
@@ -236,25 +240,23 @@ extension SQLiteHistory: Favicons {
                 icons.append(faviconURL)
             }
 
-            return deferMaybe(icons)
+            completionHandler(icons)
         }
     }
 
     // Generates a "default" favicon based on the first character in the
     // site's domain name or gets an already-generated icon from the cache.
-    fileprivate func generateDefaultFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>> {
-        let deferred = Deferred<Maybe<UIImage>>()
-
+    fileprivate func generateDefaultFaviconImage(forSite site: Site, completionHandler: @escaping (UIImage) -> Void) {
         DispatchQueue.main.async {
             guard let url = URL(string: site.url), let character = url.baseDomain?.first else {
-                deferred.fill(Maybe(success: defaultFavicon))
+                completionHandler(defaultFavicon)
                 return
             }
 
             let faviconLetter = String(character).uppercased()
 
             if let cachedFavicon = defaultFaviconImageCache[faviconLetter] {
-                deferred.fill(Maybe(success: cachedFavicon))
+                completionHandler(cachedFavicon)
                 return
             }
 
@@ -283,8 +285,7 @@ extension SQLiteHistory: Favicons {
             UIGraphicsEndImageContext()
 
             defaultFaviconImageCache[faviconLetter] = image
-            deferred.fill(Maybe(success: image))
+            completionHandler(image)
         }
-        return deferred
     }
 }
