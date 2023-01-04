@@ -103,7 +103,6 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         }
         let tab = recentlyClosedTabs[indexPath.row]
         let displayURL = tab.url.displayURL ?? tab.url
-        let site: Favicon? = (tab.faviconURL != nil) ? Favicon(url: tab.faviconURL!) : nil
         twoLineCell.descriptionLabel.isHidden = false
         twoLineCell.titleLabel.text = tab.title
         twoLineCell.titleLabel.isHidden = tab.title?.isEmpty ?? true ? true : false
