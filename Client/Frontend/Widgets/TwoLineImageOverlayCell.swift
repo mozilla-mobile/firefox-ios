@@ -12,6 +12,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
     struct UX {
         static let ImageSize: CGFloat = 29
         static let BorderViewMargin: CGFloat = 16
+        static let iconBorderWidth: CGFloat = 0.5
     }
 
     /// Cell reuse causes the chevron to appear where it shouldn't. So, we use a different reuseIdentifier to prevent that.
@@ -29,6 +30,8 @@ class TwoLineImageOverlayCell: UITableViewCell,
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 5.0
         imageView.clipsToBounds = true
+        imageView.layer.borderWidth = UX.iconBorderWidth
+        imageView.backgroundColor = .clear
     }
 
     lazy var leftOverlayImageView: UIImageView = .build { imageView in
@@ -115,6 +118,7 @@ class TwoLineImageOverlayCell: UITableViewCell,
         selectedView.backgroundColor = theme.colors.layer5Hover
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textSecondary
+        leftImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
     }
 
     override func prepareForReuse() {
