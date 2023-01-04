@@ -8,33 +8,6 @@ import Storage
 import Account
 import Glean
 
-// A convinient mapping, `Profile.swift` can't depend
-// on `PlacesMigrationConfiguration` directly since
-// the FML is only usable from `Client` at the moment
-extension PlacesMigrationConfiguration {
-    func into() -> HistoryMigrationConfiguration {
-        switch self {
-        case .disabled:
-            return .disabled
-        case .dryRun:
-            return .dryRun
-        case .real:
-            return .real
-        }
-    }
-}
-
-extension PlacesApiConfiguration {
-    func into() -> HistoryAPIConfiguration {
-        switch self {
-        case .old:
-            return .old
-        case .new:
-            return .new
-        }
-    }
-}
-
 class AppLaunchUtil {
     private var log: RollingFileLogger
     private var adjustHelper: AdjustHelper
@@ -91,6 +64,11 @@ class AppLaunchUtil {
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
+
+        // We migrate history from browser db to places if it hasn't already
+        DispatchQueue.global(qos: .default).async {
+            self.runAppServicesHistoryMigration()
+        }
 
         NotificationCenter.default.addObserver(forName: .FSReadingListAddReadingListItem, object: nil, queue: nil) { (notification) -> Void in
             if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
@@ -149,7 +127,6 @@ class AppLaunchUtil {
         // We also make sure that any cache invalidation happens after each applyPendingExperiments().
         NotificationCenter.default.addObserver(forName: .nimbusExperimentsApplied, object: nil, queue: nil) { _ in
             FxNimbus.shared.invalidateCachedValues()
-            self.runEarlyExperimentDependencies()
         }
 
         let defaults = UserDefaults.standard
@@ -196,33 +173,15 @@ class AppLaunchUtil {
         profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
     }
 
-    private func runEarlyExperimentDependencies() {
-        runAppServicesHistoryMigration()
-    }
-
     // MARK: - Application Services History Migration
 
     private func runAppServicesHistoryMigration() {
-        let placesHistory = FxNimbus.shared.features.placesHistory.value()
-        FxNimbus.shared.features.placesHistory.recordExposure()
-
-        guard placesHistory.migration != .disabled else {
-            log.info("Migration disabled, won't run migration")
-            return
-        }
-
         let browserProfile = self.profile as? BrowserProfile
 
-        let migrationRanKey = "PlacesHistoryMigrationRan" + placesHistory.migration.rawValue
-        let migrationRan = UserDefaults.standard.bool(forKey: migrationRanKey)
-        UserDefaults.standard.setValue(true, forKey: migrationRanKey)
-        if !migrationRan {
-            if placesHistory.api == .new {
-                browserProfile?.historyApiConfiguration = .new
-                // We set a user default so users with new configuration never go back
-                UserDefaults.standard.setValue(true, forKey: PrefsKeys.NewPlacesAPIDefaultKey)
-            }
-
+        let migrationSucceeded = UserDefaults.standard.bool(forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
+        let migrationAttemptNumber = UserDefaults.standard.integer(forKey: PrefsKeys.HistoryMigrationAttemptNumber)
+        UserDefaults.standard.setValue(migrationAttemptNumber + 1, forKey: PrefsKeys.HistoryMigrationAttemptNumber)
+        if !migrationSucceeded && migrationAttemptNumber < AppConstants.MAX_HISTORY_MIGRATION_ATTEMPT {
             log.info("Migrating Application services history")
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started
@@ -231,7 +190,6 @@ class AppLaunchUtil {
             GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
             GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             browserProfile?.migrateHistoryToPlaces(
-            migrationConfig: placesHistory.migration.into(),
             callback: { result in
                 self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
                 // We record various success metrics here
@@ -240,6 +198,7 @@ class AppLaunchUtil {
                 self.log.info("Migrated \(result.numSucceeded) entries")
                 GleanMetrics.PlacesHistoryMigration.numToMigrate.set(Int64(result.numTotal))
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
+                UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
             },
             errCallback: { err in
                 let errDescription = err?.localizedDescription ?? "Unknown error during History migration"
@@ -252,7 +211,7 @@ class AppLaunchUtil {
                 SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
             })
         } else {
-            log.info("History Migration skipped, already migrated")
+            log.info("History Migration skipped")
         }
     }
 }

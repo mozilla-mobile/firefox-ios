@@ -344,7 +344,7 @@ private extension HistoryDeletionUtilityTests {
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).value.isSuccess, file: file, line: line)
         XCTAssertTrue(profile.places.deleteHistoryMetadataOlderThan(olderThan: -1).value.isSuccess, file: file, line: line)
 
-        XCTAssertTrue(profile.history.removeHistoryFromDate(Date(timeIntervalSince1970: 0)).value.isSuccess, file: file, line: line)
+        XCTAssertTrue(profile.places.deleteVisitsBetween(Date(timeIntervalSince1970: 0)).value.isSuccess, file: file, line: line)
     }
 
     // `shouldSkipMetadata` is a  parameter to deal with the case where AS doesn't allow
@@ -376,7 +376,7 @@ private extension HistoryDeletionUtilityTests {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        let emptyHistory = profile.history.getSitesByLastVisit(limit: 100, offset: 0).value
+        let emptyHistory = profile.places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).value
         XCTAssertTrue(emptyHistory.isSuccess, file: file, line: line)
         XCTAssertNotNil(emptyHistory.successValue, file: file, line: line)
         XCTAssertEqual(emptyHistory.successValue!.count, 0, "History", file: file, line: line)
@@ -424,7 +424,7 @@ private extension HistoryDeletionUtilityTests {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        let historyItems = profile.history.getSitesByLastVisit(limit: 100, offset: 0).value
+        let historyItems = profile.places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).value
         XCTAssertTrue(historyItems.isSuccess, file: file, line: line)
         XCTAssertNotNil(historyItems.successValue, file: file, line: line)
         XCTAssertEqual(historyItems.successValue!.count, sites.count, file: file, line: line)
@@ -478,8 +478,9 @@ private extension HistoryDeletionUtilityTests {
         file: StaticString = #filePath,
         line: UInt = #line
     ) {
-        let visit = SiteVisit(site: site, date: timeVisited)
-        XCTAssertTrue(profile.history.addLocalVisit(visit).value.isSuccess, "Site added: \(site.url).", file: file, line: line)
+        let visit = VisitObservation(url: site.url, title: site.title, visitType: .link, at: Int64(timeVisited) / 1000)
+        let applied = profile.places.applyObservation(visitObservation: visit).value
+        XCTAssertTrue(applied.isSuccess, "Site added: \(site.url).", file: file, line: line)
     }
 
     func setupMetadataItem(

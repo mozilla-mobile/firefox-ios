@@ -139,7 +139,7 @@ private let log = Logger.syncLogger
 
 /**
  * The monolithic class that manages the inter-related history etc. tables.
- * We rely on SQLiteHistory having initialized the favicon table first.
+ * We rely on BrowserDBSQLite having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
     static let DefaultVersion = 41    // PR #10553.

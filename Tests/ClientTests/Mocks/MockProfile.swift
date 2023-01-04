@@ -15,10 +15,6 @@ open class MockSyncManager: SyncManager {
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
 
-    open func hasSyncedHistory() -> Deferred<Maybe<Bool>> {
-        return deferMaybe(true)
-    }
-
     private func completedWithStats(collection: String) -> Deferred<Maybe<SyncStatus>> {
         return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
     }
@@ -79,16 +75,15 @@ open class MockProfile: Client.Profile {
     }
 
     // Read/Writeable properties for mocking
-    public var recommendations: HistoryRecommendations
     public var places: RustPlaces
     public var tabs: RustRemoteTabs
     public var files: FileAccessor
-    public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
     public var logins: RustLogins
     public var syncManager: SyncManager!
-    public var historyApiConfiguration: HistoryAPIConfiguration
 
-    fileprivate var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
+    fileprivate var legacyPlaces: Favicons & PinnedSites
+
+    public var pinnedSites: PinnedSites
 
     var database: BrowserDB
     var readingListDB: BrowserDB
@@ -110,20 +105,18 @@ open class MockProfile: Client.Profile {
         database = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
         readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
         let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
+        try? files.remove("\(databasePrefix)_places.db")
+
         places = RustPlaces(databasePath: placesDatabasePath)
+        _ = places.reopenIfClosed()
 
         let tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_tabs.db").path
 
         tabs = RustRemoteTabs(databasePath: tabsDbPath)
 
-        legacyPlaces = SQLiteHistory(database: self.database, prefs: MockProfilePrefs())
-        recommendations = legacyPlaces
-        history = legacyPlaces
-        // We run the tests using the old configuration
-        // the new APIs have extensive tests in the application services repository
-        // For now, to test the new configuration
-        // change the following to `.new`
-        historyApiConfiguration = .old
+        legacyPlaces = BrowserDBSQLite(database: self.database, prefs: MockProfilePrefs())
+
+        pinnedSites = legacyPlaces
     }
 
     public func localName() -> String {

@@ -40,15 +40,26 @@ extension TopSitesProvider {
 }
 
 class TopSitesProviderImplementation: TopSitesProvider {
-    private let browserHistoryFetcher: BrowserHistory
+    private let pinnedSiteFetcher: PinnedSites
+    private let placesFetcher: RustPlaces
     private let prefs: Prefs
 
     private var frecencySites = [Site]()
     private var pinnedSites = [Site]()
 
-    init(browserHistoryFetcher: BrowserHistory,
-         prefs: Prefs) {
-        self.browserHistoryFetcher = browserHistoryFetcher
+    init(
+        placesFetcher: RustPlaces,
+        pinnedSiteFetcher: PinnedSites,
+        prefs: Prefs
+    ) {
+        self.placesFetcher = placesFetcher
+        // It's possible that the top sites fetch is the
+        // very first use of places, lets make sure that
+        // our connection is open
+        if !self.placesFetcher.isOpen {
+            _ = self.placesFetcher.reopenIfClosed()
+        }
+        self.pinnedSiteFetcher = pinnedSiteFetcher
         self.prefs = prefs
     }
 
@@ -75,10 +86,9 @@ class TopSitesProviderImplementation: TopSitesProvider {
 private extension TopSitesProviderImplementation {
     func getFrecencySites(group: DispatchGroup, numberOfMaxItems: Int) {
         group.enter()
-        browserHistoryFetcher
-            .getTopSitesWithLimit(numberOfMaxItems)
+        placesFetcher.getTopFrecentSiteInfos(limit: numberOfMaxItems, thresholdOption: FrecencyThresholdOption.none)
             .uponQueue(.global(qos: .userInitiated)) { [weak self] result in
-                if let sites = result.successValue?.asArray() {
+                if let sites = result.successValue {
                     self?.frecencySites = sites
                 }
 
@@ -88,7 +98,7 @@ private extension TopSitesProviderImplementation {
 
     func getPinnedSites(group: DispatchGroup) {
         group.enter()
-        browserHistoryFetcher
+        pinnedSiteFetcher
             .getPinnedTopSites()
             .uponQueue(.global(qos: .userInitiated)) { [weak self] result in
                 if let sites = result.successValue?.asArray() {

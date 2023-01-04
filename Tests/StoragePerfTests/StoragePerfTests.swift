@@ -14,65 +14,19 @@ class MockFiles: FileAccessor {
     }
 }
 
-class TestSQLiteHistoryFrecencyPerf: XCTestCase {
+class HistoryFrecencyPerfTests: XCTestCase {
     func testFrecencyPerf() {
         let files = MockFiles()
-        let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: database, prefs: prefs)
-
+        let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
+        let places = RustPlaces(databasePath: placesDatabasePath)
+        _ = places.reopenIfClosed()
         let count = 100
 
-        history.clearHistory().succeeded()
-        populateHistoryForFrecencyCalculations(history, siteCount: count)
+        _ = places.deleteEverythingHistory().value
+
+        populateHistoryForFrecencyCalculations(places, siteCount: count)
         self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
-                history.getFrecentHistory().getSites(matchingSearchQuery: nil, limit: 10).succeeded()
-            self.stopMeasuring()
-        }
-    }
-}
-
-class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
-    func testCheckIfCleanupIsNeeded() {
-        let files = MockFiles()
-        let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: database, prefs: prefs)
-
-        history.clearHistory().succeeded()
-
-        let maxRows = UInt(250)
-
-        let doCleanup1 = history.checkIfCleanupIsNeeded(maxHistoryRows: maxRows).value.successValue!
-        XCTAssertFalse(doCleanup1, "We should not need to perform clean-up")
-
-        // Clean-up is triggered once we exceed 2,500 history items in a test environment.
-        populateHistoryForFrecencyCalculations(history, siteCount: Int(maxRows + 1))
-        let doCleanup2 = history.checkIfCleanupIsNeeded(maxHistoryRows: maxRows).value.successValue!
-        XCTAssertTrue(doCleanup2, "We should not need to perform clean-up")
-
-        // Trigger the actual clean-up operation to happen and re-check.
-        _ = database.run(history.cleanupOldHistory(numberOfRowsToPrune: 50)).value.successValue
-        let doCleanup3 = history.checkIfCleanupIsNeeded(maxHistoryRows: maxRows).value.successValue!
-        XCTAssertFalse(doCleanup3, "We should not need to perform clean-up")
-    }
-}
-
-class TestSQLiteHistoryTopSitesCachePref: XCTestCase {
-    func testCachePerf() {
-        let files = MockFiles()
-        let database = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: database, prefs: prefs)
-
-        let count = 100
-
-        history.clearHistory().succeeded()
-        populateHistoryForFrecencyCalculations(history, siteCount: count)
-
-        history.setTopSitesNeedsInvalidation()
-        self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
-            history.repopulate(invalidateTopSites: true).succeeded()
+            _ = places.queryAutocomplete(matchingSearchQuery: "", limit: 10).value
             self.stopMeasuring()
         }
     }

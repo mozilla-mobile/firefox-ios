@@ -129,8 +129,11 @@ public struct PrefsKeys {
     public static let WallpaperManagerCurrentWallpaperImageLandscape = "WallpaperManagerCurrentWallpaperImageLandscape"
     public static let WallpaperManagerLogoSwitchPreference = "WallpaperManagerLogoSwitchPreference"
 
-    // Application Services Migration to Places DB
-    public static let NewPlacesAPIDefaultKey = "NewPlacesAPI"
+    // Application Services migrated to Places DB Successfully
+    public static let PlacesHistoryMigrationSucceeded = "PlacesHistoryMigrationSucceeded"
+
+    // The number of times we have attempted the Application Services to Places DB migration
+    public static let HistoryMigrationAttemptNumber = "HistoryMigrationAttemptNumber"
 
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"

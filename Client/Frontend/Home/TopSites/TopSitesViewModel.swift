@@ -94,29 +94,21 @@ class TopSitesViewModel {
     // MARK: - Context actions
 
     func hideURLFromTopSites(_ site: Site) {
-        guard let host = site.tileURL.normalizedHost else { return }
         topSiteHistoryManager.removeDefaultTopSitesTile(site: site)
-
-        profile.history.removeHostFromTopSites(host).uponQueue(.main) { [weak self] result in
-            guard result.isSuccess, let self = self else { return }
-            self.refreshIfNeeded(refresh: true)
+        // We make sure to remove all history for URL so it doesn't show anymore in the
+        // top sites, this is the approach that Android takes too.
+        self.profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { _ in
+            NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
         }
     }
 
     func pinTopSite(_ site: Site) {
-        profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
-            guard result.isSuccess else { return }
-            self.refreshIfNeeded(refresh: true)
-        }
+        _ = profile.pinnedSites.addPinnedTopSite(site)
     }
 
     func removePinTopSite(_ site: Site) {
         googleTopSiteManager.removeGoogleTopSite(site: site)
         topSiteHistoryManager.removeTopSite(site: site)
-    }
-
-    func refreshIfNeeded(refresh forced: Bool) {
-        topSiteHistoryManager.refreshIfNeeded(forceRefresh: forced)
     }
 }
 

@@ -16,8 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
-        syncDelegate: UIApplication.shared.syncDelegate,
-        isNewHistoryPlacesAPI: UserDefaults.standard.bool(forKey: PrefsKeys.NewPlacesAPIDefaultKey)
+        syncDelegate: UIApplication.shared.syncDelegate
     )
     lazy var tabManager: TabManager = TabManager(
         profile: profile,
@@ -73,8 +72,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Widgets are available on iOS 14 and up only.
         if #available(iOS 14.0, *) {
-            let topSitesProvider = TopSitesProviderImplementation(browserHistoryFetcher: profile.history,
-                                                                  prefs: profile.prefs)
+            let topSitesProvider = TopSitesProviderImplementation(
+                placesFetcher: profile.places,
+                pinnedSiteFetcher: profile.pinnedSites,
+                prefs: profile.prefs
+            )
 
             widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
         }

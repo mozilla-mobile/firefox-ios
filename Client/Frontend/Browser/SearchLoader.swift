@@ -16,14 +16,12 @@ private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([
 class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
-    fileprivate let frecentHistory: FrecentHistory
 
     private var skipNextAutocomplete: Bool
 
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
         self.urlBar = urlBar
-        self.frecentHistory = profile.history.getFrecentHistory()
         self.skipNextAutocomplete = false
 
         super.init()
@@ -50,39 +48,24 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
     }
 
     private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        switch self.profile.historyApiConfiguration {
-        case .old:
-            currentDeferredHistoryQuery?.cancel()
-
-            guard let deferredHistory = frecentHistory.getSites(
-                matchingSearchQuery: query,
-                limit: 100
-            ) as? CancellableDeferred else {
-                assertionFailure("FrecentHistory query should be cancellable")
+        profile.places.interruptReader()
+        return self.profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).bind { result in
+            guard let historyItems = result.successValue else {
+                SentryIntegration.shared.sendWithStacktrace(
+                    message: "Error searching history",
+                    tag: .rustPlaces,
+                    severity: .error,
+                    description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
+                )
                 return deferMaybe(ArrayCursor(data: []))
             }
-            currentDeferredHistoryQuery = deferredHistory
-            return deferredHistory
-        case .new:
-            profile.places.interruptReader()
-            return self.profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).bind { result in
-                guard let historyItems = result.successValue else {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Error searching history",
-                        tag: .rustPlaces,
-                        severity: .error,
-                        description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
-                    )
-                    return deferMaybe(ArrayCursor(data: []))
-                }
-                let sites = historyItems.sorted {
-                    // Sort decending by frecency score
-                    $0.frecency > $1.frecency
-                }.map({
-                    return Site(url: $0.url, title: $0.title )
-                }).uniqued()
-                return deferMaybe(ArrayCursor(data: sites))
-            }
+            let sites = historyItems.sorted {
+                // Sort decending by frecency score
+                $0.frecency > $1.frecency
+            }.map({
+                return Site(url: $0.url, title: $0.title )
+            }).uniqued()
+            return deferMaybe(ArrayCursor(data: sites))
         }
     }
 

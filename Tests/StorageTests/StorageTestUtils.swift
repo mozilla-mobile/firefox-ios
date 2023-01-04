@@ -8,6 +8,7 @@ import Foundation
 import Shared
 @testable import Storage
 @testable import Client
+
 import XCTest
 
 let threeMonthsInMillis: UInt64 = 3 * 30 * 24 * 60 * 60 * 1000
@@ -25,41 +26,27 @@ func advanceMicrosecondTimestamp(_ timestamp: MicrosecondTimestamp, by: Int) -> 
     return timestamp + UInt64(by)
 }
 
-extension Site {
-    func asPlace() -> Place {
-        return Place(guid: self.guid!, url: self.url, title: self.title)
-    }
-}
-
 enum VisitOrigin {
     case local
     case remote
 }
 
-func populateHistoryForFrecencyCalculations(_ history: SQLiteHistory, siteCount count: Int, visitPerSite: Int = 4) {
+func populateHistoryForFrecencyCalculations(_ places: RustPlaces, siteCount count: Int, visitPerSite: Int = 4) {
     for i in 0...count {
         let site = Site(url: "http://s\(i)ite\(i).com/foo", title: "A \(i)")
         site.guid = "abc\(i)def"
 
-        let baseMillis: UInt64 = baseInstantInMillis - 20000
-        history.insertOrUpdatePlace(site.asPlace(), modified: baseMillis).succeeded()
-
         for j in 0..<visitPerSite {
             let visitTime = advanceMicrosecondTimestamp(baseInstantInMicros, by: (1000000 * i) + (1000 * j))
-            addVisitForSite(site, intoHistory: history, from: .local, atTime: visitTime)
-            addVisitForSite(site, intoHistory: history, from: .remote, atTime: visitTime - 100)
+            addVisitForSite(site, intoPlaces: places, atTime: visitTime)
+            addVisitForSite(site, intoPlaces: places, atTime: visitTime - 100)
         }
     }
 }
 
-func addVisitForSite(_ site: Site, intoHistory history: SQLiteHistory, from: VisitOrigin, atTime: MicrosecondTimestamp) {
-    let visit = SiteVisit(site: site, date: atTime, type: VisitType.link)
-    switch from {
-    case .local:
-        history.addLocalVisit(visit).succeeded()
-    case .remote:
-        history.storeRemoteVisits([visit], forGUID: site.guid!).succeeded()
-    }
+func addVisitForSite(_ site: Site, intoPlaces places: RustPlaces, atTime: MicrosecondTimestamp) {
+    let visit = VisitObservation(url: site.url, visitType: VisitTransition.link, at: Int64(atTime) / 1000)
+    _ = places.applyObservation(visitObservation: visit).value
 }
 
 extension BrowserDB {

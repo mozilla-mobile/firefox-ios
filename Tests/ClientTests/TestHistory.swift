@@ -9,23 +9,25 @@ import Storage
 import XCTest
 
 class TestHistory: ProfileTest {
-    fileprivate func addSite(_ history: BrowserHistory, url: String, title: String, bool: Bool = true) {
+    fileprivate func addSite(_ places: RustPlaces, url: String, title: String, bool: Bool = true) {
+        _ = places.reopenIfClosed()
         let site = Site(url: url, title: title)
-        let visit = SiteVisit(site: site, date: Date().toMicrosecondsSince1970())
-        XCTAssertEqual(bool, history.addLocalVisit(visit).value.isSuccess, "Site added: \(url).")
+        let visit = VisitObservation(url: site.url, title: site.title, visitType: VisitTransition.link)
+        let res = places.applyObservation(visitObservation: visit).value
+        XCTAssertEqual(bool, res.isSuccess, "Site added: \(url)., error value: \(res.failureValue ?? "wow")")
     }
 
-    fileprivate func innerCheckSites(_ history: BrowserHistory, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
+    fileprivate func innerCheckSites(_ places: RustPlaces, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
         // Retrieve the entry
-        history.getSitesByLastVisit(limit: 100, offset: 0).upon {
+        places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).upon {
             XCTAssertTrue($0.isSuccess)
             callback($0.successValue!)
         }
     }
 
-    fileprivate func checkSites(_ history: BrowserHistory, urls: [String: String]) {
+    fileprivate func checkSites(_ places: RustPlaces, urls: [String: String]) {
         // Retrieve the entry.
-        if let cursor = history.getSitesByLastVisit(limit: 100, offset: 0).value.successValue {
+        if let cursor = places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).value.successValue {
             XCTAssertEqual(cursor.status, CursorStatus.success, "Returned success \(cursor.statusMessage).")
             XCTAssertEqual(cursor.count, urls.count, "Cursor has \(urls.count) entries.")
 
@@ -41,18 +43,16 @@ class TestHistory: ProfileTest {
         }
     }
 
-    fileprivate func clear(_ history: BrowserHistory) {
-        XCTAssertTrue(history.clearHistory().value.isSuccess, "History cleared.")
+    fileprivate func clear(_ places: RustPlaces) {
+        XCTAssertTrue(places.deleteEverythingHistory().value.isSuccess, "History cleared.")
     }
 
-    fileprivate func checkVisits(_ history: BrowserHistory, url: String) {
+    fileprivate func checkVisits(_ places: RustPlaces, url: String) {
         let expectation = self.expectation(description: "Wait for history")
-        history.getSitesByLastVisit(limit: 100, offset: 0).upon { result in
+        places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).upon { result in
             XCTAssertTrue(result.isSuccess)
-            history.getFrecentHistory().getSites(matchingSearchQuery: url, limit: 100).upon { result in
+            places.queryAutocomplete(matchingSearchQuery: url, limit: 100).upon { result in
                 XCTAssertTrue(result.isSuccess)
-                let cursor = result.successValue!
-                XCTAssertEqual(cursor.status, CursorStatus.success, "returned success \(cursor.statusMessage)")
                 // XXX - We don't allow querying much info about visits here anymore, so there isn't a lot to do
                 expectation.fulfill()
             }
@@ -63,122 +63,107 @@ class TestHistory: ProfileTest {
     // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
     func testHistory() {
         withTestProfile { profile -> Void in
-            let history = profile.history
-            self.addSite(history, url: "http://url1/", title: "title")
-            self.addSite(history, url: "http://url1/", title: "title")
-            self.addSite(history, url: "http://url1/", title: "title 2")
-            self.addSite(history, url: "https://url2/", title: "title")
-            self.addSite(history, url: "https://url2/", title: "title")
-            self.checkSites(history, urls: ["http://url1/": "title 2", "https://url2/": "title"])
-            self.checkVisits(history, url: "http://url1/")
-            self.checkVisits(history, url: "https://url2/")
-            self.clear(history)
+            let places = profile.places
+            self.addSite(places, url: "http://url1/", title: "title")
+            self.addSite(places, url: "http://url1/", title: "title")
+            self.addSite(places, url: "http://url1/", title: "title 2")
+            self.addSite(places, url: "https://url2/", title: "title")
+            self.addSite(places, url: "https://url2/", title: "title")
+            self.checkSites(places, urls: ["http://url1/": "title 2", "https://url2/": "title"])
+            self.checkVisits(places, url: "http://url1/")
+            self.checkVisits(places, url: "https://url2/")
+            self.clear(places)
         }
     }
 
     func testSearchHistory_WithResults() {
         let expectation = self.expectation(description: "Wait for search history")
-        let mockProfile = MockProfile()
-        mockProfile.reopen()
-        let history = mockProfile.history
+        withTestProfile { profile in
+            let places = profile.places
 
-        let clearTest = {
-            self.clear(history)
-            mockProfile.shutdown()
+            addSite(places, url: "http://amazon.com/", title: "Amazon")
+            addSite(places, url: "http://mozilla.org/", title: "Mozilla")
+            addSite(places, url: "https://apple.com/", title: "Apple")
+            addSite(places, url: "https://apple.developer.com/", title: "Apple Developer")
+
+            places.queryAutocomplete(matchingSearchQuery: "App", limit: 25).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let results = result.successValue!
+                XCTAssertEqual(results.count, 2)
+                expectation.fulfill()
+                self.clear(places)
+            }
+
+            self.waitForExpectations(timeout: 100, handler: nil)
         }
-
-        addSite(history, url: "http://amazon.com/", title: "Amazon")
-        addSite(history, url: "http://mozilla.org/", title: "Mozilla")
-        addSite(history, url: "https://apple.com/", title: "Apple")
-        addSite(history, url: "https://apple.developer.com/", title: "Apple Developer")
-
-        history.getHistory(matching: "App", limit: 25, offset: 0) { results in
-            XCTAssertEqual(results.count, 2)
-            expectation.fulfill()
-            clearTest()
-        }
-
-        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testSearchHistory_WithResultsByTitle() {
         let expectation = self.expectation(description: "Wait for search history")
-        let mockProfile = MockProfile()
-        mockProfile.reopen()
-        let history = mockProfile.history
+        withTestProfile { profile in
+            let places = profile.places
+            addSite(places, url: "http://amazon.com/", title: "Amazon")
+            addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
+            addSite(places, url: "http://mozilla.dev.org/", title: "Internet dev")
+            addSite(places, url: "https://apple.com/", title: "Apple")
 
-        let clearTest = {
-            self.clear(history)
-            mockProfile.shutdown()
+            places.queryAutocomplete(matchingSearchQuery: "int", limit: 25).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let results = result.successValue!
+                XCTAssertEqual(results.count, 2)
+                expectation.fulfill()
+                self.clear(places)
+            }
+
+            self.waitForExpectations(timeout: 100, handler: nil)
         }
-
-        addSite(history, url: "http://amazon.com/", title: "Amazon")
-        addSite(history, url: "http://mozilla.org/", title: "Mozilla internet")
-        addSite(history, url: "http://mozilla.dev.org/", title: "Internet dev")
-        addSite(history, url: "https://apple.com/", title: "Apple")
-
-        history.getHistory(matching: "int", limit: 25, offset: 0) { results in
-            XCTAssertEqual(results.count, 2)
-            expectation.fulfill()
-            clearTest()
-        }
-
-        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testSearchHistory_WithResultsByUrl() {
         let expectation = self.expectation(description: "Wait for search history")
-        let mockProfile = MockProfile()
-        mockProfile.reopen()
-        let history = mockProfile.history
+        withTestProfile { profile in
+            let places = profile.places
+            addSite(places, url: "http://amazon.com/", title: "Amazon")
+            addSite(places, url: "http://mozilla.developer.org/", title: "Mozilla")
+            addSite(places, url: "https://apple.developer.com/", title: "Apple")
 
-        let clearTest = {
-            self.clear(history)
-            mockProfile.shutdown()
+            places.queryAutocomplete(matchingSearchQuery: "dev", limit: 25).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let results = result.successValue!
+                XCTAssertEqual(results.count, 2)
+                expectation.fulfill()
+                self.clear(places)
+            }
+
+            self.waitForExpectations(timeout: 100, handler: nil)
         }
-
-        addSite(history, url: "http://amazon.com/", title: "Amazon")
-        addSite(history, url: "http://mozilla.developer.org/", title: "Mozilla")
-        addSite(history, url: "https://apple.developer.com/", title: "Apple")
-
-        history.getHistory(matching: "dev", limit: 25, offset: 0) { results in
-            XCTAssertEqual(results.count, 2)
-            expectation.fulfill()
-            clearTest()
-        }
-
-        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testSearchHistory_NoResults() {
         let expectation = self.expectation(description: "Wait for search history")
-        let mockProfile = MockProfile()
-        mockProfile.reopen()
-        let history = mockProfile.history
+        withTestProfile { profile in
+            let places = profile.places
+            addSite(places, url: "http://amazon.com/", title: "Amazon")
+            addSite(places, url: "http://mozilla.org/", title: "Mozilla internet")
+            addSite(places, url: "https://apple.com/", title: "Apple")
 
-        let clearTest = {
-            self.clear(history)
-            mockProfile.shutdown()
+            places.queryAutocomplete(matchingSearchQuery: "red", limit: 25).upon { result in
+                XCTAssertTrue(result.isSuccess)
+                let results = result.successValue!
+                XCTAssertEqual(results.count, 0)
+                expectation.fulfill()
+                self.clear(places)
+            }
+
+            self.waitForExpectations(timeout: 100, handler: nil)
         }
-
-        addSite(history, url: "http://amazon.com/", title: "Amazon")
-        addSite(history, url: "http://mozilla.org/", title: "Mozilla internet")
-        addSite(history, url: "https://apple.com/", title: "Apple")
-
-        history.getHistory(matching: "red", limit: 25, offset: 0) { results in
-            XCTAssertEqual(results.count, 0)
-            expectation.fulfill()
-            clearTest()
-        }
-
-        self.waitForExpectations(timeout: 100, handler: nil)
     }
 
     func testAboutUrls() {
         withTestProfile { (profile) -> Void in
-            let history = profile.history
-            self.addSite(history, url: "about:home", title: "About Home", bool: false)
-            self.clear(history)
+            let places = profile.places
+            self.addSite(places, url: "about:home", title: "About Home")
+            self.clear(places)
         }
     }
 
@@ -187,38 +172,38 @@ class TestHistory: ProfileTest {
 
     func testInsertPerformance() {
         withTestProfile { profile -> Void in
-            let history = profile.history
+            let places = profile.places
             var index = 0
 
             self.measure({ () -> Void in
                 for _ in 0...self.numCmds {
-                    self.addSite(history, url: "https://someurl\(index).com/", title: "title \(index)")
+                    self.addSite(places, url: "https://someurl\(index).com/", title: "title \(index)")
                     index += 1
                 }
-                self.clear(history)
+                self.clear(places)
             })
         }
     }
 
     func testGetPerformance() {
         withTestProfile { profile -> Void in
-            let history = profile.history
+            let places = profile.places
             var index = 0
             var urls = [String: String]()
 
-            self.clear(history)
+            self.clear(places)
             for _ in 0...self.numCmds {
-                self.addSite(history, url: "https://someurl\(index).com/", title: "title \(index)")
+                self.addSite(places, url: "https://someurl\(index).com/", title: "title \(index)")
                 urls["https://someurl\(index).com/"] = "title \(index)"
                 index += 1
             }
 
             self.measure({ () -> Void in
-                self.checkSites(history, urls: urls)
+                self.checkSites(places, urls: urls)
                 return
             })
 
-            self.clear(history)
+            self.clear(places)
         }
     }
 
@@ -235,11 +220,11 @@ class TestHistory: ProfileTest {
 
             let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.numThreads {
-                var history = profile.history as BrowserHistory
-                self.runRandom(&history, queue: queue, completion: { () -> Void in
+                var places = profile.places
+                self.runRandom(&places, queue: queue, completion: { () -> Void in
                     counter += 1
                     if counter == self.numThreads {
-                        self.clear(history)
+                        self.clear(places)
                         expectation.fulfill()
                     }
                 })
@@ -256,15 +241,15 @@ class TestHistory: ProfileTest {
                                       attributes: DispatchQueue.Attributes.concurrent,
                                       autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
                                       target: nil)
-            var history = profile.history as BrowserHistory
+            var places = profile.places
             var counter = 0
 
             let expectation = self.expectation(description: "Wait for history")
             for _ in 0..<self.numThreads {
-                self.runRandom(&history, queue: queue, completion: { () -> Void in
+                self.runRandom(&places, queue: queue, completion: { () -> Void in
                     counter += 1
                     if counter == self.numThreads {
-                        self.clear(history)
+                        self.clear(places)
                         expectation.fulfill()
                     }
                 })
@@ -275,7 +260,7 @@ class TestHistory: ProfileTest {
 
     // Runs a random command on a database. Calls cb when finished.
     fileprivate func runRandom(
-        _ history: inout BrowserHistory,
+        _ places: inout RustPlaces,
         cmdIn: Int,
         completion: @escaping () -> Void
     ) {
@@ -288,24 +273,24 @@ class TestHistory: ProfileTest {
         case 0...1:
             let url = "https://randomurl.com/\(arc4random() % 100)"
             let title = "title \(arc4random() % 100)"
-            addSite(history, url: url, title: title)
+            addSite(places, url: url, title: title)
             completion()
         case 2...3:
-            innerCheckSites(history) { cursor in
+            innerCheckSites(places) { cursor in
                 for site in cursor {
                     _ = site!
                 }
             }
             completion()
         default:
-            history.clearHistory().upon { success in completion() }
+            places.deleteEverythingHistory().upon { success in completion() }
         }
     }
 
     // Calls numCmds random methods on this database. val is a counter used by this interally (i.e. always pass zero for it).
     // Calls cb when finished.
     fileprivate func runMultiRandom(
-        _ history: inout BrowserHistory,
+        _ places: inout RustPlaces,
         val: Int, numCmds: Int,
         completion: @escaping () -> Void
     ) {
@@ -313,23 +298,23 @@ class TestHistory: ProfileTest {
             completion()
             return
         } else {
-            runRandom(&history, cmdIn: -1) { [history] in
-                var history = history
-                self.runMultiRandom(&history, val: val+1, numCmds: numCmds, completion: completion)
+            runRandom(&places, cmdIn: -1) { [places] in
+                var places = places
+                self.runMultiRandom(&places, val: val+1, numCmds: numCmds, completion: completion)
             }
         }
     }
 
     // Helper for starting a new thread running NumCmds random methods on it. Calls cb when done.
     fileprivate func runRandom(
-        _ history: inout BrowserHistory,
+        _ places: inout RustPlaces,
         queue: DispatchQueue,
         completion: @escaping () -> Void
     ) {
-        queue.async { [history] in
-            var history = history
+        queue.async { [places] in
+            var places = places
             // Each thread creates its own history provider
-            self.runMultiRandom(&history, val: 0, numCmds: self.numCmds) {
+            self.runMultiRandom(&places, val: 0, numCmds: self.numCmds) {
                 DispatchQueue.main.async(execute: completion)
             }
         }
