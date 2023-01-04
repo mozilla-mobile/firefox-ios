@@ -86,8 +86,6 @@ extension BrowserDBSQLite: PinnedSites {
         //
         // We have since allowed the guid to be optional, and should remove this guid
         // once we stop supporting downgrading to any versions less than 110.
-        let guid = "dummy-guid"
-
         let args: Args = [site.url, now, site.title, site.id, "dummy-guid", host]
         let arglist = BrowserDB.varlist(args.count)
 
