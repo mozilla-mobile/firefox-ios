@@ -63,11 +63,6 @@ class AutoplaySettingsViewController: SettingsTableViewController {
         return [section]
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.keyboardDismissMode = .onDrag
