@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
+import SiteImageView
 
 enum OneLineTableViewCustomization {
     case regular
@@ -12,7 +13,6 @@ enum OneLineTableViewCustomization {
 struct OneLineTableViewCellViewModel {
     let title: String?
     var leftImageView: UIImage?
-    var leftImageViewContentView: UIView.ContentMode
     let accessoryView: UIImageView?
     let accessoryType: UITableViewCell.AccessoryType
 }
@@ -41,11 +41,7 @@ class OneLineTableViewCell: UITableViewCell,
     private lazy var selectedView: UIView = .build { _ in }
     private lazy var containerView: UIView = .build { _ in }
 
-    lazy var leftImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = UX.cornerRadius
-        imageView.clipsToBounds = true
-    }
+    lazy var leftImageView: FaviconImageView = .build { _ in }
 
     lazy var titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
@@ -135,10 +131,12 @@ class OneLineTableViewCell: UITableViewCell,
     // Use it for new code, replace when possible in old code
     func configure(viewModel: OneLineTableViewCellViewModel) {
         titleLabel.text = viewModel.title
-        leftImageView.image = viewModel.leftImageView
-        leftImageView.contentMode = viewModel.leftImageViewContentView
         accessoryView = viewModel.accessoryView
         editingAccessoryType = viewModel.accessoryType
+
+        if let image = viewModel.leftImageView {
+            leftImageView.image = image
+        }
     }
 
     func configureTapState(isEnabled: Bool) {
