@@ -108,7 +108,7 @@ class PhotonActionSheetTest: BaseTestCase {
         }
         waitForExistence(fennecElement, timeout: 5)
         fennecElement.tap()
-        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 10)
+        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: TIMEOUT)
     }
 
     // Smoketest
