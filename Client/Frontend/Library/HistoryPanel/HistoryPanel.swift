@@ -381,7 +381,6 @@ class HistoryPanel: UIViewController,
 
         let viewModel = OneLineTableViewCellViewModel(title: historyActionable.itemTitle,
                                                       leftImageView: historyActionable.itemImage,
-                                                      leftImageViewContentView: .scaleAspectFit,
                                                       accessoryView: nil,
                                                       accessoryType: .none)
         cell.configure(viewModel: viewModel)

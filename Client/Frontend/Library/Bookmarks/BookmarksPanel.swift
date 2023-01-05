@@ -6,6 +6,7 @@ import UIKit
 import Storage
 import Shared
 import Common
+import SiteImageView
 
 let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
@@ -383,13 +384,11 @@ class BookmarksPanel: SiteTableViewController,
             }
             cell.tag = indexPath.item
 
-            let viewModel = bookmarkCell.getViewModel(forSite: site,
-                                                      profile: profile) { viewModel in
-                guard cell.tag == indexPath.item else { return }
+            let viewModel = bookmarkCell.getViewModel()
 
-                // Configure again once image is loaded for BookmarkItemData
-                cell.configure(viewModel: viewModel)
-                cell.setNeedsLayout()
+            if let site = site,
+               viewModel.leftImageView == nil {
+                cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
             }
 
             cell.configure(viewModel: viewModel)
