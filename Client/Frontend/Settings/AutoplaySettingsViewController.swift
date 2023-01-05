@@ -65,6 +65,6 @@ class AutoplaySettingsViewController: SettingsTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.keyboardDismissMode = .onDrag
+       tableView.keyboardDismissMode = .onDrag
     }
 }
