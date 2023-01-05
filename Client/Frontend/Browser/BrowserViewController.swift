@@ -570,7 +570,7 @@ class BrowserViewController: UIViewController {
 
         if let toast = self.pendingToast {
             self.pendingToast = nil
-            show(toast: toast, afterWaiting: ButtonToast.UX.toastDelay)
+            show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
         showQueuedAlertIfAvailable()
 
@@ -2181,7 +2181,7 @@ extension BrowserViewController: TabManagerDelegate {
         // The whole toast system needs some rework so as compromised solution before the rework I create the toast
         // with light theme and force apply theme with real theme before showing
         toast.applyTheme(theme: themeManager.currentTheme)
-        show(toast: toast, afterWaiting: ButtonToast.UX.toastDelay)
+        show(toast: toast, afterWaiting: ButtonToast.UX.delay)
     }
 
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {

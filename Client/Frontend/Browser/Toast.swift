@@ -18,7 +18,7 @@ class Toast: UIView, ThemeApplicable {
 
     var animationConstraint: NSLayoutConstraint?
     var completionHandler: ((Bool) -> Void)?
-    var didDismissWithoutTapHandler: (() -> Void)?
+//    var didDismissWithoutTapHandler: (() -> Void)?
 
     weak var viewController: UIViewController?
 
@@ -60,7 +60,6 @@ class Toast: UIView, ThemeApplicable {
                 }) { finished in
                     if let duration = duration {
                         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                            self.didDismissWithoutTapHandler?()
                             self.dismiss(false)
                         }
                     }

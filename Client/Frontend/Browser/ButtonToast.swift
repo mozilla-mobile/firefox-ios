@@ -15,23 +15,20 @@ struct ButtonToastViewModel {
 
 class ButtonToast: Toast {
     struct UX {
-        static let toastDelay = DispatchTimeInterval.milliseconds(900)
-        static let toastPadding: CGFloat = 15.0
-        static let toastButtonPadding: CGFloat = 10.0
-        static let toastButtonBorderRadius: CGFloat = 5
-        static let toastButtonBorderWidth: CGFloat = 1
+        static let delay = DispatchTimeInterval.milliseconds(900)
+        static let padding: CGFloat = 15.0
+        static let buttonPadding: CGFloat = 10.0
+        static let buttonBorderRadius: CGFloat = 5
+        static let buttonBorderWidth: CGFloat = 1
         static let descriptionFontSize: CGFloat = 13
-        // Padded View
-        static let WidthOffset: CGFloat = 20.0
-        static let TopOffset: CGFloat = 5.0
-        static let BottomOffset: CGFloat = 20.0
+        static let widthOffset: CGFloat = 20.0
     }
 
     // MARK: - UI
     private var horizontalStackView: UIStackView = .build { stackView in
         stackView.axis = .horizontal
         stackView.alignment = .center
-        stackView.spacing = UX.toastPadding
+        stackView.spacing = UX.padding
     }
 
     private var imageView: UIImageView = .build { imageView in }
@@ -42,7 +39,8 @@ class ButtonToast: Toast {
     }
 
     private var titleLabel: UILabel = .build { label in
-        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                   size: UX.descriptionFontSize)
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
     }
@@ -54,8 +52,8 @@ class ButtonToast: Toast {
     }
 
     private var roundedButton: UIButton = .build { button in
-        button.layer.cornerRadius = UX.toastButtonBorderRadius
-        button.layer.borderWidth = UX.toastButtonBorderWidth
+        button.layer.cornerRadius = UX.buttonBorderRadius
+        button.layer.borderWidth = UX.buttonBorderWidth
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
                                                                                 size: Toast.UX.fontSize)
         button.titleLabel?.numberOfLines = 1
@@ -67,13 +65,10 @@ class ButtonToast: Toast {
     // Pass themeManager to call on init
     init(viewModel: ButtonToastViewModel,
          theme: Theme,
-         completion: ((_ buttonPressed: Bool) -> Void)? = nil,
-         autoDismissCompletion: (() -> Void)? = nil
-    ) {
+         completion: ((_ buttonPressed: Bool) -> Void)? = nil) {
         super.init(frame: .zero)
 
         self.completionHandler = completion
-        self.didDismissWithoutTapHandler = autoDismissCompletion
 
         self.clipsToBounds = true
         let createdToastView = createView(viewModel: viewModel)
@@ -130,7 +125,7 @@ class ButtonToast: Toast {
         NSLayoutConstraint.activate([
             labelStackView.centerYAnchor.constraint(equalTo: horizontalStackView.centerYAnchor),
 
-            horizontalStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: UX.toastPadding),
+            horizontalStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: UX.padding),
             horizontalStackView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor),
             horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
             horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
@@ -150,14 +145,14 @@ class ButtonToast: Toast {
         paddedView.addSubview(roundedButton)
 
         NSLayoutConstraint.activate([
-            roundedButton.heightAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * UX.toastButtonPadding),
-            roundedButton.widthAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.toastButtonPadding),
+            roundedButton.heightAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * UX.buttonPadding),
+            roundedButton.widthAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.buttonPadding),
             roundedButton.centerYAnchor.constraint(equalTo: paddedView.centerYAnchor),
             roundedButton.centerXAnchor.constraint(equalTo: paddedView.centerXAnchor),
 
             paddedView.topAnchor.constraint(equalTo: stackView.topAnchor),
             paddedView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-            paddedView.widthAnchor.constraint(equalTo: roundedButton.widthAnchor, constant: UX.WidthOffset)
+            paddedView.widthAnchor.constraint(equalTo: roundedButton.widthAnchor, constant: UX.widthOffset)
         ])
 
         roundedButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
