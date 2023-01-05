@@ -725,8 +725,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         let viewModel = ButtonToastViewModel(
             labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, recentlyClosedTabs.count),
             buttonText: .TabsDeleteAllUndoAction)
+        // Passing nil theme because themeManager is not available,
+        // calling to applyTheme with proper theme before showing
         let toast = ButtonToast(viewModel: viewModel,
-                                theme: LightTheme(),
+                                theme: nil,
                                 completion: { buttonPressed in
             // Handles undo to Close tabs
             if buttonPressed {

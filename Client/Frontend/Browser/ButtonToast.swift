@@ -16,12 +16,13 @@ struct ButtonToastViewModel {
 class ButtonToast: Toast {
     struct UX {
         static let delay = DispatchTimeInterval.milliseconds(900)
-        static let padding: CGFloat = 15.0
-        static let buttonPadding: CGFloat = 10.0
+        static let padding: CGFloat = 15
+        static let buttonPadding: CGFloat = 10
         static let buttonBorderRadius: CGFloat = 5
         static let buttonBorderWidth: CGFloat = 1
+        static let titleFontSize: CGFloat = 15
         static let descriptionFontSize: CGFloat = 13
-        static let widthOffset: CGFloat = 20.0
+        static let widthOffset: CGFloat = 20
     }
 
     // MARK: - UI
@@ -35,20 +36,19 @@ class ButtonToast: Toast {
 
     private var labelStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.alignment = .leading
+        stackView.alignment = .fill
     }
 
     private var titleLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                   size: UX.descriptionFontSize)
-        label.lineBreakMode = .byWordWrapping
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+                                                                       size: UX.titleFontSize)
         label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
                                                                        size: UX.descriptionFontSize)
-        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 0
     }
 
     private var roundedButton: UIButton = .build { button in
@@ -64,7 +64,7 @@ class ButtonToast: Toast {
 
     // Pass themeManager to call on init
     init(viewModel: ButtonToastViewModel,
-         theme: Theme,
+         theme: Theme?,
          completion: ((_ buttonPressed: Bool) -> Void)? = nil) {
         super.init(frame: .zero)
 
@@ -85,7 +85,9 @@ class ButtonToast: Toast {
         animationConstraint = toastView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
                                                              constant: Toast.UX.toastHeight)
         animationConstraint?.isActive = true
-        applyTheme(theme: theme)
+        if let theme = theme {
+            applyTheme(theme: theme)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -117,11 +119,6 @@ class ButtonToast: Toast {
         setupPaddedButton(stackView: horizontalStackView, buttonText: viewModel.buttonText)
         toastView.addSubview(horizontalStackView)
 
-        if viewModel.textAlignment == .center {
-            titleLabel.centerXAnchor.constraint(equalTo: toastView.centerXAnchor).isActive = true
-            descriptionLabel.centerXAnchor.constraint(equalTo: toastView.centerXAnchor).isActive = true
-        }
-
         NSLayoutConstraint.activate([
             labelStackView.centerYAnchor.constraint(equalTo: horizontalStackView.centerYAnchor),
 
@@ -145,8 +142,10 @@ class ButtonToast: Toast {
         paddedView.addSubview(roundedButton)
 
         NSLayoutConstraint.activate([
-            roundedButton.heightAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * UX.buttonPadding),
-            roundedButton.widthAnchor.constraint(equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.buttonPadding),
+            roundedButton.heightAnchor.constraint(
+                equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.height + 2 * UX.buttonPadding),
+            roundedButton.widthAnchor.constraint(
+                equalToConstant: roundedButton.titleLabel!.intrinsicContentSize.width + 2 * UX.buttonPadding),
             roundedButton.centerYAnchor.constraint(equalTo: paddedView.centerYAnchor),
             roundedButton.centerXAnchor.constraint(equalTo: paddedView.centerXAnchor),
 
@@ -161,12 +160,13 @@ class ButtonToast: Toast {
     }
 
     override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+
         titleLabel.textColor = theme.colors.textInverted
         descriptionLabel.textColor = theme.colors.textInverted
         imageView.tintColor = theme.colors.textInverted
         roundedButton.setTitleColor(theme.colors.textInverted, for: [])
         roundedButton.layer.borderColor = theme.colors.borderInverted.cgColor
-        super.applyTheme(theme: theme)
     }
 
     // MARK: - Button action
