@@ -10,7 +10,7 @@ import WebKit
 struct AutoplayAccessors {
     static let AutoplayPrefKey = PrefsKeys.AutoplayMediaKey
     static let Default = AutoplayAction.allowAudioAndVideo
-    
+
     static func getAutoplayAction(_ prefs: Prefs?) -> AutoplayAction {
         guard let raw = prefs?.stringForKey(AutoplayPrefKey) else { return Default }
 
@@ -39,7 +39,7 @@ enum AutoplayAction: String {
     case allowAudioAndVideo
     case blockAudio
     case blockAudioAndVideo
-    
+
     var settingTitle: String {
         switch self {
         case .allowAudioAndVideo:
@@ -50,6 +50,4 @@ enum AutoplayAction: String {
             return .Settings.Autoplay.BlockAudioAndVideo
         }
     }
-
 }
-
