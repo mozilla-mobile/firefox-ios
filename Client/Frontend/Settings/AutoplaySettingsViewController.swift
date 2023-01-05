@@ -31,7 +31,7 @@ class AutoplaySettingsViewController: SettingsTableViewController {
         let allowAudioAndVideo = CheckmarkSetting(
             title: NSAttributedString(string: .Settings.Autoplay.AllowAudioAndVideo),
             subtitle: nil,
-            accessibilityIdentifier: "AllowAudioAndVideo",
+            accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.allowAudioAndVideo,
             isChecked: {return self.currentChoice == AutoplayAction.allowAudioAndVideo},
             onChecked: {
                 self.currentChoice = AutoplayAction.allowAudioAndVideo
@@ -40,7 +40,7 @@ class AutoplaySettingsViewController: SettingsTableViewController {
         let blockAudio = CheckmarkSetting(
             title: NSAttributedString(string: .Settings.Autoplay.BlockAudio),
             subtitle: nil,
-            accessibilityIdentifier: "BlockAudio",
+            accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.blockAudio,
             isChecked: {return self.currentChoice == AutoplayAction.blockAudio},
             onChecked: {
                 self.currentChoice = AutoplayAction.blockAudio
@@ -49,7 +49,7 @@ class AutoplaySettingsViewController: SettingsTableViewController {
         let blockAudioAndVideo = CheckmarkSetting(
             title: NSAttributedString(string: .Settings.Autoplay.BlockAudioAndVideo),
             subtitle: nil,
-            accessibilityIdentifier: "BlockAudioAndVideo",
+            accessibilityIdentifier: AccessibilityIdentifiers.Settings.Autoplay.blockAudioAndVideo,
             isChecked: {return self.currentChoice == AutoplayAction.blockAudioAndVideo},
             onChecked: {
                 self.currentChoice = AutoplayAction.blockAudioAndVideo

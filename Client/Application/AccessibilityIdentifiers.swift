@@ -236,6 +236,12 @@ public struct AccessibilityIdentifiers {
             static let topSetting = "TopSearchBar"
             static let bottomSetting = "BottomSearchBar"
         }
+        
+        struct Autoplay {
+            static let allowAudioAndVideo = "AllowAudioAndVideo"
+            static let blockAudio = "BlockAudio"
+            static let blockAudioAndVideo = "BlockAudioAndVideo"
+        }
     }
 
     struct ShareTo {
