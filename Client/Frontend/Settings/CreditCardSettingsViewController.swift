@@ -4,18 +4,14 @@
 
 import Foundation
 import UIKit
+import Shared
 
-class CreditCardSettingsViewController: UIViewController, Themeable {
-
-    var themeManager: ThemeManager
+class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
     var themeObserver: NSObjectProtocol?
-    var notificationCenter: NotificationProtocol
+    var theme: Theme
 
-
-    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
-        self.themeManager = themeManager
-        self.notificationCenter = notificationCenter
+    init(theme: Theme) {
+        self.theme = theme
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -25,11 +21,10 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange()
-        applyTheme()
+        applyTheme(theme: theme)
     }
 
-    func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme.colors.layer1
+    func applyTheme(theme: Theme) {
+        view.backgroundColor = theme.colors.layer1
     }
 }
