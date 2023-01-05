@@ -7,9 +7,7 @@ import Storage
 
 /// Used to setup bookmarks and folder cell in Bookmarks panel, getting their viewModel
 protocol BookmarksFolderCell {
-    func getViewModel(forSite site: Site?,
-                      profile: Profile?,
-                      completion: ((OneLineTableViewCellViewModel) -> Void)?) -> OneLineTableViewCellViewModel
+    func getViewModel() -> OneLineTableViewCellViewModel
 
     func didSelect(profile: Profile,
                    libraryPanelDelegate: LibraryPanelDelegate?,
@@ -17,10 +15,7 @@ protocol BookmarksFolderCell {
 }
 
 extension BookmarkFolderData: BookmarksFolderCell {
-    func getViewModel(forSite site: Site?,
-                      profile: Profile?,
-                      completion: ((OneLineTableViewCellViewModel) -> Void)?)
-    -> OneLineTableViewCellViewModel {
+    func getViewModel() -> OneLineTableViewCellViewModel {
         var title: String
         if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
             title = localizedString
@@ -30,7 +25,6 @@ extension BookmarkFolderData: BookmarksFolderCell {
 
         return OneLineTableViewCellViewModel(title: title,
                                              leftImageView: leftImageView,
-                                             leftImageViewContentView: .center,
                                              accessoryView: UIImageView(image: chevronImage),
                                              accessoryType: .disclosureIndicator)
     }
@@ -52,11 +46,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
 }
 
 extension BookmarkItemData: BookmarksFolderCell {
-    func getViewModel(
-        forSite site: Site?,
-        profile: Profile?,
-        completion: ((OneLineTableViewCellViewModel) -> Void)?
-    ) -> OneLineTableViewCellViewModel {
+    func getViewModel() -> OneLineTableViewCellViewModel {
         var title: String
         if self.title.isEmpty {
             title = url
@@ -64,28 +54,10 @@ extension BookmarkItemData: BookmarksFolderCell {
             title = self.title
         }
 
-        var viewModel = OneLineTableViewCellViewModel(title: title,
-                                                      leftImageView: nil,
-                                                      leftImageViewContentView: .center,
-                                                      accessoryView: nil,
-                                                      accessoryType: .disclosureIndicator)
-
-        if let site = site {
-            profile?.favicons.getFaviconImage(forSite: site) { result in
-                // Check that we successfully retrieved an image (should always happen)
-                // and ensure that the cell we were fetching for is still on-screen.
-                guard let image = result else { return }
-
-                DispatchQueue.main.async {
-                    viewModel.leftImageView = image
-                    viewModel.leftImageViewContentView = .scaleAspectFill
-
-                    completion?(viewModel)
-                }
-            }
-        }
-
-        return viewModel
+        return OneLineTableViewCellViewModel(title: title,
+                                             leftImageView: nil,
+                                             accessoryView: nil,
+                                             accessoryType: .disclosureIndicator)
     }
 
     func didSelect(profile: Profile,
