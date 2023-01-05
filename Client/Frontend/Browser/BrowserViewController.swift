@@ -570,7 +570,7 @@ class BrowserViewController: UIViewController {
 
         if let toast = self.pendingToast {
             self.pendingToast = nil
-            show(toast: toast, afterWaiting: ButtonToast.UX.ToastDelay)
+            show(toast: toast, afterWaiting: ButtonToast.UX.toastDelay)
         }
         showQueuedAlertIfAvailable()
 
@@ -1174,7 +1174,8 @@ class BrowserViewController: UIViewController {
         let viewModel = ButtonToastViewModel(labelText: .AppMenu.AddBookmarkConfirmMessage,
                                              buttonText: .BookmarksEdit,
                                              textAlignment: .left)
-        let toast = ButtonToast(viewModel: viewModel) { isButtonTapped in
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme) { isButtonTapped in
             isButtonTapped ? self.openBookmarkEditPanel() : nil
         }
         self.show(toast: toast)
@@ -1663,6 +1664,7 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
                                              descriptionText: url.absoluteDisplayString,
                                              buttonText: .GoButtonTittle)
         let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
                                 completion: { buttonPressed in
             if buttonPressed {
                 self.settingsOpenURLInNewTab(url)
@@ -1887,7 +1889,9 @@ extension BrowserViewController: LibraryPanelDelegate {
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-        let toast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
             }
@@ -1943,7 +1947,9 @@ extension BrowserViewController: HomePanelDelegate {
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
         let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                              buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-        let toast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
             }
@@ -2171,7 +2177,11 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard let toast = toast, !(tabManager.selectedTab?.isPrivate ?? false) else { return }
-        show(toast: toast, afterWaiting: ButtonToast.UX.ToastDelay)
+        // The toast is created from TabManager which doesn't have access to themeManager
+        // The whole toast system needs some rework so as compromised solution before the rework I create the toast
+        // with light theme and force apply theme with real theme before showing
+        toast.applyTheme(theme: themeManager.currentTheme)
+        show(toast: toast, afterWaiting: ButtonToast.UX.toastDelay)
     }
 
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
@@ -2335,7 +2345,9 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
                 let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
                                                      buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-                let toast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
+                let toast = ButtonToast(viewModel: viewModel,
+                                        theme: self.themeManager.currentTheme,
+                                        completion: { buttonPressed in
                     if buttonPressed {
                         self.tabManager.selectTab(tab)
                     }

@@ -112,7 +112,7 @@ class DownloadToast: Toast {
         let horizontalStackView: UIStackView = .build { stackView in
             stackView.axis = .horizontal
             stackView.alignment = .center
-            stackView.spacing = ButtonToast.UX.ToastPadding
+            stackView.spacing = ButtonToast.UX.toastPadding
         }
 
         let icon = UIImageView(image: UIImage.templateImageNamed("download"))
@@ -158,7 +158,7 @@ class DownloadToast: Toast {
 
             horizontalStackView.centerXAnchor.constraint(equalTo: toastView.centerXAnchor),
             horizontalStackView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
-            horizontalStackView.widthAnchor.constraint(equalTo: toastView.widthAnchor, constant: -2 * ButtonToast.UX.ToastPadding)
+            horizontalStackView.widthAnchor.constraint(equalTo: toastView.widthAnchor, constant: -2 * ButtonToast.UX.toastPadding)
         ])
 
         progressWidthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)

@@ -711,7 +711,7 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
     }
 
     func showToast(message: String) {
-        SimpleToast().showAlertWithText(message, bottomContainer: self.view, theme: themeManager.currentTheme)
+        SimpleToast().showAlertWithText(message, bottomContainer: view, theme: themeManager.currentTheme)
     }
 }
 

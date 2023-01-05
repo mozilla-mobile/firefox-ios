@@ -203,7 +203,8 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             let viewModel = ButtonToastViewModel(labelText: message,
                                                  buttonText: .UndoString,
                                                  textAlignment: .left)
-            let toast = ButtonToast(viewModel: viewModel) { isButtonTapped in
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: themeManager.currentTheme) { isButtonTapped in
                 isButtonTapped ? self.addBookmark(url: url ?? "") : nil
             }
             show(toast: toast)

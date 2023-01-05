@@ -190,7 +190,9 @@ extension BrowserViewController: WKUIDelegate {
                     // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
                     let viewModel = ButtonToastViewModel(labelText: toastLabelText,
                                                          buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-                    let toast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
+                    let toast = ButtonToast(viewModel: viewModel,
+                                            theme: self.themeManager.currentTheme,
+                                            completion: { buttonPressed in
                         if buttonPressed {
                             self.tabManager.selectTab(tab)
                         }

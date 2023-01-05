@@ -20,7 +20,8 @@ extension BrowserViewController: DownloadQueueDelegate {
 
                     let viewModel = ButtonToastViewModel(labelText: .DownloadCancelledToastLabelText,
                                                          textAlignment: .center)
-                    let downloadCancelledToast = ButtonToast(viewModel: viewModel)
+                    let downloadCancelledToast = ButtonToast(viewModel: viewModel,
+                                                             theme: self.themeManager.currentTheme)
                     self.show(toast: downloadCancelledToast)
                 }
             })
@@ -53,7 +54,9 @@ extension BrowserViewController: DownloadQueueDelegate {
                 let viewModel = ButtonToastViewModel(labelText: download.filename,
                                                      imageName: ImageIdentifiers.check,
                                                      buttonText: .DownloadsButtonTitle)
-                let downloadCompleteToast = ButtonToast(viewModel: viewModel, completion: { buttonPressed in
+                let downloadCompleteToast = ButtonToast(viewModel: viewModel,
+                                                        theme: self.themeManager.currentTheme,
+                                                        completion: { buttonPressed in
                     guard buttonPressed else { return }
 
                     self.showLibrary(panel: .downloads)
@@ -63,7 +66,8 @@ extension BrowserViewController: DownloadQueueDelegate {
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))
             } else {
                 let viewModel = ButtonToastViewModel(labelText: .DownloadFailedToastLabelText, textAlignment: .center)
-                let downloadFailedToast = ButtonToast(viewModel: viewModel)
+                let downloadFailedToast = ButtonToast(viewModel: viewModel,
+                                                      theme: self.themeManager.currentTheme)
                 self.show(toast: downloadFailedToast, duration: nil)
             }
         }

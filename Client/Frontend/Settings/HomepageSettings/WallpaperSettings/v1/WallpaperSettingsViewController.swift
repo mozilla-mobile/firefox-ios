@@ -217,6 +217,7 @@ private extension WallpaperSettingsViewController {
                                              buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button)
         let toast = ButtonToast(
             viewModel: viewModel,
+            theme: themeManager.currentTheme,
             completion: { buttonPressed in
             if buttonPressed { self.dismissView() }
         })

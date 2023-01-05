@@ -92,7 +92,6 @@ class Toast: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        print("YRD apply theme on toast")
         toastView.backgroundColor = theme.colors.actionPrimary
     }
 }

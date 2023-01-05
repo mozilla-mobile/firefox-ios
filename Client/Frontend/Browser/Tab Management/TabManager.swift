@@ -729,7 +729,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
                 buttonText: .TabsDeleteAllUndoAction)
             toast = ButtonToast(
                 viewModel: viewModel,
-//                theme:
+                theme: LightTheme(),
                 completion: { buttonPressed in
                     if buttonPressed {
                         self.reAddTabs(tabsToAdd: recentlyClosedTabs,

@@ -67,6 +67,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var borderAccent: UIColor = FXColors.Blue50
     var borderAccentNonOpaque: UIColor = FXColors.Blue50.withAlphaComponent(0.1)
     var borderAccentPrivate: UIColor = FXColors.Purple60
+    var borderInverted: UIColor = FXColors.LightGrey05
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.16)
