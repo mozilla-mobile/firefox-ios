@@ -9,6 +9,7 @@ class DownloadToast: Toast {
     struct UX {
         static let ToastBackgroundColor = UIColor.Photon.Blue40
         static let ToastProgressColor = UIColor.Photon.Blue50
+        static let ToastDescriptionFont = UIFont.systemFont(ofSize: 13)
     }
 
     lazy var progressView: UIView = .build { view in
@@ -132,7 +133,7 @@ class DownloadToast: Toast {
         labelStackView.addArrangedSubview(label)
 
         descriptionLabel.textColor = UIColor.Photon.White100
-        descriptionLabel.font = ButtonToast.UX.ToastDescriptionFont
+        descriptionLabel.font = UX.ToastDescriptionFont
         descriptionLabel.text = descriptionText
         descriptionLabel.lineBreakMode = .byTruncatingTail
         labelStackView.addArrangedSubview(descriptionLabel)
