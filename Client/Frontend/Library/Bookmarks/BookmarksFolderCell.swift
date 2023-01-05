@@ -54,11 +54,10 @@ extension BookmarkItemData: BookmarksFolderCell {
             title = self.title
         }
 
-        var viewModel = OneLineTableViewCellViewModel(title: title,
-                                                      leftImageView: nil,
-                                                      accessoryView: nil,
-                                                      accessoryType: .disclosureIndicator)
-        return viewModel
+        return OneLineTableViewCellViewModel(title: title,
+                                             leftImageView: nil,
+                                             accessoryView: nil,
+                                             accessoryType: .disclosureIndicator)
     }
 
     func didSelect(profile: Profile,
