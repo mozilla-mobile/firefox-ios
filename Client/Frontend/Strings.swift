@@ -1055,22 +1055,22 @@ extension String {
 
         public struct Autoplay {
             public static let Autoplay = MZLocalizedString(
-                "Settings.Autoplay.SettingsTitle",
+                "Settings.Autoplay.SettingsTitle.v111",
                 tableName: nil,
                 value: "Autoplay",
                 comment: "In the settings menu, this label indicates that there is an option of customizing the Autoplay behaviour.")
             public static let AllowAudioAndVideo = MZLocalizedString(
-                "Settings.Autoplay.AllowAudioAndVideo",
+                "Settings.Autoplay.AllowAudioAndVideo.v111",
                 tableName: nil,
                 value: "Allow Audio and Video",
                 comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will allow audio and video content to autoplay.")
             public static let BlockAudio = MZLocalizedString(
-                "Settings.Autoplay.BlockAudio",
+                "Settings.Autoplay.BlockAudio.v111",
                 tableName: nil,
                 value: "Block Audio",
                 comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio from autoplaying.")
             public static let BlockAudioAndVideo = MZLocalizedString(
-                "Settings.Autoplay.BlockAudioAndVideo",
+                "Settings.Autoplay.BlockAudioAndVideo.v111",
                 tableName: nil,
                 value: "Block Audio and Video",
                 comment: "In the settings menu, in the Autoplay customization section, this label indicates that selecting this will block audio and video content from autoplaying.")
