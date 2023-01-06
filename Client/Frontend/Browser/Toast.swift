@@ -18,7 +18,6 @@ class Toast: UIView, ThemeApplicable {
 
     var animationConstraint: NSLayoutConstraint?
     var completionHandler: ((Bool) -> Void)?
-//    var didDismissWithoutTapHandler: (() -> Void)?
 
     weak var viewController: UIViewController?
 
