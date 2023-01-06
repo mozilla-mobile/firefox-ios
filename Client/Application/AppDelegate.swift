@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             quality: UIConstants.ScreenshotQuality)
     )
 
-    lazy var themeManager: ThemeManager = DefaultThemeManager(appDelegate: self)
+    lazy var themeManager: ThemeManager = DefaultThemeManager()
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
 

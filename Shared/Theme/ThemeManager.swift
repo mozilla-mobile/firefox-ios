@@ -39,7 +39,6 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
     public var currentTheme: Theme = LightTheme()
     public var notificationCenter: NotificationProtocol
     private var userDefaults: UserDefaultsInterface
-    private var appDelegate: UIApplicationDelegate?
     private var mainQueue: DispatchQueueInterface
 
     public var window: UIWindow?
@@ -48,11 +47,9 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
 
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
-                appDelegate: UIApplicationDelegate? = nil,
                 mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
-        self.appDelegate = appDelegate
         self.mainQueue = mainQueue
 
         migrateDefaultsToUseStandard()
