@@ -60,10 +60,9 @@ class EnhancedTrackingProtectionMenuVM {
 
     // MARK: - Functions
 
-    func getDetailsViewModel(withCachedImage cachedImage: UIImage?) -> EnhancedTrackingProtectionDetailsVM {
+    func getDetailsViewModel() -> EnhancedTrackingProtectionDetailsVM {
         return EnhancedTrackingProtectionDetailsVM(topLevelDomain: websiteTitle,
                                                    title: tab.displayTitle,
-                                                   image: cachedImage,
                                                    URL: tab.url?.absoluteDisplayString ?? websiteTitle,
                                                    getLockIcon: getConnectionStatusImage(themeType:),
                                                    connectionStatusMessage: connectionStatusString,

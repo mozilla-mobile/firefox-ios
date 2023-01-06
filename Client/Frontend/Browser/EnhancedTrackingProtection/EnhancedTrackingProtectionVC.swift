@@ -5,6 +5,7 @@
 import Shared
 import UIKit
 import Common
+import SiteImageView
 
 struct ETPMenuUX {
     struct Fonts {
@@ -19,11 +20,12 @@ struct ETPMenuUX {
         static let viewCornerRadius: CGFloat = 8
         static let viewHeight: CGFloat = 44
         static let websiteLabelToHeroImageSpacing: CGFloat = 8
-        static let heroImageSize: CGFloat = 40
+        static let faviconImageSize: CGFloat = 40
         static let closeButtonSize: CGFloat = 30
+        static let faviconCornerRadius: CGFloat = 5
 
         struct Line {
-            static let distanceFromHeroImage: CGFloat = 17
+            static let distanceFromFavicon: CGFloat = 17
             static let height: CGFloat = 1
         }
     }
@@ -57,11 +59,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
         view.backgroundColor = .clear
     }
 
-    private var heroImage: UIImageView = .build { heroImage in
-        heroImage.contentMode = .scaleAspectFit
-        heroImage.clipsToBounds = true
-        heroImage.layer.masksToBounds = true
-        heroImage.layer.cornerRadius = 5
+    private var favicon: FaviconImageView = .build { favicon in
+        favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysTemplate)
     }
 
     private let siteDomainLabel: UILabel = .build { label in
@@ -201,20 +200,20 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private func setupHeaderView() {
-        headerContainer.addSubviews(heroImage, siteDomainLabel, closeButton, horizontalLine)
+        headerContainer.addSubviews(favicon, siteDomainLabel, closeButton, horizontalLine)
         view.addSubview(headerContainer)
 
         var headerConstraints = [
             headerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            heroImage.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
-            heroImage.topAnchor.constraint(equalTo: headerContainer.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
-            heroImage.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.heroImageSize),
-            heroImage.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.heroImageSize),
+            favicon.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor, constant: ETPMenuUX.UX.gutterDistance),
+            favicon.topAnchor.constraint(equalTo: headerContainer.topAnchor, constant: ETPMenuUX.UX.gutterDistance),
+            favicon.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
+            favicon.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
 
-            siteDomainLabel.centerYAnchor.constraint(equalTo: heroImage.centerYAnchor),
-            siteDomainLabel.leadingAnchor.constraint(equalTo: heroImage.trailingAnchor, constant: 8),
+            siteDomainLabel.centerYAnchor.constraint(equalTo: favicon.centerYAnchor),
+            siteDomainLabel.leadingAnchor.constraint(equalTo: favicon.trailingAnchor, constant: 8),
             siteDomainLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -15),
 
             closeButton.trailingAnchor.constraint(equalTo: headerContainer.trailingAnchor, constant: -ETPMenuUX.UX.gutterDistance),
@@ -224,7 +223,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
             horizontalLine.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: headerContainer.trailingAnchor),
-            horizontalLine.topAnchor.constraint(equalTo: heroImage.bottomAnchor, constant: ETPMenuUX.UX.Line.distanceFromHeroImage),
+            horizontalLine.topAnchor.constraint(equalTo: favicon.bottomAnchor, constant: ETPMenuUX.UX.Line.distanceFromFavicon),
             horizontalLine.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.Line.height),
             headerContainer.bottomAnchor.constraint(equalTo: horizontalLine.bottomAnchor)
         ]
@@ -337,20 +336,13 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     private func updateViewDetails() {
-        if let favIconURL = viewModel.favIcon {
-            ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: favIconURL,
-                                                                   limit: ImageLoadingConstants.NoLimitImageSize) {
-                [weak self] image, error in
-                guard error == nil, let image = image else { return }
-                self?.heroImage.image = image
-                self?.viewModel.heroImage = image
-            }
+        if let urlString = viewModel.tab.url?.absoluteString {
+            favicon.setFavicon(FaviconImageViewModel(urlStringRequest: urlString,
+                                                     faviconCornerRadius: ETPMenuUX.UX.faviconCornerRadius))
         }
 
         siteDomainLabel.text = viewModel.websiteTitle
-
         connectionLabel.text = viewModel.connectionStatusString
-
         toggleSwitch.isOn = viewModel.isSiteETPEnabled
         toggleLabel.text = .TrackingProtectionEnableTitle
         toggleStatusLabel.text = toggleSwitch.isOn ? .ETPOn : .ETPOff
@@ -370,7 +362,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     }
 
     @objc func connectionDetailsTapped() {
-        let detailsVC = EnhancedTrackingProtectionDetailsVC(with: viewModel.getDetailsViewModel(withCachedImage: heroImage.image))
+        let detailsVC = EnhancedTrackingProtectionDetailsVC(with: viewModel.getDetailsViewModel())
         detailsVC.modalPresentationStyle = .pageSheet
         self.present(detailsVC, animated: true)
     }
@@ -444,8 +436,7 @@ extension EnhancedTrackingProtectionMenuVC {
         connectionView.backgroundColor = theme.colors.layer2
         connectionDetailArrow.tintColor = theme.colors.iconSecondary
         connectionImage.image = viewModel.getConnectionStatusImage(themeType: theme.type)
-        heroImage.image = viewModel.heroImage ?? UIImage(named: ImageIdentifiers.defaultFavicon)?
-            .tinted(withColor: theme.colors.iconPrimary)
+        headerContainer.tintColor = theme.colors.iconPrimary
         if viewModel.connectionSecure {
             connectionImage.tintColor = theme.colors.iconPrimary
         }
@@ -456,7 +447,6 @@ extension EnhancedTrackingProtectionMenuVC {
         protectionView.backgroundColor = theme.colors.layer2
         protectionButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary
-        heroImage.tintColor = theme.colors.iconPrimary
         setNeedsStatusBarAppearanceUpdate()
     }
 }
