@@ -8,7 +8,6 @@ import Shared
 struct EnhancedTrackingProtectionDetailsVM {
     let topLevelDomain: String
     let title: String
-    let image: UIImage?
     let URL: String
 
     let getLockIcon: (ThemeType) -> UIImage

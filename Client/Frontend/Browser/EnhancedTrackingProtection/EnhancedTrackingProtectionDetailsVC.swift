@@ -5,6 +5,7 @@
 import Foundation
 import Common
 import Shared
+import SiteImageView
 
 class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     // MARK: - UI
@@ -22,13 +23,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     }
 
     private let siteInfoSection = ETPSectionView(frame: .zero)
-
-    private let siteInfoImage: UIImageView = .build { image in
-        image.contentMode = .scaleAspectFit
-        image.clipsToBounds = true
-        image.layer.masksToBounds = true
-        image.layer.cornerRadius = 5
-    }
+    private let siteInfoImage: FaviconImageView = .build { _ in }
 
     private var siteInfoTitleLabel: UILabel = .build { label in
         label.font = ETPMenuUX.Fonts.viewTitleLabels
@@ -125,8 +120,8 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
 
             siteInfoImage.leadingAnchor.constraint(equalTo: siteInfoSection.leadingAnchor, constant: 13),
             siteInfoImage.topAnchor.constraint(equalTo: siteInfoSection.topAnchor, constant: 13),
-            siteInfoImage.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.heroImageSize),
-            siteInfoImage.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.heroImageSize),
+            siteInfoImage.heightAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
+            siteInfoImage.widthAnchor.constraint(equalToConstant: ETPMenuUX.UX.faviconImageSize),
 
             siteInfoTitleLabel.leadingAnchor.constraint(equalTo: siteInfoImage.trailingAnchor, constant: 11),
             siteInfoTitleLabel.topAnchor.constraint(equalTo: siteInfoSection.topAnchor, constant: 13),
@@ -185,7 +180,9 @@ extension EnhancedTrackingProtectionDetailsVC {
         }
         closeButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
         connectionImage.image = viewModel.getLockIcon(theme.type)
-        siteInfoImage.image = viewModel.image ?? UIImage(imageLiteralResourceName: ImageIdentifiers.defaultFavicon).withTintColor(theme.colors.iconPrimary)
+
+        siteInfoImage.setFavicon(FaviconImageViewModel(urlStringRequest: viewModel.URL,
+                                                       faviconCornerRadius: ETPMenuUX.UX.faviconCornerRadius))
 
         setNeedsStatusBarAppearanceUpdate()
     }
