@@ -42,7 +42,6 @@ public struct RemoteTab: Equatable {
     public let history: [Foundation.URL]
     public let lastUsed: Timestamp
     public let icon: Foundation.URL?
-    public var faviconURL: String? // Empty for now until #10000 is done
 
     public static func shouldIncludeURL(_ url: Foundation.URL) -> Bool {
         if InternalURL(url) != nil {
