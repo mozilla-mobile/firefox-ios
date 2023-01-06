@@ -121,6 +121,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
             generalSettings.insert(SearchBarSetting(settings: self), at: 5)
         }
 
+        let autofillCreditCardStatus = featureFlags.isFeatureEnabled(.creditCardAutofillStatus, checking: .buildOnly)
         let tabTrayGroupsAreBuildActive = featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildOnly)
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
         if tabTrayGroupsAreBuildActive || inactiveTabsAreBuildActive {
@@ -183,6 +184,10 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
 
         privacySettings.append(ClearPrivateDataSetting(settings: self))
+
+        if autofillCreditCardStatus {
+            privacySettings.append(AutofillCreditCardSettings(settings: self))
+        }
 
         privacySettings += [
             BoolSetting(prefs: prefs,

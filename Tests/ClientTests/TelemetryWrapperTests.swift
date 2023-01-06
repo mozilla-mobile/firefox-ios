@@ -414,6 +414,18 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.SettingsMenu.showTourPressed)
     }
 
+    // MARK: - Credit card autofill
+
+    func test_autofill_credit_card_settings_tapped_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .tap,
+            object: .creditCardAutofillSettings
+        )
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.autofillSettingsTapped)
+    }
+
     // MARK: - Nimbus Calls
 
     func test_appForeground_NimbusIsCalled() throws {
