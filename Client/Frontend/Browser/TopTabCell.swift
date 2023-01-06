@@ -4,10 +4,12 @@
 
 import Foundation
 import Shared
+import SiteImageView
 
 class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, ReusableCell {
     struct UX {
         static let faviconSize: CGFloat = 20
+        static let faviconCornerRadius: CGFloat = 2
         static let tabCornerRadius: CGFloat = 8
         static let tabNudge: CGFloat = 1 // Nudge the favicon and close button by 1px
         static let tabTitlePadding: CGFloat = 10
@@ -49,11 +51,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         label.isAccessibilityElement = false
     }
 
-    let favicon: UIImageView = .build { imageView in
-        imageView.layer.cornerRadius = 2.0
-        imageView.layer.masksToBounds = true
-        imageView.semanticContentAttribute = .forceLeftToRight
-    }
+    let favicon: FaviconImageView = .build { _ in }
 
     let closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.closeTap), for: [])
@@ -89,18 +87,13 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         let hideCloseButton = frame.width < 148 && !selected
         closeButton.isHidden = hideCloseButton
 
-        favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)
+        favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysTemplate)
         favicon.tintColor = UIColor.theme.tabTray.faviconTint
-        favicon.contentMode = .scaleAspectFit
         favicon.backgroundColor = .clear
 
-        if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
-            ImageLoadingHandler.shared.getImageFromCacheOrDownload(
-                with: url,
-                limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-                guard error == nil, let image = image else { return }
-                self.favicon.image = image
-            }
+        if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
+            favicon.setFavicon(FaviconImageViewModel(urlStringRequest: siteURL,
+                                                     faviconCornerRadius: UX.faviconCornerRadius))
         }
     }
 
