@@ -707,50 +707,48 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
                                          isPrivate: Bool,
                                          previousTabUUID: String) {
-        var toast: ButtonToast?
-        let numberOfTabs = recentlyClosedTabs.count
-        if numberOfTabs > 0 {
-            // Add last 10 tab(s) to recently closed list
-            // Note: The recently closed tab list is only updated when the undo
-            // snackbar disappears and does not update if someone taps on undo button
-            recentlyClosedTabs.suffix(10).forEach { tab in
-                if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
-                    profile.recentlyClosedTabs.addTab(url as URL,
-                                                      title: tab.lastTitle,
-                                                      faviconURL: tab.displayFavicon?.url,
-                                                      lastExecutedTime: tab.lastExecutedTime)
+        guard !recentlyClosedTabs.isEmpty else { return }
+
+        // Add last 10 tab(s) to recently closed list
+        // Note: The recently closed tab list is only updated when the undo
+        // snackbar disappears and does not update if someone taps on undo button
+        recentlyClosedTabs.suffix(10).forEach { tab in
+            if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
+                profile.recentlyClosedTabs.addTab(url as URL,
+                                                  title: tab.lastTitle,
+                                                  faviconURL: tab.displayFavicon?.url,
+                                                  lastExecutedTime: tab.lastExecutedTime)
+            }
+        }
+
+        // Toast
+        let viewModel = ButtonToastViewModel(
+            labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, recentlyClosedTabs.count),
+            buttonText: .TabsDeleteAllUndoAction)
+        // Passing nil theme because themeManager is not available,
+        // calling to applyTheme with proper theme before showing
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: nil,
+                                completion: { buttonPressed in
+            // Handles undo to Close tabs
+            if buttonPressed {
+                self.reAddTabs(tabsToAdd: recentlyClosedTabs,
+                               previousTabUUID: previousTabUUID)
+                NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
+            } else {
+                // Finish clean up for recently close tabs
+                DispatchQueue.global(qos: .background).async { [unowned self] in
+                    let previousTab = tabs.filter {
+                        $0.tabUUID == previousTabUUID
+                    }.first
+
+                    self.cleanupClosedTabs(recentlyClosedTabs,
+                                           previous: previousTab,
+                                           isPrivate: isPrivate)
                 }
             }
-
-            // Toast
-            var didPressButton = false
-            toast = ButtonToast(
-                labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, numberOfTabs),
-                buttonText: .TabsDeleteAllUndoAction,
-                completion: { buttonPressed in
-                    if buttonPressed {
-                        self.reAddTabs(tabsToAdd: recentlyClosedTabs,
-                                       previousTabUUID: previousTabUUID)
-                        NotificationCenter.default.post(name: .DidTapUndoCloseAllTabToast, object: nil)
-                    }
-                    didPressButton = true
-                }, autoDismissCompletion: {
-                    guard !didPressButton else { return }
-                    DispatchQueue.global(qos: .background).async { [unowned self] in
-                        let previousTab = tabs.filter {
-                            $0.tabUUID == previousTabUUID
-                        }.first
-
-                        self.cleanupClosedTabs(recentlyClosedTabs,
-                                               previous: previousTab,
-                                               isPrivate: isPrivate)
-                    }
-                })
-        }
-
-        if let toast = toast {
-            delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
-        }
+        })
+        delegates.forEach { $0.get()?.tabManagerDidRemoveAllTabs(self, toast: toast) }
     }
 
     // MARK: - Private

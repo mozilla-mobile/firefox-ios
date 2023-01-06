@@ -152,7 +152,7 @@ class BrowserViewController: UIViewController {
     let downloadQueue: DownloadQueue
 
     private var keyboardPressesHandlerValue: Any?
-    private var themeManager: ThemeManager
+    var themeManager: ThemeManager
 
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
@@ -570,7 +570,7 @@ class BrowserViewController: UIViewController {
 
         if let toast = self.pendingToast {
             self.pendingToast = nil
-            show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
+            show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
         showQueuedAlertIfAvailable()
 
@@ -1171,9 +1171,11 @@ class BrowserViewController: UIViewController {
     }
 
     private func showBookmarksToast() {
-        let toast = ButtonToast(labelText: .AppMenu.AddBookmarkConfirmMessage,
-                                buttonText: .BookmarksEdit,
-                                textAlignment: .left) { isButtonTapped in
+        let viewModel = ButtonToastViewModel(labelText: .AppMenu.AddBookmarkConfirmMessage,
+                                             buttonText: .BookmarksEdit,
+                                             textAlignment: .left)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme) { isButtonTapped in
             isButtonTapped ? self.openBookmarkEditPanel() : nil
         }
         self.show(toast: toast)
@@ -1502,7 +1504,8 @@ class BrowserViewController: UIViewController {
                 self.showSendToDevice()
             case CustomActivityAction.copyLink.actionType:
                 SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
-                                                bottomContainer: webViewContainer)
+                                                bottomContainer: webViewContainer,
+                                                theme: themeManager.currentTheme)
             default: break
             }
 
@@ -1656,8 +1659,19 @@ class BrowserViewController: UIViewController {
 extension BrowserViewController: SearchBarLocationProvider {}
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
-    func shouldDisplay(clipboardBar bar: ButtonToast) {
-        show(toast: bar, duration: ClipboardBarToastUX.ToastDelay)
+    func shouldDisplay(clipBoardURL url: URL) {
+        let viewModel = ButtonToastViewModel(labelText: .GoToCopiedLink,
+                                             descriptionText: url.absoluteDisplayString,
+                                             buttonText: .GoButtonTittle)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
+            if buttonPressed {
+                self.settingsOpenURLInNewTab(url)
+            }
+        })
+        clipboardBarDisplayHandler?.clipboardToast = toast
+        show(toast: toast, duration: ClipboardBarDisplayHandler.UX.toastDelay)
     }
 }
 
@@ -1873,7 +1887,11 @@ extension BrowserViewController: LibraryPanelDelegate {
         // If in overlay mode switching doesnt correctly dismiss the homepanels
         guard !topTabsVisible, !self.urlBar.inOverlayMode else { return }
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-        let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+        let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                             buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
             }
@@ -1927,7 +1945,11 @@ extension BrowserViewController: HomePanelDelegate {
         guard !topTabsVisible else { return }
 
         // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-        let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+        let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                             buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
             if buttonPressed {
                 self.tabManager.selectTab(tab)
             }
@@ -2131,12 +2153,14 @@ extension BrowserViewController: TabManagerDelegate {
         urlFromAnotherApp = nil
     }
 
-    func show(toast: Toast, afterWaiting delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore, duration: DispatchTimeInterval? = SimpleToastUX.ToastDismissAfter) {
+    func show(toast: Toast,
+              afterWaiting delay: DispatchTimeInterval = Toast.UX.toastDelayBefore,
+              duration: DispatchTimeInterval? = Toast.UX.toastDismissAfter) {
         if let downloadToast = toast as? DownloadToast {
             self.downloadToast = downloadToast
         }
 
-        // If BVC isnt visible hold on to this toast until viewDidAppear
+        // If BVC isn't visible hold on to this toast until viewDidAppear
         if self.view.window == nil {
             self.pendingToast = toast
             return
@@ -2153,7 +2177,11 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         guard let toast = toast, !(tabManager.selectedTab?.isPrivate ?? false) else { return }
-        show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
+        // The toast is created from TabManager which doesn't have access to themeManager
+        // The whole toast system needs some rework so as compromised solution before the rework I create the toast
+        // with light theme and force apply theme with real theme before showing
+        toast.applyTheme(theme: themeManager.currentTheme)
+        show(toast: toast, afterWaiting: ButtonToast.UX.delay)
     }
 
     func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
@@ -2315,7 +2343,11 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
                 guard !self.topTabsVisible else { return }
                 // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                let toast = ButtonToast(labelText: .ContextMenuButtonToastNewTabOpenedLabelText, buttonText: .ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+                let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
+                                                     buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
+                let toast = ButtonToast(viewModel: viewModel,
+                                        theme: self.themeManager.currentTheme,
+                                        completion: { buttonPressed in
                     if buttonPressed {
                         self.tabManager.selectTab(tab)
                     }
@@ -2638,7 +2670,9 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
             self.popToBVC()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
+                                                bottomContainer: self.webViewContainer,
+                                                theme: self.themeManager.currentTheme)
             }
         }
     }

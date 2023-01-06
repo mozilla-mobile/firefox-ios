@@ -5,15 +5,21 @@
 import Shared
 import UIKit
 
-struct DownloadToastUX {
-    static let ToastBackgroundColor = UIColor.Photon.Blue40
-    static let ToastProgressColor = UIColor.Photon.Blue50
-}
-
 class DownloadToast: Toast {
-    lazy var progressView: UIView = .build { view in
-        view.backgroundColor = DownloadToastUX.ToastProgressColor
+    struct UX {
+        static let ToastBackgroundColor = UIColor.Photon.Blue40
+        static let ToastProgressColor = UIColor.Photon.Blue50
+        static let ToastDescriptionFont = UIFont.systemFont(ofSize: 13)
     }
+
+    lazy var progressView: UIView = .build { view in
+        view.backgroundColor = UX.ToastProgressColor
+    }
+
+    let descriptionLabel = UILabel()
+    var progressWidthConstraint: NSLayoutConstraint?
+
+    var downloads: [Download] = []
 
     var percent: CGFloat = 0.0 {
         didSet {
@@ -51,11 +57,6 @@ class DownloadToast: Toast {
         return String(format: .DownloadMultipleFilesAndProgressToastDescriptionText, fileCountDescription, descriptionText)
     }
 
-    var downloads: [Download] = []
-
-    let descriptionLabel = UILabel()
-    var progressWidthConstraint: NSLayoutConstraint?
-
     init(download: Download, completion: @escaping (_ buttonPressed: Bool) -> Void) {
         super.init(frame: .zero)
 
@@ -73,10 +74,10 @@ class DownloadToast: Toast {
             toastView.trailingAnchor.constraint(equalTo: trailingAnchor),
             toastView.heightAnchor.constraint(equalTo: heightAnchor),
 
-            heightAnchor.constraint(equalToConstant: ButtonToastUX.ToastHeight)
+            heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight)
         ])
 
-        animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor, constant: ButtonToastUX.ToastHeight)
+        animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor, constant: Toast.UX.toastHeight)
         animationConstraint?.isActive = true
     }
 
@@ -111,7 +112,7 @@ class DownloadToast: Toast {
         let horizontalStackView: UIStackView = .build { stackView in
             stackView.axis = .horizontal
             stackView.alignment = .center
-            stackView.spacing = ButtonToastUX.ToastPadding
+            stackView.spacing = ButtonToast.UX.padding
         }
 
         let icon = UIImageView(image: UIImage.templateImageNamed("download"))
@@ -124,7 +125,7 @@ class DownloadToast: Toast {
 
         let label = UILabel()
         label.textColor = UIColor.Photon.White100
-        label.font = ButtonToastUX.ToastLabelFont
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         label.text = labelText
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 1
@@ -132,7 +133,7 @@ class DownloadToast: Toast {
         labelStackView.addArrangedSubview(label)
 
         descriptionLabel.textColor = UIColor.Photon.White100
-        descriptionLabel.font = ButtonToastUX.ToastDescriptionFont
+        descriptionLabel.font = UX.ToastDescriptionFont
         descriptionLabel.text = descriptionText
         descriptionLabel.lineBreakMode = .byTruncatingTail
         labelStackView.addArrangedSubview(descriptionLabel)
@@ -145,7 +146,7 @@ class DownloadToast: Toast {
         cancel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
         horizontalStackView.addArrangedSubview(cancel)
 
-        toastView.backgroundColor = DownloadToastUX.ToastBackgroundColor
+        toastView.backgroundColor = UX.ToastBackgroundColor
 
         toastView.addSubview(progressView)
         toastView.addSubview(horizontalStackView)
@@ -157,7 +158,7 @@ class DownloadToast: Toast {
 
             horizontalStackView.centerXAnchor.constraint(equalTo: toastView.centerXAnchor),
             horizontalStackView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
-            horizontalStackView.widthAnchor.constraint(equalTo: toastView.widthAnchor, constant: -2 * ButtonToastUX.ToastPadding)
+            horizontalStackView.widthAnchor.constraint(equalTo: toastView.widthAnchor, constant: -2 * ButtonToast.UX.padding)
         ])
 
         progressWidthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
@@ -179,6 +180,6 @@ class DownloadToast: Toast {
     }
 
     override func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
-        // Intentional NOOP to override superclass behavior for dismissing the toast.
+        // Intentional NOOP to override superclass behaviour for dismissing the toast.
     }
 }

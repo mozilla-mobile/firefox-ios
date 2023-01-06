@@ -200,12 +200,18 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     func showToast(message: String, toastAction: MenuButtonToastAction, url: String?) {
         switch toastAction {
         case .removeBookmark:
-            let toast = ButtonToast(labelText: message, buttonText: .UndoString, textAlignment: .left) { isButtonTapped in
+            let viewModel = ButtonToastViewModel(labelText: message,
+                                                 buttonText: .UndoString,
+                                                 textAlignment: .left)
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: themeManager.currentTheme) { isButtonTapped in
                 isButtonTapped ? self.addBookmark(url: url ?? "") : nil
             }
             show(toast: toast)
         default:
-            SimpleToast().showAlertWithText(message, bottomContainer: webViewContainer)
+            SimpleToast().showAlertWithText(message,
+                                            bottomContainer: webViewContainer,
+                                            theme: themeManager.currentTheme)
         }
     }
 

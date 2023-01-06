@@ -497,7 +497,8 @@ extension BookmarksPanel: LibraryPanelContextMenu {
             self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
                     SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage,
-                                                    bottomContainer: self.view)
+                                                    bottomContainer: self.view,
+                                                    theme: self.themeManager.currentTheme)
                 } else {
                     self.browserLog.debug("Could not add pinned top site")
                 }

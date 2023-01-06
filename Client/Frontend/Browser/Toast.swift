@@ -4,11 +4,20 @@
 
 import Foundation
 import UIKit
+import Shared
 
-class Toast: UIView {
+class Toast: UIView, ThemeApplicable {
+    struct UX {
+        static let toastHeight: CGFloat = 56
+        static let toastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
+        static let toastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
+        static let toastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
+        static let toastAnimationDuration = 0.5
+        static let fontSize: CGFloat = 15
+    }
+
     var animationConstraint: NSLayoutConstraint?
     var completionHandler: ((Bool) -> Void)?
-    var didDismissWithoutTapHandler: (() -> Void)?
 
     weak var viewController: UIViewController?
 
@@ -20,9 +29,7 @@ class Toast: UIView {
         return gestureRecognizer
     }()
 
-    lazy var toastView: UIView = .build { view in
-        view.backgroundColor = SimpleToastUX.ToastDefaultColor
-    }
+    lazy var toastView: UIView = .build { view in }
 
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
@@ -45,14 +52,13 @@ class Toast: UIView {
             self.layoutIfNeeded()
 
             UIView.animate(
-                withDuration: SimpleToastUX.ToastAnimationDuration,
+                withDuration: UX.toastAnimationDuration,
                 animations: {
                     self.animationConstraint?.constant = 0
                     self.layoutIfNeeded()
                 }) { finished in
                     if let duration = duration {
                         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                            self.didDismissWithoutTapHandler?()
                             self.dismiss(false)
                         }
                     }
@@ -62,13 +68,14 @@ class Toast: UIView {
 
     func dismiss(_ buttonPressed: Bool) {
         guard !dismissed else { return }
+
         dismissed = true
         superview?.removeGestureRecognizer(gestureRecognizer)
 
         UIView.animate(
-            withDuration: SimpleToastUX.ToastAnimationDuration,
+            withDuration: UX.toastAnimationDuration,
             animations: {
-                self.animationConstraint?.constant = SimpleToastUX.ToastHeight
+                self.animationConstraint?.constant = UX.toastHeight
                 self.layoutIfNeeded()
             }) { finished in
                 self.removeFromSuperview()
@@ -80,5 +87,9 @@ class Toast: UIView {
 
     @objc func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
         dismiss(false)
+    }
+
+    func applyTheme(theme: Theme) {
+        toastView.backgroundColor = theme.colors.actionPrimary
     }
 }

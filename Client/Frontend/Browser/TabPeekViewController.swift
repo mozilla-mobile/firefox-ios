@@ -12,6 +12,7 @@ protocol TabPeekDelegate: AnyObject {
     @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController)
     func tabPeekDidCloseTab(_ tab: Tab)
+    func tabPeekDidCopyUrl()
 }
 
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
@@ -52,10 +53,11 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             // only add the copy URL action if we don't already have 3 items in our list
             // as we are only allowed 4 in total and we always want to display close tab
             if actions.count < 3 {
-                actions.append(UIPreviewAction(title: .TabPeekCopyUrl, style: .default) {[weak self] previewAction, viewController in
+                actions.append(UIPreviewAction(title: .TabPeekCopyUrl, style: .default) { [weak self] previewAction, viewController in
                     guard let wself = self, let url = wself.tab?.canonicalURL else { return }
+
                     UIPasteboard.general.url = url
-                    SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
+                    wself.delegate?.tabPeekDidCopyUrl()
                 })
             }
         }
@@ -87,8 +89,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             }
             actions.append(UIAction(title: .TabPeekCopyUrl, image: UIImage.templateImageNamed(ImageIdentifiers.copyLink), identifier: nil) { [weak self] _ in
                 guard let wself = self, let url = wself.tab?.canonicalURL else { return }
+
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
+                wself.delegate?.tabPeekDidCopyUrl()
             })
         }
         actions.append(UIAction(title: .TabPeekCloseTab,

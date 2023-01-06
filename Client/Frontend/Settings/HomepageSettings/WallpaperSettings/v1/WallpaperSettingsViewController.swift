@@ -213,16 +213,18 @@ private extension WallpaperSettingsViewController {
     }
 
     func showToast() {
+        let viewModel = ButtonToastViewModel(labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
+                                             buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button)
         let toast = ButtonToast(
-            labelText: WallpaperSettingsViewModel.Constants.Strings.Toast.label,
-            buttonText: WallpaperSettingsViewModel.Constants.Strings.Toast.button,
+            viewModel: viewModel,
+            theme: themeManager.currentTheme,
             completion: { buttonPressed in
             if buttonPressed { self.dismissView() }
         })
 
         toast.showToast(viewController: self,
-                        delay: SimpleToastUX.ToastDelayBefore,
-                        duration: SimpleToastUX.ToastDismissAfter) { toast in
+                        delay: Toast.UX.toastDelayBefore,
+                        duration: Toast.UX.toastDismissAfter) { toast in
             [
                 toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
