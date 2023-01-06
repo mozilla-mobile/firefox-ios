@@ -76,6 +76,7 @@ public protocol ThemeColourPalette {
     var borderAccent: UIColor { get }
     var borderAccentNonOpaque: UIColor { get }
     var borderAccentPrivate: UIColor { get }
+    var borderInverted: UIColor { get }
 
     // MARK: - Shadow
     var shadowDefault: UIColor { get }

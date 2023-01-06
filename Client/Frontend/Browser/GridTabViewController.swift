@@ -514,6 +514,12 @@ extension GridTabViewController: TabPeekDelegate {
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {
         present(viewController, animated: true, completion: nil)
     }
+
+    func tabPeekDidCopyUrl() {
+        SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
+                                        bottomContainer: view,
+                                        theme: themeManager.currentTheme)
+    }
 }
 
 // MARK: - TabDisplayCompeltionDelegate & RecentlyClosedPanelDelegate

@@ -57,8 +57,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private let tabUrl: URL?
     private let isFileURL: Bool
     private let showFXASyncAction: (FXASyncClosure) -> Void
-    private let themeManager: ThemeManager
 
+    let themeManager: ThemeManager
     var bookmarksHandler: BookmarksHandler
     let profile: Profile
     let tabManager: TabManager

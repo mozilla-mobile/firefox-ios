@@ -5,15 +5,15 @@
 import Foundation
 import Shared
 
-public struct ClipboardBarToastUX {
-    static let ToastDelay = DispatchTimeInterval.milliseconds(4000)
-}
-
 protocol ClipboardBarDisplayHandlerDelegate: AnyObject {
-    func shouldDisplay(clipboardBar bar: ButtonToast)
+    func shouldDisplay(clipBoardURL url: URL)
 }
 
 class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
+    public struct UX {
+        static let toastDelay = DispatchTimeInterval.milliseconds(10000)
+    }
+
     weak var delegate: (ClipboardBarDisplayHandlerDelegate & SettingsDelegate)?
     weak var settingsDelegate: SettingsDelegate?
     weak var tabManager: TabManager?
@@ -128,21 +128,7 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
               let url = UIPasteboard.general.url,
               shouldDisplayBar(url.absoluteString) else { return }
 
-        self.lastDisplayedURL = url.absoluteString
-
-        self.clipboardToast =
-        ButtonToast(
-            labelText: .GoToCopiedLink,
-            descriptionText: url.absoluteDisplayString,
-            buttonText: .GoButtonTittle,
-            completion: { buttonPressed in
-                if buttonPressed {
-                    self.delegate?.settingsOpenURLInNewTab(url)
-                }
-            })
-
-        if let toast = self.clipboardToast {
-            delegate?.shouldDisplay(clipboardBar: toast)
-        }
+        lastDisplayedURL = url.absoluteString
+        delegate?.shouldDisplay(clipBoardURL: url)
     }
 }

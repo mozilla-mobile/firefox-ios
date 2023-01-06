@@ -18,9 +18,9 @@ extension BrowserViewController: DownloadQueueDelegate {
                 if buttonPressed, !downloadQueue.isEmpty {
                     downloadQueue.cancelAll()
 
-                    let downloadCancelledToast = ButtonToast(labelText: .DownloadCancelledToastLabelText, backgroundColor: UIColor.Photon.Grey60, textAlignment: .center)
-
-                    self.show(toast: downloadCancelledToast)
+                    SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                                    bottomContainer: self.webViewContainer,
+                                                    theme: self.themeManager.currentTheme)
                 }
             })
 
@@ -49,7 +49,12 @@ extension BrowserViewController: DownloadQueueDelegate {
             downloadToast.dismiss(false)
 
             if error == nil {
-                let downloadCompleteToast = ButtonToast(labelText: download.filename, imageName: "check", buttonText: .DownloadsButtonTitle, completion: { buttonPressed in
+                let viewModel = ButtonToastViewModel(labelText: download.filename,
+                                                     imageName: ImageIdentifiers.check,
+                                                     buttonText: .DownloadsButtonTitle)
+                let downloadCompleteToast = ButtonToast(viewModel: viewModel,
+                                                        theme: self.themeManager.currentTheme,
+                                                        completion: { buttonPressed in
                     guard buttonPressed else { return }
 
                     self.showLibrary(panel: .downloads)
@@ -58,9 +63,9 @@ extension BrowserViewController: DownloadQueueDelegate {
 
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))
             } else {
-                let downloadFailedToast = ButtonToast(labelText: .DownloadFailedToastLabelText, backgroundColor: UIColor.Photon.Grey60, textAlignment: .center)
-
-                self.show(toast: downloadFailedToast, duration: nil)
+                SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                                bottomContainer: self.webViewContainer,
+                                                theme: self.themeManager.currentTheme)
             }
         }
     }

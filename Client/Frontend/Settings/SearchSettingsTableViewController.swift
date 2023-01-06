@@ -168,7 +168,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             customSearchEngineForm.profile = self.profile
             customSearchEngineForm.successCallback = {
                 guard let window = self.view.window else { return }
-                SimpleToast().showAlertWithText(.ThirdPartySearchEngineAdded, bottomContainer: window)
+                SimpleToast().showAlertWithText(.ThirdPartySearchEngineAdded,
+                                                bottomContainer: window,
+                                                theme: self.themeManager.currentTheme)
             }
             navigationController?.pushViewController(customSearchEngineForm, animated: true)
         }
