@@ -10,8 +10,6 @@ import SiteImageView
 class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
     struct UX {
         static let headerHeight = SiteTableViewControllerUX.RowHeight
-        static let iconBorderColor = UIColor.Photon.Grey30
-        static let iconBorderWidth: CGFloat = 0.5
     }
 
     weak var collapsibleSectionDelegate: CollapsibleTableViewSection?
@@ -105,8 +103,6 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
         cell.titleLabel.text = tab.title
         cell.descriptionLabel.text = tab.URL.absoluteString
         cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: tab.URL.absoluteString))
-        cell.leftImageView.layer.borderColor = UX.iconBorderColor.cgColor
-        cell.leftImageView.layer.borderWidth = UX.iconBorderWidth
         cell.accessoryView = nil
         cell.applyTheme(theme: theme)
         return cell
