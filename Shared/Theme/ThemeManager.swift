@@ -7,6 +7,7 @@ import Common
 
 public protocol ThemeManager {
     var currentTheme: Theme { get }
+    var window: UIWindow? { get set }
 
     func getInterfaceStyle() -> UIUserInterfaceStyle
     func changeCurrentTheme(_ newTheme: ThemeType)
@@ -38,18 +39,17 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
     public var currentTheme: Theme = LightTheme()
     public var notificationCenter: NotificationProtocol
     private var userDefaults: UserDefaultsInterface
-    private var appDelegate: UIApplicationDelegate?
     private var mainQueue: DispatchQueueInterface
+
+    public var window: UIWindow?
 
     // MARK: - Init
 
     public init(userDefaults: UserDefaultsInterface = UserDefaults.standard,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
-                appDelegate: UIApplicationDelegate? = nil,
                 mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.userDefaults = userDefaults
         self.notificationCenter = notificationCenter
-        self.appDelegate = appDelegate
         self.mainQueue = mainQueue
 
         migrateDefaultsToUseStandard()
@@ -76,11 +76,7 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
 
         // overwrite the user interface style on the window attached to our scene
         // once we have multiple scenes we need to update all of them
-        if #available(iOS 15, *) {
-            appDelegate?.window??.windowScene?.keyWindow?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
-        }
-        // old way of updating the theme. We should pass in and save sceneDelegate instead of appDelegate
-        appDelegate?.window??.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
+        window?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
 
         mainQueue.ensureMainThread { [weak self] in
             self?.notificationCenter.post(name: .ThemeDidChange)

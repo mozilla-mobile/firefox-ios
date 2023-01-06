@@ -46,6 +46,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         self.window = window
 
+        var themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager.window = window
+
         handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
     }
 
