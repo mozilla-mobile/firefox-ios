@@ -1036,6 +1036,25 @@ class ClearPrivateDataSetting: Setting {
     }
 }
 
+class AutofillCreditCardSettings: Setting, FeatureFlaggable {
+    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+
+    override var accessibilityIdentifier: String? { return "AutofillCreditCard" }
+
+    init(settings: SettingsTableViewController) {
+        let title: String = .SettingsAutofillCreditCard
+        super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        // Telemetry
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillSettings)
+
+        let viewController = CreditCardSettingsViewController(theme: theme)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .AppSettingsPrivacyPolicy, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
