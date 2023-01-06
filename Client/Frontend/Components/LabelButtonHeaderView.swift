@@ -53,7 +53,6 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         button.isHidden = true
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .subheadline,
                                                                                 size: UX.moreButtonTextSize)
-        button.contentHorizontalAlignment = .trailing
     }
 
     // MARK: - Variables
@@ -156,6 +155,9 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
             stackView.axis = .horizontal
             moreButton.contentHorizontalAlignment = .trailing
         }
+
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }
 
