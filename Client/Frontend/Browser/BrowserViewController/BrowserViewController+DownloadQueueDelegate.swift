@@ -18,11 +18,9 @@ extension BrowserViewController: DownloadQueueDelegate {
                 if buttonPressed, !downloadQueue.isEmpty {
                     downloadQueue.cancelAll()
 
-                    let viewModel = ButtonToastViewModel(labelText: .DownloadCancelledToastLabelText,
-                                                         textAlignment: .center)
-                    let downloadCancelledToast = ButtonToast(viewModel: viewModel,
-                                                             theme: self.themeManager.currentTheme)
-                    self.show(toast: downloadCancelledToast)
+                    SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                                    bottomContainer: self.webViewContainer,
+                                                    theme: self.themeManager.currentTheme)
                 }
             })
 
@@ -65,10 +63,9 @@ extension BrowserViewController: DownloadQueueDelegate {
 
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))
             } else {
-                let viewModel = ButtonToastViewModel(labelText: .DownloadFailedToastLabelText, textAlignment: .center)
-                let downloadFailedToast = ButtonToast(viewModel: viewModel,
-                                                      theme: self.themeManager.currentTheme)
-                self.show(toast: downloadFailedToast, duration: nil)
+                SimpleToast().showAlertWithText(.DownloadCancelledToastLabelText,
+                                                bottomContainer: self.webViewContainer,
+                                                theme: self.themeManager.currentTheme)
             }
         }
     }
