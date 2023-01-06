@@ -328,7 +328,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
                     }
 
                     self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.iconSize)
-                            .withRenderingMode(.alwaysTemplate)
+                            .withRenderingMode(.alwaysOriginal)
                     self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
                 }
             }
