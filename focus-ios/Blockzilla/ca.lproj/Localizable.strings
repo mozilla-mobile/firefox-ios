@@ -175,11 +175,26 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "Tanca";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "Inicia";
+
 /* Text for a label that indicates the title of button from onboarding screen */
 "Onboarding.Button.Title" = "Comença a navegar";
 
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Omet";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Defineix com a navegador per defecte";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Elimineu l'historial de navegació, contrasenyes i galetes i eviteu que anuncis no desitjats us segueixin amb un sol clic!";
+
 /* Text for a label that indicates the title of history section from onboarding screen. */
 "Onboarding.History.Title" = "El vostre historial no us segueix";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Més que d'incògnit";
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Us donem la benvinguda al Firefox %@";
@@ -301,6 +316,9 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVADESA";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Defineix com a navegador per defecte";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Tema del sistema";
 
@@ -370,6 +388,9 @@
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Afegeix a les dreceres";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "S'ha afegit a les dreceres";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Copia l'adreça";
 
@@ -378,6 +399,9 @@
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Elimina de les dreceres";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "S'ha eliminat la drecera";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Mostra el lloc d'escriptori";
@@ -393,6 +417,9 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Obre al Firefox";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Obre l'enllaç";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Comparteix la pàgina amb…";
@@ -411,6 +438,9 @@
 
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Cancel·la";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Fet";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Afegeix";

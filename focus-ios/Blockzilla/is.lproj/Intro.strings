@@ -11,13 +11,13 @@
 "Intro.Slides.Search.Description" = "Ertu að leita að einhverju nýju? Prófaðu aðra leitarvél.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Leitin þín á þinn hátt";
+"Intro.Slides.Search.Title" = "Leitin þín, á þinn hátt";
 
 /* Button to skip onboarding in Focus */
 "Intro.Slides.Skip.Button" = "Sleppa";
 
 /* Description for the 'Welcome' panel in the First Run tour. */
-"Intro.Slides.Welcome.Description" = "Taktu einkavafur upp á næsta stig. Lokaðu fyrir auglýsingar og annað efni sem getur fylgst með þér á milli vefsvæða og aukið hleðslutíma á vefsíðum.";
+"Intro.Slides.Welcome.Description" = "Taktu huliðsvafur upp á næsta stig. Lokaðu fyrir auglýsingar og annað efni sem getur fylgst með þér á milli vefsvæða og eykur hleðslutíma á vefsíðum.";
 
 /* Title for the first panel 'Welcome' in the First Run tour. */
 "Intro.Slides.Welcome.Title" = "Auka friðhelgina þína";

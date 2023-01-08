@@ -110,7 +110,7 @@
 "Browser.backLabel" = "Til baka";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL Afritað á klemmuspjald";
+"browser.copyAddressToast" = "Vefslóð afrituð á klippispjald";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Afrita";
@@ -218,7 +218,7 @@
 "Onboarding.Protection.Title" = "Vernd eftir þínum eigin geðþótta";
 
 /* Text for a label that indicates the subtitle for onboarding screen. */
-"Onboarding.Subtitle" = "Taktu einkavafur þitt upp á næsta stig.";
+"Onboarding.Subtitle" = "Taktu huliðsvafur þitt upp á næsta stig.";
 
 /* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
 "Onboarding.Title" = "Velkomin í Firefox %@!";
@@ -257,7 +257,7 @@
 "SearchSuggestions.promptMessage" = "Til að fá tillögur, þarf %@ að senda það sem þú skrifar í slóðina til leitarvélarinnar.";
 
 /* Title for search suggestions prompt */
-"SearchSuggestions.promptTitle" = "Sýna leitar tillögur?";
+"SearchSuggestions.promptTitle" = "Sýna leitartillögur?";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "Sjálfvirk leiðrétting á slóðum";
@@ -572,7 +572,7 @@
 "TooltipBodyText.Privacy" = "Þessar sjálfgefnu stillingar bjóða upp á öfluga vernd. En það er auðvelt að laga til stillingarnar til að mæta sérþörfum þínum.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
-"TooltipBodyText.SearchBar" = "Byrjaðu einkavafralotuna þína og við lokum á rakningar og annað vont dót á meðan þú vafrar.";
+"TooltipBodyText.SearchBar" = "Byrjaðu huliðsvafralotuna þína og við lokum á rakningar og annað vont dót á meðan þú vafrar.";
 
 /* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
 "TooltipBodyText.ShieldIcon" = "%@ kom í veg fyrir að þetta vefsvæði njósnaði um þig. Ýttu á skjöldinn til að fá upplýsingar um það sem við lokuðum á.";
@@ -644,7 +644,7 @@
 "WidgetOnboardingCard.ActionButton" = "Sýna mér hvernig";
 
 /* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
-"WidgetOnboardingCard.Subtitle" = "Við látum þig vera í einkavafrinu þínu, en byrjum hraðar næst með %@ viðmótshlutanum á upphafsskjánum þínum.";
+"WidgetOnboardingCard.Subtitle" = "Við látum þig vera í huliðsvafrinu þínu, en byrjum hraðar næst með %@-viðmótshlutanum á upphafsskjánum þínum.";
 
 /* Title shown on card view explaining the app has a widget option */
 "WidgetOnboardingCard.Title" = "Vafraferill hreinsaður! 🎉";
