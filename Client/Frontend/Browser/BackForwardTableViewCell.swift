@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import SiteImageView
 
 struct BackForwardCellViewModel {
     var site: Site
@@ -22,18 +23,13 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let faviconWidth: CGFloat = 29
         static let faviconPadding: CGFloat = 20
+        static let faviconCornerRadius: CGFloat = 6
         static let labelPadding: CGFloat = 20
         static let iconSize = CGSize(width: 23, height: 23)
         static let fontSize: CGFloat = 12
     }
 
-    private lazy var faviconView: UIImageView = .build { imageView in
-        imageView.image = FaviconFetcher.defaultFavicon
-        imageView.layer.cornerRadius = 6
-        imageView.layer.borderWidth = 0.5
-        imageView.layer.masksToBounds = true
-        imageView.contentMode = .center
-    }
+    private lazy var faviconView: FaviconImageView = .build { _ in }
 
     lazy var label: UILabel = .build { _ in }
 
@@ -111,14 +107,13 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     func configure(viewModel: BackForwardCellViewModel, theme: Theme) {
         self.viewModel = viewModel
 
-        faviconView.setFavicon(forSite: viewModel.site) { [weak self] in
-            if InternalURL.isValid(url: viewModel.site.tileURL) {
-                self?.faviconView.image = UIImage(named: ImageIdentifiers.firefoxFavicon)
-                self?.faviconView.image = self?.faviconView.image?.createScaled(UX.iconSize)
-                return
-            }
-
-            self?.faviconView.image = self?.faviconView.image?.createScaled(UX.iconSize)
+        if let url = URL(string: viewModel.site.url),
+            InternalURL(url)?.isAboutHomeURL == true {
+            faviconView.image = UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysTemplate)
+            faviconView.backgroundColor = .clear
+        } else {
+            faviconView.setFavicon(FaviconImageViewModel(urlStringRequest: viewModel.site.url,
+                                                         faviconCornerRadius: UX.faviconCornerRadius))
         }
 
         label.text = viewModel.cellTittle
@@ -137,10 +132,6 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.textColor = theme.colors.textPrimary
         viewModel.strokeBackgroundColor = theme.colors.borderPrimary
         faviconView.layer.borderColor = theme.colors.borderPrimary.cgColor
-        // setFavicon applies a color background to the imageView
-        // if the color is clear we default to white background
-        if faviconView.backgroundColor == nil || faviconView.backgroundColor == .clear {
-            faviconView.backgroundColor = theme.colors.layer6
-        }
+        faviconView.tintColor = theme.colors.iconPrimary
     }
 }
