@@ -15,7 +15,7 @@ private let searchableIndex = CSSearchableIndex.default()
 
 class UserActivityHandler {
     init() {
-        register(self, forTabEvents: .didClose, .didLoseFocus, .didGainFocus, .didChangeURL, .didLoadPageMetadata, .didLoadReadability) // .didLoadFavicon, // TODO: Bug 1390294
+        register(self, forTabEvents: .didClose, .didLoseFocus, .didGainFocus, .didChangeURL, .didLoadPageMetadata, .didLoadReadability)
     }
 
     class func clearSearchIndex(completionHandler: ((Error?) -> Void)? = nil) {

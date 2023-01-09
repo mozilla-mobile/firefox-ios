@@ -135,7 +135,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
 extension JumpBackInDataAdaptorTests {
     func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
         let dispatchQueue = MockDispatchQueue()
-        let siteImageHelper = SiteImageHelperMock()
         let notificationCenter = SpyNotificationCenter()
 
         let subject = JumpBackInDataAdaptorImplementation(profile: mockProfile,
@@ -145,7 +144,6 @@ extension JumpBackInDataAdaptorTests {
                                                           notificationCenter: notificationCenter)
 
         trackForMemoryLeaks(subject, file: file, line: line)
-        trackForMemoryLeaks(siteImageHelper, file: file, line: line)
         trackForMemoryLeaks(dispatchQueue, file: file, line: line)
 
         return subject
