@@ -298,7 +298,7 @@ class LibraryViewController: UIViewController, Themeable {
 
         view.backgroundColor = themeManager.currentTheme.colors.layer3
         navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer1
-        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimaryHover
+        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimary
         navigationController?.navigationBar.backgroundColor = themeManager.currentTheme.colors.layer1
         navigationController?.toolbar.barTintColor = themeManager.currentTheme.colors.layer1
         navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimaryHover
