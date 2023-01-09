@@ -286,7 +286,7 @@ class LibraryViewController: UIViewController, Themeable {
             navigationController?.toolbar.scrollEdgeAppearance = standardAppearance
             navigationController?.toolbar.compactScrollEdgeAppearance = standardAppearance
         }
-        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimaryHover
+        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimary
     }
 
     func applyTheme() {
@@ -298,10 +298,10 @@ class LibraryViewController: UIViewController, Themeable {
 
         view.backgroundColor = themeManager.currentTheme.colors.layer3
         navigationController?.navigationBar.barTintColor = themeManager.currentTheme.colors.layer1
-        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimaryHover
+        navigationController?.navigationBar.tintColor = themeManager.currentTheme.colors.actionPrimary
         navigationController?.navigationBar.backgroundColor = themeManager.currentTheme.colors.layer1
         navigationController?.toolbar.barTintColor = themeManager.currentTheme.colors.layer1
-        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimaryHover
+        navigationController?.toolbar.tintColor = themeManager.currentTheme.colors.actionPrimary
         segmentControlToolbar.barTintColor = themeManager.currentTheme.colors.layer1
         segmentControlToolbar.tintColor = themeManager.currentTheme.colors.textPrimary
         segmentControlToolbar.isTranslucent = false
