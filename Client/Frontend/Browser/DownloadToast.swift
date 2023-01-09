@@ -7,13 +7,10 @@ import UIKit
 
 class DownloadToast: Toast {
     struct UX {
-        static let ToastBackgroundColor = UIColor.Photon.Blue40
-        static let ToastProgressColor = UIColor.Photon.Blue50
         static let buttonSize: CGFloat = 40
     }
 
     lazy var progressView: UIView = .build { view in
-        view.backgroundColor = UX.ToastProgressColor
     }
 
     private var horizontalStackView: UIStackView = .build { stackView in
@@ -24,7 +21,6 @@ class DownloadToast: Toast {
 
     private var imageView: UIImageView = .build { imageView in
         imageView.image = UIImage.templateImageNamed(ImageIdentifiers.downloads)
-        imageView.tintColor = UIColor.Photon.White100
     }
 
     private var labelStackView: UIStackView = .build { stackView in
@@ -47,7 +43,6 @@ class DownloadToast: Toast {
 
     private lazy var closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.closeMediumButton), for: [])
-        button.tintColor = UIColor.Photon.White100
         button.addTarget(self, action: #selector(self.buttonPressed), for: .touchUpInside)
     }
 
@@ -148,7 +143,6 @@ class DownloadToast: Toast {
     func createView(_ labelText: String, descriptionText: String) -> UIView {
         horizontalStackView.addArrangedSubview(imageView)
 
-        titleLabel.textColor = UIColor.Photon.White100
         titleLabel.text = labelText
         descriptionLabel.text = descriptionText
 
@@ -158,7 +152,6 @@ class DownloadToast: Toast {
         horizontalStackView.addArrangedSubview(labelStackView)
         horizontalStackView.addArrangedSubview(closeButton)
 
-        toastView.backgroundColor = UX.ToastBackgroundColor
         toastView.addSubview(progressView)
         toastView.addSubview(horizontalStackView)
 
