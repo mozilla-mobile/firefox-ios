@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import SiteImageView
 
 class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell {
     private var viewModel: InactiveTabItemCellModel?
@@ -13,11 +14,7 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
         return view
     }()
 
-    private lazy var leftImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 5.0
-        imageView.clipsToBounds = true
-    }
+    private lazy var leftImageView: FaviconImageView = .build { _ in }
 
     private lazy var titleLabel: UILabel = .build { label in
         label.textColor = .black
@@ -49,8 +46,12 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
 
         titleLabel.text = viewModel.title
         titleLabel.font = viewModel.fontForLabel
-        leftImageView.setImageAndBackground(forIcon: viewModel.icon,
-                                            website: viewModel.website) {}
+
+        if let urlString = viewModel.website?.absoluteString {
+            let cornerRadius = InactiveTabItemCellModel.UX.FaviconCornerRadius
+            leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: urlString,
+                                                           faviconCornerRadius: cornerRadius))
+        }
         separatorInset = UIEdgeInsets(top: 0,
                                       left: InactiveTabItemCellModel.UX.ImageSize + 2 *
                                       InactiveTabItemCellModel.UX.BorderViewMargin,

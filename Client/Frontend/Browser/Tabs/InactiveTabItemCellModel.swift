@@ -15,6 +15,7 @@ struct InactiveTabItemCellModel {
         static let MidViewLeadingConstant: CGFloat = 12
         static let MidViewTrailingConstant: CGFloat = -16
         static let SeparatorHeight: CGFloat = 0.5
+        static let FaviconCornerRadius: CGFloat = 5
     }
 
     var fontForLabel: UIFont {
@@ -22,6 +23,5 @@ struct InactiveTabItemCellModel {
     }
 
     var title: String?
-    var icon: Favicon?
     var website: URL?
 }
