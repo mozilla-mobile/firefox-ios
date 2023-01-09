@@ -132,7 +132,6 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
 
             let viewModel = InactiveTabItemCellModel(title: tab.getTabTrayTitle(),
-                                                     icon: tab.displayFavicon,
                                                      website: getTabDomainUrl(tab: tab))
             cell.configureCell(viewModel: viewModel)
             return cell
