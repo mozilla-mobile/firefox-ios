@@ -9,7 +9,6 @@ import Storage
 class RecentlySavedDataAdaptorTests: XCTestCase {
     let oneDay: TimeInterval = 86400
     var subject: RecentlySavedDataAdaptor!
-    var mockSiteImageHelper: SiteImageHelperMock!
     var mockReadingList: ReadingListMock!
     var mockBookmarksHandler: BookmarksHandlerMock!
     var mockNotificationCenter: MockNotificationCenter!
@@ -17,7 +16,6 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        mockSiteImageHelper = SiteImageHelperMock()
         mockReadingList = ReadingListMock()
         mockBookmarksHandler = BookmarksHandlerMock()
         mockNotificationCenter = MockNotificationCenter()
@@ -26,7 +24,6 @@ class RecentlySavedDataAdaptorTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        mockSiteImageHelper = nil
         mockReadingList = nil
         mockBookmarksHandler = nil
         mockNotificationCenter = nil
