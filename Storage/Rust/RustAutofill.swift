@@ -33,7 +33,7 @@ public struct UnencryptedCreditCardFields {
     public var ccExpMonth: Int64
     public var ccExpYear: Int64
     public var ccType: String
-    
+
     func toUpdatableCreditCardFields() -> UpdatableCreditCardFields {
         let rustKeys = RustAutofillEncryptionKeys()
         let ccNumberEnc = rustKeys.encryptCreditCardNum(creditCardNum: self.ccNumber)
@@ -112,17 +112,13 @@ public class RustAutofillEncryptionKeys {
         }
     }
     
-    fileprivate func checkCanary(
-        canary: String,
-        text: String,
-        key: String
-    ) throws -> Bool {
+    fileprivate func checkCanary(canary: String,
+                                 text: String,
+                                 key: String) throws -> Bool {
         return try decryptString(key: key, ciphertext: canary) == text
     }
 
-    func encryptCreditCardNum(
-        creditCardNum: String
-    ) -> String? {
+    func encryptCreditCardNum(creditCardNum: String) -> String? {
         guard let key = self.keychain.string(forKey: self.ccKeychainKey) else {
             return nil
         }
@@ -146,15 +142,14 @@ public class RustAutofillEncryptionKeys {
         return nil
     }
     
-    fileprivate func createCanary(text: String, key: String) throws -> String {
+    fileprivate func createCanary(text: String,
+                                  key: String) throws -> String {
         return try encryptString(key: key, cleartext: text)
     }
 
-    private func sendAutofillStoreErrorToSentry(
-        err: AutofillApiError,
-        errorDomain: String,
-        errorMessage: String
-    ) {
+    private func sendAutofillStoreErrorToSentry(err: AutofillApiError,
+                                                errorDomain: String,
+                                                errorMessage: String) {
         var message: String {
             switch err {
             case .SqlError(let message),
@@ -257,86 +252,66 @@ public class RustAutofill {
         return error
     }
 
-    public func addCreditCard(
-        creditCard: UnencryptedCreditCardFields
-    ) -> Deferred<Maybe<CreditCard>> {
-        let deferred = Deferred<Maybe<CreditCard>>()
-
+    public func addCreditCard(creditCard: UnencryptedCreditCardFields, completion: @escaping (CreditCard?, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = AutofillApiError.UnexpectedAutofillApiError(
                     reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
+                completion(nil, error)
                 return
             }
 
             do {
-                let id = try self.storage?.addCreditCard(
-                    cc: creditCard.toUpdatableCreditCardFields())
-                deferred.fill(Maybe(success: id!))
+                let id = try self.storage?.addCreditCard(cc: creditCard.toUpdatableCreditCardFields())
+                completion(id!, nil)
             } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+                completion(nil, err)
             }
         }
-
-        return deferred
     }
 
-    public func getCreditCard(id: String) -> Deferred<Maybe<CreditCard?>> {
-        let deferred = Deferred<Maybe<CreditCard?>>()
-
+    public func getCreditCard(id: String, completion: @escaping (CreditCard?, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = AutofillApiError.UnexpectedAutofillApiError(
                     reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
+                completion(nil, error)
                 return
             }
 
             do {
                 let record = try self.storage?.getCreditCard(guid: id)
-                deferred.fill(Maybe(success: record))
+                completion(record, nil)
             } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+                completion(nil, err)
             }
         }
-
-        return deferred
     }
 
-    public func listCreditCards() -> Deferred<Maybe<[CreditCard]>> {
-        let deferred = Deferred<Maybe<[CreditCard]>>()
-
+    public func listCreditCards(completion: @escaping ([CreditCard]?, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = AutofillApiError.UnexpectedAutofillApiError(
                     reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
+                completion(nil, error)
                 return
             }
 
             do {
                 let records = try self.storage?.getAllCreditCards()
-                deferred.fill(Maybe(success: records ?? []))
+                completion(records, nil)
             } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+                completion(nil, err)
             }
         }
-
-        return deferred
     }
 
-    public func updateCreditCard(
-        id: String,
-        creditCard: UnencryptedCreditCardFields
-    ) -> Success {
-        let deferred = Success()
-
+    public func updateCreditCard(id: String, creditCard: UnencryptedCreditCardFields, completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = AutofillApiError.UnexpectedAutofillApiError(
                     reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
+                completion(false, error)
                 return
             }
 
@@ -344,79 +319,65 @@ public class RustAutofill {
                 _ = try self.storage?.updateCreditCard(
                     guid: id,
                     cc: creditCard.toUpdatableCreditCardFields())
-                deferred.fill(Maybe(success: ()))
+                completion(true, nil)
             } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+                completion(false, err)
             }
         }
-
-        return deferred
     }
 
-    public func deleteCreditCard(id: String) -> Deferred<Maybe<Bool>> {
-        let deferred = Deferred<Maybe<Bool>>()
-
+    public func deleteCreditCard(id: String, completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = AutofillApiError.UnexpectedAutofillApiError(
                     reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
+                completion(false, error)
                 return
             }
 
             do {
                 let existed = try self.storage?.deleteCreditCard(guid: id)
-                deferred.fill(Maybe(success: existed!))
+                completion(existed!, nil)
             } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+                completion(false, err)
             }
         }
-
-        return deferred
     }
     
-    public func use(creditCard: CreditCard) -> Success {
-        let deferred = Success()
-
+    public func use(creditCard: CreditCard, completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = AutofillApiError.UnexpectedAutofillApiError(
                     reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
+                completion(false, error)
                 return
             }
 
             do {
                 try self.storage?.touchCreditCard(guid: creditCard.guid)
-                deferred.fill(Maybe(success: ()))
+                completion(true, nil)
             } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+                completion(false, err)
             }
         }
-
-        return deferred
     }
     
-    public func scrubCreditCardNums() -> Success {
-        let deferred = Success()
-
+    public func scrubCreditCardNums(completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
                 let error = AutofillApiError.UnexpectedAutofillApiError(
                     reason: "Database is closed")
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
+                completion(false, error)
                 return
             }
 
             do {
                 try self.storage?.scrubEncryptedData()
-                deferred.fill(Maybe(success: ()))
+                completion(true, nil)
             } catch let err as NSError {
-                deferred.fill(Maybe(failure: err))
+                completion(false, err)
             }
         }
-
-        return deferred
     }
 
     public func getStoredKey() throws -> String {
@@ -441,7 +402,7 @@ public class RustAutofill {
                         tag: SentryTag.rustAutofill,
                         severity: .warning)
                     
-                    _ = self.scrubCreditCardNums()
+                    _ = self.scrubCreditCardNums(completion: {_,_ in })
                     return try rustKeys.createAndStoreKey()
                 }
             } catch let error as NSError {
@@ -459,7 +420,7 @@ public class RustAutofill {
                     tag: SentryTag.rustAutofill,
                     severity: .warning)
                 
-                _ = self.scrubCreditCardNums()
+                _ = self.scrubCreditCardNums(completion: {_,_ in })
                 return try rustKeys.createAndStoreKey()
             } catch let error as NSError {
                 throw error
@@ -472,7 +433,7 @@ public class RustAutofill {
                     tag: SentryTag.rustAutofill,
                     severity: .warning)
                 
-               _ = self.scrubCreditCardNums()
+                _ = self.scrubCreditCardNums(completion: {_,_ in })
                 return try rustKeys.createAndStoreKey()
             } catch let error as NSError {
                 throw error

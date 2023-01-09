@@ -32,8 +32,8 @@ class RustAutofillTests: XCTestCase {
             XCTFail("Could not retrieve root directory")
         }
     }
-    
-    func addCreditCard() -> Deferred<Maybe<CreditCard>> {
+
+    func addCreditCard(completion: @escaping (CreditCard?, Error?) -> Void) {
         let creditCard = UnencryptedCreditCardFields(
             ccName: "Jane Doe",
             ccNumber: "1234567890123456",
@@ -41,80 +41,135 @@ class RustAutofillTests: XCTestCase {
             ccExpMonth: 03,
             ccExpYear: 2027,
             ccType: "Visa")
-        return autofill.addCreditCard(creditCard: creditCard)
+        return autofill.addCreditCard(creditCard: creditCard, completion: completion)
     }
-    
+
     func testAddCreditCard() {
-        let addResult = addCreditCard().value
-        XCTAssertTrue(addResult.isSuccess)
-        XCTAssertNotNil(addResult.successValue)
-        let getResult = autofill.getCreditCard(id: addResult.successValue!.guid).value
-        XCTAssertTrue(getResult.isSuccess)
-        XCTAssertNotNil(getResult.successValue!)
-        XCTAssertEqual(getResult.successValue!!.guid, addResult.successValue!.guid)
+        let expectationAddCard = expectation(description: "completed add card")
+        let expectationGetCard = expectation(description: "completed getting card")
+
+        addCreditCard { creditCard, err in
+            XCTAssertNotNil(creditCard)
+            XCTAssertNil(err)
+            expectationAddCard.fulfill()
+
+            self.autofill.getCreditCard(id: creditCard!.guid) { card, error in
+                XCTAssertNotNil(card)
+                XCTAssertNil(err)
+                XCTAssertEqual(creditCard!.guid, card!.guid)
+                expectationGetCard.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
     }
-    
+
     func testListCreditCards() {
-        let listResult1 = autofill.listCreditCards().value
-        XCTAssertTrue(listResult1.isSuccess)
-        XCTAssertNotNil(listResult1.successValue)
-        XCTAssertEqual(listResult1.successValue!.count, 0)
-        let addResult = addCreditCard().value
-        XCTAssertTrue(addResult.isSuccess)
-        XCTAssertNotNil(addResult.successValue)
-        let listResult2 = autofill.listCreditCards().value
-        XCTAssertTrue(listResult2.isSuccess)
-        XCTAssertNotNil(listResult2.successValue)
-        XCTAssertEqual(listResult2.successValue!.count, 1)
+        let expectationCardList = expectation(description: "gettting empty card list")
+        let expectationAddCard = expectation(description: "add card")
+        let expectationGetCards = expectation(description: "getting card list")
+        autofill.listCreditCards { cards, err in
+            XCTAssertNotNil(cards)
+            XCTAssertNil(err)
+            XCTAssertEqual(cards!.count, 0)
+            expectationCardList.fulfill()
+
+            self.addCreditCard { creditCard, err in
+                XCTAssertNotNil(creditCard)
+                XCTAssertNil(err)
+                expectationAddCard.fulfill()
+
+                self.autofill.listCreditCards { cards, err in
+                    XCTAssertNotNil(cards)
+                    XCTAssertNil(err)
+                    XCTAssertEqual(cards!.count, 1)
+                    expectationGetCards.fulfill()
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
     }
     
     func testUpdateCreditCard() {
-        let addResult = addCreditCard().value
-        XCTAssertTrue(addResult.isSuccess)
-        XCTAssertNotNil(addResult.successValue)
-        let getResult1 = autofill.getCreditCard(id: addResult.successValue!.guid).value
-        XCTAssertTrue(getResult1.isSuccess)
-        XCTAssertNotNil(getResult1.successValue!)
-        let creditCard = getResult1.successValue!
-        XCTAssertEqual(creditCard!.guid, addResult.successValue!.guid)
+        let expectationAddCard = expectation(description: "completed add card")
+        let expectationGetCard = expectation(description: "completed getting card")
+        let expectationUpdateCard = expectation(description: "update card")
+        let expectationCheckUpdateCard = expectation(description: "checking updated card")
 
-        let expectedCcExpYear = Int64(2028)
-        let updatedCreditCard = UnencryptedCreditCardFields(
-            ccName: creditCard!.ccName,
-            ccNumber: creditCard!.ccNumberEnc,
-            ccNumberLast4: creditCard!.ccNumberLast4,
-            ccExpMonth: creditCard!.ccExpMonth,
-            ccExpYear: expectedCcExpYear,
-            ccType: creditCard!.ccType)
+        addCreditCard { creditCard, err in
+            XCTAssertNotNil(creditCard)
+            XCTAssertNil(err)
+            expectationAddCard.fulfill()
 
-        let updateResult = autofill.updateCreditCard(id: creditCard!.guid,
-                                                     creditCard: updatedCreditCard).value
-        XCTAssertTrue(updateResult.isSuccess)
-        let getResult2 = autofill.getCreditCard(id: creditCard!.guid).value
-        XCTAssertTrue(getResult2.isSuccess)
-        XCTAssertNotNil(getResult2.successValue!)
-        let actualCcExpYear = getResult2.successValue!!.ccExpYear
-        XCTAssertEqual(expectedCcExpYear, actualCcExpYear)
+            self.autofill.getCreditCard(id: creditCard!.guid) { card, error in
+                XCTAssertNotNil(card)
+                XCTAssertNil(err)
+                XCTAssertEqual(creditCard!.guid, card!.guid)
+                expectationGetCard.fulfill()
+
+                let expectedCcExpYear = Int64(2028)
+                let updatedCreditCard = UnencryptedCreditCardFields(ccName: creditCard!.ccName,
+                                                                    ccNumber: creditCard!.ccNumberEnc,
+                                                                    ccNumberLast4: creditCard!.ccNumberLast4,
+                                                                    ccExpMonth: creditCard!.ccExpMonth,
+                                                                    ccExpYear: expectedCcExpYear,
+                                                                    ccType: creditCard!.ccType)
+                self.autofill.updateCreditCard(id: creditCard!.guid,
+                                               creditCard: updatedCreditCard) { success, err in
+                    XCTAssert(success)
+                    XCTAssertNil(err)
+                    expectationUpdateCard.fulfill()
+
+                    self.autofill.getCreditCard(id: creditCard!.guid) { updatedCardVal, err in
+                        XCTAssertNotNil(updatedCardVal)
+                        XCTAssertNil(err)
+                        XCTAssertEqual(updatedCardVal!.ccExpYear, updatedCreditCard.ccExpYear)
+                        expectationCheckUpdateCard.fulfill()
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
     }
-    
+
     func testDeleteCreditCard() {
-        let addResult = addCreditCard().value
-        XCTAssertTrue(addResult.isSuccess)
-        XCTAssertNotNil(addResult.successValue)
-        let getResult1 = autofill.getCreditCard(id: addResult.successValue!.guid).value
-        XCTAssertTrue(getResult1.isSuccess)
-        XCTAssertNotNil(getResult1.successValue!)
-        let creditCard = getResult1.successValue!
-        XCTAssertEqual(creditCard!.guid, addResult.successValue!.guid)
-        let deleteResult = autofill.deleteCreditCard(id: creditCard!.guid).value
-        XCTAssertTrue(deleteResult.isSuccess)
-        XCTAssertNotNil(deleteResult.successValue!)
-        XCTAssertTrue(deleteResult.successValue!)
-        let getResult2 = autofill.getCreditCard(id: creditCard!.guid).value
-        XCTAssertTrue(getResult2.isFailure)
-        print("THIS", getResult2.failureValue!.description)
-        let expectedError =
-            "MozillaAppServices.AutofillApiError.NoSuchRecord(guid: \"\(creditCard!.guid)\")"
-        XCTAssertEqual(expectedError, getResult2.failureValue!.description)
+        let expectationAddCard = expectation(description: "completed add card")
+        let expectationGetCard = expectation(description: "completed getting card")
+        let expectationDeleteCard = expectation(description: "delete card")
+        let expectationCheckDeleteCard = expectation(description: "check that no card exist")
+
+        addCreditCard { creditCard, err in
+            XCTAssertNotNil(creditCard)
+            XCTAssertNil(err)
+            expectationAddCard.fulfill()
+
+            self.autofill.getCreditCard(id: creditCard!.guid) { card, error in
+                XCTAssertNotNil(card)
+                XCTAssertNil(err)
+                XCTAssertEqual(creditCard!.guid, card!.guid)
+                expectationGetCard.fulfill()
+
+                self.autofill.deleteCreditCard(id: card!.guid) { success, err in
+                    XCTAssert(success)
+                    XCTAssertNil(err)
+                    expectationDeleteCard.fulfill()
+
+                    self.autofill.getCreditCard(id: creditCard!.guid) { deletedCreditCard, error in
+                        XCTAssertNil(deletedCreditCard)
+                        XCTAssertNotNil(error)
+
+                        let expectedError =
+                        "NoSuchRecord(guid: \"\(creditCard!.guid)\")"
+                        XCTAssertEqual(expectedError, "\(error!)")
+                        expectationCheckDeleteCard.fulfill()
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
     }
+
 }
