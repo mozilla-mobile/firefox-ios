@@ -469,14 +469,17 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         app.buttons["TopTabsViewController.newTabButton"].tap()
         waitForExistence(app.buttons["TopTabsViewController.tabsButton"])
         waitForExistence(app.buttons["Show Tabs"].staticTexts["3"], timeout: TIMEOUT)
-        waitForValueContains(app.buttons["Show Tabs"], value: "3")
+        let numTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("3", numTab)
         // Remove one tab by tapping on 'x' button
         app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "Homepage").element(boundBy: 1).buttons["Remove page — Homepage"].tap()
         waitForExistence(app.buttons["Show Tabs"].staticTexts["2"], timeout: TIMEOUT)
-        waitForValueContains(app.buttons["Show Tabs"], value: "2")
+        let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("2", numTabAfterRemovingThirdTab)
         app.collectionViews["Top Tabs View"].children(matching: .cell).element(boundBy: 1).buttons["Remove page — Homepage"].tap()
         waitForExistence(app.buttons["Show Tabs"].staticTexts["1"], timeout: TIMEOUT)
-        waitForValueContains(app.buttons["Show Tabs"], value: "1")
+        var numTabAfterRemovingSecondTab = app.buttons["Show Tabs"].value as? String
+        XCTAssertEqual("1", numTabAfterRemovingSecondTab)
     }
 
     func cellIsSelectedTab(index: Int, url: String, title: String) {
