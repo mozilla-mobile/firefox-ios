@@ -566,7 +566,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
-            let tab = self.filteredOpenedTabs[indexPath.row]
+            guard let tab = self.filteredOpenedTabs[safe: indexPath.row] else { return }
             searchDelegate?.searchViewController(self, uuid: tab.tabUUID)
         case .bookmarksAndHistory:
             if let site = data[indexPath.row] {
@@ -575,7 +575,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                 }
             }
         case .searchHighlights:
-            if let url = searchHighlights[indexPath.row].siteUrl {
+            if let url = searchHighlights[safe: indexPath.row]?.siteUrl {
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
         }
