@@ -199,6 +199,7 @@ class AppLaunchUtil {
                 GleanMetrics.PlacesHistoryMigration.numToMigrate.set(Int64(result.numTotal))
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
                 UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
+                NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)
             },
             errCallback: { err in
                 let errDescription = err?.localizedDescription ?? "Unknown error during History migration"
