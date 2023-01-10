@@ -185,7 +185,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             clientPickerController.pickerDelegate = clientPickerDelegate
             clientPickerController.profile = browserProfile
             if let url = tab.url?.absoluteString {
-                clientPickerController.shareItem = ShareItem(url: url, title: tab.title, favicon: nil)
+                clientPickerController.shareItem = ShareItem(url: url, title: tab.title)
             }
 
             self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)

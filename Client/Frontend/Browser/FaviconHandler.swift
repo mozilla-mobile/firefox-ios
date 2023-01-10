@@ -9,10 +9,6 @@ import Storage
 class FaviconHandler {
     private let backgroundQueue = OperationQueue()
 
-    init() {
-        register(self, forTabEvents: .didLoadPageMetadata, .pageMetadataNotAvailable)
-    }
-
     func getFaviconIconFrom(url faviconUrl: String,
                             domainLevelIconUrl: String,
                             completion: @escaping (Favicon?, ImageLoadingError?) -> Void
@@ -61,49 +57,5 @@ class FaviconHandler {
             favicon.height = Int(image.size.height)
             completion(favicon, nil)
         }
-    }
-
-    func loadFaviconURL(_ faviconUrl: String, forTab tab: Tab,
-                        completion: @escaping (Favicon?, ImageLoadingError?) -> Void) {
-        guard let currentUrl = tab.url, !faviconUrl.isEmpty else {
-            completion(nil, ImageLoadingError.iconUrlNotFound)
-            return
-        }
-
-        let domainLevelIconUrl = currentUrl.domainURL.appendingPathComponent("favicon.ico")
-
-        let onSuccess: (Favicon) -> Void = { [weak tab] (favicon) -> Void in
-            tab?.favicons.append(favicon)
-            completion(favicon, nil)
-        }
-
-        getFaviconIconFrom(url: faviconUrl,
-                           domainLevelIconUrl: domainLevelIconUrl.absoluteString) {
-            favicon, error in
-
-            guard error == nil, let favicon = favicon else {
-                completion(nil, ImageLoadingError.unableToFetchImage)
-                return
-            }
-
-            onSuccess(favicon)
-        }
-    }
-}
-
-extension FaviconHandler: TabEventHandler {
-    func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        tab.favicons.removeAll(keepingCapacity: false)
-        guard let faviconURL = metadata.faviconURL else { return }
-
-        // This is necessary for tab favicons. Tab tray tabs favicon doesn't get updated without it
-        loadFaviconURL(faviconURL, forTab: tab) { favicon, error in
-            guard error == nil else { return }
-            TabEvent.post(.didLoadFavicon(favicon), for: tab)
-        }
-    }
-
-    func tabMetadataNotAvailable(_ tab: Tab) {
-        tab.favicons.removeAll(keepingCapacity: false)
     }
 }
