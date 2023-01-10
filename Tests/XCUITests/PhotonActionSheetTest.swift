@@ -101,14 +101,15 @@ class PhotonActionSheetTest: BaseTestCase {
 
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
+        waitForExistence(app.collectionViews.buttons["Copy"], timeout: TIMEOUT)
+        waitForExistence(app.collectionViews.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"].firstMatch, timeout: TIMEOUT)
         var  fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         if iPad() {
-            waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
         }
         waitForExistence(fennecElement, timeout: 5)
         fennecElement.tap()
-        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 10)
+        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: TIMEOUT)
     }
 
     // Smoketest

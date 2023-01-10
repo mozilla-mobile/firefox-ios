@@ -35,7 +35,11 @@ class DomainAutocompleteTest: BaseTestCase {
         // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        if isTablet {
+            navigator.performAction(Action.AcceptRemovingAllTabs)
+        } else {
+            navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        }
         app.textFields["address"].typeText("moz")
 
         waitForValueContains(app.textFields["address"], value: website["value"]!)
