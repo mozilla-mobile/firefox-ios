@@ -26,6 +26,27 @@ extension XCUIApplication {
         return self.buttons["URLBar.deleteButton"]
     }
 
+    var homeViewSettingsButton: XCUIElement {
+        return self.buttons["HomeView.settingsButton"]
+    }
+    
+    var searchSuggestionsOverlay: XCUIElement {
+        return self.buttons["OverlayView.searchButton"]
+    }
+    
+    var settingsViewControllerDoneButton: XCUIElement {
+        return self.buttons["SettingsViewController.doneButton"]
+    }
+    
+    var settingsBackButton: XCUIElement {
+        return self.navigationBars.buttons["Settings"]
+    }
+    
+    var settingsDoneButton: XCUIElement {
+        return self.buttons["SettingsViewController.doneButton"]
+    }
+    
+    
     var urlTextField: XCUIElement {
         return self.textFields["URLBar.urlText"]
     }

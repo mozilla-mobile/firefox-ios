@@ -5,35 +5,32 @@
 import XCTest
 
 class AsianLocaleTest: BaseTestCase {
-	func testSearchinLocale() {
-        dismissURLBarFocused()
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
-        // Set search engine to Google
-		app.buttons["HomeView.settingsButton"].tap()
-        let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
-        settingsButton.tap()
-        waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
-		app.tables.cells["SettingsViewController.searchCell"].tap()
-
-		app.tables.staticTexts["Google"].tap()
-        app.buttons["SettingsViewController.doneButton"].tap()
-
-		// Enter 'mozilla' on the search field
-		search(searchWord: "모질라")
-        app.buttons["URLBar.deleteButton"].tap()
+    let locales: [String: String]  = [
+        "Korean": "모질라",
+        "Japanese": "モジラ",
+        "Chinese": "因特網"
+    ]
+    
+    func searchForMozillaInLocale(localeName: String, searchText: String) {
+        let urlBarDeleteButton = app.eraseButton
+        
+        search(searchWord: searchText, waitForLoadToFinish: true)
+        mozTap(urlBarDeleteButton)
         dismissURLBarFocused()
         checkForHomeScreen()
-
-		search(searchWord: "モジラ")
-        app.buttons["URLBar.deleteButton"].tap()
+    }
+    
+	func testSearchInLocale() {
+        // Test Setup
         dismissURLBarFocused()
         checkForHomeScreen()
-
-		search(searchWord: "因特網")
-        app.buttons["URLBar.deleteButton"].tap()
-        dismissURLBarFocused()
-        checkForHomeScreen()
+        navigateToSettingSearchEngine()
+        setDefaultSearchEngine(searchEngine: "Google")
+        
+        // Test Steps
+        for (localeName, searchText) in locales {
+            searchForMozillaInLocale(localeName: localeName, searchText: searchText)
+        }
 	}
 
 }

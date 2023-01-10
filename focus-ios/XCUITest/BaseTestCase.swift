@@ -5,7 +5,6 @@
 import XCTest
 
 class BaseTestCase: XCTestCase {
-
     let app = XCUIApplication()
 
     override func setUp() {
@@ -68,7 +67,7 @@ class BaseTestCase: XCTestCase {
 
     func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
             waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
-        }
+    }
 
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
             let predicate = NSPredicate(format: predicateString)
@@ -85,14 +84,11 @@ class BaseTestCase: XCTestCase {
 
     func search(searchWord: String, waitForLoadToFinish: Bool = true) {
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
+        let keyboardGoButton = app/*@START_MENU_TOKEN@*/.buttons["Go"]/*[[".keyboards",".buttons[\"go\"]",".buttons[\"Go\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/
 
-        UIPasteboard.general.string = searchWord
-
-        // Must press this way in order to support iPhone 5s
-        searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.press(forDuration: 1)
-        waitForExistence(app.menuItems["Paste & Go"])
-        app.menuItems["Paste & Go"].tap()
+        mozTap(searchOrEnterAddressTextField)
+        mozTypeText(searchOrEnterAddressTextField, text: searchWord)
+        mozTap(keyboardGoButton)
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
@@ -141,6 +137,34 @@ class BaseTestCase: XCTestCase {
 
         expectation(for: NSPredicate(format: "exists != true"), evaluatedWith: progressIndicator, handler: nil)
         waitForExpectations(timeout: finishLoadingTimeout, handler: nil)
+    }
+    
+    func mozTap(_ element: XCUIElement, timeout: TimeInterval = 10) {
+        waitForExistence(element, timeout: timeout)
+        element.tap()
+    }
+    
+    func mozTypeText(_ element: XCUIElement, text: String, timeout: TimeInterval = 10) {
+        waitForExistence(element, timeout: timeout)
+        element.typeText(text)
+    }
+    
+    func navigateToSettingSearchEngine() {
+        let homeViewSettingsButton = app.homeViewSettingsButton
+        let settingsButton = app.settingsButton
+        let settingsViewControllerSearchCell = app.tables.cells["SettingsViewController.searchCell"]
+        
+        mozTap(homeViewSettingsButton)
+        mozTap(settingsButton)
+        mozTap(settingsViewControllerSearchCell)
+    }
+    
+    func setDefaultSearchEngine(searchEngine: String) {
+        let searchEngineSelection = app.staticTexts[searchEngine]
+        let settingsViewControllerDoneButton = app.settingsViewControllerDoneButton
+        
+        mozTap(searchEngineSelection)
+        mozTap(settingsViewControllerDoneButton)
     }
 }
                        

@@ -5,6 +5,30 @@
 import XCTest
 
 class WebsiteAccessTests: BaseTestCase {
+    func setUrlAutoCompleteTo(desiredAutoCompleteState: String) {
+        let homeViewSettingsButton = app.homeViewSettingsButton
+        let settingsButton = app.settingsButton
+        let settingsViewControllerAutoCompleteCell = app.tables.cells["SettingsViewController.autocompleteCell"]
+        let autoCompleteSwitch = app.switches["toggleAutocompleteSwitch"]
+        let settingsBackButton = app.settingsBackButton
+        let settingsDoneButton = app.settingsDoneButton
+        
+        // Navigate to autocomplete settings
+        mozTap(homeViewSettingsButton)
+        mozTap(settingsButton)
+        mozTap(settingsViewControllerAutoCompleteCell)
+        
+        let topSitesState = autoCompleteSwitch.value as? String == "1" ? "On" : "Off"
+        // Toggle switch if desired state is already set
+        if desiredAutoCompleteState != topSitesState {
+            mozTap(autoCompleteSwitch)
+        }
+        
+        // Navigate back to home page
+        mozTap(settingsBackButton)
+        mozTap(settingsDoneButton)
+    }
+    
     // Smoketest
     func testVisitWebsite() {
         dismissURLBarFocused()
@@ -37,51 +61,38 @@ class WebsiteAccessTests: BaseTestCase {
     }
 
     func testDisableAutocomplete() {
+        let urlTextField = app.urlTextField
+        let searchSuggestionsOverlay = app.searchSuggestionsOverlay
+        
+        // Test Setup
         dismissURLBarFocused()
-        app.buttons["HomeView.settingsButton"].tap()
-        let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
-        settingsButton.tap()
-        // Disable Autocomplete
-        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
-        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
-        waitForExistence(app.tables.switches["toggleAutocompleteSwitch"])
-        var toggle = app.tables.switches["toggleAutocompleteSwitch"]
-        toggle.tap()
-
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 1).tap()
-
-        let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-
-        searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.typeText("mozilla")
-        waitForExistence(app.buttons["OverlayView.searchButton"])
-        let searchForButton = app.buttons["OverlayView.searchButton"]
-        XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
-        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla")
-        if !iPad() {
-            app.buttons["URLBar.cancelButton"].tap()
-        }
-
-        // Enable autocomplete
-        app.buttons["Settings"].tap()
-        waitForExistence(settingsButton, timeout: 10)
-        settingsButton.tap()
-        waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
-        app.tables.cells["SettingsViewController.autocompleteCell"].tap()
-        toggle = app.tables.switches["toggleAutocompleteSwitch"]
-        toggle.tap()
-
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 1).tap()
-
-        searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.typeText("mozilla")
-        XCTAssertNotEqual(searchForButton.label, "Search for mozilla.org/")
-        waitForValueContains(searchOrEnterAddressTextField, value: "mozilla.org/")
+        setUrlAutoCompleteTo(desiredAutoCompleteState: "Off")
+        
+        // Test Steps
+        mozTypeText(urlTextField, text: "mozilla")
+        
+        // Test Assertion
+        waitForExistence(searchSuggestionsOverlay)
+        XCTAssertEqual(urlTextField.value as? String, "mozilla")
     }
 
+    func testReEnableAutoComplete() {
+        let urlTextField = app.urlTextField
+        let searchSuggestionsOverlay = app.searchSuggestionsOverlay
+        
+        // Test Setup: to ensure autocomplete state is picked up, set to off, navigate out, then toggle back on
+        dismissURLBarFocused()
+        setUrlAutoCompleteTo(desiredAutoCompleteState: "Off")
+        setUrlAutoCompleteTo(desiredAutoCompleteState: "On")
+        
+        // Test Steps
+        mozTypeText(urlTextField, text: "mozilla")
+        
+        // Test Assertion
+        waitForExistence(searchSuggestionsOverlay)
+        XCTAssertEqual(urlTextField.value as? String, "mozilla.org/")
+    }
+    
     func testAutocompleteCustomDomain() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
@@ -98,10 +109,10 @@ class WebsiteAccessTests: BaseTestCase {
         urlInput.tap()
         urlInput.typeText("getfirefox.com")
         app.navigationBars.buttons["saveButton"].tap()
-
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.navigationBars.buttons.element(boundBy: 1).tap()
+        let manageSitesBackButton = app.navigationBars.buttons["URL Autocomplete"]
+        manageSitesBackButton.tap()
+        app.navigationBars.buttons["Settings"].tap()
+        app.buttons["SettingsViewController.doneButton"].tap()
 
         // Test auto completing the domain
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]

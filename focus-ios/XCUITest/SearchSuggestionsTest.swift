@@ -123,9 +123,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         waitForExistence(app.tables.switches["BlockerToggle.enableSearchSuggestions"], timeout: 5)
 
         app.tables.cells.switches["BlockerToggle.enableSearchSuggestions"].tap()
-        if iPad() {
-            app.tables.cells.switches["BlockerToggle.enableSearchSuggestions"].tap()
-        }
+        
         // Prompt should not display
         app.buttons["SettingsViewController.doneButton"].tap()
         typeInURLBar(text: "g")
@@ -170,9 +168,6 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.searchCell"])
         app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
-        if iPad() {
-            app.tables.switches["BlockerToggle.enableSearchSuggestions"].tap()
-        }
         checkToggle(isOn: false)
 
         // Ensure only one search cell is shown
