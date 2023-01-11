@@ -83,7 +83,6 @@ protocol Profile: AnyObject {
     var searchEngines: SearchEngines { get }
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
-    var favicons: Favicons { get }
     var logins: RustLogins { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
@@ -402,19 +401,12 @@ open class BrowserProfile: Profile {
     }()
 
     /**
-     * Favicons and pinned sites are stored in one intermeshed
-     * collection of tables.
-     *
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    private lazy var legacyPlaces: Favicons & PinnedSites  = {
+    private lazy var legacyPlaces: PinnedSites  = {
         return BrowserDBSQLite(database: self.database, prefs: self.prefs)
     }()
-
-    var favicons: Favicons {
-        return self.legacyPlaces
-    }
 
     var pinnedSites: PinnedSites {
         return self.legacyPlaces

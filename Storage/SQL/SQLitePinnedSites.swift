@@ -70,7 +70,7 @@ extension BrowserDBSQLite: PinnedSites {
             SELECT * FROM pinned_top_sites
             ORDER BY pinDate DESC
             """
-        return database.runQueryConcurrently(sql, args: [], factory: BrowserDBSQLite.iconHistoryMetadataColumnFactory)
+        return database.runQueryConcurrently(sql, args: [], factory: BrowserDBSQLite.historyMetadataColumnFactory)
     }
 
     public func addPinnedTopSite(_ site: Site) -> Success { // needs test

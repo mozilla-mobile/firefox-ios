@@ -110,14 +110,8 @@ class AppLaunchUtil {
     }
 
     private func setUserAgent() {
-        let firefoxUA = UserAgent.getUserAgent()
-
         // Record the user agent for use by search suggestion clients.
-        SearchViewController.userAgent = firefoxUA
-
-        // Some sites will only serve HTML that points to .ico files.
-        // The FaviconFetcher is explicitly for getting high-res icons, so use the desktop user agent.
-        FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
+        SearchViewController.userAgent = UserAgent.getUserAgent()
     }
 
     private func initializeExperiments() {
