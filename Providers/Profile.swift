@@ -330,6 +330,7 @@ open class BrowserProfile: Profile {
             _ = places.reopenIfClosed()
         }
         _ = tabs.reopenIfClosed()
+        _ = autofill.reopenIfClosed()
     }
 
     func shutdown() {
@@ -340,6 +341,7 @@ open class BrowserProfile: Profile {
         _ = logins.forceClose()
         _ = places.forceClose()
         _ = tabs.forceClose()
+        _ = autofill.forceClose()
     }
 
     @objc
@@ -439,6 +441,10 @@ open class BrowserProfile: Profile {
     lazy var tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("tabs.db").path
 
     lazy var tabs = RustRemoteTabs(databasePath: tabsDbPath)
+
+    lazy var autofillDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("autofill.db").path
+
+    lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
     lazy var searchEngines: SearchEngines = {
         return SearchEngines(prefs: self.prefs, files: self.files)
@@ -652,6 +658,8 @@ open class BrowserProfile: Profile {
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
 
         // Save the keys that will be restored
+        let rustAutofillKey = RustAutofillEncryptionKeys()
+        let creditCardKey = keychain.string(forKey: rustAutofillKey.ccKeychainKey)
         let rustLoginsKeys = RustLoginEncryptionKeys()
         let perFieldKey = keychain.string(forKey: rustLoginsKeys.loginPerFieldKeychainKey)
         let sqlCipherKey = keychain.string(forKey: rustLoginsKeys.loginsUnlockKeychainKey)
@@ -671,6 +679,10 @@ open class BrowserProfile: Profile {
 
         if let perFieldKey = perFieldKey {
             keychain.set(perFieldKey, forKey: rustLoginsKeys.loginPerFieldKeychainKey, withAccessibility: .afterFirstUnlock)
+        }
+
+        if let creditCardKey = creditCardKey {
+            keychain.set(creditCardKey, forKey: rustAutofillKey.ccKeychainKey, withAccessibility: .afterFirstUnlock)
         }
 
         // Tell any observers that our account has changed.
