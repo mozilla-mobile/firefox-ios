@@ -145,7 +145,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         self.store = TabManagerStoreImplementation(prefs: profile.prefs, imageStore: imageStore)
         super.init()
 
-        register(self, forTabEvents: .didLoadFavicon, .didSetScreenshot)
+        register(self, forTabEvents: .didSetScreenshot)
 
         addNavigationDelegate(self)
 
@@ -939,10 +939,6 @@ extension TabManager: WKNavigationDelegate {
 
 // MARK: - TabEventHandler
 extension TabManager: TabEventHandler {
-    func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
-        store.preserveTabs(tabs, selectedTab: selectedTab)
-    }
-
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         guard tab.screenshot != nil else {
             // Remove screenshot from image store so we can use favicon
