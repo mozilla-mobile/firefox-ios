@@ -251,4 +251,9 @@ public struct AccessibilityIdentifiers {
         static let view = "Action Sheet"
         static let tableView = "Context Menu"
     }
+
+    struct Alert {
+        static let cancelDownloadResume = "cancelDownloadAlert.resume"
+        static let cancelDownloadCancel = "cancelDownloadAlert.cancel"
+    }
 }
