@@ -396,7 +396,7 @@ public class RustAutofill {
                         tag: SentryTag.rustAutofill,
                         severity: .warning)
 
-                    self.scrubCreditCardNums(completion: {_,_ in })
+                    self.scrubCreditCardNums(completion: {_, _ in })
                     return try rustKeys.createAndStoreKey()
                 }
             } catch let error as NSError {
@@ -414,7 +414,7 @@ public class RustAutofill {
                     tag: SentryTag.rustAutofill,
                     severity: .warning)
 
-                self.scrubCreditCardNums(completion: {_,_ in })
+                self.scrubCreditCardNums(completion: {_, _ in })
                 return try rustKeys.createAndStoreKey()
             } catch let error as NSError {
                 throw error
@@ -427,7 +427,7 @@ public class RustAutofill {
                     tag: SentryTag.rustAutofill,
                     severity: .warning)
 
-                self.scrubCreditCardNums(completion: {_,_ in })
+                self.scrubCreditCardNums(completion: {_, _ in })
                 return try rustKeys.createAndStoreKey()
             } catch let error as NSError {
                 throw error
