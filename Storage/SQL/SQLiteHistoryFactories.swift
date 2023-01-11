@@ -32,18 +32,7 @@ extension BrowserDBSQLite {
         if latest > 0 {
             site.latestVisit = Visit(date: latest, type: VisitType.unknown)
         }
-
         return site
-    }
-
-    class func iconColumnFactory(_ row: SDRow) -> Favicon? {
-        if let iconURL = row["iconURL"] as? String,
-           let iconDate = row["iconDate"] as? Double,
-           row["iconID"] as? Int != nil {
-                let date = Date(timeIntervalSince1970: iconDate)
-                return Favicon(url: iconURL, date: date)
-        }
-        return nil
     }
 
     class func pageMetadataColumnFactory(_ row: SDRow) -> PageMetadata? {
@@ -59,14 +48,8 @@ extension BrowserDBSQLite {
             providerName: row["provider_name"] as? String)
     }
 
-    class func iconHistoryColumnFactory(_ row: SDRow) -> Site {
+    class func historyMetadataColumnFactory(_ row: SDRow) -> Site {
         let site = basicHistoryColumnFactory(row)
-        site.icon = iconColumnFactory(row)
-        return site
-    }
-
-    class func iconHistoryMetadataColumnFactory(_ row: SDRow) -> Site {
-        let site = iconHistoryColumnFactory(row)
         site.metadata = pageMetadataColumnFactory(row)
         return site
     }

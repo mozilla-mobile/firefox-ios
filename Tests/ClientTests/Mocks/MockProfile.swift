@@ -81,7 +81,7 @@ open class MockProfile: Client.Profile {
     public var logins: RustLogins
     public var syncManager: SyncManager!
 
-    fileprivate var legacyPlaces: Favicons & PinnedSites
+    fileprivate var legacyPlaces: PinnedSites
 
     public var pinnedSites: PinnedSites
 
@@ -142,10 +142,6 @@ open class MockProfile: Client.Profile {
     }
 
     public var isShutdown: Bool = false
-
-    public var favicons: Favicons {
-        return self.legacyPlaces
-    }
 
     lazy public var queue: TabQueue = {
         return MockTabQueue()

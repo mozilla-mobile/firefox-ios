@@ -743,14 +743,6 @@ class JumpBackInDataAdaptorMock: JumpBackInDataAdaptor {
     func getSyncedTabData() -> JumpBackInSyncedTab? {
         return syncedTab
     }
-
-    func getHeroImage(forSite site: Site) -> UIImage? {
-        return nil
-    }
-
-    func getFaviconImage(forSite site: Site) -> UIImage? {
-        return nil
-    }
 }
 
 // MARK: - MockBrowserBarViewDelegate

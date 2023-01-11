@@ -5,6 +5,7 @@
 import UIKit
 import Storage
 import Shared
+import SiteImageView
 
 class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     struct UX {
@@ -28,12 +29,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         label.numberOfLines = 1
     }
 
-    private lazy var siteImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .center
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = PhotonActionSheet.UX.cornerRadius
-        imageView.layer.borderWidth = UX.borderWidth
-    }
+    private lazy var siteImageView: FaviconImageView = .build { _ in }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -52,22 +48,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     }
 
     func configure(with site: Site) {
-        if site.icon != nil {
-            siteImageView.setFavicon(forSite: site) {
-                self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheet.UX.iconSize)
-            }
-        } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            let profile = appDelegate.profile
-            profile.favicons.getFaviconImage(forSite: site) { result in
-                guard let image = result else { return }
-
-                DispatchQueue.main.async {
-                    self.siteImageView.backgroundColor = .clear
-                    self.siteImageView.image = image.createScaled(PhotonActionSheet.UX.iconSize)
-                }
-            }
-        }
-
+        siteImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
         titleLabel.text = site.title.isEmpty ? site.url : site.title
         descriptionLabel.text = site.tileURL.baseDomain
     }
