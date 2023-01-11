@@ -7,16 +7,45 @@ import UIKit
 
 class DownloadToast: Toast {
     struct UX {
-        static let ToastBackgroundColor = UIColor.Photon.Blue40
-        static let ToastProgressColor = UIColor.Photon.Blue50
-        static let ToastDescriptionFont = UIFont.systemFont(ofSize: 13)
+        static let buttonSize: CGFloat = 40
     }
 
     lazy var progressView: UIView = .build { view in
-        view.backgroundColor = UX.ToastProgressColor
     }
 
-    let descriptionLabel = UILabel()
+    private var horizontalStackView: UIStackView = .build { stackView in
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.spacing = ButtonToast.UX.padding
+    }
+
+    private var imageView: UIImageView = .build { imageView in
+        imageView.image = UIImage.templateImageNamed(ImageIdentifiers.downloads)
+    }
+
+    private var labelStackView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.alignment = .leading
+    }
+
+    private var titleLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+                                                                       size: ButtonToast.UX.titleFontSize)
+        label.numberOfLines = 0
+    }
+
+    private var descriptionLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .body,
+                                                                       size: ButtonToast.UX.descriptionFontSize)
+        label.numberOfLines = 0
+    }
+
+    private lazy var closeButton: UIButton = .build { button in
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.closeMediumButton), for: [])
+        button.addTarget(self, action: #selector(self.buttonPressed), for: .touchUpInside)
+    }
+
     var progressWidthConstraint: NSLayoutConstraint?
 
     var downloads: [Download] = []
@@ -57,7 +86,9 @@ class DownloadToast: Toast {
         return String(format: .DownloadMultipleFilesAndProgressToastDescriptionText, fileCountDescription, descriptionText)
     }
 
-    init(download: Download, completion: @escaping (_ buttonPressed: Bool) -> Void) {
+    init(download: Download,
+         theme: Theme,
+         completion: @escaping (_ buttonPressed: Bool) -> Void) {
         super.init(frame: .zero)
 
         self.completionHandler = completion
@@ -79,6 +110,7 @@ class DownloadToast: Toast {
 
         animationConstraint = toastView.topAnchor.constraint(equalTo: topAnchor, constant: Toast.UX.toastHeight)
         animationConstraint?.isActive = true
+        applyTheme(theme: theme)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -109,44 +141,16 @@ class DownloadToast: Toast {
     }
 
     func createView(_ labelText: String, descriptionText: String) -> UIView {
-        let horizontalStackView: UIStackView = .build { stackView in
-            stackView.axis = .horizontal
-            stackView.alignment = .center
-            stackView.spacing = ButtonToast.UX.padding
-        }
+        horizontalStackView.addArrangedSubview(imageView)
 
-        let icon = UIImageView(image: UIImage.templateImageNamed("download"))
-        icon.tintColor = UIColor.Photon.White100
-        horizontalStackView.addArrangedSubview(icon)
-
-        let labelStackView = UIStackView()
-        labelStackView.axis = .vertical
-        labelStackView.alignment = .leading
-
-        let label = UILabel()
-        label.textColor = UIColor.Photon.White100
-        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
-        label.text = labelText
-        label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 1
-        label.adjustsFontSizeToFitWidth = true
-        labelStackView.addArrangedSubview(label)
-
-        descriptionLabel.textColor = UIColor.Photon.White100
-        descriptionLabel.font = UX.ToastDescriptionFont
+        titleLabel.text = labelText
         descriptionLabel.text = descriptionText
-        descriptionLabel.lineBreakMode = .byTruncatingTail
+
+        labelStackView.addArrangedSubview(titleLabel)
         labelStackView.addArrangedSubview(descriptionLabel)
 
         horizontalStackView.addArrangedSubview(labelStackView)
-
-        let cancel = UIImageView(image: UIImage.templateImageNamed(ImageIdentifiers.closeMediumButton))
-        cancel.tintColor = UIColor.Photon.White100
-        cancel.isUserInteractionEnabled = true
-        cancel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonPressed)))
-        horizontalStackView.addArrangedSubview(cancel)
-
-        toastView.backgroundColor = UX.ToastBackgroundColor
+        horizontalStackView.addArrangedSubview(closeButton)
 
         toastView.addSubview(progressView)
         toastView.addSubview(horizontalStackView)
@@ -156,9 +160,14 @@ class DownloadToast: Toast {
             progressView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
             progressView.heightAnchor.constraint(equalTo: toastView.heightAnchor),
 
-            horizontalStackView.centerXAnchor.constraint(equalTo: toastView.centerXAnchor),
-            horizontalStackView.centerYAnchor.constraint(equalTo: toastView.centerYAnchor),
-            horizontalStackView.widthAnchor.constraint(equalTo: toastView.widthAnchor, constant: -2 * ButtonToast.UX.padding)
+            horizontalStackView.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: ButtonToast.UX.padding),
+            horizontalStackView.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -ButtonToast.UX.padding),
+            horizontalStackView.bottomAnchor.constraint(equalTo: toastView.safeAreaLayoutGuide.bottomAnchor),
+            horizontalStackView.topAnchor.constraint(equalTo: toastView.topAnchor),
+            horizontalStackView.heightAnchor.constraint(equalToConstant: Toast.UX.toastHeight),
+
+            closeButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
+            closeButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
         ])
 
         progressWidthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
@@ -168,15 +177,30 @@ class DownloadToast: Toast {
     }
 
     @objc func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
-        let alert = AlertController(title: .CancelDownloadDialogTitle, message: .CancelDownloadDialogMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: .CancelDownloadDialogResume, style: .cancel, handler: nil), accessibilityIdentifier: "cancelDownloadAlert.resume")
-        alert.addAction(UIAlertAction(title: .CancelDownloadDialogCancel, style: .default, handler: { action in
+        let alert = AlertController(title: .CancelDownloadDialogTitle,
+                                    message: .CancelDownloadDialogMessage,
+                                    preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: .CancelDownloadDialogResume, style: .cancel, handler: nil),
+                        accessibilityIdentifier: AccessibilityIdentifiers.Alert.cancelDownloadResume)
+        alert.addAction(UIAlertAction(title: .CancelDownloadDialogCancel,
+                                      style: .default,
+                                      handler: { action in
             self.completionHandler?(true)
             self.dismiss(true)
             TelemetryWrapper.recordEvent(category: .action, method: .cancel, object: .download)
-        }), accessibilityIdentifier: "cancelDownloadAlert.cancel")
+        }), accessibilityIdentifier: AccessibilityIdentifiers.Alert.cancelDownloadCancel)
 
         viewController?.present(alert, animated: true, completion: nil)
+    }
+
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+
+        titleLabel.textColor = theme.colors.textInverted
+        descriptionLabel.textColor = theme.colors.textInverted
+        imageView.tintColor = theme.colors.textInverted
+        closeButton.tintColor = theme.colors.textInverted
+        progressView.backgroundColor = theme.colors.actionPrimaryHover
     }
 
     override func handleTap(_ gestureRecognizer: UIGestureRecognizer) {

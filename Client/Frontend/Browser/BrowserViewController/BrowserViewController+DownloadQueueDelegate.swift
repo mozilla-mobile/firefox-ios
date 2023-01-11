@@ -9,7 +9,9 @@ extension BrowserViewController: DownloadQueueDelegate {
     func downloadQueue(_ downloadQueue: DownloadQueue, didStartDownload download: Download) {
         // If no other download toast is shown, create a new download toast and show it.
         guard let downloadToast = self.downloadToast else {
-            let downloadToast = DownloadToast(download: download, completion: { buttonPressed in
+            let downloadToast = DownloadToast(download: download,
+                                              theme: themeManager.currentTheme,
+                                              completion: { buttonPressed in
                 // When this toast is dismissed, be sure to clear this so that any
                 // subsequent downloads cause a new toast to be created.
                 self.downloadToast = nil
