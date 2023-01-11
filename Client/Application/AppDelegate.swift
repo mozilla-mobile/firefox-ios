@@ -103,9 +103,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
-        // Create fx favicon cache directory
-        FaviconFetcher.createWebImageCacheDirectory()
-
         // update top sites widget
         updateTopSitesWidget()
 

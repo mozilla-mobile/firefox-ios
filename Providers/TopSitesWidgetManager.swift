@@ -33,9 +33,6 @@ class TopSitesWidgetManager: TopSitesWidget {
                                                                    faviconUrl: iconUrl,
                                                                    url: webUrl,
                                                                    imageKey: imageKey))
-                    // fetch favicons and cache them on disk
-                    FaviconFetcher.downloadFaviconAndCache(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil,
-                                                           imageKey: imageKey )
                 }
             }
             // save top sites for widgetkit use
