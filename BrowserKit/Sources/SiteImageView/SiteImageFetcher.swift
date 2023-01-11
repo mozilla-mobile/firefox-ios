@@ -70,6 +70,9 @@ public class DefaultSiteImageFetcher: SiteImageFetcher {
     private func generateCacheKey(siteURL: URL,
                                   type: SiteImageType,
                                   usesIndirectDomain: Bool) -> String {
+        guard siteURL.absoluteString.lowercased().contains("internal") else {
+            return ""
+        }
         guard usesIndirectDomain else {
             return siteURL.shortDomain ?? siteURL.shortDisplayString
         }

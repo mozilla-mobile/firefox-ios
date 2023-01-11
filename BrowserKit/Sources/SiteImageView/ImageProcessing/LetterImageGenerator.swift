@@ -10,14 +10,14 @@ protocol LetterImageGenerator {
     /// Runs main thread due to UILabel.initWithFrame(:)
     /// - Parameter domain: The string domain name
     /// - Returns: The generated letter image
-    @MainActor func generateLetterImage(siteString: String) async -> UIImage
+    @MainActor func generateLetterImage(siteString: String) async throws -> UIImage
 }
 
 class DefaultLetterImageGenerator: LetterImageGenerator {
-    private let defaultLetter: Character = "#"
-
-    @MainActor func generateLetterImage(siteString: String) async -> UIImage {
-        let letter: Character = siteString.first ?? defaultLetter
+    @MainActor func generateLetterImage(siteString: String) async throws -> UIImage {
+        guard let letter: Character = siteString.first else {
+            throw SiteImageError.noLetterImage
+        }
         let capitalizedLetter = letter.uppercased()
 
         let color = generateBackgroundColor(forSite: siteString)

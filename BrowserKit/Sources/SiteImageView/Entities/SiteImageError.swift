@@ -14,6 +14,7 @@ enum SiteImageError: Error, CustomStringConvertible {
     case noURLInCache
     case noHeroImage
     case noImageInBundle
+    case noLetterImage
 
     var description: String {
         switch self {
@@ -35,6 +36,8 @@ enum SiteImageError: Error, CustomStringConvertible {
             return "No hero image was found"
         case .noImageInBundle:
             return "No image in bundle was found"
+        case .noLetterImage:
+            return "The first character is nil or empty so no letter image"
         }
     }
 }
