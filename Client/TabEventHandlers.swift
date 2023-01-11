@@ -12,7 +12,6 @@ class TabEventHandlers {
     /// pattern is to implement a handler and specify which events to observe.
     static func create(with profile: Profile) -> [TabEventHandler] {
         let handlers: [TabEventHandler] = [
-            FaviconHandler(),
             UserActivityHandler(),
             MetadataParserHelper(),
             MediaImageLoader(profile.prefs),

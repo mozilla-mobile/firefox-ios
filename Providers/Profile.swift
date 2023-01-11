@@ -68,7 +68,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
     }
 
     public func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-        let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
+        let item = ShareItem(url: url.absoluteString, title: title)
         _ = self.profile.queue.addToQueue(item)
     }
 }

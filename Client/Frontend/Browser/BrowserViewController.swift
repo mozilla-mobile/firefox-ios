@@ -1146,13 +1146,13 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func addBookmark(url: String, title: String? = nil, favicon: Favicon? = nil) {
+    func addBookmark(url: String, title: String? = nil) {
         var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty {
             title = url
         }
 
-        let shareItem = ShareItem(url: url, title: title, favicon: favicon)
+        let shareItem = ShareItem(url: url, title: title)
         // Add new mobile bookmark at the top of the list
         profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
                                       url: shareItem.url,
@@ -1539,8 +1539,7 @@ class BrowserViewController: UIViewController {
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconPrimary)
         let shareItem = ShareItem(url: url.absoluteString,
-                                  title: selectedTab.title,
-                                  favicon: selectedTab.displayFavicon)
+                                  title: selectedTab.title)
 
         let helper = SendToDeviceHelper(shareItem: shareItem,
                                         profile: profile,
@@ -2132,7 +2131,9 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         tabManager.didChangedPanelSelection = true
         if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
-            profile.recentlyClosedTabs.addTab(url as URL, title: tab.lastTitle, faviconURL: tab.displayFavicon?.url, lastExecutedTime: tab.lastExecutedTime)
+            profile.recentlyClosedTabs.addTab(url as URL,
+                                              title: tab.lastTitle,
+                                              lastExecutedTime: tab.lastExecutedTime)
         }
         updateTabCountUsingTabManager(tabManager)
     }
@@ -2576,7 +2577,7 @@ extension BrowserViewController: TabTrayDelegate {
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
         let tabState = tab.tabState
-        addBookmark(url: url, title: tabState.title, favicon: tabState.favicon)
+        addBookmark(url: url, title: tabState.title)
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .tabTray)
     }
 

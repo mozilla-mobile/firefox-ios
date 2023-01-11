@@ -203,7 +203,7 @@ private extension RatingPromptManagerTests {
 
     func createBookmarks(bookmarkCount: Int, withRoot root: String) {
         (1...bookmarkCount).forEach { index in
-            let bookmark = ShareItem(url: "http://www.example.com/\(index)", title: "Example \(index)", favicon: nil)
+            let bookmark = ShareItem(url: "http://www.example.com/\(index)", title: "Example \(index)")
             _ = mockProfile.places.createBookmark(parentGUID: root,
                                                   url: bookmark.url,
                                                   title: bookmark.title,

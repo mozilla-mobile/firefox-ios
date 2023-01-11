@@ -10,12 +10,10 @@ import Shared
 public struct ShareItem {
     public let url: String
     public let title: String?
-    public let favicon: Favicon?
 
-    public init(url: String, title: String?, favicon: Favicon?) {
+    public init(url: String, title: String?) {
         self.url = url
         self.title = title
-        self.favicon = favicon
     }
 
     // We only support sharing HTTP and HTTPS URLs, as well as data URIs.
