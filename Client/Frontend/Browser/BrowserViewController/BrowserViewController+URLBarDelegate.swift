@@ -90,7 +90,7 @@ extension BrowserViewController: URLBarDelegate {
                                      value: .awesomebarShareTap,
                                      extras: nil)
 
-        if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.url {
+        if let selectedtab = tabManager.selectedTab, let tabUrl = selectedtab.canonicalURL?.displayURL {
             presentShareSheet(tabUrl,
                               tab: selectedtab,
                               sourceView: shareView,

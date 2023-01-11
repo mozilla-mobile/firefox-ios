@@ -27,4 +27,15 @@ class TabTests: XCTestCase {
         newUrl = url.withoutMobilePrefix()
         XCTAssertEqual(newUrl.host, "mobile.co.uk")
     }
+
+    func testShareURL_RemovingReaderModeComponents() {
+        let url = URL(string: "http://localhost:123/reader-mode/page?url=https://mozilla.org")!
+
+        guard let newUrl = url.displayURL else {
+            XCTFail("expected valid url without reader mode components")
+            return
+        }
+
+        XCTAssertEqual(newUrl.host, "mozilla.org")
+    }
 }
