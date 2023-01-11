@@ -61,8 +61,8 @@ public class RustAutofillEncryptionKeys {
             let canary = try self.createCanary(text: canaryPhrase, key: secret)
 
             keychain.set(secret,
-                forKey: ccKeychainKey,
-                withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+                         forKey: ccKeychainKey,
+                         withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             keychain.set(canary,
                          forKey: ccCanaryPhraseKey,
                          withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
@@ -70,18 +70,16 @@ public class RustAutofillEncryptionKeys {
             return secret
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(
-                    err: autofillStoreError,
-                    errorDomain: err.domain,
-                    errorMessage: "Error while creating and storing credit card key")
+                sendAutofillStoreErrorToSentry(err: autofillStoreError,
+                                               errorDomain: err.domain,
+                                               errorMessage: "Error while creating and storing credit card key")
 
                 throw AutofillEncryptionKeyError.noKeyCreated
             } else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Unknown error while creating and storing credit card key",
-                    tag: SentryTag.rustAutofill,
-                    severity: .error,
-                    description: err.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error while creating and storing credit card key",
+                                                            tag: SentryTag.rustAutofill,
+                                                            severity: .error,
+                                                            description: err.localizedDescription)
 
                 throw AutofillEncryptionKeyError.noKeyCreated
             }
@@ -97,21 +95,19 @@ public class RustAutofillEncryptionKeys {
             return try decryptString(key: key, ciphertext: encryptedCCNum)
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(
-                    err: autofillStoreError,
-                    errorDomain: err.domain,
-                    errorMessage: "Error while decrypting credit card")
+                sendAutofillStoreErrorToSentry(err: autofillStoreError,
+                                               errorDomain: err.domain,
+                                               errorMessage: "Error while decrypting credit card")
             } else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Unknown error while decrypting credit card",
-                    tag: SentryTag.rustAutofill,
-                    severity: .error,
-                    description: err.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error while decrypting credit card",
+                                                            tag: SentryTag.rustAutofill,
+                                                            severity: .error,
+                                                            description: err.localizedDescription)
             }
             return nil
         }
     }
-    
+
     fileprivate func checkCanary(canary: String,
                                  text: String,
                                  key: String) throws -> Bool {
@@ -127,21 +123,19 @@ public class RustAutofillEncryptionKeys {
             return try encryptString(key: key, cleartext: creditCardNum)
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(
-                    err: autofillStoreError,
-                    errorDomain: err.domain,
-                    errorMessage: "Error while encrypting credit card")
+                sendAutofillStoreErrorToSentry(err: autofillStoreError,
+                                               errorDomain: err.domain,
+                                               errorMessage: "Error while encrypting credit card")
             } else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Unknown error while encrypting credit card",
-                    tag: SentryTag.rustAutofill,
-                    severity: .error,
-                    description: err.localizedDescription)
+                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error while encrypting credit card",
+                                                            tag: SentryTag.rustAutofill,
+                                                            severity: .error,
+                                                            description: err.localizedDescription)
             }
         }
         return nil
     }
-    
+
     fileprivate func createCanary(text: String,
                                   key: String) throws -> String {
         return try encryptString(key: key, cleartext: text)
@@ -184,12 +178,12 @@ public class RustAutofill {
         self.databasePath = databasePath
 
         queue = DispatchQueue(label: "RustAutofill queue: \(databasePath)",
-            attributes: [])
+                              attributes: [])
     }
-    
+
     private func open() -> NSError? {
         do {
-            _ = try getStoredKey()
+            try getStoredKey()
             storage = try AutofillStore(dbpath: databasePath)
             isOpen = true
             return nil
@@ -316,7 +310,7 @@ public class RustAutofill {
             }
 
             do {
-                _ = try self.storage?.updateCreditCard(
+                try self.storage?.updateCreditCard(
                     guid: id,
                     cc: creditCard.toUpdatableCreditCardFields())
                 completion(true, nil)
@@ -343,7 +337,7 @@ public class RustAutofill {
             }
         }
     }
-    
+
     public func use(creditCard: CreditCard, completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
@@ -361,7 +355,7 @@ public class RustAutofill {
             }
         }
     }
-    
+
     public func scrubCreditCardNums(completion: @escaping (Bool, Error?) -> Void) {
         queue.async {
             guard self.isOpen else {
@@ -401,8 +395,8 @@ public class RustAutofill {
                         message: "Autofill key was corrupted, new one generated",
                         tag: SentryTag.rustAutofill,
                         severity: .warning)
-                    
-                    _ = self.scrubCreditCardNums(completion: {_,_ in })
+
+                    self.scrubCreditCardNums(completion: {_,_ in })
                     return try rustKeys.createAndStoreKey()
                 }
             } catch let error as NSError {
@@ -419,8 +413,8 @@ public class RustAutofill {
                     message: "Autofill key lost due to storage malfunction, new one generated",
                     tag: SentryTag.rustAutofill,
                     severity: .warning)
-                
-                _ = self.scrubCreditCardNums(completion: {_,_ in })
+
+                self.scrubCreditCardNums(completion: {_,_ in })
                 return try rustKeys.createAndStoreKey()
             } catch let error as NSError {
                 throw error
@@ -432,8 +426,8 @@ public class RustAutofill {
                     message: "Autofill key lost, new one generated",
                     tag: SentryTag.rustAutofill,
                     severity: .warning)
-                
-                _ = self.scrubCreditCardNums(completion: {_,_ in })
+
+                self.scrubCreditCardNums(completion: {_,_ in })
                 return try rustKeys.createAndStoreKey()
             } catch let error as NSError {
                 throw error

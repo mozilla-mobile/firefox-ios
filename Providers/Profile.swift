@@ -449,7 +449,7 @@ open class BrowserProfile: Profile {
     lazy var tabsDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("tabs.db").path
 
     lazy var tabs = RustRemoteTabs(databasePath: tabsDbPath)
-    
+
     lazy var autofillDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("autofill.db").path
 
     lazy var autofill = RustAutofill(databasePath: autofillDbPath)

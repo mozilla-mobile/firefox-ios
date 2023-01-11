@@ -90,7 +90,7 @@ class RustAutofillTests: XCTestCase {
 
         waitForExpectations(timeout: 3, handler: nil)
     }
-    
+
     func testUpdateCreditCard() {
         let expectationAddCard = expectation(description: "completed add card")
         let expectationGetCard = expectation(description: "completed getting card")
@@ -171,5 +171,4 @@ class RustAutofillTests: XCTestCase {
 
         waitForExpectations(timeout: 3, handler: nil)
     }
-
 }
