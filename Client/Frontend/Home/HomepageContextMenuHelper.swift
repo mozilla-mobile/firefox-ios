@@ -144,7 +144,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
     private func getAddBookmarkAction(site: Site) -> SingleActionViewModel {
         return SingleActionViewModel(title: .BookmarkContextMenuTitle, iconString: ImageIdentifiers.actionAddBookmark, tapHandler: { _ in
-            let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+            let shareItem = ShareItem(url: site.url, title: site.title)
             // Add new mobile bookmark at the top of the list
             _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
                                                              url: shareItem.url,
@@ -204,7 +204,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         let colors = SendToDeviceHelper.Colors(defaultBackground: themeColors.layer1,
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconPrimary)
-        let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
+        let shareItem = ShareItem(url: site.url, title: site.title)
         let helper = SendToDeviceHelper(shareItem: shareItem,
                                         profile: viewModel.profile,
                                         colors: colors,

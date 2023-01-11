@@ -67,7 +67,7 @@ public struct ExtensionUtils {
                         }
 
                         let title = inputItem.attributedContentText?.string
-                        let extracted = ExtractedShareItem.shareItem(ShareItem(url: url.absoluteString, title: title, favicon: nil))
+                        let extracted = ExtractedShareItem.shareItem(ShareItem(url: url.absoluteString, title: title))
                         completionHandler(extracted, nil)
                     }
 
@@ -102,7 +102,7 @@ public struct ExtensionUtils {
                 }
 
                 if let url = textToUrl(text) {
-                    let extracted = ExtractedShareItem.shareItem(ShareItem(url: url.absoluteString, title: nil, favicon: nil))
+                    let extracted = ExtractedShareItem.shareItem(ShareItem(url: url.absoluteString, title: nil))
                     completionHandler(extracted, nil)
                     return
                 }

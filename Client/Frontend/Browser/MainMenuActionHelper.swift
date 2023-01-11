@@ -12,7 +12,7 @@ import Common
 
 protocol ToolBarActionMenuDelegate: AnyObject {
     func updateToolbarState()
-    func addBookmark(url: String, title: String?, favicon: Favicon?)
+    func addBookmark(url: String, title: String?)
 
     func openURLInNewTab(_ url: URL?, isPrivate: Bool)
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool, searchFor searchText: String?)
@@ -376,8 +376,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                                    iconColor: themeColors.iconPrimary)
 
             let shareItem = ShareItem(url: url.absoluteString,
-                                      title: selectedTab.title,
-                                      favicon: selectedTab.displayFavicon)
+                                      title: selectedTab.title)
             let helper = SendToDeviceHelper(shareItem: shareItem,
                                             profile: self.profile,
                                             colors: colors,
@@ -691,7 +690,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             else { return }
 
             // The method in BVC also handles the toast for this use case
-            self.delegate?.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
+            self.delegate?.addBookmark(url: url.absoluteString, title: tab.title)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
         }
     }

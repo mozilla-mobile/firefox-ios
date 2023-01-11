@@ -43,7 +43,7 @@ extension BrowserViewController {
     @objc func addBookmarkKeyCommand() {
         if let tab = tabManager.selectedTab, homepageViewController?.view.alpha == 0 {
             guard let url = tab.canonicalURL?.displayURL else { return }
-            addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
+            addBookmark(url: url.absoluteString, title: tab.title)
         }
     }
 

@@ -31,7 +31,7 @@ extension SavedTab {
                   isSelected: isSelected,
                   title: tab.title ?? tab.lastTitle,
                   isPrivate: tab.isPrivate,
-                  faviconURL: tab.displayFavicon?.url,
+                  faviconURL: tab.faviconURL,
                   url: tab.url,
                   sessionData: sessionData,
                   uuid: tab.tabUUID,
@@ -42,12 +42,6 @@ extension SavedTab {
 
     func configureSavedTabUsing(_ tab: Tab, imageStore: DiskImageStore? = nil) -> Tab {
         tab.url = url
-
-        if let faviconURL = faviconURL {
-            let icon = Favicon(url: faviconURL, date: Date())
-            icon.width = 1
-            tab.favicons.append(icon)
-        }
 
         if let screenshotUUID = screenshotUUID, let imageStore = imageStore {
             tab.screenshotUUID = screenshotUUID

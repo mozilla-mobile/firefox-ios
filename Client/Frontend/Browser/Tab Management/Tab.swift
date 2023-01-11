@@ -44,7 +44,6 @@ struct TabState {
     var isPrivate: Bool = false
     var url: URL?
     var title: String?
-    var favicon: Favicon?
 }
 
 enum TabUrlType: String {
@@ -71,7 +70,7 @@ class Tab: NSObject {
     }
     var urlType: TabUrlType = .regular
     var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
+        return TabState(isPrivate: _isPrivate, url: url, title: displayTitle)
     }
 
     var timerPerWebsite: [String: StopWatchTimer] = [:]
@@ -81,7 +80,11 @@ class Tab: NSObject {
 
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
-    var pageMetadata: PageMetadata?
+    var pageMetadata: PageMetadata? {
+        didSet {
+            faviconURL = pageMetadata?.faviconURL
+        }
+    }
 
     var readabilityResult: ReadabilityResult?
 
@@ -220,10 +223,6 @@ class Tab: NSObject {
         return self.displayTitle.isEmpty ? backUpName : self.displayTitle
     }
 
-    var displayFavicon: Favicon? {
-        return favicons.max { $0.width! < $1.width! }
-    }
-
     var canGoBack: Bool {
         return webView?.canGoBack ?? false
     }
@@ -237,14 +236,10 @@ class Tab: NSObject {
     var tabDelegate: TabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
     var bars = [SnackBar]()
-    var favicons = [Favicon]() {
-        didSet {
-            updateFaviconCache()
-        }
-    }
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
     var sessionData: SessionData?
+    var faviconURL: String?
     fileprivate var lastRequest: URLRequest?
     var isRestoring: Bool = false
     var pendingScreenshot = false
@@ -785,21 +780,6 @@ class Tab: NSObject {
             }
         }
         return .none
-    }
-
-    func updateFaviconCache() {
-        guard let displayFavicon = displayFavicon?.url,
-              let faviconUrl = URL(string: displayFavicon),
-              let baseDomain = url?.baseDomain
-        else { return }
-
-        if currentFaviconUrl == nil {
-            currentFaviconUrl = faviconUrl
-        } else if !faviconUrl.isEqual(currentFaviconUrl!) {
-            return
-        }
-
-        FaviconFetcher.downloadFaviconAndCache(imageURL: currentFaviconUrl, imageKey: baseDomain)
     }
 }
 

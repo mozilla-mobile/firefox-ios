@@ -186,7 +186,7 @@ extension SyncDataDisplay {
             notificationContent.userInfo["sentTabs"] = [tab] as NSArray
 
             // Add tab to the queue.
-            let item = ShareItem(url: urlString, title: title, favicon: nil)
+            let item = ShareItem(url: urlString, title: title)
             _ = tabQueue?.addToQueue(item).value // Force synchronous.
 
             presentNotification(title: .SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
@@ -252,7 +252,7 @@ extension SyncDataDisplay {
 extension SyncDataDisplay: SyncDelegate {
     func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         if url.isWebPage() {
-            let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
+            let item = ShareItem(url: url.absoluteString, title: title)
             _ = tabQueue?.addToQueue(item).value // Force synchronous.
         }
     }

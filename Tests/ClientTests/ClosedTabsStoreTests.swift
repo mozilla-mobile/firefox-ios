@@ -47,7 +47,7 @@ class ClosedTabsStoreTests: XCTestCase {
         let store = createStore()
         let urlString = "thisisanotheraurl.com"
         let tabTitle = "a different title"
-        store.addTab(URL(string: urlString)!, title: tabTitle, faviconURL: nil, lastExecutedTime: nil)
+        store.addTab(URL(string: urlString)!, title: tabTitle, lastExecutedTime: nil)
         XCTAssertEqual(store.tabs.count, 1)
 
         let firstTab = store.popFirstTab()
@@ -73,8 +73,8 @@ class ClosedTabsStoreTests: XCTestCase {
 
     func testStoreCanClearTabs() {
         let store = createStore()
-        store.addTab(URL(string: "thisisaurl.com")!, title: "a title", faviconURL: nil, lastExecutedTime: nil)
-        store.addTab(URL(string: "thisisaurl2.com")!, title: "a title2", faviconURL: nil, lastExecutedTime: nil)
+        store.addTab(URL(string: "thisisaurl.com")!, title: "a title", lastExecutedTime: nil)
+        store.addTab(URL(string: "thisisaurl2.com")!, title: "a title2", lastExecutedTime: nil)
         store.clearTabs()
 
         XCTAssertEqual(store.tabs.count, 0)
@@ -110,8 +110,8 @@ class ClosedTabsStoreTests: XCTestCase {
         let store = createStore()
         addTabs(number: 2, to: store, lastExecutedTime: Date.now())
         let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
-        store.addTab(URL(string: "thisisaurl3.com")!, title: "a title3", faviconURL: nil, lastExecutedTime: twoDaysAgo.toTimestamp())
-        store.addTab(URL(string: "thisisaurl4.com")!, title: "a title4", faviconURL: nil, lastExecutedTime: twoDaysAgo.toTimestamp())
+        store.addTab(URL(string: "thisisaurl3.com")!, title: "a title3", lastExecutedTime: twoDaysAgo.toTimestamp())
+        store.addTab(URL(string: "thisisaurl4.com")!, title: "a title4", lastExecutedTime: twoDaysAgo.toTimestamp())
         store.removeTabsFromDate(Date.yesterday)
 
         XCTAssertEqual(store.tabs.count, 2)
@@ -127,7 +127,7 @@ private extension ClosedTabsStoreTests {
 
     func addTabs(number: Int, to store: ClosedTabsStore, lastExecutedTime: Timestamp? = nil) {
         for index in 0...number - 1 {
-            store.addTab(URL(string: "thisisaurl\(index).com")!, title: "a title\(index)", faviconURL: nil, lastExecutedTime: lastExecutedTime)
+            store.addTab(URL(string: "thisisaurl\(index).com")!, title: "a title\(index)", lastExecutedTime: lastExecutedTime)
         }
     }
 }

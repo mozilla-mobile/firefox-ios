@@ -716,7 +716,6 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
                 profile.recentlyClosedTabs.addTab(url as URL,
                                                   title: tab.lastTitle,
-                                                  faviconURL: tab.displayFavicon?.url,
                                                   lastExecutedTime: tab.lastExecutedTime)
             }
         }

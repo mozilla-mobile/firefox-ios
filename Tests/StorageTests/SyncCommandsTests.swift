@@ -69,10 +69,10 @@ class SyncCommandsTests: XCTestCase {
         clientsAndTabs = SQLiteRemoteClientsAndTabs(db: db)
         clientsAndTabs.insertOrUpdateClients(clients).succeeded()
 
-        shareItems.append(ShareItem(url: "http://mozilla.com", title: "Mozilla", favicon: nil))
-        shareItems.append(ShareItem(url: "http://slashdot.org", title: "Slashdot", favicon: nil))
-        shareItems.append(ShareItem(url: "http://news.bbc.co.uk", title: "BBC News", favicon: nil))
-        shareItems.append(ShareItem(url: "http://news.bbc.co.uk", title: nil, favicon: nil))
+        shareItems.append(ShareItem(url: "http://mozilla.com", title: "Mozilla"))
+        shareItems.append(ShareItem(url: "http://slashdot.org", title: "Slashdot"))
+        shareItems.append(ShareItem(url: "http://news.bbc.co.uk", title: "BBC News"))
+        shareItems.append(ShareItem(url: "http://news.bbc.co.uk", title: nil))
 
         wipeCommand = SyncCommand(value: "{'command':'wipeAll', 'args':[]}")
     }
