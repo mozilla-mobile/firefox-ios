@@ -6,44 +6,59 @@ import XCTest
 @testable import SiteImageView
 
 final class LetterImageGeneratorTests: XCTestCase {
-    func testEmptyDomain_doesntReturnEmptyImage() async {
+    func testEmptyDomain_throws() async {
         let subject = DefaultLetterImageGeneratorSpy()
         let siteString = ""
-        let result = await subject.generateLetterImage(siteString: siteString)
 
-        XCTAssertEqual(subject.capturedLetter, "#")
-        XCTAssertNotEqual(result, UIImage())
-        testColor(subject: subject, red: 0.850, green: 0.133, blue: 0.082, alpha: 1.0)
+        do {
+            _ = try await subject.generateLetterImage(siteString: siteString)
+        } catch {
+            XCTAssertEqual(error.localizedDescription, SiteImageError.noLetterImage.localizedDescription)
+        }
     }
 
     func testDomain1_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
         let siteString = "mozilla.com"
-        let result = await subject.generateLetterImage(siteString: siteString)
 
-        XCTAssertEqual(subject.capturedLetter, "M")
-        XCTAssertNotEqual(result, UIImage())
-        testColor(subject: subject, red: 0.223, green: 0.576, blue: 0.125, alpha: 1.0)
+        do {
+            let result = try await subject.generateLetterImage(siteString: siteString)
+
+            XCTAssertEqual(subject.capturedLetter, "M")
+            XCTAssertNotEqual(result, UIImage())
+            testColor(subject: subject, red: 0.223, green: 0.576, blue: 0.125, alpha: 1.0)
+        } catch {
+            XCTFail("Failed to generate a letter image")
+        }
     }
 
     func testDomain2_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
         let siteString = "firefox.com"
-        let result = await subject.generateLetterImage(siteString: siteString)
 
-        XCTAssertEqual(subject.capturedLetter, "F")
-        XCTAssertNotEqual(result, UIImage())
-        testColor(subject: subject, red: 0.584, green: 0.803, blue: 1.0, alpha: 1.0)
+        do {
+            let result = try await subject.generateLetterImage(siteString: siteString)
+
+            XCTAssertEqual(subject.capturedLetter, "F")
+            XCTAssertNotEqual(result, UIImage())
+            testColor(subject: subject, red: 0.584, green: 0.803, blue: 1.0, alpha: 1.0)
+        } catch {
+            XCTFail("Failed to generate a letter image")
+        }
     }
 
     func testFakeDomain_returnsExpectedLetterAndColor() async {
         let subject = DefaultLetterImageGeneratorSpy()
         let siteString = "?$%^"
-        let result = await subject.generateLetterImage(siteString: siteString)
+        do {
+            let result = try await subject.generateLetterImage(siteString: siteString)
 
-        XCTAssertEqual(subject.capturedLetter, "?")
-        XCTAssertNotEqual(result, UIImage())
-        testColor(subject: subject, red: 0.003, green: 0.639, blue: 0.615, alpha: 1.0)
+            XCTAssertEqual(subject.capturedLetter, "?")
+            XCTAssertNotEqual(result, UIImage())
+            testColor(subject: subject, red: 0.003, green: 0.639, blue: 0.615, alpha: 1.0)
+        } catch {
+            XCTFail("Failed to generate a letter image")
+        }
     }
 }
 

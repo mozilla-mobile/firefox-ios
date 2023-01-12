@@ -374,6 +374,7 @@ public class RustAutofill {
         }
     }
 
+    @discardableResult
     public func getStoredKey() throws -> String {
         let rustKeys = RustAutofillEncryptionKeys()
         let key = rustKeys.keychain.string(forKey: rustKeys.ccKeychainKey)
