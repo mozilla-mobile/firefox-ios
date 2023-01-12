@@ -21,7 +21,7 @@ files="ads-track-digest256.json analytics-track-digest256.json base-cryptomining
 for file in $files
 do
 	echo "$file"
-	curl "https://storage.googleapis.com/shavar-lists-ios-public/Public/shavar-lists-v${CURRENT_SHAVAR_LIST_VERSION}/${file}" -o "shavar-prod-lists/normalized-lists/${file}"
+	curl "https://storage.googleapis.com/shavar-lists-ios-public/Public/shavar-lists-${CURRENT_SHAVAR_LIST_VERSION}/${file}" -o "shavar-prod-lists/normalized-lists/${file}"
 done
 
 cp shavar-prod-lists/normalized-lists/disconnect-entitylist.json shavar-prod-lists/

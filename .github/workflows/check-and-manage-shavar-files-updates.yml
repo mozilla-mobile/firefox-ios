@@ -30,7 +30,7 @@ jobs:
         pip install -r requirements.txt
     - uses: actions/checkout@v3
       with:
-        repository: 'mozilla-services/shavar-list-creation'
+        repository: 'irios3/shavar-list-creation'
         ref: 'creat-json-tracking-protection-lists'
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
@@ -41,103 +41,76 @@ jobs:
       run: |
         echo "Download version.txt file"
         curl -X GET -o "version.txt" https://storage.googleapis.com/shavar-lists-ios-public/Public/version.txt
-    - name: Get shavar-files-latest-folder
-      run: |
-        mkdir tmp
-        files="ads-track-digest256.json analytics-track-digest256.json base-cryptomining-track-digest256.json base-fingerprinting-track-digest256.json content-track-digest256.json social-track-digest256.json disconnect-entitylist.json"
-
-        for file in $files
-        do
-          echo "$file"
-          curl "https://storage.googleapis.com/shavar-lists-ios-public/Public/shavar-lists-v0/${file}" -o "tmp/${file}_new.json"
-        done
-    - name: Get disconnect-entitylist file
-      run: |
-        git clone https://github.com/mozilla-services/shavar-prod-lists.git
-        ls
     - name: Locally generate shavar JSON files
       run: |
         ls
-        ls tmp
         mv sample_shavar_list_creation.ini shavar_list_creation.ini
 
-        echo "run sed"
-        sed -i -e 's/_creat_latest_prod/_creation/g' lists2safebrowsing.py
-
-        echo "run script"
+        echo "Run script to get JSON files"
         python3 lists2safebrowsing.py
 
-        ls -la
-        echo "create folder"
-        mkdir shavar_json_files
+        echo "Lists are generated"
+        ls
 
-        echo "copy required files into folder"
-        mv ads-track-digest256.json base-cryptomining-track-digest256.json analytics-track-digest256.json base-fingerprinting-track-digest256.json social-track-digest256.json content-track-digest256.json shavar_json_files/
-        mv shavar-prod-lists/disconnect-entitylist.json shavar_json_files/
-        ls shavar_json_files
-    - name: Compare JSON files
+        # Once the files are generated, check which is the latest version of these files
+        LATEST_SHAVAR_VERSION=$(ls -1 | grep -v 'gha-creds\-*' | egrep -o '[0-9]{3}.[0-9]'| sort -n | tail -n 1 | sed 's/\.0//g')
+        echo $LATEST_SHAVAR_VERSION
+
+        CURRENT_VERSION=`cat version.txt`
+        echo $CURRENT_VERSION
+        SHOULD_UPDATE_VERSION=false
+
+        # Compare with version saved in the bucket
+        if [ "$LATEST_SHAVAR_VERSION" -gt "$CURRENT_VERSION" ];
+        then
+          echo "Yes, let's get new JSON files"
+          SHOULD_UPDATE_VERSION=true
+          echo "SHOULD_UPDATE_VERSION=$SHOULD_UPDATE_VERSION" >> $GITHUB_ENV
+
+          # Create new folder with the new version
+          mkdir "shavar_version_${LATEST_SHAVAR_VERSION}"
+
+          # Copy all files into a new folder named with the latest version
+          cp -r ${LATEST_SHAVAR_VERSION}.0*.json shavar_version_${LATEST_SHAVAR_VERSION}
+          echo ls shavar_version_${LATEST_SHAVAR_VERSION}
+
+          cd shavar_version_${LATEST_SHAVAR_VERSION}
+
+          # Once the files are stored in their versioned folder, remove the version from the file name
+
+          for file in *; do
+            echo $file
+            #This works, now we need to use variable instead of that value
+            mv "$file" "$(echo $file | sed -E "s/$LATEST_SHAVAR_VERSION\.0-//g")"
+          done
+
+          # Update the version in the version.txt file
+          cd ..
+          sed -i -e "s/$CURRENT_VERSION/$LATEST_SHAVAR_VERSION/g" version.txt
+          UPDATE_SHAVAR_VERSION=`cat version.txt`
+          echo "$UPDATE_SHAVAR_VERSION"
+          echo "UPDATE_SHAVAR_VERSION=$UPDATE_SHAVAR_VERSION" >> $GITHUB_ENV
+        else
+          echo "There is not any new version"
+        fi
+    - name: Get disconnect-entitylist file
+      if: ${{ env.SHOULD_UPDATE_VERSION }}
       run: |
-        generatedFiles=(shavar_json_files/content-track-digest256.json shavar_json_files/ads-track-digest256.json shavar_json_files/base-cryptomining-track-digest256.json shavar_json_files/analytics-track-digest256.json shavar_json_files/base-fingerprinting-track-digest256.json shavar_json_files/social-track-digest256.json shavar_json_files/disconnect-entitylist.json)
-
-        oldFiles=(tmp/content-track-digest256.json_new.json tmp/ads-track-digest256.json_new.json tmp/base-cryptomining-track-digest256.json_new.json tmp/analytics-track-digest256.json_new.json tmp/base-fingerprinting-track-digest256.json_new.json tmp/social-track-digest256.json_new.json tmp/disconnect-entitylist.json_new.json)
-        createNewVersion=false
-
-        for ((i=0; i<${#generatedFiles[@]}; i++)); do
-          echo "${generatedFiles[$i]}" 
-          echo "${oldFiles[$i]}"
-          echo "DIFF"
-          diff ${generatedFiles[$i]} ${oldFiles[$i]}|grep ">"|cut -c 3- > foo.txt
-          output="`cat foo.txt`"
-          echo "after"
-          if [ ! "$output" = "" ]; then
-            echo "there are changes in files"
-            createNewVersion=true
-            echo $createNewVersion
-            echo "createNewVersion=$createNewVersion" >> $GITHUB_ENV
-          else
-            echo "There are NO changes in files"
-          fi
-        done
-    - name: Create folders
-      if: ${{ env.createNewVersion }}
-      run: |
-        echo "Read version folder"
-        version=`cat version.txt`
-        echo $version
-        echo "Create version folder +1"
-        mkdir "shavar_version_$(( ${version} + 1))"
-        echo "shavar_version_$(( ${version} + 1))"
-
-        echo "Copy all generated Files into a new folder +1 and to new"
-        for ((i=0; i<${#generatedFiles[@]}; i++)); do
-          cp ${generatedFiles[$i]} "shavar_version_$(( ${version} + 1))"
-          cp ${generatedFiles[$i]} "new"
-          echo "Files copied to the new release folder"
-        done
-        sed -i -e "s/$version/$(( ${version} + 1))/g" version.txt
-        new_version=`cat version.txt`
-        echo "$new_version"
-        echo "new_version=$new_version" >> $GITHUB_ENV
-
+        git clone https://github.com/mozilla-services/shavar-prod-lists.git
+        cd shavar-prod-lists && git checkout ${{ env.UPDATE_SHAVAR_VERSION }}.0
+        cp disconnect-entitylist.json ../shavar_version_${UPDATE_SHAVAR_VERSION}
+        ls
     - id: 'upload-folder'
-      if: ${{ env.createNewVersion }}
+      if: ${{ env.SHOULD_UPDATE_VERSION }}
       uses: 'google-github-actions/upload-cloud-storage@v1'
       with:
-        path: 'shavar_json_files'
-        destination: 'shavar-lists-ios-public/Public/shavar-lists-v${{ env.new_version }}'
+        path: 'shavar_version_${{ env.UPDATE_SHAVAR_VERSION }}'
+        destination: 'shavar-lists-ios-public/Public/shavar-lists-v${{ env.UPDATE_SHAVAR_VERSION }}'
         parent: false
     - id: 'upload-folder-1'
       uses: 'google-github-actions/upload-cloud-storage@v1'
-      if: ${{ env.createNewVersion }}
+      if: ${{ env.SHOULD_UPDATE_VERSION }}
       with:
         path: 'version.txt'
         destination: 'shavar-lists-ios-public/Public'
         parent: false
-    - id: 'upload-folder-2'
-      uses: 'google-github-actions/upload-cloud-storage@v1'
-      if: ${{ env.createNewVersion }}
-      with:
-        path: 'shavar_json_files'
-        destination: 'shavar-lists-ios-public/Public/new'
-        parent: false
-

@@ -1,9 +1,10 @@
 import requests
 import json
+import os
 
 
 GCP_VERSION_FILE= "https://storage.googleapis.com/shavar-lists-ios-public/Public/version.txt"
-CONTENT_BLOCKER_FILE="content-blocker.sh"
+CONTENT_BLOCKER_FILE="content_blocker_update.sh"
 
 def get_shavar_version_from_gcp():
     resp = requests.get(GCP_VERSION_FILE)
@@ -21,7 +22,7 @@ def read_current_shavar_version_on_repo():
             if string_to_search in line:
                 get_version=str(line).split('=')
                 remove_new_line=get_version[1].replace("\n", "")
-                remove_quotes=remove_new_line[1].replace('"', "")
+                remove_quotes=remove_new_line.replace('"', "")
                 current_shavar_version_on_repo=int(remove_quotes)
                 return current_shavar_version_on_repo
 
@@ -29,6 +30,8 @@ def compare_versions(shavar_version_on_gcp, current_shavar_version_on_repo):
     if shavar_version_on_gcp > current_shavar_version_on_repo:
         print("Update shavar lists")
         return True
+    else:
+        print("Shavar lists are up to date")
 
 def update_content_blocker_file(shavar_version_on_gcp, current_shavar_version_on_repo, CONTENT_BLOCKER_FILE):
     # Read content_blocker file
