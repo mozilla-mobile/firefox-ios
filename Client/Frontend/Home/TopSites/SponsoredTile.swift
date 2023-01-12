@@ -20,7 +20,5 @@ final class SponsoredTile: Site {
 
         // A guid is required in case the site might become a pinned site
         self.guid = "default" + contile.name
-
-        icon = Favicon(url: contile.imageUrl)
     }
 }

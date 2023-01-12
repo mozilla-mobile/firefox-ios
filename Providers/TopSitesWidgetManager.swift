@@ -25,12 +25,9 @@ class TopSitesWidgetManager: TopSitesWidget {
 
             var widgetkitTopSites = [WidgetKitTopSiteModel]()
             sites.forEach { site in
-                // Favicon icon url
-                let iconUrl = site.icon?.url ?? ""
                 let imageKey = site.tileURL.baseDomain ?? ""
                 if let webUrl = URL(string: site.url) {
                     widgetkitTopSites.append(WidgetKitTopSiteModel(title: site.title,
-                                                                   faviconUrl: iconUrl,
                                                                    url: webUrl,
                                                                    imageKey: imageKey))
                 }

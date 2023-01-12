@@ -12,7 +12,7 @@ import Storage
  * ```
  * class HandoffHandler {
  *     init() {
- *         register(self, forTabEvents: .didLoadFavicon, .didLoadPageMetadata)
+ *         register(self, forTabEvents: .didLoadPageMetadata)
  *     }
  * }
  * ```
@@ -24,10 +24,6 @@ import Storage
  * extension HandoffHandler: TabEventHandler {
  *     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
  *         print("\(tab) has \(pageMetadata)")
- *     }
- *
- *     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon) {
- *         print("\(tab) has \(favicon)")
  *     }
  * }
  * ```
@@ -54,7 +50,6 @@ protocol TabEventHandler: AnyObject {
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
     func tabMetadataNotAvailable(_ tab: Tab)
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult)
-    func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?)
     func tabDidGainFocus(_ tab: Tab)
     func tabDidLoseFocus(_ tab: Tab)
     func tabDidClose(_ tab: Tab)
@@ -70,7 +65,6 @@ extension TabEventHandler {
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {}
     func tabMetadataNotAvailable(_ tab: Tab) {}
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult) {}
-    func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?) {}
     func tabDidGainFocus(_ tab: Tab) {}
     func tabDidLoseFocus(_ tab: Tab) {}
     func tabDidClose(_ tab: Tab) {}
@@ -84,7 +78,6 @@ enum TabEventLabel: String {
     case didLoadPageMetadata
     case didLoadReadability
     case pageMetadataNotAvailable
-    case didLoadFavicon
     case didGainFocus
     case didLoseFocus
     case didClose
@@ -99,7 +92,6 @@ enum TabEvent {
     case didLoadPageMetadata(PageMetadata)
     case pageMetadataNotAvailable
     case didLoadReadability(ReadabilityResult)
-    case didLoadFavicon(Favicon?)
     case didGainFocus
     case didLoseFocus
     case didClose
@@ -125,8 +117,6 @@ enum TabEvent {
             handler.tabMetadataNotAvailable(tab)
         case .didLoadReadability(let result):
             handler.tab(tab, didLoadReadability: result)
-        case .didLoadFavicon(let favicon):
-            handler.tab(tab, didLoadFavicon: favicon)
         case .didGainFocus:
             handler.tabDidGainFocus(tab)
         case .didLoseFocus:
