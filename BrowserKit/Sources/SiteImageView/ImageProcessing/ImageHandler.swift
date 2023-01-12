@@ -105,8 +105,12 @@ class DefaultImageHandler: ImageHandler {
     }
 
     private func fallbackToLetterFavicon(site: SiteImageModel) async -> UIImage {
-        let image = await letterImageGenerator.generateLetterImage(siteString: site.cacheKey)
-        await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: site.expectedImageType)
-        return image
+        do {
+            let image = try await letterImageGenerator.generateLetterImage(siteString: site.cacheKey)
+            await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: site.expectedImageType)
+            return image
+        } catch {
+            return UIImage(named: "defaultFavicon")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
+        }
     }
 }

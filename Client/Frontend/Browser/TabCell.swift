@@ -208,6 +208,7 @@ class TabCell: UICollectionViewCell,
         titleText.textColor = theme.colors.textPrimary
         screenshotView.backgroundColor = theme.colors.layer1
         favicon.tintColor = theme.colors.textPrimary
+        smallFaviconView.tintColor = theme.colors.textPrimary
     }
 
     override func prepareForReuse() {
