@@ -1,8 +1,26 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Fer del Firefox el vostre navegador per defecte és un vot a favor d'una Internet oberta i accessible.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Trieu una Internet millor";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Vegeu com fer-ho";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Feu que els enllaços dels llocs web, del correu electrònic i de Missatges s'obrin automàticament en el Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Trieu el Firefox com a navegador per defecte i obtindreu velocitat, seguretat i privadesa de forma automàtica.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Milloreu la navegació diària";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox bloca una mitjana de més de 3.000 elements de seguiment per usuari al mes. Feu que sigui el vostre navegador per defecte, per a la vostra tranquil·litat i privadesa.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "El Firefox protegeix la vostra privadesa";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Canvieu el navegador per defecte";

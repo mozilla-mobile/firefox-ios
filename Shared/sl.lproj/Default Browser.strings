@@ -10,6 +10,9 @@
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Nastavite, naj se povezave s spletnih strani, iz e-pošte in sporočil odpirajo v Firefoxu.";
 
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Izberite Firefox za privzeti brskalnik, da hitrost, varnost in zasebnost postanejo samoumevne.";
+
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.NextLevel.Title.v108" = "Povzdignite vsakodnevno brskanje";
 
