@@ -5,7 +5,7 @@
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Перайдзіце да лепшага Інтэрнэту";
 
 /* Button string to learn how to set your default browser. */
-"DefaultBrowserCard.Button.v2" = "Даведацца як";
+"DefaultBrowserCard.Button.v2" = "Даведацца, як";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Наладзьце аўтаматычнае адкрыццё спасылак з сайтаў, пошты і паведамленняў у Firefox.";
@@ -23,7 +23,7 @@
 "DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox абараняе прыватнасць";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "Змяніць прадвызначаны браўзер";
+"DefaultBrowserCard.Title" = "Пераключыць прадвызначаны браўзер";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "Перайсці ў налады";

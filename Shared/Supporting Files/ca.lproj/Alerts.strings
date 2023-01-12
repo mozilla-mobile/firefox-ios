@@ -1,12 +1,12 @@
 /* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
-"Alerts.RestoreTabs.Button.No.v109" = "Nie";
+"Alerts.RestoreTabs.Button.No.v109" = "No";
 
 /* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
-"Alerts.RestoreTabs.Button.Yes.v109" = "Przywróć karty";
+"Alerts.RestoreTabs.Button.Yes.v109" = "Restaura les pestanyes";
 
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
-"Alerts.RestoreTabs.Message.v109" = "Przepraszamy! Przywróć karty, by kontynuować przeglądanie.";
+"Alerts.RestoreTabs.Message.v109" = "Restaureu les pestanyes per a continuar des d'on ho havíeu deixat.";
 
 /* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
-"Alerts.RestoreTabs.Title.v109.v2" = "%@ uległ awarii. Czy przywrócić karty?";
+"Alerts.RestoreTabs.Title.v109.v2" = "El %@ ha fallat. Voleu restaurar les pestanyes?";
 
