@@ -49,9 +49,8 @@ open class UserAgent {
         return ua.lowercased().contains("intel mac")
     }
 
-    public static func desktopUserAgent() -> String {
-        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
-    }
+    public static let desktopUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/604.1"
+
 
     public static func mobileUserAgent() -> String {
         return UserAgentBuilder.defaultMobileUserAgent().userAgent()
@@ -72,7 +71,7 @@ open class UserAgent {
             if let customUA = CustomUserAgentConstant.customDesktopUAFor[domain] {
                 return customUA
             }
-            return desktopUserAgent()
+            return desktopUserAgent
         case .Mobile:
             if let customUA = CustomUserAgentConstant.customUAFor[domain] {
                 return customUA
@@ -102,7 +101,7 @@ public struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
     private static let ecosiaMobileUA = UserAgentBuilder.ecosiaMobileUserAgent().userAgent()
-    private static let ecosiaDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "(Ecosia ios@\(AppInfo.ecosiaAppVersion).\(AppInfo.buildNumber))")
+    private static let ecosiaDesktopUA = "\(UserAgent.desktopUserAgent) \(UserAgent.uaBitEcosia)"
 
 
     public static let customUAFor = [
@@ -112,7 +111,7 @@ public struct CustomUserAgentConstant {
         "ecosia.org": ecosiaMobileUA ]
 
     public static let customDesktopUAFor = [
-        "ecosia.org": "\(UserAgent.desktopUserAgent()) \(UserAgent.uaBitEcosia)" ]
+        "ecosia.org": ecosiaDesktopUA ]
 }
 
 public struct UserAgentBuilder {
@@ -165,6 +164,6 @@ public struct UserAgentBuilder {
     }
 
     public static func ecosiaMobileUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "\(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari) \(UserAgent.uaBitEcosia)")
+        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU iPhone OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "\(UserAgent.uaBitVersion) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari) \(UserAgent.uaBitEcosia)")
     }
 }

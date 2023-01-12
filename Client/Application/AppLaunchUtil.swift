@@ -116,7 +116,7 @@ class AppLaunchUtil {
 
         // Some sites will only serve HTML that points to .ico files.
         // The FaviconFetcher is explicitly for getting high-res icons, so use the desktop user agent.
-        FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
+        FaviconFetcher.userAgent = UserAgent.desktopUserAgent
     }
 
     private func initializeExperiments() {
