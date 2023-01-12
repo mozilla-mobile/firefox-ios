@@ -6,7 +6,7 @@ import WebKit
 import UIKit
 
 open class UserAgent {
-    public static let uaBitSafari = "Safari/605.1.15"
+    public static let uaBitSafari = "Safari/604.1"
     public static let uaBitMobile = "Mobile/15E148"
     public static let uaBitVersion = "Version/\(UIDevice.current.systemVersion)"
     public static let uaBitEcosia = "(Ecosia ios@\(AppInfo.ecosiaAppVersion).\(AppInfo.buildNumber))"
