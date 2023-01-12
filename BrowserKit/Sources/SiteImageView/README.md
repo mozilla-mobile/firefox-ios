@@ -22,7 +22,7 @@ color.
 
 # Hero Images
 
-Create and object of type HeroImageView and use it as you would any other image view, setting it's 
+Create an object of type HeroImageView and use it as you would any other image view, setting it's 
 constraints etc. To populate it call setHeroImage giving it a HeroImageViewModel with the data of the
 website you want to load.
 
