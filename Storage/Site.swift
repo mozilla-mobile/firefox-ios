@@ -13,20 +13,6 @@ public func == <T> (lhs: T, rhs: T) -> Bool where T: Identifiable {
     return lhs.id == rhs.id
 }
 
-open class Favicon: Identifiable {
-    open var id: Int?
-
-    public let url: String
-    public let date: Date
-    open var width: Int?
-    open var height: Int?
-
-    public init(url: String, date: Date = Date()) {
-        self.url = url
-        self.date = date
-    }
-}
-
 // TODO: Site shouldn't have all of these optional decorators. Include those in the
 // cursor results, perhaps as a tuple.
 open class Site: Identifiable {
@@ -45,8 +31,6 @@ open class Site: Identifiable {
     public let url: String
     public let title: String
     open var metadata: PageMetadata?
-     // Sites may have multiple favicons. We'll return the largest.
-    open var icon: Favicon?
     open var latestVisit: Visit?
     open fileprivate(set) var bookmarked: Bool?
 

@@ -200,7 +200,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
         self.inactiveViewModel = InactiveTabViewModel()
         tabManager.addDelegate(self)
-        register(self, forTabEvents: .didLoadFavicon, .didChangeURL, .didSetScreenshot)
+        register(self, forTabEvents: .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             guard !tabsToDisplay.isEmpty else { return }
@@ -854,10 +854,6 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
 }
 
 extension TabDisplayManager: TabEventHandler {
-    func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
-        updateCellFor(tab: tab, selectedTabChanged: false)
-    }
-
     func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
         updateCellFor(tab: tab, selectedTabChanged: false)
     }

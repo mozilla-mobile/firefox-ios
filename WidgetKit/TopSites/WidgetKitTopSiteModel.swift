@@ -7,7 +7,6 @@ import Shared
 
 struct WidgetKitTopSiteModel: Codable {
     var title: String
-    var faviconUrl: String
     var url: URL
     var imageKey: String
 

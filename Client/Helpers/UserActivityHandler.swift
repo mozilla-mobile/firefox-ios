@@ -8,6 +8,7 @@ import Storage
 import CoreSpotlight
 import MobileCoreServices
 import WebKit
+import SiteImageView
 
 private let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
 
@@ -61,7 +62,9 @@ extension UserActivityHandler: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didLoadReadability page: ReadabilityResult) {
-        spotlightIndex(page, for: tab)
+        Task {
+            await spotlightIndex(page, for: tab)
+        }
     }
 
     func tabDidClose(_ tab: Tab) {
@@ -74,7 +77,7 @@ extension UserActivityHandler: TabEventHandler {
 private let log = Logger.browserLogger
 
 extension UserActivityHandler {
-    func spotlightIndex(_ page: ReadabilityResult, for tab: Tab) {
+    func spotlightIndex(_ page: ReadabilityResult, for tab: Tab) async {
         guard let url = tab.url,
               !tab.isPrivate,
               url.isWebPage(includeDataURIs: false),
@@ -103,12 +106,13 @@ extension UserActivityHandler {
         case .screenshot:
             attributeSet.thumbnailData = tab.screenshot?.pngData()
         case .favicon:
-            if let baseDomain = tab.url?.baseDomain {
-                attributeSet.thumbnailData = FaviconFetcher.getFaviconFromDiskCache(imageKey: baseDomain)?.pngData()
-            }
-        case .letter:
-            if let url = tab.url {
-                attributeSet.thumbnailData = FaviconFetcher.letter(forUrl: url).pngData()
+            if let urlString = tab.url?.absoluteString {
+                let faviconFetcher = DefaultSiteImageFetcher.factory()
+                let image = await faviconFetcher.getImage(urlStringRequest: urlString,
+                                                          type: .favicon,
+                                                          id: UUID(),
+                                                          usesIndirectDomain: false)
+                attributeSet.thumbnailData = image.faviconImage?.pngData()
             }
         default:
             attributeSet.thumbnailData = nil
@@ -130,12 +134,11 @@ extension UserActivityHandler {
             let day: TimeInterval = 60 * 60 * 24
             item.expirationDate = Date(timeIntervalSinceNow: Double(numDays) * day)
         }
-        searchableIndex.indexSearchableItems([item]) { error in
-            if let error = error {
-                log.info("Spotlight: Indexing error: \(error.localizedDescription)")
-            } else {
-                log.info("Spotlight: Search item successfully indexed!")
-            }
+        do {
+            try await searchableIndex.indexSearchableItems([item])
+            log.info("Spotlight: Search item successfully indexed!")
+        } catch {
+            log.info("Spotlight: Indexing error: \(error.localizedDescription)")
         }
     }
 
