@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import SiteImageView
 
 private var debugTabCount = 0
 
@@ -239,7 +240,13 @@ class Tab: NSObject {
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
     var sessionData: SessionData?
-    var faviconURL: String?
+    private let faviconHelper: SiteImageFetcher
+    var faviconURL: String? {
+        didSet {
+            faviconHelper.cacheFaviconURL(siteURL: url,
+                                          faviconURL: URL(string: faviconURL ?? ""))
+        }
+    }
     fileprivate var lastRequest: URLRequest?
     var isRestoring: Bool = false
     var pendingScreenshot = false
@@ -367,12 +374,16 @@ class Tab: NSObject {
 
     var profile: Profile
 
-    init(profile: Profile, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
+    init(profile: Profile,
+         configuration: WKWebViewConfiguration,
+         isPrivate: Bool = false,
+         faviconHelper: SiteImageFetcher = DefaultSiteImageFetcher.factory()) {
         self.configuration = configuration
         self.nightMode = false
         self.noImageMode = false
         self.profile = profile
         self.metadataManager = TabMetadataManager(metadataObserver: profile.places)
+        self.faviconHelper = faviconHelper
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
