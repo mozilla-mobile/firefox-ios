@@ -32,8 +32,8 @@ a favicon as described above.
 
 # General
 
-All caching of URL's and images are managed by the SiteImageView system. These are automatically expired
-after 30 days of no use.
+All caching of URL's and images are managed by the SiteImageView system, they are cached both locally and to disk. 
+The disk caches are automatically expired after 30 days of no use so they don't grow too big over time.
 
 
 # Future development
