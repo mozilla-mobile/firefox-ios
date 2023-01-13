@@ -5,14 +5,14 @@
 import Foundation
 import WebKit
 import Shared
-
-struct NightModePrefsKey {
-    static let NightModeButtonIsInMenu = PrefsKeys.KeyNightModeButtonIsInMenu
-    static let NightModeStatus = PrefsKeys.KeyNightModeStatus
-    static let NightModeEnabledDarkTheme = PrefsKeys.KeyNightModeEnabledDarkTheme
-}
+import Common
 
 class NightModeHelper: TabContentScript {
+    private enum NightModeKeys {
+        static let Status = "profile.NightModeStatus"
+        static let DarkThemeEnabled = "NightModeEnabledDarkTheme"
+    }
+
     fileprivate weak var tab: Tab?
 
     required init(tab: Tab) {
@@ -31,28 +31,32 @@ class NightModeHelper: TabContentScript {
         // Do nothing.
     }
 
-    static func toggle(_ prefs: Prefs, tabManager: TabManager) {
-        let isActive = prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
-        setNightMode(prefs, tabManager: tabManager, enabled: !isActive)
+    static func toggle(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
+                       tabManager: TabManager) {
+        let isActive = userDefaults.bool(forKey: NightModeKeys.Status)
+        setNightMode(userDefaults, tabManager: tabManager, enabled: !isActive)
     }
 
-    static func setNightMode(_ prefs: Prefs, tabManager: TabManager, enabled: Bool) {
-        prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeStatus)
+    static func setNightMode(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
+                             tabManager: TabManager,
+                             enabled: Bool) {
+        userDefaults.set(enabled, forKey: NightModeKeys.Status)
         for tab in tabManager.tabs {
             tab.nightMode = enabled
             tab.webView?.scrollView.indicatorStyle = enabled ? .white : .default
         }
     }
 
-    static func setEnabledDarkTheme(_ prefs: Prefs, darkTheme enabled: Bool) {
-        prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeEnabledDarkTheme)
+    static func setEnabledDarkTheme(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
+                                    darkTheme enabled: Bool) {
+        userDefaults.set(enabled, forKey: NightModeKeys.DarkThemeEnabled)
     }
 
-    static func hasEnabledDarkTheme(_ prefs: Prefs) -> Bool {
-        return prefs.boolForKey(NightModePrefsKey.NightModeEnabledDarkTheme) ?? false
+    static func hasEnabledDarkTheme(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
+        return userDefaults.bool(forKey: NightModeKeys.DarkThemeEnabled)
     }
 
-    static func isActivated(_ prefs: Prefs) -> Bool {
-        return prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
+    static func isActivated(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
+        return userDefaults.bool(forKey: NightModeKeys.Status)
     }
 }
