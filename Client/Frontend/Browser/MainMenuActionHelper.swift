@@ -447,12 +447,12 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getNightModeAction() -> [PhotonRowActions] {
         var items: [PhotonRowActions] = []
 
-        let nightModeEnabled = NightModeHelper.isActivated(profile.prefs)
+        let nightModeEnabled = NightModeHelper.isActivated()
         let nightModeTitle: String = nightModeEnabled ? .AppMenu.AppMenuTurnOffNightMode : .AppMenu.AppMenuTurnOnNightMode
         let nightMode = SingleActionViewModel(title: nightModeTitle,
                                               iconString: ImageIdentifiers.nightMode,
                                               isEnabled: nightModeEnabled) { _ in
-            NightModeHelper.toggle(self.profile.prefs, tabManager: self.tabManager)
+            NightModeHelper.toggle(tabManager: self.tabManager)
 
             if nightModeEnabled {
                 TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .nightModeEnabled)
@@ -461,17 +461,17 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
 
             // If we've enabled night mode and the theme is normal, enable dark theme
-            if NightModeHelper.isActivated(self.profile.prefs), LegacyThemeManager.instance.currentName == .normal {
+            if NightModeHelper.isActivated(), LegacyThemeManager.instance.currentName == .normal {
                 LegacyThemeManager.instance.current = LegacyDarkTheme()
                 self.themeManager.changeCurrentTheme(.dark)
-                NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: true)
+                NightModeHelper.setEnabledDarkTheme(darkTheme: true)
             }
 
             // If we've disabled night mode and dark theme was activated by it then disable dark theme
-            if !NightModeHelper.isActivated(self.profile.prefs), NightModeHelper.hasEnabledDarkTheme(self.profile.prefs), LegacyThemeManager.instance.currentName == .dark {
+            if !NightModeHelper.isActivated(), NightModeHelper.hasEnabledDarkTheme(), LegacyThemeManager.instance.currentName == .dark {
                 LegacyThemeManager.instance.current = LegacyNormalTheme()
                 self.themeManager.changeCurrentTheme(.light)
-                NightModeHelper.setEnabledDarkTheme(self.profile.prefs, darkTheme: false)
+                NightModeHelper.setEnabledDarkTheme(darkTheme: false)
             }
         }.items
         items.append(nightMode)

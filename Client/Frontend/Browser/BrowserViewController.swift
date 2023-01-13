@@ -658,7 +658,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func updateLegacyTheme() {
-        if !NightModeHelper.isActivated(profile.prefs) && LegacyThemeManager.instance.systemThemeIsOn {
+        if !NightModeHelper.isActivated() && LegacyThemeManager.instance.systemThemeIsOn {
             let userInterfaceStyle = traitCollection.userInterfaceStyle
             LegacyThemeManager.instance.current = userInterfaceStyle == .dark ? LegacyDarkTheme() : LegacyNormalTheme()
         }
