@@ -57,6 +57,10 @@ class MockSiteImageFetcher: SiteImageFetcher {
     var image = UIImage()
     var capturedType: SiteImageType?
     var capturedStringRequest: String?
+    var siteURL: URL?
+    var faviconURL: URL?
+    var cacheFaviconURLCalled = 0
+
     func getImage(urlStringRequest: String,
                   type: SiteImageType,
                   id: UUID,
@@ -72,5 +76,11 @@ class MockSiteImageFetcher: SiteImageFetcher {
                               faviconURL: nil,
                               faviconImage: image,
                               heroImage: image)
+    }
+
+    func cacheFaviconURL(siteURL: URL?, faviconURL: URL?) {
+        self.siteURL = siteURL
+        self.faviconURL = faviconURL
+        cacheFaviconURLCalled += 1
     }
 }

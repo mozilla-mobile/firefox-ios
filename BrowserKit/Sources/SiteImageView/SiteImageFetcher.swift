@@ -10,6 +10,7 @@ public protocol SiteImageFetcher {
                   type: SiteImageType,
                   id: UUID,
                   usesIndirectDomain: Bool) async -> SiteImageModel
+    func cacheFaviconURL(siteURL: URL?, faviconURL: URL?)
 }
 
 public class DefaultSiteImageFetcher: SiteImageFetcher {
@@ -63,6 +64,18 @@ public class DefaultSiteImageFetcher: SiteImageFetcher {
         }
 
         return imageModel
+    }
+
+    public func cacheFaviconURL(siteURL: URL?, faviconURL: URL?) {
+        guard let siteURL = siteURL,
+              let faviconURL = faviconURL else {
+            return
+        }
+
+        let cacheKey = generateCacheKey(siteURL: siteURL,
+                                        type: .favicon,
+                                        usesIndirectDomain: false)
+        urlHandler.cacheFaviconURL(cacheKey: cacheKey, faviconURL: faviconURL)
     }
 
     // MARK: - Private
