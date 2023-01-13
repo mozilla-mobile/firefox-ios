@@ -72,7 +72,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.hostnameLabel.text = login.hostname
             cell.usernameLabel.text = username.isEmpty ? "(no username)" : username
             // TODO: FXIOS-4995 - BreachAlertsManager theming
-            if NightModeHelper.hasEnabledDarkTheme(viewModel.profile.prefs) {
+            if NightModeHelper.hasEnabledDarkTheme() {
                 cell.breachAlertImageView.tintColor = BreachAlertsManager.darkMode
             } else {
                 cell.breachAlertImageView.tintColor = BreachAlertsManager.lightMode
