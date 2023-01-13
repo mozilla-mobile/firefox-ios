@@ -145,12 +145,25 @@ final class SiteImageFetcherTests: XCTestCase {
         XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "https://www.focus.com")
         XCTAssertEqual(imageHandler.capturedSite?.siteURL, URL(string: siteURL))
     }
+
+    // Test cache
+    func testCacheFavicon() {
+        let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
+                                              imageHandler: imageHandler)
+        subject.cacheFaviconURL(siteURL: URL(string: "https://firefox.com"),
+                                faviconURL: URL(string: "https://firefox.com/favicon.ico"))
+
+        XCTAssertEqual(urlHandler.faviconURL?.absoluteString, "https://firefox.com/favicon.ico")
+        XCTAssertEqual(urlHandler.cacheKey, "firefox")
+    }
 }
 
 // MARK: - MockFaviconURLHandler
 private class MockFaviconURLHandler: FaviconURLHandler {
     var faviconURL: URL?
     var capturedImageModel: SiteImageModel?
+    var cacheKey: String?
+    var cacheFaviconURLCalled = 0
 
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel {
         capturedImageModel = site
@@ -161,6 +174,12 @@ private class MockFaviconURLHandler: FaviconURLHandler {
                               cacheKey: site.cacheKey,
                               domain: site.domain,
                               faviconURL: faviconURL)
+    }
+
+    func cacheFaviconURL(cacheKey: String, faviconURL: URL) {
+        self.cacheKey = cacheKey
+        self.faviconURL = faviconURL
+        cacheFaviconURLCalled += 1
     }
 }
 
