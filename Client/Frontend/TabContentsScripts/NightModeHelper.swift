@@ -34,7 +34,7 @@ class NightModeHelper: TabContentScript {
 
     static func toggle(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
                        tabManager: TabManager) {
-        let isActive = userDefaults.bool(forKey: NightModePrefsKey.NightModeStatus) ?? false
+        let isActive = userDefaults.bool(forKey: NightModePrefsKey.NightModeStatus)
         setNightMode(userDefaults, tabManager: tabManager, enabled: !isActive)
     }
 
@@ -54,10 +54,10 @@ class NightModeHelper: TabContentScript {
     }
 
     static func hasEnabledDarkTheme(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
-        return userDefaults.bool(forKey: NightModePrefsKey.NightModeEnabledDarkTheme) ?? false
+        return userDefaults.bool(forKey: NightModePrefsKey.NightModeEnabledDarkTheme)
     }
 
     static func isActivated(_ userDefaults: UserDefaultsInterface = UserDefaults.standard) -> Bool {
-        return userDefaults.bool(forKey: NightModePrefsKey.NightModeStatus) ?? false
+        return userDefaults.bool(forKey: NightModePrefsKey.NightModeStatus)
     }
 }
