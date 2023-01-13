@@ -654,6 +654,8 @@ types:
       variants:
         new-tab-card:
           description: This is the card that appears at the top on the Firefox Home Page.
+        survey:
+          description: This is a full-page that appears providing a survey to the user.
         Unknown:
           description: A message has NOT declared its target surface.
 
