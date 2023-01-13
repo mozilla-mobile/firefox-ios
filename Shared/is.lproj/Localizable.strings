@@ -749,7 +749,7 @@
 "Menu.Copy.Title" = "Afrita vistfang";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "Afritað á klemmuspjald";
+"Menu.CopyURL.Confirm" = "Vefslóð afrituð á klippispjald";
 
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Sérsníða upphafssíðu";
@@ -1235,7 +1235,7 @@
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "Hreinsa atriði: %1$@";
 
 /* Copy app version alert shown in settings. */
-"Settings.CopyAppVersion.Title" = "Afritað texta á klemmuspjald";
+"Settings.CopyAppVersion.Title" = "Afritað á klippispjald";
 
 /* Default text in search bar for Data Management */
 "Settings.DataManagement.SearchLabel" = "Sía vefsíður";
@@ -1664,7 +1664,7 @@
 "ShareSheet.SendToDevice.Title.v108" = "Senda tengil á tæki";
 
 /* Label for show search suggestions setting. */
-"Show Search Suggestions" = "Sýna leitar tillögur";
+"Show Search Suggestions" = "Sýna leitartillögur";
 
 /* Accessibility label for the tabs button in the (top) tab toolbar */
 "Show Tabs" = "Sýna flipa";

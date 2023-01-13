@@ -17,7 +17,7 @@
 "On" = "Virkt";
 
 /* Title displayed for when there are no open tabs while in private mode */
-"Private Browsing" = "Vafra í huliðsstillingu";
+"Private Browsing" = "Huliðsvafur";
 
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Huliðshamur";

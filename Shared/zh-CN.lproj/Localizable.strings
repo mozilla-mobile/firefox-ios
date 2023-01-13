@@ -53,13 +53,13 @@
 "Added page to Reading List" = "页面已添加到阅读列表";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Dismiss" = "确定";
+"AddPass.Error.Dismiss" = "好";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Message" = "添加密码到 Wallet 时出错。请稍后重试。";
+"AddPass.Error.Message" = "添加凭证到“钱包”时出错。请稍后重试。";
 
 /* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Title" = "添加密码失败";
+"AddPass.Error.Title" = "添加凭证失败";
 
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "网址与搜索";

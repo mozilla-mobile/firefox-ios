@@ -17,7 +17,7 @@
 "About" = "Аб праграме";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "Дадаць у ярлыкі";
+"ActivityStream.ContextMenu.AddToShortcuts" = "Дадаць у цэтлікі";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "Замацаваць";
@@ -38,7 +38,7 @@
 "ActivityStream.RecentHistory.Title" = "Нядаўна наведаныя";
 
 /* Section title label for Shortcuts */
-"ActivityStream.Shortcuts.SectionTitle" = "Ярлыкі";
+"ActivityStream.Shortcuts.SectionTitle" = "Цэтлікі";
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Колькасць радкоў";
@@ -56,7 +56,7 @@
 "AddPass.Error.Dismiss" = "OK";
 
 /* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
-"AddPass.Error.Message" = "Падчас дадавання карткі ў Wallet узнікла памылка. Калі ласка, паспрабуйце зноў пазней.";
+"AddPass.Error.Message" = "Падчас дадання карткі да Wallet узнікла памылка. Калі ласка, паспрабуйце зноў пазней.";
 
 /* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Title" = "Не атрымалася дадаць картку";
@@ -107,16 +107,16 @@
 "Bookmarks.Folder.Label" = "Папка";
 
 /* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
-"Bookmarks.Menu.DesktopBookmarks" = "Закладкі з камп'ютара";
+"Bookmarks.Menu.DesktopBookmarks" = "Закладкі працоўнага стала";
 
 /* The button to create a new bookmark */
-"Bookmarks.NewBookmark.Label" = "Новая закладка";
+"Bookmarks.NewBookmark.Label" = "Дадаць закладку";
 
 /* The button to create a new folder */
 "Bookmarks.NewFolder.Label" = "Новая папка";
 
 /* The button to create a new separator */
-"Bookmarks.NewSeparator.Label" = "Новы раздзяляльнік";
+"Bookmarks.NewSeparator.Label" = "Новы межнік";
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Загаловак";
@@ -161,7 +161,7 @@
 "Closing tab" = "Картка закрываецца";
 
 /* Context menu item for bookmarking a link URL */
-"ContextMenu.BookmarkLinkButtonTitle" = "Дадаць спасылку ў закладкі";
+"ContextMenu.BookmarkLinkButtonTitle" = "Дадаць закладку на спасылку";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Адкрыта новая прыватная картка";
@@ -194,7 +194,7 @@
 "ContextMenu.ShareLinkButtonTitle" = "Падзяліцца спасылкай";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
-"ContextualHints.SearchBarPlacement.CallToAction" = "Налады паліцы інструментаў";
+"ContextualHints.SearchBarPlacement.CallToAction" = "Налады паліцы прылад";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "Карткі, якія вы не праглядалі на працягу двух тыдняў, будуць перанесеныя сюды.";
@@ -386,7 +386,7 @@
 "fxa.signin.qr-link-instruction" = "Адкрыйце Firefox на сваім камп’ютары і перайдзіце на firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Гатовы да сканіравання";
+"fxa.signin.ready-to-scan" = "Гатовы да сканавання";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Выкарыстаць электронную пошту";
@@ -713,7 +713,7 @@
 "LoginsList.Title" = "ЗАХАВАНЫЯ ЛАГІНЫ";
 
 /* Restore Tabs Prompt Description */
-"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Падобна, што Firefox аварыйна завяршыў працу. Жадаеце аднавіць карткі?";
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Падобна, што Firefox раней пацярпеў крах. Вы хочаце аднавіць карткі?";
 
 /* Title for the button that marks a reading list item as read */
 "Mark as Read" = "Пазначыць прачытаным";
@@ -725,13 +725,13 @@
 "Menu.AddBookmark.AlternateLabel.v99" = "Дадаць закладку";
 
 /* Toast displayed to the user after a bookmark has been added. */
-"Menu.AddBookmark.Confirm" = "Закладка дададзена";
+"Menu.AddBookmark.Confirm" = "Дададзена закладка";
 
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "Дадаць";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"Menu.AddPin.Confirm2" = "Дададзена ў ярлыкі";
+"Menu.AddPin.Confirm2" = "Дададзена ў цэтлікі";
 
 /* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
 "Menu.AddReadingList.Label.v99" = "Дадаць";
@@ -740,7 +740,7 @@
 "Menu.AddToReadingList.Confirm" = "Дададзена ў спіс для чытання";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
-"Menu.AddToShortcuts.v99" = "Дадаць у ярлыкі";
+"Menu.AddToShortcuts.v99" = "Дадаць у цэтлікі";
 
 /* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "Закладкі";
@@ -803,10 +803,10 @@
 "Menu.RemoveBookmark.Label.v99" = "Выдаліць";
 
 /* Label for the remove from shortcuts button in the menu. Pressing this button removes the current website from the shortcut pins on the home page. */
-"Menu.RemovedFromShortcuts.v99" = "Выдаліць з ярлыкоў";
+"Menu.RemovedFromShortcuts.v99" = "Выдаліць з цэтлікаў";
 
 /* Toast displayed to the user after removing the item to the Shortcuts. */
-"Menu.RemovePin.Confirm2.v99" = "Выдалена з ярлыкоў";
+"Menu.RemovePin.Confirm2.v99" = "Выдалена з цэтлікаў";
 
 /* Long label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. */
 "Menu.RemoveReadingList.AlternateLabel.v99" = "Выдаліць са спісу для чытання";
@@ -959,7 +959,7 @@
 "Onboarding.WhatsNew.Button.Title" = "Пачаць агляданне";
 
 /* Title for prompt displayed to user after the app crashes */
-"Oops! Firefox crashed" = "Ой! Адбыўся збой Firefox";
+"Oops! Firefox crashed" = "Ой! Firefox пацярпеў крах";
 
 /* See http://mzl.la/1LXbDOL */
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Адкрывайце артыкулы ў рэжыме чытання дотыкам да значку кнігі, калі ён з'явіцца ў адрасным радку.";
@@ -1337,7 +1337,7 @@
 "Settings.Home.Option.RecentlyVisited" = "Нядаўна наведаныя";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Shortcuts section on the Firefox homepage on or off */
-"Settings.Home.Option.Shortcuts" = "Ярлыкі";
+"Settings.Home.Option.Shortcuts" = "Цэтлікі";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Sponsored Stories on the Firefox homepage on or off */
 "Settings.Home.Option.SponsoredPocket.v103" = "Артыкулы ад спонсараў";
@@ -1424,13 +1424,13 @@
 "Settings.Homepage.Shortcuts.RowsPageTitle.v100" = "Радкі";
 
 /* Users can disable or enable shortcuts related settings. This string is the title of the page to change your shortcuts settings. */
-"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Ярлыкі";
+"Settings.Homepage.Shortcuts.ShortcutsPageTitle.v100" = "Цэтлікі";
 
 /* This string is the title of the toggle to disable the shortcuts section in the settings page. */
-"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Ярлыкі";
+"Settings.Homepage.Shortcuts.ShortcutsToggle.v100" = "Цэтлікі";
 
 /* This string is the title of the toggle to disable the sponsored shortcuts functionnality which can be enabled in the shortcut sections. This toggle is in the settings page. */
-"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Спансіраваныя ярлыкі";
+"Settings.Homepage.Shortcuts.SponsoredShortcutsToggle.v100" = "Спонсарскія цэтлікі";
 
 /* Toggled OFF to hide the shortcuts section */
 "Settings.Homepage.Shortcuts.ToggleOff.v100" = "Выкл.";
@@ -1640,7 +1640,7 @@
 "ShareExtension.AddToReadingListActionDone.Title" = "Дададзена ў спіс для чытання";
 
 /* Action label on share extension to bookmark the page in Firefox. */
-"ShareExtension.BookmarkThisPageAction.Title" = "Дадаць старонку ў закладкі";
+"ShareExtension.BookmarkThisPageAction.Title" = "Дадаць закладку на гэту старонкі";
 
 /* Share extension label shown after user has performed 'Bookmark this Page' action. */
 "ShareExtension.BookmarkThisPageActionDone.Title" = "У закладках";
