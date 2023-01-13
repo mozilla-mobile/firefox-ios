@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 
 class ShareTrackersViewController: UIViewController {
 
@@ -21,6 +20,7 @@ class ShareTrackersViewController: UIViewController {
 
     private lazy var trackerStatsLabel: UILabel = {
         let trackerStatsLabel = UILabel()
+        trackerStatsLabel.translatesAutoresizingMaskIntoConstraints = false
         trackerStatsLabel.font = .footnote14Light
         trackerStatsLabel.textColor = .secondaryText
         trackerStatsLabel.numberOfLines = 2
@@ -31,6 +31,7 @@ class ShareTrackersViewController: UIViewController {
 
     private lazy var shieldLogo: UIImageView = {
         let shieldLogo = UIImageView()
+        shieldLogo.translatesAutoresizingMaskIntoConstraints = false
         shieldLogo.image = .trackingProtectionOn
         shieldLogo.tintColor = UIColor.white
         return shieldLogo
@@ -38,6 +39,7 @@ class ShareTrackersViewController: UIViewController {
 
     private lazy var trackerStatsShareButton: UIButton = {
         var button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(.secondaryText, for: .normal)
         button.titleLabel?.font = .footnote14Light
         button.titleLabel?.textAlignment = .center
@@ -53,8 +55,9 @@ class ShareTrackersViewController: UIViewController {
         return button
     }()
 
-    lazy var stackView: UIStackView = {
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [shieldLogo, trackerStatsLabel, trackerStatsShareButton])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.spacing = .shareTrackerStackViewSpacing
         stackView.alignment = .center
         stackView.axis = .horizontal
@@ -65,14 +68,19 @@ class ShareTrackersViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(stackView)
         trackerStatsLabel.text = trackerTitle
-        shieldLogo.snp.makeConstraints {
-            $0.size.equalTo(CGFloat.shieldLogoSize)
-        }
-        stackView.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.leading.greaterThanOrEqualToSuperview().offset(CGFloat.shareTrackersLeadingTrailingOffset)
-            $0.trailing.lessThanOrEqualToSuperview().offset(CGFloat.shareTrackersLeadingTrailingOffset)
-        }
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            shieldLogo.heightAnchor.constraint(equalToConstant: .shieldLogoSize),
+            shieldLogo.widthAnchor.constraint(equalToConstant: .shieldLogoSize),
+
+            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            stackView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: .shareTrackersLeadingTrailingOffset),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -(.shareTrackersLeadingTrailingOffset))
+        ])
     }
 
     @objc private func shareTapped(sender: UIButton) {
