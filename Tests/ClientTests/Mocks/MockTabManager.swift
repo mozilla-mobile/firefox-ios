@@ -9,7 +9,6 @@ import WebKit
 
 class MockTabManager: TabManagerProtocol {
     var selectedTab: Tab?
-    var isStartingAtHome = false
 
     var nextRecentlyAccessedNormalTabs = [Tab]()
 
