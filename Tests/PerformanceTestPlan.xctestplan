@@ -42,6 +42,7 @@
         "IntegrationTests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
+        "JumpBackInTests",
         "LibraryTestsIpad",
         "MailAppSettingsTests",
         "NavigationTest",
