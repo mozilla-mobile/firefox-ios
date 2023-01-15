@@ -32,7 +32,7 @@
 "About.safariBullet2" = "拦截网络字体，减少网页大小";
 
 /* Label on About screen */
-"About.safariBulletHeader" = "用作 Safari 扩展，可以：";
+"About.safariBulletHeader" = "用作 Safari 浏览器扩展，可以：";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
 "About.title" = "关于 %@";
@@ -224,13 +224,13 @@
 "Onboarding.Title" = "欢迎使用 Firefox %@！";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "点按 Safari，然后选择“内容拦截器”";
+"Safari.instructionsContentBlockers" = "点按“Safari 浏览器”，然后选择“内容拦截器”";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "启用 %@";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsExtentions" = "选择 Safari，然后选择“扩展”";
+"Safari.instructionsExtentions" = "选择“Safari 浏览器”，然后选择“扩展”";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ 未启用。";
@@ -296,7 +296,7 @@
 "Settings.rate" = "为 %@ 打分";
 
 /* Label for Safari integration section */
-"Settings.safariTitle" = "Safari 整合";
+"Settings.safariTitle" = "Safari 浏览器整合";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "设置";
@@ -386,7 +386,7 @@
 "Settings.toggleHomeScreenTips" = "显示主屏幕提示";
 
 /* Safari toggle label on settings screen */
-"Settings.toggleSafari" = "Safari";
+"Settings.toggleSafari" = "Safari 浏览器";
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "发送使用统计";
