@@ -40,7 +40,9 @@ class HistoryClearable: Clearable {
     func clear() -> Success {
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
-        return profile.places.deleteEverythingHistory().bindQueue(.main) { _ in }
+        return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
+            return Deferred(value: success)
+        }
     }
 }
 
