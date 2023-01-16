@@ -1,5 +1,5 @@
 # Number of days of inactivity before an issue becomes stale
-# 365 * 2.5 ~= 570 days to start with, then we can lower later on
+# 570 days to start with, then we can lower later on
 daysUntilStale: 570
 # Number of days of inactivity before a stale issue is closed
 daysUntilClose: 30
