@@ -180,7 +180,7 @@ tasks:
                               else:
                                   $if: 'tasks_for == "github-release"'
                                   then:
-                                      - 'assume:repo:${repoUrl[8:]}:release'
+                                      - 'assume:repo:${repoUrl[8:]}:release:${releaseAction}'
                                   else:
                                       $if: 'tasks_for == "action"'
                                       then:
