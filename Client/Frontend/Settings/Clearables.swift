@@ -40,37 +40,7 @@ class HistoryClearable: Clearable {
     func clear() -> Success {
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
-        return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
-            return self.clearAfterHistory(success: success)
-        }
-    }
-
-    func clearAfterHistory(success: Maybe<Void>) -> Success {
-        // Clear image cache - Kingfisher
-        KingfisherManager.shared.cache.clearMemoryCache()
-        KingfisherManager.shared.cache.clearDiskCache()
-
-        self.profile.recentlyClosedTabs.clearTabs()
-        self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
-        CSSearchableIndex.default().deleteAllSearchableItems()
-        NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
-        log.debug("HistoryClearable succeeded: \(success).")
-
-        self.tabManager.clearAllTabsHistory()
-
-        return Deferred(value: success)
-    }
-}
-
-struct ClearableErrorType: MaybeErrorType {
-    let err: Error
-
-    init(err: Error) {
-        self.err = err
-    }
-
-    var description: String {
-        return "Couldn't clear: \(err)."
+        return profile.places.deleteEverythingHistory().bindQueue(.main) { _ in }
     }
 }
 
@@ -101,28 +71,6 @@ class SpotlightClearable: Clearable {
         }
         return deferred
     }
-}
-
-private func deleteLibraryFolderContents(_ folder: String) throws {
-    let manager = FileManager.default
-    let library = manager.urls(for: .libraryDirectory, in: .userDomainMask)[0]
-    let dir = library.appendingPathComponent(folder)
-    let contents = try manager.contentsOfDirectory(atPath: dir.path)
-    for content in contents {
-        do {
-            try manager.removeItem(at: dir.appendingPathComponent(content))
-        } catch where ((error as NSError).userInfo[NSUnderlyingErrorKey] as? NSError)?.code == Int(EPERM) {
-            // "Not permitted". We ignore this.
-            log.debug("Couldn't delete some library contents.")
-        }
-    }
-}
-
-private func deleteLibraryFolder(_ folder: String) throws {
-    let manager = FileManager.default
-    let library = manager.urls(for: .libraryDirectory, in: .userDomainMask)[0]
-    let dir = library.appendingPathComponent(folder)
-    try manager.removeItem(at: dir)
 }
 
 // Removes all app cache storage.
