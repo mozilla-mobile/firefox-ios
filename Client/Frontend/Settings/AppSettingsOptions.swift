@@ -373,9 +373,19 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.image = UIImage(named: ImageIdentifiers.placeholderAvatar)?
                 .createScaled(CGSize(width: 30, height: 30))
 
+            guard let str = RustFirefoxAccounts.shared.userProfile?.avatarUrl,
+                    let actionIconUrl = URL(string: str)
+            else { return }
 
-            RustFirefoxAccounts.shared.avatar?.image.uponQueue(.main) { image in
+            ImageLoadingHandler.shared.getImageFromCacheOrDownload(
+                with: actionIconUrl,
+                limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                guard error == nil, let image = image else {
+                    return
+                }
+
                 imageView.image = image.createScaled(CGSize(width: 30, height: 30))
+                        .withRenderingMode(.alwaysOriginal)
             }
         }
     }
