@@ -3,26 +3,32 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 
 public class TooltipViewController: UIViewController {
 
-    private let tooltipView = TooltipView()
+    private lazy var tooltipView: TooltipView = {
+        let tooltipView = TooltipView()
+        tooltipView.translatesAutoresizingMaskIntoConstraints = false
+        tooltipView.delegate = self
+        return tooltipView
+    }()
 
     public var dismiss: (() -> Void)?
 
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
-        tooltipView.delegate = self
         preferredContentSize = tooltipView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
 
     private func setupLayout() {
         view.addSubview(tooltipView)
-        tooltipView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            tooltipView.topAnchor.constraint(equalTo: view.topAnchor),
+            tooltipView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tooltipView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tooltipView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     public func configure(anchoredBy sourceView: UIView, sourceRect: CGRect) {

@@ -3,7 +3,6 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import SnapKit
 import DesignSystem
 
 public protocol TooltipViewDelegate: AnyObject {
@@ -64,10 +63,10 @@ class TooltipView: UIView {
     private lazy var dismissButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.snp.makeConstraints {
-            $0.height.equalTo(Int.side)
-            $0.width.equalTo(Int.side)
-        }
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: CGFloat.dismissButtonSize),
+            button.heightAnchor.constraint(equalToConstant: CGFloat.dismissButtonSize)
+        ])
         button.setImage(.iconClose, for: .normal)
         button.addTarget(self, action: #selector(didTapTooltipDismissButton), for: .primaryActionTriggered)
         return button
@@ -96,9 +95,12 @@ class TooltipView: UIView {
     private func setupLayout() {
         addSubview(mainStackView)
         translatesAutoresizingMaskIntoConstraints = false
-        mainStackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
+        NSLayoutConstraint.activate([
+            mainStackView.topAnchor.constraint(equalTo: self.topAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            mainStackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        ])
     }
 
     func set(title: String = "", body: String, maxWidth: CGFloat? = nil) {
@@ -108,7 +110,9 @@ class TooltipView: UIView {
         guard let maxWidth = maxWidth else { return }
         let maxSize = CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude)
         let idealSize = body.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin], context: nil).size
-        labelContainerStackView.snp.makeConstraints { $0.width.lessThanOrEqualTo(idealSize.width) }
+        NSLayoutConstraint.activate([
+            labelContainerStackView.widthAnchor.constraint(lessThanOrEqualToConstant: idealSize.width)
+            ])
     }
 
     @objc func didTapTooltipDismissButton() {
@@ -120,13 +124,10 @@ fileprivate extension CGFloat {
     static let space: CGFloat = 12
     static let margin: CGFloat = 16
     static let cornerRadius: CGFloat = 12
+    static let dismissButtonSize: CGFloat = 24
 }
 
 fileprivate extension CGPoint {
     static let startPoint = CGPoint(x: 0, y: 1)
     static let endPoint = CGPoint(x: 1, y: 1)
-}
-
-fileprivate extension Int {
-    static let side: Int = 24
 }

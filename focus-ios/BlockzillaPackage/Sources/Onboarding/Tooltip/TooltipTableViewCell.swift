@@ -6,17 +6,25 @@ import UIKit
 
 public class TooltipTableViewCell: UITableViewCell {
 
-    private var tooltip = TooltipView()
+    private lazy var tooltip: TooltipView = {
+        let tooltipView = TooltipView()
+        tooltipView.translatesAutoresizingMaskIntoConstraints = false
+        tooltipView.delegate = self
+        return tooltipView
+    }()
+
     public weak var delegate: TooltipViewDelegate?
 
     public convenience init(title: String, body: String, style: UITableViewCell.CellStyle = .default, reuseIdentifier: String? = nil) {
         self.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(tooltip)
         tooltip.set(title: title, body: body)
-        tooltip.delegate = self
-        tooltip.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        contentView.addSubview(tooltip)
+        NSLayoutConstraint.activate([
+            tooltip.topAnchor.constraint(equalTo: contentView.topAnchor),
+            tooltip.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            tooltip.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            tooltip.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

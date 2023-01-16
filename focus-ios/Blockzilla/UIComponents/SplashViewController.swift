@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
-import SnapKit
 import DesignSystem
 import Combine
 
@@ -35,10 +34,15 @@ class SplashViewController: UIViewController {
 
     var authenticationManager: AuthenticationManager
 
-    private let logoImage = UIImageView(image: AppInfo.config.wordmark)
+    private lazy var logoImage: UIImageView = {
+        let logoImage = UIImageView(image: AppInfo.config.wordmark)
+        logoImage.translatesAutoresizingMaskIntoConstraints = false
+        return logoImage
+    }()
 
     private lazy var authButton: UIButton = {
         let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .black
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
@@ -56,16 +60,16 @@ class SplashViewController: UIViewController {
         )
         view.backgroundColor = .launchScreenBackground
         view.addSubview(logoImage)
-        logoImage.snp.makeConstraints { make in
-            make.center.equalTo(self.view)
-        }
-
         view.addSubview(authButton)
-        authButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(logoImage).inset(100)
-            make.height.width.equalTo(CGFloat.authButtonSize)
-        }
+
+        NSLayoutConstraint.activate([
+            logoImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            authButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            authButton.topAnchor.constraint(equalTo: logoImage.topAnchor, constant: CGFloat.authButtonTopInset),
+            authButton.widthAnchor.constraint(equalToConstant: CGFloat.authButtonSize),
+            authButton.heightAnchor.constraint(equalToConstant: CGFloat.authButtonSize)
+        ])
 
         updateUI()
 
@@ -105,7 +109,8 @@ fileprivate extension UIColor {
 fileprivate extension CGFloat {
     static let cornerRadius: CGFloat = 22
     static let padding: CGFloat = 8
-    static let authButtonSize = 44
+    static let authButtonSize: CGFloat = 44
+    static let authButtonTopInset: CGFloat = 100
 }
 
 fileprivate extension CATransform3D {
