@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import WebKit
 import CoreSpotlight
-import Kingfisher
+import SiteImageView
 
 private let log = Logger.browserLogger
 
@@ -29,10 +29,14 @@ class ClearableError: MaybeErrorType {
 class HistoryClearable: Clearable {
     let profile: Profile
     let tabManager: TabManager
+    let siteImageHandler: SiteImageHandler
 
-    init(profile: Profile, tabManager: TabManager) {
+    init(profile: Profile,
+         tabManager: TabManager,
+         siteImageHandler: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.profile = profile
         self.tabManager = tabManager
+        self.siteImageHandler = siteImageHandler
     }
 
     var label: String { .ClearableHistory }
@@ -40,6 +44,11 @@ class HistoryClearable: Clearable {
     func clear() -> Success {
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
+
+        // Clear image data from Site Image Helper
+        siteImageHandler.clearAllCaches()
+
+        // Clear everything in places
         return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
             return Deferred(value: success)
         }

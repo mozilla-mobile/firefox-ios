@@ -5,20 +5,21 @@
 import UIKit
 import Common
 
-public protocol SiteImageFetcher {
+public protocol SiteImageHandler {
     func getImage(urlStringRequest: String,
                   type: SiteImageType,
                   id: UUID,
                   usesIndirectDomain: Bool) async -> SiteImageModel
     func cacheFaviconURL(siteURL: URL?, faviconURL: URL?)
+    func clearAllCaches()
 }
 
-public class DefaultSiteImageFetcher: SiteImageFetcher {
+public class DefaultSiteImageHandler: SiteImageHandler {
     private let urlHandler: FaviconURLHandler
     private let imageHandler: ImageHandler
 
-    public static func factory() -> DefaultSiteImageFetcher {
-        return DefaultSiteImageFetcher()
+    public static func factory() -> DefaultSiteImageHandler {
+        return DefaultSiteImageHandler()
     }
 
     init(urlHandler: FaviconURLHandler = DefaultFaviconURLHandler(),
@@ -76,6 +77,11 @@ public class DefaultSiteImageFetcher: SiteImageFetcher {
                                         type: .favicon,
                                         usesIndirectDomain: false)
         urlHandler.cacheFaviconURL(cacheKey: cacheKey, faviconURL: faviconURL)
+    }
+
+    public func clearAllCaches() {
+        urlHandler.clearCache()
+        imageHandler.clearCache()
     }
 
     // MARK: - Private

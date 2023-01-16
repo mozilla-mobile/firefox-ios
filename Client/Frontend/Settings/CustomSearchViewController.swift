@@ -25,7 +25,7 @@ class CustomSearchError: MaybeErrorType {
 }
 
 class CustomSearchViewController: SettingsTableViewController {
-    private let faviconFetcher: SiteImageFetcher
+    private let faviconFetcher: SiteImageHandler
     private var urlString: String?
     private var engineTitle = ""
     var successCallback: (() -> Void)?
@@ -36,7 +36,7 @@ class CustomSearchViewController: SettingsTableViewController {
         return spinner
     }()
 
-    init(faviconFetcher: SiteImageFetcher = DefaultSiteImageFetcher.factory()) {
+    init(faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.faviconFetcher = faviconFetcher
         super.init()
     }

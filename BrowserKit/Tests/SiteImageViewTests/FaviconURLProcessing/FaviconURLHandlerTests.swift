@@ -75,6 +75,28 @@ class FaviconURLHandlerTests: XCTestCase {
         }
     }
 
+    func testCacheFaviconURL() async {
+        subject.cacheFaviconURL(cacheKey: "key", faviconURL: URL(string: "myUrl")!)
+
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        let count = await mockCache.cacheURLCalledCount
+        let key = await mockCache.cacheKey
+        let url = await mockCache.faviconURL?.absoluteString
+
+        XCTAssertEqual(count, 1)
+        XCTAssertEqual(key, "key")
+        XCTAssertEqual(url, "myUrl")
+    }
+
+    func testClearCache() async {
+        subject.clearCache()
+
+        try? await Task.sleep(nanoseconds: 100_000_000)
+        let count = await mockCache.clearCacheCalledCount
+
+        XCTAssertEqual(count, 1)
+    }
+
     private func createSiteImageModel(siteURL: String) -> SiteImageModel {
         return SiteImageModel(id: UUID(),
                               expectedImageType: .favicon,

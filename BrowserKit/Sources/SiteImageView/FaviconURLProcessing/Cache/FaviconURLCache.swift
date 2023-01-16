@@ -7,6 +7,7 @@ import Foundation
 protocol FaviconURLCache {
     func getURLFromCache(cacheKey: String) async throws -> URL
     func cacheURL(cacheKey: String, faviconURL: URL) async
+    func clearCache() async
 }
 
 actor DefaultFaviconURLCache: FaviconURLCache {
@@ -48,6 +49,11 @@ actor DefaultFaviconURLCache: FaviconURLCache {
                                  faviconURL: faviconURL.absoluteString,
                                  createdAt: Date())
         urlCache[cacheKey] = favicon
+        preserveCache()
+    }
+
+    func clearCache() async {
+        urlCache = [String: FaviconURL]()
         preserveCache()
     }
 

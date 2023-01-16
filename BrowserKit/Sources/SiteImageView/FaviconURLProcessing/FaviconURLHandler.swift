@@ -7,6 +7,7 @@ import Foundation
 protocol FaviconURLHandler {
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel
     func cacheFaviconURL(cacheKey: String, faviconURL: URL)
+    func clearCache()
 }
 
 struct DefaultFaviconURLHandler: FaviconURLHandler {
@@ -45,6 +46,12 @@ struct DefaultFaviconURLHandler: FaviconURLHandler {
     func cacheFaviconURL(cacheKey: String, faviconURL: URL) {
         Task {
             await urlCache.cacheURL(cacheKey: cacheKey, faviconURL: faviconURL)
+        }
+    }
+
+    func clearCache() {
+        Task {
+            await urlCache.clearCache()
         }
     }
 }
