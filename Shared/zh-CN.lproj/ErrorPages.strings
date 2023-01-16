@@ -1,5 +1,5 @@
 /* Shown in error pages for files that can't be shown and need to be downloaded. */
-"Open in Safari" = "在 Safari 中打开";
+"Open in Safari" = "在 Safari 浏览器中打开";
 
 /* Shown in error pages on a button that will try to load the page again */
 "Try again" = "重试";
