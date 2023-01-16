@@ -45,13 +45,25 @@ class HistoryClearable: Clearable {
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
 
+        // Clear everything in places
+        return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
+            return self.clearAfterHistory(success: success)
+        }
+    }
+
+    func clearAfterHistory(success: Maybe<Void>) -> Success {
         // Clear image data from Site Image Helper
         siteImageHandler.clearAllCaches()
 
-        // Clear everything in places
-        return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
-            return Deferred(value: success)
-        }
+        self.profile.recentlyClosedTabs.clearTabs()
+        self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
+        CSSearchableIndex.default().deleteAllSearchableItems()
+        NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
+        log.debug("HistoryClearable succeeded: \(success).")
+
+        self.tabManager.clearAllTabsHistory()
+
+        return Deferred(value: success)
     }
 }
 
