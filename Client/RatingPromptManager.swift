@@ -129,7 +129,18 @@ final class RatingPromptManager {
         lastRequestDate = date
         requestCount += 1
 
-        SKStoreReviewController.requestReview()
+        guard #available(iOS 14, *) else {
+            SKStoreReviewController.requestReview()
+            return
+        }
+
+        guard let scene = UIApplication.shared.connectedScenes.first(where: {
+            $0.activationState == .foregroundActive
+        }) as? UIWindowScene else { return }
+
+        DispatchQueue.main.async {
+            SKStoreReviewController.requestReview(in: scene)
+        }
     }
 
     private func updateBookmarksCount(group: DispatchGroupInterface) {
