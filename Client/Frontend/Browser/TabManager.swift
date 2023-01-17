@@ -107,6 +107,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         }
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
+
+        //Ecosia: inject cookie when config is created to make sure they are present
+        let cookie = isPrivate ? Cookie.incognito : Cookie.standard
+        configuration.websiteDataStore.httpCookieStore.setCookie(cookie)
         return configuration
     }
 
