@@ -4,40 +4,50 @@
 
 "use strict";
 
-import { FormAutofillHeuristicsShared } from "Assets/CC_Script/FormAutofillHeuristics.shared.mjs";
+import { CreditCardAutofill } from "Assets/CC_Script/CreditCardAutofill.js";
+
 class CreditCardHelper {
   constructor() {
-    console.log(FormAutofillHeuristicsShared); // Just to make sure it's imported correctly
-    window.addEventListener("load", () => {
-      this.sendMessage({
-        msg: `${new Date().toGMTString()}: ping!!`,
-      });
+    this.onLoad = this.onLoad.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.creditCardAutofill = new CreditCardAutofill();
+    window.addEventListener("load", this.onLoad);
+  }
+
+  onLoad() {
+    const observer = new MutationObserver((mutations) => {
+      for (var idx = 0; idx < mutations.length; ++idx) {
+        this.findForms(mutations[idx].addedNodes);
+      }
+    });
+    observer.observe(document.body, {
+      attributes: false,
+      childList: true,
+      characterData: false,
+      subtree: true,
+    });
+
+    [...document.forms].forEach((form) => {
+      const allFields = this.creditCardAutofill.findCreditCardForms(form);
+      allFields.forEach((field) =>
+        field.addEventListener("focus", this.onFocus)
+      );
     });
   }
-  //   const findForms = (nodes) => {
-  //     for (var i = 0; i < nodes.length; i++) {
-  //       var node = nodes[i];
-  //       if (node.nodeName === "FORM") {
-  //         webkit.messageHandlers.creditCardMessageHandler.postMessage(
-  //       } else if (node.hasChildNodes()) {
-  //         findForms(node.childNodes);
-  //       }
-  //     }
-  //     return false;
-  //   };
 
-  //   const observer = new MutationObserver((mutations) => {
-  //     for (var idx = 0; idx < mutations.length; ++idx) {
-  //       findForms(mutations[idx].addedNodes);
-  //     }
-  //   });
+  onFocus(ev) {
+    window.webkit.messageHandlers.creditCardMessageHandler.postMessage({
+      msg: "cc-form",
+      id: this.creditCardAutofill.getSectionId(ev.target),
+    });
+  }
 
   sendMessage(payload) {
     window.webkit.messageHandlers.creditCardMessageHandler.postMessage(payload);
   }
 
   fillCreditCardInfo(payload) {
-    alert(`Called from swift result: ${JSON.stringify(payload)}`);
+    this.creditCardAutofill.fillCreditCardInfo(payload);
   }
 }
 
