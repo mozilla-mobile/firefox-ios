@@ -16,7 +16,7 @@ export const LabelUtils = {
 
   // A weak map consisting of label element and extracted strings pairs.
   // @type {WeakMap<HTMLLabelElement, array>}
-  _labelStrings: null,
+  _labelStrings: new WeakMap(),
 
   /**
    * Extract all strings of an element's children to an array.

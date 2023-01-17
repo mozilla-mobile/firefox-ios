@@ -1,19 +1,27 @@
-import { FormAutofillUtilsShared } from "resource://gre/modules/FormAutofillUtils.shared.mjs";
 import { FormAutofillHeuristicsShared } from "resource://gre/modules/FormAutofillHeuristics.shared.mjs";
+import { FormAutofillUtilsShared } from "resource://gre/modules/FormAutofillUtils.shared.mjs";
 
-const ccFathomConfidenceThreshold = 0.5;
-const ccFathomTestConfidence = 0.5;
-const ccHeuristicsMode = 0;
-const CreditCardRulesets = {};
+// TODO(HACK): Update this
+const lazy = { log: { debug: () => {} } };
+// TODO(HACK): Update this
+const creditCardRulesets = {
+  types: ["cc-number", "cc-name"],
+};
 
-const DEFAULT_SECTION_NAME = "-moz-section-default";
+// TODO(HACK): Update this
+const fathomTmpValues = {
+  ccFathomConfidenceThreshold: 0.5,
+  ccFathomTestConfidence: 0.5,
+  ccHeuristicsMode: 1,
+};
+export const DEFAULT_SECTION_NAME = "-moz-section-default";
 
 /**
  * To help us classify sections, we want to know what fields can appear
  * multiple times in a row.
  * Such fields, like `address-line{X}`, should not break sections.
  */
-const MULTI_FIELD_NAMES = [
+export const MULTI_FIELD_NAMES = [
   "address-level3",
   "address-level2",
   "address-level1",
@@ -29,7 +37,7 @@ const MULTI_FIELD_NAMES = [
  * there are four of these fields in a row.
  * Otherwise, multiple cc-number fields should be in separate sections.
  */
-const MULTI_N_FIELD_NAMES = {
+export const MULTI_N_FIELD_NAMES = {
   "cc-number": 4,
 };
 
@@ -230,7 +238,7 @@ export class FieldScanner {
    *          The array with the sections, and the belonging fieldDetails are in
    *          each section. For example, it may return something like this:
    *          [{
-   *             type: FormAutofillUtils.SECTION_TYPES.ADDRESS,  // section type
+   *             type: FormAutofillUtilsShared.SECTION_TYPES.ADDRESS,  // section type
    *             fieldDetails: [{  // a record for each field
    *                 fieldName: "email",
    *                 section: "",
@@ -240,7 +248,7 @@ export class FieldScanner {
    *               }, ...]
    *           },
    *           {
-   *             type: FormAutofillUtils.SECTION_TYPES.CREDIT_CARD,
+   *             type: FormAutofillUtilsShared.SECTION_TYPES.CREDIT_CARD,
    *             fieldDetails: [{
    *                fieldName: "cc-exp-month",
    *                section: "",
@@ -392,10 +400,10 @@ export class FieldScanner {
       } else if (FormAutofillUtilsShared.isCreditCardField(fieldName)) {
         creditCardFieldDetails.push(fieldDetail);
       } else {
-        // lazy.log.debug(
-        //   "Not collecting a field with a unknown fieldName",
-        //   fieldDetail
-        // );
+        lazy.log.debug(
+          "Not collecting a field with a unknown fieldName",
+          fieldDetail
+        );
       }
     }
     this._transformCCNumberForMultipleFields(creditCardFieldDetails);
@@ -467,7 +475,8 @@ export class FieldScanner {
     }
 
     let highestField = null;
-    let highestConfidence = ccFathomConfidenceThreshold; // Start with a threshold of 0.5
+    //TODO(HACK): Update this
+    let highestConfidence = fathomTmpValues.ccFathomConfidenceThreshold; // Start with a threshold of 0.5
     for (let [key, value] of Object.entries(elementConfidences)) {
       if (!fields.includes(key)) {
         // ignore field that we don't care
@@ -485,8 +494,10 @@ export class FieldScanner {
     }
 
     // Used by test ONLY! This ensure testcases always get the same confidence
-    if (ccFathomTestConfidence > 0) {
-      highestConfidence = ccFathomTestConfidence;
+    //TODO(HACK): Update this
+    if (fathomTmpValues.ccFathomTestConfidence > 0) {
+      //TODO(HACK): Update this
+      highestConfidence = fathomTmpValues.ccFathomTestConfidence;
     }
 
     return [highestField, highestConfidence];
@@ -497,7 +508,11 @@ export class FieldScanner {
    * @returns {object} Fathom confidence keyed by field-type.
    */
   static getFormAutofillConfidences(elements) {
-    if (ccHeuristicsMode == FormAutofillUtilsShared.CC_FATHOM_NATIVE) {
+    //TODO(HACK): Update this
+    if (
+      fathomTmpValues.ccHeuristicsMode ==
+      FormAutofillUtilsShared.CC_FATHOM_NATIVE
+    ) {
       let confidences = ChromeUtils.getFormAutofillConfidences(elements);
       return confidences.map((c) => {
         let result = {};
@@ -523,7 +538,7 @@ export class FieldScanner {
        * @returns {number} Confidence in range [0, 1]
        */
       function confidence(fieldName) {
-        const ruleset = CreditCardRulesets[fieldName];
+        const ruleset = creditCardRulesets[fieldName];
         const fnodes = ruleset.against(element).get(fieldName);
 
         // fnodes is either 0 or 1 item long, since we ran the ruleset
@@ -533,7 +548,7 @@ export class FieldScanner {
 
       // Bang the element against the ruleset for every type of field:
       let confidences = {};
-      CreditCardRulesets.types.map((fieldName) => {
+      creditCardRulesets.types.map((fieldName) => {
         confidences[fieldName] = confidence(fieldName);
       });
 

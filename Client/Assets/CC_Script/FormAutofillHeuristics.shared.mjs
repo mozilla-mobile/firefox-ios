@@ -1,11 +1,21 @@
 import { FormAutofillUtilsShared } from "resource://gre/modules/FormAutofillUtils.shared.mjs";
-import { FieldScanner } from "resource://gre/modules/FieldScanner.mjs";
-import { LabelUtils } from "resource://gre/modules/LabelUtils.mjs";
 import { CreditCard } from "resource://gre/modules/CreditCard.sys.mjs";
+import { LabelUtils } from "resource://gre/modules/LabelUtils.mjs";
+import { FieldScanner } from "resource://gre/modules/FieldScanner.mjs";
 
-const CreditCardRulesets = {};
+// TODO(HACK): Update this
+const creditCardRulesets = {
+  types: ["cc-number", "cc-name"],
+};
 
+/**
+ * Returns the autocomplete information of fields according to heuristics.
+ */
 export const FormAutofillHeuristicsShared = {
+  RULES: null,
+
+  CREDIT_CARD_FIELDNAMES: [],
+  ADDRESS_FIELDNAMES: [],
   /**
    * Try to find a contiguous sub-array within an array.
    *
@@ -320,7 +330,7 @@ export const FormAutofillHeuristicsShared = {
     // it.
     if (
       FormAutofillUtilsShared.isFathomCreditCardsEnabled() &&
-      CreditCardRulesets.types.includes(detail.fieldName)
+      creditCardRulesets.types.includes(detail.fieldName)
     ) {
       fieldScanner.parsingIndex++;
       return true;
@@ -513,6 +523,45 @@ export const FormAutofillHeuristicsShared = {
     return fieldScanner.getSectionFieldDetails();
   },
 
+  _getPossibleFieldNames(element) {
+    let fieldNames = [];
+    let isAutoCompleteOff =
+      element.autocomplete == "off" || element.form?.autocomplete == "off";
+    //TODO(HACK): Update this
+    // if (
+    //   FormAutofill.isAutofillCreditCardsAvailable &&
+    //   (!isAutoCompleteOff || FormAutofill.creditCardsAutocompleteOff)
+    // )
+    if (!isAutoCompleteOff) {
+      fieldNames.push(...this.CREDIT_CARD_FIELDNAMES);
+    }
+    //TODO(HACK): Update this
+    // if (
+    //     FormAutofill.isAutofillAddressesAvailable &&
+    //     (!isAutoCompleteOff || FormAutofill.addressesAutocompleteOff)
+    //   )
+    if (!isAutoCompleteOff) {
+      fieldNames.push(...this.ADDRESS_FIELDNAMES);
+    }
+
+    if (HTMLSelectElement.isInstance(element)) {
+      const FIELDNAMES_FOR_SELECT_ELEMENT = [
+        "address-level1",
+        "address-level2",
+        "country",
+        "cc-exp-month",
+        "cc-exp-year",
+        "cc-exp",
+        "cc-type",
+      ];
+      fieldNames = fieldNames.filter((name) =>
+        FIELDNAMES_FOR_SELECT_ELEMENT.includes(name)
+      );
+    }
+
+    return fieldNames;
+  },
+
   getInfo(element, scanner) {
     function infoRecordWithFieldName(fieldName, confidence = null) {
       return {
@@ -554,7 +603,7 @@ export const FormAutofillHeuristicsShared = {
     if (FormAutofillUtilsShared.isFathomCreditCardsEnabled()) {
       // We don't care fields that are not supported by fathom
       let fathomFields = fields.filter((r) =>
-        CreditCardRulesets.types.includes(r)
+        creditCardRulesets.types.includes(r)
       );
       let [matchedFieldName, confidence] = scanner.getFathomField(
         element,
@@ -595,7 +644,7 @@ export const FormAutofillHeuristicsShared = {
   /**
    * Extract all the signature strings of an element.
    *
-   * @param {HTMLElement} element‚
+   * @param {HTMLElement} element
    * @returns {ElementStrings}
    */
   _getElementStrings(element) {
