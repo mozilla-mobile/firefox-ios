@@ -8,25 +8,21 @@ import UIKit
 
 public enum ImageLoadingError: Error, CustomStringConvertible {
     case unableToFetchImage
-    case iconUrlNotFound
     case sizeTooLarge
 
     public var description: String {
         switch self {
         case .unableToFetchImage: return "Favicon Image Error: Unable to fetch image"
-        case .iconUrlNotFound: return "Facicon url not found"
         case .sizeTooLarge: return "Image download size too large"
         }
     }
 }
 
 public struct ImageLoadingConstants {
-    public static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
-    public static let ExpirationTime = TimeInterval(60*60*24*7) // Only check for icons once a week
     public static let NoLimitImageSize = 0 // 0 Means there is no limit for image size
 }
 
-protocol ImageFetcher {
+protocol ImageLoadingHandler {
     func getImageFromCacheOrDownload(with url: URL, limit maxSize: Int,
                                      completion: @escaping (UIImage?, ImageLoadingError?) -> Void)
     func saveImageToCache(img: UIImage, key: String)
@@ -36,18 +32,14 @@ protocol ImageFetcher {
     func downloadImageOnly(with url: URL,
                            limit maxSize: Int,
                            completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void)
-    func downloadAndCacheImageWithAuthentication(with url: URL,
-                                                 completion: @escaping (UIImage?, ImageLoadingError?) -> Void)
 }
 
-public class ImageLoadingHandler: ImageFetcher {
-    // MARK: singleton property
-    public static let shared = ImageLoadingHandler()
+/// Useful to load random images into the project. For Favicons or hero images please use SiteImageView from BrowserKit.
+public class DefaultImageLoadingHandler: ImageLoadingHandler {
+    public static let shared = DefaultImageLoadingHandler()
 
     public var disposition: URLSession.AuthChallengeDisposition = .useCredential
     public var credential: URLCredential?
-
-    public init() {}
 
     public func getImageFromCacheOrDownload(with url: URL, limit maxSize: Int,
                                             completion: @escaping (UIImage?, ImageLoadingError?) -> Void) {
@@ -99,21 +91,6 @@ public class ImageLoadingHandler: ImageFetcher {
         }
     }
 
-    public func downloadAndCacheImageWithAuthentication(with url: URL,
-                                                        completion: @escaping (UIImage?, ImageLoadingError?) -> Void) {
-        let imageDownloader = ImageDownloader.default
-        imageDownloader.authenticationChallengeResponder = self
-        imageDownloader.downloadImage(with: url, options: nil) {  [unowned self] result in
-            switch result {
-            case .success(let value):
-                self.saveImageToCache(img: value.image, key: url.absoluteString)
-                completion(value.image, nil)
-            case .failure:
-                completion(nil, ImageLoadingError.unableToFetchImage)
-            }
-        }
-    }
-
     public func downloadImageOnly(with url: URL, limit maxSize: Int,
                                   completion: @escaping (UIImage?, Data?, ImageLoadingError?) -> Void) {
         let imgDownloader = ImageDownloader.default
@@ -140,21 +117,5 @@ public class ImageLoadingHandler: ImageFetcher {
                 completion(nil, nil, ImageLoadingError.unableToFetchImage)
             }
         }
-    }
-}
-
-extension ImageLoadingHandler: AuthenticationChallengeResponsible {
-    public func downloader( _ downloader: ImageDownloader,
-                            didReceive challenge: URLAuthenticationChallenge,
-                            completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        // Provide `AuthChallengeDisposition` and `URLCredential`
-        completionHandler(disposition, credential)
-    }
-
-    public func downloader( _ downloader: ImageDownloader, task: URLSessionTask,
-                            didReceive challenge: URLAuthenticationChallenge,
-                            completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        // Provide `AuthChallengeDisposition` and `URLCredential`
-        completionHandler(disposition, credential)
     }
 }

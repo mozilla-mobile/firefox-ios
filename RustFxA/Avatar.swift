@@ -17,8 +17,10 @@ open class Avatar {
     private func downloadAvatar() {
         guard let url = url else { return }
 
-        ImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url,
-                                                               limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+        DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(
+            with: url,
+            limit: ImageLoadingConstants.NoLimitImageSize
+        ) { image, error in
             guard error == nil,
                   let image = image
             else {
