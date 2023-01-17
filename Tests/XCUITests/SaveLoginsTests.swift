@@ -89,9 +89,7 @@ class SaveLoginTest: BaseTestCase {
         openLoginsSettings()
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
-        // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-        // Change to 3 entries for iPhone since the hostname is not saved and only one entry appears
-        print(app.debugDescription)
+        XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
     }
 
