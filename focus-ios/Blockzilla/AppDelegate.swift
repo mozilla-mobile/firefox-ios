@@ -47,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private let nimbus = NimbusWrapper.shared
     private var queuedUrl: URL?
+    private var isWidgetURL = false
     private var queuedString: String?
     private let themeManager = ThemeManager()
     private var cancellables = Set<AnyCancellable>()
@@ -165,6 +166,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         guard let navigation = NavigationPath(url: url) else { return false }
+        if navigation == .widget {
+            isWidgetURL = true
+            return false
+        }
         let navigationHandler = NavigationPath.handle(application, navigation: navigation, with: browserViewController)
 
         if case .text = navigation {
@@ -222,6 +227,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             GleanMetrics.Siri.eraseInBackground.record()
         }
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
+
+        if isWidgetURL {
+            _ = NavigationPath.handle(application, navigation: .widget, with: browserViewController)
+            isWidgetURL = false
+        }
 
         if let url = queuedUrl {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.openedFromExtension, object: TelemetryEventObject.app)

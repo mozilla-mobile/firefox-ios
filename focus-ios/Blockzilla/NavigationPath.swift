@@ -111,6 +111,8 @@ extension NavigationPath: Equatable {
             return lhsURL == rhsURL
         case let (.text(lhsText), .text(text: rhsText)):
             return lhsText == rhsText
+        case (.widget, .widget):
+            return true
         default:
             return false
         }
