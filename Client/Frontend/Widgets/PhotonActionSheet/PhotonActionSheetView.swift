@@ -320,15 +320,16 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
             statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
             statusIcon.image = image
             if let actionIconUrl = action.iconURL {
-                ImageLoadingHandler.shared.getImageFromCacheOrDownload(
+                DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(
                     with: actionIconUrl,
-                    limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                    limit: ImageLoadingConstants.NoLimitImageSize
+                ) { image, error in
                     guard error == nil, let image = image, self.accessibilityLabel == action.currentTitle else {
                         return
                     }
 
                     self.statusIcon.image = image.createScaled(PhotonActionSheet.UX.iconSize)
-                            .withRenderingMode(.alwaysOriginal)
+                        .withRenderingMode(.alwaysOriginal)
                     self.statusIcon.layer.cornerRadius = PhotonActionSheet.UX.iconSize.width / 2
                 }
             }
