@@ -184,7 +184,7 @@ public class SentryIntegration: SentryProtocol {
     public func addBreadcrumb(category: String, message: String) {
         let breadcrumb = Breadcrumb(level: .info, category: category)
         breadcrumb.message = message
-        SentrySDK.addBreadcrumb(crumb: breadcrumb)
+        SentrySDK.addBreadcrumb(breadcrumb)
     }
 
     // MARK: - Private
