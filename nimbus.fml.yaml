@@ -152,7 +152,7 @@ features:
       - channel: developer
         value:
           awesome-bar:
-            search-highlights: true
+            search-highlights: false
             position:
               is-position-feature-enabled: true
               is-bottom: false
@@ -160,7 +160,7 @@ features:
       - channel: beta
         value:
           awesome-bar:
-            search-highlights: true
+            search-highlights: false
             position:
               is-position-feature-enabled: true
               is-bottom: false

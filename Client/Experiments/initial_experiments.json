@@ -216,7 +216,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('108.!') >= 0)))",
       "startDate": "2022-11-30",
-      "enrollmentEndDate": "2022-06-10",
+      "enrollmentEndDate": "2023-01-04",
       "endDate": null,
       "proposedDuration": 63,
       "proposedEnrollment": 21,

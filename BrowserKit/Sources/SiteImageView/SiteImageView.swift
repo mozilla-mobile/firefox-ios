@@ -5,10 +5,10 @@
 import UIKit
 import Common
 
-/// Used in HeroImageView and FaviconImageView to update their image using the SiteImageFetcher
+/// Used in HeroImageView and FaviconImageView to update their image using the SiteImageHandler
 protocol SiteImageView: UIView {
     var uniqueID: UUID? { get set }
-    var imageFetcher: SiteImageFetcher { get set }
+    var imageFetcher: SiteImageHandler { get set }
 
     func updateImage(url: String,
                      type: SiteImageType,

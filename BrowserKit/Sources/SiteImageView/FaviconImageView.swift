@@ -14,21 +14,21 @@ import Common
 public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - Properties
     var uniqueID: UUID?
-    var imageFetcher: SiteImageFetcher
+    var imageFetcher: SiteImageHandler
     var requestStartedWith: String?
     private var completionHandler: (() -> Void)?
 
     // MARK: - Init
 
     public override init(frame: CGRect) {
-        self.imageFetcher = DefaultSiteImageFetcher()
+        self.imageFetcher = DefaultSiteImageHandler()
         super.init(frame: frame)
         setupUI()
     }
 
     // Internal init used in unit tests only
     init(frame: CGRect,
-         imageFetcher: SiteImageFetcher,
+         imageFetcher: SiteImageHandler,
          completionHandler: @escaping () -> Void) {
         self.imageFetcher = imageFetcher
         self.completionHandler = completionHandler
