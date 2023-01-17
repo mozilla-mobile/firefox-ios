@@ -240,7 +240,7 @@ class Tab: NSObject {
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
     var sessionData: SessionData?
-    private let faviconHelper: SiteImageFetcher
+    private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
             faviconHelper.cacheFaviconURL(siteURL: url,
@@ -294,7 +294,6 @@ class Tab: NSObject {
 
     var mimeType: String?
     var isEditing: Bool = false
-    var currentFaviconUrl: URL?
     // When viewing a non-HTML content type in the webview (like a PDF document), this URL will
     // point to a tempfile containing the content so it can be shared to external applications.
     var temporaryDocument: TemporaryDocument?
@@ -377,7 +376,7 @@ class Tab: NSObject {
     init(profile: Profile,
          configuration: WKWebViewConfiguration,
          isPrivate: Bool = false,
-         faviconHelper: SiteImageFetcher = DefaultSiteImageFetcher.factory()) {
+         faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.configuration = configuration
         self.nightMode = false
         self.noImageMode = false

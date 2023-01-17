@@ -11,6 +11,7 @@ actor FaviconURLCacheMock: FaviconURLCache {
 
     var getURLFromCacheCalledCount = 0
     var cacheURLCalledCount = 0
+    var clearCacheCalledCount = 0
 
     var cacheKey: String?
     var faviconURL: URL?
@@ -32,5 +33,9 @@ actor FaviconURLCacheMock: FaviconURLCache {
         cacheURLCalledCount += 1
         self.cacheKey = cacheKey
         self.faviconURL = faviconURL
+    }
+
+    func clearCache() async {
+        clearCacheCalledCount += 1
     }
 }

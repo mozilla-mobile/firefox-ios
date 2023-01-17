@@ -8,7 +8,7 @@ import UIKit
 // MARK: - Kingfisher wrappers
 
 /// Image downloader wrapper around Kingfisher image downloader
-/// Used in SiteImageFetcher
+/// Used in FaviconFetcher
 protocol SiteImageDownloader {
     @discardableResult
     func downloadImage(
@@ -50,7 +50,7 @@ extension ImageDownloader: SiteImageDownloader {
 }
 
 /// Image loading result wrapper for Kingfisher type so we have control when testing
-/// Used in SiteImageFetcher
+/// Used in FaviconFetcher
 protocol SiteImageLoadingResult {
     var image: UIImage { get }
 }

@@ -23,6 +23,9 @@ protocol SiteImageCache {
     func cacheImage(image: UIImage,
                     cacheKey: String,
                     type: SiteImageType) async
+
+    /// Clears the image cache
+    func clearCache() async
 }
 
 actor DefaultSiteImageCache: SiteImageCache {
@@ -49,6 +52,10 @@ actor DefaultSiteImageCache: SiteImageCache {
     func cacheImage(image: UIImage, cacheKey: String, type: SiteImageType) async {
         let key = self.cacheKey(cacheKey, type: type)
         imageCache.store(image: image, forKey: key)
+    }
+
+    func clearCache() async {
+        imageCache.clearCache()
     }
 
     private func cacheKey(_ cacheKey: String, type: SiteImageType) -> String {

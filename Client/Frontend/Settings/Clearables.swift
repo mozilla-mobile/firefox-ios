@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import WebKit
 import CoreSpotlight
-import Kingfisher
+import SiteImageView
 
 private let log = Logger.browserLogger
 
@@ -29,10 +29,14 @@ class ClearableError: MaybeErrorType {
 class HistoryClearable: Clearable {
     let profile: Profile
     let tabManager: TabManager
+    let siteImageHandler: SiteImageHandler
 
-    init(profile: Profile, tabManager: TabManager) {
+    init(profile: Profile,
+         tabManager: TabManager,
+         siteImageHandler: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.profile = profile
         self.tabManager = tabManager
+        self.siteImageHandler = siteImageHandler
     }
 
     var label: String { .ClearableHistory }
@@ -40,15 +44,16 @@ class HistoryClearable: Clearable {
     func clear() -> Success {
         // Treat desktop sites as part of browsing history.
         Tab.ChangeUserAgent.clear()
+
+        // Clear everything in places
         return profile.places.deleteEverythingHistory().bindQueue(.main) { success in
             return self.clearAfterHistory(success: success)
         }
     }
 
     func clearAfterHistory(success: Maybe<Void>) -> Success {
-        // Clear image cache - Kingfisher
-        KingfisherManager.shared.cache.clearMemoryCache()
-        KingfisherManager.shared.cache.clearDiskCache()
+        // Clear image data from Site Image Helper
+        siteImageHandler.clearAllCaches()
 
         self.profile.recentlyClosedTabs.clearTabs()
         self.profile.places.deleteHistoryMetadataOlderThan(olderThan: INT64_MAX).uponQueue(.global(qos: .userInteractive)) { _ in }
@@ -59,18 +64,6 @@ class HistoryClearable: Clearable {
         self.tabManager.clearAllTabsHistory()
 
         return Deferred(value: success)
-    }
-}
-
-struct ClearableErrorType: MaybeErrorType {
-    let err: Error
-
-    init(err: Error) {
-        self.err = err
-    }
-
-    var description: String {
-        return "Couldn't clear: \(err)."
     }
 }
 
@@ -101,28 +94,6 @@ class SpotlightClearable: Clearable {
         }
         return deferred
     }
-}
-
-private func deleteLibraryFolderContents(_ folder: String) throws {
-    let manager = FileManager.default
-    let library = manager.urls(for: .libraryDirectory, in: .userDomainMask)[0]
-    let dir = library.appendingPathComponent(folder)
-    let contents = try manager.contentsOfDirectory(atPath: dir.path)
-    for content in contents {
-        do {
-            try manager.removeItem(at: dir.appendingPathComponent(content))
-        } catch where ((error as NSError).userInfo[NSUnderlyingErrorKey] as? NSError)?.code == Int(EPERM) {
-            // "Not permitted". We ignore this.
-            log.debug("Couldn't delete some library contents.")
-        }
-    }
-}
-
-private func deleteLibraryFolder(_ folder: String) throws {
-    let manager = FileManager.default
-    let library = manager.urls(for: .libraryDirectory, in: .userDomainMask)[0]
-    let dir = library.appendingPathComponent(folder)
-    try manager.removeItem(at: dir)
 }
 
 // Removes all app cache storage.

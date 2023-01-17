@@ -6,11 +6,11 @@ import XCTest
 @testable import SiteImageView
 
 final class SiteImageViewTests: XCTestCase {
-    private var imageFetcher: MockSiteImageFetcher!
+    private var imageFetcher: MockSiteImageHandler!
 
     override func setUp() {
         super.setUp()
-        self.imageFetcher = MockSiteImageFetcher()
+        self.imageFetcher = MockSiteImageHandler()
     }
 
     override func tearDown() {
@@ -53,13 +53,14 @@ final class SiteImageViewTests: XCTestCase {
     }
 }
 
-class MockSiteImageFetcher: SiteImageFetcher {
+class MockSiteImageHandler: SiteImageHandler {
     var image = UIImage()
     var capturedType: SiteImageType?
     var capturedStringRequest: String?
     var siteURL: URL?
     var faviconURL: URL?
     var cacheFaviconURLCalled = 0
+    var clearAllCachesCalled = 0
 
     func getImage(urlStringRequest: String,
                   type: SiteImageType,
@@ -82,5 +83,9 @@ class MockSiteImageFetcher: SiteImageFetcher {
         self.siteURL = siteURL
         self.faviconURL = faviconURL
         cacheFaviconURLCalled += 1
+    }
+
+    func clearAllCaches() {
+        clearAllCachesCalled += 1
     }
 }

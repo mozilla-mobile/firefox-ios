@@ -107,7 +107,7 @@ extension UserActivityHandler {
             attributeSet.thumbnailData = tab.screenshot?.pngData()
         case .favicon:
             if let urlString = tab.url?.absoluteString {
-                let faviconFetcher = DefaultSiteImageFetcher.factory()
+                let faviconFetcher = DefaultSiteImageHandler.factory()
                 let image = await faviconFetcher.getImage(urlStringRequest: urlString,
                                                           type: .favicon,
                                                           id: UUID(),

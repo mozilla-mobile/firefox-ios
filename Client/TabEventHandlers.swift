@@ -14,7 +14,6 @@ class TabEventHandlers {
         let handlers: [TabEventHandler] = [
             UserActivityHandler(),
             MetadataParserHelper(),
-            MediaImageLoader(profile.prefs),
             AccountSyncHandler(with: profile)
         ]
 
