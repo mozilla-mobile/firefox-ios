@@ -374,15 +374,13 @@ class AccountStatusSetting: WithAccountSetting {
                 .createScaled(CGSize(width: 30, height: 30))
 
             guard let str = RustFirefoxAccounts.shared.userProfile?.avatarUrl,
-                    let actionIconUrl = URL(string: str)
+                  let actionIconUrl = URL(string: str)
             else { return }
 
             ImageLoadingHandler.shared.getImageFromCacheOrDownload(
                 with: actionIconUrl,
                 limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-                guard error == nil, let image = image else {
-                    return
-                }
+                guard error == nil, let image = image else { return }
 
                 imageView.image = image.createScaled(CGSize(width: 30, height: 30))
                         .withRenderingMode(.alwaysOriginal)
