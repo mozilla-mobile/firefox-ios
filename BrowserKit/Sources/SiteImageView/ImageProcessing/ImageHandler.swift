@@ -30,6 +30,9 @@ protocol ImageHandler {
     ///   - domain: The domain this hero image will be associated with
     /// - Returns: The hero image
     func fetchHeroImage(site: SiteImageModel) async throws -> UIImage
+
+    /// Clears the image cache
+    func clearCache()
 }
 
 class DefaultImageHandler: ImageHandler {
@@ -64,6 +67,12 @@ class DefaultImageHandler: ImageHandler {
             return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: .heroImage)
         } catch {
             return try await fetchHeroImageFromFetcher(site: site)
+        }
+    }
+
+    func clearCache() {
+        Task {
+            await self.imageCache.clearCache()
         }
     }
 

@@ -18,7 +18,7 @@ class DefaultBundleDataProvider: BundleDataProvider {
     }
 
     func getBundleData() throws -> Data {
-        guard let path = bundle.path(forResource: "top_sites", ofType: "json") else {
+        guard let path = bundle.path(forResource: "bundle_sites", ofType: "json") else {
             throw BundleDataError.noPath
         }
 

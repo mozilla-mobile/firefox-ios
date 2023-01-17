@@ -23,7 +23,7 @@ struct TabProvider: TimelineProvider {
         }
 
         let simpleTabs = SimpleTab.getSimpleTabs()
-        let siteImageFetcher = DefaultSiteImageFetcher.factory()
+        let siteImageFetcher = DefaultSiteImageHandler.factory()
 
         Task {
             let tabFaviconDictionary = await withTaskGroup(of: (String, SiteImageModel).self,

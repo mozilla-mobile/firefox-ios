@@ -78,12 +78,23 @@ final class SiteImageCacheTests: XCTestCase {
         XCTAssertEqual(imageCache.capturedStorageKey, "www.firefox.com-favicon")
         XCTAssertEqual(imageCache.capturedImage, expectedImage)
     }
+
+    func testClearCache() async {
+        let subject = DefaultSiteImageCache(imageCache: imageCache)
+        await subject.clearCache()
+
+        XCTAssertEqual(imageCache.clearCacheCalledCount, 1)
+    }
 }
 
 private class MockDefaultImageCache: DefaultImageCache {
     var image: UIImage?
     var retrievalError: KingfisherError?
     var capturedRetrievalKey: String?
+    var capturedImage: UIImage?
+    var capturedStorageKey: String?
+    var clearCacheCalledCount = 0
+
     func retrieveImage(forKey key: String) async throws -> UIImage? {
         capturedRetrievalKey = key
         if let error = retrievalError {
@@ -93,10 +104,12 @@ private class MockDefaultImageCache: DefaultImageCache {
         }
     }
 
-    var capturedImage: UIImage?
-    var capturedStorageKey: String?
     func store(image: UIImage, forKey key: String) {
         capturedImage = image
         capturedStorageKey = key
+    }
+
+    func clearCache() {
+        clearCacheCalledCount += 1
     }
 }
