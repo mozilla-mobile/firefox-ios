@@ -6,9 +6,7 @@ import Foundation
 import Shared
 import WebKit
 
-
 class CreditCardHelper: TabContentScript {
-
     fileprivate weak var tab: Tab?
 
     class func name() -> String {
@@ -24,10 +22,10 @@ class CreditCardHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let request = message.body as? Dictionary<String, Any> else {return}
-        print("Received from content script: " , request);
-    
-        let response : [String: Any] = [
+        guard let request = message.body as? [String: Any] else {return}
+        print("Received from content script: ", request)
+
+        let response: [String: Any] = [
             "data": [
                 "cc-name": "Jane Doe",
                 "cc-number": "5555555555554444",
@@ -35,17 +33,15 @@ class CreditCardHelper: TabContentScript {
                 "cc-exp-year": "2028",
               ],
             "id": request["id"]!,
-        ];
-        
+        ]
+
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject:response);
-            let fillCreditCardInfoCallback = "window.__firefox__.CreditCardHelper.fillCreditCardInfo('\(String(data: jsonData, encoding: .utf8)!)')";
+            let jsonData = try JSONSerialization.data(withJSONObject: response)
+            let fillCreditCardInfoCallback = "window.__firefox__.CreditCardHelper.fillCreditCardInfo('\(String(data: jsonData, encoding: .utf8)!)')"
             guard let webView = tab?.webView else {return}
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback)
         } catch let error as NSError {
           print(error)
         }
-
     }
-
 }
