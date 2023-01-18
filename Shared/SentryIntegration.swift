@@ -84,6 +84,7 @@ public class SentryIntegration: SentryProtocol {
             options.dsn = dsn
             options.environment = environment.rawValue
             options.releaseName = self.releaseName
+            options.enableFileIOTracing = false
             options.beforeSend = { event in
                 let attributes = event.extra ?? [:]
                 self.attributes = attributes.merge(with: self.attributes)
@@ -184,7 +185,7 @@ public class SentryIntegration: SentryProtocol {
     public func addBreadcrumb(category: String, message: String) {
         let breadcrumb = Breadcrumb(level: .info, category: category)
         breadcrumb.message = message
-        SentrySDK.addBreadcrumb(crumb: breadcrumb)
+        SentrySDK.addBreadcrumb(breadcrumb)
     }
 
     // MARK: - Private
