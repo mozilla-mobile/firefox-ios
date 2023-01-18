@@ -84,6 +84,7 @@ public class SentryIntegration: SentryProtocol {
             options.dsn = dsn
             options.environment = environment.rawValue
             options.releaseName = self.releaseName
+            options.enableFileIOTracing = false
             options.beforeSend = { event in
                 let attributes = event.extra ?? [:]
                 self.attributes = attributes.merge(with: self.attributes)
