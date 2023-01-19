@@ -7,7 +7,7 @@ import Shared
 
 class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
     struct UX {
-        static let verticalPadding: CGFloat = 60
+        static let verticalPadding: CGFloat = 40
         static let horizontalPadding: CGFloat = 24
         static let paddingInBetweenItems: CGFloat = 15
         static let buttonCornerRadius: CGFloat = 13
