@@ -73,8 +73,8 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go back to regular mode and check the total number of tabs
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
-        waitForExistence(app.otherElements["Tabs Tray"].cells.staticTexts[url2Label])
-        waitForNoExistence(app.otherElements["Tabs Tray"].cells.staticTexts[url1And3Label])
+        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url2Label])
+        waitForNoExistence(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url1And3Label])
         let numRegularTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }
