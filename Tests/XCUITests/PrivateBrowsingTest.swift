@@ -67,14 +67,14 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts[url1And3Label])
+        waitForExistence(app.otherElements["Tabs Tray"].cells.staticTexts[url1And3Label])
         let numPrivTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numPrivTabs, 1, "The number of private tabs is not correct")
         // Go back to regular mode and check the total number of tabs
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
 
-        waitForExistence(app.cells.staticTexts[url2Label])
-        waitForNoExistence(app.cells.staticTexts[url1And3Label])
+        waitForExistence(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url2Label])
+        waitForNoExistence(app.otherElements["Tabs Tray"].collectionViews.cells.staticTexts[url1And3Label])
         let numRegularTabs = app.otherElements["Tabs Tray"].cells.count
         XCTAssertEqual(numRegularTabs, 2, "The number of regular tabs is not correct")
     }
@@ -273,7 +273,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         // History without counting Clear Recent History, Recently Closed
-        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 2
+        let history = app.tables[HistoryPanelA11y.tableView].cells.count - 1
         XCTAssertEqual(history, 1, "There should be one entry in History")
         let savedToHistory = app.tables[HistoryPanelA11y.tableView].cells.staticTexts[url2Label]
         waitForExistence(savedToHistory)
