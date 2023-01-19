@@ -57,5 +57,5 @@ jobs:
           # Label to apply on staled PRs
           stale-pr-label: "stale"
 
-          # Label to apply on staled PRs  
+          # Labels on PRs exempted from stale
           exempt-pr-labels: "do not stale"
