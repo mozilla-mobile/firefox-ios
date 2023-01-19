@@ -3290,11 +3290,6 @@
 		8A05813728B56D9B00FD8D46 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A05813928B56DB900FD8D46 /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A05813B28B56DD700FD8D46 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
-		8A05814B28B56DD700FD8D46 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
-		8A05815B28B56DD700FD8D46 /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
-		8A05816B28B56DD700FD8D46 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/WidgetIntents.strings"; sourceTree = "<group>"; };
-		8A05817B28B56DD700FD8D46 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
-		8A05818B28B56DD700FD8D46 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = te; path = te.lproj/WidgetIntents.strings; sourceTree = "<group>"; };
 		8A0621B729428FBD005D1EFD /* OpenTabNotificationObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTabNotificationObject.swift; sourceTree = "<group>"; };
 		8A07910E278F62F2005529CB /* AdjustHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustHelper.swift; sourceTree = "<group>"; };
 		8A08EC6327EBDCAC00E119C7 /* AdServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdServices.framework; path = System/Library/Frameworks/AdServices.framework; sourceTree = SDKROOT; };
@@ -13589,11 +13584,6 @@
 				8A05813728B56D9B00FD8D46 /* ta */,
 				8A05813928B56DB900FD8D46 /* bo */,
 				8A05813B28B56DD700FD8D46 /* uz */,
-				8A05814B28B56DD700FD8D46 /* fi */,
-				8A05815B28B56DD700FD8D46 /* si */,
-				8A05816B28B56DD700FD8D46 /* hi-IN */,
-				8A05817B28B56DD700FD8D46 /* ast */,
-				8A05818B28B56DD700FD8D46 /* te */,
 			);
 			name = WidgetIntents.intentdefinition;
 			sourceTree = "<group>";
