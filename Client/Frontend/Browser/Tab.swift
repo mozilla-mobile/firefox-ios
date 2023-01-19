@@ -566,11 +566,9 @@ class Tab: NSObject {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
 
+            // Ecosia: inject analytics id
             var request = request
-            if !isPrivate {
-                // Ecosia: add analytics to url
-                request.url = request.url?.ecosified
-            }
+            request.url = request.url?.ecosified
             return webView.load(request)
         }
         return nil
