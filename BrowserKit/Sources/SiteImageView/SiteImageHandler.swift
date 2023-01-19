@@ -112,7 +112,7 @@ public class DefaultSiteImageHandler: SiteImageHandler {
             var faviconURLImageModel = imageModel
             if faviconURLImageModel.faviconURL == nil {
                 // Try to fetch the favicon URL
-                let faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
+                faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
             }
             return await imageHandler.fetchFavicon(site: faviconURLImageModel)
         } catch {
