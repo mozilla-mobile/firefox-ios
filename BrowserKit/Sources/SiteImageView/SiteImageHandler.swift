@@ -52,6 +52,8 @@ public class DefaultSiteImageHandler: SiteImageHandler {
                                                    usesIndirectDomain: usesIndirectDomain)
         }
 
+        // For favicons with the usesIndirectDomain flag set we want to use the provided
+        // url directly to retrieve the image
         if usesIndirectDomain, type == .favicon {
             imageModel.faviconURL = URL(string: urlStringRequest)
         }
