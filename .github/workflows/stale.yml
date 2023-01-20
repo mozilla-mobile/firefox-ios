@@ -24,9 +24,6 @@ jobs:
           # Max number of operations per run
           operations-per-run: 1000
 
-          # Turn on to debug running the github action
-          debug-only: true
-
           # Change the order used to fetch the issues and pull requests from GitHub. Going with older ones.
           ascending: true
 
