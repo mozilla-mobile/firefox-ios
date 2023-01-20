@@ -1030,6 +1030,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func enterOverlayMode() {
+        // Delay enterOverlay mode after dismissableView is dismiss
         if let viewcontroller = presentedViewController as? OnViewDismissable {
             viewcontroller.onViewDismissed = { [weak self] in
                 let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
@@ -1039,7 +1040,7 @@ class BrowserViewController: UIViewController {
             }
         } else if presentedViewController is OnboardingViewControllerProtocol {
             // leave from overlay mode while in onboarding is displayed on iPad
-            self.urlBar.leaveOverlayMode()
+            leaveOverlayMode(didCancel: false)
         } else {
             self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
         }
@@ -1139,7 +1140,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        urlBar.leaveOverlayMode()
+        leaveOverlayMode(didCancel: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -1212,7 +1213,7 @@ class BrowserViewController: UIViewController {
 
     override func accessibilityPerformEscape() -> Bool {
         if urlBar.inOverlayMode {
-            urlBar.didClickCancel()
+            leaveOverlayMode(didCancel: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -1433,6 +1434,7 @@ class BrowserViewController: UIViewController {
             // Check that the newly created tab is still selected.
             // This let's the user spam the Cmd+T button without lots of responder changes.
             guard tab == self.tabManager.selectedTab else { return }
+
             self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
             if let text = searchText {
                 self.urlBar.setLocation(text, search: true)
@@ -1484,7 +1486,7 @@ class BrowserViewController: UIViewController {
         if currentViewController != self {
             _ = self.navigationController?.popViewController(animated: true)
         } else if let urlBar = urlBar, urlBar.inOverlayMode {
-            urlBar.didClickCancel()
+            leaveOverlayMode(didCancel: true)
         }
     }
 
@@ -1965,7 +1967,7 @@ extension BrowserViewController: HomePanelDelegate {
         case .jumpBackIn,
                 .jumpBackInSyncedTab,
                 .toolbarLocation:
-            self.urlBar.leaveOverlayMode()
+            leaveOverlayMode(didCancel: false)
         default: break
         }
     }
@@ -1988,8 +1990,9 @@ extension BrowserViewController: SearchViewControllerDelegate {
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
 
+    // In searchViewController when user selects an open tabs and switch to it
     func searchViewController(_ searchViewController: SearchViewController, uuid: String) {
-        urlBar.leaveOverlayMode(didCancel: true)
+        leaveOverlayMode(didCancel: true)
         if let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
         }
@@ -2108,13 +2111,13 @@ extension BrowserViewController: TabManagerDelegate {
             if tab.url == nil, !tab.isRestoring {
                 if tabManager.didChangedPanelSelection && !tabManager.didAddNewTab {
                     tabManager.didChangedPanelSelection = false
-                    urlBar.leaveOverlayMode()
+                    leaveOverlayMode(didCancel: false)
                 } else {
                     tabManager.didAddNewTab = false
                     urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
                 }
             } else {
-                urlBar.leaveOverlayMode()
+                leaveOverlayMode(didCancel: false)
             }
         }
     }
@@ -2631,7 +2634,7 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
-        urlBar.leaveOverlayMode(didCancel: true)
+        leaveOverlayMode(didCancel: true)
         self.urlBarDidPressTabs(urlBar)
     }
 
@@ -2645,7 +2648,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidChangeTab() {
-        urlBar.leaveOverlayMode(didCancel: true)
+        leaveOverlayMode(didCancel: true)
     }
 }
 
