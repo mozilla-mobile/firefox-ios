@@ -130,7 +130,9 @@ class DevicePickerViewController: UITableViewController {
                 return
             }
 
-            self.devices = state.remoteDevices.map { device in
+            self.devices = state.remoteDevices.compactMap { device in
+                guard device.capabilities.contains(.sendTab) else { return nil }
+
                 let typeString = "\(device.deviceType)"
                 let lastAccessTime = device.lastAccessTime == nil ? nil : UInt64(clamping: device.lastAccessTime!)
                 return RemoteDevice(id: device.id,
