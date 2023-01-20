@@ -5,7 +5,7 @@
 name: Close Stale Issues
 on:
   schedule:
-    - cron: "0 8 * * 1" # Once per week, on mondays at 8 o'clock
+    - cron: "0 0 * * *" # Once per day at midnight
   workflow_dispatch: {}
 
 jobs:
@@ -20,6 +20,12 @@ jobs:
           ### GENERAL ###
           # Idle number of days before closing stale issues/PRs
           days-before-close: 30
+
+          # Max number of operations per run
+          operations-per-run: 60
+
+          # Change the order used to fetch the issues and pull requests from GitHub. Going with older ones.
+          ascending: true
 
           ### ISSUES ###
           # Idle number of days before marking issues stale, set `-1` to disable
@@ -51,5 +57,5 @@ jobs:
           # Label to apply on staled PRs
           stale-pr-label: "stale"
 
-          # Label to apply on staled PRs  
-          exempt-pr-label: "do not stale"
+          # Labels on PRs exempted from stale
+          exempt-pr-labels: "do not stale"
