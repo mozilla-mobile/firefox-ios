@@ -1003,13 +1003,24 @@ open class BrowserProfile: Profile {
             log.debug("Syncing clients to storage.")
 
             if constellationStateUpdate == nil {
-                constellationStateUpdate = NotificationCenter.default.addObserver(forName: .constellationStateUpdate, object: nil, queue: .main) { [weak self] notification in
-                    guard let accountManager = self?.profile.rustFxA.accountManager.peek(), let state = accountManager.deviceConstellation()?.state() else { return }
-                    guard let self = self else { return }
-                    let devices = state.remoteDevices.map { d -> RemoteDevice in
-                        let t = "\(d.deviceType)"
-                        let lastAccessTime = d.lastAccessTime == nil ? nil : UInt64(clamping: d.lastAccessTime!)
-                        return RemoteDevice(id: d.id, name: d.displayName, type: t, isCurrentDevice: d.isCurrentDevice, lastAccessTime: lastAccessTime, availableCommands: nil)
+                constellationStateUpdate = NotificationCenter.default.addObserver(forName: .constellationStateUpdate,
+                                                                                  object: nil,
+                                                                                  queue: .main) { [weak self] notification in
+                    guard let accountManager = self?.profile.rustFxA.accountManager.peek(),
+                          let state = accountManager.deviceConstellation()?.state(),
+                          let self = self else { return }
+
+                    let devices = state.remoteDevices.compactMap { device -> RemoteDevice? in
+                        guard device.capabilities.contains(.sendTab) else { return nil }
+
+                        let type = "\(device.deviceType)"
+                        let lastAccessTime = device.lastAccessTime == nil ? nil : UInt64(clamping: device.lastAccessTime!)
+                        return RemoteDevice(id: device.id,
+                                            name: device.displayName,
+                                            type: type,
+                                            isCurrentDevice: device.isCurrentDevice,
+                                            lastAccessTime: lastAccessTime,
+                                            availableCommands: nil)
                     }
                     _ = self.profile.remoteClientsAndTabs.replaceRemoteDevices(devices)
                 }
