@@ -81,12 +81,9 @@ final class SiteImageFetcherTests: XCTestCase {
 
     func testFaviconIndirectDomain_faviconURLFound_generateFavicon() async {
         let siteURL = "https://www.mozilla.com"
-<<<<<<< HEAD:BrowserKit/Tests/SiteImageViewTests/SiteImageFetcherTests.swift
+        let faviconURL = URL(string: "www.mozilla.com/resource")!
         urlHandler.faviconURL = faviconURL
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
-=======
-        let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
->>>>>>> 796f57efd (Bugfix FXIOS-5615 [v110] Fix sponsored tile favicons (#12976)):BrowserKit/Tests/SiteImageViewTests/SiteImageHandlerTests.swift
                                               imageHandler: imageHandler)
         let result = await subject.getImage(urlStringRequest: siteURL,
                                             type: .favicon,
