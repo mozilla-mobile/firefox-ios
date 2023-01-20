@@ -67,7 +67,7 @@ extension BrowserViewController {
     }
 
     func showReaderModeBar(animated: Bool) {
-        if self.readerModeBar == nil {
+        if readerModeBar == nil {
             let readerModeBar = ReaderModeBarView(frame: CGRect.zero)
             readerModeBar.delegate = self
             if isBottomSearchBar {
@@ -76,7 +76,7 @@ extension BrowserViewController {
                 header.addArrangedViewToBottom(readerModeBar)
             }
 
-            self.readerModeBar = readerModeBar
+            readerModeBar = readerModeBar
         }
 
         updateReaderModeBar()
@@ -85,6 +85,7 @@ extension BrowserViewController {
 
     func hideReaderModeBar(animated: Bool) {
         guard let readerModeBar = readerModeBar else { return }
+        
         if isBottomSearchBar {
             overKeyboardContainer.removeArrangedView(readerModeBar)
         } else {

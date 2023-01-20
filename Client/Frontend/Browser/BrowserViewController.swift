@@ -2029,12 +2029,12 @@ extension BrowserViewController: TabManagerDelegate {
 
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
-        if let wv = previous?.webView {
-            wv.endEditing(true)
-            wv.accessibilityLabel = nil
-            wv.accessibilityElementsHidden = true
-            wv.accessibilityIdentifier = nil
-            wv.removeFromSuperview()
+        if let webView = previous?.webView {
+            webView.endEditing(true)
+            webView.accessibilityLabel = nil
+            webView.accessibilityElementsHidden = true
+            webView.accessibilityIdentifier = nil
+            webView.removeFromSuperview()
         }
 
         if let tab = selected, let webView = tab.webView {
