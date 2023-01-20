@@ -51,6 +51,12 @@ public class DefaultSiteImageFetcher: SiteImageFetcher {
                                                    usesIndirectDomain: usesIndirectDomain)
         }
 
+        // For favicons with the usesIndirectDomain flag set we want to use the provided
+        // url directly to retrieve the image
+        if usesIndirectDomain, type == .favicon {
+            imageModel.faviconURL = URL(string: urlStringRequest)
+        }
+
         do {
             switch type {
             case .heroImage:
@@ -99,8 +105,11 @@ public class DefaultSiteImageFetcher: SiteImageFetcher {
 
     private func getFaviconImage(imageModel: SiteImageModel) async -> UIImage {
         do {
-            // Try to fetch the favicon URL
-            let faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
+            var faviconURLImageModel = imageModel
+            if faviconURLImageModel.faviconURL == nil {
+                // Try to fetch the favicon URL
+                faviconURLImageModel = try await urlHandler.getFaviconURL(site: imageModel)
+            }
             return await imageHandler.fetchFavicon(site: faviconURLImageModel)
         } catch {
             // If no favicon URL, generate favicon without it

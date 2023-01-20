@@ -80,8 +80,8 @@ final class SiteImageFetcherTests: XCTestCase {
     }
 
     func testFaviconIndirectDomain_faviconURLFound_generateFavicon() async {
-        let faviconURL = URL(string: "www.mozilla.com/resource")!
         let siteURL = "https://www.mozilla.com"
+        let faviconURL = URL(string: "www.mozilla.com/resource")!
         urlHandler.faviconURL = faviconURL
         let subject = DefaultSiteImageFetcher(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
@@ -92,12 +92,12 @@ final class SiteImageFetcherTests: XCTestCase {
 
         XCTAssertEqual(result.cacheKey, "https://www.mozilla.com")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
-        XCTAssertEqual(result.faviconURL, nil)
+        XCTAssertEqual(result.faviconURL?.absoluteString, "https://www.mozilla.com")
         XCTAssertEqual(result.expectedImageType, .favicon)
         XCTAssertNil(result.heroImage)
         XCTAssertNotNil(result.faviconImage)
 
-        XCTAssertEqual(imageHandler.capturedSite?.faviconURL, faviconURL)
+        XCTAssertEqual(imageHandler.capturedSite?.faviconURL?.absoluteString, "https://www.mozilla.com")
         XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "https://www.mozilla.com")
     }
 
