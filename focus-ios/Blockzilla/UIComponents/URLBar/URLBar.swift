@@ -902,7 +902,50 @@ class URLBar: UIView {
     }
 
     @objc private func didSingleTap(sender: UITapGestureRecognizer) {
+        setTextForURL()
         delegate?.urlBarDidPressScrollTop(self, tap: sender)
+    }
+
+    func setTextForURL() {
+        guard let (locationText, isSearchQuery) = delegate?.urlBarDisplayTextForURL(url) else { return }
+
+        var overlayText = locationText
+        // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
+        if let text = locationText, let url = URL(string: text), let host = url.host {
+            overlayText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
+        }
+        enterOverlayMode(overlayText, pasted: false, search: isSearchQuery)
+    }
+
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        if pasted {
+            // Clear any existing text, focus the field, then set the actual pasted text.
+            // This avoids highlighting all of the text.
+            self.urlTextField.text = ""
+            DispatchQueue.main.async {
+                self.urlTextField.becomeFirstResponder()
+                self.setLocation(locationText, search: search)
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.urlTextField.becomeFirstResponder()
+                // Need to set location again so text could be immediately selected.
+                self.setLocation(locationText, search: search)
+                self.highlightText(self.urlTextField)
+            }
+        }
+    }
+
+    func setLocation(_ location: String?, search: Bool) {
+        guard let text = location, !text.isEmpty else {
+            urlTextField.text = location
+            return
+        }
+        if search {
+            urlTextField.text = text
+        } else {
+            urlTextField.setTextWithoutSearching(text)
+        }
     }
 
     /// Show the URL toolset buttons if we're on iPad/landscape; hide them otherwise.
@@ -1036,7 +1079,7 @@ extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldBeginEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool {
 
         DispatchQueue.main.async {
-            self.setTextToURL(displayFullUrl: true)
+            self.setTextForURL()
         }
 
         if !isEditing {

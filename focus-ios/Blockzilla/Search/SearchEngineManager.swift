@@ -193,4 +193,12 @@ class SearchEngineManager {
     private func saveDisabledDefaultEngineNames(engines: [String]) {
         prefs.set(engines, forKey: SearchEngineManager.prefKeyDisabledEngines)
     }
+
+    func queryForSearchURL(_ url: URL) -> String? {
+        for engine in engines {
+            guard let searchTerm = engine.queryForSearchURL(url) else { continue }
+            return searchTerm
+        }
+        return nil
+    }
 }

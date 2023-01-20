@@ -108,6 +108,37 @@ class SearchEngineManagerTests: XCTestCase {
         manager.removeEngine(engine: engineToRemove)
         XCTAssertFalse(manager.isValidSearchEngineName(engineToRemove.name))
     }
+    
+    func testQueryFromSearchURLGoogle() {
+        let manager = SearchEngineManager(prefs: mockUserDefaults)
+        let url = URL(string: "https://www.google.com/search?q=ps5&source=hp&ei=yDybY7_iBMSH9u8P-fWwkAs&iflsig=AJiK0e8AAAAAY5tK2K2eVYMzMJI3G8qcqgmnGdrC6UVp&ved=0ahUKEwi_5s_h9_v7AhXEg_0HHfk6DLIQ4dUDCAg&uact=5&oq=ps5&gs_lcp=Cgdnd3Mtd2l6EAMyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIICAAQgAQQyQMyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEOgsILhCABBDHARDRAzoFCC4QgAQ6CAguEIAEENQCUIoEWOwGYKIJaAFwAHgAgAFLiAHcAZIBATOYAQCgAQGwAQA&sclient=gws-wiz")
+        guard let url = url else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(manager.queryForSearchURL(url), "ps5")
+    }
+
+    func testQueryFromSearchURLAmazon() {
+        let manager = SearchEngineManager(prefs: mockUserDefaults)
+        let url = URL(string: "https://www.amazon.com/s?k=ps5&crid=PHPNYHV6UT42&sprefix=ps%2Caps%2C192&ref=nb_sb_noss_2")
+        guard let url = url else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(manager.queryForSearchURL(url), "ps5")
+    }
+
+    func testQueryFromSearchURLDuckDuckGo() {
+        let manager = SearchEngineManager(prefs: mockUserDefaults)
+        let url = URL(string: "https://duckduckgo.com/?q=ps5&t=h_&ia=web")
+        guard let url = url else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(manager.queryForSearchURL(url), "ps5")
+    }
+    
 }
 
 private class MockUserDefaults: UserDefaults {

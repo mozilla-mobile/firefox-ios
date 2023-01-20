@@ -332,6 +332,19 @@ extension URL {
         }
         return self
     }
+
+    /**
+     * Returns a shorter displayable string for a domain
+     *
+     * E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
+     *       https://accounts.foo.com/bar/baz?noo=abc#123  => accounts.foo
+     **/
+    public var shortDisplayString: String {
+        guard let publicSuffix = self.publicSuffix, let baseDomain = self.normalizedHost else {
+            return self.normalizedHost ?? self.absoluteString
+        }
+        return baseDomain.replacingOccurrences(of: ".\(publicSuffix)", with: "")
+    }
 }
 
 // MARK: Private Helpers

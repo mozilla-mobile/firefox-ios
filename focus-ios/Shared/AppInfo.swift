@@ -89,4 +89,7 @@ class AppInfo {
     open class func isFirstRunUIEnabled() -> Bool {
         return !ProcessInfo.processInfo.arguments.contains("disableFirstRunUI")
     }
+
+    // The port for the internal webserver, tests can change this
+    public static var webserverPort = 6571
 }

@@ -15,4 +15,5 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidDismiss(_ urlBar: URLBar)
     func urlBarDidTapShield(_ urlBar: URLBar)
     func urlBarDidLongPress(_ urlBar: URLBar)
+    func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool)
 }
