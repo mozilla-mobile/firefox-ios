@@ -52,7 +52,8 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
                                                           .TabsTrayDidSelectHomeTab,
                                                           .TopTabsTabClosed,
                                                           .ProfileDidFinishSyncing,
-                                                          .FirefoxAccountChanged])
+                                                          .FirefoxAccountChanged,
+                                                          .TabDataUpdated])
 
         userInitiatedQueue.async { [weak self] in
             self?.updateTabsAndAccountData()
@@ -196,6 +197,7 @@ extension JumpBackInDataAdaptorImplementation: Notifiable {
         userInitiatedQueue.async { [weak self] in
             switch notification.name {
             case .ShowHomepage,
+                    .TabDataUpdated,
                     .TabsTrayDidClose,
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
