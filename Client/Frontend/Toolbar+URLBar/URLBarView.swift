@@ -56,7 +56,7 @@ protocol URLBarViewProtocol {
 
 extension URLBarViewProtocol {
     func leaveOverlayMode(didCancel cancel: Bool = false) {
-        self.leaveOverlayMode(didCancel: cancel)
+        leaveOverlayMode(didCancel: cancel)
     }
 }
 

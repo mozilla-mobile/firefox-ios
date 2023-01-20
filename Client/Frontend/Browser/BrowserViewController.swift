@@ -29,12 +29,6 @@ enum ReferringPage {
     case tabTray
 }
 
-protocol BrowserBarViewDelegate: AnyObject {
-    var inOverlayMode: Bool { get }
-
-    func leaveOverlayMode(didCancel cancel: Bool)
-}
-
 class BrowserViewController: UIViewController {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -962,7 +956,6 @@ class BrowserViewController: UIViewController {
             urlBar: urlBar)
         homepageViewController.homePanelDelegate = self
         homepageViewController.libraryPanelDelegate = self
-        homepageViewController.browserBarViewDelegate = self
         homepageViewController.sendToDeviceDelegate = self
         self.homepageViewController = homepageViewController
         addChild(homepageViewController)
@@ -1044,6 +1037,10 @@ class BrowserViewController: UIViewController {
         } else {
             self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
         }
+    }
+
+    private func leaveOverlayMode(didCancel cancel: Bool) {
+        urlBar.leaveOverlayMode(didCancel: cancel)
     }
 
     func showLibrary(panel: LibraryPanelType? = nil) {
@@ -2737,16 +2734,6 @@ extension BrowserViewController {
         }
 
         return sceneDelegate.browserViewController
-    }
-}
-
-extension BrowserViewController: BrowserBarViewDelegate {
-    var inOverlayMode: Bool {
-        return urlBar.inOverlayMode
-    }
-
-    func leaveOverlayMode(didCancel cancel: Bool) {
-        urlBar.leaveOverlayMode(didCancel: cancel)
     }
 }
 

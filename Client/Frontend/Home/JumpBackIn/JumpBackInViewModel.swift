@@ -22,8 +22,8 @@ class JumpBackInViewModel: FeatureFlaggable {
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
     var prepareContextualHint: ((SyncedTabCell) -> Void)?
+    private var urlBar: URLBarViewProtocol
 
-    weak var browserBarViewDelegate: BrowserBarViewDelegate?
     weak var delegate: HomepageDataModelDelegate?
 
     // The data that is showed to the user after layout calculation
@@ -51,6 +51,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
+        urlBar: URLBarViewProtocol,
         theme: Theme,
         tabManager: TabManagerProtocol,
         adaptor: JumpBackInDataAdaptor,
@@ -59,6 +60,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
+        self.urlBar = urlBar
         self.theme = theme
         self.tabManager = tabManager
         self.jumpBackInDataAdaptor = adaptor
@@ -66,11 +68,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(group: ASGroup<Tab>) {
-        guard let delegate = browserBarViewDelegate else { return }
-
-        if delegate.inOverlayMode {
-            delegate.leaveOverlayMode(didCancel: false)
-        }
+        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
 
         guard let firstTab = group.groupedItems.first else { return }
 
@@ -86,11 +84,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(tab: Tab) {
-        guard let delegate = browserBarViewDelegate else { return }
-
-        if delegate.inOverlayMode {
-            delegate.leaveOverlayMode(didCancel: false)
-        }
+        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
 
         tabManager.selectTab(tab, previous: nil)
         TelemetryWrapper.recordEvent(
