@@ -572,6 +572,7 @@ extension GridTabViewController {
         case .deleteTab:
             didTapToolbarDelete(sender)
         }
+        notificationCenter.post(name: .TabDataUpdated)
     }
 
     func didTapToolbarAddTab() {
