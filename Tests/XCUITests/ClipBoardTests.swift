@@ -84,7 +84,12 @@ class ClipBoardTests: BaseTestCase {
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         app.textFields["url"].press(forDuration: 3)
         waitForExistence(app.tables["Context Menu"])
-        app.otherElements[ImageIdentifiers.pasteAndGo].tap()
+        /*
+        waitForExistence(app.tables["Context Menu"].otherElements["menu-PasteAndGo"])
+        waitForExistence(app.tables["Context Menu"].otherElements["menu-Paste"])
+        waitForExistence(app.tables["Context Menu"].otherElements["menu-Copy-Link"])
+         */
+        app.tables["Context Menu"].otherElements[ImageIdentifiers.pasteAndGo].tap()
         waitForExistence(app.textFields["url"])
         waitForValueContains(app.textFields["url"], value: "www.example.com")
     }
