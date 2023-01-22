@@ -36,14 +36,16 @@ class CreditCardHelper {
   }
 
   onFocus(ev) {
-    window.webkit.messageHandlers.creditCardMessageHandler.postMessage({
+    this.sendMessage({
       msg: "cc-form",
       id: this.creditCardAutofill.getSectionId(ev.target),
     });
   }
 
   sendMessage(payload) {
-    window.webkit.messageHandlers.creditCardMessageHandler.postMessage(payload);
+    window.webkit.messageHandlers.creditCardMessageHandler?.postMessage(
+      payload
+    );
   }
 
   fillCreditCardInfo(payload) {

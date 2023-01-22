@@ -25,15 +25,17 @@ class CreditCardHelper: TabContentScript {
         guard let request = message.body as? [String: Any] else {return}
         print("Received from content script: ", request)
 
-        let response: [String: Any] = [
-            "data": [
-                "cc-name": "Jane Doe",
-                "cc-number": "5555555555554444",
-                "cc-exp-month": "05",
-                "cc-exp-year": "2028",
-              ],
-            "id": request["id"]!,
-        ]
+        // TODO: Retrieve response value from user selected credit card
+        // Example value: [
+        //     "data": [
+        //         "cc-name": "Jane Doe",
+        //         "cc-number": "5555555555554444",
+        //         "cc-exp-month": "05",
+        //         "cc-exp-year": "2028",
+        //       ],
+        //     "id": request["id"]!,
+        // ]
+        let response: [String: Any] = [:]
 
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: response)

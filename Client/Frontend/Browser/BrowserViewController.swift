@@ -1768,8 +1768,9 @@ extension BrowserViewController: TabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
-        let creditCardHelper = CreditCardHelper(tab: tab)
-        tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+        // TODO(Nish): Wrap this in a feature flag
+        // let creditCardHelper = CreditCardHelper(tab: tab)
+        // tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self

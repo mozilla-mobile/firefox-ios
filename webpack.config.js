@@ -26,7 +26,8 @@ for (let [name, files] of Object.entries(needsFirefoxFile)) {
   }
 }
 
-// Custom plugin used to replace resource://gre/modules/... with Assets/...
+// Custom plugin used to replace imports used in Desktop code that use uris:
+// resource://gre/modules/... with Assets/...
 // This is needed because aliases are not supported for URI imports.
 // See: https://github.com/webpack/webpack/issues/12792
 const CustomResourceURIWebpackPlugin = new webpack.NormalModuleReplacementPlugin(
