@@ -22,7 +22,7 @@ jobs:
           days-before-close: 30
 
           # Max number of operations per run
-          operations-per-run: 60
+          operations-per-run: 1000
 
           # Change the order used to fetch the issues and pull requests from GitHub. Going with older ones.
           ascending: true
