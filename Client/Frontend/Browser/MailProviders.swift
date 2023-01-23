@@ -9,7 +9,7 @@ import Shared
 
 enum MailProviderEmailFormat {
     case standard
-    case userAndPassword
+    case userAndPassword // used for Protonmail
 }
 
 protocol MailProvider {
@@ -55,7 +55,10 @@ extension MailProvider {
         return urlComponents
     }
 
-    private func addUserAndPasswordComponents(_ components: URLComponents, toQueryItem: URLQueryItem) -> URLComponents {
+    // Used to build Protonmail URL correctly (format: "protonmail://mailto:email@test.com")
+    // We use the user, password and host component parts for this URL format.
+    private func addUserAndPasswordComponents(_ components: URLComponents,
+                                              toQueryItem: URLQueryItem) -> URLComponents {
         var urlComponents = components
         let queryItems: [URLQueryItem]? = components.queryItems
 
@@ -64,9 +67,14 @@ extension MailProvider {
               emailComponents.count >= 2
         else { return urlComponents }
 
+        // Password receives the part before the last @ (e.g. "email" if there is only one email address or
+        // "email@test.com,email2" in case there is two email addresses
+        // Host will be assigned the domain of the last email address (e.g. "test.com")
         urlComponents.password = emailComponents[0...emailComponents.count - 2].joined(separator: "@")
         urlComponents.host = emailComponents.last
 
+        // Remove the "to" data from query items
+        // Set query items to nil if there is no data left in it to avoid having a URL with a question mark at the end
         if var items = queryItems, let index = items.firstIndex(of: toQueryItem) {
             items.remove(at: index)
             urlComponents.queryItems = items.isEmpty ? nil : items
