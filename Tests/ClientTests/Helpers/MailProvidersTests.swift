@@ -10,8 +10,8 @@ class MailProvidersTests: XCTestCase {
     let toEmail = "name1@test.com"
     let ccEmail = "name2@test.com"
     let bccEmail = "name3@test.com"
-    let subject = "The%20subject%20of%20the%20email"
-    let body = "The%20body%20of%20the%20email"
+    let subject = "The subject of the email"
+    let body = "The body of the email"
 
     // MARK: - Readdle Spark
     func testReaddleSparkIntegration_basicMetadata() {
@@ -27,9 +27,21 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
+        let expectedResult = ["recipient": toEmail,
+                              "subject": subject,
+                              "textbody": body,
+                              "cc": ccEmail,
+                              "bcc": bccEmail]
+
         XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "readdle-spark://compose")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["recipient": toEmail, "subject": subject, "textbody": body, "cc": ccEmail, "bcc": bccEmail])
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
+    }
+
+    func testReaddleSparkIntegration_multipleEmails() {
+        let provider = ReaddleSparkIntegration()
+        let metadata = MailToMetadata(to: "\(toEmail),\(ccEmail)", headers: [:])
+        let mailURL = provider.newEmailURLFromMetadata(metadata)
+        XCTAssertEqual(mailURL?.absoluteString, "readdle-spark://compose?recipient=\(metadata.to)")
     }
 
     // MARK: - Airmail
@@ -46,9 +58,14 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
+        let expectedResult = ["to": toEmail,
+                              "subject": subject,
+                              "htmlBody": body,
+                              "cc": ccEmail,
+                              "bcc": bccEmail]
+
         XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "airmail://compose")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["to": toEmail, "subject": subject, "htmlBody": body, "cc": ccEmail, "bcc": bccEmail])
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
     }
 
     // MARK: - MyMail
@@ -65,9 +82,14 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
+        let expectedResult = ["to": toEmail,
+                              "subject": subject,
+                              "body": body,
+                              "cc": ccEmail,
+                              "bcc": bccEmail]
+
         XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "mymail-mailto://")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["to": toEmail, "subject": subject, "body": body, "cc": ccEmail, "bcc": bccEmail])
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
     }
 
     // MARK: - MailRuIntegration
@@ -84,16 +106,21 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
+        let expectedResult = ["to": toEmail,
+                              "subject": subject,
+                              "body": body,
+                              "cc": ccEmail,
+                              "bcc": bccEmail]
+
         XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "mailru-mailto://")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["to": toEmail, "subject": subject, "body": body, "cc": ccEmail, "bcc": bccEmail])
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
     }
 
     // MARK: - MS Outlook
     func testMSOutlookIntegration_basicMetadata() {
         let provider = MSOutlookIntegration()
         let mailURL = provider.newEmailURLFromMetadata(buildBasicMetadata())
-        XCTAssertEqual(mailURL?.absoluteString, "ms-outlook://emails/new?to=\(toEmail)")
+        XCTAssertEqual(mailURL?.absoluteString, "ms-outlook:emails/new?to=\(toEmail)")
     }
 
     func testMSOutlookIntegration_fullMetadata() {
@@ -103,16 +130,21 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "ms-outlook://emails/new")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["to": toEmail, "subject": subject, "body": body, "cc": ccEmail, "bcc": bccEmail])
+        let expectedResult = ["to": toEmail,
+                              "subject": subject,
+                              "body": body,
+                              "cc": ccEmail,
+                              "bcc": bccEmail]
+
+        XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "ms-outlook:emails/new")
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
     }
 
     // MARK: - YMail
     func testYMailIntegration_basicMetadata() {
         let provider = YMailIntegration()
         let mailURL = provider.newEmailURLFromMetadata(buildBasicMetadata())
-        XCTAssertEqual(mailURL?.absoluteString, "ymail://mail/any/compose?to=\(toEmail)")
+        XCTAssertEqual(mailURL?.absoluteString, "ymail:mail/any/compose?to=\(toEmail)")
     }
 
     func testYMailIntegration_fullMetadata() {
@@ -122,16 +154,20 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "ymail://mail/any/compose")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["to": toEmail, "subject": subject, "body": body, "cc": ccEmail])
+        let expectedResult = ["to": toEmail,
+                              "subject": subject,
+                              "body": body,
+                              "cc": ccEmail]
+
+        XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "ymail:mail/any/compose")
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
     }
 
     // MARK: - Google Gmail
     func testGoogleGmailIntegration_basicMetadata() {
         let provider = GoogleGmailIntegration()
         let mailURL = provider.newEmailURLFromMetadata(buildBasicMetadata())
-        XCTAssertEqual(mailURL?.absoluteString, "googlegmail:///co?to=\(toEmail)")
+        XCTAssertEqual(mailURL?.absoluteString, "googlegmail://co?to=\(toEmail)")
     }
 
     func testGoogleGmailIntegration_fullMetadata() {
@@ -141,16 +177,21 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "googlegmail:///co")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["to": toEmail, "subject": subject, "body": body, "cc": ccEmail, "bcc": bccEmail])
+        let expectedResult = ["to": toEmail,
+                              "subject": subject,
+                              "body": body,
+                              "cc": ccEmail,
+                              "bcc": bccEmail]
+
+        XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "googlegmail://co")
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
     }
 
     // MARK: - Fastmail
     func testFastmailIntegration_basicMetadata() {
         let provider = FastmailIntegration()
         let mailURL = provider.newEmailURLFromMetadata(buildBasicMetadata())
-        XCTAssertEqual(mailURL?.absoluteString, "fastmail://mail/compose?to=\(toEmail)")
+        XCTAssertEqual(mailURL?.absoluteString, "fastmail:mail/compose?to=\(toEmail)")
     }
 
     func testFastmailSparkIntegration_fullMetadata() {
@@ -160,9 +201,14 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "fastmail://mail/compose")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["to": toEmail, "subject": subject, "body": body, "cc": ccEmail, "bcc": bccEmail])
+        let expectedResult = ["to": toEmail,
+                              "subject": subject,
+                              "body": body,
+                              "cc": ccEmail,
+                              "bcc": bccEmail]
+
+        XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "fastmail:mail/compose")
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
     }
 
     // MARK: - ProtonMail
@@ -179,9 +225,21 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
+        let expectedResult = ["subject": subject,
+                              "body": body,
+                              "cc": ccEmail,
+                              "bcc": bccEmail]
+
         XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "protonmail://mailto:\(toEmail)")
-        XCTAssertEqual(mailURL.getQuery(),
-                       ["subject": subject, "body": body, "cc": ccEmail, "bcc": bccEmail])
+        XCTAssertTrue(NSDictionary(dictionary: mailURL.getQuery()).isEqual(to: expectedResult))
+    }
+
+    func testProtonMailIntegration_multipleEmails() {
+        let provider = ProtonMailIntegration()
+        let metadata = MailToMetadata(to: "\(toEmail),\(ccEmail)", headers: [:])
+        let mailURL = provider.newEmailURLFromMetadata(metadata)
+        let expectedResult = "\(toEmail.addingPercentEncoding(withAllowedCharacters: .urlPasswordAllowed)!),\(ccEmail)"
+        XCTAssertEqual(mailURL?.absoluteString, "protonmail://mailto:\(expectedResult)")
     }
 
     // MARK: - Private
