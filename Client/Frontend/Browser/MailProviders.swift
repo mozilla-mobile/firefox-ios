@@ -40,7 +40,7 @@ extension MailProvider {
         // Create string of additional parameters
         let additionalQueryItems = prepareParams(headers: lowercasedHeaders,
                                                  supportedHeaders: supportedHeaders,
-                                                 bodyHName: bodyHName)
+                                                 bodyName: bodyHName)
 
         // Create url based on scheme
         var urlComponents = urlComponents
