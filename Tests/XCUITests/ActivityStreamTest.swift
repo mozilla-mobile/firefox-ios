@@ -66,6 +66,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSites2Add() throws {
         throw XCTSkip("MTE-514 Database may not be loaded")
+        /*
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
         navigator.performAction(Action.CloseURLBarOpen)
         if iPad() {
@@ -73,6 +74,7 @@ class ActivityStreamTest: BaseTestCase {
         } else {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 8)
         }
+        */
     }
 
     func testTopSites3RemoveDefaultTopSite() {
@@ -85,6 +87,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() throws {
         throw XCTSkip("MTE-514 Database may not be loaded")
+        /*
         waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: 15)
         XCTAssertTrue(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         // A new site has been added to the top sites
@@ -106,6 +109,7 @@ class ActivityStreamTest: BaseTestCase {
         }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         XCTAssertFalse(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
+        */
     }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {

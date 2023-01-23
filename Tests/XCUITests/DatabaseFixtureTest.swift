@@ -48,6 +48,7 @@ class DatabaseFixtureTest: BaseTestCase {
 
     func testHistoryDatabaseFixture() throws {
         throw XCTSkip("MTE-514 Database may not be loaded")
+        /*
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -58,6 +59,7 @@ class DatabaseFixtureTest: BaseTestCase {
         let loaded = NSPredicate(format: "count == 101")
         expectation(for: loaded, evaluatedWith: app.tables[AccessibilityIdentifiers.LibraryPanels.HistoryPanel.tableView].cells, handler: nil)
         waitForExpectations(timeout: 30, handler: nil)
+        */
     }
 
     func testPerfHistory4000startUp() {
