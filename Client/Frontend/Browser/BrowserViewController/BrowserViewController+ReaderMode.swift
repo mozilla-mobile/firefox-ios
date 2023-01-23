@@ -85,6 +85,7 @@ extension BrowserViewController {
 
     func hideReaderModeBar(animated: Bool) {
         guard let readerModeBar = readerModeBar else { return }
+
         if isBottomSearchBar {
             overKeyboardContainer.removeArrangedView(readerModeBar)
         } else {
