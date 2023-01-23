@@ -46,7 +46,8 @@ class DatabaseFixtureTest: BaseTestCase {
         XCTAssertEqual(bookmarksList, 1013, "There should be an entry in the bookmarks list")
     }*/
 
-    func testHistoryDatabaseFixture() {
+    func testHistoryDatabaseFixture() throws {
+        throw XCTSkip("MTE-514 Database may not be loaded")
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)

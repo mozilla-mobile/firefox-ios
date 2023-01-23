@@ -64,7 +64,8 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(app.collectionViews.cells.staticTexts["Facebook"].exists)
     }
 
-    func testTopSites2Add() {
+    func testTopSites2Add() throws {
+        throw XCTSkip("MTE-514 Database may not be loaded")
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
         navigator.performAction(Action.CloseURLBarOpen)
         if iPad() {
@@ -82,7 +83,8 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
     }
 
-    func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
+    func testTopSitesRemoveAllExceptDefaultClearPrivateData() throws {
+        throw XCTSkip("MTE-514 Database may not be loaded")
         waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: 15)
         XCTAssertTrue(app.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         // A new site has been added to the top sites

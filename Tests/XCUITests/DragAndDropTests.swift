@@ -253,7 +253,9 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssertEqual(app.webViews.searchFields.element(boundBy: 0).value as? String, websiteWithSearchField)
     }*/
 
-    func test3DragAndDropHistoryEntry() {
+    func test3DragAndDropHistoryEntry() throws {
+        throw XCTSkip("MTE-514 Database may not be loaded")
+
         if skipPlatform { return }
 
         typealias historyPanelA11y = AccessibilityIdentifiers.LibraryPanels.HistoryPanel
@@ -280,7 +282,9 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         XCTAssertTrue(secondEntryOnList.exists, "second entry after is not correct")
     }
 
-    func testDragAndDropBookmarkEntry() {
+    func testDragAndDropBookmarkEntry() throws {
+        throw XCTSkip("MTE-514 Database may not be loaded")
+
         if skipPlatform { return }
 
         waitForExistence(app.textFields["url"], timeout: 5)
