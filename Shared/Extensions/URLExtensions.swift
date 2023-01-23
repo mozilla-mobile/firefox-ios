@@ -160,14 +160,13 @@ extension URL {
 
     public func getQuery() -> [String: String] {
         var results = [String: String]()
-        let keyValues = self.query?.components(separatedBy: "&")
+        let components = URLComponents(url: self, resolvingAgainstBaseURL: false)
 
-        if keyValues?.count ?? 0 > 0 {
-            for pair in keyValues! {
-                let kv = pair.components(separatedBy: "=")
-                if kv.count > 1 {
-                    results[kv[0]] = kv[1]
-                }
+        guard let queryItems = components?.queryItems else { return results }
+
+        for item in queryItems {
+            if let value = item.value {
+                results[item.name] = value
             }
         }
 
