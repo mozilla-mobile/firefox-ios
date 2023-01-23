@@ -349,6 +349,9 @@ features:
     defaults:
       - value:
           triggers:
+            NOT_INSTALLED_TODAY:      days_since_install > 0
+            NOT_LAUNCHED_YESTERDAY:   app_cycle.foreground|eventLastSeen('Days', 1) > 1
+            AFTER_THREE_LAUNCHES_THIS_WEEK: app_cycle.foreground|eventSum('Weeks', 1, 0) >= 3
             USER_RECENTLY_INSTALLED:  days_since_install < 7
             USER_RECENTLY_UPDATED:    days_since_update < 7 && days_since_install != days_since_update
             USER_TIER_ONE_COUNTRY:    ('US' in locale || 'GB' in locale || 'CA' in locale || 'DE' in locale || 'FR' in locale)
