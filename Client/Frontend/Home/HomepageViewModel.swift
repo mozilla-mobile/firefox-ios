@@ -125,6 +125,7 @@ class HomepageViewModel: FeatureFlaggable {
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,
+            urlBar: urlBar,
             theme: theme,
             tabManager: tabManager,
             adaptor: adaptor,
