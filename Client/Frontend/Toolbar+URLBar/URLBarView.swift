@@ -515,7 +515,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
 
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
         guard !inOverlayMode else { return }
-        print("YRD enterOverlayMode")
 
         createLocationTextField()
 
@@ -553,7 +552,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     func leaveOverlayMode(didCancel cancel: Bool) {
         guard inOverlayMode else { return }
 
-        print("YRD leaveOverlayMode")
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)

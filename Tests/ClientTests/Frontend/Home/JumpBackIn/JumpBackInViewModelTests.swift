@@ -671,9 +671,6 @@ extension JumpBackInViewModelTests {
             adaptor: adaptor,
             wallpaperManager: WallpaperManager()
         )
-//        if addDelegate {
-//            subject.browserBarViewDelegate = mockBrowserBarViewDelegate
-//        }
 
         trackForMemoryLeaks(subject)
 
