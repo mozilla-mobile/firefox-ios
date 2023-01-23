@@ -18,13 +18,15 @@ class TodayWidgetViewModel {
 
     func updateCopiedLink() {
         if UIPasteboard.general.hasURLs {
-            UIPasteboard.general.asyncURL().uponQueue(.main) { res in
-                guard let url: URL? = res.successValue else {
-                    TodayModel.copiedURL = nil
-                    return
+            UIPasteboard.general.asyncURL { url in
+                DispatchQueue.main.async {
+                    guard let url: URL = url else {
+                        TodayModel.copiedURL = nil
+                        return
+                    }
+                    TodayModel.copiedURL = url
+                    self.AppearanceDelegate?.openContainingApp("?url=\(TodayModel.copiedURL?.absoluteString.escape() ?? "")", query: "open-url")
                 }
-                TodayModel.copiedURL = url
-                self.AppearanceDelegate?.openContainingApp("?url=\(TodayModel.copiedURL?.absoluteString.escape() ?? "")", query: "open-url")
             }
         } else {
             guard let searchText = UIPasteboard.general.string else {

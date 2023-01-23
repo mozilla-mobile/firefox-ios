@@ -32,29 +32,16 @@ extension UIPasteboard {
     /// Preferred method to get strings out of the clipboard.
     /// When iCloud pasteboards are enabled, the usually fast, synchronous calls
     /// become slow and synchronous causing very slow start up times.
-    func asyncString() -> Deferred<Maybe<String?>> {
-        return fetchAsync {
-            return UIPasteboard.general.string
+    func asyncString(completionHandler: @escaping (String?) -> Void) {
+        DispatchQueue.global().async {
+            completionHandler(UIPasteboard.general.string)
         }
     }
 
     /// Preferred method to get URLs out of the clipboard.
-    /// We use Deferred<Maybe<T?>> to fit in to the rest of the Deferred<Maybe> tools
-    /// we already use; but use optionals instead of errorTypes, because not having a URL
-    /// on the clipboard isn't an error.
-    func asyncURL() -> Deferred<Maybe<URL?>> {
-        return fetchAsync {
-            return self.syncURL
-        }
-    }
-
-    // Converts the potentially long running synchronous operation into an asynchronous one.
-    private func fetchAsync<T>(getter: @escaping () -> T) -> Deferred<Maybe<T>> {
-        let deferred = Deferred<Maybe<T>>()
+    func asyncURL(completionHandler: @escaping (URL?) -> Void) {
         DispatchQueue.global().async {
-            let value = getter()
-            deferred.fill(Maybe(success: value))
+            completionHandler(self.syncURL)
         }
-        return deferred
     }
 }
