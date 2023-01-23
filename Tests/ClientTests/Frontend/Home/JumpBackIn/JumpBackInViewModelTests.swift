@@ -12,10 +12,9 @@ import Common
 class JumpBackInViewModelTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockTabManager: MockTabManager!
+    private var urlBar: MockURLBarView!
 
-    var mockBrowserBarViewDelegate: MockBrowserBarViewDelegate!
     var stubBrowserViewController: BrowserViewController!
-
     var adaptor: JumpBackInDataAdaptorMock!
 
     let iPhone14ScreenSize = CGSize(width: 390, height: 844)
@@ -31,7 +30,7 @@ class JumpBackInViewModelTests: XCTestCase {
             profile: mockProfile,
             tabManager: TabManager(profile: mockProfile, imageStore: nil)
         )
-        mockBrowserBarViewDelegate = MockBrowserBarViewDelegate()
+        urlBar = MockURLBarView()
 
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
@@ -41,7 +40,7 @@ class JumpBackInViewModelTests: XCTestCase {
         AppContainer.shared.reset()
         adaptor = nil
         stubBrowserViewController = nil
-        mockBrowserBarViewDelegate = nil
+        urlBar = nil
         mockTabManager = nil
         mockProfile = nil
     }
@@ -49,7 +48,7 @@ class JumpBackInViewModelTests: XCTestCase {
     // MARK: - Switch to group
 
     func test_switchToGroup_noBrowserDelegate_doNothing() {
-        let subject = createSubject(addDelegate: false)
+        let subject = createSubject()
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
         var completionDidRun = false
         subject.onTapGroup = { tab in
@@ -58,15 +57,15 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.switchTo(group: group)
 
-        XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
-        XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 0)
+        XCTAssertFalse(urlBar.inOverlayMode)
+        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 0)
         XCTAssertFalse(completionDidRun)
     }
 
     func test_switchToGroup_noGroupedItems_doNothing() {
         let subject = createSubject()
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
-        mockBrowserBarViewDelegate.inOverlayMode = true
+        urlBar.inOverlayMode = true
         var completionDidRun = false
         subject.onTapGroup = { tab in
             completionDidRun = true
@@ -74,15 +73,15 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.switchTo(group: group)
 
-        XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
-        XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 1)
+        XCTAssertFalse(urlBar.inOverlayMode)
+        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertFalse(completionDidRun)
     }
 
     func test_switchToGroup_inOverlayMode_leavesOverlayMode() {
         let subject = createSubject()
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
-        mockBrowserBarViewDelegate.inOverlayMode = true
+        urlBar.inOverlayMode = true
         var completionDidRun = false
         subject.onTapGroup = { tab in
             completionDidRun = true
@@ -90,8 +89,8 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.switchTo(group: group)
 
-        XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
-        XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 1)
+        XCTAssertFalse(urlBar.inOverlayMode)
+        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertFalse(completionDidRun)
     }
 
@@ -99,7 +98,7 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedTab = createTab(profile: mockProfile)
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [expectedTab], timestamp: 0)
-        mockBrowserBarViewDelegate.inOverlayMode = true
+        urlBar.inOverlayMode = true
         var receivedTab: Tab?
         subject.onTapGroup = { tab in
             receivedTab = tab
@@ -107,56 +106,45 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.switchTo(group: group)
 
-        XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
+        XCTAssertFalse(urlBar.inOverlayMode)
+        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertEqual(expectedTab, receivedTab)
     }
 
     // MARK: - Switch to tab
 
-    func test_switchToTab_noBrowserDelegate_doNothing() {
-        let subject = createSubject()
-        let expectedTab = createTab(profile: mockProfile)
-        subject.browserBarViewDelegate = nil
-
-        subject.switchTo(tab: expectedTab)
-
-        XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
-        XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 0)
-        XCTAssertTrue(mockTabManager.lastSelectedTabs.isEmpty)
-    }
-
     func test_switchToTab_notInOverlayMode_switchTabs() {
         let subject = createSubject()
         let tab = createTab(profile: mockProfile)
-        mockBrowserBarViewDelegate.inOverlayMode = false
+        urlBar.inOverlayMode = false
 
         subject.switchTo(tab: tab)
 
-        XCTAssertFalse(mockBrowserBarViewDelegate.inOverlayMode)
-        XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 0)
+        XCTAssertFalse(urlBar.inOverlayMode)
+        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 0)
         XCTAssertFalse(mockTabManager.lastSelectedTabs.isEmpty)
     }
 
     func test_switchToTab_inOverlayMode_leaveOverlayMode() {
         let subject = createSubject()
         let tab = createTab(profile: mockProfile)
-        mockBrowserBarViewDelegate.inOverlayMode = true
+        urlBar.inOverlayMode = true
 
         subject.switchTo(tab: tab)
 
-        XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
-        XCTAssertEqual(mockBrowserBarViewDelegate.leaveOverlayModeCount, 1)
+        XCTAssertFalse(urlBar.inOverlayMode)
+        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertFalse(mockTabManager.lastSelectedTabs.isEmpty)
     }
 
     func test_switchToTab_tabManagerSelectsTab() {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile)
-        mockBrowserBarViewDelegate.inOverlayMode = true
+        urlBar.inOverlayMode = true
 
         subject.switchTo(tab: tab1)
 
-        XCTAssertTrue(mockBrowserBarViewDelegate.inOverlayMode)
+        XCTAssertFalse(urlBar.inOverlayMode)
         guard !mockTabManager.lastSelectedTabs.isEmpty else {
             XCTFail("No tabs were selected in mock tab manager.")
             return
@@ -672,19 +660,17 @@ class JumpBackInViewModelTests: XCTestCase {
 
 // MARK: - Helpers
 extension JumpBackInViewModelTests {
-    func createSubject(addDelegate: Bool = true) -> JumpBackInViewModel {
+    func createSubject() -> JumpBackInViewModel {
         let subject = JumpBackInViewModel(
             isZeroSearch: false,
             profile: mockProfile,
             isPrivate: false,
+            urlBar: urlBar,
             theme: LightTheme(),
             tabManager: mockTabManager,
             adaptor: adaptor,
             wallpaperManager: WallpaperManager()
         )
-        if addDelegate {
-            subject.browserBarViewDelegate = mockBrowserBarViewDelegate
-        }
 
         trackForMemoryLeaks(subject)
 
@@ -742,16 +728,5 @@ class JumpBackInDataAdaptorMock: JumpBackInDataAdaptor {
     var syncedTab: JumpBackInSyncedTab?
     func getSyncedTabData() -> JumpBackInSyncedTab? {
         return syncedTab
-    }
-}
-
-// MARK: - MockBrowserBarViewDelegate
-class MockBrowserBarViewDelegate: BrowserBarViewDelegate {
-    var inOverlayMode = false
-
-    var leaveOverlayModeCount = 0
-
-    func leaveOverlayMode(didCancel cancel: Bool) {
-        leaveOverlayModeCount += 1
     }
 }

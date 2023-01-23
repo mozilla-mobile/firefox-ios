@@ -21,12 +21,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         }
     }
     weak var libraryPanelDelegate: LibraryPanelDelegate?
-    weak var browserBarViewDelegate: BrowserBarViewDelegate? {
-        didSet {
-            viewModel.jumpBackInViewModel.browserBarViewDelegate = browserBarViewDelegate
-        }
-    }
-
     weak var sendToDeviceDelegate: SendToDeviceDelegate? {
         didSet {
             contextMenuHelper.sendToDeviceDelegate = sendToDeviceDelegate

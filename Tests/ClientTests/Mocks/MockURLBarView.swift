@@ -7,8 +7,15 @@
 class MockURLBarView: URLBarViewProtocol {
     var inOverlayMode = false
     var leaveOverlayModeCallCount = 0
+    var enterOverlayModeCallCount = 0
 
     func leaveOverlayMode(didCancel cancel: Bool) {
         leaveOverlayModeCallCount += 1
+        inOverlayMode = false
+    }
+
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        enterOverlayModeCallCount += 1
+        inOverlayMode = true
     }
 }
