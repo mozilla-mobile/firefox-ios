@@ -198,7 +198,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
 class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     fileprivate let Padding: CGFloat = 8
-    fileprivate let TextLabelHeight: CGFloat = 44
+    fileprivate let TextLabelHeight: CGFloat = 36
     fileprivate var TextLabelWidth: CGFloat {
         let width = textField.frame.width == 0 ? 360 : textField.frame.width
         return width
@@ -261,6 +261,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
         textField.snp.makeConstraints { make in
             make.height.equalTo(TextFieldHeight)
+            make.top.bottom.equalTo(0).inset(Padding / 2)
             make.left.right.equalTo(cell.contentView).inset(Padding)
         }
     }
