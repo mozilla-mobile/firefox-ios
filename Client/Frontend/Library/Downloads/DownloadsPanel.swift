@@ -202,7 +202,7 @@ class DownloadsPanel: UIViewController,
 
     // MARK: - Empty State
     private func updateEmptyPanelState() {
-        if viewModel.groupedDownloadedFiles.isEmpty {
+        if !viewModel.hasDownloadedFiles {
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubviewToFront(emptyStateOverlayView)
@@ -270,13 +270,13 @@ class DownloadsPanel: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard viewModel.hasDownloadItem(for: section) else { return 0 }
+        guard viewModel.hasDownloadedItem(for: section) else { return 0 }
 
         return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard viewModel.hasDownloadItem(for: section),
+        guard viewModel.hasDownloadedItem(for: section),
               let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SiteTableViewHeader.cellIdentifier) as?
                 SiteTableViewHeader
         else { return nil }
@@ -330,7 +330,7 @@ class DownloadsPanel: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.groupedDownloadedFiles.numberOfItemsForSection(section)
+        return viewModel.getNumberOfItem(for: section)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -340,7 +340,7 @@ class DownloadsPanel: UIViewController,
             if let downloadedFile = strongSelf.viewModel.downloadedFileForIndexPath(indexPath),
                strongSelf.deleteDownloadedFile(downloadedFile) {
                 strongSelf.tableView.beginUpdates()
-                strongSelf.viewModel.groupedDownloadedFiles.remove(downloadedFile)
+                strongSelf.viewModel.removeDownloadedFile(downloadedFile)
                 strongSelf.tableView.deleteRows(at: [indexPath], with: .right)
                 strongSelf.tableView.endUpdates()
                 strongSelf.updateEmptyPanelState()

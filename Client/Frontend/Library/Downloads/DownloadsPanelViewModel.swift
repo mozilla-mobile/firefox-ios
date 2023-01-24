@@ -6,48 +6,27 @@ import Foundation
 import Shared
 
 class DownloadsPanelViewModel {
-    var groupedDownloadedFiles = DateGroupedTableData<DownloadedFile>()
+    private var groupedDownloadedFiles = DateGroupedTableData<DownloadedFile>()
     var fileExtensionIcons: [String: UIImage] = [:]
+    var fileFetcher: DownloadFileFetcher
+
+    var hasDownloadedFiles: Bool {
+        return !groupedDownloadedFiles.isEmpty
+    }
+
+    init(fileFetcher: DownloadFileFetcher = DefaultDownloadFileFetcher()) {
+        self.fileFetcher = fileFetcher
+    }
 
     func reloadData() {
         groupedDownloadedFiles = DateGroupedTableData<DownloadedFile>()
 
-        let downloadedFiles = fetchData()
+        let downloadedFiles = fileFetcher.fetchData()
         for downloadedFile in downloadedFiles {
             groupedDownloadedFiles.add(downloadedFile, timestamp: downloadedFile.lastModified.timeIntervalSince1970)
         }
 
         fileExtensionIcons = [:]
-    }
-
-    func fetchData() -> [DownloadedFile] {
-        var downloadedFiles: [DownloadedFile] = []
-        do {
-            let downloadsPath = try FileManager.default.url(
-                for: .documentDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: false).appendingPathComponent("Downloads")
-            let files = try FileManager.default.contentsOfDirectory(
-                at: downloadsPath,
-                includingPropertiesForKeys: nil,
-                options: [.skipsHiddenFiles,
-                          .skipsPackageDescendants,
-                          .skipsSubdirectoryDescendants])
-
-            for file in files {
-                let attributes = try FileManager.default.attributesOfItem(atPath: file.path) as NSDictionary
-                let downloadedFile = DownloadedFile(path: file, size: attributes.fileSize(), lastModified: attributes.fileModificationDate() ?? Date())
-                downloadedFiles.append(downloadedFile)
-            }
-        } catch let error {
-            print("Unable to get files in Downloads folder: \(error.localizedDescription)")
-            return []
-        }
-
-        return downloadedFiles.sorted(by: { first, second -> Bool in
-            return first.lastModified > second.lastModified
-        })
     }
 
     func downloadedFileForIndexPath(_ indexPath: IndexPath) -> DownloadedFile? {
@@ -57,7 +36,7 @@ class DownloadsPanelViewModel {
 
     func isFirstSection(_ section: Int) -> Bool {
         for index in 0..<section {
-            if hasDownloadItem(for: index) {
+            if hasDownloadedItem(for: index) {
                 return false
             }
         }
@@ -79,7 +58,15 @@ class DownloadsPanelViewModel {
         }
     }
 
-    func hasDownloadItem(for section: Int) -> Bool {
+    func hasDownloadedItem(for section: Int) -> Bool {
         return groupedDownloadedFiles.numberOfItemsForSection(section) > 0
+    }
+
+    func getNumberOfItem(for section: Int) -> Int {
+        return groupedDownloadedFiles.numberOfItemsForSection(section)
+    }
+
+    func removeDownloadedFile(_ downloadedFile: DownloadedFile) {
+        groupedDownloadedFiles.remove(downloadedFile)
     }
 }
