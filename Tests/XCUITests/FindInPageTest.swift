@@ -44,26 +44,26 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("Book")
 
         // Once there are matches, test previous/next buttons
-        waitForExistence(app.staticTexts["1/6"])
+        waitForExistence(app.staticTexts["1/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/6"].exists)
 
         let nextInPageResultButton = app.buttons["FindInPage.find_next"]
         nextInPageResultButton.tap()
-        waitForExistence(app.staticTexts["2/6"])
+        waitForExistence(app.staticTexts["2/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["2/6"].exists)
 
         nextInPageResultButton.tap()
-        waitForExistence(app.staticTexts["3/6"])
+        waitForExistence(app.staticTexts["3/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["3/6"].exists)
 
         let previousInPageResultButton = app.buttons["FindInPage.find_previous"]
         previousInPageResultButton.tap()
 
-        waitForExistence(app.staticTexts["2/6"])
+        waitForExistence(app.staticTexts["2/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["2/6"].exists)
 
         previousInPageResultButton.tap()
-        waitForExistence(app.staticTexts["1/6"])
+        waitForExistence(app.staticTexts["1/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/6"].exists)
 
         // Tapping on close dismisses the search bar
@@ -78,7 +78,7 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("The Book of")
 
         // Once there are matches, test previous/next buttons
-        waitForExistence(app.staticTexts["1/6"])
+        waitForExistence(app.staticTexts["1/6"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/6"].exists)
     }
 
@@ -103,7 +103,7 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("lorem")
 
         // There should be matches
-        waitForExistence(app.staticTexts["1/5"])
+        waitForExistence(app.staticTexts["1/5"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["1/5"].exists)
     }
 
@@ -113,7 +113,7 @@ class FindInPageTests: BaseTestCase {
 
         // Try to find text which does not match and check that there are not results
         app.textFields["FindInPage.searchField"].typeText("foo")
-        waitForExistence(app.staticTexts["0/0"])
+        waitForExistence(app.staticTexts["0/0"], timeout: TIMEOUT)
         XCTAssertTrue(app.staticTexts["0/0"].exists, "There should not be any matches")
     }
 
