@@ -259,7 +259,7 @@ class ActivityStreamTest: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
 
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
-            app.collectionViews.cells.staticTexts["Apple"].press(forDuration: 1)
+            app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
 
             let contextMenuHeight = app.tables["Context Menu"].frame.size.height
             let parentViewHeight = app.otherElements["Action Sheet"].frame.size.height
