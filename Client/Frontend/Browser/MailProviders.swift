@@ -7,75 +7,115 @@ import Shared
 
 // mailto headers: subject, body, cc, bcc
 
+enum MailProviderEmailFormat {
+    case standard
+    case protonmail // used for Protonmail
+}
+
 protocol MailProvider {
-    var urlFormat: String {get set}
-    var supportedHeaders: [String] {get set}
+    var components: URLComponents { get }
+    var supportedHeaders: [String] { get set }
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL?
 }
 
 extension MailProvider {
-    fileprivate func constructEmailURLString(_ urlFormat: String,
+    fileprivate func constructEmailURLString(_ urlComponents: URLComponents,
                                              metadata: MailToMetadata,
                                              supportedHeaders: [String],
                                              bodyHName: String = "body",
                                              toHName: String = "to",
-                                             toParamFormat: String = "%@=%@") -> String {
+                                             emailFormat: MailProviderEmailFormat = .standard) -> URLComponents {
         var lowercasedHeaders = prepareHeaders(metadata: metadata)
 
         // Evaluate "to" parameter
-        var toParam: String
-        if let toHValue = lowercasedHeaders["to"] {
-            let value = metadata.to.isEmpty ? toHValue : [metadata.to, toHValue].joined(separator: "%2C%20")
+        var toQueryItem: URLQueryItem
+        if let toHeaderValue = lowercasedHeaders["to"] {
+            let value = metadata.to.isEmpty ? toHeaderValue : [metadata.to, toHeaderValue].joined(separator: ",")
             lowercasedHeaders.removeValue(forKey: "to")
-            toParam = String(format: toParamFormat, toHName, value)
+            toQueryItem = URLQueryItem(name: toHName, value: value)
         } else {
-            toParam = String(format: toParamFormat, toHName, metadata.to)
+            toQueryItem = URLQueryItem(name: toHName, value: metadata.to)
         }
 
         // Create string of additional parameters
-        let stringParams = prepareParams(headers: lowercasedHeaders,
-                                         supportedHeaders: supportedHeaders,
-                                         bodyHName: bodyHName)
+        let additionalQueryItems = prepareParams(headers: lowercasedHeaders,
+                                                 supportedHeaders: supportedHeaders,
+                                                 bodyName: bodyHName)
 
         // Create url based on scheme
-        var finalURLString = String(format: urlFormat, toParam, (stringParams.isEmpty ? "" : stringParams))
+        var urlComponents = urlComponents
+        var queryItems: [URLQueryItem] = [toQueryItem]
+        queryItems.append(contentsOf: additionalQueryItems)
+        urlComponents.queryItems = queryItems.isEmpty ? nil : queryItems
 
-        // Clean up url scheme. Remove ? or & if parameters are empty
-        if stringParams.isEmpty, ["?", "&"].contains(finalURLString.last) {
-            finalURLString = String(finalURLString.dropLast())
+        if emailFormat == .protonmail {
+            urlComponents = addProtonmailComponents(urlComponents, toQueryItem: toQueryItem)
         }
 
-        return finalURLString
+        return urlComponents
+    }
+
+    // Used to build Protonmail URL correctly (format: "protonmail://mailto:email@test.com")
+    // We use the user, password and host component parts for this URL format.
+    private func addProtonmailComponents(_ components: URLComponents,
+                                         toQueryItem: URLQueryItem) -> URLComponents {
+        var urlComponents = components
+        let queryItems: [URLQueryItem]? = components.queryItems
+
+        // Split email in user name and domain
+        guard let emailComponents = toQueryItem.value?.components(separatedBy: "@"),
+              emailComponents.count >= 2
+        else { return urlComponents }
+
+        // Password receives the part before the last @ (e.g. "email" if there is only one email address or
+        // "email@test.com,email2" in case there is two email addresses
+        // Host will be assigned the domain of the last email address (e.g. "test.com")
+        urlComponents.password = emailComponents[0...emailComponents.count - 2].joined(separator: "@")
+        urlComponents.host = emailComponents.last
+
+        // Remove the "to" data from query items
+        // Set query items to nil if there is no data left in it to avoid having a URL with a question mark at the end
+        if var items = queryItems, let index = items.firstIndex(of: toQueryItem) {
+            items.remove(at: index)
+            urlComponents.queryItems = items.isEmpty ? nil : items
+        }
+
+        return urlComponents
     }
 
     private func prepareHeaders(metadata: MailToMetadata) -> [String: String] {
         var lowercasedHeaders = [String: String]()
 
-        metadata.headers.forEach { (hname, hvalue) in
-            lowercasedHeaders[hname.lowercased()] = hvalue
+        metadata.headers.forEach { (name, value) in
+            lowercasedHeaders[name.lowercased()] = value
         }
         return lowercasedHeaders
     }
 
     private func prepareParams(headers: [String: String],
                                supportedHeaders: [String],
-                               bodyHName: String = "body") -> String {
-        var queryParams: [String] = []
+                               bodyName: String = "body") -> [URLQueryItem] {
+        var queryItems = [URLQueryItem]()
 
-        headers.forEach({ (hname, hvalue) in
-            if supportedHeaders.contains(hname) {
-                queryParams.append("\(hname)=\(hvalue)")
-            } else if hname == "body" {
-                queryParams.append("\(bodyHName)=\(hvalue)")
+        headers.forEach({ (name, value) in
+            if supportedHeaders.contains(name) {
+                queryItems.append(URLQueryItem(name: name, value: value))
+            } else if name == "body" {
+                queryItems.append(URLQueryItem(name: bodyName, value: value))
             }
         })
 
-        return queryParams.joined(separator: "&")
+        return queryItems
     }
 }
 
 class ReaddleSparkIntegration: MailProvider {
-    var urlFormat = "readdle-spark://compose?%@&%@"
+    var components: URLComponents {
+        var components = URLComponents()
+        components.scheme = "readdle-spark"
+        components.host = "compose"
+        return components
+    }
     var supportedHeaders = [
         "subject",
         "recipient",
@@ -86,16 +126,21 @@ class ReaddleSparkIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(urlFormat,
+        return constructEmailURLString(components,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders,
                                        bodyHName: "textbody",
-                                       toHName: "recipient").asURL
+                                       toHName: "recipient").url
     }
 }
 
 class AirmailIntegration: MailProvider {
-    var urlFormat = "airmail://compose?%@&%@"
+    var components: URLComponents {
+        var components = URLComponents()
+        components.scheme = "airmail"
+        components.host = "compose"
+        return components
+    }
     var supportedHeaders = [
         "subject",
         "from",
@@ -107,15 +152,20 @@ class AirmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(urlFormat,
+        return constructEmailURLString(components,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders,
-                                       bodyHName: "htmlBody").asURL
+                                       bodyHName: "htmlBody").url
     }
 }
 
 class MyMailIntegration: MailProvider {
-    var urlFormat = "mymail-mailto://?%@&%@"
+    var components: URLComponents {
+        var components = URLComponents()
+        components.scheme = "mymail-mailto"
+        components.host = ""
+        return components
+    }
     var supportedHeaders = [
         "to",
         "subject",
@@ -125,21 +175,27 @@ class MyMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(urlFormat,
+        return constructEmailURLString(components,
                                        metadata: metadata,
-                                       supportedHeaders: supportedHeaders).asURL
+                                       supportedHeaders: supportedHeaders).url
     }
 }
 
 class MailRuIntegration: MyMailIntegration {
-    override init() {
-        super.init()
-        self.urlFormat = "mailru-mailto://?%@&%@"
+    override var components: URLComponents {
+        var components = super.components
+        components.scheme = "mailru-mailto"
+        return components
     }
 }
 
 class MSOutlookIntegration: MailProvider {
-    var urlFormat = "ms-outlook://emails/new?%@&%@"
+    var components: URLComponents {
+        var components = URLComponents()
+        components.scheme = "ms-outlook"
+        components.path = "emails/new"
+        return components
+    }
     var supportedHeaders = [
         "to",
         "cc",
@@ -149,14 +205,19 @@ class MSOutlookIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(urlFormat,
+        return constructEmailURLString(components,
                                        metadata: metadata,
-                                       supportedHeaders: supportedHeaders).asURL
+                                       supportedHeaders: supportedHeaders).url
     }
 }
 
 class YMailIntegration: MailProvider {
-    var urlFormat = "ymail://mail/any/compose?%@&%@"
+    var components: URLComponents {
+        var components = URLComponents()
+        components.scheme = "ymail"
+        components.path = "mail/any/compose"
+        return components
+    }
     var supportedHeaders = [
         "to",
         "cc",
@@ -165,14 +226,19 @@ class YMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(urlFormat,
+        return constructEmailURLString(components,
                                        metadata: metadata,
-                                       supportedHeaders: supportedHeaders).asURL
+                                       supportedHeaders: supportedHeaders).url
     }
 }
 
 class GoogleGmailIntegration: MailProvider {
-    var urlFormat = "googlegmail:///co?%@&%@"
+    var components: URLComponents {
+        var components = URLComponents()
+        components.scheme = "googlegmail"
+        components.host = "co"
+        return components
+    }
     var supportedHeaders = [
         "to",
         "cc",
@@ -182,14 +248,19 @@ class GoogleGmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(urlFormat,
+        return constructEmailURLString(components,
                                        metadata: metadata,
-                                       supportedHeaders: supportedHeaders).asURL
+                                       supportedHeaders: supportedHeaders).url
     }
 }
 
 class FastmailIntegration: MailProvider {
-    var urlFormat = "fastmail://mail/compose?%@&%@"
+    var components: URLComponents {
+        var components = URLComponents()
+        components.scheme = "fastmail"
+        components.path = "mail/compose"
+        return components
+    }
     var supportedHeaders = [
         "to",
         "cc",
@@ -199,14 +270,19 @@ class FastmailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(urlFormat,
+        return constructEmailURLString(components,
                                        metadata: metadata,
-                                       supportedHeaders: supportedHeaders).asURL
+                                       supportedHeaders: supportedHeaders).url
     }
 }
 
 class ProtonMailIntegration: MailProvider {
-    var urlFormat = "protonmail://%@?%@"
+    var components: URLComponents {
+        var components = URLComponents()
+        components.scheme = "protonmail"
+        components.user = "mailto"
+        return components
+    }
     var supportedHeaders = [
         "to",
         "cc",
@@ -216,10 +292,10 @@ class ProtonMailIntegration: MailProvider {
     ]
 
     func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
-        return constructEmailURLString(urlFormat,
+        return constructEmailURLString(components,
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders,
                                        toHName: "mailto",
-                                       toParamFormat: "%@:%@").asURL
+                                       emailFormat: .protonmail).url
     }
 }
