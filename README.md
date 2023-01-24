@@ -15,14 +15,13 @@ Ecosia for iOS is based on a fork of the code of "Firefox for iOS". We want to e
 ## Requirements
 
 - OSX
-- Xcode 13.4.1
+- Xcode 14.2
 - Node
-- Python3
-- pip
-- virtualenv
 
 ### Optional to build MZ App Services
-- gyp
+- Python3
+- pip
+- virtualenvgyp
 - ninja
 - rust
 - protoc
@@ -30,65 +29,7 @@ Ecosia for iOS is based on a fork of the code of "Firefox for iOS". We want to e
 - uniffi-bindgen
 - swift-protobuf
 
-This branch works with [Xcode 13.4.1](https://developer.apple.com/download/more/?=xcode)
-
-### Install Node, VirtualEnv and python3 (mandatory)
-
-```bash
-brew update
-brew install node
-brew install virtualenv
-brew install python3
-```
-
-If you don't plan to build Mozilla App Services, skip to [Getting Started](#Getting-started).
-
-### Install pip
-
-Pip comes with python but it might not be found if you have multiple version of python installed.
-Check if pip is found
-
-```bash
-python -m pip --version
-```
-
-If there is an error run
-
-```bash
-sudo python2.7 -m ensurepip --default-pip
-```
-
-### Install GYP
-
-If building application-services dependency gyp needs to be installed [https://github.com/mogemimi/pomdog/wiki/How-to-Install-GYP](https://github.com/mogemimi/pomdog/wiki/How-to-Install-GYP)
-
-### Install ninja
-
-If building application-services dependency ninja needs to be installed [https://github.com/ninja-build/ninja](https://github.com/ninja-build/ninja)
-
-### Install rust
-
-If building application-services dependency rust needs to be installed [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
-
-### Install protoc
-
-If building application-services dependency protoc needs to be installed [https://google.github.io/proto-lens/installing-protoc.html](https://google.github.io/proto-lens/installing-protoc.html)
-
-### Install tcl
-
-If building application-services dependency tcl needs to be installed [https://www.tcl.tk/software/tcltk/](https://www.tcl.tk/software/tcltk/)
-
-### Install uniffi-bindgen
-
-If building application-services dependency uniffi-bindgen needs to be installed
-
-```bash
-cargo install uniffi_bindgen
-```
-
-### Install swift-protobuf
-
-If building application-services dependency swift-protobuf needs to be installed [https://github.com/apple/swift-protobuf](https://github.com/apple/swift-protobuf)
+This branch works with [Xcode 14.2](https://developer.apple.com/download/more/?=xcode)
 
 ## Getting Started
 
@@ -103,17 +44,10 @@ For the upcoming commands, cd into the checked out folder
 cd ios-browser/
 ```
 
-Run npm to include the user javascripts
-
-```bash
-npm install
-npm run build
-```
-
 Setup content blocking scripts
 
 ```bash
-(cd content-blocker-lib-ios/ContentBlockerGen && swift run)
+./content_blocker_update.sh
 ```
 
 ### Open the project
