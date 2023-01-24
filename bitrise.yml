@@ -125,6 +125,17 @@ workflows:
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
             "$BITRISE_SOURCE_DIR/Tests/XCUITests"
+    - script@1.1:
+        title: Run Danger
+        is_always_run: true
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # Fail if any command fails
+            set -e
+            echo "Run danger"
+            swift run danger-swift ci
+
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
