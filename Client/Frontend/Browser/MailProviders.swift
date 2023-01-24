@@ -9,7 +9,7 @@ import Shared
 
 enum MailProviderEmailFormat {
     case standard
-    case userAndPassword // used for Protonmail
+    case protonmail // used for Protonmail
 }
 
 protocol MailProvider {
@@ -48,8 +48,8 @@ extension MailProvider {
         queryItems.append(contentsOf: additionalQueryItems)
         urlComponents.queryItems = queryItems.isEmpty ? nil : queryItems
 
-        if emailFormat == .userAndPassword {
-            urlComponents = addUserAndPasswordComponents(urlComponents, toQueryItem: toQueryItem)
+        if emailFormat == .protonmail {
+            urlComponents = addProtonmailComponents(urlComponents, toQueryItem: toQueryItem)
         }
 
         return urlComponents
@@ -57,8 +57,8 @@ extension MailProvider {
 
     // Used to build Protonmail URL correctly (format: "protonmail://mailto:email@test.com")
     // We use the user, password and host component parts for this URL format.
-    private func addUserAndPasswordComponents(_ components: URLComponents,
-                                              toQueryItem: URLQueryItem) -> URLComponents {
+    private func addProtonmailComponents(_ components: URLComponents,
+                                         toQueryItem: URLQueryItem) -> URLComponents {
         var urlComponents = components
         let queryItems: [URLQueryItem]? = components.queryItems
 
@@ -296,6 +296,6 @@ class ProtonMailIntegration: MailProvider {
                                        metadata: metadata,
                                        supportedHeaders: supportedHeaders,
                                        toHName: "mailto",
-                                       emailFormat: .userAndPassword).url
+                                       emailFormat: .protonmail).url
     }
 }
