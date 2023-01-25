@@ -75,7 +75,7 @@ public class DefaultSiteImageHandler: SiteImageHandler {
     private func generateCacheKey(siteURL: URL?,
                                   faviconURL: URL? = nil,
                                   type: SiteImageType) -> String {
-        // If we alredy have a favicon url use the url as the cache key
+        // If we already have a favicon url use the url as the cache key
         if let faviconURL = faviconURL {
             return faviconURL.absoluteString
         }
