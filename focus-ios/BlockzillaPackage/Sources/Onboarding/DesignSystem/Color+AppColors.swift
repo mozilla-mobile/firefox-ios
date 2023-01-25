@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public extension Color {
+extension Color {
     static let actionButton = Color(UIColor(named: "actionButton", in: Bundle.module, compatibleWith: nil)!)
     static let secondOnboardingScreenBackground = Color(UIColor(named: "secondOnboardingScreenBackground", in: Bundle.module, compatibleWith: nil)!)
     static let secondOnboardingScreenBottomButton = Color(UIColor(named: "secondOnboardingScreenBottomButton", in: Bundle.module, compatibleWith: nil)!)

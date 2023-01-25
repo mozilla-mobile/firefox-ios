@@ -376,6 +376,11 @@ struct UIConstants {
                 value: "Show Me How",
                 comment: "Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget")
 
+        public static let unlockWithBiometricsActionButton = NSLocalizedString(
+            "BiometricAuthentication.UnlockButton.Title",
+            value: "Unlock",
+            comment: "Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics.")
+
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
