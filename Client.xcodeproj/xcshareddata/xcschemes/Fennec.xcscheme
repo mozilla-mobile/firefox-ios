@@ -379,6 +379,26 @@
                ReferencedContainer = "container:FxA/FxA.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "CommonTests"
+               BuildableName = "CommonTests"
+               BlueprintName = "CommonTests"
+               ReferencedContainer = "container:BrowserKit">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "SiteImageViewTests"
+               BuildableName = "SiteImageViewTests"
+               BlueprintName = "SiteImageViewTests"
+               ReferencedContainer = "container:BrowserKit">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
