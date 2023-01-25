@@ -2779,9 +2779,10 @@ extension BrowserViewController {
             switch settings.authorizationStatus {
             case .authorized: authorizationStatus = "authorized"
             case .denied: authorizationStatus = "denied"
-            case .notDetermined: authorizationStatus = "notDetermined"
             case .ephemeral: authorizationStatus = "ephemeral"
             case .provisional: authorizationStatus = "provisional"
+            case .notDetermined: authorizationStatus = "notDetermined"
+            @unknown default: authorizationStatus = "notDetermined"
             }
 
             var alertSetting = ""
@@ -2789,6 +2790,7 @@ extension BrowserViewController {
             case .enabled: alertSetting = "enabled"
             case .disabled: alertSetting = "disabled"
             case .notSupported: alertSetting = "notSupported"
+            @unknown default: alertSetting = "notSupported"
             }
 
             let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue: authorizationStatus,
