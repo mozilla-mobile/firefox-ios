@@ -16,6 +16,13 @@ private enum SearchListSection: Int, CaseIterable {
     case openedTabs
     case bookmarksAndHistory
     case searchHighlights
+    case fakeTestSection
+}
+
+struct FakeTestSuggestion {
+    let title: String
+    let url: URL
+    let iconURL: URL?
 }
 
 private struct SearchViewControllerUX {
@@ -69,6 +76,7 @@ class SearchViewController: SiteTableViewController,
     private var filteredOpenedTabs = [Tab]()
     private var tabManager: TabManager
     private var searchHighlights = [HighlightItem]()
+    private var fakeTestSuggestions = [FakeTestSuggestion]()
     private var highlightManager: HistoryHighlightsManagerProtocol
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
@@ -85,6 +93,9 @@ class SearchViewController: SiteTableViewController,
         return UIImage(named: "sync_open_tab")!
     }()
 
+    private let fakeTestSuggestionsQueue: DispatchQueueInterface
+    private var fakeTestSuggestionsFetchWork: DispatchWorkItem?
+
     var suggestions: [String]? = []
     var savedQuery: String = ""
     var searchFeature: FeatureHolder<Search>
@@ -96,17 +107,20 @@ class SearchViewController: SiteTableViewController,
             || !filteredOpenedTabs.isEmpty
             || !filteredRemoteClientTabs.isEmpty
             || !searchHighlights.isEmpty
+            || !fakeTestSuggestions.isEmpty
     }
 
     init(profile: Profile,
          viewModel: SearchViewModel,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
+         fakeTestSuggestionsQueue: DispatchQueueInterface = DispatchQueue(label: "FakeTestSuggestions")) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
+        self.fakeTestSuggestionsQueue = fakeTestSuggestionsQueue
         super.init(profile: profile)
 
         if #available(iOS 15.0, *) {
@@ -160,6 +174,41 @@ class SearchViewController: SiteTableViewController,
             self.searchHighlights = results
             self.tableView.reloadData()
         }
+    }
+
+    private func loadFakeTestSuggestions() {
+        self.fakeTestSuggestionsFetchWork?.cancel()
+
+        let searchQuery = self.searchQuery
+        let fetchWork = DispatchWorkItem { [weak self] in
+            let newFakeTestSuggestions = [
+                FakeTestSuggestion(
+                    title: "California - Wikipedia (Test)",
+                    url: URL(string: "https://en.wikipedia.org/wiki/California")!,
+                    iconURL: URL(string: "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/quicksuggest/05f7ba7a-f7cf-4288-a89f-8fad6970a3b8")!
+                ),
+                FakeTestSuggestion(
+                    title: "Amazon (Test)",
+                    url: URL(string: "https://www.amazon.com")!,
+                    iconURL: URL(string: "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/quicksuggest/e507bd18-b496-4de6-81b0-c98351ff8434")!
+                ),
+                FakeTestSuggestion(
+                    title: "Ulta (Test)",
+                    url: URL(string: "https://www.ulta.com")!,
+                    iconURL: URL(string: "https://firefox-settings-attachments.cdn.mozilla.net/main-workspace/quicksuggest/806ccf86-d482-49ca-a857-c6eff0cb96d1")!
+                ),
+            ].filter { $0.title.localizedCaseInsensitiveContains(searchQuery) }
+            DispatchQueue.main.async {
+                guard let self = self, self.searchQuery == searchQuery else {
+                    return
+                }
+                self.fakeTestSuggestions = newFakeTestSuggestions
+                self.fakeTestSuggestionsFetchWork = nil
+                self.tableView.reloadData()
+            }
+        }
+        self.fakeTestSuggestionsFetchWork = fetchWork
+        fakeTestSuggestionsQueue.asyncAfter(deadline: .now().advanced(by: .milliseconds(500)), execute: fetchWork)
     }
 
     func dynamicFontChanged(_ notification: Notification) {
@@ -469,6 +518,7 @@ class SearchViewController: SiteTableViewController,
         }
 
         loadSearchHighlights()
+        loadFakeTestSuggestions()
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
@@ -550,6 +600,9 @@ class SearchViewController: SiteTableViewController,
                 recordSearchListSelectionTelemetry(type: .searchHighlights)
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: nil)
             }
+        case .fakeTestSection:
+            let suggestion = fakeTestSuggestions[indexPath.row]
+            searchDelegate?.searchViewController(self, didSelectURL: suggestion.url, searchTerm: nil)
         }
     }
 
@@ -610,6 +663,8 @@ class SearchViewController: SiteTableViewController,
             return data.count
         case .searchHighlights:
             return searchHighlights.count
+        case .fakeTestSection:
+            return fakeTestSuggestions.count
         }
     }
 
@@ -728,6 +783,19 @@ class SearchViewController: SiteTableViewController,
             twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
             twoLineCell.accessoryView = nil
             cell = twoLineCell
+        case .fakeTestSection:
+            let suggestion = fakeTestSuggestions[indexPath.row]
+            oneLineCell.titleLabel.text = suggestion.title
+            oneLineCell.leftImageView.contentMode = .center
+            oneLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
+            oneLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
+            if let iconURL = suggestion.iconURL {
+                oneLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: iconURL.absoluteString, usesIndirectDomain: true))
+            } else {
+                oneLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: suggestion.url.absoluteString))
+            }
+            oneLineCell.accessoryView = nil
+            cell = oneLineCell
         }
 
         // We need to set the correct theme on the cells when the initial display happens
@@ -799,6 +867,8 @@ private extension SearchViewController {
                         TelemetryWrapper.EventValue.historyItem.rawValue
         case .searchHighlights:
             extra = TelemetryWrapper.EventValue.searchHighlights.rawValue
+        case .fakeTestSection:
+            return
         }
 
         TelemetryWrapper.recordEvent(category: .action,
