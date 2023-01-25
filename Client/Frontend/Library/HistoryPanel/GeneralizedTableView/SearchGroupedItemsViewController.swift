@@ -126,7 +126,7 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
                 cell.descriptionLabel.isHidden = false
                 cell.leftImageView.layer.borderColor = self.themeManager.currentTheme.colors.layer4.cgColor
                 cell.leftImageView.layer.borderWidth = 0.5
-                cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
+                cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
 
                 return cell
             }

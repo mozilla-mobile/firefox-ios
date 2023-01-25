@@ -682,7 +682,7 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
                 let urlString = openedTab.url?.absoluteString ?? ""
-                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: urlString))
+                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
@@ -697,7 +697,7 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
                 let urlString = remoteTab.URL.absoluteString
-                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: urlString))
+                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString))
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
@@ -711,7 +711,7 @@ class SearchViewController: SiteTableViewController,
                 twoLineCell.leftOverlayImageView.image = isBookmark ? self.bookmarkedBadge : nil
                 twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                 twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
+                twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
                 twoLineCell.accessoryView = nil
                 cell = twoLineCell
             }
@@ -725,7 +725,7 @@ class SearchViewController: SiteTableViewController,
             twoLineCell.descriptionLabel.text = urlString
             twoLineCell.leftImageView.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
             twoLineCell.leftImageView.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-            twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
+            twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
             twoLineCell.accessoryView = nil
             cell = twoLineCell
         }

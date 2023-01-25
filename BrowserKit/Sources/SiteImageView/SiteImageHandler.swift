@@ -6,10 +6,7 @@ import UIKit
 import Common
 
 public protocol SiteImageHandler {
-    func getImage(urlStringRequest: String,
-                  type: SiteImageType,
-                  id: UUID,
-                  usesIndirectDomain: Bool) async -> SiteImageModel
+    func getImage(site: SiteImageModel) async -> SiteImageModel
     func cacheFaviconURL(siteURL: URL?, faviconURL: URL?)
     func clearAllCaches()
 }
@@ -28,38 +25,22 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         self.imageHandler = imageHandler
     }
 
-    public func getImage(urlStringRequest: String,
-                         type: SiteImageType,
-                         id: UUID,
-                         usesIndirectDomain: Bool) async -> SiteImageModel {
-        var imageModel = SiteImageModel(id: id,
-                                        expectedImageType: type,
-                                        urlStringRequest: urlStringRequest,
-                                        siteURL: nil,
-                                        cacheKey: "",
-                                        domain: nil,
-                                        faviconURL: nil,
-                                        faviconImage: nil,
-                                        heroImage: nil)
+    public func getImage(site: SiteImageModel) async -> SiteImageModel {
+        var imageModel = site
 
         // urlStringRequest possibly cannot be a URL
-        if let siteURL = URL(string: urlStringRequest) {
+        if let siteURL = URL(string: site.siteURLString ?? "") {
             let domain = generateDomainURL(siteURL: siteURL)
             imageModel.siteURL = siteURL
             imageModel.domain = domain
-            imageModel.cacheKey = generateCacheKey(siteURL: siteURL,
-                                                   type: type,
-                                                   usesIndirectDomain: usesIndirectDomain)
         }
 
-        // For favicons with the usesIndirectDomain flag set we want to use the provided
-        // url directly to retrieve the image
-        if usesIndirectDomain, type == .favicon {
-            imageModel.faviconURL = URL(string: urlStringRequest)
-        }
+        imageModel.cacheKey = generateCacheKey(siteURL: URL(string: site.siteURLString ?? ""),
+                                               faviconURL: imageModel.faviconURL,
+                                               type: imageModel.expectedImageType)
 
         do {
-            switch type {
+            switch site.expectedImageType {
             case .heroImage:
                 imageModel.heroImage = try await getHeroImage(imageModel: imageModel)
             case .favicon:
@@ -80,8 +61,7 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         }
 
         let cacheKey = generateCacheKey(siteURL: siteURL,
-                                        type: .favicon,
-                                        usesIndirectDomain: false)
+                                        type: .favicon)
         urlHandler.cacheFaviconURL(cacheKey: cacheKey, faviconURL: faviconURL)
     }
 
@@ -92,13 +72,24 @@ public class DefaultSiteImageHandler: SiteImageHandler {
 
     // MARK: - Private
 
-    private func generateCacheKey(siteURL: URL,
-                                  type: SiteImageType,
-                                  usesIndirectDomain: Bool) -> String {
-        guard usesIndirectDomain else {
-            return siteURL.shortDomain ?? siteURL.shortDisplayString
+    private func generateCacheKey(siteURL: URL?,
+                                  faviconURL: URL? = nil,
+                                  type: SiteImageType) -> String {
+        // If we already have a favicon url use the url as the cache key
+        if let faviconURL = faviconURL {
+            return faviconURL.absoluteString
         }
-        return siteURL.absoluteString
+
+        guard let siteURL = siteURL else { return "" }
+
+        // Always use the full site URL as the cache key for hero images
+        if type == .heroImage {
+            return siteURL.absoluteString
+        }
+
+        // For everything else use the domain as the key to avoid caching
+        // and fetching unneccessary duplicates
+        return siteURL.shortDomain ?? siteURL.shortDisplayString
     }
 
     private func getHeroImage(imageModel: SiteImageModel) async throws -> UIImage {

@@ -112,7 +112,7 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
             faviconView.image = UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysTemplate)
             faviconView.backgroundColor = .clear
         } else {
-            faviconView.setFavicon(FaviconImageViewModel(urlStringRequest: viewModel.site.url,
+            faviconView.setFavicon(FaviconImageViewModel(siteURLString: viewModel.site.url,
                                                          faviconCornerRadius: UX.faviconCornerRadius))
         }
 

@@ -108,10 +108,10 @@ extension UserActivityHandler {
         case .favicon:
             if let urlString = tab.url?.absoluteString {
                 let faviconFetcher = DefaultSiteImageHandler.factory()
-                let image = await faviconFetcher.getImage(urlStringRequest: urlString,
-                                                          type: .favicon,
-                                                          id: UUID(),
-                                                          usesIndirectDomain: false)
+                let siteImageModel = SiteImageModel(id: UUID(),
+                                                    expectedImageType: .favicon,
+                                                    siteURLString: urlString)
+                let image = await faviconFetcher.getImage(site: siteImageModel)
                 attributeSet.thumbnailData = image.faviconImage?.pngData()
             }
         default:

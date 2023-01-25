@@ -27,10 +27,10 @@ final class SiteImageHandlerTests: XCTestCase {
         let siteURL = "https://www.example.hello.com"
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .favicon,
-                                            id: UUID(),
-                                            usesIndirectDomain: false)
+        let model = SiteImageModel(id: UUID(),
+                                   expectedImageType: .favicon,
+                                   siteURLString: siteURL)
+        let result = await subject.getImage(site: model)
 
         XCTAssertEqual(result.cacheKey, "example.hello")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
@@ -48,10 +48,10 @@ final class SiteImageHandlerTests: XCTestCase {
         let siteURL = "www.example.hello.com"
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .favicon,
-                                            id: UUID(),
-                                            usesIndirectDomain: false)
+        let model = SiteImageModel(id: UUID(),
+                                   expectedImageType: .favicon,
+                                   siteURLString: siteURL)
+        let result = await subject.getImage(site: model)
 
         XCTAssertEqual(result.cacheKey, "www.example.hello.com")
         XCTAssertEqual(imageHandler.capturedSite?.cacheKey, "www.example.hello.com")
@@ -63,10 +63,10 @@ final class SiteImageHandlerTests: XCTestCase {
         urlHandler.faviconURL = faviconURL
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .favicon,
-                                            id: UUID(),
-                                            usesIndirectDomain: false)
+        let model = SiteImageModel(id: UUID(),
+                                   expectedImageType: .favicon,
+                                   siteURLString: siteURL)
+        let result = await subject.getImage(site: model)
 
         XCTAssertEqual(result.cacheKey, "mozilla")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
@@ -80,16 +80,15 @@ final class SiteImageHandlerTests: XCTestCase {
     }
 
     func testFaviconIndirectDomain_faviconURLFound_generateFavicon() async {
-        let siteURL = "https://www.mozilla.com"
+        let siteURL = URL(string: "https://www.mozilla.com")
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .favicon,
-                                            id: UUID(),
-                                            usesIndirectDomain: true)
+        let model = SiteImageModel(id: UUID(),
+                                   expectedImageType: .favicon,
+                                   faviconURL: siteURL)
+        let result = await subject.getImage(site: model)
 
         XCTAssertEqual(result.cacheKey, "https://www.mozilla.com")
-        XCTAssertEqual(result.siteURL, URL(string: siteURL))
         XCTAssertEqual(result.faviconURL?.absoluteString, "https://www.mozilla.com")
         XCTAssertEqual(result.expectedImageType, .favicon)
         XCTAssertNil(result.heroImage)
@@ -105,10 +104,10 @@ final class SiteImageHandlerTests: XCTestCase {
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
         let siteURL = "https://www.firefox.com"
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .heroImage,
-                                            id: UUID(),
-                                            usesIndirectDomain: true)
+        let model = SiteImageModel(id: UUID(),
+                                   expectedImageType: .heroImage,
+                                   siteURLString: siteURL)
+        let result = await subject.getImage(site: model)
 
         XCTAssertEqual(result.cacheKey, "https://www.firefox.com")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
@@ -127,10 +126,10 @@ final class SiteImageHandlerTests: XCTestCase {
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
         let siteURL = "https://www.focus.com"
-        let result = await subject.getImage(urlStringRequest: siteURL,
-                                            type: .heroImage,
-                                            id: UUID(),
-                                            usesIndirectDomain: true)
+        let model = SiteImageModel(id: UUID(),
+                                   expectedImageType: .heroImage,
+                                   siteURLString: siteURL)
+        let result = await subject.getImage(site: model)
 
         XCTAssertEqual(result.cacheKey, "https://www.focus.com")
         XCTAssertEqual(result.siteURL, URL(string: siteURL))
@@ -177,10 +176,9 @@ private class MockFaviconURLHandler: FaviconURLHandler {
         capturedImageModel = site
         return SiteImageModel(id: site.id,
                               expectedImageType: site.expectedImageType,
-                              urlStringRequest: site.urlStringRequest,
+                              siteURLString: site.siteURLString,
                               siteURL: site.siteURL,
                               cacheKey: site.cacheKey,
-                              domain: site.domain,
                               faviconURL: faviconURL)
     }
 
