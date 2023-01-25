@@ -35,7 +35,7 @@ public struct SiteImageModel {
 
     public init(id: UUID,
                 expectedImageType: SiteImageType,
-                siteURLString: String?,
+                siteURLString: String? = nil,
                 siteURL: URL? = nil,
                 cacheKey: String = "",
                 faviconURL: URL? = nil,

@@ -33,11 +33,11 @@ public class DefaultSiteImageHandler: SiteImageHandler {
             let domain = generateDomainURL(siteURL: siteURL)
             imageModel.siteURL = siteURL
             imageModel.domain = domain
-
-            imageModel.cacheKey = generateCacheKey(siteURL: siteURL,
-                                                   faviconURL: imageModel.faviconURL,
-                                                   type: imageModel.expectedImageType)
         }
+
+        imageModel.cacheKey = generateCacheKey(siteURL: URL(string: site.siteURLString ?? ""),
+                                               faviconURL: imageModel.faviconURL,
+                                               type: imageModel.expectedImageType)
 
         do {
             switch site.expectedImageType {

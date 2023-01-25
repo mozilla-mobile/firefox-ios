@@ -100,10 +100,9 @@ class FaviconURLHandlerTests: XCTestCase {
     private func createSiteImageModel(siteURL: String) -> SiteImageModel {
         return SiteImageModel(id: UUID(),
                               expectedImageType: .favicon,
-                              urlStringRequest: siteURL,
+                              siteURLString: siteURL,
                               siteURL: URL(string: siteURL)!,
                               cacheKey: "domain",
-                              domain: ImageDomain(bundleDomains: []),
                               faviconURL: nil,
                               faviconImage: nil,
                               heroImage: nil)
