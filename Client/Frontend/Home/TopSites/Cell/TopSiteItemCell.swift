@@ -147,7 +147,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
 
-        var urlRequest = topSite.site.url
+        let urlRequest = topSite.site.url
         var imageURL: URL?
 
         if let site = topSite.site as? SponsoredTile {
