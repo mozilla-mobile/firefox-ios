@@ -629,6 +629,11 @@ extension TelemetryWrapper {
 
         // Onboarding
         case cardType = "card-type"
+
+        // Notification permission
+        case notificationPermissionIsGranted = "is-granted"
+        case notificationPermissionStatus = "status"
+        case notificationPermissionAlertSetting = "alert-setting"
     }
 
     func recordEvent(category: EventCategory,
