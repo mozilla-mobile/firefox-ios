@@ -643,7 +643,6 @@
 		9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */; };
 		9614BF4428AD1C6700D3F7EA /* AccountSyncHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4328AD1C6700D3F7EA /* AccountSyncHandler.swift */; };
 		962021E128B8078400BDF3D9 /* ContextualHintCopyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962021E028B8078400BDF3D9 /* ContextualHintCopyProvider.swift */; };
-		962C6C3D2970550500354BE8 /* Fake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962C6C3C2970550500354BE8 /* Fake.swift */; };
 		962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962F39492672D57A006BDA2A /* RecentItemsHelper.swift */; };
 		9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92727F5D72D00771F5E /* GleanPlumbMessageManager.swift */; };
 		9636D92A27F767EC00771F5E /* GleanPlumbMessageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9636D92927F767EC00771F5E /* GleanPlumbMessageUtility.swift */; };
@@ -3546,7 +3545,6 @@
 		962021E028B8078400BDF3D9 /* ContextualHintCopyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintCopyProvider.swift; sourceTree = "<group>"; };
 		962A450E9186BF349E535413 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		962C6C39297054A700354BE8 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		962C6C3C2970550500354BE8 /* Fake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fake.swift; sourceTree = "<group>"; };
 		962C6C3F2971F5D400354BE8 /* Dangerfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dangerfile.swift; sourceTree = "<group>"; };
 		962F39492672D57A006BDA2A /* RecentItemsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsHelper.swift; sourceTree = "<group>"; };
 		9636D92727F5D72D00771F5E /* GleanPlumbMessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManager.swift; sourceTree = "<group>"; };
@@ -4390,6 +4388,7 @@
 		D4BF6AB92893DDAA001B5130 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/Today.strings"; sourceTree = "<group>"; };
 		D4C35390283500A600F7DC7D /* TabsPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsPerformanceTests.swift; sourceTree = "<group>"; };
 		D4C4BDCD2253725E00986F04 /* LibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTests.swift; sourceTree = "<group>"; };
+		D4F389132981634F0082E974 /* Fake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fake.swift; sourceTree = "<group>"; };
 		D4F3D788232F960600FBB9AA /* WhatsNewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewTest.swift; sourceTree = "<group>"; };
 		D50268E825D1AE2D00026CDA /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D50268E925D1AE2D00026CDA /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
@@ -6713,7 +6712,7 @@
 		962C6C3E2970551000354BE8 /* DangerDependencies */ = {
 			isa = PBXGroup;
 			children = (
-				962C6C3C2970550500354BE8 /* Fake.swift */,
+				D4F389132981634F0082E974 /* Fake.swift */,
 			);
 			path = DangerDependencies;
 			sourceTree = "<group>";
@@ -10641,7 +10640,6 @@
 				C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */,
 				D5D0532E2645B3A700759F85 /* ExperimentsTableView.swift in Sources */,
 				2165B2C22860C2F4004C0786 /* AdjustTelemetryHelper.swift in Sources */,
-				962C6C3D2970550500354BE8 /* Fake.swift in Sources */,
 				8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */,
 				434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */,
 				2137785F297F3B1B00D01309 /* DownloadsPanelViewModel.swift in Sources */,
