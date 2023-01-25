@@ -249,6 +249,13 @@ extension FxAWebViewModel {
                 if granted {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
+
+                let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionIsGranted.rawValue:
+                                granted]
+                TelemetryWrapper.recordEvent(category: .prompt,
+                                             method: .tap,
+                                             object: .notificationPermission,
+                                             extras: extras)
             }
         }
         // Record login or registration completed telemetry

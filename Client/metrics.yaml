@@ -701,6 +701,22 @@ onboarding:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
+  notification_permission_prompt:
+    type: event
+    description: |
+      Records the users decision to enable/disable notifications.
+    extra_keys:
+      granted:
+        type: boolean
+        description: |
+          Whether the notification permission was granted.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-07-01"
 
 # Upgrade onboarding metrics
 upgrade:

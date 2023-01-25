@@ -408,6 +408,7 @@ extension TelemetryWrapper {
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case settingsMenuShowTour = "show-tour"
         case creditCardAutofillSettings = "creditCardAutofillSettings"
+        case notificationPermission = "notificationPermission"
         // MARK: New Onboarding
         case onboardingClose = "onboarding-close"
         case onboardingCardView = "onboarding-card-view"
@@ -872,6 +873,18 @@ extension TelemetryWrapper {
             GleanMetrics.Onboarding.wallpaperSelectorView.record()
         case (.action, .close, .onboardingWallpaperSelector, _, _):
             GleanMetrics.Onboarding.wallpaperSelectorClose.record()
+        case(.prompt, .tap, .notificationPermission, _, let extras):
+            if let isPermissionGranted = extras?[EventExtraKey.notificationPermissionIsGranted.rawValue] as? Bool {
+                let permissionExtra = GleanMetrics.Onboarding.NotificationPermissionPromptExtra(granted: isPermissionGranted)
+                GleanMetrics.Onboarding.notificationPermissionPrompt.record(permissionExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
 
         // MARK: Upgrade onboarding
         case (.action, .view, .upgradeOnboardingCardView, _, let extras):
