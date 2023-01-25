@@ -165,7 +165,11 @@ enum Experiments {
             return NimbusDisabled.shared
         }
 
-        let bundles = [Bundle.main, Strings.bundle]
+        let bundles = [
+            Bundle.main,
+            Strings.bundle,
+            Strings.bundle.fallbackTranslationBundle()
+        ].compactMap { $0 }
 
         let builder = NimbusBuilder(dbPath: dbPath)
         builder.with(url: remoteSettingsURL) // with(url:) returns void.

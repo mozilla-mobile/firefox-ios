@@ -19,6 +19,30 @@ class NimbusIntegrationTests: XCTestCase {
         XCTAssertEqual(stringWithTable, "Switch Your Default Browser")
     }
 
+    func testStringFallbackBundleAccessExplicitLanguage() throws {
+        let bundles = [
+            Bundle.main,
+            Strings.bundle.fallbackTranslationBundle(language: "es"),
+        ].compactMap { $0 }
+        let stringWithNoTable = bundles.getString(named: "ShareExtension.OpenInFirefoxAction.Title")
+        XCTAssertEqual(stringWithNoTable, "Abrir en Firefox")
+
+        let stringWithTable = bundles.getString(named: "Default Browser/DefaultBrowserCard.Title")
+        XCTAssertEqual(stringWithTable, "Cambia tu navegador predeterminado")
+    }
+
+    func testStringFallbackBundleAccessImplicitLanguage() throws {
+        let bundles = [
+            Bundle.main,
+            Strings.bundle.fallbackTranslationBundle(),
+        ].compactMap { $0 }
+        let stringWithNoTable = bundles.getString(named: "ShareExtension.OpenInFirefoxAction.Title")
+        XCTAssertEqual(stringWithNoTable, "Open in Firefox")
+
+        let stringWithTable = bundles.getString(named: "Default Browser/DefaultBrowserCard.Title")
+        XCTAssertEqual(stringWithTable, "Switch Your Default Browser")
+    }
+
     func testNSLocalizedStringAccess() throws {
         XCTAssertEqual(Locale.current.languageCode, "en")
         let stringWithNoTable = NSLocalizedString("ShareExtension.OpenInFirefoxAction.Title", bundle: Strings.bundle, comment: "")
