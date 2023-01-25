@@ -1,3 +1,4 @@
 /* Title of the Erase intent. */
 "Intents.Erase.Title" = "Rader";
 
+"Intents.Erase.Description" = "Erase browsing session";

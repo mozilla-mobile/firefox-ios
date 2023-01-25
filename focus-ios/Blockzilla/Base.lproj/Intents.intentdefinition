@@ -19,8 +19,10 @@
 		<dict>
 			<key>INIntentCategory</key>
 			<string>generic</string>
+			<key>INIntentDescription</key>
+			<string>Erase browsing session</string>
 			<key>INIntentDescriptionID</key>
-			<string>MLjPgP</string>
+			<string>Intents.Erase.Description</string>
 			<key>INIntentName</key>
 			<string>Erase</string>
 			<key>INIntentParameterCombinations</key>

@@ -1,3 +1,5 @@
 /* Title of the Erase intent. */
 "Intents.Erase.Title" = "امسح";
 
+"Intents.Erase.Description" = "Erase browsing session";
+
