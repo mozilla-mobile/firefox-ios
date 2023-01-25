@@ -804,6 +804,20 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
+        case(.action, .view, .notificationPermission, _, let extras):
+            if let status = extras?[EventExtraKey.notificationPermissionStatus.rawValue] as? String,
+               let alertSetting = extras?[EventExtraKey.notificationPermissionAlertSetting.rawValue] as? String {
+                let permissionExtra = GleanMetrics.App.NotificationPermissionExtra(alertSetting: alertSetting,
+                                                                                   status: status)
+                GleanMetrics.App.notificationPermission.record(permissionExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
