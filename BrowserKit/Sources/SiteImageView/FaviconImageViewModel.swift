@@ -5,15 +5,15 @@
 import UIKit
 
 public struct FaviconImageViewModel {
-    var urlStringRequest: String
+    var siteURLString: String?
+    var faviconURL: URL?
     var faviconCornerRadius: CGFloat
-    var usesIndirectDomain: Bool
 
-    public init(urlStringRequest: String,
-                faviconCornerRadius: CGFloat = 4,
-                usesIndirectDomain: Bool = false) {
-        self.urlStringRequest = urlStringRequest
+    public init(siteURLString: String? = nil,
+                faviconURL: URL? = nil,
+                faviconCornerRadius: CGFloat = 4) {
+        self.siteURLString = siteURLString
+        self.faviconURL = faviconURL
         self.faviconCornerRadius = faviconCornerRadius
-        self.usesIndirectDomain = usesIndirectDomain
     }
 }

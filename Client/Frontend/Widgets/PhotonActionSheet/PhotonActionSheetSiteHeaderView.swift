@@ -48,7 +48,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     }
 
     func configure(with site: Site) {
-        siteImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
+        siteImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
         titleLabel.text = site.title.isEmpty ? site.url : site.title
         descriptionLabel.text = site.tileURL.baseDomain
     }

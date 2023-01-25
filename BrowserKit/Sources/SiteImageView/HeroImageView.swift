@@ -76,15 +76,16 @@ public class HeroImageView: UIView, SiteImageView {
 
     // MARK: - SiteImageView
 
-    func setURL(_ urlStringRequest: String, type: SiteImageType) {
-        guard canMakeRequest(with: urlStringRequest) else { return }
+    func setURL(_ siteURLString: String, type: SiteImageType) {
+        guard canMakeRequest(with: siteURLString) else { return }
 
         let id = UUID()
         uniqueID = id
-        updateImage(url: urlStringRequest,
-                    type: type,
-                    id: id,
-                    usesIndirectDomain: true)
+
+        let model = SiteImageModel(id: id,
+                                   expectedImageType: .heroImage,
+                                   siteURLString: siteURLString)
+        updateImage(site: model)
     }
 
     func setImage(imageModel: SiteImageModel) {

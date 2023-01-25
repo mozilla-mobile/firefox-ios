@@ -165,7 +165,7 @@ class TabCell: UICollectionViewCell,
 
         favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)
         if !tab.isFxHomeTab {
-            favicon.setFavicon(FaviconImageViewModel(urlStringRequest: tab.url?.absoluteString ?? ""))
+            favicon.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
         }
 
         if selected {
@@ -196,7 +196,7 @@ class TabCell: UICollectionViewCell,
 
         // Favicon or letter image when tab screenshot isn't available
         } else {
-            smallFaviconView.setFavicon(FaviconImageViewModel(urlStringRequest: tab.url?.absoluteString ?? ""))
+            smallFaviconView.setFavicon(FaviconImageViewModel(siteURLString: tab.url?.absoluteString ?? ""))
             faviconBG.isHidden = false
             screenshotView.image = nil
         }
