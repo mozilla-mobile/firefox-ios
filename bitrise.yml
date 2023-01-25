@@ -126,9 +126,9 @@ workflows:
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
             "$BITRISE_SOURCE_DIR/Tests/XCUITests" \
-            "$BITRISE_SOURCE_DIR/Package.swift \
-            "$BITRISE_SOURCE_DIR/Package.resolved \
-            "$BITRISE_SOURCE_DIR/Dangerfile.swift
+            "$BITRISE_SOURCE_DIR/Package.swift" \
+            "$BITRISE_SOURCE_DIR/Package.resolved" \
+            "$BITRISE_SOURCE_DIR/Dangerfile.swift"
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
