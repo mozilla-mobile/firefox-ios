@@ -1,8 +1,14 @@
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Standard za lěpšy internet";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "Zgóńśo, kak to źo";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Nastajśo wótkaze z websedłow, mejlkow a powěsćow, aby se awtomatiski we Firefox wócynili.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox wašu priwatnosć šćita";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "Standardny wobglědowak změniś";
