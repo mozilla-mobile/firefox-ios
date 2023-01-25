@@ -121,7 +121,7 @@ class JumpBackInCell: UICollectionViewCell, ReusableCell {
                                                             heroImageSize: UX.heroImageSize)
         heroImage.setHeroImage(heroImageViewModel)
 
-        let faviconViewModel = FaviconImageViewModel(urlStringRequest: viewModel.siteURL)
+        let faviconViewModel = FaviconImageViewModel(siteURLString: viewModel.siteURL)
         websiteImage.setFavicon(faviconViewModel)
 
         itemTitle.text = viewModel.titleText

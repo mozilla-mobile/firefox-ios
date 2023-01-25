@@ -181,7 +181,7 @@ extension EnhancedTrackingProtectionDetailsVC {
         closeButton.setTitleColor(theme.colors.actionPrimary, for: .normal)
         connectionImage.image = viewModel.getLockIcon(theme.type)
 
-        siteInfoImage.setFavicon(FaviconImageViewModel(urlStringRequest: viewModel.URL,
+        siteInfoImage.setFavicon(FaviconImageViewModel(siteURLString: viewModel.URL,
                                                        faviconCornerRadius: ETPMenuUX.UX.faviconCornerRadius))
 
         setNeedsStatusBarAppearanceUpdate()

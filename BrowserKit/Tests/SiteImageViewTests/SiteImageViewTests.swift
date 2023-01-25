@@ -21,7 +21,7 @@ final class SiteImageViewTests: XCTestCase {
     func testFaviconSetup() {
         let expectation = expectation(description: "Completed image setup")
         let url = "https://www.firefox.com"
-        let viewModel = FaviconImageViewModel(urlStringRequest: url,
+        let viewModel = FaviconImageViewModel(siteURLString: url,
                                               faviconCornerRadius: 8)
         let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {
             expectation.fulfill()
@@ -29,8 +29,8 @@ final class SiteImageViewTests: XCTestCase {
         subject.setFavicon(viewModel)
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(imageFetcher.capturedStringRequest, url)
-        XCTAssertEqual(imageFetcher.capturedType, .favicon)
+        XCTAssertEqual(imageFetcher.capturedSite?.siteURLString, url)
+        XCTAssertEqual(imageFetcher.capturedSite?.expectedImageType, .favicon)
     }
 
     func testHeroImageSetup() {
@@ -48,35 +48,22 @@ final class SiteImageViewTests: XCTestCase {
         subject.setHeroImage(viewModel)
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(imageFetcher.capturedStringRequest, url)
-        XCTAssertEqual(imageFetcher.capturedType, .heroImage)
+        XCTAssertEqual(imageFetcher.capturedSite?.siteURLString, url)
+        XCTAssertEqual(imageFetcher.capturedSite?.expectedImageType, .heroImage)
     }
 }
 
 class MockSiteImageHandler: SiteImageHandler {
     var image = UIImage()
-    var capturedType: SiteImageType?
-    var capturedStringRequest: String?
+    var capturedSite: SiteImageModel?
     var siteURL: URL?
     var faviconURL: URL?
     var cacheFaviconURLCalled = 0
     var clearAllCachesCalled = 0
 
-    func getImage(urlStringRequest: String,
-                  type: SiteImageType,
-                  id: UUID,
-                  usesIndirectDomain: Bool) async -> SiteImageModel {
-        capturedStringRequest = urlStringRequest
-        capturedType = type
-        return SiteImageModel(id: id,
-                              expectedImageType: type,
-                              urlStringRequest: urlStringRequest,
-                              siteURL: URL(string: urlStringRequest)!,
-                              cacheKey: "",
-                              domain: ImageDomain(bundleDomains: []),
-                              faviconURL: nil,
-                              faviconImage: image,
-                              heroImage: image)
+    func getImage(site: SiteImageModel) async -> SiteImageModel {
+        capturedSite = site
+        return site
     }
 
     func cacheFaviconURL(siteURL: URL?, faviconURL: URL?) {

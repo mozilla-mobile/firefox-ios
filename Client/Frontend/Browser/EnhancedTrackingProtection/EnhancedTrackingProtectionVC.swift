@@ -337,7 +337,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     private func updateViewDetails() {
         if let urlString = viewModel.tab.url?.absoluteString {
-            favicon.setFavicon(FaviconImageViewModel(urlStringRequest: urlString,
+            favicon.setFavicon(FaviconImageViewModel(siteURLString: urlString,
                                                      faviconCornerRadius: ETPMenuUX.UX.faviconCornerRadius))
         }
 

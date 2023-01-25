@@ -98,10 +98,10 @@ class CustomSearchViewController: SettingsTableViewController {
             throw CustomSearchError(.DuplicateEngine)
         }
 
-        let result = await faviconFetcher.getImage(urlStringRequest: url.absoluteString,
-                                                   type: .favicon,
-                                                   id: UUID(),
-                                                   usesIndirectDomain: false)
+        let siteImageModel = SiteImageModel(id: UUID(),
+                                            expectedImageType: .favicon,
+                                            siteURLString: url.absoluteString)
+        let result = await faviconFetcher.getImage(site: siteImageModel)
 
         let engine = OpenSearchEngine(engineID: nil,
                                       shortName: name,

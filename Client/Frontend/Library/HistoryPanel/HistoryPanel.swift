@@ -397,7 +397,7 @@ class HistoryPanel: UIViewController,
         cell.descriptionLabel.isHidden = false
         cell.leftImageView.layer.borderColor = themeManager.currentTheme.colors.borderPrimary.cgColor
         cell.leftImageView.layer.borderWidth = UX.IconBorderWidth
-        cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
+        cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
         cell.accessoryView = nil
         cell.applyTheme(theme: themeManager.currentTheme)
         return cell

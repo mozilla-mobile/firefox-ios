@@ -109,7 +109,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
         twoLineCell.leftImageView.layer.borderColor = RecentlyClosedPanelUX.IconBorderColor.cgColor
         twoLineCell.leftImageView.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
-        twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: displayURL.absoluteString))
+        twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: displayURL.absoluteString))
 
         return twoLineCell
     }

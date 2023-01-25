@@ -49,7 +49,7 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
 
         if let urlString = viewModel.website?.absoluteString {
             let cornerRadius = InactiveTabItemCellModel.UX.FaviconCornerRadius
-            leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: urlString,
+            leftImageView.setFavicon(FaviconImageViewModel(siteURLString: urlString,
                                                            faviconCornerRadius: cornerRadius))
         }
         separatorInset = UIEdgeInsets(top: 0,

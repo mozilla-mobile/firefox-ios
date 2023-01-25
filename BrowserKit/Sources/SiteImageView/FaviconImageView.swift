@@ -50,14 +50,16 @@ public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - SiteImageView
 
     func setURL(_ viewModel: FaviconImageViewModel) {
-        guard canMakeRequest(with: viewModel.urlStringRequest) else { return }
+        guard canMakeRequest(with: viewModel.siteURLString) else { return }
 
         let id = UUID()
         uniqueID = id
-        updateImage(url: viewModel.urlStringRequest,
-                    type: .favicon,
-                    id: id,
-                    usesIndirectDomain: viewModel.usesIndirectDomain)
+
+        let model = SiteImageModel(id: id,
+                                   expectedImageType: .favicon,
+                                   siteURLString: viewModel.siteURLString,
+                                   faviconURL: viewModel.faviconURL)
+        updateImage(site: model)
     }
 
     func setImage(imageModel: SiteImageModel) {

@@ -12,14 +12,14 @@ public struct SiteImageModel {
     /// The image type expected when making a request
     let expectedImageType: SiteImageType
 
-    /// Always present, used to make the initial request
-    let urlStringRequest: String
+    /// Represents the website and not the resource
+    let siteURLString: String?
 
     /// URL can be nil in case the urlStringRequest cannot be used to build a URL
     var siteURL: URL?
 
     /// Used to cache any resources related to this request
-    var cacheKey: String
+    var cacheKey: String = ""
 
     /// Domain can be nil in case we don't have a siteURL to get the domain from
     var domain: ImageDomain?
@@ -32,4 +32,23 @@ public struct SiteImageModel {
 
     /// The fetched hero image
     var heroImage: UIImage?
+
+    public init(id: UUID,
+                expectedImageType: SiteImageType,
+                siteURLString: String? = nil,
+                siteURL: URL? = nil,
+                cacheKey: String = "",
+                faviconURL: URL? = nil,
+                faviconImage: UIImage? = nil,
+                heroImage: UIImage? = nil) {
+        self.id = id
+        self.expectedImageType = expectedImageType
+        self.siteURLString = siteURLString
+        self.siteURL = siteURL
+        self.cacheKey = cacheKey
+        self.domain = nil
+        self.faviconURL = faviconURL
+        self.faviconImage = faviconImage
+        self.heroImage = heroImage
+    }
 }

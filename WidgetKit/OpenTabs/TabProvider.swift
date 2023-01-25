@@ -29,12 +29,12 @@ struct TabProvider: TimelineProvider {
             let tabFaviconDictionary = await withTaskGroup(of: (String, SiteImageModel).self,
                                                            returning: [String: Image].self) { group in
                 for (_, tab) in simpleTabs {
+                    let siteImageModel = SiteImageModel(id: UUID(),
+                                                        expectedImageType: .favicon,
+                                                        siteURLString: tab.url?.absoluteString ?? "")
                     group.addTask {
                         await (tab.imageKey,
-                               siteImageFetcher.getImage(urlStringRequest: tab.url?.absoluteString ?? "",
-                                                         type: .favicon,
-                                                         id: UUID(),
-                                                         usesIndirectDomain: false))
+                               siteImageFetcher.getImage(site: siteImageModel))
                     }
                 }
 

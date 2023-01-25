@@ -388,7 +388,7 @@ class BookmarksPanel: SiteTableViewController,
 
             if let site = site,
                viewModel.leftImageView == nil {
-                cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
+                cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
             }
 
             cell.configure(viewModel: viewModel)

@@ -92,7 +92,7 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         favicon.backgroundColor = .clear
 
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
-            favicon.setFavicon(FaviconImageViewModel(urlStringRequest: siteURL,
+            favicon.setFavicon(FaviconImageViewModel(siteURLString: siteURL,
                                                      faviconCornerRadius: UX.faviconCornerRadius))
         }
     }

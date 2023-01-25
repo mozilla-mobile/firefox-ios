@@ -38,10 +38,9 @@ final class ImageHandlerTests: XCTestCase {
                                       type: SiteImageType = .favicon) -> SiteImageModel {
         return SiteImageModel(id: UUID(),
                               expectedImageType: type,
-                              urlStringRequest: cacheKey,
+                              siteURLString: cacheKey,
                               siteURL: URL(string: cacheKey)!,
                               cacheKey: cacheKey,
-                              domain: ImageDomain(bundleDomains: []),
                               faviconURL: imageURL,
                               faviconImage: nil,
                               heroImage: nil)
