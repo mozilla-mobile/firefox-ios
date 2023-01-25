@@ -62,7 +62,7 @@ class DownloadsPanelViewModel {
         return groupedDownloadedFiles.numberOfItemsForSection(section) > 0
     }
 
-    func getNumberOfItem(for section: Int) -> Int {
+    func getNumberOfItems(for section: Int) -> Int {
         return groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
