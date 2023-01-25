@@ -526,9 +526,9 @@ app:
         description: |
             The users alert setting.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-07-01"
@@ -732,9 +732,9 @@ onboarding:
         description: |
           Whether the notification permission was granted.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-07-01"
