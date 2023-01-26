@@ -4,6 +4,8 @@
 
 import Foundation
 import UserNotifications
+import Shared
+
 
 class NotificationManager {
     private var center: UNUserNotificationCenter
@@ -17,6 +19,8 @@ class NotificationManager {
         center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             completion(granted, error)
 
+            guard !AppConstants.isRunningUnitTest else { return }
+
             let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionIsGranted.rawValue:
                             granted]
             TelemetryWrapper.recordEvent(category: .prompt,
@@ -29,6 +33,10 @@ class NotificationManager {
     // Retrieves the authorization and feature-related notification settings and sends Telemetry
     func getNotificationSettings(completion: @escaping (UNNotificationSettings) -> Void) {
         center.getNotificationSettings { settings in
+            completion(settings)
+
+            guard !AppConstants.isRunningUnitTest else { return }
+
             var authorizationStatus = ""
             switch settings.authorizationStatus {
             case .authorized: authorizationStatus = "authorized"
@@ -54,8 +62,6 @@ class NotificationManager {
                                          method: .view,
                                          object: .notificationPermission,
                                          extras: extras)
-
-            completion(settings)
         }
     }
 
