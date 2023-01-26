@@ -78,7 +78,9 @@ workflows:
         title: Save xcresult to env
         inputs:
         - content: |
-            envman add --key BITRISE_XCRESULT_PATH --valuefile ./xcodebuild.xcresult
+            export $BITRISE_DEPLOY_DIR="xcodebuild.xcresult"
+            envman add --key $BITRISE_DEPLOY_DIR --value "${$BITRISE_DEPLOY_DIR}"
+            echo "value of MY_DIR: ${$BITRISE_DEPLOY_DIR}"
     - script@1.1:
         title: Run Danger
         is_always_run: true
@@ -89,6 +91,9 @@ workflows:
             set -e
             echo "Run danger"
             swift run danger-swift ci
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "${BITRISE_SOURCE_DIR}/xcodebuild.xcresult"
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
@@ -408,19 +413,6 @@ workflows:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: Unit Test
-    - deploy-to-bitrise-io@2.0:
-        inputs:
-        - deploy_path: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
-    - script@1.1:
-        title: Run Danger
-        is_always_run: true
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # Fail if any command fails
-            set -e
-            echo "Run danger"
-            swift run danger-swift ci
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x
