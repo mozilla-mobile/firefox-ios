@@ -11,7 +11,7 @@ let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter
 class ActivityStreamTest: BaseTestCase {
     let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
 
-    let testWithDB = ["testActivityStreamPages", "testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
+    let testWithDB = ["testActivityStreamPages", "testTopSites2Add", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
     let pagesVisitediPad = "browserActivityStreamPagesiPad.db"
