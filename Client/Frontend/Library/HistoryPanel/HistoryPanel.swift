@@ -432,7 +432,9 @@ class HistoryPanel: UIViewController,
         // Insert the ASGroup at the correct spot!
         viewModel.searchTermGroups.forEach { grouping in
             if let groupSection = viewModel.shouldAddGroupToSections(group: grouping) {
-                guard let individualItem = grouping.groupedItems.last, let lastVisit = individualItem.latestVisit else { return }
+                guard let individualItem = grouping.groupedItems.last,
+                      let lastVisit = individualItem.latestVisit
+                else { return }
 
                 let groupTimeInterval = TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
 

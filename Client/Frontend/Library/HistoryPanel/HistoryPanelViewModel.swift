@@ -64,6 +64,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     var groupedSites = DateGroupedTableData<Site>()
     var isFetchInProgress = false
     var shouldResetHistory = false
+    // Collapsible sections
     var hiddenSections: [Sections] = []
 
     var hasRecentlyClosed: Bool {
