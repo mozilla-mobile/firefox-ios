@@ -9,8 +9,6 @@ public struct Logger {}
 
 // MARK: - Singleton Logger Instances
 public extension Logger {
-    static let logPII = false
-
     /// Logger used for recording happenings with Sync, Accounts, Providers, Storage, and Profiles
     static let syncLogger = RollingFileLogger(filenameRoot: "sync", logDirectoryPath: Logger.logFileDirectoryPath(inDocuments: saveLogsToDocuments))
 

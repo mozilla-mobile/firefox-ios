@@ -96,7 +96,7 @@ class LibraryPanelHelper {
                 panelType: .history),
 
             LibraryPanelDescriptor(
-                viewController: DownloadsPanel(profile: profile),
+                viewController: DownloadsPanel(),
                 profile: profile,
                 tabManager: tabManager,
                 accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,

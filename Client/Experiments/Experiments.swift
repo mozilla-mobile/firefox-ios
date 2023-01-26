@@ -102,9 +102,6 @@ enum Experiments {
             URL(fileURLWithPath: $0).appendingPathComponent("nimbus.db").path
         }
 
-        if let dbPath = dbPath, Logger.logPII {
-            log.info("Nimbus database: \(dbPath)")
-        }
         return dbPath
     }
 
