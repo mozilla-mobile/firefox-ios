@@ -150,9 +150,6 @@ open class SyncStateMachine {
                     return
                 }
                 log.debug("Got token from auth state.")
-                if Logger.logPII {
-                   log.debug("Server is \(token.api_endpoint).")
-                }
                 let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync))
                 if prior == nil {
                    log.info("No persisted Sync state. Starting over.")

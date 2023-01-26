@@ -43,9 +43,6 @@ class AppSyncDelegate: SyncDelegate {
                 if settings.alertSetting != .enabled {
                     return
                 }
-                if Logger.logPII {
-                    log.info("Displaying notification for URL \(url.absoluteString)")
-                }
 
                 let notificationContent = UNMutableNotificationContent()
                 let title: String

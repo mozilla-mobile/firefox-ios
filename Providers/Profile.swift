@@ -261,9 +261,7 @@ open class BrowserProfile: Profile {
 
             switch level {
             case .trace:
-                if Logger.logPII {
-                    log.verbose(logString)
-                }
+                break
             case .debug:
                 log.debug(logString)
             case .info:
