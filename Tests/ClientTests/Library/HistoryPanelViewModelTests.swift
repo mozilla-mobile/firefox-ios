@@ -17,6 +17,7 @@ class HistoryPanelViewModelTests: XCTestCase {
 
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "HistoryPanelViewModelTest")
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         profile.reopen()
         subject = HistoryPanelViewModel(profile: profile)
     }
@@ -229,7 +230,19 @@ class HistoryPanelViewModelTests: XCTestCase {
         XCTAssertEqual(section, .today)
     }
 
-    // MARK: -
+    // MARK: - Deletion
+
+    func testDeleteGroup_ForToday() {
+        setupSiteVisits()
+
+        fetchHistory { _ in
+            XCTAssertEqual(self.subject.visibleSections[0], .today)
+            self.subject.deleteGroupsFor(dateOption: .today)
+            XCTAssertEqual(self.subject.visibleSections.count, 0)
+        }
+    }
+
+    // MARK: - Setup
     private func setupSiteVisits() {
         addSiteVisit(profile, url: "http://mozilla.org/", title: "Mozilla internet")
         addSiteVisit(profile, url: "http://mozilla.dev.org/", title: "Internet dev")
@@ -237,7 +250,8 @@ class HistoryPanelViewModelTests: XCTestCase {
     }
 
     private func addSiteVisit(_ profile: MockProfile, url: String, title: String) {
-        let result = profile.places.applyObservation(visitObservation: VisitObservation(url: url, title: title, visitType: VisitTransition.link))
+        let visitObservation = VisitObservation(url: url, title: title, visitType: VisitTransition.link)
+        let result = profile.places.applyObservation(visitObservation: visitObservation)
 
         XCTAssertEqual(true, result.value.isSuccess, "Site added: \(url).")
     }

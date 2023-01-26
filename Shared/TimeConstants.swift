@@ -150,6 +150,9 @@ extension Date {
     public var lastWeek: Date {
         return Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
     }
+    public var lastMonth: Date {
+        return Calendar.current.date(byAdding: .day, value: -31, to: noon) ?? Date()
+    }
     public var older: Date {
         return Calendar.current.date(byAdding: .day, value: -20, to: noon) ?? Date()
     }
