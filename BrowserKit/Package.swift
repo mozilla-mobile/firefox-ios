@@ -25,6 +25,9 @@ let package = Package(
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
+        .package(
+            url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
+            exact: "1.9.6"),
     ],
     targets: [
         .target(
@@ -35,7 +38,7 @@ let package = Package(
             dependencies: ["SiteImageView"]),
         .target(
             name: "Common",
-            dependencies: ["Dip"]),
+            dependencies: ["Dip", "SwiftyBeaver"]),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),
