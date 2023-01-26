@@ -18,6 +18,9 @@ public enum LoggerCategory: String {
     // This includes bookmarks, downloads, reader mode and history.
     case library
 
+    // Related to the application lifecycle
+    case lifecycle
+
     // Related to the setup of services on app launch
     case setup
 

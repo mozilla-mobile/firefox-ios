@@ -77,7 +77,6 @@ public class DefaultLogger: Logger {
                       file: String = #file,
                       function: String = #function,
                       line: Int = #line) {
-
         // Currently no way for Swiftybeaver to have fatal log levels.
         // Let's keep the possibility open in our code since other logger supports this.
         logger.error(message,
@@ -85,5 +84,19 @@ public class DefaultLogger: Logger {
                      function,
                      line: line,
                      context: category.rawValue)
+    }
+
+    public func copyLogsToDocuments() {
+        guard let defaultLogDirectoryPath = logger.logFileDirectoryPath(inDocuments: false),
+              let documentsLogDirectoryPath = logger.logFileDirectoryPath(inDocuments: true),
+              let previousLogFiles = try? FileManager.default.contentsOfDirectory(atPath: defaultLogDirectoryPath) else { return }
+
+        let defaultLogDirectoryURL = URL(fileURLWithPath: defaultLogDirectoryPath, isDirectory: true)
+        let documentsLogDirectoryURL = URL(fileURLWithPath: documentsLogDirectoryPath, isDirectory: true)
+        for previousLogFile in previousLogFiles {
+            let previousLogFileURL = defaultLogDirectoryURL.appendingPathComponent(previousLogFile)
+            let targetLogFileURL = documentsLogDirectoryURL.appendingPathComponent(previousLogFile)
+            try? FileManager.default.copyItem(at: previousLogFileURL, to: targetLogFileURL)
+        }
     }
 }

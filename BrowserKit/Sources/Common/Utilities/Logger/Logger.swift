@@ -65,6 +65,9 @@ public protocol Logger {
                file: String,
                function: String,
                line: Int)
+
+    /// Provide method to save log files to document folder so we can retrieve it more easily on devices
+    func copyLogsToDocuments()
 }
 
 public extension Logger {

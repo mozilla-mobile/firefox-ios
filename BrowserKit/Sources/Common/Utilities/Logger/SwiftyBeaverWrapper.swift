@@ -35,12 +35,40 @@ protocol SwiftyBeaverWrapper {
                       _ function: String,
                       line: Int,
                       context: Any?)
+
+    static func logFileDirectoryPath(inDocuments: Bool) -> String?
+    static var fileDestination: URL? { get }
 }
 
-extension SwiftyBeaver: SwiftyBeaverWrapper {}
+extension SwiftyBeaver: SwiftyBeaverWrapper {
+    static func logFileDirectoryPath(inDocuments: Bool) -> String? {
+        let searchPathDirectory: FileManager.SearchPathDirectory = inDocuments ? .documentDirectory : .cachesDirectory
+        guard let targetDirectory = NSSearchPathForDirectoriesInDomains(searchPathDirectory,
+                                                                        .userDomainMask,
+                                                                        true).first
+        else { return nil }
+
+        let logsDirectory = "\(targetDirectory)/Logs"
+        if !FileManager.default.fileExists(atPath: logsDirectory) {
+            try? FileManager.default.createDirectory(atPath: logsDirectory,
+                                                     withIntermediateDirectories: true,
+                                                     attributes: nil)
+        }
+        return logsDirectory
+    }
+
+    static var fileDestination: URL? {
+        guard let path = SwiftyBeaver.logFileDirectoryPath(inDocuments: false) else { return nil }
+
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        let date = dateFormatterGet.string(from: Date())
+        return URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent("Firefox-\(date).log")
+    }
+}
 
 struct DefaultSwiftyBeaver {
-
     /// Setup SwiftyBeaver as our basic logger for console and file destination.
     ///
     /// Note that filters can be added here on the different destinations like the following:
@@ -51,12 +79,12 @@ struct DefaultSwiftyBeaver {
     static let implementation: SwiftyBeaverWrapper.Type = {
         let console = ConsoleDestination()
         // Format has full date/time, colored log level, tag, file name and message
-        console.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] [$N] $M"
+        console.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] $N - $M"
         console.minLevel = .debug
 
-        let file = FileDestination()
+        let file = FileDestination(logFileURL: SwiftyBeaver.fileDestination)
         // Format has full date/time, colored log level, tag, file name and message
-        file.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] [$N] $M"
+        file.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] $N - $M"
         file.minLevel = .info
 
         let logger = SwiftyBeaver.self

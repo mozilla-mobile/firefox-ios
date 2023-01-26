@@ -9,7 +9,7 @@ import UIKit
 import Common
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let log = Logger.browserLogger
+    private let logger = DefaultLogger.shared
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // It's important this is the first thing that happens when the app is run
         DependencyHelper().bootstrapDependencies()
 
-        log.info("startApplication begin")
+        logger.info("startApplication begin", category: .lifecycle)
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         menuBuilderHelper = MenuBuilderHelper()
 
-        log.info("startApplication end")
+        logger.info("startApplication end", category: .lifecycle)
 
         return true
     }
@@ -66,6 +66,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        logger.info("didFinishLaunchingWithOptions start", category: .lifecycle)
+
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
         backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
@@ -83,12 +85,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         addObservers()
 
+        logger.info("didFinishLaunchingWithOptions end", category: .lifecycle)
+
         return true
     }
 
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(_ application: UIApplication) {
+        logger.info("applicationDidBecomeActive start", category: .lifecycle)
+
         shutdownWebServer?.cancel()
         shutdownWebServer = nil
 
@@ -111,6 +117,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
         }
+
+        logger.info("applicationDidBecomeActive end", category: .lifecycle)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -120,6 +128,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        logger.info("applicationDidEnterBackground start", category: .lifecycle)
+
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
 
@@ -136,6 +146,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         shutdownWebServer = singleShotTimer
         backgroundSyncUtil?.scheduleSyncOnAppBackground()
         tabManager.preserveTabs()
+
+        logger.info("applicationDidEnterBackground end", category: .lifecycle)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
