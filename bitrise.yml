@@ -74,28 +74,15 @@ workflows:
             xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
             echo "Show files after running tests"
             ls -la
-    #- script@1.1:
-    #    title: Save xcresult to env
-    #    inputs:
-    #    - content: |
-    #        MY_DIR=$(basename xcodebuild.xcresult)
-    #        envman add --key BITRISE_DEPLOY_DIR --value "$MY_DIR"
-    #        echo "value of MY_DIR: $MY_DIR"
-    #- script@1.1:
-    #    title: Run Danger
-    #    is_always_run: true
-    #    inputs:
-    #    - content: |
-            #!/usr/bin/env bash
-            # Fail if any command fails
-    #        set -e
-    #        echo "Run danger"
-    #        swift run danger-swift ci
-    - deploy-to-bitrise-io@2:
-        inputs:
-        - deploy_path: "${BITRISE_SOURCE_DIR}/xcodebuild.xcresult"
     - script@1.1:
-        title: Run Danger 2
+        title: Save xcresult to env
+        inputs:
+        - content: |
+            MY_DIR=$(basename xcodebuild.xcresult)
+            envman add --key BITRISE_DEPLOY_DIR_2 --value "$MY_DIR"
+            echo "value of MY_DIR: $MY_DIR"
+    - script@1.1:
+        title: Run Danger
         is_always_run: true
         inputs:
         - content: |
@@ -104,6 +91,19 @@ workflows:
             set -e
             echo "Run danger"
             swift run danger-swift ci
+    #- deploy-to-bitrise-io@2:
+    #    inputs:
+    #    - deploy_path: "${BITRISE_SOURCE_DIR}/xcodebuild.xcresult"
+    #- script@1.1:
+    #    title: Run Danger 2
+    #    is_always_run: true
+    #    inputs:
+    #    - content: |
+            #!/usr/bin/env bash
+            # Fail if any command fails
+    #        set -e
+    #        echo "Run danger"
+    #        swift run danger-swift ci
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
