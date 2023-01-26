@@ -512,6 +512,27 @@ app:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
+  notification_permission:
+    type: event
+    description: |
+      Records the status of the users notification permission.
+    extra_keys:
+      status:
+        type: string
+        description: |
+            The status of the users notification permission.
+      alert_setting:
+        type: string
+        description: |
+            The users alert setting.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-07-01"
+
 # Downloads
 downloads:
   download_now_button_tapped:
@@ -701,6 +722,22 @@ onboarding:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
+  notification_permission_prompt:
+    type: event
+    description: |
+      Records the users decision to enable/disable notifications.
+    extra_keys:
+      granted:
+        type: boolean
+        description: |
+          Whether the notification permission was granted.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13039
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-07-01"
 
 # Upgrade onboarding metrics
 upgrade:
