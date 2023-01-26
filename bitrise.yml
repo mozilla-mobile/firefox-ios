@@ -52,12 +52,12 @@ workflows:
         inputs:
         - configuration: Fennec
         - xcodebuild_options: '"CODE_SIGNING_ALLOWED=NO" "COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-derivedDataPath /Users/vagrant/git/DerivedData"'
+            "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-derivedDataPath" "/Users/vagrant/git/DerivedData"'
         - scheme: Fennec_Enterprise_XCUITests
     - xcode-test-without-building@0:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
-        - xcodebuild_options: '"-derivedDataPath DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
+        - xcodebuild_options: '"-derivedDataPath" "DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
     - script@1.1:
         title: Run Danger
