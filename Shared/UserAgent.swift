@@ -49,7 +49,7 @@ open class UserAgent {
         return ua.lowercased().contains("intel mac")
     }
 
-    public static let desktopUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/604.1"
+    public static let desktopUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15"
 
 
     public static func mobileUserAgent() -> String {
