@@ -2,6 +2,23 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+function videoTags() {
+    return document.getElementsByTagName("video");
+}
+
+function closeFullScreen() {
+    try {
+        var videos = videoTags()
+        for (var i = 0; i < videos.length; i++) {
+            videos.item(i).onplaying = function() {
+                videos.item(i).webkitExitFullScreen()
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 var isFullScreenEnabled = document.fullscreenEnabled ||
                                     document.webkitFullscreenEnabled ||
                                     document.mozFullScreenEnabled ||

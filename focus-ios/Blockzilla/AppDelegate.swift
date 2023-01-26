@@ -212,6 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appPhase = .willResignActive
         browserViewController.dismissActionSheet()
         browserViewController.deactivateUrlBar()
+        browserViewController.exitFullScreenVideo()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

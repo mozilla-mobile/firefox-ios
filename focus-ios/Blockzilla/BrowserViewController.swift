@@ -614,6 +614,11 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    public func exitFullScreenVideo() {
+        let js = "closeFullScreen()"
+        webViewController.evaluate(js, completion: nil)
+    }
+
     private func containWebView() {
         addChild(webViewController)
         webViewContainer.addSubview(webViewController.view)
