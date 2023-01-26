@@ -11,7 +11,7 @@ let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "Twitter
 class ActivityStreamTest: BaseTestCase {
     let TopSiteCellgroup = XCUIApplication().cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
 
-    let testWithDB = ["testActivityStreamPages", "testTopSites2Add", "testTopSitesOpenInNewPrivateTab", "testContextMenuInLandscape", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
+    let testWithDB = ["testActivityStreamPages", "testTopSites2Add", "testTopSitesRemoveAllExceptDefaultClearPrivateData"]
 
     // Using the DDDBBs created for these tests containing enough entries for the tests that used them listed above
     let pagesVisitediPad = "browserActivityStreamPagesiPad.db"
@@ -179,9 +179,9 @@ class ActivityStreamTest: BaseTestCase {
         }
         navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
-        // Long tap on apple top site, second cell
-        waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 3)
-        app.collectionViews.cells.staticTexts["Apple"].press(forDuration: 1)
+        // Long tap on Wikipedia top site
+        waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"], timeout: 3)
+        app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
         app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].tap()
 
         XCTAssert(TopSiteCellgroup.exists)
@@ -192,17 +192,17 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.nowAt(TabTray)
         if iPad() {
-            waitForExistence(app.collectionViews.element(boundBy: 1).cells.staticTexts["Apple"], timeout: 15)
-            app/*@START_MENU_TOKEN@*/.otherElements["Tabs Tray"].collectionViews/*[[".otherElements[\"Tabs Tray\"].collectionViews",".collectionViews"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.cells["Apple"].tap()
+            waitForExistence(app.collectionViews.element(boundBy: 1).cells.staticTexts["Wikipedia"], timeout: TIMEOUT)
+            app/*@START_MENU_TOKEN@*/.otherElements["Tabs Tray"].collectionViews/*[[".otherElements[\"Tabs Tray\"].collectionViews",".collectionViews"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.cells["Wikipedia"].tap()
         } else {
-            waitForExistence(app.collectionViews.cells.staticTexts["Apple"], timeout: 5)
-            app.collectionViews.element(boundBy: 1).cells.staticTexts["Apple"].tap()
+            waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"], timeout: TIMEOUT)
+            app.collectionViews.element(boundBy: 1).cells.staticTexts["Wikipedia"].tap()
         }
 
         // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)
         XCTAssertTrue(app.textFields["url"].exists)
-        waitForValueContains(app.textFields["url"], value: "apple.com")
+        waitForValueContains(app.textFields["url"], value: "wikipedia.org")
     }
 
     // Smoketest
@@ -259,7 +259,7 @@ class ActivityStreamTest: BaseTestCase {
             navigator.performAction(Action.CloseURLBarOpen)
 
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
-            app.collectionViews.cells.staticTexts["Apple"].press(forDuration: 1)
+            app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
 
             let contextMenuHeight = app.tables["Context Menu"].frame.size.height
             let parentViewHeight = app.otherElements["Action Sheet"].frame.size.height
