@@ -92,7 +92,7 @@ class NotificationManager {
         center.removePendingNotificationRequests(withIdentifiers: ids)
     }
 
-    // Mark: - Private
+    // MARK: - Private
 
     // Helper method that takes trigger based on date or time interval
     private func schedule(title: String,
