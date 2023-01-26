@@ -58,7 +58,7 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-resultBundlePath" "xcodebuild.xcresult" "-xctestrun" "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun"'
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" "-xctestrun" "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun"'
     - script@1.1:
         title: Run Danger
         is_always_run: true
