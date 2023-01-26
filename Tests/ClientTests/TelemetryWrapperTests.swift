@@ -212,6 +212,17 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.closeTap)
     }
 
+    func test_onboardingNotificationPermission_GleanIsCalled() {
+        let isGrantedKey = TelemetryWrapper.EventExtraKey.notificationPermissionIsGranted.rawValue
+        let extras = [isGrantedKey: true]
+        TelemetryWrapper.recordEvent(category: .prompt,
+                                     method: .tap,
+                                     object: .notificationPermission,
+                                     extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.notificationPermissionPrompt)
+    }
+
     // MARK: - Upgrade onboarding
     func test_upgradeCardViewWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue
@@ -424,6 +435,20 @@ class TelemetryWrapperTests: XCTestCase {
         )
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.CreditCard.autofillSettingsTapped)
+    }
+
+    // MARK: - App
+
+    func test_appNotificationPermission_GleanIsCalled() {
+        let statusKey = TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue
+        let alertSettingKey = TelemetryWrapper.EventExtraKey.notificationPermissionAlertSetting.rawValue
+        let extras = [statusKey: "authorized", alertSettingKey: "enabled"]
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .notificationPermission,
+                                     extras: extras)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.App.notificationPermission)
     }
 
     // MARK: - Nimbus Calls
