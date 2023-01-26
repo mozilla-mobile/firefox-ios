@@ -6,11 +6,26 @@ import Foundation
 import UserNotifications
 import Shared
 
+protocol UserNotificationCenterProtocol {
+    func getNotificationSettings(completionHandler: @escaping (UNNotificationSettings) -> Void)
+    func requestAuthorization(options: UNAuthorizationOptions,
+                              completionHandler: @escaping (Bool, Error?) -> Void)
+    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?)
+    func getPendingNotificationRequests(completionHandler: @escaping ([UNNotificationRequest]) -> Void)
+    func removePendingNotificationRequests(withIdentifiers identifiers: [String])
+    func removeAllPendingNotificationRequests()
+    func getDeliveredNotifications(completionHandler: @escaping ([UNNotification]) -> Void)
+    func removeDeliveredNotifications(withIdentifiers identifiers: [String])
+    func removeAllDeliveredNotifications()
+}
+
+extension UNUserNotificationCenter: UserNotificationCenterProtocol {
+}
 
 class NotificationManager {
-    private var center: UNUserNotificationCenter
+    private var center: UserNotificationCenterProtocol
 
-    init(center: UNUserNotificationCenter = UNUserNotificationCenter.current()) {
+    init(center: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
         self.center = center
     }
 
@@ -89,11 +104,30 @@ class NotificationManager {
         schedule(title: title, body: body, id: id, trigger: trigger)
     }
 
-    // Remove Pending
+    // Fetches all delivered notifications that are still present in Notification Center.
+    func findDeliveredNotifications(completion: @escaping ([UNNotification]) -> Void) {
+        center.getDeliveredNotifications { notificationList in
+            completion(notificationList)
+        }
+    }
+
+    // Fetches all delivered notifications that are still present in Notification Center by id
+    func findDeliveredNotificationForId(id: String,
+                                        completion: @escaping (UNNotification?) -> Void) {
+        findDeliveredNotifications { notificationList in
+            let notification = notificationList.filter { notification -> Bool in
+                notification.request.identifier == id
+            }.first
+            completion(notification)
+        }
+    }
+
+    // Remove all pending notifications
     func removeAllPendingNotifications() {
         center.removeAllPendingNotificationRequests()
     }
 
+    // Remove pending notifications with id
     func removePendingNotificationsWithId(ids: [String]) {
         center.removePendingNotificationRequests(withIdentifiers: ids)
     }
@@ -113,6 +147,6 @@ class NotificationManager {
         let request = UNNotificationRequest(identifier: id,
                                             content: notificationContent,
                                             trigger: trigger)
-        center.add(request)
+        center.add(request, withCompletionHandler: nil)
     }
 }
