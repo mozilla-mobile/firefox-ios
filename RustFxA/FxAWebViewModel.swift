@@ -243,19 +243,11 @@ extension FxAWebViewModel {
 
             // ask for push notification
             MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
-            let center = UNUserNotificationCenter.current()
-            center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            NotificationManager().requestAuthorization { granted, error in
                 guard error == nil else { return }
                 if granted {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
-
-                let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionIsGranted.rawValue:
-                                granted]
-                TelemetryWrapper.recordEvent(category: .prompt,
-                                             method: .tap,
-                                             object: .notificationPermission,
-                                             extras: extras)
             }
         }
         // Record login or registration completed telemetry
