@@ -408,6 +408,7 @@ extension TelemetryWrapper {
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case settingsMenuShowTour = "show-tour"
         case creditCardAutofillSettings = "creditCardAutofillSettings"
+        case notificationPermission = "notificationPermission"
         // MARK: New Onboarding
         case onboardingClose = "onboarding-close"
         case onboardingCardView = "onboarding-card-view"
@@ -628,6 +629,11 @@ extension TelemetryWrapper {
 
         // Onboarding
         case cardType = "card-type"
+
+        // Notification permission
+        case notificationPermissionIsGranted = "is-granted"
+        case notificationPermissionStatus = "status"
+        case notificationPermissionAlertSetting = "alert-setting"
     }
 
     func recordEvent(category: EventCategory,
@@ -803,6 +809,20 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
+        case(.action, .view, .notificationPermission, _, let extras):
+            if let status = extras?[EventExtraKey.notificationPermissionStatus.rawValue] as? String,
+               let alertSetting = extras?[EventExtraKey.notificationPermissionAlertSetting.rawValue] as? String {
+                let permissionExtra = GleanMetrics.App.NotificationPermissionExtra(alertSetting: alertSetting,
+                                                                                   status: status)
+                GleanMetrics.App.notificationPermission.record(permissionExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
@@ -872,6 +892,18 @@ extension TelemetryWrapper {
             GleanMetrics.Onboarding.wallpaperSelectorView.record()
         case (.action, .close, .onboardingWallpaperSelector, _, _):
             GleanMetrics.Onboarding.wallpaperSelectorClose.record()
+        case(.prompt, .tap, .notificationPermission, _, let extras):
+            if let isPermissionGranted = extras?[EventExtraKey.notificationPermissionIsGranted.rawValue] as? Bool {
+                let permissionExtra = GleanMetrics.Onboarding.NotificationPermissionPromptExtra(granted: isPermissionGranted)
+                GleanMetrics.Onboarding.notificationPermissionPrompt.record(permissionExtra)
+            } else {
+                recordUninstrumentedMetrics(
+                    category: category,
+                    method: method,
+                    object: object,
+                    value: value,
+                    extras: extras)
+            }
 
         // MARK: Upgrade onboarding
         case (.action, .view, .upgradeOnboardingCardView, _, let extras):

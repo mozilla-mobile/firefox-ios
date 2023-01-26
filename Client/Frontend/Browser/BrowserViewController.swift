@@ -405,7 +405,7 @@ class BrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         KeyboardHelper.defaultHelper.addDelegate(self)
-        trackAccessibility()
+        trackTelemetry()
         setupNotifications()
         addSubviews()
 
@@ -2738,6 +2738,11 @@ extension BrowserViewController {
 }
 
 extension BrowserViewController {
+    func trackTelemetry() {
+        trackAccessibility()
+        trackNotificationPermission()
+    }
+
     func trackAccessibility() {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .voiceOver,
@@ -2765,5 +2770,36 @@ extension BrowserViewController {
                                      extras: [
                                         TelemetryWrapper.EventExtraKey.isAccessibilitySizeEnabled.rawValue: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory.description,
                                         TelemetryWrapper.EventExtraKey.preferredContentSizeCategory.rawValue: UIApplication.shared.preferredContentSizeCategory.rawValue.description])
+    }
+
+    func trackNotificationPermission() {
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { settings in
+            var authorizationStatus = ""
+            switch settings.authorizationStatus {
+            case .authorized: authorizationStatus = "authorized"
+            case .denied: authorizationStatus = "denied"
+            case .ephemeral: authorizationStatus = "ephemeral"
+            case .provisional: authorizationStatus = "provisional"
+            case .notDetermined: authorizationStatus = "notDetermined"
+            @unknown default: authorizationStatus = "notDetermined"
+            }
+
+            var alertSetting = ""
+            switch settings.alertSetting {
+            case .enabled: alertSetting = "enabled"
+            case .disabled: alertSetting = "disabled"
+            case .notSupported: alertSetting = "notSupported"
+            @unknown default: alertSetting = "notSupported"
+            }
+
+            let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue: authorizationStatus,
+                          TelemetryWrapper.EventExtraKey.notificationPermissionAlertSetting.rawValue: alertSetting]
+
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .view,
+                                         object: .notificationPermission,
+                                         extras: extras)
+        }
     }
 }
