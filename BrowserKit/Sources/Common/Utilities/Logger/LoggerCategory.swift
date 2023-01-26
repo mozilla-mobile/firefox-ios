@@ -4,8 +4,29 @@
 
 import Foundation
 
+/// This enum defines all the logger categories used in the app.
+/// Categories are sorted in alphabetical order.
+/// Do not add new categories unless discussing with the team beforehand.
 public enum LoggerCategory: String {
-    case sync
+    // Related to homepage UI and it's data management
     case homepage
+
+    // Related to the keychain
     case keychain
+
+    // Related to library UI and it's data management throughout the app.
+    // This includes bookmarks, downloads, reader mode and history.
+    case library
+
+    // Related to the setup of services on app launch
+    case setup
+
+    // Related to the settings UI, setup and management
+    case settings
+
+    // Related to sync accounts and sync management
+    case sync
+
+    // Related to the tabs UI, setup and management
+    case tabs
 }
