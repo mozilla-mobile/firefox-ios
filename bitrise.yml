@@ -54,35 +54,37 @@ workflows:
     #    - xcodebuild_options: '"CODE_SIGNING_ALLOWED=NO" "COMPILER_INDEX_STORE_ENABLE=NO"
     #        "CODE_SIGNING_REQUIRED=NO" "CODE_SIGN_IDENTITY=" "-derivedDataPath" "/Users/vagrant/git/DerivedData"'
     #    - scheme: Fennec_Enterprise_XCUITests
-    #- xcode-test-without-building@0:
+    - xcode-test-without-building@0:
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
+        - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
+    #- script@1.1:
+    #    title: Test without Building
     #    inputs:
-    #    - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
-    #    - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
-    #        "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-
-    - script@1.1:
-        title: Test without Building
-        inputs:
-        - content: |
+    #    - content: |
             #!/usr/bin/env bash
-            set -ex
-            ls -la
-            ls DerivedData
-            pwd
-            echo "-- test-without-building --"
+    #        set -ex
+    #        ls -la
+    #        ls DerivedData
+    #        pwd
+    #        echo "-- test-without-building --"
 
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
-            echo "Show files after running tests"
-            ls -la
-    - script@1.1:
-        title: Save xcresult to env
+    #       xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
+    #        echo "Show files after running tests"
+    #        ls -la
+    - script:
+        title: Just checking
         inputs:
         - content: |
-            MY_DIR=$(basename xcodebuild.xcresult)
-            envman add --key BITRISE_DEPLOY_DIR_2 --value "$MY_DIR"
-            echo "value of MY_DIR: $MY_DIR"
+            "echo value of xcresult path: $BITRISE_XCRESULT_PATH"
+            ls -la
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: "$BITRISE_XCRESULT_PATH"
     - script@1.1:
-        title: Run Danger
+        title: Run Danger 2
         is_always_run: true
         inputs:
         - content: |
@@ -91,19 +93,6 @@ workflows:
             set -e
             echo "Run danger"
             swift run danger-swift ci
-    #- deploy-to-bitrise-io@2:
-    #    inputs:
-    #    - deploy_path: "${BITRISE_SOURCE_DIR}/xcodebuild.xcresult"
-    #- script@1.1:
-    #    title: Run Danger 2
-    #    is_always_run: true
-    #    inputs:
-    #    - content: |
-            #!/usr/bin/env bash
-            # Fail if any command fails
-    #        set -e
-    #        echo "Run danger"
-    #        swift run danger-swift ci
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true

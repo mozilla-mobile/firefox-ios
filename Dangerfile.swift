@@ -13,8 +13,8 @@ func changedFiles() {
 }
 
 func coverage() {
-    guard let xcresult = ProcessInfo.processInfo.environment["$BITRISE_DEPLOY_DIR_2"]?.escapeString() else {
-        fail("Could not get the $BITRISE_DEPLOY_DIR_2 to generage code coverage")
+    guard let xcresult = ProcessInfo.processInfo.environment["$BITRISE_XCRESULT_PATH"]?.escapeString() else {
+        fail("Could not get the $BITRISE_XCRESULT_PATH to generage code coverage")
         return
     }
 
