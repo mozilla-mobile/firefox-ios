@@ -72,8 +72,14 @@ workflows:
             echo "-- test-without-building --"
 
             xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
- 
-    - script:
+            echo "Show files after running tests"
+            ls -la
+    - script@1.1:
+        title: Save xcresult to env
+        inputs:
+        - content: |
+            envman add --key BITRISE_XCRESULT_PATH --valuefile ./xcodebuild.xcresult
+    - script@1.1:
         title: Run Danger
         is_always_run: true
         inputs:
