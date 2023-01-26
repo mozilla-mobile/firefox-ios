@@ -157,7 +157,7 @@ class BrowserViewController: UIViewController {
         return keyboardPressesHandlerValue
     }
 
-    fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
+    private var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
     init(
         profile: Profile,
@@ -608,6 +608,7 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
         }
+        showQueuedAlertIfAvailable()
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -880,7 +881,7 @@ class BrowserViewController: UIViewController {
         isCrashAlertShowing = true
     }
 
-    fileprivate func showQueuedAlertIfAvailable() {
+    private func showQueuedAlertIfAvailable() {
         if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
