@@ -5,9 +5,9 @@
 import Foundation
 
 public protocol Logger {
-    /// The TRACE log level captures all the details about the behavior of the application. It is mostly diagnostic and is more granular and finer than DEBUG
+    /// The VERBOSE log level captures all the details about the behavior of the application. It is mostly diagnostic and is more granular and finer than DEBUG
     /// log level. This log level is used in situations where you need to see what happened in your application or what happened in the third-party libraries used.
-    /// You can use the TRACE log level to query parameters in the code or interpret the algorithm’s steps.
+    /// You can use the VERBOSE log level to query parameters in the code or interpret the algorithm’s steps.
     func verbose(_ message: String,
                  category: LoggerCategory,
                  sendToSentry: Bool,
