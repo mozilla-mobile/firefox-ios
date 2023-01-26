@@ -63,7 +63,7 @@ public extension Array {
 }
 
 public extension Sequence where Iterator.Element: Hashable {
-    /// Return a  de-duplicated sequence with the order preserved. `o(N)` complexity.
+    /// Return a de-duplicated sequence with the order preserved. `o(N)` complexity.
     func uniqued() -> [Iterator.Element] {
         var seen: Set<Iterator.Element> = []
         return filter { seen.insert($0).inserted }
@@ -82,7 +82,7 @@ public extension Sequence {
 }
 
 public extension Collection {
-    /// Returns the element at the specified index iff it is within bounds, otherwise nil.
+    /// Returns the element at the specified index if it is within bounds, otherwise nil.
     subscript (safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
     }
