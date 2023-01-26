@@ -4,6 +4,7 @@
 
 import Foundation
 import Sentry
+import Common
 
 public enum SentryTag: String {
     case swiftData = "SwiftData"
@@ -40,6 +41,7 @@ public class SentryIntegration: SentryProtocol {
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
     private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
     private let DeviceAppHashLength = UInt(20)
+    private let logger = DefaultLogger.shared
 
     private var enabled = false
 
@@ -58,12 +60,12 @@ public class SentryIntegration: SentryProtocol {
         guard !enabled else { return }
 
         if DeviceInfo.isSimulator() {
-            Logger.browserLogger.debug("Not enabling Sentry; Running in Simulator")
+            logger.debug("Not enabling Sentry; Running in Simulator", category: .setup)
             return
         }
 
         if !sendUsageData {
-            Logger.browserLogger.debug("Not enabling Sentry; Not enabled by user choice")
+            logger.debug("Not enabling Sentry; Not enabled by user choice", category: .setup)
             return
         }
 
@@ -75,10 +77,10 @@ public class SentryIntegration: SentryProtocol {
 
         let bundle = AppInfo.applicationBundle
         guard let dsn = bundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
-            Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
+            logger.debug("Not enabling Sentry; Not configured in Info.plist", category: .setup)
             return
         }
-        Logger.browserLogger.debug("Enabling Sentry crash handler")
+        logger.verbose("Enabling Sentry crash handler", category: .setup)
 
         SentrySDK.start { options in
             options.dsn = dsn
@@ -213,11 +215,13 @@ public class SentryIntegration: SentryProtocol {
         return event
     }
 
+    // TODO: FXIOS-5633 Remove since will be handled from default logger (also need to handle severity)
     private func printMessage(message: String, extra: [String: Any]? = nil) {
         let string = extra?.reduce("") { (result: String, arg1) in
             let (key, value) = arg1
             return "\(result), \(key): \(value)"
         }
-        Logger.browserLogger.debug("Sentry: \(message) \(string ??? "")")
+
+        logger.debug("Sentry: \(message) \(string ??? "")", category: .setup)
     }
 }
