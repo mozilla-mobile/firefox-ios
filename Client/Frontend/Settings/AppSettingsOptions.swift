@@ -2,12 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Account
-import Common
 import Foundation
-import Glean
 import Shared
+import Account
 import LocalAuthentication
+import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 

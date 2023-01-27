@@ -10,12 +10,6 @@ class LoggerFileManagerTests: XCTestCase {
     private var subject: DefaultLoggerFileManager!
     private var fileManager: MockFileManager!
 
-    private lazy var formatter: DateFormatter = {
-        let dateFormatterGet = DateFormatter()
-        dateFormatterGet.dateFormat = "yyyy-MM-dd%20HH:mm:ss"
-        return dateFormatterGet
-    }()
-
     override func setUp() {
         super.setUp()
         fileManager = MockFileManager()
