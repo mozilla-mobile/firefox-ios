@@ -1038,6 +1038,9 @@
 		E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FCD294782D8003680B0 /* UIPasteboard+Extension.swift */; };
 		E1442FDB294782F9003680B0 /* UIPasteboard+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FCD294782D8003680B0 /* UIPasteboard+Extension.swift */; };
 		E1442FDC2947836E003680B0 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FCB294782D8003680B0 /* UIView+Extension.swift */; };
+		E1463D022981DA190074E16E /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D012981DA190074E16E /* NotificationManager.swift */; };
+		E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D032982D0240074E16E /* NotificationManagerTests.swift */; };
+		E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */; };
 		E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BF33D2950B1230039758D /* MailProvidersTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
 		E15A8B2D286D0066004BB2B8 /* TabsPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A8B2C286D0066004BB2B8 /* TabsPayloadTests.swift */; };
@@ -4810,6 +4813,9 @@
 		E1442FCA294782D8003680B0 /* UIView+SnapKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+SnapKit.swift"; sourceTree = "<group>"; };
 		E1442FCB294782D8003680B0 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		E1442FCD294782D8003680B0 /* UIPasteboard+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIPasteboard+Extension.swift"; sourceTree = "<group>"; };
+		E1463D012981DA190074E16E /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		E1463D032982D0240074E16E /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTests.swift; sourceTree = "<group>"; };
+		E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserNotificationCenter.swift; sourceTree = "<group>"; };
 		E14BF33D2950B1230039758D /* MailProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvidersTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
 		E15A8B2C286D0066004BB2B8 /* TabsPayloadTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayloadTests.swift; sourceTree = "<group>"; };
@@ -6005,6 +6011,7 @@
 				8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */,
 				9614BF4328AD1C6700D3F7EA /* AccountSyncHandler.swift */,
 				DA27EEDA28BADF4700DD6F5D /* MenuBuilderHelper.swift */,
+				E1463D012981DA190074E16E /* NotificationManager.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -6529,9 +6536,10 @@
 			children = (
 				8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */,
 				2165B2BF2860BB41004C0786 /* AdjustTelemetryHelperTests.swift */,
+				E14BF33D2950B1230039758D /* MailProvidersTests.swift */,
+				E1463D032982D0240074E16E /* NotificationManagerTests.swift */,
 				8AEE284A276A973400C7104D /* RatingPromptManagerTests.swift */,
 				8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */,
-				E14BF33D2950B1230039758D /* MailProvidersTests.swift */,
 				5A70EF1C295E3C3500790249 /* TestSetup.swift */,
 			);
 			path = Helpers;
@@ -7152,8 +7160,10 @@
 			children = (
 				45D5EDBF292D619000311934 /* MockablePinnedSites.swift */,
 				2165B2C32860CB34004C0786 /* MockAdjustTelemetryData.swift */,
+				965C3C9729343445006499ED /* MockAppSessionManager.swift */,
 				8AE80BB42891AE6700BC12EA /* MockDispatchGroup.swift */,
 				8ABA9C8C28931223002C0077 /* MockDispatchQueue.swift */,
+				965C3C95293431FC006499ED /* MockLaunchSessionProvider.swift */,
 				5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */,
 				8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
@@ -7164,10 +7174,9 @@
 				8AE80BAE2891960300BC12EA /* MockTraitCollection.swift */,
 				21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */,
 				C80C11EF28B3C9150062922A /* MockUserDefaults.swift */,
+				E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */,
 				5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */,
 				8AE80BB02891A39F00BC12EA /* SpyNotificationCenter.swift */,
-				965C3C9729343445006499ED /* MockAppSessionManager.swift */,
-				965C3C95293431FC006499ED /* MockLaunchSessionProvider.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -10707,6 +10716,7 @@
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,
+				E1463D022981DA190074E16E /* NotificationManager.swift in Sources */,
 				884CA7492344A301002E4711 /* TextContentDetector.swift in Sources */,
 				C8656D77270F858900E199EA /* TabsSettingsViewControler.swift in Sources */,
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
@@ -10831,6 +10841,7 @@
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
 				8ABA9C8E28931288002C0077 /* JumpBackInDataAdaptorTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
+				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				E60D032A1D5118DB002FE3F6 /* SyncStatusResolverTests.swift in Sources */,
 				8ADED7F0276A7788009C19E6 /* CumulativeDaysOfUseCounterTests.swift in Sources */,
 				8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */,
@@ -10908,6 +10919,7 @@
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,
 				E1AEC178286E0CF500062E29 /* HomepageViewControllerTests.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,
+				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
 				C8D0D6F4281C231200AFAED9 /* FeatureFlagsUserPrefsMigrationUtilityTests.swift in Sources */,
