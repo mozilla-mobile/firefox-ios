@@ -26,7 +26,10 @@ open class Avatar {
     }
 
     private func downloadAvatar(completionHandler: @escaping(UIImage?, Error?) -> Void) {
-        guard let url = url else { return }
+        guard let url = url else {
+            completionHandler(nil, ImageLoadingError.unableToFetchImage)
+            return
+        }
         
         DispatchQueue.global().async {
             DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url, limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
