@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
+import Common
 @testable import SiteImageView
 
 class URLCacheFileManagerTests: XCTestCase {
@@ -47,5 +48,21 @@ class MockFileManager: FileManagerProtocol {
     func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
         urlsCalledCount += 1
         return urls
+    }
+
+    func contentsOfDirectory(atPath path: String) throws -> [String] {
+        return []
+    }
+
+    func removeItem(atPath path: String) throws {}
+
+    func copyItem(at srcURL: URL, to dstURL: URL) throws {}
+
+    func createDirectory(atPath path: String,
+                         withIntermediateDirectories createIntermediates: Bool,
+                         attributes: [FileAttributeKey: Any]?) throws {}
+
+    func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
+        return []
     }
 }

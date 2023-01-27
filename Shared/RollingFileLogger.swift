@@ -4,6 +4,7 @@
 
 import Foundation
 import XCGLogger
+import Common
 
 //// A rolling file logger that saves to a different log file based on given timestamp.
 open class RollingFileLogger: XCGLogger {
