@@ -47,7 +47,7 @@ let package = Package(
             dependencies: ["Common"]),
         .target(
             name: "Logger",
-            dependencies: ["SwiftyBeaver"]),
+            dependencies: ["SwiftyBeaver", "Common"]),
         .testTarget(
             name: "LoggerTests",
             dependencies: ["Logger"]),

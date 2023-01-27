@@ -7,9 +7,12 @@ import Foundation
 public class DefaultLogger: Logger {
     public static let shared = DefaultLogger()
     private var logger: SwiftyBeaverWrapper.Type
+    private var fileManager: LoggerFileManager
 
-    init(swiftyBeaver: SwiftyBeaverWrapper.Type = DefaultSwiftyBeaver.implementation) {
+    init(swiftyBeaver: SwiftyBeaverWrapper.Type = DefaultSwiftyBeaver.implementation,
+         fileManager: LoggerFileManager = DefaultLoggerFileManager()) {
         self.logger = swiftyBeaver
+        self.fileManager = fileManager
     }
 
     public func log(_ message: String,
@@ -30,17 +33,6 @@ public class DefaultLogger: Logger {
     }
 
     public func copyLogsToDocuments() {
-        guard let defaultLogDirectoryPath = logger.logFileDirectoryPath(inDocuments: false),
-              let documentsLogDirectoryPath = logger.logFileDirectoryPath(inDocuments: true),
-              let previousLogFiles = try? FileManager.default.contentsOfDirectory(atPath: defaultLogDirectoryPath)
-        else { return }
-
-        let defaultLogDirectoryURL = URL(fileURLWithPath: defaultLogDirectoryPath, isDirectory: true)
-        let documentsLogDirectoryURL = URL(fileURLWithPath: documentsLogDirectoryPath, isDirectory: true)
-        for previousLogFile in previousLogFiles {
-            let previousLogFileURL = defaultLogDirectoryURL.appendingPathComponent(previousLogFile)
-            let targetLogFileURL = documentsLogDirectoryURL.appendingPathComponent(previousLogFile)
-            try? FileManager.default.copyItem(at: previousLogFileURL, to: targetLogFileURL)
-        }
+        fileManager.copyLogsToDocuments()
     }
 }

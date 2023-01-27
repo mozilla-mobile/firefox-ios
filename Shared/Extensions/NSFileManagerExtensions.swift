@@ -82,12 +82,6 @@ public extension FileManager {
         }
     }
 
-    func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
-        return try FileManager.default.contentsOfDirectory(atPath: path)
-            .filter { $0.hasPrefix("\(prefix).") }
-            .sorted { $0 < $1 }
-    }
-
     func removeItemInDirectory(_ directory: String, named: String) throws {
         let file = URL(fileURLWithPath: directory).appendingPathComponent(named).path
         try self.removeItem(atPath: file)
