@@ -168,7 +168,11 @@ workflows:
 
             echo "-- unzip -- "
             #exec unzip "${BITRISE_ARTIFACT_PATHS}"
-            find $BITRISE_ARTIFACT_PATHS -name 'DerivedData.zip' -exec unzip {} \; 
+            DERIVED_DATA_PATH=$(echo $BITRISE_ARTIFACT_PATHS | tr '|' '\n' | tail -1)
+            
+            echo $DERIVED_DATA_PATH
+            exec unzip $DERIVED_DATA_PATH
+
             echo "show dir"
             ls
 
