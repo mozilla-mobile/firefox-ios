@@ -4,7 +4,6 @@
 
 import Foundation
 import Sentry
-import Common
 
 public enum SentryTag: String {
     case swiftData = "SwiftData"
@@ -41,7 +40,6 @@ public class SentryIntegration: SentryProtocol {
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
     private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
     private let DeviceAppHashLength = UInt(20)
-    private let logger = DefaultLogger.shared
 
     private var enabled = false
 
@@ -60,12 +58,12 @@ public class SentryIntegration: SentryProtocol {
         guard !enabled else { return }
 
         if DeviceInfo.isSimulator() {
-            logger.debug("Not enabling Sentry; Running in Simulator", category: .setup)
+            Logger.browserLogger.debug("Not enabling Sentry; Running in Simulator")
             return
         }
 
         if !sendUsageData {
-            logger.debug("Not enabling Sentry; Not enabled by user choice", category: .setup)
+            Logger.browserLogger.debug("Not enabling Sentry; Not enabled by user choice")
             return
         }
 
@@ -77,10 +75,10 @@ public class SentryIntegration: SentryProtocol {
 
         let bundle = AppInfo.applicationBundle
         guard let dsn = bundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
-            logger.debug("Not enabling Sentry; Not configured in Info.plist", category: .setup)
+            Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }
-        logger.verbose("Enabling Sentry crash handler", category: .setup)
+        Logger.browserLogger.debug("Enabling Sentry crash handler")
 
         SentrySDK.start { options in
             options.dsn = dsn
@@ -221,7 +219,6 @@ public class SentryIntegration: SentryProtocol {
             let (key, value) = arg1
             return "\(result), \(key): \(value)"
         }
-
-        logger.debug("Sentry: \(message) \(string ??? "")", category: .setup)
+        Logger.browserLogger.debug("Sentry: \(message) \(string ??? "")")
     }
 }
