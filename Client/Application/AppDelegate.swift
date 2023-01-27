@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // It's important this is the first thing that happens when the app is run
         DependencyHelper().bootstrapDependencies()
 
-        logger.info("startApplication begin", category: .lifecycle)
+        logger.info("willFinishLaunchingWithOptions begin", category: .lifecycle)
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         menuBuilderHelper = MenuBuilderHelper()
 
-        logger.info("startApplication end", category: .lifecycle)
+        logger.info("willFinishLaunchingWithOptions end", category: .lifecycle)
 
         return true
     }
