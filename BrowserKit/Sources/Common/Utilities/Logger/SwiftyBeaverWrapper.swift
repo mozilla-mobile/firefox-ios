@@ -88,6 +88,7 @@ struct DefaultSwiftyBeaver {
         file.minLevel = .info
 
         let logger = SwiftyBeaver.self
+        logger.removeAllDestinations()
         logger.addDestination(console)
         logger.addDestination(file)
 
