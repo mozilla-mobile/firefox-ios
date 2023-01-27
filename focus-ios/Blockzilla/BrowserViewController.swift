@@ -254,6 +254,7 @@ class BrowserViewController: UIViewController {
         containWebView()
         createHomeView()
         createURLBar()
+        bindUrlBarViewModel()
         updateViewConstraints()
 
         overlayView.snp.makeConstraints { make in
@@ -638,7 +639,6 @@ class BrowserViewController: UIViewController {
 
     private func createURLBar() {
         urlBar = URLBar(viewModel: urlBarViewModel)
-        bindUrlBarViewModel()
         urlBar.delegate = self
         urlBar.isIPadRegularDimensions = isIPadRegularDimensions
         urlBar.shouldShowToolset = showsToolsetInURLBar
