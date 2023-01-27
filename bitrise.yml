@@ -168,14 +168,10 @@ workflows:
 
             echo "-- unzip -- "
             #exec unzip "${BITRISE_ARTIFACT_PATHS}"
-            find . -name 'DerivedData.zip' -exec unzip {} \; 
+            find $BITRISE_ARTIFACT_PATHS -name 'DerivedData.zip' -exec unzip {} \; 
             echo "show dir"
             ls
 
-            ls ./Users/vagrant/git/Tests/
-            cp -r ./Users/vagrant/git/Tests/* .
-            mv ./Users/vagrant/git/DerivedData .
-            ls -la
     #- script@1.1:
     #    run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
     #    title: Test without Building
