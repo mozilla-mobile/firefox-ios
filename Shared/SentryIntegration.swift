@@ -213,6 +213,7 @@ public class SentryIntegration: SentryProtocol {
         return event
     }
 
+    // TODO: FXIOS-5633 Remove since will be handled from default logger (also need to handle severity)
     private func printMessage(message: String, extra: [String: Any]? = nil) {
         let string = extra?.reduce("") { (result: String, arg1) in
             let (key, value) = arg1

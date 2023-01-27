@@ -528,6 +528,7 @@
 		8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */; };
 		8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
 		8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */; };
+		8A3EF05A29846ED500517C95 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 8A3EF05929846ED500517C95 /* Logger */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A48CE33292FCC0800B32289 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8A48CE32292FCC0800B32289 /* Kingfisher */; };
@@ -5325,6 +5326,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A3EF05A29846ED500517C95 /* Logger in Frameworks */,
 				5A70EF0E295DFCCF00790249 /* Common in Frameworks */,
 				5A8FD0F4293A7E9800333AA7 /* Sentry in Frameworks */,
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
@@ -8938,6 +8940,7 @@
 				5A8FD0EB293A7D5E00333AA7 /* SnapKit */,
 				5A8FD0F3293A7E9800333AA7 /* Sentry */,
 				5A70EF0D295DFCCF00790249 /* Common */,
+				8A3EF05929846ED500517C95 /* Logger */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -15936,6 +15939,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
+		};
+		8A3EF05929846ED500517C95 /* Logger */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Logger;
 		};
 		8A48CE32292FCC0800B32289 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
