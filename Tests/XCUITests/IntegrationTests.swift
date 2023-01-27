@@ -54,7 +54,8 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
+        waitForExistence(app.staticTexts["Continue to Firefox accounts"], timeout: TIMEOUT_LONG)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
@@ -68,7 +69,10 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 25)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+        waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+        sleep(3)
     }
 
     func testFxASyncHistory () {
@@ -141,8 +145,9 @@ class IntegrationTests: BaseTestCase {
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
+        sleep(3)
         app.tables.cells.element(boundBy: 2).tap()
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
     }
 
     func testFxASyncLogins () {
@@ -223,6 +228,7 @@ class IntegrationTests: BaseTestCase {
 
         // Need to swipe to get the data on the screen on focus
         app.swipeDown()
+        sleep(3)
         waitForExistence(app.tables.otherElements["profile1"], timeout: 10)
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
     }
