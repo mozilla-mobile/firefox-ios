@@ -6,6 +6,7 @@ import Foundation
 import UserNotifications
 import Shared
 
+// Protocol with UNUserNotificationCenter methods so we can mock UNUserNotificationCenter for unit testing
 protocol UserNotificationCenterProtocol {
     func getNotificationSettings(completionHandler: @escaping (UNNotificationSettings) -> Void)
     func requestAuthorization(options: UNAuthorizationOptions,
