@@ -5,7 +5,7 @@
 import SyncTelemetry
 
 open class FxATelemetry {
-    /// Parses a JSON blob returned from `FxAccountManager#parseTelemetry()`
+    /// Pars a JSON blob returned from `FxAccountManager#parseTelemetry()`
     /// into a list of events that can be recorded into prefs, and then
     /// included in the next Sync ping. Ignores malformed and unknown events.
     public static func parseTelemetry(fromJSONString string: String) -> [Event] {
