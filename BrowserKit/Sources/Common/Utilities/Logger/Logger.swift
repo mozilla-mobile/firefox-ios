@@ -5,6 +5,11 @@
 import Foundation
 
 public protocol Logger {
+    // TODO: Laurie - Discussion about which log level we want as a team
+    // TODO: Laurie - Interface func log() with log level
+    // TODO: Laurie - Move from Common to Logger package
+    // TODO: Laurie - Rolling log -> easier to share for users. 5mb + clean up file before copying
+
     /// The VERBOSE log level captures all the details about the behavior of the application. It is mostly diagnostic and is more granular and finer than DEBUG
     /// log level. This log level is used in situations where you need to see what happened in your application or what happened in the third-party libraries used.
     /// You can use the VERBOSE log level to query parameters in the code or interpret the algorithm’s steps.
