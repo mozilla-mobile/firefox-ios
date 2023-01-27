@@ -8623,7 +8623,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				43EFA63E2786562600400DF0 /* PBXTargetDependency */,
 				2FCAE23C1ABB520700877008 /* PBXTargetDependency */,
 			);
 			name = Storage;
@@ -11058,10 +11057,6 @@
 			isa = PBXTargetDependency;
 			target = F8324A042649A188007E4BFA /* CredentialProvider */;
 			targetProxy = 435A2FF6278F51CD00C94282 /* PBXContainerItemProxy */;
-		};
-		43EFA63E2786562600400DF0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 43EFA63D2786562600400DF0 /* Places */;
 		};
 		5FA2233727F73E28005B3D87 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -15803,10 +15798,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 43C6A47D27A0679300C79856 /* XCRemoteSwiftPackageReference "MappaMundi" */;
 			productName = MappaMundi;
-		};
-		43EFA63D2786562600400DF0 /* Places */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Places;
 		};
 		5A5AB97F296CA03500485E06 /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;
