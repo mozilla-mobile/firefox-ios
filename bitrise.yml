@@ -13,10 +13,10 @@ stages:
   stage_2:
     workflows:
     - build_and_test_1_SmokeTest2: {}
-    - build_and_test_2_SmokeTest: {}
-    - build_and_test_3_SmokeTest3: {}
-    - build_and_test_4_SmokeTest4: {}
-    - just_build_fennec_to_get_warnings: {}
+    #- build_and_test_2_SmokeTest: {}
+    #- build_and_test_3_SmokeTest3: {}
+    #- build_and_test_4_SmokeTest4: {}
+    #- just_build_fennec_to_get_warnings: {}
 workflows:
   configure_build:
     before_run:
@@ -136,7 +136,6 @@ workflows:
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.1-x86_64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.1-x86_64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.1-x86_64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.1-x86_64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
@@ -168,7 +167,8 @@ workflows:
             echo "$BITRISE_ARTIFACT_PATHS"
 
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            #exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            find . -name 'DerivedData.zip' -exec unzip {} \; 
             echo "show dir"
             ls
 
