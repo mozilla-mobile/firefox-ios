@@ -6,30 +6,34 @@ import XCTest
 @testable import Logger
 
 final class LoggerTests: XCTestCase {
+    private var beaverBuilder: MockSwiftyBeaverBuilder!
+
     override func setUp() {
         super.setUp()
+        beaverBuilder = MockSwiftyBeaverBuilder()
         cleanUp()
     }
 
     override func tearDown() {
         super.tearDown()
+        beaverBuilder = nil
         cleanUp()
     }
 
     func testInfo() {
-        let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.log("Info log", level: .info, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.infoCalled, 1)
     }
 
     func testWarning() {
-        let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.log("Warning log", level: .warning, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.warningCalled, 1)
     }
 
     func testFatal() {
-        let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.log("Fatal log", level: .fatal, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.errorCalled, 1)
     }
@@ -41,6 +45,13 @@ private extension LoggerTests {
         MockSwiftyBeaver.infoCalled = 0
         MockSwiftyBeaver.warningCalled = 0
         MockSwiftyBeaver.errorCalled = 0
+    }
+}
+
+// MARK: - SwiftyBeaverBuilder
+class MockSwiftyBeaverBuilder: SwiftyBeaverBuilder {
+    func setup(with destination: URL?) -> SwiftyBeaverWrapper.Type {
+        return MockSwiftyBeaver.self
     }
 }
 

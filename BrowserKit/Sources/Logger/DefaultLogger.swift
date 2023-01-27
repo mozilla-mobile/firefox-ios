@@ -9,10 +9,10 @@ public class DefaultLogger: Logger {
     private var logger: SwiftyBeaverWrapper.Type
     private var fileManager: LoggerFileManager
 
-    init(swiftyBeaver: SwiftyBeaverWrapper.Type = DefaultSwiftyBeaver.implementation,
+    init(swiftyBeaverBuilder: SwiftyBeaverBuilder = DefaultSwiftyBeaverBuilder(),
          fileManager: LoggerFileManager = DefaultLoggerFileManager()) {
-        self.logger = swiftyBeaver
         self.fileManager = fileManager
+        self.logger = swiftyBeaverBuilder.setup(with: fileManager.getLogDestination())
     }
 
     public func log(_ message: String,

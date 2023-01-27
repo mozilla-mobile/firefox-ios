@@ -5,6 +5,7 @@
 import Foundation
 import SwiftyBeaver
 
+// MARK: - SwiftyBeaverWrapper
 protocol SwiftyBeaverWrapper {
     static func info(_ message: @autoclosure () -> Any,
                      _ file: String,
@@ -23,44 +24,20 @@ protocol SwiftyBeaverWrapper {
                       _ function: String,
                       line: Int,
                       context: Any?)
-
-    static func logFileDirectoryPath(inDocuments: Bool) -> String?
-    static var fileDestination: URL? { get }
 }
 
-extension SwiftyBeaver: SwiftyBeaverWrapper {
-    static func logFileDirectoryPath(inDocuments: Bool) -> String? {
-        let searchPathDirectory: FileManager.SearchPathDirectory = inDocuments ? .documentDirectory : .cachesDirectory
-        guard let targetDirectory = NSSearchPathForDirectoriesInDomains(searchPathDirectory,
-                                                                        .userDomainMask,
-                                                                        true).first
-        else { return nil }
+extension SwiftyBeaver: SwiftyBeaverWrapper {}
 
-        let logsDirectory = "\(targetDirectory)/Logs"
-        if !FileManager.default.fileExists(atPath: logsDirectory) {
-            try? FileManager.default.createDirectory(atPath: logsDirectory,
-                                                     withIntermediateDirectories: true,
-                                                     attributes: nil)
-        }
-        return logsDirectory
-    }
-
-    static var fileDestination: URL? {
-        guard let path = SwiftyBeaver.logFileDirectoryPath(inDocuments: false) else { return nil }
-
-        let dateFormatterGet = DateFormatter()
-        dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
-
-        let date = dateFormatterGet.string(from: Date())
-        return URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent("Firefox-\(date).log")
-    }
+// MARK: - SwiftyBeaverBuilder
+protocol SwiftyBeaverBuilder {
+    func setup(with destination: URL?) -> SwiftyBeaverWrapper.Type
 }
 
-struct DefaultSwiftyBeaver {
+struct DefaultSwiftyBeaverBuilder: SwiftyBeaverBuilder {
 
     // Format has full date/time, colored log level, tag, file name and message
     // https://docs.swiftybeaver.com/article/20-custom-format
-    static let format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] $N - $M"
+    private let defaultFormat = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] $N - $M"
 
     /// Setup SwiftyBeaver as our basic logger for console and file destination.
     ///
@@ -69,14 +46,14 @@ struct DefaultSwiftyBeaver {
     ///     `console.addFilter(Filters.Function.contains("viewDidLoad", required: true))`
     ///     `console.addFilter(Filters.Path.excludes("Sync", required: true))`
     ///     `console.addFilter(Filters.Message.contains("HTTP", caseSensitive: true, required: true))`
-    static let implementation: SwiftyBeaverWrapper.Type = {
+    func setup(with destination: URL?) -> SwiftyBeaverWrapper.Type {
         let console = ConsoleDestination()
-        console.format = DefaultSwiftyBeaver.format
+        console.format = defaultFormat
         console.minLevel = .info
         console.levelString.error = "FATAL"
 
-        let file = FileDestination(logFileURL: SwiftyBeaver.fileDestination)
-        file.format = DefaultSwiftyBeaver.format
+        let file = FileDestination(logFileURL: destination)
+        file.format = defaultFormat
         file.minLevel = .info
         file.levelString.error = "FATAL"
 
@@ -86,5 +63,5 @@ struct DefaultSwiftyBeaver {
         logger.addDestination(file)
 
         return logger
-    }()
+    }
 }
