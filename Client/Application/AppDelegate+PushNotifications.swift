@@ -106,7 +106,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             profile.removeAccount()
 
             // show the notification
-            completionHandler([.alert, .sound])
+            if #available(iOS 14, *) {
+                completionHandler([.list, .banner, .sound])
+            } else {
+                completionHandler([.alert, .sound])
+            }
         } else {
             openURLsInNewTabs(notification)
         }
