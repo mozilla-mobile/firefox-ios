@@ -6,18 +6,6 @@ import Foundation
 import SwiftyBeaver
 
 protocol SwiftyBeaverWrapper {
-    static func verbose(_ message: @autoclosure () -> Any,
-                        _ file: String,
-                        _ function: String,
-                        line: Int,
-                        context: Any?)
-
-    static func debug(_ message: @autoclosure () -> Any,
-                      _ file: String,
-                      _ function: String,
-                      line: Int,
-                      context: Any?)
-
     static func info(_ message: @autoclosure () -> Any,
                      _ file: String,
                      _ function: String,
@@ -69,6 +57,11 @@ extension SwiftyBeaver: SwiftyBeaverWrapper {
 }
 
 struct DefaultSwiftyBeaver {
+
+    // Format has full date/time, colored log level, tag, file name and message
+    // https://docs.swiftybeaver.com/article/20-custom-format
+    static let format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] $N - $M"
+
     /// Setup SwiftyBeaver as our basic logger for console and file destination.
     ///
     /// Note that filters can be added here on the different destinations like the following:
@@ -78,14 +71,14 @@ struct DefaultSwiftyBeaver {
     ///     `console.addFilter(Filters.Message.contains("HTTP", caseSensitive: true, required: true))`
     static let implementation: SwiftyBeaverWrapper.Type = {
         let console = ConsoleDestination()
-        // Format has full date/time, colored log level, tag, file name and message
-        console.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] $N - $M"
-        console.minLevel = .debug
+        console.format = DefaultSwiftyBeaver.format
+        console.minLevel = .info
+        console.levelString.error = "FATAL"
 
         let file = FileDestination(logFileURL: SwiftyBeaver.fileDestination)
-        // Format has full date/time, colored log level, tag, file name and message
-        file.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] $N - $M"
+        file.format = DefaultSwiftyBeaver.format
         file.minLevel = .info
+        file.levelString.error = "FATAL"
 
         let logger = SwiftyBeaver.self
         logger.removeAllDestinations()

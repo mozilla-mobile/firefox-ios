@@ -16,39 +16,21 @@ final class LoggerTests: XCTestCase {
         cleanUp()
     }
 
-    func testVerbose() {
-        let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
-        subject.verbose("Verbose log", category: .setup)
-        XCTAssertEqual(MockSwiftyBeaver.verboseCalled, 1)
-    }
-
-    func testDebug() {
-        let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
-        subject.debug("Debug log", category: .setup)
-        XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
-    }
-
     func testInfo() {
         let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
-        subject.info("Info log", category: .setup)
+        subject.log("Info log", level: .info, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.infoCalled, 1)
     }
 
     func testWarning() {
         let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
-        subject.warning("Warning log", category: .setup)
+        subject.log("Warning log", level: .warning, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.warningCalled, 1)
-    }
-
-    func testError() {
-        let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
-        subject.error("Error log", category: .setup)
-        XCTAssertEqual(MockSwiftyBeaver.errorCalled, 1)
     }
 
     func testFatal() {
         let subject = DefaultLogger(swiftyBeaver: MockSwiftyBeaver.self)
-        subject.fatal("Fatal log", category: .setup)
+        subject.log("Fatal log", level: .fatal, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.errorCalled, 1)
     }
 }
@@ -56,8 +38,6 @@ final class LoggerTests: XCTestCase {
 // MARK: - Helper
 private extension LoggerTests {
     func cleanUp() {
-        MockSwiftyBeaver.verboseCalled = 0
-        MockSwiftyBeaver.debugCalled = 0
         MockSwiftyBeaver.infoCalled = 0
         MockSwiftyBeaver.warningCalled = 0
         MockSwiftyBeaver.errorCalled = 0
@@ -66,15 +46,11 @@ private extension LoggerTests {
 
 // MARK: - MockSwiftyBeaver
 class MockSwiftyBeaver: SwiftyBeaverWrapper {
-    static var verboseCalled = 0
-    static func verbose(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
-        verboseCalled += 1
+    static func logFileDirectoryPath(inDocuments: Bool) -> String? {
+        return nil
     }
 
-    static var debugCalled = 0
-    static func debug(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
-        debugCalled += 1
-    }
+    static var fileDestination: URL?
 
     static var infoCalled = 0
     static func info(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
