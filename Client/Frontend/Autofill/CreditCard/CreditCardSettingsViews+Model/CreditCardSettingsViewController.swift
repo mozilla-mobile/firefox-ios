@@ -15,7 +15,9 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
     var startingConfig: CreditCardSettingsStartingConfig?
 
     //MARK: - Views
-    var creditCardEmptyView = UIHostingController(rootView: CreditCardSettingsEmptyView())
+    var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
+    var creditCardListView: UIHostingController<CreditCardListView>
+    var creditCardAddEditView: UIHostingController<CreditCardEditView>
 
     //MARK: - UX
     struct UX {
@@ -30,6 +32,9 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
         self.theme = theme
         self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
+        self.creditCardEmptyView = UIHostingController(rootView: CreditCardSettingsEmptyView())
+        self.creditCardListView = UIHostingController(rootView: CreditCardListView(viewModel: viewModel.subCardListViewModel))
+        self.creditCardAddEditView = UIHostingController(rootView: CreditCardEditView(viewModel: viewModel.subCardAddEditViewModel))
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -45,15 +50,35 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
 
     func viewSetup() {
         guard let emptyCreditCardView = creditCardEmptyView.view else { return }
+        guard let listCreditCardView = creditCardListView.view else { return }
+        guard let addEditCreditCardView = creditCardAddEditView.view else { return }
+
         emptyCreditCardView.translatesAutoresizingMaskIntoConstraints = false
+        listCreditCardView.translatesAutoresizingMaskIntoConstraints = false
+        addEditCreditCardView.translatesAutoresizingMaskIntoConstraints = false
+
         addChild(creditCardEmptyView)
+        addChild(creditCardListView)
+        addChild(creditCardAddEditView)
         view.addSubview(emptyCreditCardView)
+        view.addSubview(listCreditCardView)
+        view.addSubview(addEditCreditCardView)
 
         NSLayoutConstraint.activate([
             emptyCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             emptyCreditCardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             emptyCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            emptyCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            emptyCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+
+            listCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            listCreditCardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            listCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            listCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+
+            addEditCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            addEditCreditCardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            addEditCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            addEditCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
 
         // Hide all the views initially until we update the state
@@ -65,6 +90,7 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
 
     func setupSate() {
         // check if there are any starting config
+
         guard let startingConfig = startingConfig else {
             //Check if we have any credit cards to show in the list
             viewModel.listCreditCard { creditCards in
@@ -79,19 +105,21 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
             return
         }
 
-        updateState(type: .empty)
+        startingConfig.actionToPerform
+        updateState(type: .list)
     }
 
     func updateState(type: CreditCardSettingsState) {
+        hideAllViews()
         switch type {
         case .empty:
             creditCardEmptyView.view.isHidden = false
         case .add:
-            print("setup add view")
+            creditCardAddEditView.view.isHidden = false
         case .edit:
-            print("setup edit view")
+            creditCardAddEditView.view.isHidden = false
         case .list:
-            print("setup list view")
+            creditCardListView.view.isHidden = false
         }
     }
 
@@ -109,6 +137,8 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
 
     func hideAllViews() {
         creditCardEmptyView.view.isHidden = true
+        creditCardListView.view.isHidden = true
+        creditCardAddEditView.view.isHidden = true
     }
 
     func applyTheme(theme: Theme) {
