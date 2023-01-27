@@ -34,7 +34,6 @@ protocol SwiftyBeaverBuilder {
 }
 
 struct DefaultSwiftyBeaverBuilder: SwiftyBeaverBuilder {
-
     // Format has full date/time, colored log level, tag, file name and message
     // https://docs.swiftybeaver.com/article/20-custom-format
     private let defaultFormat = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $C$L$c [$X] $N - $M"
