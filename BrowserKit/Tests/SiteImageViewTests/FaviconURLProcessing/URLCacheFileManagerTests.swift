@@ -60,10 +60,9 @@ class MockFileManager: FileManagerProtocol {
 
     func createDirectory(atPath path: String,
                          withIntermediateDirectories createIntermediates: Bool,
-                         attributes: [FileAttributeKey : Any]?) throws {}
+                         attributes: [FileAttributeKey: Any]?) throws {}
 
     func contentsOfDirectoryAtPath(_ path: String, withFilenamePrefix prefix: String) throws -> [String] {
         return []
     }
-
 }
