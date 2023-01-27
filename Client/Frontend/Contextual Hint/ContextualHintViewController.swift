@@ -127,6 +127,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
+        listenForThemeChange()
         applyTheme()
         isPresenting = true
     }
