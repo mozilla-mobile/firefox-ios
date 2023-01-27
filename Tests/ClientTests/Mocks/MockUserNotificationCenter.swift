@@ -12,6 +12,8 @@ class MockUserNotificationCenter: UserNotificationCenterProtocol {
     var getSettingsWasCalled = false
     func getNotificationSettings(completionHandler: @escaping (UNNotificationSettings) -> Void) {
         getSettingsWasCalled = true
+
+        // calling UNUserNotificationCenter as UNNotificationSettings can't be created otherwise
         UNUserNotificationCenter.current().getNotificationSettings(completionHandler: completionHandler)
     }
 

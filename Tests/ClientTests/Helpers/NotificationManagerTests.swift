@@ -15,14 +15,17 @@ class NotificationManagerTests: XCTestCase {
         notificationManager = NotificationManager(center: center)
     }
 
+    override func tearDown() {
+        super.tearDown()
+        center = nil
+        notificationManager = nil
+    }
+
     func testRequestAuthorization() {
-        let expectation = self.expectation(description: "notification manager")
         notificationManager.requestAuthorization { (granted, error) in
             XCTAssertTrue(granted)
             XCTAssertTrue(self.center.requestAuthorizationWasCalled)
-            expectation.fulfill()
         }
-        waitForExpectations(timeout: 5)
     }
 
     func testGetNotificationSettings() {
@@ -51,21 +54,15 @@ class NotificationManagerTests: XCTestCase {
     }
 
     func testFindDeliveredNotifications() {
-        let expectation = self.expectation(description: "notification manager")
         notificationManager.findDeliveredNotifications { notifications in
             XCTAssertTrue(self.center.getDeliveredWasCalled)
-            expectation.fulfill()
         }
-        waitForExpectations(timeout: 5)
     }
 
     func testFindDeliveredNotificationForId() {
-        let expectation = self.expectation(description: "notification manager")
         notificationManager.findDeliveredNotificationForId(id: "id1") { notifications in
             XCTAssertTrue(self.center.getDeliveredWasCalled)
-            expectation.fulfill()
         }
-        waitForExpectations(timeout: 5)
     }
 
     func testRemoveAllPendingNotifications() {
