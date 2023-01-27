@@ -5,7 +5,6 @@
 import Foundation
 
 public protocol Logger {
-    // TODO: Laurie - Move from Common to Logger package
     // TODO: Laurie - Rolling log -> easier to share for users. 5mb + clean up file before copying
 
     /// Log a new message to the logging system

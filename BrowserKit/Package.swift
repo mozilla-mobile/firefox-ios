@@ -14,6 +14,9 @@ let package = Package(
         .library(
             name: "Common",
             targets: ["Common"]),
+        .library(
+            name: "Logger",
+            targets: ["Logger"]),
     ],
     dependencies: [
         .package(
@@ -38,9 +41,15 @@ let package = Package(
             dependencies: ["SiteImageView"]),
         .target(
             name: "Common",
-            dependencies: ["Dip", "SwiftyBeaver"]),
+            dependencies: ["Dip"]),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),
+        .target(
+            name: "Logger",
+            dependencies: ["SwiftyBeaver"]),
+        .testTarget(
+            name: "LoggerTests",
+            dependencies: ["Logger"]),
     ]
 )
