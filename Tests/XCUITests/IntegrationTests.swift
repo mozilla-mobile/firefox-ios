@@ -69,6 +69,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
+        waitForExistence(app.tables.staticTexts[ProcessInfo.processInfo.environment["FXA_EMAIL"]!])
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
@@ -237,7 +238,6 @@ class IntegrationTests: BaseTestCase {
         app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
-        sleep(3)
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
