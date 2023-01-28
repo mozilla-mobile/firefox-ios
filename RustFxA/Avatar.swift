@@ -6,7 +6,7 @@ import UIKit
 import Shared
 
 open class Avatar {
-    open var image : UIImage?
+    open var image: UIImage?
     public let url: URL?
 
     init(url: URL?) {
@@ -19,7 +19,7 @@ open class Avatar {
                 NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
                 return
             }
-            
+
             self.image = image
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
@@ -30,7 +30,7 @@ open class Avatar {
             completionHandler(nil, ImageLoadingError.unableToFetchImage)
             return
         }
-        
+
         DispatchQueue.global().async {
             DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url, limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
                 guard error == nil,
@@ -39,7 +39,7 @@ open class Avatar {
                     completionHandler(image, error)
                     return
                 }
-                
+
                 self.image = image
                 completionHandler(image, nil)
             }
