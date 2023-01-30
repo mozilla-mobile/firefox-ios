@@ -35,24 +35,22 @@ class TPStatsBlocklistChecker {
     // Initialized async, is non-nil when ready to be used.
     private var blockLists: TPStatsBlocklists?
 
-    func isBlocked(url: URL, mainDocumentURL: URL) -> Deferred<BlocklistCategory?> {
-        let deferred = Deferred<BlocklistCategory?>()
-
+    func isBlocked(url: URL, mainDocumentURL: URL, completionHandler: @escaping (BlocklistCategory?) -> Void) {
         guard let blockLists = blockLists,
               let host = url.host,
               !host.isEmpty
         else {
             // TP Stats init isn't complete yet
-            deferred.fill(nil)
-            return deferred
+            completionHandler(nil)
+            return
         }
 
         guard let domain = url.baseDomain,
               let docDomain = mainDocumentURL.baseDomain,
               domain != docDomain
         else {
-            deferred.fill(nil)
-            return deferred
+            completionHandler(nil)
+            return
         }
 
         // Make a copy on the main thread
@@ -60,9 +58,8 @@ class TPStatsBlocklistChecker {
 
         DispatchQueue.global().async {
             // Return true in the Deferred if the domain could potentially be blocked
-            deferred.fill(blockLists.urlIsInList(url, mainDocumentURL: mainDocumentURL, safelistedDomains: safelistRegex))
+            completionHandler(blockLists.urlIsInList(url, mainDocumentURL: mainDocumentURL, safelistedDomains: safelistRegex))
         }
-        return deferred
     }
 
     func startup() {
