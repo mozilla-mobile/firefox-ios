@@ -51,6 +51,7 @@ protocol URLBarDelegate: AnyObject {
 
 protocol URLBarViewProtocol {
     var inOverlayMode: Bool { get }
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
     func leaveOverlayMode(didCancel cancel: Bool)
 }
 
@@ -514,6 +515,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        // TODO: Remove if is only use from the manager
         guard !inOverlayMode else { return }
 
         createLocationTextField()
@@ -550,6 +552,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     func leaveOverlayMode(didCancel cancel: Bool) {
+        // TODO: Remove if is only use from the manager
         guard inOverlayMode else { return }
 
         locationTextField?.resignFirstResponder()
