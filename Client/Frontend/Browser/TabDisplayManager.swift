@@ -38,8 +38,8 @@ protocol TopTabCellDelegate: AnyObject {
 }
 
 protocol TabDisplayer: AnyObject {
-    typealias TabCellIdentifer = String
-    var tabCellIdentifer: TabCellIdentifer { get set }
+    typealias TabCellIdentifier = String
+    var tabCellIdentifier: TabCellIdentifier { get set }
 
     func focusSelectedTab()
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell
