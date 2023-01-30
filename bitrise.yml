@@ -83,18 +83,17 @@ workflows:
             set -x
 
             echo "bitrise_xcode"
-            echo "$BITRISE_XCODEBUILD_TEST_LOG_PATH"
-
             COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_test.log all)
             
             envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
 
             STR=$COUNT_XCUI
             SUB='greater'
-            #if [[ "$STR" == *"$SUB"* ]]; then
-            #    echo "Failure, the number of warnings increased"
-            #    exit 1
-            #fi
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
     - slack@3.1:
         is_always_run: true
         inputs:
@@ -132,17 +131,6 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    #- git::https://github.com/DamienBitrise/bitrise-test-plan-sharder.git@master:
-    #    title: Bitrise Test Plan Sharder
-    #    inputs:
-    #    - xcode_project: Client.xcodeproj
-    #    - target: Client
-    #    - shards: '3'
-    #    - scheme: Fennec_Enterprise_XCUITests
-    #    - test_plan: SmokeXCUITests.xctestplan
-    #    - debug_mode: 'true'
-    #    - test_path: ''
-    #    - file_type: ".swift"
     - script@1.1:
         title: Build for Testing
         inputs:
@@ -151,7 +139,7 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
     - xcode-test-without-building@0:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
@@ -180,18 +168,17 @@ workflows:
             set -x
 
             echo "bitrise_xcode"
-            echo "$BITRISE_XCODEBUILD_LOG_PATH"
-
             COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_fennec.log all)
             
             envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
+            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
 
             STR=$COUNT_XCUI
             SUB='greater'
-            #if [[ "$STR" == *"$SUB"* ]]; then
-            #    echo "Failure, the number of warnings increased"
-            #    exit 1
-            #fi
+            if [[ "$STR" == *"$SUB"* ]]; then
+                echo "Failure, the number of warnings increased"
+                exit 1
+            fi
     - slack@3.1:
         is_always_run: true
         inputs:
@@ -253,12 +240,6 @@ workflows:
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator16.1-x86_64.xctestrun"
-    - custom-test-results-export@0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        inputs:
-        - search_pattern: "*"
-        - base_path: $BITRISE_XCRESULT_PATH
-        - test_name: Smoketest2
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -294,12 +275,6 @@ workflows:
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator16.1-x86_64.xctestrun"
-    - custom-test-results-export@0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        inputs:
-        - search_pattern: "*"
-        - base_path: $BITRISE_XCRESULT_PATH
-        - test_name: SmokeTest
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -335,12 +310,6 @@ workflows:
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest3_iphonesimulator16.1-x86_64.xctestrun"
-    - custom-test-results-export@0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        inputs:
-        - search_pattern: "*"
-        - base_path: $BITRISE_XCRESULT_PATH
-        - test_name: SmokeTest3
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -376,12 +345,6 @@ workflows:
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest4_iphonesimulator16.1-x86_64.xctestrun"
-    - custom-test-results-export@0:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        inputs:
-        - search_pattern: "*"
-        - base_path: $BITRISE_XCRESULT_PATH
-        - test_name: SmokeTest4
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
