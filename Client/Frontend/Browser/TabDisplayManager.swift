@@ -253,9 +253,33 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             return
         }
 
+        if shouldEnableInactiveTabs, let inactiveViewModel = inactiveViewModel {
+            var selectedTab = tabManager.selectedTab
+            // Make sure selected tab has latest time
+            selectedTab?.lastExecutedTime = Date.now()
+
+            // Special Case: When toggling from Private to Regular
+            // mode none of the regular tabs are selected,
+            // this is because toggling from one mode to another a user still
+            // has to tap on a tab to select in order to fully switch modes
+            if let firstTab = allTabs.first, firstTab.isPrivate != selectedTab?.isPrivate {
+                selectedTab = mostRecentTab(inTabs: tabManager.normalTabs)
+            }
+
+            // update model
+            inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
+
+            // keep inactive tabs collapsed
+            self.isInactiveViewExpanded = false
+        }
+
         guard tabDisplayType == .TabGrid else {
-            tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
-            completion(nil, allTabs)
+            var filteredTabs = allTabs
+            if shouldEnableInactiveTabs, let inactiveViewModel = inactiveViewModel {
+                filteredTabs = inactiveViewModel.activeTabs
+            }
+            tabsSetupHelper(tabGroups: nil, filteredTabs: filteredTabs)
+            completion(nil, filteredTabs)
             return
         }
 
@@ -271,29 +295,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 return
             }
 
-            var selectedTab = tabManager.selectedTab
-            // Make sure selected tab has latest time
-            selectedTab?.lastExecutedTime = Date.now()
-
-            // Special Case: When toggling from Private to Regular
-            // mode none of the regular tabs are selected,
-            // this is because toggling from one mode to another a user still
-            // has to tap on a tab to select in order to fully switch modes
-
-            if let firstTab = allTabs.first, firstTab.isPrivate != selectedTab?.isPrivate {
-                selectedTab = mostRecentTab(inTabs: tabManager.normalTabs)
-            }
-
-            // update model
-            inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
-
-            let activeTabs = inactiveViewModel.activeTabs
-
-            // keep inactive tabs collapsed
-            self.isInactiveViewExpanded = false
-
             // check if groups are enabled and setup groups from active tabs only
-            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: activeTabs, completion: completion)
+            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: inactiveViewModel.activeTabs, completion: completion)
         }
     }
 
