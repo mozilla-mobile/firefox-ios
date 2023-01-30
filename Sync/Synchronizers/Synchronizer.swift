@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Storage
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 /**
  * This exists to pass in external context: e.g., the UIApplication can

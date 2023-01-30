@@ -15,7 +15,7 @@ import SyncTelemetry
 import AuthenticationServices
 import MozillaAppServices
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 public protocol SyncManager {
     var isSyncing: Bool { get }

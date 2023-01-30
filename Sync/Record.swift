@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60
 

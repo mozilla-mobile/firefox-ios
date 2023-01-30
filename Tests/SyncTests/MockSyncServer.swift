@@ -10,7 +10,7 @@ import SwiftyJSON
 
 import XCTest
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 private func optTimestamp(x: AnyObject?) -> Timestamp? {
     guard let str = x as? String else { return nil }

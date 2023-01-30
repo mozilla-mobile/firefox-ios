@@ -58,12 +58,12 @@ public class SentryIntegration: SentryProtocol {
         guard !enabled else { return }
 
         if DeviceInfo.isSimulator() {
-            Logger.browserLogger.debug("Not enabling Sentry; Running in Simulator")
+            LegacyLogger.browserLogger.debug("Not enabling Sentry; Running in Simulator")
             return
         }
 
         if !sendUsageData {
-            Logger.browserLogger.debug("Not enabling Sentry; Not enabled by user choice")
+            LegacyLogger.browserLogger.debug("Not enabling Sentry; Not enabled by user choice")
             return
         }
 
@@ -75,10 +75,10 @@ public class SentryIntegration: SentryProtocol {
 
         let bundle = AppInfo.applicationBundle
         guard let dsn = bundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
-            Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
+            LegacyLogger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }
-        Logger.browserLogger.debug("Enabling Sentry crash handler")
+        LegacyLogger.browserLogger.debug("Enabling Sentry crash handler")
 
         SentrySDK.start { options in
             options.dsn = dsn
@@ -219,6 +219,6 @@ public class SentryIntegration: SentryProtocol {
             let (key, value) = arg1
             return "\(result), \(key): \(value)"
         }
-        Logger.browserLogger.debug("Sentry: \(message) \(string ??? "")")
+        LegacyLogger.browserLogger.debug("Sentry: \(message) \(string ??? "")")
     }
 }

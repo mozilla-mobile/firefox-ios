@@ -7,7 +7,7 @@ import Shared
 import Account
 import SwiftyJSON
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 // Not an error that indicates a server problem, but merely an
 // error that encloses a StorageResponse.

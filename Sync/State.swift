@@ -8,7 +8,7 @@ import Shared
 import MozillaAppServices
 import SwiftyJSON
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 /*
  * This file includes types that manage intra-sync and inter-sync metadata

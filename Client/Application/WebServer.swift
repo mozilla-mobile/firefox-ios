@@ -12,7 +12,7 @@ protocol WebServerProtocol {
 }
 
 class WebServer: WebServerProtocol {
-    private let log = Logger.browserLogger
+    private let log = LegacyLogger.browserLogger
 
     static let WebServerSharedInstance = WebServer()
 

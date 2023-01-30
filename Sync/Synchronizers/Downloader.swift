@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Storage
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 class BatchingDownloader<T: CleartextPayloadJSON> {
     let client: Sync15CollectionClient<T>

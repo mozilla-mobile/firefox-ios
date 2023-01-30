@@ -135,7 +135,7 @@ private let AllTriggers: [String] = [
 
 private let AllTablesIndicesTriggersAndViews: [String] = AllViews + AllTriggers + AllIndices + AllTables
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 /**
  * The monolithic class that manages the inter-related history etc. tables.

@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 public typealias Args = [Any?]
 

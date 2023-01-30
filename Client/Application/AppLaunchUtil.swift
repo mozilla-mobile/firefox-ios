@@ -13,7 +13,7 @@ class AppLaunchUtil {
     private var adjustHelper: AdjustHelper
     private var profile: Profile
 
-    init(log: RollingFileLogger = Logger.browserLogger,
+    init(log: RollingFileLogger = LegacyLogger.browserLogger,
          profile: Profile) {
         self.log = log
         self.profile = profile
@@ -24,13 +24,13 @@ class AppLaunchUtil {
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
         if DebugSettingsBundleOptions.saveLogsToDocuments {
-            Logger.copyPreviousLogsToDocuments()
+            LegacyLogger.copyPreviousLogsToDocuments()
         }
 
         // Now roll logs.
         DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
-            Logger.syncLogger.deleteOldLogsDownToSizeLimit()
-            Logger.browserLogger.deleteOldLogsDownToSizeLimit()
+            LegacyLogger.syncLogger.deleteOldLogsDownToSizeLimit()
+            LegacyLogger.browserLogger.deleteOldLogsDownToSizeLimit()
         }
 
         TelemetryWrapper.shared.setup(profile: profile)
@@ -48,8 +48,8 @@ class AppLaunchUtil {
 
         let logDate = Date()
         // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
-        Logger.syncLogger.newLogWithDate(logDate)
-        Logger.browserLogger.newLogWithDate(logDate)
+        LegacyLogger.syncLogger.newLogWithDate(logDate)
+        LegacyLogger.browserLogger.newLogWithDate(logDate)
 
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.

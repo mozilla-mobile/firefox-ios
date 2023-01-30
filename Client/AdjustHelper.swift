@@ -7,7 +7,7 @@ import Adjust
 import Shared
 import Glean
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 final class AdjustHelper: FeatureFlaggable {
     private static let adjustAppTokenKey = "AdjustAppToken"

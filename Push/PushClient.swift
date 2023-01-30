@@ -15,7 +15,7 @@ protocol PushClient {
 }
 
 public class PushClientImplementation: PushClient {
-    private let log = Logger.browserLogger
+    private let log = LegacyLogger.browserLogger
 
     /// Bug 1364403 – This is to be put into the push registration
     private let apsEnvironment: [String: Any] = [

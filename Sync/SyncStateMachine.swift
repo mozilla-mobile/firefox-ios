@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Account
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 private let StorageVersionCurrent = 5
 

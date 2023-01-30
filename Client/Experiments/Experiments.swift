@@ -6,7 +6,7 @@ import Foundation
 import MozillaAppServices
 import Shared
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"
 private let NIMBUS_LOCAL_DATA_KEY = "nimbus_local_data"

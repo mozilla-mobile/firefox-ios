@@ -6,7 +6,7 @@ import UIKit
 import NotificationCenter
 import Shared
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {

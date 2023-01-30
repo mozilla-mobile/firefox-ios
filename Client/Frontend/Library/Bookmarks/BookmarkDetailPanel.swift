@@ -6,7 +6,7 @@ import UIKit
 import Storage
 import Shared
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 private let BookmarkDetailFieldCellIdentifier = "BookmarkDetailFieldCellIdentifier"
 private let BookmarkDetailFolderCellIdentifier = "BookmarkDetailFolderCellIdentifier"

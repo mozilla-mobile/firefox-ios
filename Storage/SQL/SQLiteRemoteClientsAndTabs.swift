@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import SwiftyJSON
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     let db: BrowserDB

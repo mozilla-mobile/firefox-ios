@@ -7,7 +7,7 @@ import Shared
 
 private let AllTables: [String] = ["items"]
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 open class ReadingListSchema: Schema {
     static let DefaultVersion = 1
