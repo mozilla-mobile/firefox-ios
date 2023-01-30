@@ -6,31 +6,43 @@ import UIKit
 import Shared
 
 open class Avatar {
-    open var image = Deferred<UIImage>()
+    open var image: UIImage?
     public let url: URL?
 
     init(url: URL?) {
         self.url = url
-        downloadAvatar()
-    }
-
-    private func downloadAvatar() {
-        guard let url = url else { return }
-
-        DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(
-            with: url,
-            limit: ImageLoadingConstants.NoLimitImageSize
-        ) { image, error in
+        downloadAvatar { image, error in
             guard error == nil,
                   let image = image
             else {
-                self.image.fill(UIImage(named: ImageIdentifiers.placeholderAvatar)!)
+                self.image = UIImage(named: ImageIdentifiers.placeholderAvatar)
                 NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
                 return
             }
 
-            self.image.fill(image)
+            self.image = image
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
+        }
+    }
+
+    private func downloadAvatar(completionHandler: @escaping(UIImage?, Error?) -> Void) {
+        guard let url = url else {
+            completionHandler(nil, ImageLoadingError.unableToFetchImage)
+            return
+        }
+
+        DispatchQueue.global().async {
+            DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url, limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
+                guard error == nil,
+                      let image = image
+                else {
+                    completionHandler(image, error)
+                    return
+                }
+
+                self.image = image
+                completionHandler(image, nil)
+            }
         }
     }
 }
