@@ -197,31 +197,8 @@ workflows:
 
             echo "-- unzip -- "
             exec unzip "${BITRISE_ARTIFACT_PATHS}"
-            #DERIVED_DATA_PATH=$(echo $BITRISE_ARTIFACT_PATHS | tr '|' '\n' | tail -1)
-            
-            #echo $DERIVED_DATA_PATH
-            #exec unzip $DERIVED_DATA_PATH
-
-            echo "show dir"
-            ls
-
-    - script@1.1:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        title: Check files
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            set -ex
-            echo "show files in current directory"
-            pwd
-            ls 
-    #       ls ./Users/vagrant/git/Tests/
-    #        cp -r ./Users/vagrant/git/Tests/* .
-    #        mv ./Users/vagrant/git/DerivedData .
-    #        ls -la
-    #        echo "-- test-without-building --"
-    #        xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator16.1-x86_64.xctestrun"
     - xcode-test-without-building@0:
+        title: UI Smoketest2
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
@@ -230,10 +207,13 @@ workflows:
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
-        - search_pattern: "$BITRISE_XCRESULT_PATH"
+        - search_pattern: "*"
+        - base_path: $BITRISE_XCRESULT_PATH
         - test_name: Smoketest2
-    - deploy-to-bitrise-io@2:
+    - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        inputs:
+            - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_2_XCRESULT_PATH'
   build_and_test_2_SmokeTest:
     before_run:
     - 1_git_clone_and_post_clone
