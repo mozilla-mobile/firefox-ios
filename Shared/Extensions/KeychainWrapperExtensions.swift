@@ -5,7 +5,7 @@
 import Foundation
 import MozillaAppServices
 
-private let log = Logger.keychainLogger
+private let log = LegacyLogger.keychainLogger
 
 public extension MZKeychainWrapper {
     static var sharedClientAppContainerKeychain: MZKeychainWrapper {

@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 public class RustShared {
     static func moveDatabaseFileToBackupLocation(databasePath: String) {

@@ -1874,7 +1874,7 @@ extension BrowserViewController: LibraryPanelDelegate {
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
         guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
-            Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
+            LegacyLogger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
             return
         }
         return self.libraryPanel(didSelectURL: url, visitType: visitType)

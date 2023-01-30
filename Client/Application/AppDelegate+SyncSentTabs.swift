@@ -8,7 +8,7 @@ import Sync
 import UserNotifications
 import Account
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 extension UIApplication {
     var syncDelegate: SyncDelegate {

@@ -5,22 +5,22 @@
 import Foundation
 import XCGLogger
 
-public struct Logger {}
+public struct LegacyLogger {}
 
 // MARK: - Singleton Logger Instances
-public extension Logger {
+public extension LegacyLogger {
     /// Logger used for recording happenings with Sync, Accounts, Providers, Storage, and Profiles
-    static let syncLogger = RollingFileLogger(filenameRoot: "sync", logDirectoryPath: Logger.logFileDirectoryPath(inDocuments: saveLogsToDocuments))
+    static let syncLogger = RollingFileLogger(filenameRoot: "sync", logDirectoryPath: LegacyLogger.logFileDirectoryPath(inDocuments: saveLogsToDocuments))
 
     /// Logger used for recording frontend/browser happenings
-    static let browserLogger = RollingFileLogger(filenameRoot: "browser", logDirectoryPath: Logger.logFileDirectoryPath(inDocuments: saveLogsToDocuments))
+    static let browserLogger = RollingFileLogger(filenameRoot: "browser", logDirectoryPath: LegacyLogger.logFileDirectoryPath(inDocuments: saveLogsToDocuments))
 
     /// Logger used for recording interactions with the keychain
-    static let keychainLogger: XCGLogger = Logger.fileLoggerWithName("keychain")
+    static let keychainLogger: XCGLogger = LegacyLogger.fileLoggerWithName("keychain")
 
     /// Logger used for logging database errors such as corruption
     static let corruptLogger: RollingFileLogger = {
-        let logger = RollingFileLogger(filenameRoot: "corruptLogger", logDirectoryPath: Logger.logFileDirectoryPath(inDocuments: saveLogsToDocuments))
+        let logger = RollingFileLogger(filenameRoot: "corruptLogger", logDirectoryPath: LegacyLogger.logFileDirectoryPath(inDocuments: saveLogsToDocuments))
         logger.newLogWithDate(Date())
         return logger
     }()
@@ -86,7 +86,7 @@ public extension Logger {
     }
 
     static private func urlForLogNamed(_ name: String) -> URL? {
-        guard let logDir = Logger.logFileDirectoryPath(inDocuments: saveLogsToDocuments) else { return nil }
+        guard let logDir = LegacyLogger.logFileDirectoryPath(inDocuments: saveLogsToDocuments) else { return nil }
 
         return URL(string: "\(logDir)/\(name).log")
     }

@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Kingfisher
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 class UITestAppDelegate: AppDelegate, FeatureFlaggable {
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
