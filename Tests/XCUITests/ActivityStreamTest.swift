@@ -123,18 +123,16 @@ class ActivityStreamTest: BaseTestCase {
         }
         waitUntilPageLoad()
 
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
-        app.otherElements[ImageIdentifiers.addShortcut].tap()
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!], timeout: TIMEOUT)
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].exists)
+        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
+        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
-        app.collectionViews.cells.staticTexts[newTopSite["topSiteLabel"]!].press(forDuration: 1)
+        app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu(option: "Pin")
         waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
         XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
