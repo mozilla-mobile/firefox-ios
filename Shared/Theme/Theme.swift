@@ -13,8 +13,11 @@ public protocol Theme {
 }
 
 public struct Gradient {
-    var start: UIColor
-    var end: UIColor
+    public var colors: [UIColor]
+
+    public var cgColors: [CGColor] {
+        return colors.map { $0.cgColor }
+    }
 }
 
 /// The colour palette for a theme.

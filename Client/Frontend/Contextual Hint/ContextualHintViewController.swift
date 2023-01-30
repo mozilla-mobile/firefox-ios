@@ -5,8 +5,9 @@
 import Foundation
 import UIKit
 import Shared
+import Common
 
-class ContextualHintViewController: UIViewController, OnViewDismissable {
+class ContextualHintViewController: UIViewController, OnViewDismissable, Themeable {
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
         static let closeButtonTrailing: CGFloat = 5
@@ -26,7 +27,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     private lazy var closeButton: UIButton = .build { [weak self] button in
         button.setImage(UIImage(named: ImageIdentifiers.contextualHintClose)?.withRenderingMode(.alwaysTemplate),
                         for: .normal)
-        button.tintColor = .white
         button.addTarget(self,
                          action: #selector(self?.dismissAnimated),
                          for: .touchUpInside)
@@ -42,7 +42,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
             withTextStyle: .body,
             maxSize: 28)
         label.textAlignment = .left
-        label.textColor = .white
         label.numberOfLines = 0
     }
 
@@ -64,10 +63,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     private lazy var gradient: CAGradientLayer = {
         let gradient = CAGradientLayer()
         gradient.type = .axial
-        gradient.colors = [
-            UIColor.Photon.Violet40.cgColor,
-            UIColor.Photon.Violet70.cgColor
-        ]
         gradient.startPoint = CGPoint(x: 1, y: 0)
         gradient.endPoint = CGPoint(x: 0, y: 1)
         gradient.locations = [0, 0.63]
@@ -76,6 +71,9 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     // MARK: - Properties
     private var viewModel: ContextualHintViewModel
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     private var onViewSummoned: (() -> Void)?
     var onViewDismissed: (() -> Void)?
@@ -112,8 +110,12 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     }
 
     // MARK: - Initializers
-    init(with viewModel: ContextualHintViewModel) {
+    init(with viewModel: ContextualHintViewModel,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -125,6 +127,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
     override func viewDidLoad() {
         super.viewDidLoad()
         commonInit()
+        listenForThemeChange()
+        applyTheme()
         isPresenting = true
     }
 
@@ -223,22 +227,6 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     private func setupContent() {
         descriptionLabel.text = viewModel.getCopyFor(.description)
-
-        if viewModel.isActionType() {
-            let textAttributes: [NSAttributedString.Key: Any] = [
-                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                     maxSize: 28),
-                .foregroundColor: UIColor.white,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-
-            let attributeString = NSMutableAttributedString(
-                string: viewModel.getCopyFor(.action),
-                attributes: textAttributes
-            )
-
-            actionButton.setAttributedTitle(attributeString, for: .normal)
-        }
     }
 
     // MARK: - Button Actions
@@ -302,5 +290,28 @@ class ContextualHintViewController: UIViewController, OnViewDismissable {
 
     func startTimer() {
         viewModel.startTimer()
+    }
+
+    func applyTheme() {
+        let theme = themeManager.currentTheme
+        closeButton.tintColor = theme.colors.textOnColor
+        descriptionLabel.textColor = theme.colors.textOnColor
+        gradient.colors = theme.colors.layerGradient.cgColors
+
+        if viewModel.isActionType() {
+            let textAttributes: [NSAttributedString.Key: Any] = [
+                .font: DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+                                                                     maxSize: 28),
+                .foregroundColor: theme.colors.textOnColor,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+
+            let attributeString = NSMutableAttributedString(
+                string: viewModel.getCopyFor(.action),
+                attributes: textAttributes
+            )
+
+            actionButton.setAttributedTitle(attributeString, for: .normal)
+        }
     }
 }
