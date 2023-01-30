@@ -39,6 +39,8 @@ class TabTrayViewController: UIViewController, Themeable {
 
     // MARK: - UI Elements
     private var titleWidthConstraint: NSLayoutConstraint?
+    private var compactContainerTopConstraint: NSLayoutConstraint!
+    private var regularContainerTopConstraint: NSLayoutConstraint!
     private var containerView: UIView = .build { view in }
 
     // Buttons & Menus
@@ -244,12 +246,15 @@ class TabTrayViewController: UIViewController, Themeable {
 
         view.addSubviews(containerView)
 
+        compactContainerTopConstraint = containerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor)
+        regularContainerTopConstraint = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+
         NSLayoutConstraint.activate([
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
-            containerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor),
+            compactContainerTopConstraint,
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -266,10 +271,17 @@ class TabTrayViewController: UIViewController, Themeable {
         if let newTitle = viewModel.navTitle(for: segmentedControlIphone.selectedSegmentIndex) {
             navigationItem.titleView = nil
             navigationItem.title = newTitle
+            updateContainerConstraints(isCompact: true)
         } else {
             navigationItem.titleView = viewModel.layout == .compact ? segmentedControlIphone : segmentedControlIpad
             navigationItem.title = nil
+            updateContainerConstraints(isCompact: viewModel.layout == .compact)
         }
+    }
+
+    func updateContainerConstraints(isCompact: Bool) {
+        compactContainerTopConstraint.isActive = isCompact
+        regularContainerTopConstraint.isActive = !isCompact
     }
 
     @objc func segmentIphoneChanged() {
