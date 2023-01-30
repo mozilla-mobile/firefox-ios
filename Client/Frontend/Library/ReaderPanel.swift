@@ -7,7 +7,7 @@ import Storage
 import Shared
 import Common
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86

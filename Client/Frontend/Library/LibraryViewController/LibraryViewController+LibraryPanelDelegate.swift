@@ -33,7 +33,7 @@ extension LibraryViewController: LibraryPanelDelegate {
         // they'd copied and pasted into the URL bar.
         // See BrowserViewController.urlBar:didSubmitText:.
         guard let url = URIFixup.getURL(url) ?? viewModel.profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
-            Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
+            LegacyLogger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
             return
         }
         return self.libraryPanel(didSelectURL: url, visitType: visitType)

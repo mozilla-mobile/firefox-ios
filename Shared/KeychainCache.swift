@@ -6,7 +6,7 @@ import Foundation
 import SwiftyJSON
 import MozillaAppServices
 
-private let log = Logger.keychainLogger
+private let log = LegacyLogger.keychainLogger
 
 public protocol JSONLiteralConvertible {
     func asJSON() -> JSON

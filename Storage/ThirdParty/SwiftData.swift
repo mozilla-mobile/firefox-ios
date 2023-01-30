@@ -37,7 +37,7 @@ import Shared
 import XCGLogger
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 public class DBOperationCancelled : MaybeErrorType {
     public var description: String {
@@ -1049,7 +1049,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
-                writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
+                writeCorruptionInfoForDBNamed(filename, toLogger: LegacyLogger.corruptLogger)
                 SentryIntegration.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
 
@@ -1105,7 +1105,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
-                writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
+                writeCorruptionInfoForDBNamed(filename, toLogger: LegacyLogger.corruptLogger)
                 SentryIntegration.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
             // Don't log errors caused by `sqlite3_interrupt()` to Sentry.
