@@ -11,7 +11,7 @@ import SwiftyJSON
 private let MaxSecondsToConvertInt64: Int64 = 9223372036854775
 private let MaxSecondsToConvertDouble = Double(9223372036854775 as Int64)
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 open class TabsPayload: CleartextPayloadJSON {
     open class Tab {

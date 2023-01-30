@@ -7,7 +7,7 @@ import Shared
 import WebKit
 import Common
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 let ReaderModeProfileKeyStyle = "readermode.style"
 
 enum ReaderModeMessageType: String {

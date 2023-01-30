@@ -62,7 +62,7 @@ public struct RemoteError {
 
 private let CurrentSyncAuthStateCacheVersion = 1
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 public struct SyncAuthStateCache {
     let token: TokenServerToken

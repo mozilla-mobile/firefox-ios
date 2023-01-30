@@ -336,7 +336,7 @@ class HistoryPanel: UIViewController,
     private func configureDatasource() {
         diffableDatasource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
             guard let self = self else {
-                Logger.browserLogger.error("History Panel - self became nil inside diffableDatasource!")
+                LegacyLogger.browserLogger.error("History Panel - self became nil inside diffableDatasource!")
                 return nil
             }
 
@@ -486,7 +486,7 @@ class HistoryPanel: UIViewController,
         // For UX consistency, every cell in history panel SHOULD have a trailing action.
         let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
             guard let self = self else {
-                Logger.browserLogger.error("History Panel - self became nil inside SwipeActionConfiguration!")
+                LegacyLogger.browserLogger.error("History Panel - self became nil inside SwipeActionConfiguration!")
                 completion(false)
                 return
             }

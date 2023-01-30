@@ -7,7 +7,7 @@ import Account
 import Shared
 import SwiftyJSON
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 /**
  * Turns JSON of the form

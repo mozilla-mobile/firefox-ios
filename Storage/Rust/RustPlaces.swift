@@ -6,7 +6,7 @@ import Foundation
 import Shared
 @_exported import MozillaAppServices
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)

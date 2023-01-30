@@ -11,7 +11,7 @@ private let SectionButton = 2
 private let NumberOfSections = 3
 private let TogglesPrefKey = "clearprivatedata.toggles"
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 private let HistoryClearableIndex = 0
 
