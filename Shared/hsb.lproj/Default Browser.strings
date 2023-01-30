@@ -1,3 +1,6 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Hdyž Firefox k swojemu standardnemu wobhladowakej činiće, je to hłós za wotewrjeny, přistupny internet.";
+
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.BetterInternet.Title.v108" = "Standard za lěpši internet";
 
@@ -6,6 +9,15 @@
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Nastajće wotkazy z websydłow, mejlkow a powěsćow, zo bychu so awtomatisce we Firefox wočinili.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Wubjerće Firefox jako swój standardny wobhladowak, zo byšće spěšnosć, wěstotu a priwatnosć awtomatisce dóstał.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Wšědne přehladowanje – hišće lěpše";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox w přerězku wjace hač 3000 přesćěhowakow na wužiwarja kóždy měsac blokuje. Čińće jón k swojemu standardnemu wobhladowakej, zo byšće w pokoju přehladował.";
 
 /* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
 "DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox wašu priwatnosć škita";

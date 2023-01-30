@@ -1604,7 +1604,7 @@
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Salli joitain seuraimia, jotta sivustot toimivat oikein.";
 
 /* Description for strict level tracker protection */
-"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Estää enemmän seuraimia, mainoksia ja ponnahdusikkunoita. Sivut latautuvat nopeammin, mutta jotkut toiminnot eivät välttämättä toimi.";
+"Settings.TrackingProtection.ProtectionLevelStrict.Description" = "Estää enemmän seuraimia, mainoksia ja ponnahdusikkunoita. Sivut latautuvat nopeammin, mutta jotkin toiminnot eivät välttämättä toimi.";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Suojaustaso";
