@@ -17,11 +17,19 @@ extension NimbusServerSettings {
     /// from the `Info.plist`, or if it failes to parse as a valid URL, then `nil` is returned.
     /// - Returns: NimbusServerSettings
     static func createFromInfoDictionary(useStagingServer: Bool, usePreviewCollection: Bool) -> NimbusServerSettings? {
-        let key = useStagingServer ? NimbusStagingServerURLKey : NimbusServerURLKey
-        guard let serverURLString = Bundle.main.object(forInfoDictionaryKey: key) as? String, let serverURL = URL(string: serverURLString) else {
+        guard let serverURL = getNimbusEndpoint(useStagingServer: useStagingServer) else {
             return nil
         }
         return NimbusServerSettings(url: serverURL, collection: usePreviewCollection ? "nimbus-preview" : remoteSettingsCollection)
+    }
+
+    static func getNimbusEndpoint(useStagingServer: Bool) -> URL? {
+        let key = useStagingServer ? NimbusStagingServerURLKey : NimbusServerURLKey
+        if let serverURLString = Bundle.main.object(forInfoDictionaryKey: key) as? String,
+            let serverURL = URL(string: serverURLString) {
+            return serverURL
+        }
+        return nil
     }
 }
 
@@ -29,11 +37,14 @@ extension NimbusAppSettings {
     /// Create a `NimbusAsppSettings` struct by looking up the application name and channel in the `Info.plist`. If the values are missing
     /// from the `Info.plist` or if they fail to parse, then `nil` is returned.
     /// - Returns: NimbusAppSettings
-    static func createFromInfoDictionary() -> NimbusAppSettings? {
-        guard let appName = Bundle.main.object(forInfoDictionaryKey: NimbusAppNameKey) as? String, let channel = Bundle.main.object(forInfoDictionaryKey: NimbusAppChannelKey) as? String else {
+    static func createFromInfoDictionary(
+        customTargetingAttribtues json: [String: Any] = [String: Any]()
+    ) -> NimbusAppSettings? {
+        guard let appName = Bundle.main.object(forInfoDictionaryKey: NimbusAppNameKey) as? String,
+                let channel = Bundle.main.object(forInfoDictionaryKey: NimbusAppChannelKey) as? String else {
             return nil
         }
-        return NimbusAppSettings(appName: appName, channel: channel)
+        return NimbusAppSettings(appName: appName, channel: channel, customTargetingAttributes: json)
     }
 }
 

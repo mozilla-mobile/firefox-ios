@@ -536,10 +536,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Telemetry.default.configuration.isUploadEnabled = sender.isOn
             Glean.shared.setUploadEnabled(sender.isOn)
             if !sender.isOn {
-                NimbusWrapper.shared.nimbus?.resetTelemetryIdentifiers()
+                NimbusWrapper.shared.nimbus.resetTelemetryIdentifiers()
             }
         } else if toggle.setting == .studies {
-            NimbusWrapper.shared.nimbus?.globalUserParticipation = sender.isOn
+            NimbusWrapper.shared.nimbus.globalUserParticipation = sender.isOn
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
         }

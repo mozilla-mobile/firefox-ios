@@ -62,6 +62,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        setupCrashReporting()
+        setupTelemetry()
+        setupExperimentation()
+
         appPhase = .didFinishLaunching
 
         $appPhase.sink { [unowned self] phase in
@@ -110,10 +114,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             UserDefaults.standard.removePersistentDomain(forName: AppInfo.sharedContainerIdentifier)
         }
-
-        setupCrashReporting()
-        setupTelemetry()
-        setupExperimentation()
 
         TPStatsBlocklistChecker.shared.startup()
 
@@ -421,28 +421,11 @@ extension AppDelegate {
     }
 
     func setupExperimentation() {
-        let isFirstRun = !UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
-
         do {
             // Enable nimbus when both Send Usage Data and Studies are enabled in the settings.
-            try NimbusWrapper.shared.initialize(enabled: true, isFirstRun: isFirstRun)
+            try NimbusWrapper.shared.initialize()
         } catch {
             NSLog("Failed to setup experimentation: \(error)")
-        }
-
-        guard let nimbus = NimbusWrapper.shared.nimbus else {
-            return
-        }
-
-        AppNimbus.shared.initialize {
-            nimbus
-        }
-
-        NotificationCenter.default.addObserver(
-            forName: Notification.Name.nimbusExperimentsApplied,
-            object: nil,
-            queue: OperationQueue.main) { _ in
-            AppNimbus.shared.invalidateCachedValues()
         }
     }
 }

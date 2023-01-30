@@ -16,9 +16,49 @@ class NimbusWrapper {
     private init() {
     }
 
-    var nimbus: NimbusApi?
+    lazy var nimbus: NimbusInterface = {
+        let useStagingServer = UserDefaults.standard.bool(forKey: NimbusUseStagingServerDefault)
+        let usePreviewCollection = UserDefaults.standard.bool(forKey: NimbusUsePreviewCollectionDefault)
+        let isFirstRun = !UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
 
-    func initialize(enabled: Bool, isFirstRun: Bool = false) throws {
+        let customTargetingAttibutes = [
+            "is_first_run": isFirstRun,
+            "isFirstRun": "\(isFirstRun)"
+        ]
+
+        guard let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary(customTargetingAttribtues: customTargetingAttibutes) else {
+            fatalError("Failed to load Nimbus settings from Info.plist")
+        }
+
+        guard let databasePath = Nimbus.defaultDatabasePath() else {
+            fatalError("Failed to determine Nimbus database path")
+        }
+
+        let builder = NimbusBuilder(dbPath: databasePath)
+
+        let urlString = NimbusServerSettings.getNimbusEndpoint(useStagingServer: useStagingServer)?.absoluteString
+        builder.with(url: urlString)
+
+        let bundles = [
+            Bundle.main,
+            Bundle.main.fallbackTranslationBundle()
+        ].compactMap { $0 }
+
+        builder.with(bundles: bundles)
+            .using(previewCollection: usePreviewCollection)
+            .with(initialExperiments: Bundle.main.url(forResource: "initial_experiments", withExtension: "json"))
+            .isFirstRun(isFirstRun)
+            .onCreate { nimbus in
+                AppNimbus.shared.initialize { nimbus }
+            }
+            .onApply { _ in
+                AppNimbus.shared.invalidateCachedValues()
+            }
+
+        return builder.build(appInfo: nimbusAppSettings)
+    }()
+
+    func initializeRustComponents() throws {
         let rustLogCallback: LogCallback = { level, tag, message in
             let log = OSLog(subsystem: "org.mozilla.nimbus", category: tag ?? "default")
             switch level {
@@ -41,31 +81,11 @@ class NimbusWrapper {
         }
 
         Viaduct.shared.useReqwestBackend()
+    }
 
-        let useStagingServer = UserDefaults.standard.bool(forKey: NimbusUseStagingServerDefault)
-        let usePreviewCollection = UserDefaults.standard.bool(forKey: NimbusUsePreviewCollectionDefault)
+    func initialize() throws {
+        try initializeRustComponents()
 
-        guard let nimbusAppSettings = NimbusAppSettings.createFromInfoDictionary() else {
-            throw "Failed to load Nimbus settings from Info.plist"
-        }
-
-        let nimbusServerSettings = NimbusServerSettings.createFromInfoDictionary(useStagingServer: useStagingServer, usePreviewCollection: usePreviewCollection)
-
-        guard let databasePath = Nimbus.defaultDatabasePath() else {
-            throw "Failed to determine Nimbus database path"
-        }
-
-        self.nimbus = try Nimbus.create(nimbusServerSettings, appSettings: nimbusAppSettings, dbPath: databasePath, enabled: enabled)
-
-        guard let nimbus = self.nimbus else {
-            return
-        }
-        if isFirstRun || nimbusServerSettings == nil {
-            if let fileURL = Bundle.main.url(forResource: "initial_experiments", withExtension: "json") {
-                nimbus.setExperimentsLocally(fileURL)
-            }
-        }
-        nimbus.applyPendingExperiments()
         nimbus.fetchExperiments()
     }
 }
@@ -74,18 +94,18 @@ class NimbusWrapper {
 
 extension NimbusWrapper {
     func getAvailableExperiments() -> [AvailableExperiment] {
-        return self.nimbus?.getAvailableExperiments() ?? []
+        return self.nimbus.getAvailableExperiments()
     }
 
     func getEnrolledBranchSlug(forExperiment experiment: AvailableExperiment) -> String? {
-        return self.nimbus?.getExperimentBranch(experimentId: experiment.slug)
+        return self.nimbus.getExperimentBranch(experimentId: experiment.slug)
     }
 
     func optIn(toExperiment experiment: AvailableExperiment, withBranch branch: ExperimentBranch) {
-        self.nimbus?.optIn(experiment.slug, branch: branch.slug)
+        self.nimbus.optIn(experiment.slug, branch: branch.slug)
     }
 
     func optOut(ofExperiment experiment: AvailableExperiment) {
-        self.nimbus?.optOut(experiment.slug)
+        self.nimbus.optOut(experiment.slug)
     }
 }
