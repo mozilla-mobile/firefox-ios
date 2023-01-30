@@ -27,6 +27,7 @@ class TabDisplayManagerTests: XCTestCase {
         manager = TabManager(profile: profile, imageStore: nil)
         collectionView = MockCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        UserDefaults().setValue(true, forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun)
     }
 
     override func tearDown() {
