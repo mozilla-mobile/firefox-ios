@@ -119,6 +119,20 @@
         "identifier" : "282731671ABC9BE700AA1954",
         "name" : "SyncTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:BrowserKit",
+        "identifier" : "CommonTests",
+        "name" : "CommonTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:BrowserKit",
+        "identifier" : "SiteImageViewTests",
+        "name" : "SiteImageViewTests"
+      }
     }
   ],
   "version" : 1
