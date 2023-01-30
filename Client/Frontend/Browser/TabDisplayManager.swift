@@ -367,7 +367,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return nil
     }
 
-    func refreshStore(evenIfHidden: Bool = false, shouldAnimate: Bool = false) {
+    func refreshStore(evenIfHidden: Bool = false, shouldAnimate: Bool = false, completion: (() -> Void)? = nil) {
         operations.removeAll()
         dataStore.removeAll()
 
@@ -404,6 +404,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             }
 
             self.tabDisplayer?.focusSelectedTab()
+            completion?()
         }
     }
 
