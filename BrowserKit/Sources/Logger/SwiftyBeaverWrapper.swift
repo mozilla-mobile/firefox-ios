@@ -7,6 +7,12 @@ import SwiftyBeaver
 
 // MARK: - SwiftyBeaverWrapper
 protocol SwiftyBeaverWrapper {
+    static func debug(_ message: @autoclosure () -> Any,
+                      _ file: String,
+                      _ function: String,
+                      line: Int,
+                      context: Any?)
+
     static func info(_ message: @autoclosure () -> Any,
                      _ file: String,
                      _ function: String,

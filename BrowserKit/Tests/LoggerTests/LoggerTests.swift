@@ -20,6 +20,12 @@ final class LoggerTests: XCTestCase {
         cleanUp()
     }
 
+    func testDebug() {
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.log("Debug log", level: .debug, category: .setup)
+        XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
+    }
+
     func testInfo() {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.log("Info log", level: .info, category: .setup)
@@ -42,6 +48,7 @@ final class LoggerTests: XCTestCase {
 // MARK: - Helper
 private extension LoggerTests {
     func cleanUp() {
+        MockSwiftyBeaver.debugCalled = 0
         MockSwiftyBeaver.infoCalled = 0
         MockSwiftyBeaver.warningCalled = 0
         MockSwiftyBeaver.errorCalled = 0
@@ -62,6 +69,11 @@ class MockSwiftyBeaver: SwiftyBeaverWrapper {
     }
 
     static var fileDestination: URL?
+
+    static var debugCalled = 0
+    static func debug(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
+        debugCalled += 1
+    }
 
     static var infoCalled = 0
     static func info(_ message: @autoclosure () -> Any, _ file: String, _ function: String, line: Int, context: Any?) {
