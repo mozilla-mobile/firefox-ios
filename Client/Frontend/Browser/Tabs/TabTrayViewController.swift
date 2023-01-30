@@ -269,10 +269,12 @@ class TabTrayViewController: UIViewController, Themeable {
 
     private func updateTitle() {
         if let newTitle = viewModel.navTitle(for: segmentedControlIphone.selectedSegmentIndex) {
+            // iPhone
             navigationItem.titleView = nil
             navigationItem.title = newTitle
             updateContainerConstraints(isCompact: true)
         } else {
+            // iPad in compact or regular
             navigationItem.titleView = viewModel.layout == .compact ? segmentedControlIphone : segmentedControlIpad
             navigationItem.title = nil
             updateContainerConstraints(isCompact: viewModel.layout == .compact)
