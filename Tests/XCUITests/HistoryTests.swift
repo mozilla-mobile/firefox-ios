@@ -101,6 +101,7 @@ class HistoryTests: BaseTestCase {
 
         // Wait for OK pop-up to disappear after confirming
         waitForNoExistence(app.alerts.buttons["OK"], timeoutValue: TIMEOUT)
+        sleep(1)
 
         // Try to tap on the disabled Clear Private Data button
         app.tables.cells["ClearPrivateData"].tap()
