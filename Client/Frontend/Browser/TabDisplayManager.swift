@@ -230,16 +230,13 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
 
         // build groups
-        if shouldEnableGroupedTabs {
-            SearchTermGroupsUtility.getTabGroups(with: profile,
-                                                 from: tabsToBuildFrom,
-                                                 using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-                ensureMainThread { [weak self] in
-                    self?.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
-                    completion(tabGroups, filteredActiveTabs)
-                }
+        SearchTermGroupsUtility.getTabGroups(with: profile,
+                                             from: tabsToBuildFrom,
+                                             using: .orderedAscending) { tabGroups, filteredActiveTabs  in
+            ensureMainThread { [weak self] in
+                self?.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
+                completion(tabGroups, filteredActiveTabs)
             }
-            return
         }
     }
 
