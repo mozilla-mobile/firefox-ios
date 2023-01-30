@@ -70,6 +70,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
         waitForExistence(app.tables.staticTexts[ProcessInfo.processInfo.environment["FXA_EMAIL"]!])
+        waitForExistence(app.staticTexts["Firefox Account"], timeout: TIMEOUT)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
@@ -146,7 +147,7 @@ class IntegrationTests: BaseTestCase {
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
-        sleep(3)
+        waitForExistence(app.staticTexts["Firefox Account"], timeout: TIMEOUT)
         app.tables.cells.element(boundBy: 2).tap()
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
     }
@@ -229,8 +230,7 @@ class IntegrationTests: BaseTestCase {
 
         // Need to swipe to get the data on the screen on focus
         app.swipeDown()
-        sleep(3)
-        waitForExistence(app.tables.otherElements["profile1"], timeout: 10)
+        waitForExistence(app.tables.otherElements["profile1"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
     }
 
@@ -290,6 +290,7 @@ class IntegrationTests: BaseTestCase {
         app.webViews.buttons.element(boundBy: 0).tap()
 
         navigator.nowAt(SettingsScreen)
+        waitForExistence(app.staticTexts["Firefox Account"], timeout: TIMEOUT)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 35)
 
         // Check Bookmarks
