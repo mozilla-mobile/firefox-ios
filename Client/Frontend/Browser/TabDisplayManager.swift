@@ -75,7 +75,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     fileprivate let tabManager: TabManager
     fileprivate let collectionView: UICollectionView
     fileprivate weak var tabDisplayer: TabDisplayer?
-    private let tabReuseIdentifer: String
+    private let tabReuseIdentifier: String
     private var hasSentInactiveTabShownEvent: Bool = false
     var profile: Profile
     var cfrDelegate: InactiveTabsCFRProtocol?
@@ -188,7 +188,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         self.tabDisplayer = tabDisplayer
         self.tabManager = tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        self.tabReuseIdentifer = reuseID
+        self.tabReuseIdentifier = reuseID
         self.tabDisplayType = tabDisplayType
         self.profile = profile
         self.cfrDelegate = cfrDelegate
@@ -544,7 +544,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
+        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
         if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
