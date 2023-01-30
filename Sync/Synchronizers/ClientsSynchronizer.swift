@@ -7,7 +7,7 @@ import Shared
 import Storage
 import SwiftyJSON
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 let ClientsStorageVersion = 1
 
 // TODO

@@ -1531,7 +1531,7 @@ class BrowserViewController: UIViewController {
 
     private func showSendToDevice() {
         guard let selectedTab = tabManager.selectedTab,
-              let url = selectedTab.url
+              let url = selectedTab.canonicalURL?.displayURL
         else { return }
 
         let themeColors = themeManager.currentTheme.colors
@@ -1874,7 +1874,7 @@ extension BrowserViewController: LibraryPanelDelegate {
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
         guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
-            Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
+            LegacyLogger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
             return
         }
         return self.libraryPanel(didSelectURL: url, visitType: visitType)

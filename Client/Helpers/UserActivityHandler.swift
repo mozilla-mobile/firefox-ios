@@ -74,7 +74,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 }
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 extension UserActivityHandler {
     func spotlightIndex(_ page: ReadabilityResult, for tab: Tab) async {

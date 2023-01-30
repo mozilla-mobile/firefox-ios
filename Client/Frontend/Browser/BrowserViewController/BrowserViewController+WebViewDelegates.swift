@@ -7,7 +7,7 @@ import WebKit
 import Shared
 import UIKit
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 /// List of schemes that are allowed to be opened in new tabs.
 private let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]

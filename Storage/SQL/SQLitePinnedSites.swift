@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Glean
 
-private let log = Logger.syncLogger
+private let log = LegacyLogger.syncLogger
 
 private var ignoredSchemes = ["about"]
 

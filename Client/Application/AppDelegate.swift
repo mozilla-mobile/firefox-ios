@@ -9,7 +9,7 @@ import UIKit
 import Common
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let log = Logger.browserLogger
+    private let log = LegacyLogger.browserLogger
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
