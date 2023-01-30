@@ -367,7 +367,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
             guard let delegate = self.sendToDeviceDelegate,
                   let selectedTab = self.selectedTab,
-                  let url = selectedTab.url
+                  let url = selectedTab.canonicalURL?.displayURL
             else { return }
 
             let themeColors = self.themeManager.currentTheme.colors
