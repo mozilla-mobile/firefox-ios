@@ -12,10 +12,10 @@ protocol FaviconFetcher {
     func fetchFavicon(from imageURL: URL) async throws -> UIImage
 }
 
-struct DefaultFaviconFetcher: FaviconFetcher {
+class DefaultFaviconFetcher: FaviconFetcher {
     private let imageDownloader: SiteImageDownloader
 
-    init(imageDownloader: SiteImageDownloader = ImageDownloader.default) {
+    init(imageDownloader: SiteImageDownloader = DefaultSiteImageDownloader()) {
         self.imageDownloader = imageDownloader
     }
 

@@ -10,16 +10,30 @@ import UIKit
 /// Image downloader wrapper around Kingfisher image downloader
 /// Used in FaviconFetcher
 protocol SiteImageDownloader {
+    /// Provides the KingFisher ImageDownloader with a Timeout in case the completion isn't called
+    var timer: Timer? { get set }
+    var timeoutDelay: Double { get }
+    var shouldContinue: Bool { get }
+    func createTimer(completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?)
+
     @discardableResult
     func downloadImage(
         with url: URL,
-        completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?
+        completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?
     ) -> DownloadTask?
 
     func downloadImage(with url: URL) async throws -> SiteImageLoadingResult
 }
 
 extension SiteImageDownloader {
+    var shouldContinue: Bool {
+        // Ensure timer is valid and hasn't fired to avoid calling continuation twice
+        guard timer?.isValid ?? true else { return false }
+        timer?.invalidate()
+
+        return true
+    }
+
     func downloadImage(with url: URL) async throws -> SiteImageLoadingResult {
         return try await withCheckedThrowingContinuation { continuation in
             _ = downloadImage(with: url) { result in
@@ -30,22 +44,8 @@ extension SiteImageDownloader {
                     continuation.resume(throwing: error)
                 }
             }
+            print("Im a timer3 \(String(describing: self.timer))")
         }
-    }
-}
-
-extension ImageDownloader: SiteImageDownloader {
-    func downloadImage(with url: URL,
-                       completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?
-    ) -> DownloadTask? {
-        downloadImage(with: url, options: nil, completionHandler: { result in
-            switch result {
-            case .success(let value):
-                completionHandler?(.success(value))
-            case .failure(let error):
-                completionHandler?(.failure(error))
-            }
-        })
     }
 }
 
