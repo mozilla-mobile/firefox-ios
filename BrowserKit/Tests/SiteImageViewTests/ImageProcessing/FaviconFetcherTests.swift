@@ -48,7 +48,7 @@ final class FaviconFetcherTests: XCTestCase {
     }
 
     func testTimeout_completesWithoutImageOrError() async {
-        mockImageDownloader.timeoutDelay = 0.1
+        mockImageDownloader.timeoutDelay = 1
         let subject = DefaultFaviconFetcher(imageDownloader: mockImageDownloader)
 
         do {
@@ -64,30 +64,15 @@ final class FaviconFetcherTests: XCTestCase {
 
 // MARK: - MockSiteImageDownloader
 private class MockSiteImageDownloader: SiteImageDownloader {
-    var timer: Timer?
-    var timeoutDelay: Double = 10
+    var timeoutDelay: UInt64 = 10
+    var continuation: CheckedContinuation<SiteImageLoadingResult, Error>?
 
     var image: UIImage?
     var error: KingfisherError?
-    var completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?
-
-    func createTimer(completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?) {
-        self.completionHandler = completionHandler
-        let timer = Timer.scheduledTimer(withTimeInterval: timeoutDelay,
-                                         repeats: false) { _ in
-            completionHandler?(.failure(SiteImageError.unableToDownloadImage("Timeout reached")))
-        }
-        self.timer = timer
-        let runLoop = RunLoop.current
-        runLoop.add(timer, forMode: .default)
-        runLoop.run()
-    }
 
     func downloadImage(with url: URL,
                        completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?
     ) -> DownloadTask? {
-        createTimer(completionHandler: completionHandler)
-
         if let error = error {
             completionHandler?(.failure(error))
         } else if let image = image {
