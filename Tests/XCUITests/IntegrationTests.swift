@@ -69,8 +69,8 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.tables.staticTexts[ProcessInfo.processInfo.environment["FXA_EMAIL"]!])
-        waitForExistence(app.staticTexts["Firefox Account"], timeout: TIMEOUT)
+        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
+        waitForNoExistence(app.staticTexts["Sync and Save Data"])
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
@@ -147,7 +147,7 @@ class IntegrationTests: BaseTestCase {
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
-        waitForExistence(app.staticTexts["Firefox Account"], timeout: TIMEOUT)
+        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         app.tables.cells.element(boundBy: 2).tap()
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
     }
@@ -290,7 +290,7 @@ class IntegrationTests: BaseTestCase {
         app.webViews.buttons.element(boundBy: 0).tap()
 
         navigator.nowAt(SettingsScreen)
-        waitForExistence(app.staticTexts["Firefox Account"], timeout: TIMEOUT)
+        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 35)
 
         // Check Bookmarks
