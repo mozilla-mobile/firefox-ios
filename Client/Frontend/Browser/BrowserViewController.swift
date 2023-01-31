@@ -1028,24 +1028,24 @@ class BrowserViewController: UIViewController {
     }
 
     private func enterOverlayMode() {
-        // Delay enterOverlay mode after dismissableView is dismiss
-        if let viewcontroller = presentedViewController as? OnViewDismissable {
-            viewcontroller.onViewDismissed = { [weak self] in
-                let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-                if shouldEnterOverlay {
-                    self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                }
-            }
-        } else if presentedViewController is OnboardingViewControllerProtocol {
-            // leave from overlay mode while in onboarding is displayed on iPad
-            leaveOverlayMode(didCancel: false)
-        } else {
-            self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-        }
+//        // Delay enterOverlay mode after dismissableView is dismiss
+//        if let viewcontroller = presentedViewController as? OnViewDismissable {
+//            viewcontroller.onViewDismissed = { [weak self] in
+//                let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+//                if shouldEnterOverlay {
+//                    self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+//                }
+//            }
+//        } else if presentedViewController is OnboardingViewControllerProtocol {
+//            // leave from overlay mode while in onboarding is displayed on iPad
+//            leaveOverlayMode(didCancel: false)
+//        } else {
+//            self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
+//        }
     }
 
     private func leaveOverlayMode(didCancel cancel: Bool) {
-        urlBar.leaveOverlayMode(didCancel: cancel)
+//        urlBar.leaveOverlayMode(didCancel: cancel)
     }
 
     func showLibrary(panel: LibraryPanelType? = nil) {
@@ -2111,6 +2111,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
 
+        // TODO: Move to overlay mode manager and remove keyboard handle from here
         if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
             if tab.url == nil, !tab.isRestoring {
                 if tabManager.didChangedPanelSelection && !tabManager.didAddNewTab {

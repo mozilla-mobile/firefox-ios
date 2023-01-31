@@ -518,6 +518,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         // TODO: Remove if is only use from the manager
         guard !inOverlayMode else { return }
 
+        print("YRD url bar enterOverlayMode")
         createLocationTextField()
 
         // Show the overlay mode UI, which includes hiding the locationView and replacing it
@@ -555,6 +556,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         // TODO: Remove if is only use from the manager
         guard inOverlayMode else { return }
 
+        print("YRD url bar leaveOverlayMode")
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)

@@ -6,19 +6,27 @@ import Foundation
 
 class OverlayModeManager {
     private var urlBarView: URLBarViewProtocol
+    private var profile: Profile
+    // We need to know if homepage is showing because is a new search or just returning to an existing homepage
+    // Raise the keyboard for the first one
 
-    init(urlBarView: URLBarViewProtocol) {
+    init(urlBarView: URLBarViewProtocol,
+         profile: Profile) {
         self.urlBarView = urlBarView
+        self.profile
     }
 
-    func openNewHomepage() {
+    // Depending on the Setting for new Search the new tab can be defined to be:
+    // blank, homepage or custom URL
+    func openNewSearch(didChangePanelSelection: Bool, didAddNewTab: Bool ) {
+        // Make sure is taken care https://mozilla-hub.atlassian.net/browse/FXIOS-4018
+        guard NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage else { return }
+
         enterOverlayMode(nil, pasted: false, search: false)
     }
 
     func changeTab() {
-        if urlBarView.inOverlayMode {
-            leaveOverlayMode(didCancel: true)
-        }
+        leaveOverlayMode(didCancel: true)
     }
 
     // MARK: - Private
