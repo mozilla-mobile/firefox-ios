@@ -74,13 +74,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     /// This variable returns all normal tabs, sorted chronologically, excluding any
     /// home page tabs.
     var recentlyAccessedNormalTabs: [Tab] {
-        var eligibleTabs: [Tab]
-
-        if featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
-            eligibleTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
-        } else {
-            eligibleTabs = normalTabs
-        }
+        var eligibleTabs = viableTabs()
 
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
@@ -601,8 +595,11 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     func removeTab(_ tab: Tab, completion: (() -> Void)? = nil) {
         guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
         DispatchQueue.main.async { [unowned self] in
+            // gather the index of the deleted tab within the viable tabs array
+            // so we can select the correct next tab after deletion
+            let viableTabsIndex = deletedIndexForViableTabs(tab)
             self.removeTab(tab, flushToDisk: true)
-            self.updateIndexAfterRemovalOf(tab, deletedIndex: index)
+            self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
             completion?()
         }
 
@@ -762,19 +759,26 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         }
     }
 
-    private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int) {
-        let closedLastNormalTab = !tab.isPrivate && normalTabs.isEmpty
-        let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
-
-        let viableTabs: [Tab]
-
-        if !tab.isPrivate, featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
+    // returns all activate tabs (private or normal)
+    private func viableTabs(isPrivate: Bool = false) -> [Tab] {
+        if !isPrivate, featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
             // only use active tabs as viable tabs
             // we cannot use recentlyAccessedNormalTabs as this is filtering for sponsored and sorting tabs
-            viableTabs = InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
+            return InactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
         } else {
-            viableTabs = tab.isPrivate ? privateTabs : normalTabs
+            return isPrivate ? privateTabs : normalTabs
         }
+    }
+
+    // returns the index of a deleted tab in the viable tabs array
+    private func deletedIndexForViableTabs(_ tab: Tab) -> Int {
+        let viableTabs = viableTabs(isPrivate: tab.isPrivate)
+        return viableTabs.firstIndex(of: tab) ?? -1
+    }
+
+    private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int, viableTabsIndex: Int) {
+        let closedLastNormalTab = !tab.isPrivate && normalTabs.isEmpty
+        let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
 
         if closedLastNormalTab {
             selectTab(addTab(), previous: tab)
@@ -782,7 +786,9 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             selectTab(mostRecentTab(inTabs: tabs) ?? tabs.last, previous: tab)
         } else if deletedIndex == _selectedIndex {
             if !selectParentTab(afterRemoving: tab) {
-                if let rightOrLeftTab = viableTabs[safe: _selectedIndex] ?? viableTabs[safe: _selectedIndex - 1] {
+                let viableTabs = viableTabs(isPrivate: tab.isPrivate)
+
+                if let rightOrLeftTab = viableTabs[safe: viableTabsIndex] ?? viableTabs[safe: viableTabsIndex - 1] {
                     selectTab(rightOrLeftTab, previous: tab)
                 } else {
                     selectTab(mostRecentTab(inTabs: viableTabs) ?? viableTabs.last, previous: tab)
