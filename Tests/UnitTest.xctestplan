@@ -133,6 +133,13 @@
         "identifier" : "SiteImageViewTests",
         "name" : "SiteImageViewTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "LoggerTests",
+        "name" : "LoggerTests"
+      }
     }
   ],
   "version" : 1
