@@ -37,6 +37,11 @@ class CreditCardListViewModel: ObservableObject {
 
 struct CreditCardListView: View {
     @ObservedObject var viewModel: CreditCardListViewModel
+    init(viewModel: CreditCardListViewModel) {
+        self.viewModel = viewModel
+        UITableView.appearance().backgroundColor = .yellow
+        UITableView.appearance().tintColor = .red
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -54,31 +59,68 @@ struct CreditCardListView: View {
                 .padding(.bottom, 8)
 
             let creditCards = viewModel.creditCards
-            List(0..<creditCards.count, id: \.self) {index in
+            NoSeparatorList(4..<creditCards.count, id: \.self) {index in
                 CreditCardItemRow(item: creditCards[index])
-                    .listRowBackground(Color.white)
+                    .listRowBackground(Color.green)
                     .onTapGesture {
                         print("Tapped")
                         viewModel.cardTapped(creditCard: creditCards[index])
                     }
             }
+            .onAppear {
+                // Set the default to clear
+                UITableView.appearance().backgroundColor = .yellow
+            }
+//            .listSeparatorStyleNone()
+            .background(Color(UIColor.Photon.Blue05))
             .frame(maxWidth: .infinity)
             .listStyle(.plain)
+            
+            
+            
+//            .onAppear {
+//                UITableView.appearance().separatorStyle = .none
+//                UITableView.appearance().style = .plain
+//            }.onDisappear {
+//                UITableView.appearance().separatorStyle = .singleLine
+//            }
+            
+//            .listRowInsets(EdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 0))
+//            .onAppear() {
+//                UITableView.appearance().separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 50)
+//            }
+//            .listStyle(InsetGroupedListStyle())
 //            .scrollContentBackground(.hidden)
         }
 //        .background(.green)
     }
 }
 
-struct CreditCardListView_Previews: PreviewProvider {
-    static let cardList: [CreditCard] = [
-        CreditCard(guid: "1", ccName: "Allen Burges", ccNumberEnc: "1234567891234567", ccNumberLast4: "4567", ccExpMonth: 1234567, ccExpYear: 2023, ccType: "VISA", timeCreated: 1234678, timeLastUsed: nil, timeLastModified: 123123, timesUsed: 123123),
+//struct CreditCardListView_Previews: PreviewProvider {
+//    static let cardList: [CreditCard] = [
+//        CreditCard(guid: "1", ccName: "Allen Burges", ccNumberEnc: "1234567891234567", ccNumberLast4: "4567", ccExpMonth: 1234567, ccExpYear: 2023, ccType: "VISA", timeCreated: 1234678, timeLastUsed: nil, timeLastModified: 123123, timesUsed: 123123),
+//
+//        CreditCard(guid: "2", ccName: "Macky Otter", ccNumberEnc: "0987654323456789", ccNumberLast4: "6789", ccExpMonth: 1234567, ccExpYear: 2023, ccType: "MASTERCARD", timeCreated: 1234678, timeLastUsed: nil, timeLastModified: 123123, timesUsed: 123123)
+//    ]
+//
+//    static var previews: some View {
+//        let vm = CreditCardListViewModel(creditCards: cardList)
+//        CreditCardListView(viewModel: vm)
+//    }
+//}
 
-        CreditCard(guid: "2", ccName: "Macky Otter", ccNumberEnc: "0987654323456789", ccNumberLast4: "6789", ccExpMonth: 1234567, ccExpYear: 2023, ccType: "MASTERCARD", timeCreated: 1234678, timeLastUsed: nil, timeLastModified: 123123, timesUsed: 123123)
-    ]
-
-    static var previews: some View {
-        let vm = CreditCardListViewModel(creditCards: cardList)
-        CreditCardListView(viewModel: vm)
-    }
-}
+//public struct ListSeparatorStyleNoneModifier: ViewModifier {
+//    public func body(content: Content) -> some View {
+//        content.onAppear {
+//            UITableView.appearance().separatorStyle = .none
+//        }.onDisappear {
+//            UITableView.appearance().separatorStyle = .singleLine
+//        }
+//    }
+//}
+//
+//extension View {
+//    public func listSeparatorStyleNone() -> some View {
+//        modifier(ListSeparatorStyleNoneModifier())
+//    }
+//}

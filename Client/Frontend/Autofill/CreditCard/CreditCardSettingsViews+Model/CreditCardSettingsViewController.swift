@@ -95,12 +95,16 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
             //Check if we have any credit cards to show in the list
             viewModel.listCreditCard { creditCards in
                 guard let creditCards = creditCards, !creditCards.isEmpty else {
-                    self.updateState(type: .empty)
+                    DispatchQueue.main.async {
+                        self.updateState(type: .empty)
+                    }
                     return
                 }
-                self.updateState(type: .list)
+                DispatchQueue.main.async {
+                    self.updateState(type: .list)
+                }
             }
-            
+
             updateState(type: .empty)
             return
         }
