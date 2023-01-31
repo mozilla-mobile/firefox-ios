@@ -44,13 +44,12 @@ struct CreditCardItemRow : View {
                 .frame(maxWidth: .infinity,
                         alignment: .leading)
                 .padding(.top, -7)
-            }
+            } 
             .padding(.top, 5)
             .padding(.leading, 24)
             .padding(.trailing, 0)
             .padding(.bottom, 5)
         }
-        
 //        .alignmentGuide(.listRowSeparatorLeading) { viewDimensions in
 //            return viewDimensions[.listRowSeparatorLeading] - UIScreen.main.bounds.size.width
 //        }
