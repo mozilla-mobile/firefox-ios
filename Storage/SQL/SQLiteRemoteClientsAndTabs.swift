@@ -177,9 +177,9 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for command in commands {
                 for client in clients {
                     do {
-                        if let _ = try self.insert(connection,
-                                                   sql: "INSERT INTO commands (client_guid, value) VALUES (?, ?)",
-                                                   args: [client.guid, command.value] as Args) {
+                        if try self.insert(connection,
+                                           sql: "INSERT INTO commands (client_guid, value) VALUES (?, ?)",
+                                           args: [client.guid, command.value] as Args) != nil {
                             numberOfInserts += 1
                         } else {
                             self.logger.log("Command not inserted, but no error!",
