@@ -33,7 +33,7 @@ extension TabContentBlocker {
             TPStatsBlocklistChecker.shared.isBlocked(url: url, mainDocumentURL: mainDocumentUrl) { listItem in
                 DispatchQueue.main.async {
                     guard let listItem = listItem else { return }
-                    
+
                     self.stats = self.stats.create(matchingBlocklist: listItem, host: url.host ?? "")
                 }
             }
