@@ -221,6 +221,24 @@
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:Tests/UnitTest.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/SmokeXCUITests.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/Smoketest4.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/Smoketest2.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:Tests/Smoketest3.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "YES">
