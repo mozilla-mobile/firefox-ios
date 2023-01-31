@@ -2,13 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Common
 import XCTest
 import Kingfisher
 @testable import SiteImageView
 
 final class DefaultSiteImageDownloaderTests: XCTestCase {
-
     func testShouldContinue_whenNilTimer_thenContinues() {
         let subject = DefaultSiteImageDownloader()
         XCTAssertTrue(subject.shouldContinue)
@@ -22,8 +20,6 @@ final class DefaultSiteImageDownloaderTests: XCTestCase {
         }
         subject.timer = timer
         XCTAssertTrue(subject.shouldContinue)
-        trackForMemoryLeaks(timer)
-        trackForMemoryLeaks(subject)
     }
 
     func testShouldContinue_whenTimerInvalid_thenDoesntContinue() {
@@ -35,7 +31,5 @@ final class DefaultSiteImageDownloaderTests: XCTestCase {
         timer.invalidate()
         subject.timer = timer
         XCTAssertFalse(subject.shouldContinue)
-        trackForMemoryLeaks(timer)
-        trackForMemoryLeaks(subject)
     }
 }

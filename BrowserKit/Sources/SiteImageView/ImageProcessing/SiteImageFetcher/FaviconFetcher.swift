@@ -25,6 +25,8 @@ class DefaultFaviconFetcher: FaviconFetcher {
             return result.image
         } catch let error as KingfisherError {
             throw SiteImageError.unableToDownloadImage(error.errorDescription ?? "No description")
+        } catch let error as SiteImageError {
+            throw error
         } catch {
             throw SiteImageError.unableToDownloadImage("No description")
         }

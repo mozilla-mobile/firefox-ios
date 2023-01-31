@@ -26,15 +26,20 @@ class DefaultSiteImageDownloader: ImageDownloader, SiteImageDownloader {
     ) -> DownloadTask? {
         createTimer(completionHandler: completionHandler)
 
-        return downloadImage(with: url, options: nil, completionHandler: { result in
-            guard self.shouldContinue else { return }
-            
-            switch result {
-            case .success(let value):
-                completionHandler?(.success(value))
-            case .failure(let error):
-                completionHandler?(.failure(error))
-            }
+        return downloadImage(with: url,
+                             options: nil,
+                             completionHandler: { result in
+            // laurie
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                guard self.shouldContinue else { return }
+
+                switch result {
+                case .success(let value):
+                    completionHandler?(.success(value))
+                case .failure(let error):
+                    completionHandler?(.failure(error))
+                }
+//            }
         })
     }
 }

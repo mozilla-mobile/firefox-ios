@@ -44,7 +44,6 @@ extension SiteImageDownloader {
                     continuation.resume(throwing: error)
                 }
             }
-            print("Im a timer3 \(String(describing: self.timer))")
         }
     }
 }

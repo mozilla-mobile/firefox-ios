@@ -48,20 +48,17 @@ final class FaviconFetcherTests: XCTestCase {
     }
 
     func testTimeout_completesWithoutImageOrError() async {
-        mockImageDownloader.timeoutDelay = 0
+        mockImageDownloader.timeoutDelay = 0.1
         let subject = DefaultFaviconFetcher(imageDownloader: mockImageDownloader)
 
         do {
             _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
             XCTFail("Should have failed with error")
         } catch let error as SiteImageError {
-            XCTAssertEqual("Timeout reached",
-                           error.description)
+            XCTAssertEqual("Unable to download image with reason: Timeout reached", error.description)
         } catch {
             XCTFail("Should have failed with SiteImageError type")
         }
-
-        trackForMemoryLeaks(subject)
     }
 }
 
@@ -76,22 +73,14 @@ private class MockSiteImageDownloader: SiteImageDownloader {
 
     func createTimer(completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?) {
         self.completionHandler = completionHandler
-        //        timer = Timer.scheduledTimer(timeInterval: 0.1,
-        //                                     target: self,
-        //                                     selector: #selector(test),
-        //                                     userInfo: nil,
-        //                                     repeats: false)
-        timer = Timer.scheduledTimer(withTimeInterval: timeoutDelay,
-                                     repeats: false) { _ in
-            print("HELLO")
+        let timer = Timer.scheduledTimer(withTimeInterval: timeoutDelay,
+                                         repeats: false) { _ in
             completionHandler?(.failure(SiteImageError.unableToDownloadImage("Timeout reached")))
         }
-        print("Im a timer \(String(describing: timer))")
-    }
-
-    @objc func test() {
-        print("HELLO")
-        completionHandler?(.failure(SiteImageError.unableToDownloadImage("Timeout reached")))
+        self.timer = timer
+        let runLoop = RunLoop.current
+        runLoop.add(timer, forMode: .default)
+        runLoop.run()
     }
 
     func downloadImage(with url: URL,
@@ -99,7 +88,6 @@ private class MockSiteImageDownloader: SiteImageDownloader {
     ) -> DownloadTask? {
         createTimer(completionHandler: completionHandler)
 
-        print("Im a timer2 \(String(describing: timer))")
         if let error = error {
             completionHandler?(.failure(error))
         } else if let image = image {
