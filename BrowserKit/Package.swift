@@ -35,13 +35,15 @@ let package = Package(
     targets: [
         .target(
             name: "SiteImageView",
-            dependencies: ["Fuzi", "Kingfisher", "Common"]),
+            dependencies: ["Fuzi", "Kingfisher", "Common"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView"]),
         .target(
             name: "Common",
-            dependencies: ["Dip"]),
+            dependencies: ["Dip"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),
