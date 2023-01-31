@@ -71,7 +71,6 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         waitForNoExistence(app.staticTexts["Sync and Save Data"])
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
         sleep(3)
