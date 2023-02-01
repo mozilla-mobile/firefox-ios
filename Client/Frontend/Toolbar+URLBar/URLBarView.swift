@@ -515,7 +515,6 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
-        // TODO: Remove if is only use from the manager
         guard !inOverlayMode else { return }
 
         createLocationTextField()

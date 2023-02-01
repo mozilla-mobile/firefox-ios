@@ -2122,7 +2122,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
 
-        // TODO: Move to overlay mode manager and remove keyboard handle from here
+        // TODO: Remove this block was added to fix https://mozilla-hub.atlassian.net/browse/FXIOS-4018
+        // but will be handled in the refactoring
         if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
             if tab.url == nil, !tab.isRestoring {
                 if tabManager.didChangedPanelSelection && !tabManager.didAddNewTab {
@@ -2142,7 +2143,7 @@ extension BrowserViewController: TabManagerDelegate {
         // If we are restoring tabs then we update the count once at the end
         tabManager.didAddNewTab = true
         if !isRestoring {
-//            overlayManager.enterOverlayMode()
+            // TODO: Call to manager enterOverlayMode here
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self

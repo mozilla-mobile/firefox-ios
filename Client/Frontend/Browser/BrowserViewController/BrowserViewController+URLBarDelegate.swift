@@ -327,7 +327,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
-        // TODO: We show the homepage when entering overlay mode. Figure out how to achieve the opposite!!
         urlBar.updateSearchEngineImage()
         guard let profile = profile as? BrowserProfile else { return }
 
@@ -343,7 +342,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
-        // TODO: We show the homepage when entering overlay mode. Figure out how to achieve the opposite!!
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
     }
