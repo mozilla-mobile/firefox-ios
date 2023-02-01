@@ -21,7 +21,7 @@ class NimbusWrapper {
         let usePreviewCollection = UserDefaults.standard.bool(forKey: NimbusUsePreviewCollectionDefault)
         let isFirstRun = !UserDefaults.standard.bool(forKey: OnboardingConstants.onboardingDidAppear)
 
-        let customTargetingAttibutes = [
+        let customTargetingAttibutes: [String: Any] = [
             "is_first_run": isFirstRun,
             "isFirstRun": "\(isFirstRun)"
         ]
