@@ -34,6 +34,7 @@ extension SiteImageDownloader {
                     self.continuation = continuation
 
                     _ = self.downloadImage(with: url) { result in
+                        guard let continuation = self.continuation else { return }
                         switch result {
                         case .success(let imageResult):
                             continuation.resume(returning: imageResult)
@@ -49,6 +50,7 @@ extension SiteImageDownloader {
                 try Task.checkCancellation()
                 let error = SiteImageError.unableToDownloadImage("Timeout reached")
                 self.continuation?.resume(throwing: error)
+                self.continuation = nil
                 throw error
             }
 
