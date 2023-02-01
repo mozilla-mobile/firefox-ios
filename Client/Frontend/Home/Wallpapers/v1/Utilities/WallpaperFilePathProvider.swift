@@ -3,15 +3,19 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Logger
 
 /// Responsible for providing the required file paths on the disk.
-struct WallpaperFilePathProvider: Loggable {
+struct WallpaperFilePathProvider {
     private var fileManager: FileManagerInterface
+    private var logger: Logger
     public let metadataKey = "metadata"
     public let thumbnailsKey = "thumbnails"
 
-    init(with fileManager: FileManagerInterface) {
+    init(with fileManager: FileManagerInterface,
+         logger: Logger = DefaultLogger.shared) {
         self.fileManager = fileManager
+        self.logger = logger
     }
 
     // MARK: - Public interface
@@ -22,7 +26,9 @@ struct WallpaperFilePathProvider: Loggable {
     /// - Returns: A URL containing the correct path for the key.
     public func metadataPath() -> URL? {
         guard let keyDirectoryPath = folderPath(forKey: metadataKey) else {
-            browserLog.debug("WallpaperFilePathProtocol - error fetching keyed directory path for application")
+            logger.log("WallpaperFilePathProtocol - error fetching keyed directory path for application",
+                       level: .debug,
+                       category: .homepage)
             return nil
         }
 
@@ -39,7 +45,9 @@ struct WallpaperFilePathProvider: Loggable {
     public func imagePathWith(name: String) -> URL? {
         let key = getFolderName(from: name)
         guard let keyDirectoryPath = folderPath(forKey: key) else {
-            browserLog.debug("WallpaperFilePathProvider - error fetching keyed directory path for application")
+            logger.log("WallpaperFilePathProvider - error fetching keyed directory path for application",
+                       level: .debug,
+                       category: .homepage)
             return nil
         }
 
@@ -66,7 +74,9 @@ struct WallpaperFilePathProvider: Loggable {
             for: .applicationSupportDirectory,
             in: FileManager.SearchPathDomainMask.userDomainMask).first
         else {
-            browserLog.debug("WallpaperFilePathProvider - error fetching basePath for application")
+            logger.log("WallpaperFilePathProvider - error fetching basePath for application",
+                       level: .debug,
+                       category: .homepage)
             return nil
         }
 
@@ -84,7 +94,9 @@ struct WallpaperFilePathProvider: Loggable {
                                                 withIntermediateDirectories: true,
                                                 attributes: nil)
             } catch {
-                browserLog.debug("Could not create directory at \(directoryPath.absoluteString)")
+                logger.log("Could not create directory at \(directoryPath.absoluteString)",
+                           level: .debug,
+                           category: .homepage)
             }
         }
     }

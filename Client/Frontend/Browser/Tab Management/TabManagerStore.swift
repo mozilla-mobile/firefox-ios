@@ -2,10 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Foundation
+import Logger
 import Storage
 import Shared
-import Common
 
 protocol TabManagerStore {
     var isRestoringTabs: Bool { get }
@@ -29,8 +30,9 @@ extension TabManagerStore {
     }
 }
 
-class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable {
+class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
     // MARK: - Variables
+    private let logger: Logger
     private let tabsKey = "tabs"
     private let prefs: Prefs
     private let imageStore: DiskImageStore?
@@ -57,11 +59,13 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
     init(prefs: Prefs,
          imageStore: DiskImageStore?,
          fileManager: TabFileManager = FileManager.default,
-         serialQueue: DispatchQueueInterface = DispatchQueue(label: "tab-manager-write-queue")) {
+         serialQueue: DispatchQueueInterface = DispatchQueue(label: "tab-manager-write-queue"),
+         logger: Logger = DefaultLogger.shared) {
         self.prefs = prefs
         self.imageStore = imageStore
         self.fileManager = fileManager
         self.serialQueue = serialQueue
+        self.logger = logger
 
         self.deprecatedTabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
         self.tabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
@@ -243,10 +247,14 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable, Loggable
         guard let data = tabStateData, let path = path else { return }
         do {
             try data.write(to: path, options: [])
-            browserLog.debug("PreserveTabs write succeeded with bytes count: \(data.count)")
+            logger.log("PreserveTabs write succeeded with bytes count: \(data.count)",
+                       level: .debug,
+                       category: .tabs)
         } catch {
             // Failure could happen when restoring
-            browserLog.debug("PreserveTabs write failed with bytes count: \(data.count)")
+            logger.log("PreserveTabs write failed with bytes count: \(data.count)",
+                       level: .debug,
+                       category: .tabs)
         }
     }
 

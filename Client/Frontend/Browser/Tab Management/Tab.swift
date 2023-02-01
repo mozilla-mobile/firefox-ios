@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import WebKit
+import Logger
 import Storage
 import Shared
 import SiteImageView
+import WebKit
 
 private var debugTabCount = 0
 
@@ -114,6 +115,7 @@ class Tab: NSObject {
     var startingSearchUrlWithAds: URL?
     var adsProviderName: String = ""
     var hasHomeScreenshot: Bool = false
+    private var logger: Logger
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {
@@ -377,13 +379,15 @@ class Tab: NSObject {
     init(profile: Profile,
          configuration: WKWebViewConfiguration,
          isPrivate: Bool = false,
-         faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory()) {
+         faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
+         logger: Logger = DefaultLogger.shared) {
         self.configuration = configuration
         self.nightMode = false
         self.noImageMode = false
         self.profile = profile
         self.metadataManager = TabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
+        self.logger = logger
         super.init()
         self.isPrivate = isPrivate
         debugTabCount += 1
@@ -593,18 +597,24 @@ class Tab: NSObject {
                                            timeoutInterval: 10.0)
 
             if webView?.load(reloadRequest) != nil {
-                browserLog.debug("Reloaded the tab from originating source, ignoring local cache.")
+                logger.log("Reloaded the tab from originating source, ignoring local cache.",
+                           level: .debug,
+                           category: .tabs)
                 return
             }
         }
 
         if webView?.reloadFromOrigin() != nil {
-            browserLog.debug("reloaded zombified tab from origin")
+            logger.log("Reloaded zombified tab from origin",
+                       level: .debug,
+                       category: .tabs)
             return
         }
 
         if let webView = self.webView {
-            browserLog.debug("restoring webView from scratch")
+            logger.log("restoring webView from scratch",
+                       level: .debug,
+                       category: .tabs)
             restore(webView)
         }
     }
@@ -794,17 +804,14 @@ class Tab: NSObject {
     }
 }
 
-extension Tab: UIGestureRecognizerDelegate, Loggable {
+extension Tab: UIGestureRecognizerDelegate {
     // This prevents the recognition of one gesture recognizer from blocking another
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 
     func configureEdgeSwipeGestureRecognizers() {
-        guard let webView = webView else {
-            browserLog.info("Tab's edge swipe gesture recognizer was never added. This will affect Tab navigation telemetry!")
-            return
-        }
+        guard let webView = webView else { return }
 
         let edgeSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleEdgeSwipeTabNavigation(_:)))
         edgeSwipeGesture.edges = .left

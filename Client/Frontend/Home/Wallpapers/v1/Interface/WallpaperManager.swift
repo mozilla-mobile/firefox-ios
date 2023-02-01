@@ -2,10 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
+import Logger
 import UIKit
 import Shared
-import Common
 
 enum WallpaperManagerError: Error {
     case downloadFailed(Error)
@@ -26,7 +27,7 @@ protocol WallpaperManagerInterface {
 }
 
 /// The primary interface for the wallpaper feature.
-class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
+class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     enum ThumbnailFilter {
         case none
         case thumbnailsAvailable
@@ -35,14 +36,17 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
     // MARK: - Properties
     private var networkingModule: WallpaperNetworking
     private var userDefaults: UserDefaultsInterface
+    private var logger: Logger
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking = WallpaperNetworkingModule(),
-        userDefaults: UserDefaultsInterface = UserDefaults.standard
+        userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.networkingModule = networkingModule
         self.userDefaults = userDefaults
+        self.logger = logger
     }
 
     // MARK: Public Interface
@@ -119,7 +123,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
             NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
             completion(.success(()))
         } catch {
-            browserLog.error("Failed to set wallpaper: \(error.localizedDescription)")
+            logger.log("Failed to set wallpaper: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .homepage)
             completion(.failure(WallpaperManagerError.other(error)))
         }
     }
@@ -156,7 +162,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
                 completion(.success(()))
             } catch {
-                browserLog.error("Error fetching wallpaper resources: \(error.localizedDescription)")
+                logger.log("Error fetching wallpaper resources: \(error.localizedDescription)",
+                           level: .warning,
+                           category: .homepage)
                 completion(.failure(WallpaperManagerError.downloadFailed(error)))
             }
         }
@@ -248,7 +256,9 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable, Loggable {
 
             return metadata
         } catch {
-            browserLog.error("Error getting stored metadata: \(error.localizedDescription)")
+            logger.log("Error getting stored metadata: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .homepage)
             return nil
         }
     }
