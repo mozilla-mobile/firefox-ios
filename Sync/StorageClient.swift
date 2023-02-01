@@ -3,11 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Shared
 import Account
 import SwiftyJSON
-
-private let log = Logger.syncLogger
 
 // Not an error that indicates a server problem, but merely an
 // error that encloses a StorageResponse.
@@ -315,6 +314,7 @@ public protocol BackoffStorage {
 
 // Don't forget to batch downloads.
 open class Sync15StorageClient {
+    private var logger: Logger
     fileprivate let authorizer: Authorizer
     fileprivate let serverURI: URL
 
@@ -327,10 +327,15 @@ open class Sync15StorageClient {
     let workQueue: DispatchQueue
     let resultQueue: DispatchQueue
 
-    public init(token: TokenServerToken, workQueue: DispatchQueue, resultQueue: DispatchQueue, backoff: BackoffStorage) {
+    public init(token: TokenServerToken,
+                workQueue: DispatchQueue,
+                resultQueue: DispatchQueue,
+                backoff: BackoffStorage,
+                logger: Logger = DefaultLogger.shared) {
         self.workQueue = workQueue
         self.resultQueue = resultQueue
         self.backoff = backoff
+        self.logger = logger
 
         // This is a potentially dangerous assumption, but failable initializers up the stack are a giant pain.
         // We want the serverURI to *not* have a trailing slash: to efficiently wipe a user's storage, we delete
@@ -350,12 +355,18 @@ open class Sync15StorageClient {
         }
     }
 
-    public init(serverURI: URL, authorizer: @escaping Authorizer, workQueue: DispatchQueue, resultQueue: DispatchQueue, backoff: BackoffStorage) {
+    public init(serverURI: URL,
+                authorizer: @escaping Authorizer,
+                workQueue: DispatchQueue,
+                resultQueue: DispatchQueue,
+                backoff: BackoffStorage,
+                logger: Logger = DefaultLogger.shared) {
         self.serverURI = serverURI
         self.authorizer = authorizer
         self.workQueue = workQueue
         self.resultQueue = resultQueue
         self.backoff = backoff
+        self.logger = logger
     }
 
     func updateBackoffFromResponse<T>(_ response: StorageResponse<T>) {
@@ -364,7 +375,9 @@ open class Sync15StorageClient {
         // response.
         // This logic will have to change if we ever invalidate that assumption.
         if let ms = response.metadata.backoffMilliseconds ?? response.metadata.retryAfterMilliseconds {
-            log.info("Backing off for \(ms)ms.")
+            logger.log("Backing off for \(ms)ms.",
+                       level: .info,
+                       category: .sync)
             self.backoff.serverBackoffUntilLocalTimestamp = ms + Date.now()
         }
     }
@@ -372,26 +385,27 @@ open class Sync15StorageClient {
     func getFailureInfo(_ response: URLResponse?, _ error: Error?) -> MaybeErrorType? {
         func failFromResponse(_ httpResponse: HTTPURLResponse?) -> MaybeErrorType? {
             guard let httpResponse = httpResponse else {
-                log.error("No response")
+                logger.log("No response",
+                           level: .warning,
+                           category: .sync)
                 return RecordParseError()
             }
 
-            log.debug("Status code: \(httpResponse.statusCode).")
+            logger.log("Status code: \(httpResponse.statusCode).",
+                       level: .debug,
+                       category: .sync)
             let storageResponse = StorageResponse(value: httpResponse, metadata: ResponseMetadata(response: httpResponse))
             self.updateBackoffFromResponse(storageResponse)
 
             if httpResponse.statusCode >= 500 {
-                log.debug("ServerError.")
                 return ServerError(storageResponse)
             }
 
             if httpResponse.statusCode == 404 {
-                log.debug("NotFound")
                 return NotFound(storageResponse)
             }
 
             if httpResponse.statusCode >= 400 {
-                log.debug("BadRequestError.")
                 let req = URLRequest(url: httpResponse.url!)
                 return BadRequestError(request: req, response: storageResponse)
             }
@@ -401,16 +415,22 @@ open class Sync15StorageClient {
 
         let httpResponse = response as? HTTPURLResponse
         if error != nil {
-            log.error("Response: \(httpResponse?.statusCode ?? 0). Got error \(error ??? "nil").")
+            logger.log("Response: \(httpResponse?.statusCode ?? 0). Got error \(error ??? "nil").",
+                       level: .warning,
+                       category: .sync)
 
             // If we got one, we don't want to hit the response nil case above and
             // return a RecordParseError, because a RequestError is more fittinghttpResponse
             if let httpResponse = httpResponse, let result = failFromResponse(httpResponse) {
-                log.error("This was a failure response. Filled specific error type.")
+                logger.log("This was a failure response. Filled specific error type.",
+                           level: .warning,
+                           category: .sync)
                 return result
             }
 
-            log.error("Filling generic RequestError.")
+            logger.log("Filling generic RequestError.",
+                       level: .warning,
+                       category: .sync)
             return RequestError()
         }
 
@@ -644,16 +664,22 @@ private let DefaultInfoConfiguration = InfoConfiguration(maxRequestBytes: 1_048_
  * forbids the nesting of a generic class inside another class.
  */
 open class Sync15CollectionClient<T: CleartextPayloadJSON> {
+    private var logger: Logger
     fileprivate let client: Sync15StorageClient
     fileprivate let encrypter: RecordEncrypter<T>
     fileprivate let collectionURI: URL
     fileprivate let collectionQueue = DispatchQueue(label: "com.mozilla.sync.collectionclient", attributes: [])
     fileprivate let infoConfig = DefaultInfoConfiguration
 
-    public init(client: Sync15StorageClient, serverURI: URL, collection: String, encrypter: RecordEncrypter<T>) {
+    public init(client: Sync15StorageClient,
+                serverURI: URL,
+                collection: String,
+                encrypter: RecordEncrypter<T>,
+                logger: Logger = DefaultLogger.shared) {
         self.client = client
         self.encrypter = encrypter
         self.collectionURI = serverURI.appendingPathComponent(collection, isDirectory: false)
+        self.logger = logger
     }
 
     var maxBatchPostRecords: Int { return infoConfig.maxPostRecords }
@@ -697,10 +723,14 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
                     deferred.fill(Maybe(success: storageResponse))
                     return
                 } else {
-                    log.warning("Couldn't parse JSON response.")
+                    self.logger.log("Couldn't parse JSON response from requestURI.",
+                                    level: .warning,
+                                    category: .sync)
                 }
             } catch {
-                log.warning("Couldn't parse JSON response. \(error)")
+                self.logger.log("Couldn't parse JSON response from requestURI. \(error)",
+                                level: .warning,
+                                category: .sync)
             }
 
             deferred.fill(Maybe(failure: RecordParseError()))
@@ -746,10 +776,14 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
                     deferred.fill(Maybe(success: storageResponse))
                     return
                 } else {
-                    log.warning("Couldn't parse JSON response.")
+                    self.logger.log("Couldn't parse JSON response from uriForRecord",
+                                    level: .warning,
+                                    category: .sync)
                 }
             } catch {
-                log.warning("Couldn't parse JSON response. \(error)")
+                self.logger.log("Couldn't parse JSON response from uriForRecord: \(error)",
+                                level: .warning,
+                                category: .sync)
             }
 
             deferred.fill(Maybe(failure: RecordParseError()))
@@ -792,7 +826,10 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
             params.append(URLQueryItem(name: "sort", value: sort.rawValue))
         }
 
-        log.debug("Issuing GET with newer = \(since), offset = \(offset ??? "nil"), sort = \(sort ??? "nil").")
+        logger.log("Unexpectedly invalid crypto/keys during a successful fetch.",
+                   level: .warning,
+                   category: .sync)
+
         client.requestGET(self.collectionURI.withQueryParams(params)) { (data, response, error) in
             if let failure = self.client.getFailureInfo(response, error) {
                 let result = Maybe<StorageResponse<[Record<T>]>>.failure(failure)
@@ -801,10 +838,8 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
             }
 
             do {
-                log.verbose("Response is \(response?.debugDescription ?? "").")
                 let json = try jsonResponse(fromData: data)
                 guard let arr = json.array, let httpResponse = response as? HTTPURLResponse else {
-                    log.warning("Non-array response.")
                     deferred.fill(Maybe(failure: RecordParseError()))
                     return
                 }
@@ -819,7 +854,9 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
                 deferred.fill(Maybe(success: response))
                 return
             } catch {
-                log.warning("Couldn't parse JSON response. \(error)")
+                self.logger.log("Couldn't parse JSON response collectionURI. \(error)",
+                                level: .warning,
+                                category: .sync)
             }
 
             deferred.fill(Maybe(failure: RecordParseError()))

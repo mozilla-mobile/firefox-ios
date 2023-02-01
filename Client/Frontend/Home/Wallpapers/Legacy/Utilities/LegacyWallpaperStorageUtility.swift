@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
+class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol {
     // MARK: - Variables
     private var userDefaults: UserDefaults
     static let directoryName = "wallpapers"
@@ -22,8 +22,9 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
             case .success:
                 self.store(wallpaperObject: wallpaper)
                 NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
-            case .failure(let error):
-                self.browserLog.error("There was an error storing the wallpaper: \(error.localizedDescription)")
+            case .failure:
+                // Do nothing
+                break
             }
         }
     }
@@ -87,7 +88,6 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
 
             try pngRepresentation.write(to: saveFilePath, options: .atomic)
         } catch let error {
-            browserLog.debug("Wallpaper - error writing file to disk: \(error)")
             throw error
         }
     }
@@ -132,7 +132,7 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
         do {
             try fileManager.removeItem(at: keyDirectoryPath)
         } catch {
-            browserLog.debug("WallpaperStorageUtility - error deleting folder for \(key)")
+            // Do nothing
         }
     }
 
@@ -146,7 +146,6 @@ class LegacyWallpaperStorageUtility: LegacyWallpaperFilePathProtocol, Loggable {
                 for: .applicationSupportDirectory,
                 in: FileManager.SearchPathDomainMask.userDomainMask).first
         else {
-            browserLog.debug("Wallpaper migration error: could not fetch paths")
             return
         }
 

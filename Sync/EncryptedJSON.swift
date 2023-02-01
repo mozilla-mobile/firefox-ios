@@ -4,10 +4,9 @@
 
 import Foundation
 import Account
+import Logger
 import Shared
 import SwiftyJSON
-
-private let log = Logger.syncLogger
 
 /**
  * Turns JSON of the form
@@ -17,6 +16,7 @@ private let log = Logger.syncLogger
  * into a new JSON object resulting from decrypting and parsing the ciphertext.
  */
 open class EncryptedJSON {
+    private var logger: Logger
     var json: JSON
     var _cleartext: JSON?               // Cache decrypted cleartext.
     var _ciphertextBytes: Data?       // Cache decoded ciphertext.
@@ -28,14 +28,16 @@ open class EncryptedJSON {
 
     let keyBundle: KeyBundle
 
-    public init(json: String, keyBundle: KeyBundle) {
+    public init(json: String, keyBundle: KeyBundle, logger: Logger = DefaultLogger.shared) {
         self.keyBundle = keyBundle
         self.json = JSON(parseJSON: json)
+        self.logger = logger
     }
 
-    public init(json: JSON, keyBundle: KeyBundle) {
+    public init(json: JSON, keyBundle: KeyBundle, logger: Logger = DefaultLogger.shared) {
         self.keyBundle = keyBundle
         self.json = json
+        self.logger = logger
     }
 
     // For validating HMAC: the raw ciphertext as bytes without decoding.
@@ -89,7 +91,9 @@ open class EncryptedJSON {
         // We can force-unwrap self["ciphertext"] because we already checked
         // it when verifying the HMAC above.
         guard let data = self.ciphertextBytes else {
-            log.error("Unable to decode ciphertext base64 in record \(self["id"].string ?? "<unknown>")")
+            logger.log("Unable to decode ciphertext base64 in record \(self["id"].string ?? "<unknown>")",
+                       level: .warning,
+                       category: .sync)
             valid = false
             return false
         }
@@ -140,13 +144,17 @@ open class EncryptedJSON {
         }
 
         if !isValid() {
-            log.error("Failed to validate.")
+            logger.log("Failed to validate encrypted JSON.",
+                       level: .warning,
+                       category: .sync)
             return nil
         }
 
         let decrypted: String? = keyBundle.decrypt(self.ciphertext, iv: self.iv)
         if decrypted == nil {
-            log.error("Failed to decrypt.")
+            logger.log("Failed to decrypt encrypted JSON.",
+                       level: .warning,
+                       category: .sync)
             valid = false
             return nil
         }

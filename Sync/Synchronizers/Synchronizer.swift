@@ -3,10 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Shared
 import Storage
-
-private let log = Logger.syncLogger
 
 /**
  * This exists to pass in external context: e.g., the UIApplication can
@@ -55,7 +54,11 @@ public protocol ResettableSynchronizer {
  * pickle instructions for eventual delivery next time one is made and synchronized…
  */
 public protocol Synchronizer {
-    init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason)
+    init(scratchpad: Scratchpad,
+         delegate: SyncDelegate,
+         basePrefs: Prefs,
+         why: SyncReason,
+         logger: Logger)
 
     /**
      * Return a reason if the current state of this synchronizer -- particularly prefs and scratchpad --
@@ -165,6 +168,7 @@ public protocol SingleCollectionSynchronizer {
 }
 
 open class BaseCollectionSynchronizer {
+    private var logger: Logger
     let collection: String
 
     let scratchpad: Scratchpad
@@ -180,7 +184,12 @@ open class BaseCollectionSynchronizer {
         return basePrefs.branch(branchName)
     }
 
-    init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason, collection: String) {
+    init(scratchpad: Scratchpad,
+         delegate: SyncDelegate,
+         basePrefs: Prefs,
+         why: SyncReason,
+         collection: String,
+         logger: Logger = DefaultLogger.shared) {
         self.scratchpad = scratchpad
         self.delegate = delegate
         self.collection = collection
@@ -188,8 +197,11 @@ open class BaseCollectionSynchronizer {
         self.prefs = BaseCollectionSynchronizer.prefsForCollection(collection, withBasePrefs: basePrefs)
         self.statsSession = SyncEngineStatsSession(collection: collection)
         self.why = why
+        self.logger = logger
 
-        log.info("Synchronizer configured with prefs '\(self.prefs.getBranchPrefix()).'")
+        logger.log("Synchronizer configured with prefs '\(self.prefs.getBranchPrefix()).'",
+                   level: .debug,
+                   category: .sync)
     }
 
     var storageVersion: Int {
@@ -259,7 +271,6 @@ open class TimestampedSingleCollectionSynchronizer: BaseCollectionSynchronizer, 
     }
 
     func setTimestamp(_ timestamp: Timestamp) {
-        log.debug("Setting post-upload lastFetched to \(timestamp).")
         lastFetched = timestamp
     }
 

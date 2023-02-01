@@ -13,7 +13,7 @@ class EmptyPrivateTabsView: UIView {
         static let descriptionSizeFont: CGFloat = 17
         static let buttonSizeFont: CGFloat = 15
         static let paddingInBetweenItems: CGFloat = 15
-        static let verticalPadding: CGFloat = 100
+        static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
         static let imageSize: CGSize = CGSize(width: 90, height: 90)
     }

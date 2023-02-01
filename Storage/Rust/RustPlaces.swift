@@ -3,10 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Shared
 @_exported import MozillaAppServices
-
-private let log = Logger.syncLogger
 
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
@@ -33,11 +32,14 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
 
     private var didAttemptToMoveToBackup = false
     private var notificationCenter: NotificationCenter
+    private var logger: Logger
 
     public init(databasePath: String,
-                notificationCenter: NotificationCenter = NotificationCenter.default) {
+                notificationCenter: NotificationCenter = NotificationCenter.default,
+                logger: Logger = DefaultLogger.shared) {
         self.databasePath = databasePath
         self.notificationCenter = notificationCenter
+        self.logger = logger
         self.writerQueue = DispatchQueue(label: "RustPlaces writer queue: \(databasePath)", attributes: [])
         self.readerQueue = DispatchQueue(label: "RustPlaces reader queue: \(databasePath)", attributes: [])
     }
@@ -209,7 +211,9 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return withWriter { connection in
             let result = try connection.deleteBookmarkNode(guid: guid)
             guard result else {
-                log.debug("Bookmark with GUID \(guid) does not exist.")
+                self.logger.log("Bookmark with GUID \(guid) does not exist.",
+                                level: .debug,
+                                category: .storage)
                 return
             }
 

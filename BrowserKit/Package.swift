@@ -14,6 +14,9 @@ let package = Package(
         .library(
             name: "Common",
             targets: ["Common"]),
+        .library(
+            name: "Logger",
+            targets: ["Logger"]),
     ],
     dependencies: [
         .package(
@@ -25,19 +28,31 @@ let package = Package(
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
+        .package(
+            url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
+            exact: "1.9.6"),
     ],
     targets: [
         .target(
             name: "SiteImageView",
-            dependencies: ["Fuzi", "Kingfisher", "Common"]),
+            dependencies: ["Fuzi", "Kingfisher", "Common"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView"]),
         .target(
             name: "Common",
-            dependencies: ["Dip"]),
+            dependencies: ["Dip"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),
+        .target(
+            name: "Logger",
+            dependencies: ["SwiftyBeaver", "Common"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "LoggerTests",
+            dependencies: ["Logger"]),
     ]
 )

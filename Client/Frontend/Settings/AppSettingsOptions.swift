@@ -370,10 +370,21 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.layer.cornerRadius = (imageView.frame.height) / 2
             imageView.layer.masksToBounds = true
 
-            imageView.image = UIImage(named: ImageIdentifiers.placeholderAvatar)?.createScaled(CGSize(width: 30, height: 30))
+            imageView.image = UIImage(named: ImageIdentifiers.placeholderAvatar)?
+                .createScaled(CGSize(width: 30, height: 30))
 
-            RustFirefoxAccounts.shared.avatar?.image.uponQueue(.main) { image in
+            guard let str = RustFirefoxAccounts.shared.userProfile?.avatarUrl,
+                  let actionIconUrl = URL(string: str)
+            else { return }
+
+            DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(
+                with: actionIconUrl,
+                limit: ImageLoadingConstants.NoLimitImageSize
+            ) { image, error in
+                guard error == nil, let image = image else { return }
+
                 imageView.image = image.createScaled(CGSize(width: 30, height: 30))
+                    .withRenderingMode(.alwaysOriginal)
             }
         }
     }
@@ -432,7 +443,7 @@ class ExportBrowserDataSetting: HiddenSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         do {
-            let log = Logger.syncLogger
+            let log = LegacyLogger.syncLogger
             try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
                 log.debug("Matcher: \(file)")
                 return file.hasPrefix("browser.") || file.hasPrefix("logins.") || file.hasPrefix("metadata.")
@@ -450,7 +461,7 @@ class ExportLogDataSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        Logger.copyPreviousLogsToDocuments()
+        LegacyLogger.copyPreviousLogsToDocuments()
     }
 }
 

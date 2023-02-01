@@ -14,7 +14,7 @@ enum ReadabilityOperationResult {
 
 class ReadabilityOperation: Operation {
     let profile: Profile
-    private let log = Logger.browserLogger
+    private let log = LegacyLogger.browserLogger
 
     var url: URL
     var semaphore: DispatchSemaphore

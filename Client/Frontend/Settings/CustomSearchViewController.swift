@@ -25,7 +25,7 @@ class CustomSearchError: MaybeErrorType {
 }
 
 class CustomSearchViewController: SettingsTableViewController {
-    private let faviconFetcher: SiteImageFetcher
+    private let faviconFetcher: SiteImageHandler
     private var urlString: String?
     private var engineTitle = ""
     var successCallback: (() -> Void)?
@@ -36,7 +36,7 @@ class CustomSearchViewController: SettingsTableViewController {
         return spinner
     }()
 
-    init(faviconFetcher: SiteImageFetcher = DefaultSiteImageFetcher.factory()) {
+    init(faviconFetcher: SiteImageHandler = DefaultSiteImageHandler.factory()) {
         self.faviconFetcher = faviconFetcher
         super.init()
     }
@@ -98,10 +98,10 @@ class CustomSearchViewController: SettingsTableViewController {
             throw CustomSearchError(.DuplicateEngine)
         }
 
-        let result = await faviconFetcher.getImage(urlStringRequest: url.absoluteString,
-                                                   type: .favicon,
-                                                   id: UUID(),
-                                                   usesIndirectDomain: false)
+        let siteImageModel = SiteImageModel(id: UUID(),
+                                            expectedImageType: .favicon,
+                                            siteURLString: url.absoluteString)
+        let result = await faviconFetcher.getImage(site: siteImageModel)
 
         let engine = OpenSearchEngine(engineID: nil,
                                       shortName: name,
@@ -198,7 +198,7 @@ class CustomSearchViewController: SettingsTableViewController {
 
 class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     fileprivate let Padding: CGFloat = 8
-    fileprivate let TextLabelHeight: CGFloat = 44
+    fileprivate let TextLabelHeight: CGFloat = 36
     fileprivate var TextLabelWidth: CGFloat {
         let width = textField.frame.width == 0 ? 360 : textField.frame.width
         return width
@@ -261,6 +261,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
         textField.snp.makeConstraints { make in
             make.height.equalTo(TextFieldHeight)
+            make.top.bottom.equalTo(0).inset(Padding / 2)
             make.left.right.equalTo(cell.contentView).inset(Padding)
         }
     }

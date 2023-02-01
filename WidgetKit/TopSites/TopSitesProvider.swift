@@ -16,18 +16,18 @@ struct TopSitesProvider: TimelineProvider {
 
     func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
         let widgetKitTopSites = WidgetKitTopSiteModel.get()
-        let siteImageFetcher = DefaultSiteImageFetcher.factory()
+        let siteImageFetcher = DefaultSiteImageHandler.factory()
 
         Task {
             let tabFaviconDictionary = await withTaskGroup(of: (String, SiteImageModel).self,
                                                            returning: [String: Image].self) { group in
                 for site in widgetKitTopSites {
+                    let siteImageModel = SiteImageModel(id: UUID(),
+                                                        expectedImageType: .favicon,
+                                                        siteURLString: site.url.absoluteString)
                     group.addTask {
                         await (site.imageKey,
-                               siteImageFetcher.getImage(urlStringRequest: site.url.absoluteString,
-                                                         type: .favicon,
-                                                         id: UUID(),
-                                                         usesIndirectDomain: false))
+                               siteImageFetcher.getImage(site: siteImageModel))
                     }
                 }
 

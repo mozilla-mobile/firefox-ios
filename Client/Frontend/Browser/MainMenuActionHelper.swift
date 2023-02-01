@@ -367,7 +367,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                                      iconString: ImageIdentifiers.sendToDevice) { _ in
             guard let delegate = self.sendToDeviceDelegate,
                   let selectedTab = self.selectedTab,
-                  let url = selectedTab.url
+                  let url = selectedTab.canonicalURL?.displayURL
             else { return }
 
             let themeColors = self.themeManager.currentTheme.colors
@@ -607,7 +607,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         let libraryAction = getReadingListLibraryAction()
-        if !isHomePage {
+        if !isHomePage, selectedTab?.readerModeAvailableOrActive ?? false {
             let readingListAction = getReadingListAction()
             section.append(PhotonRowActions([libraryAction, readingListAction]))
         } else {

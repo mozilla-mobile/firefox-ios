@@ -8,7 +8,7 @@ import Common
 
 /// `AccountSyncHandler` exists to observe certain `TabEventLabel` notifications,
 /// and react accordingly.
-class AccountSyncHandler: TabEventHandler, Loggable {
+class AccountSyncHandler: TabEventHandler {
     private let throttler: Throttler
     private let profile: Profile
 

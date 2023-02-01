@@ -102,7 +102,7 @@ class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
         let tab = tabAtIndexPath(indexPath)
         cell.titleLabel.text = tab.title
         cell.descriptionLabel.text = tab.URL.absoluteString
-        cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: tab.URL.absoluteString))
+        cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: tab.URL.absoluteString))
         cell.accessoryView = nil
         cell.applyTheme(theme: theme)
         return cell

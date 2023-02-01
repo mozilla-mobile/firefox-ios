@@ -2,9 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import Shared
 import Common
+import Foundation
+import Logger
+import Shared
 
 enum WallpaperStorageError: Error {
     case fileDoesNotExistError
@@ -16,17 +17,20 @@ enum WallpaperStorageError: Error {
 }
 
 /// Responsible for writing or deleting wallpaper data to/from memory.
-struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
+struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
     private var userDefaults: UserDefaultsInterface
     private var fileManager: FileManagerInterface
+    private var logger: Logger
 
     // MARK: - Initializer
     init(
         with userDefaults: UserDefaultsInterface = UserDefaults.standard,
-        and fileManager: FileManagerInterface = FileManager.default
+        and fileManager: FileManagerInterface = FileManager.default,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.userDefaults = userDefaults
         self.fileManager = fileManager
+        self.logger = logger
     }
 
     // MARK: - Storage
@@ -88,7 +92,9 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol, Loggable {
             do {
                 return try JSONDecoder().decode(Wallpaper.self, from: data)
             } catch {
-                browserLog.error("WallpaperStorageUtility decoding error: \(error.localizedDescription)")
+                logger.log("WallpaperStorageUtility decoding error: \(error.localizedDescription)",
+                           level: .warning,
+                           category: .homepage)
             }
         }
 

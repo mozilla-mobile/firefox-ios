@@ -15,7 +15,7 @@ import Common
 public class HeroImageView: UIView, SiteImageView {
     // MARK: - Properties
     var uniqueID: UUID?
-    var imageFetcher: SiteImageFetcher
+    var imageFetcher: SiteImageHandler
     var requestStartedWith: String?
     private var completionHandler: (() -> Void)?
 
@@ -39,13 +39,13 @@ public class HeroImageView: UIView, SiteImageView {
     // MARK: - Init
 
     public override init(frame: CGRect) {
-        self.imageFetcher = DefaultSiteImageFetcher()
+        self.imageFetcher = DefaultSiteImageHandler()
         super.init(frame: frame)
     }
 
     // Internal init used in unit tests only
     init(frame: CGRect,
-         imageFetcher: SiteImageFetcher,
+         imageFetcher: SiteImageHandler,
          completionHandler: @escaping () -> Void) {
         self.imageFetcher = imageFetcher
         self.completionHandler = completionHandler
@@ -76,15 +76,16 @@ public class HeroImageView: UIView, SiteImageView {
 
     // MARK: - SiteImageView
 
-    func setURL(_ urlStringRequest: String, type: SiteImageType) {
-        guard canMakeRequest(with: urlStringRequest) else { return }
+    func setURL(_ siteURLString: String, type: SiteImageType) {
+        guard canMakeRequest(with: siteURLString) else { return }
 
         let id = UUID()
         uniqueID = id
-        updateImage(url: urlStringRequest,
-                    type: type,
-                    id: id,
-                    usesIndirectDomain: true)
+
+        let model = SiteImageModel(id: id,
+                                   expectedImageType: .heroImage,
+                                   siteURLString: siteURLString)
+        updateImage(site: model)
     }
 
     func setImage(imageModel: SiteImageModel) {

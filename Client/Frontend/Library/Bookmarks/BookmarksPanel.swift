@@ -2,10 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import UIKit
+import Logger
 import Storage
 import Shared
-import Common
 import SiteImageView
 
 let LocalizedRootBookmarkFolderStrings = [
@@ -18,8 +19,7 @@ let LocalizedRootBookmarkFolderStrings = [
 
 class BookmarksPanel: SiteTableViewController,
                       LibraryPanel,
-                      CanRemoveQuickActionBookmark,
-                      Loggable {
+                      CanRemoveQuickActionBookmark {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -30,6 +30,7 @@ class BookmarksPanel: SiteTableViewController,
     var libraryPanelDelegate: LibraryPanelDelegate?
     var state: LibraryPanelMainState
     let viewModel: BookmarksPanelViewModel
+    private var logger: Logger
 
     // MARK: - Toolbar items
     var bottomToolbarItems: [UIBarButtonItem] {
@@ -74,8 +75,10 @@ class BookmarksPanel: SiteTableViewController,
 
     // MARK: - Init
 
-    init(viewModel: BookmarksPanelViewModel) {
+    init(viewModel: BookmarksPanelViewModel,
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
+        self.logger = logger
         self.state = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID ? .bookmarks(state: .mainView) : .bookmarks(state: .inFolder)
         self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile)
@@ -289,16 +292,16 @@ class BookmarksPanel: SiteTableViewController,
 
     private func flashRow(at indexPath: IndexPath) {
         guard indexPathIsValid(indexPath) else {
-            browserLog.debug("Flash row indexPath invalid")
+            logger.log("Flash row indexPath invalid: \(indexPath)",
+                       level: .debug,
+                       category: .library)
             return
         }
 
-        browserLog.debug("Flash row by selecting at \(indexPath)")
         tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + UX.RowFlashDelay) {
             if self.indexPathIsValid(indexPath) {
-                self.browserLog.debug("Flash row by deselecting row at \(indexPath)")
                 self.tableView.deselectRow(at: indexPath, animated: true)
             }
         }
@@ -388,7 +391,7 @@ class BookmarksPanel: SiteTableViewController,
 
             if let site = site,
                viewModel.leftImageView == nil {
-                cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
+                cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
             }
 
             cell.configure(viewModel: viewModel)
@@ -479,7 +482,9 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         guard let bookmarkNode = viewModel.bookmarkNodes[safe: indexPath.row],
               let bookmarkItem = bookmarkNode as? BookmarkItemData
         else {
-            self.browserLog.debug("Could not get site details for indexPath \(indexPath)")
+            logger.log("Could not get site details for indexPath \(indexPath)",
+                       level: .debug,
+                       category: .library)
             return nil
         }
 
@@ -500,7 +505,9 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                                                     bottomContainer: self.view,
                                                     theme: self.themeManager.currentTheme)
                 } else {
-                    self.browserLog.debug("Could not add pinned top site")
+                    self.logger.log("Could not add pinned top site",
+                                    level: .debug,
+                                    category: .library)
                 }
             }
         }).items
@@ -529,7 +536,6 @@ extension BookmarksPanel: Notifiable {
         case .FirefoxAccountChanged:
             reloadData()
         default:
-            browserLog.warning("Received unexpected notification \(notification.name)")
             break
         }
     }

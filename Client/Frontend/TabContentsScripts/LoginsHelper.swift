@@ -7,7 +7,7 @@ import Shared
 import Storage
 import WebKit
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 class LoginsHelper: TabContentScript {
     fileprivate weak var tab: Tab?

@@ -3,12 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Shared
 
-private let log = Logger.syncLogger
-
 public class RustShared {
-    static func moveDatabaseFileToBackupLocation(databasePath: String) {
+    static func moveDatabaseFileToBackupLocation(databasePath: String,
+                                                 logger: Logger = DefaultLogger.shared) {
         let databaseURL = URL(fileURLWithPath: databasePath)
         let databaseContainingDirURL = databaseURL.deletingLastPathComponent()
         let baseFilename = databaseURL.lastPathComponent
@@ -37,21 +37,23 @@ public class RustShared {
 
             let shmBaseFilename = baseFilename + "-shm"
             let walBaseFilename = baseFilename + "-wal"
-            log.debug("Moving \(shmBaseFilename) and \(walBaseFilename)…")
+            logger.log("Moving database \(shmBaseFilename) and \(walBaseFilename)…",
+                       level: .debug,
+                       category: .storage)
 
             let shmDatabasePath = databaseContainingDirURL.appendingPathComponent(shmBaseFilename).path
             if FileManager.default.fileExists(atPath: shmDatabasePath) {
-                log.debug("\(shmBaseFilename) exists.")
                 try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-shm")
             }
 
             let walDatabasePath = databaseContainingDirURL.appendingPathComponent(walBaseFilename).path
             if FileManager.default.fileExists(atPath: walDatabasePath) {
-                log.debug("\(walBaseFilename) exists.")
                 try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-wal")
             }
 
-            log.debug("Finished moving Rust database (\(baseFilename)) successfully.")
+            logger.log("Finished moving Rust database \(baseFilename) successfully",
+                       level: .debug,
+                       category: .storage)
         } catch let error as NSError {
             SentryIntegration.shared.sendWithStacktrace(
                 message: "Unable to move Rust database to backup location",

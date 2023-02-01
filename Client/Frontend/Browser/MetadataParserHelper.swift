@@ -7,7 +7,7 @@ import Shared
 import Storage
 import WebKit
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 class MetadataParserHelper: TabEventHandler {
     init() {
@@ -49,32 +49,5 @@ class MetadataParserHelper: TabEventHandler {
             ]
             NotificationCenter.default.post(name: .OnPageMetadataFetched, object: nil, userInfo: userInfo)
         }
-    }
-}
-
-class MediaImageLoader: TabEventHandler {
-    private let prefs: Prefs
-
-    init(_ prefs: Prefs) {
-        self.prefs = prefs
-        register(self, forTabEvents: .didLoadPageMetadata)
-    }
-
-    func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        let cacheImages = !NoImageModeHelper.isActivated(prefs)
-        if let urlString = metadata.mediaURL,
-            let mediaURL = URL(string: urlString), cacheImages {
-            prepareCache(mediaURL)
-        }
-    }
-
-    fileprivate func prepareCache(_ url: URL) {
-        if !ImageLoadingHandler.shared.isImageInCache(url: url) {
-            downloadAndCache(fromURL: url)
-        }
-    }
-
-    fileprivate func downloadAndCache(fromURL webUrl: URL) {
-        ImageLoadingHandler.shared.downloadAndCacheImage(with: webUrl) { _, _ in }
     }
 }

@@ -19,33 +19,29 @@ public extension URL {
      https://tools.ietf.org/html/rfc2368
      */
     func mailToMetadata() -> MailToMetadata? {
-        guard scheme == "mailto" else { return nil }
-        let urlString = absoluteString
+        guard scheme == "mailto",
+              let components = URLComponents(url: self,
+                                             resolvingAgainstBaseURL: false)
+        else { return nil }
 
-        // Extract 'to' value
-        let toStart = urlString.index(urlString.startIndex, offsetBy: "mailto:".count)
-        let toEnd = urlString.firstIndex(of: "?") ?? urlString.endIndex
+        let toEmail = components.path
+        let queryItems = components.queryItems
 
-        let to = String(urlString[toStart..<toEnd])
-
-        guard toEnd != urlString.endIndex else {
-            return MailToMetadata(to: to, headers: [String: String]())
-        }
-
-        // Extract headers
-
-        let headersString = String(urlString[urlString.index(toEnd, offsetBy: 1)..<urlString.endIndex])
         var headers = [String: String]()
-        let headerComponents = headersString.components(separatedBy: "&")
 
-        headerComponents.forEach { headerPair in
-            let components = headerPair.components(separatedBy: "=")
-            guard components.count == 2 else { return }
-
-            let (hname, hvalue) = (components[0], components[1])
-            headers[hname] = hvalue
+        guard let queryItems = queryItems else {
+            if toEmail.isEmpty {
+                return nil
+            }
+            return MailToMetadata(to: toEmail, headers: headers)
         }
 
-        return MailToMetadata(to: to, headers: headers)
+        queryItems.forEach { queryItem in
+            guard let value = queryItem.value else { return }
+
+            headers[queryItem.name] = value
+        }
+
+        return MailToMetadata(to: toEmail, headers: headers)
     }
 }

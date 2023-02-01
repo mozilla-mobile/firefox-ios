@@ -6,8 +6,6 @@ import Foundation
 import Shared
 import Storage
 
-private let log = Logger.syncLogger
-
 class Uploader {
     /**
      * Upload just about anything that can be turned into something we can upload.
@@ -25,7 +23,6 @@ class Uploader {
             // (chain the download timestamp into this function), and we can detect uploads
             // that race with our own (chain download timestamps across 'walk' steps).
             // If we do that, we can also advance our last fetch timestamp after each chunk.
-            log.debug("Uploading \(records.count) records.")
             return storageOp(records, timestamp)
         }
 
@@ -55,7 +52,6 @@ open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronize
      */
     func applyIncomingRecords<T>(_ records: [T], apply: @escaping (T) -> Success) -> Success {
         if records.isEmpty {
-            log.debug("No records; done applying.")
             return succeed()
         }
 
@@ -64,13 +60,11 @@ open class IndependentRecordSynchronizer: TimestampedSingleCollectionSynchronize
 
     func applyIncomingToStorage<T>(_ records: [T], fetched: Timestamp, apply: @escaping (T) -> Success) -> Success {
         func done() -> Success {
-            log.debug("Bumping fetch timestamp to \(fetched).")
             self.lastFetched = fetched
             return succeed()
         }
 
         if records.isEmpty {
-            log.debug("No records; done applying.")
             return done()
         }
 
@@ -103,7 +97,6 @@ extension TimestampedSingleCollectionSynchronizer {
         onUpload: @escaping (POSTResult, Timestamp?) -> DeferredTimestamp
     ) -> DeferredTimestamp {
         if records.isEmpty {
-            log.debug("No modified records to upload.")
             return deferMaybe(lastTimestamp)
         }
 
@@ -125,7 +118,6 @@ extension TimestampedSingleCollectionSynchronizer {
 
     func uploadRecordsSingleBatch<T>(_ records: [Record<T>], lastTimestamp: Timestamp, storageClient: Sync15CollectionClient<T>) -> Deferred<Maybe<(timestamp: Timestamp, succeeded: [GUID])>> {
         if records.isEmpty {
-            log.debug("No modified records to upload.")
             return deferMaybe((timestamp: lastTimestamp, succeeded: []))
         }
 

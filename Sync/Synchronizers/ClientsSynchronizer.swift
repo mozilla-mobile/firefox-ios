@@ -2,22 +2,20 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Logger
 import UIKit
 import Shared
 import Storage
 import SwiftyJSON
 
-private let log = Logger.syncLogger
 let ClientsStorageVersion = 1
 
-// TODO
 public protocol Command {
     static func fromName(_ command: String, args: [JSON]) -> Command?
     func run(_ synchronizer: ClientsSynchronizer) -> Success
     static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command?
 }
 
-// Shit.
 // We need a way to wipe or reset engines.
 // We need a way to log out the account.
 // So when we sync commands, we're gonna need a delegate of some kind.
@@ -104,7 +102,14 @@ let Commands: [String: (String, [JSON]) -> Command?] = [
 ]
 
 open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {
-    public required init(scratchpad: Scratchpad, delegate: SyncDelegate, basePrefs: Prefs, why: SyncReason) {
+    private var logger: Logger
+
+    public required init(scratchpad: Scratchpad,
+                         delegate: SyncDelegate,
+                         basePrefs: Prefs,
+                         why: SyncReason,
+                         logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "clients")
     }
 
@@ -193,7 +198,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
      * upload a replacement record.
      */
     fileprivate func processCommandsFromRecord(_ record: Record<ClientPayload>?, withServer storageClient: Sync15CollectionClient<ClientPayload>) -> Deferred<Maybe<(Bool, [Command])>> {
-        log.debug("Processing commands from downloaded record.")
+        logger.log("Processing commands from downloaded record.",
+                   level: .debug,
+                   category: .sync)
 
         // TODO: short-circuit based on the modified time of the record we uploaded, so we don't need to skip ahead.
         if let record = record {
@@ -229,7 +236,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
             return clientsAndTabs.deleteCommands(clientGUID).bind({ x in return succeed() })
         }
 
-        log.debug("Fetching current client record for client \(clientGUID).")
+        logger.log("Fetching current client record for client \(clientGUID).",
+                   level: .debug,
+                   category: .sync)
         let fetch = storageClient.get(clientGUID)
         return fetch.bind { result in
             if let response = result.successValue, response.value.payload.isValid() {
@@ -239,31 +248,34 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                     let uploadRecord = Record(id: clientGUID, payload: ClientPayload(JSON(clientRecord)), ttl: ThreeWeeksInSeconds)
                     return storageClient.put(uploadRecord, ifUnmodifiedSince: record.modified)
                         >>== { resp in
-                            log.debug("Client \(clientGUID) commands upload succeeded.")
+                            self.logger.log("Client \(clientGUID) commands upload succeeded.",
+                                            level: .debug,
+                                            category: .sync)
 
                             // Always succeed, even if we couldn't delete the commands.
                             return deleteCommands()
-                    }
+                        }
                 }
             } else {
                 if let failure = result.failureValue {
-                    log.warning("Failed to fetch record with GUID \(clientGUID).")
+                    self.logger.log("Failed to fetch record with GUID \(clientGUID).",
+                                    level: .warning,
+                                    category: .sync)
                     if failure is NotFound<HTTPURLResponse> {
-                        log.debug("Not waiting to see if the client comes back.")
-
                         // TODO: keep these around and retry, expiring after a while.
                         // For now we just throw them away so we don't fail every time.
                         return deleteCommands()
                     }
 
                     if failure is BadRequestError<HTTPURLResponse> {
-                        log.debug("We made a bad request. Throwing away queued commands.")
                         return deleteCommands()
                     }
                 }
             }
 
-            log.error("Client \(clientGUID) commands upload failed: No remote client for GUID")
+            self.logger.log("Client \(clientGUID) commands upload failed: No remote client for GUID",
+                            level: .warning,
+                            category: .sync)
             return deferMaybe(UnknownError())
         }
     }
@@ -275,7 +287,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     fileprivate func maybeUploadOurRecord(_ should: Bool, ifUnmodifiedSince: Timestamp?, toServer storageClient: Sync15CollectionClient<ClientPayload>) -> Success {
         let lastUpload = self.clientRecordLastUpload
         let expired = lastUpload < (Date.now() - (2 * OneDayInMilliseconds))
-        log.debug("Should we upload our client record? Caller = \(should), expired = \(expired).")
+        logger.log("Should we upload our client record? Caller = \(should), expired = \(expired).",
+                   level: .debug,
+                   category: .sync)
         if !should && !expired {
             return succeed()
         }
@@ -284,17 +298,19 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         var uploadStats = SyncUploadStats()
         return storageClient.put(getOurClientRecord(), ifUnmodifiedSince: iUS)
-            >>== { resp in
-                if let ts = resp.metadata.lastModifiedMilliseconds {
-                    // Protocol says this should always be present for success responses.
-                    log.debug("Client record upload succeeded. New timestamp: \(ts).")
-                    self.clientRecordLastUpload = ts
-                    uploadStats.sent += 1
-                } else {
-                    uploadStats.sentFailed += 1
-                }
-                self.statsSession.recordUpload(stats: uploadStats)
-                return succeed()
+        >>== { resp in
+            if let ts = resp.metadata.lastModifiedMilliseconds {
+                // Protocol says this should always be present for success responses.
+                self.logger.log("Client record upload succeeded. New timestamp: \(ts).",
+                                level: .debug,
+                                category: .sync)
+                self.clientRecordLastUpload = ts
+                uploadStats.sent += 1
+            } else {
+                uploadStats.sentFailed += 1
+            }
+            self.statsSession.recordUpload(stats: uploadStats)
+            return succeed()
         }
     }
 
@@ -303,14 +319,14 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         toLocalClients localClients: RemoteClientsAndTabs,
         withServer storageClient: Sync15CollectionClient<ClientPayload>
     ) -> Success {
-        log.debug("Applying clients response.")
-
         var downloadStats = SyncDownloadStats()
 
         let records = response.value
         let responseTimestamp = response.metadata.lastModifiedMilliseconds
 
-        log.debug("Got \(records.count) client records.")
+        logger.log("Got \(records.count) client records.",
+                   level: .debug,
+                   category: .sync)
 
         let ourGUID = self.scratchpad.clientGUID
         let ourFxaDeviceId = self.scratchpad.fxaDeviceId
@@ -323,22 +339,30 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         for (rec) in records {
             guard rec.payload.isValid() else {
-                log.warning("Client record \(rec.id) is invalid. Skipping.")
+                logger.log("Client record \(rec.id) is invalid. Skipping.",
+                           level: .warning,
+                           category: .sync)
                 continue
             }
 
             if rec.id == ourGUID {
                 if self.clientGuidIsMigrated {
-                    log.debug("Skipping our own client records since the guid is not the fxa device ID")
+                    logger.log("Skipping our own client records since the guid is not the fxa device ID",
+                               level: .debug,
+                               category: .sync)
                 } else {
                     SentryIntegration.shared.send(message: "An unmigrated client record was found with a GUID for an ID", tag: SentryTag.clientSynchronizer, severity: .error)
                 }
             } else if rec.id == ourFxaDeviceId {
                 ourClientRecordExists = true
                 if rec.modified == self.clientRecordLastUpload {
-                    log.debug("Skipping our own unmodified record.")
+                    logger.log("Skipping our own unmodified record.",
+                               level: .debug,
+                               category: .sync)
                 } else {
-                    log.debug("Saw our own record in response.")
+                    logger.log("Saw our own record in response.",
+                               level: .debug,
+                               category: .sync)
                     ours = rec
                 }
             } else {
@@ -364,7 +388,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                 return self.maybeUploadOurRecord(shouldUpload || ourRecordDidChange || self.clientGuidIsMigrated || !ourClientRecordExists, ifUnmodifiedSince: ours?.modified, toServer: storageClient)
                     >>> { self.uploadClientCommands(toLocalClients: localClients, withServer: storageClient) }
                     >>> {
-                        log.debug("Running \(commands.count) commands.")
+                        self.logger.log("Running \(commands.count) commands.",
+                                        level: .debug,
+                                        category: .sync)
                         for command in commands {
                             _ = command.run(self)
                         }
@@ -375,7 +401,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     }
 
     open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
-        log.debug("Synchronizing clients.")
+        logger.log("Synchronizing clients.",
+                   level: .debug,
+                   category: .sync)
         self.localClients = localClients // Store for later when we process a repairResponse command
 
         if let reason = self.reasonToNotSync(storageClient) {
@@ -392,7 +420,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         let encoder = RecordEncoder<ClientPayload>(decode: { ClientPayload($0) }, encode: { $0.json })
         let encrypter = keys?.encrypter(self.collection, encoder: encoder)
         if encrypter == nil {
-            log.error("Couldn't make clients encrypter.")
+            logger.log("Couldn't make clients encrypter.",
+                       level: .warning,
+                       category: .sync)
             return deferMaybe(FatalError(message: "Couldn't make clients encrypter."))
         }
 
@@ -430,10 +460,14 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                     return succeed()
                 } else {
                     if let error = result.failureValue {
-                        log.debug("Unable to delete records from client engine")
+                        self.logger.log("Unable to delete records from client engine",
+                                        level: .debug,
+                                        category: .sync)
                         return deferMaybe(error as MaybeErrorType)
                     } else {
-                        log.debug("Unable to delete records from client engine with unknown error")
+                        self.logger.log("Unable to delete records from client engine with unknown error",
+                                        level: .debug,
+                                        category: .sync)
                         return deferMaybe(UnknownError() as MaybeErrorType)
                     }
                 }

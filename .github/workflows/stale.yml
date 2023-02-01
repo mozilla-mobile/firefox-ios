@@ -1,0 +1,61 @@
+# Close Stale Issues
+# Warns and then closes issues and PRs that have had no activity for a specified amount of time.
+# https://github.com/actions/stale
+
+name: Close Stale Issues
+on:
+  schedule:
+    - cron: "0 0 * * *" # Once per day at midnight
+  workflow_dispatch: {}
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v7.0.0
+        with:
+          ### GENERAL ###
+          # Idle number of days before closing stale issues/PRs
+          days-before-close: 30
+
+          # Max number of operations per run
+          operations-per-run: 1000
+
+          # Change the order used to fetch the issues and pull requests from GitHub. Going with older ones.
+          ascending: true
+
+          ### ISSUES ###
+          # Idle number of days before marking issues stale, set `-1` to disable
+          # 570 days to start with, then we can lower later on
+          days-before-issue-stale: 570
+
+          # Comment on the staled issues
+          stale-issue-message: "This issue has been automatically marked as stale. Has the issue been fixed, or does it still require the community's attention? Please leave any comment to keep this issue opened. It will be closed automatically if no further update occurs in the next 30 days. Thank you for your contributions!"
+
+          # Comment on the closed stale issues
+          close-issue-message: "Closing this issue after a prolonged period of inactivity. If this issue is still present in the latest release, please create a new issue linking to this one, with up-to-date information. Thank you!"
+
+          # Reason to use when closing issues
+          close-issue-reason: not_planned
+
+          # Labels on issues exempted from stale
+          exempt-issue-labels: "do not stale,Feature-Request"
+
+          # Label to apply on staled issues
+          stale-issue-label: "stale"
+
+          ### PULL REQUESTS ###
+          # Idle number of days before marking issues stale, set `-1` to disable
+          days-before-pr-stale: 365
+
+          # Comment on the staled PRs
+          stale-pr-message: "This PR has been automatically marked as stale. Please leave any comment to keep this PR opened. It will be closed automatically if no further update occurs in the next 30 days. Thank you for your contributions!"
+
+          # Label to apply on staled PRs
+          stale-pr-label: "stale"
+
+          # Labels on PRs exempted from stale
+          exempt-pr-labels: "do not stale"

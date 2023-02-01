@@ -38,10 +38,9 @@ final class ImageHandlerTests: XCTestCase {
                                       type: SiteImageType = .favicon) -> SiteImageModel {
         return SiteImageModel(id: UUID(),
                               expectedImageType: type,
-                              urlStringRequest: cacheKey,
+                              siteURLString: cacheKey,
                               siteURL: URL(string: cacheKey)!,
                               cacheKey: cacheKey,
-                              domain: ImageDomain(bundleDomains: []),
                               faviconURL: imageURL,
                               faviconImage: nil,
                               heroImage: nil)
@@ -268,6 +267,15 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
     }
+
+    func testClearCache() async {
+        let subject = createSubject()
+        subject.clearCache()
+
+        try? await Task.sleep(nanoseconds: 100_000_000)
+
+        XCTAssertEqual(siteImageCache.clearCacheCalledCount, 1)
+    }
 }
 
 private extension ImageHandlerTests {
@@ -324,6 +332,7 @@ private class MockSiteImageCache: SiteImageCache {
     var getFromCacheWithType: SiteImageType?
     var cacheImageCalled = 0
     var cachedWithType: SiteImageType?
+    var clearCacheCalledCount = 0
 
     func getImageFromCache(cacheKey: String, type: SiteImageType) async throws -> UIImage {
         getFromCacheWithType = type
@@ -339,6 +348,10 @@ private class MockSiteImageCache: SiteImageCache {
     func cacheImage(image: UIImage, cacheKey: String, type: SiteImageType) async {
         cacheImageCalled += 1
         cachedWithType = type
+    }
+
+    func clearCache() async {
+        clearCacheCalledCount += 1
     }
 }
 

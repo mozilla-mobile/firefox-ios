@@ -39,6 +39,9 @@ class TabTrayViewController: UIViewController, Themeable {
 
     // MARK: - UI Elements
     private var titleWidthConstraint: NSLayoutConstraint?
+    private var compactContainerTopConstraint: NSLayoutConstraint!
+    private var regularContainerTopConstraint: NSLayoutConstraint!
+    private var containerView: UIView = .build { view in }
 
     // Buttons & Menus
     private lazy var deleteButtonIpad: UIBarButtonItem = {
@@ -241,13 +244,20 @@ class TabTrayViewController: UIViewController, Themeable {
         view.addSubview(navigationToolbar)
         navigationToolbar.setItems([UIBarButtonItem(customView: segmentedControlIphone)], animated: false)
 
+        view.addSubviews(containerView)
+
+        compactContainerTopConstraint = containerView.topAnchor.constraint(equalTo: navigationToolbar.bottomAnchor)
+        regularContainerTopConstraint = containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+
         NSLayoutConstraint.activate([
             navigationToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navigationToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             navigationToolbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
-            segmentedControlIphone.widthAnchor.constraint(lessThanOrEqualToConstant: UX.NavigationMenu.width),
-            segmentedControlIphone.heightAnchor.constraint(equalToConstant: UX.NavigationMenu.height)
+            compactContainerTopConstraint,
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
         showPanel(viewModel.tabTrayView)
@@ -259,12 +269,21 @@ class TabTrayViewController: UIViewController, Themeable {
 
     private func updateTitle() {
         if let newTitle = viewModel.navTitle(for: segmentedControlIphone.selectedSegmentIndex) {
+            // iPhone
             navigationItem.titleView = nil
             navigationItem.title = newTitle
+            updateContainerConstraints(isCompact: true)
         } else {
+            // iPad in compact or regular
             navigationItem.titleView = viewModel.layout == .compact ? segmentedControlIphone : segmentedControlIpad
             navigationItem.title = nil
+            updateContainerConstraints(isCompact: viewModel.layout == .compact)
         }
+    }
+
+    func updateContainerConstraints(isCompact: Bool) {
+        compactContainerTopConstraint.isActive = isCompact
+        regularContainerTopConstraint.isActive = !isCompact
     }
 
     @objc func segmentIphoneChanged() {
@@ -316,17 +335,16 @@ class TabTrayViewController: UIViewController, Themeable {
     private func showPanel(_ panel: UIViewController) {
         addChild(panel)
         panel.beginAppearanceTransition(true, animated: true)
-        view.addSubview(panel.view)
-        view.bringSubviewToFront(navigationToolbar)
-        let topEdgeInset = viewModel.layout == .regular ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
-        panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
+        containerView.addSubview(panel.view)
+        containerView.bringSubviewToFront(navigationToolbar)
         panel.endAppearanceTransition()
+        panel.view.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            panel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            panel.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            panel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            panel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            panel.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            panel.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            panel.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            panel.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
 
         panel.didMove(toParent: self)
@@ -443,11 +461,6 @@ class TabTrayViewController: UIViewController, Themeable {
 
         segmentedControlIpad.isHidden = !shouldUseiPadSetup
         navigationToolbar.isHidden = shouldUseiPadSetup
-
-        if let panel = children.first {
-            let topEdgeInset = shouldUseiPadSetup ? 0 : GridTabTrayControllerUX.NavigationToolbarHeight
-            panel.additionalSafeAreaInsets = UIEdgeInsets(top: topEdgeInset, left: 0, bottom: 0, right: 0)
-        }
 
         updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         updateTitle()

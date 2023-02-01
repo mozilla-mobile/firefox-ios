@@ -74,7 +74,7 @@ extension UserActivityHandler: TabEventHandler {
     }
 }
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 extension UserActivityHandler {
     func spotlightIndex(_ page: ReadabilityResult, for tab: Tab) async {
@@ -107,11 +107,11 @@ extension UserActivityHandler {
             attributeSet.thumbnailData = tab.screenshot?.pngData()
         case .favicon:
             if let urlString = tab.url?.absoluteString {
-                let faviconFetcher = DefaultSiteImageFetcher.factory()
-                let image = await faviconFetcher.getImage(urlStringRequest: urlString,
-                                                          type: .favicon,
-                                                          id: UUID(),
-                                                          usesIndirectDomain: false)
+                let faviconFetcher = DefaultSiteImageHandler.factory()
+                let siteImageModel = SiteImageModel(id: UUID(),
+                                                    expectedImageType: .favicon,
+                                                    siteURLString: urlString)
+                let image = await faviconFetcher.getImage(site: siteImageModel)
                 attributeSet.thumbnailData = image.faviconImage?.pngData()
             }
         default:

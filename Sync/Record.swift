@@ -3,11 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Shared
-
-private let log = Logger.syncLogger
-
-let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60
 
 /**
  * Immutable representation for Sync records.
@@ -24,7 +21,7 @@ open class Record<T: CleartextPayloadJSON> {
 
     public let modified: Timestamp
     public let sortindex: Int
-    public let ttl: Int?              // Seconds. Can be null, which means 'don't expire'.
+    public let ttl: Int? // Seconds. Can be null, which means 'don't expire'.
 
     // This is a hook for decryption.
     // Right now it only parses the string. In subclasses, it'll parse the
@@ -42,19 +39,26 @@ open class Record<T: CleartextPayloadJSON> {
         return T(payload)
     }
 
-    // TODO: consider using error tuples.
-    open class func fromEnvelope(_ envelope: EnvelopeJSON, payloadFactory: (String) -> T?) -> Record<T>? {
+    open class func fromEnvelope(_ envelope: EnvelopeJSON,
+                                 payloadFactory: (String) -> T?,
+                                 logger: Logger = DefaultLogger.shared) -> Record<T>? {
         if !(envelope.isValid()) {
-            log.error("Invalid envelope.")
+            logger.log("Invalid envelope.",
+                       level: .warning,
+                       category: .sync)
             return nil
         }
         guard let payload = payloadFactory(envelope.payload) else {
-            log.error("Unable to parse payload.")
+            logger.log("Unable to parse payload.",
+                       level: .warning,
+                       category: .sync)
             return nil
         }
 
         if !payload.isValid() {
-            log.error("Invalid payload \(envelope.payload).")
+            logger.log("Invalid payload \(envelope.payload).",
+                       level: .warning,
+                       category: .sync)
             return nil
         }
 

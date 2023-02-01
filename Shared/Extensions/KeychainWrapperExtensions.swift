@@ -3,9 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import MozillaAppServices
-
-private let log = Logger.keychainLogger
 
 public extension MZKeychainWrapper {
     static var sharedClientAppContainerKeychain: MZKeychainWrapper {
@@ -17,43 +16,63 @@ public extension MZKeychainWrapper {
 }
 
 public extension MZKeychainWrapper {
-    func ensureClientStringItemAccessibility(_ accessibility: MZKeychainItemAccessibility, forKey key: String) {
+    func ensureClientStringItemAccessibility(_ accessibility: MZKeychainItemAccessibility,
+                                             forKey key: String,
+                                             logger: Logger = DefaultLogger.shared) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
-                log.debug("updating item \(key) with \(accessibility)")
+                logger.log("updating item \(key) with \(accessibility)",
+                           level: .debug,
+                           category: .storage)
 
                 guard let value = self.string(forKey: key) else {
-                    log.error("failed to get item \(key)")
+                    logger.log("failed to get item \(key)",
+                               level: .warning,
+                               category: .storage)
                     return
                 }
 
                 if !self.removeObject(forKey: key) {
-                    log.warning("failed to remove item \(key)")
+                    logger.log("failed to remove item \(key)",
+                               level: .warning,
+                               category: .storage)
                 }
 
                 if !self.set(value, forKey: key, withAccessibility: accessibility) {
-                    log.warning("failed to update item \(key)")
+                    logger.log("failed to update item \(key)",
+                               level: .warning,
+                               category: .storage)
                 }
             }
         }
     }
 
-    func ensureDictonaryItemAccessibility(_ accessibility: MZKeychainItemAccessibility, forKey key: String) {
+    func ensureDictonaryItemAccessibility(_ accessibility: MZKeychainItemAccessibility,
+                                          forKey key: String,
+                                          logger: Logger = DefaultLogger.shared) {
         if self.hasValue(forKey: key) {
             if self.accessibilityOfKey(key) != .afterFirstUnlock {
-                log.debug("updating item \(key) with \(accessibility)")
+                logger.log("updating item \(key) with \(accessibility)",
+                           level: .debug,
+                           category: .storage)
 
                 guard let value = self.object(forKey: key, ofClass: NSDictionary.self) else {
-                    log.error("failed to get item \(key)")
+                    logger.log("failed to get item \(key)",
+                               level: .warning,
+                               category: .storage)
                     return
                 }
 
                 if !self.removeObject(forKey: key) {
-                    log.warning("failed to remove item \(key)")
+                    logger.log("failed to remove item \(key)",
+                               level: .warning,
+                               category: .storage)
                 }
 
                 if !self.set(value, forKey: key, withAccessibility: accessibility) {
-                    log.warning("failed to update item \(key)")
+                    logger.log("failed to update item \(key)",
+                               level: .warning,
+                               category: .storage)
                 }
             }
         }

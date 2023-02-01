@@ -3,10 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Shared
 import SwiftyJSON
-
-private let log = Logger.syncLogger
 
 open class LoginPayload: CleartextPayloadJSON {
     fileprivate static let OptionalStringFields = [
@@ -52,25 +51,17 @@ open class LoginPayload: CleartextPayloadJSON {
 
         if !LoginPayload.OptionalStringFields.every({ field in
             let val = self[field]
-            // Yup, 404 is not found, so this means "string or nothing".
-            let valid = val.isString() || val.isNull() || val.error?.errorCode == 404
-            if !valid {
-                log.debug("Field \(field) is invalid: \(val)")
-            }
-            return valid
+            // 404 is not found, so this means "string or nothing".
+            return val.isString() || val.isNull() || val.error?.errorCode == 404
         }) {
             return false
         }
 
         if !LoginPayload.OptionalNumericFields.every({ field in
             let val = self[field]
-            // Yup, 404 is not found, so this means "number or nothing".
+            // 404 is not found, so this means "number or nothing".
             // We only check for number because we're including timestamps as NSNumbers.
-            let valid = val.isNumber() || val.isNull() || val.error?.errorCode == 404
-            if !valid {
-                log.debug("Field \(field) is invalid: \(val)")
-            }
-            return valid
+            return val.isNumber() || val.isNull() || val.error?.errorCode == 404
         }) {
             return false
         }

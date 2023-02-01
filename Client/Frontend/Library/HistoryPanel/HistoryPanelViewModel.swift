@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Logger
 import Shared
 import Storage
 import SwiftUI
@@ -13,7 +14,7 @@ private class FetchInProgressError: MaybeErrorType {
     }
 }
 
-class HistoryPanelViewModel: Loggable, FeatureFlaggable {
+class HistoryPanelViewModel: FeatureFlaggable {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
         case today
@@ -44,6 +45,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     // MARK: - Properties
 
     private let profile: Profile
+    private var logger: Logger
     // Request limit and offset
     private let queryFetchLimit = 100
     // Is not intended to be use in prod code, only on test
@@ -64,6 +66,7 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
     var groupedSites = DateGroupedTableData<Site>()
     var isFetchInProgress = false
     var shouldResetHistory = false
+    // Collapsible sections
     var hiddenSections: [Sections] = []
 
     var hasRecentlyClosed: Bool {
@@ -82,19 +85,16 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
 
     // MARK: - Inits
 
-    init(profile: Profile) {
+    init(profile: Profile,
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
-    }
-
-    deinit {
-        browserLog.debug("HistoryPanelViewModel Deinitialized.")
+        self.logger = logger
     }
 
     /// Begin the process of fetching history data, and creating ASGroups from them. A prefetch also triggers this.
     func reloadData(completion: @escaping (Bool) -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         guard !profile.isShutdown, !isFetchInProgress else {
-            browserLog.debug("HistoryPanel tableView data could NOT be reloaded! Either the profile wasn't shut down, or there's a fetch in progress.")
             completion(false)
             return
         }
@@ -294,7 +294,9 @@ class HistoryPanelViewModel: Loggable, FeatureFlaggable {
             // and the next time `fetchData()` can be called.
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
                 self.isFetchInProgress = false
-                self.browserLog.debug("currentFetchOffset is: \(self.currentFetchOffset)")
+                self.logger.log("currentFetchOffset is: \(self.currentFetchOffset)",
+                                level: .debug,
+                                category: .library)
             }
         }
 

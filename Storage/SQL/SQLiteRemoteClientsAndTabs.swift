@@ -3,16 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Shared
 import SwiftyJSON
 
-private let log = Logger.syncLogger
-
 open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
     let db: BrowserDB
+    private var logger: Logger
 
-    public init(db: BrowserDB) {
+    public init(db: BrowserDB,
+                logger: Logger = DefaultLogger.shared) {
         self.db = db
+        self.logger = logger
     }
 
     class func remoteClientFactory(_ row: SDRow) -> RemoteClient {
@@ -96,7 +98,9 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
                     try connection.executeChange("INSERT INTO clients (guid, name, modified, type, formfactor, os, version, fxaDeviceId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", withArgs: args)
 
                     if connection.lastInsertedRowID == lastInsertedRowID {
-                        log.debug("INSERT did not change last inserted row ID.")
+                        self.logger.log("INSERT did not change last inserted row ID.",
+                                        level: .debug,
+                                        category: .storage)
                     }
                 }
 
@@ -173,14 +177,19 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
             for command in commands {
                 for client in clients {
                     do {
-                        if let commandID = try self.insert(connection, sql: "INSERT INTO commands (client_guid, value) VALUES (?, ?)", args: [client.guid, command.value] as Args) {
-                            log.verbose("Inserted command: \(commandID)")
+                        if try self.insert(connection,
+                                           sql: "INSERT INTO commands (client_guid, value) VALUES (?, ?)",
+                                           args: [client.guid, command.value] as Args) != nil {
                             numberOfInserts += 1
                         } else {
-                            log.warning("Command not inserted, but no error!")
+                            self.logger.log("Command not inserted, but no error!",
+                                            level: .warning,
+                                            category: .storage)
                         }
                     } catch let err as NSError {
-                        log.error("insertCommands(_:, forClients:) failed: \(err.localizedDescription) (numberOfInserts: \(numberOfInserts)")
+                        self.logger.log("insertCommands(_:, forClients:) failed: \(err.localizedDescription) (numberOfInserts: \(numberOfInserts)",
+                                        level: .warning,
+                                        category: .storage)
                         throw err
                     }
                 }
@@ -222,7 +231,9 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
         let id = db.lastInsertedRowID
         if id == lastID {
-            log.debug("INSERT did not change last inserted row ID.")
+            logger.log("INSERT did not change last inserted row ID.",
+                       level: .debug,
+                       category: .storage)
             return nil
         }
 
@@ -271,7 +282,9 @@ extension SQLiteRemoteClientsAndTabs: ResettableSyncStorage {
 
 extension SQLiteRemoteClientsAndTabs: AccountRemovalDelegate {
     public func onRemovedAccount() -> Success {
-        log.info("Clearing clients and tabs after account removal.")
+        logger.log("Clearing clients and tabs after account removal.",
+                   level: .info,
+                   category: .storage)
         // TODO: Bug 1168690 - delete our client and tabs records from the server.
         return self.resetClient()
     }

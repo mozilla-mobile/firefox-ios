@@ -56,7 +56,7 @@ protocol URLBarViewProtocol {
 
 extension URLBarViewProtocol {
     func leaveOverlayMode(didCancel cancel: Bool = false) {
-        self.leaveOverlayMode(didCancel: cancel)
+        leaveOverlayMode(didCancel: cancel)
     }
 }
 
@@ -514,6 +514,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        guard !inOverlayMode else { return }
+
         createLocationTextField()
 
         // Show the overlay mode UI, which includes hiding the locationView and replacing it
@@ -548,6 +550,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     }
 
     func leaveOverlayMode(didCancel cancel: Bool) {
+        guard inOverlayMode else { return }
+
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
@@ -625,7 +629,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
     }
 
-    func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
+    private func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
         prepareOverlayAnimation()
         layoutIfNeeded()
 
@@ -654,7 +658,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         delegate?.urlBarDidPressTabs(self)
     }
 
-    @objc func didClickCancel() {
+    @objc private func didClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
 

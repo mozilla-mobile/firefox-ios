@@ -2,19 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-/**
-This ViewController is meant to show a tableView of STG items in a flat list with NO section headers.
- When we have coordinators, where the coordinator provides the VM to the VC, we can
- generalize this.
- */
-
+import Common
 import UIKit
+import Logger
 import Storage
 import Shared
-import Common
 import SiteImageView
 
-class SearchGroupedItemsViewController: UIViewController, Loggable {
+/// This ViewController is meant to show a tableView of STG items in a flat list with NO section headers.
+/// When we have coordinators, where the coordinator provides the VM to the VC, we can generalize this.
+class SearchGroupedItemsViewController: UIViewController {
     // MARK: - Properties
 
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.GroupedList
@@ -27,6 +24,7 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
     let viewModel: SearchGroupedItemsViewModel
     var libraryPanelDelegate: LibraryPanelDelegate? // Set this at the creation site!
     private var themeManager: ThemeManager
+    private var logger: Logger
 
     lazy private var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -53,20 +51,18 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
 
     init(viewModel: SearchGroupedItemsViewModel,
          profile: Profile,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.profile = profile
         self.themeManager = themeManager
+        self.logger = logger
 
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        browserLog.debug("GeneralizedHistoryItemsViewController Deinitialized.")
     }
 
     // MARK: - Lifecycles
@@ -115,8 +111,12 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
             guard let self = self else { return nil }
 
             if let site = item as? Site {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
-                    self.browserLog.error("GeneralizedHistoryItems - Could not dequeue a TwoLineImageOverlayCell!")
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+                                                               for: indexPath) as? TwoLineImageOverlayCell
+                else {
+                    self.logger.log("GeneralizedHistoryItems - Could not dequeue a TwoLineImageOverlayCell",
+                                    level: .debug,
+                                    category: .library)
                     return nil
                 }
 
@@ -126,7 +126,7 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
                 cell.descriptionLabel.isHidden = false
                 cell.leftImageView.layer.borderColor = self.themeManager.currentTheme.colors.layer4.cgColor
                 cell.leftImageView.layer.borderWidth = 0.5
-                cell.leftImageView.setFavicon(FaviconImageViewModel(urlStringRequest: site.url))
+                cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
 
                 return cell
             }
@@ -159,7 +159,7 @@ class SearchGroupedItemsViewController: UIViewController, Loggable {
         case .DisplayThemeChanged:
             applyTheme()
         default:
-            self.browserLog.error("Recieved unhandled notification! \(notification)")
+            break
         }
     }
 
@@ -179,7 +179,9 @@ extension SearchGroupedItemsViewController: UITableViewDelegate {
 
     private func handleSiteItemTapped(site: Site) {
         guard let url = URL(string: site.url) else {
-            browserLog.error("Couldn't navigate to site: \(site.url)")
+            logger.log("Couldn't navigate to site",
+                       level: .warning,
+                       category: .library)
             return
         }
 

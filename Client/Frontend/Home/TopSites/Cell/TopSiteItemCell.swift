@@ -147,7 +147,14 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         titleLabel.text = topSite.title
         accessibilityLabel = topSite.accessibilityLabel
 
-        let viewModel = FaviconImageViewModel(urlStringRequest: topSite.site.url)
+        let urlRequest = topSite.site.url
+        var imageURL: URL?
+
+        if let site = topSite.site as? SponsoredTile {
+            imageURL = URL(string: site.imageURL)
+        }
+        let viewModel = FaviconImageViewModel(siteURLString: urlRequest,
+                                              faviconURL: imageURL)
         imageView.setFavicon(viewModel)
         self.textColor = textColor
 

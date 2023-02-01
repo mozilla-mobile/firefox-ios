@@ -14,7 +14,7 @@ protocol RemotePanelDelegate: AnyObject {
 }
 
 // MARK: - RemoteTabsPanel
-class RemoteTabsPanel: UIViewController, Themeable, Loggable {
+class RemoteTabsPanel: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -89,7 +89,6 @@ class RemoteTabsPanel: UIViewController, Themeable, Loggable {
             break
         default:
             // no need to do anything at all
-            browserLog.warning("Received unexpected notification \(notification.name)")
             break
         }
     }
@@ -150,6 +149,10 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
+
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0.0
+        }
 
         tableView.delegate = nil
         tableView.dataSource = nil

@@ -8,7 +8,7 @@ import Sync
 import UserNotifications
 import Account
 
-private let log = Logger.browserLogger
+private let log = LegacyLogger.browserLogger
 
 extension UIApplication {
     var syncDelegate: SyncDelegate {
@@ -42,9 +42,6 @@ class AppSyncDelegate: SyncDelegate {
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 if settings.alertSetting != .enabled {
                     return
-                }
-                if Logger.logPII {
-                    log.info("Displaying notification for URL \(url.absoluteString)")
                 }
 
                 let notificationContent = UNMutableNotificationContent()

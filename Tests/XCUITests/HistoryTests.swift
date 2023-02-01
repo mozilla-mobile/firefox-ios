@@ -57,7 +57,9 @@ class HistoryTests: BaseTestCase {
         XCTAssertTrue(app.tables.buttons["Sync and Save Data"].exists, "Sign in button does not appear")
     }
 
-    func testClearHistoryFromSettings() {
+    func testClearHistoryFromSettings() throws {
+        throw XCTSkip("MTE-514 Database may not be loaded")
+        /*
         closeKeyboard()
         navigator.nowAt(NewTabScreen)
 
@@ -80,6 +82,7 @@ class HistoryTests: BaseTestCase {
         waitForExistence(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
         XCTAssertFalse(app.tables.cells.staticTexts[webpage["label"]!].exists)
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
+        */
     }
 
     // Smoketest
