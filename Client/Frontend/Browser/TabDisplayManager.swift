@@ -38,8 +38,8 @@ protocol TopTabCellDelegate: AnyObject {
 }
 
 protocol TabDisplayer: AnyObject {
-    typealias TabCellIdentifer = String
-    var tabCellIdentifer: TabCellIdentifer { get set }
+    typealias TabCellIdentifier = String
+    var tabCellIdentifier: TabCellIdentifier { get set }
 
     func focusSelectedTab()
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell
@@ -75,7 +75,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     fileprivate let tabManager: TabManager
     fileprivate let collectionView: UICollectionView
     fileprivate weak var tabDisplayer: TabDisplayer?
-    private let tabReuseIdentifer: String
+    private let tabReuseIdentifier: String
     private var hasSentInactiveTabShownEvent: Bool = false
     var profile: Profile
     var cfrDelegate: InactiveTabsCFRProtocol?
@@ -188,7 +188,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         self.tabDisplayer = tabDisplayer
         self.tabManager = tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        self.tabReuseIdentifer = reuseID
+        self.tabReuseIdentifier = reuseID
         self.tabDisplayType = tabDisplayType
         self.profile = profile
         self.cfrDelegate = cfrDelegate
@@ -230,16 +230,13 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
 
         // build groups
-        if shouldEnableGroupedTabs {
-            SearchTermGroupsUtility.getTabGroups(with: profile,
-                                                 from: tabsToBuildFrom,
-                                                 using: .orderedAscending) { tabGroups, filteredActiveTabs  in
-                ensureMainThread { [weak self] in
-                    self?.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
-                    completion(tabGroups, filteredActiveTabs)
-                }
+        SearchTermGroupsUtility.getTabGroups(with: profile,
+                                             from: tabsToBuildFrom,
+                                             using: .orderedAscending) { tabGroups, filteredActiveTabs  in
+            ensureMainThread { [weak self] in
+                self?.tabsSetupHelper(tabGroups: tabGroups, filteredTabs: filteredActiveTabs)
+                completion(tabGroups, filteredActiveTabs)
             }
-            return
         }
     }
 
@@ -253,9 +250,33 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             return
         }
 
+        if shouldEnableInactiveTabs, let inactiveViewModel = inactiveViewModel {
+            var selectedTab = tabManager.selectedTab
+            // Make sure selected tab has latest time
+            selectedTab?.lastExecutedTime = Date.now()
+
+            // Special Case: When toggling from Private to Regular
+            // mode none of the regular tabs are selected,
+            // this is because toggling from one mode to another a user still
+            // has to tap on a tab to select in order to fully switch modes
+            if let firstTab = allTabs.first, firstTab.isPrivate != selectedTab?.isPrivate {
+                selectedTab = mostRecentTab(inTabs: tabManager.normalTabs)
+            }
+
+            // update model
+            inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
+
+            // keep inactive tabs collapsed
+            self.isInactiveViewExpanded = false
+        }
+
         guard tabDisplayType == .TabGrid else {
-            tabsSetupHelper(tabGroups: nil, filteredTabs: allTabs)
-            completion(nil, allTabs)
+            var filteredTabs = allTabs
+            if shouldEnableInactiveTabs, let inactiveViewModel = inactiveViewModel {
+                filteredTabs = inactiveViewModel.activeTabs
+            }
+            tabsSetupHelper(tabGroups: nil, filteredTabs: filteredTabs)
+            completion(nil, filteredTabs)
             return
         }
 
@@ -271,29 +292,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 return
             }
 
-            var selectedTab = tabManager.selectedTab
-            // Make sure selected tab has latest time
-            selectedTab?.lastExecutedTime = Date.now()
-
-            // Special Case: When toggling from Private to Regular
-            // mode none of the regular tabs are selected,
-            // this is because toggling from one mode to another a user still
-            // has to tap on a tab to select in order to fully switch modes
-
-            if let firstTab = allTabs.first, firstTab.isPrivate != selectedTab?.isPrivate {
-                selectedTab = mostRecentTab(inTabs: tabManager.normalTabs)
-            }
-
-            // update model
-            inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
-
-            let activeTabs = inactiveViewModel.activeTabs
-
-            // keep inactive tabs collapsed
-            self.isInactiveViewExpanded = false
-
             // check if groups are enabled and setup groups from active tabs only
-            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: activeTabs, completion: completion)
+            setupSearchTermGroupsAndFilteredTabs(tabsToBuildFrom: inactiveViewModel.activeTabs, completion: completion)
         }
     }
 
@@ -367,7 +367,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return nil
     }
 
-    func refreshStore(evenIfHidden: Bool = false, shouldAnimate: Bool = false) {
+    func refreshStore(evenIfHidden: Bool = false, shouldAnimate: Bool = false, completion: (() -> Void)? = nil) {
         operations.removeAll()
         dataStore.removeAll()
 
@@ -404,6 +404,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             }
 
             self.tabDisplayer?.focusSelectedTab()
+            completion?()
         }
     }
 
@@ -544,7 +545,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
+        var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
         if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell

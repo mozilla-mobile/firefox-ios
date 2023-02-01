@@ -10,7 +10,7 @@ import XCTest
 import Common
 
 class TabDisplayManagerTests: XCTestCase {
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
+    var tabCellIdentifier: TabDisplayer.TabCellIdentifier = TopTabCell.cellIdentifier
 
     var mockDataStore: WeakListMock<Tab>!
     var dataStore: WeakList<Tab>!
@@ -23,9 +23,11 @@ class TabDisplayManagerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         mockDataStore = WeakListMock<Tab>()
         dataStore = WeakList<Tab>()
-        profile = TabManagerMockProfile()
+        profile = TabManagerMockProfile(databasePrefix: "TabDisplayManagerTests") // not using the default prefix to avoid side effects with other tests
         manager = TabManager(profile: profile, imageStore: nil)
         collectionView = MockCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        UserDefaults().setValue(true, forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun)
     }
 
     override func tearDown() {
@@ -236,6 +238,65 @@ class TabDisplayManagerTests: XCTestCase {
             // Should be selected tab is index 1, and no other one is selected
             self.testSelectedCells(tabDisplayManager: tabDisplayManager, numberOfCells: 3, selectedIndex: 1)
         }
+    }
+
+    // MARK: Inactive Tabs
+    func testInactiveTabs_iPad_hiddenInTopTabs() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TopTabTray
+
+        // Add four tabs (2 inactive, 2 active)
+        let inactiveTab1 = manager.addTab()
+        inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
+        let inactiveTab2 = manager.addTab()
+        inactiveTab2.lastExecutedTime = Date().older.toTimestamp()
+        let activeTab1 = manager.addTab()
+        _ = manager.addTab()
+        manager.selectTab(activeTab1)
+
+        let expectation = self.expectation(description: "TabDisplayManagerTests")
+        tabDisplayManager.refreshStore {
+            XCTAssertEqual(tabDisplayManager.filteredTabs.count, 2, "Only 2 active tabs should be displayed")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testInactiveTabs_grid_singleInactiveTabShowAsActive() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        // Add 1 inactive tab
+        let inactiveTab1 = manager.addTab()
+        inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
+
+        let expectation = self.expectation(description: "TabDisplayManagerTests")
+        tabDisplayManager.refreshStore {
+            XCTAssertEqual(tabDisplayManager.filteredTabs.count, 1, "1 active tabs should be displayed")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testInactiveTabs_grid_filterInactive() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        // Add four tabs (2 inactive, 2 active)
+        let inactiveTab1 = manager.addTab()
+        inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
+        let inactiveTab2 = manager.addTab()
+        inactiveTab2.lastExecutedTime = Date().older.toTimestamp()
+        let activeTab1 = manager.addTab()
+        _ = manager.addTab()
+        manager.selectTab(activeTab1)
+
+        let expectation = self.expectation(description: "TabDisplayManagerTests")
+        tabDisplayManager.refreshStore {
+            XCTAssertEqual(tabDisplayManager.filteredTabs.count, 2, "Only 2 active tabs should be displayed")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
     }
 }
 

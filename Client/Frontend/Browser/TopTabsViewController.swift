@@ -33,7 +33,7 @@ class TopTabsViewController: UIViewController, Themeable {
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
     private var topTabDisplayManager: TabDisplayManager!
-    var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TopTabCell.cellIdentifier
+    var tabCellIdentifier: TabDisplayer.TabCellIdentifier = TopTabCell.cellIdentifier
     var profile: Profile
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
