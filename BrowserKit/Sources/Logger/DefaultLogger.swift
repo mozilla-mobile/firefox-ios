@@ -23,6 +23,8 @@ public class DefaultLogger: Logger {
                     function: String = #function,
                     line: Int = #line) {
         switch level {
+        case .debug:
+            logger.debug(message, file, function, line: line, context: category)
         case .info:
             logger.info(message, file, function, line: line, context: category)
         case .warning:
