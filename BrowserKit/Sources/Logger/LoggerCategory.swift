@@ -11,9 +11,6 @@ public enum LoggerCategory: String {
     // Related to homepage UI and it's data management
     case homepage
 
-    // Related to the keychain
-    case keychain
-
     // Related to library UI and it's data management throughout the app.
     // This includes bookmarks, downloads, reader mode and history.
     case library
@@ -24,8 +21,8 @@ public enum LoggerCategory: String {
     // Related to the setup of services on app launch
     case setup
 
-    // Related to the settings UI, setup and management
-    case settings
+    // Related to storage (keychain, SQL database, store of different types, etc)
+    case storage
 
     // Related to sync accounts and sync management
     case sync

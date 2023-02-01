@@ -3,14 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Shared
-
-private let log = LegacyLogger.syncLogger
 
 public typealias Args = [Any?]
 
 open class BrowserDB {
     fileprivate let db: SwiftData
+    private var logger: Logger
 
     public let databasePath: String
 
@@ -18,8 +18,14 @@ open class BrowserDB {
     // appear in a query string.
     public static let MaxVariableNumber = 999
 
-    public init(filename: String, schema: Schema, files: FileAccessor) {
-        log.debug("Initializing BrowserDB: \(filename).")
+    public init(filename: String,
+                schema: Schema,
+                files: FileAccessor,
+                logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+        logger.log("Initializing BrowserDB: \(filename).",
+                   level: .debug,
+                   category: .storage)
 
         self.databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
@@ -89,16 +95,12 @@ open class BrowserDB {
     }
 
     @discardableResult func vacuum() -> Success {
-        log.debug("Vacuuming a BrowserDB.")
-
         return withConnection({ connection -> Void in
             try connection.vacuum()
         })
     }
 
     @discardableResult func checkpoint() -> Success {
-        log.debug("Checkpointing a BrowserDB.")
-
         return transaction { connection in
             connection.checkpoint()
         }
@@ -138,7 +140,6 @@ open class BrowserDB {
         // So here we execute 999 / (columns * rows) insertions per query.
         // Note that we can't use variables for the column names, so those don't affect the count.
         if values.isEmpty {
-            log.debug("No values to insert.")
             return succeed()
         }
 
@@ -163,10 +164,11 @@ open class BrowserDB {
             return insertChunk(values)
         }
 
-        log.debug("Splitting bulk insert across multiple runs. I hope you started a transaction!")
         let rowsPerInsert = (999 / variablesPerRow)
         let chunks = chunk(values, by: rowsPerInsert)
-        log.debug("Inserting in \(chunks.count) chunks.")
+        logger.log("Inserting in \(chunks.count) chunks in BrowserDB.",
+                   level: .debug,
+                   category: .storage)
 
         // There's no real reason why we can't pass the ArraySlice here, except that I don't
         // want to keep fighting Swift.
@@ -178,7 +180,9 @@ open class BrowserDB {
             try connection.executeChange(sql, withArgs: args)
 
             let modified = connection.numberOfRowsModified
-            log.debug("Modified rows: \(modified).")
+            self.logger.log("Write modified rows: \(modified) in BrowserDB.",
+                            level: .debug,
+                            category: .storage)
             return modified
         }
     }

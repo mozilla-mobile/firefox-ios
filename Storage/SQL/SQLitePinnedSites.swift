@@ -6,8 +6,6 @@ import Foundation
 import Shared
 import Glean
 
-private let log = LegacyLogger.syncLogger
-
 private var ignoredSchemes = ["about"]
 
 public func isIgnoredURL(_ url: URL) -> Bool {

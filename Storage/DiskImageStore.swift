@@ -4,9 +4,7 @@
 
 import Shared
 import UIKit
-import XCGLogger
-
-private var log = XCGLogger.default
+import Logger
 
 private class DiskImageStoreErrorType: MaybeErrorType {
     let description: String
@@ -24,11 +22,16 @@ open class DiskImageStore {
     fileprivate let queue = DispatchQueue(label: "DiskImageStore")
     fileprivate let quality: CGFloat
     fileprivate var keys: Set<String>
+    private var logger: Logger
 
-    required public init(files: FileAccessor, namespace: String, quality: Float) {
+    required public init(files: FileAccessor,
+                         namespace: String,
+                         quality: Float,
+                         logger: Logger = DefaultLogger.shared) {
         self.files = files
         self.filesDir = try! files.getAndEnsureDirectory(namespace)
         self.quality = CGFloat(quality)
+        self.logger = logger
 
         // Build an in-memory set of keys from the existing images on disk.
         var keys = [String]()
@@ -49,7 +52,7 @@ open class DiskImageStore {
 
             let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
             if let data = try? Data(contentsOf: imagePath),
-                   let image = UIImage.imageFromDataThreadSafe(data) {
+               let image = UIImage.imageFromDataThreadSafe(data) {
                 return deferMaybe(image)
             }
 
@@ -69,7 +72,9 @@ open class DiskImageStore {
                     self.keys.insert(key)
                     return succeed()
                 } catch {
-                    log.error("Unable to write image to disk: \(error)")
+                    self.logger.log("Unable to write image to disk: \(error)",
+                                    level: .warning,
+                                    category: .storage)
                 }
             }
 
@@ -87,7 +92,9 @@ open class DiskImageStore {
                 do {
                     try FileManager.default.removeItem(at: url)
                 } catch {
-                    log.warning("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)")
+                    self.logger.log("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)",
+                                    level: .warning,
+                                    category: .storage)
                 }
             }
 
@@ -105,7 +112,9 @@ open class DiskImageStore {
             do {
                 try FileManager.default.removeItem(at: url)
             } catch {
-                log.warning("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)")
+                self.logger.log("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)",
+                                level: .warning,
+                                category: .storage)
             }
 
             return succeed()
