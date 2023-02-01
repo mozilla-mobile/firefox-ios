@@ -50,7 +50,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         })
         let showWebPage = WebPageSetting(
             prefs: prefs,
-            prefKey: HomePageConstants.NewTabCustomUrlPrefKey,
+            prefKey: PrefsKeys.NewTabCustomUrlPrefKey,
             defaultValue: nil,
             placeholder: .CustomNewPageURL,
             accessibilityIdentifier: "NewTabAsCustomURL",

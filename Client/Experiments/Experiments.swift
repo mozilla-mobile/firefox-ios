@@ -3,10 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import MozillaAppServices
 import Shared
 
-private let log = LegacyLogger.browserLogger
 private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"
 private let NIMBUS_LOCAL_DATA_KEY = "nimbus_local_data"
@@ -109,7 +109,9 @@ enum Experiments {
         guard let url = Bundle.main.object(forInfoDictionaryKey: NIMBUS_URL_KEY) as? String,
               !url.isEmptyOrWhitespace()
         else {
-            log.error("No Nimbus URL found in Info.plist")
+            DefaultLogger.shared.log("No Nimbus URL found in Info.plist",
+                                     level: .warning,
+                                     category: .experiments)
             return nil
         }
 
@@ -158,7 +160,9 @@ enum Experiments {
         let initialExperiments = Bundle.main.url(forResource: "initial_experiments", withExtension: "json")
 
         guard let dbPath = Experiments.dbPath else {
-            log.error("Nimbus didn't get to create, because of a nil dbPath")
+            DefaultLogger.shared.log("Nimbus didn't get to create, because of a nil dbPath",
+                                     level: .warning,
+                                     category: .experiments)
             return NimbusDisabled.shared
         }
 
@@ -197,7 +201,9 @@ enum Experiments {
         // Getting the singleton first time initializes it.
         let nimbus = Experiments.shared
 
-        log.info("Nimbus is ready!")
+        DefaultLogger.shared.log("Nimbus is ready!",
+                                 level: .info,
+                                 category: .experiments)
 
         // This does its work on another thread, downloading the experiment recipes
         // for the next run. It should be the last thing we do before returning.

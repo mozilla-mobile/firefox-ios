@@ -6,8 +6,6 @@ import Foundation
 import Shared
 import Storage
 
-private let log = LegacyLogger.browserLogger
-
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
 
@@ -72,7 +70,7 @@ class Authenticator {
                     }
                     return nil
                 }
-                loginsProvider.deleteLogins(ids: malformedGUIDs).upon { _ in log.debug("Removed malformed logins.") }
+                loginsProvider.deleteLogins(ids: malformedGUIDs).upon { _ in }
             }
 
             // Found a single entry but the schemes don't match. This is a result of a schemeless entry that we
