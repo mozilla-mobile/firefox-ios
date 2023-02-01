@@ -1768,7 +1768,7 @@ extension BrowserViewController: TabDelegate {
             tab.addContentScript(logins, name: LoginsHelper.name())
         }
 
-        // TODO(Nish): Wrap this in a feature flag
+        // TODO: Wrap this in a feature flag FXIOS-5041
         // let creditCardHelper = CreditCardHelper(tab: tab)
         // tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
 
