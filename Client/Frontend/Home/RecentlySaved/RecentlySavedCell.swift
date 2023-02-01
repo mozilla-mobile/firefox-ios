@@ -35,6 +35,9 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell
+
         setupLayout()
     }
 
