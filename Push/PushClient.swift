@@ -15,8 +15,6 @@ protocol PushClient {
 }
 
 public class PushClientImplementation: PushClient {
-    private let log = LegacyLogger.browserLogger
-
     /// Bug 1364403 – This is to be put into the push registration
     private let apsEnvironment: [String: Any] = [
         "mutable-content": 1,
@@ -59,10 +57,6 @@ public extension PushClientImplementation {
         }
 
         mutableURLRequest.httpBody = JSON(parameters).stringify()?.utf8EncodedData
-
-        if experimentalMode {
-            log.info("curl -X POST \(registerURL.absoluteString) --data '\(JSON(parameters).stringify()!)'")
-        }
 
         api.fetchPushRegistration(request: mutableURLRequest) { result in
             if case .success(let push) = result {

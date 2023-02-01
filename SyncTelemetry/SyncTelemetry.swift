@@ -5,8 +5,8 @@
 import Foundation
 import SwiftyJSON
 import Shared
+import Logger
 
-private let log = LegacyLogger.browserLogger
 private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!
 private let AppName = "Fennec"
 
@@ -37,7 +37,9 @@ open class SyncTelemetry {
         event.record(prefs)
     }
 
-    open class func send(ping: SyncTelemetryPing, docType: TelemetryDocType) {
+    open class func send(ping: SyncTelemetryPing,
+                         docType: TelemetryDocType,
+                         logger: Logger = DefaultLogger.shared) {
         let docID = UUID().uuidString
         let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         let buildID = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
@@ -46,9 +48,6 @@ open class SyncTelemetry {
         let path = "/submit/telemetry/\(docID)/\(docType.rawValue)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"
         let url = ServerURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
-
-        log.debug("Ping URL: \(url)")
-        log.debug("Ping payload: \(ping.payload.stringify() ?? "")")
 
         // Don't add the common ping format for the mobile core ping.
         let pingString: String?
@@ -61,13 +60,17 @@ open class SyncTelemetry {
         }
 
         guard let body = pingString?.data(using: .utf8) else {
-            log.error("Invalid data!")
+            logger.log("Invalid data",
+                       level: .warning,
+                       category: .sync)
             assertionFailure()
             return
         }
 
         guard channel != "default" else {
-            log.debug("Non-release build; not sending ping")
+            logger.log("Non-release build; not sending ping",
+                       level: .debug,
+                       category: .sync)
             return
         }
 
@@ -78,7 +81,9 @@ open class SyncTelemetry {
 
         makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral).dataTask(with: request) { (_, response, error) in
             let code = (response as? HTTPURLResponse)?.statusCode
-            log.debug("Ping response: \(code ?? -1).")
+            logger.log("Ping response: \(code ?? -1).",
+                       level: .debug,
+                       category: .sync)
         }.resume()
     }
 
