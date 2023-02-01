@@ -234,6 +234,7 @@ workflows:
             echo "-- unzip -- "
             exec unzip "${BITRISE_ARTIFACT_PATHS}"
     - xcode-test-without-building@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: UI Smoketest2
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
@@ -273,6 +274,7 @@ workflows:
             echo "show dir"
             ls
     - xcode-test-without-building@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: UI Smoketest
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
@@ -286,7 +288,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.8core
   build_and_test_3_SmokeTest3:
     before_run:
     - 1_git_clone_and_post_clone
@@ -312,6 +314,7 @@ workflows:
             echo "show dir"
             ls
     - xcode-test-without-building@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: UI Smoketest3
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
@@ -325,7 +328,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.8core
   build_and_test_4_SmokeTest4:
     before_run:
     - 1_git_clone_and_post_clone
@@ -351,6 +354,7 @@ workflows:
             echo "show dir"
             ls
     - xcode-test-without-building@0:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: UI Smoketest3
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
@@ -608,7 +612,7 @@ workflows:
                 echo $filesChanged
             fi
 
-            doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*)'
+            doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/[a-zA-Z]+\.lproj/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*)'
 
             if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
             then
