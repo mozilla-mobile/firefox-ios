@@ -21,7 +21,8 @@ class CreditCardHelper: TabContentScript {
         return "creditCardMessageHandler"
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    func userContentController(_ userContentController: WKUserContentController,
+                               didReceiveScriptMessage message: WKScriptMessage) {
         guard let request = message.body as? [String: Any] else {return}
         print("Received from content script: ", request)
 
