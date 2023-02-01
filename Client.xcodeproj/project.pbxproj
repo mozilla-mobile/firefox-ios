@@ -575,6 +575,7 @@
 		8AB5958828413F6C0090F4AE /* RecentlySavedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB5958728413F6C0090F4AE /* RecentlySavedCell.swift */; };
 		8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB59589284145B30090F4AE /* HomepageSectionHandler.swift */; };
 		8AB5958C28414DF60090F4AE /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB5958B28414DF60090F4AE /* ActionButton.swift */; };
+		8AB5AAB1298AC27F0054CB42 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 8AB5AAB0298AC27F0054CB42 /* Logger */; };
 		8AB8571D27D929350075C173 /* TopSitesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571C27D929350075C173 /* TopSitesViewModel.swift */; };
 		8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB8571E27D931B40075C173 /* EmptyTopSiteCell.swift */; };
 		8AB8572727D93AEC0075C173 /* TopSiteHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */; };
@@ -595,7 +596,6 @@
 		8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */; };
 		8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */; };
 		8ACA8F7629198D6400D3075D /* ThrottlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F7529198D6400D3075D /* ThrottlerTests.swift */; };
-		8ACD69102988BFEC00CF5F38 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 8ACD690F2988BFEC00CF5F38 /* Logger */; };
 		8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */; };
 		8AD08D1727E91AC800B8E907 /* TabsQuantityTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
@@ -5294,7 +5294,6 @@
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				5A70EF12295DFD6400790249 /* Common in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
-				8ACD69102988BFEC00CF5F38 /* Logger in Frameworks */,
 				5A8FD0EA293A7D0C00333AA7 /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5313,6 +5312,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AB5AAB1298AC27F0054CB42 /* Logger in Frameworks */,
 				43A878FD27AB4A110071C372 /* RustMozillaAppServices.framework in Frameworks */,
 				1B0DFD25274856D60008EB0A /* SwiftyJSON in Frameworks */,
 				8A48CE3B292FCE0800B32289 /* Kingfisher in Frameworks */,
@@ -8541,7 +8541,6 @@
 				8A48CE3C292FCE1A00B32289 /* Kingfisher */,
 				5A8FD0E9293A7D0C00333AA7 /* XCGLogger */,
 				5A70EF11295DFD6400790249 /* Common */,
-				8ACD690F2988BFEC00CF5F38 /* Logger */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -8589,6 +8588,7 @@
 				5A8FD0E7293A7CD100333AA7 /* XCGLogger */,
 				5A8FD0FD293A7F0000333AA7 /* Sentry */,
 				5A9FF8482942454600DF9FBB /* Common */,
+				8AB5AAB0298AC27F0054CB42 /* Logger */,
 			);
 			productName = Shared;
 			productReference = 288A2D861AB8B3260023ABC3 /* Shared.framework */;
@@ -15975,7 +15975,7 @@
 			package = 4326A3C22849B8E500550F73 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
 		};
-		8ACD690F2988BFEC00CF5F38 /* Logger */ = {
+		8AB5AAB0298AC27F0054CB42 /* Logger */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Logger;
 		};
