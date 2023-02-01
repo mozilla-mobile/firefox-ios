@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Storage
 import Shared
 
@@ -68,7 +69,13 @@ extension QuickActions {
     }
 }
 
-struct QuickActionsImplementation: QuickActions, Loggable {
+struct QuickActionsImplementation: QuickActions {
+    private let logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
     // MARK: Administering Quick Actions
     func addDynamicApplicationShortcutItemOfType(_ type: ShortcutType,
                                                  fromShareItem shareItem: ShareItem,
@@ -107,7 +114,7 @@ struct QuickActionsImplementation: QuickActions, Loggable {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
             }
         default:
-            browserLog.warning("Cannot add static shortcut item of type \(type)")
+            logger.log("Cannot add static shortcut item of type \(type)", level: .warning, category: .setup)
         }
         application.shortcutItems = dynamicShortcutItems
     }

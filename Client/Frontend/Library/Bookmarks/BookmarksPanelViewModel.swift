@@ -3,10 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Logger
 import Storage
 import Shared
 
-class BookmarksPanelViewModel: Loggable {
+class BookmarksPanelViewModel {
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
     }
@@ -20,12 +21,15 @@ class BookmarksPanelViewModel: Loggable {
     var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
     private var flashLastRowOnNextReload = false
+    private var logger: Logger
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
     init(profile: Profile,
-         bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID) {
+         bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID,
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.bookmarkFolderGUID = bookmarkFolderGUID
+        self.logger = logger
     }
 
     var shouldFlashRow: Bool {
@@ -38,7 +42,6 @@ class BookmarksPanelViewModel: Loggable {
     func reloadData(completion: @escaping () -> Void) {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown {
-            browserLog.debug("Profile was shutdown")
             completion()
             return
         }
@@ -58,7 +61,9 @@ class BookmarksPanelViewModel: Loggable {
 
     func moveRow(at sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         guard let bookmarkNode = bookmarkNodes[safe: sourceIndexPath.row] else {
-            browserLog.debug("Could not move row from \(sourceIndexPath) to \(destinationIndexPath)")
+            logger.log("Could not move row from \(sourceIndexPath) to \(destinationIndexPath)",
+                       level: .debug,
+                       category: .library)
             return
         }
 
@@ -87,7 +92,9 @@ class BookmarksPanelViewModel: Loggable {
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)
             .uponQueue(.main) { result in
                 guard let mobileFolder = result.successValue as? BookmarkFolderData else {
-                    self.browserLog.debug("Mobile folder data setup failed \(String(describing: result.failureValue))")
+                    self.logger.log("Mobile folder data setup failed \(String(describing: result.failureValue))",
+                                    level: .debug,
+                                    category: .library)
                     self.setErrorCase()
                     completion()
                     return
@@ -120,7 +127,9 @@ class BookmarksPanelViewModel: Loggable {
         profile.places.getBookmarksTree(rootGUID: bookmarkFolderGUID,
                                         recursive: false).uponQueue(.main) { result in
             guard let folder = result.successValue as? BookmarkFolderData else {
-                self.browserLog.debug("Sublfolder data setup failed \(String(describing: result.failureValue))")
+                self.logger.log("Sublfolder data setup failed \(String(describing: result.failureValue))",
+                                level: .debug,
+                                category: .library)
                 self.setErrorCase()
                 completion()
                 return

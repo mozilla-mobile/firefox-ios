@@ -18,8 +18,14 @@ public enum LoggerCategory: String {
     // Related to the application lifecycle
     case lifecycle
 
+    // Related to experiments, nimbus and the messaging framework
+    case experiments
+
     // Related to the setup of services on app launch
     case setup
+
+    // Sentry calls, temporary category while we make the migration
+    case sentry
 
     // Related to storage (keychain, SQL database, store of different types, etc)
     case storage

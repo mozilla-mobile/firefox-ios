@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 import WebKit
-import os.log
+import Logger
 import Common
 import SiteImageView
 
@@ -19,7 +19,6 @@ private class FetchInProgressError: MaybeErrorType {
 @objcMembers
 class HistoryPanel: UIViewController,
                     LibraryPanel,
-                    Loggable,
                     Themeable {
     struct UX {
         static let WelcomeScreenItemWidth = 170
@@ -44,6 +43,7 @@ class HistoryPanel: UIViewController,
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    private var logger: Logger
 
     // We'll be able to prefetch more often the higher this number is. But remember, it's expensive!
     private let historyPanelPrefetchOffset = 8
@@ -147,22 +147,20 @@ class HistoryPanel: UIViewController,
     init(profile: Profile,
          tabManager: TabManager,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared) {
         self.clearHistoryHelper = ClearHistorySheetProvider(profile: profile, tabManager: tabManager)
         self.viewModel = HistoryPanelViewModel(profile: profile)
         self.profile = profile
         self.state = .history(state: .mainView)
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        browserLog.debug("HistoryPanel Deinitialized.")
     }
 
     // MARK: - Lifecycle
@@ -325,7 +323,6 @@ class HistoryPanel: UIViewController,
             showClearRecentHistory()
         default:
             // no need to do anything at all
-            browserLog.error("Error: Received unexpected notification \(notification.name)")
             break
         }
     }
@@ -335,14 +332,14 @@ class HistoryPanel: UIViewController,
     /// Handles dequeuing the appropriate type of cell when needed.
     private func configureDatasource() {
         diffableDatasource = UITableViewDiffableDataSource<HistoryPanelSections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
-            guard let self = self else {
-                LegacyLogger.browserLogger.error("History Panel - self became nil inside diffableDatasource!")
-                return nil
-            }
+            guard let self = self else { return nil }
 
             if let historyActionable = item as? HistoryActionablesModel {
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as? OneLineTableViewCell else {
-                    self.browserLog.error("History Panel - cannot create OneLineTableViewCell for historyActionable!")
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as? OneLineTableViewCell
+                else {
+                    self.logger.log("History Panel - cannot create OneLineTableViewCell for historyActionable",
+                                    level: .debug,
+                                    category: .library)
                     return nil
                 }
 
@@ -352,7 +349,9 @@ class HistoryPanel: UIViewController,
 
             if let site = item as? Site {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.accessoryUsageReuseIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
-                    self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for site!")
+                    self.logger.log("History Panel - cannot create TwoLineImageOverlayCell for site",
+                                    level: .debug,
+                                    category: .library)
                     return nil
                 }
 
@@ -362,7 +361,9 @@ class HistoryPanel: UIViewController,
 
             if let searchTermGroup = item as? ASGroup<Site> {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier, for: indexPath) as? TwoLineImageOverlayCell else {
-                    self.browserLog.error("History Panel - cannot create TwoLineImageOverlayCell for STG!")
+                    self.logger.log("History Panel - cannot create TwoLineImageOverlayCell for STG",
+                                    level: .debug,
+                                    category: .library)
                     return nil
                 }
 
@@ -587,7 +588,9 @@ extension HistoryPanel: UITableViewDelegate {
 
     private func handleSiteItemTapped(site: Site) {
         guard let url = URL(string: site.url) else {
-            browserLog.error("Couldn't navigate to site: \(site.url)")
+            self.logger.log("Couldn't navigate to site",
+                            level: .warning,
+                            category: .library)
             return
         }
 

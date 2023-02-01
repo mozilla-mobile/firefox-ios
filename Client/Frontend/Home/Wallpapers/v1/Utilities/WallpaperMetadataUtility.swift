@@ -2,13 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import Shared
 import Common
+import Foundation
+import Logger
+import Shared
 
 /// Responsible for tracking whether or not the wallpaper system should perform
 /// a variety of checks, such as whether it should fetch data from the server.
-class WallpaperMetadataUtility: Loggable {
+class WallpaperMetadataUtility {
     // MARK: - Properties
     /// Will return `true` under two conditions:
     /// 1. Has never performed a check
@@ -26,14 +27,17 @@ class WallpaperMetadataUtility: Loggable {
 
     private let userDefaults: UserDefaultsInterface
     private let networkingModule: WallpaperNetworking
+    private var logger: Logger
 
     // MARK: - Initializers
     init(
         with networkingModule: WallpaperNetworking,
-        and userDefaults: UserDefaultsInterface = UserDefaults.standard
+        and userDefaults: UserDefaultsInterface = UserDefaults.standard,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.networkingModule = networkingModule
         self.userDefaults = userDefaults
+        self.logger = logger
     }
 
     // MARK: - Public interface
@@ -52,7 +56,9 @@ class WallpaperMetadataUtility: Loggable {
                 return false
             }
         } catch {
-            browserLog.error("Failed to fetch new metadata: \(error.localizedDescription)")
+            logger.log("Failed to fetch new metadata: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .homepage)
             return false
         }
     }
@@ -91,7 +97,9 @@ class WallpaperMetadataUtility: Loggable {
 
             return true
         } catch {
-            browserLog.error("Failed to get old metadata: \(error.localizedDescription)")
+            logger.log("Failed to get old metadata: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .homepage)
             return true
         }
     }
