@@ -7,6 +7,11 @@ import Foundation
 // Log levels are kept to a minimum to make sure they are relevant and useful. If your log isn't important enough
 // to make it to this list, then it shouldn't be logged.
 public enum LoggerLevel: String {
+    // Less granular compared to the VERBOSE level, but it is more than you will need in everyday use. The
+    // DEBUG log level should be used for information that may be needed for diagnosing issues and troubleshooting or
+    // when running application in the test environment for the purpose of making sure everything is running correctly.
+    case debug
+
     // INFO messages are like the normal behavior of applications. They state what happened. For example, if a
     // particular service stopped or started or you added something to the database, or a view was shown or hidden.
     // These entries are nothing to worry about during usual operations. The information logged using the INFO log is
