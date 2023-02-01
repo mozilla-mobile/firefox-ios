@@ -35,4 +35,7 @@ public enum LoggerCategory: String {
 
     // Related to the tabs UI, setup and management
     case tabs
+
+    // Webview scripts, webview delegate
+    case webview
 }

@@ -2,12 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Foundation
+import Logger
 import Shared
 import WebKit
-import Common
 
-private let log = LegacyLogger.browserLogger
 let ReaderModeProfileKeyStyle = "readermode.style"
 
 enum ReaderModeMessageType: String {
@@ -271,6 +271,7 @@ let ReaderModeNamespace = "window.__firefox__.reader"
 class ReaderMode: TabContentScript {
     weak var delegate: ReaderModeDelegate?
 
+    private var logger: Logger
     fileprivate weak var tab: Tab?
     var state = ReaderModeState.unavailable
     fileprivate var originalURL: URL?
@@ -279,8 +280,10 @@ class ReaderMode: TabContentScript {
         return "ReaderMode"
     }
 
-    required init(tab: Tab) {
+    required init(tab: Tab,
+                  logger: Logger = DefaultLogger.shared) {
         self.tab = tab
+        self.logger = logger
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -304,7 +307,9 @@ class ReaderMode: TabContentScript {
 
     fileprivate func handleReaderContentParsed(_ readabilityResult: ReadabilityResult) {
         guard let tab = tab else { return }
-        log.info("ReaderMode: Readability result available!")
+        logger.log("Reader content parsed",
+                   level: .debug,
+                   category: .library)
         tab.readabilityResult = readabilityResult
         delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
     }

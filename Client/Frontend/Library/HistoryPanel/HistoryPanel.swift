@@ -487,7 +487,6 @@ class HistoryPanel: UIViewController,
         // For UX consistency, every cell in history panel SHOULD have a trailing action.
         let deleteAction = UIContextualAction(style: .destructive, title: .HistoryPanelDelete) { [weak self] (_, _, completion) in
             guard let self = self else {
-                LegacyLogger.browserLogger.error("History Panel - self became nil inside SwipeActionConfiguration!")
                 completion(false)
                 return
             }

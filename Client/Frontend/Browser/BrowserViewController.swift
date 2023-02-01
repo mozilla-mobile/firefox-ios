@@ -14,6 +14,7 @@ import MobileCoreServices
 import Telemetry
 import Sentry
 import Common
+import Logger
 
 struct UrlToOpenModel {
     var url: URL?
@@ -147,6 +148,7 @@ class BrowserViewController: UIViewController {
 
     private var keyboardPressesHandlerValue: Any?
     var themeManager: ThemeManager
+    var logger: Logger
 
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
@@ -164,7 +166,8 @@ class BrowserViewController: UIViewController {
         tabManager: TabManager,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         ratingPromptManager: RatingPromptManager = AppContainer.shared.resolve(),
-        downloadQueue: DownloadQueue = AppContainer.shared.resolve()
+        downloadQueue: DownloadQueue = AppContainer.shared.resolve(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
         self.tabManager = tabManager
@@ -172,6 +175,7 @@ class BrowserViewController: UIViewController {
         self.ratingPromptManager = ratingPromptManager
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
+        self.logger = logger
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -1874,7 +1878,9 @@ extension BrowserViewController: LibraryPanelDelegate {
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
         guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
-            LegacyLogger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
+            logger.log("Invalid URL, and couldn't generate a search URL for it.",
+                       level: .warning,
+                       category: .library)
             return
         }
         return self.libraryPanel(didSelectURL: url, visitType: visitType)

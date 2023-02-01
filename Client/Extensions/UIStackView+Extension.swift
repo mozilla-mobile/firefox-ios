@@ -5,8 +5,6 @@
 import Foundation
 import Shared
 
-private let log = LegacyLogger.browserLogger
-
 extension UIStackView {
     func toggleStackViewVisibility(show: Bool) {
         guard show else {
@@ -27,10 +25,7 @@ extension UIStackView {
     }
 
     func insertArrangedView(_ view: UIView, position: Int, animated: Bool = true, completion: (() -> Void)? = nil) {
-        guard position <= arrangedSubviews.count, position >= 0 else {
-            log.warning("Couldn't insert subview \(view.debugDescription) into stackview \(self.debugDescription)")
-            return
-        }
+        guard position <= arrangedSubviews.count, position >= 0 else { return }
 
         let animateClosure = { self.insertArrangedSubview(view, at: position) }
         animateAddingView(view, animateClosure: animateClosure, animated: animated, completion: completion)

@@ -3,11 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import WebKit
 import Shared
 import UIKit
-
-private let log = LegacyLogger.browserLogger
 
 /// List of schemes that are allowed to be opened in new tabs.
 private let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
@@ -479,7 +478,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if InternalURL.isValid(url: url) {
             if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
-                log.warning("Denying unprivileged request: \(navigationAction.request)")
+                logger.log("Denying unprivileged request: \(navigationAction.request)",
+                           level: .warning,
+                           category: .webview)
                 decisionHandler(.cancel)
                 return
             }

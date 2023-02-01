@@ -2,10 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Shared
-import UIKit
-import Storage
 import Common
+import Logger
+import Shared
+import Storage
+import UIKit
 
 extension LibraryViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
@@ -27,6 +28,7 @@ class LibraryViewController: UIViewController, Themeable {
     var onViewDismissed: (() -> Void)?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    var logger: Logger
 
     // Views
     private var controllerContainerView: UIView = .build { view in }
@@ -68,10 +70,12 @@ class LibraryViewController: UIViewController, Themeable {
     init(profile: Profile,
          tabManager: TabManager,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = LibraryViewModel(withProfile: profile, tabManager: tabManager)
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
 
         super.init(nibName: nil, bundle: nil)
     }

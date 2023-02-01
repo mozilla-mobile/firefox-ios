@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Logger
 import WebKit
 
 enum ReadabilityOperationResult {
@@ -14,23 +15,25 @@ enum ReadabilityOperationResult {
 
 class ReadabilityOperation: Operation {
     let profile: Profile
-    private let log = LegacyLogger.browserLogger
 
     var url: URL
     var semaphore: DispatchSemaphore
     var result: ReadabilityOperationResult?
     var tab: Tab!
     var readerModeCache: ReaderModeCache
+    private var logger: Logger
 
     init(
         url: URL,
         readerModeCache: ReaderModeCache,
-        profile: Profile
+        profile: Profile,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.url = url
         self.semaphore = DispatchSemaphore(value: 0)
         self.readerModeCache = readerModeCache
         self.profile = profile
+        self.logger = logger
     }
 
     override func main() {
@@ -71,14 +74,19 @@ class ReadabilityOperation: Operation {
                 break
             case .success(let readabilityResult):
                 do {
-                    log.info("ReadabilityService: Readability result available!")
                     try readerModeCache.put(url, readabilityResult)
+                    logger.log("Readability result available",
+                               level: .info,
+                               category: .library)
                 } catch let error as NSError {
-                    print("Failed to store readability results in the cache: \(error.localizedDescription)")
-                    // TODO Fail
+                    logger.log("Failed to store readability results in the cache: \(error.localizedDescription)",
+                               level: .warning,
+                               category: .library)
                 }
             case .error:
-                // TODO Not entirely sure what to do on error. Needs UX discussion and followup bug.
+                logger.log("Result was of type error",
+                           level: .warning,
+                           category: .library)
                 break
             }
         }
@@ -109,7 +117,9 @@ extension ReadabilityOperation: ReaderModeDelegate {
     }
 
     func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab) {
-        log.info("ReadbilityService: Readability result available!")
+        logger.log("Did parse ReadabilityResult",
+                   level: .debug,
+                   category: .library)
         guard tab == self.tab else { return }
 
         result = ReadabilityOperationResult.success(readabilityResult)
