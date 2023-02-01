@@ -49,7 +49,8 @@ let package = Package(
             dependencies: ["Common"]),
         .target(
             name: "Logger",
-            dependencies: ["SwiftyBeaver", "Common"]),
+            dependencies: ["SwiftyBeaver", "Common"],
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "LoggerTests",
             dependencies: ["Logger"]),
