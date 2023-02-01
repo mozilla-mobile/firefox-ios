@@ -44,7 +44,7 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
-            xcodebuild -resolvePackageDependencies
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
     - script@1.1:
         title: Compress Derived Data
@@ -211,7 +211,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x
-        machine_type_id: g2.12core
+        machine_type_id: g2.8core
   build_and_test_1_SmokeTest2:
     before_run:
     - 1_git_clone_and_post_clone
@@ -244,6 +244,10 @@ workflows:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_2_XCRESULT_PATH'
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.1.x
+        machine_type_id: g2-m1.8core
   build_and_test_2_SmokeTest:
     before_run:
     - 1_git_clone_and_post_clone
@@ -407,7 +411,7 @@ workflows:
             echo "Adding com.apple.developer.web-browser to entitlements"
 
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecApplication.entitlements
-    - cache-pull@2.1: {}
+    #- cache-pull@2.1: {}
   2_certificate_and_profile:
     steps:
     - certificate-and-profile-installer@1.10: {}
