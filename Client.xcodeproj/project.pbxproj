@@ -1043,7 +1043,6 @@
 		E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */; };
 		E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BF33D2950B1230039758D /* MailProvidersTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
-		E15A8B2D286D0066004BB2B8 /* TabsPayloadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15A8B2C286D0066004BB2B8 /* TabsPayloadTests.swift */; };
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
 		E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */; };
 		E15DE7C4293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7C3293A7B0F00B32667 /* PhotonActionSheetTitleHeaderView.swift */; };
@@ -4820,7 +4819,6 @@
 		E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserNotificationCenter.swift; sourceTree = "<group>"; };
 		E14BF33D2950B1230039758D /* MailProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvidersTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
-		E15A8B2C286D0066004BB2B8 /* TabsPayloadTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsPayloadTests.swift; sourceTree = "<group>"; };
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
 		E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSeparator.swift; sourceTree = "<group>"; };
 		E15DE7C1293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetLineSeparator.swift; sourceTree = "<group>"; };
@@ -5730,7 +5728,6 @@
 				E6EDE81D1D524475007A0732 /* BatchingClientTests.swift */,
 				2F3724C51ABF3C01007607FA /* StorageClientTests.swift */,
 				E6BA20111E52165800697F9C /* SyncTelemetryTests.swift */,
-				E15A8B2C286D0066004BB2B8 /* TabsPayloadTests.swift */,
 			);
 			path = SyncTests;
 			sourceTree = "<group>";
@@ -9839,7 +9836,6 @@
 			files = (
 				E6BA20211E52170E00697F9C /* SyncTelemetryTests.swift in Sources */,
 				28ECD97A1BA1EA2200D829DA /* MockSyncServer.swift in Sources */,
-				E15A8B2D286D0066004BB2B8 /* TabsPayloadTests.swift in Sources */,
 				285D37E31ABCA69E000E1CF9 /* CryptoTests.swift in Sources */,
 				28F596A11ACA13CA0071DDCC /* InfoTests.swift in Sources */,
 				D8BA178A206D40670023AC00 /* Mocking.swift in Sources */,
