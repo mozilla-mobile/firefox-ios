@@ -62,6 +62,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)
         itemTitle.text = viewModel.site.title
+        accessibilityLabel = viewModel.accessibilityLabel
         applyTheme(theme: theme)
     }
 
