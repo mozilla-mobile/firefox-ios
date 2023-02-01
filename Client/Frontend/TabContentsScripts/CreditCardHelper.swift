@@ -38,8 +38,9 @@ class CreditCardHelper: TabContentScript {
         let response: [String: Any] = [:]
 
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: response)
-            let fillCreditCardInfoCallback = "window.__firefox__.CreditCardHelper.fillCreditCardInfo('\(String(data: jsonData, encoding: .utf8)!)')"
+            let jsonData = try JSONSerialization.data(withJSONObject: "asd")
+            guard let jsonDataVal = String(data: jsonData, encoding: .utf8) else { return }
+            let fillCreditCardInfoCallback = "window.__firefox__.CreditCardHelper.fillCreditCardInfo('\(jsonDataVal)')"
             guard let webView = tab?.webView else {return}
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback)
         } catch let error as NSError {
