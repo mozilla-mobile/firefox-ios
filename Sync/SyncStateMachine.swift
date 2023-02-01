@@ -122,7 +122,7 @@ open class SyncStateMachine {
 
     fileprivate func advanceFromState(_ state: SyncState) -> ReadyDeferred {
         logger.log("advanceFromState: \(state.label)",
-                   level: .info,
+                   level: .debug,
                    category: .sync)
 
         // Record visibility before taking any action.
@@ -160,7 +160,7 @@ open class SyncStateMachine {
                 let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync))
                 if prior == nil {
                     self.logger.log("No persisted Sync state. Starting over.",
-                                    level: .info,
+                                    level: .debug,
                                     category: .sync)
                 }
                 var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKSync(kSync), persistingTo: self.scratchpadPrefs)
@@ -336,7 +336,7 @@ open class BaseSyncState: SyncState {
         self.logger = logger
 
         logger.log("Inited \(self.label.rawValue)",
-                   level: .info,
+                   level: .debug,
                    category: .sync)
     }
 
@@ -358,7 +358,7 @@ open class BaseSyncState: SyncState {
         self.logger = logger
 
         logger.log("Inited \(self.label.rawValue)",
-                   level: .info,
+                   level: .debug,
                    category: .sync)
     }
 
@@ -709,7 +709,7 @@ open class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
         if v > StorageVersionCurrent {
             // New storage version?  Uh-oh.  No recovery possible here.
             logger.log("Client upgrade required for storage version \(v)",
-                       level: .info,
+                       level: .warning,
                        category: .sync)
             return deferMaybe(ClientUpgradeRequired(previousState: self, target: v))
         }
@@ -717,7 +717,7 @@ open class ResolveMetaGlobalVersion: BaseSyncStateWithInfo {
         if v < StorageVersionCurrent {
             // Old storage version?  Uh-oh.  Wipe and upload both meta/global and crypto/keys.
             logger.log("Server storage version \(v) is outdated.",
-                       level: .info,
+                       level: .warning,
                        category: .sync)
             return deferMaybe(RemoteUpgradeRequired(previousState: self))
         }
