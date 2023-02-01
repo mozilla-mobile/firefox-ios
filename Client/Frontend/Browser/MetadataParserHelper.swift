@@ -7,8 +7,6 @@ import Shared
 import Storage
 import WebKit
 
-private let log = LegacyLogger.browserLogger
-
 class MetadataParserHelper: TabEventHandler {
     init() {
         register(self, forTabEvents: .didChangeURL)
@@ -33,7 +31,6 @@ class MetadataParserHelper: TabEventHandler {
             guard let dict = result as? [String: Any],
                 let pageURL = tab.url?.displayURL,
                 let pageMetadata = PageMetadata.fromDictionary(dict) else {
-                    log.debug("Page contains no metadata!")
                     TabEvent.post(.pageMetadataNotAvailable, for: tab)
                     tab.pageMetadata = nil
                     return

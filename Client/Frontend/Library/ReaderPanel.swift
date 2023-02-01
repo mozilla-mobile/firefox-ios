@@ -7,8 +7,6 @@ import Storage
 import Shared
 import Common
 
-private let log = LegacyLogger.browserLogger
-
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
@@ -224,7 +222,6 @@ class ReadingListPanel: UITableViewController,
             }
         default:
             // no need to do anything at all
-            log.warning("Received unexpected notification \(notification.name)")
             break
         }
     }

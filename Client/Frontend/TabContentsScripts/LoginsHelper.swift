@@ -7,8 +7,6 @@ import Shared
 import Storage
 import WebKit
 
-private let log = LegacyLogger.browserLogger
-
 class LoginsHelper: TabContentScript {
     fileprivate weak var tab: Tab?
     fileprivate let profile: Profile
@@ -39,7 +37,6 @@ class LoginsHelper: TabContentScript {
         else {
             // bug 159484 - disallow url types that don't support a hostPort.
             // (although we handle "javascript:..." as a special case above.)
-            log.debug("Couldn't parse origin for \(uriString)")
             return nil
         }
 
@@ -136,13 +133,11 @@ class LoginsHelper: TabContentScript {
 
     func setCredentials(_ login: LoginEntry) {
         if login.password.isEmpty {
-            log.debug("Empty password")
             return
         }
 
         profile.logins.getLoginsForProtectionSpace(login.protectionSpace, withUsername: login.username).uponQueue(.main) { res in
             if let data = res.successValue {
-                log.debug("Found \(data.count) logins.")
                 for saved in data {
                     if let saved = saved {
                         if saved.decryptedPassword == login.password {
@@ -245,8 +240,6 @@ class LoginsHelper: TabContentScript {
                 // `requestLogins` is for webpage forms, not for HTTP Auth, and the latter has httpRealm != nil; filter those out.
                 return login?.httpRealm == nil ? login?.toJSONDict() : nil
             }
-
-            log.debug("Found \(logins.count) logins.")
 
             let dict: [String: Any] = [
                 "requestId": requestId,
