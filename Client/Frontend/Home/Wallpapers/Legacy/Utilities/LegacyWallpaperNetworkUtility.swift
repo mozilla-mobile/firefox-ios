@@ -13,7 +13,7 @@ protocol LegacyWallpaperDownloadProtocol {
 
 extension URLSession: LegacyWallpaperDownloadProtocol {}
 
-class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
+class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol {
     // MARK: - Variables
     private static let wallpaperURLScheme = "MozWallpaperURLScheme"
     lazy var downloadProtocol: LegacyWallpaperDownloadProtocol = {
@@ -37,28 +37,25 @@ class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
         guard let url = buildURLWith(path: urlPath) else { return }
 
         downloadProtocol.dataTask(with: url) { data, response, error in
-            if let error = error {
-                self.browserLog.debug("Error fetching wallpaper: \(error.localizedDescription)")
+            if error != nil {
                 return
             }
 
             guard let httpResponse = response as? HTTPURLResponse,
                   (200...299).contains(httpResponse.statusCode)
             else {
-                self.browserLog.debug("Wallpaper download - bad networking response: \(response.debugDescription)")
                 return
             }
 
             guard let data = data, let image = UIImage(data: data) else {
-                self.browserLog.error("")
                 return
             }
 
             let storageUtility = LegacyWallpaperStorageUtility()
             do {
                 try storageUtility.store(image: image, forKey: localPath)
-            } catch let error {
-                self.browserLog.error("Error saving downloaded image - \(error.localizedDescription)")
+            } catch {
+                // Do nothing
             }
         }.resume()
     }
@@ -75,7 +72,6 @@ class LegacyWallpaperNetworkUtility: LegacyWallpaperFilePathProtocol, Loggable {
         guard let appToken = bundle.object(forInfoDictionaryKey: LegacyWallpaperNetworkUtility.wallpaperURLScheme) as? String,
               !appToken.isEmpty
         else {
-            browserLog.debug("Error fetching wallpapers: asset scheme not configured in Info.plist")
             return nil
         }
 

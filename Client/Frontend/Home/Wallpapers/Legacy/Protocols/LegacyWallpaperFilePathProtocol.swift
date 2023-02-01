@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol LegacyWallpaperFilePathProtocol: Loggable {}
+protocol LegacyWallpaperFilePathProtocol {}
 
 extension LegacyWallpaperFilePathProtocol {
     /// Given a key, creates a URL pointing to the
@@ -14,7 +14,6 @@ extension LegacyWallpaperFilePathProtocol {
     /// - Returns: A URL containing the correct path for the key.
     func filePath(forKey key: String) -> URL? {
         guard let keyDirectoryPath = folderPath(forKey: key) else {
-            browserLog.debug("WallpaperFilePathProtocol - error fetching keyed directory path for application")
             return nil
         }
 
@@ -33,7 +32,6 @@ extension LegacyWallpaperFilePathProtocol {
         guard let basePath = fileManager.urls(
             for: .applicationSupportDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first
         else {
-            browserLog.debug("WallpaperFilePathProtocol - error fetching basePath for application")
             return nil
         }
 
@@ -56,7 +54,7 @@ extension LegacyWallpaperFilePathProtocol {
                                                 withIntermediateDirectories: true,
                                                 attributes: nil)
             } catch {
-                browserLog.debug("Could not create directory at \(directoryPath.absoluteString)")
+                // Do nothing
             }
         }
     }

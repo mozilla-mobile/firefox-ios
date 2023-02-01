@@ -2,15 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import Shared
 import Common
+import Foundation
+import Logger
+import Shared
 
-struct WallpaperMigrationUtility: Loggable {
+struct WallpaperMigrationUtility {
     private let metadataMigration = PrefsKeys.Wallpapers.v1MigrationCheck
     private let legacyAssetMigration = PrefsKeys.Wallpapers.legacyAssetMigrationCheck
     private let userDefaults: UserDefaultsInterface
     private let oldPromotionID = "trPromotion"
+    private var logger: Logger
 
     // For ease of legibility, we're performing an inverse check here. If a migration
     // has already been performed, then we should not perform it again.
@@ -24,8 +26,10 @@ struct WallpaperMigrationUtility: Loggable {
         return !userDefaults.bool(forKey: legacyAssetMigration)
     }
 
-    init(with userDefaults: UserDefaultsInterface = UserDefaults.standard) {
+    init(with userDefaults: UserDefaultsInterface = UserDefaults.standard,
+         logger: Logger = DefaultLogger.shared) {
         self.userDefaults = userDefaults
+        self.logger = logger
     }
 
     /// Performs a migration of existing assets without having to download
@@ -67,7 +71,9 @@ struct WallpaperMigrationUtility: Loggable {
 
             markLegacyAssetMigrationComplete()
         } catch {
-            browserLog.error("Migration error: \(error.localizedDescription)")
+            logger.log("Existing asset migration error: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .homepage)
         }
     }
 
@@ -94,7 +100,9 @@ struct WallpaperMigrationUtility: Loggable {
 
             markMetadataMigrationComplete()
         } catch {
-            browserLog.error("Migration error: \(error.localizedDescription)")
+            logger.log("Metadata migration error: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .homepage)
         }
     }
 

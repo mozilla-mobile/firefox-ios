@@ -278,7 +278,7 @@ extension TopSitesDataAdaptorImplementation: DataObserverDelegate {
 }
 
 // MARK: - Notifiable protocol
-extension TopSitesDataAdaptorImplementation: Notifiable, Loggable {
+extension TopSitesDataAdaptorImplementation: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .ProfileDidFinishSyncing,
@@ -287,7 +287,7 @@ extension TopSitesDataAdaptorImplementation: Notifiable, Loggable {
                 .TopSitesUpdated:
             self.didInvalidateDataSource(forceRefresh: true)
         default:
-            browserLog.warning("Received unexpected notification \(notification.name)")
+            break
         }
     }
 }

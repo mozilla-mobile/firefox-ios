@@ -3,6 +3,7 @@
 //// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Logger
 import Shared
 
 typealias ContileResult = Swift.Result<[Contile], Error>
@@ -22,7 +23,7 @@ extension ContileProviderInterface {
 }
 
 /// `Contile` is short for contextual tiles. This provider returns data that is used in Shortcuts (Top Sites) section on the Firefox home page.
-class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFlaggable {
+class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
     static let contileProdResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
     static let contileStagingResourceEndpoint = "https://contile-stage.topsites.nonprod.cloudops.mozgcp.net/v1/tiles"
 
@@ -33,13 +34,21 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFl
         return URLCache.shared
     }()
 
+    private var logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
     enum Error: Swift.Error {
         case failure
     }
 
     func fetchContiles(timestamp: Timestamp = Date.now(), completion: @escaping (ContileResult) -> Void) {
         guard let resourceEndpoint = resourceEndpoint else {
-            browserLog.error("The Contile resource URL is invalid: \(String(describing: resourceEndpoint))")
+            logger.log("The Contile resource URL is invalid: \(String(describing: resourceEndpoint))",
+                       level: .warning,
+                       category: .homepage)
             completion(.failure(Error.failure))
             return
         }
@@ -60,7 +69,9 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFl
             guard let self = self else { return }
 
             if let error = error {
-                self.browserLog.debug("An error occurred while fetching data: \(error)")
+                self.logger.log("An error occurred while fetching data: \(error)",
+                                level: .debug,
+                                category: .homepage)
                 completion(.failure(Error.failure))
                 return
             }
@@ -68,7 +79,9 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFl
             guard let response = validatedHTTPResponse(response, statusCode: 200..<300),
                   let data = data
             else {
-                self.browserLog.debug("Response isn't valid: \(response.debugDescription)")
+                self.logger.log("Response isn't valid, data is nil?: \(data == nil)",
+                                level: .debug,
+                                category: .homepage)
                 completion(.failure(Error.failure))
                 return
             }
@@ -87,7 +100,9 @@ class ContileProvider: ContileProviderInterface, Loggable, URLCaching, FeatureFl
             contiles.sort { $0.position ?? 0 < $1.position ?? 0 }
             completion(.success(contiles))
         } catch let error {
-            browserLog.error("Unable to parse with error: \(error)")
+            self.logger.log("Unable to parse with error: \(error)",
+                            level: .warning,
+                            category: .homepage)
             completion(.failure(Error.failure))
         }
     }

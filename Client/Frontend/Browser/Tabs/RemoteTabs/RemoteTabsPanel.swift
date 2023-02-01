@@ -14,7 +14,7 @@ protocol RemotePanelDelegate: AnyObject {
 }
 
 // MARK: - RemoteTabsPanel
-class RemoteTabsPanel: UIViewController, Themeable, Loggable {
+class RemoteTabsPanel: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -89,7 +89,6 @@ class RemoteTabsPanel: UIViewController, Themeable, Loggable {
             break
         default:
             // no need to do anything at all
-            browserLog.warning("Received unexpected notification \(notification.name)")
             break
         }
     }

@@ -32,12 +32,10 @@ extension ReusableCell where Self: UICollectionReusableView {
     static var cellIdentifier: String { return String(describing: self) }
 }
 
-extension UICollectionView: Loggable {
+extension UICollectionView {
     func dequeueReusableCell<T: ReusableCell>(cellType: T.Type, for indexPath: IndexPath) -> T? {
-        guard let cell = dequeueReusableCell(withReuseIdentifier: T.cellIdentifier, for: indexPath) as? T else {
-            browserLog.warning("Cannot dequeue cell at index path \(indexPath)")
-            return nil
-        }
+        guard let cell = dequeueReusableCell(withReuseIdentifier: T.cellIdentifier, for: indexPath) as? T
+        else { return nil }
 
         return cell
     }

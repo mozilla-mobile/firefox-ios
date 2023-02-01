@@ -3,12 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-
+import Logger
 import MozillaAppServices
 import Shared
 
 /// Methods here can be considered as tools for extracting certain information from a message.
-class GleanPlumbMessageUtility: Loggable {
+class GleanPlumbMessageUtility {
+    private var logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
     // MARK: - Properties
 
     /// Holds evaluations of JEXLS seen so far.
@@ -24,7 +30,9 @@ class GleanPlumbMessageUtility: Loggable {
             return try Experiments.shared.createMessageHelper(additionalContext: contextProvider.createAdditionalDeviceContext())
         } catch {
             /// If we're here, then all of Messaging is in limbo! Report the error and let the surface handle this `nil`
-            browserLog.error("GleanPlumbMessageHelper could not be created! With error \(error)")
+            logger.log("GleanPlumbMessageHelper could not be created! With error \(error)",
+                       level: .warning,
+                       category: .experiments)
             return nil
         }
     }

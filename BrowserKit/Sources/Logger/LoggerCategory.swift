@@ -18,6 +18,9 @@ public enum LoggerCategory: String {
     // Related to the application lifecycle
     case lifecycle
 
+    // Related to experiments, nimbus and the messaging framework
+    case experiments
+
     // Related to the setup of services on app launch
     case setup
 

@@ -2,9 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Logger
 import Shared
 
-class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFlaggable, URLCaching, Loggable {
+class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFlaggable, URLCaching {
+    private var logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
     var endpoint: URL {
         if featureFlags.isCoreFeatureEnabled(.useStagingSponsoredPocketStoriesAPI) {
             return PocketSponsoredConstants.staging
@@ -77,7 +84,9 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
         urlSession.dataTask(with: request) { [weak self] (data, response, error) in
             guard let self = self else { return }
             if let error = error {
-                self.browserLog.debug("An error occurred while fetching data: \(error)")
+                self.logger.log("An error occurred while fetching data: \(error)",
+                                level: .debug,
+                                category: .homepage)
                 completion(.failure(Error.failure))
                 return
             }
@@ -86,7 +95,9 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
                        let data = data,
                        !data.isEmpty
             else {
-                self.browserLog.debug("Response isn't proper: \(response.debugDescription), with data \(String(describing: data))")
+                self.logger.log("Response isn't proper",
+                                level: .debug,
+                                category: .homepage)
                 completion(.failure(Error.invalidHTTPResponse))
                 return
             }
@@ -101,7 +112,9 @@ class PocketSponsoredStoriesProvider: PocketSponsoredStoriesProviding, FeatureFl
             let decodedResponse = try JSONDecoder().decode(PocketSponsoredRequest.self, from: data)
             completion(.success(decodedResponse.spocs))
         } catch {
-            self.browserLog.error("Unable to parse with error: \(error)")
+            logger.log("Unable to parse with error: \(error)",
+                       level: .warning,
+                       category: .homepage)
             completion(.failure(Error.decodingFailure))
         }
     }

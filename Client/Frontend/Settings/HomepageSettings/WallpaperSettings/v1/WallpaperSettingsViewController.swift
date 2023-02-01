@@ -2,11 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import UIKit
 import Common
+import UIKit
+import Logger
 import Shared
 
-class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Themeable {
+class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
     private struct UX {
         static let cardWidth: CGFloat = UIDevice().isTinyFormFactor ? 88 : 97
         static let cardHeight: CGFloat = UIDevice().isTinyFormFactor ? 80 : 88
@@ -19,6 +20,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Th
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    private var logger: Logger
 
     // Views
     private lazy var contentView: UIView = .build { _ in }
@@ -44,10 +46,12 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Loggable, Th
     // MARK: - Initializers
     init(viewModel: WallpaperSettingsViewModel,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -257,7 +261,9 @@ private extension WallpaperSettingsViewController {
                 case .success:
                     self?.showToast()
                 case .failure(let error):
-                    self?.browserLog.info(error.localizedDescription)
+                    self?.logger.log("Could not download and set wallpaper: \(error.localizedDescription)",
+                                     level: .warning,
+                                     category: .homepage)
                     self?.showError(error) { _ in
                         self?.downloadAndSetWallpaper(at: indexPath)
                     }
