@@ -157,7 +157,7 @@ open class BrowserSchema: Schema {
         let ver = String(cString: sqlite3_libversion())
         self.logger = logger
         logger.log("Init SQLite version: \(ver) (\(v)).",
-                   level: .info,
+                   level: .debug,
                    category: .setup)
     }
 

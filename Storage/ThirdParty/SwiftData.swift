@@ -641,7 +641,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
         if SwiftData.EnableWAL {
             logger.log("Enabling WAL mode.",
-                       level: .info,
+                       level: .debug,
                        category: .storage)
 
             let desiredPagesPerJournal = 16
