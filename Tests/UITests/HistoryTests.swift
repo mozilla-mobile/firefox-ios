@@ -59,41 +59,6 @@ class HistoryTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "url")
     }
 
-    // Could be removed since tested on XCUITets -> AP VERIFY OR ADD
-    /*
-    func testDeleteHistoryItemFromListWith2Items() {
-        // add 2 history items
-        let urls = addHistoryItems(2)
-
-        // Check that both appear in the history home panel
-        BrowserUtils.openLibraryMenu(tester())
-        tester().waitForAnimationsToFinish()
-
-        EarlGrey.selectElement(with: grey_accessibilityLabel(urls[0]))
-            .perform(grey_longPress())
-        
-        tester().tapView(withAccessibilityLabel: "Delete from History")
-
-        // The second history entry still exists
-        EarlGrey.selectElement(with: grey_accessibilityLabel(urls[1]))
-            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
-            .assert(grey_notNil())
-
-        // check page 1 does not exist
-        let historyRemoved = GREYCondition(name: "Check entry is removed", block: {
-            var errorOrNil: NSError?
-            let matcher = grey_allOf([grey_accessibilityLabel(urls[0]),
-                                              grey_sufficientlyVisible()])
-            EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil != nil
-            return success
-        }).wait(withTimeout: 5)
-        GREYAssertTrue(historyRemoved, reason: "Failed to remove history")
-
-        // Close History (and so Library) panel
-        BrowserUtils.closeLibraryMenu(tester())
-    }*/
-
     func testDeleteHistoryItemFromListWithMoreThan100Items() {
 
         for pageNo in 1...102 {
