@@ -53,9 +53,6 @@ class BatchingDownloader<T: CleartextPayloadJSON> {
         let branchName = "downloader." + collection + "."
         let prefs = basePrefs.branch(branchName)
 
-        let lm = prefs.timestampForKey("lastModified")
-        let bt = prefs.timestampForKey("baseTimestamp")
-
         prefs.removeObjectForKey("nextOffset")
         prefs.removeObjectForKey("offsetNewer")
         prefs.removeObjectForKey("baseTimestamp")
