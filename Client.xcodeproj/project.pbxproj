@@ -528,7 +528,6 @@
 		8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */; };
 		8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
 		8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */; };
-		8A3EF05A29846ED500517C95 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 8A3EF05929846ED500517C95 /* Logger */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A48CE33292FCC0800B32289 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8A48CE32292FCC0800B32289 /* Kingfisher */; };
@@ -597,6 +596,7 @@
 		8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */; };
 		8ACA8F74291987AE00D3075D /* AccountSyncHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F73291987AE00D3075D /* AccountSyncHandlerTests.swift */; };
 		8ACA8F7629198D6400D3075D /* ThrottlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ACA8F7529198D6400D3075D /* ThrottlerTests.swift */; };
+		8ACD69102988BFEC00CF5F38 /* Logger in Frameworks */ = {isa = PBXBuildFile; productRef = 8ACD690F2988BFEC00CF5F38 /* Logger */; };
 		8AD08D1527E9198E00B8E907 /* TabsQuantityTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1427E9198E00B8E907 /* TabsQuantityTelemetry.swift */; };
 		8AD08D1727E91AC800B8E907 /* TabsQuantityTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */; };
 		8AD1980F27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD1980E27BEB3F100D64B0E /* PhotonActionSheetViewModel.swift */; };
@@ -5298,6 +5298,7 @@
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				5A70EF12295DFD6400790249 /* Common in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
+				8ACD69102988BFEC00CF5F38 /* Logger in Frameworks */,
 				5A8FD0EA293A7D0C00333AA7 /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5329,7 +5330,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A3EF05A29846ED500517C95 /* Logger in Frameworks */,
 				5A70EF0E295DFCCF00790249 /* Common in Frameworks */,
 				5A8FD0F4293A7E9800333AA7 /* Sentry in Frameworks */,
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
@@ -8547,6 +8547,7 @@
 				8A48CE3C292FCE1A00B32289 /* Kingfisher */,
 				5A8FD0E9293A7D0C00333AA7 /* XCGLogger */,
 				5A70EF11295DFD6400790249 /* Common */,
+				8ACD690F2988BFEC00CF5F38 /* Logger */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -8961,7 +8962,6 @@
 				5A8FD0EB293A7D5E00333AA7 /* SnapKit */,
 				5A8FD0F3293A7E9800333AA7 /* Sentry */,
 				5A70EF0D295DFCCF00790249 /* Common */,
-				8A3EF05929846ED500517C95 /* Logger */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -15953,10 +15953,6 @@
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
 		};
-		8A3EF05929846ED500517C95 /* Logger */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Logger;
-		};
 		8A48CE32292FCC0800B32289 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4326A3C22849B8E500550F73 /* XCRemoteSwiftPackageReference "Kingfisher" */;
@@ -15986,6 +15982,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4326A3C22849B8E500550F73 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		8ACD690F2988BFEC00CF5F38 /* Logger */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Logger;
 		};
 		D433852B27ABC8150069DD33 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;
