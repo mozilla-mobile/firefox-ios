@@ -251,7 +251,7 @@ class TabDisplayManagerTests: XCTestCase {
         let inactiveTab2 = manager.addTab()
         inactiveTab2.lastExecutedTime = Date().older.toTimestamp()
         let activeTab1 = manager.addTab()
-        let activeTab2 = manager.addTab()
+        _ = manager.addTab()
         manager.selectTab(activeTab1)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
@@ -288,7 +288,7 @@ class TabDisplayManagerTests: XCTestCase {
         let inactiveTab2 = manager.addTab()
         inactiveTab2.lastExecutedTime = Date().older.toTimestamp()
         let activeTab1 = manager.addTab()
-        let activeTab2 = manager.addTab()
+        _ = manager.addTab()
         manager.selectTab(activeTab1)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")

@@ -427,11 +427,11 @@ class TabManagerTests: XCTestCase {
             return tab
         }
 
-        let tab0 = addTab(true) // inactive
+        _ = addTab(true) // inactive
         let tab1 = addTab(false) // active
-        let tab2 = addTab(true) // inactive
+        _ = addTab(true) // inactive
         let tab3 = addTab(false) // active
-        let tab4 = addTab(false) // active
+        _ = addTab(false) // active
 
         manager.selectTab(tab1)
 
