@@ -152,7 +152,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         return super.application(application, willFinishLaunchingWithOptions: launchOptions)
     }
 
-
     /// Use this to reset the application between tests.
     func resetApplication() {
         // Clear image cache - Kingfisher
