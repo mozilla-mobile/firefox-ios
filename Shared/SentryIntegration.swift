@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Logger
 import Sentry
 
 public enum SentryTag: String {
@@ -35,7 +36,11 @@ public class SentryIntegration: SentryProtocol {
     }
 
     public static let shared = SentryIntegration()
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
 
+    private let logger: Logger
     private let SentryDSNKey = "SentryCloudDSN"
     private let SentryDeviceAppHashKey = "SentryDeviceAppHash"
     private let DefaultDeviceAppHash = "0000000000000000000000000000000000000000"
@@ -58,12 +63,16 @@ public class SentryIntegration: SentryProtocol {
         guard !enabled else { return }
 
         if DeviceInfo.isSimulator() {
-            LegacyLogger.browserLogger.debug("Not enabling Sentry; Running in Simulator")
+            logger.log("Not enabling Sentry; Running in Simulator",
+                       level: .debug,
+                       category: .setup)
             return
         }
 
         if !sendUsageData {
-            LegacyLogger.browserLogger.debug("Not enabling Sentry; Not enabled by user choice")
+            logger.log("Not enabling Sentry; Not enabled by user choice",
+                       level: .debug,
+                       category: .setup)
             return
         }
 
@@ -75,10 +84,14 @@ public class SentryIntegration: SentryProtocol {
 
         let bundle = AppInfo.applicationBundle
         guard let dsn = bundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
-            LegacyLogger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
+            logger.log("Not enabling Sentry; Not configured in Info.plist",
+                       level: .debug,
+                       category: .setup)
             return
         }
-        LegacyLogger.browserLogger.debug("Enabling Sentry crash handler")
+        logger.log("Enabling Sentry crash handler",
+                   level: .debug,
+                   category: .setup)
 
         SentrySDK.start { options in
             options.dsn = dsn
@@ -219,6 +232,8 @@ public class SentryIntegration: SentryProtocol {
             let (key, value) = arg1
             return "\(result), \(key): \(value)"
         }
-        LegacyLogger.browserLogger.debug("Sentry: \(message) \(string ??? "")")
+        logger.log("Sentry: \(message) \(string ??? "")",
+                   level: .debug,
+                   category: .sentry)
     }
 }
