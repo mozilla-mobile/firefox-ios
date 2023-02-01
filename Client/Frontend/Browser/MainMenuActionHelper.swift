@@ -607,7 +607,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         let libraryAction = getReadingListLibraryAction()
-        if !isHomePage {
+        if !isHomePage, selectedTab?.readerModeAvailableOrActive ?? false {
             let readingListAction = getReadingListAction()
             section.append(PhotonRowActions([libraryAction, readingListAction]))
         } else {
