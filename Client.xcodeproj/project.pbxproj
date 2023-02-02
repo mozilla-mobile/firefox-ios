@@ -107,6 +107,7 @@
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
 		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
 		21B2844A28464FF0003EA521 /* OnboardingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */; };
+		21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */; };
 		21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */; };
 		21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */; };
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
@@ -1933,6 +1934,7 @@
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
 		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
 		21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewModel.swift; sourceTree = "<group>"; };
+		21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOverlayModeManager.swift; sourceTree = "<group>"; };
 		21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+ToolbarActions.swift"; sourceTree = "<group>"; };
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIDevice.swift; sourceTree = "<group>"; };
@@ -7188,6 +7190,7 @@
 				E1463D0529830E4F0074E16E /* MockUserNotificationCenter.swift */,
 				5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */,
 				8AE80BB02891A39F00BC12EA /* SpyNotificationCenter.swift */,
+				21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -10884,6 +10887,7 @@
 				965C3C9829343445006499ED /* MockAppSessionManager.swift in Sources */,
 				8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */,
 				CA24B53924ABFE250093848C /* LoginsListSelectionHelperTests.swift in Sources */,
+				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				5A9A09D228AFD51900B6F51E /* MockHomepageDataModelDelegate.swift in Sources */,
 				D525DFB325FBE5E000B18763 /* TabTests.swift in Sources */,
