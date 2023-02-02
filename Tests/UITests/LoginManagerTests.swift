@@ -254,45 +254,6 @@ class LoginManagerTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCloseAllButton)
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
     }
-    // This test is disabled until bug 1486243 is fixed
-    /*func testOpenAndFillFromPrivateContext() {
-        if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityID("TopTabsViewController.tabsButton"))
-                .perform(grey_tap())
-        } else {
-            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.tabsButton")).perform(grey_tap())
-        }
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Private Mode")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Add Tab")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
-        if BrowserUtils.iPad() {
-            let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
-                                              grey_accessibilityID(ImageIdentifiers.settings)])
-            EarlGrey.selectElement(with: settings_button).perform(grey_tap())
-        } else {
-            EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
-        }
-
-        if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Tracking Protection"))
-                .using(searchAction: grey_scrollInDirection(.down, 200),
-                       onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
-                .assert(grey_notNil())
-        }
-        EarlGrey.selectElement(with: grey_accessibilityID("Logins")).perform(grey_tap())
-
-        tester().waitForView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-        tester().tapView(withAccessibilityLabel: "a0@email.com, http://a0.com")
-
-        tester().waitForView(withAccessibilityLabel: "password")
-
-        // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        EarlGrey.selectElement(with: grey_accessibilityID("websiteField")).perform(grey_tap())
-        waitForMatcher(name: "Open & Fill")
-
-        tester().wait(forTimeInterval: 10)
-        tester().waitForViewWithAccessibilityValue("a0.com/")
-    }*/
 
     func testDetailUsernameMenuOptions() {
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
