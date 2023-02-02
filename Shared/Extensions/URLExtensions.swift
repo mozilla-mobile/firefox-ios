@@ -31,18 +31,6 @@ extension URL {
     public func getResourceLongLongForKey(_ key: String) -> Int64? {
         return (getResourceValueForKey(key) as? NSNumber)?.int64Value
     }
-
-    public func getResourceBoolForKey(_ key: String) -> Bool? {
-        return getResourceValueForKey(key) as? Bool
-    }
-
-    public var isRegularFile: Bool {
-        return getResourceBoolForKey(URLResourceKey.isRegularFileKey.rawValue) ?? false
-    }
-
-    public func lastComponentIsPrefixedBy(_ prefix: String) -> Bool {
-        return (pathComponents.last?.hasPrefix(prefix) ?? false)
-    }
 }
 
 // The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
