@@ -316,6 +316,7 @@
 		437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B672681256800FB41C1 /* InactiveTabCell.swift */; };
 		437A9B6A2681257F00FB41C1 /* InactiveTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */; };
 		438FE86129887D2F00155B10 /* NoSeparatorList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438FE86029887D2F00155B10 /* NoSeparatorList.swift */; };
+		438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438FE8632988ABA600155B10 /* CreditCardTableViewController.swift */; };
 		4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7FE246DAFBE00570811 /* FirefoxColors.swift */; };
 		4392FB20252EC49D00AD3D23 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
 		4392FB34252EC4CE00AD3D23 /* SessionRestoreHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC4869C2195F58300CDA48D /* SessionRestoreHandler.swift */; };
@@ -2568,6 +2569,7 @@
 		438FAA9A28CF4BBE00F6C86B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		438FAA9B28CF4BBE00F6C86B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		438FE86029887D2F00155B10 /* NoSeparatorList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSeparatorList.swift; sourceTree = "<group>"; };
+		438FE8632988ABA600155B10 /* CreditCardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardTableViewController.swift; sourceTree = "<group>"; };
 		43904ED28118BAD713896491 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		4390F7FE246DAFBE00570811 /* FirefoxColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxColors.swift; sourceTree = "<group>"; };
 		43932284292259B300D758AA /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/SearchHeaderTitle.strings; sourceTree = "<group>"; };
@@ -6168,6 +6170,14 @@
 			path = CC_Script;
 			sourceTree = "<group>";
 		};
+		438FE8622988AB8F00155B10 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				438FE8632988ABA600155B10 /* CreditCardTableViewController.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 		43A5643423CD1E1B00B6857D /* Update */ = {
 			isa = PBXGroup;
 			children = (
@@ -6199,6 +6209,7 @@
 		43D00491296FC46E00CB0F31 /* CreditCard */ = {
 			isa = PBXGroup;
 			children = (
+				438FE8622988AB8F00155B10 /* UIKit */,
 				43D16B7E29831CFE009F8279 /* Logic */,
 				43D16B8329831E8D009F8279 /* ViewComponents+Style */,
 				43D16B7D29831CEA009F8279 /* CreditCardSettingsViews+Model */,
@@ -10384,6 +10395,7 @@
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
 				048B4C8924A53F81001B56E8 /* UIButtonExtensions.swift in Sources */,
+				438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
 				E195440528A5AFDE00304CF0 /* BottomSheetViewController.swift in Sources */,
 				E13F8C342928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift in Sources */,
@@ -14305,6 +14317,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -14604,6 +14617,7 @@
 				DEVELOPMENT_TEAM = "";
 				EXCLUDED_SOURCE_FILE_NAMES = CredentialProvider.appex;
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -14868,6 +14882,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -15358,6 +15373,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

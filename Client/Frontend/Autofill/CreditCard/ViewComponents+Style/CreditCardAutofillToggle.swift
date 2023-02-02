@@ -7,7 +7,7 @@ import SwiftUI
 
 struct CreditCardAutofillToggle: View {
     @ObservedObject var viewModel: CreditCardListViewModel
-    
+
     var body: some View {
         VStack {
             Divider()
@@ -20,14 +20,13 @@ struct CreditCardAutofillToggle: View {
                 }.font(.system(size: 17))
                  .padding(.leading, 16)
                  .padding(.trailing, 16)
-//                 .tint(viewModel.toggleState ? .blue : .gray)
+
             }
             Divider()
                 .frame(height: 0.7)
                 .padding(.leading, 16)
         }
         .frame(width: UIScreen.main.bounds.size.width, height: 42)
-//        .background(.white)
     }
 }
 
