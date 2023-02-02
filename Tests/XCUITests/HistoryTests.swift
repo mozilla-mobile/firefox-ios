@@ -88,8 +88,7 @@ class HistoryTests: BaseTestCase {
     // Smoketest
     func testClearPrivateDataButtonDisabled() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        }
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
@@ -107,6 +106,7 @@ class HistoryTests: BaseTestCase {
 
         // If the button is disabled, the confirmation pop-up should not exist
         XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
+        }
     }
 
     func testRecentlyClosedNoWebsiteOpen() {
