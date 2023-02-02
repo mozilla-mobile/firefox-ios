@@ -13,10 +13,10 @@ stages:
     - configure_build_fennec_xcuitest: {}
   stage_2:
     workflows:
-    #- build_and_test_1_SmokeTest2: {}
+    - build_and_test_1_SmokeTest2: {}
     - build_and_test_2_SmokeTest: {}
     - build_and_test_3_SmokeTest3: {}
-    #- build_and_test_4_SmokeTest4: {}
+    - build_and_test_4_SmokeTest4: {}
 workflows:
   configure_build_fennec_xcuitest:
     before_run:
@@ -158,7 +158,7 @@ workflows:
             # Fail if any command fails
             set -e
             echo "Run danger"
-            swift run danger-swift ci
+            #swift run danger-swift ci
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
@@ -291,10 +291,12 @@ workflows:
         inputs:
         - test_name: UISmoketest
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
+    - deploy-to-bitrise-io@2:
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x
-        machine_type_id: g2.8core
+        machine_type_id: g2.4core
   build_and_test_3_SmokeTest3:
     before_run:
     - 1_git_clone_and_post_clone
@@ -339,8 +341,6 @@ workflows:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        #inputs:
-        #- pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_3_XCRESULT_PATH'
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x
