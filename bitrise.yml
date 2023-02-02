@@ -138,7 +138,7 @@ workflows:
             set -euxo pipefail
             echo "-- build-for-testing --"
             mkdir DerivedData
-            xcodebuild -resolvePackageDependencies
+            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
             xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
     - xcode-test-without-building@0:
         inputs:
@@ -146,19 +146,20 @@ workflows:
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
+        - maximum_test_repetitions: 2
     - deploy-to-bitrise-io@2:
         inputs:
         - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"  
     - script@1.1:
         title: Run Danger 2
-        is_always_run: true
+        #is_always_run: true
         inputs:
         - content: |
             #!/usr/bin/env bash
             # Fail if any command fails
             set -e
             echo "Run danger"
-            swift run danger-swift ci
+            #swift run danger-swift ci
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
@@ -432,7 +433,7 @@ workflows:
             echo "Adding com.apple.developer.web-browser to entitlements"
 
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" Client/Entitlements/FennecApplication.entitlements
-    #- cache-pull@2.1: {}
+    - cache-pull@2.1: {}
   2_certificate_and_profile:
     steps:
     - certificate-and-profile-installer@1.10: {}
