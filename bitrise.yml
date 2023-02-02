@@ -384,7 +384,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x
-        machine_type_id: g2.8core
+        machine_type_id: g2.4core
   send_slack_notification:
     steps:
     - slack@3.1:
