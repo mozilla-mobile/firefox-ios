@@ -6,14 +6,6 @@ import Foundation
 import SwiftUI
 import Storage
 
-//struct CreditCard {
-//    var ccName: String
-//    var ccNumber: String
-//    var imageName: String
-//    var expires: String
-//    var last4: String
-//    var ccType: String
-//}
 
 class CreditCardListViewModel: ObservableObject {
     @Published var creditCards: [CreditCard] = [CreditCard]()
@@ -36,11 +28,16 @@ class CreditCardListViewModel: ObservableObject {
 }
 
 struct CreditCardListView: View {
-    @ObservedObject var viewModel: CreditCardListViewModel
+    @ObservedObject var viewModel: CreditCardListViewModel = CreditCardListViewModel(creditCards: [CreditCard]())
+
+    init() {
+        UITableView.appearance().backgroundColor = .clear // tableview background
+        UITableViewCell.appearance().backgroundColor = .clear // cell background
+    }
+
     init(viewModel: CreditCardListViewModel) {
+        self.init()
         self.viewModel = viewModel
-        UITableView.appearance().backgroundColor = .yellow
-        UITableView.appearance().tintColor = .red
     }
 
     var body: some View {
@@ -58,23 +55,57 @@ struct CreditCardListView: View {
                 .padding(.top, 25)
                 .padding(.bottom, 8)
 
+            
             let creditCards = viewModel.creditCards
-            NoSeparatorList(4..<creditCards.count, id: \.self) {index in
+            if #available(iOS 14.0, *) {
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(creditCards, id: \.self) { creditCard in
+                            VStack(spacing: 0) {
+                                
+                                Button {
+                                    print("somecode")
+                                } label: {
+                                    CreditCardItemRow(item: creditCard, ux: CreditCardItemRowUX(titleTextColor: .black, subTextColor: .gray, separatorColor: .gray))
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            print("Tapped")
+                                            viewModel.cardTapped(creditCard: creditCard)
+                                        }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .buttonStyle(PlainButtonStyle())
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            
+            /*
+            List(4..<creditCards.count, id: \.self) {index in
+                Text("\(creditCards[index].ccName)")
+                    .listRowBackground(Color.pink)
+//                    .background(Color(UIColor.Photon.Yellow30))
+
                 CreditCardItemRow(item: creditCards[index])
                     .listRowBackground(Color.green)
                     .onTapGesture {
                         print("Tapped")
                         viewModel.cardTapped(creditCard: creditCards[index])
                     }
+
             }
-            .onAppear {
-                // Set the default to clear
-                UITableView.appearance().backgroundColor = .yellow
-            }
+//            .onAppear {
+//                // Set the default to clear
+//                UITableView.appearance().backgroundColor = .yellow
+//            }
+//            .foregroundColor(.pink)
 //            .listSeparatorStyleNone()
             .background(Color(UIColor.Photon.Blue05))
             .frame(maxWidth: .infinity)
             .listStyle(.plain)
+             */
             
             
             
@@ -92,7 +123,16 @@ struct CreditCardListView: View {
 //            .listStyle(InsetGroupedListStyle())
 //            .scrollContentBackground(.hidden)
         }
-//        .background(.green)
+        .background(Color(UIColor.clear))
+
+    }
+    
+    func temp() -> some View {
+        if !viewModel.creditCards.isEmpty {
+            viewModel.creditCards.remove(at: 0)
+        }
+        
+        return EmptyView()
     }
 }
 
@@ -106,21 +146,5 @@ struct CreditCardListView: View {
 //    static var previews: some View {
 //        let vm = CreditCardListViewModel(creditCards: cardList)
 //        CreditCardListView(viewModel: vm)
-//    }
-//}
-
-//public struct ListSeparatorStyleNoneModifier: ViewModifier {
-//    public func body(content: Content) -> some View {
-//        content.onAppear {
-//            UITableView.appearance().separatorStyle = .none
-//        }.onDisappear {
-//            UITableView.appearance().separatorStyle = .singleLine
-//        }
-//    }
-//}
-//
-//extension View {
-//    public func listSeparatorStyleNone() -> some View {
-//        modifier(ListSeparatorStyleNoneModifier())
 //    }
 //}
