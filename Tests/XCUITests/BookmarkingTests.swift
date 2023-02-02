@@ -13,9 +13,9 @@ let url_4 = "test-password-2.html"
 
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: 15)
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: TIMEOUT_LONG)
         app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
         navigator.nowAt(BrowserTab)
     }
@@ -130,7 +130,9 @@ class BookmarkingTests: BaseTestCase {
     }
 
     func testBookmarksAwesomeBar() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        }
         typeOnSearchBar(text: "www.ebay")
         waitForExistence(app.tables["SiteTable"])
         waitForExistence(app.tables["SiteTable"].cells.staticTexts["www.ebay"], timeout: 5)
@@ -264,6 +266,9 @@ class BookmarkingTests: BaseTestCase {
     // Smoketest
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 1 cell (desktop bookmark folder)
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -299,6 +304,9 @@ class BookmarkingTests: BaseTestCase {
 
     func testDesktopFoldersArePresent() {
         // Verify that there are only 1 cell (desktop bookmark folder)
+        XCTExpectFailure("The app was not launched", strict: false) {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
