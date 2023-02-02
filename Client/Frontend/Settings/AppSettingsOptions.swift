@@ -7,6 +7,7 @@ import Shared
 import Account
 import LocalAuthentication
 import Glean
+import Logger
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -459,7 +460,7 @@ class ExportLogDataSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        LegacyLogger.copyPreviousLogsToDocuments()
+        DefaultLogger.shared.copyLogsToDocuments()
     }
 }
 
