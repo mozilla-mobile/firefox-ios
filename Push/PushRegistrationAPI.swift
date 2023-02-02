@@ -17,7 +17,6 @@ public protocol PushRegistrationAPI {
 }
 
 public class PushRegistrationAPIImplementation: PushRegistrationAPI {
-    private let log = LegacyLogger.browserLogger
     private static let PushClientErrorDomain = "org.mozilla.push.error"
     private let PushClientUnknownError = NSError(domain: PushRegistrationAPIImplementation.PushClientErrorDomain,
                                                  code: 999,
@@ -51,8 +50,6 @@ public class PushRegistrationAPIImplementation: PushRegistrationAPI {
 
     private func fetchJSONData(request: URLRequest,
                                completion: @escaping (Result<JSON, Error>) -> Void) {
-        log.info("\(request.httpMethod!) \(request.url?.absoluteString ?? "nil")")
-
         urlSession.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 completion(.failure(PushClientError.Local(error)))

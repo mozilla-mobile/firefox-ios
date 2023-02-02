@@ -7,8 +7,6 @@ import Adjust
 import Shared
 import Glean
 
-private let log = LegacyLogger.browserLogger
-
 final class AdjustHelper: FeatureFlaggable {
     private static let adjustAppTokenKey = "AdjustAppToken"
     private let profile: Profile
@@ -57,8 +55,8 @@ final class AdjustHelper: FeatureFlaggable {
 
     private func getConfig() -> ADJConfig? {
         let bundle = AppInfo.applicationBundle
-        guard let appToken = bundle.object(forInfoDictionaryKey: AdjustHelper.adjustAppTokenKey) as? String, !appToken.isEmpty else {
-            log.debug("Adjust - Not enabling Adjust; Not configured in Info.plist")
+        guard let appToken = bundle.object(forInfoDictionaryKey: AdjustHelper.adjustAppTokenKey) as? String,
+                !appToken.isEmpty else {
             return nil
         }
 

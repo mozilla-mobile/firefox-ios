@@ -3,8 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Shared
-
-private let log = LegacyLogger.browserLogger
+import Logger
 
 public let PrefKeySyncEvents = "sync.telemetry.events"
 
@@ -21,6 +20,7 @@ public extension IdentifierString {
 }
 
 public struct Event: Decodable {
+    private let logger: Logger
     let timestamp: Timestamp
     let category: IdentifierString
     let method: IdentifierString
@@ -73,6 +73,7 @@ public struct Event: Decodable {
         }
         extra = extraDictionary
         value = nil
+        logger = DefaultLogger.shared
     }
 
     init(
@@ -81,7 +82,8 @@ public struct Event: Decodable {
         method: IdentifierString,
         object: IdentifierString,
         value: String? = nil,
-        extra: [String: String]? = nil
+        extra: [String: String]? = nil,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.timestamp = timestamp
         self.category = category
@@ -89,6 +91,7 @@ public struct Event: Decodable {
         self.object = object
         self.value = value
         self.extra = extra
+        self.logger = logger
     }
 
     public static func hasQueuedEvents(inPrefs prefs: Prefs) -> Bool {
@@ -113,7 +116,9 @@ public struct Event: Decodable {
         do {
             return try JSONSerialization.data(withJSONObject: toArray(), options: [])
         } catch let error {
-            log.error("Error pickling telemetry event. Error: \(error), Event: \(self)")
+            logger.log("Error pickling telemetry event. Error: \(error), Event: \(self)",
+                       level: .warning,
+                       category: .sync)
             return nil
         }
     }
@@ -130,7 +135,9 @@ public struct Event: Decodable {
                 extra: array[5] as? [String: String]
             )
         } catch let error {
-            log.error("Error unpickling telemetry event: \(error)")
+            DefaultLogger.shared.log("Error unpickling telemetry event: \(error)",
+                                     level: .warning,
+                                     category: .sync)
             return nil
         }
     }
@@ -146,7 +153,9 @@ public struct Event: Decodable {
             events.append(data)
             prefs.setObject(events, forKey: PrefKeySyncEvents)
         } else {
-            log.info("Event not recorded due to validation failure or pickling error!")
+            logger.log("Event not recorded due to validation failure or pickling error!",
+                       level: .debug,
+                       category: .sync)
         }
     }
 }

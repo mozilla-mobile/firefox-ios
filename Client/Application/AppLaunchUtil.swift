@@ -7,15 +7,16 @@ import Shared
 import Storage
 import Account
 import Glean
+import Logger
 
 class AppLaunchUtil {
-    private var log: RollingFileLogger
+    private var logger: Logger
     private var adjustHelper: AdjustHelper
     private var profile: Profile
 
-    init(log: RollingFileLogger = LegacyLogger.browserLogger,
+    init(logger: Logger = DefaultLogger.shared,
          profile: Profile) {
-        self.log = log
+        self.logger = logger
         self.profile = profile
         self.adjustHelper = AdjustHelper(profile: profile)
     }
@@ -25,6 +26,7 @@ class AppLaunchUtil {
         // is turned on in the Settings app, copy over old logs.
         if DebugSettingsBundleOptions.saveLogsToDocuments {
             LegacyLogger.copyPreviousLogsToDocuments()
+            logger.copyLogsToDocuments()
         }
 
         // Now roll logs.
@@ -138,7 +140,9 @@ class AppLaunchUtil {
         let migrationAttemptNumber = UserDefaults.standard.integer(forKey: PrefsKeys.HistoryMigrationAttemptNumber)
         UserDefaults.standard.setValue(migrationAttemptNumber + 1, forKey: PrefsKeys.HistoryMigrationAttemptNumber)
         if !migrationSucceeded && migrationAttemptNumber < AppConstants.MAX_HISTORY_MIGRATION_ATTEMPT {
-            log.info("Migrating Application services history")
+            logger.log("Migrating Application services history",
+                       level: .info,
+                       category: .sync)
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started
             // this will help us identify how often the migration starts, but never ends
@@ -147,11 +151,15 @@ class AppLaunchUtil {
             GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             browserProfile?.migrateHistoryToPlaces(
             callback: { result in
-                self.log.info("Successful Migration took \(result.totalDuration / 1000) seconds")
+                self.logger.log("Successful Migration took \(result.totalDuration / 1000) seconds",
+                                level: .info,
+                                category: .sync)
                 // We record various success metrics here
                 GleanMetrics.PlacesHistoryMigration.duration.stopAndAccumulate(id)
                 GleanMetrics.PlacesHistoryMigration.numMigrated.set(Int64(result.numSucceeded))
-                self.log.info("Migrated \(result.numSucceeded) entries")
+                self.logger.log("Migrated \(result.numSucceeded) entries",
+                                level: .info,
+                                category: .sync)
                 GleanMetrics.PlacesHistoryMigration.numToMigrate.set(Int64(result.numTotal))
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
                 UserDefaults.standard.setValue(true, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
@@ -159,7 +167,9 @@ class AppLaunchUtil {
             },
             errCallback: { err in
                 let errDescription = err?.localizedDescription ?? "Unknown error during History migration"
-                self.log.error(errDescription)
+                self.logger.log("Migration failed with \(errDescription)",
+                                level: .warning,
+                                category: .sync)
 
                 GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
@@ -168,7 +178,9 @@ class AppLaunchUtil {
                 SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
             })
         } else {
-            log.info("History Migration skipped")
+            self.logger.log("History Migration skipped",
+                            level: .debug,
+                            category: .sync)
         }
     }
 }

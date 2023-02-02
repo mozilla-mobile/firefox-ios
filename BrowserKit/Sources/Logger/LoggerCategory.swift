@@ -11,6 +11,9 @@ public enum LoggerCategory: String {
     // Related to homepage UI and it's data management
     case homepage
 
+    // Relates to more than one area (example Profile binds storage, sync, tabs together)
+    case core
+
     // Related to library UI and it's data management throughout the app.
     // This includes bookmarks, downloads, reader mode and history.
     case library
@@ -30,12 +33,12 @@ public enum LoggerCategory: String {
     // Related to storage (keychain, SQL database, store of different types, etc)
     case storage
 
-    // Related to sync accounts and sync management
+    // Related to sync accounts, sync management, application services
     case sync
 
     // Related to the tabs UI, setup and management
     case tabs
 
-    // Webview scripts, webview delegate
+    // Webview scripts, webview delegate, webserver like GCDWebserver
     case webview
 }

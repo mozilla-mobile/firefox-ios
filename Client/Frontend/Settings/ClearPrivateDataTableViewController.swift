@@ -11,8 +11,6 @@ private let SectionButton = 2
 private let NumberOfSections = 3
 private let TogglesPrefKey = "clearprivatedata.toggles"
 
-private let log = LegacyLogger.browserLogger
-
 private let HistoryClearableIndex = 0
 
 class ClearPrivateDataTableViewController: ThemedTableViewController {
@@ -145,7 +143,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                     .enumerated()
                     .compactMap { (i, pair) in
                         guard toggles[i] else { return nil }
-                        log.debug("Clearing \(pair.clearable).")
                         return pair.clearable.clear()
                     }
                     .allSucceed()

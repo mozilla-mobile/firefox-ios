@@ -7,8 +7,7 @@ import Storage
 import Sync
 import UserNotifications
 import Account
-
-private let log = LegacyLogger.browserLogger
+import Logger
 
 extension UIApplication {
     var syncDelegate: SyncDelegate {
@@ -24,9 +23,11 @@ extension UIApplication {
  */
 class AppSyncDelegate: SyncDelegate {
     private let app: UIApplication
+    private let logger: Logger
 
-    init(app: UIApplication) {
+    init(app: UIApplication, logger: Logger = DefaultLogger.shared) {
         self.app = app
+        self.logger = logger
     }
 
     func displaySentTab(for url: URL, title: String, from deviceName: String?) {
@@ -65,7 +66,9 @@ class AppSyncDelegate: SyncDelegate {
 
                 UNUserNotificationCenter.current().add(request) { error in
                     if let error = error {
-                        log.error(error.localizedDescription)
+                        self.logger.log("UNUserNotificationCenter error: \(error.localizedDescription)",
+                                        level: .warning,
+                                        category: .sync)
                     }
                 }
             }
