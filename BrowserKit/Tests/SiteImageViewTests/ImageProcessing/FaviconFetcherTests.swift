@@ -46,14 +46,33 @@ final class FaviconFetcherTests: XCTestCase {
             XCTFail("Should have succeeded with image")
         }
     }
+
+    func testTimeout_completesWithoutImageOrError() async {
+        mockImageDownloader.timeoutDelay = 1
+        let subject = DefaultFaviconFetcher(imageDownloader: mockImageDownloader)
+
+        do {
+            _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
+            XCTFail("Should have failed with error")
+        } catch let error as SiteImageError {
+            XCTAssertEqual("Unable to download image with reason: Timeout reached", error.description)
+        } catch {
+            XCTFail("Should have failed with SiteImageError type")
+        }
+    }
 }
 
 // MARK: - MockSiteImageDownloader
 private class MockSiteImageDownloader: SiteImageDownloader {
+    var timeoutDelay: UInt64 = 10
+    var continuation: CheckedContinuation<SiteImageLoadingResult, Error>?
+
     var image: UIImage?
     var error: KingfisherError?
 
-    func downloadImage(with url: URL, completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?) -> DownloadTask? {
+    func downloadImage(with url: URL,
+                       completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?
+    ) -> DownloadTask? {
         if let error = error {
             completionHandler?(.failure(error))
         } else if let image = image {

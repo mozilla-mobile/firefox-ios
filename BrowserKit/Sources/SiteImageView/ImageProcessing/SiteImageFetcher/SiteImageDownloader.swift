@@ -9,11 +9,15 @@ import UIKit
 
 /// Image downloader wrapper around Kingfisher image downloader
 /// Used in FaviconFetcher
-protocol SiteImageDownloader {
+protocol SiteImageDownloader: AnyObject {
+    /// Provides the KingFisher ImageDownloader with a Timeout in case the completion isn't called
+    var timeoutDelay: UInt64 { get }
+    var continuation: CheckedContinuation<any SiteImageLoadingResult, any Error>? { get set }
+
     @discardableResult
     func downloadImage(
         with url: URL,
-        completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?
+        completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?
     ) -> DownloadTask?
 
     func downloadImage(with url: URL) async throws -> SiteImageLoadingResult
@@ -21,31 +25,43 @@ protocol SiteImageDownloader {
 
 extension SiteImageDownloader {
     func downloadImage(with url: URL) async throws -> SiteImageLoadingResult {
-        return try await withCheckedThrowingContinuation { continuation in
-            _ = downloadImage(with: url) { result in
-                switch result {
-                case .success(let imageResult):
-                    continuation.resume(returning: imageResult)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
+        return try await withThrowingTaskGroup(of: SiteImageLoadingResult.self) { group in
+            // Use task groups to have a timeout when downloading an image from Kingfisher
+            // due to https://sentry.io/share/issue/951b878416374dd98eccb6fd88fd8427
+            group.addTask {
+                return try await withCheckedThrowingContinuation { continuation in
+                    // Store a copy of the continuation to act on in the case the sleep finishes first
+                    self.continuation = continuation
+
+                    _ = self.downloadImage(with: url) { result in
+                        guard let continuation = self.continuation else { return }
+                        switch result {
+                        case .success(let imageResult):
+                            continuation.resume(returning: imageResult)
+                        case .failure(let error):
+                            continuation.resume(throwing: error)
+                        }
+                    }
                 }
             }
-        }
-    }
-}
 
-extension ImageDownloader: SiteImageDownloader {
-    func downloadImage(with url: URL,
-                       completionHandler: ((Result<SiteImageLoadingResult, KingfisherError>) -> Void)?
-    ) -> DownloadTask? {
-        downloadImage(with: url, options: nil, completionHandler: { result in
-            switch result {
-            case .success(let value):
-                completionHandler?(.success(value))
-            case .failure(let error):
-                completionHandler?(.failure(error))
+            group.addTask {
+                try await Task.sleep(nanoseconds: self.timeoutDelay * NSEC_PER_SEC)
+                try Task.checkCancellation()
+                let error = SiteImageError.unableToDownloadImage("Timeout reached")
+                self.continuation?.resume(throwing: error)
+                self.continuation = nil
+                throw error
             }
-        })
+
+            // wait for the first task and cancel the other one
+            let result = try await group.next()
+            group.cancelAll()
+            guard let result = result else {
+                throw SiteImageError.unableToDownloadImage("Result not present")
+            }
+            return result
+        }
     }
 }
 
