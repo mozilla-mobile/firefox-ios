@@ -5,8 +5,7 @@
 import UIKit
 import NotificationCenter
 import Shared
-
-private let log = LegacyLogger.browserLogger
+import Logger
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
@@ -16,6 +15,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
+    let logger: Logger = DefaultLogger.shared
 
     private func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
         let imageButton = ImageButtonWithLabel()
@@ -162,7 +162,9 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     func openContainingApp(_ urlSuffix: String = "", query: String) {
         let urlString = "\(model.scheme)://\(query)\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
-            log.info("Extension opened containing app: \(success)")
+            self.logger.log("Extension opened containing app: \(success)",
+                            level: .info,
+                            category: .setup)
         }
     }
 

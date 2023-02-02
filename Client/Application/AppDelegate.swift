@@ -7,9 +7,10 @@ import Storage
 import CoreSpotlight
 import UIKit
 import Common
+import Logger
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let log = LegacyLogger.browserLogger
+    private let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
@@ -44,7 +45,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // It's important this is the first thing that happens when the app is run
         DependencyHelper().bootstrapDependencies()
 
-        log.info("willFinishLaunchingWithOptions begin")
+        logger.log("willFinishLaunchingWithOptions begin",
+                   level: .info,
+                   category: .lifecycle)
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
@@ -55,7 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         menuBuilderHelper = MenuBuilderHelper()
 
-        log.info("willFinishLaunchingWithOptions end")
+        logger.log("willFinishLaunchingWithOptions end",
+                   level: .info,
+                   category: .lifecycle)
 
         return true
     }
@@ -65,7 +70,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        log.info("didFinishLaunchingWithOptions start")
+        logger.log("didFinishLaunchingWithOptions start",
+                   level: .info,
+                   category: .lifecycle)
 
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
@@ -84,7 +91,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         addObservers()
 
-        log.info("didFinishLaunchingWithOptions end")
+        logger.log("didFinishLaunchingWithOptions end",
+                   level: .info,
+                   category: .lifecycle)
 
         return true
     }
@@ -92,7 +101,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(_ application: UIApplication) {
-        log.info("applicationDidBecomeActive start")
+        logger.log("applicationDidBecomeActive start",
+                   level: .info,
+                   category: .lifecycle)
 
         shutdownWebServer?.cancel()
         shutdownWebServer = nil
@@ -117,7 +128,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.ratingPromptManager.updateData()
         }
 
-        log.info("applicationDidBecomeActive end")
+        logger.log("applicationDidBecomeActive end",
+                   level: .info,
+                   category: .lifecycle)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -127,7 +140,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        log.info("applicationDidEnterBackground start")
+        logger.log("applicationDidEnterBackground start",
+                   level: .info,
+                   category: .lifecycle)
 
         TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -146,7 +161,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         backgroundSyncUtil?.scheduleSyncOnAppBackground()
         tabManager.preserveTabs()
 
-        log.info("applicationDidEnterBackground end")
+        logger.log("applicationDidEnterBackground end",
+                   level: .info,
+                   category: .lifecycle)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

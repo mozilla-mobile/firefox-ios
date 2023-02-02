@@ -6,8 +6,6 @@ import Foundation
 import Shared
 import Kingfisher
 
-private let log = LegacyLogger.browserLogger
-
 class UITestAppDelegate: AppDelegate, FeatureFlaggable {
     lazy var dirForTestProfile = { return "\(self.appRootDir())/profile.testProfile" }()
 
@@ -93,7 +91,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         if launchArguments.contains(LaunchArguments.ClearProfile) {
             // Use a clean profile for each test session.
-            log.debug("Deleting all files in 'Documents' directory to clear the profile")
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate, clear: true)
         } else {
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
@@ -155,12 +152,8 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         return super.application(application, willFinishLaunchingWithOptions: launchOptions)
     }
 
-    /**
-     Use this to reset the application between tests.
-     **/
+    /// Use this to reset the application between tests.
     func resetApplication() {
-        log.debug("Wiping everything for a clean start.")
-
         // Clear image cache - Kingfisher
         KingfisherManager.shared.cache.clearMemoryCache()
         KingfisherManager.shared.cache.clearDiskCache()
@@ -183,7 +176,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             do {
                 try manager.removeItem(at: documents.appendingPathComponent(content))
             } catch {
-                log.debug("Couldn't delete some document contents.")
+                // Couldn't delete some document contents.
             }
         }
     }

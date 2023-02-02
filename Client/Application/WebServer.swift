@@ -4,6 +4,7 @@
 
 import Foundation
 import GCDWebServers
+import Logger
 import Shared
 
 protocol WebServerProtocol {
@@ -12,8 +13,7 @@ protocol WebServerProtocol {
 }
 
 class WebServer: WebServerProtocol {
-    private let log = LegacyLogger.browserLogger
-
+    private var logger: Logger
     static let WebServerSharedInstance = WebServer()
 
     class var sharedInstance: WebServer {
@@ -34,8 +34,9 @@ class WebServer: WebServerProtocol {
     /// so this prevents them from accessing any resources.
     fileprivate let sessionToken = UUID().uuidString
 
-    init() {
+    init(logger: Logger = DefaultLogger.shared) {
         credentials = URLCredential(user: sessionToken, password: "", persistence: .forSession)
+        self.logger = logger
     }
 
     @discardableResult func start() throws -> Bool {
@@ -77,7 +78,9 @@ class WebServer: WebServerProtocol {
             if let resource = NSURL(string: path)?.lastPathComponent {
                 server.addGETHandler(forPath: "/\(module)/\(resource)", filePath: path as String, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
             } else {
-                log.warning("Unable to locate resource at path: '\(path)'")
+                logger.log("Unable to locate resource at path: '\(path)'",
+                           level: .warning,
+                           category: .webview)
             }
         }
     }

@@ -10,8 +10,6 @@ import SwiftyJSON
 
 import XCTest
 
-private let log = LegacyLogger.syncLogger
-
 private func optTimestamp(x: AnyObject?) -> Timestamp? {
     guard let str = x as? String else { return nil }
     return decimalSecondsStringToTimestamp(str)
@@ -206,9 +204,7 @@ class MockSyncServer {
     private func recordsMatchingSpec(spec: SyncRequestSpec) -> (records: [EnvelopeJSON], offsetID: String?)? {
         // If we have a provided offset, handle that directly.
         if let offset = spec.offset {
-            log.debug("Got provided offset \(offset).")
             guard let remainder = self.continuations[offset] else {
-                log.error("Unknown offset.")
                 return nil
             }
 
@@ -217,7 +213,6 @@ class MockSyncServer {
 
             // Handle the smaller-than-limit or no-provided-limit cases.
             guard let limit = spec.limit, limit < remainder.count else {
-                log.debug("Returning all remaining items.")
                 return (remainder, nil)
             }
 
@@ -226,7 +221,6 @@ class MockSyncServer {
             self.offsets += 1
             let (returned, remaining) = splitArray(items: remainder, at: limit)
             self.continuations[next] = remaining
-            log.debug("Returning \(limit) items; next continuation is \(next).")
             return (returned, next)
         }
 
@@ -236,7 +230,6 @@ class MockSyncServer {
         }
 
         var items = Array(records)
-        log.debug("Got \(items.count) candidate records.")
 
         if spec.newer ?? 0 > 0 {
             items = items.filter { $0.modified > spec.newer! }
@@ -251,12 +244,10 @@ class MockSyncServer {
             switch sort {
             case SortOption.NewestFirst:
                 items = items.sorted { $0.modified > $1.modified }
-                log.debug("Sorted items newest first: \(items.map { $0.modified })")
             case SortOption.OldestFirst:
                 items = items.sorted { $0.modified < $1.modified }
-                log.debug("Sorted items oldest first: \(items.map { $0.modified })")
             case SortOption.Index:
-                log.warning("Index sorting not yet supported.")
+                break
             }
         }
 
@@ -430,7 +421,6 @@ class MockSyncServer {
             }
 
             let timestamp = self.modifiedTimeForCollection(collection: spec.collection)!
-            log.debug("Returning GET response with X-Last-Modified for \(items.count) records: \(timestamp).")
             return MockSyncServer.withHeaders(response: response, lastModified: timestamp, records: items.count)
         }
 
