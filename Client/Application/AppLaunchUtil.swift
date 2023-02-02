@@ -25,14 +25,7 @@ class AppLaunchUtil {
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
         if DebugSettingsBundleOptions.saveLogsToDocuments {
-            LegacyLogger.copyPreviousLogsToDocuments()
             logger.copyLogsToDocuments()
-        }
-
-        // Now roll logs.
-        DispatchQueue.global(qos: DispatchQoS.background.qosClass).async {
-            LegacyLogger.syncLogger.deleteOldLogsDownToSizeLimit()
-            LegacyLogger.browserLogger.deleteOldLogsDownToSizeLimit()
         }
 
         TelemetryWrapper.shared.setup(profile: profile)
@@ -47,11 +40,6 @@ class AppLaunchUtil {
         KeyboardHelper.defaultHelper.startObserving()
         DynamicFontHelper.defaultHelper.startObserving()
         MenuHelper.defaultHelper.setItems()
-
-        let logDate = Date()
-        // Create a new sync log file on cold app launch. Note that this doesn't roll old logs.
-        LegacyLogger.syncLogger.newLogWithDate(logDate)
-        LegacyLogger.browserLogger.newLogWithDate(logDate)
 
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
