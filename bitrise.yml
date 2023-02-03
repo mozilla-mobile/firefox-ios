@@ -158,7 +158,7 @@ workflows:
             # Fail if any command fails
             set -e
             echo "Run danger"
-            #swift run danger-swift ci
+            swift run danger-swift ci
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
