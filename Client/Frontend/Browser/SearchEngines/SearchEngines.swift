@@ -41,7 +41,7 @@ class SearchEngines {
 
     weak var delegate: SearchEngineDelegate?
 
-    init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider) {
+    init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()) {
         self.prefs = prefs
         // By default, show search suggestions
         self.shouldShowSearchSuggestions = prefs.boolForKey(showSearchSuggestions) ?? true
@@ -50,7 +50,7 @@ class SearchEngines {
         self.disabledEngines = getDisabledEngines()
         self.orderedEngines = []
 
-        engineProvider.getOrderedEngines { orderedEngines in
+        getOrderedEngines { orderedEngines in
             self.orderedEngines = orderedEngines
         }
     }
@@ -174,7 +174,9 @@ class SearchEngines {
     /// Get all known search engines, possibly as ordered by the user.
     private func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
-        getUnorderedBundledEnginesFor(locale: locale, completion: { [weak self] engineResults in
+        engineProvider.getUnorderedBundledEnginesFor(locale: locale,
+                                                     possibleLanguageIdentifier: possibilitiesForLanguageIdentifier(locale.identifier),
+                                                     completion: { [weak self] engineResults in
             guard let self = self else { return }
 
             let unorderedEngines = self.customEngines + engineResults

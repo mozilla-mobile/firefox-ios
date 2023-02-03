@@ -479,7 +479,7 @@ open class BrowserProfile: Profile {
     lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
     lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs, files: self.files, engineProvider: DefaultSearchEngineProvider())
+        return SearchEngines(prefs: self.prefs, files: self.files)
     }()
 
     func makePrefs() -> Prefs {

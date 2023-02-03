@@ -5,12 +5,15 @@
 import UIKit
 
 protocol SearchEngineProvider {
-    func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void)
+    func getUnorderedBundledEnginesFor(locale: Locale,
+                                       possibleLanguageIdentifier: [String],
+                                       completion: @escaping ([OpenSearchEngine]) -> Void)
 }
 
 class DefaultSearchEngineProvider: SearchEngineProvider {
-    func getUnorderedBundledEnginesFor(locale: Locale, completion: @escaping ([OpenSearchEngine]) -> Void ) {
-        let languageIdentifier = locale.identifier
+    func getUnorderedBundledEnginesFor(locale: Locale,
+                                       possibleLanguageIdentifier: [String],
+                                       completion: @escaping ([OpenSearchEngine]) -> Void ) {
         let region = locale.regionCode ?? "US"
         let parser = OpenSearchParser(pluginMode: true)
 
@@ -25,7 +28,7 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
             completion([])
             return
         }
-        let possibilities = possibilitiesForLanguageIdentifier(languageIdentifier)
+        let possibilities = possibleLanguageIdentifier
         let engineNames = defaultSearchPrefs.visibleDefaultEngines(for: possibilities, and: region)
         let defaultEngineName = defaultSearchPrefs.searchDefault(for: possibilities, and: region)
         assert(!engineNames.isEmpty, "No search engines")
@@ -42,52 +45,5 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
 
             completion(result)
         }
-    }
-
-    /// Get all known search engines, possibly as ordered by the user.
-    func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
-        let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
-        getUnorderedBundledEnginesFor(locale: locale, completion: { [weak self] engineResults in
-            guard let self = self else { return }
-
-            let unorderedEngines = self.customEngines + engineResults
-
-            // might not work to change the default.
-            guard let orderedEngineNames = self.prefs.stringArrayForKey(self.orderedEngineNames) else {
-                // We haven't persisted the engine order, so return whatever order we got from disk.
-
-                DispatchQueue.main.async {
-                    completion(unorderedEngines)
-                    self.delegate?.searchEnginesDidUpdate()
-                }
-
-                return
-            }
-
-            // We have a persisted order of engines, so try to use that order.
-            // We may have found engines that weren't persisted in the ordered list
-            // (if the user changed locales or added a new engine); these engines
-            // will be appended to the end of the list.
-            let orderedEngines = unorderedEngines.sorted { engine1, engine2 in
-                let index1 = orderedEngineNames.firstIndex(of: engine1.shortName)
-                let index2 = orderedEngineNames.firstIndex(of: engine2.shortName)
-
-                if index1 == nil && index2 == nil {
-                    return engine1.shortName < engine2.shortName
-                }
-
-                // nil < N for all non-nil values of N.
-                if index1 == nil || index2 == nil {
-                    return index1 ?? -1 > index2 ?? -1
-                }
-
-                return index1! < index2!
-            }
-
-            DispatchQueue.main.async {
-                completion(orderedEngines)
-                self.delegate?.searchEnginesDidUpdate()
-            }
-        })
     }
 }
