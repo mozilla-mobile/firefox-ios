@@ -7,7 +7,6 @@ import Foundation
 import XCTest
 import Shared
 
-
 /// Note: These tests assume search engines are available and populated at test start.
 ///
 /// With the recent change of search engines being available later (to prevent a blocking call on `main`)
@@ -21,27 +20,23 @@ class SearchEnginesTests: XCTestCase {
     private var profile: Profile!
     private var engines: SearchEngines!
     private var orderedEngines: [OpenSearchEngine]!
-    private var mockSearchEngineProvider = MockSearchEngineProvider()
+    private var mockSearchEngineProvider: MockSearchEngineProvider!
 
     override func setUp() {
         super.setUp()
 
         profile = MockProfile()
-        engines = SearchEngines(prefs: profile.prefs, files: profile.files, engineProvider: <#SearchEngineProvider#>)
-
-
+        mockSearchEngineProvider = MockSearchEngineProvider()
+        engines = SearchEngines(prefs: profile.prefs, files: profile.files, engineProvider: mockSearchEngineProvider)
     }
 
     override func tearDown() {
         super.tearDown()
 
         profile = nil
+        mockSearchEngineProvider = nil
         engines = nil
     }
-
-//    private func getOrderedEnginesForSetup() {
-//        engines.orderedEngines =
-//    }
 
     func testIncludesExpectedEngines() {
         // Verify that the set of shipped engines includes the expected subset.
@@ -85,7 +80,6 @@ class SearchEnginesTests: XCTestCase {
                                           searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                           suggestTemplate: nil,
                                           isCustomEngine: true)
-
     }
 
     func testDefaultEngine() {

@@ -47,8 +47,8 @@ class SearchEngines {
         self.shouldShowSearchSuggestions = prefs.boolForKey(showSearchSuggestions) ?? true
         self.fileAccessor = files
         self.engineProvider = engineProvider
-        self.disabledEngines = getDisabledEngines()
         self.orderedEngines = []
+        self.disabledEngines = getDisabledEngines()
 
         getOrderedEngines { orderedEngines in
             self.orderedEngines = orderedEngines

@@ -5,18 +5,18 @@
 import Foundation
 @testable import Client
 
-
 class MockSearchEngineProvider: SearchEngineProvider {
-    var getSomeDataCallCount = 0
-    var getSomeDataCompletion: ([OpenSearchEngine]) -> Void?
+    var getUnorderedEnginesCount = 0
+    var unorderedEngines: (([OpenSearchEngine]) -> Void)?
 
-    func callGetSomeDataCompletion(withResult result: @escaping ([OpenSearchEngine]) -> Void) {
-        getSomeDataCompletion(result)
+    func getUnorderedEngines(withResult result: [OpenSearchEngine]) {
+        unorderedEngines?(result)
     }
 
-    func getOrderedEngines(completion: @escaping ([Client.OpenSearchEngine]) -> Void) {
-        getSomeDataCallCount += 1
-        getSomeDataCompletion = completion
+    func getUnorderedBundledEnginesFor(locale: Locale,
+                                       possibleLanguageIdentifier: [String],
+                                       completion: @escaping ([OpenSearchEngine]) -> Void) {
+        getUnorderedEnginesCount += 1
+        unorderedEngines = completion
     }
-
 }
