@@ -1,5 +1,6 @@
 const glob = require("glob");
 const path = require("path");
+const webpack = require("webpack");
 
 const AllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/*.js");
 const AllFramesAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.js");
@@ -25,6 +26,24 @@ for (let [name, files] of Object.entries(needsFirefoxFile)) {
   }
 }
 
+// Custom plugin used to replace imports used in Desktop code that use uris:
+// resource://gre/modules/... with Assets/...
+// This is needed because aliases are not supported for URI imports.
+// See: https://github.com/webpack/webpack/issues/12792
+const CustomResourceURIWebpackPlugin = new webpack.NormalModuleReplacementPlugin(
+  /resource:\/\/gre\/modules\/(.*)/,
+  function (resource) {
+    console.log(resource.request.replace(
+      /resource:\/\/gre\/modules\//,
+      path.resolve(__dirname, 'Client/Assets/CC_Script')
+    ));
+    resource.request = resource.request.replace(
+      /resource:\/\/gre\/modules/,
+      "Assets/CC_Script"
+    );
+  }
+);
+
 module.exports = {
   mode: "production",
   entry: {
@@ -42,7 +61,7 @@ module.exports = {
   module: {
     rules: []
   },
-  plugins: [],
+  plugins: [CustomResourceURIWebpackPlugin],
   resolve: {
     fallback: {
       url: require.resolve("page-metadata-parser")
