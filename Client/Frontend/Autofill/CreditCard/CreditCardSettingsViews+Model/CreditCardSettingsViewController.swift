@@ -116,7 +116,7 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
                 }
             }
 
-            updateState(type: .empty)
+            updateState(type: .edit)
             return
         }
 

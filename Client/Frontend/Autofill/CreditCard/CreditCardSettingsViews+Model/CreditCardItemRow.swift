@@ -19,7 +19,8 @@ struct CreditCardItemRow: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(alignment: .center, spacing: 0) {
-                Image(systemName: "creditcard")
+                getImage(creditCard: item)
+                    .renderingMode(.original)
                     .resizable()
                     .frame(width: 24, height: 24)
                     .aspectRatio(contentMode: .fit)
@@ -54,7 +55,8 @@ struct CreditCardItemRow: View {
                             .font(.system(size: 17))
                             .foregroundColor(ux.subTextColor)
                     }
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity,
+                           alignment: .leading)
                 }
                 .padding(.leading, 24)
                 .padding(.trailing, 0)
@@ -70,5 +72,16 @@ struct CreditCardItemRow: View {
                 .padding(.trailing, 10)
         }
         .frame(maxHeight: 86)
+    }
+
+    func getImage(creditCard: CreditCard) -> Image {
+        let defaultImage = Image("credit_card_placeholder")
+
+        guard let type = CreditCardType(rawValue: creditCard.ccType),
+              let image = type.image else {
+            return defaultImage
+        }
+
+        return Image(uiImage: image)
     }
 }

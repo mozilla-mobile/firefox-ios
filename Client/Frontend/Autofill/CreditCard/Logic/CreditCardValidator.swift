@@ -17,7 +17,7 @@ enum CreditCardType: String, Equatable, CaseIterable {
     var image: UIImage? {
         switch self {
         case .visa:
-            return UIImage(named: "ImageIdentifiers.placeholderAvatar")
+            return UIImage(named: "logo_visa")
         case .mastercard:
             return UIImage(named: "logo_mastercard")
         case .amex:
@@ -38,7 +38,7 @@ enum CreditCardType: String, Equatable, CaseIterable {
     var validNumberLength: IndexSet {
         switch self {
         case .visa:
-            return IndexSet([13,16])
+            return IndexSet([13, 16])
         case .amex:
             return IndexSet(integer: 15)
         case .diners:
@@ -66,7 +66,6 @@ struct CreditCardValidator {
     var creditCardNumber: Int
 
     func check() -> CreditCardType? {
-
         let val = regEx.first { _, regex in
             var result = "\(creditCardNumber)".range(of: regex, options: .regularExpression)
             return (result != nil)

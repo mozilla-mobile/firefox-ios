@@ -6,34 +6,29 @@ import Foundation
 import SwiftUI
 
 struct RemoveCardButton: View {
-    @ObservedObject var viewModel: CreditCardListViewModel
-    
     var body: some View {
         VStack {
-            Divider()
+            Rectangle()
+                .fill(.gray)
+                .frame(maxWidth: .infinity)
                 .frame(height: 0.7)
+                .padding(.leading, 10)
+                .padding(.trailing, 10)
+            VStack {
+                Button(String.CreditCard.EditCard.RemoveCardButtonTitle) {
+                    print("Button pressed")
+                }
+                .font(.system(size: 17))
+                .foregroundColor(.red)
                 .padding(.leading, 16)
-                .hidden()
-            HStack {
-                Toggle(isOn: $viewModel.toggleState) {
-                    Text("Save and autofill cards")
-                }.font(.system(size: 17))
-                 .padding(.leading, 16)
-                 .padding(.trailing, 16)
-//                 .tint(viewModel.toggleState ? .blue : .gray)
+                .padding(.trailing, 16)
             }
-            Divider()
+            Rectangle()
+                .fill(.gray)
+                .frame(maxWidth: .infinity)
                 .frame(height: 0.7)
-                .padding(.leading, 16)
+                .padding(.leading, 10)
+                .padding(.trailing, 10)
         }
-        .frame(width: UIScreen.main.bounds.size.width, height: 42)
-//        .background(.white)
-    }
-}
-
-struct RemoveCardButton_Previews: PreviewProvider {
-    static var previews: some View {
-        
-        RemoveCardButton(viewModel: CreditCardListViewModel())
-    }
+        .frame(width: UIScreen.main.bounds.size.width, height: 42)    }
 }
