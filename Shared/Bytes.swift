@@ -7,10 +7,8 @@ import Foundation
 
 public typealias GUID = String
 
-/**
- * Utilities for futzing with bytes and such.
- */
-open class Bytes {
+/// Utilities for futzing with bytes and such.
+extension Bytes {
     open class func generateGUID() -> GUID {
         // Turns the standard NSData encoding into the URL-safe variant that Sync expects.
         return generateRandomBytes(9)

@@ -19,7 +19,7 @@ open class AppInfo {
             fatalError("Unable to get application Bundle (Bundle.main.bundlePath=\(bundle.bundlePath))")
         }
     }
-    
+
     public static var bundleIdentifier: String {
         return applicationBundle.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
     }
