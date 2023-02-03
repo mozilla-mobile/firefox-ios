@@ -572,13 +572,6 @@ class BrowserViewController: UIViewController {
         showQueuedAlertIfAvailable()
 
         prepareURLOnboardingContextualHint()
-
-        let vm = CreditCardSettingsViewModel(profile: profile)
-        let viewController = CreditCardSettingsViewController(
-            theme: themeManager.currentTheme,
-            creditCardViewModel: vm,
-            startingConfig: nil)
-        navigationController?.pushViewController(viewController, animated: true)
     }
 
     private func prepareURLOnboardingContextualHint() {
