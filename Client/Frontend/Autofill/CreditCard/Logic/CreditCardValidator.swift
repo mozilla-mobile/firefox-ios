@@ -8,7 +8,6 @@ enum CreditCardType: String, Equatable, CaseIterable {
     case visa = "VISA"
     case mastercard = "MASTERCARD"
     case amex = "AMEX"
-    case cartesbancaires = "CARTES BANCAIRES"
     case diners = "DINERS"
     case jcb = "JCB"
     case discover = "DISCOVER"
@@ -18,26 +17,24 @@ enum CreditCardType: String, Equatable, CaseIterable {
     var image: UIImage? {
         switch self {
         case .visa:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
+            return UIImage(named: "ImageIdentifiers.placeholderAvatar")
         case .mastercard:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
+            return UIImage(named: "logo_mastercard")
         case .amex:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
-        case .cartesbancaires:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
+            return UIImage(named: "logo_amex")
         case .diners:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
+            return UIImage(named: "logo_diners")
         case .jcb:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
+            return UIImage(named: "logo_jcb")
         case .discover:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
+            return UIImage(named: "logo_discover")
         case .mir:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
+            return UIImage(named: "logo_mir")
         case .unionpay:
-            return UIImage(named: ImageIdentifiers.placeholderAvatar)
+            return UIImage(named: "logo_unionpay")
         }
     }
-    
+
     var validNumberLength: IndexSet {
         switch self {
         case .visa:
@@ -59,7 +56,6 @@ struct CreditCardValidator {
         .visa: "^4[0-9]{6,}$",
         .mastercard: "^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$",
         .amex: "^3[47][0-9]{5,}$",
-        .cartesbancaires: "",
         .diners: "^3(?:0[0-5]|[68][0-9])[0-9]{4,}$",
         .jcb: "^(?:2131|1800|35[0-9]{3})[0-9]{3,}$",
         .discover: "^6(?:011|5[0-9]{2})[0-9]{3,}$",
@@ -75,7 +71,6 @@ struct CreditCardValidator {
             var result = "\(creditCardNumber)".range(of: regex, options: .regularExpression)
             return (result != nil)
         }
-
         return val?.key
     }
 }
