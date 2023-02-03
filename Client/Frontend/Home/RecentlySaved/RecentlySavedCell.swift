@@ -35,6 +35,9 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
 
+        isAccessibilityElement = true
+        accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell
+
         setupLayout()
     }
 
@@ -59,6 +62,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)
         itemTitle.text = viewModel.site.title
+        accessibilityLabel = viewModel.accessibilityLabel
         applyTheme(theme: theme)
     }
 
