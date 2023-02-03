@@ -11,6 +11,10 @@ public class DefaultLogger: Logger {
     private var sentry: SentryWrapper
     private var fileManager: LoggerFileManager
 
+    public var crashedLastLaunch: Bool {
+        return sentry.crashedLastLaunch
+    }
+
     init(swiftyBeaverBuilder: SwiftyBeaverBuilder = DefaultSwiftyBeaverBuilder(),
          sentryWrapper: SentryWrapper = DefaultSentryWrapper(),
          fileManager: LoggerFileManager = DefaultLoggerFileManager()) {

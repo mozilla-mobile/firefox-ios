@@ -190,13 +190,11 @@ public class SentryIntegration: SentryProtocol {
         captureEvent(event: event)
     }
 
-    // Laurie - Used in 2 places. Worth keeping?
     public func addAttributes(_ attributes: [String: Any]) {
         self.attributes = self.attributes.merge(with: attributes)
     }
 
     // Add manual breadcrumb
-    // Laurie - Not used
     public func addBreadcrumb(category: String, message: String) {
         let breadcrumb = Breadcrumb(level: .info, category: category)
         breadcrumb.message = message

@@ -5,6 +5,8 @@
 import Foundation
 
 public protocol Logger {
+    var crashedLastLaunch: Bool { get }
+
     func setup(sendUsageData: Bool)
 
     /// Log a new message to the logging system

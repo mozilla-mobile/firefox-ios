@@ -12,15 +12,6 @@ public enum AppName: String, CustomStringConvertible {
     }
 }
 
-public enum AppBuildChannel: String {
-    case release = "release"
-    case beta = "beta"
-    case developer = "developer"
-
-    // Used for unknown cases
-    case other = "other"
-}
-
 public enum KVOConstants: String {
     case loading = "loading"
     case estimatedProgress = "estimatedProgress"
@@ -54,19 +45,6 @@ public struct AppConstants {
     public static let isRunningPerfTests = ProcessInfo.processInfo.arguments.contains(LaunchArguments.PerformanceTest)
 
     public static let FxAiOSClientId = "1b1a3e44c54fbb58"
-
-    /// Build Channel.
-    public static let BuildChannel: AppBuildChannel = {
-        #if MOZ_CHANNEL_RELEASE
-            return AppBuildChannel.release
-        #elseif MOZ_CHANNEL_BETA
-            return AppBuildChannel.beta
-        #elseif MOZ_CHANNEL_FENNEC
-            return AppBuildChannel.developer
-        #else
-            return AppBuildChannel.other
-        #endif
-    }()
 
     public static let scheme: String = {
         guard let identifier = Bundle.main.bundleIdentifier else {
@@ -105,9 +83,6 @@ public struct AppConstants {
 
     /// The maximum length of a bookmark description stored by Firefox. Shared with Places on desktop.
     public static let DB_DESCRIPTION_LENGTH_MAX = 1024
-
-    /// Fixed short version for nightly builds
-    public static let NIGHTLY_APP_VERSION = "9000"
 
     /// Time that needs to pass before polling FxA for send tabs again, 86_400_000 milliseconds is 1 day
     public static let FXA_COMMANDS_INTERVAL = 86_400_000

@@ -2,9 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import UIKit
 
-open class DeviceInfo {
+extension DeviceInfo {
     // List of device names that don't support advanced visual settings
     static let lowGraphicsQualityModels = ["iPad",
                                            "iPad1,1",
@@ -65,10 +66,6 @@ open class DeviceInfo {
 
     open class func deviceModel() -> String {
         return UIDevice.current.model
-    }
-
-    open class func isSimulator() -> Bool {
-        return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }
 
     open class func isBlurSupported() -> Bool {
