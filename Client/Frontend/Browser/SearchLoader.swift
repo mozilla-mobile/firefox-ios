@@ -32,17 +32,6 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
     }()
 
-    fileprivate func getBookmarksAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return profile.places.searchBookmarks(query: query, limit: 5).bind { result in
-            guard let bookmarkItems = result.successValue else {
-                return deferMaybe(ArrayCursor(data: []))
-            }
-
-            let sites = bookmarkItems.map({ Site(url: $0.url, title: $0.title, bookmarked: true, guid: $0.guid) })
-            return deferMaybe(ArrayCursor(data: sites))
-        }
-    }
-
     fileprivate func getBookmarksAsSites(matchingSearchQuery query: String, limit: UInt, completionHandler: @escaping (([Site]) -> Void)) {
         profile.places.searchBookmarks(query: query, limit: limit).upon { result in
             guard let bookmarkItems = result.successValue else {
@@ -55,29 +44,8 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         }
     }
 
-    private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        profile.places.interruptReader()
-        return self.profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).bind { result in
-            guard let historyItems = result.successValue else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Error searching history",
-                    tag: .rustPlaces,
-                    severity: .error,
-                    description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
-                )
-                return deferMaybe(ArrayCursor(data: []))
-            }
-            let sites = historyItems.sorted {
-                // Sort decending by frecency score
-                $0.frecency > $1.frecency
-            }.map({
-                return Site(url: $0.url, title: $0.title )
-            }).uniqued()
-            return deferMaybe(ArrayCursor(data: sites))
-        }
-    }
-
     private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int, completionHandler: @escaping (([Site]) -> Void)) {
+        profile.places.interruptReader()
         profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).upon { result in
             guard let historyItems = result.successValue else {
                 SentryIntegration.shared.sendWithStacktrace(
@@ -127,7 +95,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                         queries.append(history)
                         group.leave()
                     }
-                    _ = group.wait(timeout: .distantFuture)arr
+                    _ = group.wait(timeout: .distantFuture)
                 }
 
                 DispatchQueue.main.async {

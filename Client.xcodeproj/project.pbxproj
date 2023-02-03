@@ -413,7 +413,6 @@
 		5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D528B01FD500B6F51E /* MockURLBarView.swift */; };
 		5A9A09D828B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9A09D728B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift */; };
 		5A9FF8492942454600DF9FBB /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A9FF8482942454600DF9FBB /* Common */; };
-		5AAB58D7298AB2560063AD64 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
 		5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
 		5AC40329291AFBDB002BF91C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
@@ -5404,14 +5403,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5AAB58D6298AB2520063AD64 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5AAB58D7298AB2560063AD64 /* RustMozillaAppServices.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		5FA2233A27F74067005B3D87 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -8697,7 +8688,6 @@
 			buildConfigurationList = 3B43E3E91D95C48E00BBA9DB /* Build configuration list for PBXNativeTarget "StoragePerfTests" */;
 			buildPhases = (
 				3B43E3CC1D95C48D00BBA9DB /* Sources */,
-				5AAB58D6298AB2520063AD64 /* Frameworks */,
 			);
 			buildRules = (
 			);
