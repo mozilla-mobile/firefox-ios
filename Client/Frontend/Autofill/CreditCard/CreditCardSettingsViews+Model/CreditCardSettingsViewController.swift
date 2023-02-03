@@ -14,12 +14,12 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
     var state: CreditCardSettingsState = .empty
     var startingConfig: CreditCardSettingsStartingConfig?
 
-    //MARK: - Views
+    //MARK: Views
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
     var creditCardAddEditView: UIHostingController<CreditCardEditView>
     var creditCardTableViewController: CreditCardTableViewController
 
-    //MARK: - Initializers
+    //MARK: Initializers
     init(theme: Theme,
          creditCardViewModel: CreditCardSettingsViewModel,
          startingConfig: CreditCardSettingsStartingConfig?) {
