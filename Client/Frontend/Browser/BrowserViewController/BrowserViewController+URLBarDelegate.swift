@@ -258,7 +258,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
-        urlBar.updateSearchEngineImage()
         if text.isEmpty {
             hideSearchController()
         } else {
@@ -305,7 +304,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
-        let engine = profile.searchEngines.defaultEngine
+        guard let engine = profile.searchEngines.defaultEngine else { return }
 
         if let searchURL = engine.searchURLForQuery(text) {
             // We couldn't find a matching search keyword, so do a search query.
@@ -325,7 +324,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
-        urlBar.updateSearchEngineImage()
+        urlBar.searchEnginesDidUpdate()
         guard let profile = profile as? BrowserProfile else { return }
 
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {

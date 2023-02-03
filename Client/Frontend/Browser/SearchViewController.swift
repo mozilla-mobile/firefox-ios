@@ -209,6 +209,8 @@ class SearchViewController: SiteTableViewController,
 
     var searchEngines: SearchEngines! {
         didSet {
+            guard let defaultEngine = searchEngines.defaultEngine else { return }
+
             suggestClient?.cancelPendingRequest()
 
             // Query and reload the table with new search suggestions.
@@ -217,7 +219,7 @@ class SearchViewController: SiteTableViewController,
             // Show the default search engine first.
             if !viewModel.isPrivate {
                 let ua = SearchViewController.userAgent ?? "FxSearch"
-                suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine, userAgent: ua)
+                suggestClient = SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
             }
 
             // Reload the footer list of search engines.
@@ -226,12 +228,14 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var quickSearchEngines: [OpenSearchEngine] {
+        guard let defaultEngine = searchEngines.defaultEngine else { return [] }
+
         var engines = searchEngines.quickSearchEngines
 
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
         if viewModel.isPrivate || !searchEngines.shouldShowSearchSuggestions {
-            engines?.insert(searchEngines.defaultEngine, at: 0)
+            engines?.insert(defaultEngine, at: 0)
         }
 
         return engines!
@@ -503,14 +507,15 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
+            guard let defaultEngine = searchEngines.defaultEngine else { return }
+
             recordSearchListSelectionTelemetry(type: .searchSuggestions)
             // Assume that only the default search engine can provide search suggestions.
-            let engine = searchEngines.defaultEngine
             guard let suggestions = suggestions else { return }
             guard let suggestion = suggestions[safe: indexPath.row] else { return }
-            if let url = engine.searchURLForQuery(suggestion) {
-                Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
-                GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
+            if let url = defaultEngine.searchURLForQuery(suggestion) {
+                Telemetry.default.recordSearch(location: .suggestion, searchEngine: defaultEngine.engineID ?? "other")
+                GleanMetrics.Search.counts["\(defaultEngine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
                 searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
             }
         case .openedTabs:
@@ -559,7 +564,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.remoteTabs.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
-            title = searchEngines.defaultEngine.headerSearchTitle
+            title = searchEngines.defaultEngine?.headerSearchTitle ?? ""
         default:  title = ""
         }
 

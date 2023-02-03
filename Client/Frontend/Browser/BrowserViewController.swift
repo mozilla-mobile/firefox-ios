@@ -1460,7 +1460,8 @@ class BrowserViewController: UIViewController {
 
     func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
         popToBVC()
-        let engine = profile.searchEngines.defaultEngine
+        guard let engine = profile.searchEngines.defaultEngine else { return }
+
         if let searchURL = engine.searchURLForQuery(text) {
             openURLInNewTab(searchURL, isPrivate: isPrivate)
             if let tab = tabManager.selectedTab {
@@ -1875,7 +1876,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     }
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
-        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
+        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine?.searchURLForQuery(url) else {
             logger.log("Invalid URL, and couldn't generate a search URL for it.",
                        level: .warning,
                        category: .library)
@@ -2006,7 +2007,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
         searchSettingsTableViewController.profile = self.profile
         // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
-            self.urlBar.updateSearchEngineImage()
+            self.urlBar.searchEnginesDidUpdate()
             self.searchController?.reloadSearchEngines()
             self.searchController?.reloadData()
         }

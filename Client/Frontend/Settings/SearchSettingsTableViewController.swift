@@ -30,7 +30,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
         // Otherwise, enable editing if we have at least one custom engine.
         let customEngineCount = model.orderedEngines.filter({$0.isCustomEngine}).count
-        return model.defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
+        return model.defaultEngine?.isCustomEngine == true ? customEngineCount > 1 : customEngineCount > 0
     }
 
     var model: SearchEngines!
@@ -161,7 +161,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
-            searchEnginePicker.selectedSearchEngineName = model.defaultEngine.shortName
+            searchEnginePicker.selectedSearchEngineName = model.defaultEngine?.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
         } else if indexPath.item + 1 == model.orderedEngines.count {
             let customSearchEngineForm = CustomSearchViewController()

@@ -7,13 +7,44 @@ import Foundation
 import XCTest
 import Shared
 
+
+/// Note: These tests assume search engines are available and populated at test start.
+///
+/// With the recent change of search engines being available later (to prevent a blocking call on `main`)
+/// these tests will fail. But in general app usage, search engines are available very early at startup.
+///
+/// These tests require the assumption that search engines are available instantly to hold. So, those fixtures
+/// have been added to `TBA`
 class SearchEnginesTests: XCTestCase {
     private let defaultSearchEngineName = "Google"
     private let expectedEngineNames = ["Amazon.com", "Bing", "DuckDuckGo", "Google", "eBay", "Wikipedia"]
+    private var profile: Profile!
+    private var engines: SearchEngines!
+    private var orderedEngines: [OpenSearchEngine]!
+    private var mockSearchEngineProvider = MockSearchEngineProvider()
+
+    override func setUp() {
+        super.setUp()
+
+        profile = MockProfile()
+        engines = SearchEngines(prefs: profile.prefs, files: profile.files, engineProvider: <#SearchEngineProvider#>)
+
+
+    }
+
+    override func tearDown() {
+        super.tearDown()
+
+        profile = nil
+        engines = nil
+    }
+
+//    private func getOrderedEnginesForSetup() {
+//        engines.orderedEngines =
+//    }
 
     func testIncludesExpectedEngines() {
         // Verify that the set of shipped engines includes the expected subset.
-        let profile = MockProfile()
         let engines = SearchEngines(prefs: profile.prefs, files: profile.files).orderedEngines
         XCTAssertTrue((engines?.count)! >= expectedEngineNames.count)
 
@@ -24,9 +55,8 @@ class SearchEnginesTests: XCTestCase {
 
     func testDefaultEngineOnStartup() {
         // If this is our first run, Google should be first for the en locale.
-        let profile = MockProfile()
         let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
-        XCTAssertEqual(engines.defaultEngine.shortName, defaultSearchEngineName)
+        XCTAssertEqual(engines.defaultEngine?.shortName, defaultSearchEngineName)
         XCTAssertEqual(engines.orderedEngines[0].shortName, defaultSearchEngineName)
     }
 
@@ -37,8 +67,9 @@ class SearchEnginesTests: XCTestCase {
                                           searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                           suggestTemplate: nil,
                                           isCustomEngine: true)
-        let profile = MockProfile()
         let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
+
+        engines.orderedEngines[0] = testEngine
         engines.addSearchEngine(testEngine)
         XCTAssertEqual(engines.orderedEngines[1].engineID, testEngine.engineID)
 
@@ -47,9 +78,17 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertEqual(deleted, [])
     }
 
+    func testDeletingCustomEngine() {
+        let testEngine = OpenSearchEngine(engineID: "ATester",
+                                          shortName: "ATester",
+                                          image: UIImage(),
+                                          searchTemplate: "http://firefox.com/find?q={searchTerm}",
+                                          suggestTemplate: nil,
+                                          isCustomEngine: true)
+
+    }
+
     func testDefaultEngine() {
-        let profile = MockProfile()
-        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
         let engineSet = engines.orderedEngines
 
         engines.defaultEngine = (engineSet?[0])!
@@ -72,9 +111,6 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testOrderedEngines() {
-        let profile = MockProfile()
-        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
-
         engines.orderedEngines = [expectedEngineNames[4], expectedEngineNames[2], expectedEngineNames[0]].map { name in
             for engine in engines.orderedEngines {
                 if engine.shortName == name {
@@ -101,8 +137,6 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testQuickSearchEngines() {
-        let profile = MockProfile()
-        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
         let engineSet = engines.orderedEngines
 
         // You can't disable the default engine.
@@ -143,9 +177,6 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testSearchSuggestionSettings() {
-        let profile = MockProfile()
-        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
-
         // By default, you should see search suggestions
         XCTAssertTrue(engines.shouldShowSearchSuggestions)
 
@@ -156,27 +187,8 @@ class SearchEnginesTests: XCTestCase {
         XCTAssertFalse(engines2.shouldShowSearchSuggestions)
     }
 
-    func testUnorderedSearchEngines() {
-        let profile = MockProfile()
-        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
-
-        XCTAssertEqual(
-            engines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "zh-TW")).compactMap({$0.shortName}),
-            ["Google", "Bing", "DuckDuckGo", "Wikipedia (zh)"])
-        XCTAssertEqual(
-            engines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-CA")).compactMap({$0.shortName}),
-            ["Google", "Amazon.com", "Bing", "DuckDuckGo", "eBay", "Wikipedia"])
-        XCTAssertEqual(
-            engines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "de-DE")).compactMap({$0.shortName}),
-            ["Google", "Amazon.de", "Bing", "DuckDuckGo", "eBay", "Ecosia", "Qwant", "Wikipedia (de)"])
-        XCTAssertEqual(
-            engines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-US")).compactMap({$0.shortName}),
-            ["Google", "Amazon.com", "Bing", "DuckDuckGo", "eBay", "Wikipedia"])
-    }
-
     func testGetOrderedEngines() {
         // setup an existing search engine in the profile
-        let profile = MockProfile()
         profile.prefs.setObject(["Google"], forKey: "search.orderedEngineNames")
         let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
         XCTAssert(engines.orderedEngines.count > 1, "There should be more than one search engine")
