@@ -315,7 +315,6 @@
 		437A857827E43FE100E42764 /* FxAWebViewTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A857727E43FE100E42764 /* FxAWebViewTelemetry.swift */; };
 		437A9B682681256800FB41C1 /* InactiveTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B672681256800FB41C1 /* InactiveTabCell.swift */; };
 		437A9B6A2681257F00FB41C1 /* InactiveTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */; };
-		438FE86129887D2F00155B10 /* NoSeparatorList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438FE86029887D2F00155B10 /* NoSeparatorList.swift */; };
 		438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438FE8632988ABA600155B10 /* CreditCardTableViewController.swift */; };
 		4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7FE246DAFBE00570811 /* FirefoxColors.swift */; };
 		4392FB20252EC49D00AD3D23 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
@@ -2568,7 +2567,6 @@
 		438DF00C2959B85B005E4C8F /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/TabsTray.strings"; sourceTree = "<group>"; };
 		438FAA9A28CF4BBE00F6C86B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		438FAA9B28CF4BBE00F6C86B /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
-		438FE86029887D2F00155B10 /* NoSeparatorList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSeparatorList.swift; sourceTree = "<group>"; };
 		438FE8632988ABA600155B10 /* CreditCardTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardTableViewController.swift; sourceTree = "<group>"; };
 		43904ED28118BAD713896491 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		4390F7FE246DAFBE00570811 /* FirefoxColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxColors.swift; sourceTree = "<group>"; };
@@ -6178,6 +6176,15 @@
 			path = UIKit;
 			sourceTree = "<group>";
 		};
+		439ED164298CB82000AFAAAF /* TBD */ = {
+			isa = PBXGroup;
+			children = (
+				439C48992976018E007C3DCD /* CreditCardListView.swift */,
+				43D16B7929831C7F009F8279 /* CreditCardAutofillToggle.swift */,
+			);
+			path = TBD;
+			sourceTree = "<group>";
+		};
 		43A5643423CD1E1B00B6857D /* Update */ = {
 			isa = PBXGroup;
 			children = (
@@ -6209,6 +6216,7 @@
 		43D00491296FC46E00CB0F31 /* CreditCard */ = {
 			isa = PBXGroup;
 			children = (
+				439ED164298CB82000AFAAAF /* TBD */,
 				438FE8622988AB8F00155B10 /* UIKit */,
 				43D16B7E29831CFE009F8279 /* Logic */,
 				43D16B8329831E8D009F8279 /* ViewComponents+Style */,
@@ -6222,7 +6230,6 @@
 			children = (
 				43D4BCB92972082400775FB5 /* CreditCardSettingsViewModel.swift */,
 				4346FF07295BA6A200F4D220 /* CreditCardSettingsViewController.swift */,
-				439C48992976018E007C3DCD /* CreditCardListView.swift */,
 				43D16B7B29831CD0009F8279 /* CreditCardItemRow.swift */,
 				43D16B7F29831DC5009F8279 /* CreditCardEditView.swift */,
 				43D00492296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift */,
@@ -6243,9 +6250,7 @@
 			children = (
 				43D16B8429831EA5009F8279 /* Style.swift */,
 				43D16B8629831EEF009F8279 /* RemoveCardButton.swift */,
-				43D16B7929831C7F009F8279 /* CreditCardAutofillToggle.swift */,
 				43D16B8129831E6A009F8279 /* FloatingTextField.swift */,
-				438FE86029887D2F00155B10 /* NoSeparatorList.swift */,
 			);
 			path = "ViewComponents+Style";
 			sourceTree = "<group>";
@@ -10826,7 +10831,6 @@
 				5A70EF1F295E3DFC00790249 /* UnitTestAppDelegate.swift in Sources */,
 				2128E27E2934F78600FB91BE /* CustomAppActivity.swift in Sources */,
 				966B0DC82926F60500A85A7E /* UIResponder+Extensions.swift in Sources */,
-				438FE86129887D2F00155B10 /* NoSeparatorList.swift in Sources */,
 				4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */,
 				E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */,
 				8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */,
