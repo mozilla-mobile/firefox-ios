@@ -136,7 +136,7 @@
     },
     {
       "target" : {
-        "containerPath" : "container:",
+        "containerPath" : "container:BrowserKit",
         "identifier" : "LoggerTests",
         "name" : "LoggerTests"
       }
