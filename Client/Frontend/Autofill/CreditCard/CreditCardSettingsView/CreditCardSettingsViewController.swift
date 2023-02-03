@@ -27,8 +27,12 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
         self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
         self.creditCardEmptyView = UIHostingController(rootView: CreditCardSettingsEmptyView())
-        self.creditCardAddEditView = UIHostingController(rootView: CreditCardEditView(viewModel: viewModel.subCardAddEditViewModel))
-        self.creditCardTableViewController = CreditCardTableViewController(theme: theme, viewModel: viewModel.subCardTableViewModel)
+        self.creditCardAddEditView =
+        UIHostingController(rootView: CreditCardEditView(
+            viewModel: viewModel.addEditViewModel,
+            removeButtonColor: Color(theme.colors.textWarning),
+            borderColor: Color(theme.colors.borderPrimary)))
+        self.creditCardTableViewController = CreditCardTableViewController(theme: theme, viewModel: viewModel.creditCardTableViewModel)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -78,23 +82,23 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
         hideAllViews()
 
         // Setup state and update view
-        setupSate()
+        setupState()
     }
 
-    func setupSate() {
+    func setupState() {
         // check if there are any starting config
         guard let startingConfig = startingConfig else {
             //Check if we have any credit cards to show in the list
             viewModel.listCreditCard { creditCards in
                 guard let creditCards = creditCards, !creditCards.isEmpty else {
-                    DispatchQueue.main.async {
-                        self.updateState(type: .empty)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.updateState(type: .empty)
                     }
                     return
                 }
-                DispatchQueue.main.async {
-                    self.viewModel.updateCreditCardsList(creditCards: creditCards)
-                    self.updateState(type: .list)
+                DispatchQueue.main.async { [weak self] in
+                    self?.viewModel.updateCreditCardsList(creditCards: creditCards)
+                    self?.updateState(type: .list)
                 }
             }
 

@@ -23,8 +23,8 @@ struct CreditCardSettingsStartingConfig {
 class CreditCardSettingsViewModel {
     var autofill: RustAutofill?
     var profile: Profile
-    var subCardAddEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel()
-    var subCardTableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
+    var addEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel()
+    var creditCardTableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
 
     public init(profile: Profile) {
         self.profile = profile
@@ -43,8 +43,8 @@ class CreditCardSettingsViewModel {
     }
 
     func updateCreditCardsList(creditCards: [CreditCard]) {
-        DispatchQueue.main.async {
-            self.subCardTableViewModel.creditCards = creditCards
+        DispatchQueue.main.async { [weak self] in
+            self?.creditCardTableViewModel.creditCards = creditCards
         }
     }
 }

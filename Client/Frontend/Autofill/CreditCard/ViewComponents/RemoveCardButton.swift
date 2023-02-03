@@ -6,10 +6,13 @@ import Foundation
 import SwiftUI
 
 struct RemoveCardButton: View {
+    let removeButtonColor: Color
+    let borderColor: Color
+
     var body: some View {
         VStack {
             Rectangle()
-                .fill(.gray)
+                .fill(borderColor)
                 .frame(maxWidth: .infinity)
                 .frame(height: 0.7)
                 .padding(.leading, 10)
@@ -19,12 +22,12 @@ struct RemoveCardButton: View {
                     print("Button pressed")
                 }
                 .font(.system(size: 17))
-                .foregroundColor(.red)
+                .foregroundColor(removeButtonColor)
                 .padding(.leading, 16)
                 .padding(.trailing, 16)
             }
             Rectangle()
-                .fill(.gray)
+                .fill(borderColor)
                 .frame(maxWidth: .infinity)
                 .frame(height: 0.7)
                 .padding(.leading, 10)

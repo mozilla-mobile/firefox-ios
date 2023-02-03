@@ -1050,7 +1050,7 @@ class ClearPrivateDataSetting: Setting {
 }
 
 class AutofillCreditCardSettings: Setting, FeatureFlaggable {
-    let profile: Profile
+    private let profile: Profile
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
     override var accessibilityIdentifier: String? { return "AutofillCreditCard" }
 
@@ -1063,9 +1063,9 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
     override func onClick(_ navigationController: UINavigationController?) {
         // Telemetry
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillSettings)
-        let vm = CreditCardSettingsViewModel(profile: profile)
+        let viewModel = CreditCardSettingsViewModel(profile: profile)
         let viewController = CreditCardSettingsViewController(theme: theme,
-                                                              creditCardViewModel: vm,
+                                                              creditCardViewModel: viewModel,
                                                               startingConfig: nil)
         navigationController?.pushViewController(viewController, animated: true)
     }
