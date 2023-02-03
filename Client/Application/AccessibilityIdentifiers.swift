@@ -88,6 +88,10 @@ public struct AccessibilityIdentifiers {
             static let itemCell = "JumpBackInCell"
         }
 
+        struct RecentlySaved {
+            static let itemCell = "RecentlySavedCell"
+        }
+
         struct SyncedTab {
             static let itemCell = "SyncedTabCell"
             static let cardTitle = "SyncedTabCardTitle"

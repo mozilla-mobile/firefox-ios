@@ -8,6 +8,9 @@ import Shared
 
 struct RecentlySavedCellViewModel {
     let site: Site
+    var accessibilityLabel: String {
+        return "\(site.title)"
+    }
 }
 
 class RecentlySavedViewModel {
