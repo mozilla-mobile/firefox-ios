@@ -6,25 +6,33 @@ import Foundation
 import SwiftUI
 
 struct FloatingTextField: View {
+    struct Colors {
+        let errorColor: Color
+        let titleColor: Color
+        let textFieldColor: Color
+    }
+
     var label: String
     @Binding var textVal: String
     var placeHolder: String = "Enter something here..."
     var errorString: String = ""
     var showError: Bool = false
-
+    var colors: Colors
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(label)
                 .font(.system(size: 15))
-                .foregroundColor(.gray)
+                .foregroundColor(colors.titleColor)
             TextField(placeHolder, text: $textVal)
                 .font(.system(size: 17))
                 .padding(.top, 7.5)
+                .foregroundColor(colors.textFieldColor)
             if showError {
                 HStack (spacing: 0) {
                     Image("error-autofill")
                     Text(errorString)
-                        .errorTextStyle()
+                        .errorTextStyle(color: colors.errorColor)
                 }
                 .padding(.top, 7.4)
             }

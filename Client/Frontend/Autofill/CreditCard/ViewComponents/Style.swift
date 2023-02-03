@@ -6,16 +6,18 @@ import Foundation
 import SwiftUI
 
 struct ErrorTextStyle : ViewModifier {
+    var color: Color
+
     func body(content: Content) -> some View {
         content
             .font(.system(size: 15))
             .padding(.leading, 10)
-            .foregroundColor(.red)
+            .foregroundColor(color)
     }
 }
 
 extension View {
-    func errorTextStyle() -> some View {
-        self.modifier(ErrorTextStyle())
+    func errorTextStyle(color: Color) -> some View {
+        self.modifier(ErrorTextStyle(color: color))
     }
 }

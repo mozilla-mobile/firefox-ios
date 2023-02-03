@@ -6,16 +6,17 @@ import Foundation
 import SwiftUI
 import Storage
 
-struct CreditCardItemRowUX {
-    var titleTextColor: Color
-    var subTextColor: Color
-    var separatorColor: Color
-}
 
 struct CreditCardItemRow: View {
-    let item: CreditCard
-    let ux: CreditCardItemRowUX
+    struct Colors {
+        let titleTextColor: Color
+        let subTextColor: Color
+        let separatorColor: Color
+    }
 
+    let item: CreditCard
+    let colors: Colors
+    
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(alignment: .center, spacing: 0) {
@@ -29,17 +30,17 @@ struct CreditCardItemRow: View {
                 VStack(spacing: 0) {
                     Text(item.ccName)
                         .font(.system(size: 17))
-                        .foregroundColor(ux.titleTextColor)
+                        .foregroundColor(colors.titleTextColor)
                         .frame(maxWidth: .infinity,
                                alignment: .leading)
 
                     HStack(spacing: 0) {
                         Text(item.ccType)
                             .font(.system(size: 17))
-                            .foregroundColor(ux.titleTextColor)
+                            .foregroundColor(colors.titleTextColor)
                         Text(item.ccNumberLast4)
                             .font(.system(size: 17))
-                            .foregroundColor(ux.subTextColor)
+                            .foregroundColor(colors.subTextColor)
                             .padding(.leading, 5)
                     }
                     .frame(maxWidth: .infinity,
@@ -50,10 +51,10 @@ struct CreditCardItemRow: View {
                     HStack(spacing: 0) {
                         Text("Expires")
                             .font(.system(size: 17))
-                            .foregroundColor(ux.subTextColor)
+                            .foregroundColor(colors.subTextColor)
                         Text("\(item.ccExpYear)")
                             .font(.system(size: 17))
-                            .foregroundColor(ux.subTextColor)
+                            .foregroundColor(colors.subTextColor)
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
@@ -65,7 +66,7 @@ struct CreditCardItemRow: View {
             .padding(.bottom, 10)
 
             Rectangle()
-                .fill(ux.separatorColor)
+                .fill(colors.separatorColor)
                 .frame(maxWidth: .infinity)
                 .frame(height: 0.7)
                 .padding(.leading, 10)
