@@ -45,7 +45,7 @@ public enum LoggerLevel: String {
     }
 
     func isGreaterOrEqualThanLevel(_ level: LoggerLevel) -> Bool {
-        return value > level.value
+        return value >= level.value
     }
 
     var sentryLevel: SentryLevel {

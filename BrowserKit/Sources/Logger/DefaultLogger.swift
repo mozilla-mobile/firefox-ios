@@ -30,7 +30,7 @@ public class DefaultLogger: Logger {
     public func log(_ message: String,
                     level: LoggerLevel,
                     category: LoggerCategory,
-                    extra: [String: Any]? = nil,
+                    extra: [String: String]? = nil,
                     description: String? = nil,
                     sendToSentry: Bool = false,
                     file: String = #file,
@@ -40,7 +40,7 @@ public class DefaultLogger: Logger {
         let extraEvents = bundleExtraEvents(extra: extra,
                                             description: description)
         let reducedExtra = reduce(extraEvents: extraEvents)
-        let loggerMessage = "\(message) \(reducedExtra)"
+        let loggerMessage = "\(message)\(reducedExtra)"
 
         // Log locally and in console
         switch level {
@@ -53,6 +53,8 @@ public class DefaultLogger: Logger {
         case .fatal:
             logger.error(loggerMessage, file, function, line: line, context: category)
         }
+
+        guard sendToSentry else { return }
 
         // Log to sentry
         sentry.send(message: message,
@@ -67,9 +69,9 @@ public class DefaultLogger: Logger {
 
     // MARK: - Private
 
-    private func bundleExtraEvents(extra: [String: Any]?,
-                                   description: String?) -> [String: Any] {
-        var extraEvents: [String: Any] = [:]
+    private func bundleExtraEvents(extra: [String: String]?,
+                                   description: String?) -> [String: String] {
+        var extraEvents: [String: String] = [:]
         if let paramEvents = extra {
             extraEvents = extraEvents.merge(with: paramEvents)
         }

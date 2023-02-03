@@ -14,7 +14,7 @@ protocol SentryWrapper {
     func send(message: String,
               category: LoggerCategory,
               level: LoggerLevel,
-              extraEvents: [String: Any]?)
+              extraEvents: [String: String]?)
 }
 
 class DefaultSentryWrapper: SentryWrapper {
@@ -87,7 +87,7 @@ class DefaultSentryWrapper: SentryWrapper {
     func send(message: String,
               category: LoggerCategory,
               level: LoggerLevel,
-              extraEvents: [String: Any]?) {
+              extraEvents: [String: String]?) {
         guard shouldSendEventFor(level) else {
             return
         }
