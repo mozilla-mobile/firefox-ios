@@ -5,7 +5,7 @@ pipelines:
   pipeline_multiple_shards:
     stages:
     - stage_1: {}
-    - stage_2: {}
+    #- stage_2: {}
 stages:
   stage_1:
     workflows:
@@ -158,7 +158,7 @@ workflows:
             # Fail if any command fails
             set -e
             echo "Run danger"
-            #swift run danger-swift ci
+            swift run danger-swift ci
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
