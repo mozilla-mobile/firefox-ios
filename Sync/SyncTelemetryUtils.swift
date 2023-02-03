@@ -17,7 +17,6 @@ public enum SyncReason: String {
     case user = "user"
     case syncNow = "syncNow"
     case didLogin = "didLogin"
-    case push = "push"
     case engineEnabled = "engineEnabled"
     case clientNameChanged = "clientNameChanged"
 }
@@ -465,6 +464,39 @@ public class GleanSyncOperationHelper {
 
         GleanMetrics.Pings.shared.tempSync.submit()
     }
+    
+    public func reportTelemetry(_ result: RustSyncResult) {
+        guard let json = result.telemetryJson,
+              let telemetry = try? RustSyncTelemetryPing.fromJSONString(
+                jsonObjectText: json
+              ) else {
+            return
+        }
+        
+        for sync in telemetry.syncs {
+            _ = GleanMetrics.Sync.syncUuid.generateAndSet()
+            
+            if let failureReason = sync.failureReason {
+                GleanMetrics.Sync.failureReason[String(describing: failureReason)].add()
+            }
+
+            for engine in sync.engines {
+                if engine.failureReason == nil {
+                    self.recordRustSyncEngineStats(engine.name,
+                                                   incoming: engine.incoming,
+                                                   outgoing: engine.outgoing)
+                } else {
+                    self.recordSyncEngineFailure(
+                        engine.name,
+                        String(describing: engine.failureReason))
+                }
+
+                self.submitSyncEnginePing(engine.name)
+            }
+
+            GleanMetrics.Pings.shared.tempSync.submit()
+        }
+    }
 
     private func recordSyncEngineStats(_ engineName: String, _ stats: SyncEngineStatsSession) {
         // Create maps on labels to stat value,
@@ -482,6 +514,47 @@ public class GleanSyncOperationHelper {
             ("failed_to_upload", stats.uploadStats.sentFailed)
         ].filter { (_, stat) in stat > 0 }
 
+        switch engineName {
+        case "tabs":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.outgoing[l].add(Int32(v)) }
+        case "bookmarks":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.outgoing[l].add(Int32(v)) }
+        case "history":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.outgoing[l].add(Int32(v)) }
+        case "logins":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.outgoing[l].add(Int32(v)) }
+        case "clients":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.outgoing[l].add(Int32(v)) }
+        default:
+            break
+        }
+    }
+    
+    private func recordRustSyncEngineStats(_ engineName: String,
+                                           incoming: IncomingInfo?,
+                                           outgoing: [OutgoingInfo])
+    {
+        let incomingLabelsToValue = [
+            ("applied", incoming?.applied ?? 0),
+            ("reconciled", incoming?.reconciled ?? 0),
+            ("failed_to_apply", incoming?.failed ?? 0)
+        ].filter { (_, stat) in stat > 0 }
+
+    // TODO: Check if outgoing should be aggregated this way
+        let outgoingLabelsToValue = [
+            ("uploaded", outgoing.reduce (0, { totalUploaded, rec in
+                totalUploaded + rec.sent
+            })),
+            ("failed_to_upload", outgoing.reduce (0, { totalFailed, rec in
+                totalFailed + rec.failed
+            }))
+        ].filter { (_, stat) in stat > 0 }
+        
         switch engineName {
         case "tabs":
             incomingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.incoming[l].add(Int32(v))}

@@ -849,6 +849,12 @@ public class RustLogins {
 
         return deferred
     }
+    
+    public func registerWithSyncManager() {
+        queue.async {
+            self.storage?.registerWithSyncManager()
+        }
+    }
 
     private func migrateSQLCipherDBIfNeeded(key: String) {
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
