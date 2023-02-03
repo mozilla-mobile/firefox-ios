@@ -33,8 +33,6 @@ struct CreditCardSettingsEmptyView: View {
                 Spacer()
                     .frame(height: 25)
                 Spacer()
-                Spacer()
-                Spacer()
             }
         }
     }

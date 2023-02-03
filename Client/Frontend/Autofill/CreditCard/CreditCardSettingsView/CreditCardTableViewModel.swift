@@ -11,13 +11,13 @@ import Shared
 class CreditCardTableViewModel {
     var creditCards: [CreditCard] = [CreditCard]() {
         didSet {
-            didUpdadteCreditCards?()
+            didUpdateCreditCards?()
         }
     }
 
-    var didUpdadteCreditCards: (() -> Void)?
+    var didUpdateCreditCards: (() -> Void)?
 
-    var autofillCreditCardStatus: Bool {
+    var isAutofillEnabled: Bool {
         get {
             let userdefaults = UserDefaults.standard
             let key = PrefsKeys.KeyAutofillCreditCardStatus
@@ -34,6 +34,6 @@ class CreditCardTableViewModel {
     }
 
     func updateToggle() {
-        autofillCreditCardStatus = !autofillCreditCardStatus
+        isAutofillEnabled = !isAutofillEnabled
     }
 }
