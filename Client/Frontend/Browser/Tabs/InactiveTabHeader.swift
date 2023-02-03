@@ -30,7 +30,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .headline,
-            size: 17)
+            maxSize: 17)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
