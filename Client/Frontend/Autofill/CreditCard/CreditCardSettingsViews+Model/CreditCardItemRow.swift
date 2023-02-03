@@ -12,7 +12,7 @@ struct CreditCardItemRowUX {
     var separatorColor: Color
 }
 
-struct CreditCardItemRow : View {
+struct CreditCardItemRow: View {
     let item: CreditCard
     let ux: CreditCardItemRowUX
 
@@ -24,7 +24,7 @@ struct CreditCardItemRow : View {
                     .frame(width: 24, height: 24)
                     .aspectRatio(contentMode: .fit)
                     .padding(.leading, 16)
-                
+
                 VStack(spacing: 0) {
                     Text(item.ccName)
                         .font(.system(size: 17))
@@ -42,7 +42,7 @@ struct CreditCardItemRow : View {
                             .padding(.leading, 5)
                     }
                     .frame(maxWidth: .infinity,
-                            alignment: .leading)
+                           alignment: .leading)
                     .padding(.top, 2)
                     .padding(.bottom, 2)
 
@@ -54,17 +54,14 @@ struct CreditCardItemRow : View {
                             .font(.system(size: 17))
                             .foregroundColor(ux.subTextColor)
                     }
-                    .frame(maxWidth: .infinity,
-                            alignment: .leading)
+                    .frame(maxWidth: .infinity)
                 }
                 .padding(.leading, 24)
                 .padding(.trailing, 0)
-//                .padding(.bottom, 5)
             }
             .padding(.top, 10)
             .padding(.bottom, 10)
 
-//            Spacer()
             Rectangle()
                 .fill(ux.separatorColor)
                 .frame(maxWidth: .infinity)
@@ -73,11 +70,5 @@ struct CreditCardItemRow : View {
                 .padding(.trailing, 10)
         }
         .frame(maxHeight: 86)
-
-//        .frame(maxWidth: .infinity,
-//                maxHeight: 86)
-//        .alignmentGuide(.listRowSeparatorLeading) { viewDimensions in
-//            return viewDimensions[.listRowSeparatorLeading] - UIScreen.main.bounds.size.width
-//        }
     }
 }
