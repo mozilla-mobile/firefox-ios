@@ -26,10 +26,11 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
 
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
+
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .body,
-            weight: .semibold,
-            maxSize: 16)
+            size: 16,
+            weight: .semibold)
         button.setImage(UIImage(named: ImageIdentifiers.trashIconMonochrome), for: .normal)
         button.tintColor = .black
         button.backgroundColor = .Photon.LightGrey30
