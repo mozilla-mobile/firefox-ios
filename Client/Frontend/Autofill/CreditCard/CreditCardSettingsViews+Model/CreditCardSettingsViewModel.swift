@@ -15,12 +15,6 @@ enum CreditCardSettingsState: String, Equatable, CaseIterable {
     case list = "List"
 }
 
-//enum CreditCardModifierState: String, Equatable, CaseIterable {
-//    case add = "Add"
-//    case edit = "Edit"
-//    case remove = "Remove"
-//}
-
 struct CreditCardSettingsStartingConfig {
     var actionToPerform: CreditCardSettingsState?
     var creditCard: CreditCard?
