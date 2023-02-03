@@ -9,28 +9,11 @@ import Storage
 import Shared
 
 class CreditCardTableViewController: UIViewController, ThemeApplicable {
-    var creditCards: [CreditCard] = [CreditCard]()
+    var viewModel: CreditCardTableViewModel
     var theme: Theme
 
-    var autofillCreditCardStatus: Bool {
-        get {
-            let userdefaults = UserDefaults.standard
-            let key = PrefsKeys.KeyAutofillCreditCardStatus
-            guard userdefaults.value(forKey: key) != nil else {
-                // Default value is true for autofill credit card input
-                return true
-            }
-
-            return userdefaults.bool(forKey: key)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: PrefsKeys.KeyAutofillCreditCardStatus)
-            toggleSwitch.setOn(autofillCreditCardStatus, animated: true)
-        }
-    }
-
     // MARK: View
-    lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                            forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
@@ -86,8 +69,9 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         return savedCardsTitleLabel
     }()
 
-    init(theme: Theme) {
+    init(theme: Theme, viewModel: CreditCardTableViewModel) {
         self.theme = theme
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -109,7 +93,11 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         view.addSubview(savedCardsTitleLabel)
         view.addSubview(tableView)
 
-        toggleSwitch.setOn(autofillCreditCardStatus, animated: true)
+        toggleSwitch.setOn(viewModel.autofillCreditCardStatus, animated: true)
+
+        viewModel.didUpdadteCreditCards = { [weak self] in
+            self?.reloadData()
+        }
 
         NSLayoutConstraint.activate([
             toggleSwitchContainer.topAnchor.constraint(equalTo: view.topAnchor),
@@ -151,13 +139,22 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
     func applyTheme(theme: Theme) {
         toggleSwitchContainerLine.backgroundColor = theme.colors.borderPrimary
         toggleSwitchContainer.backgroundColor = theme.colors.layer2
-        tableView.backgroundColor = theme.colors.layer2
+        tableView.backgroundColor = .clear// theme.colors.layer2
         toggleSwitch.onTintColor = theme.colors.actionPrimary
         view.backgroundColor = theme.colors.layer1
     }
 
-    @objc func autofillToggleTapped() {
-        autofillCreditCardStatus = !autofillCreditCardStatus
+    @objc private func autofillToggleTapped() {
+        viewModel.updateToggle()
+        updateToggleValue(value: viewModel.autofillCreditCardStatus)
+    }
+
+    func reloadData() {
+        tableView.reloadData()
+    }
+
+    func updateToggleValue(value: Bool) {
+        toggleSwitch.setOn(value, animated: true)
     }
 }
 
@@ -165,7 +162,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
                                          UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        creditCards.count
+        return viewModel.creditCards.count
     }
 
     func tableView(_ tableView: UITableView,
@@ -183,7 +180,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             subTextColor: subTextColor,
             separatorColor: separatorColor)
 
-        let creditCard = creditCards[indexPath.row]
+        let creditCard = viewModel.creditCards[indexPath.row]
 
         let creditCardRow = CreditCardItemRow(item: creditCard, ux: ux)
         hostingCell.host(creditCardRow, parentController: self)
