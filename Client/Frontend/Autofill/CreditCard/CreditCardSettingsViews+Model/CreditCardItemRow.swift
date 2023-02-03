@@ -44,8 +44,8 @@ struct CreditCardItemRow: View {
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
-                    .padding(.top, 2)
-                    .padding(.bottom, 2)
+                    .padding(.top, 3)
+                    .padding(.bottom, 3)
 
                     HStack(spacing: 0) {
                         Text("Expires")

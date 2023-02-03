@@ -25,7 +25,6 @@ struct FloatingTextField: View {
                     Image("error-autofill")
                     Text(errorString)
                         .errorTextStyle()
-                        
                 }
                 .padding(.top, 7.4)
             }
