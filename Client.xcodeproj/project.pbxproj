@@ -6168,14 +6168,6 @@
 			path = CC_Script;
 			sourceTree = "<group>";
 		};
-		439ED164298CB82000AFAAAF /* TBD iOS14 */ = {
-			isa = PBXGroup;
-			children = (
-				43D16B7929831C7F009F8279 /* CreditCardAutofillToggle.swift */,
-			);
-			path = "TBD iOS14";
-			sourceTree = "<group>";
-		};
 		43A5643423CD1E1B00B6857D /* Update */ = {
 			isa = PBXGroup;
 			children = (
@@ -6207,7 +6199,6 @@
 		43D00491296FC46E00CB0F31 /* CreditCard */ = {
 			isa = PBXGroup;
 			children = (
-				439ED164298CB82000AFAAAF /* TBD iOS14 */,
 				43D16B7E29831CFE009F8279 /* Logic */,
 				43D16B8329831E8D009F8279 /* ViewComponents+Style */,
 				43D16B7D29831CEA009F8279 /* CreditCardSettingsViews+Model */,
@@ -6243,6 +6234,7 @@
 				43D16B8429831EA5009F8279 /* Style.swift */,
 				43D16B8629831EEF009F8279 /* RemoveCardButton.swift */,
 				43D16B8129831E6A009F8279 /* FloatingTextField.swift */,
+				43D16B7929831C7F009F8279 /* CreditCardAutofillToggle.swift */,
 			);
 			path = "ViewComponents+Style";
 			sourceTree = "<group>";

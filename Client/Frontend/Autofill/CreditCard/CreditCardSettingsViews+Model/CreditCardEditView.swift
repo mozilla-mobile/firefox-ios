@@ -52,7 +52,7 @@ struct CreditCardEditView: View {
     @ObservedObject var viewModel: CreditCardEditViewModel
 
         var body: some View {
-            VStack(spacing: 11){
+            VStack(spacing: 11) {
                 FloatingTextField(label: "Name on Card",
                                   textVal: $viewModel.nameOnCard,
                                   placeHolder: "",
