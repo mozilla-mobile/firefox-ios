@@ -352,6 +352,12 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
 
         return deferred
     }
+    
+    public func registerWithSyncManager() {
+        writerQueue.async {
+            self.api?.registerWithSyncManager()
+        }
+    }
 
     public func resetBookmarksMetadata() -> Success {
         let deferred = Success()

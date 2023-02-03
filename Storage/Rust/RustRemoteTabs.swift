@@ -157,6 +157,27 @@ public class RustRemoteTabs {
 
         return deferred
     }
+    
+    public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
+        return self.getAll().bind { result in
+            if let error = result.failureValue {
+                return deferMaybe(error)
+            }
+            
+            guard let records = result.successValue else {
+                return deferMaybe(nil)
+            }
+            
+            let client = records.first(where: { $0.clientId == fxaDeviceId })?.toRemoteClient()
+            return deferMaybe(client)
+        }
+    }
+    
+    public func registerWithSyncManager() {
+        queue.async {
+           self.storage?.registerWithSyncManager()
+        }
+    }
 }
 
 public extension RemoteTabRecord {
@@ -172,5 +193,23 @@ public extension RemoteTabRecord {
 public extension ClientRemoteTabs {
     func toClientAndTabs(client: RemoteClient) -> ClientAndTabs {
         return ClientAndTabs(client: client, tabs: self.remoteTabs.map { $0.toRemoteTab(client: client)}.compactMap { $0 })
+    }
+    
+    func toClientAndTabs() -> ClientAndTabs {
+        let client = self.toRemoteClient()
+        let tabs = self.remoteTabs.map { $0.toRemoteTab(client: client)}.compactMap { $0 }
+
+        return ClientAndTabs(client: client, tabs: tabs)
+    }
+    
+    func toRemoteClient() -> RemoteClient {
+        return RemoteClient(guid: self.clientId,
+                            name: self.clientName,
+                            modified: UInt64(self.lastModified),
+                            type: "\(self.deviceType)",
+                            formfactor: nil,
+                            os: nil,
+                            version: nil,
+                            fxaDeviceId: self.clientId)
     }
 }

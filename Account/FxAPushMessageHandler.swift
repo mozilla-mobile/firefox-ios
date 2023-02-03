@@ -125,10 +125,24 @@ extension FxAPushMessageHandler {
                             }
 
                             waitForClient = Deferred<Maybe<String>>()
-                            profile.remoteClientsAndTabs.getClient(fxaDeviceId: deviceId).uponQueue(.main) { result in
-                                guard let device = result.successValue else {
-                                    waitForClient?.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
-                                    return
+                            
+                            let usingSyncManager = UserDefaults
+                                .standard
+                                .bool(forKey: PrefsKeys.UsingRustSyncManager)
+                            if usingSyncManager {
+                                profile.tabs.getClient(fxaDeviceId: deviceId)
+                                    .uponQueue(.main) { result in
+
+                                    guard let device = result.successValue else {
+                                        waitForClient?
+                                            .fill(Maybe(failure: result.failureValue ??
+                                                        "Unknown Error"))
+                                        return
+                                    }
+                                    messages.append(
+                                        PushMessage.deviceDisconnected(device?.name))
+                                    waitForClient?.fill(
+                                        Maybe(success: device?.name ?? "Unknown Device"))
                                 }
                                 messages.append(PushMessage.deviceDisconnected(device?.name))
                                 waitForClient?.fill(Maybe(success: device?.name ?? "Unknown Device"))
