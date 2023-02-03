@@ -5,7 +5,7 @@
 import Foundation
 import SwiftUI
 
-struct ErrorTextStyle : ViewModifier {
+struct ErrorTextStyle: ViewModifier {
     var color: Color
 
     func body(content: Content) -> some View {

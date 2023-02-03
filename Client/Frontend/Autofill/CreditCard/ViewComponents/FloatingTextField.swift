@@ -18,7 +18,7 @@ struct FloatingTextField: View {
     var errorString: String = ""
     var showError: Bool = false
     var colors: Colors
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(label)
@@ -29,7 +29,7 @@ struct FloatingTextField: View {
                 .padding(.top, 7.5)
                 .foregroundColor(colors.textFieldColor)
             if showError {
-                HStack (spacing: 0) {
+                HStack(spacing: 0) {
                     Image("error-autofill")
                     Text(errorString)
                         .errorTextStyle(color: colors.errorColor)

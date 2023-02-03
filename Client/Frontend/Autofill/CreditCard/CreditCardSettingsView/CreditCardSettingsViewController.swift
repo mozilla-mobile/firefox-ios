@@ -14,12 +14,12 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
     var state: CreditCardSettingsState = .empty
     var startingConfig: CreditCardSettingsStartingConfig?
 
-    //MARK: Views
+    // MARK: Views
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
     var creditCardAddEditView: UIHostingController<CreditCardEditView>
     var creditCardTableViewController: CreditCardTableViewController
 
-    //MARK: Initializers
+    // MARK: Initializers
     init(theme: Theme,
          creditCardViewModel: CreditCardSettingsViewModel,
          startingConfig: CreditCardSettingsStartingConfig?) {
@@ -87,8 +87,8 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
 
     func setupState() {
         // check if there are any starting config
-        guard let startingConfig = startingConfig else {
-            //Check if we have any credit cards to show in the list
+        guard startingConfig != nil else {
+            // Check if we have any credit cards to show in the list
             viewModel.listCreditCard { creditCards in
                 guard let creditCards = creditCards, !creditCards.isEmpty else {
                     DispatchQueue.main.async { [weak self] in
@@ -122,18 +122,6 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
             creditCardTableViewController.reloadData()
             creditCardTableViewController.view.isHidden = false
         }
-    }
-
-    func setupAdd() {
-
-    }
-
-    func setupEdit() {
-
-    }
-
-    func setupList() {
-
     }
 
     func hideAllViews() {

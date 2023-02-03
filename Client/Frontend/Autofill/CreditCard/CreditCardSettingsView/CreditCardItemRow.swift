@@ -6,7 +6,6 @@ import Foundation
 import SwiftUI
 import Storage
 
-
 struct CreditCardItemRow: View {
     struct Colors {
         let titleTextColor: Color
@@ -16,7 +15,7 @@ struct CreditCardItemRow: View {
 
     let item: CreditCard
     let colors: Colors
-    
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(alignment: .center, spacing: 0) {

@@ -10,7 +10,8 @@ struct CreditCardSettingsEmptyView: View {
         ZStack {
             Color(UIColor.clear)
                 .edgesIgnoringSafeArea(.all)
-            VStack() {
+            VStack {
+                Spacer()
                 Spacer()
                     .frame(height: 25)
                 Image("credit_card_placeholder")
@@ -30,8 +31,6 @@ struct CreditCardSettingsEmptyView: View {
                     .padding(.leading, 10)
                     .padding(.trailing, 10)
                     .padding([.top], -5)
-                Spacer()
-                    .frame(height: 25)
                 Spacer()
             }
         }

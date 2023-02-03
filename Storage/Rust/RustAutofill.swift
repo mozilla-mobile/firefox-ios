@@ -36,11 +36,11 @@ public struct UnencryptedCreditCardFields {
     public var ccType: String
 
     public init(ccName: String,
-         ccNumber: String,
-         ccNumberLast4: String,
-         ccExpMonth: Int64,
-         ccExpYear: Int64,
-         ccType: String) {
+                ccNumber: String,
+                ccNumberLast4: String,
+                ccExpMonth: Int64,
+                ccExpYear: Int64,
+                ccType: String) {
         self.ccName = ccName
         self.ccNumber = ccNumber
         self.ccNumberLast4 = ccNumberLast4
