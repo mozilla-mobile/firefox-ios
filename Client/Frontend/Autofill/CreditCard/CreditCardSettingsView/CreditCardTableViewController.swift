@@ -30,27 +30,16 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         return tableView
     }()
 
-    private var toggleSwitchContainer: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private var toggleSwitchContainer: UIView = .build { view in }
 
-    private var toggleSwitchContainerLine: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private var toggleSwitchContainerLine: UIView = .build { view in }
 
-    private var toggleSwitchLabel: UILabel = {
-        var toggleSwitchLabel = UILabel()
+    private var toggleSwitchLabel: UILabel = .build { toggleSwitchLabel in
         toggleSwitchLabel.font = UIFont.systemFont(ofSize: 17.0,
                                                    weight: UIFont.Weight.regular)
         toggleSwitchLabel.numberOfLines = 1
         toggleSwitchLabel.text = String.CreditCard.EditCard.ToggleToAllowAutofillTitle
-        toggleSwitchLabel.translatesAutoresizingMaskIntoConstraints = false
-        return toggleSwitchLabel
-    }()
+    }
 
     private var toggleSwitch: UISwitch = .build { toggleSwitch in
         toggleSwitch.addTarget(self,
@@ -93,9 +82,9 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         view.addSubview(savedCardsTitleLabel)
         view.addSubview(tableView)
 
-        toggleSwitch.setOn(viewModel.autofillCreditCardStatus, animated: true)
+        toggleSwitch.setOn(viewModel.isAutofillEnabled, animated: true)
 
-        viewModel.didUpdadteCreditCards = { [weak self] in
+        viewModel.didUpdateCreditCards = { [weak self] in
             self?.reloadData()
         }
 
@@ -139,14 +128,14 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
     func applyTheme(theme: Theme) {
         toggleSwitchContainerLine.backgroundColor = theme.colors.borderPrimary
         toggleSwitchContainer.backgroundColor = theme.colors.layer2
-        tableView.backgroundColor = .clear// theme.colors.layer2
+        tableView.backgroundColor = .clear
         toggleSwitch.onTintColor = theme.colors.actionPrimary
         view.backgroundColor = theme.colors.layer1
     }
 
     @objc private func autofillToggleTapped() {
         viewModel.updateToggle()
-        updateToggleValue(value: viewModel.autofillCreditCardStatus)
+        updateToggleValue(value: viewModel.isAutofillEnabled)
     }
 
     func reloadData() {
@@ -175,14 +164,15 @@ extension CreditCardTableViewController: UITableViewDelegate,
         let titleTextColor = Color(theme.colors.textPrimary)
         let subTextColor = Color(theme.colors.textSecondary)
         let separatorColor = Color(theme.colors.borderPrimary)
-        let ux = CreditCardItemRowUX(
+        let colors = CreditCardItemRow.Colors(
             titleTextColor: titleTextColor,
             subTextColor: subTextColor,
             separatorColor: separatorColor)
 
         let creditCard = viewModel.creditCards[indexPath.row]
 
-        let creditCardRow = CreditCardItemRow(item: creditCard, ux: ux)
+        let creditCardRow = CreditCardItemRow(item: creditCard,
+                                              colors: colors)
         hostingCell.host(creditCardRow, parentController: self)
 
         return hostingCell
