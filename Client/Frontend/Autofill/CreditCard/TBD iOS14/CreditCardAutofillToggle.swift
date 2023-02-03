@@ -6,7 +6,7 @@ import Foundation
 import SwiftUI
 
 struct CreditCardAutofillToggle: View {
-    @ObservedObject var viewModel: CreditCardListViewModel
+    @State private var toggleState = false
 
     var body: some View {
         VStack {
@@ -15,7 +15,7 @@ struct CreditCardAutofillToggle: View {
                 .padding(.leading, 16)
                 .hidden()
             HStack {
-                Toggle(isOn: $viewModel.toggleState) {
+                Toggle(isOn: $toggleState) {
                     Text("Save and autofill cards")
                 }.font(.system(size: 17))
                  .padding(.leading, 16)
@@ -27,12 +27,5 @@ struct CreditCardAutofillToggle: View {
                 .padding(.leading, 16)
         }
         .frame(width: UIScreen.main.bounds.size.width, height: 42)
-    }
-}
-
-struct CreditCardAutofillToggle_Previews: PreviewProvider {
-    static var previews: some View {
-        
-        CreditCardAutofillToggle(viewModel: CreditCardListViewModel())
     }
 }

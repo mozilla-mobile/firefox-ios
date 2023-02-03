@@ -78,7 +78,7 @@ struct CreditCardEditView: View {
                     .frame(height: 0.7)
 
                 Spacer()
-                
+
                 RemoveCardButton()
             }
             .padding(.top, 20)

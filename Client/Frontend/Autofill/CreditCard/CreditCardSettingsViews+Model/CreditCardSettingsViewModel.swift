@@ -23,14 +23,13 @@ struct CreditCardSettingsStartingConfig {
 class CreditCardSettingsViewModel {
     var autofill: RustAutofill?
     var profile: Profile
-    var subCardListViewModel: CreditCardListViewModel = CreditCardListViewModel()
     var subCardAddEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel()
+    var subCardTableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
 
     public init(profile: Profile) {
         self.profile = profile
         guard let profile = profile as? BrowserProfile else { return }
         self.autofill = profile.autofill
-        setupListViewModel()
     }
 
     func listCreditCard(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
@@ -43,27 +42,9 @@ class CreditCardSettingsViewModel {
         })
     }
 
-    func setupListViewModel() {
-        autofill?.listCreditCards(completion: { creditCards, err in
-            guard err == nil, let creditCards = creditCards else {
-                return
-            }
-
-            self.subCardListViewModel.creditCards = creditCards
-        })
+    func updateCreditCardsList(creditCards: [CreditCard]) {
+        DispatchQueue.main.async {
+            self.subCardTableViewModel.creditCards = creditCards
+        }
     }
-
-//    func injectDummyData() {
-//        let cardList: [UnencryptedCreditCardFields] = [
-//            UnencryptedCreditCardFields(ccName: "Allen Burges", ccNumber: "1234567891234567", ccNumberLast4: "4567", ccExpMonth: 8, ccExpYear: 2023, ccType: "VISA"),
-//
-//            UnencryptedCreditCardFields(ccName: "Macky Otter", ccNumber: "0987654323456789", ccNumberLast4: "6789", ccExpMonth: 9, ccExpYear: 2023, ccType: "MASTERCARD")
-//        ]
-//
-//        cardList.forEach { card in
-//            autofill?.addCreditCard(creditCard: card, completion: { _,_ in
-//                self.setupListViewModel()
-//            })
-//        }
-//    }
 }
