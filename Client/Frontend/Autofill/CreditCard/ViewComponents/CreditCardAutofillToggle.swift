@@ -20,7 +20,6 @@ struct CreditCardAutofillToggle: View {
                 }.font(.system(size: 17))
                  .padding(.leading, 16)
                  .padding(.trailing, 16)
-
             }
             Divider()
                 .frame(height: 0.7)

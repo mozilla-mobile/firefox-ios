@@ -4491,7 +4491,6 @@ extension String {
 // MARK: - Credit Card
 extension String {
     public struct CreditCard {
-
         // Settings / Empty State
         public struct Settings {
             public static let EmptyListTitle = MZLocalizedString(
@@ -4593,13 +4592,13 @@ extension String {
                 tableName: nil,
                 value: "Remove the card?",
                 comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
-            
+
             public static let RemoveCardSublabel = MZLocalizedString(
                 "SnackBar.RemoveCard.Sublabel.v110",
                 tableName: nil,
                 value: "This will remove the card from all of your synced devices.",
                 comment: "Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices")
-            
+
             public static let CancelRemoveCardButton = MZLocalizedString(
                 "SnackBar.CancelRemoveCard.Button.v110",
                 tableName: nil,

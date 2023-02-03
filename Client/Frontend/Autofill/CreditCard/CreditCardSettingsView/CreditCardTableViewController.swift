@@ -42,7 +42,7 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
     }
 
     private var toggleSwitch: UISwitch = .build { toggleSwitch in
-        toggleSwitch.addTarget(self,
+        toggleSwitch.addTarget(CreditCardTableViewController.self,
                                action: #selector(autofillToggleTapped),
                                for: .valueChanged)
         toggleSwitch.translatesAutoresizingMaskIntoConstraints = false

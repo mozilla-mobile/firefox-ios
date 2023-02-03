@@ -13,23 +13,23 @@ class CreditCardEditViewModel: ObservableObject {
     @Published var nameIsValid = true
     @Published var numberIsValid = true
     @Published var expirationIsValid = true
-    @Published var nameOnCard : String = "" {
+    @Published var nameOnCard: String = "" {
         didSet (val) {
             nameIsValid = nameOnCard.isEmpty
             print("\(val)")
         }
     }
 
-    @Published var expirationDate : String = "" {
+    @Published var expirationDate: String = "" {
         didSet (val) {
             numberIsValid = true
             print("\(val)")
         }
     }
 
-    @Published var cardNumber : String = "" {
+    @Published var cardNumber: String = "" {
         didSet (val) {
-            expirationIsValid = true// !nameOnCard.isEmpty
+            expirationIsValid = true
             print("\(val)")
         }
     }
@@ -45,5 +45,4 @@ class CreditCardEditViewModel: ObservableObject {
         self.errorState = errorState
         self.enteredValue = enteredValue
     }
-
 }
