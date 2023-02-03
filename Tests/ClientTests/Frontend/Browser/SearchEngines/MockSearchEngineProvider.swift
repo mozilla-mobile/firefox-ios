@@ -9,8 +9,21 @@ class MockSearchEngineProvider: SearchEngineProvider {
     var getUnorderedEnginesCount = 0
     var unorderedEngines: (([OpenSearchEngine]) -> Void)?
 
+    var mockEngines: [OpenSearchEngine] = [OpenSearchEngine(engineID: "ATester",
+                                                            shortName: "ATester",
+                                                            image: UIImage(),
+                                                            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+                                                            suggestTemplate: nil,
+                                                            isCustomEngine: true)]
+
     func getUnorderedEngines(withResult result: [OpenSearchEngine]) {
-        unorderedEngines?(result)
+        unorderedEngines?(mockEngines)
+    }
+
+    func getOrderedEngines(customEngines: [OpenSearchEngine],
+                           orderedEngineNames: [String]?,
+                           completion: @escaping ([OpenSearchEngine]) -> Void) {
+        completion(mockEngines)
     }
 
     func getUnorderedBundledEnginesFor(locale: Locale,

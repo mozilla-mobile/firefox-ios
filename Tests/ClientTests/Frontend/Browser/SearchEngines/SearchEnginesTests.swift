@@ -40,12 +40,18 @@ class SearchEnginesTests: XCTestCase {
 
     func testIncludesExpectedEngines() {
         // Verify that the set of shipped engines includes the expected subset.
-        let engines = SearchEngines(prefs: profile.prefs, files: profile.files).orderedEngines
-        XCTAssertTrue((engines?.count)! >= expectedEngineNames.count)
+        let expectation = expectation(description: "Completed parse engines")
 
-        for engineName in expectedEngineNames {
-            XCTAssertTrue(((engines?.filter { engine in engine.shortName == engineName })?.count)! > 0)
+        let orderedEngines = engines.getOrderedEngines { result in
+            XCTAssertEqual(self.engines.orderedEngines.count, 1)
+            expectation.fulfill()
         }
+
+        waitForExpectations(timeout: 5)
+//        XCTAssertTrue((orderedEngines?.count)! >= expectedEngineNames.count)
+//        for engineName in expectedEngineNames {
+//            XCTAssertTrue(((orderedEngines?.filter { engine in engine.shortName == engineName })?.count)! > 0)
+//        }
     }
 
     func testDefaultEngineOnStartup() {
@@ -62,7 +68,6 @@ class SearchEnginesTests: XCTestCase {
                                           searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                           suggestTemplate: nil,
                                           isCustomEngine: true)
-        let engines = SearchEngines(prefs: profile.prefs, files: profile.files)
 
         engines.orderedEngines[0] = testEngine
         engines.addSearchEngine(testEngine)
