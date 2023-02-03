@@ -5,9 +5,11 @@
 import Foundation
 import Shared
 import WebKit
+import Logger
 
 class CreditCardHelper: TabContentScript {
-    fileprivate weak var tab: Tab?
+    private weak var tab: Tab?
+    private var logger: Logger = DefaultLogger.shared
 
     class func name() -> String {
         return "CreditCardHelper"
@@ -36,7 +38,6 @@ class CreditCardHelper: TabContentScript {
         //       ],
         //     "id": request["id"]!,
         // ]
-        let response: [String: Any] = [:]
 
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: "asd")
@@ -45,7 +46,9 @@ class CreditCardHelper: TabContentScript {
             guard let webView = tab?.webView else {return}
             webView.evaluateJavascriptInDefaultContentWorld(fillCreditCardInfoCallback)
         } catch let error as NSError {
-          print(error)
+            logger.log("Credit card script error \(error)",
+                       level: .debug,
+                       category: .webview)
         }
     }
 }
