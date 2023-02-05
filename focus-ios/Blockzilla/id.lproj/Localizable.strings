@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Situs Teratas";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Buka";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sesi Baru";
 

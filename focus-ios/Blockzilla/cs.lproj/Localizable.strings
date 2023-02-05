@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Top stránky";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Odemknout";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nová relace";
 
@@ -549,6 +552,9 @@
 
 /* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
 "TooltipBodyText.ShieldIcon" = "Aplikace %@ zabránila tomuto serveru ve vašem sledování. Klepnutím na ikonu štítu se dozvíte, co bylo zablokováno.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Máme je! Tomuto serveru jsme zabránili ve vašem sledování. Klepnutím na ikonu štítu se dozvíte, co bylo zablokováno.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Klepnutím na ikonu koše kdykoliv zahladíte všechny stopy po vašem prohlížení.";

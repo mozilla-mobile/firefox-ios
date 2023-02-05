@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "熱門網站";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "解鎖";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "開新使用階段";
 
