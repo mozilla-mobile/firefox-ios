@@ -11,7 +11,7 @@
       "channel": "release",
       "userFacingName": "iOS Message Experiment: Default Browser Card Copy",
       "userFacingDescription": "Experimenting on the messaging in the homepage card for default browser.",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -146,7 +146,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true') && (app_version|versionCompare('109.!') >= 0) && (language in ['de', 'en', 'es', 'fr', 'it', 'ja', 'nl', 'pt', 'ru', 'zh'])))",
       "startDate": "2023-01-05",
-      "enrollmentEndDate": "2023-01-12",
+      "enrollmentEndDate": "2023-02-06",
       "endDate": null,
       "proposedDuration": 21,
       "proposedEnrollment": 7,
