@@ -232,7 +232,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func searchEnginesDidUpdate() {
         self.searchIconImageView.image = profile.searchEngines.defaultEngine?.image
     }
