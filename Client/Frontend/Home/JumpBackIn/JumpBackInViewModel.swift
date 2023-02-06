@@ -22,6 +22,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
     var prepareContextualHint: ((SyncedTabCell) -> Void)?
+    // TODO: FXIOS-5639 Remove opening new tab should handle itself the dismissal of the keyboard
     private var urlBar: URLBarViewProtocol
 
     weak var delegate: HomepageDataModelDelegate?

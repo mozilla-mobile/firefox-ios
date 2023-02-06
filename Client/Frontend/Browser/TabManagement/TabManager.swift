@@ -57,6 +57,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     var selectedIndex: Int { return _selectedIndex }
     private let logger: Logger
 
+    // TODO: Remove FXIOS-5639 it was introduced to fix bug that will be taken care on refactoring
     var didChangedPanelSelection: Bool = true
     var didAddNewTab: Bool = true
     var tabDisplayType: TabDisplayType = .TabGrid
