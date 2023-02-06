@@ -51,7 +51,7 @@ struct CreditCardItemRow: View {
                         Text("Expires")
                             .font(.system(.body))
                             .foregroundColor(colors.subTextColor)
-                        Text(String(item.ccExpYear))
+                        Text("\(item.ccExpYear)")
                             .font(.system(.body))
                             .foregroundColor(colors.subTextColor)
                             .padding(.leading, 5)
