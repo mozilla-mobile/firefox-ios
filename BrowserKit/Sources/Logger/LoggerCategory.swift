@@ -14,15 +14,15 @@ public enum LoggerCategory: String {
     // Relates to more than one area (example Profile binds storage, sync, tabs together)
     case core
 
+    // Related to experiments, nimbus and the messaging framework
+    case experiments
+
     // Related to library UI and it's data management throughout the app.
     // This includes bookmarks, downloads, reader mode and history.
     case library
 
     // Related to the application lifecycle
     case lifecycle
-
-    // Related to experiments, nimbus and the messaging framework
-    case experiments
 
     // Related to the setup of services on app launch
     case setup
