@@ -648,7 +648,14 @@ extension BrowserViewController: WKNavigationDelegate {
             // block and use a temporary document instead
             tab.temporaryDocument = TemporaryDocument(preflightResponse: response,
                                                       request: request)
-            let url = tab.temporaryDocument?.getURL().value
+            let group = DispatchGroup()
+            var url: URL?
+            group.enter()
+            tab.temporaryDocument?.getURL(completionHandler: { docURL in
+                url = docURL
+                group.leave()
+            })
+            _ = group.wait(timeout: .distantFuture)
 
             if previewHelper.canOpen(url: url) {
                 // Open our helper and cancel this response from the webview.
