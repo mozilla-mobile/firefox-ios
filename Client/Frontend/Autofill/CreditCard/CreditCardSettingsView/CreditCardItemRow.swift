@@ -85,3 +85,30 @@ struct CreditCardItemRow: View {
         return Image(uiImage: image)
     }
 }
+
+struct CreditCardItemRow_Previews: PreviewProvider {
+    static var previews: some View {
+        let creditCard = CreditCard(guid: "1",
+                                    ccName: "Allen Burges",
+                                    ccNumberEnc: "1234567891234567",
+                                    ccNumberLast4: "4567",
+                                    ccExpMonth: 1234567,
+                                    ccExpYear: 2023,
+                                    ccType: "VISA",
+                                    timeCreated: 1234678,
+                                    timeLastUsed: nil,
+                                    timeLastModified: 123123,
+                                    timesUsed: 123123)
+        let colors = CreditCardItemRow.Colors(titleTextColor: .gray,
+                                              subTextColor: .gray,
+                                              separatorColor: .gray)
+
+        CreditCardItemRow(item: creditCard, colors: colors)
+            .environment(\.sizeCategory, .extraSmall)
+
+        CreditCardItemRow(item: creditCard, colors: colors)
+
+        CreditCardItemRow(item: creditCard, colors: colors)
+            .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
+    }
+}
