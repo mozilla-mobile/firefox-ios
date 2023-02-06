@@ -50,12 +50,14 @@ class HomepageViewControllerTests: XCTestCase {
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
         let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let urlBar = URLBarView(profile: profile)
+        let overlayManager = MockOverlayModeManager()
 
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
         let firefoxHomeViewController = HomepageViewController(profile: profile,
                                                                tabManager: tabManager,
-                                                               urlBar: urlBar)
+                                                               urlBar: urlBar,
+                                                               overlayManager: overlayManager)
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }
