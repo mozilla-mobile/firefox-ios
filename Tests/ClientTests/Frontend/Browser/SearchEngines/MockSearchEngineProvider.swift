@@ -9,12 +9,56 @@ class MockSearchEngineProvider: SearchEngineProvider {
     var getUnorderedEnginesCount = 0
     var unorderedEngines: (([OpenSearchEngine]) -> Void)?
 
-    var mockEngines: [OpenSearchEngine] = [OpenSearchEngine(engineID: "ATester",
-                                                            shortName: "ATester",
-                                                            image: UIImage(),
-                                                            searchTemplate: "http://firefox.com/find?q={searchTerm}",
-                                                            suggestTemplate: nil,
-                                                            isCustomEngine: true)]
+    var mockEngines: [OpenSearchEngine] = [
+        OpenSearchEngine(
+            engineID: "ATester",
+            shortName: "ATester",
+            image: UIImage(),
+            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            suggestTemplate: nil,
+            isCustomEngine: true
+        ),
+        OpenSearchEngine(
+            engineID: "BTester",
+            shortName: "BTester",
+            image: UIImage(),
+            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            suggestTemplate: nil,
+            isCustomEngine: true
+        ),
+        OpenSearchEngine(
+            engineID: "CTester",
+            shortName: "CTester",
+            image: UIImage(),
+            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            suggestTemplate: nil,
+            isCustomEngine: true
+        ),
+        OpenSearchEngine(
+            engineID: "DTester",
+            shortName: "DTester",
+            image: UIImage(),
+            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            suggestTemplate: nil,
+            isCustomEngine: true
+        ),
+        OpenSearchEngine(
+            engineID: "ETester",
+            shortName: "ETester",
+            image: UIImage(),
+            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            suggestTemplate: nil,
+            isCustomEngine: true
+        ),
+        OpenSearchEngine(
+            engineID: "FTester",
+            shortName: "FTester",
+            image: UIImage(),
+            searchTemplate: "http://firefox.com/find?q={searchTerm}",
+            suggestTemplate: nil,
+            isCustomEngine: true
+        )
+    ]
 
     func getUnorderedEngines(withResult result: [OpenSearchEngine]) {
         unorderedEngines?(mockEngines)

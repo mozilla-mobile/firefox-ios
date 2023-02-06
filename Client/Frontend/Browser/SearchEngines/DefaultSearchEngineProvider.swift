@@ -24,7 +24,6 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
                                       completion: { [weak self] engineResults in
-            guard let self = self else { return }
 
             let unorderedEngines = customEngines + engineResults
 
