@@ -63,9 +63,12 @@ class BrowserViewController: UIViewController {
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing: Bool = false
     var currentMiddleButtonState: MiddleButtonState?
-    fileprivate var customSearchBarButton: UIBarButtonItem?
+    private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
+    // TODO: Remove at FXIOS-5639 Feature flag like to use during the refactoring
+    private var shouldUseOverlayManager = false
+    private var overlayManager: OverlayModeManager?
 
     var contextHintVC: ContextualHintViewController
 
@@ -460,6 +463,10 @@ class BrowserViewController: UIViewController {
 
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
+
+        if shouldUseOverlayManager {
+            overlayManager = DefaultOverlayModeManager(urlBarView: urlBar)
+        }
     }
 
     private func setupNotifications() {
@@ -957,7 +964,8 @@ class BrowserViewController: UIViewController {
         let homepageViewController = HomepageViewController(
             profile: profile,
             tabManager: tabManager,
-            urlBar: urlBar)
+            urlBar: urlBar,
+            overlayManager: overlayManager)
         homepageViewController.homePanelDelegate = self
         homepageViewController.libraryPanelDelegate = self
         homepageViewController.sendToDeviceDelegate = self
@@ -1027,6 +1035,8 @@ class BrowserViewController: UIViewController {
     }
 
     private func enterOverlayMode() {
+        guard !shouldUseOverlayManager else { return }
+
         // Delay enterOverlay mode after dismissableView is dismiss
         if let viewcontroller = presentedViewController as? OnViewDismissable {
             viewcontroller.onViewDismissed = { [weak self] in
@@ -1044,6 +1054,8 @@ class BrowserViewController: UIViewController {
     }
 
     private func leaveOverlayMode(didCancel cancel: Bool) {
+        guard !shouldUseOverlayManager else { return }
+
         urlBar.leaveOverlayMode(didCancel: cancel)
     }
 
@@ -2113,6 +2125,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
 
+        // TODO: Remove this block was added to fix https://mozilla-hub.atlassian.net/browse/FXIOS-4018
+        // but will be handled in the refactoring
         if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
             if tab.url == nil, !tab.isRestoring {
                 if tabManager.didChangedPanelSelection && !tabManager.didAddNewTab {
@@ -2132,6 +2146,7 @@ extension BrowserViewController: TabManagerDelegate {
         // If we are restoring tabs then we update the count once at the end
         tabManager.didAddNewTab = true
         if !isRestoring {
+            // TODO: Call to manager enterOverlayMode here
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self

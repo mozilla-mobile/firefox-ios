@@ -85,6 +85,7 @@
 		2137785F297F3B1B00D01309 /* DownloadsPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137785E297F3B1B00D01309 /* DownloadsPanelViewModel.swift */; };
 		2137786129802B7000D01309 /* DownloadsPanelViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137786029802B7000D01309 /* DownloadsPanelViewModelTests.swift */; };
 		213778632980448C00D01309 /* DownloadFileFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213778622980448C00D01309 /* DownloadFileFetcher.swift */; };
+		2137786529832C8900D01309 /* OverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137786429832C8900D01309 /* OverlayModeManager.swift */; };
 		213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */; };
 		213B67A827CE721E000542F5 /* StartAtHomeHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */; };
 		21534904288201E300FADB4D /* GleanPlumbMessageManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */; };
@@ -108,6 +109,7 @@
 		21A7C44E283539170071D996 /* IntroViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44D283539170071D996 /* IntroViewModel.swift */; };
 		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
 		21B2844A28464FF0003EA521 /* OnboardingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */; };
+		21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */; };
 		21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */; };
 		21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */; };
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
@@ -1900,6 +1902,7 @@
 		2137785E297F3B1B00D01309 /* DownloadsPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPanelViewModel.swift; sourceTree = "<group>"; };
 		2137786029802B7000D01309 /* DownloadsPanelViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsPanelViewModelTests.swift; sourceTree = "<group>"; };
 		213778622980448C00D01309 /* DownloadFileFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadFileFetcher.swift; sourceTree = "<group>"; };
+		2137786429832C8900D01309 /* OverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayModeManager.swift; sourceTree = "<group>"; };
 		213B67A527CE682B000542F5 /* StartAtHomeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelper.swift; sourceTree = "<group>"; };
 		213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAtHomeHelperTests.swift; sourceTree = "<group>"; };
 		215349022881FA3C00FADB4D /* GleanPlumbMessageManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GleanPlumbMessageManagerTests.swift; sourceTree = "<group>"; };
@@ -1924,6 +1927,7 @@
 		21A7C44D283539170071D996 /* IntroViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModel.swift; sourceTree = "<group>"; };
 		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
 		21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewModel.swift; sourceTree = "<group>"; };
+		21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockOverlayModeManager.swift; sourceTree = "<group>"; };
 		21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+ToolbarActions.swift"; sourceTree = "<group>"; };
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIDevice.swift; sourceTree = "<group>"; };
@@ -6538,6 +6542,7 @@
 				8AD40FC627BADC3400672675 /* ToolbarTextField.swift */,
 				0BF0DB931A8545800039F300 /* URLBarView.swift */,
 				8AD40FCE27BADC6A00672675 /* URLTextField.swift */,
+				2137786429832C8900D01309 /* OverlayModeManager.swift */,
 			);
 			path = "Toolbar+URLBar";
 			sourceTree = "<group>";
@@ -7160,6 +7165,7 @@
 				8ABA9C8C28931223002C0077 /* MockDispatchQueue.swift */,
 				965C3C95293431FC006499ED /* MockLaunchSessionProvider.swift */,
 				5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */,
+				21B41A1B298B1876008BC0A2 /* MockOverlayModeManager.swift */,
 				8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				8A2366F928A302E500846D1B /* MockSponsoredPocketAPI.swift */,
@@ -10633,6 +10639,7 @@
 				E10A1F752863BC51001EEA80 /* InactiveTabItemCell.swift in Sources */,
 				8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */,
 				8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */,
+				2137786529832C8900D01309 /* OverlayModeManager.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */,
 				96A562A027D6D0E80045144A /* ContileProvider.swift in Sources */,
@@ -10852,6 +10859,7 @@
 				965C3C9829343445006499ED /* MockAppSessionManager.swift in Sources */,
 				8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */,
 				CA24B53924ABFE250093848C /* LoginsListSelectionHelperTests.swift in Sources */,
+				21B41A1D298B187A008BC0A2 /* MockOverlayModeManager.swift in Sources */,
 				2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */,
 				5A9A09D228AFD51900B6F51E /* MockHomepageDataModelDelegate.swift in Sources */,
 				D525DFB325FBE5E000B18763 /* TabTests.swift in Sources */,
