@@ -37,8 +37,12 @@ NSString* const FSReadingListAddReadingListItemNotification = @"FSReadingListAdd
     // To keep this as simple as possible and have as little as possible coupling between this Objective-C
     // singleton and our Swift world, we simply send out a notification that our AppDelegate (which has access
     // to the browser profile and reading list service) can respond to.
+    NSMutableDictionary* userInfo = [NSMutableDictionary new];
+    userInfo[@"URL"] = URL;
+    userInfo[@"Title"] = title;
     [[NSNotificationCenter defaultCenter] postNotificationName: FSReadingListAddReadingListItemNotification
-        object:self userInfo: @{@"URL": URL, @"Title": title}];
+                                                        object: self
+                                                      userInfo: userInfo];
     return YES;
 }
 @end
