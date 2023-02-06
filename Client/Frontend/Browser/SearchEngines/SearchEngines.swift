@@ -116,7 +116,7 @@ class SearchEngines {
         disabledEngines[engine.shortName] = true
     }
 
-    func deleteCustomEngine(_ engine: OpenSearchEngine) {
+    func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping () -> Void) {
         // We can't delete a preinstalled engine or an engine that is currently the default.
         if !engine.isCustomEngine || isEngineDefault(engine) {
             return
@@ -128,6 +128,8 @@ class SearchEngines {
         getOrderedEngines { orderedEngines in
             self.orderedEngines = orderedEngines
             self.delegate?.searchEnginesDidUpdate()
+
+            completion()
         }
     }
 
