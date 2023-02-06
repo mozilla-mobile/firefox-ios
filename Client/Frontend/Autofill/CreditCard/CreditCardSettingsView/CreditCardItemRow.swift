@@ -18,7 +18,7 @@ struct CreditCardItemRow: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            HStack(alignment: .center, spacing: 0) {
+            HStack(alignment: .center, spacing: 24) {
                 getImage(creditCard: item)
                     .renderingMode(.original)
                     .resizable()
@@ -28,17 +28,17 @@ struct CreditCardItemRow: View {
 
                 VStack(spacing: 0) {
                     Text(item.ccName)
-                        .font(.system(size: 17))
+                        .font(.system(.body))
                         .foregroundColor(colors.titleTextColor)
                         .frame(maxWidth: .infinity,
                                alignment: .leading)
 
                     HStack(spacing: 0) {
                         Text(item.ccType)
-                            .font(.system(size: 17))
+                            .font(.system(.body))
                             .foregroundColor(colors.titleTextColor)
                         Text(item.ccNumberLast4)
-                            .font(.system(size: 17))
+                            .font(.system(.body))
                             .foregroundColor(colors.subTextColor)
                             .padding(.leading, 5)
                     }
@@ -49,17 +49,17 @@ struct CreditCardItemRow: View {
 
                     HStack(spacing: 0) {
                         Text("Expires")
-                            .font(.system(size: 17))
+                            .font(.system(.body))
                             .foregroundColor(colors.subTextColor)
-                        Text("\(item.ccExpYear)")
-                            .font(.system(size: 17))
+                        Text(String(item.ccExpYear))
+                            .font(.system(.body))
                             .foregroundColor(colors.subTextColor)
+                            .padding(.leading, 5)
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
                 }
-                .padding(.leading, 24)
-                .padding(.trailing, 0)
+                .padding(.trailing, 10)
             }
             .padding(.top, 10)
             .padding(.bottom, 10)
