@@ -32,24 +32,21 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         return try! String(contentsOfFile: filePath!).components(separatedBy: "\n")
     }()
 
-    // `weak` usage here allows deferred queue to be the owner. The deferred is always filled and this set to nil,
-    // this is defensive against any changes to queue (or cancellation) behaviour in future.
-    private weak var currentDeferredHistoryQuery: CancellableDeferred<Maybe<Cursor<Site>>>?
-
-    fileprivate func getBookmarksAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
-        return profile.places.searchBookmarks(query: query, limit: 5).bind { result in
+    fileprivate func getBookmarksAsSites(matchingSearchQuery query: String, limit: UInt, completionHandler: @escaping (([Site]) -> Void)) {
+        profile.places.searchBookmarks(query: query, limit: limit).upon { result in
             guard let bookmarkItems = result.successValue else {
-                return deferMaybe(ArrayCursor(data: []))
+                completionHandler([])
+                return
             }
 
             let sites = bookmarkItems.map({ Site(url: $0.url, title: $0.title, bookmarked: true, guid: $0.guid) })
-            return deferMaybe(ArrayCursor(data: sites))
+            completionHandler(sites)
         }
     }
 
-    private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int) -> Deferred<Maybe<Cursor<Site>>> {
+    private func getHistoryAsSites(matchingSearchQuery query: String, limit: Int, completionHandler: @escaping (([Site]) -> Void)) {
         profile.places.interruptReader()
-        return self.profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).bind { result in
+        profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).upon { result in
             guard let historyItems = result.successValue else {
                 SentryIntegration.shared.sendWithStacktrace(
                     message: "Error searching history",
@@ -57,7 +54,8 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                     severity: .error,
                     description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
                 )
-                return deferMaybe(ArrayCursor(data: []))
+                completionHandler([])
+                return
             }
             let sites = historyItems.sorted {
                 // Sort decending by frecency score
@@ -65,7 +63,7 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
             }.map({
                 return Site(url: $0.url, title: $0.title )
             }).uniqued()
-            return deferMaybe(ArrayCursor(data: sites))
+            completionHandler(sites)
         }
     }
 
@@ -83,59 +81,64 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
                 GleanMetrics.Awesomebar.queryTime.cancel(timerid)
                 return
             }
-            let deferredBookmarks = getBookmarksAsSites(matchingSearchQuery: query, limit: 5)
 
-            var deferredQueries = [deferredBookmarks]
-            let historyHighlightsEnabled = featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly)
-            if !historyHighlightsEnabled {
-                // Lets only add the history query if history highlights are not enabled
-                deferredQueries.append(getHistoryAsSites(matchingSearchQuery: query, limit: 100))
-            }
+            getBookmarksAsSites(matchingSearchQuery: query, limit: 5) { [weak self] bookmarks in
+                guard let self = self else { return }
 
-            all(deferredQueries).uponQueue(.main) { results in
-                defer {
-                    self.currentDeferredHistoryQuery = nil
-                    GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
-                }
-
-                let deferredBookmarksSites = results[safe: 0]?.successValue?.asArray() ?? []
-                var combinedSites = deferredBookmarksSites
+                var queries = [bookmarks]
+                let historyHighlightsEnabled = self.featureFlags.isFeatureEnabled(.searchHighlights, checking: .buildOnly)
                 if !historyHighlightsEnabled {
-                    let cancellableHistory = deferredQueries[safe: 1] as? CancellableDeferred
-                    if let cancellableHistory = cancellableHistory, cancellableHistory.cancelled {
+                    let group = DispatchGroup()
+                    group.enter()
+                    // Lets only add the history query if history highlights are not enabled
+                    self.getHistoryAsSites(matchingSearchQuery: self.query, limit: 100) { history in
+                        queries.append(history)
+                        group.leave()
+                    }
+                    _ = group.wait(timeout: .distantFuture)
+                }
+
+                DispatchQueue.main.async {
+                    let results = queries
+                    defer {
+                        GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
+                    }
+
+                    let bookmarksSites = results[safe: 0] ?? []
+                    var combinedSites = bookmarksSites
+                    if !historyHighlightsEnabled {
+                        let historySites = results[safe: 1] ?? []
+                        combinedSites += historySites
+                    }
+
+                    // Load the data in the table view.
+                    self.load(ArrayCursor(data: combinedSites))
+
+                    // If the new search string is not longer than the previous
+                    // we don't need to find an autocomplete suggestion.
+                    guard oldValue.count < self.query.count else { return }
+
+                    // If we should skip the next autocomplete, reset
+                    // the flag and bail out here.
+                    guard !self.skipNextAutocomplete else {
+                        self.skipNextAutocomplete = false
                         return
                     }
-                    let deferredHistorySites = results[safe: 1]?.successValue?.asArray() ?? []
-                    combinedSites += deferredHistorySites
-                }
 
-                // Load the data in the table view.
-                self.load(ArrayCursor(data: combinedSites))
-
-                // If the new search string is not longer than the previous
-                // we don't need to find an autocomplete suggestion.
-                guard oldValue.count < self.query.count else { return }
-
-                // If we should skip the next autocomplete, reset
-                // the flag and bail out here.
-                guard !self.skipNextAutocomplete else {
-                    self.skipNextAutocomplete = false
-                    return
-                }
-
-                // First, see if the query matches any URLs from the user's search history.
-                for site in combinedSites {
-                    if let completion = self.completionForURL(site.url) {
-                        self.urlBar.setAutocompleteSuggestion(completion)
-                        return
+                    // First, see if the query matches any URLs from the user's search history.
+                    for site in combinedSites {
+                        if let completion = self.completionForURL(site.url) {
+                            self.urlBar.setAutocompleteSuggestion(completion)
+                            return
+                        }
                     }
-                }
 
-                // If there are no search history matches, try matching one of the Alexa top domains.
-                for domain in self.topDomains {
-                    if let completion = self.completionForDomain(domain) {
-                        self.urlBar.setAutocompleteSuggestion(completion)
-                        return
+                    // If there are no search history matches, try matching one of the Alexa top domains.
+                    for domain in self.topDomains {
+                        if let completion = self.completionForDomain(domain) {
+                            self.urlBar.setAutocompleteSuggestion(completion)
+                            return
+                        }
                     }
                 }
             }
