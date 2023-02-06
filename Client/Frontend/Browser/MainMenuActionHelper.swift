@@ -568,19 +568,24 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-            if let temporaryDocument = tab.temporaryDocument {
-                temporaryDocument.getURL().uponQueue(.main, block: { tempDocURL in
+
+            guard let temporaryDocument = tab.temporaryDocument else {
+                self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
+                return
+            }
+
+            temporaryDocument.getURL { tempDocURL in
+                DispatchQueue.main.async {
                     // If we successfully got a temp file URL, share it like a downloaded file,
                     // otherwise present the ordinary share menu for the web URL.
-                    if tempDocURL.isFileURL,
-                        let presentableVC = self.menuActionDelegate as? PresentableVC {
+                    if let tempDocURL = tempDocURL,
+                       tempDocURL.isFileURL,
+                       let presentableVC = self.menuActionDelegate as? PresentableVC {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView, presentableVC: presentableVC)
                     } else {
                         self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
                     }
-                })
-            } else {
-                self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
+                }
             }
         }.items
     }
