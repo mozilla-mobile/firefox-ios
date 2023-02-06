@@ -51,6 +51,7 @@ protocol URLBarDelegate: AnyObject {
 
 protocol URLBarViewProtocol {
     var inOverlayMode: Bool { get }
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
     func leaveOverlayMode(didCancel cancel: Bool)
 }
 

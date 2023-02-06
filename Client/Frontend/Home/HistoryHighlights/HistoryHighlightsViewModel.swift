@@ -67,6 +67,7 @@ class HistoryHighlightsViewModel {
     var historyItems = [HighlightItem]()
     private var profile: Profile
     private var isPrivate: Bool
+    // TODO: FXIOS-5639 Remove opening new tab should handle itself the dismissal of the keyboard
     private var urlBar: URLBarViewProtocol
     private var hasSentSectionEvent = false
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
