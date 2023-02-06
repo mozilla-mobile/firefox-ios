@@ -242,13 +242,22 @@ public protocol SyncPingFailureFormattable {
 public struct SyncPing: SyncTelemetryPing {
     public private(set) var payload: JSON
 
-    static func pingFields(prefs: Prefs, why: SyncPingReason) -> Deferred<Maybe<(token: TokenServerToken, fields: [String: Any])>> {
+    static func pingFields(
+        prefs: Prefs,
+        why: SyncPingReason,
+        completion: @escaping ((Maybe<(token: TokenServerToken, fields: [String: Any])>) -> Void)
+    ) {
         // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for
         // our ping's identifiers
-        return RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
+        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false).upon { result in
+            guard let (token, kSync) = result.successValue else {
+                completion(Maybe(failure: result.failureValue ?? "Unknown Error"))
+                return
+            }
             let scratchpadPrefs = prefs.branch("sync.scratchpad")
             guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else {
-                return deferMaybe(SyncPingError.failedToRestoreScratchpad)
+                completion(Maybe(failure: SyncPingError.failedToRestoreScratchpad))
+                return
             }
 
             let ping: [String: Any] = pingCommonData(
@@ -257,15 +266,23 @@ public struct SyncPing: SyncTelemetryPing {
                 hashedDeviceID: (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             )
 
-            return deferMaybe((token, ping))
+            completion(Maybe(success: (token, ping)))
         }
     }
 
-    public static func from(result: SyncOperationResult,
-                            remoteClientsAndTabs: RemoteClientsAndTabs,
-                            prefs: Prefs,
-                            why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
-        return pingFields(prefs: prefs, why: why) >>== { (token, fields) in
+    public static func from(
+        result: SyncOperationResult,
+        remoteClientsAndTabs: RemoteClientsAndTabs,
+        prefs: Prefs,
+        why: SyncPingReason,
+        completion: @escaping ((Maybe<SyncPing>) -> Void)
+    ) {
+        pingFields(prefs: prefs, why: why) { ping in
+            guard let (token, fields) = ping.successValue else {
+                completion(Maybe(failure: ping.failureValue ?? "Unknown Error"))
+                return
+            }
+
             var ping = fields
 
             // TODO: We don't cache our sync pings so if it fails, it fails. Once we add
@@ -274,22 +291,35 @@ public struct SyncPing: SyncTelemetryPing {
             let events = Event.takeAll(fromPrefs: prefs).map { $0.toArray() }
             ping["events"] = events
 
-            return dictionaryFrom(result: result, storage: remoteClientsAndTabs, token: token) >>== { syncDict in
+            dictionaryFrom(
+                result: result,
+                storage: remoteClientsAndTabs,
+                token: token
+            ).upon { syncDict in
                 // TODO: Split the sync ping metadata from storing a single sync.
                 ping["syncs"] = [syncDict]
-                return deferMaybe(SyncPing(payload: JSON(ping)))
+                completion(Maybe(success: SyncPing(payload: JSON(ping))))
             }
         }
     }
 
-    public static func fromQueuedEvents(prefs: Prefs, why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
+    public static func fromQueuedEvents(
+        prefs: Prefs,
+        why: SyncPingReason,
+        completion: @escaping ((Maybe<SyncPing>) -> Void)
+    ) {
         if !Event.hasQueuedEvents(inPrefs: prefs) {
-            return deferMaybe(SyncPingError.emptyPing)
+            completion(Maybe(failure: SyncPingError.emptyPing))
+            return
         }
-        return pingFields(prefs: prefs, why: why) >>== { (_, fields) in
+        pingFields(prefs: prefs, why: why) { result in
+            guard let (_, fields) = result.successValue else {
+                completion(Maybe(failure: result.failureValue ?? "Unknown Error"))
+                return
+            }
             var ping = fields
             ping["events"] = Event.takeAll(fromPrefs: prefs).map { $0.toArray() }
-            return deferMaybe(SyncPing(payload: JSON(ping)))
+            completion(Maybe(success: SyncPing(payload: JSON(ping))))
         }
     }
 
