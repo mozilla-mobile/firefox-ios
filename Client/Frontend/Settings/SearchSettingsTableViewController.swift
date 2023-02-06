@@ -282,7 +282,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         if editingStyle == .delete {
             let index = indexPath.item + 1
             let engine = model.orderedEngines[index]
-            
+
             model.deleteCustomEngine(engine) {
                 tableView.deleteRows(at: [indexPath], with: .right)
             }
