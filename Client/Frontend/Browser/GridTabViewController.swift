@@ -351,7 +351,7 @@ extension GridTabViewController {
 
             DispatchQueue.main.async { [unowned self] in
                 if isPrivateState {
-                    let previousTab = self.tabManager.tabs.filter { $0.tabUUID == previousTabUUID }.first
+                    let previousTab = self.tabManager.tabs.first(where: { $0.tabUUID == previousTabUUID })
                     self.tabManager.cleanupClosedTabs(recentlyClosedTabs,
                                                       previous: previousTab,
                                                       isPrivate: isPrivateState)

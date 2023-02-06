@@ -4,6 +4,7 @@
 
 import Foundation
 
+// swiftlint:disable first_where
 extension UIWindow {
     static var keyWindow: UIWindow? {
         return UIApplication.shared.connectedScenes
