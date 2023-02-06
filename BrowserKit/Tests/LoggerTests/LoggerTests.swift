@@ -98,8 +98,8 @@ final class LoggerTests: XCTestCase {
     }
 
     func testSentryLog_sendUsageDataNotCalled() {
-        let _ = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                              sentryWrapper: sentryWrapper)
+        _ = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
+                          sentryWrapper: sentryWrapper)
         XCTAssertNil(sentryWrapper.savedSendUsageData)
     }
 
@@ -177,11 +177,11 @@ class MockSentryWrapper: SentryWrapper {
     var message: String?
     var category: LoggerCategory?
     var level: LoggerLevel?
-    var extraEvents: [String : String]?
+    var extraEvents: [String: String]?
     func send(message: String,
               category: LoggerCategory,
               level: LoggerLevel,
-              extraEvents: [String : String]?) {
+              extraEvents: [String: String]?) {
         self.message = message
         self.category = category
         self.level = level
