@@ -16,7 +16,6 @@ public protocol Logger {
     ///   - category: The category of the log
     ///   - extra: Optional extras to send, in a dictionnary format
     ///   - description: Optional description to add to the message
-    ///   - sendToSentry: Set to true to send the log to Sentry as well, false by default
     ///   - file: The file this log is located in
     ///   - function: The function this log is located in
     ///   - line: The line number this log is located in
@@ -25,7 +24,6 @@ public protocol Logger {
              category: LoggerCategory,
              extra: [String: String]?,
              description: String?,
-             sendToSentry: Bool,
              file: String,
              function: String,
              line: Int)
@@ -40,7 +38,6 @@ public extension Logger {
              category: LoggerCategory,
              extra: [String: String]? = nil,
              description: String? = nil,
-             sendToSentry: Bool = false,
              file: String = #file,
              function: String = #function,
              line: Int = #line) {
@@ -49,7 +46,6 @@ public extension Logger {
                  category: category,
                  extra: extra,
                  description: description,
-                 sendToSentry: sendToSentry,
                  file: file,
                  function: function,
                  line: line)

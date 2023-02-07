@@ -32,7 +32,6 @@ public class DefaultLogger: Logger {
                     category: LoggerCategory,
                     extra: [String: String]? = nil,
                     description: String? = nil,
-                    sendToSentry: Bool = false,
                     file: String = #file,
                     function: String = #function,
                     line: Int = #line) {
@@ -53,8 +52,6 @@ public class DefaultLogger: Logger {
         case .fatal:
             logger.error(loggerMessage, file, function, line: line, context: category)
         }
-
-        guard sendToSentry else { return }
 
         // Log to sentry
         sentry.send(message: message,
