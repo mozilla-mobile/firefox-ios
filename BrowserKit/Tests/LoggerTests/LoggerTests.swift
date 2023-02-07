@@ -62,37 +62,24 @@ final class LoggerTests: XCTestCase {
                     extra: ["example": "test"],
                     description: "A description")
 
-        XCTAssertEqual(MockSwiftyBeaver.savedMessage, "Debug log, errorDescription: A description, example: test")
+        XCTAssertEqual(MockSwiftyBeaver.savedMessage, "Debug log - A description, example: test")
         XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
     }
 
     // MARK: - Sentry
 
-    func testSentryLog_notSentByDefault() {
+    func testSentryLog_fatalIsSent_informationCorrelate() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
                                     sentryWrapper: sentryWrapper)
-        subject.log("Debug log",
-                    level: .debug,
+        subject.log("Fatal log",
+                    level: .fatal,
                     category: .setup,
                     extra: ["example": "test"],
-                    description: "Description")
+                    description: "A description")
 
-        XCTAssertEqual(sentryWrapper.message, nil)
-    }
-
-    func testSentryLog_informationCorrelate() throws {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                                    sentryWrapper: sentryWrapper)
-        subject.log("Debug log",
-                    level: .debug,
-                    category: .setup,
-                    extra: ["example": "test"],
-                    description: "A description",
-                    sendToSentry: true)
-
-        XCTAssertEqual(sentryWrapper.message, "Debug log")
+        XCTAssertEqual(sentryWrapper.message, "Fatal log")
         XCTAssertEqual(sentryWrapper.category, .setup)
-        XCTAssertEqual(sentryWrapper.level, .debug)
+        XCTAssertEqual(sentryWrapper.level, .fatal)
         let extra = try XCTUnwrap(sentryWrapper.extraEvents)
         XCTAssertEqual(extra, ["example": "test", "errorDescription": "A description"])
     }

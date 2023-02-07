@@ -36,10 +36,8 @@ public class DefaultLogger: Logger {
                     function: String = #function,
                     line: Int = #line) {
         // Prepare messages
-        let extraEvents = bundleExtraEvents(extra: extra,
-                                            description: description)
-        let reducedExtra = reduce(extraEvents: extraEvents)
-        let loggerMessage = "\(message)\(reducedExtra)"
+        let reducedExtra = reduce(extraEvents: extra)
+        let loggerMessage = "\(message) - \(description ?? "")\(reducedExtra)"
 
         // Log locally and in console
         switch level {
@@ -54,6 +52,8 @@ public class DefaultLogger: Logger {
         }
 
         // Log to sentry
+        let extraEvents = bundleExtraEvents(extra: extra,
+                                            description: description)
         sentry.send(message: message,
                     category: category,
                     level: level,
@@ -79,8 +79,10 @@ public class DefaultLogger: Logger {
         return extraEvents
     }
 
-    private func reduce(extraEvents: [String: Any]) -> String {
-        return extraEvents.reduce("") { (result: String, arg1) in
+    private func reduce(extraEvents: [String: String]?) -> String {
+        guard let extras = extraEvents else { return "" }
+
+        return extras.reduce("") { (result: String, arg1) in
             let (key, value) = arg1
             return "\(result), \(key): \(value)"
         }
