@@ -133,10 +133,10 @@ class BookmarkingTests: BaseTestCase {
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         }
-        typeOnSearchBar(text: "www.ebay")
+        typeOnSearchBar(text: "www.google")
         waitForExistence(app.tables["SiteTable"])
-        waitForExistence(app.tables["SiteTable"].cells.staticTexts["www.ebay"], timeout: 5)
-        XCTAssertTrue(app.tables["SiteTable"].cells.staticTexts["www.ebay"].exists)
+        waitForExistence(app.tables["SiteTable"].cells.staticTexts["www.google"], timeout: 5)
+        XCTAssertTrue(app.tables["SiteTable"].cells.staticTexts["www.google"].exists)
         typeOnSearchBar(text: ".com")
         typeOnSearchBar(text: "\r")
         navigator.nowAt(BrowserTab)
@@ -145,7 +145,7 @@ class BookmarkingTests: BaseTestCase {
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(URLBarOpen)
-        typeOnSearchBar(text: "http://www.olx.ro")
+        typeOnSearchBar(text: "https://mozilla.org")
 
         // Site table exists but is empty
         waitForExistence(app.tables["SiteTable"])
@@ -163,9 +163,9 @@ class BookmarkingTests: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)
-        typeOnSearchBar(text: "olx.ro")
+        typeOnSearchBar(text: "mozilla.org")
         waitForExistence(app.tables["SiteTable"])
-        waitForExistence(app.cells.staticTexts["olx.ro"])
+        waitForExistence(app.cells.staticTexts["mozilla.org"])
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
     /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
