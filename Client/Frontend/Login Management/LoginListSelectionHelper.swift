@@ -28,10 +28,9 @@ public class LoginListSelectionHelper {
     }
 
     func deselectIndexPath(_ indexPath: IndexPath) {
-        guard let foundSelectedPath = (selectedIndexPaths.filter { $0.row == indexPath.row && $0.section == indexPath.section }).first,
-              let indexToRemove = selectedIndexPaths.firstIndex(of: foundSelectedPath) else {
-            return
-        }
+        guard let foundSelectedPath = selectedIndexPaths.first(where: { $0.row == indexPath.row && $0.section == indexPath.section }),
+              let indexToRemove = selectedIndexPaths.firstIndex(of: foundSelectedPath)
+        else { return }
 
         selectedIndexPaths.remove(at: indexToRemove)
     }

@@ -216,7 +216,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     }
 
     func getTabForURL(_ url: URL) -> Tab? {
-        return tabs.filter({ $0.webView?.url == url }).first
+        return tabs.first(where: { $0.webView?.url == url })
     }
 
     func getTabForUUID(uuid: String) -> Tab? {
@@ -732,9 +732,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
             } else {
                 // Finish clean up for recently close tabs
                 DispatchQueue.global(qos: .background).async { [unowned self] in
-                    let previousTab = tabs.filter {
-                        $0.tabUUID == previousTabUUID
-                    }.first
+                    let previousTab = tabs.first(where: { $0.tabUUID == previousTabUUID })
 
                     self.cleanupClosedTabs(recentlyClosedTabs,
                                            previous: previousTab,
@@ -802,7 +800,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
     private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {
         tabs.append(contentsOf: tabsToAdd)
-        let tabToSelect = tabs.filter { $0.tabUUID == previousTabUUID }.first
+        let tabToSelect = tabs.first(where: { $0.tabUUID == previousTabUUID })
         let currentlySelectedTab = selectedTab
         if let tabToSelect = tabToSelect, let currentlySelectedTab = currentlySelectedTab {
             // remove currently selected tab
