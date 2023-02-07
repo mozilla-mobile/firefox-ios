@@ -54,7 +54,8 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
+        waitForExistence(app.staticTexts["Continue to Firefox accounts"], timeout: TIMEOUT_LONG)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
@@ -68,7 +69,11 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 25)
+        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
+        waitForNoExistence(app.staticTexts["Sync and Save Data"])
+        waitForExistence(app.tables.staticTexts["Syncing…"], timeout: TIMEOUT_LONG)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
+        sleep(3)
     }
 
     func testFxASyncHistory () {
@@ -89,8 +94,8 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: 20)
-        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextFieldChinaFxA], timeout: 20)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
+        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextFieldChinaFxA], timeout: TIMEOUT_LONG)
 
         // Wait for element not present on FxA sign in page China FxA server
         waitForNoExistence(app.webViews.otherElements.staticTexts["Firefox Monitor"])
@@ -141,8 +146,9 @@ class IntegrationTests: BaseTestCase {
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
+        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         app.tables.cells.element(boundBy: 2).tap()
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: TIMEOUT_LONG)
     }
 
     func testFxASyncLogins () {
@@ -223,7 +229,7 @@ class IntegrationTests: BaseTestCase {
 
         // Need to swipe to get the data on the screen on focus
         app.swipeDown()
-        waitForExistence(app.tables.otherElements["profile1"], timeout: 10)
+        waitForExistence(app.tables.otherElements["profile1"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
     }
 
@@ -231,7 +237,6 @@ class IntegrationTests: BaseTestCase {
         app.buttons["urlBar-cancel"].tap()
         // Sign into Firefox Accounts
         signInFxAccounts()
-        sleep(3)
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
@@ -284,6 +289,7 @@ class IntegrationTests: BaseTestCase {
         app.webViews.buttons.element(boundBy: 0).tap()
 
         navigator.nowAt(SettingsScreen)
+        waitForExistence(app.staticTexts["FIREFOX ACCOUNT"], timeout: TIMEOUT)
         waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 35)
 
         // Check Bookmarks
