@@ -51,6 +51,23 @@ final class SiteImageViewTests: XCTestCase {
         XCTAssertEqual(imageFetcher.capturedSite?.siteURLString, url)
         XCTAssertEqual(imageFetcher.capturedSite?.expectedImageType, .heroImage)
     }
+
+    func testCanMakeRequest_firstTime_true() {
+        let url = "https://www.firefox.com"
+        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
+        let canMakeRequestFirstTime = subject.canMakeRequest(with: url)
+
+        XCTAssertTrue(canMakeRequestFirstTime)
+    }
+
+    func testCanMakeRequest_secondTime_false() {
+        let url = "https://www.firefox.com"
+        let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {}
+        _ = subject.canMakeRequest(with: url)
+        let canMakeRequestSecondTime = subject.canMakeRequest(with: url)
+
+        XCTAssertFalse(canMakeRequestSecondTime)
+    }
 }
 
 class MockSiteImageHandler: SiteImageHandler {
