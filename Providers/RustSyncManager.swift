@@ -181,6 +181,19 @@ public class RustSyncManager: NSObject, SyncManager {
     fileprivate func beginSyncing() {
         notifySyncing(notification: .ProfileDidStartSyncing)
     }
+    
+    private func resolveSyncState(
+        status: ServiceStatus,
+        hasSynced: Bool
+    ) -> SyncDisplayState {
+        if hasSynced || status == .ok || status == .backedOff {
+            return .good
+        } else if status == .authError {
+            return .warning(message: .FirefoxSyncOfflineTitle)
+        } else {
+            return .bad(message: .FirefoxSyncOfflineTitle)
+        }
+    }
 
     fileprivate func endRustSyncing(_ result: RustSyncResult) {
         // loop through statuses and fill sync state
@@ -188,20 +201,24 @@ public class RustSyncManager: NSObject, SyncManager {
                    level: .info,
                    category: .sync)
         
-        syncDisplayState = .good
+        syncDisplayState = resolveSyncState(status: result.status,
+                         hasSynced: !result.successful.isEmpty && !result.failures.isEmpty)
         
         #if MOZ_TARGET_CLIENT
             if canSendUsageData() {
                 let gleanHelper = GleanSyncOperationHelper()
                 gleanHelper.reportTelemetry(result)
             } else {
-                logger.log("Profile isn't sending usage data. Not sending sync status event.",
-                           level: .debug,
-                           category: .sync)
+                logger.log("""
+                    Profile isn't sending usage data. Not sending sync status event.
+                    """,
+                    level: .debug,
+                    category: .sync)
             }
         #endif
 
-        // Don't notify if we are performing a sync in the background. This prevents more db access from happening
+        // Don't notify if we are performing a sync in the background. This prevents more
+        // db access from happening
         if !self.backgrounded {
             notifySyncing(notification: .ProfileDidFinishSyncing)
         }
@@ -212,7 +229,8 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     private func notifySyncing(notification: Notification.Name) {
-        NotificationCenter.default.post(name: notification, object: syncDisplayState?.asObject())
+        NotificationCenter.default.post(name: notification,
+                                        object: syncDisplayState?.asObject())
     }
 
     init(profile: BrowserProfile,
@@ -225,25 +243,23 @@ public class RustSyncManager: NSObject, SyncManager {
 
         let center = NotificationCenter.default
 
-        // NOTE: We may no longer need this observer because the only place where the
-        // `DatabaseWasRecreated` was posted was in SwiftData, which BrowserDB
-        // inherited from. Because the sync databases are now created in appservices
-        // and don't use SwiftData, they don't need to be reset when the BrowserDB
-        // databases are recreated. This means `onDatabaseWasRecreated` and all
-        // supporting functions can be removed.
-        // - handleRecreationOfDatabaseNamed
-        // - locallyResetCollection
-        
-//            center.addObserver(self, selector: #selector(onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
-        
-        center.addObserver(self, selector: #selector(onStartSyncing), name: .ProfileDidStartSyncing, object: nil)
-        center.addObserver(self, selector: #selector(onFinishSyncing), name: .ProfileDidFinishSyncing, object: nil)
+        center.addObserver(self,
+                           selector: #selector(onStartSyncing),
+                           name: .ProfileDidStartSyncing,
+                           object: nil)
+        center.addObserver(self,
+                           selector: #selector(onFinishSyncing),
+                           name: .ProfileDidFinishSyncing,
+                           object: nil)
     }
 
     func doInBackgroundAfter(_ millis: Int64, _ block: @escaping () -> Void) {
         let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
-        // Pretty ambiguous here. I'm thinking .now was DispatchTime.now() and not Date.now()
-        queue.asyncAfter(deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)), execute: block)
+        // Pretty ambiguous here. I'm thinking .now was DispatchTime.now() and not
+        // Date.now()
+        queue.asyncAfter(
+            deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)),
+            execute: block)
     }
 
     @objc func onStartSyncing(_ notification: NSNotification) {
@@ -261,7 +277,8 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     public func onAddedAccount() -> Success {
-        // Only sync if we're green lit. This makes sure that we don't sync unverified accounts.
+        // Only sync if we're green lit. This makes sure that we don't sync unverified
+        // accounts.
         guard self.profile.hasSyncableAccount() else { return succeed() }
 
         self.beginTimedSyncs()
@@ -269,7 +286,6 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     public func onRemovedAccount() -> Success {
-        let profile = self.profile
         let clearPrefs: () -> Success = {
             withExtendedLifetime(self) {
                 // Clear prefs after we're done clearing everything else -- just in case
@@ -280,9 +296,10 @@ public class RustSyncManager: NSObject, SyncManager {
                 // as wiping the Sync prefs.
                 
                 // XXX: `Scratchpad.clearFromPrefs` and `clearAll` were pulled from
-                // `SyncStateMachine.clearStateFromPrefs` to reduce `RustSyncManager` on
-                // the swift sync state machine. This will make refactoring or eliminating
-                // that code easier once the rust sync manager rollout is complete.
+                // `SyncStateMachine.clearStateFromPrefs` to reduce RustSyncManager's
+                // dependence on the swift sync state machine. This will make refactoring
+                // or eliminating that code easier once the rust sync manager rollout is
+                // complete.
                 Scratchpad.clearFromPrefs(self.prefsForSync.branch("scratchpad"))
                 self.prefsForSync.clearAll()
             }
@@ -292,24 +309,45 @@ public class RustSyncManager: NSObject, SyncManager {
         return clearPrefs()
     }
 
-    func getEngineEnablementChangesForAccount() -> [String: Bool] {
-        var enginesEnablements: [String: Bool] = [:]
-        // We just created the account, the user went through the Choose What to Sync screen on FxA.
-        if let declined = UserDefaults.standard.stringArray(forKey: "fxa.cwts.declinedSyncEngines") {
-            declined.forEach { enginesEnablements[$0] = false }
+    private func getEngineEnablementChangesForAccount() -> [String: Bool] {
+        var engineEnablements: [String: Bool] = [:]
+        // We just created the account, the user went through the Choose What to Sync
+        // screen on FxA.
+        if let declined = UserDefaults.standard.stringArray(
+            forKey: "fxa.cwts.declinedSyncEngines") {
+
+            declined.forEach { engineEnablements[$0] = false }
             UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
         } else {
-            // Bundle in authState the engines the user activated/disabled since the last sync.
+            // Bundle in authState the engines the user activated/disabled since the
+            // last sync.
             RustTogglableEngines.forEach { engine in
                 let stateChangedPref = "engine.\(engine).enabledStateChanged"
                 if self.prefsForSync.boolForKey(stateChangedPref) != nil,
                    let enabled = self.prefsForSync.boolForKey("engine.\(engine).enabled") {
-                    enginesEnablements[engine] = enabled
+                    engineEnablements[engine] = enabled
                     self.prefsForSync.setObject(nil, forKey: stateChangedPref)
                 }
             }
         }
-        return enginesEnablements
+        
+        if !engineEnablements.isEmpty {
+            logger.log("""
+                engines to enable:
+                \(engineEnablements.compactMap { $0.value ? $0.key : nil })
+                """,
+               level: .debug,
+               category: .sync)
+            logger.log("""
+                engines to disable:
+                \(engineEnablements.compactMap { !$0.value ? $0.key : nil })
+                """,
+               level: .debug,
+               category: .sync)
+        }
+        
+        
+        return engineEnablements
     }
 
     public class ScopedKeyError: MaybeErrorType {
@@ -332,7 +370,9 @@ public class RustSyncManager: NSObject, SyncManager {
         public var description = "Failed to get sync engine and key data."
     }
     
-    fileprivate func getEnginesAndKeys(engines: [String]) -> Deferred<Maybe<([EngineIdentifier], [String: String])>> {
+    fileprivate func getEnginesAndKeys(
+        engines: [String]
+    ) -> Deferred<Maybe<([EngineIdentifier], [String: String])>> {
         let deferred = Deferred<Maybe<([EngineIdentifier], [String: String])>>()
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
@@ -374,9 +414,13 @@ public class RustSyncManager: NSObject, SyncManager {
         return deferred
     }
 
-    fileprivate func syncRustEngines(why: RustSyncReason, engines: [String]) -> Deferred<Maybe<RustSyncResult>> {
+    fileprivate func syncRustEngines(
+        why: RustSyncReason,
+        engines: [String]
+    ) -> Deferred<Maybe<RustSyncResult>> {
         let deferred = Deferred<Maybe<RustSyncResult>>()
 
+        logger.log("Syncing \(engines)", level: .info, category: .sync)
         self.profile.rustFxA.accountManager.upon { accountManager in
             guard let device = accountManager.deviceConstellation()?
                 .state()?
@@ -404,7 +448,8 @@ public class RustSyncManager: NSObject, SyncManager {
                     }
 
                     self.getEnginesAndKeys(engines: engines).upon { result in
-                        guard let (rustEngines, localEncryptionKeys) = result.successValue else {
+                        guard let (rustEngines, localEncryptionKeys) = result
+                            .successValue else {
                             deferred.fill(Maybe(failure: EngineAndKeyRetrievalError()))
                             return
                         }
@@ -423,7 +468,8 @@ public class RustSyncManager: NSObject, SyncManager {
                             deviceSettings:  DeviceSettings(
                                 fxaDeviceId: device.id,
                                 name: device.displayName,
-                                kind: self.toSyncManagerDeviceType(deviceType: device.deviceType)))
+                                kind: self.toSyncManagerDeviceType(
+                                    deviceType: device.deviceType)))
 
                         self.beginSyncing()
                         self.syncManagerAPI.sync(params: params) { syncResult in
@@ -432,17 +478,34 @@ public class RustSyncManager: NSObject, SyncManager {
                                 syncResult.persistedState,
                                 forKey: PrefsKeys.RustSyncState)
                             
+                            self.logger.log("""
+                                        Finished syncing with \(syncResult.status) status
+                                        """,
+                                       level: .debug,
+                                       category: .sync)
+                            self.logger.log("""
+                                        Declined engines
+                                        \(String(describing: syncResult.declined))
+                                        """,
+                                       level: .debug,
+                                       category: .sync)
+                            self.logger.log("""
+                                        Returned telemetry:
+                                        \(String(describing: syncResult.telemetryJson))
+                                        """,
+                                        level: .debug,
+                                        category: .sync)
+
                             // Save declined/enabled engines - we assume the engines
                             // not included in the returned `declined` property of the
                             // result of the sync manager `sync` are enabled.
-                                let updateEnginePref:
-                                (String, Bool) -> Void = { engine, enabled in
-                                    self
-                                        .prefsForSync
-                                        .setBool(enabled,
-                                                 forKey: "engine.\(engine).enabled")
-                                }
-                            
+                            let updateEnginePref:
+                            (String, Bool) -> Void = { engine, enabled in
+                                self.prefsForSync
+                                    .setBool(enabled,
+                                             forKey: "engine.\(engine).enabled")
+                            }
+
                             if let declined = syncResult.declined {
                                 RustTogglableEngines.forEach ({
                                     if declined.contains($0) {
@@ -468,7 +531,9 @@ public class RustSyncManager: NSObject, SyncManager {
         return deferred
     }
     
-    fileprivate func toSyncManagerDeviceType(deviceType: DeviceType) -> SyncManagerDeviceType {
+    fileprivate func toSyncManagerDeviceType(
+        deviceType: DeviceType
+    ) -> SyncManagerDeviceType {
         switch deviceType{
         case .desktop:
             return SyncManagerDeviceType.desktop
@@ -486,7 +551,8 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     @discardableResult public func syncEverything(why: SyncReason) -> Success {
-        if let accountManager = RustFirefoxAccounts.shared.accountManager.peek(), accountManager.accountMigrationInFlight() {
+        if let accountManager = RustFirefoxAccounts.shared.accountManager.peek(),
+           accountManager.accountMigrationInFlight() {
             accountManager.retryMigration { _ in }
             return Success()
         }
