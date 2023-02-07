@@ -89,6 +89,9 @@ class DefaultSentryWrapper: SentryWrapper {
               level: LoggerLevel,
               extraEvents: [String: String]?) {
         guard shouldSendEventFor(level) else {
+            addBreadcrumb(message: message,
+                          category: category,
+                          level: level)
             return
         }
 
@@ -111,6 +114,13 @@ class DefaultSentryWrapper: SentryWrapper {
         }
     }
 
+    private func addBreadcrumb(message: String, category: LoggerCategory, level: LoggerLevel) {
+        let breadcrumb = Breadcrumb(level: level.sentryLevel,
+                                    category: category.rawValue)
+        breadcrumb.message = message
+        SentrySDK.addBreadcrumb(breadcrumb)
+    }
+
     private func makeEvent(message: String,
                            category: LoggerCategory,
                            level: LoggerLevel,
@@ -128,11 +138,11 @@ class DefaultSentryWrapper: SentryWrapper {
     /// This is the behaviour we want for Sentry logging
     ///       .info .warning .fatal
     /// Debug      n        n          n
-    /// Beta         n         y          y
+    /// Beta         n         n          y
     /// Release   n         n          y
     private func shouldSendEventFor(_ level: LoggerLevel) -> Bool {
         let shouldSendRelease = AppConstants.BuildChannel == .release && level.isGreaterOrEqualThanLevel(.fatal)
-        let shouldSendBeta = AppConstants.BuildChannel == .beta && level.isGreaterOrEqualThanLevel(.warning)
+        let shouldSendBeta = AppConstants.BuildChannel == .beta && level.isGreaterOrEqualThanLevel(.fatal)
 
         return enabled && (shouldSendBeta || shouldSendRelease)
     }
