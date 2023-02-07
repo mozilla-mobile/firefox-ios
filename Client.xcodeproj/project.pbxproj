@@ -1052,6 +1052,7 @@
 		E169C6E82979CA0E0017B8D7 /* URLMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */; };
 		E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */; };
 		E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */; };
+		E17496382991A2720096900A /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17496372991A2720096900A /* AdaptiveStack.swift */; };
 		E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */; };
 		E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */; };
 		E18BAAFD28E4A44500098AE2 /* TopTabFader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */; };
@@ -4839,6 +4840,7 @@
 		E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLMailTests.swift; sourceTree = "<group>"; };
 		E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModelTests.swift; sourceTree = "<group>"; };
 		E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteTableViewHeader.swift; sourceTree = "<group>"; };
+		E17496372991A2720096900A /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
 		E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandler.swift; sourceTree = "<group>"; };
 		E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCell.swift; sourceTree = "<group>"; };
 		E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabFader.swift; sourceTree = "<group>"; };
@@ -6714,6 +6716,7 @@
 		8AED23C327AC1F8700DE7E97 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				E17496362991A2480096900A /* SwiftUI */,
 				8AB5958B28414DF60090F4AE /* ActionButton.swift */,
 				8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */,
 				8A9CB41D2846F0BF00CC3A16 /* FadeScrollView.swift */,
@@ -7727,6 +7730,14 @@
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		E17496362991A2480096900A /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				E17496372991A2720096900A /* AdaptiveStack.swift */,
+			);
+			path = SwiftUI;
 			sourceTree = "<group>";
 		};
 		E1877A7F286E0EFD00F5BDF2 /* WebView */ = {
@@ -10383,6 +10394,7 @@
 				8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */,
 				C8D0D6F2281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
+				E17496382991A2720096900A /* AdaptiveStack.swift in Sources */,
 				C87DC85C27B2C94D006EFCE2 /* LegacyWallpaperResourceManager.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
