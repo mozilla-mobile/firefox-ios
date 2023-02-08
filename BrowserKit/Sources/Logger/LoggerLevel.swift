@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Sentry
 
 // Log levels are kept to a minimum to make sure they are relevant and useful. If your log isn't important enough
 // to make it to this list, then it shouldn't be logged.
@@ -29,4 +30,34 @@ public enum LoggerLevel: String {
     // level of logging shows that the application’s situation is catastrophic, such that an important function is not
     // working. For example, you can use FATAL log level if the application is unable to connect to the data store.
     case fatal
+
+    private var value: Int {
+        switch self {
+        case .debug:
+            return 0
+        case .info:
+            return 1
+        case .warning:
+            return 2
+        case .fatal:
+            return 3
+        }
+    }
+
+    func isGreaterOrEqualThanLevel(_ level: LoggerLevel) -> Bool {
+        return value >= level.value
+    }
+
+    var sentryLevel: SentryLevel {
+        switch self {
+        case .debug:
+            return SentryLevel.debug
+        case .info:
+            return SentryLevel.info
+        case .warning:
+            return SentryLevel.error
+        case .fatal:
+            return SentryLevel.fatal
+        }
+    }
 }

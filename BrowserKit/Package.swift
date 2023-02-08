@@ -31,6 +31,9 @@ let package = Package(
         .package(
             url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
             exact: "1.9.6"),
+        .package(
+            url: "https://github.com/getsentry/sentry-cocoa.git",
+            exact: "8.1.0"),
     ],
     targets: [
         .target(
@@ -49,7 +52,11 @@ let package = Package(
             dependencies: ["Common"]),
         .target(
             name: "Logger",
-            dependencies: ["SwiftyBeaver", "Common"],
+            dependencies: [
+                "SwiftyBeaver",
+                "Common",
+                .product(name: "Sentry", package: "sentry-cocoa")
+            ],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "LoggerTests",

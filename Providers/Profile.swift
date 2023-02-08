@@ -7,6 +7,8 @@
 // application (i.e. App Extensions). Introducing new dependencies here
 // may have unintended negative consequences for App Extensions such as
 // increased startup times which may lead to termination by the OS.
+
+import Common
 import Account
 import Shared
 import Storage
