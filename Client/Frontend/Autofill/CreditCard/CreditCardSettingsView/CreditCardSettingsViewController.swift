@@ -26,7 +26,13 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
         self.theme = theme
         self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
-        self.creditCardEmptyView = UIHostingController(rootView: CreditCardSettingsEmptyView())
+
+        let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: Color(theme.colors.textPrimary),
+                                                        subTextColor: Color(theme.colors.textPrimary),
+                                                        toggleTextColor: Color(theme.colors.textPrimary))
+        let emptyView = CreditCardSettingsEmptyView(colors: colors, isToggleOn: true)
+        self.creditCardEmptyView = UIHostingController(rootView: emptyView)
+
         self.creditCardAddEditView =
         UIHostingController(rootView: CreditCardEditView(
             viewModel: viewModel.addEditViewModel,
