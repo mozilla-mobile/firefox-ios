@@ -47,9 +47,9 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
     }
 
     func viewSetup() {
-        guard let emptyCreditCardView = creditCardEmptyView.view else { return }
-        guard let addEditCreditCardView = creditCardAddEditView.view else { return }
-        guard let creditCardTableView = creditCardTableViewController.view else { return }
+        guard let emptyCreditCardView = creditCardEmptyView.view,
+            let addEditCreditCardView = creditCardAddEditView.view,
+            let creditCardTableView = creditCardTableViewController.view else { return }
         creditCardTableView.translatesAutoresizingMaskIntoConstraints = false
         emptyCreditCardView.translatesAutoresizingMaskIntoConstraints = false
         addEditCreditCardView.translatesAutoresizingMaskIntoConstraints = false
