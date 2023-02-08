@@ -171,10 +171,11 @@ extension CreditCardTableViewController: UITableViewDelegate,
 
         let creditCard = viewModel.creditCards[indexPath.row]
 
-        let creditCardRow = CreditCardItemRow(item: creditCard,
-                                              colors: colors)
+        let creditCardRow = CreditCardItemRow(
+            item: creditCard,
+            colors: colors,
+            isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         hostingCell.host(creditCardRow, parentController: self)
-
         return hostingCell
     }
 

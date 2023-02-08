@@ -15,16 +15,19 @@ struct CreditCardItemRow: View {
 
     let item: CreditCard
     let colors: Colors
+    let isAccessibilityCategory: Bool
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            HStack(alignment: .center, spacing: 24) {
+            AdaptiveStack(horizontalAlignment: .leading,
+                          verticalAlignment: .center,
+                          spacing: isAccessibilityCategory ? 5 : 24,
+                          isAccessibilityCategory: isAccessibilityCategory) {
                 getImage(creditCard: item)
                     .renderingMode(.original)
                     .resizable()
                     .frame(width: 24, height: 24)
                     .aspectRatio(contentMode: .fit)
-                    .padding(.leading, 16)
 
                 VStack(spacing: 0) {
                     Text(item.ccName)
@@ -33,36 +36,39 @@ struct CreditCardItemRow: View {
                         .frame(maxWidth: .infinity,
                                alignment: .leading)
 
-                    HStack(spacing: 0) {
+                    AdaptiveStack(horizontalAlignment: .leading,
+                                  spacing: isAccessibilityCategory ? 0 : 5,
+                                  isAccessibilityCategory: isAccessibilityCategory) {
                         Text(item.ccType)
                             .font(.system(.body))
                             .foregroundColor(colors.titleTextColor)
                         Text(item.ccNumberLast4)
-                            .font(.system(.body))
+                            .font(.system(.subheadline))
                             .foregroundColor(colors.subTextColor)
-                            .padding(.leading, 5)
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
                     .padding(.top, 3)
                     .padding(.bottom, 3)
 
-                    HStack(spacing: 0) {
+                    AdaptiveStack(horizontalAlignment: .leading,
+                                  spacing: isAccessibilityCategory ? 0 : 5,
+                                  isAccessibilityCategory: isAccessibilityCategory) {
                         Text("Expires")
                             .font(.system(.body))
                             .foregroundColor(colors.subTextColor)
-                        Text("\(item.ccExpYear)")
-                            .font(.system(.body))
+                        Text(String(item.ccExpYear))
+                            .font(.system(.subheadline))
                             .foregroundColor(colors.subTextColor)
-                            .padding(.leading, 5)
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
                 }
-                .padding(.trailing, 10)
             }
-            .padding(.top, 10)
-            .padding(.bottom, 10)
+            .padding(.leading, 16)
+            .padding(.trailing, 16)
+            .padding(.top, 11)
+            .padding(.bottom, 11)
 
             Rectangle()
                 .fill(colors.separatorColor)
@@ -71,7 +77,6 @@ struct CreditCardItemRow: View {
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
         }
-        .frame(maxHeight: 86)
     }
 
     func getImage(creditCard: CreditCard) -> Image {
@@ -103,12 +108,20 @@ struct CreditCardItemRow_Previews: PreviewProvider {
                                               subTextColor: .gray,
                                               separatorColor: .gray)
 
-        CreditCardItemRow(item: creditCard, colors: colors)
-            .environment(\.sizeCategory, .extraSmall)
+        CreditCardItemRow(item: creditCard,
+                          colors: colors,
+                          isAccessibilityCategory: false)
 
-        CreditCardItemRow(item: creditCard, colors: colors)
-
-        CreditCardItemRow(item: creditCard, colors: colors)
+        CreditCardItemRow(item: creditCard,
+                          colors: colors,
+                          isAccessibilityCategory: true)
             .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
+            .previewDisplayName("Large")
+
+        CreditCardItemRow(item: creditCard,
+                          colors: colors,
+                          isAccessibilityCategory: false)
+            .environment(\.sizeCategory, .extraSmall)
+            .previewDisplayName("Small")
     }
 }
