@@ -245,18 +245,18 @@ public struct SyncPing: SyncTelemetryPing {
     static func pingFields(
         prefs: Prefs,
         why: SyncPingReason,
-        completion: @escaping ((Maybe<(token: TokenServerToken, fields: [String: Any])>) -> Void)
+        completion: @escaping (((token: TokenServerToken, fields: [String: Any])?) -> Void)
     ) {
         // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for
         // our ping's identifiers
         RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false).upon { result in
             guard let (token, kSync) = result.successValue else {
-                completion(Maybe(failure: result.failureValue ?? "Unknown Error"))
+                completion(nil)
                 return
             }
             let scratchpadPrefs = prefs.branch("sync.scratchpad")
             guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else {
-                completion(Maybe(failure: SyncPingError.failedToRestoreScratchpad))
+                completion(nil)
                 return
             }
 
@@ -266,7 +266,7 @@ public struct SyncPing: SyncTelemetryPing {
                 hashedDeviceID: (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             )
 
-            completion(Maybe(success: (token, ping)))
+            completion((token, ping))
         }
     }
 
@@ -275,11 +275,11 @@ public struct SyncPing: SyncTelemetryPing {
         remoteClientsAndTabs: RemoteClientsAndTabs,
         prefs: Prefs,
         why: SyncPingReason,
-        completion: @escaping ((Maybe<SyncPing>) -> Void)
+        completion: @escaping ((SyncPing?) -> Void)
     ) {
-        pingFields(prefs: prefs, why: why) { ping in
-            guard let (token, fields) = ping.successValue else {
-                completion(Maybe(failure: ping.failureValue ?? "Unknown Error"))
+        pingFields(prefs: prefs, why: why) {
+            guard let (token, fields) = $0 else {
+                completion(nil)
                 return
             }
 
@@ -298,7 +298,7 @@ public struct SyncPing: SyncTelemetryPing {
             ).upon { syncDict in
                 // TODO: Split the sync ping metadata from storing a single sync.
                 ping["syncs"] = [syncDict]
-                completion(Maybe(success: SyncPing(payload: JSON(ping))))
+                completion(SyncPing(payload: JSON(ping)))
             }
         }
     }
@@ -306,20 +306,20 @@ public struct SyncPing: SyncTelemetryPing {
     public static func fromQueuedEvents(
         prefs: Prefs,
         why: SyncPingReason,
-        completion: @escaping ((Maybe<SyncPing>) -> Void)
+        completion: @escaping ((SyncPing?) -> Void)
     ) {
         if !Event.hasQueuedEvents(inPrefs: prefs) {
-            completion(Maybe(failure: SyncPingError.emptyPing))
+            completion(nil)
             return
         }
-        pingFields(prefs: prefs, why: why) { result in
-            guard let (_, fields) = result.successValue else {
-                completion(Maybe(failure: result.failureValue ?? "Unknown Error"))
+        pingFields(prefs: prefs, why: why) {
+            guard let (_, fields) = $0 else {
+                completion(nil)
                 return
             }
             var ping = fields
             ping["events"] = Event.takeAll(fromPrefs: prefs).map { $0.toArray() }
-            completion(Maybe(success: SyncPing(payload: JSON(ping))))
+            completion(SyncPing(payload: JSON(ping)))
         }
     }
 

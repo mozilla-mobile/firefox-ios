@@ -589,7 +589,7 @@ open class BrowserProfile: Profile {
                 prefs: self.prefs,
                 why: .schedule
             ) {
-                guard let ping = $0.successValue else { return }
+                guard let ping = $0 else { return }
                 SyncTelemetry.send(ping: ping, docType: .sync)
             }
         }
@@ -836,7 +836,7 @@ open class BrowserProfile: Profile {
                         prefs: prefs,
                         why: .schedule
                     ) {
-                        guard let ping = $0.successValue else { return }
+                        guard let ping = $0 else { return }
                         SyncTelemetry.send(ping: ping, docType: .sync)
                     }
                 } else {
