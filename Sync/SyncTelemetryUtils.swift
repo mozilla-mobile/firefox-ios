@@ -295,7 +295,7 @@ public struct SyncPing: SyncTelemetryPing {
                 result: result,
                 storage: remoteClientsAndTabs,
                 token: token
-            ).upon { syncDict in
+            ) { syncDict in
                 // TODO: Split the sync ping metadata from storing a single sync.
                 ping["syncs"] = [syncDict]
                 completion(SyncPing(payload: JSON(ping)))
@@ -338,12 +338,19 @@ public struct SyncPing: SyncTelemetryPing {
     }
 
     // Generates a single sync ping payload that is stored in the 'syncs' list in the sync ping.
-    private static func dictionaryFrom(result: SyncOperationResult,
-                                       storage: RemoteClientsAndTabs,
-                                       token: TokenServerToken) -> Deferred<Maybe<[String: Any]>> {
-        return connectedDevices(fromStorage: storage, token: token) >>== { devices in
+    private static func dictionaryFrom(
+        result: SyncOperationResult,
+        storage: RemoteClientsAndTabs,
+        token: TokenServerToken,
+        completion: @escaping (([String: Any]) -> Void)
+    ) {
+        connectedDevices(
+            fromStorage: storage,
+            token: token
+        ) { devices in
             guard let stats = result.stats else {
-                return deferMaybe([String: Any]())
+                completion([String: Any]())
+                return
             }
 
             var dict = stats.asDictionary()
@@ -364,13 +371,16 @@ public struct SyncPing: SyncTelemetryPing {
             }
 
             dict["devices"] = devices
-            return deferMaybe(dict)
+            completion(dict)
         }
     }
 
     // Returns a list of connected devices formatted for use in the 'devices' property in the sync ping.
-    private static func connectedDevices(fromStorage storage: RemoteClientsAndTabs,
-                                         token: TokenServerToken) -> Deferred<Maybe<[[String: Any]]>> {
+    private static func connectedDevices(
+        fromStorage storage: RemoteClientsAndTabs,
+        token: TokenServerToken,
+        completion: @escaping (([[String: Any]]) -> Void)
+    ) {
         func dictionaryFrom(client: RemoteClient) -> [String: Any]? {
             var device = [String: Any]()
             if let os = client.os {
@@ -385,7 +395,13 @@ public struct SyncPing: SyncTelemetryPing {
             return device
         }
 
-        return storage.getClients() >>== { deferMaybe($0.compactMap(dictionaryFrom)) }
+        storage.getClients().upon { result in
+            guard let clients = result.successValue else {
+                completion([])
+                return
+            }
+            completion(clients.compactMap(dictionaryFrom))
+        }
     }
 
     private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {
