@@ -415,31 +415,7 @@ class BrowserViewController: UIViewController {
         setupNotifications()
         addSubviews()
 
-        // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work,
-        // thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need
-        // to make them "persistent" e.g. by being stored in BVC
-        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { () -> Bool in
-            if let pasteboardContents = UIPasteboard.general.string {
-                self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
-                return true
-            }
-            return false
-        })
-        pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
-            if let pasteboardContents = UIPasteboard.general.string {
-                // Enter overlay mode and make the search controller appear.
-                self.urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
-
-                return true
-            }
-            return false
-        })
-        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { () -> Bool in
-            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
-                UIPasteboard.general.url = url
-            }
-            return true
-        })
+        setupAccessibleActions()
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
@@ -467,6 +443,34 @@ class BrowserViewController: UIViewController {
         if shouldUseOverlayManager {
             overlayManager = DefaultOverlayModeManager(urlBarView: urlBar)
         }
+    }
+
+    private func setupAccessibleActions() {
+        // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work,
+        // thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need
+        // to make them "persistent" e.g. by being stored in BVC
+        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { () -> Bool in
+            if let pasteboardContents = UIPasteboard.general.string {
+                self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
+                return true
+            }
+            return false
+        })
+        pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
+            if let pasteboardContents = UIPasteboard.general.string {
+                // Enter overlay mode and make the search controller appear.
+                self.overlayManager?.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+
+                return true
+            }
+            return false
+        })
+        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { () -> Bool in
+            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
+                UIPasteboard.general.url = url
+            }
+            return true
+        })
     }
 
     private func setupNotifications() {
@@ -2130,7 +2134,7 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
         if !isRestoring {
-            // TODO: Call to manager enterOverlayMode here
+            overlayManager?.enterOverlayMode()
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self

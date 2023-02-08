@@ -30,7 +30,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManagerProtocol
-    // TODO: FXIOS-5639 Remove urlBar direct access from homepage
     private var urlBar: URLBarViewProtocol
     private var overlayManager: OverlayModeManager?
     private var userDefaults: UserDefaultsInterface
@@ -78,7 +77,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
-                                           urlBar: urlBar,
                                            theme: themeManager.currentTheme)
 
         let jumpBackInContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,

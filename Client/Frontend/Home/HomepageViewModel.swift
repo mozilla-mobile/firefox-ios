@@ -102,7 +102,6 @@ class HomepageViewModel: FeatureFlaggable {
     init(profile: Profile,
          isPrivate: Bool,
          tabManager: TabManagerProtocol,
-         urlBar: URLBarViewProtocol,
          nimbus: FxNimbus = FxNimbus.shared,
          isZeroSearch: Bool = false,
          theme: Theme,
