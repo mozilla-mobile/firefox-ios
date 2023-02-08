@@ -126,10 +126,7 @@ extension FxAPushMessageHandler {
 
                             waitForClient = Deferred<Maybe<String>>()
                             
-                            let usingSyncManager = UserDefaults
-                                .standard
-                                .bool(forKey: PrefsKeys.UsingRustSyncManager)
-                            if usingSyncManager {
+                            if FxNimbus.shared.features.rustSyncManagerComponent.value().rustSyncManagerStatus {
                                 profile.tabs.getClient(fxaDeviceId: deviceId)
                                     .uponQueue(.main) { result in
 

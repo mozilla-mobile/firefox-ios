@@ -14,9 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
+    private let rustSyncManagerStatus = FxNimbus.shared.features.rustSyncManagerComponent.value().rustSyncManagerStatus
+
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
-        syncDelegate: UIApplication.shared.syncDelegate
+        syncDelegate: UIApplication.shared.syncDelegate,
+        rustSyncManagerEnabled: rustSyncManagerStatus
     )
     lazy var tabManager: TabManager = TabManager(
         profile: profile,

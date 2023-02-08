@@ -71,17 +71,13 @@ public class RustSyncManager: NSObject, SyncManager {
         // it for the first sync manager full sync.
 
         if let persistedState = getPersistedState(engineName: "tabs") {
-            UserDefaults.standard.setValue(persistedState,
-                                           forKey: PrefsKeys.RustSyncState)
+            self.prefs.setString(persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
         } else if let persistedState = getPersistedState(engineName: "logins") {
-            UserDefaults.standard.setValue(persistedState,
-                                           forKey: PrefsKeys.RustSyncState)
+            self.prefs.setString(persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
         } else if let persistedState = getPersistedState(engineName: "bookmarks") {
-            UserDefaults.standard.setValue(persistedState,
-                                           forKey: PrefsKeys.RustSyncState)
+            self.prefs.setString(persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
         } else if let persistedState = getPersistedState(engineName: "history") {
-            UserDefaults.standard.setValue(persistedState,
-                                           forKey: PrefsKeys.RustSyncState)
+            self.prefs.setString(persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
         }
         
         // There were no enabled engines to sync so persisted state will be empty.
@@ -182,27 +178,58 @@ public class RustSyncManager: NSObject, SyncManager {
         notifySyncing(notification: .ProfileDidStartSyncing)
     }
     
-    private func resolveSyncState(
-        status: ServiceStatus,
-        hasSynced: Bool
-    ) -> SyncDisplayState {
-        if hasSynced || status == .ok || status == .backedOff {
-            return .good
-        } else if status == .authError {
-            return .warning(message: .FirefoxSyncOfflineTitle)
-        } else {
-            return .bad(message: .FirefoxSyncOfflineTitle)
-        }
-    }
+//    private func resolveSyncState(
+//        status: ServiceStatus,
+//        hasSynced: Bool
+//    ) -> SyncDisplayState {
+//        if hasSynced || status == .ok || status == .backedOff {
+//            return .good
+//        } else if status == .authError {
+//            return .warning(message: .FirefoxSyncOfflineTitle)
+//        } else {
+//            return .bad(message: .FirefoxSyncOfflineTitle)
+//        }
+        
+//        switch syncStatus {
+//        case .notStarted(let reason):
+//            switch reason {
+//            case .offline:
+//                return .bad(message: .FirefoxSyncOfflineTitle)
+//            case .noAccount:
+//                return .warning(message: .FirefoxSyncOfflineTitle)
+//            case .backoff:
+//                return .good
+//            case .engineRemotelyNotEnabled:
+//                return .good
+//            case .engineFormatOutdated:
+//                return .good
+//            case .engineFormatTooNew:
+//                return .good
+//            case .storageFormatOutdated:
+//                return .good
+//            case .storageFormatTooNew:
+//                return .good
+//            case .stateMachineNotReady:
+//                return .good
+//            case .redLight:
+//                return .good
+//            case .unknown:
+//                return .good
+//            }
+//        case .completed:
+//            return .good
+//        case .partial:
+//            return .good
+//        }
+//    }
 
     fileprivate func endRustSyncing(_ result: RustSyncResult) {
-        // loop through statuses and fill sync state
         logger.log("Ending all queued syncs.",
                    level: .info,
                    category: .sync)
         
-        syncDisplayState = resolveSyncState(status: result.status,
-                         hasSynced: !result.successful.isEmpty && !result.failures.isEmpty)
+//        syncDisplayState = resolveSyncState(status: result.status,
+//                         hasSynced: !result.successful.isEmpty && !result.failures.isEmpty)
         
         #if MOZ_TARGET_CLIENT
             if canSendUsageData() {
@@ -463,8 +490,8 @@ public class RustSyncManager: NSObject, SyncManager {
                                 fxaAccessToken: accessTokenInfo.token,
                                 syncKey: key.k,
                                 tokenserverUrl: tokenServerEndpointURL.absoluteString),
-                            persistedState: UserDefaults
-                                .standard.string(forKey: PrefsKeys.RustSyncState),
+                            persistedState:
+                                self.prefs.stringForKey(PrefsKeys.RustSyncManagerPersistedState),
                             deviceSettings:  DeviceSettings(
                                 fxaDeviceId: device.id,
                                 name: device.displayName,
@@ -474,10 +501,7 @@ public class RustSyncManager: NSObject, SyncManager {
                         self.beginSyncing()
                         self.syncManagerAPI.sync(params: params) { syncResult in
                             // Save the persisted state
-                            UserDefaults.standard.setValue(
-                                syncResult.persistedState,
-                                forKey: PrefsKeys.RustSyncState)
-                            
+                           self.prefs.setString(syncResult.persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
                             self.logger.log("""
                                         Finished syncing with \(syncResult.status) status
                                         """,
