@@ -71,12 +71,11 @@ class LoginListDataSourceHelperTests: XCTestCase {
         let logins = [apple, appleMusic, zebra]
         subject.setDomainLookup(logins)
         let expectation = expectation(description: "Compute sections from login done")
-        subject.computeSectionsFromLogins(logins).upon { (formattedLoginsMaybe) in
-            XCTAssertTrue(formattedLoginsMaybe.isSuccess)
-            XCTAssertNotNil(formattedLoginsMaybe.successValue)
-            let formattedLogins = formattedLoginsMaybe.successValue
-            XCTAssertEqual(formattedLogins?.0, sortedTitles)
-            XCTAssertEqual(formattedLogins?.1, expected)
+        subject.computeSectionsFromLogins(logins) { formattedLogins in
+            XCTAssertTrue(!formattedLogins.0.isEmpty)
+            XCTAssertTrue(!formattedLogins.1.isEmpty)
+            XCTAssertEqual(formattedLogins.0, sortedTitles)
+            XCTAssertEqual(formattedLogins.1, expected)
             expectation.fulfill()
         }
 
