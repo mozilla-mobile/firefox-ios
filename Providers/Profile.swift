@@ -528,6 +528,26 @@ open class BrowserProfile: Profile {
         return syncDelegate ?? CommandStoringSyncDelegate(profile: self)
     }
     
+    // This function exists to service the `FxaPushMessengerHandler.handle` function and
+    // will be removed after the rust sync manager rollout is complete
+    public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
+        if self.rustSyncManagerEnabled {
+            return self.tabs.getClient(fxaDeviceId: fxaDeviceId)
+        } else {
+            return self.remoteClientsAndTabs.getClient(fxaDeviceId: fxaDeviceId)
+        }
+    }
+    
+    // This function exists to service the `TabPeekViewController.setState` function and
+    // will be removed after the rust sync manager rollout is complete
+    public func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>> {
+        if self.rustSyncManagerEnabled {
+            return tabs.getClientGUIDs()
+        } else {
+            return self.remoteClientsAndTabs.getClientGUIDs()
+        }
+    }
+    
     func getRustTabsWithClients() -> Deferred<Maybe<[ClientAndTabs]>> {
         return self.tabs.getAll().bind { tabsResult in
             if let tabsError = tabsResult.failureValue {
@@ -621,7 +641,7 @@ open class BrowserProfile: Profile {
             // We shouldn't be called at all if the user isn't signed in.
             return
         }
-        // TODO: check if this should be replaced
+
         if syncManager.isSyncing {
             // If Sync is already running, `BrowserSyncManager#endSyncing` will
             // send a ping with the queued events when it's done, so don't send

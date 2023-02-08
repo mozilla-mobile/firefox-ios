@@ -173,6 +173,21 @@ public class RustRemoteTabs {
         }
     }
     
+    public func getClientGUIDs() -> Deferred<Maybe<Set<GUID>>> {
+        return self.getAll().bind { result in
+            if let error = result.failureValue {
+                return deferMaybe(error)
+            }
+            
+            guard let records = result.successValue else {
+                return deferMaybe(Set<GUID>())
+            }
+
+            let guids = records.map({ $0.clientId })
+            return deferMaybe(Set(guids))
+        }
+    }
+    
     public func registerWithSyncManager() {
         queue.async {
            self.storage?.registerWithSyncManager()
