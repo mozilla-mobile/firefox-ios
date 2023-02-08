@@ -2124,27 +2124,10 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
-
-        // TODO: Remove this block was added to fix https://mozilla-hub.atlassian.net/browse/FXIOS-4018
-        // but will be handled in the refactoring
-        if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
-            if tab.url == nil, !tab.isRestoring {
-                if tabManager.didChangedPanelSelection && !tabManager.didAddNewTab {
-                    tabManager.didChangedPanelSelection = false
-                    leaveOverlayMode(didCancel: false)
-                } else {
-                    tabManager.didAddNewTab = false
-                    urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
-                }
-            } else {
-                leaveOverlayMode(didCancel: false)
-            }
-        }
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
-        tabManager.didAddNewTab = true
         if !isRestoring {
             // TODO: Call to manager enterOverlayMode here
             updateTabCountUsingTabManager(tabManager)
