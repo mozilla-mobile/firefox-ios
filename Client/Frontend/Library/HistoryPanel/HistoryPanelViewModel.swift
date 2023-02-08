@@ -103,29 +103,32 @@ class HistoryPanelViewModel: FeatureFlaggable {
             resetHistory()
         }
 
-        fetchData().uponQueue(.global(qos: .userInteractive)) { result in
-            guard let fetchedSites = result.successValue?.asArray(), !fetchedSites.isEmpty else {
-                completion(false)
-                return
-            }
+        fetchData { [weak self] fetchedSites in
+            DispatchQueue.global(qos: .userInteractive).async {
+                guard let self = self,
+                      !fetchedSites.isEmpty else {
+                    completion(false)
+                    return
+                }
 
-            self.currentFetchOffset += self.queryFetchLimit
-            if self.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) {
-                self.populateASGroups(fetchedSites: fetchedSites) { groups, items in
-                    guard let groups = groups else {
-                        completion(false)
-                        return
+                self.currentFetchOffset += self.queryFetchLimit
+                if self.featureFlags.isFeatureEnabled(.historyGroups, checking: .buildOnly) {
+                    self.populateASGroups(fetchedSites: fetchedSites) { groups, items in
+                        guard let groups = groups else {
+                            completion(false)
+                            return
+                        }
+
+                        self.searchTermGroups.append(contentsOf: groups)
+                        self.createGroupedSites(sites: items)
+                        self.buildGroupsVisibleSections()
+                        completion(true)
                     }
-
-                    self.searchTermGroups.append(contentsOf: groups)
-                    self.createGroupedSites(sites: items)
-                    self.buildGroupsVisibleSections()
+                } else {
+                    self.populateHistorySites(fetchedSites: fetchedSites)
+                    self.buildVisibleSections()
                     completion(true)
                 }
-            } else {
-                self.populateHistorySites(fetchedSites: fetchedSites)
-                self.buildVisibleSections()
-                completion(true)
             }
         }
     }
@@ -270,37 +273,31 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     // MARK: - Private helpers
 
-    private func fetchData() -> Deferred<Maybe<Cursor<Site>>> {
+    private func fetchData(completion: @escaping (([Site]) -> Void)) {
         guard !isFetchInProgress else {
-            return deferMaybe(FetchInProgressError())
+            completion([])
+            return
         }
 
         isFetchInProgress = true
 
-        let deferred = profile.places.getSitesWithBound(
+        profile.places.getSitesWithBound(
             limit: queryFetchLimit,
             offset: currentFetchOffset,
             excludedTypes: VisitTransitionSet(0)
-        )
+        ).upon { [weak self] result in
+            completion(result.successValue?.asArray() ?? [])
 
-        let historySites = Deferred<Maybe<Cursor<Site>>>()
-        deferred.upon { sites in
-            historySites.fill(sites)
-            guard sites.isSuccess else {
-                self.isFetchInProgress = false
-                return
-            }
             // Force 100ms delay between resolution of the last batch of results
             // and the next time `fetchData()` can be called.
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                guard let self = self else { return }
                 self.isFetchInProgress = false
                 self.logger.log("currentFetchOffset is: \(self.currentFetchOffset)",
                                 level: .debug,
                                 category: .library)
             }
         }
-
-        return historySites
     }
 
     private func resetHistory() {
