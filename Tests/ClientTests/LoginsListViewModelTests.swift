@@ -50,28 +50,28 @@ class LoginsListViewModelTests: XCTestCase {
     }
 
     func testQueryLogins() {
-        let group = DispatchGroup()
-        group.enter()
+        let expectation = XCTestExpectation()
         viewModel.queryLogins("") { emptyQueryResult in
             XCTAssertEqual(emptyQueryResult.count, 10)
-            group.leave()
+            expectation.fulfill()
         }
-        group.enter()
+
         viewModel.queryLogins("example") { exampleQueryResult in
             XCTAssertEqual(exampleQueryResult.count, 10)
-            group.leave()
+            expectation.fulfill()
         }
-        group.enter()
+
         viewModel.queryLogins("3") { threeQueryResult in
             XCTAssertEqual(threeQueryResult.count, 1)
-            group.leave()
+            expectation.fulfill()
         }
-        group.enter()
+
         viewModel.queryLogins("yxz") { zQueryResult in
             XCTAssertEqual(zQueryResult.count, 0)
-            group.leave()
+            expectation.fulfill()
         }
-        group.wait(timeout: .distantFuture)
+
+        wait(for: [expectation], timeout: 5)
     }
 
     func testIsDuringSearchControllerDismiss() {
