@@ -12,6 +12,19 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
     var viewModel: CreditCardTableViewModel
     var theme: Theme
 
+    // MARK: UX constants
+    struct UX {
+        static let toggleSwitchContainerHeight = 40
+        static let toggleSwitchAnchor = -16
+        static let toggleSwitchLabelHeight = 18
+        static let toggleSwitchContainerLineHeight = 0.7
+        static let toggleSwitchContainerLineAnchor = 10
+        static let savedCardsTitleLabelBottomAnchor = 25
+        static let savedCardsTitleLabelLeading = 16
+        static let savedCardsTitleLabelHeight = 13
+        static let tableViewTopAnchor = 8
+    }
+
     // MARK: View
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -48,15 +61,14 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         toggleSwitch.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    private var savedCardsTitleLabel: UILabel = {
-        var savedCardsTitleLabel = UILabel()
+    private var savedCardsTitleLabel: UILabel = .build { savedCardsTitleLabel in
         savedCardsTitleLabel.font = UIFont.systemFont(ofSize: 12.0,
                                                       weight: UIFont.Weight.regular)
         savedCardsTitleLabel.numberOfLines = 1
         savedCardsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         savedCardsTitleLabel.text = String.CreditCard.EditCard.SavedCardListTitle
         return savedCardsTitleLabel
-    }()
+    }
 
     init(theme: Theme, viewModel: CreditCardTableViewModel) {
         self.theme = theme
@@ -90,33 +102,33 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
 
         NSLayoutConstraint.activate([
             toggleSwitchContainer.topAnchor.constraint(equalTo: view.topAnchor),
-            toggleSwitchContainer.heightAnchor.constraint(equalToConstant: 40),
+            toggleSwitchContainer.heightAnchor.constraint(equalToConstant: UX.toggleSwitchContainerHeight),
             toggleSwitchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             toggleSwitchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             toggleSwitch.centerYAnchor.constraint(
                 equalTo: toggleSwitchContainer.centerYAnchor),
-            toggleSwitch.trailingAnchor.constraint(equalTo: toggleSwitchContainer.trailingAnchor, constant: -16),
+            toggleSwitch.trailingAnchor.constraint(equalTo: toggleSwitchContainer.trailingAnchor, constant: -UX.toggleSwitchAnchor),
 
             toggleSwitchLabel.centerYAnchor.constraint(
                 equalTo: toggleSwitchContainer.centerYAnchor),
-            toggleSwitchLabel.leadingAnchor.constraint(equalTo: toggleSwitchContainer.leadingAnchor, constant: 16),
-            toggleSwitchLabel.heightAnchor.constraint(equalToConstant: 18),
+            toggleSwitchLabel.leadingAnchor.constraint(equalTo: toggleSwitchContainer.leadingAnchor, constant: UX.toggleSwitchAnchor),
+            toggleSwitchLabel.heightAnchor.constraint(equalToConstant: UX.toggleSwitchLabelHeight),
 
-            toggleSwitchContainerLine.heightAnchor.constraint(equalToConstant: 0.7),
+            toggleSwitchContainerLine.heightAnchor.constraint(equalToConstant: UX.toggleSwitchContainerLineHeight),
             toggleSwitchContainerLine.leadingAnchor.constraint(
-                equalTo: toggleSwitchContainer.leadingAnchor, constant: 10),
+                equalTo: toggleSwitchContainer.leadingAnchor, constant: UX.toggleSwitchContainerLineAnchor),
             toggleSwitchContainerLine.trailingAnchor.constraint(
-                equalTo: toggleSwitchContainer.trailingAnchor, constant: 10),
+                equalTo: toggleSwitchContainer.trailingAnchor, constant: UX.toggleSwitchContainerLineAnchor),
             toggleSwitchContainerLine.bottomAnchor.constraint(
                 equalTo: toggleSwitchContainer.bottomAnchor),
 
-            savedCardsTitleLabel.topAnchor.constraint(equalTo: toggleSwitchContainer.bottomAnchor, constant: 25),
-            savedCardsTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            savedCardsTitleLabel.heightAnchor.constraint(equalToConstant: 13),
+            savedCardsTitleLabel.topAnchor.constraint(equalTo: toggleSwitchContainer.bottomAnchor, constant: UX.savedCardsTitleLabelBottomAnchor),
+            savedCardsTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.savedCardsTitleLabelLeading),
+            savedCardsTitleLabel.heightAnchor.constraint(equalToConstant: UX.savedCardsTitleLabelHeight),
             savedCardsTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            tableView.topAnchor.constraint(equalTo: savedCardsTitleLabel.bottomAnchor, constant: 8),
+            tableView.topAnchor.constraint(equalTo: savedCardsTitleLabel.bottomAnchor, constant: UX.tableViewTopAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
