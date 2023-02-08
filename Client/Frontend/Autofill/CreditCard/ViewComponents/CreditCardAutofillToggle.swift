@@ -6,7 +6,8 @@ import Foundation
 import SwiftUI
 
 struct CreditCardAutofillToggle: View {
-    @State var isToggleOn: Bool = false
+    var textColor: Color
+    @State var isToggleOn: Bool = false // @ObservedObject
 
     var body: some View {
         VStack {
@@ -17,6 +18,7 @@ struct CreditCardAutofillToggle: View {
             HStack {
                 Toggle("Save and autofill cards", isOn: $isToggleOn)
                     .font(.system(.body))
+                    .foregroundColor(textColor)
                     .padding(.leading, 16)
                     .padding(.trailing, 16)
             }
@@ -29,13 +31,16 @@ struct CreditCardAutofillToggle: View {
 
 struct CreditCardAutofillToggle_Previews: PreviewProvider {
     static var previews: some View {
-        CreditCardAutofillToggle(isToggleOn: true)
+        CreditCardAutofillToggle(textColor: .gray,
+                                 isToggleOn: true)
 
-        CreditCardAutofillToggle(isToggleOn: true)
+        CreditCardAutofillToggle(textColor: .gray,
+                                 isToggleOn: true)
             .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
             .previewDisplayName("Large")
 
-        CreditCardAutofillToggle(isToggleOn: true)
+        CreditCardAutofillToggle(textColor: .gray,
+                                 isToggleOn: true)
             .environment(\.sizeCategory, .extraSmall)
             .previewDisplayName("Small")
     }
