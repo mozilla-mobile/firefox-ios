@@ -6,11 +6,14 @@ import Foundation
 import UIKit
 import SwiftUI
 import Storage
+import Common
 import Shared
 
-class CreditCardTableViewController: UIViewController, ThemeApplicable {
+class CreditCardTableViewController: UIViewController, Themeable {
     var viewModel: CreditCardTableViewModel
-    var theme: Theme
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
 
     // MARK: UX constants
     struct UX {
@@ -69,9 +72,12 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         savedCardsTitleLabel.text = String.CreditCard.EditCard.SavedCardListTitle
     }
 
-    init(theme: Theme, viewModel: CreditCardTableViewModel) {
-        self.theme = theme
+    init(viewModel: CreditCardTableViewModel,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -81,8 +87,9 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        applyTheme(theme: theme)
         viewSetup()
+        listenForThemeChange()
+        applyTheme()
     }
 
     private func viewSetup() {
@@ -136,7 +143,8 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         view.bringSubviewToFront(tableView)
     }
 
-    func applyTheme(theme: Theme) {
+    func applyTheme() {
+        let theme = themeManager.currentTheme
         toggleSwitchContainerLine.backgroundColor = theme.colors.borderPrimary
         toggleSwitchContainer.backgroundColor = theme.colors.layer2
         tableView.backgroundColor = .clear
@@ -156,6 +164,10 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
     func updateToggleValue(value: Bool) {
         toggleSwitch.setOn(value, animated: true)
     }
+
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
 }
 
 extension CreditCardTableViewController: UITableViewDelegate,
@@ -172,6 +184,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
+        let theme = themeManager.currentTheme
         let titleTextColor = Color(theme.colors.textPrimary)
         let subTextColor = Color(theme.colors.textSecondary)
         let separatorColor = Color(theme.colors.borderPrimary)

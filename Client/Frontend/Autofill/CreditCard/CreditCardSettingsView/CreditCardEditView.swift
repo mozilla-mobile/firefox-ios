@@ -19,7 +19,6 @@ struct CreditCardEditView: View {
 
             FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
                               textVal: $viewModel.nameOnCard,
-                              placeHolder: "",
                               errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
                               showError: !viewModel.nameIsValid,
                               colors: colors)
@@ -28,7 +27,6 @@ struct CreditCardEditView: View {
 
             FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
                               textVal: $viewModel.cardNumber,
-                              placeHolder: "",
                               errorString: String.CreditCard.ErrorState.CardNumberTitle,
                               showError: !viewModel.numberIsValid,
                               colors: colors)
@@ -37,7 +35,6 @@ struct CreditCardEditView: View {
 
             FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
                               textVal: $viewModel.expirationDate,
-                              placeHolder: "",
                               errorString: String.CreditCard.ErrorState.CardExpirationDateTitle,
                               showError: !viewModel.expirationIsValid,
                               colors: colors)

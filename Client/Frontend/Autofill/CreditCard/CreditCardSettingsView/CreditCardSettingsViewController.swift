@@ -4,15 +4,17 @@
 
 import Foundation
 import UIKit
-import Shared
 import SwiftUI
+import Storage
+import Common
+import Shared
 
-class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
+class CreditCardSettingsViewController: UIViewController, Themeable {
     var themeObserver: NSObjectProtocol?
-    var theme: Theme
     var viewModel: CreditCardSettingsViewModel
-    var state: CreditCardSettingsState = .empty
     var startingConfig: CreditCardSettingsStartingConfig?
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
 
     // MARK: Views
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
@@ -20,19 +22,21 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
     var creditCardTableViewController: CreditCardTableViewController
 
     // MARK: Initializers
-    init(theme: Theme,
-         creditCardViewModel: CreditCardSettingsViewModel,
-         startingConfig: CreditCardSettingsStartingConfig?) {
-        self.theme = theme
+    init(creditCardViewModel: CreditCardSettingsViewModel,
+         startingConfig: CreditCardSettingsStartingConfig?,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
+        self.themeManager = themeManager
         self.creditCardEmptyView = UIHostingController(rootView: CreditCardSettingsEmptyView())
         self.creditCardAddEditView =
         UIHostingController(rootView: CreditCardEditView(
             viewModel: viewModel.addEditViewModel,
-            removeButtonColor: Color(theme.colors.textWarning),
-            borderColor: Color(theme.colors.borderPrimary)))
-        self.creditCardTableViewController = CreditCardTableViewController(theme: theme, viewModel: viewModel.creditCardTableViewModel)
+            removeButtonColor: Color(themeManager.currentTheme.colors.textWarning),
+            borderColor: Color(themeManager.currentTheme.colors.borderPrimary)))
+        self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.creditCardTableViewModel)
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -42,8 +46,9 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        applyTheme(theme: theme)
         viewSetup()
+        listenForThemeChange()
+        applyTheme()
     }
 
     func viewSetup() {
@@ -130,7 +135,12 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
         creditCardTableViewController.view.isHidden = true
     }
 
-    func applyTheme(theme: Theme) {
+    func applyTheme() {
+        let theme = themeManager.currentTheme
         view.backgroundColor = theme.colors.layer1
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 }
