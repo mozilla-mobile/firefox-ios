@@ -11,51 +11,31 @@ import Shared
 class CreditCardTableViewController: UIViewController, ThemeApplicable {
     var viewModel: CreditCardTableViewModel
     var theme: Theme
+    var isToggled = true
 
     // MARK: View
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(HostingTableViewCell<CreditCardItemRow>.self,
                            forCellReuseIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier)
-        tableView.sectionHeaderHeight = 0
+        tableView.register(HostingTableViewCell<CreditCardAutofillToggle>.self,
+                           forCellReuseIdentifier: HostingTableViewCell<CreditCardAutofillToggle>.cellIdentifier)
+        tableView.register(
+            HostingTableViewSectionHeader<CreditCardSectionHeader>.self,
+            forHeaderFooterViewReuseIdentifier: HostingTableViewSectionHeader<CreditCardSectionHeader>.cellIdentifier)
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.sectionFooterHeight = 0
         tableView.tableHeaderView = UIView(frame: CGRect(
             origin: .zero,
             size: CGSize(width: 0, height: CGFloat.leastNormalMagnitude)))
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 86
         tableView.separatorStyle = .none
         tableView.separatorColor = .clear
         tableView.dataSource = self
         tableView.delegate = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
-    }()
-
-    private var toggleSwitchContainer: UIView = .build { view in }
-
-    private var toggleSwitchContainerLine: UIView = .build { view in }
-
-    private var toggleSwitchLabel: UILabel = .build { toggleSwitchLabel in
-        toggleSwitchLabel.font = UIFont.systemFont(ofSize: 17.0,
-                                                   weight: UIFont.Weight.regular)
-        toggleSwitchLabel.numberOfLines = 1
-        toggleSwitchLabel.text = String.CreditCard.EditCard.ToggleToAllowAutofillTitle
-    }
-
-    private var toggleSwitch: UISwitch = .build { toggleSwitch in
-        toggleSwitch.addTarget(CreditCardTableViewController.self,
-                               action: #selector(autofillToggleTapped),
-                               for: .valueChanged)
-        toggleSwitch.translatesAutoresizingMaskIntoConstraints = false
-    }
-
-    private var savedCardsTitleLabel: UILabel = {
-        var savedCardsTitleLabel = UILabel()
-        savedCardsTitleLabel.font = UIFont.systemFont(ofSize: 12.0,
-                                                      weight: UIFont.Weight.regular)
-        savedCardsTitleLabel.numberOfLines = 1
-        savedCardsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        savedCardsTitleLabel.text = String.CreditCard.EditCard.SavedCardListTitle
-        return savedCardsTitleLabel
     }()
 
     init(theme: Theme, viewModel: CreditCardTableViewModel) {
@@ -75,48 +55,14 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
     }
 
     private func viewSetup() {
-        view.addSubview(toggleSwitchContainer)
-        toggleSwitchContainer.addSubview(toggleSwitchLabel)
-        toggleSwitchContainer.addSubview(toggleSwitch)
-        toggleSwitchContainer.addSubview(toggleSwitchContainerLine)
-        view.addSubview(savedCardsTitleLabel)
         view.addSubview(tableView)
-
-        toggleSwitch.setOn(viewModel.isAutofillEnabled, animated: true)
 
         viewModel.didUpdateCreditCards = { [weak self] in
             self?.reloadData()
         }
 
         NSLayoutConstraint.activate([
-            toggleSwitchContainer.topAnchor.constraint(equalTo: view.topAnchor),
-            toggleSwitchContainer.heightAnchor.constraint(equalToConstant: 40),
-            toggleSwitchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            toggleSwitchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            toggleSwitch.centerYAnchor.constraint(
-                equalTo: toggleSwitchContainer.centerYAnchor),
-            toggleSwitch.trailingAnchor.constraint(equalTo: toggleSwitchContainer.trailingAnchor, constant: -16),
-
-            toggleSwitchLabel.centerYAnchor.constraint(
-                equalTo: toggleSwitchContainer.centerYAnchor),
-            toggleSwitchLabel.leadingAnchor.constraint(equalTo: toggleSwitchContainer.leadingAnchor, constant: 16),
-            toggleSwitchLabel.heightAnchor.constraint(equalToConstant: 18),
-
-            toggleSwitchContainerLine.heightAnchor.constraint(equalToConstant: 0.7),
-            toggleSwitchContainerLine.leadingAnchor.constraint(
-                equalTo: toggleSwitchContainer.leadingAnchor, constant: 10),
-            toggleSwitchContainerLine.trailingAnchor.constraint(
-                equalTo: toggleSwitchContainer.trailingAnchor, constant: 10),
-            toggleSwitchContainerLine.bottomAnchor.constraint(
-                equalTo: toggleSwitchContainer.bottomAnchor),
-
-            savedCardsTitleLabel.topAnchor.constraint(equalTo: toggleSwitchContainer.bottomAnchor, constant: 25),
-            savedCardsTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            savedCardsTitleLabel.heightAnchor.constraint(equalToConstant: 13),
-            savedCardsTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            tableView.topAnchor.constraint(equalTo: savedCardsTitleLabel.bottomAnchor, constant: 8),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -126,36 +72,74 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        toggleSwitchContainerLine.backgroundColor = theme.colors.borderPrimary
-        toggleSwitchContainer.backgroundColor = theme.colors.layer2
-        tableView.backgroundColor = .clear
-        toggleSwitch.onTintColor = theme.colors.actionPrimary
+//        toggleSwitchContainerLine.backgroundColor = theme.colors.borderPrimary
+//        toggleSwitchContainer.backgroundColor = theme.colors.layer2
+//        tableView.backgroundColor = .clear
+//        toggleSwitch.onTintColor = theme.colors.actionPrimary
         view.backgroundColor = theme.colors.layer1
     }
 
     @objc private func autofillToggleTapped() {
         viewModel.updateToggle()
-        updateToggleValue(value: viewModel.isAutofillEnabled)
+//        updateToggleValue(value: viewModel.isAutofillEnabled)
     }
 
     func reloadData() {
         tableView.reloadData()
     }
 
-    func updateToggleValue(value: Bool) {
-        toggleSwitch.setOn(value, animated: true)
-    }
+//    func updateToggleValue(value: Bool) {
+//        toggleSwitch.setOn(value, animated: true)
+//    }
 }
 
 extension CreditCardTableViewController: UITableViewDelegate,
                                          UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return viewModel.creditCards.count
+        return section == 0 ? 1 : viewModel.creditCards.count
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section > 0,
+                let hostingCell = tableView.dequeueReusableHeaderFooterView(
+                    withIdentifier: HostingTableViewSectionHeader<CreditCardSectionHeader>.cellIdentifier) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
+        else { return nil }
+
+        let headerView = CreditCardSectionHeader(textColor: Color(theme.colors.textSecondary))
+        hostingCell.host(headerView, parentController: self)
+        return hostingCell
     }
 
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            return toggleCell()
+        } else {
+            return creditCardCell(indexPath: indexPath)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    // MARK: - Private
+    private func toggleCell() -> UITableViewCell {
+        guard let hostingCell = tableView.dequeueReusableCell(
+            withIdentifier: HostingTableViewCell<CreditCardAutofillToggle>.cellIdentifier) as? HostingTableViewCell<CreditCardAutofillToggle> else {
+            return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
+        }
+
+        let row = CreditCardAutofillToggle(isToggleOn: isToggled)
+        hostingCell.host(row, parentController: self)
+        return hostingCell
+    }
+    private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = tableView.dequeueReusableCell(
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
