@@ -41,6 +41,7 @@ extension SiteImageDownloader {
                         case .failure(let error):
                             continuation.resume(throwing: error)
                         }
+                        self.continuation = nil
                     }
                 }
             }
