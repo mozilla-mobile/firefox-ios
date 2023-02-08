@@ -20,7 +20,6 @@ final class LoginListViewModel {
     private(set) var hasData: Bool = false
     weak var searchController: UISearchController?
     weak var delegate: LoginViewModelDelegate?
-    private(set) var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
     private(set) var titles = [Character]()
     private(set) var loginRecordSections = [Character: [LoginRecord]]() {
         didSet {
@@ -49,44 +48,46 @@ final class LoginListViewModel {
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
         // Fill in an in-flight query and re-query
-        activeLoginQuery?.fillIfUnfilled(Maybe(failure: NewSearchInProgressError(description: "Updated search string provided")))
-        activeLoginQuery = queryLogins(query ?? "")
-        activeLoginQuery! >>== self.setLogins
-        // Loading breaches is a heavy operation hence loading it once per opening logins screen
-        guard !hasLoadedBreaches else { return }
-        breachAlertsManager.loadBreaches { [weak self] _ in
-            guard let self = self, let logins = self.activeLoginQuery?.value.successValue else { return }
-            self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
-            guard let breaches = self.userBreaches else { return }
-            var indexPaths = Set<IndexPath>()
-            for breach in breaches {
-                if logins.contains(breach), let indexPath = self.indexPathForLogin(breach) {
-                    indexPaths.insert(indexPath)
+        queryLogins(query ?? "") { [weak self] logins in
+            self?.setLogins(logins)
+            // Loading breaches is a heavy operation hence loading it once per opening logins screen
+            guard self?.hasLoadedBreaches == false else { return }
+            self?.breachAlertsManager.loadBreaches(completion: { _ in
+                guard let self = self else { return }
+
+                self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
+                guard let breaches = self.userBreaches else { return }
+                var indexPaths = Set<IndexPath>()
+                for breach in breaches {
+                    if logins.contains(breach), let indexPath = self.indexPathForLogin(breach) {
+                        indexPaths.insert(indexPath)
+                    }
                 }
-            }
-            self.breachIndexPath = indexPaths
-            self.hasLoadedBreaches = true
+                self.breachIndexPath = indexPaths
+                self.hasLoadedBreaches = true
+            })
         }
     }
 
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
-    func queryLogins(_ query: String) -> Deferred<Maybe<[LoginRecord]>> {
-        let deferred = Deferred<Maybe<[LoginRecord]>>()
+    func queryLogins(_ query: String, completion: @escaping (([LoginRecord]) -> Void)) {
         profile.logins.searchLoginsWithQuery(query).upon { result in
             // Check any failure, Ex. database is closed
             guard result.failureValue == nil else {
                 DispatchQueue.main.async {
                     self.delegate?.loginSectionsDidUpdate()
                 }
+                completion([])
                 return
             }
             // Make sure logins exist
-            guard let logins = result.successValue else { return }
-            deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
-            succeed()
+            guard let logins = result.successValue else {
+                completion([])
+                return
+            }
+            completion(logins.asArray())
         }
-        return deferred
     }
 
     func setIsDuringSearchControllerDismiss(to: Bool) {
@@ -131,32 +132,37 @@ final class LoginListViewModel {
     func setLogins(_ logins: [LoginRecord]) {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.
-        return self.helper.computeSectionsFromLogins(logins).uponQueue(.main) { result in
-            guard let (titles, sections) = result.successValue,
-                  !logins.isEmpty
-            else {
-                self.count = 0
-                self.hasData = false
-                self.titles = []
-                self.loginRecordSections = [:]
-                return
-            }
 
-            self.count = logins.count
-            self.hasData = !logins.isEmpty
-            self.titles = titles
-            self.loginRecordSections = sections
+        helper.computeSectionsFromLogins(logins) { [weak self] result in
+            let titles = result.0
+            let sections = result.1
+            DispatchQueue.main.async {
+                guard !logins.isEmpty else {
+                    self?.count = 0
+                    self?.hasData = false
+                    self?.titles = []
+                    self?.loginRecordSections = [:]
+                    return
+                }
 
-            // Disable the search controller if there are no logins saved
-            if !(self.searchController?.isActive ?? true) {
-                self.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
-                    self.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
+                self?.count = logins.count
+                self?.hasData = !logins.isEmpty
+                self?.titles = titles
+                self?.loginRecordSections = sections
+
+                // Disable the search controller if there are no logins saved
+                if !(self?.searchController?.isActive ?? true) {
+                    self?.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
+                    self?.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
+                }
             }
         }
     }
 
-    public func save(loginRecord: LoginEntry) -> Deferred<Maybe<String>> {
-        return profile.logins.addLogin(login: loginRecord)
+    public func save(loginRecord: LoginEntry, completion: @escaping ((String?) -> Void)) {
+        profile.logins.addLogin(login: loginRecord).upon { result in
+            completion(result.successValue)
+        }
     }
 
     func setBreachIndexPath(indexPath: IndexPath) {

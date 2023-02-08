@@ -46,31 +46,25 @@ class LoginListViewController: SensitiveViewController, Themeable {
         authenticateInNavigationController navigationController: UINavigationController,
         profile: Profile,
         settingsDelegate: SettingsDelegate? = nil,
-        webpageNavigationHandler: ((_ url: URL?) -> Void)?
-    ) -> Deferred<LoginListViewController?> {
-        let deferred = Deferred<LoginListViewController?>()
-
-        func fillDeferred(ok: Bool) {
-            if ok {
-                let viewController = LoginListViewController(profile: profile,
-                                                             webpageNavigationHandler: webpageNavigationHandler)
-                viewController.settingsDelegate = settingsDelegate
-                deferred.fill(viewController)
-            } else {
-                deferred.fill(nil)
-            }
-        }
-
+        webpageNavigationHandler: ((_ url: URL?) -> Void)?,
+        completion: @escaping ((LoginListViewController?) -> Void)
+    ) {
         AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+            let viewController: LoginListViewController?
             switch result {
             case .success:
-                fillDeferred(ok: true)
+                viewController = LoginListViewController(
+                    profile: profile,
+                    webpageNavigationHandler: webpageNavigationHandler
+                )
+                viewController?.settingsDelegate = settingsDelegate
             case .failure:
-                fillDeferred(ok: false)
+                viewController = nil
+            }
+            DispatchQueue.main.async {
+                completion(viewController)
             }
         }
-
-        return deferred
     }
 
     private init(profile: Profile,
@@ -308,9 +302,8 @@ private extension LoginListViewController {
 
     @objc func presentAddCredential() {
         let addController = AddCredentialViewController { [weak self] record in
-            let result = self?.viewModel.save(loginRecord: record)
             self?.presentedViewController?.dismiss(animated: true) {
-                result?.upon { id in
+                self?.viewModel.save(loginRecord: record) { _ in
                     DispatchQueue.main.async {
                         self?.loadLogins()
                         self?.tableView.reloadData()

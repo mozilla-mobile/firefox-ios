@@ -53,17 +53,19 @@ class LoginListDataSourceHelper {
         }
     }
 
-    func computeSectionsFromLogins(_ logins: [LoginRecord]) -> Deferred<Maybe<([Character], [Character: [LoginRecord]])>> {
+    func computeSectionsFromLogins(_ logins: [LoginRecord], completion: @escaping ((([Character], [Character: [LoginRecord]])) -> Void)) {
         guard !logins.isEmpty else {
-            return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
+            completion( ([Character](), [Character: [LoginRecord]]()) )
+            return
         }
 
         var sections = [Character: [LoginRecord]]()
         var titleSet = Set<Character>()
 
-        return deferDispatchAsync(DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) { [weak self] in
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else {
-                return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
+                completion( ([Character](), [Character: [LoginRecord]]()) )
+                return
             }
 
             self.setDomainLookup(logins)
@@ -79,7 +81,7 @@ class LoginListDataSourceHelper {
             // 4. Go through each section and sort.
             sections.forEach { sections[$0] = $1.sorted(by: self.sortByDomain) }
 
-            return deferMaybe( (Array(titleSet).sorted(), sections) )
+            completion( (Array(titleSet).sorted(), sections) )
         }
     }
 }

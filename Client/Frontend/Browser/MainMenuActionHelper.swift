@@ -803,11 +803,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func showLoginListVC(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
         guard let menuActionDelegate = menuActionDelegate else { return }
-        LoginListViewController.create(authenticateInNavigationController: navigationController,
-                                       profile: self.profile,
-                                       settingsDelegate: menuActionDelegate,
-                                       webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-            self.presentLoginList(loginsVC)
+        LoginListViewController.create(
+            authenticateInNavigationController: navigationController,
+            profile: self.profile,
+            settingsDelegate: menuActionDelegate,
+            webpageNavigationHandler: navigationHandler
+        ) { [weak self] loginsVC in
+            self?.presentLoginList(loginsVC)
         }
     }
 
