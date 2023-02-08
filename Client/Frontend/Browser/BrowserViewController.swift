@@ -12,7 +12,6 @@ import SnapKit
 import Account
 import MobileCoreServices
 import Telemetry
-import Sentry
 import Common
 import Logger
 

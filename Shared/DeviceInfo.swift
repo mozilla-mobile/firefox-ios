@@ -2,9 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import UIKit
 
-open class DeviceInfo {
+extension DeviceInfo {
     // List of device names that don't support advanced visual settings
     static let lowGraphicsQualityModels = ["iPad",
                                            "iPad1,1",
@@ -46,7 +47,7 @@ open class DeviceInfo {
     }
 
     /// Return the client name, which can be either "Fennec on Stefan's iPod" or simply "Stefan's iPod" if the application display name cannot be obtained.
-    open class func defaultClientName() -> String {
+    public class func defaultClientName() -> String {
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.DeviceName) {
             return String(format: .DeviceInfoClientNameDescription, AppInfo.displayName, "iOS")
         }
@@ -54,7 +55,7 @@ open class DeviceInfo {
         return String(format: .DeviceInfoClientNameDescription, AppInfo.displayName, UIDevice.current.name)
     }
 
-    open class func clientIdentifier(_ prefs: Prefs) -> String {
+    public class func clientIdentifier(_ prefs: Prefs) -> String {
         if let id = prefs.stringForKey("clientIdentifier") {
             return id
         }
@@ -63,15 +64,11 @@ open class DeviceInfo {
         return id
     }
 
-    open class func deviceModel() -> String {
+    public class func deviceModel() -> String {
         return UIDevice.current.model
     }
 
-    open class func isSimulator() -> Bool {
-        return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
-    }
-
-    open class func isBlurSupported() -> Bool {
+    public class func isBlurSupported() -> Bool {
         // We've tried multiple ways to make this change visible on simulators, but we
         // haven't found a solution that worked:
         // 1. http://stackoverflow.com/questions/21603475/how-can-i-detect-if-the-iphone-my-app-is-on-is-going-to-use-a-simple-transparen
@@ -80,7 +77,7 @@ open class DeviceInfo {
         return !lowGraphicsQualityModels.contains(specificModelName)
     }
 
-    open class func hasConnectivity() -> Bool {
+    public class func hasConnectivity() -> Bool {
         let status = Reach().connectionStatus()
         switch status {
         case .online(.wwan), .online(.wiFi):
@@ -91,7 +88,7 @@ open class DeviceInfo {
     }
 
     // Reports portrait screen size regardless of the current orientation.
-    open class func screenSizeOrientationIndependent() -> CGSize {
+    public class func screenSizeOrientationIndependent() -> CGSize {
         let screenSize = UIScreen.main.bounds.size
         return CGSize(width: min(screenSize.width, screenSize.height), height: max(screenSize.width, screenSize.height))
     }
