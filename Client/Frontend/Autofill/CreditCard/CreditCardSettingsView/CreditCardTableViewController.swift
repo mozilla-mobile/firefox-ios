@@ -139,6 +139,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
         hostingCell.host(row, parentController: self)
         return hostingCell
     }
+
     private func creditCardCell(indexPath: IndexPath) -> UITableViewCell {
         guard let hostingCell = tableView.dequeueReusableCell(
             withIdentifier: HostingTableViewCell<CreditCardItemRow>.cellIdentifier) as? HostingTableViewCell<CreditCardItemRow> else {
@@ -161,9 +162,5 @@ extension CreditCardTableViewController: UITableViewDelegate,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         hostingCell.host(creditCardRow, parentController: self)
         return hostingCell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
