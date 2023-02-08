@@ -31,7 +31,7 @@ struct CreditCardItemRow: View {
 
                 VStack(spacing: 0) {
                     Text(item.ccName)
-                        .font(.system(.body))
+                        .font(.body)
                         .foregroundColor(colors.titleTextColor)
                         .frame(maxWidth: .infinity,
                                alignment: .leading)
@@ -40,10 +40,10 @@ struct CreditCardItemRow: View {
                                   spacing: isAccessibilityCategory ? 0 : 5,
                                   isAccessibilityCategory: isAccessibilityCategory) {
                         Text(item.ccType)
-                            .font(.system(.body))
+                            .font(.body)
                             .foregroundColor(colors.titleTextColor)
                         Text(item.ccNumberLast4)
-                            .font(.system(.subheadline))
+                            .font(.subheadline)
                             .foregroundColor(colors.subTextColor)
                     }
                     .frame(maxWidth: .infinity,
@@ -55,10 +55,10 @@ struct CreditCardItemRow: View {
                                   spacing: isAccessibilityCategory ? 0 : 5,
                                   isAccessibilityCategory: isAccessibilityCategory) {
                         Text("Expires")
-                            .font(.system(.body))
+                            .font(.body)
                             .foregroundColor(colors.subTextColor)
                         Text(String(item.ccExpYear))
-                            .font(.system(.subheadline))
+                            .font(.subheadline)
                             .foregroundColor(colors.subTextColor)
                     }
                     .frame(maxWidth: .infinity,
