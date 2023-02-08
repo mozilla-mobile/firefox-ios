@@ -178,58 +178,32 @@ public class RustSyncManager: NSObject, SyncManager {
         notifySyncing(notification: .ProfileDidStartSyncing)
     }
     
-//    private func resolveSyncState(
-//        status: ServiceStatus,
-//        hasSynced: Bool
-//    ) -> SyncDisplayState {
-//        if hasSynced || status == .ok || status == .backedOff {
-//            return .good
-//        } else if status == .authError {
-//            return .warning(message: .FirefoxSyncOfflineTitle)
-//        } else {
-//            return .bad(message: .FirefoxSyncOfflineTitle)
-//        }
-        
-//        switch syncStatus {
-//        case .notStarted(let reason):
-//            switch reason {
-//            case .offline:
-//                return .bad(message: .FirefoxSyncOfflineTitle)
-//            case .noAccount:
-//                return .warning(message: .FirefoxSyncOfflineTitle)
-//            case .backoff:
-//                return .good
-//            case .engineRemotelyNotEnabled:
-//                return .good
-//            case .engineFormatOutdated:
-//                return .good
-//            case .engineFormatTooNew:
-//                return .good
-//            case .storageFormatOutdated:
-//                return .good
-//            case .storageFormatTooNew:
-//                return .good
-//            case .stateMachineNotReady:
-//                return .good
-//            case .redLight:
-//                return .good
-//            case .unknown:
-//                return .good
-//            }
-//        case .completed:
-//            return .good
-//        case .partial:
-//            return .good
-//        }
-//    }
+    private func resolveSyncState(
+        result: RustSyncResult
+    ) -> SyncDisplayState {
+        let hasSynced = !result.successful.isEmpty
+        let status = result.status
+
+        // This is similar to the old `SyncStatusResolver.resolveResults` call. If none of
+        // the engines successfully synced and a network issue occured we return `.bad`.
+        // If none of the engines successfully synced and an auth error occured we return
+        // `.warning`. Otherwise we return `.good`.
+
+        if !hasSynced && status == .authError {
+            return .warning(message: .FirefoxSyncOfflineTitle)
+        } else if !hasSynced && status == .networkError {
+            return .bad(message: .FirefoxSyncOfflineTitle)
+        } else {
+            return .good
+        }
+    }
 
     fileprivate func endRustSyncing(_ result: RustSyncResult) {
-        logger.log("Ending all queued syncs.",
+        logger.log("Ending all syncs.",
                    level: .info,
                    category: .sync)
         
-//        syncDisplayState = resolveSyncState(status: result.status,
-//                         hasSynced: !result.successful.isEmpty && !result.failures.isEmpty)
+        syncDisplayState = resolveSyncState(result: result)
         
         #if MOZ_TARGET_CLIENT
             if canSendUsageData() {
@@ -363,13 +337,13 @@ public class RustSyncManager: NSObject, SyncManager {
                 engines to enable:
                 \(engineEnablements.compactMap { $0.value ? $0.key : nil })
                 """,
-               level: .debug,
+               level: .info,
                category: .sync)
             logger.log("""
                 engines to disable:
                 \(engineEnablements.compactMap { !$0.value ? $0.key : nil })
                 """,
-               level: .debug,
+               level: .info,
                category: .sync)
         }
         
@@ -417,7 +391,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     rustEngines.append("passwords")
                 } else {
                     SentryIntegration.shared.sendWithStacktrace(
-                        message: "Logins encryption could not be retrieved for syncing",
+                        message: "Login encryption key could not be retrieved for syncing",
                         tag: SentryTag.rustLogins, severity: .warning)
                 }
             case "bookmarks":
@@ -491,7 +465,8 @@ public class RustSyncManager: NSObject, SyncManager {
                                 syncKey: key.k,
                                 tokenserverUrl: tokenServerEndpointURL.absoluteString),
                             persistedState:
-                                self.prefs.stringForKey(PrefsKeys.RustSyncManagerPersistedState),
+                                self.prefs
+                                    .stringForKey(PrefsKeys.RustSyncManagerPersistedState),
                             deviceSettings:  DeviceSettings(
                                 fxaDeviceId: device.id,
                                 name: device.displayName,
@@ -501,23 +476,24 @@ public class RustSyncManager: NSObject, SyncManager {
                         self.beginSyncing()
                         self.syncManagerAPI.sync(params: params) { syncResult in
                             // Save the persisted state
-                           self.prefs.setString(syncResult.persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
+                            self.prefs.setString(syncResult.persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
+
                             self.logger.log("""
                                         Finished syncing with \(syncResult.status) status
                                         """,
-                                       level: .debug,
+                                       level: .info,
                                        category: .sync)
                             self.logger.log("""
                                         Declined engines
                                         \(String(describing: syncResult.declined))
                                         """,
-                                       level: .debug,
+                                       level: .info,
                                        category: .sync)
                             self.logger.log("""
                                         Returned telemetry:
                                         \(String(describing: syncResult.telemetryJson))
                                         """,
-                                        level: .debug,
+                                        level: .info,
                                         category: .sync)
 
                             // Save declined/enabled engines - we assume the engines
@@ -627,10 +603,10 @@ public class RustSyncManager: NSObject, SyncManager {
     }
     
     public func syncClientsThenTabs() -> SyncResult {
-        // This function exists to comply with the `SyncManager` protocol while the rust
-        // sync manager rollout is enabled and will not be called. To be safe, `syncTabs`
-        // is called in the event this is called. Once the rollout is complete this can be
-        // removed along with an update to the protocol.
+        // XXX: This function exists to comply with the `SyncManager` protocol while the
+        // rust sync manager rollout is enabled and will not be called. To be safe,
+        // `syncTabs` is called. Once the rollout is complete this can be removed along
+        // with an update to the protocol.
         
         return self.syncTabs().bind { result in
             if let error = result.failureValue {
@@ -638,21 +614,21 @@ public class RustSyncManager: NSObject, SyncManager {
             }
             
             // The current callers of `BrowserSyncManager.syncClientsThenTabs` only care
-            // whether the function fails or succeeds, so we're returning a meaningless
+            // whether the function fails or succeeds, so we are returning a meaningless
             // value here
             return deferMaybe(SyncStatus.notStarted(SyncNotStartedReason.unknown))
         }
     }
         
     public func syncClients() -> SyncResult {
-        // This function exists to to comply with the `SyncManager` protocol and has no
-        // callers. It will be removed when the rust sync manager rollout is complete.
-        // To be safe, `syncClientsThenTabs` is being called.
+        // XXX: This function exists to to comply with the `SyncManager` protocol and has
+        // no callers. It will be removed when the rust sync manager rollout is complete.
+        // To be safe, `syncClientsThenTabs` is called.
         return self.syncClientsThenTabs()
     }
     
     public func syncHistory() -> SyncResult {
-        // The retrurn type of this function has been changed to comply with the
+        // XXX: The retrurn type of this function has been changed to comply with the
         // `SyncManager` protocol during the rust sync manager rollout. It will be updated
         // once the rollout is complete.
         return syncRustEngines(why: .user, engines: ["history"]).bind { result in
@@ -660,8 +636,8 @@ public class RustSyncManager: NSObject, SyncManager {
                 return deferMaybe(error)
             }
             
-            // The current callers of this function only care whether the function fails
-            // or succeeds, so we're returning a meaningless value here.
+            // The current callers of this function only care whether this function fails
+            // or succeeds, so we are returning a meaningless value here.
             return deferMaybe(SyncStatus.notStarted(SyncNotStartedReason.unknown))
         }
     }

@@ -177,34 +177,18 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             self.isBookmarked = isBookmarked
         }
         
-        if FxNimbus.shared.features.rustSyncManagerComponent.value().rustSyncManagerStatus {
-            browserProfile.tabs.getAll().uponQueue(.main) {
-                guard let clients = $0.successValue else { return }
-                
-                self.hasRemoteClients = !clients.isEmpty
-                let clientPickerController = DevicePickerViewController(profile: browserProfile)
-                clientPickerController.pickerDelegate = clientPickerDelegate
-                clientPickerController.profile = browserProfile
-                if let url = tab.url?.absoluteString {
-                    clientPickerController.shareItem = ShareItem(url: url, title: tab.title)
-                }
+        browserProfile.getClientGUIDs().uponQueue(.main) {
+            guard let clientGUIDs = $0.successValue else { return }
 
-                self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
+            self.hasRemoteClients = !clientGUIDs.isEmpty
+            let clientPickerController = DevicePickerViewController(profile: browserProfile)
+            clientPickerController.pickerDelegate = clientPickerDelegate
+            clientPickerController.profile = browserProfile
+            if let url = tab.url?.absoluteString {
+                clientPickerController.shareItem = ShareItem(url: url, title: tab.title)
             }
-        } else {
-            browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(.main) {
-                guard let clientGUIDs = $0.successValue else { return }
 
-                self.hasRemoteClients = !clientGUIDs.isEmpty
-                let clientPickerController = DevicePickerViewController(profile: browserProfile)
-                clientPickerController.pickerDelegate = clientPickerDelegate
-                clientPickerController.profile = browserProfile
-                if let url = tab.url?.absoluteString {
-                    clientPickerController.shareItem = ShareItem(url: url, title: tab.title)
-                }
-
-                self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
-            }
+            self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
         }
 
         let result = browserProfile.readingList.getRecordWithURL(displayURL).value.successValue

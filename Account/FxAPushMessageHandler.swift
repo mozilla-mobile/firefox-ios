@@ -125,26 +125,25 @@ extension FxAPushMessageHandler {
                             }
 
                             waitForClient = Deferred<Maybe<String>>()
-                            
-                            if FxNimbus.shared.features.rustSyncManagerComponent.value().rustSyncManagerStatus {
-                                profile.tabs.getClient(fxaDeviceId: deviceId)
-                                    .uponQueue(.main) { result in
+                            profile
+                                .getClient(fxaDeviceId: deviceId)
+                                .uponQueue(.main) { result in
 
-                                    guard let device = result.successValue else {
-                                        waitForClient?
-                                            .fill(Maybe(failure: result.failureValue ??
-                                                        "Unknown Error"))
-                                        return
-                                    }
-                                    messages.append(
-                                        PushMessage.deviceDisconnected(device?.name))
-                                    waitForClient?.fill(
-                                        Maybe(success: device?.name ?? "Unknown Device"))
+                                guard let device = result.successValue else {
+                                    waitForClient?
+                                        .fill(Maybe(failure: result.failureValue ??
+                                                    "Unknown Error"))
+                                    return
                                 }
-                                messages.append(PushMessage.deviceDisconnected(device?.name))
-                                waitForClient?.fill(Maybe(success: device?.name ?? "Unknown Device"))
+                                messages.append(
+                                    PushMessage.deviceDisconnected(device?.name))
+                                waitForClient?.fill(
+                                    Maybe(success: device?.name ?? "Unknown Device"))
                                 if let id = device?.guid {
-                                    profile.remoteClientsAndTabs.deleteClient(guid: id).uponQueue(.main) { _ in }
+                                    profile.remoteClientsAndTabs
+                                        .deleteClient(guid: id).uponQueue(.main) { _ in
+                                        print("deleted client")
+                                    }
                                 }
                             }
                         default:
