@@ -1430,7 +1430,7 @@ extension String {
         value: "Copied to clipboard",
         comment: "Copy app version alert shown in settings.")
     public static let SettingsAutofillCreditCard = MZLocalizedString(
-        "Settings.AutofillCreditCard.Title.v110",
+        "Settings.AutofillCreditCard.Title.v112",
         tableName: nil,
         value: "Autofill Credit Card",
         comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
@@ -4494,12 +4494,12 @@ extension String {
         // Settings / Empty State
         public struct Settings {
             public static let EmptyListTitle = MZLocalizedString(
-                "Settings.EmptyList.Title.v110",
+                "Settings.EmptyList.Title.v112",
                 tableName: nil,
                 value: "Save Credit Cards to Firefox",
                 comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. Firefox is the product name and should not be alterted.")
             public static let EmptyListDescription = MZLocalizedString(
-                "Settings.EmptyList.Description.v110",
+                "Settings.EmptyList.Description.v112",
                 tableName: nil,
                 value: "Save your card information securely to check out faster next time.",
                 comment: "Description label for when there are no credit cards shown in credit card list in autofill settings screen.")
@@ -4508,42 +4508,42 @@ extension String {
         // Editing and saving credit card
         public struct EditCard {
             public static let NameOnCardTitle = MZLocalizedString(
-                "EditCard.NameOnCard.Title.v110",
+                "EditCard.NameOnCard.Title.v112",
                 tableName: nil,
                 value: "Name on Card",
                 comment: "Title label for user to input their name printed on their credit card in the text box below.")
             public static let CardNumberTitle = MZLocalizedString(
-                "EditCard.CardNumber.Title.v110",
+                "EditCard.CardNumber.Title.v112",
                 tableName: nil,
                 value: "Card Number",
                 comment: "Title label for user to input their credit card number printed on their credit card in the text box below.")
             public static let CardExpirationDateTitle = MZLocalizedString(
-                "EditCard.CardExpirationDate.Title.v110",
+                "EditCard.CardExpirationDate.Title.v112",
                 tableName: nil,
                 value: "Expiration MM / YY",
                 comment: "Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below.")
             public static let RemoveCardButtonTitle = MZLocalizedString(
-                "Edit.RemoveCardButton.Title.v110",
+                "Edit.RemoveCardButton.Title.v112",
                 tableName: nil,
                 value: "Remove Card",
                 comment: "Title label for button that allows user to remove their saved credit card.")
             public static let ToggleToAllowAutofillTitle = MZLocalizedString(
-                "EditCard.ToggleToAllowAutofill.Title.v110",
+                "EditCard.ToggleToAllowAutofill.Title.v112",
                 tableName: nil,
                 value: "Save and autofill cards",
                 comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
             public static let SavedCardListTitle = MZLocalizedString(
-                "EditCard.SavedCardList.Title.v110",
+                "EditCard.SavedCardList.Title.v112",
                 tableName: nil,
                 value: "SAVED CARDS",
                 comment: "Title label for user to pick a credit card from the list below to be updated.")
             public static let ExpiredDateTitle = MZLocalizedString(
-                "EditCard.History.ExpiredDate.Title.v110",
+                "EditCard.History.ExpiredDate.Title.v112",
                 tableName: nil,
                 value: "Expires %@",
                 comment: "Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation.")
             public static let NavButtonSaveTitle = MZLocalizedString(
-                "EditCard.NavButtonSave.Title.v110",
+                "EditCard.NavButtonSave.Title.v112",
                 tableName: nil,
                 value: "Save",
                 comment: "Button title which when tapped will allow the user to save valid credit card details.")
@@ -4552,17 +4552,17 @@ extension String {
         // Error States for wrong input while editing credit card
         public struct ErrorState {
             public static let NameOnCardSublabel = MZLocalizedString(
-                "ErrorState.NameOnCard.Sublabel.v110",
+                "ErrorState.NameOnCard.Sublabel.v112",
                 tableName: nil,
                 value: "Add a name",
                 comment: "Sub label error string that gets shown when user enters incorrect input for their name printed on their credit card in the text box.")
             public static let CardNumberTitle = MZLocalizedString(
-                "ErrorState.CardNumber.Sublabel.v110",
+                "ErrorState.CardNumber.Sublabel.v112",
                 tableName: nil,
                 value: "Enter a valid card number",
                 comment: "Sub label error string that gets shown when user enters incorrect input for their number printed on their credit card in the text box.")
             public static let CardExpirationDateTitle = MZLocalizedString(
-                "ErrorState.CardExpirationDate.Sublabel.v110",
+                "ErrorState.CardExpirationDate.Sublabel.v112",
                 tableName: nil,
                 value: "Enter a valid expiration date",
                 comment: "Sub label error string that gets shown when user enters incorrect input for their expiration date on their credit card in the text box.")
@@ -4570,17 +4570,17 @@ extension String {
 
         public struct SnackBar {
             public static let SavedCardLabel = MZLocalizedString(
-                "SnackBar.SavedCard.Label.v110",
+                "SnackBar.SavedCard.Label.v112",
                 tableName: nil,
                 value: "New card saved",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully")
             public static let UpdatedCardLabel = MZLocalizedString(
-                "SnackBar.UpdatedCard.Label.v110",
+                "SnackBar.UpdatedCard.Label.v112",
                 tableName: nil,
                 value: "Card information updated",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully")
             public static let RemovedCardLabel = MZLocalizedString(
-                "SnackBar.RemovedCard.Label.v110",
+                "SnackBar.RemovedCard.Label.v112",
                 tableName: nil,
                 value: "Card removed",
                 comment: "Label text that gets presented as a confirmation at the bottom of screen when the credit card is successfully removed.")
@@ -4588,25 +4588,25 @@ extension String {
 
         public struct Alert {
             public static let RemoveCardTitle = MZLocalizedString(
-                "SnackBar.RemoveCard.Label.v110",
+                "SnackBar.RemoveCard.Label.v112",
                 tableName: nil,
                 value: "Remove the card?",
                 comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
 
             public static let RemoveCardSublabel = MZLocalizedString(
-                "SnackBar.RemoveCard.Sublabel.v110",
+                "SnackBar.RemoveCard.Sublabel.v112",
                 tableName: nil,
                 value: "This will remove the card from all of your synced devices.",
                 comment: "Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices")
 
             public static let CancelRemoveCardButton = MZLocalizedString(
-                "SnackBar.CancelRemoveCard.Button.v110",
+                "SnackBar.CancelRemoveCard.Button.v112",
                 tableName: nil,
                 value: "Cancel",
                 comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and cancel the the operation.")
 
             public static let RemovedCardLabel = MZLocalizedString(
-                "SnackBar.RemovedCard.Button.v110",
+                "SnackBar.RemovedCard.Button.v112",
                 tableName: nil,
                 value: "Remove",
                 comment: "Button text to dimiss the dialog box that gets presented as a confirmation to to remove card and perform the the operation of removing the credit card.")
