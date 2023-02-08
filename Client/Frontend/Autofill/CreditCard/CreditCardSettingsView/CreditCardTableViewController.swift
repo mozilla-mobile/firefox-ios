@@ -14,15 +14,15 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
 
     // MARK: UX constants
     struct UX {
-        static let toggleSwitchContainerHeight = 40
-        static let toggleSwitchAnchor = -16
-        static let toggleSwitchLabelHeight = 18
-        static let toggleSwitchContainerLineHeight = 0.7
-        static let toggleSwitchContainerLineAnchor = 10
-        static let savedCardsTitleLabelBottomAnchor = 25
-        static let savedCardsTitleLabelLeading = 16
-        static let savedCardsTitleLabelHeight = 13
-        static let tableViewTopAnchor = 8
+        static let toggleSwitchContainerHeight: CGFloat = 40
+        static let toggleSwitchAnchor: CGFloat = -16
+        static let toggleSwitchLabelHeight: CGFloat = 18
+        static let toggleSwitchContainerLineHeight: CGFloat = 0.7
+        static let toggleSwitchContainerLineAnchor: CGFloat = 10
+        static let savedCardsTitleLabelBottomAnchor: CGFloat = 25
+        static let savedCardsTitleLabelLeading: CGFloat = 16
+        static let savedCardsTitleLabelHeight: CGFloat = 13
+        static let tableViewTopAnchor: CGFloat = 8
     }
 
     // MARK: View
@@ -67,7 +67,6 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         savedCardsTitleLabel.numberOfLines = 1
         savedCardsTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         savedCardsTitleLabel.text = String.CreditCard.EditCard.SavedCardListTitle
-        return savedCardsTitleLabel
     }
 
     init(theme: Theme, viewModel: CreditCardTableViewModel) {
