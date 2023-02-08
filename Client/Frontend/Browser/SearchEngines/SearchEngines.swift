@@ -118,9 +118,7 @@ class SearchEngines {
 
     func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping () -> Void) {
         // We can't delete a preinstalled engine or an engine that is currently the default.
-        if !engine.isCustomEngine || isEngineDefault(engine) {
-            return
-        }
+        guard engine.isCustomEngine || isEngineDefault(engine) else { return }
 
         customEngines.remove(at: customEngines.firstIndex(of: engine)!)
         saveCustomEngines()
