@@ -17,28 +17,28 @@ struct CreditCardEditView: View {
                 titleColor: .gray,
                 textFieldColor: .gray)
 
-            FloatingTextField(label: "Name on Card",
+            FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
                               textVal: $viewModel.nameOnCard,
                               placeHolder: "",
-                              errorString: "Add a name",
+                              errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
                               showError: !viewModel.nameIsValid,
                               colors: colors)
             Divider()
                 .frame(height: 0.7)
 
-            FloatingTextField(label: "Card Number",
+            FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
                               textVal: $viewModel.cardNumber,
                               placeHolder: "",
-                              errorString: "Enter a valid card number",
+                              errorString: String.CreditCard.ErrorState.CardNumberTitle,
                               showError: !viewModel.numberIsValid,
                               colors: colors)
             Divider()
                 .frame(height: 0.7)
 
-            FloatingTextField(label: "Expiration MM / YY",
+            FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
                               textVal: $viewModel.expirationDate,
                               placeHolder: "",
-                              errorString: "Enter a valid expiration date",
+                              errorString: String.CreditCard.ErrorState.CardExpirationDateTitle,
                               showError: !viewModel.expirationIsValid,
                               colors: colors)
             Divider()
