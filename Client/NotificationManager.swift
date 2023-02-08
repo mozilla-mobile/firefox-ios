@@ -116,9 +116,9 @@ class NotificationManager {
     func findDeliveredNotificationForId(id: String,
                                         completion: @escaping (UNNotification?) -> Void) {
         findDeliveredNotifications { notificationList in
-            let notification = notificationList.filter { notification -> Bool in
+            let notification = notificationList.first(where: { notification -> Bool in
                 notification.request.identifier == id
-            }.first
+            })
             completion(notification)
         }
     }

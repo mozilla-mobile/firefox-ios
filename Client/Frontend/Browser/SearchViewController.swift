@@ -640,8 +640,7 @@ class SearchViewController: SiteTableViewController,
         let range = searchPhrase.range(of: query)
         guard searchPhrase != query, let upperBound = range?.upperBound else { return nil }
 
-        let boldString = String(searchPhrase[upperBound..<searchPhrase.endIndex])
-        let attributedString = searchPhrase.attributedText(boldString: boldString,
+        let attributedString = searchPhrase.attributedText(boldIn: upperBound..<searchPhrase.endIndex,
                                                            font: DynamicFontHelper().DefaultStandardFont)
         return attributedString
     }

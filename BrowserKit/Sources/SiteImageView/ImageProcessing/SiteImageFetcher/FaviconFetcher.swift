@@ -15,7 +15,7 @@ protocol FaviconFetcher {
 struct DefaultFaviconFetcher: FaviconFetcher {
     private let imageDownloader: SiteImageDownloader
 
-    init(imageDownloader: SiteImageDownloader = ImageDownloader.default) {
+    init(imageDownloader: SiteImageDownloader = DefaultSiteImageDownloader()) {
         self.imageDownloader = imageDownloader
     }
 
@@ -25,6 +25,8 @@ struct DefaultFaviconFetcher: FaviconFetcher {
             return result.image
         } catch let error as KingfisherError {
             throw SiteImageError.unableToDownloadImage(error.errorDescription ?? "No description")
+        } catch let error as SiteImageError {
+            throw error
         } catch {
             throw SiteImageError.unableToDownloadImage("No description")
         }

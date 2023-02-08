@@ -33,7 +33,7 @@ private let CertErrorCodes = [
 private func certFromErrorURL(_ url: URL) -> SecCertificate? {
     func getCert(_ url: URL) -> SecCertificate? {
         let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        if let encodedCert = components?.queryItems?.filter({ $0.name == "badcert" }).first?.value,
+        if let encodedCert = components?.queryItems?.first(where: { $0.name == "badcert" })?.value,
             let certData = Data(base64Encoded: encodedCert, options: []) {
             return SecCertificateCreateWithData(nil, certData as CFData)
         }
