@@ -18,6 +18,6 @@ struct ErrorTextStyle: ViewModifier {
 
 extension View {
     func errorTextStyle(color: Color) -> some View {
-        self.modifier(ErrorTextStyle(color: color))
+        modifier(ErrorTextStyle(color: color))
     }
 }
