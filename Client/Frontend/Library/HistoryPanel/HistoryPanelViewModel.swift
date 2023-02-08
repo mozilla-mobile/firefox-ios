@@ -287,10 +287,6 @@ class HistoryPanelViewModel: FeatureFlaggable {
             excludedTypes: VisitTransitionSet(0)
         ).upon { [weak self] result in
             completion(result.successValue?.asArray() ?? [])
-            guard result.isSuccess else {
-                self?.isFetchInProgress = false
-                return
-            }
 
             // Force 100ms delay between resolution of the last batch of results
             // and the next time `fetchData()` can be called.
