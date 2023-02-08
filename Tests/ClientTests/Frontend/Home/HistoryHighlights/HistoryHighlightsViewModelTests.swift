@@ -13,7 +13,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
     private var dataAdaptor: MockHistoryHighlightsDataAdaptor!
     private var delegate: MockHomepageDataModelDelegate!
     private var telemetry: MockTelemetryWrapper!
-    private var urlBar: MockURLBarView!
 
     override func setUp() {
         super.setUp()
@@ -23,7 +22,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         dataAdaptor = MockHistoryHighlightsDataAdaptor()
         delegate = MockHomepageDataModelDelegate()
         telemetry = MockTelemetryWrapper()
-        urlBar = MockURLBarView()
     }
 
     override func tearDown() {
@@ -34,7 +32,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         subject = nil
         delegate = nil
         telemetry = nil
-        urlBar = nil
     }
 
     func testLoadNewDataIsEnabled() {
@@ -123,11 +120,9 @@ class HistoryHighlightsViewModelTests: XCTestCase {
 
     func testSwitchToWhileInOverlayMode() {
         setupSubject()
-        urlBar.inOverlayMode = true
 
         subject.switchTo(getItemWithTitle(title: "item"))
 
-        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertEqual(telemetry.recordEventCallCount, 1)
         XCTAssertTrue(telemetry.recordedCategories.contains(.action))
         XCTAssertTrue(telemetry.recordedMethods.contains(.tap))
@@ -234,7 +229,6 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         subject = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
-            urlBar: urlBar,
             theme: LightTheme(),
             historyHighlightsDataAdaptor: dataAdaptor,
             dispatchQueue: MockDispatchQueue(),

@@ -30,8 +30,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManagerProtocol
-    private var urlBar: URLBarViewProtocol
-    private var overlayManager: OverlayModeManager?
+    private var overlayManager: OverlayModeManager
     private var userDefaults: UserDefaultsInterface
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var jumpBackInContextualHintViewController: ContextualHintViewController
@@ -63,13 +62,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     // MARK: - Initializers
     init(profile: Profile,
          tabManager: TabManagerProtocol,
-         urlBar: URLBarViewProtocol,
-         overlayManager: OverlayModeManager?,
+         overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
-        self.urlBar = urlBar
         self.overlayManager = overlayManager
         self.tabManager = tabManager
         self.userDefaults = userDefaults
@@ -317,7 +314,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     @objc private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
-            urlBar.leaveOverlayMode()
+            overlayManager.leaveOverlayMode()
         }
     }
 

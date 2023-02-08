@@ -68,7 +68,7 @@ class BrowserViewController: UIViewController {
     var passBookHelper: OpenPassBookHelper?
     // TODO: Remove at FXIOS-5639 Feature flag like to use during the refactoring
     private var shouldUseOverlayManager = true
-    private var overlayManager: OverlayModeManager?
+    private var overlayManager: OverlayModeManager!
 
     var contextHintVC: ContextualHintViewController
 
@@ -968,7 +968,6 @@ class BrowserViewController: UIViewController {
         let homepageViewController = HomepageViewController(
             profile: profile,
             tabManager: tabManager,
-            urlBar: urlBar,
             overlayManager: overlayManager)
         homepageViewController.homePanelDelegate = self
         homepageViewController.libraryPanelDelegate = self
