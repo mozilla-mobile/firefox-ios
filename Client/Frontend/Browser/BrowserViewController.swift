@@ -67,7 +67,7 @@ class BrowserViewController: UIViewController {
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
     // TODO: Remove at FXIOS-5639 Feature flag like to use during the refactoring
-    private var shouldUseOverlayManager = false
+    private var shouldUseOverlayManager = true
     private var overlayManager: OverlayModeManager?
 
     var contextHintVC: ContextualHintViewController
@@ -1153,7 +1153,8 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        leaveOverlayMode(didCancel: false)
+        // TODO: Check all flows that call finishEditing we could leaveOverlayMode from autocompleteTextFieldShouldReturn
+        overlayManager?.leaveOverlayMode(didCancel: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -2136,7 +2137,6 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        tabManager.didChangedPanelSelection = true
         if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
             profile.recentlyClosedTabs.addTab(url as URL,
                                               title: tab.lastTitle,
@@ -2147,7 +2147,6 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
-        tabManager.didChangedPanelSelection = true
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
