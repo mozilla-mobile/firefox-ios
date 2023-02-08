@@ -11,10 +11,10 @@ public struct PrefsKeys {
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
     
     // Global sync state for rust sync manager
-    public static let RustSyncState = "rustSyncStateKey"
+    public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStatKey"
     
-    // Rust sync manager component is being used
-    public static let UsingRustSyncManager = "usingRustSyncManagerKey"
+    // Persisted State for rust sync manager has been migrated
+    public static let MigratedRustSyncPersistedState = "migratedRustSyncPersistedStateKey"
     
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"

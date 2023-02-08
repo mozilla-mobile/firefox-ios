@@ -214,6 +214,7 @@ open class BrowserProfile: Profile {
     var syncManager: SyncManager!
 
     var syncDelegate: SyncDelegate?
+    var rustSyncManagerEnabled: Bool
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -229,6 +230,7 @@ open class BrowserProfile: Profile {
      */
     init(localName: String,
          syncDelegate: SyncDelegate? = nil,
+         rustSyncManagerEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
         logger.log("Initing profile \(localName) on thread \(Thread.current).",
@@ -238,6 +240,7 @@ open class BrowserProfile: Profile {
         self.files = ProfileFileAccessor(localName: localName)
         self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         self.syncDelegate = syncDelegate
+        self.rustSyncManagerEnabled = rustSyncManagerEnabled
         self.logger = logger
 
         if clear {
@@ -304,20 +307,18 @@ open class BrowserProfile: Profile {
         // By default, filter logging from Rust below `.info` level.
         try? RustLog.shared.setLevelFilter(filter: .info)
 
-        // TODO: `rollout` is a holder for Nimbus rollout logic
-        let rollout = true
-
-        
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
-        if rollout {
+        if self.rustSyncManagerEnabled {
             let syncManager = RustSyncManager(profile: self)
             
             // If the rust sync manager is not being used, we want to set the persisted
-            // state for future rust sync manager syncs
-            if !UserDefaults.standard.bool(forKey: PrefsKeys.UsingRustSyncManager)  {
+            // state for future rust sync manager syncs. The migration only needs to be
+            // performed once.
+            // TODO: Check that this is true and this isn't the first run
+            if !(prefs.boolForKey(PrefsKeys.MigratedRustSyncPersistedState) ?? false)  {
                 syncManager.migrateSyncData()
-                UserDefaults.standard.set(true, forKey: PrefsKeys.UsingRustSyncManager)
+                self.prefs.setBool(true, forKey: PrefsKeys.MigratedRustSyncPersistedState)
             }
             
             self.syncManager = syncManager
@@ -543,10 +544,8 @@ open class BrowserProfile: Profile {
     }
 
     func getTabsWithNativeClients() -> Deferred<Maybe<[ClientAndTabs]>> {
-        let usingRustSyncManager =
-            prefs.boolForKey(PrefsKeys.UsingRustSyncManager) ?? false
 
-        if usingRustSyncManager {
+        if self.rustSyncManagerEnabled {
             return getRustTabsWithClients()
         } else {
             // When we are using the application services tabs component with the iOS

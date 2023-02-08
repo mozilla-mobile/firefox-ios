@@ -177,7 +177,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
             self.isBookmarked = isBookmarked
         }
         
-        if UserDefaults.standard.bool(forKey: PrefsKeys.UsingRustSyncManager) {
+        if FxNimbus.shared.features.rustSyncManagerComponent.value().rustSyncManagerStatus {
             browserProfile.tabs.getAll().uponQueue(.main) {
                 guard let clients = $0.successValue else { return }
                 

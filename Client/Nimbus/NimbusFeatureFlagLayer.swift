@@ -69,6 +69,8 @@ final class NimbusFeatureFlagLayer {
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
+        case .rustSyncManagerStatus:
+            return checkNimbusForRustSyncManager(for: featureID, from: nimbus)
         }
     }
 
@@ -183,6 +185,17 @@ final class NimbusFeatureFlagLayer {
 
             switch featureID {
             case .creditCardAutofillStatus: return config.creditCardAutofillStatus
+            default: return false
+            }
+    }
+    
+    public func checkNimbusForRustSyncManager(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.rustSyncManagerComponent.value()
+
+            switch featureID {
+            case .rustSyncManagerStatus: return config.rustSyncManagerStatus
             default: return false
             }
     }
