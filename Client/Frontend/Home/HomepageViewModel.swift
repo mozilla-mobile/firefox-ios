@@ -125,7 +125,6 @@ class HomepageViewModel: FeatureFlaggable {
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,
-            urlBar: urlBar,
             theme: theme,
             tabManager: tabManager,
             adaptor: adaptor,
@@ -143,7 +142,6 @@ class HomepageViewModel: FeatureFlaggable {
         self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
-            urlBar: urlBar,
             theme: theme,
             historyHighlightsDataAdaptor: historyDataAdaptor,
             wallpaperManager: wallpaperManager)
