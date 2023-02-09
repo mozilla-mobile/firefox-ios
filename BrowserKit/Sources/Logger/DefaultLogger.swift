@@ -8,11 +8,11 @@ public class DefaultLogger: Logger {
     public static let shared = DefaultLogger()
 
     private var logger: SwiftyBeaverWrapper.Type
-    private var sentry: SentryWrapper?
+    private var crashManager: CrashManager?
     private var fileManager: LoggerFileManager
 
     public var crashedLastLaunch: Bool {
-        return sentry?.crashedLastLaunch ?? false
+        return crashManager?.crashedLastLaunch ?? false
     }
 
     init(swiftyBeaverBuilder: SwiftyBeaverBuilder = DefaultSwiftyBeaverBuilder(),
@@ -21,12 +21,12 @@ public class DefaultLogger: Logger {
         self.logger = swiftyBeaverBuilder.setup(with: fileManager.getLogDestination())
     }
 
-    public func configure(sentryWrapper: SentryWrapper) {
-        self.sentry = sentryWrapper
+    public func configure(crashManager: CrashManager) {
+        self.crashManager = crashManager
     }
 
     public func setup(sendUsageData: Bool) {
-        sentry?.setup(sendUsageData: sendUsageData)
+        crashManager?.setup(sendUsageData: sendUsageData)
     }
 
     public func log(_ message: String,
@@ -56,10 +56,10 @@ public class DefaultLogger: Logger {
         // Log to sentry
         let extraEvents = bundleExtraEvents(extra: extra,
                                             description: description)
-        sentry?.send(message: message,
-                     category: category,
-                     level: level,
-                     extraEvents: extraEvents)
+        crashManager?.send(message: message,
+                           category: category,
+                           level: level,
+                           extraEvents: extraEvents)
     }
 
     public func copyLogsToDocuments() {

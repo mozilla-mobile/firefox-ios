@@ -6,8 +6,8 @@ import Common
 import Foundation
 import Sentry
 
-// MARK: - SentryWrapper
-public protocol SentryWrapper {
+// MARK: - CrashManager
+public protocol CrashManager {
     var crashedLastLaunch: Bool { get }
 
     func setup(sendUsageData: Bool)
@@ -17,28 +17,26 @@ public protocol SentryWrapper {
               extraEvents: [String: String]?)
 }
 
-public class DefaultSentryWrapper: SentryWrapper {
+public class DefaultCrashManager: CrashManager {
     enum Environment: String {
         case nightly = "Nightly"
         case production = "Production"
     }
 
     // MARK: - Properties
-    private let sentryDSNKey = "SentryCloudDSN"
-    private let sentryDeviceAppHashKey = "SentryDeviceAppHash"
+    private let deviceAppHashKey = "SentryDeviceAppHash"
     private let defaultDeviceAppHash = "0000000000000000000000000000000000000000"
     private let deviceAppHashLength = UInt(20)
 
     private var enabled = false
 
     private var shouldSetup: Bool {
-        return !enabled && !DeviceInfo.isSimulator()
+        return !enabled && !isSimulator
     }
 
     private var environment: Environment {
         var environment = Environment.production
         if AppInfo.appVersion == appInfo.nightlyAppVersion, appInfo.buildChannel == .beta {
-            // Setup sentry for Nightly
             environment = Environment.nightly
         }
         return environment
@@ -48,30 +46,28 @@ public class DefaultSentryWrapper: SentryWrapper {
         return "\(AppInfo.bundleIdentifier)@\(AppInfo.appVersion)+(\(AppInfo.buildNumber))"
     }
 
-    private var dsn: String? {
-        let bundle = AppInfo.applicationBundle
-        guard let dsn = bundle.object(forInfoDictionaryKey: sentryDSNKey) as? String,
-              !dsn.isEmpty else {
-            return nil
-        }
-        return dsn
-    }
-
+    // MARK: - Init
     private var appInfo: BrowserKitInformation
+    private var sentryWrapper: SentryWrapper
+    private var isSimulator: Bool
 
-    public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared) {
+    public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared,
+                sentryWrapper: SentryWrapper = DefaultSentry(),
+                isSimulator: Bool = DeviceInfo.isSimulator()) {
         self.appInfo = appInfo
+        self.sentryWrapper = sentryWrapper
+        self.isSimulator = isSimulator
     }
 
-    // MARK: - SentryWrapper protocol
+    // MARK: - CrashManager protocol
     public var crashedLastLaunch: Bool {
-        return SentrySDK.crashedLastRun
+        return sentryWrapper.crashedInLastRun
     }
 
     public func setup(sendUsageData: Bool) {
-        guard shouldSetup, sendUsageData, let dsn = dsn else { return }
+        guard shouldSetup, sendUsageData, let dsn = sentryWrapper.dsn else { return }
 
-        SentrySDK.start { options in
+        sentryWrapper.startWithConfigureOptions(configure: { options in
             options.dsn = dsn
             options.environment = self.environment.rawValue
             options.releaseName = self.releaseName
@@ -82,7 +78,7 @@ public class DefaultSentryWrapper: SentryWrapper {
                 }
                 return crumb
             }
-        }
+        })
         enabled = true
 
         configureScope()
@@ -94,6 +90,8 @@ public class DefaultSentryWrapper: SentryWrapper {
                      category: LoggerCategory,
                      level: LoggerLevel,
                      extraEvents: [String: String]?) {
+        guard enabled else { return }
+
         guard shouldSendEventFor(level) else {
             addBreadcrumb(message: message,
                           category: category,
@@ -114,17 +112,17 @@ public class DefaultSentryWrapper: SentryWrapper {
         // Capture event if Sentry is enabled and a message is available
         guard let message = event.message?.formatted else { return }
 
-        SentrySDK.capture(message: message) { (scope) in
+        sentryWrapper.captureMessage(message: message, with: { scope in
             scope.setEnvironment(event.environment)
             scope.setExtras(event.extra)
-        }
+        })
     }
 
     private func addBreadcrumb(message: String, category: LoggerCategory, level: LoggerLevel) {
         let breadcrumb = Breadcrumb(level: level.sentryLevel,
                                     category: category.rawValue)
         breadcrumb.message = message
-        SentrySDK.addBreadcrumb(breadcrumb)
+        sentryWrapper.addBreadcrumb(crumb: breadcrumb)
     }
 
     private func makeEvent(message: String,
@@ -150,27 +148,27 @@ public class DefaultSentryWrapper: SentryWrapper {
         let shouldSendRelease = appInfo.buildChannel == .release && level.isGreaterOrEqualThanLevel(.fatal)
         let shouldSendBeta = appInfo.buildChannel == .beta && level.isGreaterOrEqualThanLevel(.fatal)
 
-        return enabled && (shouldSendBeta || shouldSendRelease)
+        return shouldSendBeta || shouldSendRelease
     }
 
     private func configureScope() {
         let deviceAppHash = UserDefaults(suiteName: appInfo.sharedContainerIdentifier)?
-            .string(forKey: self.sentryDeviceAppHashKey)
-        SentrySDK.configureScope { scope in
+            .string(forKey: self.deviceAppHashKey)
+        sentryWrapper.configureScope(scope: { scope in
             scope.setContext(value: [
                 "device_app_hash": deviceAppHash ?? self.defaultDeviceAppHash
             ], key: "appContext")
-        }
+        })
     }
 
     /// If we have not already for this install, generate a completely random identifier for this device.
     /// It is stored in the app group so that the same value will be used for both the main application and the app extensions.
     private func configureIdentifier() {
         guard let defaults = UserDefaults(suiteName: appInfo.sharedContainerIdentifier),
-              defaults.string(forKey: sentryDeviceAppHashKey) == nil else { return }
+              defaults.string(forKey: deviceAppHashKey) == nil else { return }
 
         defaults.set(Bytes.generateRandomBytes(deviceAppHashLength).hexEncodedString,
-                     forKey: sentryDeviceAppHashKey)
+                     forKey: deviceAppHashKey)
     }
 
     /// Ignore SIGPIPE exceptions globally.
