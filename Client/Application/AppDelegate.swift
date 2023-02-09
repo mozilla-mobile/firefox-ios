@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
         // Configure logger so we can start tracking logs early
-        logger.configure(sentryWrapper: DefaultSentryWrapper())
+        logger.configure(crashManager: DefaultCrashManager())
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,
                    category: .lifecycle)
