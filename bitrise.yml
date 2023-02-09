@@ -598,46 +598,47 @@ workflows:
             set -e
 
             echo "Commit on origin/main"
-            COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"`
-            echo $COMMIT_ON_MAIN_ORIGIN
+            COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"` || true
+            if [[ ! "failed" == *"$COMMIT_ON_MAIN_ORIGIN"* ]]; then
+                echo $COMMIT_ON_MAIN_ORIGIN
 
-            echo "Files changed with origin"
-            echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+                echo "Files changed with origin"
+                echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
 
-            echo "Commit on main branch"
-            echo $GIT_CLONE_COMMIT_HASH
-            COMMIT_ON_MAIN_PR=`git log -n 2 main --pretty=format:"%H" | tail -n 1`
-            echo $COMMIT_ON_MAIN_PR
+                echo "Commit on main branch"
+                echo $GIT_CLONE_COMMIT_HASH
+                COMMIT_ON_MAIN_PR=`git log -n 2 main --pretty=format:"%H" | tail -n 1`
+                echo $COMMIT_ON_MAIN_PR
 
-            filesChanged=""
-            if [[ $COMMIT_ON_MAIN_PR == $COMMIT_ON_MAIN_ORIGIN ]]
-            then
-                echo "First commit, use origin/main"
-                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
-                echo $filesChanged
-            elif [[ $COMMIT_ON_MAIN_PR == $GIT_CLONE_COMMIT_HASH ]]
-            then
-                echo "Merge made by the 'ort' strategy"
-                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
-                echo $filesChanged
-            else
-                echo "Commits on PR"
-                echo "Files changed betwee commits"
-                echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
-                filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
-                echo $filesChanged
+                filesChanged=""
+                if [[ $COMMIT_ON_MAIN_PR == $COMMIT_ON_MAIN_ORIGIN ]]
+                then
+                    echo "First commit, use origin/main"
+                    filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+                    echo $filesChanged
+                elif [[ $COMMIT_ON_MAIN_PR == $GIT_CLONE_COMMIT_HASH ]]
+                then
+                    echo "Merge made by the 'ort' strategy"
+                    filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_ORIGIN`
+                    echo $filesChanged
+                else
+                    echo "Commits on PR"
+                    echo "Files changed betwee commits"
+                    echo `git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
+                    filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
+                    echo $filesChanged
+                fi
+
+                doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/[a-zA-Z]+\.lproj/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*)'
+
+                if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
+                then
+                    echo "Running UI Tests"
+                    envman add --key RUN_UI_TESTS --value Run_UI_Tests
+                else
+                    echo "Not Running UI Tests"
+                fi
             fi
-
-            doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/[a-zA-Z]+\.lproj/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*)'
-
-            if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
-            then
-                echo "Running UI Tests"
-                envman add --key RUN_UI_TESTS --value Run_UI_Tests
-            else
-                echo "Not Running UI Tests"
-            fi
-
   NewXcodeVersions:
     steps:
     - script@1:
