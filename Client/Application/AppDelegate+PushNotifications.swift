@@ -123,7 +123,8 @@ extension AppDelegate {
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("failed to register. \(error)")
-        SentryIntegration.shared.send(message: "Failed to register for APNS")
+        logger.log("Failed to register for APNS",
+                   level: .info,
+                   category: .setup)
     }
 }

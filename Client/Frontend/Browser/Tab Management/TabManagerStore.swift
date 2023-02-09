@@ -161,10 +161,10 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
         do {
             try fileManager.removeItem(at: path)
         } catch let error {
-            SentryIntegration.shared.send(message: "Clear archive couldn't be completed",
-                                          tag: .tabManager,
-                                          severity: .warning,
-                                          description: error.localizedDescription)
+            logger.log("Clear archive couldn't be completed",
+                       level: .warning,
+                       category: .tabs,
+                       description: error.localizedDescription)
         }
     }
 
@@ -175,10 +175,10 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
         do {
             try archiver.encodeEncodable(savedTabs, forKey: tabsKey)
         } catch let error {
-            SentryIntegration.shared.send(message: "Archiving savedTabs failed",
-                                          tag: .tabManager,
-                                          severity: .warning,
-                                          description: error.localizedDescription)
+            logger.log("Archiving savedTabs failed",
+                       level: .warning,
+                       category: .tabs,
+                       description: error.localizedDescription)
             return nil
         }
 
@@ -204,10 +204,10 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
     }
 
     private func savedTabError(description: String) -> [SavedTab] {
-        SentryIntegration.shared.send(message: "Failed to restore tabs",
-                                      tag: .tabManager,
-                                      severity: .error,
-                                      description: description)
+        logger.log("Failed to restore tabs",
+                   level: .warning,
+                   category: .tabs,
+                   description: description)
         SimpleTab.saveSimpleTab(tabs: nil)
         return [SavedTab]()
     }
@@ -294,10 +294,10 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
         do {
             try fileManager.removeItem(at: deprecatedPath)
         } catch let error {
-            SentryIntegration.shared.send(message: "Clear deprecated archive couldn't be completed",
-                                          tag: .tabManager,
-                                          severity: .warning,
-                                          description: error.localizedDescription)
+            logger.log("Clear deprecated archive couldn't be completed",
+                       level: .warning,
+                       category: .tabs,
+                       description: error.localizedDescription)
         }
     }
 }

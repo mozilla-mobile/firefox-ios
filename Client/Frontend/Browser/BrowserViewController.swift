@@ -1265,11 +1265,10 @@ class BrowserViewController: UIViewController {
         guard let kp = keyPath,
               let path = KVOConstants(rawValue: kp)
         else {
-            SentryIntegration.shared.send(
-                message: "BVC observeValue webpage unhandled KVO",
-                tag: .general,
-                severity: .error,
-                description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            logger.log("BVC observeValue webpage unhandled KVO",
+                       level: .info,
+                       category: .webview,
+                       description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
 
@@ -2731,15 +2730,19 @@ extension BrowserViewController {
     /// We're currently seeing crashes from cases of there being no `connectedScene`, or being unable to cast to a SceneDelegate.
     /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
     ///
-    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now. 
+    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now.
     public static func foregroundBVC() -> BrowserViewController? {
         guard let scene = UIApplication.shared.connectedScenes.first else {
-            SentryIntegration.shared.send(message: "No connected scenes exist.", severity: .fatal)
+            DefaultLogger.shared.log("No connected scenes exist.",
+                                     level: .fatal,
+                                     category: .setup)
             return nil
         }
 
         guard let sceneDelegate = scene.delegate as? SceneDelegate else {
-            SentryIntegration.shared.send(message: "Scene could not be cast as SceneDelegate.", severity: .fatal)
+            DefaultLogger.shared.log("Scene could not be cast as SceneDelegate.",
+                                     level: .fatal,
+                                     category: .setup)
             return nil
         }
 

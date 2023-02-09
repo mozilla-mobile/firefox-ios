@@ -1502,7 +1502,10 @@ open class BrowserSchema: Schema {
         do {
             try db.executeChange(sql)
         } catch let err as NSError {
-            SentryIntegration.shared.sendWithStacktrace(message: "Error dropping tableList table", tag: SentryTag.browserDB, severity: .error, description: "\(err.localizedDescription)")
+            logger.log("Error dropping tableList table",
+                       level: .warning,
+                       category: .storage,
+                       description: err.localizedDescription)
             return false
         }
 
@@ -1511,7 +1514,10 @@ open class BrowserSchema: Schema {
         do {
             try db.setVersion(previousVersion)
         } catch let err as NSError {
-            SentryIntegration.shared.sendWithStacktrace(message: "Error setting database version", tag: SentryTag.browserDB, severity: .error, description: "\(err.localizedDescription)")
+            logger.log("Error setting database version",
+                       level: .warning,
+                       category: .storage,
+                       description: err.localizedDescription)
             return false
         }
 
@@ -1560,7 +1566,9 @@ open class BrowserSchema: Schema {
                            level: .warning,
                            category: .storage)
                 let extra = ["table": "clients", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
-                SentryIntegration.shared.sendWithStacktrace(message: "Error altering table", tag: SentryTag.browserDB, severity: .error, extra: extra)
+                logger.log("Error altering table",
+                           level: .warning,
+                           category: .storage)
                 return .failure
             }
         }
@@ -1570,11 +1578,11 @@ open class BrowserSchema: Schema {
             do {
                 try db.executeChange(sql)
             } catch let err as NSError {
-                logger.log("Error altering clients table: \(err.localizedDescription); SQL was \(sql)",
-                           level: .warning,
-                           category: .storage)
                 let extra = ["table": "clients", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
-                SentryIntegration.shared.sendWithStacktrace(message: "Error altering table", tag: SentryTag.browserDB, severity: .error, extra: extra)
+                logger.log("Error altering clients table",
+                           level: .warning,
+                           category: .storage,
+                           extra: extra)
                 return .failure
             }
         }
