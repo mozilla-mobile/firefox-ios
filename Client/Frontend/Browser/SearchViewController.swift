@@ -207,9 +207,9 @@ class SearchViewController: SiteTableViewController,
         }
     }
 
-    var searchEngines: SearchEngines! {
+    var searchEngines: SearchEngines? {
         didSet {
-            guard let defaultEngine = searchEngines.defaultEngine else { return }
+            guard let defaultEngine = searchEngines?.defaultEngine else { return }
 
             suggestClient?.cancelPendingRequest()
 
@@ -228,13 +228,13 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var quickSearchEngines: [OpenSearchEngine] {
-        guard let defaultEngine = searchEngines.defaultEngine else { return [] }
+        guard let defaultEngine = searchEngines?.defaultEngine else { return [] }
 
-        var engines = searchEngines.quickSearchEngines
+        var engines = searchEngines?.quickSearchEngines
 
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
-        if viewModel.isPrivate || !searchEngines.shouldShowSearchSuggestions {
+        if viewModel.isPrivate || !(searchEngines?.shouldShowSearchSuggestions ?? false) {
             engines?.insert(defaultEngine, at: 0)
         }
 
@@ -315,7 +315,7 @@ class SearchViewController: SiteTableViewController,
                 make.leading.equalTo(leftEdge)
                 make.top.equalTo(self.searchEngineScrollViewContent)
                 make.bottom.equalTo(self.searchEngineScrollViewContent)
-                if engine === self.searchEngines.quickSearchEngines.last {
+                if engine === self.searchEngines?.quickSearchEngines.last {
                     make.trailing.equalTo(self.searchEngineScrollViewContent)
                 }
             }
@@ -466,7 +466,7 @@ class SearchViewController: SiteTableViewController,
     private func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
-        if searchQuery.isEmpty || !searchEngines.shouldShowSearchSuggestions || searchQuery.looksLikeAURL() {
+        if searchQuery.isEmpty || !(searchEngines?.shouldShowSearchSuggestions ?? false) || searchQuery.looksLikeAURL() {
             suggestions = []
             tableView.reloadData()
             return
@@ -507,17 +507,18 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
-            guard let defaultEngine = searchEngines.defaultEngine else { return }
+            guard let defaultEngine = searchEngines?.defaultEngine else { return }
 
             recordSearchListSelectionTelemetry(type: .searchSuggestions)
             // Assume that only the default search engine can provide search suggestions.
-            guard let suggestions = suggestions else { return }
-            guard let suggestion = suggestions[safe: indexPath.row] else { return }
-            if let url = defaultEngine.searchURLForQuery(suggestion) {
-                Telemetry.default.recordSearch(location: .suggestion, searchEngine: defaultEngine.engineID ?? "other")
-                GleanMetrics.Search.counts["\(defaultEngine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
-                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
-            }
+            guard let suggestions = suggestions,
+                  let suggestion = suggestions[safe: indexPath.row],
+                  let url = defaultEngine.searchURLForQuery(suggestion)
+            else { return }
+
+            Telemetry.default.recordSearch(location: .suggestion, searchEngine: defaultEngine.engineID ?? "other")
+            GleanMetrics.Search.counts["\(defaultEngine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
+            searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
         case .openedTabs:
             recordSearchListSelectionTelemetry(type: .openedTabs)
             let tab = self.filteredOpenedTabs[indexPath.row]
@@ -564,7 +565,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.remoteTabs.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
-            title = searchEngines.defaultEngine?.headerSearchTitle ?? ""
+            title = searchEngines?.defaultEngine?.headerSearchTitle ?? ""
         default:  title = ""
         }
 

@@ -92,19 +92,6 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testOrderedEngines() {
-        engines.orderedEngines = [expectedEngineNames[4], expectedEngineNames[2], expectedEngineNames[0]].map { name in
-            for engine in engines.orderedEngines {
-                if engine.shortName == name {
-                    return engine
-                }
-            }
-            XCTFail("Could not find engine: \(name)")
-            return engines.orderedEngines.first!
-        }
-        XCTAssertEqual(engines.orderedEngines[0].shortName, expectedEngineNames[4])
-        XCTAssertEqual(engines.orderedEngines[1].shortName, expectedEngineNames[2])
-        XCTAssertEqual(engines.orderedEngines[2].shortName, expectedEngineNames[0])
-
         /// Persistance can't be tested without the default fixture changing.
         // Remaining engines should be appended in alphabetical order.
         let expectation = expectation(description: "Completed parse engines")

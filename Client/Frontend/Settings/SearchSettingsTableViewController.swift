@@ -27,10 +27,12 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
     var updateSearchIcon: (() -> Void)?
     fileprivate var isEditable: Bool {
+        guard let defaultEngine = model.defaultEngine else { return false }
+
         // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
         // Otherwise, enable editing if we have at least one custom engine.
         let customEngineCount = model.orderedEngines.filter({$0.isCustomEngine}).count
-        return model.defaultEngine?.isCustomEngine == true ? customEngineCount > 1 : customEngineCount > 0
+        return defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
     }
 
     var model: SearchEngines!

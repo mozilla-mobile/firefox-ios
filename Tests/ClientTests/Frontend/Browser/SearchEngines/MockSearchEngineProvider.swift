@@ -6,7 +6,6 @@ import Foundation
 @testable import Client
 
 class MockSearchEngineProvider: SearchEngineProvider {
-    var getUnorderedEnginesCount = 0
     var unorderedEngines: (([OpenSearchEngine]) -> Void)?
 
     var mockEngines: [OpenSearchEngine] = [
@@ -73,7 +72,6 @@ class MockSearchEngineProvider: SearchEngineProvider {
     func getUnorderedBundledEnginesFor(locale: Locale,
                                        possibleLanguageIdentifier: [String],
                                        completion: @escaping ([OpenSearchEngine]) -> Void) {
-        getUnorderedEnginesCount += 1
         unorderedEngines = completion
     }
 }
