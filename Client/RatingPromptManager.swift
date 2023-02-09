@@ -32,7 +32,7 @@ final class RatingPromptManager {
     /// - Parameters:
     ///   - profile: User's profile data
     ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
-    ///   - sentry: Sentry protocol to override in Unit test
+    ///   - logger: Logger protocol to override in Unit test
     init(profile: Profile,
          daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
          logger: Logger = DefaultLogger.shared,
