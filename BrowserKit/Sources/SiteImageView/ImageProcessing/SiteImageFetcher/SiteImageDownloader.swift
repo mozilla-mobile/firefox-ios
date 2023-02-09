@@ -8,17 +8,12 @@ import UIKit
 // MARK: - Kingfisher wrappers
 
 /// Image downloader wrapper around Kingfisher image downloader
-<<<<<<< HEAD
-/// Used in SiteImageFetcher
-protocol SiteImageDownloader {
-=======
 /// Used in FaviconFetcher
 protocol SiteImageDownloader: AnyObject {
     /// Provides the KingFisher ImageDownloader with a Timeout in case the completion isn't called
     var timeoutDelay: UInt64 { get }
     var continuation: CheckedContinuation<any SiteImageLoadingResult, any Error>? { get set }
 
->>>>>>> 02774844b (Bugfix FXIOS-5660 [v110] Continuation crash try 2 (#13157))
     @discardableResult
     func downloadImage(
         with url: URL,

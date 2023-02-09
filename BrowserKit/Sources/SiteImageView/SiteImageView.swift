@@ -18,14 +18,6 @@ protocol SiteImageView: UIView {
 
     // Avoid multiple image loading in parallel. Only start a new request if the URL string has changed
     var requestStartedWith: String? { get set }
-<<<<<<< HEAD
-    func canMakeRequest(with urlStringRequest: String) -> Bool
-}
-
-extension SiteImageView {
-    func canMakeRequest(with urlStringRequest: String) -> Bool {
-        return requestStartedWith != urlStringRequest
-=======
     func canMakeRequest(with siteURLString: String?) -> Bool
 }
 
@@ -37,7 +29,6 @@ extension SiteImageView {
         }
 
         return requestStartedWith != siteURLString
->>>>>>> 02774844b (Bugfix FXIOS-5660 [v110] Continuation crash try 2 (#13157))
     }
 
     func updateImage(url: String,

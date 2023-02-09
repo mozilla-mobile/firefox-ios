@@ -50,11 +50,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - SiteImageView
 
     func setURL(_ viewModel: FaviconImageViewModel) {
-<<<<<<< HEAD
-        guard canMakeRequest(with: viewModel.urlStringRequest) else { return }
-=======
         guard canMakeRequest(with: viewModel.siteURLString ?? viewModel.faviconURL?.absoluteString) else { return }
->>>>>>> 02774844b (Bugfix FXIOS-5660 [v110] Continuation crash try 2 (#13157))
 
         let id = UUID()
         uniqueID = id
