@@ -14,7 +14,7 @@ struct CreditCardSettingsEmptyView: View {
                 Spacer()
                 Spacer()
                     .frame(height: 25)
-                Image("credit_card_placeholder")
+                Image(ImageIdentifiers.creditCardPlaceholder)
                     .resizable()
                     .frame(width: 200, height: 200)
                     .aspectRatio(contentMode: .fit)

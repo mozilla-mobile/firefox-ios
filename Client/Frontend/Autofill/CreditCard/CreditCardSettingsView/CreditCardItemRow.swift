@@ -75,7 +75,7 @@ struct CreditCardItemRow: View {
     }
 
     func getImage(creditCard: CreditCard) -> Image {
-        let defaultImage = Image("credit_card_placeholder")
+        let defaultImage = Image(ImageIdentifiers.creditCardPlaceholder)
 
         guard let type = CreditCardType(rawValue: creditCard.ccType),
               let image = type.image else {
