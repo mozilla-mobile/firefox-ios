@@ -74,17 +74,17 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
         NSLayoutConstraint.activate([
             emptyCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            emptyCreditCardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            emptyCreditCardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             emptyCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
             addEditCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            addEditCreditCardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            addEditCreditCardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             addEditCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             addEditCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
             creditCardTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            creditCardTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            creditCardTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             creditCardTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             creditCardTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
