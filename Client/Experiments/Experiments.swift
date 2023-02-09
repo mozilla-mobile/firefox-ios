@@ -44,7 +44,7 @@ private let NIMBUS_IS_FIRST_RUN_KEY = "NimbusFirstRun"
 /// The server components of Nimbus are: `RemoteSettings` which serves the experiment definitions to
 /// clients, and `Experimenter`, which is the user interface for creating and administering experiments.
 ///
-/// Rust errors are not expected, but will be reported via Sentry.
+/// Rust errors are not expected, but will be reported via logger.
 enum Experiments {
     private static var studiesSetting: Bool?
     private static var telemetrySetting: Bool?

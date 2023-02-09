@@ -75,9 +75,9 @@ public class RustAutofillEncryptionKeys {
             return secret
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(err: autofillStoreError,
-                                               errorDomain: err.domain,
-                                               errorMessage: "Error while creating and storing credit card key")
+                logAutofillStoreError(err: autofillStoreError,
+                                      errorDomain: err.domain,
+                                      errorMessage: "Error while creating and storing credit card key")
 
                 throw AutofillEncryptionKeyError.noKeyCreated
             } else {
@@ -100,9 +100,9 @@ public class RustAutofillEncryptionKeys {
             return try decryptString(key: key, ciphertext: encryptedCCNum)
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(err: autofillStoreError,
-                                               errorDomain: err.domain,
-                                               errorMessage: "Error while decrypting credit card")
+                logAutofillStoreError(err: autofillStoreError,
+                                      errorDomain: err.domain,
+                                      errorMessage: "Error while decrypting credit card")
             } else {
                 logger.log("Unknown error while decrypting credit card",
                            level: .warning,
@@ -128,9 +128,9 @@ public class RustAutofillEncryptionKeys {
             return try encryptString(key: key, cleartext: creditCardNum)
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(err: autofillStoreError,
-                                               errorDomain: err.domain,
-                                               errorMessage: "Error while encrypting credit card")
+                logAutofillStoreError(err: autofillStoreError,
+                                      errorDomain: err.domain,
+                                      errorMessage: "Error while encrypting credit card")
             } else {
                 logger.log("Unknown error while encrypting credit card",
                            level: .warning,
@@ -146,9 +146,9 @@ public class RustAutofillEncryptionKeys {
         return try encryptString(key: key, cleartext: text)
     }
 
-    private func sendAutofillStoreErrorToSentry(err: AutofillApiError,
-                                                errorDomain: String,
-                                                errorMessage: String) {
+    private func logAutofillStoreError(err: AutofillApiError,
+                                       errorDomain: String,
+                                       errorMessage: String) {
         var message: String {
             switch err {
             case .SqlError(let message),

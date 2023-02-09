@@ -226,7 +226,7 @@ extension FxAWebViewController {
         guard let kp = keyPath,
               let path = KVOConstants(rawValue: kp)
         else {
-            sendSentryObserveValueError(forKeyPath: keyPath)
+            sendObserveValueError(forKeyPath: keyPath)
             return
         }
 
@@ -236,11 +236,11 @@ extension FxAWebViewController {
                 viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
             }
         default:
-            sendSentryObserveValueError(forKeyPath: keyPath)
+            sendObserveValueError(forKeyPath: keyPath)
         }
     }
 
-    private func sendSentryObserveValueError(forKeyPath keyPath: String?) {
+    private func sendObserveValueError(forKeyPath keyPath: String?) {
         logger.log("FxA webpage unhandled KVO",
                    level: .info,
                    category: .sync,

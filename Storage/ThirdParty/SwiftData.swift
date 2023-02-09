@@ -1228,7 +1228,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                            category: .storage,
                            description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
-            // Don't log errors caused by `sqlite3_interrupt()` to Sentry.
+            // Don't log errors caused by `sqlite3_interrupt()`.
             else if error.code != Int(SQLITE_INTERRUPT) {
                 logger.log("Execute error SQL error",
                            level: .warning,
