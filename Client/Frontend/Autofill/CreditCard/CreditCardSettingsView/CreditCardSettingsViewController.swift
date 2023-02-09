@@ -2,17 +2,18 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
+import Common
 import UIKit
 import Shared
+import Storage
 import SwiftUI
 
-class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
-    var themeObserver: NSObjectProtocol?
-    var theme: Theme
+class CreditCardSettingsViewController: UIViewController, Themeable {
     var viewModel: CreditCardSettingsViewModel
-    var state: CreditCardSettingsState = .empty
     var startingConfig: CreditCardSettingsStartingConfig?
+    var themeObserver: NSObjectProtocol?
+    var themeManager: ThemeManager
+    var notificationCenter: NotificationProtocol
 
     // MARK: Views
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
@@ -20,13 +21,16 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
     var creditCardTableViewController: CreditCardTableViewController
 
     // MARK: Initializers
-    init(theme: Theme,
-         creditCardViewModel: CreditCardSettingsViewModel,
-         startingConfig: CreditCardSettingsStartingConfig?) {
-        self.theme = theme
+    init(creditCardViewModel: CreditCardSettingsViewModel,
+         startingConfig: CreditCardSettingsStartingConfig?,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
 
+        let theme = themeManager.currentTheme
         let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: Color(theme.colors.textPrimary),
                                                         subTextColor: Color(theme.colors.textPrimary),
                                                         toggleTextColor: Color(theme.colors.textPrimary))
@@ -36,9 +40,9 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
         self.creditCardAddEditView =
         UIHostingController(rootView: CreditCardEditView(
             viewModel: viewModel.addEditViewModel,
-            removeButtonColor: Color(theme.colors.textWarning),
-            borderColor: Color(theme.colors.borderPrimary)))
-        self.creditCardTableViewController = CreditCardTableViewController(theme: theme, viewModel: viewModel.creditCardTableViewModel)
+            removeButtonColor: Color(themeManager.currentTheme.colors.textWarning),
+            borderColor: Color(themeManager.currentTheme.colors.borderPrimary)))
+        self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.creditCardTableViewModel)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -48,14 +52,15 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        applyTheme(theme: theme)
         viewSetup()
+        listenForThemeChange()
+        applyTheme()
     }
 
     func viewSetup() {
-        guard let emptyCreditCardView = creditCardEmptyView.view else { return }
-        guard let addEditCreditCardView = creditCardAddEditView.view else { return }
-        guard let creditCardTableView = creditCardTableViewController.view else { return }
+        guard let emptyCreditCardView = creditCardEmptyView.view,
+            let addEditCreditCardView = creditCardAddEditView.view,
+            let creditCardTableView = creditCardTableViewController.view else { return }
         creditCardTableView.translatesAutoresizingMaskIntoConstraints = false
         emptyCreditCardView.translatesAutoresizingMaskIntoConstraints = false
         addEditCreditCardView.translatesAutoresizingMaskIntoConstraints = false
@@ -136,7 +141,12 @@ class CreditCardSettingsViewController: UIViewController, ThemeApplicable {
         creditCardTableViewController.view.isHidden = true
     }
 
-    func applyTheme(theme: Theme) {
+    func applyTheme() {
+        let theme = themeManager.currentTheme
         view.backgroundColor = theme.colors.layer1
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 }

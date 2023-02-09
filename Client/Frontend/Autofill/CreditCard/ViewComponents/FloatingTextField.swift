@@ -14,7 +14,6 @@ struct FloatingTextField: View {
 
     var label: String
     @Binding var textVal: String
-    var placeHolder: String = "Enter something here..."
     var errorString: String = ""
     var showError: Bool = false
     var colors: Colors
@@ -24,7 +23,7 @@ struct FloatingTextField: View {
             Text(label)
                 .font(.system(size: 15))
                 .foregroundColor(colors.titleColor)
-            TextField(placeHolder, text: $textVal)
+            TextField("", text: $textVal)
                 .font(.system(size: 17))
                 .padding(.top, 7.5)
                 .foregroundColor(colors.textFieldColor)

@@ -2,15 +2,30 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import UIKit
-import SwiftUI
-import Storage
+import Common
 import Shared
+import Storage
+import SwiftUI
+import UIKit
 
-class CreditCardTableViewController: UIViewController, ThemeApplicable {
+class CreditCardTableViewController: UIViewController, Themeable {
+    // MARK: UX constants
+    struct UX {
+        static let toggleSwitchContainerHeight: CGFloat = 40
+        static let toggleSwitchAnchor: CGFloat = -16
+        static let toggleSwitchLabelHeight: CGFloat = 18
+        static let toggleSwitchContainerLineHeight: CGFloat = 0.7
+        static let toggleSwitchContainerLineAnchor: CGFloat = 10
+        static let savedCardsTitleLabelBottomAnchor: CGFloat = 25
+        static let savedCardsTitleLabelLeading: CGFloat = 16
+        static let savedCardsTitleLabelHeight: CGFloat = 13
+        static let tableViewTopAnchor: CGFloat = 8
+    }
+
     var viewModel: CreditCardTableViewModel
-    var theme: Theme
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
+    var notificationCenter: NotificationProtocol
     var isToggled = true
 
     // MARK: View
@@ -38,9 +53,12 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         return tableView
     }()
 
-    init(theme: Theme, viewModel: CreditCardTableViewModel) {
-        self.theme = theme
+    init(viewModel: CreditCardTableViewModel,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -50,12 +68,15 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        applyTheme(theme: theme)
         viewSetup()
+        listenForThemeChange()
+        applyTheme()
     }
 
     private func viewSetup() {
         view.addSubview(tableView)
+
+//        toggleSwitch.setOn(viewModel.isAutofillEnabled, animated: true)
 
         viewModel.didUpdateCreditCards = { [weak self] in
             self?.reloadData()
@@ -71,7 +92,8 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
         view.bringSubviewToFront(tableView)
     }
 
-    func applyTheme(theme: Theme) {
+    func applyTheme() {
+        let theme = themeManager.currentTheme
 //        toggleSwitchContainerLine.backgroundColor = theme.colors.borderPrimary
 //        toggleSwitchContainer.backgroundColor = theme.colors.layer2
 //        tableView.backgroundColor = .clear
@@ -91,6 +113,10 @@ class CreditCardTableViewController: UIViewController, ThemeApplicable {
 //    func updateToggleValue(value: Bool) {
 //        toggleSwitch.setOn(value, animated: true)
 //    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
 }
 
 extension CreditCardTableViewController: UITableViewDelegate,
@@ -110,7 +136,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
                     withIdentifier: HostingTableViewSectionHeader<CreditCardSectionHeader>.cellIdentifier) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
         else { return nil }
 
-        let headerView = CreditCardSectionHeader(textColor: Color(theme.colors.textSecondary))
+        let headerView = CreditCardSectionHeader(textColor: Color(themeManager.currentTheme.colors.textSecondary))
         hostingCell.host(headerView, parentController: self)
         return hostingCell
     }
@@ -135,7 +161,8 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
-        let row = CreditCardAutofillToggle(textColor: Color(theme.colors.textPrimary), isToggleOn: isToggled)
+        let row = CreditCardAutofillToggle(textColor: Color(themeManager.currentTheme.colors.textPrimary),
+                                           isToggleOn: isToggled)
         hostingCell.host(row, parentController: self)
         return hostingCell
     }
@@ -146,6 +173,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
+        let theme = themeManager.currentTheme
         let titleTextColor = Color(theme.colors.textPrimary)
         let subTextColor = Color(theme.colors.textSecondary)
         let separatorColor = Color(theme.colors.borderPrimary)

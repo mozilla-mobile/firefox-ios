@@ -1064,9 +1064,9 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
         // Telemetry
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillSettings)
         let viewModel = CreditCardSettingsViewModel(profile: profile)
-        let viewController = CreditCardSettingsViewController(theme: theme,
-                                                              creditCardViewModel: viewModel,
-                                                              startingConfig: nil)
+        let viewController = CreditCardSettingsViewController(
+            creditCardViewModel: viewModel,
+            startingConfig: nil)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
