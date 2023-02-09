@@ -92,7 +92,10 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     func setupState() {
         // check if there are any starting config
-        guard startingConfig != nil else {
+        guard startingConfig == nil else {
+            updateState(type: .empty)
+            return
+        }
             // Check if we have any credit cards to show in the list
             viewModel.listCreditCard { creditCards in
                 guard let creditCards = creditCards, !creditCards.isEmpty else {
