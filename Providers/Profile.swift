@@ -315,8 +315,13 @@ open class BrowserProfile: Profile {
             // If the rust sync manager is not being used, we want to set the persisted
             // state for future rust sync manager syncs. The migration only needs to be
             // performed once.
-            // TODO: Check that this is true and this isn't the first run
-            if !(prefs.boolForKey(PrefsKeys.MigratedRustSyncPersistedState) ?? false)  {
+
+            let hasSyncedBefore =
+                prefs.timestampForKey(PrefsKeys.KeyLastSyncFinishTime) != nil
+            let hasMigratedState =
+                prefs.boolForKey(PrefsKeys.MigratedRustSyncPersistedState) ?? false
+            
+            if hasSyncedBefore && !hasMigratedState {
                 syncManager.migrateSyncData()
                 self.prefs.setBool(true, forKey: PrefsKeys.MigratedRustSyncPersistedState)
             }
