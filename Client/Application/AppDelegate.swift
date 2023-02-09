@@ -42,6 +42,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        let sentryWrapper = DefaultSentryWrapper(buildChannel: AppConstants.buildChannel,
+                                                 nightlyAppVersion: AppConstants.nightlyAppVersion,
+                                                 sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
+        logger.configure(sentryWrapper: sentryWrapper)
+
         // It's important this is the first thing that happens when the app is run
         DependencyHelper().bootstrapDependencies()
 

@@ -35,6 +35,7 @@ class AppLaunchUtil {
         // before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
         SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+        logger.setup(sendUsageData: sendUsageData)
 
         setUserAgent()
 

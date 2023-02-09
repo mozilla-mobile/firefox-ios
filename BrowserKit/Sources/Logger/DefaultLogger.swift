@@ -8,7 +8,7 @@ public class DefaultLogger: Logger {
     public static let shared = DefaultLogger()
 
     private var logger: SwiftyBeaverWrapper.Type
-    private var sentry: SentryWrapper
+    private var sentry: SentryWrapper!
     private var fileManager: LoggerFileManager
 
     public var crashedLastLaunch: Bool {
@@ -16,10 +16,12 @@ public class DefaultLogger: Logger {
     }
 
     init(swiftyBeaverBuilder: SwiftyBeaverBuilder = DefaultSwiftyBeaverBuilder(),
-         sentryWrapper: SentryWrapper = DefaultSentryWrapper(),
          fileManager: LoggerFileManager = DefaultLoggerFileManager()) {
         self.fileManager = fileManager
         self.logger = swiftyBeaverBuilder.setup(with: fileManager.getLogDestination())
+    }
+
+    public func configure(sentryWrapper: SentryWrapper) {
         self.sentry = sentryWrapper
     }
 

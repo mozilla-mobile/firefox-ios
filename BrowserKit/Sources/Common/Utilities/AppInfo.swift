@@ -4,7 +4,6 @@
 
 import Foundation
 
-// TODO: FXIOS-5698 Implement injection into BrowserKit for AppConstants and AppInfo
 open class AppInfo {
     /// Return the main application bundle. If this is called from an extension, the containing app bundle is returned.
     public static var applicationBundle: Bundle {
@@ -46,17 +45,5 @@ open class AppInfo {
             return components[0..<components.count-1].joined(separator: ".")
         }
         return baseBundleIdentifier
-    }
-
-    /// Return the shared container identifier (also known as the app group) to be used with for example background
-    /// http requests. It is the base bundle identifier with a "group." prefix.
-    public static var sharedContainerIdentifier: String {
-        var bundleIdentifier = baseBundleIdentifier
-        if bundleIdentifier == "org.mozilla.ios.FennecEnterprise" {
-            // Bug 1373726 - Base bundle identifier incorrectly generated for Nightly builds
-            // This can be removed when we are able to fix the app group in the developer portal
-            bundleIdentifier = "org.mozilla.ios.Fennec.enterprise"
-        }
-        return "group." + bundleIdentifier
     }
 }
