@@ -49,20 +49,7 @@ public class RustSyncManager: NSObject, SyncManager {
     
     lazy var syncManagerAPI = RustSyncManagerAPI()
     
-    private func getPersistedState(engineName: String) -> String? {
-        if let enabled = self.prefsForSync.boolForKey("engine.\(engineName).enabled"),
-           enabled,
-           let result = syncRustEngines(why: .user, engines: [engineName])
-            .value
-            .successValue
-        {
-            return result.persistedState
-        } else {
-            return nil
-        }
-    }
-    
-    func migrateSyncData() {
+    public func migrateSyncData() {
         // The sync functions used by the old native swift sync manager did not return
         // a persisted state string. And if we do not call the sync manager's rust
         // function with persisted state data that call will be treated as the first
@@ -70,17 +57,21 @@ public class RustSyncManager: NSObject, SyncManager {
         // completed. To avoid that, we sync one component with sync manager and store
         // it for the first sync manager full sync.
 
-        if let persistedState = getPersistedState(engineName: "tabs") {
-            self.prefs.setString(persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
-        } else if let persistedState = getPersistedState(engineName: "logins") {
-            self.prefs.setString(persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
-        } else if let persistedState = getPersistedState(engineName: "bookmarks") {
-            self.prefs.setString(persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
-        } else if let persistedState = getPersistedState(engineName: "history") {
-            self.prefs.setString(persistedState, forKey: PrefsKeys.RustSyncManagerPersistedState)
-        }
+        var setState = false
         
-        // There were no enabled engines to sync so persisted state will be empty.
+        for engineName in ["tabs", "logins", "bookmarks", "history"] {
+            if let enabled = self.prefsForSync.boolForKey("engine.\(engineName).enabled"),
+               enabled && !setState {
+                syncRustEngines(why: .user, engines: [engineName]).upon({ result in
+                    
+                    if let persistedState = result.successValue?.persistedState {
+                        self.prefs.setString(persistedState,
+                                             forKey: PrefsKeys.RustSyncManagerPersistedState)
+                    }
+                })
+                setState = true
+            }
+        }
     }
     
     public var isSyncing: Bool {
