@@ -145,7 +145,7 @@ enum Experiments {
         // thinks it is.
         let appSettings = NimbusAppSettings(
             appName: nimbusAppName,
-            channel: AppConstants.BuildChannel.nimbusString,
+            channel: AppConstants.buildChannel.nimbusString,
             customTargetingAttributes: customTargetingAttributes
         )
 

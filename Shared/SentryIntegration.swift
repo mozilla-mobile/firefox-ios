@@ -78,7 +78,7 @@ public class SentryIntegration: SentryProtocol {
         }
 
         var environment = Environment.production
-        if AppInfo.appVersion == AppConstants.NIGHTLY_APP_VERSION, AppConstants.BuildChannel == .beta {
+        if AppInfo.appVersion == AppConstants.nightlyAppVersion, AppConstants.buildChannel == .beta {
             // Setup sentry for Nightly Firefox Beta
             environment = Environment.nightly
         }
@@ -211,8 +211,8 @@ public class SentryIntegration: SentryProtocol {
          Release    n      n       y
      */
     private func shouldSendEventFor(_ severity: SentryLevel) -> Bool {
-        let shouldSendRelease = AppConstants.BuildChannel == .release && severity.rawValue >= SentryLevel.fatal.rawValue
-        let shouldSendBeta = AppConstants.BuildChannel == .beta && severity.rawValue >= SentryLevel.fatal.rawValue
+        let shouldSendRelease = AppConstants.buildChannel == .release && severity.rawValue >= SentryLevel.fatal.rawValue
+        let shouldSendBeta = AppConstants.buildChannel == .beta && severity.rawValue >= SentryLevel.fatal.rawValue
 
         return shouldSendBeta || shouldSendRelease
     }

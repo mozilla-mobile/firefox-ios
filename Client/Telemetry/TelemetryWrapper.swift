@@ -86,7 +86,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         telemetryConfig.appName = "Fennec"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.dataDirectory = .cachesDirectory
-        telemetryConfig.updateChannel = AppConstants.BuildChannel.rawValue
+        telemetryConfig.updateChannel = AppConstants.buildChannel.rawValue
         let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
@@ -173,7 +173,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         }
 
         // Initialize Glean telemetry
-        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue), buildInfo: GleanMetrics.GleanBuild.info)
+        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.buildChannel.rawValue), buildInfo: GleanMetrics.GleanBuild.info)
 
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
