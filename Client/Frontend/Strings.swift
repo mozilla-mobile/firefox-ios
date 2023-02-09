@@ -4495,12 +4495,12 @@ extension String {
         public struct Settings {
             public static let EmptyListTitle = MZLocalizedString(
                 "Settings.EmptyList.Title.v112",
-                tableName: nil,
+                tableName: "Settings",
                 value: "Save Credit Cards to Firefox",
                 comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. Firefox is the product name and should not be alterted.")
             public static let EmptyListDescription = MZLocalizedString(
                 "Settings.EmptyList.Description.v112",
-                tableName: nil,
+                tableName: "Settings",
                 value: "Save your card information securely to check out faster next time.",
                 comment: "Description label for when there are no credit cards shown in credit card list in autofill settings screen.")
         }

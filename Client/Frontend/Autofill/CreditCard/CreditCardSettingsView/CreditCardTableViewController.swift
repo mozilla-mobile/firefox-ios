@@ -154,7 +154,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
 
     @objc private func autofillToggleTapped() {
         viewModel.updateToggle()
-        toggleSwitch.setOn(value, animated: true)
+        toggleSwitch.setOn(viewModel.isAutofillEnabled, animated: true)
     }
 
     func reloadData() {

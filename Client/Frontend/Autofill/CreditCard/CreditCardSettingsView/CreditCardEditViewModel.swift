@@ -16,21 +16,18 @@ class CreditCardEditViewModel: ObservableObject {
     @Published var nameOnCard: String = "" {
         didSet (val) {
             nameIsValid = nameOnCard.isEmpty
-            print("\(val)")
         }
     }
 
     @Published var expirationDate: String = "" {
         didSet (val) {
             numberIsValid = true
-            print("\(val)")
         }
     }
 
     @Published var cardNumber: String = "" {
         didSet (val) {
             expirationIsValid = true
-            print("\(val)")
         }
     }
 
