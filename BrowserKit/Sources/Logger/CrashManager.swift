@@ -78,7 +78,6 @@ public class DefaultCrashManager: CrashManager {
                 }
                 return crumb
             }
-
         })
         enabled = true
 
