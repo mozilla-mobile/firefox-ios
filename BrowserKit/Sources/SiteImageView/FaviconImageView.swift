@@ -50,7 +50,7 @@ public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - SiteImageView
 
     func setURL(_ viewModel: FaviconImageViewModel) {
-        guard canMakeRequest(with: viewModel.siteURLString ?? viewModel.faviconURL?.absoluteString) else { return }
+        guard canMakeRequest(with: viewModel.urlStringRequest) else { return }
 
         let id = UUID()
         uniqueID = id
