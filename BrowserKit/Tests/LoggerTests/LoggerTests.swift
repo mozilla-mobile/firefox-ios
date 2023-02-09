@@ -26,36 +26,36 @@ final class LoggerTests: XCTestCase {
     // MARK: - Log
 
     func testLog_debug() {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                                    sentryWrapper: sentryWrapper)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(sentryWrapper: sentryWrapper)
         subject.log("Debug log", level: .debug, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
     }
 
     func testLog_info() {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                                    sentryWrapper: sentryWrapper)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(sentryWrapper: sentryWrapper)
         subject.log("Info log", level: .info, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.infoCalled, 1)
     }
 
     func testLog_warning() {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                                    sentryWrapper: sentryWrapper)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(sentryWrapper: sentryWrapper)
         subject.log("Warning log", level: .warning, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.warningCalled, 1)
     }
 
     func testLog_fatal() {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                                    sentryWrapper: sentryWrapper)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(sentryWrapper: sentryWrapper)
         subject.log("Fatal log", level: .fatal, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.errorCalled, 1)
     }
 
     func testLog_informationCorrelate() throws {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                                    sentryWrapper: sentryWrapper)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(sentryWrapper: sentryWrapper)
         subject.log("Debug log",
                     level: .debug,
                     category: .setup,
@@ -69,8 +69,8 @@ final class LoggerTests: XCTestCase {
     // MARK: - Sentry
 
     func testSentryLog_fatalIsSent_informationCorrelate() throws {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                                    sentryWrapper: sentryWrapper)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(sentryWrapper: sentryWrapper)
         subject.log("Fatal log",
                     level: .fatal,
                     category: .setup,
@@ -85,14 +85,14 @@ final class LoggerTests: XCTestCase {
     }
 
     func testSentryLog_sendUsageDataNotCalled() {
-        _ = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                          sentryWrapper: sentryWrapper)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(sentryWrapper: sentryWrapper)
         XCTAssertNil(sentryWrapper.savedSendUsageData)
     }
 
     func testSentryLog_sendUsageDataCalled() throws {
-        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder,
-                                    sentryWrapper: sentryWrapper)
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(sentryWrapper: sentryWrapper)
         subject.setup(sendUsageData: true)
 
         let savedSendUsageData = try XCTUnwrap(sentryWrapper.savedSendUsageData)

@@ -45,7 +45,7 @@ open class SyncTelemetry {
         let appVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         let buildID = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
 
-        let channel = AppConstants.BuildChannel.rawValue
+        let channel = AppConstants.buildChannel.rawValue
         let path = "/submit/telemetry/\(docID)/\(docType.rawValue)/\(AppName)/\(appVersion)/\(channel)/\(buildID)"
         let url = ServerURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
@@ -114,7 +114,7 @@ open class SyncTelemetry {
                 "version": AppInfo.appVersion,
                 "displayVersion": displayVersion,
                 "platformVersion": osVersion,
-                "channel": AppConstants.BuildChannel.rawValue
+                "channel": AppConstants.buildChannel.rawValue
             ]
         ]
     }

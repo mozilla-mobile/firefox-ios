@@ -32,7 +32,7 @@ open class FeatureSwitch {
     /// This gives us stable properties across restarts and new releases.
     open func isMember(_ prefs: Prefs) -> Bool {
         // Only use bucketing if we're in the correct build channel, and feature flag is true.
-        guard buildChannel == AppConstants.BuildChannel, nonChannelValue else {
+        guard buildChannel == AppConstants.buildChannel, nonChannelValue else {
             return nonChannelValue
         }
 

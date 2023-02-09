@@ -8,6 +8,7 @@ public protocol Logger {
     var crashedLastLaunch: Bool { get }
 
     func setup(sendUsageData: Bool)
+    func configure(sentryWrapper: SentryWrapper)
 
     /// Log a new message to the logging system
     /// - Parameters:
