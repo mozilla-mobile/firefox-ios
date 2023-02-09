@@ -17,7 +17,7 @@ struct CreditCardAutofillToggle: View {
                 .hidden()
             HStack {
                 Toggle("Save and autofill cards", isOn: $isToggleOn)
-                    .font(.system(.body))
+                    .font(.body)
                     .foregroundColor(textColor)
                     .padding(.leading, 16)
                     .padding(.trailing, 16)

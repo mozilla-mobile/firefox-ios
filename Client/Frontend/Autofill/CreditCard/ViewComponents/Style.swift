@@ -10,7 +10,7 @@ struct ErrorTextStyle: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .font(.system(size: 15))
+            .preferredBodyFont(size: 15)
             .padding(.leading, 10)
             .foregroundColor(color)
     }
