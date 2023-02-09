@@ -908,9 +908,8 @@ class SearchSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = SearchSettingsTableViewController()
-        viewController.model = profile.searchEngines
-        viewController.profile = profile
+        let viewController = SearchSettingsTableViewController(profile: profile)
+
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
