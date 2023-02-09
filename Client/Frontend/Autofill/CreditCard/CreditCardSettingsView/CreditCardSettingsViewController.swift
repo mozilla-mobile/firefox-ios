@@ -31,17 +31,17 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
 
         let theme = themeManager.currentTheme
-        let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: Color(theme.colors.textPrimary),
-                                                        subTextColor: Color(theme.colors.textPrimary),
-                                                        toggleTextColor: Color(theme.colors.textPrimary))
+        let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: theme.colors.textPrimary.color,
+                                                        subTextColor: theme.colors.textPrimary.color,
+                                                        toggleTextColor: theme.colors.textPrimary.color)
         let emptyView = CreditCardSettingsEmptyView(colors: colors, isToggleOn: true)
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
 
         self.creditCardAddEditView =
         UIHostingController(rootView: CreditCardEditView(
             viewModel: viewModel.addEditViewModel,
-            removeButtonColor: Color(themeManager.currentTheme.colors.textWarning),
-            borderColor: Color(themeManager.currentTheme.colors.borderPrimary)))
+            removeButtonColor: themeManager.currentTheme.colors.textWarning.color,
+            borderColor: themeManager.currentTheme.colors.borderPrimary.color))
         self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.creditCardTableViewModel)
         super.init(nibName: nil, bundle: nil)
     }

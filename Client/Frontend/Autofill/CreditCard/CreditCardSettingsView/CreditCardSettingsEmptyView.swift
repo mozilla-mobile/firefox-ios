@@ -17,7 +17,7 @@ struct CreditCardSettingsEmptyView: View {
 
     var body: some View {
         ZStack {
-            Color(UIColor.clear)
+            UIColor.clear.color
                 .edgesIgnoringSafeArea(.all)
             GeometryReader { proxy in
                 ScrollView {

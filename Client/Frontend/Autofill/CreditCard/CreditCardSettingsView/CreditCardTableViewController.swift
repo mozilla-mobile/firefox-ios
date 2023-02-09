@@ -136,7 +136,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
                     withIdentifier: HostingTableViewSectionHeader<CreditCardSectionHeader>.cellIdentifier) as? HostingTableViewSectionHeader<CreditCardSectionHeader>
         else { return nil }
 
-        let headerView = CreditCardSectionHeader(textColor: Color(themeManager.currentTheme.colors.textSecondary))
+        let headerView = CreditCardSectionHeader(textColor: themeManager.currentTheme.colors.textSecondary.color)
         hostingCell.host(headerView, parentController: self)
         return hostingCell
     }
@@ -161,7 +161,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
-        let row = CreditCardAutofillToggle(textColor: Color(themeManager.currentTheme.colors.textPrimary),
+        let row = CreditCardAutofillToggle(textColor: themeManager.currentTheme.colors.textPrimary.color,
                                            isToggleOn: isToggled)
         hostingCell.host(row, parentController: self)
         return hostingCell
@@ -174,9 +174,9 @@ extension CreditCardTableViewController: UITableViewDelegate,
         }
 
         let theme = themeManager.currentTheme
-        let titleTextColor = Color(theme.colors.textPrimary)
-        let subTextColor = Color(theme.colors.textSecondary)
-        let separatorColor = Color(theme.colors.borderPrimary)
+        let titleTextColor = theme.colors.textPrimary.color
+        let subTextColor = theme.colors.textSecondary.color
+        let separatorColor = theme.colors.borderPrimary.color
         let colors = CreditCardItemRow.Colors(
             titleTextColor: titleTextColor,
             subTextColor: subTextColor,
