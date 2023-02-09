@@ -7,19 +7,19 @@ import XCTest
 
 final class LoggerTests: XCTestCase {
     private var beaverBuilder: MockSwiftyBeaverBuilder!
-    private var sentryWrapper: MockSentryWrapper!
+    private var crashManager: MockCrashManager!
 
     override func setUp() {
         super.setUp()
         beaverBuilder = MockSwiftyBeaverBuilder()
-        sentryWrapper = MockSentryWrapper()
+        crashManager = MockCrashManager()
         cleanUp()
     }
 
     override func tearDown() {
         super.tearDown()
         beaverBuilder = nil
-        sentryWrapper = nil
+        crashManager = nil
         cleanUp()
     }
 
@@ -27,35 +27,35 @@ final class LoggerTests: XCTestCase {
 
     func testLog_debug() {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
-        subject.configure(sentryWrapper: sentryWrapper)
+        subject.configure(crashManager: crashManager)
         subject.log("Debug log", level: .debug, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
     }
 
     func testLog_info() {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
-        subject.configure(sentryWrapper: sentryWrapper)
+        subject.configure(crashManager: crashManager)
         subject.log("Info log", level: .info, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.infoCalled, 1)
     }
 
     func testLog_warning() {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
-        subject.configure(sentryWrapper: sentryWrapper)
+        subject.configure(crashManager: crashManager)
         subject.log("Warning log", level: .warning, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.warningCalled, 1)
     }
 
     func testLog_fatal() {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
-        subject.configure(sentryWrapper: sentryWrapper)
+        subject.configure(crashManager: crashManager)
         subject.log("Fatal log", level: .fatal, category: .setup)
         XCTAssertEqual(MockSwiftyBeaver.errorCalled, 1)
     }
 
     func testLog_informationCorrelate() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
-        subject.configure(sentryWrapper: sentryWrapper)
+        subject.configure(crashManager: crashManager)
         subject.log("Debug log",
                     level: .debug,
                     category: .setup,
@@ -70,32 +70,32 @@ final class LoggerTests: XCTestCase {
 
     func testSentryLog_fatalIsSent_informationCorrelate() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
-        subject.configure(sentryWrapper: sentryWrapper)
+        subject.configure(crashManager: crashManager)
         subject.log("Fatal log",
                     level: .fatal,
                     category: .setup,
                     extra: ["example": "test"],
                     description: "A description")
 
-        XCTAssertEqual(sentryWrapper.message, "Fatal log")
-        XCTAssertEqual(sentryWrapper.category, .setup)
-        XCTAssertEqual(sentryWrapper.level, .fatal)
-        let extra = try XCTUnwrap(sentryWrapper.extraEvents)
+        XCTAssertEqual(crashManager.message, "Fatal log")
+        XCTAssertEqual(crashManager.category, .setup)
+        XCTAssertEqual(crashManager.level, .fatal)
+        let extra = try XCTUnwrap(crashManager.extraEvents)
         XCTAssertEqual(extra, ["example": "test", "errorDescription": "A description"])
     }
 
     func testSentryLog_sendUsageDataNotCalled() {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
-        subject.configure(sentryWrapper: sentryWrapper)
-        XCTAssertNil(sentryWrapper.savedSendUsageData)
+        subject.configure(crashManager: crashManager)
+        XCTAssertNil(crashManager.savedSendUsageData)
     }
 
     func testSentryLog_sendUsageDataCalled() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
-        subject.configure(sentryWrapper: sentryWrapper)
+        subject.configure(crashManager: crashManager)
         subject.setup(sendUsageData: true)
 
-        let savedSendUsageData = try XCTUnwrap(sentryWrapper.savedSendUsageData)
+        let savedSendUsageData = try XCTUnwrap(crashManager.savedSendUsageData)
         XCTAssertTrue(savedSendUsageData)
     }
 }
@@ -152,8 +152,8 @@ class MockSwiftyBeaver: SwiftyBeaverWrapper {
     }
 }
 
-// MARK: - SentryWrapper
-class MockSentryWrapper: SentryWrapper {
+// MARK: - CrashManager
+class MockCrashManager: CrashManager {
     var crashedLastLaunch: Bool = false
 
     var savedSendUsageData: Bool?
