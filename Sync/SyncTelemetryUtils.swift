@@ -242,13 +242,22 @@ public protocol SyncPingFailureFormattable {
 public struct SyncPing: SyncTelemetryPing {
     public private(set) var payload: JSON
 
-    static func pingFields(prefs: Prefs, why: SyncPingReason) -> Deferred<Maybe<(token: TokenServerToken, fields: [String: Any])>> {
+    static func pingFields(
+        prefs: Prefs,
+        why: SyncPingReason,
+        completion: @escaping (((token: TokenServerToken, fields: [String: Any])?) -> Void)
+    ) {
         // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for
         // our ping's identifiers
-        return RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
+        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false).upon { result in
+            guard let (token, kSync) = result.successValue else {
+                completion(nil)
+                return
+            }
             let scratchpadPrefs = prefs.branch("sync.scratchpad")
             guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else {
-                return deferMaybe(SyncPingError.failedToRestoreScratchpad)
+                completion(nil)
+                return
             }
 
             let ping: [String: Any] = pingCommonData(
@@ -257,15 +266,23 @@ public struct SyncPing: SyncTelemetryPing {
                 hashedDeviceID: (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
             )
 
-            return deferMaybe((token, ping))
+            completion((token, ping))
         }
     }
 
-    public static func from(result: SyncOperationResult,
-                            remoteClientsAndTabs: RemoteClientsAndTabs,
-                            prefs: Prefs,
-                            why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
-        return pingFields(prefs: prefs, why: why) >>== { (token, fields) in
+    public static func from(
+        result: SyncOperationResult,
+        remoteClientsAndTabs: RemoteClientsAndTabs,
+        prefs: Prefs,
+        why: SyncPingReason,
+        completion: @escaping ((SyncPing?) -> Void)
+    ) {
+        pingFields(prefs: prefs, why: why) {
+            guard let (token, fields) = $0 else {
+                completion(nil)
+                return
+            }
+
             var ping = fields
 
             // TODO: We don't cache our sync pings so if it fails, it fails. Once we add
@@ -274,22 +291,35 @@ public struct SyncPing: SyncTelemetryPing {
             let events = Event.takeAll(fromPrefs: prefs).map { $0.toArray() }
             ping["events"] = events
 
-            return dictionaryFrom(result: result, storage: remoteClientsAndTabs, token: token) >>== { syncDict in
+            dictionaryFrom(
+                result: result,
+                storage: remoteClientsAndTabs,
+                token: token
+            ) { syncDict in
                 // TODO: Split the sync ping metadata from storing a single sync.
                 ping["syncs"] = [syncDict]
-                return deferMaybe(SyncPing(payload: JSON(ping)))
+                completion(SyncPing(payload: JSON(ping)))
             }
         }
     }
 
-    public static func fromQueuedEvents(prefs: Prefs, why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
+    public static func fromQueuedEvents(
+        prefs: Prefs,
+        why: SyncPingReason,
+        completion: @escaping ((SyncPing?) -> Void)
+    ) {
         if !Event.hasQueuedEvents(inPrefs: prefs) {
-            return deferMaybe(SyncPingError.emptyPing)
+            completion(nil)
+            return
         }
-        return pingFields(prefs: prefs, why: why) >>== { (_, fields) in
+        pingFields(prefs: prefs, why: why) {
+            guard let (_, fields) = $0 else {
+                completion(nil)
+                return
+            }
             var ping = fields
             ping["events"] = Event.takeAll(fromPrefs: prefs).map { $0.toArray() }
-            return deferMaybe(SyncPing(payload: JSON(ping)))
+            completion(SyncPing(payload: JSON(ping)))
         }
     }
 
@@ -308,12 +338,19 @@ public struct SyncPing: SyncTelemetryPing {
     }
 
     // Generates a single sync ping payload that is stored in the 'syncs' list in the sync ping.
-    private static func dictionaryFrom(result: SyncOperationResult,
-                                       storage: RemoteClientsAndTabs,
-                                       token: TokenServerToken) -> Deferred<Maybe<[String: Any]>> {
-        return connectedDevices(fromStorage: storage, token: token) >>== { devices in
+    private static func dictionaryFrom(
+        result: SyncOperationResult,
+        storage: RemoteClientsAndTabs,
+        token: TokenServerToken,
+        completion: @escaping (([String: Any]) -> Void)
+    ) {
+        connectedDevices(
+            fromStorage: storage,
+            token: token
+        ) { devices in
             guard let stats = result.stats else {
-                return deferMaybe([String: Any]())
+                completion([String: Any]())
+                return
             }
 
             var dict = stats.asDictionary()
@@ -334,13 +371,16 @@ public struct SyncPing: SyncTelemetryPing {
             }
 
             dict["devices"] = devices
-            return deferMaybe(dict)
+            completion(dict)
         }
     }
 
     // Returns a list of connected devices formatted for use in the 'devices' property in the sync ping.
-    private static func connectedDevices(fromStorage storage: RemoteClientsAndTabs,
-                                         token: TokenServerToken) -> Deferred<Maybe<[[String: Any]]>> {
+    private static func connectedDevices(
+        fromStorage storage: RemoteClientsAndTabs,
+        token: TokenServerToken,
+        completion: @escaping (([[String: Any]]) -> Void)
+    ) {
         func dictionaryFrom(client: RemoteClient) -> [String: Any]? {
             var device = [String: Any]()
             if let os = client.os {
@@ -355,7 +395,13 @@ public struct SyncPing: SyncTelemetryPing {
             return device
         }
 
-        return storage.getClients() >>== { deferMaybe($0.compactMap(dictionaryFrom)) }
+        storage.getClients().upon { result in
+            guard let clients = result.successValue else {
+                completion([])
+                return
+            }
+            completion(clients.compactMap(dictionaryFrom))
+        }
     }
 
     private static func enginePingDataFrom(engineResults: EngineResults) -> [[String: Any]] {

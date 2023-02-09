@@ -361,7 +361,7 @@ private class MockFaviconFetcher: FaviconFetcher {
     var fetchImageSucceedCalled = 0
     var fetchImageFailedCalled = 0
 
-    func fetchFavicon(from imageURL: URL) async throws -> UIImage {
+    func fetchFavicon(from imageURL: URL, imageDownloader: SiteImageDownloader) async throws -> UIImage {
         if let image = image {
             fetchImageSucceedCalled += 1
             return image

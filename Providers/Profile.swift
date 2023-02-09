@@ -7,6 +7,8 @@
 // application (i.e. App Extensions). Introducing new dependencies here
 // may have unintended negative consequences for App Extensions such as
 // increased startup times which may lead to termination by the OS.
+
+import Common
 import Account
 import Shared
 import Storage
@@ -585,8 +587,13 @@ open class BrowserProfile: Profile {
         }
         let sendUsageData = prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
         if sendUsageData {
-            SyncPing.fromQueuedEvents(prefs: self.prefs,
-                                      why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
+            SyncPing.fromQueuedEvents(
+                prefs: self.prefs,
+                why: .schedule
+            ) {
+                guard let ping = $0 else { return }
+                SyncTelemetry.send(ping: ping, docType: .sync)
+            }
         }
     }
 
@@ -825,10 +832,15 @@ open class BrowserProfile: Profile {
 
             #if MOZ_TARGET_CLIENT
                 if canSendUsageData() {
-                    SyncPing.from(result: result,
-                                  remoteClientsAndTabs: profile.remoteClientsAndTabs,
-                                  prefs: prefs,
-                                  why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
+                    SyncPing.from(
+                        result: result,
+                        remoteClientsAndTabs: profile.remoteClientsAndTabs,
+                        prefs: prefs,
+                        why: .schedule
+                    ) {
+                        guard let ping = $0 else { return }
+                        SyncTelemetry.send(ping: ping, docType: .sync)
+                    }
                 } else {
                     logger.log("Profile isn't sending usage data. Not sending sync status event.",
                                level: .debug,

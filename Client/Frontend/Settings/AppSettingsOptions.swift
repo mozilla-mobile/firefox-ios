@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Foundation
 import Shared
 import Account
@@ -971,14 +972,15 @@ class LoginsSetting: Setting {
                     LoginListViewController.create(
                         authenticateInNavigationController: navController,
                         profile: self.profile,
-                        webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                            guard let loginsVC = loginsVC else { return }
-                            navController.pushViewController(loginsVC, animated: true)
-                            // Remove the onboarding from the navigation stack so that we go straight back to settings
-                            navController.viewControllers.removeAll { viewController in
-                                viewController == loginOnboardingViewController
-                            }
+                        webpageNavigationHandler: navigationHandler
+                    ) { loginsVC in
+                        guard let loginsVC = loginsVC else { return }
+                        navController.pushViewController(loginsVC, animated: true)
+                        // Remove the onboarding from the navigation stack so that we go straight back to settings
+                        navController.viewControllers.removeAll { viewController in
+                            viewController == loginOnboardingViewController
                         }
+                    }
                 }
 
                 navigationController?.pushViewController(loginOnboardingViewController, animated: true)
@@ -988,10 +990,11 @@ class LoginsSetting: Setting {
                 LoginListViewController.create(
                     authenticateInNavigationController: navController,
                     profile: profile,
-                    webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                        guard let loginsVC = loginsVC else { return }
-                        navController.pushViewController(loginsVC, animated: true)
-                    }
+                    webpageNavigationHandler: navigationHandler
+                ) { loginsVC in
+                    guard let loginsVC = loginsVC else { return }
+                    navController.pushViewController(loginsVC, animated: true)
+                }
             }
         } else {
             let viewController = DevicePasscodeRequiredViewController()
