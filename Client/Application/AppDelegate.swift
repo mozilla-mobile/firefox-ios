@@ -42,17 +42,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        let sentryWrapper = DefaultSentryWrapper(buildChannel: AppConstants.buildChannel,
-                                                 nightlyAppVersion: AppConstants.nightlyAppVersion,
-                                                 sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
-        logger.configure(sentryWrapper: sentryWrapper)
+        // Configure app information for BrowserKit, needed for logger
+        BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
+                                               nightlyAppVersion: AppConstants.nightlyAppVersion,
+                                               sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
-        // It's important this is the first thing that happens when the app is run
-        DependencyHelper().bootstrapDependencies()
-
+        // Configure logger so we can start tracking logs early
+        logger.configure(sentryWrapper: DefaultSentryWrapper())
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,
                    category: .lifecycle)
+
+        // Then setup dependency container as it's needed for everything else
+        DependencyHelper().bootstrapDependencies()
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()

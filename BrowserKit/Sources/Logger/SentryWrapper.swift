@@ -37,7 +37,7 @@ public class DefaultSentryWrapper: SentryWrapper {
 
     private var environment: Environment {
         var environment = Environment.production
-        if AppInfo.appVersion == nightlyAppVersion, buildChannel == .beta {
+        if AppInfo.appVersion == appInfo.nightlyAppVersion, appInfo.buildChannel == .beta {
             // Setup sentry for Nightly
             environment = Environment.nightly
         }
@@ -57,16 +57,10 @@ public class DefaultSentryWrapper: SentryWrapper {
         return dsn
     }
 
-    private var buildChannel: AppBuildChannel
-    private var nightlyAppVersion: String
-    private var sharedContainerIdentifier: String
+    private var appInfo: BrowserKitInformation
 
-    public init(buildChannel: AppBuildChannel,
-                nightlyAppVersion: String,
-                sharedContainerIdentifier: String) {
-        self.buildChannel = buildChannel
-        self.nightlyAppVersion = nightlyAppVersion
-        self.sharedContainerIdentifier = sharedContainerIdentifier
+    public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared) {
+        self.appInfo = appInfo
     }
 
     // MARK: - SentryWrapper protocol
@@ -153,14 +147,14 @@ public class DefaultSentryWrapper: SentryWrapper {
     /// Beta         n         n          y
     /// Release   n         n          y
     private func shouldSendEventFor(_ level: LoggerLevel) -> Bool {
-        let shouldSendRelease = buildChannel == .release && level.isGreaterOrEqualThanLevel(.fatal)
-        let shouldSendBeta = buildChannel == .beta && level.isGreaterOrEqualThanLevel(.fatal)
+        let shouldSendRelease = appInfo.buildChannel == .release && level.isGreaterOrEqualThanLevel(.fatal)
+        let shouldSendBeta = appInfo.buildChannel == .beta && level.isGreaterOrEqualThanLevel(.fatal)
 
         return enabled && (shouldSendBeta || shouldSendRelease)
     }
 
     private func configureScope() {
-        let deviceAppHash = UserDefaults(suiteName: sharedContainerIdentifier)?
+        let deviceAppHash = UserDefaults(suiteName: appInfo.sharedContainerIdentifier)?
             .string(forKey: self.sentryDeviceAppHashKey)
         SentrySDK.configureScope { scope in
             scope.setContext(value: [
@@ -172,7 +166,7 @@ public class DefaultSentryWrapper: SentryWrapper {
     /// If we have not already for this install, generate a completely random identifier for this device.
     /// It is stored in the app group so that the same value will be used for both the main application and the app extensions.
     private func configureIdentifier() {
-        guard let defaults = UserDefaults(suiteName: sharedContainerIdentifier),
+        guard let defaults = UserDefaults(suiteName: appInfo.sharedContainerIdentifier),
               defaults.string(forKey: sentryDeviceAppHashKey) == nil else { return }
 
         defaults.set(Bytes.generateRandomBytes(deviceAppHashLength).hexEncodedString,
