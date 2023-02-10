@@ -43,6 +43,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
             viewModel: viewModel.addEditViewModel,
             removeButtonColor: themeManager.currentTheme.colors.textWarning.color,
             borderColor: themeManager.currentTheme.colors.borderPrimary.color))
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -98,26 +99,26 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     func setupState() {
         // check if there are any starting config
-        guard startingConfig != nil else {
-            // Check if we have any credit cards to show in the list
-            viewModel.listCreditCard { creditCards in
-                guard let creditCards = creditCards, !creditCards.isEmpty else {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.updateState(type: .empty)
-                    }
-                    return
-                }
-                DispatchQueue.main.async { [weak self] in
-                    self?.viewModel.updateCreditCardsList(creditCards: creditCards)
-                    self?.updateState(type: .list)
-                }
-            }
-
-            updateState(type: .edit)
+        guard startingConfig == nil else {
+            updateState(type: .empty)
             return
         }
 
-        updateState(type: .empty)
+        // Check if we have any credit cards to show in the list
+        viewModel.listCreditCard { creditCards in
+            guard let creditCards = creditCards, !creditCards.isEmpty else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.updateState(type: .empty)
+                }
+                return
+            }
+            DispatchQueue.main.async { [weak self] in
+                self?.viewModel.updateCreditCardsList(creditCards: creditCards)
+                self?.updateState(type: .list)
+            }
+        }
+
+        updateState(type: .edit)
     }
 
     func updateState(type: CreditCardSettingsState) {

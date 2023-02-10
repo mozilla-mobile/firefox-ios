@@ -18,7 +18,4 @@ class CreditCardTableViewModel {
     }
 
     var didUpdateCreditCards: (() -> Void)?
-
-
-    }
 }

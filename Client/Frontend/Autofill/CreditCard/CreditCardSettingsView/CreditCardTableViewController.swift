@@ -172,7 +172,6 @@ extension CreditCardTableViewController: UITableViewDelegate,
             separatorColor: separatorColor)
 
         let creditCard = viewModel.creditCards[indexPath.row]
-
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
             colors: colors,
