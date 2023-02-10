@@ -861,7 +861,7 @@ class BrowserViewController: UIViewController {
     var displayedRestoreTabsAlert = false
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return SentryIntegration.shared.crashedLastLaunch
+        return logger.crashedLastLaunch
     }
 
     fileprivate func showRestoreTabsAlert() {

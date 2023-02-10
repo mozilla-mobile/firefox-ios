@@ -31,10 +31,8 @@ class AppLaunchUtil {
 
         TelemetryWrapper.shared.setup(profile: profile)
 
-        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
-        // before getting the Profile.
+        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
         logger.setup(sendUsageData: sendUsageData)
 
         setUserAgent()
