@@ -4,9 +4,7 @@
 
 import Shared
 @testable import Storage
-@testable import Client
 import UIKit
-
 import XCTest
 
 class DiskImageStoreTests: XCTestCase {

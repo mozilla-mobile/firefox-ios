@@ -6,8 +6,6 @@ import Common
 import Foundation
 import Shared
 @testable import Storage
-@testable import Client
-
 import XCTest
 
 // TODO: rewrite this test to not use BrowserSchema. It used to use HistoryTable…
