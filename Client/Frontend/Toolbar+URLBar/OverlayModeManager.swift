@@ -29,6 +29,7 @@ class DefaultOverlayModeManager: OverlayModeManager {
         }
     }
 
+    // TODO: YRD might need some parameters
     func switchTab() {
         leaveOverlayMode(didCancel: true)
     }
