@@ -96,25 +96,22 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
             updateState(type: .empty)
             return
         }
-            // Check if we have any credit cards to show in the list
-            viewModel.listCreditCard { creditCards in
-                guard let creditCards = creditCards, !creditCards.isEmpty else {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.updateState(type: .empty)
-                    }
-                    return
-                }
-                DispatchQueue.main.async { [weak self] in
-                    self?.viewModel.updateCreditCardsList(creditCards: creditCards)
-                    self?.updateState(type: .list)
-                }
-            }
 
-            updateState(type: .edit)
-            return
+        // Check if we have any credit cards to show in the list
+        viewModel.listCreditCard { creditCards in
+            guard let creditCards = creditCards, !creditCards.isEmpty else {
+                DispatchQueue.main.async { [weak self] in
+                    self?.updateState(type: .empty)
+                }
+                return
+            }
+            DispatchQueue.main.async { [weak self] in
+                self?.viewModel.updateCreditCardsList(creditCards: creditCards)
+                self?.updateState(type: .list)
+            }
         }
 
-        updateState(type: .empty)
+        updateState(type: .edit)
     }
 
     func updateState(type: CreditCardSettingsState) {
