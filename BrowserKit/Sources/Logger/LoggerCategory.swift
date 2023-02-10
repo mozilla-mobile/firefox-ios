@@ -8,34 +8,40 @@ import Foundation
 /// Categories are sorted in alphabetical order.
 /// Do not add new categories unless discussing with the team beforehand.
 public enum LoggerCategory: String {
-    // Related to homepage UI and it's data management
+    /// Related to homepage UI and it's data management.
     case homepage
 
-    // Related to experiments, nimbus and the messaging framework
+    /// Related to experiments, nimbus and the messaging framework.
     case experiments
 
-    // Related to library UI and it's data management throughout the app.
-    // This includes bookmarks, downloads, reader mode and history.
+    /// Related to errors around image fetches, and includes all image types (`SiteImageType`, and general images).
+    case images
+
+    /// Related to library UI and it's data management throughout the app.
+    /// This includes bookmarks, downloads, reader mode and history.
     case library
 
-    // Related to the application lifecycle
+    /// Related to the application lifecycle.
     case lifecycle
 
-    // Related to the setup of services on app launch and general setup of the app
+    /// Related to the setup of services on app launch.
     case setup
 
-    // Related to storage (keychain, SQL database, store of different types, etc)
+    /// Sentry calls, temporary category while we make the migration.
+    case sentry
+
+    /// Related to storage (keychain, SQL database, store of different types, etc).
     case storage
 
-    // Related to sync accounts, sync management, application services
+    /// Related to sync accounts, sync management, application services.
     case sync
 
-    // Related to the tabs UI, setup and management
+    /// Related to the tabs UI, setup and management.
     case tabs
 
-    // Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
+    /// Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
 
-    // Anything related to telemetry
+    /// Anything related to telemetry
     case telemetry
 }
