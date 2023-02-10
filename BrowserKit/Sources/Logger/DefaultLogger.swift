@@ -94,7 +94,7 @@ public class DefaultLogger: Logger {
 
         return extras.reduce("") { (result: String, arg1) in
             let (key, value) = arg1
-            let pastResult = result == "" ? "" : "\(result), "
+            let pastResult = result.isEmpty ? "" : "\(result), "
             return "\(pastResult)\(key): \(value)"
         }
     }

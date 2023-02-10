@@ -90,7 +90,6 @@ final class LoggerTests: XCTestCase {
         XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
     }
 
-
     func testLog_informationCorrelate_withMessageOnly() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.configure(crashManager: crashManager)
