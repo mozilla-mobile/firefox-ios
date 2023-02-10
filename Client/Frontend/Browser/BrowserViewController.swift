@@ -68,7 +68,7 @@ class BrowserViewController: UIViewController {
     var passBookHelper: OpenPassBookHelper?
     // TODO: Remove at FXIOS-5639 Feature flag like to use during the refactoring
     private var shouldUseOverlayManager = true
-    private var overlayManager: OverlayModeManager!
+    var overlayManager: OverlayModeManager!
 
     var contextHintVC: ContextualHintViewController
 
@@ -2126,7 +2126,7 @@ extension BrowserViewController: TabManagerDelegate {
         if topTabsVisible {
             topTabsDidChangeTab()
             // Only for iPad leave overlay mode on tab change
-            overlayManager.leaveOverlayMode(didCancel: true)
+            overlayManager.switchTab()
         }
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
@@ -2135,7 +2135,7 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
         if !isRestoring {
-            overlayManager?.enterOverlayMode()
+            overlayManager?.openNewTab(nil, url: tab.url)
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self

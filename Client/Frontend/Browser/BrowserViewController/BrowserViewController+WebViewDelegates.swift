@@ -198,6 +198,7 @@ extension BrowserViewController: WKUIDelegate {
                                             completion: { buttonPressed in
                         if buttonPressed {
                             self.tabManager.selectTab(tab)
+                            self.overlayManager.switchTab()
                         }
                     })
                     self.show(toast: toast)

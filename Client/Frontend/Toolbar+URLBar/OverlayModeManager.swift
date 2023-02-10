@@ -8,16 +8,8 @@ protocol OverlayModeManager {
     var inOverlayMode: Bool { get }
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
     func leaveOverlayMode(didCancel cancel: Bool)
-}
-
-extension OverlayModeManager {
-    func enterOverlayMode(_ locationText: String? = nil, pasted: Bool = false, search: Bool = true) {
-        enterOverlayMode(locationText, pasted: pasted, search: search)
-    }
-
-    func leaveOverlayMode(didCancel cancel: Bool = false) {
-        leaveOverlayMode(didCancel: cancel)
-    }
+    func openNewTab(_ locationText: String?, url: URL?)
+    func switchTab()
 }
 
 class DefaultOverlayModeManager: OverlayModeManager {
@@ -29,6 +21,16 @@ class DefaultOverlayModeManager: OverlayModeManager {
 
     init(urlBarView: URLBarViewProtocol) {
         self.urlBarView = urlBarView
+    }
+
+    func openNewTab(_ locationText: String?, url: URL?) {
+        if url == nil || url?.isFxHomeUrl ?? false {
+            enterOverlayMode(locationText, pasted: false, search: true)
+        }
+    }
+
+    func switchTab() {
+        leaveOverlayMode(didCancel: true)
     }
 
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
