@@ -26,7 +26,7 @@ class CreditCardHelper: TabContentScript {
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
         // TODO: Retrieve response value from user selected credit card
-        guard message.body as? [String: Any] else { return }
+        guard (message.body as? [String: Any]) != nil else { return }
         // guard let request = message.body as? [String: Any] else { return }
         //
         // Example value: [
