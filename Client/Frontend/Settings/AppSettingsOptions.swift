@@ -898,7 +898,7 @@ class SearchSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine.shortName) }
+    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine?.shortName ?? "") }
 
     override var accessibilityIdentifier: String? { return "Search" }
 
@@ -908,9 +908,8 @@ class SearchSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = SearchSettingsTableViewController()
-        viewController.model = profile.searchEngines
-        viewController.profile = profile
+        let viewController = SearchSettingsTableViewController(profile: profile)
+
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
