@@ -11,9 +11,6 @@ public enum LoggerCategory: String {
     // Related to homepage UI and it's data management
     case homepage
 
-    // Relates to more than one area (example Profile binds storage, sync, tabs together)
-    case core
-
     // Related to experiments, nimbus and the messaging framework
     case experiments
 
