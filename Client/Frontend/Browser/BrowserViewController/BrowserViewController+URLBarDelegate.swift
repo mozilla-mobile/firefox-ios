@@ -6,6 +6,7 @@ import Shared
 import Storage
 import Telemetry
 import Glean
+import Logger
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
@@ -258,7 +259,6 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
-        urlBar.updateSearchEngineImage()
         if text.isEmpty {
             hideSearchController()
         } else {
@@ -305,27 +305,27 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
-        let engine = profile.searchEngines.defaultEngine
-
-        if let searchURL = engine.searchURLForQuery(text) {
-            // We couldn't find a matching search keyword, so do a search query.
-            Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
-            GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
-            searchTelemetry?.shouldSetUrlTypeSearch = true
-
-            let searchData = TabGroupData(searchTerm: text,
-                                          searchUrl: searchURL.absoluteString,
-                                          nextReferralUrl: "")
-            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
-            finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
-        } else {
-            // We still don't have a valid URL, so something is broken. Give up.
-            assertionFailure("Couldn't generate search URL: \(text)")
+        guard let engine = profile.searchEngines.defaultEngine,
+              let searchURL = engine.searchURLForQuery(text)
+        else {
+            DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
+            return
         }
+
+        // We couldn't find a matching search keyword, so do a search query.
+        Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
+        GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
+        searchTelemetry?.shouldSetUrlTypeSearch = true
+
+        let searchData = TabGroupData(searchTerm: text,
+                                      searchUrl: searchURL.absoluteString,
+                                      nextReferralUrl: "")
+        tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
+        finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
-        urlBar.updateSearchEngineImage()
+        urlBar.searchEnginesDidUpdate()
         guard let profile = profile as? BrowserProfile else { return }
 
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
