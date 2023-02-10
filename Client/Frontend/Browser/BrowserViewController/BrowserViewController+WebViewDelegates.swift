@@ -17,8 +17,6 @@ extension BrowserViewController: WKUIDelegate {
         guard !navigationAction.isInternalUnprivileged,
               shouldRequestBeOpenedAsPopup(navigationAction.request)
         else {
-            print("Denying popup from request: \(navigationAction.request)")
-
             guard let url = navigationAction.request.url else { return nil }
 
             if url.scheme == "whatsapp" && UIApplication.shared.canOpenURL(url) {
@@ -739,7 +737,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
     fileprivate func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
         if error.code == WKError.webContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
-            print("WebContent process has crashed. Trying to reload to restart it.")
+            logger.log("WebContent process has crashed. Trying to reload to restart it.",
+                       level: .warning,
+                       category: .webview)
             webView.reload()
             return true
         }

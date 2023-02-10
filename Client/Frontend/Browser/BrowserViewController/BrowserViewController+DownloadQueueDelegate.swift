@@ -38,9 +38,7 @@ extension BrowserViewController: DownloadQueueDelegate {
         downloadToast?.combinedBytesDownloaded = combinedBytesDownloaded
     }
 
-    func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {
-        print("didFinishDownloadingTo(): \(location)")
-    }
+    func downloadQueue(_ downloadQueue: DownloadQueue, download: Download, didFinishDownloadingTo location: URL) {}
 
     func downloadQueue(_ downloadQueue: DownloadQueue, didCompleteWithError error: Error?) {
         guard let downloadToast = self.downloadToast,

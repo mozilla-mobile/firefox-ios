@@ -254,9 +254,7 @@ class QRCodeViewController: UIViewController {
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: ImageIdentifiers.qrCodeLight)
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.White100
-            } catch {
-                print(error)
-            }
+            } catch {}
         } else {
             do {
                 try captureDevice.lockForConfiguration()
@@ -264,9 +262,7 @@ class QRCodeViewController: UIViewController {
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: ImageIdentifiers.qrCodeLightTurnedOn)
                 navigationItem.rightBarButtonItem?.tintColor = UX.isLightingNavigationItemColor
-            } catch {
-                print(error)
-            }
+            } catch {}
         }
         isLightOn = !isLightOn
     }
@@ -280,9 +276,7 @@ class QRCodeViewController: UIViewController {
         do {
             let input = try AVCaptureDeviceInput(device: captureDevice)
             captureSession.addInput(input)
-        } catch {
-            print(error)
-        }
+        } catch {}
         let output = AVCaptureMetadataOutput()
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)

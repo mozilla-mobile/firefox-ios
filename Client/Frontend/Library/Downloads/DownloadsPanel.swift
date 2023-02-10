@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Storage
 import Common
+import Logger
 
 class DownloadsPanel: UIViewController,
                       UITableViewDelegate,
@@ -25,7 +26,7 @@ class DownloadsPanel: UIViewController,
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     private var viewModel = DownloadsPanelViewModel()
-
+    private let logger: Logger
     private let events: [Notification.Name] = [.FileDidDownload,
                                                .PrivateDataClearedDownloadedFiles,
                                                .DynamicFontChanged]
@@ -53,9 +54,11 @@ class DownloadsPanel: UIViewController,
 
     // MARK: - Lifecycle
     init(notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
         self.state = .downloads
         super.init(nibName: nil, bundle: nil)
         events.forEach { NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil) }
@@ -107,8 +110,6 @@ class DownloadsPanel: UIViewController,
                 self.emptyStateOverlayView = self.createEmptyStateOverlayView()
                 break
             default:
-                // no need to do anything at all
-                print("Error: Received unexpected notification \(notification.name)")
                 break
             }
         }
@@ -126,7 +127,9 @@ class DownloadsPanel: UIViewController,
             try FileManager.default.removeItem(at: downloadedFile.path)
             return true
         } catch let error {
-            print("Unable to delete downloaded file: \(error.localizedDescription)")
+            logger.log("Unable to delete downloaded file: \(error.localizedDescription)",
+                       level: .warning,
+                       category: .library)
         }
 
         return false
@@ -134,15 +137,10 @@ class DownloadsPanel: UIViewController,
 
     private func shareDownloadedFile(_ downloadedFile: DownloadedFile, indexPath: IndexPath) {
         let helper = ShareExtensionHelper(url: downloadedFile.path, tab: nil)
-        let controller = helper.createActivityViewController { completed, activityType in
-            print("Shared downloaded file: \(completed)")
-        }
+        let controller = helper.createActivityViewController { _, _ in }
 
         if let popoverPresentationController = controller.popoverPresentationController {
-            guard let tableViewCell = tableView.cellForRow(at: indexPath) else {
-                print("Unable to get table view cell at index path: \(indexPath)")
-                return
-            }
+            guard let tableViewCell = tableView.cellForRow(at: indexPath) else { return }
 
             popoverPresentationController.sourceView = tableViewCell
             popoverPresentationController.sourceRect = tableViewCell.bounds

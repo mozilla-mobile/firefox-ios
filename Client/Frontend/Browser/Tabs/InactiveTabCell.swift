@@ -183,7 +183,7 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
                 delegate?.didSelectInactiveTab(tab: tab)
             }
         case .closeAllTabsButton, .none:
-            print("nothing")
+            break
         }
     }
 

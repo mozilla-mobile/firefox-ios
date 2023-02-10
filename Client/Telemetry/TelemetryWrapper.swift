@@ -58,24 +58,16 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             create: false).appendingPathComponent(pathComponent).path,
               FileManager.default.fileExists(atPath: oldPath) else { return }
 
-        print("Migrating \(pathComponent) from ~/Documents to \(destinationSearchPath)")
         guard let newPath = try? FileManager.default.url(
             for: destinationSearchPath,
             in: .userDomainMask,
             appropriateFor: nil,
             create: true).appendingPathComponent(pathComponent).path
-        else {
-            print("Unable to get destination path \(destinationSearchPath) to move \(pathComponent)")
-            return
-        }
+        else { return }
 
         do {
             try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
-
-            print("Migrated \(pathComponent) to \(destinationSearchPath) successfully")
-        } catch let error as NSError {
-            print("Unable to move \(pathComponent) to \(destinationSearchPath): \(error.localizedDescription)")
-        }
+        } catch {}
     }
 
     func setup(profile: Profile) {

@@ -79,7 +79,6 @@ extension String {
             }
             delta = delta + (char - n) * (h + 1)
             if delta < 0 {
-                print("error: invalid char:")
                 output = ""
                 return output
             }

@@ -36,9 +36,7 @@ class GleanTelemetryTests: XCTestCase {
         Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
 
-        RustFirefoxAccounts.startup(prefs: MockProfilePrefs()).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
-        }
+        RustFirefoxAccounts.startup(prefs: MockProfilePrefs()).uponQueue(.main) { _ in }
     }
 
     func testSyncPingIsSentOnSyncOperation() throws {

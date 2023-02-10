@@ -44,9 +44,7 @@ class WebServerUtil {
         // so this is better anyway.
         do {
             try webServer.start()
-        } catch let err as NSError {
-            print("Error: Unable to start WebServer \(err)")
-        }
+        } catch {}
     }
 
     private func registerHandlersForTestMethods(server: GCDWebServer) {

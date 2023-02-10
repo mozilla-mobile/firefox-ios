@@ -133,9 +133,7 @@ extension FxAPushMessageHandler {
                                 messages.append(PushMessage.deviceDisconnected(device?.name))
                                 waitForClient?.fill(Maybe(success: device?.name ?? "Unknown Device"))
                                 if let id = device?.guid {
-                                    profile.remoteClientsAndTabs.deleteClient(guid: id).uponQueue(.main) { _ in
-                                        print("deleted client")
-                                    }
+                                    profile.remoteClientsAndTabs.deleteClient(guid: id).uponQueue(.main) { _ in }
                                 }
                             }
                         default:

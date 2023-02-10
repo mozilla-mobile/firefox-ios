@@ -72,7 +72,7 @@ class AppLaunchUtil {
         SystemUtils.onFirstRun()
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
+            self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
         }
     }
 

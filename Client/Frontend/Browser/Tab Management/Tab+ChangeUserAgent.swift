@@ -55,9 +55,7 @@ extension Tab {
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: baseDomainList, requiringSecureCoding: false)
                 try data.write(to: ChangeUserAgent.file)
-            } catch {
-                print("Couldn't write file: \(error)")
-            }
+            } catch {}
         }
     }
 }

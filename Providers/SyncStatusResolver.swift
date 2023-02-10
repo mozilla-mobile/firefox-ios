@@ -5,6 +5,7 @@
 import Sync
 import Shared
 import Storage
+import Logger
 
 public enum SyncDisplayState {
     case inProgress
@@ -51,6 +52,13 @@ public func == (lhs: SyncDisplayState, rhs: SyncDisplayState) -> Bool {
  */
 public struct SyncStatusResolver {
     let engineResults: Maybe<EngineResults>
+    private let logger: Logger
+
+    init(engineResults: Maybe<EngineResults>,
+         logger: Logger = DefaultLogger.shared) {
+        self.engineResults = engineResults
+        self.logger = logger
+    }
 
     public func resolveResults() -> SyncDisplayState {
         guard let results = engineResults.successValue else {
@@ -59,7 +67,7 @@ public struct SyncStatusResolver {
 
         // Run through the engine results and produce a relevant display status for each one
         let displayStates: [SyncDisplayState] = results.map { (engineIdentifier, syncStatus) in
-            print("Sync status for \(engineIdentifier): \(syncStatus)")
+            logger.log("Sync status for \(engineIdentifier): \(syncStatus)", level: .info, category: .sync)
 
             // Explicitly call out each of the enum cases to let us lean on the compiler when
             // we add new error states
@@ -118,7 +126,7 @@ public struct SyncStatusResolver {
             }
         }
 
-        print("Resolved sync display state: \(aggregate)")
+        logger.log("Resolved sync display state: \(aggregate)", level: .info, category: .sync)
         return aggregate
     }
 }

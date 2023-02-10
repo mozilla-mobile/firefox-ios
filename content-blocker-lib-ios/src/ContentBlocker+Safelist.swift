@@ -64,9 +64,7 @@ extension ContentBlocker {
         let list = safelistedDomains.domainSet.joined(separator: "\n")
         do {
             try list.write(to: fileURL, atomically: true, encoding: .utf8)
-        } catch {
-            print("Failed to save safelist file: \(error)")
-        }
+        } catch {}
     }
     // Ensure domains used for safelisting are standardized by using this function.
     func safelistableDomain(fromUrl url: URL) -> String? {

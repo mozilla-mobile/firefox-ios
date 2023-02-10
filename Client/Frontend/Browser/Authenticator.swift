@@ -104,10 +104,11 @@ class Authenticator {
         _ viewController: UIViewController,
         credentials: URLCredential?,
         protectionSpace: URLProtectionSpace,
-        loginsHelper: LoginsHelper?
+        loginsHelper: LoginsHelper?,
+        logger: Logger = DefaultLogger.shared
     ) -> Deferred<Maybe<LoginEntry>> {
         if protectionSpace.host.isEmpty {
-            print("Unable to show a password prompt without a hostname")
+            logger.log("Unable to show a password prompt without a hostname", level: .warning, category: .sync)
             return deferMaybe(LoginRecordError(description: "Unable to show a password prompt without a hostname"))
         }
 

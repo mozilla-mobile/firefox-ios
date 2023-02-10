@@ -24,31 +24,26 @@ class OpenSearchParser {
 
     func parse(_ file: String, engineID: String) -> OpenSearchEngine? {
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: file)) else {
-            print("Invalid search file")
             return nil
         }
 
         guard let indexer = try? XMLDocument(data: data),
             let docIndexer = indexer.root else {
-                print("Invalid XML document")
                 return nil
         }
 
         let shortNameIndexer = docIndexer.children(tag: "ShortName")
         if shortNameIndexer.count != 1 {
-            print("ShortName must appear exactly once")
             return nil
         }
 
         let shortName = shortNameIndexer[0].stringValue
         if shortName.isEmpty {
-            print("ShortName must contain text")
             return nil
         }
 
         let urlIndexers = docIndexer.children(tag: "Url")
         if urlIndexers.isEmpty {
-            print("Url must appear at least once")
             return nil
         }
 
@@ -57,7 +52,6 @@ class OpenSearchParser {
         for urlIndexer in urlIndexers {
             let type = urlIndexer.attributes["type"]
             if type == nil {
-                print("Url element requires a type attribute", terminator: "\n")
                 return nil
             }
 
@@ -68,7 +62,6 @@ class OpenSearchParser {
 
             var template = urlIndexer.attributes["template"]
             if template == nil {
-                print("Url element requires a template attribute", terminator: "\n")
                 return nil
             }
 
@@ -88,7 +81,6 @@ class OpenSearchParser {
                         let name = paramIndexer.attributes["name"]
                         var value = paramIndexer.attributes["value"]
                         if name == nil || value == nil {
-                            print("Param element must have name and value attributes", terminator: "\n")
                             return nil
                         }
 
@@ -110,7 +102,6 @@ class OpenSearchParser {
         }
 
         if searchTemplate == nil {
-            print("Search engine must have a text/html type")
             return nil
         }
 
@@ -143,7 +134,6 @@ class OpenSearchParser {
             let image = UIImage.imageFromDataThreadSafe(imageData) {
             uiImage = image
         } else {
-            print("Error: Invalid search image data")
             return nil
         }
 

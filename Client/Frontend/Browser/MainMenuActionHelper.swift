@@ -593,9 +593,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     // Main menu option Share page with when opening a file
     private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
         let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
-        let controller = helper.createActivityViewController { completed, activityType in
-            print("Shared downloaded file: \(completed)")
-        }
+        let controller = helper.createActivityViewController { _, _ in }
 
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = buttonView

@@ -23,7 +23,6 @@ import Storage
  * ```
  * extension HandoffHandler: TabEventHandler {
  *     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
- *         print("\(tab) has \(pageMetadata)")
  *     }
  * }
  * ```

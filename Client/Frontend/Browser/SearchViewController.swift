@@ -472,22 +472,7 @@ class SearchViewController: SiteTableViewController,
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
-            if let error = error {
-                let isSuggestClientError = error.domain == SearchSuggestClientErrorDomain
-
-                switch error.code {
-                case NSURLErrorCancelled where error.domain == NSURLErrorDomain:
-                    // Request was cancelled. Do nothing.
-                    break
-                case SearchSuggestClientErrorInvalidEngine where isSuggestClientError:
-                    // Engine does not support search suggestions. Do nothing.
-                    break
-                case SearchSuggestClientErrorInvalidResponse where isSuggestClientError:
-                    print("Error: Invalid search suggestion data")
-                default:
-                    print("Error: \(error.description)")
-                }
-            } else {
+            if error != nil {
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
                 self.suggestions?.removeAll(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) })
