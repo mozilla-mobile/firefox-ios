@@ -23,7 +23,7 @@ class DefaultSearchEngineProvider: SearchEngineProvider {
         let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
         getUnorderedBundledEnginesFor(locale: locale,
                                       possibleLanguageIdentifier: locale.possibilitiesForLanguageIdentifier(),
-                                      completion: { [weak self] engineResults in
+                                      completion: { engineResults in
             let unorderedEngines = customEngines + engineResults
 
             // might not work to change the default.
