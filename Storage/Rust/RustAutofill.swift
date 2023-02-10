@@ -35,6 +35,20 @@ public struct UnencryptedCreditCardFields {
     public var ccExpYear: Int64
     public var ccType: String
 
+    public init(ccName: String,
+                ccNumber: String,
+                ccNumberLast4: String,
+                ccExpMonth: Int64,
+                ccExpYear: Int64,
+                ccType: String) {
+        self.ccName = ccName
+        self.ccNumber = ccNumber
+        self.ccNumberLast4 = ccNumberLast4
+        self.ccExpMonth = ccExpMonth
+        self.ccExpYear = ccExpYear
+        self.ccType = ccType
+    }
+
     func toUpdatableCreditCardFields() -> UpdatableCreditCardFields {
         let rustKeys = RustAutofillEncryptionKeys()
         let ccNumberEnc = rustKeys.encryptCreditCardNum(creditCardNum: self.ccNumber)
