@@ -16,6 +16,7 @@ class MockHistoryHighlightsManager: HistoryHighlightsManagerProtocol {
 
     func getHighlightsData(with profile: Profile,
                            and tabs: [Tab],
+                           shouldFilterLastURL: Bool,
                            shouldGroupHighlights: Bool,
                            resultCount: Int,
                            completion: @escaping ([HighlightItem]?) -> Void) {

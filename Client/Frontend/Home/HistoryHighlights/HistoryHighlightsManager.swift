@@ -27,6 +27,7 @@ protocol HistoryHighlightsManagerProtocol {
     func getHighlightsData(
         with profile: Profile,
         and tabs: [Tab],
+        shouldFilterLastURL: Bool,
         shouldGroupHighlights: Bool,
         resultCount: Int,
         completion: @escaping ([HighlightItem]?) -> Void)
@@ -36,12 +37,14 @@ extension HistoryHighlightsManagerProtocol {
     func getHighlightsData(
         with profile: Profile,
         and tabs: [Tab],
+        shouldFilterLastURL: Bool = false,
         shouldGroupHighlights: Bool = false,
         resultCount: Int = defaultHighlightCount,
         completion: @escaping ([HighlightItem]?) -> Void) {
         self.getHighlightsData(
             with: profile,
             and: tabs,
+            shouldFilterLastURL: shouldFilterLastURL,
             shouldGroupHighlights: shouldGroupHighlights,
             resultCount: resultCount,
             completion: completion)
@@ -94,6 +97,7 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
     /// - Parameters:
     ///   - profile: The user's `Profile` info
     ///   - tabs: List of `Tab` to filter open tabs from the highlight item list
+    ///   - shouldFilterLastURL: Toogle to filter last opened url - in set to true in a session last visited URL won't be included in displayed highlights
     ///   - shouldGroupHighlights: Toggle to support highlight groups in the future for now is set to false
     ///   - resultCount: The number of results to return
     ///   - completion: completion handler than contains either a list of `HistoryHighlights` if `shouldGroupHighlights` is set to false
@@ -101,6 +105,7 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
     func getHighlightsData(
         with profile: Profile,
         and tabs: [Tab],
+        shouldFilterLastURL: Bool = false,
         shouldGroupHighlights: Bool = false,
         resultCount: Int = defaultHighlightCount,
         completion: @escaping ([HighlightItem]?) -> Void
@@ -115,7 +120,7 @@ class HistoryHighlightsManager: HistoryHighlightsManagerProtocol {
                 !tabs.contains { highlights.urlFromString == $0.lastKnownUrl }
             }
 
-            filterHighlights = SponsoredContentFilterUtility().filterSponsoredHighlights(from: filterHighlights)
+            filterHighlights = SponsoredContentFilterUtility().filterSponsoredHighlights(from: shouldFilterLastURL ? filterHighlights : highlights)
 
             if shouldGroupHighlights {
                 self.buildSearchGroups(with: profile, and: filterHighlights) { groups, filterHighlights in
