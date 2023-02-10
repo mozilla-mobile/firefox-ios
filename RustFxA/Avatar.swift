@@ -11,38 +11,27 @@ open class Avatar {
 
     init(url: URL?) {
         self.url = url
-        downloadAvatar { image, error in
-            guard error == nil,
-                  let image = image
-            else {
+
+        downloadAvatar(url: url) { image in
+            guard let avatarImage = image else {
                 self.image = UIImage(named: ImageIdentifiers.placeholderAvatar)
                 NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
                 return
             }
 
-            self.image = image
+            self.image = avatarImage
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
     }
 
-    private func downloadAvatar(completionHandler: @escaping(UIImage?, Error?) -> Void) {
-        guard let url = url else {
-            completionHandler(nil, ImageLoadingError.unableToFetchImage)
+    private func downloadAvatar(url: URL?, completion: @escaping (UIImage?) -> Void) {
+        guard let avatarUrl = url else {
+            completion(nil)
             return
         }
 
-        DispatchQueue.global().async {
-            DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(with: url, limit: ImageLoadingConstants.NoLimitImageSize) { image, error in
-                guard error == nil,
-                      let image = image
-                else {
-                    completionHandler(image, error)
-                    return
-                }
-
-                self.image = image
-                completionHandler(image, nil)
-            }
+        GeneralizedImageFetcher().getImageFor(url: avatarUrl) { image in
+            completion(image)
         }
     }
 }

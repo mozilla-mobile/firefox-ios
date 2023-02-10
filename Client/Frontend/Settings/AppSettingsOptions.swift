@@ -379,13 +379,10 @@ class AccountStatusSetting: WithAccountSetting {
                   let actionIconUrl = URL(string: str)
             else { return }
 
-            DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(
-                with: actionIconUrl,
-                limit: ImageLoadingConstants.NoLimitImageSize
-            ) { image, error in
-                guard error == nil, let image = image else { return }
+            GeneralizedImageFetcher().getImageFor(url: actionIconUrl) { image in
+                guard let avatar = image else { return }
 
-                imageView.image = image.createScaled(CGSize(width: 30, height: 30))
+                imageView.image = avatar.createScaled(CGSize(width: 30, height: 30))
                     .withRenderingMode(.alwaysOriginal)
             }
         }

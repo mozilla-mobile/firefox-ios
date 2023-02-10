@@ -3,10 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Shared
 
 /// Protocol to provide a caching functionality for network calls
-protocol URLCaching {
+public protocol URLCaching {
     var urlCache: URLCache { get }
 
     func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data?
@@ -14,7 +13,7 @@ protocol URLCaching {
     func cache(response: HTTPURLResponse?, for request: URLRequest, with data: Data?)
 }
 
-extension URLCaching {
+public extension URLCaching {
     // The default maximum cache age, 1 hour in milliseconds, can be overridden
     var maxCacheAge: Timestamp { OneMinuteInMilliseconds * 60 }
     private var cacheAgeKey: String { "cache-time" }
