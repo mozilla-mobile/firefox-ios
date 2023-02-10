@@ -5,6 +5,7 @@
 import PassKit
 import Shared
 import WebKit
+import Logger
 
 class OpenPassBookHelper {
     private enum InvalidPassError: Error {
@@ -30,14 +31,17 @@ class OpenPassBookHelper {
     private let cookieStore: WKHTTPCookieStore
     private lazy var session = makeURLSession(userAgent: UserAgent.fxaUserAgent,
                                               configuration: .ephemeral)
+    private let logger: Logger
 
     init(response: URLResponse,
          cookieStore: WKHTTPCookieStore,
-         presenter: Presenter) {
+         presenter: Presenter,
+         logger: Logger = DefaultLogger.shared) {
         self.response = response
         self.url = response.url
         self.cookieStore = cookieStore
         self.presenter = presenter
+        self.logger = logger
     }
 
     static func shouldOpenWithPassBook(response: URLResponse,
@@ -161,9 +165,10 @@ class OpenPassBookHelper {
     }
 
     private func sendLogError(with errorDescription: String) {
-        // Log error on sentry to help debug https://github.com/mozilla-mobile/firefox-ios/issues/12331
-        SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when adding pass to Apple Wallet",
-                                                    severity: .error,
-                                                    description: errorDescription)
+        // Log error to help debug https://github.com/mozilla-mobile/firefox-ios/issues/12331
+        logger.log("Unknown error when adding pass to Apple Wallet",
+                   level: .warning,
+                   category: .webview,
+                   description: errorDescription)
     }
 }

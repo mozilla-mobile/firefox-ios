@@ -34,7 +34,6 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
         dataTask = URLSession.shared.dataTask(with: request) { _, response, _ in
             guard let response = response as? HTTPURLResponse else { return }
             guard response.statusCode < 400 else {
-                SentryIntegration.shared.send(message: "BreachAlerts: fetchEtag: HTTP status code: \(response.statusCode)")
                 completion(nil)
                 return
             }
@@ -58,17 +57,14 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
         dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let response = response as? HTTPURLResponse else { return }
             guard response.statusCode < 400 else {
-                SentryIntegration.shared.send(message: "BreachAlerts: fetchData: HTTP status code: \(response.statusCode)")
                 return
             }
             if let error = error {
                 completion(Maybe(failure: BreachAlertsError(description: error.localizedDescription)))
-                SentryIntegration.shared.send(message: "BreachAlerts: fetchData: \(error)")
                 return
             }
             guard let data = data else {
                 completion(Maybe(failure: BreachAlertsError(description: "invalid data")))
-                SentryIntegration.shared.send(message: "BreachAlerts: fetchData: invalid data")
                 assertionFailure("Error unwrapping data")
                 return
             }

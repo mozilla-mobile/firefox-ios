@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Account
 import Common
+import Logger
 
 /// Reflects parent page that launched FirefoxAccountSignInViewController
 enum FxASignInParentType {
@@ -41,6 +42,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     /// Dismissal style for FxAWebViewController
     /// Changes based on whether or not this VC is launched from the app menu or settings
     private let fxaDismissStyle: DismissType
+    private let logger: Logger
 
     // UI
     private lazy var scrollView: UIScrollView = .build { view in
@@ -136,7 +138,10 @@ class FirefoxAccountSignInViewController: UIViewController {
     ///   - profile: User Profile info
     ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
     ///   - deepLinkParams: URL args passed in from deep link that propagate to FxA web view
-    init(profile: Profile, parentType: FxASignInParentType, deepLinkParams: FxALaunchParams) {
+    init(profile: Profile,
+         parentType: FxASignInParentType,
+         deepLinkParams: FxALaunchParams,
+         logger: Logger = DefaultLogger.shared) {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
         switch parentType {
@@ -156,6 +161,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             self.telemetryObject = .tabTray
             self.fxaDismissStyle = .popToTabTray
         }
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -276,7 +282,9 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     }
 
     func didScanQRCodeWithText(_ text: String) {
-        SentryIntegration.shared.send(message: "FirefoxAccountSignInVC Error: `didScanQRCodeWithText` should not be called")
+        logger.log("FirefoxAccountSignInVC Error: `didScanQRCodeWithText` should not be called",
+                   level: .info,
+                   category: .sync)
     }
 }
 

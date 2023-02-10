@@ -352,7 +352,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                                level: .debug,
                                category: .sync)
                 } else {
-                    SentryIntegration.shared.send(message: "An unmigrated client record was found with a GUID for an ID", tag: SentryTag.clientSynchronizer, severity: .error)
+                    logger.log("An unmigrated client record was found with a GUID for an ID",
+                               level: .warning,
+                               category: .sync)
                 }
             } else if rec.id == ourFxaDeviceId {
                 ourClientRecordExists = true

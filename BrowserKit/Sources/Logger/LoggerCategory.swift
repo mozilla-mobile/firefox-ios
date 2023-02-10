@@ -21,7 +21,7 @@ public enum LoggerCategory: String {
     // Related to the application lifecycle
     case lifecycle
 
-    // Related to the setup of services on app launch
+    // Related to the setup of services on app launch and general setup of the app
     case setup
 
     // Sentry calls, temporary category while we make the migration
@@ -36,6 +36,6 @@ public enum LoggerCategory: String {
     // Related to the tabs UI, setup and management
     case tabs
 
-    // Webview scripts, webview delegate, webserver like GCDWebserver
+    // Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
 }

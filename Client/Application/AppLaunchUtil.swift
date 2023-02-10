@@ -164,8 +164,6 @@ class AppLaunchUtil {
                 GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
                 GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
-                // We also send the error to sentry
-                SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
             })
         } else {
             self.logger.log("History Migration skipped",

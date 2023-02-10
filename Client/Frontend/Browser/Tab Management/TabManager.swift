@@ -7,6 +7,7 @@ import Foundation
 import WebKit
 import Storage
 import Shared
+import Logger
 
 // MARK: - TabManagerDelegate
 @objc protocol TabManagerDelegate: AnyObject {
@@ -55,6 +56,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     private(set) var tabs = [Tab]()
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
+    private let logger: Logger
 
     var didChangedPanelSelection: Bool = true
     var didAddNewTab: Bool = true
@@ -129,11 +131,13 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     // MARK: - Initializer
 
     init(profile: Profile,
-         imageStore: DiskImageStore?
+         imageStore: DiskImageStore?,
+         logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
         self.navDelegate = TabManagerNavDelegate()
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
+        self.logger = logger
 
         self.store = TabManagerStoreImplementation(prefs: profile.prefs, imageStore: imageStore)
         super.init()
@@ -618,10 +622,10 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     ///   - flushToDisk: Will store changes if true, and update selected index
     private func removeTab(_ tab: Tab, flushToDisk: Bool) {
         guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
-            SentryIntegration.shared.sendWithStacktrace(message: "Could not find index of tab to remove",
-                                                        tag: .tabManager,
-                                                        severity: .error,
-                                                        description: "Tab count: \(count)")
+            logger.log("Could not find index of tab to remove",
+                       level: .warning,
+                       category: .tabs,
+                       description: "Tab count: \(count)")
             return
         }
 

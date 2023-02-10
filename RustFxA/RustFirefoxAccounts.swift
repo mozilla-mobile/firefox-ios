@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Logger
 import MozillaAppServices
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
@@ -150,7 +151,7 @@ open class RustFirefoxAccounts {
         return FxAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
     }
 
-    private init() {
+    private init(logger: Logger = DefaultLogger.shared) {
         // Set-up Rust network stack. Note that this has to be called
         // before any Application Services component gets used.
         Viaduct.shared.useReqwestBackend()
@@ -181,7 +182,10 @@ open class RustFirefoxAccounts {
             if let error = notification.userInfo?["error"] as? Error {
                 info = error.localizedDescription
             }
-            SentryIntegration.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
+            logger.log("RustFxa failed account migration",
+                       level: .warning,
+                       category: .sync,
+                       description: info)
             self?.accountMigrationFailed = true
             NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
         }

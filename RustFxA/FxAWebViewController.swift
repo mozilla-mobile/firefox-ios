@@ -4,6 +4,7 @@
 
 import WebKit
 import Account
+import Logger
 import Shared
 
 enum DismissType {
@@ -22,6 +23,7 @@ class FxAWebViewController: UIViewController {
     /// Used to show a second WKWebView to browse help links.
     fileprivate var helpBrowser: WKWebView?
     fileprivate let viewModel: FxAWebViewModel
+    private let logger: Logger
     /// Closure for dismissing higher up FxA Sign in view controller
     var shouldDismissFxASignInViewController: (() -> Void)?
 
@@ -33,7 +35,11 @@ class FxAWebViewController: UIViewController {
      - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part of a UINavigationController stack it will pop to the root.
      - parameter deepLinkParams: URL args passed in from deep link that propagate to FxA web view
      */
-    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, deepLinkParams: FxALaunchParams) {
+    init(pageType: FxAPageType,
+         profile: Profile,
+         dismissalStyle: DismissType,
+         deepLinkParams: FxALaunchParams,
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile, deepLinkParams: deepLinkParams)
 
         self.dismissType = dismissalStyle
@@ -48,6 +54,8 @@ class FxAWebViewController: UIViewController {
         webView.accessibilityLabel = .FxAWebContentAccessibilityLabel
         webView.scrollView.bounces = false  // Don't allow overscrolling.
         webView.customUserAgent = FxAWebViewModel.mobileUserAgent
+
+        self.logger = logger
 
         super.init(nibName: nil, bundle: nil)
         let scriptMessageHandler = WKScriptMessageHandleDelegate(self)
@@ -218,7 +226,7 @@ extension FxAWebViewController {
         guard let kp = keyPath,
               let path = KVOConstants(rawValue: kp)
         else {
-            sendSentryObserveValueError(forKeyPath: keyPath)
+            sendObserveValueError(forKeyPath: keyPath)
             return
         }
 
@@ -228,14 +236,14 @@ extension FxAWebViewController {
                 viewModel.fxAWebViewTelemetry.recordTelemetry(for: FxAFlow.startedFlow(type: flow))
             }
         default:
-            sendSentryObserveValueError(forKeyPath: keyPath)
+            sendObserveValueError(forKeyPath: keyPath)
         }
     }
 
-    private func sendSentryObserveValueError(forKeyPath keyPath: String?) {
-        SentryIntegration.shared.send(message: "FxA webpage unhandled KVO",
-                                      tag: .rustLog,
-                                      severity: .error,
-                                      description: "Unhandled KVO key: \(keyPath ?? "nil")")
+    private func sendObserveValueError(forKeyPath keyPath: String?) {
+        logger.log("FxA webpage unhandled KVO",
+                   level: .info,
+                   category: .sync,
+                   description: "Unhandled KVO key: \(keyPath ?? "nil")")
     }
 }

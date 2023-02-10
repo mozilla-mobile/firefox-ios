@@ -10,7 +10,7 @@ import Common
 import Logger
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let logger = DefaultLogger.shared
+    let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 

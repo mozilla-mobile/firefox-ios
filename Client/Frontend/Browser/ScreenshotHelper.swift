@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import WebKit
+import Logger
 
 /**
  * Handles screenshots for a given tab, including pages with non-webview content.
@@ -13,9 +14,12 @@ class ScreenshotHelper {
     var viewIsVisible = false
 
     fileprivate weak var controller: BrowserViewController?
+    private let logger: Logger
 
-    init(controller: BrowserViewController) {
+    init(controller: BrowserViewController,
+         logger: Logger = DefaultLogger.shared) {
         self.controller = controller
+        self.logger = logger
     }
 
     /// Takes a screenshot of the WebView to be displayed on the tab view page
@@ -25,7 +29,10 @@ class ScreenshotHelper {
      */
     func takeScreenshot(_ tab: Tab) {
         guard let webView = tab.webView, let url = tab.url else {
-            SentryIntegration.shared.send(message: "Tab Snapshot Error", tag: .tabManager, severity: .debug, description: "Tab webView or url is nil")
+            logger.log("Tab Snapshot Error",
+                       level: .debug,
+                       category: .tabs,
+                       description: "Tab webView or url is nil")
             return
         }
         // Handle home page snapshots, can not use Apple API snapshot function for this
@@ -48,9 +55,15 @@ class ScreenshotHelper {
                     tab.setScreenshot(image)
                     TabEvent.post(.didSetScreenshot(isHome: false), for: tab)
                 } else if let error = error {
-                    SentryIntegration.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: error.localizedDescription)
+                    self.logger.log("Tab Snapshot Error",
+                                    level: .debug,
+                                    category: .tabs,
+                                    description: error.localizedDescription)
                 } else {
-                    SentryIntegration.shared.send(message: "Tab snapshot error", tag: .tabManager, severity: .debug, description: "No error description")
+                    self.logger.log("Tab Snapshot Error",
+                                    level: .debug,
+                                    category: .tabs,
+                                    description: "No error description")
                 }
             }
         }

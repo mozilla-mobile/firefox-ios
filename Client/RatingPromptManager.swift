@@ -7,6 +7,7 @@ import StoreKit
 import Shared
 import Storage
 import Common
+import Logger
 
 // The `RatingPromptManager` handles app store review requests and the internal logic of when they can be presented to a user.
 final class RatingPromptManager {
@@ -15,7 +16,7 @@ final class RatingPromptManager {
 
     private var hasMinimumMobileBookmarksCount = false
     private let minimumMobileBookmarksCount = 5
-    private let sentry: SentryProtocol?
+    private let logger: Logger
     private let group: DispatchGroupInterface
 
     private let dataQueue = DispatchQueue(label: "com.moz.ratingPromptManager.queue")
@@ -31,14 +32,14 @@ final class RatingPromptManager {
     /// - Parameters:
     ///   - profile: User's profile data
     ///   - daysOfUseCounter: Counter for the cumulative days of use of the application by the user
-    ///   - sentry: Sentry protocol to override in Unit test
+    ///   - logger: Logger protocol to override in Unit test
     init(profile: Profile,
          daysOfUseCounter: CumulativeDaysOfUseCounter = CumulativeDaysOfUseCounter(),
-         sentry: SentryProtocol = SentryIntegration.shared,
+         logger: Logger = DefaultLogger.shared,
          group: DispatchGroupInterface = DispatchGroup()) {
         self.profile = profile
         self.daysOfUseCounter = daysOfUseCounter
-        self.sentry = sentry
+        self.logger = logger
         self.group = group
     }
 
@@ -103,7 +104,7 @@ final class RatingPromptManager {
         guard daysOfUseCounter.hasRequiredCumulativeDaysOfUse else { return false }
 
         // Required: has not crashed in the last session
-        guard let sentry = sentry, !sentry.crashedLastLaunch else { return false }
+        guard !logger.crashedLastLaunch else { return false }
 
         // One of the following
         let isBrowserDefault = RatingPromptManager.isBrowserDefault

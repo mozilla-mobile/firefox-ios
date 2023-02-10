@@ -292,7 +292,6 @@ open class BrowserProfile: Profile {
                 logger.log(logString,
                            level: .warning,
                            category: .sync)
-                SentryIntegration.shared.sendWithStacktrace(message: logString, tag: .rustLog, severity: .error)
             }
 
             return true
@@ -387,7 +386,9 @@ open class BrowserProfile: Profile {
                 )
                 result.upon { result in
                     guard result.isSuccess else {
-                        SentryIntegration.shared.sendWithStacktrace(message: result.failureValue?.localizedDescription ?? "Unknown error adding history visit", tag: .rustPlaces, severity: .error)
+                        self.logger.log(result.failureValue?.localizedDescription ?? "Unknown error adding history visit",
+                                        level: .warning,
+                                        category: .sync)
                         return
                     }
                 }
@@ -1139,7 +1140,9 @@ open class BrowserProfile: Profile {
             let syncUnlockInfo = Deferred<Maybe<SyncUnlockInfo>>()
             profile.rustFxA.accountManager.uponQueue(.main) { accountManager in
                 guard let deviceId = accountManager.deviceConstellation()?.state()?.localDevice?.id else {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Device Id could not be retrieved", tag: SentryTag.rustRemoteTabs, severity: .warning)
+                    self.logger.log("Device Id could not be retrieved",
+                                    level: .warning,
+                                    category: .sync)
                     syncUnlockInfo.fill(Maybe(failure: DeviceIdError()))
                     return
                 }
@@ -1157,7 +1160,9 @@ open class BrowserProfile: Profile {
                         }
 
                         guard let encryptionKey = try? self.profile.logins.getStoredKey() else {
-                            SentryIntegration.shared.sendWithStacktrace(message: "Stored logins encryption could not be retrieved", tag: SentryTag.rustLogins, severity: .warning)
+                            self.logger.log("Stored logins encryption could not be retrieved",
+                                            level: .warning,
+                                            category: .sync)
                             syncUnlockInfo.fill(Maybe(failure: EncryptionKeyError()))
                             return
                         }
@@ -1383,10 +1388,10 @@ open class BrowserProfile: Profile {
             do {
                 return try syncReducer.append(synchronizers)
             } catch let error {
-                SentryIntegration.shared.send(message: "Synchronizers appended after sync was finished. This is a bug",
-                                              tag: .clientSynchronizer,
-                                              severity: .error,
-                                              description: error.localizedDescription)
+                logger.log("Synchronizers appended after sync was finished. This is a bug",
+                           level: .warning,
+                           category: .sync,
+                           description: error.localizedDescription)
                 return deferStatuses()
             }
         }

@@ -5,6 +5,7 @@
 import Foundation
 import AVFoundation
 import Shared
+import Logger
 
 protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)
@@ -68,6 +69,17 @@ class QRCodeViewController: UIViewController {
             scanBorderSize = minSize / 2
         }
         return scanBorderSize
+    }
+
+    private let logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -315,12 +327,12 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             self.dismiss(animated: true, completion: {
                 guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
                       let qrCodeDelegate = self.qrCodeDelegate,
-                        let text = metaData.stringValue
+                      let text = metaData.stringValue
                 else {
-                        SentryIntegration.shared.sendWithStacktrace(
-                            message: "Unable to scan QR code",
-                            tag: .general)
-                        return
+                    self.logger.log("Unable to scan QR code",
+                                    level: .debug,
+                                    category: .webview)
+                    return
                 }
 
                 if let url = URIFixup.getURL(text) {
