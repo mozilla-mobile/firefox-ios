@@ -189,7 +189,6 @@ final public class BreachAlertsManager {
 
     private func decodeData(data: Data, _ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
         guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
-            print(BreachAlertsError(description: "JSON data decode failure"))
             assertionFailure("Error decoding JSON data")
             return
         }

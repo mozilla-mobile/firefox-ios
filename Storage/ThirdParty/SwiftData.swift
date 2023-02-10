@@ -446,9 +446,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
     fileprivate let flags: SwiftData.Flags
     fileprivate let schema: Schema
     fileprivate let files: FileAccessor
-
-    fileprivate let debug_enabled = false
-
     private var didAttemptToMoveToBackup = false
     private var logger: Logger
 
@@ -559,10 +556,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                            category: .storage)
                 return nil
             }
-        }
-
-        if debug_enabled {
-            traceOn()
         }
     }
 
@@ -979,80 +972,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         try executeChange("VACUUM")
     }
 
-    // Developers can manually add a call to this to trace to console.
-    func traceOn() {
-        let uMask = UInt32(
-            SQLITE_TRACE_STMT |
-            SQLITE_TRACE_PROFILE |
-            SQLITE_TRACE_ROW |
-            SQLITE_TRACE_CLOSE
-        )
-
-        // https://stackoverflow.com/questions/43593618/sqlite-trace-for-logging/43595437
-        sqlite3_trace_v2(sqliteDB, uMask, { (reason, context, p, x) -> Int32 in
-            switch Int32(reason) {
-            case SQLITE_TRACE_STMT:
-                // The P argument is a pointer to the prepared statement.
-                // The X argument is a pointer to a string which is the unexpanded SQL text
-                guard let pStmt = OpaquePointer(p) /*, let cSql = x?.assumingMemoryBound(to: CChar.self) */ else {
-                    return 0
-                }
-
-                // let sql = String(cString: cSql) // The unexpanded SQL text
-                let expandedSql = String(cString: sqlite3_expanded_sql(pStmt)) // The expanded SQL text
-                print("SQLITE_TRACE_STMT:", expandedSql)
-            case SQLITE_TRACE_PROFILE:
-                // The P argument is a pointer to the prepared statement and the X argument points
-                // to a 64-bit integer which is the estimated of the number of nanosecond that the
-                // prepared statement took to run.
-                guard let pStmt = OpaquePointer(p), let duration = x?.load(as: UInt64.self) else {
-                    return 0
-                }
-
-                let milliSeconds = Double(duration)/Double(NSEC_PER_MSEC)
-                let sql = String(cString: sqlite3_sql(pStmt)) // The unexpanded SQL text
-                print("SQLITE_TRACE_PROFILE:", milliSeconds, "ms for statement:", sql)
-            case SQLITE_TRACE_ROW:
-                // The P argument is a pointer to the prepared statement and the X argument is unused.
-                guard let _ = OpaquePointer(p) else {
-                    return 0
-                }
-
-                print("SQLITE_TRACE_ROW")
-            case SQLITE_TRACE_CLOSE:
-                // The P argument is a pointer to the database connection object and the X argument is unused.
-                guard let _ = OpaquePointer(p) else {
-                    return 0
-                }
-
-                print("SQLITE_TRACE_CLOSE")
-            default:
-                break
-            }
-            return 0
-        }, nil)
-    }
-
-    /// Creates an error from a sqlite status. Will print to the console if debug_enabled is set.
+    /// Creates an error from a sqlite status.
     /// Do not call this unless you're going to return this error.
     fileprivate func createErr(_ description: String, status: Int) -> NSError {
-        var msg = SDError.errorMessageFromCode(status)
-
-        if debug_enabled {
-            logger.log("SwiftData Error: \(description), Code: \(status) - \(msg)",
-                       level: .debug,
-                       category: .storage)
-        }
-
-        if let errMsg = String(validatingUTF8: sqlite3_errmsg(sqliteDB)) {
-            msg += " " + errMsg
-            if debug_enabled {
-                logger.log("SwiftData Error: Details: \(errMsg)",
-                           level: .debug,
-                           category: .storage)
-            }
-        }
-
+        let msg = SDError.errorMessageFromCode(status)
         return NSError(domain: "org.mozilla", code: status, userInfo: [NSLocalizedDescriptionKey: msg])
     }
 
@@ -1145,15 +1068,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         // Close, not reset -- this isn't going to be reused.
         defer { statement?.close() }
 
-        if debug_enabled {
-            let timer = PerformanceTimer(thresholdSeconds: 0.01, label: "executeChange")
-            defer {
-                timer.stopAndPrint()
-            }
-
-            explain(query: sqlStr, withArgs: args)
-        }
-
         if let error = error {
             // Special case: Write additional info to the database log in the case of a database corruption.
             if error.code == Int(SQLITE_CORRUPT) {
@@ -1182,20 +1096,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     public func executeQuery<T>(_ sqlStr: String, factory: @escaping (SDRow) -> T) -> Cursor<T> {
         return self.executeQuery(sqlStr, factory: factory, withArgs: nil)
-    }
-
-    func explain(query sqlStr: String, withArgs args: Args?) {
-        do {
-            let qp = try SQLiteDBStatement(connection: self, query: "EXPLAIN QUERY PLAN \(sqlStr)", args: args)
-            let qpFactory: (SDRow) -> String = { row in
-                return "id: \(row[0] as! Int), order: \(row[1] as! Int), from: \(row[2] as! Int), details: \(row[3] as! String)"
-            }
-            let qpCursor = FilledSQLiteCursor<String>(statement: qp, factory: qpFactory)
-            print("⦿ EXPLAIN QUERY (Columns: id, order, from, details) ---------------- ")
-            qpCursor.forEach { print("⦿ EXPLAIN: \($0 ?? "")") }
-        } catch {
-            print("Explain query plan failed!")
-        }
     }
 
     /// Queries the database.
@@ -1241,15 +1141,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                        description: error.localizedDescription)
 
             return Cursor<T>(err: error)
-        }
-
-        if debug_enabled {
-            let timer = PerformanceTimer(thresholdSeconds: 0.01, label: "executeQuery")
-            defer {
-                timer.stopAndPrint()
-            }
-
-            explain(query: sqlStr, withArgs: args)
         }
 
         return FilledSQLiteCursor<T>(statement: statement!, factory: factory)

@@ -430,9 +430,7 @@ class DeleteExportedDataSetting: HiddenSetting {
                     try fileManager.removeItemInDirectory(documentsPath, named: file)
                 }
             }
-        } catch {
-            print("Couldn't delete exported data: \(error).")
-        }
+        } catch {}
     }
 }
 
@@ -448,9 +446,7 @@ class ExportBrowserDataSetting: HiddenSetting {
             try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
                 return file.hasPrefix("browser.") || file.hasPrefix("logins.") || file.hasPrefix("metadata.")
             }
-        } catch {
-            print("Couldn't export browser data: \(error).")
-        }
+        } catch {}
     }
 }
 

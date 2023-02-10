@@ -27,9 +27,7 @@ struct WidgetKitTopSiteModel: Codable {
                 let jsonDecoder = JSONDecoder()
                 let sites = try jsonDecoder.decode([WidgetKitTopSiteModel].self, from: topSites)
                 return sites
-            } catch {
-                print("Error occured")
-            }
+            } catch {}
         }
         return [WidgetKitTopSiteModel]()
     }

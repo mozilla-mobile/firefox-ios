@@ -26,9 +26,7 @@ extension SimpleTab {
                 let jsonDecoder = JSONDecoder()
                 let tabs = try jsonDecoder.decode([String: SimpleTab].self, from: tbs)
                 return tabs
-            } catch {
-                print("Error occured")
-            }
+            } catch {}
         }
         return [String: SimpleTab]()
     }

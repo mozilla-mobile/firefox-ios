@@ -186,7 +186,6 @@ extension BrowserViewController: URLBarDelegate {
                                             theme: themeManager.currentTheme)
         case .failure(let error):
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
-            print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
         }
         return true
     }
@@ -321,7 +320,6 @@ extension BrowserViewController: URLBarDelegate {
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
-            print("Error handling URL entry: \"\(text)\".")
             assertionFailure("Couldn't generate search URL: \(text)")
         }
     }
