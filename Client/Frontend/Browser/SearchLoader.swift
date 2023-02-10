@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import Storage
 import Glean
+import Logger
 
 private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([^/]+)/", options: [])
 
@@ -16,13 +17,15 @@ private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([
 class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable {
     fileprivate let profile: Profile
     fileprivate let urlBar: URLBarView
+    private let logger: Logger
 
     private var skipNextAutocomplete: Bool
 
-    init(profile: Profile, urlBar: URLBarView) {
+    init(profile: Profile, urlBar: URLBarView, logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.urlBar = urlBar
         self.skipNextAutocomplete = false
+        self.logger = logger
 
         super.init()
     }
@@ -48,12 +51,10 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewController>, FeatureFlaggable
         profile.places.interruptReader()
         profile.places.queryAutocomplete(matchingSearchQuery: query, limit: limit).upon { result in
             guard let historyItems = result.successValue else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Error searching history",
-                    tag: .rustPlaces,
-                    severity: .error,
-                    description: result.failureValue?.localizedDescription ?? "Unknown error searching history"
-                )
+                self.logger.log("Error searching history",
+                                level: .warning,
+                                category: .sync,
+                                description: result.failureValue?.localizedDescription ?? "Unknown error searching history")
                 completionHandler([])
                 return
             }

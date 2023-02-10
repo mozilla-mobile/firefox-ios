@@ -5,8 +5,8 @@
 import Shared
 import SyncTelemetry
 import Account
-import os.log
 import MozillaAppServices
+import Logger
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
@@ -17,9 +17,11 @@ let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 /// The main entry points are `handle` methods, to accept the raw APNS `userInfo` and then to process the resulting JSON.
 class FxAPushMessageHandler {
     let profile: Profile
+    private let logger: Logger
 
-    init(with profile: Profile) {
+    init(with profile: Profile, logger: Logger = DefaultLogger.shared) {
         self.profile = profile
+        self.logger = logger
     }
 }
 
@@ -71,10 +73,16 @@ extension FxAPushMessageHandler {
                     guard case .success(let events) = result, !events.isEmpty else {
                         let err: PushMessageError
                         if case .failure(let error) = result {
-                            SentryIntegration.shared.send(message: "Failed to get any events from FxA", tag: .fxaClient, severity: .error, description: error.localizedDescription)
+                            self.logger.log("Failed to get any events from FxA",
+                                            level: .warning,
+                                            category: .sync,
+                                            description: error.localizedDescription)
                             err = PushMessageError.messageIncomplete(error.localizedDescription)
                         } else {
-                            SentryIntegration.shared.send(message: "Got zero events from FxA", tag: .fxaClient, severity: .error, description: "no events retrieved from fxa")
+                            self.logger.log("Got zero events from FxA",
+                                            level: .warning,
+                                            category: .sync,
+                                            description: "No events retrieved from fxa")
                             err = PushMessageError.messageIncomplete("empty message")
                         }
                         deferred.fill(Maybe(failure: err))

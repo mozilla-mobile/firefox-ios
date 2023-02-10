@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 @_exported import MozillaAppServices
+import Logger
 
 public class RustRemoteTabs {
     let databasePath: String
@@ -15,9 +16,12 @@ public class RustRemoteTabs {
     private(set) var isOpen = false
 
     private var didAttemptToMoveToBackup = false
+    private let logger: Logger
 
-    public init(databasePath: String) {
+    public init(databasePath: String,
+                logger: Logger = DefaultLogger.shared) {
         self.databasePath = databasePath
+        self.logger = logger
 
         queue = DispatchQueue(label: "RustRemoteTabs queue: \(databasePath)", attributes: [])
     }
@@ -73,17 +77,15 @@ public class RustRemoteTabs {
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let tabsError = err as? TabsApiError {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Tabs error when syncing Tabs database",
-                        tag: SentryTag.rustRemoteTabs,
-                        severity: .error,
-                        description: tabsError.localizedDescription)
+                    self.logger.log("Tabs error when syncing Tabs database",
+                                    level: .warning,
+                                    category: .tabs,
+                                    description: tabsError.localizedDescription)
                 } else {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Unknown error when opening Rust Tabs database",
-                        tag: SentryTag.rustRemoteTabs,
-                        severity: .error,
-                        description: err.localizedDescription)
+                    self.logger.log("Unknown error when opening Rust Tabs database",
+                                    level: .warning,
+                                    category: .tabs,
+                                    description: err.localizedDescription)
                 }
 
                 deferred.fill(Maybe(failure: err))

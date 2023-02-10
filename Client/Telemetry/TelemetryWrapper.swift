@@ -8,6 +8,7 @@ import Shared
 import Telemetry
 import Account
 import Sync
+import Logger
 
 protocol TelemetryWrapperProtocol {
     func recordEvent(category: TelemetryWrapper.EventCategory,
@@ -42,9 +43,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
     private var crashedLastLaunch: Bool
 
     private var profile: Profile?
+    private var logger: Logger
 
-    init() {
-        crashedLastLaunch = SentryIntegration.shared.crashedLastLaunch
+    init(logger: Logger = DefaultLogger.shared) {
+        crashedLastLaunch = logger.crashedLastLaunch
+        self.logger = logger
     }
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
@@ -309,7 +312,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
 
     @objc func uploadError(notification: NSNotification) {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
-        SentryIntegration.shared.send(message: "Upload Error", tag: SentryTag.unifiedTelemetry, severity: .info, description: error.debugDescription)
+        logger.log("Upload Error",
+                   level: .info,
+                   category: .setup,
+                   description: error.debugDescription)
     }
 }
 
@@ -1364,8 +1370,10 @@ extension TelemetryWrapper {
         value: EventValue?,
         extras: [String: Any]?
     ) {
-        let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))"
-        SentryIntegration.shared.send(message: msg, severity: .info)
+        DefaultLogger.shared.log("Uninstrumented metric recorded",
+                                 level: .info,
+                                 category: .setup,
+                                 description: "\(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))")
     }
 }
 
