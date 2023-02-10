@@ -44,8 +44,9 @@ class DefaultLoggerFileManager: LoggerFileManager {
 
     // MARK: - Private
 
+    /// Delete logs in Documents folder to make sure we can copy in the latest version of the logs file
     private func deleteOldLogs() {
-        guard let logDirectoryPath = logDirectoryPath,
+        guard let logDirectoryPath = logFileDirectoryPath(inDocuments: true),
               let logFiles = try? fileManager.contentsOfDirectoryAtPath(logDirectoryPath,
                                                                         withFilenamePrefix: fileNameRoot)
         else { return }
@@ -55,6 +56,7 @@ class DefaultLoggerFileManager: LoggerFileManager {
         }
     }
 
+    /// Copy logs file from the cache to the documents folder
     private func copyLogs() {
         guard let defaultLogDirectoryPath = logFileDirectoryPath(inDocuments: false),
               let documentsLogDirectoryPath = logFileDirectoryPath(inDocuments: true),
@@ -70,6 +72,9 @@ class DefaultLoggerFileManager: LoggerFileManager {
         }
     }
 
+    /// Get the logs file either from documents or cache folder. If the Logs folder doesn't exist in that folder it will be created.
+    /// - Parameter inDocuments: If true then we get the documentlogs path, if not we get the cache logs path
+    /// - Returns: The path for logs in the directory we asked for
     private func logFileDirectoryPath(inDocuments: Bool) -> String? {
         let searchPathDirectory: FileManager.SearchPathDirectory = inDocuments ? .documentDirectory : .cachesDirectory
         guard let targetDirectory = NSSearchPathForDirectoriesInDomains(searchPathDirectory,
