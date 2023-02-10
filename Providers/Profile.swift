@@ -342,7 +342,7 @@ open class BrowserProfile: Profile {
     func reopen() {
         logger.log("Reopening profile.",
                    level: .debug,
-                   category: .core)
+                   category: .storage)
         isShutdown = false
 
         database.reopenIfClosed()
@@ -360,7 +360,7 @@ open class BrowserProfile: Profile {
     func shutdown() {
         logger.log("Shutting down profile.",
                    level: .debug,
-                   category: .core)
+                   category: .storage)
         isShutdown = true
 
         database.forceClose()
@@ -395,7 +395,7 @@ open class BrowserProfile: Profile {
         } else {
             logger.log("Ignoring location change",
                        level: .debug,
-                       category: .core)
+                       category: .webview)
         }
     }
 
@@ -405,14 +405,14 @@ open class BrowserProfile: Profile {
         guard !isPrivate else {
             logger.log("Private mode - Ignoring page metadata.",
                        level: .debug,
-                       category: .core)
+                       category: .webview)
             return
         }
         guard let pageURL = notification.userInfo?["tabURL"] as? URL,
               let pageMetadata = notification.userInfo?["pageMetadata"] as? PageMetadata else {
             logger.log("Metadata notification doesn't contain any metadata!",
                        level: .debug,
-                       category: .core)
+                       category: .webview)
             return
         }
         let defaultMetadataTTL: UInt64 = 3 * 24 * 60 * 60 * 1000 // 3 days for the metadata to live
