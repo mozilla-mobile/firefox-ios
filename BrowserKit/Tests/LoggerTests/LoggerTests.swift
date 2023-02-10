@@ -66,9 +66,19 @@ final class LoggerTests: XCTestCase {
         XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
     }
 
-    // MARK: - Sentry
+    // MARK: - CrashManager
 
-    func testSentryLog_fatalIsSent_informationCorrelate() throws {
+    func testCrashManagerLog_withoutCrashManager_doesNotLog() {
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.log("Debug log", level: .debug, category: .setup)
+        XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
+
+        XCTAssertNil(crashManager.message)
+        XCTAssertNil(crashManager.category)
+        XCTAssertNil(crashManager.level)
+    }
+
+    func testCrashManagerLog_fatalIsSent_informationCorrelate() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.configure(crashManager: crashManager)
         subject.log("Fatal log",
@@ -84,13 +94,13 @@ final class LoggerTests: XCTestCase {
         XCTAssertEqual(extra, ["example": "test", "errorDescription": "A description"])
     }
 
-    func testSentryLog_sendUsageDataNotCalled() {
+    func testCrashManagerLog_sendUsageDataNotCalled() {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.configure(crashManager: crashManager)
         XCTAssertNil(crashManager.savedSendUsageData)
     }
 
-    func testSentryLog_sendUsageDataCalled() throws {
+    func testCrashManagerLog_sendUsageDataCalled() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.configure(crashManager: crashManager)
         subject.setup(sendUsageData: true)
