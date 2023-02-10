@@ -1565,10 +1565,6 @@ open class BrowserSchema: Schema {
                 logger.log("Error altering clients table: \(err.localizedDescription); SQL was \(sql)",
                            level: .warning,
                            category: .storage)
-                let extra = ["table": "clients", "errorDescription": "\(err.localizedDescription)", "sql": "\(sql)"]
-                logger.log("Error altering table",
-                           level: .warning,
-                           category: .storage)
                 return .failure
             }
         }

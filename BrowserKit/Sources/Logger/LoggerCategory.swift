@@ -38,4 +38,7 @@ public enum LoggerCategory: String {
 
     // Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
+
+    // Anything related to telemetry
+    case telemetry
 }

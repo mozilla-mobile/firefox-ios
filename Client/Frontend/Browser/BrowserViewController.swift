@@ -1471,7 +1471,6 @@ class BrowserViewController: UIViewController {
             }
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
-            print("Error handling URL entry: \"\(text)\".")
             assertionFailure("Couldn't generate search URL: \(text)")
         }
     }
@@ -1592,10 +1591,7 @@ class BrowserViewController: UIViewController {
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil, webViewStatus: WebViewUpdateStatus) {
         tabManager.expireSnackbars()
 
-        guard let webView = tab.webView else {
-            print("Cannot navigate in tab without a webView")
-            return
-        }
+        guard let webView = tab.webView else { return }
 
         if let url = webView.url {
             if tab === tabManager.selectedTab {

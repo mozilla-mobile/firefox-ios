@@ -7,6 +7,7 @@ import Foundation
 import Account
 import MozillaAppServices
 import Shared
+import Logger
 
 enum FxAPageType {
     case emailLoginFlow
@@ -33,7 +34,7 @@ class FxAWebViewModel {
     fileprivate var deepLinkParams: FxALaunchParams
     fileprivate(set) var baseURL: URL?
     let fxAWebViewTelemetry = FxAWebViewTelemetry()
-
+    private let logger: Logger
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
@@ -55,10 +56,14 @@ class FxAWebViewModel {
      - parameter profile: a Profile.
      - parameter deepLinkParams: url parameters that originate from a deep link
      */
-    required init(pageType: FxAPageType, profile: Profile, deepLinkParams: FxALaunchParams) {
+    required init(pageType: FxAPageType,
+                  profile: Profile,
+                  deepLinkParams: FxALaunchParams,
+                  logger: Logger = DefaultLogger.shared) {
         self.pageType = pageType
         self.profile = profile
         self.deepLinkParams = deepLinkParams
+        self.logger = logger
 
         // If accountMigrationFailed then the app menu has a caution icon,
         // and at this point the user has taken sufficient action to clear the caution.
@@ -131,7 +136,9 @@ extension FxAWebViewModel {
 
         let origin = message.frameInfo.securityOrigin
         guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
-            print("Ignoring message - \(origin) does not match expected origin: \(url.origin ?? "nil")")
+            logger.log("Ignoring message - \(origin) does not match expected origin: \(url.origin ?? "nil")",
+                       level: .warning,
+                       category: .sync)
             return
         }
 
