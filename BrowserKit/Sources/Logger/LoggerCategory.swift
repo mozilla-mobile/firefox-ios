@@ -24,9 +24,6 @@ public enum LoggerCategory: String {
     // Related to the setup of services on app launch and general setup of the app
     case setup
 
-    // Sentry calls, temporary category while we make the migration
-    case sentry
-
     // Related to storage (keychain, SQL database, store of different types, etc)
     case storage
 
