@@ -4,7 +4,6 @@
 
 import Foundation
 @testable import Storage
-@testable import Client
 import XCTest
 
 class MockFiles: FileAccessor {
