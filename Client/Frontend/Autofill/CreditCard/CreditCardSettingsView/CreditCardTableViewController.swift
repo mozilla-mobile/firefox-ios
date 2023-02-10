@@ -26,7 +26,6 @@ class CreditCardTableViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
-    var isToggled = true
 
     // MARK: View
     private lazy var tableView: UITableView = {
@@ -76,8 +75,6 @@ class CreditCardTableViewController: UIViewController, Themeable {
     private func viewSetup() {
         view.addSubview(tableView)
 
-//        toggleSwitch.setOn(viewModel.isAutofillEnabled, animated: true)
-
         viewModel.didUpdateCreditCards = { [weak self] in
             self?.reloadData()
         }
@@ -101,18 +98,9 @@ class CreditCardTableViewController: UIViewController, Themeable {
         view.backgroundColor = theme.colors.layer1
     }
 
-    @objc private func autofillToggleTapped() {
-        viewModel.updateToggle()
-//        updateToggleValue(value: viewModel.isAutofillEnabled)
-    }
-
     func reloadData() {
         tableView.reloadData()
     }
-
-//    func updateToggleValue(value: Bool) {
-//        toggleSwitch.setOn(value, animated: true)
-//    }
 
     deinit {
         notificationCenter.removeObserver(self)
@@ -157,12 +145,13 @@ extension CreditCardTableViewController: UITableViewDelegate,
     // MARK: - Private
     private func toggleCell() -> UITableViewCell {
         guard let hostingCell = tableView.dequeueReusableCell(
-            withIdentifier: HostingTableViewCell<CreditCardAutofillToggle>.cellIdentifier) as? HostingTableViewCell<CreditCardAutofillToggle> else {
+            withIdentifier: HostingTableViewCell<CreditCardAutofillToggle>.cellIdentifier) as? HostingTableViewCell<CreditCardAutofillToggle>,
+              let model = viewModel.toggleModel else {
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
         let row = CreditCardAutofillToggle(textColor: themeManager.currentTheme.colors.textPrimary.color,
-                                           isToggleOn: isToggled)
+                                           model: model)
         hostingCell.host(row, parentController: self)
         return hostingCell
     }

@@ -5,9 +5,27 @@
 import Foundation
 import SwiftUI
 
+protocol ToggleModelDelegate: AnyObject {
+    func toggleDidChange(_ toggleModel: ToggleModel)
+}
+
+class ToggleModel: ObservableObject {
+    @Published var isEnabled: Bool = false {
+        didSet {
+            delegate?.toggleDidChange(self)
+        }
+    }
+    weak var delegate: ToggleModelDelegate?
+
+    init(isEnabled: Bool, delegate: ToggleModelDelegate? = nil) {
+        self.isEnabled = isEnabled
+        self.delegate = delegate
+    }
+}
+
 struct CreditCardAutofillToggle: View {
     var textColor: Color
-    @State var isToggleOn: Bool = false // @ObservedObject
+    @ObservedObject var model: ToggleModel
 
     var body: some View {
         VStack {
@@ -16,7 +34,7 @@ struct CreditCardAutofillToggle: View {
                 .padding(.leading, 16)
                 .hidden()
             HStack {
-                Toggle("Save and autofill cards", isOn: $isToggleOn)
+                Toggle("Save and autofill cards", isOn: $model.isEnabled)
                     .font(.body)
                     .foregroundColor(textColor)
                     .padding(.leading, 16)
@@ -30,17 +48,19 @@ struct CreditCardAutofillToggle: View {
 }
 
 struct CreditCardAutofillToggle_Previews: PreviewProvider {
-    static var previews: some View {
-        CreditCardAutofillToggle(textColor: .gray,
-                                 isToggleOn: true)
+        static var previews: some View {
+            let model = ToggleModel(isEnabled: true)
 
         CreditCardAutofillToggle(textColor: .gray,
-                                 isToggleOn: true)
+                                 model: model)
+
+        CreditCardAutofillToggle(textColor: .gray,
+                                 model: model)
             .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
             .previewDisplayName("Large")
 
         CreditCardAutofillToggle(textColor: .gray,
-                                 isToggleOn: true)
+                                 model: model)
             .environment(\.sizeCategory, .extraSmall)
             .previewDisplayName("Small")
     }

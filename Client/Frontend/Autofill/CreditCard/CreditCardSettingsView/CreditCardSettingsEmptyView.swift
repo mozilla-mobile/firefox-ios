@@ -13,7 +13,7 @@ struct CreditCardSettingsEmptyView: View {
     }
 
     let colors: Colors
-    @State var isToggleOn: Bool = false
+    @ObservedObject var toggleModel: ToggleModel
 
     var body: some View {
         ZStack {
@@ -22,7 +22,9 @@ struct CreditCardSettingsEmptyView: View {
             GeometryReader { proxy in
                 ScrollView {
                     VStack {
-                        CreditCardAutofillToggle(textColor: colors.toggleTextColor, isToggleOn: isToggleOn)
+                        CreditCardAutofillToggle(
+                            textColor: colors.toggleTextColor,
+                            model: toggleModel)
                         Spacer()
                         Image("credit_card_placeholder")
                             .resizable()
@@ -55,9 +57,10 @@ struct CreditCardSettingsEmptyView: View {
 
 struct CreditCardSettingsEmptyView_Previews: PreviewProvider {
     static var previews: some View {
+        let toggleModel = ToggleModel(isEnabled: true)
         let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: .gray,
                                                         subTextColor: .gray,
                                                         toggleTextColor: .gray)
-        CreditCardSettingsEmptyView(colors: colors, isToggleOn: true)
+        CreditCardSettingsEmptyView(colors: colors, toggleModel: toggleModel)
     }
 }
