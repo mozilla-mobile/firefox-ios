@@ -109,10 +109,6 @@ class SyncDataDisplay {
         self.notificationContent = content
         self.tabQueue = tabQueue
         self.logger = logger
-
-        // TODO: LAURIE
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        logger.setup(sendUsageData: sendUsageData)
     }
 
     func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
