@@ -2125,6 +2125,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         if topTabsVisible {
             topTabsDidChangeTab()
+            // Only for iPad leave overlay mode on tab change
+            overlayManager.leaveOverlayMode(didCancel: true)
         }
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)

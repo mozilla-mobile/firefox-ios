@@ -158,16 +158,17 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         }
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // make sure the keyboard is dismissed when wallpaper onboarding is shown
-        // Can be removed once underlying problem is solved (FXIOS-4904)
-        if let presentedViewController = presentedViewController,
-           presentedViewController.isKind(of: BottomSheetViewController.self) {
-            self.dismissKeyboard()
-        }
-    }
+    // TODO: Remove, bottom sheet needs to check if isInOverlayMode to show
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//
+//        // make sure the keyboard is dismissed when wallpaper onboarding is shown
+//        // Can be removed once underlying problem is solved (FXIOS-4904)
+//        if let presentedViewController = presentedViewController,
+//           presentedViewController.isKind(of: BottomSheetViewController.self) {
+//            self.dismissKeyboard()
+//        }
+//    }
 
     // MARK: - Layout
 
