@@ -767,8 +767,6 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.reloadFromUrlBar.add()
 
         // MARK: - QR Codes
-        case(.action, .tap, .creditCardAutofillSettings, _, _):
-            GleanMetrics.CreditCard.autofillSettingsTapped.record()
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
@@ -782,6 +780,10 @@ extension TelemetryWrapper {
             } else {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
+
+        // MARK: Credit Card
+        case(.action, .tap, .creditCardAutofillSettings, _, _):
+            GleanMetrics.CreditCard.autofillSettingsTapped.record()
 
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
