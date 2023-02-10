@@ -72,7 +72,7 @@ class AppLaunchUtil {
         SystemUtils.onFirstRun()
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
+            self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
         }
     }
 
@@ -164,8 +164,6 @@ class AppLaunchUtil {
                 GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
                 GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
-                // We also send the error to sentry
-                SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
             })
         } else {
             self.logger.log("History Migration skipped",

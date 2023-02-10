@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import Logger
 import XCTest
 import StoreKit
 import Shared
@@ -15,7 +16,7 @@ class RatingPromptManagerTests: XCTestCase {
     var promptManager: RatingPromptManager!
     var mockProfile: MockProfile!
     var createdGuids: [String] = []
-    var sentry: CrashingMockSentryClient!
+    var logger: CrashingMockLogger!
     var mockDispatchGroup: MockDispatchGroup!
 
     override func setUp() {
@@ -35,7 +36,7 @@ class RatingPromptManagerTests: XCTestCase {
         promptManager = nil
         mockProfile?.shutdown()
         mockProfile = nil
-        sentry = nil
+        logger = nil
         urlOpenerSpy = nil
     }
 
@@ -74,9 +75,9 @@ class RatingPromptManagerTests: XCTestCase {
         XCTAssertEqual(ratingPromptOpenCount, 0)
     }
 
-    func testShouldShowPrompt_sentryHasCrashedInLastSession_returnsFalse() {
+    func testShouldShowPrompt_loggerHasCrashedInLastSession_returnsFalse() {
         setupEnvironment(isBrowserDefault: true)
-        sentry?.enableCrashOnLastLaunch = true
+        logger?.enableCrashOnLastLaunch = true
 
         promptManager.showRatingPromptIfNeeded()
         XCTAssertEqual(ratingPromptOpenCount, 0)
@@ -256,11 +257,11 @@ private extension RatingPromptManagerTests {
 
     func setupPromptManager(hasCumulativeDaysOfUse: Bool) {
         let mockCounter = CumulativeDaysOfUseCounterMock(hasCumulativeDaysOfUse)
-        sentry = CrashingMockSentryClient()
+        logger = CrashingMockLogger()
         mockDispatchGroup = MockDispatchGroup()
         promptManager = RatingPromptManager(profile: mockProfile,
                                             daysOfUseCounter: mockCounter,
-                                            sentry: sentry,
+                                            logger: logger,
                                             group: mockDispatchGroup)
     }
 
@@ -289,10 +290,13 @@ class CumulativeDaysOfUseCounterMock: CumulativeDaysOfUseCounter {
     }
 }
 
-// MARK: - CrashingMockSentryClient
-class CrashingMockSentryClient: SentryProtocol {
-    var enableCrashOnLastLaunch = false
+// MARK: - CrashingMockLogger
+class CrashingMockLogger: Logger {
+    func setup(sendUsageData: Bool) {}
+    func configure(crashManager: CrashManager) {}
+    func copyLogsToDocuments() {}
 
+    var enableCrashOnLastLaunch = false
     var crashedLastLaunch: Bool {
         return enableCrashOnLastLaunch
     }

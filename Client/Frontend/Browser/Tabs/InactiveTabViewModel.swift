@@ -45,9 +45,7 @@ struct InactiveTabModel: Codable {
                 let jsonDecoder = JSONDecoder()
                 let inactiveTabModel = try jsonDecoder.decode(InactiveTabModel.self, from: inactiveTabsModel)
                 return inactiveTabModel
-            } catch {
-                print("Error occured")
-            }
+            } catch {}
         }
         return nil
     }

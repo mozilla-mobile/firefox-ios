@@ -62,9 +62,7 @@ class MetaGlobalTests: XCTestCase {
         authState = MockSyncAuthState(serverRoot: serverRoot, kSync: kSync)
         stateMachine = SyncStateMachine(prefs: syncPrefs)
 
-        RustFirefoxAccounts.startup(prefs: syncPrefs).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
-        }
+        RustFirefoxAccounts.startup(prefs: syncPrefs).uponQueue(.main) { _ in }
     }
 
     override func tearDown() {

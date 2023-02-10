@@ -109,8 +109,6 @@ class GroupedTabCell: UICollectionViewCell,
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let section = indexPath.section
-        print(section)
     }
 
     @objc func toggleInactiveTabSection() {
@@ -322,7 +320,6 @@ class GroupedTabContainerCell: UITableViewCell,
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.row)
         if let tab = tabs?[indexPath.item] {
             delegate?.didSelectGroupedTab(tab: tab)
         }

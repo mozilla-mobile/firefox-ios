@@ -149,12 +149,10 @@ class HistoryPanelViewModel: FeatureFlaggable {
             self.isFetchInProgress = false
 
             guard result.isSuccess else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Error searching history panel",
-                    tag: .rustPlaces,
-                    severity: .error,
-                    description: result.failureValue?.localizedDescription ?? "Unkown error searching history"
-                )
+                self.logger.log("Error searching history panel",
+                                level: .warning,
+                                category: .sync,
+                                description: result.failureValue?.localizedDescription ?? "Unkown error searching history")
                 completion(false)
                 return
             }
