@@ -53,7 +53,7 @@ final class LoggerTests: XCTestCase {
         XCTAssertEqual(MockSwiftyBeaver.errorCalled, 1)
     }
 
-    func testLog_informationCorrelate() throws {
+    func testLog_informationCorrelate_withAllParams() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.configure(crashManager: crashManager)
         subject.log("Debug log",
@@ -62,7 +62,42 @@ final class LoggerTests: XCTestCase {
                     extra: ["example": "test"],
                     description: "A description")
 
-        XCTAssertEqual(MockSwiftyBeaver.savedMessage, "Debug log - A description, example: test")
+        XCTAssertEqual(MockSwiftyBeaver.savedMessage, "Debug log - A description - example: test")
+        XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
+    }
+
+    func testLog_informationCorrelate_withMessageAndDescriptionOnly() throws {
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(crashManager: crashManager)
+        subject.log("Debug log",
+                    level: .debug,
+                    category: .setup,
+                    description: "A description")
+
+        XCTAssertEqual(MockSwiftyBeaver.savedMessage, "Debug log - A description")
+        XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
+    }
+
+    func testLog_informationCorrelate_withMessageAndExtra() throws {
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(crashManager: crashManager)
+        subject.log("Debug log",
+                    level: .debug,
+                    category: .setup,
+                    extra: ["example": "test"])
+
+        XCTAssertEqual(MockSwiftyBeaver.savedMessage, "Debug log - example: test")
+        XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
+    }
+
+    func testLog_informationCorrelate_withMessageOnly() throws {
+        let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
+        subject.configure(crashManager: crashManager)
+        subject.log("Debug log",
+                    level: .debug,
+                    category: .setup)
+
+        XCTAssertEqual(MockSwiftyBeaver.savedMessage, "Debug log")
         XCTAssertEqual(MockSwiftyBeaver.debugCalled, 1)
     }
 

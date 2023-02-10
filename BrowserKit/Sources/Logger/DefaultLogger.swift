@@ -39,7 +39,15 @@ public class DefaultLogger: Logger {
                     line: Int = #line) {
         // Prepare messages
         let reducedExtra = reduce(extraEvents: extra)
-        let loggerMessage = "\(message) - \(description ?? "")\(reducedExtra)"
+        var loggerMessage = "\(message)"
+        let prefix = " - "
+        if let description = description {
+            loggerMessage.append("\(prefix)\(description)")
+        }
+
+        if !reducedExtra.isEmpty {
+            loggerMessage.append("\(prefix)\(reducedExtra)")
+        }
 
         // Log locally and in console
         switch level {
@@ -86,7 +94,8 @@ public class DefaultLogger: Logger {
 
         return extras.reduce("") { (result: String, arg1) in
             let (key, value) = arg1
-            return "\(result), \(key): \(value)"
+            let pastResult = result.isEmpty ? "" : "\(result), "
+            return "\(pastResult)\(key): \(value)"
         }
     }
 }
