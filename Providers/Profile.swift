@@ -18,7 +18,7 @@ import AuthenticationServices
 import MozillaAppServices
 import Logger
 
-public protocol SyncManager {
+public protocol NativeSyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
     var syncDisplayState: SyncDisplayState? { get }
@@ -132,7 +132,7 @@ protocol Profile: AnyObject {
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
     func pollCommands(forcePoll: Bool)
 
-    var syncManager: SyncManager! { get }
+    var syncManager: NativeSyncManager! { get }
     func hasSyncedLogins() -> Deferred<Maybe<Bool>>
 
     func syncCredentialIdentities() -> Deferred<Result<Void, Error>>
@@ -211,7 +211,7 @@ open class BrowserProfile: Profile {
 
     let database: BrowserDB
     let readingListDB: BrowserDB
-    var syncManager: SyncManager!
+    var syncManager: NativeSyncManager!
 
     var syncDelegate: SyncDelegate?
     var rustSyncManagerEnabled: Bool
@@ -554,18 +554,47 @@ open class BrowserProfile: Profile {
     }
     
     func getRustTabsWithClients() -> Deferred<Maybe<[ClientAndTabs]>> {
-        return self.tabs.getAll().bind { tabsResult in
+        let deferred = Deferred<Maybe<[ClientAndTabs]>>()
+        self.tabs.getAll().upon { tabsResult in
             if let tabsError = tabsResult.failureValue {
-                return deferMaybe(tabsError)
+                deferred.fill(Maybe(failure: tabsError))
+                return
             }
 
-            guard let clientRemoteTabs = tabsResult.successValue else {
-                return deferMaybe([])
+            guard let rustClientAndTabs = tabsResult.successValue else {
+                deferred.fill(Maybe(success: []))
+                return
             }
+            
+            return self.rustFxA.accountManager.upon({ accountManager in
+                guard let remoteDeviceIds: [String] = accountManager
+                    .deviceConstellation()?.state()?.remoteDevices.map({ $0.id }) else
+                {
+                    deferred.fill(Maybe(success: []))
+                    return
+                }
 
+                self.logger.log("Updating FxA devices list.",
+                                level: .debug,
+                                category: .sync)
+                accountManager.deviceConstellation()?.refreshState()
+                
+                let clientAndtabs = rustClientAndTabs
+                    .map { $0.toClientAndTabs() }.filter({ record in
 
-            return deferMaybe(clientRemoteTabs.map ({ $0.toClientAndTabs() }))
+                        remoteDeviceIds.contains { deviceId in
+                            guard let clientDeviceId = record.client.fxaDeviceId else {
+                                return false
+                            }
+                            return clientDeviceId == deviceId
+                        }
+                    })
+
+                deferred.fill(Maybe(success: clientAndtabs))
+                return
+            })
         }
+        return deferred
     }
 
     func getTabsWithNativeClients() -> Deferred<Maybe<[ClientAndTabs]>> {
@@ -605,9 +634,12 @@ open class BrowserProfile: Profile {
                             return record.toClientAndTabs(client: client)
                         }
                         
-                        self.logger.log("Could not find client data for appservices client ID \(record.clientId).",
-                                    level: .debug,
-                                    category: .tabs)
+                        self.logger.log("""
+                            Could not find client data for appservices
+                            client ID \(record.clientId).
+                            """,
+                            level: .debug,
+                            category: .tabs)
                         return nil
                     }.compactMap { $0 }
                     
@@ -816,7 +848,7 @@ open class BrowserProfile: Profile {
     }
 
     // Extends NSObject so we can use timers.
-    public class BrowserSyncManager: NSObject, SyncManager {
+    public class BrowserSyncManager: NSObject, NativeSyncManager {
         // We shouldn't live beyond our containing BrowserProfile, either in the main app or in
         // an extension.
         // But it's possible that we'll finish a side-effect sync after we've ditched the profile

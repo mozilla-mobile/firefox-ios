@@ -11,7 +11,7 @@ import AuthenticationServices
 import Logger
 
 // Extends NSObject so we can use timers.
-public class RustSyncManager: NSObject, SyncManager {
+public class RustSyncManager: NSObject, NativeSyncManager {
     // We shouldn't live beyond our containing BrowserProfile, either in the main app
     // or in an extension.
     // But it's possible that we'll finish a side-effect sync after we've ditched the
@@ -47,7 +47,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
     
-    lazy var syncManagerAPI = RustSyncManagerAPI()
+    lazy var syncManagerAPI = RustSyncManagerAPI(logger: self.logger)
     
     public func migrateSyncData() {
         // The sync functions used by the old native swift sync manager did not return
@@ -381,9 +381,9 @@ public class RustSyncManager: NSObject, SyncManager {
                     localEncryptionKeys["passwords"] = key
                     rustEngines.append("passwords")
                 } else {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Login encryption key could not be retrieved for syncing",
-                        tag: SentryTag.rustLogins, severity: .warning)
+                    self.logger.log("Login encryption key could not be retrieved for syncing",
+                                    level: .warning,
+                                    category: .sync)
                 }
             case "bookmarks":
                 if !registeredPlaces {
@@ -417,11 +417,9 @@ public class RustSyncManager: NSObject, SyncManager {
             guard let device = accountManager.deviceConstellation()?
                 .state()?
                 .localDevice else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Device Id could not be retrieved",
-                    tag: SentryTag.rustSyncManager,
-                    severity: .warning
-                )
+                self.logger.log("Device Id could not be retrieved",
+                                level: .warning,
+                                category: .sync)
                 deferred.fill(Maybe(failure: DeviceIdError()))
                 return
             }
