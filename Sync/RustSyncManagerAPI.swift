@@ -3,16 +3,19 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Logger
 import Shared
 @_exported import MozillaAppServices
 
 open class RustSyncManagerAPI {
     let queue: DispatchQueue
+    private let logger: Logger
     var api: SyncManager
 
-    public init() {
+    public init(logger: Logger = DefaultLogger.shared) {
         queue = DispatchQueue(label: "RustSyncManager queue", attributes: [])
         self.api = SyncManager()
+        self.logger = logger
     }
 
     public func disconnect() {
@@ -28,17 +31,18 @@ open class RustSyncManagerAPI {
                 completion(result)
             } catch let err as NSError {
                 if let syncError = err as? SyncManagerError {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Rust SyncManager sync error",
-                        tag: SentryTag.rustSyncManager,
-                        severity: .error,
-                        description: syncError.localizedDescription)
+                    self.logger.log("""
+                        Rust SyncManager sync error: \(syncError.localizedDescription)
+                        """,
+                        level: .warning,
+                        category: .sync)
                 } else {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Unknown error when attempting a rust SyncManager sync",
-                        tag: SentryTag.rustSyncManager,
-                        severity: .error,
-                        description: err.localizedDescription)
+                    self.logger.log("""
+                        Unknown error when attempting a rust SyncManager sync:
+                        \(err.localizedDescription)
+                        """,
+                        level: .warning,
+                        category: .sync)
                 }
             }
         }
