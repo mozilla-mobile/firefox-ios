@@ -190,6 +190,12 @@
 /* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
 "Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Přeskočit";
 
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Pro zvýšení vašeho soukromí vymažeme při zavření aplikace vaši historii.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Nastavte si aplikaci %@ jako výchozí a chraňte tak svá data při každém otevření odkazu.";
+
 /* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
 "Onboarding.DefaultBrowser.Title.V2" = "%@ není jako ostatní prohlížeče";
 
@@ -225,6 +231,9 @@
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "Povolte %@";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Zvolte Safari, a poté Rozšíření";
 
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ není povolen.";
@@ -544,11 +553,17 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Chybí na stránce obsah nebo se chová podivně?";
 
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "Hledat v aplikaci %@";
+
 /* This is the body text that is displayed for the Context Menu icon tooltip */
 "TooltipBodyText.ContextMenu" = "Všechny možnosti zabezpečení a ochrany soukromí najdete v nastavení.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
 "TooltipBodyText.Privacy" = "Tato výchozí nastavení poskytují silnou ochranu. Můžete je ale jednoduše nastavit podle vlastních potřeb.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Začněte svou relaci anonymního prohlížení a my budeme průběžně blokovat sledovací prvky a jiné zlé věci.";
 
 /* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
 "TooltipBodyText.ShieldIcon" = "Aplikace %@ zabránila tomuto serveru ve vašem sledování. Klepnutím na ikonu štítu se dozvíte, co bylo zablokováno.";
@@ -558,6 +573,9 @@
 
 /* This is the body text that is displayed for the Trash icon tooltip */
 "TooltipBodyText.TrashIcon" = "Klepnutím na ikonu koše kdykoliv zahladíte všechny stopy po vašem prohlížení.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Klepnutím sem vše vyhodíte do koše – historii, cookies, prostě vše – a začnete znovu v novém panelu.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Jste chráněni!";
