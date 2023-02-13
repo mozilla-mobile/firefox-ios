@@ -129,6 +129,7 @@ class BookmarkingTests: BaseTestCase {
         checkItemInBookmarkList()
     }
 
+    // Smoketest
     func testBookmarksAwesomeBar() {
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
