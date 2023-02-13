@@ -9,7 +9,7 @@ protocol OverlayModeManager {
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
     func leaveOverlayMode(didCancel cancel: Bool)
     func openNewTab(_ locationText: String?, url: URL?)
-    func switchTab()
+    func switchTab(didCancel: Bool)
 }
 
 class DefaultOverlayModeManager: OverlayModeManager {
@@ -30,8 +30,8 @@ class DefaultOverlayModeManager: OverlayModeManager {
     }
 
     // TODO: YRD might need some parameters
-    func switchTab() {
-        leaveOverlayMode(didCancel: true)
+    func switchTab(didCancel: Bool) {
+        leaveOverlayMode(didCancel: didCancel)
     }
 
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {

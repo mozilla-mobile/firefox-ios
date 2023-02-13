@@ -217,9 +217,8 @@ class BrowserViewController: UIViewController {
         applyTheme()
     }
 
-    @objc func didTapUndoCloseAllTabToast(notification: Notification) {
-        leaveOverlayMode(didCancel: true)
-    }
+    // TODO: YRD Remove delegate keyboard should't raise on first place
+    @objc func didTapUndoCloseAllTabToast(notification: Notification) { }
 
     @objc func openTabNotification(notification: Notification) {
         guard let openTabObject = notification.object as? OpenTabNotificationObject else {
@@ -1037,6 +1036,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    // TODO: YRD remove
     private func enterOverlayMode() {
         guard !shouldUseOverlayManager else { return }
 
@@ -1050,16 +1050,10 @@ class BrowserViewController: UIViewController {
             }
         } else if presentedViewController is OnboardingViewControllerProtocol {
             // leave from overlay mode while in onboarding is displayed on iPad
-            leaveOverlayMode(didCancel: false)
+            self.urlBar.leaveOverlayMode(didCancel: false)
         } else {
             self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
         }
-    }
-
-    private func leaveOverlayMode(didCancel cancel: Bool) {
-        guard !shouldUseOverlayManager else { return }
-
-        urlBar.leaveOverlayMode(didCancel: cancel)
     }
 
     func showLibrary(panel: LibraryPanelType? = nil) {
@@ -1229,8 +1223,8 @@ class BrowserViewController: UIViewController {
     }
 
     override func accessibilityPerformEscape() -> Bool {
-        if urlBar.inOverlayMode {
-            leaveOverlayMode(didCancel: true)
+        if overlayManager.inOverlayMode {
+            overlayManager.leaveOverlayMode(didCancel: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -1501,8 +1495,6 @@ class BrowserViewController: UIViewController {
 
         if currentViewController != self {
             _ = self.navigationController?.popViewController(animated: true)
-        } else if let urlBar = urlBar, urlBar.inOverlayMode {
-            leaveOverlayMode(didCancel: true)
         }
     }
 
@@ -1984,14 +1976,15 @@ extension BrowserViewController: HomePanelDelegate {
         showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
+    // TODO: YRD Remove CFR should not dismiss keyboard instead should not present if keyboard is raised
     func homePanelDidPresentContextualHintOf(type: ContextualHintType) {
-        switch type {
-        case .jumpBackIn,
-                .jumpBackInSyncedTab,
-                .toolbarLocation:
-            leaveOverlayMode(didCancel: false)
-        default: break
-        }
+//        switch type {
+//        case .jumpBackIn,
+//                .jumpBackInSyncedTab,
+//                .toolbarLocation:
+//            leaveOverlayMode(didCancel: false)
+//        default: break
+//        }
     }
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
@@ -2014,7 +2007,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     // In searchViewController when user selects an open tabs and switch to it
     func searchViewController(_ searchViewController: SearchViewController, uuid: String) {
-        leaveOverlayMode(didCancel: true)
+        overlayManager.switchTab(didCancel: true)
         if let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
         }
@@ -2125,8 +2118,6 @@ extension BrowserViewController: TabManagerDelegate {
 
         if topTabsVisible {
             topTabsDidChangeTab()
-            // Only for iPad leave overlay mode on tab change
-            overlayManager.switchTab()
         }
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
@@ -2135,6 +2126,7 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
         if !isRestoring {
+            // TODO: YRD Move causes side effects we should call this when + is press
             overlayManager?.openNewTab(nil, url: tab.url)
             updateTabCountUsingTabManager(tabManager)
         }
@@ -2642,7 +2634,8 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
-        leaveOverlayMode(didCancel: true)
+        // Technically is not changing tabs but is loosing focus on urlbar
+        overlayManager.switchTab(didCancel: true)
         self.urlBarDidPressTabs(urlBar)
     }
 
@@ -2650,13 +2643,11 @@ extension BrowserViewController: TopTabsDelegate {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
     }
 
-    func topTabsDidTogglePrivateMode() {
-        guard tabManager.selectedTab != nil else { return }
-        urlBar.leaveOverlayMode()
-    }
+    func topTabsDidTogglePrivateMode() { }
 
     func topTabsDidChangeTab() {
-        leaveOverlayMode(didCancel: true)
+        // Only for iPad leave overlay mode on tab change
+        overlayManager.switchTab(didCancel: true)
     }
 }
 
