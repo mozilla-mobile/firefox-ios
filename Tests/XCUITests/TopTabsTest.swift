@@ -19,7 +19,7 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 45)
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -39,7 +39,7 @@ class TopTabsTest: BaseTestCase {
         } else {
             navigator.goto(TabTray)
         }
-        waitForExistence(app.cells.staticTexts[urlLabel], timeout: 5)
+        waitForExistence(app.cells.staticTexts[urlLabel], timeout: TIMEOUT)
     }
 
     func testAddTabFromContext() {
@@ -168,6 +168,7 @@ class TopTabsTest: BaseTestCase {
 
     func testCloseAllTabsPrivateModeUndo() {
         navigator.goto(URLBarOpen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         navigator.back()
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -245,6 +246,7 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testOpenNewTabLandscape() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         navigator.performAction(Action.CloseURLBarOpen)
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
@@ -370,6 +372,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -382,6 +385,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
