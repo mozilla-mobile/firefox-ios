@@ -12,16 +12,20 @@ protocol ContextualHintEligibilityUtilityProtocol {
 struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtocol, ContextualHintPrefsKeysProvider {
     var profile: Profile
     var device: UIDeviceInterface
+    // For contextual hints shown in Homepage that can overlap with keyboard being raised by user interaction
+    private var overlayState: OverlayStateProtocol?
 
     init(with profile: Profile,
+         overlayState: OverlayStateProtocol?,
          device: UIDeviceInterface = UIDevice.current) {
         self.profile = profile
+        self.overlayState = overlayState
         self.device = device
     }
 
     /// Determine if this hint is eligible to present, outside of Nimbus flag settings.
     func canPresent(_ hintType: ContextualHintType) -> Bool {
-        guard isDeviceReady else { return false }
+        guard isDeviceReady, !isInOverlayMode else { return false }
 
         var hintTypeShouldBePresented = false
 
@@ -44,6 +48,12 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
     // Do not present contextual hint in landscape on iPhone
     private var isDeviceReady: Bool {
         !UIWindow.isLandscape || device.userInterfaceIdiom == .pad
+    }
+
+    private var isInOverlayMode: Bool {
+        guard overlayState != nil else { return false }
+
+        return overlayState?.inOverlayMode ?? false
     }
 
     /// If device is iPhone we present JumpBackIn and SyncTab CFRs only after Toolbar CFR has been presented

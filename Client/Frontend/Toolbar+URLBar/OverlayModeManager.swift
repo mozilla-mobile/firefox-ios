@@ -4,10 +4,13 @@
 
 import Foundation
 
-protocol OverlayModeManager {
+protocol OverlayStateProtocol {
     var inOverlayMode: Bool { get }
-    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
-    func leaveOverlayMode(didCancel cancel: Bool)
+}
+
+protocol OverlayModeManager: OverlayStateProtocol {
+    func finishEdition()
+    func pasteContent(pasteContent: String)
     func openNewTab(_ locationText: String?, url: URL?)
     func switchTab(didCancel: Bool)
 }
@@ -23,24 +26,31 @@ class DefaultOverlayModeManager: OverlayModeManager {
         self.urlBarView = urlBarView
     }
 
+    func finishEdition() {
+        leaveOverlayMode(didCancel: false)
+    }
+
+    func pasteContent(pasteContent: String) {
+        enterOverlayMode(pasteContent, pasted: true, search: true)
+    }
+
     func openNewTab(_ locationText: String?, url: URL?) {
         if url == nil || url?.isFxHomeUrl ?? false {
             enterOverlayMode(locationText, pasted: false, search: true)
         }
     }
 
-    // TODO: YRD might need some parameters
     func switchTab(didCancel: Bool) {
         leaveOverlayMode(didCancel: didCancel)
     }
 
-    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+    private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
         guard !inOverlayMode else { return }
 
         urlBarView.enterOverlayMode(locationText, pasted: pasted, search: search)
     }
 
-    func leaveOverlayMode(didCancel cancel: Bool) {
+    private func leaveOverlayMode(didCancel cancel: Bool) {
         guard inOverlayMode else { return }
 
         urlBarView.leaveOverlayMode(didCancel: cancel)

@@ -458,7 +458,7 @@ class BrowserViewController: UIViewController {
         pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
-                self.overlayManager?.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                self.overlayManager.pasteContent(pasteContent: pasteboardContents)
 
                 return true
             }
@@ -594,8 +594,8 @@ class BrowserViewController: UIViewController {
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
             presentedUsing: { self.presentContextualHint() },
-            withActionBeforeAppearing: { self.homePanelDidPresentContextualHintOf(type: .toolbarLocation) },
-            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) })
+            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) },
+            overlayState: overlayManager)
     }
 
     private func presentContextualHint() {
@@ -1023,8 +1023,6 @@ class BrowserViewController: UIViewController {
 
             if userHasPressedHomeButton {
                 userHasPressedHomeButton = false
-            } else if focusUrlBar && !contextHintVC.shouldPresentHint() {
-                enterOverlayMode()
             }
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideHomepage()
@@ -1150,8 +1148,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        // TODO: Check all flows that call finishEditing we could leaveOverlayMode from autocompleteTextFieldShouldReturn
-        overlayManager?.leaveOverlayMode(didCancel: false)
+        overlayManager?.finishEdition()
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -1224,7 +1221,7 @@ class BrowserViewController: UIViewController {
 
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
-            overlayManager.leaveOverlayMode(didCancel: true)
+            overlayManager.finishEdition()
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -1974,17 +1971,6 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanelDidRequestToOpenTabTray(withFocusedTab tabToFocus: Tab?, focusedSegment: TabTrayViewModel.Segment?) {
         showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
-    }
-
-    // TODO: YRD Remove CFR should not dismiss keyboard instead should not present if keyboard is raised
-    func homePanelDidPresentContextualHintOf(type: ContextualHintType) {
-//        switch type {
-//        case .jumpBackIn,
-//                .jumpBackInSyncedTab,
-//                .toolbarLocation:
-//            leaveOverlayMode(didCancel: false)
-//        default: break
-//        }
     }
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {

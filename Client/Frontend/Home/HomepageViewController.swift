@@ -315,7 +315,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     @objc private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
-            overlayManager.leaveOverlayMode(didCancel: true)
+            overlayManager.finishEdition()
         }
     }
 
@@ -353,11 +353,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager(userDefaults: userDefaults)
-        guard wallpaperManager.canOnboardingBeShown(using: viewModel.profile),
+        guard !overlayManager.inOverlayMode,
+              wallpaperManager.canOnboardingBeShown(using: viewModel.profile),
               canModalBePresented
         else { return }
-
-        self.dismissKeyboard()
 
         let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager, openSettingsAction: {
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
@@ -398,8 +397,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController) },
             sourceRect: rect,
-            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackIn) },
-            andActionForButton: { self.openTabsSettings() })
+            andActionForButton: { self.openTabsSettings() },
+            overlayState: overlayManager)
     }
 
     private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
@@ -415,7 +414,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             withArrowDirection: .down,
             andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController) },
-            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackInSyncedTab) })
+            overlayState: overlayManager)
     }
 
     @objc private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
@@ -669,10 +668,6 @@ private extension HomepageViewController {
                                      method: .tap,
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
-    }
-
-    func contextualHintPresented(type: ContextualHintType) {
-        homePanelDelegate?.homePanelDidPresentContextualHintOf(type: type)
     }
 
     func openTabsSettings() {
