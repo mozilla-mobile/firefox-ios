@@ -38,7 +38,7 @@ let package = Package(
     targets: [
         .target(
             name: "SiteImageView",
-            dependencies: ["Fuzi", "Kingfisher", "Common"],
+            dependencies: ["Fuzi", "Kingfisher", "Common", "Logger"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",

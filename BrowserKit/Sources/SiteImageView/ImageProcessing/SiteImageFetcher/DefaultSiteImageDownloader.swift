@@ -4,12 +4,15 @@
 
 import Foundation
 import Kingfisher
+import Logger
 
 class DefaultSiteImageDownloader: ImageDownloader, SiteImageDownloader {
     var continuation: CheckedContinuation<SiteImageLoadingResult, Error>?
     var timeoutDelay: UInt64 { return 10 }
+    var logger: Logger
 
-    override init(name: String = "default") {
+    init(name: String = "default", logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
         super.init(name: name)
     }
 
