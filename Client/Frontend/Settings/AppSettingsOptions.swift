@@ -379,13 +379,10 @@ class AccountStatusSetting: WithAccountSetting {
                   let actionIconUrl = URL(string: str)
             else { return }
 
-            DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(
-                with: actionIconUrl,
-                limit: ImageLoadingConstants.NoLimitImageSize
-            ) { image, error in
-                guard error == nil, let image = image else { return }
+            GeneralizedImageFetcher().getImageFor(url: actionIconUrl) { image in
+                guard let avatar = image else { return }
 
-                imageView.image = image.createScaled(CGSize(width: 30, height: 30))
+                imageView.image = avatar.createScaled(CGSize(width: 30, height: 30))
                     .withRenderingMode(.alwaysOriginal)
             }
         }
@@ -898,7 +895,7 @@ class SearchSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine.shortName) }
+    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine?.shortName ?? "") }
 
     override var accessibilityIdentifier: String? { return "Search" }
 
@@ -908,9 +905,8 @@ class SearchSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = SearchSettingsTableViewController()
-        viewController.model = profile.searchEngines
-        viewController.profile = profile
+        let viewController = SearchSettingsTableViewController(profile: profile)
+
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

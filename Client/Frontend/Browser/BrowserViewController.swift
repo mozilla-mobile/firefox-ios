@@ -1460,18 +1460,21 @@ class BrowserViewController: UIViewController {
 
     func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
         popToBVC()
-        let engine = profile.searchEngines.defaultEngine
-        if let searchURL = engine.searchURLForQuery(text) {
-            openURLInNewTab(searchURL, isPrivate: isPrivate)
-            if let tab = tabManager.selectedTab {
-                let searchData = TabGroupData(searchTerm: text,
-                                              searchUrl: searchURL.absoluteString,
-                                              nextReferralUrl: "")
-                tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
-            }
-        } else {
-            // We still don't have a valid URL, so something is broken. Give up.
-            assertionFailure("Couldn't generate search URL: \(text)")
+
+        guard let engine = profile.searchEngines.defaultEngine,
+              let searchURL = engine.searchURLForQuery(text)
+        else {
+            DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
+            return
+        }
+
+        openURLInNewTab(searchURL, isPrivate: isPrivate)
+
+        if let tab = tabManager.selectedTab {
+            let searchData = TabGroupData(searchTerm: text,
+                                          searchUrl: searchURL.absoluteString,
+                                          nextReferralUrl: "")
+            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         }
     }
 
@@ -1875,7 +1878,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     }
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
-        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
+        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine?.searchURLForQuery(url) else {
             logger.log("Invalid URL, and couldn't generate a search URL for it.",
                        level: .warning,
                        category: .library)
@@ -2001,12 +2004,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-        let searchSettingsTableViewController = SearchSettingsTableViewController()
-        searchSettingsTableViewController.model = self.profile.searchEngines
-        searchSettingsTableViewController.profile = self.profile
+        let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile)
+
         // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
-            self.urlBar.updateSearchEngineImage()
+            self.urlBar.searchEnginesDidUpdate()
             self.searchController?.reloadSearchEngines()
             self.searchController?.reloadData()
         }
