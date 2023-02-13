@@ -185,7 +185,7 @@ extension BrowserViewController: URLBarDelegate {
             SimpleToast().showAlertWithText(.ShareAddToReadingListDone,
                                             bottomContainer: self.webViewContainer,
                                             theme: themeManager.currentTheme)
-        case .failure(let error):
+        case .failure:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.ReaderModeAddPageMaybeExistsErrorAccessibilityLabel)
         }
         return true
