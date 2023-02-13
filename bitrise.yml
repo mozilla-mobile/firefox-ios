@@ -248,7 +248,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x-ventura
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.4core
   build_and_test_2_SmokeTest:
     before_run:
     - 1_git_clone_and_post_clone
