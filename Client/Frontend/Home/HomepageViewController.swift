@@ -8,6 +8,7 @@ import Storage
 import SyncTelemetry
 import MozillaAppServices
 import Common
+import Logger
 
 class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable {
     // MARK: - Typealiases
@@ -36,6 +37,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
+    private var logger: Logger
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
@@ -65,7 +67,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
          urlBar: URLBarViewProtocol,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared
     ) {
         self.urlBar = urlBar
         self.tabManager = tabManager
@@ -87,6 +90,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
 
         contextMenuHelper.delegate = self
@@ -250,6 +254,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     /// This is a problem that need to be fixed but until then we have to rely on the methods here.
 
     func homepageWillAppear(isZeroSearch: Bool) {
+        logger.log("\(type(of: self)) will appear", level: .info, category: .lifecycle)
+
         viewModel.isZeroSearch = isZeroSearch
         viewModel.recordViewAppeared()
     }
