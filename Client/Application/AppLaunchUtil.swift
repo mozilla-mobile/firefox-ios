@@ -72,6 +72,9 @@ class AppLaunchUtil {
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
         }
+
+        // Add swizzle on UIViewControllers to automatically log when there's a new view showing
+        UIViewController.loggerSwizzle()
     }
 
     func setUpPostLaunchDependencies() {

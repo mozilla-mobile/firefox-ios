@@ -549,6 +549,9 @@ class BrowserViewController: UIViewController {
         }
 
         if !displayedRestoreTabsAlert && crashedLastLaunch() {
+            logger.log("The application crashed on last session",
+                       level: .info,
+                       category: .lifecycle)
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
