@@ -1,0 +1,27 @@
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Alamin kung paano";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Set links from websites, emails, and Messages to open automatically in Firefox.";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Palitan ang iyong pangunahin na Browser";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Pumunta sa Settings";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Pumunta sa Settings";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. i-Tap ang Default na Browser App";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Piliin ang Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Default Browser App";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Gawing Default Browser";
+

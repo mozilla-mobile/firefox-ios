@@ -16,8 +16,29 @@
 /* About settings section title */
 "About" = "Tungkol";
 
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Idagdag sa mga Shortcut";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Pin";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "i-Unpin";
+
+/* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
+"ActivityStream.JumpBackIn.SectionTitle" = "Balikan Ang Naiwan";
+
+/* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
+"ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Mga Tabs: %d";
+
+/* A string used to signify the start of the Recently Saved section in Home Screen. */
+"ActivityStream.Library.Title" = "Nai-save Kamakailan";
+
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Kabibisita Lang";
+
+/* Section title label for Shortcuts */
+"ActivityStream.Shortcuts.SectionTitle" = "Mga Shortcuts";
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "I-set ang mga Row";
@@ -43,6 +64,12 @@
 /* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
 "Address and Search" = "Address and Search";
 
+/* Accessibility label for action adding current page to reading list. */
+"Address.Bar.ReadingList.v106" = "Idagdag sa Reading List";
+
+/* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
+"Address.Bar.v99" = "Address Bar";
+
 /* Used as a button label for crash dialog prompt */
 "Always Send" = "Laging Ipadala";
 
@@ -67,6 +94,9 @@
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Mga Bookmark";
 
+/* The button on the snackbar to edit a bookmark after adding it. */
+"Bookmarks.Edit.Button" = "i-Edit";
+
 /* The button to edit a bookmark */
 "Bookmarks.EditBookmark.Label" = "i-Edit ang Bookmark";
 
@@ -75,6 +105,9 @@
 
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "Folder";
+
+/* A label indicating all bookmarks grouped under the category 'Desktop Bookmarks'. */
+"Bookmarks.Menu.DesktopBookmarks" = "Mga Bookmark sa Desktop";
 
 /* The button to create a new bookmark */
 "Bookmarks.NewBookmark.Label" = "Bagong Bookmark";
@@ -87,6 +120,21 @@
 
 /* The label for the title of a bookmark */
 "Bookmarks.Title.Label" = "Pamagat";
+
+/* Describes the date on which the breach occurred */
+"BreachAlerts.BreachDate" = "Naganap ang breach na ito noong";
+
+/* Description of what a breach is */
+"BreachAlerts.Description" = "Passwords were leaked or stolen since you last changed your password. To protect this account, log in to the site and change your password.";
+
+/* Link to monitor.firefox.com to learn more about breached passwords */
+"BreachAlerts.LearnMoreButton" = "Alamin";
+
+/* Leads to a link to the breached website */
+"BreachAlerts.Link" = "Puntahan";
+
+/* Title for the Breached Login Detail View. */
+"BreachAlerts.Title" = "Website Breach";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Tinkad";
@@ -145,6 +193,12 @@
 /* Context menu item for sharing a link URL */
 "ContextMenu.ShareLinkButtonTitle" = "Ibahagi ang Link";
 
+/* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
+"ContextualHints.SearchBarPlacement.CallToAction" = "Mga Toolbar Setting";
+
+/* Accessibility label for action denoting closing contextual hint. */
+"ContextualHintsCloseButtonAccessibility.v105" = "Isara";
+
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
 "Could not add page to Reading list" = "Hindi maidagdag ang pahina sa Reading List.";
 
@@ -154,8 +208,14 @@
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "Hindi maiload ang pahina.";
 
+/* Description for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Description" = "Ang Built-in Enhanced Tracking Protection ay nakatutulong upang pigilan ang mga ad na sundan ang iyong mga gawain web. I-Turn On ang Strict upang pigilan ang mas marami pang tracker, ad, at mga popup.";
+
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "Magpunta sa Settings";
+
+/* Title for the new ETP mode i.e. standard vs strict */
+"CoverSheet.v24.ETP.Title" = "Proteksyon Laban sa Pagsubaybay ng Ad.";
 
 /* See http://mzl.la/1Qtkf0j */
 "Create an account" = "Gumawa ng account.";
@@ -168,6 +228,9 @@
 
 /* Title for default search engine picker. */
 "Default Search Engine" = "Default Search Engine";
+
+/* Accessibility label for action denoting closing default browser home tab banner. */
+"DefaultBrowserCloseButtonAccessibility.v102" = "Isara";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
 "Display Settings" = "Ipakita ang Settings";
@@ -259,6 +322,33 @@
 /* Title for firefox about:home page in tab history list */
 "Firefox.HomePage.Title" = "Home Page ng Firefox";
 
+/* A button at bottom of the Firefox homepage that, when clicked, takes users straight to the settings options, where they can customize the Firefox Home page */
+"FirefoxHome.CustomizeHomeButton.Title" = "Ipasadya ang Homepage";
+
+/* At the end of the Pocket section on the Firefox Homepage, this button appears and indicates tapping it will navigate the user to more Pocket Stories. */
+"FirefoxHome.Pocket.DiscoverMore" = "Magtuklas pa";
+
+/* On each Pocket Stories on the Firefox Homepage, this label appears and indicates the number of minutes to read an article. Minutes should be abbreviated due to space constraints. %d represents the number of minutes */
+"FirefoxHome.Pocket.Minutes.v99" = "%d min";
+
+/* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
+"FirefoxHome.RecentHistory.Remove" = "Alisin";
+
+/* Label showing how many sites there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.SitesCount.v101" = "Mga Site: %d";
+
+/* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Mga Setting";
+
+/* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
+"FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "Ang Aming Mga Suki at Iyong Privacy";
+
+/* Accessibility action title to open the synced tab for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.OpenTab.A11y.v106" = "Magbukas ng naka-sync na tab";
+
+/* Button title shown for tab pickup on the Firefox homepage in the Jump Back In section. */
+"FirefoxHomepage.JumpBackIn.TabPickup.ShowAll.ButtonTitle.v104" = "Tingnan ang lahat ng naka-sync na tab";
+
 /* Accessibility Label for the tab toolbar Forward button */
 "Forward" = "Sulong";
 
@@ -270,6 +360,15 @@
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "Walang Internet Koneksyon";
+
+/* FxA sign in view subtitle */
+"fxa.signin.camera-signin" = "Mag-sign in gamit ang iyong camera";
+
+/* FxA sign in view qr code scan button */
+"fxa.signin.ready-to-scan" = "Handa nang mag-scan";
+
+/* FxA sign in view email login button */
+"fxa.signin.use-email-instead" = "Gumamit na lang ng email";
 
 /* Button label to Sync your Firefox Account */
 "FxA.SyncNow" = "I-sync Ngayon";
@@ -334,11 +433,17 @@
 /* Title for the Recently Closed button in the History Panel */
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Kakasarado lang";
 
+/* Accessibility label for the tab toolbar indicating the Home button. */
+"Home" = "Home";
+
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Bookmark";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.DeleteFromHistory" = "Burahin sa Kasaysayan";
+
+/* The title for the Open in New Private Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Buksan sa isang Pribadong Tab";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "Buksan sa Bagong Tab";
@@ -388,17 +493,101 @@
 /* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Ipakita ang Nakaraan na Tab";
 
+/* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
+"InactiveTabs.TabTray.CloseButtonTitle" = "Isara Lahat ng mga Hindi Aktibong Tab";
+
 /* Accessibility label for button increasing font size in display settings of reader mode */
 "Increase text size" = "Palakihin ang text size";
 
 /* Relative time for a tab that was visited within the last few moments. */
 "just now" = "ngayon lang";
 
+/* A label indicating the keyboard shortcut of resetting a web page's view to the standard viewing size. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ActualSize" = "Totoong Sukat";
+
+/* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.AddBookmark" = "Magdagdag ng Bookmark";
+
+/* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ClearRecentHistory" = "Burahin ang Kasaysayan Kamakailan";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Hanapin Muli";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Mga Bookmark";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Kasaysayan";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Mga Kagamitan";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can take when navigating between their availale set of tabs. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Window" = "Window";
+
+/* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Settings" = "Mga Setting";
+
+/* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowBookmarks" = "Ipakita ang mga Bookmark";
+
+/* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowDownloads" = "Ipakita ang mga Download";
+
+/* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowFirstTab" = "Ipakita ang Unang Tab";
+
+/* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowHistory" = "Ipakita ang Kasaysayan";
+
+/* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ShowLastTab" = "Ipakita ang Huling Tab";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Palakihin";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Paliitin";
+
 /* This label is meant to signify the section containing a group of items from the past thirty days. */
 "Last month" = "Nakaraang buwan";
 
 /* This label is meant to signify the section containing a group of items from the past seven days. */
 "Last week" = "Nakaraang linggo";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.Bookmarks.v106" = "Mga Bookmark";
+
+/* Panel accessibility label */
+"LibraryPanel.Accessibility.History.v106" = "Kasaysayan";
+
+/* Within the History Panel, users can delete search group sites history. They can cancel this action by pressing a cancel button. */
+"LibraryPanel.History.ClearGroupedTabsCancel.v100" = "Kanselahin";
+
+/* Within the History Panel, users can delete search group sites history. They need to confirm the action by pressing the delete button. */
+"LibraryPanel.History.ClearGroupedTabsDelete.v100" = "Burahin";
+
+/* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "Tanggalin ang lahat ng site sa %@?";
+
+/* Within the history panel, a user can navigate into a screen with only grouped history items. Within that screen, a user can now swipe to delete a single item in the list. This label informs the user of a deletion action on the item. */
+"LibraryPanel.History.DeleteGroupedItem.v104" = "Burahin";
+
+/* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
+"LibraryPanel.History.NoHistoryFound.v99" = "Walang nakitang kasaysayan";
+
+/* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "Mga Naisarang Tab";
+
+/* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
+"LibraryPanel.History.SearchHistoryPlaceholder.v99" = "Ipasok ang mga search term";
+
+/* Within the History Panel, users can see the option of viewing their history from synced tabs. */
+"LibraryPanel.History.SyncedHistory.v100" = "Naka-sync na Kasaysayan";
+
+/* This label is meant to signify the section containing a group of items that are older than thirty days. */
+"LibraryPanel.Section.Older" = "Mas luma";
 
 /* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
 "Licenses" = "Mga Lisensya";
@@ -418,6 +607,21 @@
 /* Toggle logins syncing setting */
 "Logins" = "Mga Login";
 
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.DevicePasscodeRequired.LearnMoreButtonTitle" = "Alamin";
+
+/* Title of the Continue button. */
+"Logins.Onboarding.ContinueButtonTitle" = "Magpatuloy";
+
+/* Title of the Learn More button that links to a support page about device passcode requirements. */
+"Logins.Onboarding.LearnMoreButtonTitle" = "Alamin";
+
+/* Label displaying welcome view tagline under the title */
+"Logins.WelcomeView.Tagline" = "Dalhin kahit saan ang mga password mo";
+
+/* Label displaying welcome view title */
+"Logins.WelcomeView.Title2" = "i-AutoFill ang mga Firefox Password mo";
+
 /* Button to not save the user's password */
 "LoginsHelper.DontSave.Button" = "Huwag I-save";
 
@@ -430,6 +634,12 @@
 /* Prompt for saving a password with no username. The parameter is the hostname of the site. */
 "LoginsHelper.PromptSavePassword.Title" = "I-save and password para sa %@?";
 
+/* Prompt for updating a login. The first parameter is the hostname for which the password will be updated for. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg" = "i-Update ang pag-login para sa %@?";
+
+/* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "i-Update ang login %1 ng %2$@?";
+
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "I-save ang Login";
 
@@ -438,6 +648,21 @@
 
 /* Placeholder test for search box in logins list view. */
 "LoginsList.LoginsListSearchPlaceholder" = "Filter";
+
+/* Label shown when there are no logins saved */
+"LoginsList.NoLoginsFound.Title" = "Walang natagpuang mga login";
+
+/* Label that appears after the search if there are no logins matching the search */
+"LoginsList.NoMatchingResult.Subtitle" = "Walang resultang tumugma sa iyong hinahanap.";
+
+/* Label displayed when a user searches and no matches can be found against the search query */
+"LoginsList.NoMatchingResult.Title" = "Walang katugmang mga login";
+
+/* Title for cancel button for user to stop searching for a particular login */
+"LoginsList.Search.Cancel" = "Kanselahin";
+
+/* Placeholder text for search field */
+"LoginsList.Search.Placeholder" = "Hanapin sa mga login";
 
 /* Title for the list of logins */
 "LoginsList.Title" = "SAVED LOGINS";
@@ -451,11 +676,29 @@
 /* Title for the button that marks a reading list item as unread */
 "Mark as Unread" = "Markahan bilang Hindi pa nabasa";
 
+/* Long label for the add bookmark button displayed in the menu. Pressing this button bookmarks the current page. */
+"Menu.AddBookmark.AlternateLabel.v99" = "Magdagdag ng Bookmark";
+
 /* Toast displayed to the user after a bookmark has been added. */
 "Menu.AddBookmark.Confirm" = "Idinagdag ang bookmark";
 
+/* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
+"Menu.AddBookmark.Label.v99" = "Idagdag";
+
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"Menu.AddPin.Confirm2" = "Nadagdag sa Shortcuts";
+
+/* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
+"Menu.AddReadingList.Label.v99" = "Idagdag";
+
 /* Toast displayed to the user after adding the item to their reading list. */
 "Menu.AddToReadingList.Confirm" = "Idinagdag Upang Listahan ng Pagbabasa";
+
+/* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
+"Menu.AddToShortcuts.v99" = "Idagdag sa Shortcuts";
+
+/* Label for the button, displayed in the menu, takes you to to bookmarks screen when pressed. */
+"Menu.Bookmarks.Label" = "Mga Bookmark";
 
 /* The title for the button that lets you copy the url from the location bar. */
 "Menu.Copy.Title" = "Kopyahin ang mga Address";
@@ -463,11 +706,44 @@
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL Kinopya sa Clipboard";
 
+/* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
+"Menu.CustomizeHomePage.v99" = "Ipasadya ang Homepage";
+
+/* Label for the button, displayed in the menu, takes you to to Downloads screen when pressed. */
+"Menu.Downloads.Label" = "Mga Download";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOff.Title" = "Naka-OFF ang Enhanced Tracking Protection para sa site na ito";
+
+/* A switch to enable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtectionOn.Title" = "Naka-ON ang Enhanced Tracking Protection para sa site na ito";
+
+/* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
+"Menu.Help.v99" = "Tulong";
+
+/* Label for the button, displayed in the menu, takes you to to History screen when pressed. */
+"Menu.History.Label" = "Kasaysayan";
+
+/* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
+"Menu.NewTab.v99" = "Bagong Tab";
+
+/* Label for the button, displayed in the menu, turns off night mode. */
+"Menu.NightModeTurnOff.Label2" = "I-turn off ang Night Mode";
+
+/* Label for the button, displayed in the menu, turns on night mode. */
+"Menu.NightModeTurnOn.Label2" = "I-turn on ang Night Mode";
+
+/* Label for the button, displayed in the menu, takes you to to passwords screen when pressed. */
+"Menu.Passwords.Label" = "Mga Password";
+
 /* The title for the button that lets you paste into the location bar */
 "Menu.Paste.Title" = "I-paste";
 
 /* The title for the button that lets you paste and go to a URL */
 "Menu.PasteAndGo.Title" = "IIlagay at Pumunta";
+
+/* Label for the button, displayed in the menu, takes you to to Reading List screen when pressed. */
+"Menu.ReadingList.Label" = "Listahan ng mga Babasahin";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "I-reload na walang Pagsubaybay";
@@ -598,8 +874,14 @@
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "Kakasarado Lang";
 
+/* More button text for Recently Saved items at the home page. */
+"RecentlySaved.Actions.More" = "Ipakita Lahat";
+
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Subukan muli";
+
+/* Accessibility label for the reload button */
+"Reload page" = "I-reload ang pahina";
 
 /* Title for the button that removes a reading list item */
 "Remove" = "Alisin";
@@ -642,6 +924,9 @@
 
 /* The text shown in the URL bar on about:home */
 "Search or enter address" = "Hanapin o ilagay ang address.";
+
+/* Search suggestion cell label that allows user to switch to tab which they searched for in url bar */
+"Search.Awesomebar.SwitchToTab" = "Lumipat sa tab";
 
 /* The message that asks the user to Add the search provider explaining where the search engine will appear */
 "Search.ThirdPartyEngines.AddMessage" = "The new search engine will appear in the quick search bar.";
@@ -922,6 +1207,9 @@
 /* The title for the setting to send usage data. */
 "Settings.SendUsage.Title" = "Ipadala ang Data ng Paggamit";
 
+/* Title of setting to enable link previews when long-pressing links. */
+"Settings.ShowLinkPreviews.Title" = "Ipakita ang Preview ng mga Link";
+
 /* Setting to show Logins & Passwords quick access in the application menu */
 "Settings.ShowLoginsInAppMenu.Title" = "Ipakita sa Application Menu";
 
@@ -936,6 +1224,9 @@
 
 /* The Title on info view which shows a list of all blocked websites */
 "Settings.TrackingProtection.Info.BlocksTitle" = "BLOCKS";
+
+/* 'Learn more' info link on the Tracking Protection settings screen. */
+"Settings.TrackingProtection.LearnMore" = "Alamin pa";
 
 /* Title for tracking protection options section where level can be selected. */
 "Settings.TrackingProtection.ProtectionLevelTitle" = "Antas ng Proteksyon";
@@ -1030,11 +1321,26 @@
 /* The label indicating that all the tabs were closed */
 "Tabs.DeleteAllUndo.Title" = "%d tab(s) closed";
 
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "Magdagdag ng Tab";
+
 /* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.CloseAllTabs.KeyCodeTitle" = "Isarado ang Lahat na mga Tab";
 
+/* Accessibility label for the currently selected tab. */
+"TabTray.CurrentSelectedTab.A11Y" = "Kasalakukyang napiling tab";
+
+/* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
+"TabTray.InactiveTabs.SectionTitle" = "Hindi Aktibong Tab";
+
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Magbukas ng Bagong Tab";
+
+/* The title on the button to look at private tabs. */
+"TabTray.SegmentedControlTitles.PrivateTabs" = "Pribado";
+
+/* The title on the button to look at regular tabs. */
+"TabTray.SegmentedControlTitles.Tabs" = "Tabs";
 
 /* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
 "The page could not be displayed in Reader View." = "Ang pahinang ito ay hindi maipakita sa Reader View.";
@@ -1092,6 +1398,9 @@
 
 /* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
 "unread" = "Hindi pa nabasa";
+
+/* Debug option */
+"Use stage servers" = "Gamitin ang stage servers";
 
 /* Username textbox in Authentication prompt */
 "Username" = "Username";
