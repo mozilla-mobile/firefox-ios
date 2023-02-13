@@ -158,6 +158,7 @@ class SearchTests: BaseTestCase {
 
     private func changeSearchEngine(searchEngine: String) {
         sleep(2)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(SearchSettings)
         // Open the list of default search engines and select the desired
         app.tables.cells.element(boundBy: 0).tap()

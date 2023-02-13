@@ -44,7 +44,6 @@
         "BaseTestCase",
         "BookmarkingTests\/testAccessBookmarksFromContextMenu()",
         "BookmarkingTests\/testBookmarkingUI()",
-        "BookmarkingTests\/testBookmarksAwesomeBar()",
         "BrowsingPDFTests",
         "ClipBoardTests\/testClipboard()",
         "CopiedLinksTests",
