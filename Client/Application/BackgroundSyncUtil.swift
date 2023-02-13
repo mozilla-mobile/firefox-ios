@@ -4,15 +4,19 @@
 
 import Foundation
 import BackgroundTasks
+import Logger
 
 class BackgroundSyncUtil {
     let profile: Profile
     let application: UIApplication
+    let logger: Logger
 
     init(profile: Profile,
-         application: UIApplication) {
+         application: UIApplication,
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.application = application
+        self.logger = logger
 
         setUpBackgroundSync()
     }
@@ -32,7 +36,9 @@ class BackgroundSyncUtil {
                 do {
                     try BGTaskScheduler.shared.submit(request)
                 } catch {
-                    NSLog(error.localizedDescription)
+                    self.logger.log("failed to sync named collections \(error.localizedDescription)",
+                                    level: .warning,
+                                    category: .sync)
                 }
             }
         }
@@ -71,15 +77,18 @@ class BackgroundSyncUtil {
             do {
                 try BGTaskScheduler.shared.submit(request)
             } catch {
-                NSLog(error.localizedDescription)
+                logger.log("failed to shut down profile \(error.localizedDescription)",
+                           level: .warning,
+                           category: .sync)
             }
         }
     }
 
     private func shutdownProfileWhenNotActive() {
-        // Only shutdown the profile if we are not in the foreground
-        guard application.applicationState != .active else { return }
-
-        profile.shutdown()
+        ensureMainThread {
+            // Only shutdown the profile if we are not in the foreground
+            guard self.application.applicationState != .active else { return }
+            self.profile.shutdown()
+        }
     }
 }
