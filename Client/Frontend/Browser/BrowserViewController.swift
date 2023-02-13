@@ -1267,7 +1267,7 @@ class BrowserViewController: UIViewController {
         else {
             logger.log("BVC observeValue webpage unhandled KVO",
                        level: .info,
-                       category: .webview,
+                       category: .unlabeled,
                        description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
@@ -2733,14 +2733,14 @@ extension BrowserViewController {
         guard let scene = UIApplication.shared.connectedScenes.first else {
             DefaultLogger.shared.log("No connected scenes exist.",
                                      level: .fatal,
-                                     category: .setup)
+                                     category: .lifecycle)
             return nil
         }
 
         guard let sceneDelegate = scene.delegate as? SceneDelegate else {
             DefaultLogger.shared.log("Scene could not be cast as SceneDelegate.",
                                      level: .fatal,
-                                     category: .setup)
+                                     category: .lifecycle)
             return nil
         }
 

@@ -36,12 +36,16 @@ public enum LoggerCategory: String {
     /// Related to sync accounts, sync management, application services.
     case sync
 
-    /// Related to the tabs UI, setup and management.
+    /// Anything related to telemetry
+    case telemetry
+
+    /// Related to the tabs UI, setup and management
     case tabs
+
+    /// For any logs that doesn't fit in any categories. Before using think if your label should fit in any, or a new
+    /// category. If it doesn't and it's a one-off case then let's used 'unlabeled'
+    case unlabeled
 
     /// Webview scripts, webview delegate, webserver like GCDWebserver, showing webview alerts, webview navigation
     case webview
-
-    /// Anything related to telemetry
-    case telemetry
 }

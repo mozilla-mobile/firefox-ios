@@ -325,7 +325,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                 else {
                     self.logger.log("Unable to scan QR code",
                                     level: .debug,
-                                    category: .webview)
+                                    category: .unlabeled)
                     return
                 }
 
