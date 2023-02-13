@@ -10,7 +10,7 @@ import Storage
 import Sync
 import XCTest
 
-open class MockSyncManager: NativeSyncManager {
+open class MockSyncManager: Client.SyncManager {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
@@ -79,7 +79,7 @@ open class MockProfile: Client.Profile {
     public var tabs: RustRemoteTabs
     public var files: FileAccessor
     public var logins: RustLogins
-    public var syncManager: NativeSyncManager!
+    public var syncManager: Client.SyncManager!
 
     fileprivate var legacyPlaces: PinnedSites
 

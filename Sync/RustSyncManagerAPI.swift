@@ -8,24 +8,24 @@ import Shared
 @_exported import MozillaAppServices
 
 open class RustSyncManagerAPI {
-    let queue: DispatchQueue
+//    let queue: DispatchQueue
     private let logger: Logger
     var api: SyncManager
 
     public init(logger: Logger = DefaultLogger.shared) {
-        queue = DispatchQueue(label: "RustSyncManager queue", attributes: [])
+//        queue = DispatchQueue(label: "RustSyncManager queue", attributes: [])
         self.api = SyncManager()
         self.logger = logger
     }
 
     public func disconnect() {
-        queue.async {
+//        queue.async {
             self.api.disconnect()
-        }
+//        }
     }
     
     public func sync(params: SyncParams, completion: @escaping (RustSyncResult) -> Void) {
-        queue.async {
+//        queue.async {
             do {
                 let result = try self.api.sync(params: params)
                 completion(result)
@@ -45,16 +45,16 @@ open class RustSyncManagerAPI {
                         category: .sync)
                 }
             }
-        }
+//        }
     }
 
     public func getAvailableEngines() -> Deferred<[String]> {
         let deferred = Deferred<[String]>()
         
-        queue.async {
+//        queue.async {
             let engines = self.api.getAvailableEngines()
             deferred.fill(engines)
-        }
+//        }
         
         return deferred
     }

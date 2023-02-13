@@ -11,7 +11,7 @@ import AuthenticationServices
 import Logger
 
 // Extends NSObject so we can use timers.
-public class RustSyncManager: NSObject, NativeSyncManager {
+public class RustSyncManager: NSObject, SyncManager {
     // We shouldn't live beyond our containing BrowserProfile, either in the main app
     // or in an extension.
     // But it's possible that we'll finish a side-effect sync after we've ditched the
@@ -593,9 +593,9 @@ public class RustSyncManager: NSObject, NativeSyncManager {
     
     public func syncClientsThenTabs() -> SyncResult {
         // XXX: This function exists to comply with the `SyncManager` protocol while the
-        // rust sync manager rollout is enabled and will not be called. To be safe,
-        // `syncTabs` is called. Once the rollout is complete this can be removed along
-        // with an update to the protocol.
+        // rust sync manager rollout is enabled. To be safe, `syncTabs` is called. Once
+        // the rollout is complete this can be removed along with an update to the
+        // protocol.
         
         return self.syncTabs().bind { result in
             if let error = result.failureValue {
