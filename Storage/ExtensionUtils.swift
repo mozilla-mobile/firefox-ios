@@ -75,9 +75,6 @@ public struct ExtensionUtils {
                 }
 
                 if attachment.isText {
-                    if textProviderFallback != nil {
-                        NSLog("\(#function) More than one text attachment, only one expected.")
-                    }
                     textProviderFallback = attachment
                 }
             }
