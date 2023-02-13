@@ -39,7 +39,7 @@ class TopTabsTest: BaseTestCase {
         } else {
             navigator.goto(TabTray)
         }
-        waitForExistence(app.cells.staticTexts[urlLabel], timeout: 5)
+        waitForExistence(app.cells.staticTexts[urlLabel], timeout: TIMEOUT)
     }
 
     func testAddTabFromContext() {
