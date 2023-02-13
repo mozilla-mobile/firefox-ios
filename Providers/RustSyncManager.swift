@@ -170,7 +170,7 @@ public class RustSyncManager: NSObject, SyncManager {
     }
     
     private func resolveSyncState(
-        result: RustSyncResult
+        result: MozillaAppServices.SyncResult
     ) -> SyncDisplayState {
         let hasSynced = !result.successful.isEmpty
         let status = result.status
@@ -189,7 +189,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    fileprivate func endRustSyncing(_ result: RustSyncResult) {
+    fileprivate func endRustSyncing(_ result: MozillaAppServices.SyncResult) {
         logger.log("Ending all syncs.",
                    level: .info,
                    category: .sync)
@@ -407,10 +407,10 @@ public class RustSyncManager: NSObject, SyncManager {
     }
 
     fileprivate func syncRustEngines(
-        why: RustSyncReason,
+        why: MozillaAppServices.SyncReason,
         engines: [String]
-    ) -> Deferred<Maybe<RustSyncResult>> {
-        let deferred = Deferred<Maybe<RustSyncResult>>()
+    ) -> Deferred<Maybe<MozillaAppServices.SyncResult>> {
+        let deferred = Deferred<Maybe<MozillaAppServices.SyncResult>>()
 
         logger.log("Syncing \(engines)", level: .info, category: .sync)
         self.profile.rustFxA.accountManager.upon { accountManager in
@@ -474,13 +474,14 @@ public class RustSyncManager: NSObject, SyncManager {
                                        category: .sync)
                             self.logger.log("""
                                         Declined engines
-                                        \(String(describing: syncResult.declined))
+                                        \(String(describing: syncResult.declined ?? []))
                                         """,
                                        level: .info,
                                        category: .sync)
                             self.logger.log("""
                                         Returned telemetry:
-                                        \(String(describing: syncResult.telemetryJson))
+                                        \(String(describing: syncResult.telemetryJson ??
+                                        "(No telemetry data was returned)"))
                                         """,
                                         level: .info,
                                         category: .sync)
@@ -539,7 +540,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    @discardableResult public func syncEverything(why: SyncReason) -> Success {
+    @discardableResult public func syncEverything(why: Sync.SyncReason) -> Success {
         if let accountManager = RustFirefoxAccounts.shared.accountManager.peek(),
            accountManager.accountMigrationInFlight() {
             accountManager.retryMigration { _ in }
@@ -562,7 +563,7 @@ public class RustSyncManager: NSObject, SyncManager {
      * Some help is given to callers who use different namespaces (specifically: `passwords` is mapped to `logins`)
      * and to preserve some ordering rules.
      */
-    public func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+    public func syncNamedCollections(why: Sync.SyncReason, names: [String]) -> Success {
         // Massage the list of names into engine identifiers.var engines = [String]()
         var engines = [String]()
 
@@ -587,11 +588,11 @@ public class RustSyncManager: NSObject, SyncManager {
         return syncRustEngines(why: convertedWhy, engines: orderedEngines) >>> succeed
     }
 
-    public func syncTabs() -> Deferred<Maybe<RustSyncResult>> {
+    public func syncTabs() -> Deferred<Maybe<MozillaAppServices.SyncResult>> {
         return syncRustEngines(why: .user, engines: ["tabs"])
     }
     
-    public func syncClientsThenTabs() -> SyncResult {
+    public func syncClientsThenTabs() -> Sync.SyncResult {
         // XXX: This function exists to comply with the `SyncManager` protocol while the
         // rust sync manager rollout is enabled. To be safe, `syncTabs` is called. Once
         // the rollout is complete this can be removed along with an update to the
@@ -609,14 +610,14 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
         
-    public func syncClients() -> SyncResult {
+    public func syncClients() -> Sync.SyncResult {
         // XXX: This function exists to to comply with the `SyncManager` protocol and has
         // no callers. It will be removed when the rust sync manager rollout is complete.
         // To be safe, `syncClientsThenTabs` is called.
         return self.syncClientsThenTabs()
     }
     
-    public func syncHistory() -> SyncResult {
+    public func syncHistory() -> Sync.SyncResult {
         // XXX: The retrurn type of this function has been changed to comply with the
         // `SyncManager` protocol during the rust sync manager rollout. It will be updated
         // once the rollout is complete.

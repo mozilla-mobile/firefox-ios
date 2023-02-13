@@ -189,13 +189,13 @@ extension SyncEngineStatsSession: DictionaryRepresentable {
 
 // Stats and metadata for a sync operation.
 public class SyncOperationStatsSession: StatsSession {
-    public let why: SyncReason
+    public let why: Sync.SyncReason
     public var uid: String?
     public var deviceID: String?
 
     fileprivate let didLogin: Bool
 
-    public init(why: SyncReason, uid: String, deviceID: String?) {
+    public init(why: Sync.SyncReason, uid: String, deviceID: String?) {
         self.why = why
         self.uid = uid
         self.deviceID = deviceID
@@ -465,7 +465,7 @@ public class GleanSyncOperationHelper {
         GleanMetrics.Pings.shared.tempSync.submit()
     }
     
-    public func reportTelemetry(_ result: RustSyncResult) {
+    public func reportTelemetry(_ result: MozillaAppServices.SyncResult) {
         guard let json = result.telemetryJson,
               let telemetry = try? RustSyncTelemetryPing.fromJSONString(
                 jsonObjectText: json

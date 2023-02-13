@@ -57,7 +57,7 @@ public protocol Synchronizer {
     init(scratchpad: Scratchpad,
          delegate: SyncDelegate,
          basePrefs: Prefs,
-         why: SyncReason,
+         why: Sync.SyncReason,
          logger: Logger)
 
     /**
@@ -175,7 +175,7 @@ open class BaseCollectionSynchronizer {
     let delegate: SyncDelegate
     let basePrefs: Prefs
     let prefs: Prefs
-    let why: SyncReason
+    let why: Sync.SyncReason
 
     var statsSession: SyncEngineStatsSession
 
@@ -187,7 +187,7 @@ open class BaseCollectionSynchronizer {
     init(scratchpad: Scratchpad,
          delegate: SyncDelegate,
          basePrefs: Prefs,
-         why: SyncReason,
+         why: Sync.SyncReason,
          collection: String,
          logger: Logger = DefaultLogger.shared) {
         self.scratchpad = scratchpad
