@@ -306,7 +306,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
         logger.log("Upload Error",
                    level: .info,
-                   category: .setup,
+                   category: .telemetry,
                    description: error.debugDescription)
     }
 }
@@ -1364,7 +1364,7 @@ extension TelemetryWrapper {
     ) {
         DefaultLogger.shared.log("Uninstrumented metric recorded",
                                  level: .info,
-                                 category: .setup,
+                                 category: .telemetry,
                                  description: "\(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))")
     }
 }
