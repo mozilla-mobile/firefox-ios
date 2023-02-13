@@ -3,6 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import Logger
 
 enum NavigationItemLocation {
     case Left
@@ -99,5 +100,36 @@ extension UIViewController {
         else { return nil }
 
         return scene
+    }
+
+    // MARK: - Logger Swizzling
+
+    /// Ignore some view controller out of logs to avoid spamming the logger, which would reduce the usefulness of logging view controllers
+    private enum LoggerIgnoreViewController: String, CaseIterable {
+        case compatibility = "UICompatibilityInputViewController"
+        case dismissable = "DismissableNavigationViewController"
+        case editingOverlay = "UIEditingOverlayViewController"
+        case inputWindow = "UIInputWindowController"
+        case themed = "ThemedNavigationController"
+    }
+
+    /// Add a swizzle on top of the viewWillAppear function to log whenever a view controller will appear. Needs to be only called once on app launch.
+    static func loggerSwizzle() {
+        let originalSelector = #selector(UIViewController.viewWillAppear(_:))
+        let swizzledSelector = #selector(UIViewController.loggerViewWillAppear(_:))
+
+        guard let originalMethod = class_getInstanceMethod(self, originalSelector),
+              let swizzledMethod = class_getInstanceMethod(self, swizzledSelector) else { return }
+
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }
+
+    @objc func loggerViewWillAppear(_ animated: Bool) {
+        let values: [String] = LoggerIgnoreViewController.allCases.map { $0.rawValue }
+        if !values.contains("\(type(of: self))") {
+            DefaultLogger.shared.log("\(type(of: self)) will appear", level: .info, category: .lifecycle)
+        }
+
+        loggerViewWillAppear(animated)
     }
 }
