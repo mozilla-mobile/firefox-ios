@@ -29,8 +29,8 @@ jobs:
 
           ### ISSUES ###
           # Idle number of days before marking issues stale, set `-1` to disable
-          # 570 days to start with, then we can lower later on
-          days-before-issue-stale: 570
+          # 350 days (a little less than a year) for now, can be evaluated later if needs to be lowered more
+          days-before-issue-stale: 350
 
           # Comment on the staled issues
           stale-issue-message: "This issue has been automatically marked as stale. Has the issue been fixed, or does it still require the community's attention? Please leave any comment to keep this issue opened. It will be closed automatically if no further update occurs in the next 30 days. Thank you for your contributions!"
@@ -49,7 +49,8 @@ jobs:
 
           ### PULL REQUESTS ###
           # Idle number of days before marking issues stale, set `-1` to disable
-          days-before-pr-stale: 365
+          # We need to review PRs faster than 3 months
+          days-before-pr-stale: 90
 
           # Comment on the staled PRs
           stale-pr-message: "This PR has been automatically marked as stale. Please leave any comment to keep this PR opened. It will be closed automatically if no further update occurs in the next 30 days. Thank you for your contributions!"
