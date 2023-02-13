@@ -16,7 +16,6 @@ class MockFiles: FileAccessor {
 class SupportingFiles: FileAccessor {
     init() {
         let path = Bundle.main.bundlePath + "/PlugIns/StorageTests.xctest/"
-        NSLog("Supporting files: \(path)")
         super.init(rootPath: path)
     }
 }
