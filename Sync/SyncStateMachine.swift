@@ -341,8 +341,17 @@ open class BaseSyncState: SyncState {
                    category: .sync)
     }
 
-    open func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs, why: SyncReason) -> T {
-        return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs, why: why, logger: DefaultLogger.shared)
+    open func synchronizer<T: Synchronizer>(
+        _ synchronizerClass: T.Type,
+        delegate: SyncDelegate,
+        prefs: Prefs,
+        why: Sync.SyncReason
+    ) -> T {
+        return T(scratchpad: self.scratchpad,
+                 delegate: delegate,
+                 basePrefs: prefs,
+                 why: why,
+                 logger: DefaultLogger.shared)
     }
 
     // This isn't a convenience initializer 'cos subclasses can't call convenience initializers.

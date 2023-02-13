@@ -19,15 +19,15 @@ open class MockSyncManager: Client.SyncManager {
         return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
     }
 
-    open func syncClients() -> SyncResult { return completedWithStats(collection: "mock_clients") }
-    open func syncClientsThenTabs() -> SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
-    open func syncHistory() -> SyncResult { return completedWithStats(collection: "mock_history") }
-    open func syncEverything(why: SyncReason) -> Success {
+    open func syncClients() -> Sync.SyncResult { return completedWithStats(collection: "mock_clients") }
+    open func syncClientsThenTabs() -> Sync.SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
+    open func syncHistory() -> Sync.SyncResult { return completedWithStats(collection: "mock_history") }
+    open func syncEverything(why: Sync.SyncReason) -> Success {
         return succeed()
     }
 
     var syncNamedCollectionsCalled = 0
-    open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+    open func syncNamedCollections(why: Sync.SyncReason, names: [String]) -> Success {
         syncNamedCollectionsCalled += 1
         return succeed()
     }

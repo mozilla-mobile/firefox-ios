@@ -24,7 +24,10 @@ open class RustSyncManagerAPI {
 //        }
     }
     
-    public func sync(params: SyncParams, completion: @escaping (RustSyncResult) -> Void) {
+    public func sync(
+        params: SyncParams,
+        completion: @escaping (MozillaAppServices.SyncResult) -> Void
+    ) {
 //        queue.async {
             do {
                 let result = try self.api.sync(params: params)
@@ -60,18 +63,18 @@ open class RustSyncManagerAPI {
     }
 }
 
-public func toRustSyncReason(reason: SyncReason) -> RustSyncReason {
+public func toRustSyncReason(reason: Sync.SyncReason) -> MozillaAppServices.SyncReason {
     switch reason{
     case .startup:
-        return RustSyncReason.startup
+        return MozillaAppServices.SyncReason.startup
     case .scheduled:
-        return RustSyncReason.scheduled
+        return MozillaAppServices.SyncReason.scheduled
     case .backgrounded:
-        return RustSyncReason.backgrounded
+        return MozillaAppServices.SyncReason.backgrounded
     case .user, .syncNow:
-        return RustSyncReason.user
+        return MozillaAppServices.SyncReason.user
     case .didLogin, .clientNameChanged, .engineEnabled:
-        return RustSyncReason.enabledChange
+        return MozillaAppServices.SyncReason.enabledChange
     }
 }
 
