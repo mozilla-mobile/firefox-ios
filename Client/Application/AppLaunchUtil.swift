@@ -75,6 +75,9 @@ class AppLaunchUtil {
 
         // Add swizzle on UIViewControllers to automatically log when there's a new view showing
         UIViewController.loggerSwizzle()
+
+        // Add swizzle on top of UIControl to automatically log when there's an action sent
+        UIControl.loggerSwizzle()
     }
 
     func setUpPostLaunchDependencies() {
