@@ -32,6 +32,7 @@ struct CreditCardSettingsEmptyView: View {
                             .aspectRatio(contentMode: .fit)
                             .fixedSize()
                             .padding([.top], 10)
+                            .accessibility(hidden: true)
                         Text(String.CreditCard.Settings.EmptyListTitle)
                             .preferredBodyFont(size: 22)
                             .foregroundColor(colors.titleTextColor)

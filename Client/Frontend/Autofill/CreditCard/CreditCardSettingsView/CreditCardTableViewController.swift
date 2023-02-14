@@ -177,6 +177,8 @@ extension CreditCardTableViewController: UITableViewDelegate,
             colors: colors,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         hostingCell.host(creditCardRow, parentController: self)
+        hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: indexPath)
+        hostingCell.isAccessibilityElement = true
         return hostingCell
     }
 }
