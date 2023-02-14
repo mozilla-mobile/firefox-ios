@@ -215,7 +215,7 @@ class BrowserViewController: UIViewController {
         applyTheme()
     }
 
-    // TODO: YRD Remove delegate keyboard should't raise on first place
+    // TODO: FXIOS-5639 Remove delegate keyboard
     @objc func didTapUndoCloseAllTabToast(notification: Notification) { }
 
     @objc func openTabNotification(notification: Notification) {
@@ -1124,7 +1124,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        overlayManager?.finishEdition()
+        overlayManager?.finishEdition(didCancel: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -1197,7 +1197,7 @@ class BrowserViewController: UIViewController {
 
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
-            overlayManager.finishEdition()
+            overlayManager.finishEdition(didCancel: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -2604,6 +2604,7 @@ extension BrowserViewController: TopTabsDelegate {
         overlayManager.openNewTab(nil, url: nil)
     }
 
+    // TODO: FXIOS-5639 Remove from protocol if it was used for keyboard handling
     func topTabsDidTogglePrivateMode() { }
 
     func topTabsDidChangeTab() {

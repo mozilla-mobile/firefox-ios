@@ -9,9 +9,9 @@ protocol OverlayStateProtocol {
 }
 
 protocol OverlayModeManager: OverlayStateProtocol {
-    func finishEdition()
     func pasteContent(pasteContent: String)
     func openNewTab(_ locationText: String?, url: URL?)
+    func finishEdition(didCancel: Bool)
     func switchTab(didCancel: Bool)
 }
 
@@ -26,8 +26,8 @@ class DefaultOverlayModeManager: OverlayModeManager {
         self.urlBarView = urlBarView
     }
 
-    func finishEdition() {
-        leaveOverlayMode(didCancel: false)
+    func finishEdition(didCancel: Bool) {
+        leaveOverlayMode(didCancel: didCancel)
     }
 
     func pasteContent(pasteContent: String) {
