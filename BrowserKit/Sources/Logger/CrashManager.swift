@@ -78,6 +78,8 @@ public class DefaultCrashManager: CrashManager {
                 }
                 return crumb
             }
+            // Turn Sentry breadcrumbs off since we have our own log swizzling
+            options.integrations = options.integrations?.filter { $0 != "SentryAutoBreadcrumbTrackingIntegration" }
         })
         enabled = true
 
