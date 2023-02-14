@@ -43,7 +43,6 @@ extension YourImpact {
             case
             info,
             finance,
-            shop,
             trees,
             privacy,
             faq
@@ -58,8 +57,6 @@ extension YourImpact {
                     return .localized(.treesUpdate)
                 case .faq:
                     return .localized(.faqs)
-                case .shop:
-                    return .localized(.shop)
                 case .privacy:
                     return .localized(.privacy)
                 }
@@ -75,8 +72,6 @@ extension YourImpact {
                     return .localized(.discoverWhereWe)
                 case .faq:
                     return .localized(.findAnswersTo)
-                case .shop:
-                    return .localized(.buyTShirt)
                 case .privacy:
                     return .localized(.learnHowWe)
                 }
@@ -92,8 +87,6 @@ extension YourImpact {
                     return "treesUpdate"
                 case .faq:
                     return "faqs"
-                case .shop:
-                    return "ecosiaShop"
                 case .privacy:
                     return "privacy"
                 }
@@ -109,8 +102,6 @@ extension YourImpact {
                     return Environment.current.trees
                 case .faq:
                     return Environment.current.faq
-                case .shop:
-                    return Environment.current.shop
                 case .privacy:
                     return Environment.current.privacy
                 }
@@ -126,8 +117,6 @@ extension YourImpact {
                     return .projects
                 case .faq:
                     return .faq
-                case .shop:
-                    return .shop
                 case .privacy:
                     return .privacy
                 }

@@ -397,13 +397,6 @@
     "domain": "info.ecosia.org/privacy"
   },
   {
-    "title": "ecosiashop",
-    "url": "https://ecosiashop.com",
-    "image_url": "ecosiashop-com.png",
-    "background_color": "#fff",
-    "domain": "ecosiashop.com"
-  },
-  {
     "title": "ecosiafin",
     "url": "https://blog.ecosia.org/ecosia-financial-reports-tree-planting-receipts",
     "image_url": "ecosiafin-org.png",

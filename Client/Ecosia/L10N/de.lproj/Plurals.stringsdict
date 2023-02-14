@@ -95,7 +95,7 @@
 			<key>one</key>
 			<string>%d Einladungen von Freunden</string>
 			<key>other</key>
-			<string>%d Einladungen von Freunden</string>
+			<string>%d Einladungen von Freund*innen</string>
 		</dict>
 	</dict>
 	<key>%d accepted invite(s)</key>
