@@ -31,10 +31,8 @@ class AppLaunchUtil {
 
         TelemetryWrapper.shared.setup(profile: profile)
 
-        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
-        // before getting the Profile.
+        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
         logger.setup(sendUsageData: sendUsageData)
 
         setUserAgent()
@@ -74,6 +72,12 @@ class AppLaunchUtil {
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
         }
+
+        // Add swizzle on UIViewControllers to automatically log when there's a new view showing
+        UIViewController.loggerSwizzle()
+
+        // Add swizzle on top of UIControl to automatically log when there's an action sent
+        UIControl.loggerSwizzle()
     }
 
     func setUpPostLaunchDependencies() {

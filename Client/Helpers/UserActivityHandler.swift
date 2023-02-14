@@ -139,12 +139,12 @@ extension UserActivityHandler {
         do {
             try await searchableIndex.indexSearchableItems([item])
             logger.log("Spotlight: Search item successfully indexed!",
-                       level: .info,
-                       category: .setup)
+                       level: .debug,
+                       category: .unlabeled)
         } catch {
             logger.log("Spotlight: Indexing error: \(error.localizedDescription)",
                        level: .warning,
-                       category: .setup)
+                       category: .unlabeled)
         }
     }
 
@@ -153,11 +153,11 @@ extension UserActivityHandler {
             if let error = error {
                 self.logger.log("Spotlight: Deindexing error: \(error.localizedDescription)",
                                 level: .warning,
-                                category: .setup)
+                                category: .unlabeled)
             } else {
                 self.logger.log("Spotlight: Search item successfully removed!",
-                                level: .info,
-                                category: .setup)
+                                level: .debug,
+                                category: .unlabeled)
             }
         }
     }

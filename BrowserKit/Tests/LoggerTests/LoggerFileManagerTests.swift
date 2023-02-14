@@ -33,7 +33,12 @@ final class LoggerFileManagerTests: XCTestCase {
         fileManager.contentsOfDirectory = ["path/file1"]
 
         subject.copyLogsToDocuments()
-        XCTAssertEqual(fileManager.createDirectoryCalled, 3)
+        XCTAssertEqual(fileManager.createDirectoryCalled, 4)
+        XCTAssertTrue(fileManager.createDirectoryCalledAtPaths[0].contains("/data/Library/Caches/Logs"))
+        XCTAssertTrue(fileManager.createDirectoryCalledAtPaths[1].contains("/data/Documents/Logs"))
+        XCTAssertTrue(fileManager.createDirectoryCalledAtPaths[2].contains("/data/Library/Caches/Logs"))
+        XCTAssertTrue(fileManager.createDirectoryCalledAtPaths[3].contains("/data/Documents/Logs"))
+
         let sourceURL = try XCTUnwrap(fileManager.sourceURL?.absoluteString.contains("/Caches/Logs/path/file1"))
         XCTAssertTrue(sourceURL)
         let destinationURL = try XCTUnwrap(fileManager.destinationURL?.absoluteString.contains("/Documents/Logs/path/file1"))
@@ -72,10 +77,12 @@ private class MockFileManager: FileManagerProtocol {
         return contentsOfDirectory
     }
 
+    var createDirectoryCalledAtPaths = [String]()
     var createDirectoryCalled = 0
     func createDirectory(atPath path: String,
                          withIntermediateDirectories createIntermediates: Bool,
                          attributes: [FileAttributeKey: Any]? = nil) throws {
+        createDirectoryCalledAtPaths.append(path)
         createDirectoryCalled += 1
     }
 
