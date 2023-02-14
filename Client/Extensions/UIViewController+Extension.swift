@@ -107,6 +107,7 @@ extension UIViewController {
     /// Ignore some view controller out of logs to avoid spamming the logger, which would reduce the usefulness of logging view controllers
     private enum LoggerIgnoreViewController: String, CaseIterable {
         case compatibility = "UICompatibilityInputViewController"
+        case defaultTheme = "ThemedDefaultNavigationController"
         case dismissable = "DismissableNavigationViewController"
         case editingOverlay = "UIEditingOverlayViewController"
         case inputWindow = "UIInputWindowController"
@@ -124,7 +125,7 @@ extension UIViewController {
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
 
-    @objc func loggerViewWillAppear(_ animated: Bool) {
+    @objc private func loggerViewWillAppear(_ animated: Bool) {
         let values: [String] = LoggerIgnoreViewController.allCases.map { $0.rawValue }
         if !values.contains("\(type(of: self))") {
             DefaultLogger.shared.log("\(type(of: self)) will appear", level: .info, category: .lifecycle)
