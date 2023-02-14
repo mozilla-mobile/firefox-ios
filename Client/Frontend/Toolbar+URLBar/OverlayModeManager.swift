@@ -45,14 +45,10 @@ class DefaultOverlayModeManager: OverlayModeManager {
     }
 
     private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
-        guard !inOverlayMode else { return }
-
         urlBarView.enterOverlayMode(locationText, pasted: pasted, search: search)
     }
 
     private func leaveOverlayMode(didCancel cancel: Bool) {
-        guard inOverlayMode else { return }
-
         urlBarView.leaveOverlayMode(didCancel: cancel)
     }
 }

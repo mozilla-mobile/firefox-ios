@@ -52,6 +52,7 @@ class TabTrayViewModel {
 
     let profile: Profile
     let tabManager: TabManager
+    let overlayManager: OverlayModeManager
 
     // Tab Tray Views
     let tabTrayView: TabTrayViewDelegate
@@ -68,9 +69,11 @@ class TabTrayViewModel {
          profile: Profile,
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
+         overlayManager: OverlayModeManager,
          segmentToFocus: TabTrayViewModel.Segment? = nil) {
         self.profile = profile
         self.tabManager = tabManager
+        self.overlayManager = overlayManager
 
         self.tabTrayView = GridTabViewController(tabManager: self.tabManager,
                                                  profile: profile,
@@ -100,6 +103,7 @@ extension TabTrayViewModel {
     }
 
     @objc func didTapAddTab(_ sender: UIBarButtonItem) {
+        overlayManager.openNewTab(nil, url: nil)
         tabTrayView.performToolbarAction(.addTab, sender: sender)
     }
 

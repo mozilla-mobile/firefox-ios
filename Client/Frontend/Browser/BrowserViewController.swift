@@ -66,8 +66,6 @@ class BrowserViewController: UIViewController {
     private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
-    // TODO: Remove at FXIOS-5639 Feature flag like to use during the refactoring
-    private var shouldUseOverlayManager = true
     var overlayManager: OverlayModeManager!
 
     var contextHintVC: ContextualHintViewController
@@ -439,9 +437,7 @@ class BrowserViewController: UIViewController {
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
 
-        if shouldUseOverlayManager {
-            overlayManager = DefaultOverlayModeManager(urlBarView: urlBar)
-        }
+        overlayManager = DefaultOverlayModeManager(urlBarView: urlBar)
     }
 
     private func setupAccessibleActions() {
@@ -1031,26 +1027,6 @@ class BrowserViewController: UIViewController {
 
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
-        }
-    }
-
-    // TODO: YRD remove
-    private func enterOverlayMode() {
-        guard !shouldUseOverlayManager else { return }
-
-        // Delay enterOverlay mode after dismissableView is dismiss
-        if let viewcontroller = presentedViewController as? OnViewDismissable {
-            viewcontroller.onViewDismissed = { [weak self] in
-                let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-                if shouldEnterOverlay {
-                    self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                }
-            }
-        } else if presentedViewController is OnboardingViewControllerProtocol {
-            // leave from overlay mode while in onboarding is displayed on iPad
-            self.urlBar.leaveOverlayMode(didCancel: false)
-        } else {
-            self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
         }
     }
 
@@ -2112,8 +2088,6 @@ extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
         if !isRestoring {
-            // TODO: YRD Move causes side effects we should call this when + is press
-            overlayManager?.openNewTab(nil, url: tab.url)
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
@@ -2627,6 +2601,7 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        overlayManager.openNewTab(nil, url: nil)
     }
 
     func topTabsDidTogglePrivateMode() { }

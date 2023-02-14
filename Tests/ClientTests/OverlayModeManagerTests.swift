@@ -30,6 +30,7 @@ class OverlayModeManagerTests: XCTestCase {
         subject.openNewTab(nil, url: URL(string: "internal://local/about/home"))
 
         XCTAssertTrue(subject.inOverlayMode)
+        XCTAssertEqual(subject.enterOverlayModeCallCount, 1)
     }
 
     func testEnterOverlayMode_ForNewTabWithURL() {

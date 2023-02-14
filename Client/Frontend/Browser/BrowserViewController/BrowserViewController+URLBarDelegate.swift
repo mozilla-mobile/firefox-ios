@@ -38,6 +38,7 @@ extension BrowserViewController: URLBarDelegate {
             profile: profile,
             tabToFocus: tabToFocus,
             tabManager: tabManager,
+            overlayManager: overlayManager,
             focusedSegment: focusedSegment)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
