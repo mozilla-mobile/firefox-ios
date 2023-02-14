@@ -6,6 +6,7 @@ import Foundation
 import WebKit
 import Shared
 import Common
+import OSLog
 
 class NightModeHelper: TabContentScript {
     private enum NightModeKeys {
@@ -45,6 +46,13 @@ class NightModeHelper: TabContentScript {
             tab.nightMode = enabled
             tab.webView?.scrollView.indicatorStyle = enabled ? .white : .default
         }
+
+        print("adding a print")
+        NSLog("Adding an NSLog")
+        os_log("Adding os_log")
+
+        let deferred = Deferred<Maybe<Int>>()
+        deferred.fill(Maybe.success(0))
     }
 
     static func setEnabledDarkTheme(_ userDefaults: UserDefaultsInterface = UserDefaults.standard,
