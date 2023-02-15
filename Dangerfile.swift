@@ -6,19 +6,21 @@ import Danger
 import DangerSwiftCoverage
 import Foundation
 
+/// Reference at https://danger.systems/swift/reference.html
 let danger = Danger()
 
-coverage()
-changedFiles()
+checkCodeCoverage()
 checkBigPullRequest()
 checkForPRDescription()
+checkForCodeUsage()
+changedFiles()
 
 func changedFiles() {
     message("Edited \(danger.git.modifiedFiles.count) files")
     message("Created \(danger.git.createdFiles.count) files")
 }
 
-func coverage() {
+func checkCodeCoverage() {
     guard let xcresult = ProcessInfo.processInfo.environment["BITRISE_XCRESULT_PATH"]?.escapeString() else {
         fail("Could not get the BITRISE_XCRESULT_PATH to generate code coverage")
         return
@@ -29,6 +31,8 @@ func coverage() {
         minimumCoverage: 50
     )
 }
+
+// MARK: - PR guidelines
 
 // Encourage smaller PRs
 func checkBigPullRequest() {
@@ -51,6 +55,91 @@ func checkForPRDescription() {
     }
 }
 
+enum CodeUsageToDetect: CaseIterable {
+    static let commonLoggerSentence = " Please remove this usage from production code or use BrowserKit Logger."
+
+    case print
+    case nsLog
+    case osLog
+
+    var message: String {
+        switch self {
+        case .print:
+            return "Print() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
+        case .nsLog:
+            return "NSLog() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
+        case .osLog:
+            return "os_log() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
+        }
+    }
+
+    var keyword: String {
+        switch self {
+        case .print:
+            return "print("
+        case .nsLog:
+            return "NSLog("
+        case .osLog:
+            return "os_log("
+        }
+    }
+}
+
+// Detects CodeUsageToDetect in PR so certain functions are not used in new code.
+func checkForCodeUsage() {
+    let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
+
+    // Iterate through each added and modified file
+    for file in editedFiles {
+        let diff = danger.utils.diff(forFile: file, sourceBranch: danger.github.pullRequest.head.ref)
+
+        // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
+        switch diff {
+        case let .success(diff):
+            switch diff.changes {
+            case let .modified(hunks), let .renamed(_, hunks):
+                detect(keywords: CodeUsageToDetect.allCases, inHunks: hunks, file: file)
+            case let .created(newLines):
+                detect(keywords: CodeUsageToDetect.allCases, inLines: newLines, file: file)
+            case .deleted:
+                break // do not warn on deleted lines
+            }
+        case .failure:
+            break
+        }
+    }
+}
+
+// MARK: - Detect keyword helpers
+func detect(keywords: [CodeUsageToDetect], inHunks hunks: [FileDiff.Hunk], file: String) {
+    for keyword in keywords {
+        detect(keyword: keyword.keyword, inHunks: hunks, file: file, message: keyword.message)
+    }
+}
+
+func detect(keyword: String, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
+    for hunk in hunks {
+        for (index, line) in hunk.lines.enumerated() where String(describing: line).contains(keyword) {
+            let lineNumber = hunk.newLineStart + index + 1
+            warn(String(format: message, file, lineNumber))
+        }
+    }
+}
+
+func detect(keywords: [CodeUsageToDetect], inLines lines: [String], file: String) {
+    for keyword in keywords {
+        detect(keyword: keyword.keyword, inLines: lines, file: file, message: keyword.message)
+    }
+}
+
+func detect(keyword: String, inLines lines: [String], file: String, message: String) {
+    for (index, line) in lines.enumerated() where line.contains(keyword) {
+        let lineNumber = index + 1
+        warn(String(format: message, file, lineNumber))
+    }
+}
+
+// MARK: - String Extension
 extension String {
     // Helper function to escape (iOS) in our file name for xcov.
     func escapeString() -> String {

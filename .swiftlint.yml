@@ -93,7 +93,8 @@ analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
-  - build
+  - build/
+  - .build/
   - Client/Assets/Search/get_supported_locales.swift
   - Client/Generated
   - fastlane/
