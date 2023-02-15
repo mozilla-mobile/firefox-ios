@@ -39,3 +39,6 @@ fi
 
 # Run and update content blocker
 ./content_blocker_update.sh
+
+# Ecosia: Create Staging.xcconfig if not existing
+touch Client/Configuration/Staging.xcconfig

@@ -31,7 +31,7 @@ extension BrowserViewController: YourImpactDelegate {
 extension BrowserViewController: DefaultBrowserDelegate {
     @available(iOS 14, *)
     func defaultBrowserDidShow(_ defaultBrowser: DefaultBrowser) {
-        User.shared.firstTime = false
+        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         homepageViewController?.reloadTooltip()
     }
 }

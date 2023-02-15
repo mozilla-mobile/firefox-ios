@@ -70,6 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Ecosia: Disable BG sync //backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
         // Ecosia: lifecycle tracking
         Analytics.shared.activity(.launch)
+
         return true
     }
 
@@ -114,6 +115,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.profile.cleanupHistoryIfNeeded()
             self.browserViewController.ratingPromptManager.updateData()
         }
+
+        // Ecosia: start experimentation
+        startExperimentation()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

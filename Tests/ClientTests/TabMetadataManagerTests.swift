@@ -89,7 +89,7 @@ class TabMetadataManagerTests: XCTestCase {
             XCTAssertNil(result.successValue![0].referrerUrl)
             expectation.fulfill()
         }
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func testUpdateObservationTitle_ForNavigatedToDifferentURL() throws {

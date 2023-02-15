@@ -4,6 +4,7 @@
 
 #include "Common.xcconfig"
 #include "Release.xcconfig"
+#include "Staging.xcconfig"
 
 MOZ_BUNDLE_DISPLAY_NAME = Ecosia Beta
 MOZ_BUNDLE_ID = com.ecosia.ecosiaapp.firefox

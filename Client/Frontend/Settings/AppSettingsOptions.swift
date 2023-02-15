@@ -9,8 +9,11 @@ import LocalAuthentication
 import Core
 
 // This file contains all of the settings available in the main settings screen of the app.
-
+#if MOZ_CHANNEL_FENNEC
+private var ShowDebugSettings: Bool = true
+#else
 private var ShowDebugSettings: Bool = false
+#endif
 private var DebugSettingsClickCount: Int = 0
 
 private var disclosureIndicator: UIImageView {
@@ -675,174 +678,6 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
     }
 }
 
-final class PushBackInstallation: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Push back installation by 3 days (needs restart).", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        Calendar.current.date(byAdding: .day, value: -3, to: User.shared.install).map {
-            User.shared.install = $0
-        }
-    }
-}
-
-final class ToggleBrandRefreshIntro: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Toggle - Show Rebrand intro", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        let isOn = User.shared.showsRebrandIntro
-        return NSAttributedString(string: isOn ? "True" : "False", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        User.shared.showsRebrandIntro ? User.shared.hideRebrandIntro() : User.shared.showRebrandIntro()
-        settings.tableView.reloadData()
-    }
-}
-
-final class ToggleCounterIntro: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Toggle - Show Counter intro", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        let isOn = User.shared.showsCounterIntro
-        return NSAttributedString(string: isOn ? "True" : "False", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        User.shared.showsCounterIntro ? User.shared.hideCounterIntro() : User.shared.showCounterIntro()
-        settings.tableView.reloadData()
-    }
-}
-
-final class ShowTour: HiddenSetting, WelcomeDelegate {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Show Intro", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let welcome = Welcome(delegate: self)
-        welcome.modalPresentationStyle = .fullScreen
-        welcome.modalTransitionStyle = .coverVertical
-        navigationController?.present(welcome, animated: true)
-    }
-
-    func welcomeDidFinish(_ welcome: Welcome) {
-        welcome.dismiss(animated: true, completion: nil)
-    }
-}
-
-
-final class CreateReferralCode: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Referral Code \(User.shared.referrals.code ?? "-")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        return .init(string: "Toggle to create or erase code")
-    }
-
-
-    override func onClick(_ navigationController: UINavigationController?) {
-
-        if User.shared.referrals.code == nil {
-            User.shared.referrals.code = "TEST123"
-
-            let alertTitle = "Code created"
-            let alert = AlertController(title: alertTitle, message: User.shared.referrals.code, preferredStyle: .alert)
-            navigationController?.topViewController?.present(alert, animated: true) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    alert.dismiss(animated: true)
-                }
-                self.settings.tableView.reloadData()
-            }
-        } else {
-            User.shared.referrals.code = nil
-
-            let alert = AlertController(title: "Code erased!", message: "Reopen app to create new one", preferredStyle: .alert)
-            navigationController?.topViewController?.present(alert, animated: true) {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    alert.dismiss(animated: true)
-                }
-                self.settings.tableView.reloadData()
-            }
-        }
-    }
-}
-
-final class AddReferral: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Add Referral", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        User.shared.referrals.claims += 1
-
-        let alertTitle = "Referral count increased by one."
-        let alert = AlertController(title: alertTitle, message: "Open NTP to see spotlight", preferredStyle: .alert)
-        navigationController?.topViewController?.present(alert, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                alert.dismiss(animated: true)
-            }
-        }
-    }
-}
-
-final class AddClaim: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Add Referral Claim", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        User.shared.referrals.isClaimed = true
-        User.shared.referrals.isNewClaim = true
-
-        let alertTitle = "User got referred."
-        let alert = AlertController(title: alertTitle, message: "Open NTP to see claim", preferredStyle: .alert)
-        navigationController?.topViewController?.present(alert, animated: true) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                alert.dismiss(animated: true)
-            }
-        }
-    }
-}
-
-final class ResetSearchCount: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Set search count to 0", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        return NSAttributedString(string: "\(User.shared.treeCount)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        User.shared.treeCount = 0
-        self.settings.tableView.reloadData()
-        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
-    }
-}
-
-final class ChangeSearchCount: HiddenSetting {
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: Increase search count by 10", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        return NSAttributedString(string: "\(User.shared.treeCount)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        User.shared.treeCount += 10
-        self.settings.tableView.reloadData()
-        NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
-    }
-}
-
 class InactiveTabsExpireEarly: BoolSetting {
 
     static let key = "EcosiaInactiveTabsDebugSetting"
@@ -873,7 +708,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: .init(format: .localized(.version), Bundle.version) + " (\(Environment.current))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .init(format: .localized(.version), Bundle.version) + " (\(Environment.current.name))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     public static var appVersion: String {

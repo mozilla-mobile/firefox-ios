@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AdjustAppToken</key>
+	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>AppIdentifierPrefix</key>
 	<string>$(APP_IDENTIFIER_PREFIX)</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
@@ -42,12 +44,18 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CF_ACCESS_CLIENT_ID</key>
+	<string>$(CF_ACCESS_CLIENT_ID)</string>
+	<key>CF_ACCESS_CLIENT_SECRET</key>
+	<string>$(CF_ACCESS_CLIENT_SECRET)</string>
 	<key>INIntentsSupported</key>
 	<array>
 		<string>QuickActionIntent</string>
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>pocket</string>
@@ -99,12 +107,10 @@
 		<string>QuickLinkSelectionIntent</string>
 		<string>com.ecosia.ecosiaapp.browsing</string>
 	</array>
-	<key>PocketEnvironmentAPIKey</key>
-	<string>$(POCKET_API_KEY)</string>
-	<key>AdjustAppToken</key>
-	<string>$(ADJUST_APP_TOKEN)</string>
 	<key>NimbusURL</key>
 	<string>$(NIMBUS_URL)</string>
+	<key>PocketEnvironmentAPIKey</key>
+	<string>$(POCKET_API_KEY)</string>
 	<key>SentryCloudDSN</key>
 	<string>$(SENTRY_CLOUD_DSN)</string>
 	<key>UIAppFonts</key>
@@ -150,6 +156,8 @@
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER).QRCode</string>
 		</dict>
 	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
@@ -186,8 +194,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
