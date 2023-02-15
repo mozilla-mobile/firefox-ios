@@ -211,7 +211,7 @@ class HistoryHighlightsViewModelTests: XCTestCase {
         XCTAssertNotNil(cell)
         XCTAssertFalse(cell!.isFillerCell)
         XCTAssertEqual(cell!.itemDescription.text,
-                       String.localizedStringWithFormat(.FirefoxHomepage.Common.SitesCount, 2))
+                       String.localizedStringWithFormat(.FirefoxHomepage.Common.PagesCount, 2))
     }
 
     func testDidSelectItem() {
