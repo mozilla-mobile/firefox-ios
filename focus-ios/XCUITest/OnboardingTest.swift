@@ -10,7 +10,7 @@ class OnboardingTest: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        app.launchArguments = ["testMode"]
+        app.launchArguments = []
         app.launch()
     }
 
@@ -39,36 +39,29 @@ class OnboardingTest: XCTestCase {
 
     // Smoketest
     func testPressingDots() throws {
-        throw XCTSkip("This test is temporarily disabled, it should be refactored when the new onboarding functionality is done")
-        let stackElement = app.otherElements["Intro.stackView"]
-        let pageIndicatorButton1 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 0)
-        let pageIndicatorButton2 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 1)
-        let pageIndicatorButton3 = stackElement.children(matching: .button).matching(identifier: "page indicator").element(boundBy: 2)
+        let pageIndicatorButton = app.pageIndicators.firstMatch
+        XCTAssertEqual(pageIndicatorButton.value as? String, "page 1 of 2")
+        
+        waitForExistence(app.staticTexts["Welcome to Firefox Focus!"], timeout: 15)
+        XCTAssert(app.images["icon_background"].exists)
+        XCTAssert(app.buttons["Get Started"].isEnabled)
+        XCTAssert(app.buttons["icon_close"].isEnabled)
+        pageIndicatorButton.tap()
 
-        waitForExistence(app.staticTexts["Power up your privacy"], timeout: 3)
+        XCTAssertEqual(pageIndicatorButton.value as? String, "page 2 of 2")
+        waitForExistence(app.staticTexts["Focus isn’t like other browsers"], timeout: 15)
+        XCTAssert(app.images["icon_hugging_focus"].exists)
+        XCTAssert(app.buttons["Set as Default Browser"].isEnabled)
+        XCTAssert(app.buttons["Skip"].isEnabled)
+        XCTAssert(app.buttons["icon_close"].isEnabled)
+        pageIndicatorButton.tap()
+        
+        XCTAssertEqual(pageIndicatorButton.value as? String, "page 1 of 2")
+        waitForExistence(app.staticTexts["Welcome to Firefox Focus!"], timeout: 15)
+        pageIndicatorButton.tap()
 
-        pageIndicatorButton2.tap()
-        waitForExistence(app.staticTexts["Your search, your way"], timeout: 3)
-        XCTAssert(pageIndicatorButton2.isSelected)
-
-        pageIndicatorButton3.tap()
-        waitForExistence(app.staticTexts["Your history is history"], timeout: 3)
-        XCTAssert(pageIndicatorButton3.isSelected)
-
-        pageIndicatorButton1.tap()
-        waitForExistence(app.staticTexts["Your search, your way"], timeout: 3)
-        XCTAssert(pageIndicatorButton2.isSelected)
-
-        pageIndicatorButton1.tap()
-        waitForExistence(app.staticTexts["Power up your privacy"], timeout: 3)
-        XCTAssert(pageIndicatorButton1.isSelected)
-        XCTAssert(!pageIndicatorButton2.isSelected)
-
-        // Make sure button alpha values update even when selecting "Next" button
-        let nextButton = app.buttons["Next"]
-        nextButton.tap()
-        waitForExistence(app.staticTexts["Your search, your way"], timeout: 3)
-        XCTAssert(pageIndicatorButton2.isSelected)
+        XCTAssertEqual(pageIndicatorButton.value as? String, "page 2 of 2")
+        waitForExistence(app.staticTexts["Focus isn’t like other browsers"], timeout: 15)
     }
 
 }

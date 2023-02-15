@@ -7,8 +7,11 @@ import XCTest
 class SnapshotTests: BaseTestCaseL10n {
 
     func test01FirstRunScreens() {
-        waitForExistence(app.buttons["IntroViewController.startBrowsingButton"], timeout: 10)
+        waitForExistence(app.collectionViews.cells.images["icon_background"], timeout: 10)
         snapshot("00FirstRun")
+        app.collectionViews.cells.images["icon_background"].swipeLeft()
+        waitForExistence(app.collectionViews.cells.images["icon_hugging_focus"], timeout: 3)
+        snapshot("01FirstRun")
     }
 
     func test02Settings() {
