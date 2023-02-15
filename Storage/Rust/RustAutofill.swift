@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 @_exported import MozillaAppServices
+import Logger
 
 typealias AutofillStore = Store
 
@@ -53,7 +54,11 @@ public class RustAutofillEncryptionKeys {
     let ccCanaryPhraseKey = "creditCardCanaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
 
-    public init() {}
+    private let logger: Logger
+
+    public init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
 
     fileprivate func createAndStoreKey() throws -> String {
         do {
@@ -70,16 +75,16 @@ public class RustAutofillEncryptionKeys {
             return secret
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(err: autofillStoreError,
-                                               errorDomain: err.domain,
-                                               errorMessage: "Error while creating and storing credit card key")
+                logAutofillStoreError(err: autofillStoreError,
+                                      errorDomain: err.domain,
+                                      errorMessage: "Error while creating and storing credit card key")
 
                 throw AutofillEncryptionKeyError.noKeyCreated
             } else {
-                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error while creating and storing credit card key",
-                                                            tag: SentryTag.rustAutofill,
-                                                            severity: .error,
-                                                            description: err.localizedDescription)
+                logger.log("Unknown error while creating and storing credit card key",
+                           level: .warning,
+                           category: .storage,
+                           description: err.localizedDescription)
 
                 throw AutofillEncryptionKeyError.noKeyCreated
             }
@@ -95,14 +100,14 @@ public class RustAutofillEncryptionKeys {
             return try decryptString(key: key, ciphertext: encryptedCCNum)
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(err: autofillStoreError,
-                                               errorDomain: err.domain,
-                                               errorMessage: "Error while decrypting credit card")
+                logAutofillStoreError(err: autofillStoreError,
+                                      errorDomain: err.domain,
+                                      errorMessage: "Error while decrypting credit card")
             } else {
-                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error while decrypting credit card",
-                                                            tag: SentryTag.rustAutofill,
-                                                            severity: .error,
-                                                            description: err.localizedDescription)
+                logger.log("Unknown error while decrypting credit card",
+                           level: .warning,
+                           category: .storage,
+                           description: err.localizedDescription)
             }
             return nil
         }
@@ -123,14 +128,14 @@ public class RustAutofillEncryptionKeys {
             return try encryptString(key: key, cleartext: creditCardNum)
         } catch let err as NSError {
             if let autofillStoreError = err as? AutofillApiError {
-                sendAutofillStoreErrorToSentry(err: autofillStoreError,
-                                               errorDomain: err.domain,
-                                               errorMessage: "Error while encrypting credit card")
+                logAutofillStoreError(err: autofillStoreError,
+                                      errorDomain: err.domain,
+                                      errorMessage: "Error while encrypting credit card")
             } else {
-                SentryIntegration.shared.sendWithStacktrace(message: "Unknown error while encrypting credit card",
-                                                            tag: SentryTag.rustAutofill,
-                                                            severity: .error,
-                                                            description: err.localizedDescription)
+                logger.log("Unknown error while encrypting credit card",
+                           level: .warning,
+                           category: .storage,
+                           description: err.localizedDescription)
             }
         }
         return nil
@@ -141,9 +146,9 @@ public class RustAutofillEncryptionKeys {
         return try encryptString(key: key, cleartext: text)
     }
 
-    private func sendAutofillStoreErrorToSentry(err: AutofillApiError,
-                                                errorDomain: String,
-                                                errorMessage: String) {
+    private func logAutofillStoreError(err: AutofillApiError,
+                                       errorDomain: String,
+                                       errorMessage: String) {
         var message: String {
             switch err {
             case .SqlError(let message),
@@ -156,11 +161,10 @@ public class RustAutofillEncryptionKeys {
             }
         }
 
-        SentryIntegration.shared.sendWithStacktrace(
-            message: errorMessage,
-            tag: SentryTag.rustAutofill,
-            severity: .error,
-            description: "\(errorDomain) - \(err.descriptionValue): \(message)")
+        logger.log(errorMessage,
+                   level: .warning,
+                   category: .storage,
+                   description: "\(errorDomain) - \(err.descriptionValue): \(message)")
     }
 }
 
@@ -174,11 +178,15 @@ public class RustAutofill {
 
     private var didAttemptToMoveToBackup = false
 
-    public init(databasePath: String) {
+    private let logger: Logger
+
+    public init(databasePath: String,
+                logger: Logger = DefaultLogger.shared) {
         self.databasePath = databasePath
 
         queue = DispatchQueue(label: "RustAutofill queue: \(databasePath)",
                               attributes: [])
+        self.logger = logger
     }
 
     private func open() -> NSError? {
@@ -192,17 +200,15 @@ public class RustAutofill {
                 // This is an unrecoverable
                 // state unless we can move the existing file to a backup
                 // location and start over.
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Rust Autofill store error when opening database",
-                    tag: SentryTag.rustAutofill,
-                    severity: .error,
-                    description: autofillStoreError.localizedDescription)
+                logger.log("Rust Autofill store error when opening database",
+                           level: .warning,
+                           category: .storage,
+                           description: autofillStoreError.localizedDescription)
             } else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Unknown error when opening Rust Autofill database",
-                    tag: SentryTag.rustAutofill,
-                    severity: .error,
-                    description: err.localizedDescription)
+                logger.log("Unknown error when opening Rust Autofill database",
+                           level: .warning,
+                           category: .storage,
+                           description: err.localizedDescription)
             }
 
             if !didAttemptToMoveToBackup {
@@ -392,28 +398,25 @@ public class RustAutofill {
                 if canaryIsValid {
                     return key!
                 } else {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Autofill key was corrupted, new one generated",
-                        tag: SentryTag.rustAutofill,
-                        severity: .warning)
+                    logger.log("Autofill key was corrupted, new one generated",
+                               level: .warning,
+                               category: .storage)
 
                     self.scrubCreditCardNums(completion: {_, _ in })
                     return try rustKeys.createAndStoreKey()
                 }
             } catch let error as NSError {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Error retrieving autofill encryption key",
-                    tag: SentryTag.rustAutofill,
-                    severity: .error,
-                    description: error.localizedDescription)
+                logger.log("Error retrieving autofill encryption key",
+                           level: .warning,
+                           category: .storage,
+                           description: error.localizedDescription)
             }
         case (.some(key), .none):
             // The key is present, but we didn't expect it to be there.
             do {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Autofill key lost due to storage malfunction, new one generated",
-                    tag: SentryTag.rustAutofill,
-                    severity: .warning)
+                logger.log("Autofill key lost due to storage malfunction, new one generated",
+                           level: .warning,
+                           category: .storage)
 
                 self.scrubCreditCardNums(completion: {_, _ in })
                 return try rustKeys.createAndStoreKey()
@@ -423,10 +426,9 @@ public class RustAutofill {
         case (.none, .some(encryptedCanaryPhrase)):
             // We expected the key to be present, but it's gone missing on us.
             do {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Autofill key lost, new one generated",
-                    tag: SentryTag.rustAutofill,
-                    severity: .warning)
+                logger.log("Autofill key lost, new one generated",
+                           level: .warning,
+                           category: .storage)
 
                 self.scrubCreditCardNums(completion: {_, _ in })
                 return try rustKeys.createAndStoreKey()

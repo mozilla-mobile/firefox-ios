@@ -10,6 +10,9 @@ protocol SearchEnginePickerDelegate: AnyObject {
 }
 
 class SearchSettingsTableViewController: ThemedTableViewController {
+    private let profile: Profile
+    private let model: SearchEngines
+
     fileprivate let SectionDefault = 0
     fileprivate let ItemDefaultEngine = 0
     fileprivate let ItemDefaultSuggestions = 1
@@ -22,18 +25,26 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
     fileprivate var showDeletion = false
 
-    var profile: Profile?
-    var tabManager: TabManager?
-
     var updateSearchIcon: (() -> Void)?
     fileprivate var isEditable: Bool {
+        guard let defaultEngine = model.defaultEngine else { return false }
+
         // If the default engine is a custom one, make sure we have more than one since we can't edit the default.
         // Otherwise, enable editing if we have at least one custom engine.
         let customEngineCount = model.orderedEngines.filter({$0.isCustomEngine}).count
-        return model.defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
+        return defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
     }
 
-    var model: SearchEngines!
+    init(profile: Profile) {
+        self.profile = profile
+        model = profile.searchEngines
+
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,7 +172,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             // Every engine is a valid choice for the default engine, even the current default engine.
             searchEnginePicker.engines = model.orderedEngines.sorted { e, f in e.shortName < f.shortName }
             searchEnginePicker.delegate = self
-            searchEnginePicker.selectedSearchEngineName = model.defaultEngine.shortName
+            searchEnginePicker.selectedSearchEngineName = model.defaultEngine?.shortName
             navigationController?.pushViewController(searchEnginePicker, animated: true)
         } else if indexPath.item + 1 == model.orderedEngines.count {
             let customSearchEngineForm = CustomSearchViewController()
@@ -282,8 +293,10 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         if editingStyle == .delete {
             let index = indexPath.item + 1
             let engine = model.orderedEngines[index]
-            model.deleteCustomEngine(engine)
-            tableView.deleteRows(at: [indexPath], with: .right)
+
+            model.deleteCustomEngine(engine) {
+                tableView.deleteRows(at: [indexPath], with: .right)
+            }
 
             // End editing if we are no longer edit since we've deleted all editable cells.
             if !isEditable {

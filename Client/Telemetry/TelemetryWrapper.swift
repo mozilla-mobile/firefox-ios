@@ -8,6 +8,7 @@ import Shared
 import Telemetry
 import Account
 import Sync
+import Logger
 
 protocol TelemetryWrapperProtocol {
     func recordEvent(category: TelemetryWrapper.EventCategory,
@@ -42,9 +43,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
     private var crashedLastLaunch: Bool
 
     private var profile: Profile?
+    private var logger: Logger
 
-    init() {
-        crashedLastLaunch = SentryIntegration.shared.crashedLastLaunch
+    init(logger: Logger = DefaultLogger.shared) {
+        crashedLastLaunch = logger.crashedLastLaunch
+        self.logger = logger
     }
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
@@ -55,24 +58,16 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             create: false).appendingPathComponent(pathComponent).path,
               FileManager.default.fileExists(atPath: oldPath) else { return }
 
-        print("Migrating \(pathComponent) from ~/Documents to \(destinationSearchPath)")
         guard let newPath = try? FileManager.default.url(
             for: destinationSearchPath,
             in: .userDomainMask,
             appropriateFor: nil,
             create: true).appendingPathComponent(pathComponent).path
-        else {
-            print("Unable to get destination path \(destinationSearchPath) to move \(pathComponent)")
-            return
-        }
+        else { return }
 
         do {
             try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
-
-            print("Migrated \(pathComponent) to \(destinationSearchPath) successfully")
-        } catch let error as NSError {
-            print("Unable to move \(pathComponent) to \(destinationSearchPath): \(error.localizedDescription)")
-        }
+        } catch {}
     }
 
     func setup(profile: Profile) {
@@ -134,7 +129,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             var settings: [String: String?] = inputDict["settings"] as? [String: String?] ?? [:]
 
             let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
-            settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
+            settings["defaultSearchEngine"] = searchEngines.defaultEngine?.engineID ?? "custom"
 
             if let windowBounds = UIWindow.keyWindow?.bounds {
                 settings["windowWidth"] = String(describing: windowBounds.width)
@@ -229,7 +224,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
 
         // Record default search engine setting
         let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
-        GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine.engineID ?? "custom")
+        GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
         let delegate = UIApplication.shared.delegate as? AppDelegate
@@ -309,7 +304,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
 
     @objc func uploadError(notification: NSNotification) {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
-        SentryIntegration.shared.send(message: "Upload Error", tag: SentryTag.unifiedTelemetry, severity: .info, description: error.debugDescription)
+        logger.log("Upload Error",
+                   level: .info,
+                   category: .telemetry,
+                   description: error.debugDescription)
     }
 }
 
@@ -1364,8 +1362,10 @@ extension TelemetryWrapper {
         value: EventValue?,
         extras: [String: Any]?
     ) {
-        let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))"
-        SentryIntegration.shared.send(message: msg, severity: .info)
+        DefaultLogger.shared.log("Uninstrumented metric recorded",
+                                 level: .info,
+                                 category: .telemetry,
+                                 description: "\(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))")
     }
 }
 

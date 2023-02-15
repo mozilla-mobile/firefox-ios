@@ -495,8 +495,6 @@ class Tab: NSObject {
             }
         } else if let request = lastRequest {
             webView.load(request)
-        } else {
-            print("creating webview with no lastRequest and no session data: \(self.url?.description ?? "nil")")
         }
     }
 
@@ -960,25 +958,5 @@ class TabWebView: WKWebView, MenuHelperInterface {
                 message: "Do not call evaluateJavaScript directly on TabWebViews, should only be called on super class")
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
-    }
-}
-
-///
-// Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
-//
-// This class only exists to contain the swizzledMenuHelperFindInPage. This class is actually never
-// instantiated. It only serves as a placeholder for the method. When the method is called, self is
-// actually pointing to a WKContentView. Which is not public, but that is fine, we only need to know
-// that it is a UIView subclass to access its superview.
-//
-
-class TabWebViewMenuHelper: UIView {
-    @objc func swizzledMenuHelperFindInPage() {
-        if let tabWebView = superview?.superview as? TabWebView {
-            tabWebView.evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
-                let selection = result as? String ?? ""
-                tabWebView.delegate?.tabWebView(tabWebView, didSelectFindInPageForSelection: selection)
-            }
-        }
     }
 }

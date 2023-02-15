@@ -62,7 +62,6 @@ final public class BreachAlertsManager {
         // 1b. local file exists, so load from that
         guard let fileData = FileManager.default.contents(atPath: cacheURL.path) else {
             completion(Maybe(failure: BreachAlertsError(description: "failed to get data from breach.json")))
-            SentryIntegration.shared.send(message: "BreachAlerts: failed to get data from breach.json")
             try? FileManager.default.removeItem(at: cacheURL) // bad file, so delete it
             self.fetchAndSaveBreaches(completion)
             return
@@ -190,7 +189,6 @@ final public class BreachAlertsManager {
 
     private func decodeData(data: Data, _ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
         guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
-            print(BreachAlertsError(description: "JSON data decode failure"))
             assertionFailure("Error decoding JSON data")
             return
         }

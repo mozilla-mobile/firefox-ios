@@ -115,11 +115,7 @@ class ContentBlocker {
         for list in rules {
             let name = list.filename
             ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
-                guard let rule = rule else {
-                    let msg = "lookUpContentRuleList for \(name): \(error?.localizedDescription ?? "empty rules")"
-                    print("Content blocker error: \(msg)")
-                    return
-                }
+                guard let rule = rule else { return }
                 self.add(contentRuleList: rule, toTab: tab)
             }
         }

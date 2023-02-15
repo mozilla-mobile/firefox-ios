@@ -16,11 +16,11 @@ public class RustShared {
         // Attempt to make a backup as long as the database file still exists.
         guard FileManager.default.fileExists(atPath: databasePath) else {
             // No backup was attempted since the database file did not exist.
-            SentryIntegration.shared.sendWithStacktrace(message: "The Rust database was deleted while in use", tag: SentryTag.rustLogins)
+            logger.log("The Rust database was deleted while in use",
+                       level: .info,
+                       category: .storage)
             return
         }
-
-        SentryIntegration.shared.sendWithStacktrace(message: "Unable to open Rust database", tag: SentryTag.rustLogins, severity: .warning, description: "Attempting to move '\(baseFilename)'")
 
         // Note that a backup file might already exist! We append a counter to avoid this.
         var bakCounter = 0
@@ -55,11 +55,10 @@ public class RustShared {
                        level: .debug,
                        category: .storage)
         } catch let error as NSError {
-            SentryIntegration.shared.sendWithStacktrace(
-                message: "Unable to move Rust database to backup location",
-                tag: SentryTag.rustLogins,
-                severity: .error,
-                description: "Attempted to move to '\(bakBaseFilename)'. \(error.localizedDescription)")
+            logger.log("Unable to move Rust database to backup location",
+                       level: .warning,
+                       category: .storage,
+                       description: "Attempted to move to '\(bakBaseFilename)'. \(error.localizedDescription)")
         }
     }
 }

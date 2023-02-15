@@ -29,8 +29,7 @@ class DefaultDownloadFileFetcher: DownloadFileFetcher {
                 let downloadedFile = DownloadedFile(path: file, size: attributes.fileSize(), lastModified: attributes.fileModificationDate() ?? Date())
                 downloadedFiles.append(downloadedFile)
             }
-        } catch let error {
-            print("Unable to get files in Downloads folder: \(error.localizedDescription)")
+        } catch {
             return []
         }
 

@@ -248,7 +248,7 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x-ventura
-        machine_type_id: g2-m1.8core
+        machine_type_id: g2.4core
   build_and_test_2_SmokeTest:
     before_run:
     - 1_git_clone_and_post_clone
@@ -1444,10 +1444,10 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '110.0'
+    BITRISE_RELEASE_VERSION: '111.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '110.0'
+    BITRISE_BETA_VERSION: '111.0'
 
 meta:
   bitrise.io:
@@ -1459,7 +1459,7 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
-- push_branch: release/v110.0
+- push_branch: release/v111.0
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
   pipeline: pipeline_multiple_shards

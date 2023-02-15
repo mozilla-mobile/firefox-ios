@@ -7,7 +7,6 @@ import UIKit
 import XCTest
 
 @testable import Account
-@testable import Client
 
 // Testing client state is so delicate that I'm not going to test this.  The test below does two
 // requests; we would need a third, and a guarantee of the server state, to test this completely.

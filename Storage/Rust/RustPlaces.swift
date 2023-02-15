@@ -52,17 +52,15 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
             return nil
         } catch let err as NSError {
             if let placesError = err as? PlacesApiError {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Places error when opening Rust Places database",
-                    tag: SentryTag.rustPlaces,
-                    severity: .error,
-                    description: placesError.localizedDescription)
+                logger.log("Places error when opening Rust Places database",
+                           level: .warning,
+                           category: .storage,
+                           description: placesError.localizedDescription)
             } else {
-                SentryIntegration.shared.sendWithStacktrace(
-                    message: "Unknown error when opening Rust Places database",
-                    tag: SentryTag.rustPlaces,
-                    severity: .error,
-                    description: err.localizedDescription)
+                logger.log("Unknown error when opening Rust Places database",
+                           level: .warning,
+                           category: .storage,
+                           description: err.localizedDescription)
             }
 
             return err
@@ -305,17 +303,15 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let placesError = err as? PlacesApiError {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Places error when syncing Places database",
-                        tag: SentryTag.rustPlaces,
-                        severity: .error,
-                        description: placesError.localizedDescription)
+                    self.logger.log("Places error when syncing Places database",
+                                    level: .warning,
+                                    category: .storage,
+                                    description: placesError.localizedDescription)
                 } else {
-                    SentryIntegration.shared.sendWithStacktrace(
-                        message: "Unknown error when opening Rust Places database",
-                        tag: SentryTag.rustPlaces,
-                        severity: .error,
-                        description: err.localizedDescription)
+                    self.logger.log("Unknown error when opening Rust Places database",
+                                    level: .warning,
+                                    category: .storage,
+                                    description: err.localizedDescription)
                 }
 
                 deferred.fill(Maybe(failure: err))
@@ -339,15 +335,15 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let placesError = err as? PlacesApiError {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Places error when syncing Places database",
-                                                                tag: SentryTag.rustPlaces,
-                                                                severity: .error,
-                                                                description: placesError.localizedDescription)
+                    self.logger.log("Places error when syncing Places database",
+                                    level: .warning,
+                                    category: .storage,
+                                    description: placesError.localizedDescription)
                 } else {
-                    SentryIntegration.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database",
-                                                                tag: SentryTag.rustPlaces,
-                                                                severity: .error,
-                                                                description: err.localizedDescription)
+                    self.logger.log("Unknown error when opening Rust Places database",
+                                    level: .warning,
+                                    category: .sync,
+                                    description: err.localizedDescription)
                 }
 
                 deferred.fill(Maybe(failure: err))
