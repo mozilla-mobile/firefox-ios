@@ -139,7 +139,7 @@ class HistoryHighlightsTests: XCTestCase {
         let expectation = expectation(description: "Highlights")
         let expectedCount = 2
 
-        manager.getHighlightsData(with: profile, and: [tabs], shouldFilterLastURL: true) { highlights in
+        manager.getHighlightsData(with: profile, and: [tabs]) { highlights in
             guard let highlights = highlights else {
                 XCTFail("Highlights should not be nil.")
                 return
