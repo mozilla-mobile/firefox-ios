@@ -50,7 +50,7 @@ class GleanTelemetryTests: XCTestCase {
         }
 
         _ = syncManager.syncNamedCollections(
-            why: SyncReason.didLogin,
+            why: OldSyncReason.didLogin,
             names: ["tabs", "logins", "bookmarks", "history", "clients"]
         )
 

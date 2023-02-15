@@ -10,6 +10,8 @@ import Storage
 import SwiftyJSON
 import SyncTelemetry
 
+public typealias OldSyncReason = SyncReason
+
 public enum SyncReason: String {
     case startup = "startup"
     case scheduled = "scheduled"
@@ -190,13 +192,13 @@ extension SyncEngineStatsSession: DictionaryRepresentable {
 
 // Stats and metadata for a sync operation.
 public class SyncOperationStatsSession: StatsSession {
-    public let why: SyncReason
+    public let why: OldSyncReason
     public var uid: String?
     public var deviceID: String?
 
     fileprivate let didLogin: Bool
 
-    public init(why: SyncReason, uid: String, deviceID: String?) {
+    public init(why: OldSyncReason, uid: String, deviceID: String?) {
         self.why = why
         self.uid = uid
         self.deviceID = deviceID
