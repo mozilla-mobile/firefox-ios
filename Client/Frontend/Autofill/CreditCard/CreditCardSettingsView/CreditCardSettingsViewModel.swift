@@ -23,9 +23,11 @@ struct CreditCardSettingsStartingConfig {
 class CreditCardSettingsViewModel {
     var autofill: RustAutofill?
     var profile: Profile
-    var addEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel()
+
+    lazy var addEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel(profile: profile)
     var creditCardTableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
     var toggleModel: ToggleModel!
+    
 
     public init(profile: Profile) {
         self.profile = profile
