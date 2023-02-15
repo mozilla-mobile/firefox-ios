@@ -73,7 +73,7 @@ enum CodeUsageToDetect: CaseIterable {
         }
     }
 
-    var keyword: String  {
+    var keyword: String {
         switch self {
         case .print:
             return "print("
