@@ -15,54 +15,60 @@ struct CreditCardItemRow: View {
 
     let item: CreditCard
     let colors: Colors
+    let isAccessibilityCategory: Bool
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            HStack(alignment: .center, spacing: 0) {
+            AdaptiveStack(horizontalAlignment: .leading,
+                          verticalAlignment: .center,
+                          spacing: isAccessibilityCategory ? 5 : 24,
+                          isAccessibilityCategory: isAccessibilityCategory) {
                 getImage(creditCard: item)
                     .renderingMode(.original)
                     .resizable()
                     .frame(width: 24, height: 24)
                     .aspectRatio(contentMode: .fit)
-                    .padding(.leading, 16)
 
                 VStack(spacing: 0) {
                     Text(item.ccName)
-                        .font(.system(size: 17))
+                        .font(.body)
                         .foregroundColor(colors.titleTextColor)
                         .frame(maxWidth: .infinity,
                                alignment: .leading)
 
-                    HStack(spacing: 0) {
+                    AdaptiveStack(horizontalAlignment: .leading,
+                                  spacing: isAccessibilityCategory ? 0 : 5,
+                                  isAccessibilityCategory: isAccessibilityCategory) {
                         Text(item.ccType)
-                            .font(.system(size: 17))
+                            .font(.body)
                             .foregroundColor(colors.titleTextColor)
                         Text(item.ccNumberLast4)
-                            .font(.system(size: 17))
+                            .font(.subheadline)
                             .foregroundColor(colors.subTextColor)
-                            .padding(.leading, 5)
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
                     .padding(.top, 3)
                     .padding(.bottom, 3)
 
-                    HStack(spacing: 0) {
+                    AdaptiveStack(horizontalAlignment: .leading,
+                                  spacing: isAccessibilityCategory ? 0 : 5,
+                                  isAccessibilityCategory: isAccessibilityCategory) {
                         Text("Expires")
-                            .font(.system(size: 17))
+                            .font(.body)
                             .foregroundColor(colors.subTextColor)
-                        Text("\(item.ccExpYear)")
-                            .font(.system(size: 17))
+                        Text(String(item.ccExpYear))
+                            .font(.subheadline)
                             .foregroundColor(colors.subTextColor)
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
                 }
-                .padding(.leading, 24)
-                .padding(.trailing, 0)
             }
-            .padding(.top, 10)
-            .padding(.bottom, 10)
+            .padding(.leading, 16)
+            .padding(.trailing, 16)
+            .padding(.top, 11)
+            .padding(.bottom, 11)
 
             Rectangle()
                 .fill(colors.separatorColor)
@@ -71,7 +77,6 @@ struct CreditCardItemRow: View {
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
         }
-        .frame(maxHeight: 86)
     }
 
     func getImage(creditCard: CreditCard) -> Image {
@@ -83,5 +88,40 @@ struct CreditCardItemRow: View {
         }
 
         return Image(uiImage: image)
+    }
+}
+
+struct CreditCardItemRow_Previews: PreviewProvider {
+    static var previews: some View {
+        let creditCard = CreditCard(guid: "1",
+                                    ccName: "Allen Burges",
+                                    ccNumberEnc: "1234567891234567",
+                                    ccNumberLast4: "4567",
+                                    ccExpMonth: 1234567,
+                                    ccExpYear: 2023,
+                                    ccType: "VISA",
+                                    timeCreated: 1234678,
+                                    timeLastUsed: nil,
+                                    timeLastModified: 123123,
+                                    timesUsed: 123123)
+        let colors = CreditCardItemRow.Colors(titleTextColor: .gray,
+                                              subTextColor: .gray,
+                                              separatorColor: .gray)
+
+        CreditCardItemRow(item: creditCard,
+                          colors: colors,
+                          isAccessibilityCategory: false)
+
+        CreditCardItemRow(item: creditCard,
+                          colors: colors,
+                          isAccessibilityCategory: true)
+            .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
+            .previewDisplayName("Large")
+
+        CreditCardItemRow(item: creditCard,
+                          colors: colors,
+                          isAccessibilityCategory: false)
+            .environment(\.sizeCategory, .extraSmall)
+            .previewDisplayName("Small")
     }
 }
