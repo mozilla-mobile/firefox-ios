@@ -6,9 +6,8 @@ import Foundation
 import Storage
 import Common
 
-protocol JumpBackInDataAdaptor {
-    var hasSyncedTabFeatureEnabled: Bool { get }
-
+protocol JumpBackInDataAdaptor: Actor {
+    func hasSyncedTabFeatureEnabled() -> Bool
     func getRecentTabData() -> [Tab]
     func getGroupsData() -> [ASGroup<Tab>]?
     func getSyncedTabData() -> JumpBackInSyncedTab?
@@ -18,10 +17,10 @@ protocol JumpBackInDelegate: AnyObject {
     func didLoadNewData()
 }
 
-class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggable {
+actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggable {
     // MARK: Properties
 
-    var notificationCenter: NotificationProtocol
+    nonisolated let notificationCenter: NotificationProtocol
     private let profile: Profile
     private let tabManager: TabManagerProtocol
     private var recentTabs: [Tab] = [Tab]()
@@ -47,16 +46,22 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         self.mainQueue = mainQueue
         self.userInitiatedQueue = userInitiatedQueue
 
-        setupNotifications(forObserver: self, observing: [.ShowHomepage,
-                                                          .TabsTrayDidClose,
-                                                          .TabsTrayDidSelectHomeTab,
-                                                          .TopTabsTabClosed,
-                                                          .ProfileDidFinishSyncing,
-                                                          .FirefoxAccountChanged,
-                                                          .TabDataUpdated])
+        let notifications: [Notification.Name] = [.ShowHomepage,
+                                                  .TabsTrayDidClose,
+                                                  .TabsTrayDidSelectHomeTab,
+                                                  .TopTabsTabClosed,
+                                                  .ProfileDidFinishSyncing,
+                                                  .FirefoxAccountChanged,
+                                                  .TabDataUpdated]
+        notifications.forEach {
+            notificationCenter.addObserver(self,
+                                           selector: #selector(handleNotifications),
+                                           name: $0,
+                                           object: nil)
+        }
 
-        userInitiatedQueue.async { [weak self] in
-            self?.updateTabsAndAccountData()
+        Task {
+            await self.updateTabsAndAccountData()
         }
     }
 
@@ -66,7 +71,7 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     // MARK: Public interface
 
-    var hasSyncedTabFeatureEnabled: Bool {
+    func hasSyncedTabFeatureEnabled() -> Bool {
         return featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) && hasSyncAccount ?? false
     }
 
@@ -82,85 +87,85 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         return mostRecentSyncedTab
     }
 
-    // MARK: Jump back in data
-
-    private func updateTabsAndAccountData() {
-        getHasSyncAccount { [weak self] in
-            self?.updateTabsData()
-        }
+    func setDelegate(delegate: JumpBackInDelegate) {
+        self.delegate = delegate
     }
 
-    private func updateTabsData() {
-        updateTabsData { [weak self] in
-            self?.delegate?.didLoadNewData()
-        }
+    // MARK: Jump back in data
 
-        updateRemoteTabs { [weak self] in
-            self?.delegate?.didLoadNewData()
-        }
+    private func updateTabsAndAccountData() async {
+        hasSyncAccount = await getHasSyncAccount()
+        await updateTabsData()
+    }
 
-        if featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) {
-            updateGroupsData { [weak self] in
-                self?.delegate?.didLoadNewData()
+    private func updateTabsData() async {
+        recentTabs = await updateRecentTabs()
+        if let remoteTabs = await updateRemoteTabs() {
+            createMostRecentSyncedTab(from: remoteTabs)
+        }
+        recentGroups = await updateGroupsData()
+        delegate?.didLoadNewData()
+    }
+
+    private func updateRecentTabs() async -> [Tab] {
+        // Recent tabs need to be accessed from .main otherwise value isn't proper
+        return await withCheckedContinuation { continuation in
+            mainQueue.async {
+                continuation.resume(returning: self.tabManager.recentlyAccessedNormalTabs)
             }
         }
     }
 
-    private func updateTabsData(completion: @escaping () -> Void) {
-        // Recent tabs need to be accessed from .main otherwise value isn't proper
-        mainQueue.async {
-            self.recentTabs = self.tabManager.recentlyAccessedNormalTabs
-            completion()
+    private func updateGroupsData() async -> [ASGroup<Tab>]? {
+        guard featureFlags.isFeatureEnabled(.tabTrayGroups, checking: .buildAndUser) else {
+            return nil
         }
-    }
-
-    private func updateGroupsData(completion: @escaping () -> Void) {
-        SearchTermGroupsUtility.getTabGroups(
-            with: self.profile,
-            from: self.recentTabs,
-            using: .orderedDescending
-        ) { [weak self] groups, _ in
-            self?.recentGroups = groups
-            completion()
+        return await withCheckedContinuation { continuation in
+            SearchTermGroupsUtility.getTabGroups(
+                with: self.profile,
+                from: self.recentTabs,
+                using: .orderedDescending
+            ) { [weak self] groups, _ in
+                continuation.resume(returning: groups)
+            }
         }
     }
 
     // MARK: Synced tab data
 
-    private func getHasSyncAccount(completion: @escaping () -> Void) {
+    private func getHasSyncAccount() async -> Bool {
         guard featureFlags.isFeatureEnabled(.jumpBackInSyncedTab, checking: .buildOnly) else {
-            completion()
-            return
+            return false
         }
 
-        profile.hasSyncAccount { hasSync in
-            self.hasSyncAccount = hasSync
-            completion()
+        return await withCheckedContinuation { continuation in
+            profile.hasSyncAccount { hasSync in
+                continuation.resume(returning: hasSync)
+            }
         }
     }
 
-    private func updateRemoteTabs(completion: @escaping () -> Void) {
+    private func updateRemoteTabs() async -> [ClientAndTabs]? {
         // Short circuit if the user is not logged in or feature not enabled
-        guard hasSyncedTabFeatureEnabled else {
-            mostRecentSyncedTab = nil
-            completion()
-            return
+        guard hasSyncedTabFeatureEnabled() else {
+            return nil
         }
 
-        // Get cached tabs
-        profile.getCachedClientsAndTabs { [weak self] result in
-            self?.createMostRecentSyncedTab(from: result, completion: completion)
+        return await withCheckedContinuation { continuation in
+            // Get cached tabs
+            profile.getCachedClientsAndTabs { [weak self] result in
+                continuation.resume(returning: result)
+            }
         }
     }
 
-    private func createMostRecentSyncedTab(from clientAndTabs: [ClientAndTabs], completion: @escaping () -> Void) {
+    private func createMostRecentSyncedTab(from clientAndTabs: [ClientAndTabs]) {
         // filter clients for non empty desktop clients
         let desktopClientAndTabs = clientAndTabs.filter { !$0.tabs.isEmpty &&
             ClientType.fromFxAType($0.client.type) == .Desktop }
 
         guard !desktopClientAndTabs.isEmpty, !clientAndTabs.isEmpty else {
             mostRecentSyncedTab = nil
-            completion()
             return
         }
 
@@ -182,29 +187,25 @@ class JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
         guard let mostRecentTab = mostRecentTab else {
             mostRecentSyncedTab = nil
-            completion()
             return
         }
 
         mostRecentSyncedTab = JumpBackInSyncedTab(client: mostRecentTab.client, tab: mostRecentTab.tab)
-        completion()
     }
-}
 
-// MARK: - Notifiable
-extension JumpBackInDataAdaptorImplementation: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        userInitiatedQueue.async { [weak self] in
+    @MainActor
+    @objc func handleNotifications(_ notification: Notification) {
+        Task {
             switch notification.name {
             case .ShowHomepage,
                     .TabDataUpdated,
                     .TabsTrayDidClose,
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
-                self?.updateTabsData()
+                await updateTabsData()
             case .ProfileDidFinishSyncing,
                     .FirefoxAccountChanged:
-                self?.updateTabsAndAccountData()
+                await updateTabsAndAccountData()
             default: break
             }
         }
