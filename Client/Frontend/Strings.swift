@@ -5041,7 +5041,7 @@ extension String {
                 "SnackBar.RemovedCard.Button.v112",
                 tableName: "Alert",
                 value: "Remove",
-                comment: "Button text to dimiss the dialog box that gets presented as a confirmation to to remove card and perform the the operation of removing the credit card.")
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and perform the operation of removing the credit card.")
         }
     }
 }
