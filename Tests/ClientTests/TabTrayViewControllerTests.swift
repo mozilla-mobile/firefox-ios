@@ -14,6 +14,8 @@ class TabTrayViewControllerTests: XCTestCase {
     var manager: TabManager!
     var tabTray: TabTrayViewController!
     var gridTab: GridTabViewController!
+    var overlayManager: MockOverlayModeManager!
+    var urlBar: MockURLBarView!
 
     override func setUp() {
         super.setUp()
@@ -21,7 +23,14 @@ class TabTrayViewControllerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         profile = TabManagerMockProfile()
         manager = TabManager(profile: profile, imageStore: nil)
-        tabTray = TabTrayViewController(tabTrayDelegate: nil, profile: profile, tabToFocus: nil, tabManager: manager)
+        urlBar = MockURLBarView()
+        overlayManager = MockOverlayModeManager()
+        overlayManager.setURLBar(urlBarView: urlBar)
+        tabTray = TabTrayViewController(tabTrayDelegate: nil,
+                                        profile: profile,
+                                        tabToFocus: nil,
+                                        tabManager: manager,
+                                        overlayManager: overlayManager)
         gridTab = GridTabViewController(tabManager: manager, profile: profile)
         manager.addDelegate(gridTab)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -33,6 +42,8 @@ class TabTrayViewControllerTests: XCTestCase {
         AppContainer.shared.reset()
         profile = nil
         manager = nil
+        urlBar = nil
+        overlayManager = nil
         tabTray = nil
         gridTab = nil
     }

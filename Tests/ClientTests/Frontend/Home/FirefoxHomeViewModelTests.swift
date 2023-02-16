@@ -32,7 +32,6 @@ class FirefoxHomeViewModelTests: XCTestCase {
         let viewModel = HomepageViewModel(profile: profile,
                                           isPrivate: false,
                                           tabManager: MockTabManager(),
-                                          urlBar: URLBarView(profile: profile),
                                           theme: LightTheme())
         XCTAssertEqual(viewModel.shownSections.count, 3)
         XCTAssertEqual(viewModel.shownSections[0], HomepageSectionType.logoHeader)
