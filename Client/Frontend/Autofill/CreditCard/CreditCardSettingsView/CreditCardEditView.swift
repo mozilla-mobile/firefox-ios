@@ -43,8 +43,11 @@ struct CreditCardEditView: View {
 
             Spacer()
 
-            RemoveCardButton(removeButtonColor: removeButtonColor,
-                             borderColor: borderColor)
+            RemoveCardButton(
+                removeButtonColor: removeButtonColor,
+                borderColor: borderColor,
+                alertDetails: viewModel.removeButtonDetails
+            )
         }
         .padding(.top, 20)
     }
