@@ -24,12 +24,12 @@ protocol OverlayModeManager: OverlayStateProtocol {
     func openNewTab(_ locationText: String?, url: URL?)
 
     /// Leave overlay mode when user finish edition, either pressing the go button, enter etc
-    /// - Parameter didCancelLoading: Bool value determine if the loading animation of the current search should be canceled
-    func finishEdition(didCancelLoading: Bool)
+    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
+    func finishEdition(shouldCancelLoading: Bool)
 
     /// Leave overlay mode when tab change happens, like switching tabs or open a site from any homepage section
-    /// - Parameter didCancelLoading: Bool value determine if the loading animation of the current search should be canceled
-    func switchTab(didCancelLoading: Bool)
+    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
+    func switchTab(shouldCancelLoading: Bool)
 }
 
 class DefaultOverlayModeManager: OverlayModeManager {
@@ -55,12 +55,12 @@ class DefaultOverlayModeManager: OverlayModeManager {
         }
     }
 
-    func finishEdition(didCancelLoading: Bool) {
-        leaveOverlayMode(didCancel: didCancelLoading)
+    func finishEdition(shouldCancelLoading: Bool) {
+        leaveOverlayMode(didCancel: shouldCancelLoading)
     }
 
-    func switchTab(didCancelLoading: Bool) {
-        leaveOverlayMode(didCancel: didCancelLoading)
+    func switchTab(shouldCancelLoading: Bool) {
+        leaveOverlayMode(didCancel: shouldCancelLoading)
     }
 
     private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {

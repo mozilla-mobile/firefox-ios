@@ -22,6 +22,7 @@ class OverlayModeManagerTests: XCTestCase {
         subject = nil
     }
 
+    // MARK: - Test EnterOverlay for New tab
     func testEnterOverlayMode_ForNewTabWithNilURL() {
         subject.openNewTab(nil, url: nil)
 
@@ -39,5 +40,32 @@ class OverlayModeManagerTests: XCTestCase {
         subject.openNewTab(nil, url: URL(string: "https://test.com"))
 
         XCTAssertFalse(subject.inOverlayMode)
+        XCTAssertEqual(subject.enterOverlayModeCallCount, 1)
+    }
+
+    // MARK: - Test EnterOverlay for paste action
+
+    func testEnterOverlayMode_ForPasteContent() {
+        subject.openSearch(with: "paste")
+
+        XCTAssertTrue(subject.inOverlayMode)
+        XCTAssertEqual(subject.enterOverlayModeCallCount, 1)
+    }
+
+    // MARK: - Test EnterOverlay for finish edition
+
+    func testLeaveOverlayMode_ForFinishEdition() {
+        subject.finishEdition(shouldCancelLoading: true)
+
+        XCTAssertFalse(subject.inOverlayMode)
+        XCTAssertEqual(subject.leaveOverlayModeCallCount, 1)
+    }
+
+    // MARK: - Test EnterOverlay for Tab change
+    func testEnterOverlayMode_ForSwitchTab() {
+        subject.switchTab(shouldCancelLoading: true)
+
+        XCTAssertFalse(subject.inOverlayMode)
+        XCTAssertEqual(subject.leaveOverlayModeCallCount, 1)
     }
 }

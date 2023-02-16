@@ -44,6 +44,14 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertTrue(result)
     }
 
+    func test_shouldPresentInactiveTabsHint_WithNilOverlayMode() {
+        subject = ContextualHintEligibilityUtility(with: profile,
+                                                   overlayState: nil,
+                                                   device: MockUIDevice(isIpad: true))
+        let result = subject.canPresent(.inactiveTabs)
+        XCTAssertTrue(result)
+    }
+
     func test_shouldPresentJumpBackHint() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.toolbarOnboardingKey.rawValue)
 

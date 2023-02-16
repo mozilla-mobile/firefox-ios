@@ -1125,7 +1125,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        overlayManager.finishEdition(didCancelLoading: false)
+        overlayManager.finishEdition(shouldCancelLoading: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -1198,7 +1198,7 @@ class BrowserViewController: UIViewController {
 
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
-            overlayManager.finishEdition(didCancelLoading: true)
+            overlayManager.finishEdition(shouldCancelLoading: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -1970,7 +1970,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     // In searchViewController when user selects an open tabs and switch to it
     func searchViewController(_ searchViewController: SearchViewController, uuid: String) {
-        overlayManager.switchTab(didCancelLoading: true)
+        overlayManager.switchTab(shouldCancelLoading: true)
         if let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
         }
@@ -2596,7 +2596,7 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
         // Technically is not changing tabs but is loosing focus on urlbar
-        overlayManager.switchTab(didCancelLoading: true)
+        overlayManager.switchTab(shouldCancelLoading: true)
         self.urlBarDidPressTabs(urlBar)
     }
 
@@ -2610,7 +2610,7 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change
-        overlayManager.switchTab(didCancelLoading: true)
+        overlayManager.switchTab(shouldCancelLoading: true)
     }
 }
 
