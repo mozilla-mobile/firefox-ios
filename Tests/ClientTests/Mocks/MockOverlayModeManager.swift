@@ -6,18 +6,27 @@ import XCTest
 
 @testable import Client
 
-class MockOverlayModeManager: OverlayModeManager {
-    var inOverlayMode = false
+class MockOverlayModeManager: DefaultOverlayModeManager {
     var leaveOverlayModeCallCount = 0
     var enterOverlayModeCallCount = 0
 
-    func leaveOverlayMode(didCancel cancel: Bool) {
-        leaveOverlayModeCallCount += 1
-        inOverlayMode = false
+    override func openSearch(with pasteContent: String) {
+        enterOverlayModeCallCount += 1
+        super.openSearch(with: pasteContent)
     }
 
-    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+    override func openNewTab(_ locationText: String?, url: URL?) {
         enterOverlayModeCallCount += 1
-        inOverlayMode = true
+        super.openNewTab(locationText, url: url)
+    }
+
+    override func finishEdition(shouldCancelLoading: Bool) {
+        leaveOverlayModeCallCount += 1
+        super.finishEdition(shouldCancelLoading: shouldCancelLoading)
+    }
+
+    override func switchTab(shouldCancelLoading: Bool) {
+        leaveOverlayModeCallCount += 1
+        super.switchTab(shouldCancelLoading: shouldCancelLoading)
     }
 }

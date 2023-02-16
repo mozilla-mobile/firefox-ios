@@ -67,8 +67,6 @@ class HistoryHighlightsViewModel {
     var historyItems = [HighlightItem]()
     private var profile: Profile
     private var isPrivate: Bool
-    // TODO: FXIOS-5639 Remove opening new tab should handle itself the dismissal of the keyboard
-    private var urlBar: URLBarViewProtocol
     private var hasSentSectionEvent = false
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
@@ -110,7 +108,6 @@ class HistoryHighlightsViewModel {
     // MARK: - Inits
     init(with profile: Profile,
          isPrivate: Bool,
-         urlBar: URLBarViewProtocol,
          theme: Theme,
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
@@ -118,7 +115,6 @@ class HistoryHighlightsViewModel {
          wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isPrivate = isPrivate
-        self.urlBar = urlBar
         self.theme = theme
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry
@@ -141,8 +137,6 @@ class HistoryHighlightsViewModel {
     }
 
     func switchTo(_ highlight: HighlightItem) {
-        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
-
         onTapItem?(highlight)
         telemetry.recordEvent(category: .action,
                               method: .tap,

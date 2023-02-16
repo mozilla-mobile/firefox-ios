@@ -12,12 +12,18 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
 
     var profile: MockProfile!
     var subject: ContextualHintEligibilityUtility!
+    var urlBar: MockURLBarView!
+    var overlayState: MockOverlayModeManager!
 
     override func setUp() {
         super.setUp()
 
         profile = MockProfile()
+        urlBar = MockURLBarView()
+        overlayState = MockOverlayModeManager()
+        overlayState.setURLBar(urlBarView: urlBar)
         subject = ContextualHintEligibilityUtility(with: profile,
+                                                   overlayState: nil,
                                                    device: MockUIDevice(isIpad: false))
     }
 
@@ -26,12 +32,22 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
 
         profile.shutdown()
         profile = nil
+        urlBar = nil
+        overlayState = nil
         subject = nil
     }
 
     // MARK: - Test should Present cases
 
     func test_shouldPresentInactiveTabsHint() {
+        let result = subject.canPresent(.inactiveTabs)
+        XCTAssertTrue(result)
+    }
+
+    func test_shouldPresentInactiveTabsHint_WithNilOverlayMode() {
+        subject = ContextualHintEligibilityUtility(with: profile,
+                                                   overlayState: nil,
+                                                   device: MockUIDevice(isIpad: true))
         let result = subject.canPresent(.inactiveTabs)
         XCTAssertTrue(result)
     }
@@ -50,6 +66,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
 
     func test_shouldPresentJumpBackHint_iPadWithoutToolbar() {
         subject = ContextualHintEligibilityUtility(with: profile,
+                                                   overlayState: overlayState,
                                                    device: MockUIDevice(isIpad: true))
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertTrue(result)
@@ -69,6 +86,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
 
     func test_shouldPresentSyncedHint_iPadWithoutToolbar() {
         subject = ContextualHintEligibilityUtility(with: profile,
+                                                   overlayState: overlayState,
                                                    device: MockUIDevice(isIpad: true))
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertTrue(result)
@@ -90,6 +108,15 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
+    func test_shouldNotPresentJumpBackHint_WithOverlayMode() {
+        subject = ContextualHintEligibilityUtility(with: profile,
+                                                   overlayState: overlayState,
+                                                   device: MockUIDevice(isIpad: true))
+        overlayState.openNewTab(nil, url: nil)
+        let result = subject.canPresent(.jumpBackIn)
+        XCTAssertFalse(result)
+    }
+
     func test_shouldNotPresentJumpBackInWhenSyncedTabConfigured() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackInSyncedTabConfiguredKey.rawValue)
 
@@ -100,6 +127,15 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     func test_shouldNotPresentSyncedTabHint() {
         profile.prefs.setBool(true, forKey: CFRPrefsKeys.jumpBackInSyncedTabKey.rawValue)
 
+        let result = subject.canPresent(.jumpBackInSyncedTab)
+        XCTAssertFalse(result)
+    }
+
+    func test_shouldNotPresentSyncedHint_WithOverlayMode() {
+        subject = ContextualHintEligibilityUtility(with: profile,
+                                                   overlayState: overlayState,
+                                                   device: MockUIDevice(isIpad: true))
+        overlayState.openNewTab(nil, url: nil)
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertFalse(result)
     }
