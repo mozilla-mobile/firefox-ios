@@ -6,8 +6,21 @@ import Foundation
 import SwiftUI
 
 struct RemoveCardButton: View {
+    @State private var showAlert = false
+
+    struct AlertDetails {
+        let alertTitle: Text
+        let alertBody: Text?
+        let primaryButtonStyleAndText: Alert.Button
+        let secondaryButtonStyleAndText: Alert.Button
+
+        let primaryButtonAction: () -> Void
+        let secondaryButtonAction: (() -> Void)?
+    }
+
     let removeButtonColor: Color
     let borderColor: Color
+    let alertDetails: AlertDetails
 
     var body: some View {
         VStack {
@@ -19,7 +32,15 @@ struct RemoveCardButton: View {
                 .padding(.trailing, 10)
             VStack {
                 Button(String.CreditCard.EditCard.RemoveCardButtonTitle) {
-                    print("Button pressed")
+                    showAlert.toggle()
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: alertDetails.alertTitle,
+                        message: alertDetails.alertBody,
+                        primaryButton: alertDetails.primaryButtonStyleAndText,
+                        secondaryButton: alertDetails.secondaryButtonStyleAndText
+                    )
                 }
                 .font(.body)
                 .foregroundColor(removeButtonColor)
