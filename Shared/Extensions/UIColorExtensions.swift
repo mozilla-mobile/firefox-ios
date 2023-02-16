@@ -2,16 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import SwiftUI
 import UIKit
 
-public struct Color {
-    public var red: CGFloat
-    public var green: CGFloat
-    public var blue: CGFloat
-    public var alpha: CGFloat
-}
-
 extension UIColor {
+    private struct ColorComponents {
+        public var red: CGFloat
+        public var green: CGFloat
+        public var blue: CGFloat
+        public var alpha: CGFloat
+    }
+
     /**
      * Initializes and returns a color object for the given RGB hex integer.
      */
@@ -45,7 +46,10 @@ extension UIColor {
         let b = ((colorRef?.count ?? 0) > 2 ? colorRef?[2] : g) ?? 0
         let a = cgColor.alpha
 
-        var color = String(format: "#%02lX%02lX%02lX", lroundf(Float(r * 255)), lroundf(Float(g * 255)), lroundf(Float(b * 255)))
+        var color = String(format: "#%02lX%02lX%02lX",
+                           lroundf(Float(r * 255)),
+                           lroundf(Float(g * 255)),
+                           lroundf(Float(b * 255)))
         if a < 1 {
             color += String(format: "%02lX", lroundf(Float(a)))
         }
@@ -53,12 +57,16 @@ extension UIColor {
         return color
     }
 
-    public var components: Color {
+    private var components: ColorComponents {
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
         var alpha: CGFloat = 0
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return Color(red: red, green: green, blue: blue, alpha: alpha)
+        return ColorComponents(red: red, green: green, blue: blue, alpha: alpha)
+    }
+
+    public var color: Color {
+        return Color(self)
     }
 }

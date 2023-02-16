@@ -5,8 +5,27 @@
 import Foundation
 import SwiftUI
 
+protocol ToggleModelDelegate: AnyObject {
+    func toggleDidChange(_ toggleModel: ToggleModel)
+}
+
+class ToggleModel: ObservableObject {
+    @Published var isEnabled: Bool = false {
+        didSet {
+            delegate?.toggleDidChange(self)
+        }
+    }
+    weak var delegate: ToggleModelDelegate?
+
+    init(isEnabled: Bool, delegate: ToggleModelDelegate? = nil) {
+        self.isEnabled = isEnabled
+        self.delegate = delegate
+    }
+}
+
 struct CreditCardAutofillToggle: View {
-    @State private var toggleState = false
+    var textColor: Color
+    @ObservedObject var model: ToggleModel
 
     var body: some View {
         VStack {
@@ -15,16 +34,34 @@ struct CreditCardAutofillToggle: View {
                 .padding(.leading, 16)
                 .hidden()
             HStack {
-                Toggle(isOn: $toggleState) {
-                    Text("Save and autofill cards")
-                }.font(.system(size: 17))
-                 .padding(.leading, 16)
-                 .padding(.trailing, 16)
+                Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
+                    .font(.body)
+                    .foregroundColor(textColor)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
             }
             Divider()
                 .frame(height: 0.7)
                 .padding(.leading, 16)
         }
-        .frame(width: UIScreen.main.bounds.size.width, height: 42)
+    }
+}
+
+struct CreditCardAutofillToggle_Previews: PreviewProvider {
+        static var previews: some View {
+            let model = ToggleModel(isEnabled: true)
+
+        CreditCardAutofillToggle(textColor: .gray,
+                                 model: model)
+
+        CreditCardAutofillToggle(textColor: .gray,
+                                 model: model)
+            .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
+            .previewDisplayName("Large")
+
+        CreditCardAutofillToggle(textColor: .gray,
+                                 model: model)
+            .environment(\.sizeCategory, .extraSmall)
+            .previewDisplayName("Small")
     }
 }
