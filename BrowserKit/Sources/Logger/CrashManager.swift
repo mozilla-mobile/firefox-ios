@@ -72,7 +72,6 @@ public class DefaultCrashManager: CrashManager {
             options.environment = self.environment.rawValue
             options.releaseName = self.releaseName
             options.enableFileIOTracing = false
-            options.enableAutoBreadcrumbTracking = false
             options.beforeBreadcrumb = { crumb in
                 if crumb.type == "http" || crumb.category == "http" {
                     return nil
