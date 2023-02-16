@@ -101,8 +101,7 @@ class HomepageViewModel: FeatureFlaggable {
     // MARK: - Initializers
     init(profile: Profile,
          isPrivate: Bool,
-         tabManager: TabManager,
-         urlBar: URLBarViewProtocol,
+         tabManager: TabManagerProtocol,
          nimbus: FxNimbus = FxNimbus.shared,
          isZeroSearch: Bool = false,
          theme: Theme,
@@ -125,7 +124,6 @@ class HomepageViewModel: FeatureFlaggable {
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,
-            urlBar: urlBar,
             theme: theme,
             tabManager: tabManager,
             adaptor: jumpBackInAdaptor,
@@ -142,7 +140,6 @@ class HomepageViewModel: FeatureFlaggable {
         self.historyHighlightsViewModel = HistoryHighlightsViewModel(
             with: profile,
             isPrivate: isPrivate,
-            urlBar: urlBar,
             theme: theme,
             historyHighlightsDataAdaptor: historyDataAdaptor,
             wallpaperManager: wallpaperManager)

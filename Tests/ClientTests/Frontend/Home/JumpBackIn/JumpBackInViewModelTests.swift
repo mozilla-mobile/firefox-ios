@@ -13,7 +13,6 @@ import Common
 class JumpBackInViewModelTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockTabManager: MockTabManager!
-    private var urlBar: MockURLBarView!
 
     var stubBrowserViewController: BrowserViewController!
     var adaptor: JumpBackInDataAdaptorMock!
@@ -31,7 +30,6 @@ class JumpBackInViewModelTests: XCTestCase {
             profile: mockProfile,
             tabManager: LegacyTabManager(profile: mockProfile, imageStore: nil)
         )
-        urlBar = MockURLBarView()
 
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
     }
@@ -41,7 +39,6 @@ class JumpBackInViewModelTests: XCTestCase {
         AppContainer.shared.reset()
         adaptor = nil
         stubBrowserViewController = nil
-        urlBar = nil
         mockTabManager = nil
         mockProfile = nil
     }
@@ -58,15 +55,12 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.switchTo(group: group)
 
-        XCTAssertFalse(urlBar.inOverlayMode)
-        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 0)
         XCTAssertFalse(completionDidRun)
     }
 
     func test_switchToGroup_noGroupedItems_doNothing() {
         let subject = createSubject()
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
-        urlBar.inOverlayMode = true
         var completionDidRun = false
         subject.onTapGroup = { tab in
             completionDidRun = true
@@ -74,24 +68,6 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.switchTo(group: group)
 
-        XCTAssertFalse(urlBar.inOverlayMode)
-        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
-        XCTAssertFalse(completionDidRun)
-    }
-
-    func test_switchToGroup_inOverlayMode_leavesOverlayMode() {
-        let subject = createSubject()
-        let group = ASGroup<Tab>(searchTerm: "", groupedItems: [], timestamp: 0)
-        urlBar.inOverlayMode = true
-        var completionDidRun = false
-        subject.onTapGroup = { tab in
-            completionDidRun = true
-        }
-
-        subject.switchTo(group: group)
-
-        XCTAssertFalse(urlBar.inOverlayMode)
-        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertFalse(completionDidRun)
     }
 
@@ -99,7 +75,6 @@ class JumpBackInViewModelTests: XCTestCase {
         let subject = createSubject()
         let expectedTab = createTab(profile: mockProfile)
         let group = ASGroup<Tab>(searchTerm: "", groupedItems: [expectedTab], timestamp: 0)
-        urlBar.inOverlayMode = true
         var receivedTab: Tab?
         subject.onTapGroup = { tab in
             receivedTab = tab
@@ -107,8 +82,6 @@ class JumpBackInViewModelTests: XCTestCase {
 
         subject.switchTo(group: group)
 
-        XCTAssertFalse(urlBar.inOverlayMode)
-        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertEqual(expectedTab, receivedTab)
     }
 
@@ -117,35 +90,27 @@ class JumpBackInViewModelTests: XCTestCase {
     func test_switchToTab_notInOverlayMode_switchTabs() {
         let subject = createSubject()
         let tab = createTab(profile: mockProfile)
-        urlBar.inOverlayMode = false
 
         subject.switchTo(tab: tab)
 
-        XCTAssertFalse(urlBar.inOverlayMode)
-        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 0)
         XCTAssertFalse(mockTabManager.lastSelectedTabs.isEmpty)
     }
 
     func test_switchToTab_inOverlayMode_leaveOverlayMode() {
         let subject = createSubject()
         let tab = createTab(profile: mockProfile)
-        urlBar.inOverlayMode = true
 
         subject.switchTo(tab: tab)
 
-        XCTAssertFalse(urlBar.inOverlayMode)
-        XCTAssertEqual(urlBar.leaveOverlayModeCallCount, 1)
         XCTAssertFalse(mockTabManager.lastSelectedTabs.isEmpty)
     }
 
     func test_switchToTab_tabManagerSelectsTab() {
         let subject = createSubject()
         let tab1 = createTab(profile: mockProfile)
-        urlBar.inOverlayMode = true
 
         subject.switchTo(tab: tab1)
 
-        XCTAssertFalse(urlBar.inOverlayMode)
         guard !mockTabManager.lastSelectedTabs.isEmpty else {
             XCTFail("No tabs were selected in mock tab manager.")
             return
@@ -691,7 +656,6 @@ extension JumpBackInViewModelTests {
             isZeroSearch: false,
             profile: mockProfile,
             isPrivate: false,
-            urlBar: urlBar,
             theme: LightTheme(),
             tabManager: mockTabManager,
             adaptor: adaptor,

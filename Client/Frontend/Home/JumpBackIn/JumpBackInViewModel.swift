@@ -22,8 +22,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     var syncedTabsShowAllAction: (() -> Void)?
     var openSyncedTabAction: ((URL) -> Void)?
     var prepareContextualHint: ((SyncedTabCell) -> Void)?
-    // TODO: FXIOS-5639 Remove opening new tab should handle itself the dismissal of the keyboard
-    private var urlBar: URLBarViewProtocol
 
     weak var delegate: HomepageDataModelDelegate?
 
@@ -52,7 +50,6 @@ class JumpBackInViewModel: FeatureFlaggable {
         isZeroSearch: Bool = false,
         profile: Profile,
         isPrivate: Bool,
-        urlBar: URLBarViewProtocol,
         theme: Theme,
         tabManager: TabManager,
         adaptor: JumpBackInDataAdaptor,
@@ -61,7 +58,6 @@ class JumpBackInViewModel: FeatureFlaggable {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.isPrivate = isPrivate
-        self.urlBar = urlBar
         self.theme = theme
         self.tabManager = tabManager
         self.jumpBackInDataAdaptor = adaptor
@@ -69,8 +65,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(group: ASGroup<Tab>) {
-        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
-
         guard let firstTab = group.groupedItems.first else { return }
 
         onTapGroup?(firstTab)
@@ -85,8 +79,6 @@ class JumpBackInViewModel: FeatureFlaggable {
     }
 
     func switchTo(tab: Tab) {
-        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
-
         tabManager.selectTab(tab, previous: nil)
         TelemetryWrapper.recordEvent(
             category: .action,
