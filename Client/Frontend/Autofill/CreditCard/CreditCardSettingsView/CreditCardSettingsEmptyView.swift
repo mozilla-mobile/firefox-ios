@@ -26,7 +26,7 @@ struct CreditCardSettingsEmptyView: View {
                             textColor: colors.toggleTextColor,
                             model: toggleModel)
                         Spacer()
-                        Image("credit_card_placeholder")
+                        Image(ImageIdentifiers.creditCardPlaceholder)
                             .resizable()
                             .frame(width: 200, height: 200)
                             .aspectRatio(contentMode: .fit)
