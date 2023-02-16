@@ -21,10 +21,10 @@ struct FloatingTextField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(label)
-                .font(.system(size: 15))
+                .font(.subheadline)
                 .foregroundColor(colors.titleColor)
             TextField("", text: $textVal)
-                .font(.system(size: 17))
+                .font(.body)
                 .padding(.top, 7.5)
                 .foregroundColor(colors.textFieldColor)
             if showError {
