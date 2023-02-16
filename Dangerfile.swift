@@ -128,8 +128,18 @@ func detect(keywords: [CodeUsageToDetect], inHunks hunks: [FileDiff.Hunk], file:
 
 func detect(keyword: String, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
     for hunk in hunks {
-        for (index, line) in hunk.lines.enumerated() where String(describing: line).contains(keyword) {
-            let lineNumber = hunk.newLineStart + index + 1
+        var newLineCount = 0
+        for line in hunk.lines {
+            let isAddedLine = "\(line)".starts(with: "+")
+            let isRemovedLine = "\(line)".starts(with: "-")
+            // Make sure our newLineCount is proper to warn on correct line number
+            guard isAddedLine || !isRemovedLine else { continue }
+            newLineCount += 1
+
+            // Warn only on added line having the particular keyword
+            guard isAddedLine && String(describing: line).contains(keyword) else { continue }
+
+            let lineNumber = hunk.newLineStart + newLineCount - 1
             warn(String(format: message, file, lineNumber))
         }
     }
