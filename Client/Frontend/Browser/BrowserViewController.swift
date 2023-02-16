@@ -65,9 +65,7 @@ class BrowserViewController: UIViewController {
     private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
-    // TODO: Remove at FXIOS-5639 Feature flag like to use during the refactoring
-    private var shouldUseOverlayManager = false
-    private var overlayManager: OverlayModeManager?
+    var overlayManager: OverlayModeManager
 
     var surveySurfaceManager: SurveySurfaceManager?
     var contextHintVC: ContextualHintViewController
@@ -179,6 +177,7 @@ class BrowserViewController: UIViewController {
         self.downloadQueue = downloadQueue
         self.logger = logger
 
+        self.overlayManager = DefaultOverlayModeManager()
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
         self.contextHintVC = ContextualHintViewController(with: contextViewModel)
@@ -217,9 +216,8 @@ class BrowserViewController: UIViewController {
         applyTheme()
     }
 
-    @objc func didTapUndoCloseAllTabToast(notification: Notification) {
-        leaveOverlayMode(didCancel: true)
-    }
+    // TODO: FXIOS-5639 Remove delegate keyboard
+    @objc func didTapUndoCloseAllTabToast(notification: Notification) { }
 
     @objc func openTabNotification(notification: Notification) {
         guard let openTabObject = notification.object as? OpenTabNotificationObject else {
@@ -415,31 +413,7 @@ class BrowserViewController: UIViewController {
         setupNotifications()
         addSubviews()
 
-        // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work,
-        // thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need
-        // to make them "persistent" e.g. by being stored in BVC
-        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { () -> Bool in
-            if let pasteboardContents = UIPasteboard.general.string {
-                self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
-                return true
-            }
-            return false
-        })
-        pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
-            if let pasteboardContents = UIPasteboard.general.string {
-                // Enter overlay mode and make the search controller appear.
-                self.urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
-
-                return true
-            }
-            return false
-        })
-        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { () -> Bool in
-            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
-                UIPasteboard.general.url = url
-            }
-            return true
-        })
+        setupAccessibleActions()
 
         clipboardBarDisplayHandler = ClipboardBarDisplayHandler(prefs: profile.prefs, tabManager: tabManager)
         clipboardBarDisplayHandler?.delegate = self
@@ -464,9 +438,35 @@ class BrowserViewController: UIViewController {
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
 
-        if shouldUseOverlayManager {
-            overlayManager = DefaultOverlayModeManager(urlBarView: urlBar)
-        }
+        overlayManager.setURLBar(urlBarView: urlBar)
+    }
+
+    private func setupAccessibleActions() {
+        // UIAccessibilityCustomAction subclass holding an AccessibleAction instance does not work,
+        // thus unable to generate AccessibleActions and UIAccessibilityCustomActions "on-demand" and need
+        // to make them "persistent" e.g. by being stored in BVC
+        pasteGoAction = AccessibleAction(name: .PasteAndGoTitle, handler: { () -> Bool in
+            if let pasteboardContents = UIPasteboard.general.string {
+                self.urlBar(self.urlBar, didSubmitText: pasteboardContents)
+                return true
+            }
+            return false
+        })
+        pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
+            if let pasteboardContents = UIPasteboard.general.string {
+                // Enter overlay mode and make the search controller appear.
+                self.overlayManager.openSearch(with: pasteboardContents)
+
+                return true
+            }
+            return false
+        })
+        copyAddressAction = AccessibleAction(name: .CopyAddressTitle, handler: { () -> Bool in
+            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
+                UIPasteboard.general.url = url
+            }
+            return true
+        })
     }
 
     private func setupNotifications() {
@@ -593,8 +593,8 @@ class BrowserViewController: UIViewController {
             withArrowDirection: isBottomSearchBar ? .down : .up,
             andDelegate: self,
             presentedUsing: { self.presentContextualHint() },
-            withActionBeforeAppearing: { self.homePanelDidPresentContextualHintOf(type: .toolbarLocation) },
-            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) })
+            andActionForButton: { self.homePanelDidRequestToOpenSettings(at: .customizeToolbar) },
+            overlayState: overlayManager)
     }
 
     private func presentContextualHint() {
@@ -967,7 +967,6 @@ class BrowserViewController: UIViewController {
         let homepageViewController = HomepageViewController(
             profile: profile,
             tabManager: tabManager,
-            urlBar: urlBar,
             overlayManager: overlayManager)
         homepageViewController.homePanelDelegate = self
         homepageViewController.libraryPanelDelegate = self
@@ -1024,8 +1023,6 @@ class BrowserViewController: UIViewController {
 
             if userHasPressedHomeButton {
                 userHasPressedHomeButton = false
-            } else if focusUrlBar && !contextHintVC.shouldPresentHint() {
-                enterOverlayMode()
             }
         } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
             hideHomepage()
@@ -1035,31 +1032,6 @@ class BrowserViewController: UIViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             topTabsViewController?.refreshTabs()
         }
-    }
-
-    private func enterOverlayMode() {
-        guard !shouldUseOverlayManager else { return }
-
-        // Delay enterOverlay mode after dismissableView is dismiss
-        if let viewcontroller = presentedViewController as? OnViewDismissable {
-            viewcontroller.onViewDismissed = { [weak self] in
-                let shouldEnterOverlay = self?.tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
-                if shouldEnterOverlay {
-                    self?.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-                }
-            }
-        } else if presentedViewController is OnboardingViewControllerProtocol {
-            // leave from overlay mode while in onboarding is displayed on iPad
-            leaveOverlayMode(didCancel: false)
-        } else {
-            self.urlBar.enterOverlayMode(nil, pasted: false, search: false)
-        }
-    }
-
-    private func leaveOverlayMode(didCancel cancel: Bool) {
-        guard !shouldUseOverlayManager else { return }
-
-        urlBar.leaveOverlayMode(didCancel: cancel)
     }
 
     func showLibrary(panel: LibraryPanelType? = nil) {
@@ -1156,7 +1128,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        leaveOverlayMode(didCancel: false)
+        overlayManager.finishEdition(shouldCancelLoading: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -1228,8 +1200,8 @@ class BrowserViewController: UIViewController {
     }
 
     override func accessibilityPerformEscape() -> Bool {
-        if urlBar.inOverlayMode {
-            leaveOverlayMode(didCancel: true)
+        if overlayManager.inOverlayMode {
+            overlayManager.finishEdition(shouldCancelLoading: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -1495,8 +1467,6 @@ class BrowserViewController: UIViewController {
 
         if currentViewController != self {
             _ = self.navigationController?.popViewController(animated: true)
-        } else if let urlBar = urlBar, urlBar.inOverlayMode {
-            leaveOverlayMode(didCancel: true)
         }
     }
 
@@ -1976,16 +1946,6 @@ extension BrowserViewController: HomePanelDelegate {
         showTabTray(withFocusOnUnselectedTab: tabToFocus, focusedSegment: focusedSegment)
     }
 
-    func homePanelDidPresentContextualHintOf(type: ContextualHintType) {
-        switch type {
-        case .jumpBackIn,
-                .jumpBackInSyncedTab,
-                .toolbarLocation:
-            leaveOverlayMode(didCancel: false)
-        default: break
-        }
-    }
-
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
         showSettingsWithDeeplink(to: settingsPage)
     }
@@ -2037,7 +1997,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     // In searchViewController when user selects an open tabs and switch to it
     func searchViewController(_ searchViewController: SearchViewController, uuid: String) {
-        leaveOverlayMode(didCancel: true)
+        overlayManager.switchTab(shouldCancelLoading: true)
         if let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
         }
@@ -2150,36 +2110,17 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateInContentHomePanel(selected?.url as URL?, focusUrlBar: true)
-
-        // TODO: Remove this block was added to fix https://mozilla-hub.atlassian.net/browse/FXIOS-4018
-        // but will be handled in the refactoring
-        if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
-            if tab.url == nil, !tab.isRestoring {
-                if tabManager.didChangedPanelSelection && !tabManager.didAddNewTab {
-                    tabManager.didChangedPanelSelection = false
-                    leaveOverlayMode(didCancel: false)
-                } else {
-                    tabManager.didAddNewTab = false
-                    urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
-                }
-            } else {
-                leaveOverlayMode(didCancel: false)
-            }
-        }
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
         // If we are restoring tabs then we update the count once at the end
-        tabManager.didAddNewTab = true
         if !isRestoring {
-            // TODO: Call to manager enterOverlayMode here
             updateTabCountUsingTabManager(tabManager)
         }
         tab.tabDelegate = self
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        tabManager.didChangedPanelSelection = true
         if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
             profile.recentlyClosedTabs.addTab(url as URL,
                                               title: tab.lastTitle,
@@ -2190,7 +2131,6 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
-        tabManager.didChangedPanelSelection = true
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
@@ -2675,21 +2615,22 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
-        leaveOverlayMode(didCancel: true)
+        // Technically is not changing tabs but is loosing focus on urlbar
+        overlayManager.switchTab(shouldCancelLoading: true)
         self.urlBarDidPressTabs(urlBar)
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
+        overlayManager.openNewTab(nil, url: nil)
     }
 
-    func topTabsDidTogglePrivateMode() {
-        guard tabManager.selectedTab != nil else { return }
-        urlBar.leaveOverlayMode()
-    }
+    // TODO: FXIOS-5639 Remove from protocol if it was used for keyboard handling
+    func topTabsDidTogglePrivateMode() { }
 
     func topTabsDidChangeTab() {
-        leaveOverlayMode(didCancel: true)
+        // Only for iPad leave overlay mode on tab change
+        overlayManager.switchTab(shouldCancelLoading: true)
     }
 }
 
