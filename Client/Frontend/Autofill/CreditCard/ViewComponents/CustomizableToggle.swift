@@ -68,7 +68,6 @@ struct CustomizableToggleUIKit: UIViewRepresentable {
     let toggleUX: UX
 
     func makeUIView(context: Context) -> UISwitch {
-
         let switchButton = UISwitch(frame: CGRect(
             width: toggleUX.toggleWidth,
             height: toggleUX.toggleHeight)
