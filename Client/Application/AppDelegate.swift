@@ -178,6 +178,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile.shutdown()
     }
 
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        logger.log("Received memory warning", level: .info, category: .lifecycle)
+    }
+
     private func updateTopSitesWidget() {
         // Since we only need the topSites data in the archiver, let's write it
         // only if iOS 14 is available.
