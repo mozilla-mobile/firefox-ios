@@ -4,8 +4,12 @@
 
 import Foundation
 import SwiftUI
+import Common
 
 class CreditCardEditViewModel: ObservableObject {
+    typealias CreditCardText = String.CreditCard.Alert
+    let profile: Profile
+
     @Published var firstName: String = ""
     @Published var lastName: String = ""
     @Published var errorState: String = ""
@@ -31,12 +35,39 @@ class CreditCardEditViewModel: ObservableObject {
         }
     }
 
-    init() {}
+    var removeButtonDetails: RemoveCardButton.AlertDetails {
+        let isSignedIn = profile.hasSyncableAccount()
 
-    init(firstName: String,
+        if isSignedIn {
+            return RemoveCardButton.AlertDetails(
+                alertTitle: Text(CreditCardText.RemoveCardTitle),
+                alertBody: Text(CreditCardText.RemoveCardSublabel),
+                primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)),
+                secondaryButtonStyleAndText: .cancel(),
+                primaryButtonAction: {},
+                secondaryButtonAction: {})
+        }
+
+        return RemoveCardButton.AlertDetails(
+            alertTitle: Text(CreditCardText.RemoveCardTitle),
+            alertBody: nil,
+            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)),
+            secondaryButtonStyleAndText: .cancel(),
+            primaryButtonAction: {},
+            secondaryButtonAction: {}
+        )
+    }
+
+    init(profile: Profile) {
+        self.profile = profile
+    }
+
+    init(profile: Profile = AppContainer.shared.resolve(),
+         firstName: String,
          lastName: String,
          errorState: String,
          enteredValue: String) {
+        self.profile = profile
         self.firstName = firstName
         self.lastName = lastName
         self.errorState = errorState
