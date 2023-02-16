@@ -66,7 +66,7 @@ class BrowserViewController: UIViewController {
     private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
-    var overlayManager: OverlayModeManager!
+    var overlayManager: OverlayModeManager
 
     var contextHintVC: ContextualHintViewController
 
@@ -177,6 +177,7 @@ class BrowserViewController: UIViewController {
         self.downloadQueue = downloadQueue
         self.logger = logger
 
+        self.overlayManager = DefaultOverlayModeManager()
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
         self.contextHintVC = ContextualHintViewController(with: contextViewModel)
@@ -437,7 +438,7 @@ class BrowserViewController: UIViewController {
         // Awesomebar Location Telemetry
         SearchBarSettingsViewModel.recordLocationTelemetry(for: isBottomSearchBar ? .bottom : .top)
 
-        overlayManager = DefaultOverlayModeManager(urlBarView: urlBar)
+        overlayManager.setURLBar(urlBarView: urlBar)
     }
 
     private func setupAccessibleActions() {
@@ -1124,7 +1125,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        overlayManager?.finishEdition(didCancel: false)
+        overlayManager.finishEdition(didCancel: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)

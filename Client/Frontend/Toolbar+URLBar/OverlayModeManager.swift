@@ -9,6 +9,7 @@ protocol OverlayStateProtocol {
 }
 
 protocol OverlayModeManager: OverlayStateProtocol {
+    func setURLBar(urlBarView: URLBarViewProtocol)
     func pasteContent(pasteContent: String)
     func openNewTab(_ locationText: String?, url: URL?)
     func finishEdition(didCancel: Bool)
@@ -16,13 +17,15 @@ protocol OverlayModeManager: OverlayStateProtocol {
 }
 
 class DefaultOverlayModeManager: OverlayModeManager {
-    private var urlBarView: URLBarViewProtocol
+    private var urlBarView: URLBarViewProtocol?
 
     var inOverlayMode: Bool {
-        return urlBarView.inOverlayMode
+        return urlBarView?.inOverlayMode ?? false
     }
 
-    init(urlBarView: URLBarViewProtocol) {
+    init() {}
+
+    func setURLBar(urlBarView: URLBarViewProtocol) {
         self.urlBarView = urlBarView
     }
 
@@ -45,10 +48,10 @@ class DefaultOverlayModeManager: OverlayModeManager {
     }
 
     private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
-        urlBarView.enterOverlayMode(locationText, pasted: pasted, search: search)
+        urlBarView?.enterOverlayMode(locationText, pasted: pasted, search: search)
     }
 
     private func leaveOverlayMode(didCancel cancel: Bool) {
-        urlBarView.leaveOverlayMode(didCancel: cancel)
+        urlBarView?.leaveOverlayMode(didCancel: cancel)
     }
 }
