@@ -34,7 +34,7 @@ struct CreditCardAutofillToggle: View {
                 .padding(.leading, 16)
                 .hidden()
             HStack {
-                Toggle("Save and autofill cards", isOn: $model.isEnabled)
+                Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
                     .font(.body)
                     .foregroundColor(textColor)
                     .padding(.leading, 16)
