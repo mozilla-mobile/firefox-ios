@@ -4930,6 +4930,11 @@ extension String {
                 tableName: "Settings",
                 value: "Save your card information securely to check out faster next time.",
                 comment: "Description label for when there are no credit cards shown in credit card list in autofill settings screen.")
+            public static let ListItemA11y = MZLocalizedString(
+                "Settings.ListItem.v112",
+                tableName: "Settings",
+                value: "%1$@ ending in %2$@, issued to %3$@, expires %4$@",
+                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card type (e.g. Visa). The second parameter is the last 4 digits of the credit card. The third parameter is the name of the credit card holder. The fourth and fifth parameters are the month and year of the credit card's expiration date.")
         }
 
         // Editing and saving credit card
