@@ -2,17 +2,16 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import UIKit
-import SwiftUI
-import Storage
 import Common
+import UIKit
 import Shared
+import Storage
+import SwiftUI
 
 class CreditCardSettingsViewController: UIViewController, Themeable {
-    var themeObserver: NSObjectProtocol?
     var viewModel: CreditCardSettingsViewModel
     var startingConfig: CreditCardSettingsStartingConfig?
+    var themeObserver: NSObjectProtocol?
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
 
@@ -29,14 +28,22 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
         self.themeManager = themeManager
-        self.creditCardEmptyView = UIHostingController(rootView: CreditCardSettingsEmptyView())
+        self.notificationCenter = notificationCenter
+        self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.creditCardTableViewModel)
+
+        let theme = themeManager.currentTheme
+        let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: theme.colors.textPrimary.color,
+                                                        subTextColor: theme.colors.textPrimary.color,
+                                                        toggleTextColor: theme.colors.textPrimary.color)
+        let emptyView = CreditCardSettingsEmptyView(colors: colors, toggleModel: viewModel.toggleModel)
+        self.creditCardEmptyView = UIHostingController(rootView: emptyView)
+
         self.creditCardAddEditView =
         UIHostingController(rootView: CreditCardEditView(
             viewModel: viewModel.addEditViewModel,
-            removeButtonColor: Color(themeManager.currentTheme.colors.textWarning),
-            borderColor: Color(themeManager.currentTheme.colors.borderPrimary)))
-        self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.creditCardTableViewModel)
-        self.notificationCenter = notificationCenter
+            removeButtonColor: themeManager.currentTheme.colors.textWarning.color,
+            borderColor: themeManager.currentTheme.colors.borderPrimary.color))
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -68,17 +75,17 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
         NSLayoutConstraint.activate([
             emptyCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            emptyCreditCardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            emptyCreditCardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             emptyCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
             addEditCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            addEditCreditCardView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            addEditCreditCardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             addEditCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             addEditCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
             creditCardTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            creditCardTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            creditCardTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             creditCardTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             creditCardTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
