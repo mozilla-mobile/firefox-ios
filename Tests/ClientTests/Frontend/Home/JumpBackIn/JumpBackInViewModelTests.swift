@@ -18,7 +18,7 @@ class JumpBackInViewModelTests: XCTestCase {
     var adaptor: JumpBackInDataAdaptorMock!
 
     let iPhone14ScreenSize = CGSize(width: 390, height: 844)
-    let sleepTime: UInt64 = 500_000_000
+    let sleepTime: UInt64 = 1_000_000_000
     override func setUp() {
         super.setUp()
 
