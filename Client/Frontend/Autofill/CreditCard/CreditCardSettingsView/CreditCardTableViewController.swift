@@ -91,10 +91,6 @@ class CreditCardTableViewController: UIViewController, Themeable {
 
     func applyTheme() {
         let theme = themeManager.currentTheme
-//        toggleSwitchContainerLine.backgroundColor = theme.colors.borderPrimary
-//        toggleSwitchContainer.backgroundColor = theme.colors.layer2
-//        tableView.backgroundColor = .clear
-//        toggleSwitch.onTintColor = theme.colors.actionPrimary
         view.backgroundColor = theme.colors.layer1
     }
 
