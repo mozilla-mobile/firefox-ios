@@ -14,6 +14,7 @@ import WebKit
 class JumpBackInDataAdaptorTests: XCTestCase {
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
+    let sleepTime: UInt64 = 100_000_000
 
     override func setUp() {
         super.setUp()
@@ -48,6 +49,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         mockTabManager.nextRecentlyAccessedNormalTabs = [tab1, tab2, tab3]
 
         let subject = createSubject()
+        try? await Task.sleep(nanoseconds: sleepTime)
 
         let recentTabs = await subject.getRecentTabData()
         XCTAssertEqual(recentTabs.count, 3)
@@ -63,6 +65,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
                                                        tabs: remoteTabs(idRange: 1...3))]
 
         let subject = createSubject()
+        try? await Task.sleep(nanoseconds: sleepTime)
 
         let recentTabs = await subject.getRecentTabData()
         XCTAssertEqual(recentTabs.count, 3)
@@ -74,6 +77,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     func testSyncTab_whenNoSyncTabsData_notReturned() async {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
+        try? await Task.sleep(nanoseconds: sleepTime)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since there's no remote tabs")
@@ -86,6 +90,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
                                                        tabs: remoteTabs(idRange: 1...3))]
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
+        try? await Task.sleep(nanoseconds: sleepTime)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since hasSyncableAccount is off")
@@ -96,6 +101,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         mockProfile.hasSyncableAccountMock = false
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs(idRange: 1...2))]
         let subject = createSubject()
+        try? await Task.sleep(nanoseconds: sleepTime)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertNil(syncTab, "No sync tab since there's no desktop client")
@@ -108,6 +114,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         mockProfile.mockClientAndTabs = [ClientAndTabs(client: remoteClient, tabs: remoteTabs)]
 
         let subject = createSubject()
+        try? await Task.sleep(nanoseconds: sleepTime)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertEqual(syncTab?.client.name, remoteClient.name)
@@ -123,6 +130,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
                                          ClientAndTabs(client: remoteClient, tabs: remoteClientTabs)]
 
         let subject = createSubject()
+        try? await Task.sleep(nanoseconds: sleepTime)
 
         let syncTab = await subject.getSyncedTabData()
         XCTAssertEqual(syncTab?.client.name, remoteClient.name)
@@ -150,8 +158,8 @@ extension JumpBackInDataAdaptorTests {
     }
 
     func createTab(profile: MockProfile,
-                   configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
                    urlString: String? = "www.website.com") -> Tab {
+        let configuration: WKWebViewConfiguration = WKWebViewConfiguration()
         let tab = Tab(profile: profile, configuration: configuration)
 
         if let urlString = urlString {
