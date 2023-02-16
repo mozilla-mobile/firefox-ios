@@ -10,14 +10,14 @@ class MockOverlayModeManager: DefaultOverlayModeManager {
     var leaveOverlayModeCallCount = 0
     var enterOverlayModeCallCount = 0
 
-    override func finishEdition() {
+    override func finishEdition(didCancelLoading: Bool) {
         leaveOverlayModeCallCount += 1
-        super.finishEdition()
+        super.finishEdition(didCancelLoading: didCancelLoading)
     }
 
-    override func pasteContent(pasteContent: String) {
+    override func openSearch(with pasteContent: String) {
         enterOverlayModeCallCount += 1
-        super.pasteContent(pasteContent: pasteContent)
+        super.openSearch(with: pasteContent)
     }
 
     override func openNewTab(_ locationText: String?, url: URL?) {
@@ -25,8 +25,8 @@ class MockOverlayModeManager: DefaultOverlayModeManager {
         super.openNewTab(locationText, url: url)
     }
 
-    override func switchTab(didCancel: Bool) {
+    override func switchTab(didCancelLoading: Bool) {
         leaveOverlayModeCallCount += 1
-        super.switchTab(didCancel: didCancel)
+        super.switchTab(didCancelLoading: didCancelLoading)
     }
 }

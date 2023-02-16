@@ -7,17 +7,19 @@ import XCTest
 @testable import Client
 class OverlayModeManagerTests: XCTestCase {
     private var urlBar: MockURLBarView!
-    private var subject: OverlayModeManager!
+    private var subject: MockOverlayModeManager!
 
     override func setUp() {
         super.setUp()
-
         urlBar = MockURLBarView()
-        subject = MockOverlayModeManager(urlBarView: urlBar)
+        subject = MockOverlayModeManager()
+        subject.setURLBar(urlBarView: urlBar)
     }
 
     override func tearDown() {
         super.tearDown()
+        urlBar = nil
+        subject = nil
     }
 
     func testEnterOverlayMode_ForNewTabWithNilURL() {

@@ -303,7 +303,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     @objc private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
-            overlayManager.finishEdition(didCancel: false)
+            overlayManager.finishEdition(didCancelLoading: false)
         }
     }
 

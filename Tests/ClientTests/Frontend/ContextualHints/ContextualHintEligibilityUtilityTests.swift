@@ -20,7 +20,8 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
 
         profile = MockProfile()
         urlBar = MockURLBarView()
-        overlayState = MockOverlayModeManager(urlBarView: urlBar)
+        overlayState = MockOverlayModeManager()
+        overlayState.setURLBar(urlBarView: urlBar)
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: nil,
                                                    device: MockUIDevice(isIpad: false))

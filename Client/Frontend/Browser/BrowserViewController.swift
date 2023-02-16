@@ -455,7 +455,7 @@ class BrowserViewController: UIViewController {
         pasteAction = AccessibleAction(name: .PasteTitle, handler: { () -> Bool in
             if let pasteboardContents = UIPasteboard.general.string {
                 // Enter overlay mode and make the search controller appear.
-                self.overlayManager.pasteContent(pasteContent: pasteboardContents)
+                self.overlayManager.openSearch(with: pasteboardContents)
 
                 return true
             }
@@ -1125,7 +1125,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        overlayManager.finishEdition(didCancel: false)
+        overlayManager.finishEdition(didCancelLoading: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -1198,7 +1198,7 @@ class BrowserViewController: UIViewController {
 
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
-            overlayManager.finishEdition(didCancel: true)
+            overlayManager.finishEdition(didCancelLoading: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -1970,7 +1970,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
     // In searchViewController when user selects an open tabs and switch to it
     func searchViewController(_ searchViewController: SearchViewController, uuid: String) {
-        overlayManager.switchTab(didCancel: true)
+        overlayManager.switchTab(didCancelLoading: true)
         if let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
         }
@@ -2596,7 +2596,7 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
         // Technically is not changing tabs but is loosing focus on urlbar
-        overlayManager.switchTab(didCancel: true)
+        overlayManager.switchTab(didCancelLoading: true)
         self.urlBarDidPressTabs(urlBar)
     }
 
@@ -2610,7 +2610,7 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change
-        overlayManager.switchTab(didCancel: true)
+        overlayManager.switchTab(didCancelLoading: true)
     }
 }
 

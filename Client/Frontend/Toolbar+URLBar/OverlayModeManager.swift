@@ -9,11 +9,27 @@ protocol OverlayStateProtocol {
 }
 
 protocol OverlayModeManager: OverlayStateProtocol {
+    /// Set URLBar which is not available when the manager is created
+    /// - Parameter urlBarView: URLBar that contains textfield which open and dismiss the keyboard
     func setURLBar(urlBarView: URLBarViewProtocol)
-    func pasteContent(pasteContent: String)
+
+    /// Enter overlay mode with paste content
+    /// - Parameter pasteContent: String with the content to paste on the search
+    func openSearch(with pasteContent: String)
+
+    /// Enter overlay mode when opening a new tab
+    /// - Parameters:
+    ///   - locationText: String with initial search text
+    ///   - url: Tab url to determine if is the url is homepage or nil
     func openNewTab(_ locationText: String?, url: URL?)
-    func finishEdition(didCancel: Bool)
-    func switchTab(didCancel: Bool)
+
+    /// Leave overlay mode when user finish edition, either pressing the go button, enter etc
+    /// - Parameter didCancelLoading: Bool value determine if the loading animation of the current search should be canceled
+    func finishEdition(didCancelLoading: Bool)
+
+    /// Leave overlay mode when tab change happens, like switching tabs or open a site from any homepage section
+    /// - Parameter didCancelLoading: Bool value determine if the loading animation of the current search should be canceled
+    func switchTab(didCancelLoading: Bool)
 }
 
 class DefaultOverlayModeManager: OverlayModeManager {
@@ -29,11 +45,7 @@ class DefaultOverlayModeManager: OverlayModeManager {
         self.urlBarView = urlBarView
     }
 
-    func finishEdition(didCancel: Bool) {
-        leaveOverlayMode(didCancel: didCancel)
-    }
-
-    func pasteContent(pasteContent: String) {
+    func openSearch(with pasteContent: String) {
         enterOverlayMode(pasteContent, pasted: true, search: true)
     }
 
@@ -43,8 +55,12 @@ class DefaultOverlayModeManager: OverlayModeManager {
         }
     }
 
-    func switchTab(didCancel: Bool) {
-        leaveOverlayMode(didCancel: didCancel)
+    func finishEdition(didCancelLoading: Bool) {
+        leaveOverlayMode(didCancel: didCancelLoading)
+    }
+
+    func switchTab(didCancelLoading: Bool) {
+        leaveOverlayMode(didCancel: didCancelLoading)
     }
 
     private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
