@@ -1155,6 +1155,10 @@
 		E18259DB29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */; };
 		E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */; };
 		E18259E329B2A51B00E6BE76 /* MockNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259E229B2A51B00E6BE76 /* MockNotificationManager.swift */; };
+		E17496382991A2720096900A /* AdaptiveStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17496372991A2720096900A /* AdaptiveStack.swift */; };
+		E174963A2992B42C0096900A /* CreditCardSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17496392992B42C0096900A /* CreditCardSectionHeader.swift */; };
+		E174963C2992B6A60096900A /* HostingTableViewSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E174963B2992B6A60096900A /* HostingTableViewSectionHeader.swift */; };
+		E17496402994302D0096900A /* PreferredFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = E174963F2994302D0096900A /* PreferredFont.swift */; };
 		E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */; };
 		E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */; };
 		E18BAAFD28E4A44500098AE2 /* TopTabFader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */; };
@@ -5775,6 +5779,10 @@
 		E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationCardHelper.swift; sourceTree = "<group>"; };
 		E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCenterProtocol.swift; sourceTree = "<group>"; };
 		E18259E229B2A51B00E6BE76 /* MockNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNotificationManager.swift; sourceTree = "<group>"; };
+		E17496372991A2720096900A /* AdaptiveStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptiveStack.swift; sourceTree = "<group>"; };
+		E17496392992B42C0096900A /* CreditCardSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardSectionHeader.swift; sourceTree = "<group>"; };
+		E174963B2992B6A60096900A /* HostingTableViewSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingTableViewSectionHeader.swift; sourceTree = "<group>"; };
+		E174963F2994302D0096900A /* PreferredFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredFont.swift; sourceTree = "<group>"; };
 		E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandler.swift; sourceTree = "<group>"; };
 		E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCell.swift; sourceTree = "<group>"; };
 		E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabFader.swift; sourceTree = "<group>"; };
@@ -7168,12 +7176,13 @@
 		43D16B7D29831CEA009F8279 /* CreditCardSettingsView */ = {
 			isa = PBXGroup;
 			children = (
-				43D4BCB92972082400775FB5 /* CreditCardSettingsViewModel.swift */,
-				4346FF07295BA6A200F4D220 /* CreditCardSettingsViewController.swift */,
-				43D16B7B29831CD0009F8279 /* CreditCardItemRow.swift */,
 				4347B399298DA5BB0045F677 /* CreditCardEditViewModel.swift */,
 				43D16B7F29831DC5009F8279 /* CreditCardEditView.swift */,
+				43D16B7B29831CD0009F8279 /* CreditCardItemRow.swift */,
+				E17496392992B42C0096900A /* CreditCardSectionHeader.swift */,
 				43D00492296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift */,
+				4346FF07295BA6A200F4D220 /* CreditCardSettingsViewController.swift */,
+				43D4BCB92972082400775FB5 /* CreditCardSettingsViewModel.swift */,
 				438FE8632988ABA600155B10 /* CreditCardTableViewController.swift */,
 				4347B397298D6D7B0045F677 /* CreditCardTableViewModel.swift */,
 			);
@@ -7195,6 +7204,7 @@
 				43D16B8629831EEF009F8279 /* RemoveCardButton.swift */,
 				43D16B8129831E6A009F8279 /* FloatingTextField.swift */,
 				43D16B7929831C7F009F8279 /* CreditCardAutofillToggle.swift */,
+				E174963F2994302D0096900A /* PreferredFont.swift */,
 			);
 			path = ViewComponents;
 			sourceTree = "<group>";
@@ -7326,6 +7336,7 @@
 				D04CD748216CF86B004FF5B0 /* DevicePickerViewController.swift */,
 				E1CD81C4290C6D5800124B27 /* HelpView.swift */,
 				E1CD81C1290C62A600124B27 /* HostingTableViewCell.swift */,
+				E174963B2992B6A60096900A /* HostingTableViewSectionHeader.swift */,
 				E1B04A9C28E20A8300670E54 /* InstructionsView.swift */,
 				D04CD747216CF86A004FF5B0 /* SiriShortcuts.swift */,
 			);
@@ -7775,6 +7786,7 @@
 		8AED23C327AC1F8700DE7E97 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				E17496362991A2480096900A /* SwiftUI */,
 				8AB5958B28414DF60090F4AE /* ActionButton.swift */,
 				8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */,
 				8A9CB41D2846F0BF00CC3A16 /* FadeScrollView.swift */,
@@ -8971,6 +8983,14 @@
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		E17496362991A2480096900A /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				E17496372991A2720096900A /* AdaptiveStack.swift */,
+			);
+			path = SwiftUI;
 			sourceTree = "<group>";
 		};
 		E1877A7F286E0EFD00F5BDF2 /* WebView */ = {
@@ -11618,6 +11638,7 @@
 				8A0621B829428FBD005D1EFD /* OpenTabNotificationObject.swift in Sources */,
 				C8D0D6F2281C182D00AFAED9 /* FeatureFlagUserPrefsMigrationUtility.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
+				E17496382991A2720096900A /* AdaptiveStack.swift in Sources */,
 				C87DC85C27B2C94D006EFCE2 /* LegacyWallpaperResourceManager.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				F8A0B08229AD61FA0091C75B /* RustSyncManager.swift in Sources */,
@@ -11644,6 +11665,8 @@
 				C8DC90C32A066B4A0008832B /* MarkupToken.swift in Sources */,
 				E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */,
 				FA6B2AC21D41F02D00429414 /* String+Punycode.swift in Sources */,
+				048B4C7D24A53EA8001B56E8 /* TodayViewModel.swift in Sources */,
+				E174963C2992B6A60096900A /* HostingTableViewSectionHeader.swift in Sources */,
 				8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */,
 				D301AAEE1A3A55B70078DD1D /* GridTabViewController.swift in Sources */,
 				EB9A179B20E69A7F00B12184 /* LegacyThemeManager.swift in Sources */,
@@ -11788,6 +11811,7 @@
 				C83432FE26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
+				E17496402994302D0096900A /* PreferredFont.swift in Sources */,
 				E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */,
 				9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
@@ -11864,6 +11888,7 @@
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
 				8A7A26E529D4C0A800EA76F1 /* IntroScreenManager.swift in Sources */,
 				8AB8574827D97CD40075C173 /* HomePanelType.swift in Sources */,
+				E174963A2992B42C0096900A /* CreditCardSectionHeader.swift in Sources */,
 				2128E27B292E624400FB91BE /* SendToDeviceActivity.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginDetailTableViewCell.swift in Sources */,
 				C855728229AE7F1700AF32B0 /* SurveySurfaceManager.swift in Sources */,
@@ -16424,6 +16449,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -16723,6 +16749,7 @@
 				DEVELOPMENT_TEAM = "";
 				EXCLUDED_SOURCE_FILE_NAMES = CredentialProvider.appex;
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -16971,6 +16998,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				INFOPLIST_FILE = Client/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -17457,6 +17485,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

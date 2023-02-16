@@ -2,9 +2,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Shared
 import SwiftUI
 import UIKit
-import Shared
 
 protocol InstructionsViewDelegate: AnyObject {
     func dismissInstructionsView()
@@ -23,7 +23,7 @@ struct InstructionsView: View {
 
     var body: some View {
         ZStack {
-            Color(backgroundColor).edgesIgnoringSafeArea(.all)
+            backgroundColor.color.edgesIgnoringSafeArea(.all)
             ScrollView {
                 HelpView(textColor: textColor,
                          imageColor: imageColor,
