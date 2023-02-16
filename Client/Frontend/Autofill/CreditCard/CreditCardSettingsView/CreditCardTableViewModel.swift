@@ -9,6 +9,8 @@ import Storage
 import Shared
 
 class CreditCardTableViewModel {
+    var toggleModel: ToggleModel?
+
     var creditCards: [CreditCard] = [CreditCard]() {
         didSet {
             didUpdateCreditCards?()
@@ -17,23 +19,26 @@ class CreditCardTableViewModel {
 
     var didUpdateCreditCards: (() -> Void)?
 
-    var isAutofillEnabled: Bool {
-        get {
-            let userdefaults = UserDefaults.standard
-            let key = PrefsKeys.KeyAutofillCreditCardStatus
-            guard userdefaults.value(forKey: key) != nil else {
-                // Default value is true for autofill credit card input
-                return true
-            }
+    func a11yLabel(for indexPath: IndexPath) -> NSAttributedString {
+        guard indexPath.section == 1 else { return NSAttributedString() }
 
-            return userdefaults.bool(forKey: key)
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: PrefsKeys.KeyAutofillCreditCardStatus)
-        }
-    }
+        let creditCard = creditCards[indexPath.row]
 
-    func updateToggle() {
-        isAutofillEnabled = !isAutofillEnabled
+        let components = DateComponents(year: Int(creditCard.ccExpYear), month: Int(creditCard.ccExpMonth))
+        let formattedExpiryDate = DateComponentsFormatter.localizedString(from: components,
+                                                                          unitsStyle: .spellOut) ?? ""
+
+        let string = String(format: .CreditCard.Settings.ListItemA11y,
+                            creditCard.ccType,
+                            creditCard.ccNumberLast4,
+                            creditCard.ccName,
+                            formattedExpiryDate)
+        let attributedString = NSMutableAttributedString(string: string)
+        if let range = attributedString.string.range(of: creditCard.ccNumberLast4) {
+            attributedString.addAttributes([.accessibilitySpeechSpellOut: true],
+                                           range: NSRange(range, in: attributedString.string))
+        }
+
+        return attributedString
     }
 }

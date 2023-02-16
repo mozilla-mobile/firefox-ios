@@ -25,11 +25,30 @@ class CreditCardSettingsViewModel {
     var profile: Profile
     var addEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel()
     var creditCardTableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
+    var toggleModel: ToggleModel!
 
     public init(profile: Profile) {
         self.profile = profile
         guard let profile = profile as? BrowserProfile else { return }
         self.autofill = profile.autofill
+        self.toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
+        creditCardTableViewModel.toggleModel = toggleModel
+    }
+
+    var isAutofillEnabled: Bool {
+        get {
+            let userDefaults = UserDefaults.standard
+            let key = PrefsKeys.KeyAutofillCreditCardStatus
+            guard userDefaults.value(forKey: key) != nil else {
+                // Default value is true for autofill credit card input
+                return true
+            }
+
+            return userDefaults.bool(forKey: key)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: PrefsKeys.KeyAutofillCreditCardStatus)
+        }
     }
 
     func listCreditCard(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
@@ -46,5 +65,11 @@ class CreditCardSettingsViewModel {
         DispatchQueue.main.async { [weak self] in
             self?.creditCardTableViewModel.creditCards = creditCards
         }
+    }
+}
+
+extension CreditCardSettingsViewModel: ToggleModelDelegate {
+    func toggleDidChange(_ toggleModel: ToggleModel) {
+        isAutofillEnabled = toggleModel.isEnabled
     }
 }

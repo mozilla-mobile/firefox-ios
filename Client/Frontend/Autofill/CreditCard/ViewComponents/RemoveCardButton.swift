@@ -21,7 +21,7 @@ struct RemoveCardButton: View {
                 Button(String.CreditCard.EditCard.RemoveCardButtonTitle) {
                     print("Button pressed")
                 }
-                .font(.system(size: 17))
+                .font(.body)
                 .foregroundColor(removeButtonColor)
                 .padding(.leading, 16)
                 .padding(.trailing, 16)
@@ -33,5 +33,5 @@ struct RemoveCardButton: View {
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
         }
-        .frame(width: UIScreen.main.bounds.size.width, height: 42)    }
+    }
 }
