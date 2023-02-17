@@ -83,8 +83,4 @@ public protocol ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor { get }
-
-    // MARK: - Tab
-    var tabShadow: UIColor { get }
-    var tabBackgroundSelected: UIColor { get }
 }

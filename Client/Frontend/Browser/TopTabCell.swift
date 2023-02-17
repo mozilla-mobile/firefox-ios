@@ -98,8 +98,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
         titleText.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textPrimary
 
-        selectedBackground.backgroundColor = theme.colors.tabBackgroundSelected
-        selectedBackground.layer.shadowColor = theme.colors.tabShadow.cgColor
+        selectedBackground.backgroundColor = theme.colors.layer2
+        selectedBackground.layer.shadowColor = theme.colors.shadowDefault.cgColor
         selectedBackground.isHidden = false
     }
 

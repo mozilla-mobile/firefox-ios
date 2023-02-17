@@ -71,8 +71,4 @@ private struct LightColourPalette: ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.16)
-
-    // MARK: - Tab
-    var tabShadow: UIColor = FXColors.DarkGrey40
-    var tabBackgroundSelected: UIColor = FXColors.LightGrey10
 }
