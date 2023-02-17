@@ -42,6 +42,7 @@ struct CreditCardEditView: View {
                 .frame(height: 0.7)
 
             Spacer()
+                .frame(height: 4)
 
             RemoveCardButton(
                 removeButtonColor: removeButtonColor,
@@ -50,6 +51,7 @@ struct CreditCardEditView: View {
             )
         }
         .padding(.top, 20)
+        Spacer()
     }
 }
 
