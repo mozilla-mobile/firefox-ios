@@ -3,7 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import Logger
+import Common
 
 enum NavigationItemLocation {
     case Left
