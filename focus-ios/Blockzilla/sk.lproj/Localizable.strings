@@ -20,7 +20,7 @@
 "About.rowHelp" = "Pomocník";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "Zásady ochrany súkromia";
+"About.rowPrivacy" = "Vyhlásenie o ochrane osobných údajov";
 
 /* Label for row in About screen */
 "About.rowRights" = "Vaše práva";
