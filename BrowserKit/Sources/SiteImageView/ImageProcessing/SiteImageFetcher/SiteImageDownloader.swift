@@ -4,7 +4,7 @@
 
 import Kingfisher
 import UIKit
-import Logger
+import Common
 
 // MARK: - Kingfisher wrappers
 

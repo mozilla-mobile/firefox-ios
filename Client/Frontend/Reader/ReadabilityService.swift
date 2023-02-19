@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import Logger
+import Common
 import WebKit
 
 enum ReadabilityOperationResult {

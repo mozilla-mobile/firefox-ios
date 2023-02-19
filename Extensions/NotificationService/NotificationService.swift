@@ -8,7 +8,6 @@ import Shared
 import Storage
 import Sync
 import UserNotifications
-import Logger
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?

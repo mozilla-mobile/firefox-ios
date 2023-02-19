@@ -7,7 +7,6 @@ import Storage
 import CoreSpotlight
 import UIKit
 import Common
-import Logger
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
     let logger = DefaultLogger.shared

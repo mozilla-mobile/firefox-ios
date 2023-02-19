@@ -8,7 +8,6 @@ import Shared
 import Telemetry
 import Account
 import Sync
-import Logger
 
 protocol TelemetryWrapperProtocol {
     func recordEvent(category: TelemetryWrapper.EventCategory,

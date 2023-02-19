@@ -4,7 +4,7 @@
 
 import Shared
 import UIKit
-import Logger
+import Common
 
 private class DiskImageStoreErrorType: MaybeErrorType {
     let description: String

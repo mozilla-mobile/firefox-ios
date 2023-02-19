@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import Logger
+import Common
 
 /// Generate a default letter image from the domain name
 protocol LetterImageGenerator {

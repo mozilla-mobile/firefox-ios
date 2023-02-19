@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
-import Logger
+import Common
 
 protocol BundleImageFetcher {
     /// Fetches from the bundle

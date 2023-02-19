@@ -4,7 +4,7 @@
 
 import Foundation
 import Kingfisher
-import Logger
+import Common
 
 class DefaultSiteImageDownloader: ImageDownloader, SiteImageDownloader {
     var continuation: CheckedContinuation<SiteImageLoadingResult, Error>?

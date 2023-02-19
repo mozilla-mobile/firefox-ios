@@ -5,7 +5,7 @@
 import Sync
 import Shared
 import Storage
-import Logger
+import Common
 
 public enum SyncDisplayState {
     case inProgress

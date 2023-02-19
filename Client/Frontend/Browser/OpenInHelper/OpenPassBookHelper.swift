@@ -5,7 +5,7 @@
 import PassKit
 import Shared
 import WebKit
-import Logger
+import Common
 
 class OpenPassBookHelper {
     private enum InvalidPassError: Error {

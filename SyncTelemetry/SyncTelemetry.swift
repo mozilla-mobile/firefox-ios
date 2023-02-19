@@ -6,7 +6,6 @@ import Common
 import Foundation
 import SwiftyJSON
 import Shared
-import Logger
 
 private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!
 private let AppName = "Fennec"
