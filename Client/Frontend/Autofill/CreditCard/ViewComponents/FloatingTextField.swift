@@ -29,7 +29,9 @@ struct FloatingTextField: View {
                 .foregroundColor(colors.textFieldColor)
             if showError {
                 HStack(spacing: 0) {
-                    Image("error-autofill")
+                    Image(ImageIdentifiers.errorAutofill)
+                        .renderingMode(.template)
+                        .foregroundColor(colors.errorColor)
                     Text(errorString)
                         .errorTextStyle(color: colors.errorColor)
                 }
