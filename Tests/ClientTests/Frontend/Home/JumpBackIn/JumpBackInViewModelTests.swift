@@ -9,6 +9,7 @@ import Storage
 import Shared
 import Common
 
+@MainActor
 class JumpBackInViewModelTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockTabManager: MockTabManager!
@@ -18,7 +19,7 @@ class JumpBackInViewModelTests: XCTestCase {
     var adaptor: JumpBackInDataAdaptorMock!
 
     let iPhone14ScreenSize = CGSize(width: 390, height: 844)
-    let sleepTime: UInt64 = 1_000_000_000
+    let sleepTime: UInt64 = 100_000_000
     override func setUp() {
         super.setUp()
 
