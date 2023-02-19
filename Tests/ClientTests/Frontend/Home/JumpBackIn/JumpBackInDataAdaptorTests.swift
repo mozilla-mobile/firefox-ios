@@ -148,7 +148,6 @@ extension JumpBackInDataAdaptorTests {
         let subject = JumpBackInDataAdaptorImplementation(profile: mockProfile,
                                                           tabManager: mockTabManager,
                                                           mainQueue: dispatchQueue,
-                                                          userInitiatedQueue: dispatchQueue,
                                                           notificationCenter: notificationCenter)
 
         trackForMemoryLeaks(subject, file: file, line: line)
