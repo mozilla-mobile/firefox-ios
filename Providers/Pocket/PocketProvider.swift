@@ -34,6 +34,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     private let pocketGlobalFeed: String
 
     static let GlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
+    
     static let MoreStoriesURL = {
         switch Locale.current.identifier {
         case "de_DE":
