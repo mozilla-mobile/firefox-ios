@@ -179,11 +179,11 @@ extension String {
     /// Identifiers of all new strings should begin with `FirefoxHome.`
     public struct FirefoxHomepage {
         public struct Common {
-            public static let SitesCount = MZLocalizedString(
-                "FirefoxHomepage.Common.SitesCount.v101",
+            public static let PagesCount = MZLocalizedString(
+                "FirefoxHomepage.Common.PagesCount.v112",
                 tableName: nil,
-                value: "Sites: %d",
-                comment: "Label showing how many sites there is in a search group. %d represents a number")
+                value: "Pages: %d",
+                comment: "Label showing how many pages there is in a search group. %d represents a number")
         }
 
         public struct CustomizeHomepage {
