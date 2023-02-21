@@ -125,8 +125,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme
-        contentView.backgroundColor = theme.colors.shadowDefault
+        contentView.backgroundColor = themeManager.currentTheme.colors.shadowDefault
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
     }
 }
