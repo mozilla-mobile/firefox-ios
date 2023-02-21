@@ -34,11 +34,20 @@ struct CreditCardAutofillToggle: View {
                 .padding(.leading, 16)
                 .hidden()
             HStack {
-                Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
-                    .font(.body)
-                    .foregroundColor(textColor)
-                    .padding(.leading, 16)
-                    .padding(.trailing, 16)
+                if #available(iOS 14.0, *) {
+                    Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
+                        .font(.body)
+                        .foregroundColor(textColor)
+                        .padding(.leading, 16)
+                        .padding(.trailing, 16)
+                        .toggleStyle(SwitchToggleStyle(tint: .blue))
+                } else {
+                    Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
+                        .font(.body)
+                        .foregroundColor(textColor)
+                        .padding(.leading, 16)
+                        .padding(.trailing, 16)
+                }
             }
             Divider()
                 .frame(height: 0.7)
