@@ -53,16 +53,12 @@ extension BrowserViewController: WKUIDelegate {
         return false
     }
 
-    private func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+    fileprivate func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
         return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
     }
 
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping () -> Void) {
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
         if shouldDisplayJSAlertForWebView(webView) {
             present(messageAlert.alertController(), animated: true, completion: nil)
