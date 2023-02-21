@@ -278,6 +278,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
     private func reloadOnRotation(newSize: CGSize) {
+        logger.log("Reload on rotation to new size \(newSize)", level: .info, category: .homepage)
+
         if presentedViewController as? PhotonActionSheet != nil {
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
@@ -301,6 +303,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         else { return }
 
         let privacySectionState = isPrivate ? "Removing": "Adding"
+        logger.log("\(privacySectionState) privacy sensitive sections", level: .info, category: .homepage)
         viewModel.isPrivate = isPrivate
         reloadView()
     }
