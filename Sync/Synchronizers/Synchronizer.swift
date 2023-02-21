@@ -57,7 +57,7 @@ public protocol Synchronizer {
     init(scratchpad: Scratchpad,
          delegate: SyncDelegate,
          basePrefs: Prefs,
-         why: SyncReason,
+         why: OldSyncReason,
          logger: Logger)
 
     /**
@@ -94,7 +94,7 @@ public enum SyncStatus {
 }
 
 public typealias DeferredTimestamp = Deferred<Maybe<Timestamp>>
-public typealias SyncResult = Deferred<Maybe<SyncStatus>>
+public typealias OldSyncResult = Deferred<Maybe<SyncStatus>>
 public typealias EngineIdentifier = String
 public typealias EngineStatus = (EngineIdentifier, SyncStatus)
 public typealias EngineResults = [EngineStatus]
@@ -175,7 +175,7 @@ open class BaseCollectionSynchronizer {
     let delegate: SyncDelegate
     let basePrefs: Prefs
     let prefs: Prefs
-    let why: SyncReason
+    let why: OldSyncReason
 
     var statsSession: SyncEngineStatsSession
 
@@ -187,7 +187,7 @@ open class BaseCollectionSynchronizer {
     init(scratchpad: Scratchpad,
          delegate: SyncDelegate,
          basePrefs: Prefs,
-         why: SyncReason,
+         why: OldSyncReason,
          collection: String,
          logger: Logger = DefaultLogger.shared) {
         self.scratchpad = scratchpad

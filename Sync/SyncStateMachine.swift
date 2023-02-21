@@ -341,7 +341,7 @@ open class BaseSyncState: SyncState {
                    category: .sync)
     }
 
-    open func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs, why: SyncReason) -> T {
+    open func synchronizer<T: Synchronizer>(_ synchronizerClass: T.Type, delegate: SyncDelegate, prefs: Prefs, why: OldSyncReason) -> T {
         return T(scratchpad: self.scratchpad, delegate: delegate, basePrefs: prefs, why: why, logger: DefaultLogger.shared)
     }
 
