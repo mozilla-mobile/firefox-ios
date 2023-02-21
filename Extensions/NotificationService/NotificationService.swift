@@ -8,16 +8,10 @@ import Shared
 import Storage
 import Sync
 import UserNotifications
-import Logger
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
     var profile: ExtensionProfile?
-    let logger: Logger
-
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-    }
 
     // This is run when an APNS notification with `mutable-content` is received.
     // If the app is backgrounded, then the alert notification is displayed.
@@ -25,7 +19,6 @@ class NotificationService: UNNotificationServiceExtension {
     // AppDelegate.application(_:didReceiveRemoteNotification:completionHandler:)
     // Once the notification is tapped, then the same userInfo is passed to the same method in the AppDelegate.
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        logger.log("push notification received", level: .info, category: .lifecycle)
         let userInfo = request.content.userInfo
 
         let content = request.content.mutableCopy() as! UNMutableNotificationContent
@@ -99,16 +92,13 @@ class SyncDataDisplay {
 
     var tabQueue: TabQueue?
     var messageDelivered: Bool = false
-    private let logger: Logger
 
     init(content: UNMutableNotificationContent,
          contentHandler: @escaping (UNNotificationContent) -> Void,
-         tabQueue: TabQueue,
-         logger: Logger = DefaultLogger.shared) {
+         tabQueue: TabQueue) {
         self.contentHandler = contentHandler
         self.notificationContent = content
         self.tabQueue = tabQueue
-        self.logger = logger
     }
 
     func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
@@ -157,7 +147,6 @@ extension SyncDataDisplay {
     }
 
     func displayAccountVerifiedNotification() {
-        logger.log("SentTab error: account not verified", level: .info, category: .tabs)
         #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
             return
@@ -167,7 +156,6 @@ extension SyncDataDisplay {
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
-        logger.log("SentTab error: \(debugInfo)", level: .info, category: .tabs)
         #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
             return
@@ -210,7 +198,6 @@ extension SyncDataDisplay {
             #else
                 body = .SentTab_NoTabArrivingNotification_body
             #endif
-            logger.log("SentTab error: no tab", level: .info, category: .tabs)
         } else {
             let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {
