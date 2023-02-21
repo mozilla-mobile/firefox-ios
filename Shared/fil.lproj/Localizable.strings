@@ -638,7 +638,7 @@
 "LoginsHelper.PromptUpdateLogin.Title.OneArg" = "i-Update ang pag-login para sa %@?";
 
 /* Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site. */
-"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "i-Update ang login %1 ng %2$@?";
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg" = "i-Update ang login %1$@ ng %2$@?";
 
 /* Button to save the user's password */
 "LoginsHelper.SaveLogin.Button" = "I-save ang Login";
