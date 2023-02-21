@@ -61,6 +61,7 @@ enum CodeUsageToDetect: CaseIterable {
     case print
     case nsLog
     case osLog
+    case deferred
 
     var message: String {
         switch self {
@@ -70,6 +71,8 @@ enum CodeUsageToDetect: CaseIterable {
             return "NSLog() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
         case .osLog:
             return "os_log() function seems to be used in file %@ at line %d.\(CodeUsageToDetect.commonLoggerSentence)"
+        case .deferred:
+            return "Deferred class seems to be used in file %@ at line %d. Please consider replacing with completion handler instead."
         }
     }
 
@@ -81,6 +84,8 @@ enum CodeUsageToDetect: CaseIterable {
             return "NSLog("
         case .osLog:
             return "os_log("
+        case .deferred:
+            return "Deferred<"
         }
     }
 }
@@ -89,10 +94,14 @@ enum CodeUsageToDetect: CaseIterable {
 func checkForCodeUsage() {
     let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
 
+    // We look at the diff between the source and destination branches
+    let destinationSha = "\(danger.github.pullRequest.base.sha)"
+    let sourceSha = "\(danger.github.pullRequest.head.sha)"
+    let diffBranches = "\(destinationSha)..\(sourceSha)"
+
     // Iterate through each added and modified file
     for file in editedFiles {
-        let diff = danger.utils.diff(forFile: file, sourceBranch: danger.github.pullRequest.head.ref)
-
+        let diff = danger.utils.diff(forFile: file, sourceBranch: diffBranches)
         // For modified, renamed hunks, or created new lines detect code usage to avoid in PR
         switch diff {
         case let .success(diff):
@@ -119,8 +128,18 @@ func detect(keywords: [CodeUsageToDetect], inHunks hunks: [FileDiff.Hunk], file:
 
 func detect(keyword: String, inHunks hunks: [FileDiff.Hunk], file: String, message: String) {
     for hunk in hunks {
-        for (index, line) in hunk.lines.enumerated() where String(describing: line).contains(keyword) {
-            let lineNumber = hunk.newLineStart + index + 1
+        var newLineCount = 0
+        for line in hunk.lines {
+            let isAddedLine = "\(line)".starts(with: "+")
+            let isRemovedLine = "\(line)".starts(with: "-")
+            // Make sure our newLineCount is proper to warn on correct line number
+            guard isAddedLine || !isRemovedLine else { continue }
+            newLineCount += 1
+
+            // Warn only on added line having the particular keyword
+            guard isAddedLine && String(describing: line).contains(keyword) else { continue }
+
+            let lineNumber = hunk.newLineStart + newLineCount - 1
             warn(String(format: message, file, lineNumber))
         }
     }
