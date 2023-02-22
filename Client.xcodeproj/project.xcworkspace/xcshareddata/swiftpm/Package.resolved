@@ -109,15 +109,6 @@
       }
     },
     {
-      "identity" : "swift-protobuf",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-protobuf.git",
-      "state" : {
-        "revision" : "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
-        "version" : "1.18.0"
-      }
-    },
-    {
       "identity" : "swiftybeaver",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
