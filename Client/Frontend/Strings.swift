@@ -676,6 +676,26 @@ extension String {
             tableName: nil,
             value: "Skip",
             comment: "String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens.")
+        public static let IntroNotificationTitle = MZLocalizedString(
+            "Onboarding.Notification.Title.v112",
+            tableName: "Onboarding",
+            value: "Notifications help you do more with Firefox",
+            comment: "String used to describe the title of the notification onboarding page in our Onboarding screens.")
+        public static let IntroNotificationDescription = MZLocalizedString(
+            "Onboarding.Notification.Description.v112",
+            tableName: "Onboarding",
+            value: "Send tabs between your devices and get tips about how to get the most out of Firefox.",
+            comment: "String used to describe the description of the notification onboarding page in our Onboarding screens.")
+        public static let IntroNotificationContinueAction = MZLocalizedString(
+            "Onboarding.Notification.Continue.Action.v112",
+            tableName: "Onboarding",
+            value: "Continue",
+            comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
+        public static let IntroNotificationSkipAction = MZLocalizedString(
+            "Onboarding.Notification.Skip.Action.v112",
+            tableName: "Onboarding",
+            value: "Not now",
+            comment: "String used to describe the option to skip the notification permission in Firefox Onboarding screens.")
         public static let WallpaperSelectorTitle = MZLocalizedString(
             "Onboarding.Wallpaper.Title.v106",
             tableName: nil,
