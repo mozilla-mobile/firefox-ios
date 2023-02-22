@@ -6117,7 +6117,7 @@
 			path = DefaultBrowserOnboardingTests;
 			sourceTree = "<group>";
 		};
-		4331A9B927193DEF005E8080 /* Contextual Hint */ = {
+		4331A9B927193DEF005E8080 /* ContextualHint */ = {
 			isa = PBXGroup;
 			children = (
 				4331A9BA27193DEF005E8080 /* ContextualHintViewController.swift */,
@@ -6126,7 +6126,7 @@
 				964FA97628A2A55C0024BB3B /* ContextualHintPrefsKeysProvider.swift */,
 				962021E028B8078400BDF3D9 /* ContextualHintCopyProvider.swift */,
 			);
-			path = "Contextual Hint";
+			path = ContextualHint;
 			sourceTree = "<group>";
 		};
 		4336FAF9264B170F00A6B076 /* WebcompatAtDocumentStart */ = {
@@ -6431,7 +6431,7 @@
 			path = OpenInHelper;
 			sourceTree = "<group>";
 		};
-		8A590C6228C13E1D0032F1AA /* Tab Management */ = {
+		8A590C6228C13E1D0032F1AA /* TabManagement */ = {
 			isa = PBXGroup;
 			children = (
 				63306D3821103EAE00F25400 /* SavedTab.swift */,
@@ -6447,7 +6447,7 @@
 				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
 				215B458127DA420400E5E800 /* TabMetadataManager.swift */,
 			);
-			path = "Tab Management";
+			path = TabManagement;
 			sourceTree = "<group>";
 		};
 		8A7653C028A2E54800924ABF /* Pocket */ = {
@@ -6669,7 +6669,7 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
-		8AED868428CA7B1200351A50 /* Tab Management */ = {
+		8AED868428CA7B1200351A50 /* TabManagement */ = {
 			isa = PBXGroup;
 			children = (
 				6A5F591C28627C0100FABA92 /* TabManagerNavDelegateTests.swift */,
@@ -6679,7 +6679,7 @@
 				39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */,
 				8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */,
 			);
-			path = "Tab Management";
+			path = TabManagement;
 			sourceTree = "<group>";
 		};
 		9614BF3F28A53F2000D3F7EA /* ContextualHints */ = {
@@ -7488,7 +7488,7 @@
 			children = (
 				8A1E3BE428CBBF1E003388C4 /* SearchEngines */,
 				8A590C5F28C122FF0032F1AA /* OpenInHelper */,
-				8A590C6228C13E1D0032F1AA /* Tab Management */,
+				8A590C6228C13E1D0032F1AA /* TabManagement */,
 				C849E45F26B9C36600260F0B /* EnhancedTrackingProtection */,
 				23F2C365244E44FA00FA4496 /* Tabs */,
 				D38F02D01C05127100175932 /* Authenticator.swift */,
@@ -7701,7 +7701,7 @@
 		E1AEC173286E0CF500062E29 /* Browser */ = {
 			isa = PBXGroup;
 			children = (
-				8AED868428CA7B1200351A50 /* Tab Management */,
+				8AED868428CA7B1200351A50 /* TabManagement */,
 				8A1E3BE828CBC57E003388C4 /* SearchEngines */,
 				E1AEC174286E0CF500062E29 /* WebView */,
 				8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */,
@@ -7846,7 +7846,7 @@
 			name = Configuration;
 			sourceTree = "<group>";
 		};
-		E63ED8DF1BFD254E0097D08E /* Login Management */ = {
+		E63ED8DF1BFD254E0097D08E /* LoginManagement */ = {
 			isa = PBXGroup;
 			children = (
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
@@ -7866,7 +7866,7 @@
 				F85C7EDC27109241004BDBA4 /* LoginOnboardingViewController.swift */,
 				F85C7EDE2710B4DD004BDBA4 /* LoginOnboarding.swift */,
 			);
-			path = "Login Management";
+			path = LoginManagement;
 			sourceTree = "<group>";
 		};
 		E65075551E37F714006961AC /* Utils */ = {
@@ -8363,7 +8363,7 @@
 				8AD40FB827BAD1DD00672675 /* TabContentsScripts */,
 				8AD40FB727BAD1D600672675 /* Toolbar+URLBar */,
 				8AED23C327AC1F8700DE7E97 /* Components */,
-				4331A9B927193DEF005E8080 /* Contextual Hint */,
+				4331A9B927193DEF005E8080 /* ContextualHint */,
 				2816EFFF1B33E05400522243 /* UIConstants.swift */,
 				C87DF9DA267247190097E707 /* UIConstants+BottomInset.swift */,
 				8AB8572D27D94A1A0075C173 /* UXSizeClass.swift */,
@@ -8378,7 +8378,7 @@
 				43A5643423CD1E1B00B6857D /* Update */,
 				E49943F31AE6879C00BF9DE4 /* Intro */,
 				D05434F3225FDA3400FDE4EF /* Library */,
-				E63ED8DF1BFD254E0097D08E /* Login Management */,
+				E63ED8DF1BFD254E0097D08E /* LoginManagement */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
 				F84B21F51A0910F600AAB793 /* Reader */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
