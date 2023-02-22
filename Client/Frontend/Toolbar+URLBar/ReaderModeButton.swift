@@ -68,7 +68,7 @@ class ReaderModeButton: UIButton {
 
 extension ReaderModeButton: NotificationThemeable {
     func applyTheme() {
-        selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
-        unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
+        selectedTintColor = UIColor.legacyTheme.urlbar.readerModeButtonSelected
+        unselectedTintColor = UIColor.legacyTheme.urlbar.readerModeButtonUnselected
     }
 }

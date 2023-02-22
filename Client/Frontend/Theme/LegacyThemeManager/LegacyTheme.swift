@@ -12,7 +12,7 @@ protocol PrivateModeUI {
 }
 
 extension UIColor {
-    static var theme: LegacyTheme {
+    static var legacyTheme: LegacyTheme {
         return LegacyThemeManager.instance.current
     }
 }
@@ -81,7 +81,7 @@ class URLBarColor {
     var readerModeButtonSelected: UIColor { return UIColor.Photon.Blue40 }
     var readerModeButtonUnselected: UIColor { return UIColor.Photon.Grey50 }
     var pageOptionsSelected: UIColor { return readerModeButtonSelected }
-    var pageOptionsUnselected: UIColor { return UIColor.theme.browser.tint }
+    var pageOptionsUnselected: UIColor { return UIColor.legacyTheme.browser.tint }
 }
 
 class BrowserColor {

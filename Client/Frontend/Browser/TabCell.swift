@@ -65,7 +65,7 @@ class TabCell: UICollectionViewCell,
     }
 
     // TODO: Handle visual effects theming FXIOS-5064
-    var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.theme.tabTray.tabTitleBlur))
+    var title = UIVisualEffectView(effect: UIBlurEffect(style: UIColor.legacyTheme.tabTray.tabTitleBlur))
     var animator: SwipeAnimator?
     var isSelectedTab = false
 

@@ -10,7 +10,7 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
 
     private var selectedView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.theme.tableView.selectedBackground
+        view.backgroundColor = UIColor.legacyTheme.tableView.selectedBackground
         return view
     }()
 
@@ -116,7 +116,7 @@ class InactiveTabItemCell: UITableViewCell, NotificationThemeable, ReusableCell 
 
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        selectedView.backgroundColor = UIColor.legacyTheme.tableView.selectedBackground
         if theme == .dark {
             backgroundColor = UIColor.Photon.Grey80
             titleLabel.textColor = .white

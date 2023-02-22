@@ -50,9 +50,9 @@ class LockButton: UIButton {
 
 extension LockButton: NotificationThemeable {
     func applyTheme() {
-        selectedTintColor = UIColor.theme.toolbarButton.selectedTint
+        selectedTintColor = UIColor.legacyTheme.toolbarButton.selectedTint
         disabledTintColor = UIColor.Photon.Grey50
-        unselectedTintColor = UIColor.theme.browser.tint
+        unselectedTintColor = UIColor.legacyTheme.browser.tint
         tintColor = isEnabled ? unselectedTintColor : disabledTintColor
         imageView?.tintColor = tintColor
     }

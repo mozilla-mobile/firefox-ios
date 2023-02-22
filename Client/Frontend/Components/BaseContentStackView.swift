@@ -103,7 +103,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable {
 
 extension BaseAlphaStackView: NotificationThemeable {
     func applyTheme() {
-        let color = isClearBackground ? .clear : UIColor.theme.browser.background
+        let color = isClearBackground ? .clear : UIColor.legacyTheme.browser.background
         backgroundColor = color
         keyboardSpacer?.backgroundColor = color
         insetSpacer?.backgroundColor = color
