@@ -13,7 +13,6 @@ import Account
 import MobileCoreServices
 import Telemetry
 import Common
-import Logger
 
 struct UrlToOpenModel {
     var url: URL?

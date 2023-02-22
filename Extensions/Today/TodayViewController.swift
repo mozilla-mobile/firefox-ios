@@ -5,7 +5,7 @@
 import UIKit
 import NotificationCenter
 import Shared
-import Logger
+import Common
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {

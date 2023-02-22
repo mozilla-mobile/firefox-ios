@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
+import Common
 
 protocol BundleImageFetcher {
     /// Fetches from the bundle
@@ -28,16 +29,24 @@ class DefaultBundleImageFetcher: BundleImageFetcher {
 
     private let bundleDataProvider: BundleDataProvider
     private var bundledImages = [String: FormattedBundledImage]()
+    private var logger: Logger
 
-    init(bundleDataProvider: BundleDataProvider = DefaultBundleDataProvider()) {
+    init(bundleDataProvider: BundleDataProvider = DefaultBundleDataProvider(),
+         logger: Logger = DefaultLogger.shared) {
         self.bundleDataProvider = bundleDataProvider
+        self.logger = logger
         bundledImages = retrieveBundledImages()
     }
 
     func getImageFromBundle(domain: ImageDomain?) throws -> UIImage {
         guard let domain = domain,
               let bundleDomain = getBundleDomain(domain: domain)
-        else { throw SiteImageError.noImageInBundle }
+        else {
+            logger.log("There should be at least one domain to get the bundle image from",
+                       level: .warning,
+                       category: .images)
+            throw SiteImageError.noImageInBundle
+        }
 
         guard let bundledImage = bundledImages[bundleDomain],
               let image = bundleDataProvider.getBundleImage(from: bundledImage.filePath) else {

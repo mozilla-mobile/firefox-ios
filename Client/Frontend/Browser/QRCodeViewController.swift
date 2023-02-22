@@ -5,7 +5,7 @@
 import Foundation
 import AVFoundation
 import Shared
-import Logger
+import Common
 
 protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)

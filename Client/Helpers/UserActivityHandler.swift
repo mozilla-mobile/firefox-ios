@@ -9,7 +9,7 @@ import CoreSpotlight
 import MobileCoreServices
 import WebKit
 import SiteImageView
-import Logger
+import Common
 
 private let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
 

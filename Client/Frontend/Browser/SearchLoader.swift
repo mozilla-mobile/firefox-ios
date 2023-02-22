@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Storage
 import Glean
-import Logger
+import Common
 
 private let URLBeforePathRegex = try! NSRegularExpression(pattern: "^https?://([^/]+)/", options: [])
 

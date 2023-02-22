@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import WebKit
-import Logger
+import Common
 
 class CreditCardHelper: TabContentScript {
     private weak var tab: Tab?

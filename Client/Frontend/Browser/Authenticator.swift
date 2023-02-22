@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import Storage
-import Logger
+import Common
 
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3

@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import Shared
-import Logger
 import Account
 
 private let StorageVersionCurrent = 5
