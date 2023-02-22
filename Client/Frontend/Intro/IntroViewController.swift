@@ -218,7 +218,7 @@ extension IntroViewController: OnboardingCardDelegate {
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = {
-            self.closeOnboarding()
+            self.showNextPage(.signSync)
         }
         self.present(controller, animated: true)
     }
@@ -239,7 +239,6 @@ extension IntroViewController: OnboardingCardDelegate {
 
     @objc func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
-        closeOnboarding()
     }
 }
 
