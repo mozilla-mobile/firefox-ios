@@ -16,7 +16,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
         wallpaperManager = WallpaperManagerMock()
         addWallpaperCollections()
 
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
     }
 
     override func tearDown() {

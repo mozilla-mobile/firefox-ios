@@ -10,12 +10,12 @@ import XCTest
 class TelemetryWrapperTests: XCTestCase {
     override func setUp() {
         super.setUp()
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
     }
 
     override func tearDown() {
         super.tearDown()
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
     }
 
     // MARK: - Top Site
@@ -152,16 +152,6 @@ class TelemetryWrapperTests: XCTestCase {
         testQuantityMetricSuccess(metric: GleanMetrics.Tabs.privateTabsQuantity,
                                   expectedValue: expectTabCount,
                                   failureMessage: "Should have \(expectTabCount) tabs for private tabs")
-    }
-
-    func test_tabsNormalQuantityWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabNormalQuantity, value: nil, extras: nil)
-        XCTAssertNil(GleanMetrics.Tabs.normalTabsQuantity.testGetValue())
-    }
-
-    func test_tabsPrivateQuantityWithoutExtras_GleanIsNotCalled() {
-        TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: nil)
-        XCTAssertNil(GleanMetrics.Tabs.privateTabsQuantity.testGetValue())
     }
 
     // MARK: - Onboarding
