@@ -6,7 +6,6 @@ import Common
 import Foundation
 import Account
 import Shared
-import Logger
 import MozillaAppServices
 import SwiftyJSON
 

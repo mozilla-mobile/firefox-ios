@@ -4,7 +4,7 @@
 
 import Foundation
 import BackgroundTasks
-import Logger
+import Common
 
 class BackgroundSyncUtil {
     let profile: Profile

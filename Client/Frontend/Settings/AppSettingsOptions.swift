@@ -8,7 +8,6 @@ import Shared
 import Account
 import LocalAuthentication
 import Glean
-import Logger
 
 // This file contains all of the settings available in the main settings screen of the app.
 

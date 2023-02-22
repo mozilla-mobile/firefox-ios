@@ -6,7 +6,6 @@ import UIKit
 import Shared
 import Storage
 import Common
-import Logger
 
 class DownloadsPanel: UIViewController,
                       UITableViewDelegate,

@@ -8,7 +8,6 @@ import Shared
 import Storage
 import Account
 import Glean
-import Logger
 
 class AppLaunchUtil {
     private var logger: Logger

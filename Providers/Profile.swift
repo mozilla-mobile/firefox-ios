@@ -16,7 +16,6 @@ import Sync
 import SyncTelemetry
 import AuthenticationServices
 import MozillaAppServices
-import Logger
 
 public protocol SyncManager {
     var isSyncing: Bool { get }

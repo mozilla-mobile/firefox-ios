@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import Account
 import Common
-import Logger
 
 /// Reflects parent page that launched FirefoxAccountSignInViewController
 enum FxASignInParentType {

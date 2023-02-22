@@ -4,7 +4,7 @@
 
 import UIKit
 import Shared
-import Logger
+import Common
 
 struct GeneralizedImageFetcher: URLCaching {
     var urlSession = makeURLSession(

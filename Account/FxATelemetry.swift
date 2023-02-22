@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import SyncTelemetry
-import Logger
+import Common
 
 open class FxATelemetry {
     /// Parses a JSON blob returned from `FxAccountManager#parseTelemetry()`

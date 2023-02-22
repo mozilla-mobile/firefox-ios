@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Logger
 import UIKit
 import Shared
 
