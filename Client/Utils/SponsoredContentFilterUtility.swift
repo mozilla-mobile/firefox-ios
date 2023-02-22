@@ -24,12 +24,7 @@ struct SponsoredContentFilterUtility {
 
     func filterSponsoredHighlights(from items: [HistoryHighlight]) -> [HistoryHighlight] {
         return items.filter {
-            // As part of bug FXIOS-5113, session restore URLs have been saved in metadata for a while
-            // This means that to abstain already recorded restore session URLs to appear in recently visited we
-            // need to manually filter them out for now. In a couple of release (greater than v110) this can be removed
-            // with task FXIOS-5212
-            let sessionRestoreURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)"
-            return !$0.url.contains(hideWithSearchParam) && !$0.url.contains(sessionRestoreURL)
+            return !$0.url.contains(hideWithSearchParam)
         }
     }
 }
