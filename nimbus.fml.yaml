@@ -8,6 +8,9 @@ channels:
   - developer
   - beta
   - release
+include:
+  - nimbus-features/generalFeatures.yaml
+  - nimbus-features/homescreenFeature.yaml
 # Features should be listed alphabetically, for easy location
 features:
   contextual-hint-feature:
@@ -56,133 +59,133 @@ features:
             "credit-card-autofill-status": true
         }
 
-  general-app-features:
-    description: The feature that contains feature flags for the entire application
-    variables:
-      pull-to-refresh:
-        description: "This property defines whether or not the feature is enabled"
-        type: GeneralFeature
-        default:
-          {
-            "status": true
-          }
-      report-site-issue:
-        description: "This property defines whether or not the feature is enabled"
-        type: GeneralFeature
-        default:
-          {
-            "status": false
-          }
-      shake-to-restore:
-        description: "This property defines whether or not the feature is enabled"
-        type: GeneralFeature
-        default:
-          {
-            "status": false
-          }
-    defaults:
-      - channel: beta
-        value: {
-          "pull-to-refresh": {
-            "status": true
-          },
-          "report-site-issue": {
-            "status": true
-          },
-          "shake-to-restore": {
-            "status": true
-          }
-        }
-      - channel: developer
-        value: {
-          "pull-to-refresh": {
-            "status": true
-          },
-          "report-site-issue": {
-            "status": true
-          },
-          "shake-to-restore": {
-            "status": true
-          }
-        }
+  # general-app-features:
+  #   description: The feature that contains feature flags for the entire application
+  #   variables:
+  #     pull-to-refresh:
+  #       description: "This property defines whether or not the feature is enabled"
+  #       type: GeneralFeature
+  #       default:
+  #         {
+  #           "status": true
+  #         }
+  #     report-site-issue:
+  #       description: "This property defines whether or not the feature is enabled"
+  #       type: GeneralFeature
+  #       default:
+  #         {
+  #           "status": false
+  #         }
+  #     shake-to-restore:
+  #       description: "This property defines whether or not the feature is enabled"
+  #       type: GeneralFeature
+  #       default:
+  #         {
+  #           "status": false
+  #         }
+  #   defaults:
+  #     - channel: beta
+  #       value: {
+  #         "pull-to-refresh": {
+  #           "status": true
+  #         },
+  #         "report-site-issue": {
+  #           "status": true
+  #         },
+  #         "shake-to-restore": {
+  #           "status": true
+  #         }
+  #       }
+  #     - channel: developer
+  #       value: {
+  #         "pull-to-refresh": {
+  #           "status": true
+  #         },
+  #         "report-site-issue": {
+  #           "status": true
+  #         },
+  #         "shake-to-restore": {
+  #           "status": true
+  #         }
+  #       }
 
-  homescreenFeature:
-    description: The homescreen that the user goes to when they press home or new tab.
-    variables:
-      sections-enabled:
-        description: >
-          This property provides a lookup table of whether or not the given section should be enabled.
-          If the section is enabled, it should be toggleable in the settings screen, and on by default.
-        type: Map<HomeScreenSection, Boolean>
-        default:
-          {
-            "top-sites": true,
-            "jump-back-in": true,
-            "recently-saved": true,
-            "recent-explorations": true,
-            "pocket": true
-          }
-      sponsored-tiles:
-        description: >
-          This property defines the sponsored tile feature on the
-          homepage, which is not a section therein.
-        type: SponsoredTiles
-        default:
-          {
-            "status": true,
-            "max-number-of-tiles": 2
-          }
-      pocket-sponsored-stories:
-        description: >
-          This property defines whether pocket sponsored
-          stories appear on the homepage.
-        type: Boolean
-        default: false
-      jump-back-in-synced-tab:
-        description: >
-          This property defines whether the synced tab card
-          appears on the homepage in the jump back in section.
-        type: Boolean
-        default: true
-    defaults:
-      - channel: developer
-        value: {
-          "sections-enabled": {
-            "top-sites": true,
-            "jump-back-in": true,
-            "recently-saved": true,
-            "recent-explorations": true,
-            "pocket": true
-          },
-          "sponsored-tiles": {
-            "status": true,
-            "max-number-of-tiles": 2
-          },
-          "wallpaper-feature": {
-            "status": true
-          },
-          "pocket-sponsored-stories": true,
-          "jump-back-in-synced-tab": true
-        }
-      - channel: beta
-        value: {
-          "sections-enabled": {
-            "top-sites": true,
-            "jump-back-in": true,
-            "recently-saved": true,
-            "recent-explorations": true,
-            "pocket": true
-          },
-          "sponsored-tiles": {
-            "status": true,
-            "max-number-of-tiles": 1
-          },
-          "wallpaper-feature": {
-            "status": true
-          },
-          "pocket-sponsored-stories": false,
-          "jump-back-in-synced-tab": true
-        }
+  # homescreenFeature:
+  #   description: The homescreen that the user goes to when they press home or new tab.
+  #   variables:
+  #     sections-enabled:
+  #       description: >
+  #         This property provides a lookup table of whether or not the given section should be enabled.
+  #         If the section is enabled, it should be toggleable in the settings screen, and on by default.
+  #       type: Map<HomeScreenSection, Boolean>
+  #       default:
+  #         {
+  #           "top-sites": true,
+  #           "jump-back-in": true,
+  #           "recently-saved": true,
+  #           "recent-explorations": true,
+  #           "pocket": true
+  #         }
+  #     sponsored-tiles:
+  #       description: >
+  #         This property defines the sponsored tile feature on the
+  #         homepage, which is not a section therein.
+  #       type: SponsoredTiles
+  #       default:
+  #         {
+  #           "status": true,
+  #           "max-number-of-tiles": 2
+  #         }
+  #     pocket-sponsored-stories:
+  #       description: >
+  #         This property defines whether pocket sponsored
+  #         stories appear on the homepage.
+  #       type: Boolean
+  #       default: false
+  #     jump-back-in-synced-tab:
+  #       description: >
+  #         This property defines whether the synced tab card
+  #         appears on the homepage in the jump back in section.
+  #       type: Boolean
+  #       default: true
+  #   defaults:
+  #     - channel: developer
+  #       value: {
+  #         "sections-enabled": {
+  #           "top-sites": true,
+  #           "jump-back-in": true,
+  #           "recently-saved": true,
+  #           "recent-explorations": true,
+  #           "pocket": true
+  #         },
+  #         "sponsored-tiles": {
+  #           "status": true,
+  #           "max-number-of-tiles": 2
+  #         },
+  #         "wallpaper-feature": {
+  #           "status": true
+  #         },
+  #         "pocket-sponsored-stories": true,
+  #         "jump-back-in-synced-tab": true
+  #       }
+  #     - channel: beta
+  #       value: {
+  #         "sections-enabled": {
+  #           "top-sites": true,
+  #           "jump-back-in": true,
+  #           "recently-saved": true,
+  #           "recent-explorations": true,
+  #           "pocket": true
+  #         },
+  #         "sponsored-tiles": {
+  #           "status": true,
+  #           "max-number-of-tiles": 1
+  #         },
+  #         "wallpaper-feature": {
+  #           "status": true
+  #         },
+  #         "pocket-sponsored-stories": false,
+  #         "jump-back-in-synced-tab": true
+  #       }
 
   messaging:
     description: >
@@ -500,15 +503,18 @@ features:
           "onboarding-sheet": true
         }
 
+
+
+
 types:
   objects:
-    GeneralFeature:
-      description: "The configuration for the a feature that can be enabled or disabled"
-      fields:
-        status:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
+    # GeneralFeature:
+    #   description: "The configuration for the a feature that can be enabled or disabled"
+    #   fields:
+    #     status:
+    #       type: Boolean
+    #       description: Whether or not the feature is enabled
+    #       default: false
 
     AwesomeBar:
       description: A configuration option for the awesome bar. Part of the `search` feature.
@@ -550,17 +556,17 @@ types:
           description: Whether or not the toolbar CFR shows. This is a temporary hack for Nimbus
           default: true
 
-    SponsoredTiles:
-      description: "The configuration for the sponsored tile on the homescreen"
-      fields:
-        status:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
-        max-number-of-tiles:
-          type: Int
-          description: The maximum number of sponsored tiles a user can see
-          default: 2
+    # SponsoredTiles:
+    #   description: "The configuration for the sponsored tile on the homescreen"
+    #   fields:
+    #     status:
+    #       type: Boolean
+    #       description: Whether or not the feature is enabled
+    #       default: false
+    #     max-number-of-tiles:
+    #       type: Int
+    #       description: The maximum number of sponsored tiles a user can see
+    #       default: 2
 
     MessageData:
       description: >
@@ -687,19 +693,19 @@ types:
         always:
           description: App opens to a new homepage tab after five minutes of inactiviny
 
-    HomeScreenSection:
-      description: The identifiers for the sections of the homescreen.
-      variants:
-        top-sites:
-          description: The frecency and pinned sites.
-        recently-saved:
-          description: The sites the user has bookmarked recently.
-        jump-back-in:
-          description: The tabs the user was looking immediately before being interrupted.
-        recent-explorations:
-          description: The tab groups
-        pocket:
-          description: The pocket section. This should only be available in the US.
+    # HomeScreenSection:
+    #   description: The identifiers for the sections of the homescreen.
+    #   variants:
+    #     top-sites:
+    #       description: The frecency and pinned sites.
+    #     recently-saved:
+    #       description: The sites the user has bookmarked recently.
+    #     jump-back-in:
+    #       description: The tabs the user was looking immediately before being interrupted.
+    #     recent-explorations:
+    #       description: The tab groups
+    #     pocket:
+    #       description: The pocket section. This should only be available in the US.
 
     TabTraySection:
       description: The identifiers for the sections of the tab tray.
