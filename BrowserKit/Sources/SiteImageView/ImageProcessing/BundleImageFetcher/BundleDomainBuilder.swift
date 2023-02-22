@@ -12,7 +12,7 @@ import Foundation
 struct BundleDomainBuilder {
     func buildDomains(for siteURL: URL) -> [String] {
         let shortURL = siteURL.shortDisplayString
-        let absoluteURL = siteURL.absoluteDisplayString.remove("\(siteURL.scheme ?? "")://")
+        let absoluteURL = siteURL.absoluteDisplayString.removingOccurrences(of: "\(siteURL.scheme ?? "")://")
         var domains = [shortURL, absoluteURL]
 
         if let baseDomain = siteURL.baseDomain {

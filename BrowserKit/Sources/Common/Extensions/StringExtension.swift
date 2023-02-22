@@ -4,8 +4,10 @@
 
 import Foundation
 
-extension String {
-    public func remove(_ string: String?) -> String {
-        return replacingOccurrences(of: string ?? "", with: "")
+extension StringProtocol {
+    /// Returns a new string in which all occurrences of a target
+    /// string within the receiver are removed.
+    public func removingOccurrences<Target>(of target: Target) -> String where Target: StringProtocol {
+        return replacingOccurrences(of: target, with: "")
     }
 }
