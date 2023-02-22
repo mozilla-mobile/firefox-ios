@@ -102,7 +102,7 @@ class UpdateViewModel: OnboardingViewModelProtocol,
                                        primaryAction: .Upgrade.SyncAction,
                                        secondaryAction: .Onboarding.LaterAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard)
-        case .welcome, .signSync:
+        case .welcome, .signSync, .notification:
             // Cases not supported by the upgrade screen
             return nil
         }

@@ -9,13 +9,14 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     enum InformationCards: Int, CaseIterable {
         case welcome
         case signSync
+        case notification
 
         case updateWelcome
         case updateSignSync
 
         var isOnboardingScreen: Bool {
             switch self {
-            case .welcome, .signSync:
+            case .welcome, .signSync, .notification:
                 return true
             case .updateWelcome, .updateSignSync:
                 return false
@@ -26,6 +27,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             switch self {
             case .welcome: return "welcome"
             case .signSync: return "signToSync"
+            case .notification: return "notificationPermission"
             case .updateWelcome: return "update.welcome"
             case .updateSignSync: return "update.signToSync"
             }
@@ -35,6 +37,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             switch self {
             case .welcome: return 0
             case .signSync: return 1
+            case .notification: return 2
             case .updateWelcome: return 0
             case .updateSignSync: return 1
             }
@@ -46,7 +49,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
     }
 
     var enabledCards: [IntroViewModel.InformationCards] {
-        return [.welcome, .signSync]
+        return [.welcome, .signSync, .notification]
     }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
@@ -65,6 +68,13 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        primaryAction: .IntroSignInButtonTitle,
                                        secondaryAction: .Onboarding.IntroSyncSkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
+        case .notification:
+            return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingNotification),
+                                       title: .Onboarding.IntroNotificationTitle,
+                                       description: .Onboarding.IntroNotificationDescription,
+                                       primaryAction: .Onboarding.IntroNotificationContinueAction,
+                                       secondaryAction: .Onboarding.IntroNotificationSkipAction,
+                                       a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard)
         default:
             return nil
         }

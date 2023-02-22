@@ -184,6 +184,8 @@ extension IntroViewController: OnboardingCardDelegate {
         case .signSync:
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(fxaPrams)
+        case .notification:
+            askForNotificationPermission()
         default:
             break
         }
@@ -219,6 +221,20 @@ extension IntroViewController: OnboardingCardDelegate {
             self.closeOnboarding()
         }
         self.present(controller, animated: true)
+    }
+
+    private func askForNotificationPermission() {
+        let notificationManager = NotificationManager()
+        notificationManager.requestAuthorization { [weak self] granted, error in
+            guard error == nil else { return }
+
+            DispatchQueue.main.async {
+                if granted {
+                    NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+                }
+                self?.closeOnboarding()
+            }
+        }
     }
 
     @objc func dismissSignInViewController() {
