@@ -4,6 +4,7 @@
 
 import XCTest
 import Kingfisher
+import Common
 @testable import SiteImageView
 
 final class FaviconFetcherTests: XCTestCase {
@@ -67,6 +68,7 @@ final class FaviconFetcherTests: XCTestCase {
 
 // MARK: - MockSiteImageDownloader
 private class MockSiteImageDownloader: SiteImageDownloader {
+    var logger: Logger = DefaultLogger.shared
     var timeoutDelay: UInt64 = 10
     var continuation: CheckedContinuation<SiteImageLoadingResult, Error>?
 

@@ -6,7 +6,7 @@ import Shared
 import SyncTelemetry
 import Account
 import MozillaAppServices
-import Logger
+import Common
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 

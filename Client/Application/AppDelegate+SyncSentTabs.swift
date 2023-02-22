@@ -7,7 +7,7 @@ import Storage
 import Sync
 import UserNotifications
 import Account
-import Logger
+import Common
 
 extension UIApplication {
     var syncDelegate: SyncDelegate {

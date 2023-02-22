@@ -33,7 +33,7 @@
 // THE SOFTWARE.
 
 import Foundation
-import Logger
+import Common
 import Shared
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000

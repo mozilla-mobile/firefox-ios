@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Logger
 import Shared
 
 class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {

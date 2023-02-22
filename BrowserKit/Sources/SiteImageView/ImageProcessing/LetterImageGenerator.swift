@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
+import Common
 
 /// Generate a default letter image from the domain name
 protocol LetterImageGenerator {
@@ -14,8 +15,17 @@ protocol LetterImageGenerator {
 }
 
 class DefaultLetterImageGenerator: LetterImageGenerator {
+    private var logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
     @MainActor func generateLetterImage(siteString: String) async throws -> UIImage {
         guard let letter: Character = siteString.first else {
+            logger.log("No letter found for site, which should never happen",
+                       level: .warning,
+                       category: .images)
             throw SiteImageError.noLetterImage
         }
         let capitalizedLetter = letter.uppercased()

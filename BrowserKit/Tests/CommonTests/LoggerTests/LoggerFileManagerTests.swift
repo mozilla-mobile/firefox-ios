@@ -3,8 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import XCTest
-import Common
-@testable import Logger
+@testable import Common
 
 final class LoggerFileManagerTests: XCTestCase {
     private var subject: DefaultLoggerFileManager!

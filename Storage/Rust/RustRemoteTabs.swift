@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 @_exported import MozillaAppServices
-import Logger
+import Common
 
 public class RustRemoteTabs {
     let databasePath: String

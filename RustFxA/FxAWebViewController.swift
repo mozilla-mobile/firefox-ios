@@ -4,7 +4,7 @@
 
 import WebKit
 import Account
-import Logger
+import Common
 import Shared
 
 enum DismissType {

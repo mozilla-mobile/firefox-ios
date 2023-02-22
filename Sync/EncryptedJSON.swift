@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import Account
-import Logger
 import Shared
 import SwiftyJSON
 

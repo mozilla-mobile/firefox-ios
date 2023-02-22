@@ -14,9 +14,6 @@ let package = Package(
         .library(
             name: "Common",
             targets: ["Common"]),
-        .library(
-            name: "Logger",
-            targets: ["Logger"]),
     ],
     dependencies: [
         .package(
@@ -45,21 +42,12 @@ let package = Package(
             dependencies: ["SiteImageView"]),
         .target(
             name: "Common",
-            dependencies: ["Dip"],
+            dependencies: ["Dip",
+                           "SwiftyBeaver",
+                           .product(name: "Sentry", package: "sentry-cocoa")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),
-        .target(
-            name: "Logger",
-            dependencies: [
-                "SwiftyBeaver",
-                "Common",
-                .product(name: "Sentry", package: "sentry-cocoa")
-            ],
-            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
-        .testTarget(
-            name: "LoggerTests",
-            dependencies: ["Logger"]),
     ]
 )

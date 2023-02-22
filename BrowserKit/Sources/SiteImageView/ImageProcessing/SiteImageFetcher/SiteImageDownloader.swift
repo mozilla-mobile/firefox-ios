@@ -4,6 +4,7 @@
 
 import Kingfisher
 import UIKit
+import Common
 
 // MARK: - Kingfisher wrappers
 
@@ -13,6 +14,7 @@ protocol SiteImageDownloader: AnyObject {
     /// Provides the KingFisher ImageDownloader with a Timeout in case the completion isn't called
     var timeoutDelay: UInt64 { get }
     var continuation: CheckedContinuation<any SiteImageLoadingResult, any Error>? { get set }
+    var logger: Logger { get }
 
     @discardableResult
     func downloadImage(
@@ -52,6 +54,10 @@ extension SiteImageDownloader {
                 let error = SiteImageError.unableToDownloadImage("Timeout reached")
                 self.continuation?.resume(throwing: error)
                 self.continuation = nil
+
+                self.logger.log("Timeout when downloading image reached",
+                                level: .warning,
+                                category: .images)
                 throw error
             }
 

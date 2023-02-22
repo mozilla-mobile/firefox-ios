@@ -7,7 +7,7 @@ import Foundation
 import Account
 import MozillaAppServices
 import Shared
-import Logger
+import Common
 
 enum FxAPageType {
     case emailLoginFlow
