@@ -74,7 +74,6 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
 
         favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysTemplate)
         favicon.backgroundColor = .clear
-        favicon.tintColor = UIColor.theme.tabTray.faviconTint
 
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
             favicon.setFavicon(FaviconImageViewModel(siteURLString: siteURL,
@@ -95,6 +94,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
     }
 
     func applySelectedStyle(theme: Theme) {
+        favicon.tintColor = theme.colors.textPrimary
         titleText.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textPrimary
 
@@ -104,6 +104,7 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
     }
 
     func applyUnselectedStyle(theme: Theme) {
+        favicon.tintColor = theme.colors.textPrimary
         titleText.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textPrimary
 
