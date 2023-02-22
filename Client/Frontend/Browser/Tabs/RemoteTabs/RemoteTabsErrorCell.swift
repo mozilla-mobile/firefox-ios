@@ -27,6 +27,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         stackView.alignment = .fill
         stackView.distribution = .fillProportionally
         stackView.spacing = UX.paddingInBetweenItems
+        stackView.alignment = .center
     }
 
     private let emptyStateImageView: UIImageView = .build { imageView in
@@ -105,7 +106,8 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
                                                 constant: -UX.horizontalPadding),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,
                                               constant: -UX.verticalPadding).priority(.defaultLow),
-
+            signInButton.leadingAnchor.constraint(equalTo: instructionsLabel.leadingAnchor),
+            signInButton.trailingAnchor.constraint(equalTo: instructionsLabel.trailingAnchor),
             emptyStateImageView.widthAnchor.constraint(equalToConstant: UX.imageSize.width),
             emptyStateImageView.heightAnchor.constraint(equalToConstant: UX.imageSize.height),
         ])
