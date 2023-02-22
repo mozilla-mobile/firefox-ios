@@ -58,13 +58,13 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
         return collectionView
     }()
 
-    private lazy var settingsButton: ResizableButton = .build { button in
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
-                                                                                size: 16)
-        button.titleLabel?.textAlignment = .center
-        button.setTitle(.Onboarding.WallpaperSelectorAction, for: .normal)
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.settingsButton
-    }
+//    private lazy var settingsButton: ResizableButton = .build { button in
+//        button.titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body,
+//                                                                                size: 16)
+//        button.titleLabel?.textAlignment = .center
+//        button.setTitle(.Onboarding.WallpaperSelectorAction, for: .normal)
+//        button.accessibilityIdentifier = AccessibilityIdentifiers.Onboarding.Wallpaper.settingsButton
+//    }
 
     // MARK: - Initializers
     init(viewModel: WallpaperSelectorViewModel,
@@ -86,7 +86,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
         listenForThemeChange()
         setupView()
 
-        settingsButton.addTarget(self, action: #selector(self.settingsButtonTapped), for: .touchUpInside)
+//        settingsButton.addTarget(self, action: #selector(self.settingsButtonTapped), for: .touchUpInside)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -144,7 +144,7 @@ private extension WallpaperSelectorViewController {
     func setupView() {
         configureCollectionView()
 
-        contentView.addSubviews(headerLabel, instructionLabel, collectionView, settingsButton)
+        contentView.addSubviews(headerLabel, instructionLabel, collectionView)
         view.addSubview(contentView)
 
         collectionViewHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 300)
@@ -166,13 +166,13 @@ private extension WallpaperSelectorViewController {
             instructionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
 
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: settingsButton.topAnchor, constant: -14),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionViewHeightConstraint,
 
-            settingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
-            settingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
-            settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
+//            settingsButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 34),
+//            settingsButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -43),
+//            settingsButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -34),
         ])
     }
 
