@@ -51,7 +51,7 @@ class URIFixup {
         guard let url = URL(string: string) else { return nil }
 
         var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        if AppConstants.MOZ_PUNYCODE {
+        if AppConstants.punyCode {
             let host = components?.host?.utf8HostToAscii()
             components?.host = host
         }

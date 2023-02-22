@@ -5,8 +5,6 @@
 import Common
 import Foundation
 
-public let debugPrefIsChinaEdition = "debugPrefIsChinaEdition"
-
 extension AppInfo {
     public static var displayName: String {
         return applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
@@ -39,16 +37,13 @@ extension AppInfo {
         return topic
     }
 
-    // Return whether the currently executing code is running in an Application
-    public static var isApplication: Bool {
-        return Bundle.main.object(forInfoDictionaryKey: "CFBundlePackageType") as! String == "APPL"
-    }
-
     // The port for the internal webserver, tests can change this
     public static var webserverPort = 6571
 
+    public static let debugPrefIsChinaEdition = "debugPrefIsChinaEdition"
+
     public static var isChinaEdition: Bool = {
-        if UserDefaults.standard.bool(forKey: debugPrefIsChinaEdition) {
+        if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
             return true
         }
         return Locale.current.identifier == "zh_CN"

@@ -253,7 +253,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     private func updateTextWithURL() {
-        if let host = url?.host, AppConstants.MOZ_PUNYCODE {
+        if let host = url?.host, AppConstants.punyCode {
             urlTextField.text = url?.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         } else {
             urlTextField.text = url?.absoluteString

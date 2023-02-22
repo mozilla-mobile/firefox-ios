@@ -31,7 +31,7 @@ class AppLaunchUtil {
         TelemetryWrapper.shared.setup(profile: profile)
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
+        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendUsageData) ?? true
         logger.setup(sendUsageData: sendUsageData)
 
         setUserAgent()
@@ -132,7 +132,7 @@ class AppLaunchUtil {
         let migrationSucceeded = UserDefaults.standard.bool(forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
         let migrationAttemptNumber = UserDefaults.standard.integer(forKey: PrefsKeys.HistoryMigrationAttemptNumber)
         UserDefaults.standard.setValue(migrationAttemptNumber + 1, forKey: PrefsKeys.HistoryMigrationAttemptNumber)
-        if !migrationSucceeded && migrationAttemptNumber < AppConstants.MAX_HISTORY_MIGRATION_ATTEMPT {
+        if !migrationSucceeded && migrationAttemptNumber < AppConstants.maxHistoryMigrationAttempt {
             logger.log("Migrating Application services history",
                        level: .info,
                        category: .sync)
