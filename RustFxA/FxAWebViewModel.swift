@@ -248,7 +248,9 @@ extension FxAWebViewModel {
         profile.rustFxA.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager.onAddedAccount()
 
-            // ask for push notification
+            // only ask for notification permission if onboarding is not being displayed
+            guard self.profile.prefs.boolForKey(PrefsKeys.IntroIsDisplaying) == false else { return }
+
             MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             NotificationManager().requestAuthorization { granted, error in
                 guard error == nil else { return }
