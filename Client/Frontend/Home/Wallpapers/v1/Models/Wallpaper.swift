@@ -151,7 +151,7 @@ extension Wallpaper: Encodable {
 
     private func dropOctothorpeIfAvailable(from string: String) -> String {
         if string.hasPrefix("#") {
-            return string.remove("#")
+            return string.removingOccurrences(of: "#")
         }
 
         return string
