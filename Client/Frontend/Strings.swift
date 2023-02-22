@@ -687,7 +687,7 @@ extension String {
             value: "Send tabs between your devices and get tips about how to get the most out of Firefox.",
             comment: "String used to describe the description of the notification onboarding page in our Onboarding screens.")
         public static let IntroNotificationContinueAction = MZLocalizedString(
-            "Onboarding.Notification.Continu.Action.v112",
+            "Onboarding.Notification.Continue.Action.v112",
             tableName: "Onboarding",
             value: "Continue",
             comment: "String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens.")
