@@ -24,7 +24,7 @@ class TabToolbarHelperTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         mockToolbar = MockTabToolbar()
         subject = TabToolbarHelper(toolbar: mockToolbar)
-        Glean.shared.resetGlean(clearStores: false)
+        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {

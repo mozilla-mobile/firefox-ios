@@ -17,7 +17,7 @@ class ContextMenuHelperTests: XCTestCase {
 
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
-        Glean.shared.resetGlean(clearStores: false)
+        Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
     }
 
