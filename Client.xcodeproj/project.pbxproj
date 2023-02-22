@@ -6685,7 +6685,7 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
-		8AED868428CA7B1200351A50 /* Tab Management */ = {
+		8AED868428CA7B1200351A50 /* TabManagement */ = {
 			isa = PBXGroup;
 			children = (
 				6A5F591C28627C0100FABA92 /* TabManagerNavDelegateTests.swift */,
@@ -6695,7 +6695,7 @@
 				39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */,
 				8AD08D1627E91AC800B8E907 /* TabsQuantityTelemetryTests.swift */,
 			);
-			path = "Tab Management";
+			path = TabManagement;
 			sourceTree = "<group>";
 		};
 		9614BF3F28A53F2000D3F7EA /* ContextualHints */ = {
@@ -7717,7 +7717,7 @@
 		E1AEC173286E0CF500062E29 /* Browser */ = {
 			isa = PBXGroup;
 			children = (
-				8AED868428CA7B1200351A50 /* Tab Management */,
+				8AED868428CA7B1200351A50 /* TabManagement */,
 				8A1E3BE828CBC57E003388C4 /* SearchEngines */,
 				E1AEC174286E0CF500062E29 /* WebView */,
 				8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */,
