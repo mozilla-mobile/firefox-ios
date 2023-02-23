@@ -10,6 +10,7 @@
 # nimbus.fml.yaml file. There are two main options:
 
 # --add fileName : option to add a new feature. Argument should be camelCase
+#                  Note: --add also runs --update
 # --update : updates the `include` block of the FML file.
 
 # Adds the files in the 'nimbus-features' directory in the
