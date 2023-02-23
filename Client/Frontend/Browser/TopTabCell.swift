@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import SiteImageView
 
-class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, ReusableCell {
+class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCell {
     struct UX {
         static let faviconSize: CGFloat = 20
         static let faviconCornerRadius: CGFloat = 2
@@ -16,26 +16,14 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
     }
 
     // MARK: - Properties
-    var isSelectedTab = false {
-        didSet {
-            backgroundColor = .clear
-            titleText.textColor = UIColor.theme.topTabs.tabForegroundSelected
-            closeButton.tintColor = UIColor.theme.topTabs.closeButtonSelectedTab
-            closeButton.backgroundColor = backgroundColor
-            closeButton.layer.shadowColor = backgroundColor?.cgColor
-            selectedBackground.isHidden = !isSelectedTab
-        }
-    }
+    var isSelectedTab = false
 
     weak var delegate: TopTabCellDelegate?
 
     // MARK: - UI Elements
     let selectedBackground: UIView = .build { view in
         view.clipsToBounds = false
-        view.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
         view.layer.cornerRadius = UX.tabCornerRadius
-        // UIColor.Photon.DarkGrey40 = 0x3a3944
-        view.layer.shadowColor = UIColor(rgb: 0x3a3944).cgColor
         view.layer.shadowRadius = 2
         view.layer.shadowOpacity = 0.1
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -55,14 +43,11 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
 
     let closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.closeTap), for: [])
-        button.tintColor = UIColor.Photon.Grey40
         button.imageEdgeInsets = UIEdgeInsets(top: 15,
                                               left: UX.tabTitlePadding,
                                               bottom: 15,
                                               right: UX.tabTitlePadding)
-        button.layer.shadowOpacity = 0.8
         button.layer.masksToBounds = false
-        button.layer.shadowOffset = CGSize(width: -UX.tabTitlePadding, height: 0)
         button.semanticContentAttribute = .forceLeftToRight
     }
 
@@ -88,7 +73,6 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         closeButton.isHidden = hideCloseButton
 
         favicon.image = UIImage(named: ImageIdentifiers.defaultFavicon)?.withRenderingMode(.alwaysTemplate)
-        favicon.tintColor = UIColor.theme.tabTray.faviconTint
         favicon.backgroundColor = .clear
 
         if let siteURL = tab.url?.absoluteString, !tab.isFxHomeTab {
@@ -109,8 +93,32 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         layer.zPosition = CGFloat(layoutAttributes.zIndex)
     }
 
-    func applyTheme() {
-        selectedBackground.backgroundColor = UIColor.theme.topTabs.tabBackgroundSelected
+    func applySelectedStyle(theme: Theme) {
+        favicon.tintColor = theme.colors.textPrimary
+        titleText.textColor = theme.colors.textPrimary
+        closeButton.tintColor = theme.colors.textPrimary
+
+        selectedBackground.backgroundColor = theme.colors.layer2
+        selectedBackground.layer.shadowColor = theme.colors.shadowDefault.cgColor
+        selectedBackground.isHidden = false
+    }
+
+    func applyUnselectedStyle(theme: Theme) {
+        favicon.tintColor = theme.colors.textPrimary
+        titleText.textColor = theme.colors.textPrimary
+        closeButton.tintColor = theme.colors.textPrimary
+
+        selectedBackground.backgroundColor = .clear
+        selectedBackground.layer.shadowColor = UIColor.clear.cgColor
+        selectedBackground.isHidden = true
+    }
+
+    func applyTheme(theme: Theme) {
+        if isSelectedTab {
+            applySelectedStyle(theme: theme)
+        } else {
+            applyUnselectedStyle(theme: theme)
+        }
     }
 
     private func setupLayout() {
