@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kif-framework/KIF.git",
       "state" : {
-        "revision" : "709adbc64f2d8d40d48136cdd56b0a706010904b",
-        "version" : "3.8.6"
+        "revision" : "60c0b1b429ba15c065c5cc67609371fe8cfcb7bf",
+        "version" : "3.8.7"
       }
     },
     {
