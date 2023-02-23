@@ -1,4 +1,8 @@
 ---
+# The features to be included in the nimbus.fml will be listed
+# in the `include` block. This should not be a manual process.
+# Please see the documentation in `iOSNimbusFeatureUtility`
+# for more information
 about:
   description: The root level Feature Manifest for Firefox for iOS
   ios:
