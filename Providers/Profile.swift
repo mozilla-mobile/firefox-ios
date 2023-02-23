@@ -570,7 +570,7 @@ open class BrowserProfile: Profile {
         // We run the cleanup in the background, this is a low priority task
         // that compacts the places db and reduces it's size to be under the limit.
         DispatchQueue.global(qos: .background).async {
-            self.places.runMaintenance(dbSizeLimit: AppConstants.DB_SIZE_LIMIT_IN_BYTES)
+            self.places.runMaintenance(dbSizeLimit: AppConstants.databaseSizeLimitInBytes)
         }
     }
 
@@ -585,7 +585,7 @@ open class BrowserProfile: Profile {
             // an events-only ping now.
             return
         }
-        let sendUsageData = prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+        let sendUsageData = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
         if sendUsageData {
             SyncPing.fromQueuedEvents(
                 prefs: self.prefs,
@@ -625,13 +625,13 @@ open class BrowserProfile: Profile {
 
     /// Polls for missed send tabs and handles them
     /// The method will not poll FxA if the interval hasn't passed
-    /// See AppConstants.FXA_COMMANDS_INTERVAL for the interval value
+    /// See AppConstants.fxaCommandsInterval for the interval value
     public func pollCommands(forcePoll: Bool = false) {
         // We should only poll if the interval has passed to not
         // overwhelm FxA
         let lastPoll = self.prefs.timestampForKey(PrefsKeys.PollCommandsTimestamp)
         let now = Date.now()
-        if let lastPoll = lastPoll, !forcePoll, now - lastPoll < AppConstants.FXA_COMMANDS_INTERVAL {
+        if let lastPoll = lastPoll, !forcePoll, now - lastPoll < AppConstants.fxaCommandsInterval {
             return
         }
         self.prefs.setTimestamp(now, forKey: PrefsKeys.PollCommandsTimestamp)
@@ -856,7 +856,7 @@ open class BrowserProfile: Profile {
         }
 
         func canSendUsageData() -> Bool {
-            return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+            return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
         }
 
         private func notifySyncing(notification: Notification.Name) {
