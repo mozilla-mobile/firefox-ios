@@ -2,11 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Foundation
 import Shared
 @testable import Storage
-@testable import Client
-
 import XCTest
 
 // TODO: rewrite this test to not use BrowserSchema. It used to use HistoryTable…
@@ -157,8 +156,7 @@ class TestSwiftData: XCTestCase {
 
         // Test that generator doesn't work with failed cursors
         var ran = false
-        for s in t2 {
-            print("Got \(s ?? "nil")", terminator: "\n")
+        for _ in t2 {
             ran = true
         }
         XCTAssertFalse(ran, "for...in didn't run for failed cursor")

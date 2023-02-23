@@ -10,7 +10,9 @@ import Storage
 import Sync
 import XCTest
 
-open class MockSyncManager: SyncManager {
+public typealias ClientSyncManager = Client.SyncManager
+
+open class MockSyncManager: ClientSyncManager {
     open var isSyncing = false
     open var lastSyncFinishTime: Timestamp?
     open var syncDisplayState: SyncDisplayState?
@@ -19,15 +21,15 @@ open class MockSyncManager: SyncManager {
         return deferMaybe(SyncStatus.completed(SyncEngineStatsSession(collection: collection)))
     }
 
-    open func syncClients() -> SyncResult { return completedWithStats(collection: "mock_clients") }
-    open func syncClientsThenTabs() -> SyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
-    open func syncHistory() -> SyncResult { return completedWithStats(collection: "mock_history") }
-    open func syncEverything(why: SyncReason) -> Success {
+    open func syncClients() -> OldSyncResult { return completedWithStats(collection: "mock_clients") }
+    open func syncClientsThenTabs() -> OldSyncResult { return completedWithStats(collection: "mock_clientsandtabs") }
+    open func syncHistory() -> OldSyncResult { return completedWithStats(collection: "mock_history") }
+    open func syncEverything(why: OldSyncReason) -> Success {
         return succeed()
     }
 
     var syncNamedCollectionsCalled = 0
-    open func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+    open func syncNamedCollections(why: OldSyncReason, names: [String]) -> Success {
         syncNamedCollectionsCalled += 1
         return succeed()
     }
@@ -79,7 +81,7 @@ open class MockProfile: Client.Profile {
     public var tabs: RustRemoteTabs
     public var files: FileAccessor
     public var logins: RustLogins
-    public var syncManager: SyncManager!
+    public var syncManager: ClientSyncManager!
 
     fileprivate var legacyPlaces: PinnedSites
 

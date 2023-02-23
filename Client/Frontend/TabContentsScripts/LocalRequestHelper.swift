@@ -21,7 +21,6 @@ class LocalRequestHelper: TabContentScript {
         guard let token = params["appIdToken"],
               token == UserScriptManager.appIdToken
         else {
-            print("Missing required appid token.")
             return
         }
 

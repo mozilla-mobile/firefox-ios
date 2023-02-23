@@ -1292,7 +1292,7 @@
 "Settings.DisplayTheme.SwitchMode.SectionHeader" = "모드 변경";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
-"Settings.DisplayTheme.SwitchSubtitle" = "화면 밝기에 따라 자동으려 변경됨";
+"Settings.DisplayTheme.SwitchSubtitle" = "화면 밝기에 따라 자동으로 변경됨";
 
 /* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
 "Settings.DisplayTheme.SwitchTitle" = "자동으로";

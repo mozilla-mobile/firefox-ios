@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Shared
 
 private let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
@@ -25,9 +26,7 @@ extension SimpleTab {
                 let jsonDecoder = JSONDecoder()
                 let tabs = try jsonDecoder.decode([String: SimpleTab].self, from: tbs)
                 return tabs
-            } catch {
-                print("Error occured")
-            }
+            } catch {}
         }
         return [String: SimpleTab]()
     }

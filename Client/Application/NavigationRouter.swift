@@ -347,9 +347,7 @@ enum NavigationPath {
             let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
             controller.pushViewController(viewController, animated: true)
         case .search:
-            let viewController = SearchSettingsTableViewController()
-            viewController.model = profile.searchEngines
-            viewController.profile = profile
+            let viewController = SearchSettingsTableViewController(profile: profile)
             controller.pushViewController(viewController, animated: true)
         case .clearPrivateData:
             let viewController = ClearPrivateDataTableViewController()

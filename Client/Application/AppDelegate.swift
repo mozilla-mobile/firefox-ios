@@ -7,10 +7,9 @@ import Storage
 import CoreSpotlight
 import UIKit
 import Common
-import Logger
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let logger = DefaultLogger.shared
+    let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
@@ -42,12 +41,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        // It's important this is the first thing that happens when the app is run
-        DependencyHelper().bootstrapDependencies()
+        // Configure app information for BrowserKit, needed for logger
+        BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
+                                               nightlyAppVersion: AppConstants.nightlyAppVersion,
+                                               sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
+        // Configure logger so we can start tracking logs early
+        logger.configure(crashManager: DefaultCrashManager())
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,
                    category: .lifecycle)
+
+        // Then setup dependency container as it's needed for everything else
+        DependencyHelper().bootstrapDependencies()
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
@@ -169,6 +175,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
         profile.shutdown()
+    }
+
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        logger.log("Received memory warning", level: .info, category: .lifecycle)
     }
 
     private func updateTopSitesWidget() {

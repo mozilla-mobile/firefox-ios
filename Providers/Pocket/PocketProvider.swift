@@ -34,7 +34,14 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     private let pocketGlobalFeed: String
 
     static let GlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
-    static let MoreStoriesURL = URL(string: "https://getpocket.com/explore?src=ff_ios&cdn=0")!
+    static let MoreStoriesURL = {
+        switch Locale.current.identifier {
+        case "de_DE":
+            return URL(string: "https://getpocket.com/de/explore?src=ff_ios")!
+        default:
+            return URL(string: "https://getpocket.com/explore?src=ff_ios&cdn=0")!
+        }
+    }()
 
     // Allow endPoint to be overriden for testing
     init(endPoint: String = PocketProvider.GlobalFeed) {

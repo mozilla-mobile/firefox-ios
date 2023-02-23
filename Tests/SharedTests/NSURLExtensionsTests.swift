@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import UIKit
 import XCTest
 @testable import Shared
@@ -343,7 +344,6 @@ class NSURLExtensionsTests: XCTestCase {
             let original = url.absoluteDisplayString
             let matches = detector.matches(in: original, options: [], range: NSRange(location: 0, length: original.count))
             guard !matches.isEmpty else {
-                print("\(url) doesn't match as a URL")
                 continue
             }
 

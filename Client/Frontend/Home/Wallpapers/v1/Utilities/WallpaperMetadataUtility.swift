@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Logger
 import Shared
 
 /// Responsible for tracking whether or not the wallpaper system should perform

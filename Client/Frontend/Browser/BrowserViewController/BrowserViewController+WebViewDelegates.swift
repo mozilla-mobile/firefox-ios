@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Logger
+import Common
 import WebKit
 import Shared
 import UIKit
@@ -17,8 +17,6 @@ extension BrowserViewController: WKUIDelegate {
         guard !navigationAction.isInternalUnprivileged,
               shouldRequestBeOpenedAsPopup(navigationAction.request)
         else {
-            print("Denying popup from request: \(navigationAction.request)")
-
             guard let url = navigationAction.request.url else { return nil }
 
             if url.scheme == "whatsapp" && UIApplication.shared.canOpenURL(url) {
@@ -55,16 +53,12 @@ extension BrowserViewController: WKUIDelegate {
         return false
     }
 
-    private func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+    fileprivate func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
         return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
     }
 
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping () -> Void) {
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
         if shouldDisplayJSAlertForWebView(webView) {
             present(messageAlert.alertController(), animated: true, completion: nil)
@@ -739,7 +733,9 @@ extension BrowserViewController: WKNavigationDelegate {
 
     fileprivate func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
         if error.code == WKError.webContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
-            print("WebContent process has crashed. Trying to reload to restart it.")
+            logger.log("WebContent process has crashed. Trying to reload to restart it.",
+                       level: .warning,
+                       category: .webview)
             webView.reload()
             return true
         }

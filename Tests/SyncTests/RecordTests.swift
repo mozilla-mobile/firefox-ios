@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Shared
 import Account
 import Storage
@@ -14,7 +15,6 @@ import SwiftyJSON
 class RecordTests: XCTestCase {
     func testGUIDs() {
         let s = Bytes.generateGUID()
-        print("Got GUID: \(s)", terminator: "\n")
         XCTAssertEqual(12, s.lengthOfBytes(using: .utf8))
     }
 
@@ -131,8 +131,6 @@ class RecordTests: XCTestCase {
             (s: String) -> CleartextPayloadJSON? in
             return CleartextPayloadJSON(s)
         }
-
-        print(clientPayload, terminator: "\n")
 
         // Non-JSON malformed payloads don't even yield a value.
         XCTAssertNil(Record<CleartextPayloadJSON>.fromEnvelope(EnvelopeJSON(malformedPayload), payloadFactory: clearFactory))

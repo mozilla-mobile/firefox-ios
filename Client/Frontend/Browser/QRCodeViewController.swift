@@ -5,6 +5,7 @@
 import Foundation
 import AVFoundation
 import Shared
+import Common
 
 protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)
@@ -68,6 +69,17 @@ class QRCodeViewController: UIViewController {
             scanBorderSize = minSize / 2
         }
         return scanBorderSize
+    }
+
+    private let logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
@@ -242,9 +254,7 @@ class QRCodeViewController: UIViewController {
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: ImageIdentifiers.qrCodeLight)
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.White100
-            } catch {
-                print(error)
-            }
+            } catch {}
         } else {
             do {
                 try captureDevice.lockForConfiguration()
@@ -252,9 +262,7 @@ class QRCodeViewController: UIViewController {
                 captureDevice.unlockForConfiguration()
                 navigationItem.rightBarButtonItem?.image = UIImage(named: ImageIdentifiers.qrCodeLightTurnedOn)
                 navigationItem.rightBarButtonItem?.tintColor = UX.isLightingNavigationItemColor
-            } catch {
-                print(error)
-            }
+            } catch {}
         }
         isLightOn = !isLightOn
     }
@@ -268,9 +276,7 @@ class QRCodeViewController: UIViewController {
         do {
             let input = try AVCaptureDeviceInput(device: captureDevice)
             captureSession.addInput(input)
-        } catch {
-            print(error)
-        }
+        } catch {}
         let output = AVCaptureMetadataOutput()
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
@@ -315,12 +321,12 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             self.dismiss(animated: true, completion: {
                 guard let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
                       let qrCodeDelegate = self.qrCodeDelegate,
-                        let text = metaData.stringValue
+                      let text = metaData.stringValue
                 else {
-                        SentryIntegration.shared.sendWithStacktrace(
-                            message: "Unable to scan QR code",
-                            tag: .general)
-                        return
+                    self.logger.log("Unable to scan QR code",
+                                    level: .debug,
+                                    category: .unlabeled)
+                    return
                 }
 
                 if let url = URIFixup.getURL(text) {

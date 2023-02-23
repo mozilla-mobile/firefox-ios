@@ -5,7 +5,7 @@
 import UIKit
 import NotificationCenter
 import Shared
-import Logger
+import Common
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
@@ -164,7 +164,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         self.extensionContext?.open(URL(string: urlString)!) { success in
             self.logger.log("Extension opened containing app: \(success)",
                             level: .info,
-                            category: .setup)
+                            category: .lifecycle)
         }
     }
 

@@ -4,7 +4,6 @@
 
 import XCTest
 import Shared
-@testable import Client
 @testable import Storage
 
 class RustAutofillTests: XCTestCase {

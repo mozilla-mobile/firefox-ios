@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import WebKit
-import Logger
+import Common
 
 class CreditCardHelper: TabContentScript {
     private weak var tab: Tab?
@@ -25,10 +25,10 @@ class CreditCardHelper: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController,
                                didReceiveScriptMessage message: WKScriptMessage) {
-        guard let request = message.body as? [String: Any] else {return}
-        print("Received from content script: ", request)
-
         // TODO: Retrieve response value from user selected credit card
+        guard (message.body as? [String: Any]) != nil else { return }
+        // guard let request = message.body as? [String: Any] else { return }
+        //
         // Example value: [
         //     "data": [
         //         "cc-name": "Jane Doe",

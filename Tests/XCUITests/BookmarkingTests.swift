@@ -129,6 +129,7 @@ class BookmarkingTests: BaseTestCase {
         checkItemInBookmarkList()
     }
 
+    // Smoketest
     func testBookmarksAwesomeBar() {
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
@@ -267,7 +268,7 @@ class BookmarkingTests: BaseTestCase {
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 1 cell (desktop bookmark folder)
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)

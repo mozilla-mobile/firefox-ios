@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Foundation
 import Shared
 import Sync
@@ -135,7 +136,7 @@ class SyncContentSettingsViewController: SettingsTableViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         if !enginesToSyncOnExit.isEmpty {
-            _ = self.profile.syncManager.syncNamedCollections(why: SyncReason.engineEnabled, names: Array(enginesToSyncOnExit))
+            _ = self.profile.syncManager.syncNamedCollections(why: OldSyncReason.engineEnabled, names: Array(enginesToSyncOnExit))
             enginesToSyncOnExit.removeAll()
         }
         super.viewWillDisappear(animated)

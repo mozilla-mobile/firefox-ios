@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Foundation
-import Logger
 import MozillaAppServices
 import Shared
 
@@ -43,7 +43,7 @@ private let NIMBUS_IS_FIRST_RUN_KEY = "NimbusFirstRun"
 /// The server components of Nimbus are: `RemoteSettings` which serves the experiment definitions to
 /// clients, and `Experimenter`, which is the user interface for creating and administering experiments.
 ///
-/// Rust errors are not expected, but will be reported via Sentry.
+/// Rust errors are not expected, but will be reported via logger.
 enum Experiments {
     private static var studiesSetting: Bool?
     private static var telemetrySetting: Bool?
@@ -144,17 +144,15 @@ enum Experiments {
         // thinks it is.
         let appSettings = NimbusAppSettings(
             appName: nimbusAppName,
-            channel: AppConstants.BuildChannel.nimbusString,
+            channel: AppConstants.buildChannel.nimbusString,
             customTargetingAttributes: customTargetingAttributes
         )
 
         let errorReporter: NimbusErrorReporter = { err in
-            SentryIntegration.shared.sendWithStacktrace(
-                message: "Error in Nimbus SDK",
-                tag: SentryTag.nimbus,
-                severity: .error,
-                description: err.localizedDescription
-            )
+            DefaultLogger.shared.log("Error in Nimbus SDK",
+                                     level: .warning,
+                                     category: .experiments,
+                                     description: err.localizedDescription)
         }
 
         let initialExperiments = Bundle.main.url(forResource: "initial_experiments", withExtension: "json")

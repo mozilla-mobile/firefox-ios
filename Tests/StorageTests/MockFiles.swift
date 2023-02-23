@@ -4,7 +4,6 @@
 
 import Foundation
 @testable import Storage
-@testable import Client
 import XCTest
 
 class MockFiles: FileAccessor {
@@ -17,7 +16,6 @@ class MockFiles: FileAccessor {
 class SupportingFiles: FileAccessor {
     init() {
         let path = Bundle.main.bundlePath + "/PlugIns/StorageTests.xctest/"
-        NSLog("Supporting files: \(path)")
         super.init(rootPath: path)
     }
 }

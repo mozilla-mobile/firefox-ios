@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Logger
+import Common
 import Storage
 import Shared
 
@@ -114,7 +114,7 @@ struct QuickActionsImplementation: QuickActions {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
             }
         default:
-            logger.log("Cannot add static shortcut item of type \(type)", level: .warning, category: .setup)
+            logger.log("Cannot add static shortcut item of type \(type)", level: .warning, category: .unlabeled)
         }
         application.shortcutItems = dynamicShortcutItems
     }

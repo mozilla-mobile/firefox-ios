@@ -14,6 +14,7 @@ class TrackingProtectionTests: BaseTestCase {
     // Smoketest
     func testTrackingProtection() {
         navigator.goto(URLBarOpen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         navigator.back()
         navigator.goto(TrackingProtectionSettings)
 
@@ -24,24 +25,21 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.SwitchETP)
 
         // Verify it is turned off
-//        navigator.goto(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
         // The lock icon should still be there
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
-//        navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-//        navigator.goto(BrowserTab)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables.otherElements[ImageIdentifiers.settings], timeout: 5)
         app.tables.otherElements[ImageIdentifiers.settings].tap()

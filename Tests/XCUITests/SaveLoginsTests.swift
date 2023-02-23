@@ -90,11 +90,15 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(app.tables["Login List"])
         XCTAssertTrue(app.staticTexts[domain].exists)
         // XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-        // Change to 3 entries for iPhone since the hostname is not saved and only one entry appears
-        if iPad() {
+        if processIsTranslatedStr() == m1Rosetta {
             XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
         } else {
-            XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+            // Change to 3 entries for iPhone since the hostname is not saved and only one entry appears
+            if iPad() {
+                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
+            } else {
+                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+            }
         }
     }
 

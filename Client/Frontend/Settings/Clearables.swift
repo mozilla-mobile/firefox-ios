@@ -7,7 +7,7 @@ import Shared
 import WebKit
 import CoreSpotlight
 import SiteImageView
-import Logger
+import Common
 
 // A base protocol for something that can be cleared.
 protocol Clearable {

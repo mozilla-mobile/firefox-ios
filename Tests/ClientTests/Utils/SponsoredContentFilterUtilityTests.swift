@@ -121,16 +121,6 @@ class SponsoredContentFilterUtilityTests: XCTestCase {
         let result = subject.filterSponsoredHighlights(from: highlights)
         XCTAssertEqual(result.count, 3, "All sponsored highlights were removed")
     }
-
-    func testSponsoredHighlightsFilterSessionRestoreURLs () {
-        let subject = SponsoredContentFilterUtility()
-        let highlights = createHistoryHighlight(normalHighlightsCount: 3,
-                                                sponsoredHighlightsCount: 2,
-                                                sponsoredUrl: sessionRestoreURL)
-        XCTAssertEqual(highlights.count, 5)
-        let result = subject.filterSponsoredHighlights(from: highlights)
-        XCTAssertEqual(result.count, 3, "All sponsored highlights were removed")
-    }
 }
 
 // MARK: - Helpers

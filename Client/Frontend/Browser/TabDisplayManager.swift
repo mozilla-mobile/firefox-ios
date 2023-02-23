@@ -1061,7 +1061,10 @@ extension TabDisplayOrder {
                 let order = try jsonDecoder.decode(TabDisplayOrder.self, from: tabDisplayOrder)
                 return order
             } catch let error as NSError {
-                SentryIntegration.shared.send(message: "Error: Unable to decode tab display order", tag: SentryTag.tabDisplayManager, severity: .error, description: error.debugDescription)
+                DefaultLogger.shared.log("Error: Unable to decode tab display order",
+                                         level: .warning,
+                                         category: .tabs,
+                                         description: error.debugDescription)
             }
         }
         return nil

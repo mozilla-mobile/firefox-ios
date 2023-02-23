@@ -2,12 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import Storage
 import Account
 import Glean
-import Logger
 
 class AppLaunchUtil {
     private var logger: Logger
@@ -30,10 +30,9 @@ class AppLaunchUtil {
 
         TelemetryWrapper.shared.setup(profile: profile)
 
-        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
-        // before getting the Profile.
+        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+        logger.setup(sendUsageData: sendUsageData)
 
         setUserAgent()
 
@@ -70,8 +69,14 @@ class AppLaunchUtil {
         SystemUtils.onFirstRun()
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
+            self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
         }
+
+        // Add swizzle on UIViewControllers to automatically log when there's a new view showing
+        UIViewController.loggerSwizzle()
+
+        // Add swizzle on top of UIControl to automatically log when there's an action sent
+        UIControl.loggerSwizzle()
     }
 
     func setUpPostLaunchDependencies() {
@@ -162,8 +167,6 @@ class AppLaunchUtil {
                 GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
                 GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
-                // We also send the error to sentry
-                SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
             })
         } else {
             self.logger.log("History Migration skipped",

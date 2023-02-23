@@ -139,8 +139,10 @@ class JumpBackInViewModel: FeatureFlaggable {
         }
     }
 
+    private var isSyncTabFeatureEnabled = false
+
     private var hasSyncedTab: Bool {
-        return jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled && recentSyncedTab != nil
+        return isSyncTabFeatureEnabled && recentSyncedTab != nil
     }
 
     private var hasJumpBackIn: Bool {
@@ -403,7 +405,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
                             isPortrait: isPortrait,
                             device: device)
         let maxItemsToDisplay = sectionLayout.maxItemsToDisplay(
-            hasAccount: jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled,
+            hasAccount: isSyncTabFeatureEnabled,
             device: device
         )
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
@@ -481,11 +483,13 @@ extension JumpBackInViewModel: HomepageSectionHandler {
 
 extension JumpBackInViewModel: JumpBackInDelegate {
     func didLoadNewData() {
-        ensureMainThread {
-            self.recentTabs = self.jumpBackInDataAdaptor.getRecentTabData()
-            self.recentGroups = self.jumpBackInDataAdaptor.getGroupsData()
-            self.recentSyncedTab = self.jumpBackInDataAdaptor.getSyncedTabData()
+        Task { @MainActor in
+            self.recentTabs = await self.jumpBackInDataAdaptor.getRecentTabData()
+            self.recentGroups = await self.jumpBackInDataAdaptor.getGroupsData()
+            self.recentSyncedTab = await self.jumpBackInDataAdaptor.getSyncedTabData()
+            self.isSyncTabFeatureEnabled = await self.jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled()
             guard self.isEnabled else { return }
+
             self.delegate?.reloadView()
         }
     }

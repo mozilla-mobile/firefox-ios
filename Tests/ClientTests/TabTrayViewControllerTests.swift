@@ -24,6 +24,7 @@ class TabTrayViewControllerTests: XCTestCase {
         tabTray = TabTrayViewController(tabTrayDelegate: nil, profile: profile, tabToFocus: nil, tabManager: manager)
         gridTab = GridTabViewController(tabManager: manager, profile: profile)
         manager.addDelegate(gridTab)
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -53,5 +54,26 @@ class TabTrayViewControllerTests: XCTestCase {
 
         XCTAssertEqual(tabTray.viewModel.normalTabsCount, "1")
         XCTAssertEqual(tabTray.countLabel.text, "1")
+    }
+
+    func testTabTrayInPrivateMode_WhenTabIsCreated() {
+        tabTray.viewModel.segmentToFocus = TabTrayViewModel.Segment.privateTabs
+        tabTray.viewDidLoad()
+        tabTray.didTapAddTab(UIBarButtonItem())
+        tabTray.didTapDone()
+
+        let privateState = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+        XCTAssertTrue(privateState)
+    }
+
+    func testTabTrayRevertToRegular_ForNoPrivateTabSelected() {
+        // If the user selects Private mode but doesn't focus or creates a new tab
+        // we considered that regular is actually active
+        tabTray.viewModel.segmentToFocus = TabTrayViewModel.Segment.privateTabs
+        tabTray.viewDidLoad()
+        tabTray.didTapDone()
+
+        let privateState = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+        XCTAssertFalse(privateState)
     }
 }

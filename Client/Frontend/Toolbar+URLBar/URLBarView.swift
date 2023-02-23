@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Shared
 import SnapKit
 import UIKit
@@ -60,7 +61,7 @@ extension URLBarViewProtocol {
     }
 }
 
-class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable {
+class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchangeable, SearchEngineDelegate {
     // Additional UIAppearance-configurable properties
     @objc dynamic var locationBorderColor: UIColor = URLBarViewUX.TextFieldBorderColor {
         didSet {
@@ -232,8 +233,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateSearchEngineImage() {
-        self.searchIconImageView.image = profile.searchEngines.defaultEngine.image
+    func searchEnginesDidUpdate() {
+        self.searchIconImageView.image = profile.searchEngines.defaultEngine?.image
     }
 
     fileprivate func commonInit() {
@@ -245,7 +246,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
             addSubview($0)
         }
 
-        updateSearchEngineImage()
+        profile.searchEngines.delegate = self
 
         privateModeBadge.add(toParent: self)
         appMenuBadge.add(toParent: self)

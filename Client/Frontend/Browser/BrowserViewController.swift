@@ -12,9 +12,7 @@ import SnapKit
 import Account
 import MobileCoreServices
 import Telemetry
-import Sentry
 import Common
-import Logger
 
 struct UrlToOpenModel {
     var url: URL?
@@ -159,7 +157,7 @@ class BrowserViewController: UIViewController {
         return keyboardPressesHandlerValue
     }
 
-    private var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
+    fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
     init(
         profile: Profile,
@@ -550,6 +548,9 @@ class BrowserViewController: UIViewController {
         }
 
         if !displayedRestoreTabsAlert && crashedLastLaunch() {
+            logger.log("The application crashed on last session",
+                       level: .info,
+                       category: .lifecycle)
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
@@ -612,7 +613,6 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
         }
-        showQueuedAlertIfAvailable()
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -862,7 +862,7 @@ class BrowserViewController: UIViewController {
     var displayedRestoreTabsAlert = false
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return SentryIntegration.shared.crashedLastLaunch
+        return logger.crashedLastLaunch
     }
 
     fileprivate func showRestoreTabsAlert() {
@@ -885,7 +885,7 @@ class BrowserViewController: UIViewController {
         isCrashAlertShowing = true
     }
 
-    private func showQueuedAlertIfAvailable() {
+    fileprivate func showQueuedAlertIfAvailable() {
         if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
@@ -1266,11 +1266,10 @@ class BrowserViewController: UIViewController {
         guard let kp = keyPath,
               let path = KVOConstants(rawValue: kp)
         else {
-            SentryIntegration.shared.send(
-                message: "BVC observeValue webpage unhandled KVO",
-                tag: .general,
-                severity: .error,
-                description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            logger.log("BVC observeValue webpage unhandled KVO",
+                       level: .info,
+                       category: .unlabeled,
+                       description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
 
@@ -1462,19 +1461,21 @@ class BrowserViewController: UIViewController {
 
     func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
         popToBVC()
-        let engine = profile.searchEngines.defaultEngine
-        if let searchURL = engine.searchURLForQuery(text) {
-            openURLInNewTab(searchURL, isPrivate: isPrivate)
-            if let tab = tabManager.selectedTab {
-                let searchData = TabGroupData(searchTerm: text,
-                                              searchUrl: searchURL.absoluteString,
-                                              nextReferralUrl: "")
-                tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
-            }
-        } else {
-            // We still don't have a valid URL, so something is broken. Give up.
-            print("Error handling URL entry: \"\(text)\".")
-            assertionFailure("Couldn't generate search URL: \(text)")
+
+        guard let engine = profile.searchEngines.defaultEngine,
+              let searchURL = engine.searchURLForQuery(text)
+        else {
+            DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
+            return
+        }
+
+        openURLInNewTab(searchURL, isPrivate: isPrivate)
+
+        if let tab = tabManager.selectedTab {
+            let searchData = TabGroupData(searchTerm: text,
+                                          searchUrl: searchURL.absoluteString,
+                                          nextReferralUrl: "")
+            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         }
     }
 
@@ -1594,10 +1595,7 @@ class BrowserViewController: UIViewController {
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil, webViewStatus: WebViewUpdateStatus) {
         tabManager.expireSnackbars()
 
-        guard let webView = tab.webView else {
-            print("Cannot navigate in tab without a webView")
-            return
-        }
+        guard let webView = tab.webView else { return }
 
         if let url = webView.url {
             if tab === tabManager.selectedTab {
@@ -1881,7 +1879,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     }
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
-        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
+        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine?.searchURLForQuery(url) else {
             logger.log("Invalid URL, and couldn't generate a search URL for it.",
                        level: .warning,
                        category: .library)
@@ -2007,12 +2005,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-        let searchSettingsTableViewController = SearchSettingsTableViewController()
-        searchSettingsTableViewController.model = self.profile.searchEngines
-        searchSettingsTableViewController.profile = self.profile
+        let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile)
+
         // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
-            self.urlBar.updateSearchEngineImage()
+            self.urlBar.searchEnginesDidUpdate()
             self.searchController?.reloadSearchEngines()
             self.searchController?.reloadData()
         }
@@ -2732,15 +2729,19 @@ extension BrowserViewController {
     /// We're currently seeing crashes from cases of there being no `connectedScene`, or being unable to cast to a SceneDelegate.
     /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
     ///
-    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now. 
+    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now.
     public static func foregroundBVC() -> BrowserViewController? {
         guard let scene = UIApplication.shared.connectedScenes.first else {
-            SentryIntegration.shared.send(message: "No connected scenes exist.", severity: .fatal)
+            DefaultLogger.shared.log("No connected scenes exist.",
+                                     level: .fatal,
+                                     category: .lifecycle)
             return nil
         }
 
         guard let sceneDelegate = scene.delegate as? SceneDelegate else {
-            SentryIntegration.shared.send(message: "Scene could not be cast as SceneDelegate.", severity: .fatal)
+            DefaultLogger.shared.log("Scene could not be cast as SceneDelegate.",
+                                     level: .fatal,
+                                     category: .lifecycle)
             return nil
         }
 
