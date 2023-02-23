@@ -24,7 +24,7 @@ If you find a bug in the source code or a mistake in the documentation, you can 
   * Exception: we use 4-space indentation instead of 2.
 
 ### Pull Requests
-PR's should be made from your personal branch to the `main` branch. Please see the [PR Naming Guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide) for how to name PRs. 
+PR's should be made from a branch on your personal fork to the `mozilla-mobile:main` branch. Please see the [PR Naming Guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide) for how to name PRs.
 
 #### Commits
 * All of a PR's commits will be squashed to keep a clean git history in `main`. This means that technically, individual commit names are not particularly relevant. However, for an easier review process, we should keep the following rueles of thumb in mind:
