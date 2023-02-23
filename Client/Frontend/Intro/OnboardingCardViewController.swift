@@ -29,6 +29,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let imageViewSize = CGSize(width: 240, height: 300)
 
         // small device
+        static let smallTitleFontSize: CGFloat = 28
         static let smallStackViewSpacing: CGFloat = 8
         static let smallStackViewSpacingButtons: CGFloat = 16
         static let smallScrollViewVerticalPadding: CGFloat = 20
@@ -75,8 +76,9 @@ class OnboardingCardViewController: UIViewController, Themeable {
     private lazy var titleLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
+        let fontSize = self.shouldUseSmallDeviceLayout ? UX.smallTitleFontSize : UX.titleFontSize
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .largeTitle,
-                                                                       size: UX.titleFontSize)
+                                                                       size: fontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)TitleLabel"
     }
