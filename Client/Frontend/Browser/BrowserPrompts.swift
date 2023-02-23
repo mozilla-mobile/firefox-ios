@@ -44,16 +44,6 @@ struct MessageAlert: JSAlertInfo {
     let completionHandler: () -> Void
     var shouldCallCompletion: Bool
 
-    init(message: String,
-         frame: WKFrameInfo,
-         completionHandler: @escaping () -> Void,
-         shouldCallCompletion: Bool) {
-        self.message = message
-        self.frame = frame
-        self.completionHandler = completionHandler
-        self.shouldCallCompletion = shouldCallCompletion
-    }
-
     func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
@@ -76,16 +66,6 @@ struct ConfirmPanelAlert: JSAlertInfo {
     let frame: WKFrameInfo
     let completionHandler: (Bool) -> Void
     var shouldCallCompletion: Bool
-
-    init(message: String,
-         frame: WKFrameInfo,
-         completionHandler: @escaping (Bool) -> Void,
-         shouldCallCompletion: Bool) {
-        self.message = message
-        self.frame = frame
-        self.completionHandler = completionHandler
-        self.shouldCallCompletion = shouldCallCompletion
-    }
 
     func alertController() -> JSPromptAlertController {
         // Show JavaScript confirm dialogs.
@@ -118,20 +98,10 @@ struct TextInputAlert: JSAlertInfo {
 
     var input: UITextField!
 
-    init(message: String,
-         frame: WKFrameInfo,
-         completionHandler: @escaping (String?) -> Void,
-         defaultText: String?,
-         shouldCallCompletion: Bool) {
-        self.message = message
-        self.frame = frame
-        self.completionHandler = completionHandler
-        self.defaultText = defaultText
-        self.shouldCallCompletion = shouldCallCompletion
-    }
-
     func alertController() -> JSPromptAlertController {
-        let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame), message: message, preferredStyle: .alert)
+        let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
+                                                      message: message,
+                                                      preferredStyle: .alert)
         var input: UITextField!
         alertController.addTextField(configurationHandler: { (textField: UITextField) in
             input = textField
