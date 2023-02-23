@@ -413,18 +413,6 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Accessibility.dynamicText)
     }
 
-    // MARK: - App Settings Menu
-
-    func test_showTour_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .settingsMenuShowTour
-        )
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.SettingsMenu.showTourPressed)
-    }
-
     // MARK: - Credit card autofill
 
     func test_autofill_credit_card_settings_tapped_GleanIsCalled() {
