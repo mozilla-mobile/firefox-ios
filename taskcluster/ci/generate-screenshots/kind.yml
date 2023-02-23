@@ -18,7 +18,7 @@ not-for-locales:
 
 locales-per-chunk: 6
 
-job-defaults:
+task-defaults:
     bitrise-workflow: L10nScreenshotsTests
     build-derived-data-path: {artifact-reference: '<build/public/build/target.zip>'}
     description: Generate localized screenshots by delegating the work to bitrise.io
