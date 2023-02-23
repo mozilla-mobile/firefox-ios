@@ -45,8 +45,6 @@ public class AppConstants {
     // Only performance tests
     public static let isRunningPerfTests = ProcessInfo.processInfo.arguments.contains(LaunchArguments.PerformanceTest)
 
-    public static let FxAiOSClientId = "1b1a3e44c54fbb58"
-
     public static let scheme: String = {
         guard let identifier = Bundle.main.bundleIdentifier else {
             return "unknown"
@@ -59,8 +57,8 @@ public class AppConstants {
         return scheme
     }()
 
-    public static let PrefSendUsageData = "settings.sendUsageData"
-    public static let PrefStudiesToggle = "settings.studiesToggle"
+    public static let prefSendUsageData = "settings.sendUsageData"
+    public static let prefStudiesToggle = "settings.studiesToggle"
 
     /// Build Channel.
     public static let buildChannel: AppBuildChannel = {
@@ -77,7 +75,7 @@ public class AppConstants {
 
     /// Enables support for International Domain Names (IDN)
     /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
-    public static let MOZ_PUNYCODE: Bool = {
+    public static let punyCode: Bool = {
         #if MOZ_CHANNEL_RELEASE
             return false
         #elseif MOZ_CHANNEL_BETA
@@ -90,22 +88,16 @@ public class AppConstants {
     }()
 
     /// The maximum length of a URL stored by Firefox. Shared with Places on desktop.
-    public static let DB_URL_LENGTH_MAX = 65536
-
-    /// The maximum length of a page title stored by Firefox. Shared with Places on desktop.
-    public static let DB_TITLE_LENGTH_MAX = 4096
-
-    /// The maximum length of a bookmark description stored by Firefox. Shared with Places on desktop.
-    public static let DB_DESCRIPTION_LENGTH_MAX = 1024
+    public static let databaseURLLengthMax = 65536
 
     /// Time that needs to pass before polling FxA for send tabs again, 86_400_000 milliseconds is 1 day
-    public static let FXA_COMMANDS_INTERVAL = 86_400_000
+    public static let fxaCommandsInterval = 86_400_000
 
     /// The maximum number of times we should attempt to migrated the History to Application Services Places DB
-    public static let MAX_HISTORY_MIGRATION_ATTEMPT = 5
+    public static let maxHistoryMigrationAttempt = 5
 
     /// The maximum size of the places DB in bytes
-    public static let DB_SIZE_LIMIT_IN_BYTES: UInt32 = 75 * 1024 * 1024 // corresponds to 75MiB (in bytes)
+    public static let databaseSizeLimitInBytes: UInt32 = 75 * 1024 * 1024 // corresponds to 75MiB (in bytes)
 
     /// Fixed short version for nightly builds
     public static let nightlyAppVersion = "9000"

@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Logger
+import Common
 
 /// Responsible for providing the required file paths on the disk.
 struct WallpaperFilePathProvider {

@@ -4,7 +4,6 @@
 
 import Common
 import Foundation
-import Logger
 import Storage
 import Shared
 import SiteImageView
@@ -306,7 +305,7 @@ class Tab: NSObject {
         guard let url = self.url else {
             return false
         }
-        return url.absoluteString.lengthOfBytes(using: .utf8) > AppConstants.DB_URL_LENGTH_MAX
+        return url.absoluteString.lengthOfBytes(using: .utf8) > AppConstants.databaseURLLengthMax
     }
 
     // Use computed property so @available can be used to guard `noImageMode`.

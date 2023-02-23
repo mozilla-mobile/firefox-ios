@@ -6,7 +6,7 @@ import Foundation
 import Glean
 import Shared
 @_exported import MozillaAppServices
-import Logger
+import Common
 
 typealias LoginsStoreError = LoginsApiError
 public typealias LoginRecord = EncryptedLogin

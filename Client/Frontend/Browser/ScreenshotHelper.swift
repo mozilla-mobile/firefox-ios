@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 import WebKit
-import Logger
+import Common
 
 /**
  * Handles screenshots for a given tab, including pages with non-webview content.

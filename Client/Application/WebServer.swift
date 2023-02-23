@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import GCDWebServers
-import Logger
 import Shared
 
 protocol WebServerProtocol {

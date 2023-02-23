@@ -8,7 +8,6 @@ import Shared
 import Telemetry
 import Account
 import Sync
-import Logger
 
 protocol TelemetryWrapperProtocol {
     func recordEvent(category: TelemetryWrapper.EventCategory,
@@ -82,7 +81,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.dataDirectory = .cachesDirectory
         telemetryConfig.updateChannel = AppConstants.buildChannel.rawValue
-        let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+        let sendUsageData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
 
