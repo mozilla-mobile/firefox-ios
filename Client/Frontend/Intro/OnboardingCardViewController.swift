@@ -34,6 +34,9 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let smallStackViewSpacingButtons: CGFloat = 16
         static let smallScrollViewVerticalPadding: CGFloat = 20
         static let smallImageViewSize = CGSize(width: 240, height: 300)
+
+        // tiny device (SE 1st gen)
+        static let tinyImageViewSize = CGSize(width: 144, height: 180)
     }
 
     var viewModel: OnboardingCardProtocol
@@ -46,6 +49,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
     // including now iPhone SE 2nd generation and iPad
     var shouldUseSmallDeviceLayout: Bool {
         return view.frame.height <= 667 || UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    // Adjusting layout for devices with height lower than 568 (iPhone SE 1st generation)
+    var shouldUseTinyDeviceLayout: Bool {
+        return view.frame.height <= 568
     }
 
     private lazy var scrollView: UIScrollView = .build { view in
@@ -192,7 +200,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         // Adapt layout for smaller screens
         let scrollViewVerticalPadding = shouldUseSmallDeviceLayout ? UX.smallScrollViewVerticalPadding :  UX.scrollViewVerticalPadding
         let stackViewSpacingButtons = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacingButtons :  UX.stackViewSpacingButtons
-        let imageViewHeight = shouldUseSmallDeviceLayout ?
+        let imageViewHeight = shouldUseTinyDeviceLayout ? UX.tinyImageViewSize.height : shouldUseSmallDeviceLayout ?
             UX.imageViewSize.height : UX.smallImageViewSize.height
 
         NSLayoutConstraint.activate([
