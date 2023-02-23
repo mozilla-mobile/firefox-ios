@@ -9,7 +9,7 @@ features:
         type: Map<HomeScreenSection, Boolean>
         default:
           {
-            "top-sites": false,
+            "top-sites": true,
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
@@ -41,14 +41,14 @@ features:
       - channel: developer
         value: {
           "sections-enabled": {
-            "top-sites": false,
+            "top-sites": true,
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
             "pocket": true
           },
           "sponsored-tiles": {
-            "status": false,
+            "status": true,
             "max-number-of-tiles": 2
           },
           "wallpaper-feature": {
@@ -60,7 +60,7 @@ features:
       - channel: beta
         value: {
           "sections-enabled": {
-            "top-sites": false,
+            "top-sites": true,
             "jump-back-in": true,
             "recently-saved": true,
             "recent-explorations": true,
@@ -77,31 +77,30 @@ features:
           "jump-back-in-synced-tab": true
         }
 
-types:
-  objects:
-    SponsoredTiles:
-      description: "The configuration for the sponsored tile on the homescreen"
-      fields:
-        status:
-          type: Boolean
-          description: Whether or not the feature is enabled
-          default: false
-        max-number-of-tiles:
-          type: Int
-          description: The maximum number of sponsored tiles a user can see
-          default: 2
+objects:
+  SponsoredTiles:
+    description: "The configuration for the sponsored tile on the homescreen"
+    fields:
+      status:
+        type: Boolean
+        description: Whether or not the feature is enabled
+        default: false
+      max-number-of-tiles:
+        type: Int
+        description: The maximum number of sponsored tiles a user can see
+        default: 2
 
-  enums:
-    HomeScreenSection:
-      description: The identifiers for the sections of the homescreen.
-      variants:
-        top-sites:
-          description: The frecency and pinned sites.
-        recently-saved:
-          description: The sites the user has bookmarked recently.
-        jump-back-in:
-          description: The tabs the user was looking immediately before being interrupted.
-        recent-explorations:
-          description: The tab groups
-        pocket:
-          description: The pocket section. This should only be available in the US.
+enums:
+  HomeScreenSection:
+    description: The identifiers for the sections of the homescreen.
+    variants:
+      top-sites:
+        description: The frecency and pinned sites.
+      recently-saved:
+        description: The sites the user has bookmarked recently.
+      jump-back-in:
+        description: The tabs the user was looking immediately before being interrupted.
+      recent-explorations:
+        description: The tab groups
+      pocket:
+        description: The pocket section. This should only be available in the US.

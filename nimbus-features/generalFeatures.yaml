@@ -7,7 +7,7 @@ features:
         type: GeneralFeature
         default:
           {
-            "status": false
+            "status": true
           }
       report-site-issue:
         description: "This property defines whether or not the feature is enabled"
@@ -27,7 +27,7 @@ features:
       - channel: beta
         value: {
           "pull-to-refresh": {
-            "status": false
+            "status": true
           },
           "report-site-issue": {
             "status": true
@@ -39,7 +39,7 @@ features:
       - channel: developer
         value: {
           "pull-to-refresh": {
-            "status": false
+            "status": true
           },
           "report-site-issue": {
             "status": true
