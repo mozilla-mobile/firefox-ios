@@ -69,7 +69,7 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                           timeLastUsed: nil,
                                           timeLastModified: 1234,
                                           timesUsed: 1234)
-        
+
         let viewModel = CreditCardEditViewModel(firstName: "Mike",
                                                 lastName: "Simmons",
                                                 errorState: "Temp",
