@@ -1,6 +1,5 @@
 #!/bin/sh
 
-#
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -21,20 +20,21 @@ cleanupNimbusFile() {
 }
 
 updateNimbusFML() {
-    NIMBUSFML=nimbusTest.fml.yaml
+    NIMBUSFML=nimbus.fml.yaml
 
     cleanupNimbusFile $NIMBUSFML
     addFeatureFilesToNimbus $NIMBUSFML
 }
 
 configureFeatureName() {
-    echo "saot"
+    echo $1 | sed -r 's/([a-z0-9])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]'
 }
 
 addNewFeatureContent() {
+    KEBAB_FEATURE_NAME=$(configureFeatureName $2)
     echo """# The configuration for the $2 feature
 features:
-  $2:
+  $KEBAB_FEATURE_NAME:
     description: >
       Feature description
     variables:
@@ -71,4 +71,8 @@ fi
 
 if [ "$1" == "--update" ]; then
     updateNimbusFML
+fi
+
+if [ "$1" == "--test" ]; then
+    configureFeatureName $2
 fi
