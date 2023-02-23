@@ -23,7 +23,7 @@ class SnackButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            self.backgroundColor = isHighlighted ? UIColor.theme.snackbar.highlight : .clear
+            self.backgroundColor = isHighlighted ? UIColor.legacyTheme.snackbar.highlight : .clear
         }
     }
 
@@ -39,8 +39,8 @@ class SnackButton: UIButton {
         }
         titleLabel?.adjustsFontForContentSizeCategory = false
         setTitle(title, for: .normal)
-        setTitleColor(UIColor.theme.snackbar.highlightText, for: .highlighted)
-        setTitleColor(UIColor.theme.snackbar.title, for: .normal)
+        setTitleColor(UIColor.legacyTheme.snackbar.highlightText, for: .highlighted)
+        setTitleColor(UIColor.legacyTheme.snackbar.title, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -55,7 +55,7 @@ class SnackButton: UIButton {
 
     func drawSeparator() {
         let separator = UIView()
-        separator.backgroundColor = UIColor.theme.snackbar.border
+        separator.backgroundColor = UIColor.legacyTheme.snackbar.border
         self.addSubview(separator)
         separator.snp.makeConstraints { make in
             make.leading.equalTo(self)
@@ -85,7 +85,7 @@ class SnackBar: UIView {
         label.lineBreakMode = .byWordWrapping
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.numberOfLines = 0
-        label.textColor = UIColor.Photon.Grey90 // If making themeable, change to UIColor.theme.tableView.rowText
+        label.textColor = UIColor.Photon.Grey90 // If making themeable, change to UIColor.legacyTheme.tableView.rowText
         label.backgroundColor = UIColor.clear
         return label
     }()
@@ -122,7 +122,7 @@ class SnackBar: UIView {
         titleView.addArrangedSubview(textLabel)
 
         let separator = UIView()
-        separator.backgroundColor = UIColor.theme.snackbar.border
+        separator.backgroundColor = UIColor.legacyTheme.snackbar.border
 
         addSubview(titleView)
         addSubview(separator)
@@ -149,7 +149,7 @@ class SnackBar: UIView {
         backgroundColor = UIColor.clear
         self.clipsToBounds = true // overridden by masksToBounds = false
         self.layer.borderWidth = SnackBarUX.BorderWidth
-        self.layer.borderColor = UIColor.theme.snackbar.border.cgColor
+        self.layer.borderColor = UIColor.legacyTheme.snackbar.border.cgColor
         self.layer.cornerRadius = 8
         self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }

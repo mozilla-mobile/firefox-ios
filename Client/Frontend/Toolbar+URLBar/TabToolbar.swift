@@ -140,12 +140,12 @@ extension TabToolbar: SearchBarLocationProvider {}
 
 extension TabToolbar: NotificationThemeable, PrivateModeUI {
     func applyTheme() {
-        backgroundColor = UIColor.theme.browser.background
+        backgroundColor = UIColor.legacyTheme.browser.background
         helper?.setTheme(forButtons: actionButtons)
 
-        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        privateModeBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
+        appMenuBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
+        warningMenuBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
     }
 
     func applyUIMode(isPrivate: Bool) {

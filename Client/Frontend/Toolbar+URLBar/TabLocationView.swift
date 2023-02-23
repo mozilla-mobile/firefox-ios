@@ -332,11 +332,11 @@ extension TabLocationView: AccessibilityActionsSource {
 
 extension TabLocationView: NotificationThemeable {
     func applyTheme() {
-        urlTextField.textColor = UIColor.theme.textField.textAndTint
+        urlTextField.textColor = UIColor.legacyTheme.textField.textAndTint
         readerModeButton.applyTheme()
         trackingProtectionButton.applyTheme()
 
-        let color = LegacyThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
+        let color = LegacyThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.legacyTheme.textField.background
         menuBadge.badge.tintBackground(color: color)
     }
 }
