@@ -202,9 +202,9 @@ extension SearchGroupedItemsViewController: NotificationThemeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
-            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+            tableView.backgroundColor = UIColor.legacyTheme.homePanel.panelBackground
         } else {
-            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+            tableView.backgroundColor = UIColor.legacyTheme.homePanel.panelBackground
         }
 
         view.backgroundColor = .systemBackground

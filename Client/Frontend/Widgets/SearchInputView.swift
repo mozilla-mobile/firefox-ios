@@ -159,9 +159,9 @@ class SearchInputView: UIView, NotificationThemeable {
     }
 
     func applyTheme() {
-        backgroundColor = UIColor.theme.tableView.rowBackground
+        backgroundColor = UIColor.legacyTheme.tableView.rowBackground
         overlay.backgroundColor = backgroundColor
-        titleLabel.textColor = UIColor.theme.tableView.rowText
+        titleLabel.textColor = UIColor.legacyTheme.tableView.rowText
         inputField.textColor = titleLabel.textColor
     }
 }
