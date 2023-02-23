@@ -82,3 +82,7 @@ fi
 if [ "$1" == "--update" ]; then
     updateNimbusFML
 fi
+
+if [ $# -eq 0 ]; then
+    echo "No arguments supplied. Please see the documentation in the script."
+fi
