@@ -18,31 +18,31 @@ class EcosiaNTPTooltipHighlightTests: XCTestCase {
 
     func testFirstTimeReturnsNil() throws {
         user.firstTime = true
-        XCTAssertNil(NTPTooltip.highlight(for: user))
+        XCTAssertNil(NTPTooltip.highlight(for: user, isInPromoTest: false))
     }
 
     func testGotClaimed() throws {
         user.referrals.isNewClaim = true
-        XCTAssert(NTPTooltip.highlight(for: user) == .gotClaimed)
+        XCTAssert(NTPTooltip.highlight(for: user, isInPromoTest: false) == .gotClaimed)
     }
 
     func testSuccessfulInvite() throws {
         user.referrals.claims = 1
-        XCTAssert(NTPTooltip.highlight(for: user) == .successfulInvite)
+        XCTAssert(NTPTooltip.highlight(for: user, isInPromoTest: false) == .successfulInvite)
     }
 
     func testReferralSpotlight() throws {
         user.install = Calendar.current.date(byAdding: .day, value: -4, to: .init())!
-        XCTAssert(NTPTooltip.highlight(for: user) == .referralSpotlight)
+        XCTAssert(NTPTooltip.highlight(for: user, isInPromoTest: false) == .referralSpotlight)
     }
 
     func testCounterIntro() throws {
         user.showCounterIntro()
-        XCTAssert(NTPTooltip.highlight(for: user) == .counterIntro)
+        XCTAssert(NTPTooltip.highlight(for: user, isInPromoTest: false) == .counterIntro)
     }
 
     func testFallthrough() throws {
         user.hideCounterIntro()
-        XCTAssertNil(NTPTooltip.highlight(for: user))
+        XCTAssertNil(NTPTooltip.highlight(for: user, isInPromoTest: false))
     }
 }

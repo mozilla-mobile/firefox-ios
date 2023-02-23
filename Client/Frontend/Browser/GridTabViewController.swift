@@ -377,7 +377,11 @@ extension GridTabViewController {
     }
 
     func dismissTabTray() {
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        // Ecosia: implement missing call to delegate
+        navigationController?.dismiss(animated: true, completion: { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.tabTrayDidDismiss(self)
+        })
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 

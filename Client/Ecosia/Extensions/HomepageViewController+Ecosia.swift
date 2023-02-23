@@ -44,7 +44,7 @@ extension HomepageViewController {
 extension HomepageViewController: NTPTooltipDelegate {
     func ntpTooltipTapped(_ tooltip: NTPTooltip?) {
 
-        guard let ntpHighlight = NTPTooltip.highlight(for: User.shared) else { return }
+        guard let ntpHighlight = NTPTooltip.highlight(for: User.shared, isInPromoTest: Unleash.isInPromoTest()) else { return }
 
         UIView.animate(withDuration: 0.3) {
             tooltip?.alpha = 0

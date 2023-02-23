@@ -580,7 +580,7 @@ class BrowserViewController: UIViewController {
     private func prepareURLOnboardingContextualHint() {
         guard contextHintVC.shouldPresentHint()
                 && !User.shared.firstTime
-                && NTPTooltip.highlight(for: .shared) == nil
+                && NTPTooltip.highlight(for: .shared, isInPromoTest: Unleash.isInPromoTest()) == nil
         else { return }
 
         contextHintVC.configure(
@@ -890,6 +890,7 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    /* Ecosia: unused method
     func resetBrowserChrome() {
         // animate and reset transform for tab chrome
         urlBar.updateAlphaForSubviews(1)
@@ -901,6 +902,7 @@ class BrowserViewController: UIViewController {
 
         statusBarOverlay.isHidden = false
     }
+     */
 
     /// Show the home page
     /// - Parameter inline: Inline is true when the homepage is created from the tab tray, a long press
@@ -917,6 +919,15 @@ class BrowserViewController: UIViewController {
 
         homepageViewController?.view.layer.removeAllAnimations()
         view.setNeedsUpdateConstraints()
+
+        // Ecosia: show Default Browser promo if needed
+        // Workaround for time of experiment
+        // -> artificial delay of 0.3s to wait for animations and dismissals to finish
+        if inline, !User.shared.firstTime {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.presentDefaultBrowserPromoIfNeeded()
+            }
+        }
 
         // Return early if the home page is already showing
         guard homepageViewController?.view.alpha != 1 else { return }
@@ -938,12 +949,6 @@ class BrowserViewController: UIViewController {
 
         // Make sure reload button is hidden on homepage
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
-
-        DispatchQueue.main.async {
-            if !User.shared.firstTime {
-                self.presentDefaultBrowserPromoIfNeeded()
-            }
-        }
     }
 
     /// Once the homepage is created, browserViewController keeps a reference to it, never setting it to nil during
@@ -2251,10 +2256,14 @@ extension BrowserViewController {
     }
 
     func presentDefaultBrowserPromoIfNeeded() {
-        guard !showLoadingScreen(for: .shared),
+        let isHome = tabManager.selectedTab?.url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+
+        guard isHome,
+              presentedViewController == nil,
+              !showLoadingScreen(for: .shared),
               !User.shared.showsRebrandIntro else { return }
 
-        if shouldShowIntroScreen && Unleash.getRequiredSearches() <= User.shared.treeCount  {
+        if shouldShowIntroScreen && Unleash.minPromoSearches() <= User.shared.treeCount  {
             if #available(iOS 14, *) {
                 let defaultPromo = DefaultBrowser(delegate: self)
                 present(defaultPromo, animated: true)
@@ -2576,7 +2585,10 @@ extension BrowserViewController: TabTrayDelegate {
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
     func tabTrayDidDismiss(_ tabTray: GridTabViewController) {
-        resetBrowserChrome()
+        // Ecosia: resetBrowserChrome()
+
+        // Ecosia: check if promo needs display
+        presentDefaultBrowserPromoIfNeeded()
     }
 
     func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab) {}

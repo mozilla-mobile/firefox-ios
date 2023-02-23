@@ -70,7 +70,7 @@ extension NTPImpactViewModel: HomepageViewModelProtocol {
             trailing: insets)
 
         // Adding a header if needed
-        if NTPTooltip.highlight(for: User.shared)?.text != nil {
+        if NTPTooltip.highlight(for: User.shared, isInPromoTest: Unleash.isInPromoTest())?.text != nil {
             let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                     heightDimension: .absolute(1.0))
             let header = NSCollectionLayoutBoundarySupplementaryItem(

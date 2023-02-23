@@ -7,17 +7,23 @@ import Core
 
 extension Unleash {
 
-    public static func getRequiredSearches() -> Int {
+    static func minPromoSearches() -> Int {
         let variant = getVariant(.defaultBrowser)
-        return getRequiredSearches(for: variant)
+        return minSearches(for: variant)
     }
 
-    static func getRequiredSearches(for variant: Variant) -> Int {
+    static func minSearches(for variant: Variant) -> Int {
         switch variant.name {
+        case "control": return 0
         case "test1": return 5
         case "test2": return 25
         case "test3": return 50
-        default: return 0
+        default: return .max
         }
+    }
+
+    static func isInPromoTest() -> Bool {
+        let variant = getVariant(.defaultBrowser)
+        return variant.name.hasPrefix("test")
     }
 }

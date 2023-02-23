@@ -34,9 +34,9 @@ extension NTPTooltip {
 
     }
 
-    class func highlight(for user: Core.User) -> NTPTooltip.Highlight? {
+    class func highlight(for user: Core.User, isInPromoTest: Bool) -> NTPTooltip.Highlight? {
         // on first start, when we show the default browser promo, no highlight should be shown
-        guard !user.firstTime || Unleash.getRequiredSearches() != 0 else { return nil }
+        guard !user.firstTime || isInPromoTest else { return nil }
 
         if user.referrals.isNewClaim {
             return .gotClaimed

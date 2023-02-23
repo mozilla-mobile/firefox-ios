@@ -112,7 +112,7 @@ class HomepageViewModel: FeatureFlaggable, NTPLayoutHighlightDataSource {
 
         viewAppeared = true
 
-        if NTPTooltip.highlight(for: .shared) == .referralSpotlight {
+        if NTPTooltip.highlight(for: .shared, isInPromoTest: Unleash.isInPromoTest()) == .referralSpotlight {
             Analytics.shared.showInvitePromo()
         }
 
@@ -149,7 +149,7 @@ class HomepageViewModel: FeatureFlaggable, NTPLayoutHighlightDataSource {
     }
 
     func ntpLayoutHighlightText() -> String? {
-        return NTPTooltip.highlight(for: User.shared)?.text
+        return NTPTooltip.highlight(for: User.shared, isInPromoTest: Unleash.isInPromoTest())?.text
     }
 
 }
