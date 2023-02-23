@@ -128,7 +128,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        var topSitesCells = app.collectionViews.cells["TopSitesCell"]
+        let topSitesCells = app.collectionViews.cells["TopSitesCell"]
         waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
         XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
