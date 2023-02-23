@@ -500,10 +500,10 @@ class ChangeToChinaSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if UserDefaults.standard.bool(forKey: debugPrefIsChinaEdition) {
-            UserDefaults.standard.removeObject(forKey: debugPrefIsChinaEdition)
+        if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
+            UserDefaults.standard.removeObject(forKey: AppInfo.debugPrefIsChinaEdition)
         } else {
-            UserDefaults.standard.set(true, forKey: debugPrefIsChinaEdition)
+            UserDefaults.standard.set(true, forKey: AppInfo.debugPrefIsChinaEdition)
         }
     }
 }
@@ -811,7 +811,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 
         super.init(
             prefs: prefs,
-            prefKey: AppConstants.PrefSendUsageData,
+            prefKey: AppConstants.prefSendUsageData,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
             attributedStatusText: statusText,
@@ -823,7 +823,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
         )
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
+        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
     }
 
     override var accessibilityIdentifier: String? { return "SendAnonymousUsageData" }
@@ -846,7 +846,7 @@ class StudiesToggleSetting: BoolSetting {
 
         super.init(
             prefs: prefs,
-            prefKey: AppConstants.PrefStudiesToggle,
+            prefKey: AppConstants.prefStudiesToggle,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .SettingsStudiesToggleTitle),
             attributedStatusText: statusText,
@@ -856,7 +856,7 @@ class StudiesToggleSetting: BoolSetting {
         )
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.PrefStudiesToggle) ?? true)
+        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true)
     }
 
     override var accessibilityIdentifier: String? { return "StudiesToggle" }
