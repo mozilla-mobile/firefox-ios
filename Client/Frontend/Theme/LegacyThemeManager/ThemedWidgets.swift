@@ -56,7 +56,7 @@ class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
         // Take view model color if it exists, otherwise fallback to default colors
         textLabel?.textColor = viewModel?.textColor ?? theme.colors.textPrimary
         detailTextLabel?.textColor = viewModel?.detailTextColor ?? theme.colors.textSecondary
-        backgroundColor = viewModel?.backgroundColor ?? theme.colors.layer5
+        backgroundColor = viewModel?.backgroundColor ?? theme.colors.layer2
         tintColor = viewModel?.tintColor ?? theme.colors.actionPrimary
     }
 
