@@ -205,7 +205,7 @@ extension IntroViewController: OnboardingCardDelegate {
         flowType: FxAPageType = .emailLoginFlow,
         referringPage: ReferringPage = .onboarding
     ) {
-        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
+        let signInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
                                                                                        flowType: flowType,
                                                                                        referringPage: referringPage,
                                                                                        profile: profile)
@@ -215,8 +215,8 @@ extension IntroViewController: OnboardingCardDelegate {
                                          target: self,
                                          action: #selector(dismissSignInViewController))
         buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
-        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        signInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: signInSyncVC)
         controller.onViewDismissed = {
             self.showNextPage(.signSync)
         }
