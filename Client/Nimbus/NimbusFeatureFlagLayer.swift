@@ -48,7 +48,8 @@ final class NimbusFeatureFlagLayer {
             return checkGroupingFeature(for: featureID, from: nimbus)
 
         case .onboardingUpgrade,
-                .onboardingFreshInstall:
+                .onboardingFreshInstall,
+                .onboardingNotificationCardBeforeSync:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
         case .sponsoredTiles:
@@ -196,6 +197,7 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .onboardingUpgrade: return config.upgradeFlow
         case .onboardingFreshInstall: return config.firstRunFlow
+        case .onboardingNotificationCardBeforeSync: return config.notificationCardIsBeforeSync
         default: return false
         }
     }

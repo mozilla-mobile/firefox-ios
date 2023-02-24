@@ -21,6 +21,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case jumpBackInSyncedTab
     case onboardingUpgrade
     case onboardingFreshInstall
+    case onboardingNotificationCardBeforeSync
     case pocket
     case pullToRefresh
     case recentlySaved
@@ -92,6 +93,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .jumpBackInSyncedTab,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
+                .onboardingNotificationCardBeforeSync,
                 .reportSiteIssue,
                 .searchHighlights,
                 .shakeToRestore,

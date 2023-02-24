@@ -87,16 +87,23 @@ features:
           If true, we show the new Onboarding screen when the user for v106 version.
         type: Boolean
         default: true
+      notification-card-is-before-sync:
+        description: >
+          If true, we show the notification card before the sync card otherwise after.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value: {
           "upgrade-flow": false,
-          "first-run-flow": true
+          "first-run-flow": true,
+          "notification-card-is-before-sync": false
         }
       - channel: developer
         value: {
           "upgrade-flow": false,
-          "first-run-flow": true
+          "first-run-flow": true,
+          "notification-card-is-before-sync": false	
         }
   spotlight-search:
     description: Add pages as items findable with Spotlight.

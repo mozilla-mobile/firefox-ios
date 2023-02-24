@@ -80,6 +80,9 @@ onboarding-feature:
     first-run-flow:
       type: boolean
       description: "If true, we show the new Onboarding screen when the user for v106 version.\n"
+    notification-card-is-before-sync:
+      type: boolean
+      description: "If true, we show the notification card before the sync card otherwise after.\n"
     upgrade-flow:
       type: boolean
       description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
