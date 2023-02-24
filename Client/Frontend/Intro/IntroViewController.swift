@@ -125,8 +125,11 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     // Used to programmatically set the pageViewController to show next card
     func moveToNextPage(cardType: IntroViewModel.InformationCards) {
-        if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
-            pageControl.currentPage = cardType.rawValue + 1
+        let isNotificationCardBeforeSync = viewModel.isNotificationCardBeforeSync
+        let cardPosition = cardType.position(isNotificationCardBeforeSync: isNotificationCardBeforeSync)
+
+        if let nextViewController = getNextOnboardingCard(index: cardPosition, goForward: true) {
+            pageControl.currentPage = cardPosition + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
         }
     }
@@ -232,7 +235,7 @@ extension IntroViewController: OnboardingCardDelegate {
                 if granted {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
-                self?.closeOnboarding()
+                self?.showNextPage(.notification)
             }
         }
     }

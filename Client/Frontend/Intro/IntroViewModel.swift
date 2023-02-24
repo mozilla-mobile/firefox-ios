@@ -33,11 +33,11 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             }
         }
 
-        var position: Int {
+        func position(isNotificationCardBeforeSync: Bool = false) -> Int {
             switch self {
             case .welcome: return 0
-            case .signSync: return 1
-            case .notification: return 2
+            case .signSync: return isNotificationCardBeforeSync ? 2 : 1
+            case .notification: return isNotificationCardBeforeSync ? 1 : 2
             case .updateWelcome: return 0
             case .updateSignSync: return 1
             }
@@ -48,8 +48,14 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
     }
 
+    var isNotificationCardBeforeSync: Bool {
+        return featureFlags.isFeatureEnabled(.onboardingNotificationCardBeforeSync, checking: .buildOnly) // buildOnly ???
+    }
+
     var enabledCards: [IntroViewModel.InformationCards] {
-        return [.welcome, .signSync, .notification]
+        return [.welcome, .signSync, .notification].sorted {
+            $0.position(isNotificationCardBeforeSync: isNotificationCardBeforeSync) < $1.position(isNotificationCardBeforeSync: isNotificationCardBeforeSync)
+        }
     }
 
     func getInfoModel(cardType: IntroViewModel.InformationCards) -> OnboardingModelProtocol? {
