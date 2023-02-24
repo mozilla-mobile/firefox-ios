@@ -2375,6 +2375,22 @@ extension String {
         comment: "Label for an action used to view one or more tabs from a notification.")
 }
 
+// MARK: - Engagement notification
+extension String {
+    public struct EngagementNotification {
+        public static let Title = MZLocalizedString(
+            "Engagement.Notification.Title.v112",
+            tableName: "EngagementNotification",
+            value: "Try private browsing",
+            comment: "Title of notification send to user after inactivity.")
+        public static let Body = MZLocalizedString(
+            "Engagement.Notification.Body.v112",
+            tableName: "EngagementNotification",
+            value: "Browse with no saved cookies or history in Firefox.",
+            comment: "Body of notification send to user after inactivity.")
+    }
+}
+
 // MARK: - Additional messages sent via Push from FxA
 extension String {
     public static let FxAPush_DeviceDisconnected_ThisDevice_title = MZLocalizedString(
