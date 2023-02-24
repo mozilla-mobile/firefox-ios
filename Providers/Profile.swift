@@ -16,18 +16,17 @@ import Sync
 import SyncTelemetry
 import AuthenticationServices
 import MozillaAppServices
-import Logger
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
     var lastSyncFinishTime: Timestamp? { get set }
     var syncDisplayState: SyncDisplayState? { get }
 
-    func syncClients() -> SyncResult
-    func syncClientsThenTabs() -> SyncResult
-    func syncHistory() -> SyncResult
-    @discardableResult func syncEverything(why: SyncReason) -> Success
-    func syncNamedCollections(why: SyncReason, names: [String]) -> Success
+    func syncClients() -> OldSyncResult
+    func syncClientsThenTabs() -> OldSyncResult
+    func syncHistory() -> OldSyncResult
+    @discardableResult func syncEverything(why: OldSyncReason) -> Success
+    func syncNamedCollections(why: OldSyncReason, names: [String]) -> Success
 
     func endTimedSyncs()
     func applicationDidBecomeActive()
@@ -37,7 +36,7 @@ public protocol SyncManager {
     @discardableResult func onAddedAccount() -> Success
 }
 
-typealias SyncFunction = (SyncDelegate, Prefs, Ready, SyncReason) -> SyncResult
+typealias SyncFunction = (SyncDelegate, Prefs, Ready, OldSyncReason) -> OldSyncResult
 
 class ProfileFileAccessor: FileAccessor {
     convenience init(profile: Profile) {
@@ -571,7 +570,7 @@ open class BrowserProfile: Profile {
         // We run the cleanup in the background, this is a low priority task
         // that compacts the places db and reduces it's size to be under the limit.
         DispatchQueue.global(qos: .background).async {
-            self.places.runMaintenance(dbSizeLimit: AppConstants.DB_SIZE_LIMIT_IN_BYTES)
+            self.places.runMaintenance(dbSizeLimit: AppConstants.databaseSizeLimitInBytes)
         }
     }
 
@@ -586,7 +585,7 @@ open class BrowserProfile: Profile {
             // an events-only ping now.
             return
         }
-        let sendUsageData = prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+        let sendUsageData = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
         if sendUsageData {
             SyncPing.fromQueuedEvents(
                 prefs: self.prefs,
@@ -626,13 +625,13 @@ open class BrowserProfile: Profile {
 
     /// Polls for missed send tabs and handles them
     /// The method will not poll FxA if the interval hasn't passed
-    /// See AppConstants.FXA_COMMANDS_INTERVAL for the interval value
+    /// See AppConstants.fxaCommandsInterval for the interval value
     public func pollCommands(forcePoll: Bool = false) {
         // We should only poll if the interval has passed to not
         // overwhelm FxA
         let lastPoll = self.prefs.timestampForKey(PrefsKeys.PollCommandsTimestamp)
         let now = Date.now()
-        if let lastPoll = lastPoll, !forcePoll, now - lastPoll < AppConstants.FXA_COMMANDS_INTERVAL {
+        if let lastPoll = lastPoll, !forcePoll, now - lastPoll < AppConstants.fxaCommandsInterval {
             return
         }
         self.prefs.setTimestamp(now, forKey: PrefsKeys.PollCommandsTimestamp)
@@ -857,7 +856,7 @@ open class BrowserProfile: Profile {
         }
 
         func canSendUsageData() -> Bool {
-            return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+            return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
         }
 
         private func notifySyncing(notification: Notification.Name) {
@@ -1074,7 +1073,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
+        fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             logger.log("Syncing clients to storage.",
                        level: .info,
                        category: .sync)
@@ -1180,7 +1179,7 @@ open class BrowserProfile: Profile {
             return syncUnlockInfo
         }
 
-        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
+        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             self.logger.log("Syncing logins to storage.",
                             level: .debug,
                             category: .sync)
@@ -1205,7 +1204,7 @@ open class BrowserProfile: Profile {
             })
         }
 
-        fileprivate func syncBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
+        fileprivate func syncBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             logger.log("Syncing bookmarks to storage.",
                        level: .debug,
                        category: .storage)
@@ -1225,7 +1224,7 @@ open class BrowserProfile: Profile {
             })
         }
 
-        fileprivate func syncHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
+        fileprivate func syncHistoryWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             logger.log("Syncing History to storage.",
                        level: .debug,
                        category: .storage)
@@ -1245,7 +1244,7 @@ open class BrowserProfile: Profile {
             })
         }
 
-        fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
+        fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: OldSyncReason) -> OldSyncResult {
             logger.log("Syncing tabs to storage.",
                        level: .debug,
                        category: .storage)
@@ -1295,8 +1294,8 @@ open class BrowserProfile: Profile {
         /**
          * Runs the single provided synchronization function and returns its status.
          */
-        fileprivate func sync(_ label: EngineIdentifier, function: @escaping SyncFunction) -> SyncResult {
-            let syncSeveralItems: SyncResult = syncSeveral(why: .user, synchronizers: [(label, function)]) >>== { statuses in
+        fileprivate func sync(_ label: EngineIdentifier, function: @escaping SyncFunction) -> OldSyncResult {
+            let syncSeveralItems: OldSyncResult = syncSeveral(why: .user, synchronizers: [(label, function)]) >>== { statuses in
                 if let status = statuses.find({ label == $0.0 }) {
                     return deferMaybe(status.1)
                 }
@@ -1309,7 +1308,7 @@ open class BrowserProfile: Profile {
         /**
          * Convenience method for syncSeveral([(EngineIdentifier, SyncFunction)])
          */
-        private func syncSeveral(why: SyncReason, synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+        private func syncSeveral(why: OldSyncReason, synchronizers: (EngineIdentifier, SyncFunction)...) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             return syncSeveral(why: why, synchronizers: synchronizers)
         }
 
@@ -1328,7 +1327,7 @@ open class BrowserProfile: Profile {
          * The statuses returned will be a superset of the ones that are requested here.
          * While a sync is ongoing, each engine from successive calls to this method will only be called once.
          */
-        fileprivate func syncSeveral(why: SyncReason, synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+        fileprivate func syncSeveral(why: OldSyncReason, synchronizers: [(EngineIdentifier, SyncFunction)]) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             guard let (profile, deviceID) = self.getProfileAndDeviceId() else {
                 return deferMaybe(NoAccountError())
             }
@@ -1418,7 +1417,7 @@ open class BrowserProfile: Profile {
 
         // This SHOULD NOT be called directly: use syncSeveral instead.
         fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
-                                  statsSession: SyncOperationStatsSession, why: SyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
+                                  statsSession: SyncOperationStatsSession, why: OldSyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             logger.log("Syncing \(synchronizers.map { $0.0 })",
                        level: .info,
                        category: .sync)
@@ -1466,7 +1465,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @discardableResult public func syncEverything(why: SyncReason) -> Success {
+        @discardableResult public func syncEverything(why: OldSyncReason) -> Success {
             if let accountManager = RustFirefoxAccounts.shared.accountManager.peek(), accountManager.accountMigrationInFlight() {
                 accountManager.retryMigration { _ in }
                 return Success()
@@ -1497,7 +1496,7 @@ open class BrowserProfile: Profile {
          * Some help is given to callers who use different namespaces (specifically: `passwords` is mapped to `logins`)
          * and to preserve some ordering rules.
          */
-        public func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+        public func syncNamedCollections(why: OldSyncReason, names: [String]) -> Success {
             // Massage the list of names into engine identifiers.
             let engineIdentifiers = names.map { name -> [EngineIdentifier] in
                 switch name {
@@ -1531,12 +1530,12 @@ open class BrowserProfile: Profile {
             self.profile.pollCommands()
         }
 
-        public func syncClients() -> SyncResult {
+        public func syncClients() -> OldSyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("clients", function: syncClientsWithDelegate)
         }
 
-        public func syncClientsThenTabs() -> SyncResult {
+        public func syncClientsThenTabs() -> OldSyncResult {
             // Previously we were making two separate `self.sync` calls, each of which
             // made a `self.syncSeveral` call. Because `self.syncSeveral` is meant to batch
             // engine syncs, this caused the second `self.sync` call (for the tabs engine)
@@ -1555,7 +1554,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        public func syncHistory() -> SyncResult {
+        public func syncHistory() -> OldSyncResult {
             return self.sync("history", function: syncHistoryWithDelegate)
         }
     }

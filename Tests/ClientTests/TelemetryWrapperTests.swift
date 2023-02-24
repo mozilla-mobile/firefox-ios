@@ -468,11 +468,11 @@ class TelemetryWrapperTests: XCTestCase {
 
 // MARK: - Helper functions to test telemetry
 extension XCTestCase {
-    func testEventMetricRecordingSuccess<Keys: EventExtraKey, Extras: EventExtras>(
-        metric: EventMetricType<Keys, Extras>,
+    func testEventMetricRecordingSuccess<ExtraObject>(
+        metric: EventMetricType<ExtraObject>,
         file: StaticString = #file,
         line: UInt = #line
-    ) {
+    ) where ExtraObject: EventExtras {
         XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
         XCTAssertEqual(metric.testGetValue()!.count, 1, file: file, line: line)
 

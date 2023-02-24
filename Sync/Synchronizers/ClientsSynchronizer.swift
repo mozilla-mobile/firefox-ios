@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Common
-import Logger
 import UIKit
 import Shared
 import Storage
@@ -108,7 +107,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     public required init(scratchpad: Scratchpad,
                          delegate: SyncDelegate,
                          basePrefs: Prefs,
-                         why: SyncReason,
+                         why: OldSyncReason,
                          logger: Logger = DefaultLogger.shared) {
         self.logger = logger
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "clients")
@@ -403,7 +402,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         }
     }
 
-    open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+    open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> OldSyncResult {
         logger.log("Synchronizing clients.",
                    level: .debug,
                    category: .sync)

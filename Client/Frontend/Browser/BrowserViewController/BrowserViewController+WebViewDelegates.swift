@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Logger
+import Common
 import WebKit
 import Shared
 import UIKit
@@ -53,24 +53,24 @@ extension BrowserViewController: WKUIDelegate {
         return false
     }
 
-    private func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+    fileprivate func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
         return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
     }
 
-    func webView(
-        _ webView: WKWebView,
-        runJavaScriptAlertPanelWithMessage message: String,
-        initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping () -> Void) {
-        let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
-        if shouldDisplayJSAlertForWebView(webView) {
+    func webView(_ webView: WKWebView,
+                 runJavaScriptAlertPanelWithMessage message: String,
+                 initiatedByFrame frame: WKFrameInfo,
+                 completionHandler: @escaping () -> Void) {
+        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
+        let messageAlert = MessageAlert(message: message,
+                                        frame: frame,
+                                        completionHandler: completionHandler,
+                                        shouldCallCompletion: shouldShowAlert)
+        if shouldShowAlert {
             present(messageAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
-        } else {
-            // This should never happen since an alert needs to come from a web view but just in case call the handler
-            // since not calling it will result in a runtime exception.
             completionHandler()
         }
     }
@@ -81,12 +81,15 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
+        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
+        let confirmAlert = ConfirmPanelAlert(message: message,
+                                             frame: frame,
+                                             completionHandler: completionHandler,
+                                             shouldCallCompletion: shouldShowAlert)
         if shouldDisplayJSAlertForWebView(webView) {
             present(confirmAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)
-        } else {
             completionHandler(false)
         }
     }
@@ -98,12 +101,16 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (String?) -> Void
     ) {
-        let textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
+        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
+        let textInputAlert = TextInputAlert(message: prompt,
+                                            frame: frame,
+                                            completionHandler: completionHandler,
+                                            defaultText: defaultText,
+                                            shouldCallCompletion: shouldShowAlert)
         if shouldDisplayJSAlertForWebView(webView) {
             present(textInputAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
-        } else {
             completionHandler(nil)
         }
     }

@@ -992,7 +992,7 @@
 "Privacy" = "Súkromie";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "Zásady ochrany súkromia";
+"Privacy Policy" = "Zásady ochrany osobných údajov";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "Pripojenie nie je zabezpečené";

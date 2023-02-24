@@ -33,7 +33,7 @@ class ExtensionSyncManager: BrowserProfile.BrowserSyncManager {
     }
 
     // We should probably only want to sync client commands while we're in the extension.
-    override func syncNamedCollections(why: SyncReason, names: [String]) -> Success {
+    override func syncNamedCollections(why: OldSyncReason, names: [String]) -> Success {
         let names = names.filter { extensionSafeNames.contains($0) }
         return super.syncNamedCollections(why: why, names: names)
     }

@@ -4,7 +4,7 @@
 
 import Sentry
 import XCTest
-@testable import Logger
+@testable import Common
 
 class LoggerLevelTests: XCTestCase {
     // MARK: - Sentry level

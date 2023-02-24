@@ -120,17 +120,16 @@ class HomepageViewModel: FeatureFlaggable {
                                                   wallpaperManager: wallpaperManager)
         self.wallpaperManager = wallpaperManager
 
-        let adaptor = JumpBackInDataAdaptorImplementation(profile: profile,
-                                                          tabManager: tabManager)
+        let jumpBackInAdaptor = JumpBackInDataAdaptorImplementation(profile: profile,
+                                                                    tabManager: tabManager)
         self.jumpBackInViewModel = JumpBackInViewModel(
             profile: profile,
             isPrivate: isPrivate,
             urlBar: urlBar,
             theme: theme,
             tabManager: tabManager,
-            adaptor: adaptor,
+            adaptor: jumpBackInAdaptor,
             wallpaperManager: wallpaperManager)
-        adaptor.delegate = jumpBackInViewModel
 
         self.recentlySavedViewModel = RecentlySavedViewModel(profile: profile,
                                                              theme: theme,
@@ -174,6 +173,10 @@ class HomepageViewModel: FeatureFlaggable {
         pocketViewModel.delegate = self
         jumpBackInViewModel.delegate = self
         messageCardViewModel.delegate = self
+
+        Task {
+            await jumpBackInAdaptor.setDelegate(delegate: jumpBackInViewModel)
+        }
 
         updateEnabledSections()
     }

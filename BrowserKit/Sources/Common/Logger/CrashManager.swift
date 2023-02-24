@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
 import Foundation
 import Sentry
 
@@ -51,6 +50,11 @@ public class DefaultCrashManager: CrashManager {
     private var sentryWrapper: SentryWrapper
     private var isSimulator: Bool
 
+    // Only enable app hang tracking in Beta for now
+    private var shouldEnableAppHangTracking: Bool {
+        return appInfo.buildChannel == .beta
+    }
+
     public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared,
                 sentryWrapper: SentryWrapper = DefaultSentry(),
                 isSimulator: Bool = DeviceInfo.isSimulator()) {
@@ -72,6 +76,8 @@ public class DefaultCrashManager: CrashManager {
             options.environment = self.environment.rawValue
             options.releaseName = self.releaseName
             options.enableFileIOTracing = false
+            options.enableNetworkTracking = false
+            options.enableAppHangTracking = self.shouldEnableAppHangTracking
             options.beforeBreadcrumb = { crumb in
                 if crumb.type == "http" || crumb.category == "http" {
                     return nil

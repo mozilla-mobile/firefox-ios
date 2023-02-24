@@ -21,7 +21,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
 
     // MARK: - UI Elements
     private let selectedView: UIView = .build { view in
-        view.backgroundColor = UIColor.theme.tableView.selectedBackground
+        view.backgroundColor = UIColor.legacyTheme.tableView.selectedBackground
     }
 
     private lazy var roundedButton: UIButton = {
@@ -84,7 +84,7 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
     }
 
     func applyTheme() {
-        selectedView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        selectedView.backgroundColor = UIColor.legacyTheme.tableView.selectedBackground
         self.backgroundColor = .clear
     }
 

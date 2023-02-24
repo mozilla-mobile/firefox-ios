@@ -7,7 +7,6 @@ import Foundation
 import WebKit
 import Storage
 import Shared
-import Logger
 
 // MARK: - TabManagerDelegate
 @objc protocol TabManagerDelegate: AnyObject {

@@ -5,7 +5,6 @@
 import Common
 import Foundation
 import SwiftyJSON
-import Logger
 import MozillaAppServices
 
 public protocol JSONLiteralConvertible {

@@ -8,7 +8,7 @@ import Adjust
 import Shared
 import Glean
 
-final class AdjustHelper: FeatureFlaggable {
+final class AdjustHelper: NSObject, FeatureFlaggable {
     private static let adjustAppTokenKey = "AdjustAppToken"
     private let profile: Profile
     private let telemetryHelper: AdjustTelemetryProtocol
@@ -17,7 +17,7 @@ final class AdjustHelper: FeatureFlaggable {
          telemetryHelper: AdjustTelemetryProtocol = AdjustTelemetryHelper()) {
         self.profile = profile
         self.telemetryHelper = telemetryHelper
-        let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+        let sendUsageData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
 
         // This is required for adjust to work properly with ASA and we avoid directly disabling
         // third-party sharing as there is a specific method provided to us by adjust for that.
@@ -65,6 +65,11 @@ final class AdjustHelper: FeatureFlaggable {
         let environment = isProd ? ADJEnvironmentProduction : ADJEnvironmentSandbox
         let config = ADJConfig(appToken: appToken, environment: environment)
         config?.logLevel = isProd ? ADJLogLevelSuppress : ADJLogLevelDebug
+
+        // Record attribution changes
+        // https://help.adjust.com/en/article/ios-sdk-adjconfig-class#set-up-delegate
+        config?.delegate = (self as AdjustHelper)
+
         return config
     }
 
@@ -76,7 +81,7 @@ final class AdjustHelper: FeatureFlaggable {
 
     /// Return true if retention (session) tracking should be enabled. This follows the Send Anonymous Usage Data setting.
     private var shouldTrackRetention: Bool {
-        return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+        return profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
     }
 
     // MARK: - UserDefaults
