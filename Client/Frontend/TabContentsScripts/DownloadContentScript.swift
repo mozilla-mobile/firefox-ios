@@ -56,7 +56,12 @@ class DownloadContentScript: TabContentScript {
               let data = Bytes.decodeBase64(base64String)
         else { return }
 
+        // TODO: Could we have a download queue per tab instead of resolving from foregroundBVC?
+        // Or one that is independent of BVC at least?
+        let browserViewController = BrowserViewController.foregroundBVC()
+
         defer {
+            browserViewController?.pendingDownloadWebView = nil
             DownloadContentScript.blobUrlForDownload = nil
         }
 
