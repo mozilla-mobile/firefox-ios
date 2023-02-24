@@ -252,7 +252,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
         textField.autocorrectionType = .no
         textField.delegate = self
-        textField.backgroundColor = theme.colors.layer2
+        textField.backgroundColor = theme.colors.layer5
         textField.textColor = theme.colors.textPrimary
         cell.isUserInteractionEnabled = true
         cell.accessibilityTraits = UIAccessibilityTraits.none
