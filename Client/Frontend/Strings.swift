@@ -760,6 +760,28 @@ extension String {
     public struct PasswordsAndLogins { }
 }
 
+// MARK: - Research Surface
+extension String {
+    public struct ResearchSurface {
+        private static let tableName = "Research Surface"
+        public static let BodyText = MZLocalizedString(
+            "Body.Text",
+            tableName: tableName,
+            value: "Please help make Firefox better by taking a short survey.",
+            comment: "On the Research Survey popup, the text that explains what the screen is about.")
+        public static let TakeSurveyButtonLabel = MZLocalizedString(
+            "PrimaryButton.Label",
+            tableName: tableName,
+            value: "Take Survey",
+            comment: "On the Research Survey popup, the text for the button that, when tapped, will take the user to a survey.")
+        public static let DismissButtonLabel = MZLocalizedString(
+            "SecondaryButton.Label",
+            tableName: tableName,
+            value: "No Thanks",
+            comment: "On the Research Survey popup, the text for the button that, when tapped, will dismiss this screen, and the user will not take the survey.")
+    }
+}
+
 // MARK: - Search
 extension String {
     public struct Search {

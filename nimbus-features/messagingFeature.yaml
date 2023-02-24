@@ -106,9 +106,23 @@ features:
               title: Default Browser/DefaultBrowserCard.Title
               text: Default Browser/DefaultBrowserCard.Description
               action: "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL"
-              trigger: ["I_AM_NOT_DEFAULT_BROWSER", "SUPPORTS_DEFAULT_BROWSER"]
               style: "FALLBACK"
               button-label: Default Browser/DefaultBrowserCard.Button.v2
+              surface: new-tab-card
+              trigger:
+                - I_AM_NOT_DEFAULT_BROWSER
+                - SUPPORTS_DEFAULT_BROWSER
+      - channel: developer
+        value:
+          messages:
+            research-survey:
+              text: Research Surface/Body.Text
+              action: "www.macrumors.com"
+              style: "SURVEY"
+              button-label: Research Surface/PrimaryButton.Label
+              surface: survey
+              trigger:
+                - ALWAYS
 
 objects:
   MessageData:
@@ -160,8 +174,7 @@ objects:
       surface:
         type: MessageSurfaceId
         description: Each message will tell us the surface it is targeting with this.
-        # To start, we default to the new-tab-card
-        default: new-tab-card
+        default: Unknown
 
   StyleData:
     description: >
