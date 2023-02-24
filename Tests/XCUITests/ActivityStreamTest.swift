@@ -128,14 +128,15 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
+        let topSitesCells = app.collectionViews.cells["TopSitesCell"]
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
+        XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
-        app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
         selectOptionFromContextMenu(option: "Pin")
-        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
+        XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
@@ -143,8 +144,8 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        waitForExistence(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
+        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
+        XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
