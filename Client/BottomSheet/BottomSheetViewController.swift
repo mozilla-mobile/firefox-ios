@@ -4,20 +4,23 @@
 
 import UIKit
 import Common
+import Shared
 
 protocol BottomSheetChild {
     /// Tells the child that the bottom sheet will get dismissed
     func willDismiss()
 }
 
-class BottomSheetViewController: UIViewController {
+class BottomSheetViewController: UIViewController, Themeable {
     private struct UX {
         static let minVisibleTopSpace: CGFloat = 40
         static let closeButtonWidthHeight: CGFloat = 30
         static let closeButtonTopTrailingSpace: CGFloat = 16
     }
 
-    internal var notificationCenter: NotificationProtocol
+    var notificationCenter: NotificationProtocol
+    var themeManager: ThemeManager
+    var themeObserver: NSObjectProtocol?
     private let viewModel: BottomSheetViewModel
 
     typealias BottomSheetChildViewController = UIViewController & BottomSheetChild
@@ -45,10 +48,12 @@ class BottomSheetViewController: UIViewController {
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
                 childViewController: BottomSheetChildViewController,
-                notificationCenter: NotificationProtocol = NotificationCenter.default) {
+                notificationCenter: NotificationProtocol = NotificationCenter.default,
+                themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
         self.childViewController = childViewController
         self.notificationCenter = notificationCenter
+        self.themeManager = themeManager
 
         super.init(nibName: nil, bundle: nil)
 
@@ -70,8 +75,8 @@ class BottomSheetViewController: UIViewController {
         contentView.addGestureRecognizer(gesture)
         gesture.delegate = self
 
+        listenForThemeChange()
         setupView()
-        applyTheme()
 
         contentViewBottomConstraint.constant = childViewController.view.frame.height
         view.layoutIfNeeded()
@@ -117,6 +122,11 @@ class BottomSheetViewController: UIViewController {
             }, completion: { _ in
                 self.dismiss(animated: false, completion: nil)
             })
+    }
+
+    func applyTheme() {
+        contentView.backgroundColor = themeManager.currentTheme.colors.shadowDefault
+        sheetView.layer.shadowOpacity = viewModel.shadowOpacity
     }
 }
 
@@ -238,27 +248,5 @@ extension BottomSheetViewController: UIGestureRecognizerDelegate {
         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
     ) -> Bool {
         return false
-    }
-}
-
-// MARK: - Themable & Notifiable
-extension BottomSheetViewController: NotificationThemeable, Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DisplayThemeChanged:
-            applyTheme()
-        default: break
-        }
-    }
-
-    func applyTheme() {
-        let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            contentView.backgroundColor = viewModel.sheetDarkThemeBackgroundColor
-            sheetView.layer.shadowOpacity = 0.5
-        } else {
-            contentView.backgroundColor = viewModel.sheetLightThemeBackgroundColor
-            sheetView.layer.shadowOpacity = 0.2
-        }
     }
 }
