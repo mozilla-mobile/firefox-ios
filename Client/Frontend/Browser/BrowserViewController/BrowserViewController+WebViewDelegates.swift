@@ -344,6 +344,21 @@ extension BrowserViewController: WKUIDelegate {
             }))
     }
 
+    @available(iOS 15, *)
+    func webView(_ webView: WKWebView,
+                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo,
+                 type: WKMediaCaptureType,
+                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        // If the tab isn't the selected one, do not show the media capture prompt
+        guard tabManager.selectedTab?.webView == webView else {
+            decisionHandler(.deny)
+            return
+        }
+
+        decisionHandler(.prompt)
+    }
+
     func writeToPhotoAlbum(image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveError), nil)
     }
