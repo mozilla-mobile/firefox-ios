@@ -263,7 +263,11 @@ class FirefoxAccountSignInViewController: UIViewController {
 
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow,
+                                            profile: profile,
+                                            dismissalStyle: fxaDismissStyle,
+                                            deepLinkParams: deepLinkParams,
+                                            shouldAskForNotificationPermission: telemetryObject != .onboarding)
         fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
             self?.shouldReload?()
             self?.dismissVC()
@@ -276,7 +280,11 @@ class FirefoxAccountSignInViewController: UIViewController {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
+                                      profile: profile,
+                                      dismissalStyle: fxaDismissStyle,
+                                      deepLinkParams: deepLinkParams,
+                                      shouldAskForNotificationPermission: telemetryObject != .onboarding)
         navigationController?.pushViewController(vc, animated: true)
     }
 
