@@ -347,27 +347,29 @@ extension TabLocationView: TabEventHandler {
     }
 
     private func updateBlockerStatus(forTab tab: Tab) {
-        assertIsMainThread("UI changes must be on the main thread")
         guard let blocker = tab.contentBlocker else { return }
-        trackingProtectionButton.alpha = 1.0
 
-        var lockImage: UIImage?
-        // TODO: FXIOS-5101 Use theme.type.getThemedImageName()
-        let imageID = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
-        if !(tab.webView?.hasOnlySecureContent ?? false) {
-            lockImage = UIImage(imageLiteralResourceName: imageID)
-        } else if let tintColor = trackingProtectionButton.tintColor {
-            lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed)
-                .withTintColor(tintColor, renderingMode: .alwaysTemplate)
-        }
+        ensureMainThread { [self] in
+            trackingProtectionButton.alpha = 1.0
 
-        switch blocker.status {
-        case .blocking, .noBlockedURLs:
-            trackingProtectionButton.setImage(lockImage, for: .normal)
-        case .safelisted:
-            trackingProtectionButton.setImage(lockImage?.overlayWith(image: UIImage(imageLiteralResourceName: "MarkAsRead")), for: .normal)
-        case .disabled:
-            trackingProtectionButton.setImage(lockImage, for: .normal)
+            var lockImage: UIImage?
+            // TODO: FXIOS-5101 Use theme.type.getThemedImageName()
+            let imageID = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
+            if !(tab.webView?.hasOnlySecureContent ?? false) {
+                lockImage = UIImage(imageLiteralResourceName: imageID)
+            } else if let tintColor = trackingProtectionButton.tintColor {
+                lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed)
+                    .withTintColor(tintColor, renderingMode: .alwaysTemplate)
+            }
+
+            switch blocker.status {
+            case .blocking, .noBlockedURLs:
+                trackingProtectionButton.setImage(lockImage, for: .normal)
+            case .safelisted:
+                trackingProtectionButton.setImage(lockImage?.overlayWith(image: UIImage(imageLiteralResourceName: "MarkAsRead")), for: .normal)
+            case .disabled:
+                trackingProtectionButton.setImage(lockImage, for: .normal)
+            }
         }
     }
 

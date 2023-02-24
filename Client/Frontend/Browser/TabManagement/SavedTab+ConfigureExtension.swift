@@ -10,20 +10,22 @@ import Shared
 // This cannot be easily imported into extension targets, so we break it out here.
 extension SavedTab {
     convenience init?(tab: Tab, isSelected: Bool) {
-        assert(Thread.isMainThread)
         var sessionData = tab.sessionData
-        if sessionData == nil {
-            let currentItem: WKBackForwardListItem! = tab.webView?.backForwardList.currentItem
 
-            // Freshly created web views won't have any history entries at all.
-            // If we have no history, abort.
-            if currentItem != nil {
-                // The back & forward list keep track of the users history within the session
-                let backList = tab.webView?.backForwardList.backList ?? []
-                let forwardList = tab.webView?.backForwardList.forwardList ?? []
-                let urls = (backList + [currentItem] + forwardList).map { $0.url }
-                let currentPage = -forwardList.count
-                sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now())
+        ensureMainThread {
+            if sessionData == nil {
+                let currentItem: WKBackForwardListItem! = tab.webView?.backForwardList.currentItem
+
+                // Freshly created web views won't have any history entries at all.
+                // If we have no history, abort.
+                if currentItem != nil {
+                    // The back & forward list keep track of the users history within the session
+                    let backList = tab.webView?.backForwardList.backList ?? []
+                    let forwardList = tab.webView?.backForwardList.forwardList ?? []
+                    let urls = (backList + [currentItem] + forwardList).map { $0.url }
+                    let currentPage = -forwardList.count
+                    sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now())
+                }
             }
         }
 

@@ -18,7 +18,7 @@ protocol TabManagerStore {
                       selectedTab: Tab?)
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
-                            addTabClosure: (Bool) -> Tab) -> Tab?
+                            addTabClosure: @escaping (Bool) -> Tab) -> Tab?
 
     func clearArchive()
 }
@@ -94,33 +94,34 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
     ///   - tabs: The tabs to preserve
     ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
     func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
-        assertIsMainThread("Preserving tabs is a main-only operation")
-        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab)
-        else {
+        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab) else {
             clearArchive()
             return
         }
 
-        writeOperation.cancel()
+        // Preserving tabs is a main-only operation
+        ensureMainThread { [self] in
+            writeOperation.cancel()
 
-        let path = tabsStateArchivePath()
-        let tabStateData = archive(savedTabs: savedTabs)
-        let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
+            let path = tabsStateArchivePath()
+            let tabStateData = archive(savedTabs: savedTabs)
+            let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
 
-        writeOperation = DispatchWorkItem { [weak self] in
-            SimpleTab.saveSimpleTab(tabs: simpleTabs)
-            self?.write(tabStateData: tabStateData, path: path)
+            writeOperation = DispatchWorkItem { [weak self] in
+                SimpleTab.saveSimpleTab(tabs: simpleTabs)
+                self?.write(tabStateData: tabStateData, path: path)
+            }
+
+            // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
+            // Notice above that a repeated 'preserveTabs' call will 'cancel()' a pending write operation.
+            serialQueue.asyncAfter(deadline: .now() + .milliseconds(100), execute: writeOperation)
         }
-
-        // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
-        // Notice above that a repeated 'preserveTabs' call will 'cancel()' a pending write operation.
-        serialQueue.asyncAfter(deadline: .now() + .milliseconds(100), execute: writeOperation)
     }
 
     // MARK: - Restoration
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
-                            addTabClosure: (Bool) -> Tab) -> Tab? {
+                            addTabClosure: @escaping (Bool) -> Tab) -> Tab? {
         return restoreTabs(savedTabs: tabs,
                            clearPrivateTabs: clearPrivateTabs,
                            addTabClosure: addTabClosure)
@@ -128,29 +129,33 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
 
     func restoreTabs(savedTabs: [SavedTab],
                      clearPrivateTabs: Bool,
-                     addTabClosure: (Bool) -> Tab) -> Tab? {
-        assertIsMainThread("Restoration is a main-only operation")
+                     addTabClosure: @escaping (Bool) -> Tab) -> Tab? {
         guard !lockedForReading, !savedTabs.isEmpty else { return nil }
         lockedForReading = true
         defer { lockedForReading = false }
 
-        var savedTabs = savedTabs
-        // Make sure to wipe the private tabs if the user has the pref turned on
-        if clearPrivateTabs {
-            savedTabs = savedTabs.filter { !$0.isPrivate }
-        }
-
-        var tabToSelect: Tab?
-        for savedTab in savedTabs {
-            // Provide an empty request to prevent a new tab from loading the home screen
-            var tab = addTabClosure(savedTab.isPrivate)
-            tab = savedTab.configureSavedTabUsing(tab, imageStore: imageStore)
-            if savedTab.isSelected {
-                tabToSelect = tab
+        // Restoration is a main-only operation.
+        ensureMainThread { [weak self] in
+            var savedTabs = savedTabs
+            // Make sure to wipe the private tabs if the user has the pref turned on
+            if clearPrivateTabs {
+                savedTabs = savedTabs.filter { !$0.isPrivate }
             }
+
+            var tabToSelect: Tab?
+            for savedTab in savedTabs {
+                // Provide an empty request to prevent a new tab from loading the home screen
+                var tab = addTabClosure(savedTab.isPrivate)
+                tab = savedTab.configureSavedTabUsing(tab, imageStore: self?.imageStore)
+                if savedTab.isSelected {
+                    tabToSelect = tab
+                }
+            }
+
+            return tabToSelect
         }
 
-        return tabToSelect
+        return nil
     }
 
     func clearArchive() {
