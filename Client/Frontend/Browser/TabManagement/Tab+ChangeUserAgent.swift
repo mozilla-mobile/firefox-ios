@@ -13,7 +13,8 @@ extension Tab {
         }()
 
         private static var baseDomainList: Set<String> = {
-            if let hosts = NSKeyedUnarchiver.unarchiveObject(withFile: ChangeUserAgent.file.path) as? Set<String> {
+            if let data = try? Data(contentsOf: ChangeUserAgent.file),
+               let hosts = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSSet.self, NSArray.self, NSString.self], from: data) as? Set<String> {
                 return hosts
             }
             return Set<String>()
@@ -53,7 +54,7 @@ extension Tab {
 
             // At this point, saving to disk takes place.
             do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: baseDomainList, requiringSecureCoding: false)
+                let data = try NSKeyedArchiver.archivedData(withRootObject: baseDomainList, requiringSecureCoding: true)
                 try data.write(to: ChangeUserAgent.file)
             } catch {}
         }
