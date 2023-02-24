@@ -1,0 +1,106 @@
+features:
+  homescreenFeature:
+    description: The homescreen that the user goes to when they press home or new tab.
+    variables:
+      sections-enabled:
+        description: >
+          This property provides a lookup table of whether or not the given section should be enabled.
+          If the section is enabled, it should be toggleable in the settings screen, and on by default.
+        type: Map<HomeScreenSection, Boolean>
+        default:
+          {
+            "top-sites": true,
+            "jump-back-in": true,
+            "recently-saved": true,
+            "recent-explorations": true,
+            "pocket": true
+          }
+      sponsored-tiles:
+        description: >
+          This property defines the sponsored tile feature on the
+          homepage, which is not a section therein.
+        type: SponsoredTiles
+        default:
+          {
+            "status": true,
+            "max-number-of-tiles": 2
+          }
+      pocket-sponsored-stories:
+        description: >
+          This property defines whether pocket sponsored
+          stories appear on the homepage.
+        type: Boolean
+        default: false
+      jump-back-in-synced-tab:
+        description: >
+          This property defines whether the synced tab card
+          appears on the homepage in the jump back in section.
+        type: Boolean
+        default: true
+    defaults:
+      - channel: developer
+        value: {
+          "sections-enabled": {
+            "top-sites": true,
+            "jump-back-in": true,
+            "recently-saved": true,
+            "recent-explorations": true,
+            "pocket": true
+          },
+          "sponsored-tiles": {
+            "status": true,
+            "max-number-of-tiles": 2
+          },
+          "wallpaper-feature": {
+            "status": true
+          },
+          "pocket-sponsored-stories": true,
+          "jump-back-in-synced-tab": true
+        }
+      - channel: beta
+        value: {
+          "sections-enabled": {
+            "top-sites": true,
+            "jump-back-in": true,
+            "recently-saved": true,
+            "recent-explorations": true,
+            "pocket": true
+          },
+          "sponsored-tiles": {
+            "status": true,
+            "max-number-of-tiles": 1
+          },
+          "wallpaper-feature": {
+            "status": true
+          },
+          "pocket-sponsored-stories": false,
+          "jump-back-in-synced-tab": true
+        }
+
+objects:
+  SponsoredTiles:
+    description: "The configuration for the sponsored tile on the homescreen"
+    fields:
+      status:
+        type: Boolean
+        description: Whether or not the feature is enabled
+        default: false
+      max-number-of-tiles:
+        type: Int
+        description: The maximum number of sponsored tiles a user can see
+        default: 2
+
+enums:
+  HomeScreenSection:
+    description: The identifiers for the sections of the homescreen.
+    variants:
+      top-sites:
+        description: The frecency and pinned sites.
+      recently-saved:
+        description: The sites the user has bookmarked recently.
+      jump-back-in:
+        description: The tabs the user was looking immediately before being interrupted.
+      recent-explorations:
+        description: The tab groups
+      pocket:
+        description: The pocket section. This should only be available in the US.
