@@ -706,11 +706,6 @@ extension String {
             tableName: nil,
             value: "Choose a wallpaper that speaks to you.",
             comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-        public static let WallpaperSelectorAction = MZLocalizedString(
-            "Onboarding.Wallpaper.Action.v106",
-            tableName: nil,
-            value: "Explore more wallpapers",
-            comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper.")
         public static let ClassicWallpaper = MZLocalizedString(
             "Onboarding.Wallpaper.Accessibility.Classic.v106",
             tableName: nil,

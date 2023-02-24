@@ -63,15 +63,15 @@ class ToolbarTextField: AutocompleteTextField {
 
 extension ToolbarTextField: NotificationThemeable {
     func applyTheme() {
-        backgroundColor = UIColor.theme.textField.backgroundInOverlay
-        textColor = UIColor.theme.textField.textAndTint
+        backgroundColor = UIColor.legacyTheme.textField.backgroundInOverlay
+        textColor = UIColor.legacyTheme.textField.textAndTint
         clearButtonTintColor = textColor
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
     }
 
     // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
     static func applyUIMode(isPrivate: Bool) {
-       textSelectionColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate)
+       textSelectionColor = UIColor.legacyTheme.urlbar.textSelectionHighlight(isPrivate)
     }
 }
 

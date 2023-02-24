@@ -6,7 +6,7 @@ contextual-hint-feature:
   variables:
     features-enabled:
       type: json
-      description: This property provides a lookup table of whether specific contextual hints are enabled.
+      description: "This property provides a lookup table of whether specific contextual hints are enabled.\n"
 credit-card-autofill:
   description: This property defines the credit card autofill feature
   hasExposure: true
@@ -59,7 +59,7 @@ messaging:
       description: Id or prefix of the message under experiment.
     messages:
       type: json
-      description: "A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData."
+      description: "A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData.\n"
     on-control:
       type: string
       description: What should be displayed when a control message is selected.

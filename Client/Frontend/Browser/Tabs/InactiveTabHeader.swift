@@ -27,7 +27,7 @@ class InactiveTabHeader: UITableViewHeaderFooterView, NotificationThemeable, Reu
 
     lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.text = self.title
-        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        titleLabel.textColor = UIColor.legacyTheme.homePanel.activityStreamHeaderText
         titleLabel.font = DynamicFontHelper.defaultHelper.preferredFont(
             withTextStyle: .headline,
             maxSize: 17)

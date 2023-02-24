@@ -242,7 +242,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             scanButton.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
                 .tinted(withColor: .black), for: .normal)
             scanButton.setTitleColor(.black, for: .normal)
-            scanButton.backgroundColor = UIColor.theme.homePanel.activityStreamHeaderButton
+            scanButton.backgroundColor = UIColor.legacyTheme.homePanel.activityStreamHeaderButton
         } else {
             scanButton.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
                 .tinted(withColor: .white), for: .normal)

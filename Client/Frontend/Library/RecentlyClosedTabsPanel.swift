@@ -39,7 +39,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.theme.tableView.headerBackground
+        view.backgroundColor = UIColor.legacyTheme.tableView.headerBackground
 
         tableViewController.libraryPanelDelegate = libraryPanelDelegate
         tableViewController.recentlyClosedTabsDelegate = recentlyClosedTabsDelegate

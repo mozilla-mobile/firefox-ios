@@ -1,0 +1,54 @@
+features:
+  spotlight-search:
+    description: Add pages as items findable with Spotlight.
+    variables:
+      enabled:
+        description: If this is true, then on each page load adds a new item to Spotlight.
+        type: Boolean
+        default: false
+      searchable-content:
+        type: Option<PageContent>
+        default: text-excerpt
+        description: >
+          The text content that is made searchable.
+          If this is `null` then no additional content is used, and only the title and URL will be used.
+      icon-type:
+        type: Option<IconType>
+        default: letter
+        description: >
+          The icon that is displayed next to the item in the search results.
+          If this is `null`, then no icon is displayed.
+      keep-for-days:
+        type: Option<Int>
+        default: null
+        description: >
+          Number of days to keep the item before automatic deletion.
+          If this is left `null`, then it is left to iOS's default.
+    defaults:
+      - value:
+          enabled: false
+      - channel: developer
+        value:
+          enabled: true
+          icon-type: screenshot
+
+enums:
+  IconType:
+    description: The icon that will be added to the item in the device's search engine.
+    variants:
+      screenshot:
+        description: A screenshot of the page at load time.
+      favicon:
+        description: The favicon of the page
+      letter:
+        description: An icon generated from the first letter of the base domain.
+
+  PageContent:
+    description: The page content that will be added as an item in the device's search engine.
+    variants:
+      text-excerpt:
+        description: Only use the first paragraph
+      text-content:
+        description: Use all the page as text
+      html-content:
+        description: Use all the page as HTML

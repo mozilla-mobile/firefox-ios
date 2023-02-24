@@ -70,7 +70,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // MARK: View setup
     private func setupView() {
-        view.backgroundColor = UIColor.theme.browser.background
+        view.backgroundColor = UIColor.legacyTheme.browser.background
         if viewModel.shouldShowSingleCard {
             setupSingleInfoCard()
         } else {
@@ -182,7 +182,7 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
                                          target: self,
                                          action: #selector(dismissSignInViewController))
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        buttonItem.tintColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        buttonItem.tintColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
         singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
         controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
         controller.onViewDismissed = {
@@ -284,7 +284,7 @@ extension UpdateViewController: NotificationThemeable, Notifiable {
         guard !viewModel.shouldShowSingleCard else { return }
 
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
-        let indicatorColor = theme == .dark ? UIColor.theme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
+        let indicatorColor = theme == .dark ? UIColor.legacyTheme.homePanel.activityStreamHeaderButton : UIColor.Photon.Blue50
         pageControl.currentPageIndicatorTintColor = indicatorColor
         view.backgroundColor = theme == .dark ? UIColor.Photon.DarkGrey40 : .white
 
