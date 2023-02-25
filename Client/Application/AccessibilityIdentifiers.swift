@@ -163,7 +163,6 @@ public struct AccessibilityIdentifiers {
             static let card = "wallpaperCard"
             static let title = "wallpaperOnboardingTitle"
             static let description = "wallpaperOnboardingDescription"
-            static let settingsButton = "wallpaperOnboardingSettingsButton"
         }
     }
 

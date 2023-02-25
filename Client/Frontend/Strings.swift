@@ -706,11 +706,6 @@ extension String {
             tableName: nil,
             value: "Choose a wallpaper that speaks to you.",
             comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers.")
-        public static let WallpaperSelectorAction = MZLocalizedString(
-            "Onboarding.Wallpaper.Action.v106",
-            tableName: nil,
-            value: "Explore more wallpapers",
-            comment: "Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper.")
         public static let ClassicWallpaper = MZLocalizedString(
             "Onboarding.Wallpaper.Accessibility.Classic.v106",
             tableName: nil,
@@ -2378,6 +2373,22 @@ extension String {
         tableName: nil,
         value: "View",
         comment: "Label for an action used to view one or more tabs from a notification.")
+}
+
+// MARK: - Engagement notification
+extension String {
+    public struct EngagementNotification {
+        public static let Title = MZLocalizedString(
+            "Engagement.Notification.Title.v112",
+            tableName: "EngagementNotification",
+            value: "Try private browsing",
+            comment: "Title of notification send to user after inactivity.")
+        public static let Body = MZLocalizedString(
+            "Engagement.Notification.Body.v112",
+            tableName: "EngagementNotification",
+            value: "Browse with no saved cookies or history in Firefox.",
+            comment: "Body of notification send to user after inactivity.")
+    }
 }
 
 // MARK: - Additional messages sent via Push from FxA
