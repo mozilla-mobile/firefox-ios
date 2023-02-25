@@ -282,7 +282,7 @@ class HistoryTests: BaseTestCase {
         } else {
             waitForExistence(app.navigationBars.staticTexts["Open Tabs"])
         }
-        XCTAssertFalse(app.staticTexts[bookOfMozilla["title"]!].exists)
+        XCTAssertFalse(app.staticTexts[bookOfMozilla["title"]!].isHittable)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         if isTablet {
             XCTAssertTrue(app.segmentedControls.buttons["Private"].isSelected)
