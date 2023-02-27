@@ -10,9 +10,10 @@ pull_request_rules:
     actions:
         comment:
           message: This pull request has conflicts when rebasing. Could you fix it @{{author}}? 🙏
-  - name: github-actions
+  - name: Bitrise update - Auto Merge
     conditions:
       - author=github-actions[bot]
+      - check-success=Bitrise
       - files=bitrise.yml
       - -files~=^(?!bitrise.yml).+$
       - head=update-br-new-xcode-version
