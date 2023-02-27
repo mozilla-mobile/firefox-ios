@@ -9,7 +9,7 @@ pull_request_rules:
       - conflict
     actions:
         comment:
-          message: This pull request has conflicts when rebasing. Could you fix it @{{author}}?
+          message: This pull request has conflicts when rebasing. Could you fix it @{{author}}? 🙏
   - name: github-actions
     conditions:
       - author=github-actions[bot]
