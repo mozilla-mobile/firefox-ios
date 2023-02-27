@@ -38,11 +38,10 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         let emptyView = CreditCardSettingsEmptyView(colors: colors, toggleModel: viewModel.toggleModel)
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
 
-        self.creditCardAddEditView =
-        UIHostingController(rootView: CreditCardEditView(
-            viewModel: viewModel.addEditViewModel,
-            removeButtonColor: themeManager.currentTheme.colors.textWarning.color,
-            borderColor: themeManager.currentTheme.colors.borderPrimary.color))
+        let creditCardEditView = CreditCardEditView(viewModel: viewModel.addEditViewModel,
+                                                    removeButtonColor: themeManager.currentTheme.colors.textWarning.color,
+                                                    borderColor: themeManager.currentTheme.colors.borderPrimary.color)
+        self.creditCardAddEditView = SensitiveHostingController(rootView: creditCardEditView)
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,7 +53,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 
@@ -127,7 +126,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         case .empty:
             creditCardEmptyView.view.isHidden = false
         case .add:
-            creditCardAddEditView.view.isHidden = false
+            updateStateForEditView()
         case .edit:
             creditCardAddEditView.view.isHidden = false
         case .list:
@@ -149,5 +148,20 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     deinit {
         notificationCenter.removeObserver(self)
+    }
+
+    // MARK: - Private helpers
+
+    private func updateStateForEditView() {
+        if AppAuthenticator.canAuthenticateDeviceOwner() {
+            AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+                switch result {
+                case .success:
+                    self.creditCardAddEditView.view.isHidden = false
+                case .failure:
+                    DefaultLogger.shared.log("Failed to authenticate", level: .debug, category: .creditcard)
+                }
+            }
+        }
     }
 }
