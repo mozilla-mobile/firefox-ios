@@ -246,7 +246,7 @@ public class RustSyncManager: NSObject, SyncManager {
             }
             return succeed()
         }
-        syncManagerAPI.disconnect()
+        self.syncManagerAPI.disconnect()
         return clearPrefs()
     }
 
@@ -336,7 +336,7 @@ public class RustSyncManager: NSObject, SyncManager {
                 continue
             }
         }
-        
+
         deferred.fill(Maybe(success: (rustEngines, localEncryptionKeys)))
         return deferred
     }

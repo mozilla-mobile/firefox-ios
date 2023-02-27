@@ -189,6 +189,27 @@ public class RustRemoteTabs {
         }
     }
 
+    public func getRemoteClients(remoteDeviceIds: [String]) -> Deferred<Maybe<[ClientAndTabs]>> {
+        return self.getAll().bind { result in
+            guard result.failureValue == nil else {
+                return deferMaybe(result.failureValue!)
+            }
+            guard let rustClientAndTabs = result.successValue else {
+                return deferMaybe([])
+            }
+
+            let clientAndTabs = rustClientAndTabs
+                .map { $0.toClientAndTabs() }
+                .filter({ record in
+                    remoteDeviceIds.contains { deviceId in
+                        return record.client.fxaDeviceId != nil &&
+                            record.client.fxaDeviceId! == deviceId
+                    }
+                })
+            return deferMaybe(clientAndTabs)
+        }
+    }
+
     public func registerWithSyncManager() {
         queue.async { [unowned self] in
            self.storage?.registerWithSyncManager()

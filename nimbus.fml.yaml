@@ -27,3 +27,4 @@ include:
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/wallpaperFeature.yaml
   - nimbus-features/zoomFeature.yaml
+  - nimbus-features/rustSyncManagerFeature.yaml

@@ -37,6 +37,7 @@ public struct PrefsKeys {
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeySecondRun = "SecondRun"
+    public static let SecondProfileLaunchKey = "SecondProfileLaunchKey"
 
     public struct AppVersion {
         public static let Latest = "latestAppVersion"
