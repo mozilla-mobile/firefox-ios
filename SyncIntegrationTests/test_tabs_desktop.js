@@ -24,7 +24,8 @@ Phase("phase1", [
 ]);
 
 Phase("phase2", [
-  [Sync]
+  [Sync],
+  [Sync],
   [Tabs.verify, tabs1],
   [Sync]
 ]);
