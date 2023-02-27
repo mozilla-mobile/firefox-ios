@@ -12,19 +12,11 @@ public protocol Themeable: AnyObject {
     var themeObserver: NSObjectProtocol? { get set }
     var notificationCenter: NotificationProtocol { get set }
 
-    func listenForThemeChange(_ view: UIView)
+    func listenForThemeChange(_ subview: UIView)
     func applyTheme()
 }
 
 extension Themeable {
-    public func listenForThemeChange() {
-        let mainQueue = OperationQueue.main
-        themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
-                                                       queue: mainQueue) { [weak self] _ in
-            self?.applyTheme()
-        }
-    }
-
     public func listenForThemeChange(_ subview: UIView) {
         let mainQueue = OperationQueue.main
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,

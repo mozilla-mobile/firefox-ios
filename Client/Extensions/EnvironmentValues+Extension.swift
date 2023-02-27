@@ -9,12 +9,6 @@ import Common
 extension EnvironmentValues {
     public var themeType: SwiftUITheme {
         let themeManager: ThemeManager = AppContainer.shared.resolve()
-
-        guard themeManager.currentTheme.type != .dark else {
-            let swiftUITheme = SwiftUITheme(theme: DarkTheme())
-            return swiftUITheme
-        }
-
         let swiftUITheme = SwiftUITheme(theme: themeManager.currentTheme)
         return swiftUITheme
     }
