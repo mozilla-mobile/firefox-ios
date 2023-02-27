@@ -128,7 +128,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
         tableView.separatorInset = .zero
 
         applyTheme()
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -65,7 +65,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
         applyTheme()
         setupNotifications(forObserver: self,
                            observing: [UIContentSizeCategory.didChangeNotification])
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

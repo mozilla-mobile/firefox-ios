@@ -62,7 +62,7 @@ class SiteTableViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

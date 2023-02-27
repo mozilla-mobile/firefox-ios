@@ -78,7 +78,7 @@ class AddCredentialViewController: UIViewController, Themeable {
         ])
 
         applyTheme()
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -5,13 +5,14 @@
 import Foundation
 import UIKit
 import Common
+import SwiftUI
 
-public protocol Themeable: UIViewController {
+public protocol Themeable: AnyObject {
     var themeManager: ThemeManager { get }
     var themeObserver: NSObjectProtocol? { get set }
     var notificationCenter: NotificationProtocol { get set }
 
-    func listenForThemeChange()
+    func listenForThemeChange(_ view: UIView)
     func applyTheme()
 }
 
@@ -21,11 +22,19 @@ extension Themeable {
         themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
                                                        queue: mainQueue) { [weak self] _ in
             self?.applyTheme()
-            self?.updateThemeApplicableSubviews()
         }
     }
 
-    public func updateThemeApplicableSubviews() {
+    public func listenForThemeChange(_ subview: UIView) {
+        let mainQueue = OperationQueue.main
+        themeObserver = notificationCenter.addObserver(name: .ThemeDidChange,
+                                                       queue: mainQueue) { [weak self] _ in
+            self?.applyTheme()
+            self?.updateThemeApplicableSubviews(subview)
+        }
+    }
+
+    public func updateThemeApplicableSubviews(_ view: UIView) {
         let themeViews = getAllSubviews(for: view, ofType: ThemeApplicable.self)
         themeViews.forEach { $0.applyTheme(theme: themeManager.currentTheme) }
     }

@@ -98,7 +98,7 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange()
+        listenForThemeChange(view)
         view.addSubview(tableView)
         view.accessibilityIdentifier = AccessibilityIdentifiers.Photon.view
 

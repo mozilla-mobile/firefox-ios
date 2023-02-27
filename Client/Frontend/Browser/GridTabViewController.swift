@@ -145,7 +145,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
 
         setupNotifications(forObserver: self, observing: [

@@ -186,7 +186,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         selectTheme(viewModel.readerModeStyle.theme)
         slider.value = Float(UIScreen.main.brightness)
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

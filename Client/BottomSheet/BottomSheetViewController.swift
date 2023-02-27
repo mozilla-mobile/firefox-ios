@@ -75,7 +75,7 @@ class BottomSheetViewController: UIViewController, Themeable {
         contentView.addGestureRecognizer(gesture)
         gesture.delegate = self
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupView()
 
         contentViewBottomConstraint.constant = childViewController.view.frame.height

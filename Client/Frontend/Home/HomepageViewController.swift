@@ -132,7 +132,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         setupSectionsAction()
         reloadView()
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 
