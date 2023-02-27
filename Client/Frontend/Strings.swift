@@ -760,6 +760,27 @@ extension String {
     public struct PasswordsAndLogins { }
 }
 
+// MARK: - Research Surface
+extension String {
+    public struct ResearchSurface {
+        public static let BodyText = MZLocalizedString(
+            "Body.Text",
+            tableName: "Research Surface",
+            value: "Please help make Firefox better by taking a short survey.",
+            comment: "On the Research Survey popup, the text that explains what the screen is about.")
+        public static let TakeSurveyButtonLabel = MZLocalizedString(
+            "PrimaryButton.Label",
+            tableName: "Research Surface",
+            value: "Take Survey",
+            comment: "On the Research Survey popup, the text for the button that, when tapped, will take the user to a survey.")
+        public static let DismissButtonLabel = MZLocalizedString(
+            "SecondaryButton.Label",
+            tableName: "Research Surface",
+            value: "No Thanks",
+            comment: "On the Research Survey popup, the text for the button that, when tapped, will dismiss this screen, and the user will not be taken to the survey.")
+    }
+}
+
 // MARK: - Search
 extension String {
     public struct Search {
@@ -2373,6 +2394,22 @@ extension String {
         tableName: nil,
         value: "View",
         comment: "Label for an action used to view one or more tabs from a notification.")
+}
+
+// MARK: - Engagement notification
+extension String {
+    public struct EngagementNotification {
+        public static let Title = MZLocalizedString(
+            "Engagement.Notification.Title.v112",
+            tableName: "EngagementNotification",
+            value: "Try private browsing",
+            comment: "Title of notification send to user after inactivity.")
+        public static let Body = MZLocalizedString(
+            "Engagement.Notification.Body.v112",
+            tableName: "EngagementNotification",
+            value: "Browse with no saved cookies or history in Firefox.",
+            comment: "Body of notification send to user after inactivity.")
+    }
 }
 
 // MARK: - Additional messages sent via Push from FxA
