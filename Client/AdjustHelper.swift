@@ -8,7 +8,7 @@ import Adjust
 import Shared
 import Glean
 
-final class AdjustHelper: FeatureFlaggable {
+final class AdjustHelper: NSObject, FeatureFlaggable {
     private static let adjustAppTokenKey = "AdjustAppToken"
     private let profile: Profile
     private let telemetryHelper: AdjustTelemetryProtocol
@@ -65,6 +65,11 @@ final class AdjustHelper: FeatureFlaggable {
         let environment = isProd ? ADJEnvironmentProduction : ADJEnvironmentSandbox
         let config = ADJConfig(appToken: appToken, environment: environment)
         config?.logLevel = isProd ? ADJLogLevelSuppress : ADJLogLevelDebug
+
+        // Record attribution changes
+        // https://help.adjust.com/en/article/ios-sdk-adjconfig-class#set-up-delegate
+        config?.delegate = (self as AdjustHelper)
+
         return config
     }
 
