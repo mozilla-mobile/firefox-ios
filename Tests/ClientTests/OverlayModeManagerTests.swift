@@ -55,7 +55,7 @@ class OverlayModeManagerTests: XCTestCase {
     // MARK: - Test EnterOverlay for finish edition
 
     func testLeaveOverlayMode_ForFinishEdition() {
-        subject.finishEdition(shouldCancelLoading: true)
+        subject.finishEditing(shouldCancelLoading: true)
 
         XCTAssertFalse(subject.inOverlayMode)
         XCTAssertEqual(subject.leaveOverlayModeCallCount, 1)

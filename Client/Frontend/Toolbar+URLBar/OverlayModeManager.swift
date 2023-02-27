@@ -23,9 +23,9 @@ protocol OverlayModeManager: OverlayStateProtocol {
     ///   - url: Tab url to determine if is the url is homepage or nil
     func openNewTab(_ locationText: String?, url: URL?)
 
-    /// Leave overlay mode when user finish edition, either pressing the go button, enter etc
+    /// Leave overlay mode when user finish editing, either pressing the go button, enter etc
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
-    func finishEdition(shouldCancelLoading: Bool)
+    func finishEditing(shouldCancelLoading: Bool)
 
     /// Leave overlay mode when tab change happens, like switching tabs or open a site from any homepage section
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
@@ -55,11 +55,13 @@ class DefaultOverlayModeManager: OverlayModeManager {
         }
     }
 
-    func finishEdition(shouldCancelLoading: Bool) {
+    func finishEditing(shouldCancelLoading: Bool) {
         leaveOverlayMode(didCancel: shouldCancelLoading)
     }
 
     func switchTab(shouldCancelLoading: Bool) {
+        guard inOverlayMode else { return }
+
         leaveOverlayMode(didCancel: shouldCancelLoading)
     }
 

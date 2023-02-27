@@ -20,9 +20,9 @@ class MockOverlayModeManager: DefaultOverlayModeManager {
         super.openNewTab(locationText, url: url)
     }
 
-    override func finishEdition(shouldCancelLoading: Bool) {
+    override func finishEditing(shouldCancelLoading: Bool) {
         leaveOverlayModeCallCount += 1
-        super.finishEdition(shouldCancelLoading: shouldCancelLoading)
+        super.finishEditing(shouldCancelLoading: shouldCancelLoading)
     }
 
     override func switchTab(shouldCancelLoading: Bool) {
