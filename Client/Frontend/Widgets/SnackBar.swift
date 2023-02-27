@@ -102,7 +102,7 @@ class SnackBar: UIView {
         stack.distribution = .fill
         stack.axis = .horizontal
         stack.alignment = .center
-        stack.layoutMargins = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        stack.layoutMargins = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         stack.isLayoutMarginsRelativeArrangement = true
         return stack
     }()
@@ -133,12 +133,6 @@ class SnackBar: UIView {
         addSubview(separator)
         addSubview(buttonsView)
 
-        scrollView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(buttonsView.snp.top)
-            make.height.greaterThanOrEqualTo(UIConstants.SnackbarButtonHeight * 2)
-        }
-
         separator.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
             make.height.equalTo(SnackBarUX.BorderWidth)
@@ -152,7 +146,7 @@ class SnackBar: UIView {
 
         titleView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.height.greaterThanOrEqualTo(UIConstants.SnackbarButtonHeight * 2)
+            make.height.equalTo(scrollView).priority(250)
             make.centerX.equalTo(self).priority(500)
             make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
         }
@@ -176,6 +170,15 @@ class SnackBar: UIView {
      */
     func shouldPersist(_ tab: Tab) -> Bool {
         return true
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        scrollView.snp.remakeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(buttonsView.snp.top)
+            make.height.lessThanOrEqualTo(UIScreen.main.bounds.height / 2)
+        }
     }
 
     override func updateConstraints() {
