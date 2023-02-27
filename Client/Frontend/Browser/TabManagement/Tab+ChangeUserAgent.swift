@@ -54,7 +54,7 @@ extension Tab {
 
             // At this point, saving to disk takes place.
             do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: baseDomainList, requiringSecureCoding: true)
+                let data = try NSKeyedArchiver.archivedData(withRootObject: baseDomainList, requiringSecureCoding: false)
                 try data.write(to: ChangeUserAgent.file)
             } catch {}
         }
