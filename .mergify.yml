@@ -37,3 +37,25 @@ pull_request_rules:
       queue:
         method: rebase
         name: default
+  - name: Needs landing - Rebase
+    conditions:
+      - check-success=Bitrise
+      - label=Needs Landing
+      - "#approved-reviews-by>=1"
+      - -draft
+      - label!=Do Not Merge ⛔️
+    actions:
+      queue:
+        method: rebase
+        name: default
+  - name: Needs landing - Squash
+    conditions:
+      - check-success=Bitrise
+      - label=Needs Landing (Squash)
+      - "#approved-reviews-by>=1"
+      - -draft
+      - label!=Do Not Merge ⛔️
+    actions:
+      queue:
+        method: squash
+        name: default
