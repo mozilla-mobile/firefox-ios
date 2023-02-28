@@ -171,7 +171,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
             addGestureRecognizer()
         }
         setupView()
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     override func viewDidLayoutSubviews() {

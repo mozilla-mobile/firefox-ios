@@ -84,7 +84,7 @@ class DownloadsPanel: UIViewController,
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

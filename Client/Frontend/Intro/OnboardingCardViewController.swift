@@ -157,7 +157,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupView()
         updateLayout()
         applyTheme()
