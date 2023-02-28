@@ -115,7 +115,6 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         guard let feedURL = URL(string: pocketGlobalFeed)?.withQueryParams(params) else { return nil }
 
         return URLRequest(url: feedURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5)
-        
     }
 
     private var shouldUseMockData: Bool {
