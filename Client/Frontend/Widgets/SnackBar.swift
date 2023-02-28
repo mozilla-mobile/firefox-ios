@@ -172,6 +172,18 @@ class SnackBar: UIView {
         return true
     }
 
+    private func setupButtonViewLayout(constant: CGFloat = 0) {
+        buttonsView.snp.remakeConstraints { make in
+            make.bottom.equalTo(self.snp.bottom).inset(constant)
+            make.leading.trailing.equalTo(self)
+            if !self.buttonsView.subviews.isEmpty {
+                make.height.equalTo(UIConstants.SnackbarButtonHeight)
+            } else {
+                make.height.equalTo(0)
+            }
+        }
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         scrollView.snp.remakeConstraints { make in
@@ -183,16 +195,16 @@ class SnackBar: UIView {
 
     override func updateConstraints() {
         super.updateConstraints()
+        setupButtonViewLayout()
+    }
 
-        buttonsView.snp.remakeConstraints { make in
-            make.bottom.equalTo(self.snp.bottom)
-            make.leading.trailing.equalTo(self)
-            if !self.buttonsView.subviews.isEmpty {
-                make.height.equalTo(UIConstants.SnackbarButtonHeight)
-            } else {
-                make.height.equalTo(0)
-            }
-        }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.horizontalSizeClass == .compact
+            && UIDevice.current.userInterfaceIdiom == .pad {
+            setupButtonViewLayout(constant: UIConstants.ToolbarHeight)
+        } else { setupButtonViewLayout() }
     }
 
     var showing: Bool {
