@@ -51,9 +51,9 @@ class OnboardingCardViewController: UIViewController, Themeable {
         return view.frame.height <= 667 || UIDevice.current.userInterfaceIdiom == .pad
     }
 
-    // Adjusting layout for devices with height lower than 568 (iPhone SE 1st generation)
+    // Adjusting layout for tiny devices (iPhone SE 1st generation)
     var shouldUseTinyDeviceLayout: Bool {
-        return view.frame.height <= 568
+        return UIDevice().isTinyFormFactor
     }
 
     private lazy var scrollView: UIScrollView = .build { view in
