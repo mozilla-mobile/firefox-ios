@@ -20,6 +20,13 @@ Getting involved
 
 Want to contribute but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK)
 
+We encourage you to participate in this open source project. We love Pull Requests, Bug Reports, ideas, (security) code reviews or any kind of positive contribution. Please read the [Mozilla Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
+
+- Chat: See [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion
+- Issues: [File a new issue](https://github.com/mozilla-mobile/firefox-ios/issues/new/choose) • [Existing bugs](https://github.com/mozilla-mobile/firefox-ios/issues)
+
+Want to contribute but don't know where to start? Be sure to check our [Contributing Guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first. Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK). 
+
 Building the code
 -----------------
 
@@ -76,11 +83,6 @@ To simplify the build process, these compiled files are checked-in to this repos
 ```shell
 npm run build
 ```
-
-Contributing
------------------
-
-Want to contribute to this repository? Check out [Contributing Guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md)
 
 License
 -----------------
