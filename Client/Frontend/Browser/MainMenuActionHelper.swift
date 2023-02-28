@@ -23,6 +23,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showMenuPresenter(url: URL, tab: Tab, view: UIView)
     func showFindInPage()
     func showCustomizeHomePage()
+	func showZoomPage(tab: Tab)
 }
 
 enum MenuButtonToastAction {
@@ -216,6 +217,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         if !isHomePage && !isFileURL {
+			let zoomSection = getZoomSection()
+            append(to: &section, action: zoomSection)
+
             let zoomSection = getZoomSection()
             append(to: &section, action: zoomSection)
 
@@ -759,23 +763,13 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
         guard let tab = selectedTab else { return section }
         let zoomLevel = String(format: "%.0f%%", tab.pageZoom * 100.0)
-        let zoomTitle = SingleActionViewModel(title: .AppMenu.Zoom, text: zoomLevel, isEnabled: false)
+		let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
+        let zoomAction = SingleActionViewModel(title: title) { _ in
+            self.delegate?.showZoomPage(tab: tab)
+        }
 
-        section.append(PhotonRowActions([zoomTitle, getZoomOutAction(tab: tab), getZoomInAction(tab: tab)]))
+        section.append(PhotonRowActions([zoomAction]))
         return section
-    }
-
-    
-    private func getZoomOutAction(tab: Tab) -> SingleActionViewModel {
-        return SingleActionViewModel(title: "", iconString: ImageIdentifiers.subtract, isEnabled: tab.pageZoom > 0.5) { _ in
-            tab.zoomOut()
-        }
-    }
-
-    private func getZoomInAction(tab: Tab) -> SingleActionViewModel {
-        return SingleActionViewModel(title: "", iconString: ImageIdentifiers.add, isEnabled: tab.pageZoom < 3.0) { _ in
-            tab.zoomIn()
-        }
     }
 
     // MARK: Password
