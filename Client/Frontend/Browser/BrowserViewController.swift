@@ -66,7 +66,7 @@ class BrowserViewController: UIViewController {
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
 
-    var researchSurfaceManager: ResearchSurfaceManager
+    var researchSurfaceManager: SurveySurfaceManager
     var contextHintVC: ContextualHintViewController
 
     // To avoid presenting multiple times in same launch when forcing to show
@@ -176,7 +176,7 @@ class BrowserViewController: UIViewController {
         self.downloadQueue = downloadQueue
         self.logger = logger
 
-        self.researchSurfaceManager = ResearchSurfaceManager()
+        self.researchSurfaceManager = SurveySurfaceManager()
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -1993,7 +1993,7 @@ extension BrowserViewController: HomePanelDelegate {
 
 extension BrowserViewController {
     func performResearchSurfaceCheck() {
-        if researchSurfaceManager.shouldShowResearchSurface {
+        if researchSurfaceManager.shouldShowSurveySurface {
             print("RGB - It should show!")
         }
     }

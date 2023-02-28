@@ -4,11 +4,14 @@
 
 import Foundation
 
-class ResearchSurfaceManager {
+class SurveySurfaceManager {
     private var message: GleanPlumbMessage?
     private let messagingManager: GleanPlumbMessageManagerProtocol
 
-    var shouldShowResearchSurface: Bool {
+    private var viewModel: SurveySurfaceViewModel?
+    private var viewController: SurveySurfaceViewController?
+
+    var shouldShowSurveySurface: Bool {
         updateMessage()
         if message != nil { return true }
         return false
@@ -28,8 +31,27 @@ class ResearchSurfaceManager {
 //        return message
 //    }
 
+    func surveySurface() throws -> SurveySurfaceViewController {
+        guard let message = message else { throw }
+
+        let viewModel = createViewModel(with: message)
+        let viewController = createViewController(with: viewModel)
+    }
+
+    private func createViewModel(with message: GleanPlumbMessage) throws -> SurveySurfaceViewModel {
+        guard let validURL = URL(string: message.action) else { throw }
+
+        return SurveySurfaceViewModel(withText: message.data.text,
+                                      andButtonLabel: message.data.buttonLabel,
+                                      andActionURL: validURL)
+    }
+
+    private func createViewController(with viewModel: SurveySurfaceViewModel) -> SurveySurfaceViewController {
+
+    }
+
     /// Call messagingManager to retrieve the message for research surface
-    func updateMessage(for surface: MessageSurfaceId = .survey) {
+    private func updateMessage(for surface: MessageSurfaceId = .survey) {
         guard let validMessage = messagingManager.getNextMessage(for: surface) else { return }
 
         if !validMessage.isExpired {
