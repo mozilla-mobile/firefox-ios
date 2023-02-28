@@ -17,25 +17,17 @@ class SurveySurfaceManager {
         return false
     }
 
-//    weak var delegate: MessageCardDelegate? {
-//        didSet {
-//            updateMessage()
-//        }
-//    }
-
     init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared) {
         self.messagingManager = messagingManager
     }
 
-//    func getMessageCardData() -> GleanPlumbMessage? {
-//        return message
-//    }
-
-    func surveySurface() throws -> SurveySurfaceViewController {
-        guard let message = message else { throw }
+    func surveySurface() -> SurveySurfaceViewController? {
+        guard let message = message else { return nil }
 
         let viewModel = createViewModel(with: message)
         let viewController = createViewController(with: viewModel)
+
+        return viewController
     }
 
     private func createViewModel(with message: GleanPlumbMessage) throws -> SurveySurfaceViewModel {
@@ -47,7 +39,6 @@ class SurveySurfaceManager {
     }
 
     private func createViewController(with viewModel: SurveySurfaceViewModel) -> SurveySurfaceViewController {
-
     }
 
     /// Call messagingManager to retrieve the message for research surface
@@ -56,7 +47,6 @@ class SurveySurfaceManager {
 
         if !validMessage.isExpired {
             message = validMessage
-//            delegate?.didLoadNewData()
         }
     }
 }
