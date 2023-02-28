@@ -2606,7 +2606,8 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
-        overlayManager.openNewTab(nil, url: nil)
+        overlayManager.openNewTab(url: nil,
+                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
 
     // TODO: FXIOS-5639 Remove from protocol if it was used for keyboard handling

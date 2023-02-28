@@ -19,9 +19,9 @@ protocol OverlayModeManager: OverlayStateProtocol {
 
     /// Enter overlay mode when opening a new tab
     /// - Parameters:
-    ///   - locationText: String with initial search text
     ///   - url: Tab url to determine if is the url is homepage or nil
-    func openNewTab(_ locationText: String?, url: URL?)
+    ///   - newTabSettings: User option for new tab, if is custom url (homepage) the keyboard is not raised
+    func openNewTab(url: URL?, newTabSettings: NewTabPage)
 
     /// Leave overlay mode when user finish editing, either pressing the go button, enter etc
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
@@ -49,9 +49,11 @@ class DefaultOverlayModeManager: OverlayModeManager {
         enterOverlayMode(pasteContent, pasted: true, search: true)
     }
 
-    func openNewTab(_ locationText: String?, url: URL?) {
-        if url == nil || url?.isFxHomeUrl ?? false {
-            enterOverlayMode(locationText, pasted: false, search: true)
+    func openNewTab(url: URL?, newTabSettings: NewTabPage) {
+        guard newTabSettings != .homePage else { return }
+
+        if shouldEnterOverlay(for: url) {
+            enterOverlayMode(nil, pasted: false, search: true)
         }
     }
 
@@ -63,6 +65,12 @@ class DefaultOverlayModeManager: OverlayModeManager {
         guard inOverlayMode else { return }
 
         leaveOverlayMode(didCancel: shouldCancelLoading)
+    }
+
+    private func shouldEnterOverlay(for url: URL?, newTabSettings: NewTabPage) -> Bool {
+        guard let url = url else { return true }
+
+        return url.isFxHomeUrl
     }
 
     private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {

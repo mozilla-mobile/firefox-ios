@@ -15,9 +15,9 @@ class MockOverlayModeManager: DefaultOverlayModeManager {
         super.openSearch(with: pasteContent)
     }
 
-    override func openNewTab(_ locationText: String?, url: URL?) {
+    override func openNewTab(url: URL?, newTabSettings: NewTabPage) {
         enterOverlayModeCallCount += 1
-        super.openNewTab(locationText, url: url)
+        super.openNewTab(url: url, newTabSettings: newTabSettings)
     }
 
     override func finishEditing(shouldCancelLoading: Bool) {
