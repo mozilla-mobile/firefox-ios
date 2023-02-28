@@ -444,7 +444,7 @@ extension TelemetryWrapper {
         case siteMenu = "site-menu"
         case library = "library"
         case home = "home-page"
-        case homeTabBanner = "home-tab-banner"
+        case messagingSurface = "messaging-surface"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
         case navigateTabHistoryBack = "navigate-tab-history-back"
@@ -1302,19 +1302,19 @@ extension TelemetryWrapper {
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
-        case (.information, .view, .homeTabBanner, .messageImpression, let extras):
+        case (.information, .view, .messagingSurface, .messageImpression, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.shown.record(
                     GleanMetrics.Messaging.ShownExtra(messageKey: messageId)
                 )
             }
-        case(.action, .tap, .homeTabBanner, .messageDismissed, let extras):
+        case(.action, .tap, .messagingSurface, .messageDismissed, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.dismissed.record(
                     GleanMetrics.Messaging.DismissedExtra(messageKey: messageId)
                 )
             }
-        case(.action, .tap, .homeTabBanner, .messageInteracted, let extras):
+        case(.action, .tap, .messagingSurface, .messageInteracted, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String,
                 let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
                 GleanMetrics.Messaging.clicked.record(
@@ -1325,13 +1325,13 @@ extension TelemetryWrapper {
                     GleanMetrics.Messaging.ClickedExtra(messageKey: messageId)
                 )
             }
-        case(.information, .view, .homeTabBanner, .messageExpired, let extras):
+        case(.information, .view, .messagingSurface, .messageExpired, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.expired.record(
                     GleanMetrics.Messaging.ExpiredExtra(messageKey: messageId)
                 )
             }
-        case(.information, .application, .homeTabBanner, .messageMalformed, let extras):
+        case(.information, .application, .messagingSurface, .messageMalformed, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.malformed.record(
                     GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
