@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import UIKit
+import SwiftUI
 
 /// The `Theme` protocol, which contains the implementation of themes,
 /// which comprise of a set of standardized colours (including light and
@@ -10,6 +11,22 @@ import UIKit
 public protocol Theme {
     var type: ThemeType { get }
     var colors: ThemeColourPalette { get }
+}
+
+/// SwiftUITheme protocol embeds theme so that we can use Theme in SwiftUI.
+/// EnvironmentValues in SwiftUI requires an Equatable type but changing
+/// Theme directly to Equatable isn't a viable solution for the rest of the app
+/// that is built using UIKit
+public struct SwiftUITheme: Equatable {
+    public var theme: Theme
+
+    public init(theme: Theme) {
+        self.theme = theme
+    }
+
+    public static func == (lhs: SwiftUITheme, rhs: SwiftUITheme) -> Bool {
+        return lhs.theme.type == rhs.theme.type
+    }
 }
 
 public struct Gradient {

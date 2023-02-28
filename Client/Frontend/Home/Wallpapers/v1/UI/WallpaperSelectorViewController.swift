@@ -75,7 +75,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     // MARK: - View setup & lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupView()
     }
 

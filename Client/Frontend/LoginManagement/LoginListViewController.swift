@@ -79,7 +79,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     required init?(coder aDecoder: NSCoder) {

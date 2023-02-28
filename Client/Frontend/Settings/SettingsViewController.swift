@@ -33,7 +33,7 @@ class SettingsViewController: UIViewController, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 
