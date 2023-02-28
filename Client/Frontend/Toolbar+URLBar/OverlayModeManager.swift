@@ -50,11 +50,9 @@ class DefaultOverlayModeManager: OverlayModeManager {
     }
 
     func openNewTab(url: URL?, newTabSettings: NewTabPage) {
-        guard newTabSettings != .homePage else { return }
+        guard shouldEnterOverlay(for: url, newTabSettings: newTabSettings) else { return }
 
-        if shouldEnterOverlay(for: url) {
-            enterOverlayMode(nil, pasted: false, search: true)
-        }
+        enterOverlayMode(nil, pasted: false, search: true)
     }
 
     func finishEditing(shouldCancelLoading: Bool) {
@@ -68,9 +66,13 @@ class DefaultOverlayModeManager: OverlayModeManager {
     }
 
     private func shouldEnterOverlay(for url: URL?, newTabSettings: NewTabPage) -> Bool {
-        guard let url = url else { return true }
-
-        return url.isFxHomeUrl
+        // The NewTabPage cases are weird topSites = homepage
+        // and homepage = customURL
+        switch newTabSettings {
+        case .topSites: return url?.isFxHomeUrl ?? true
+        case .blankPage: return true
+        case .homePage: return false
+        }
     }
 
     private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {

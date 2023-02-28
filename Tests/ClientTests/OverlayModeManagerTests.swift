@@ -65,7 +65,7 @@ class OverlayModeManagerTests: XCTestCase {
         XCTAssertEqual(subject.enterOverlayModeCallCount, 1)
     }
 
-    func testNotEnterOverlayMode_ForCustomUrl_WithURL() {
+    func testNotEnterOverlayMode_ForCustomUrl() {
         subject.setURLBar(urlBarView: urlBar)
         subject.openNewTab(url: URL(string: "https://test.com"),
                            newTabSettings: .homePage)
