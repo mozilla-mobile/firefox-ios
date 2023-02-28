@@ -151,8 +151,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
 
     // Used to programmatically set the pageViewController to show next card
     func moveToNextPage(cardType: IntroViewModel.InformationCards) {
-        if let nextViewController = getNextOnboardingCard(index: cardType.position(), goForward: true) {
-            pageControl.currentPage = cardType.position() + 1
+        if let nextViewController = getNextOnboardingCard(index: cardType.position, goForward: true) {
+            pageControl.currentPage = cardType.position + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
         }
     }

@@ -33,7 +33,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
             }
         }
 
-        func position() -> Int {
+        var position: Int {
             switch self {
             case .welcome: return 0
             case .signSync: return 1
