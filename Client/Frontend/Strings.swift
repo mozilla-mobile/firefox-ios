@@ -679,13 +679,13 @@ extension String {
         public static let IntroNotificationTitle = MZLocalizedString(
             "Onboarding.Notification.Title.v112",
             tableName: "Onboarding",
-            value: "Notifications help you do more with Firefox",
-            comment: "String used to describe the title of the notification onboarding page in our Onboarding screens.")
+            value: "Notifications help you do more with %@",
+            comment: "String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.")
         public static let IntroNotificationDescription = MZLocalizedString(
             "Onboarding.Notification.Description.v112",
             tableName: "Onboarding",
-            value: "Send tabs between your devices and get tips about how to get the most out of Firefox.",
-            comment: "String used to describe the description of the notification onboarding page in our Onboarding screens.")
+            value: "Send tabs between your devices and get tips about how to get the most out of %@.",
+            comment: "String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name.")
         public static let IntroNotificationContinueAction = MZLocalizedString(
             "Onboarding.Notification.Continue.Action.v112",
             tableName: "Onboarding",
@@ -764,18 +764,18 @@ extension String {
 extension String {
     public struct ResearchSurface {
         public static let BodyText = MZLocalizedString(
-            "Body.Text",
-            tableName: "Research Surface",
-            value: "Please help make Firefox better by taking a short survey.",
-            comment: "On the Research Survey popup, the text that explains what the screen is about.")
+            "Body.Text.v112",
+            tableName: "ResearchSurface",
+            value: "Please help make %@ better by taking a short survey.",
+            comment: "On the Research Survey popup, the text that explains what the screen is about. Placeholder is for the app name.")
         public static let TakeSurveyButtonLabel = MZLocalizedString(
-            "PrimaryButton.Label",
-            tableName: "Research Surface",
+            "PrimaryButton.Label.v112",
+            tableName: "ResearchSurface",
             value: "Take Survey",
-            comment: "On the Research Survey popup, the text for the button that, when tapped, will take the user to a survey.")
+            comment: "On the Research Survey popup, the text for the button that, when tapped, will dismiss the popup and take the user to a survey.")
         public static let DismissButtonLabel = MZLocalizedString(
-            "SecondaryButton.Label",
-            tableName: "Research Surface",
+            "SecondaryButton.Label.v112",
+            tableName: "ResearchSurface",
             value: "No Thanks",
             comment: "On the Research Survey popup, the text for the button that, when tapped, will dismiss this screen, and the user will not be taken to the survey.")
     }
@@ -2407,8 +2407,8 @@ extension String {
         public static let Body = MZLocalizedString(
             "Engagement.Notification.Body.v112",
             tableName: "EngagementNotification",
-            value: "Browse with no saved cookies or history in Firefox.",
-            comment: "Body of notification send to user after inactivity.")
+            value: "Browse with no saved cookies or history in %@.",
+            comment: "Body of notification send to user after inactivity. Placeholder is the app name.")
     }
 }
 

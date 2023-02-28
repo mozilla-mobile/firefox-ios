@@ -66,8 +66,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupPageController()
     }
 
