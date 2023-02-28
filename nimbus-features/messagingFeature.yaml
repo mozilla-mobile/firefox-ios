@@ -115,14 +115,6 @@ features:
               text: Default Browser/DefaultBrowserCard.Description
               button-label: Default Browser/DefaultBrowserCard.Button.v2
               action: MAKE_DEFAULT_BROWSER_WITH_TUTORIAL
-            research-survey:
-              surface: survey
-              style: SURVEY
-              trigger:
-                - ALWAYS
-              text: ResearchSurface/Body.Text
-              button-label: ResearchSurface/PrimaryButton.Label
-              action: www.macrumors.com
       - channel: developer
         value:
           messages:
@@ -133,7 +125,7 @@ features:
                 - ALWAYS
               text: Research Surface/Body.Text
               button-label: Research Surface/PrimaryButton.Label
-              action: www.macrumors.com
+              action: https://www.macrumors.com
 
 objects:
   MessageData:
