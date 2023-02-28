@@ -772,7 +772,7 @@ extension String {
             "PrimaryButton.Label.v112",
             tableName: "ResearchSurface",
             value: "Take Survey",
-            comment: "On the Research Survey popup, the text for the button that, when tapped, will take the user to a survey.")
+            comment: "On the Research Survey popup, the text for the button that, when tapped, will dismiss the popup and take the user to a survey.")
         public static let DismissButtonLabel = MZLocalizedString(
             "SecondaryButton.Label.v112",
             tableName: "ResearchSurface",
