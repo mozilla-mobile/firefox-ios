@@ -52,7 +52,7 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         let notificationCardPosition = OnboardingNotificationCardHelper().cardPosition
 
         switch notificationCardPosition {
-        case .none, .noCard:
+        case .noCard:
             return [.welcome, .signSync]
         case .beforeSync:
             return [.welcome, .notification, .signSync]

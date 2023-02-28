@@ -4,8 +4,7 @@
 
 import Foundation
 
-class OnboardingNotificationCardHelper {
-
+class OnboardingNotificationCardHelper: FeatureFlaggable {
     var cardPosition: OnboardingNotificationCardPosition {
         return featureFlags.getCustomState(for: .onboardingNotificationCard) ?? .noCard
     }

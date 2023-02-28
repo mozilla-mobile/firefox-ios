@@ -262,7 +262,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     }
 
     /// Use email login button tapped
-    @objc func emailLoginTapped(_ sender: UIButton) {OnboardingNotificationCardHelper
+    @objc func emailLoginTapped(_ sender: UIButton) {
         let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
             isOnboarding: telemetryObject == .onboarding)
 
@@ -285,7 +285,7 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
         let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
             isOnboarding: telemetryObject == .onboarding)
-        
+
         let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
                                       profile: profile,
                                       dismissalStyle: fxaDismissStyle,
