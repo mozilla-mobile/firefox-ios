@@ -2293,11 +2293,9 @@ extension BrowserViewController {
         let introViewModel = IntroViewModel()
         let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
         introViewController.didFinishFlow = {
-            self.profile.prefs.setBool(false, forKey: PrefsKeys.IntroIsDisplaying)
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             introViewController.dismiss(animated: true)
         }
-        self.profile.prefs.setBool(true, forKey: PrefsKeys.IntroIsDisplaying)
         self.introVCPresentHelper(introViewController: introViewController)
     }
 
