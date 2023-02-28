@@ -66,6 +66,7 @@ class BrowserViewController: UIViewController {
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
 
+    var researchSurfaceManager: ResearchSurfaceManager
     var contextHintVC: ContextualHintViewController
 
     // To avoid presenting multiple times in same launch when forcing to show
@@ -174,6 +175,8 @@ class BrowserViewController: UIViewController {
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
+
+        self.researchSurfaceManager = ResearchSurfaceManager()
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -558,6 +561,7 @@ class BrowserViewController: UIViewController {
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
+        performResearchSurfaceCheck()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1982,6 +1986,20 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
         showSettingsWithDeeplink(to: settingsPage)
+    }
+}
+
+// MARK: - Research Surface
+
+extension BrowserViewController {
+    func performResearchSurfaceCheck() {
+        if researchSurfaceManager.shouldShowResearchSurface {
+            print("RGB - It should show!")
+        }
+    }
+
+    func presentResearchSurface() {
+
     }
 }
 
