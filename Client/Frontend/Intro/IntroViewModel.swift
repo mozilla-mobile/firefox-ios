@@ -78,9 +78,10 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                        secondaryAction: .Onboarding.IntroSyncSkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.signSyncCard)
         case .notification:
+            let shortName = AppName.shortName.rawValue
             return OnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingNotification),
-                                       title: .Onboarding.IntroNotificationTitle,
-                                       description: .Onboarding.IntroNotificationDescription,
+                                       title: String(format: .Onboarding.IntroNotificationTitle, shortName),
+                                       description: String(format: .Onboarding.IntroNotificationDescription, shortName),
                                        primaryAction: .Onboarding.IntroNotificationContinueAction,
                                        secondaryAction: .Onboarding.IntroNotificationSkipAction,
                                        a11yIdRoot: AccessibilityIdentifiers.Onboarding.notificationCard)
