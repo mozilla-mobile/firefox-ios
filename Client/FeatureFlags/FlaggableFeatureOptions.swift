@@ -9,6 +9,21 @@ import Foundation
 /// the FlaggableFeatureOptions protocol.
 protocol FlaggableFeatureOptions { }
 
+enum OnboardingNotificationCardPosition: String, FlaggableFeatureOptions {
+    case noCard
+    case beforeSync
+    case afterSync
+
+    func askForPermissionDuringSync(isOnboarding: Bool) -> Bool {
+        switch self {
+        case .noCard:
+            return true
+        case .beforeSync, .afterSync:
+            return !isOnboarding // we ask for permission on notification card instead
+        }
+    }
+}
+
 enum StartAtHomeSetting: String, FlaggableFeatureOptions {
     case afterFourHours
     case always

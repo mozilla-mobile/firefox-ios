@@ -49,7 +49,7 @@ final class NimbusFeatureFlagLayer {
 
         case .onboardingUpgrade,
                 .onboardingFreshInstall,
-                .onboardingNotificationCardBeforeSync:
+                .onboardingNotificationCard:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
         case .sponsoredTiles:
@@ -81,6 +81,17 @@ final class NimbusFeatureFlagLayer {
         case .disabled: return .disabled
         case .afterFourHours: return .afterFourHours
         case .always: return .always
+        }
+    }
+
+    public func checkNimbusConfigForOnboardingNotificationCard(using nimbus: FxNimbus = FxNimbus.shared) -> OnboardingNotificationCardPosition {
+        let config = nimbus.features.onboardingFeature.value()
+        let nimbusSetting = config.notificationCardPosition
+
+        switch nimbusSetting {
+        case .noCard: return .noCard
+        case .afterSync: return .afterSync
+        case .beforeSync: return .beforeSync
         }
     }
 
@@ -197,7 +208,6 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .onboardingUpgrade: return config.upgradeFlow
         case .onboardingFreshInstall: return config.firstRunFlow
-        case .onboardingNotificationCardBeforeSync: return config.notificationCardIsBeforeSync
         default: return false
         }
     }
