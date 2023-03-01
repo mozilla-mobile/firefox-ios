@@ -21,6 +21,13 @@ class OverlayModeManagerTests: XCTestCase {
         subject = nil
     }
 
+    // MARK: - Test URLBarView nil
+    func testOverlayMode_ForNilURLBar() {
+        urlBar = nil
+        subject.openSearch(with: "search")
+        XCTAssertFalse(subject.inOverlayMode)
+    }
+
     // MARK: - Test EnterOverlay for New tab
     func testEnterOverlayMode_ForNewTabHome_WithNilURL() {
         subject.setURLBar(urlBarView: urlBar)
@@ -117,12 +124,5 @@ class OverlayModeManagerTests: XCTestCase {
 
         XCTAssertFalse(subject.inOverlayMode)
         XCTAssertEqual(subject.leaveOverlayModeCallCount, 1)
-    }
-
-    // MARK: - Test URLBarView nil
-    func testOverlayMode_ForNilURLBar() {
-        urlBar = nil
-        subject.openSearch(with: "search")
-        XCTAssertFalse(subject.inOverlayMode)
     }
 }

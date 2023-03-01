@@ -2610,9 +2610,6 @@ extension BrowserViewController: TopTabsDelegate {
                                   newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
 
-    // TODO: FXIOS-5639 Remove from protocol if it was used for keyboard handling
-    func topTabsDidTogglePrivateMode() { }
-
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change
         overlayManager.switchTab(shouldCancelLoading: true)
