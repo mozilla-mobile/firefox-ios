@@ -109,8 +109,6 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
         switch featureID {
-        case .onboardingNotificationCard: return
-
         case .searchBarPosition:
             if let option = desiredState as? SearchBarPosition {
                 feature.setUserPreference(to: option.rawValue)
@@ -121,7 +119,7 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
                 feature.setUserPreference(to: option.rawValue)
             }
 
-        case .wallpaperVersion: return
+        case .wallpaperVersion, .onboardingNotificationCard: return
         }
     }
 

@@ -148,6 +148,16 @@ class OnboardingCardViewController: UIViewController, Themeable {
                                                 right: UX.buttonHorizontalInset)
     }
 
+    private var imageViewHeight: CGFloat {
+        if shouldUseTinyDeviceLayout {
+            return UX.tinyImageViewSize.height
+        } else if shouldUseSmallDeviceLayout {
+            return UX.imageViewSize.height
+        } else {
+            return UX.smallImageViewSize.height
+        }
+    }
+
     init(viewModel: OnboardingCardProtocol,
          delegate: OnboardingCardDelegate?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -200,8 +210,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         // Adapt layout for smaller screens
         let scrollViewVerticalPadding = shouldUseSmallDeviceLayout ? UX.smallScrollViewVerticalPadding :  UX.scrollViewVerticalPadding
         let stackViewSpacingButtons = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacingButtons :  UX.stackViewSpacingButtons
-        let imageViewHeight = shouldUseTinyDeviceLayout ? UX.tinyImageViewSize.height : shouldUseSmallDeviceLayout ?
-            UX.imageViewSize.height : UX.smallImageViewSize.height
 
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -278,7 +286,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         delegate?.showNextPage(viewModel.cardType)
     }
 
-    // MARK: - Themable
+    // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary

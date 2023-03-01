@@ -84,7 +84,8 @@ final class NimbusFeatureFlagLayer {
         }
     }
 
-    public func checkNimbusConfigForOnboardingNotificationCard(using nimbus: FxNimbus = FxNimbus.shared) -> OnboardingNotificationCardPosition {
+    public func checkNimbusConfigForOnboardingNotificationCard(
+        using nimbus: FxNimbus = FxNimbus.shared) -> OnboardingNotificationCardPosition {
         let config = nimbus.features.onboardingFeature.value()
         let nimbusSetting = config.notificationCardPosition
 

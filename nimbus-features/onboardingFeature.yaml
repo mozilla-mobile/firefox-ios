@@ -28,7 +28,7 @@ features:
         value: {
           "upgrade-flow": false,
           "first-run-flow": true,
-          "notification-card-position": no-card
+          "notification-card-position": after-sync
         }
 
 enums:
