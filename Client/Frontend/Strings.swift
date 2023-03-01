@@ -1071,6 +1071,57 @@ extension String {
                 comment: "In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off")
         }
 
+        public struct Notifications {
+            public static let Title = MZLocalizedString(
+                "Settings.Notifications.Title",
+                tableName: nil,
+                value: "Notifications",
+                comment: "In the settings menu, in the Privacy section, this is the title for Notifications customization section."
+            )
+            public static let AllowAllNotificationsTitle = MZLocalizedString(
+                "Settings.Notifications.AllowAllNotificationsTitle",
+                tableName: nil,
+                value: "Allow All Notifications",
+                comment: "This is the title for the setting that toggles All Notifications feature in the settings menu under the Notifications section."
+            )
+            public static let TabsNotificationsTitle = MZLocalizedString(
+                "Settings.Notifications.TabsNotificationsTitle",
+                tableName: nil,
+                value: "Tabs Sent From Other Devices",
+                comment: "This is the title for the setting that toggles Tabs Sent From Other Devices feature in the settings menu under the Notifications section."
+            )
+            public static let TabsNotificationsStatus = MZLocalizedString(
+                "Settings.Notifications.TabsNotificationsStatus",
+                tableName: nil,
+                value: "This must be turned on to receive tabs.",
+                comment: "This is the description for the setting that toggles Tabs Sent From Other Devices feature in the settings menu under the Notifications section."
+            )
+            public static let SyncSignInNotificationsTitle = MZLocalizedString(
+                "Settings.Notifications.SyncSignInNotificationsTitle",
+                tableName: nil,
+                value: "Sync Sign In Confirmation",
+                comment: "This is the title for the setting that toggles Sync Sign In Confirmation feature in the settings menu under the Notifications section."
+            )
+            public static let SyncSignInNotificationsStatus = MZLocalizedString(
+                "Settings.Notifications.SyncSignInNotificationsStatus",
+                tableName: nil,
+                value: "Get notified when your account is signed in on another device.",
+                comment: "This is the description for the setting that toggles Sync Sign In Confirmation feature in the settings menu under the Notifications section."
+            )
+            public static let TipsAndFeaturesNotificationsTitle = MZLocalizedString(
+                "Settings.Notifications.TipsAndFeaturesNotificationsTitle",
+                tableName: nil,
+                value: "Tips and Features",
+                comment: "This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section."
+            )
+            public static let TipsAndFeaturesNotificationsStatus = MZLocalizedString(
+                "Settings.Notifications.TipsAndFeaturesNotificationsStatus",
+                tableName: nil,
+                value: "Learn about useful features and how to get the most out of Firefox.",
+                comment: "This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section."
+            )
+        }
+
         public struct Toolbar {
             public static let Toolbar = MZLocalizedString(
                 "Settings.Toolbar.SettingsTitle",

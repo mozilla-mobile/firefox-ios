@@ -5,6 +5,7 @@
 import Account
 import Shared
 import UIKit
+import Combine
 
 struct SettingsUX {
     static let TableViewHeaderFooterHeight = CGFloat(44)
@@ -343,6 +344,124 @@ class PrefPersister: SettingValuePersister {
             prefs.setString(value, forKey: prefKey)
         } else {
             prefs.removeObjectForKey(prefKey)
+        }
+    }
+}
+
+// A helper class for settings with a UISwitch.
+// Takes and optional settingsDidChange callback and status text.
+class BoolSettingSettable: Setting, FeatureFlaggable {
+    fileprivate let prefs: Prefs?
+    let prefKey: String? // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
+    fileprivate let defaultValue: Bool
+    fileprivate let featureFlagName: NimbusFeatureFlagID?
+    fileprivate let descriptionAttributedString: NSAttributedString?
+    private var cancellables = Set<AnyCancellable>()
+
+    override var status: NSAttributedString? {
+        return descriptionAttributedString
+    }
+
+    lazy var control: ReactiveSwitch = {
+        let control = ReactiveSwitch(isOnPublished: getStoredValue())
+        control.accessibilityIdentifier = prefKey
+        return control
+    }()
+
+    @Published var isOn: Bool = false
+
+    init(
+        title: String,
+        description: String? = nil,
+        prefs: Prefs?,
+        prefKey: String? = nil,
+        defaultValue: Bool = false,
+        featureFlagName: NimbusFeatureFlagID? = nil,
+        enabled: Bool = true
+    ) {
+        self.descriptionAttributedString = description.map(NSAttributedString.init(string:))
+        self.prefs = prefs
+        self.prefKey = prefKey
+        self.defaultValue = defaultValue
+        self.featureFlagName = featureFlagName
+        super.init(title: NSAttributedString(string: title), enabled: enabled)
+
+        self.control
+            .$isOnPublished
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                self.isOn = value
+
+                if let featureFlagName = featureFlagName {
+                    TelemetryWrapper.recordEvent(
+                        category: .action,
+                        method: .change,
+                        object: .setting,
+                        extras: ["pref": featureFlagName.rawValue as Any,
+                                 "to": value]
+                    )
+                } else {
+                    TelemetryWrapper.recordEvent(
+                        category: .action,
+                        method: .change,
+                        object: .setting,
+                        extras: ["pref": prefKey as Any, "to": value]
+                    )
+                }
+            }
+            .store(in: &self.cancellables)
+
+        self.$isOn
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] value in
+                guard let self = self else { return }
+                self.control.isOnPublished = value
+                self.store(isOn: value)
+            }
+            .store(in: &self.cancellables)
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
+        super.onConfigureCell(cell, theme: theme)
+        control.onTintColor = theme.colors.actionPrimary
+
+
+        if let title = title {
+            if let status = status {
+                control.accessibilityLabel = "\(title.string), \(status.string)"
+            } else {
+                control.accessibilityLabel = title.string
+            }
+            cell.accessibilityLabel = nil
+        }
+        cell.accessoryView = PaddedSwitch(switchView: control)
+        cell.selectionStyle = .none
+
+        if !self.enabled {
+            cell.subviews.forEach { $0.alpha = 0.5 }
+            cell.isUserInteractionEnabled = false
+        }
+    }
+
+    // These methods allow a subclass to control how the pref is saved
+    func getStoredValue() -> Bool {
+        if let featureFlagName = featureFlagName {
+            return featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
+        } else {
+            guard let key = prefKey else { return defaultValue }
+            return prefs?.boolForKey(key) ?? defaultValue
+        }
+    }
+
+    func store(isOn: Bool) {
+        if let featureFlagName = featureFlagName {
+            featureFlags.set(feature: featureFlagName, to: isOn)
+        } else {
+            guard let key = prefKey else { return }
+            prefs?.setBool(isOn, forKey: key)
         }
     }
 }
