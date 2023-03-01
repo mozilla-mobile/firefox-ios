@@ -20,7 +20,7 @@ protocol OverlayModeManager: OverlayStateProtocol {
     /// Enter overlay mode when opening a new tab
     /// - Parameters:
     ///   - url: Tab url to determine if is the url is homepage or nil
-    ///   - newTabSettings: User option for new tab, if is custom url (homepage) the keyboard is not raised
+    ///   - newTabSettings: User option for new tab, if it's a custom url (homepage) the keyboard is not raised
     func openNewTab(url: URL?, newTabSettings: NewTabPage)
 
     /// Leave overlay mode when user finish editing, either pressing the go button, enter etc
