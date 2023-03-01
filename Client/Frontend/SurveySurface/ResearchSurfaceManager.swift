@@ -28,25 +28,15 @@ class SurveySurfaceManager {
     }
 
     func surveySurface() -> SurveySurfaceViewController? {
-        guard let message = message,
-              let viewModel = createViewModel(with: message)
-        else { return nil }
+        guard let message = message else { return nil }
+        
+        let viewModel = SurveySurfaceViewModel(with: message,
+                                               theme: theme,
+                                               and: messagingManager)
 
         let viewController = SurveySurfaceViewController(viewModel: viewModel)
 
         return viewController
-    }
-
-    private func createViewModel(with message: GleanPlumbMessage) -> SurveySurfaceViewModel? {
-        guard let validURL = URL(string: message.action) else { throw }
-
-        let surfaceData = SurveySurfaceData(text: message.data.text,
-                                            primaryButtonLabel: message.data.buttonLabel,
-                                            actionURL: validURL)
-
-        return SurveySurfaceViewModel(with: surfaceData,
-                                      theme: theme,
-                                      and: messagingManager)
     }
 
     /// Call messagingManager to retrieve the message for research surface

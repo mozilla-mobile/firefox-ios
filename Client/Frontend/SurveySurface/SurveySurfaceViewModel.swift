@@ -5,14 +5,8 @@
 import Foundation
 import Shared
 
-struct SurveySurfaceData {
-    let text: String
-    let primaryButtonLabel: String
-    let actionURL: URL
-}
-
-class SurveySurfaceViewModel {
-    private let data: SurveySurfaceData
+class SurveySurfaceViewModel: MessageSurfaceProtocol {
+    private var message: GleanPlumbMessage
     private var messagingManager: GleanPlumbMessageManagerProtocol
 
 //    weak var delegate: HomepageDataModelDelegate?
@@ -21,12 +15,36 @@ class SurveySurfaceViewModel {
     var theme: Theme
 
     init(
-        with data: SurveySurfaceData,
+        with message: GleanPlumbMessage,
         theme: Theme,
         and messagingManager: GleanPlumbMessageManagerProtocol
     ) {
-        self.data = data
+        self.message = message
         self.theme = theme
         self.messagingManager = messagingManager
+    }
+
+    func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage {
+        return message
+    }
+
+    var shouldDisplayMessageCard: Bool {
+        guard let message = message else { return false }
+
+        return !message.isExpired
+    }
+
+    func handleMessageDisplayed() {
+        message.map(messagingManager.onMessageDisplayed)
+    }
+
+    func handleMessagePressed() {
+        message.map(messagingManager.onMessagePressed)
+        dismissClosure?()
+    }
+
+    func handleMessageDismiss() {
+        message.map(messagingManager.onMessageDismissed)
+        dismissClosure?()
     }
 }
