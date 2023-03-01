@@ -23,7 +23,7 @@ protocol OverlayModeManager: OverlayStateProtocol {
     ///   - newTabSettings: User option for new tab, if it's a custom url (homepage) the keyboard is not raised
     func openNewTab(url: URL?, newTabSettings: NewTabPage)
 
-    /// Leave overlay mode when user finish editing, either pressing the go button, enter etc
+    /// Leave overlay mode when user finishes editing, either by pressing the go button, enter etc
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
     func finishEditing(shouldCancelLoading: Bool)
 
