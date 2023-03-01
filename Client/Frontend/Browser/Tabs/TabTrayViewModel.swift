@@ -103,7 +103,8 @@ extension TabTrayViewModel {
     }
 
     @objc func didTapAddTab(_ sender: UIBarButtonItem) {
-        overlayManager.openNewTab(nil, url: nil)
+        overlayManager.openNewTab(url: nil,
+                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
         tabTrayView.performToolbarAction(.addTab, sender: sender)
     }
 
