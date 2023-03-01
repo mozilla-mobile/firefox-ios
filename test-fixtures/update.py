@@ -21,6 +21,8 @@ curl ${BITRISE_STACK_INFO} | jq ' . | keys'
 ]
 '''
 pattern = 'osx-xcode-'
+version_name = 'ventura'
+patterns = [pattern, version_name]
 BITRISE_YML = 'bitrise.yml'
 WORKFLOW = 'NewXcodeVersions'
 
@@ -52,15 +54,12 @@ def available_stacks():
 
 def largest_version():
     stacks = available_stacks()
-    count = 0
     for item in stacks:
-        if pattern in item:
-            p = parse_semver(item)
-            if p:
-                if count == 0 or semver.compare(largest, p) == -1:
-                    largest = p
-                count += 1
-    return '{0}.x'.format('.'.join(largest.split('.')[0:2]))
+        # only look at XCode versions that aren't in beta
+        if stacks[item]['beta-tag'] != '': continue
+        # use the first version in the list that matches both platform and version
+        if all([x in item for x in patterns]): 
+            return '{0}.x'.format('.'.join(item.split('.')[0:2]))
 
 if __name__ == '__main__':
     '''

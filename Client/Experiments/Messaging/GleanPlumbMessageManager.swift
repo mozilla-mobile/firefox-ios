@@ -115,7 +115,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
-                                     object: .homeTabBanner,
+                                     object: .messagingSurface,
                                      value: .messageImpression,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id])
     }
@@ -147,7 +147,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
-                                     object: .homeTabBanner,
+                                     object: .messagingSurface,
                                      value: .messageInteracted,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
                                               TelemetryWrapper.EventExtraKey.actionUUID.rawValue: uuid ?? "nil"])
@@ -160,7 +160,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
-                                     object: .homeTabBanner,
+                                     object: .messagingSurface,
                                      value: .messageDismissed,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id])
     }
@@ -168,7 +168,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMalformedMessage(messageKey: String) {
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .application,
-                                     object: .homeTabBanner,
+                                     object: .messagingSurface,
                                      value: .messageMalformed,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageKey])
     }

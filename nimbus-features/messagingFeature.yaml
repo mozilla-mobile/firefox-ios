@@ -47,6 +47,9 @@ features:
 
     defaults:
       - value:
+          # This list of triggers is the same on iOS and Android. Thus,
+          # the list should not be updated without consultation of the
+          # Nimbus team.
           triggers:
             NOT_INSTALLED_TODAY:      days_since_install > 0
             NOT_LAUNCHED_YESTERDAY:   app_cycle.foreground|eventLastSeen('Days', 1) > 1
@@ -103,12 +106,26 @@ features:
               max-display-count: 10
           messages:
             default-browser:
+              surface: new-tab-card
+              style: FALLBACK
+              trigger:
+                - I_AM_NOT_DEFAULT_BROWSER
+                - SUPPORTS_DEFAULT_BROWSER
               title: Default Browser/DefaultBrowserCard.Title
               text: Default Browser/DefaultBrowserCard.Description
-              action: "MAKE_DEFAULT_BROWSER_WITH_TUTORIAL"
-              trigger: ["I_AM_NOT_DEFAULT_BROWSER", "SUPPORTS_DEFAULT_BROWSER"]
-              style: "FALLBACK"
               button-label: Default Browser/DefaultBrowserCard.Button.v2
+              action: MAKE_DEFAULT_BROWSER_WITH_TUTORIAL
+      - channel: developer
+        value:
+          messages:
+            research-survey:
+              surface: survey
+              style: SURVEY
+              trigger:
+                - ALWAYS
+              text: Research Surface/Body.Text
+              button-label: Research Surface/PrimaryButton.Label
+              action: www.macrumors.com
 
 objects:
   MessageData:
@@ -160,8 +177,7 @@ objects:
       surface:
         type: MessageSurfaceId
         description: Each message will tell us the surface it is targeting with this.
-        # To start, we default to the new-tab-card
-        default: new-tab-card
+        default: Unknown
 
   StyleData:
     description: >

@@ -13,7 +13,8 @@ extension Tab {
         }()
 
         private static var baseDomainList: Set<String> = {
-            if let hosts = NSKeyedUnarchiver.unarchiveObject(withFile: ChangeUserAgent.file.path) as? Set<String> {
+            if let data = try? Data(contentsOf: ChangeUserAgent.file),
+               let hosts = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSSet.self, NSArray.self, NSString.self], from: data) as? Set<String> {
                 return hosts
             }
             return Set<String>()

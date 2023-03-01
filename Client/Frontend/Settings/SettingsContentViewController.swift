@@ -112,7 +112,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         startLoading()
 
         applyTheme()
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     func makeWebView() -> WKWebView {

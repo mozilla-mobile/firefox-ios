@@ -762,32 +762,6 @@ class YourRightsSetting: Setting {
     }
 }
 
-// Opens the on-boarding screen again
-class ShowIntroductionSetting: Setting {
-    let profile: Profile
-
-    override var accessibilityIdentifier: String? { return "ShowTour" }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: .AppSettingsShowTour, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.dismiss(animated: true, completion: {
-            // TODO: Temporary.
-            // This instance of foregroundBVC is going to be revisited after having enough telemetry of ShowTour.
-            BrowserViewController.foregroundBVC()?.presentIntroViewController(true)
-
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .tap,
-                object: .settingsMenuShowTour
-            )
-        })
-    }
-}
-
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .AppSettingsSendFeedback, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
