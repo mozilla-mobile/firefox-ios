@@ -235,12 +235,6 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
 
-    private func selectOptionFromContextMenu(option: String) {
-        XCTAssertTrue(app.tables["Context Menu"].cells.otherElements[option].exists)
-        app.tables["Context Menu"].cells.otherElements[option].tap()
-        waitForNoExistence(app.tables["Context Menu"])
-    }
-
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         waitForExistence(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         XCTAssertTrue(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].exists)
