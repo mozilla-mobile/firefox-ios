@@ -2,11 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
+import Shared
 
 class SurveySurfaceManager {
     private var message: GleanPlumbMessage?
     private let messagingManager: GleanPlumbMessageManagerProtocol
+    private let themeManager: ThemeManager
 
     private var viewModel: SurveySurfaceViewModel?
     private var viewController: SurveySurfaceViewController?
@@ -17,28 +20,33 @@ class SurveySurfaceManager {
         return false
     }
 
-    init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared) {
+    init(with themeManager: ThemeManager,
+         and messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared
+    ) {
         self.messagingManager = messagingManager
+        self.themeManager = themeManager
     }
 
     func surveySurface() -> SurveySurfaceViewController? {
-        guard let message = message else { return nil }
+        guard let message = message,
+              let viewModel = createViewModel(with: message)
+        else { return nil }
 
-        let viewModel = createViewModel(with: message)
-        let viewController = createViewController(with: viewModel)
+        let viewController = SurveySurfaceViewController(viewModel: viewModel)
 
         return viewController
     }
 
-    private func createViewModel(with message: GleanPlumbMessage) throws -> SurveySurfaceViewModel {
+    private func createViewModel(with message: GleanPlumbMessage) -> SurveySurfaceViewModel? {
         guard let validURL = URL(string: message.action) else { throw }
 
-        return SurveySurfaceViewModel(withText: message.data.text,
-                                      andButtonLabel: message.data.buttonLabel,
-                                      andActionURL: validURL)
-    }
+        let surfaceData = SurveySurfaceData(text: message.data.text,
+                                            primaryButtonLabel: message.data.buttonLabel,
+                                            actionURL: validURL)
 
-    private func createViewController(with viewModel: SurveySurfaceViewModel) -> SurveySurfaceViewController {
+        return SurveySurfaceViewModel(with: surfaceData,
+                                      theme: theme,
+                                      and: messagingManager)
     }
 
     /// Call messagingManager to retrieve the message for research surface

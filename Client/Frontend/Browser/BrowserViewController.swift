@@ -176,7 +176,7 @@ class BrowserViewController: UIViewController {
         self.downloadQueue = downloadQueue
         self.logger = logger
 
-        self.surveySurfaceManager = SurveySurfaceManager()
+        self.surveySurfaceManager = SurveySurfaceManager(with: themeManager)
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)

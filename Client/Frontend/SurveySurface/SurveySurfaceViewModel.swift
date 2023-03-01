@@ -3,19 +3,30 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
+
+struct SurveySurfaceData {
+    let text: String
+    let primaryButtonLabel: String
+    let actionURL: URL
+}
 
 class SurveySurfaceViewModel {
-    private let text: String
-    private let primaryButtonLabel: String
-    private let actionURL: URL
+    private let data: SurveySurfaceData
+    private var messagingManager: GleanPlumbMessageManagerProtocol
+
+//    weak var delegate: HomepageDataModelDelegate?
+//    weak var homepanelDelegate: HomePanelDelegate?
+    var dismissClosure: (() -> Void)?
+    var theme: Theme
 
     init(
-        withText surfaceText: String,
-        andButtonLabel primaryButtonLabel: String,
-        andActionURL url: URL
+        with data: SurveySurfaceData,
+        theme: Theme,
+        and messagingManager: GleanPlumbMessageManagerProtocol
     ) {
-        self.text = surfaceText
-        self.primaryButtonLabel = primaryButtonLabel
-        self.actionURL = url
+        self.data = data
+        self.theme = theme
+        self.messagingManager = messagingManager
     }
 }
