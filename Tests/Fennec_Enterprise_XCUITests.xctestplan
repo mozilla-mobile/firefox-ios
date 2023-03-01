@@ -64,6 +64,7 @@
         "HomePageSettingsTest",
         "HomePageSettingsUITests\/testCustomizeHomepage()",
         "HomePageSettingsUITests\/testJumpBackIn()",
+        "HomePageSettingsUITests\/testRecentlyVisited()",
         "HomePageUITest",
         "IntegrationTests",
         "IntegrationTests\/testFxASyncBookmark()",
