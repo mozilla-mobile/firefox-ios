@@ -3,9 +3,14 @@ import SnowplowTracker
 import Core
 
 final class Analytics {
+    private static let installSchema = "iglu:org.ecosia/ios_install_event/jsonschema/1-0-0"
+    private static let abTestSchema = "iglu:org.ecosia/abtest_context/jsonschema/1-0-1"
+    private static let abTestRoot = "ab_tests"
+    private static let namespace = "ios_sp"
+
     private static var tracker: TrackerController {
         Snowplow
-            .createTracker(namespace: "ios_sp",
+            .createTracker(namespace: namespace,
                            network: .init(endpoint: Environment.current.snowplow),
                            configurations: [TrackerConfiguration()
                                                 .appId(Bundle.version)
@@ -30,10 +35,19 @@ final class Analytics {
         tracker.exceptionAutotracking = false
         tracker.diagnosticAutotracking = false
     }
+
+    private static func getTestContext(from toggle: Unleash.Toggle.Name) -> SelfDescribingJson? {
+        let variant = Unleash.getVariant(toggle).name
+        guard variant != "disabled" else { return nil }
+
+        let variantContext: [String: String] = [toggle.rawValue: variant]
+        let abTestContext: [String: AnyHashable] = [abTestRoot: variantContext]
+        return SelfDescribingJson(schema: abTestSchema, andDictionary: abTestContext)
+    }
     
     func install() {
         tracker
-            .track(SelfDescribing(schema: "iglu:org.ecosia/ios_install_event/jsonschema/1-0-0",
+            .track(SelfDescribing(schema: Self.installSchema,
                                   payload: ["app_v": Bundle.version as NSObject]))
     }
     
@@ -87,7 +101,7 @@ final class Analytics {
                     .label("deeplink"))
     }
     
-    func defaultBrowser() {
+    func appOpenAsDefaultBrowser() {
         tracker
             .track(Structured(category: Category.external.rawValue,
                               action: Action.receive.rawValue)
@@ -95,11 +109,17 @@ final class Analytics {
     }
     
     func defaultBrowser(_ action: Action.Promo) {
-        tracker
-            .track(Structured(category: Category.browser.rawValue,
+        let event = Structured(category: Category.browser.rawValue,
                               action: action.rawValue)
                     .label("default_browser_promo")
-                    .property("home"))
+                    .property("home")
+
+        // add A/B Test context
+        if let context = Self.getTestContext(from: .defaultBrowser) {
+            event.contexts.add(context)
+        }
+
+        tracker.track(event)
     }
 
     func defaultBrowserSettings() {
@@ -232,11 +252,4 @@ final class Analytics {
         tracker.track(event)
     }
 
-    func promo(action: Action, for label: Label.Navigation) {
-        tracker
-            .track(Structured(category: Category.ntp.rawValue,
-                              action: action.rawValue)
-                .label(label.rawValue)
-                .property(Locale.current.regionCode ?? ""))
-    }
 }

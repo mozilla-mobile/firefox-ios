@@ -133,7 +133,7 @@ enum NavigationPath {
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
-            Analytics.shared.defaultBrowser()
+            Analytics.shared.appOpenAsDefaultBrowser()
         } else {
             return nil
         }
