@@ -217,7 +217,9 @@ class BrowserViewController: UIViewController {
     }
 
     @objc
-    func didTapUndoCloseAllTabToast(notification: Notification) { }
+    func didTapUndoCloseAllTabToast(notification: Notification) {
+        overlayManager.switchTab(shouldCancelLoading: true)
+    }
 
     @objc
     func openTabNotification(notification: Notification) {
@@ -1150,7 +1152,7 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        overlayManager.finishEdition(shouldCancelLoading: false)
+        overlayManager.finishEditing(shouldCancelLoading: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
@@ -1223,7 +1225,7 @@ class BrowserViewController: UIViewController {
 
     override func accessibilityPerformEscape() -> Bool {
         if overlayManager.inOverlayMode {
-            overlayManager.finishEdition(shouldCancelLoading: true)
+            overlayManager.finishEditing(shouldCancelLoading: true)
             return true
         } else if let selectedTab = tabManager.selectedTab, selectedTab.canGoBack {
             selectedTab.goBack()
@@ -2654,11 +2656,9 @@ extension BrowserViewController: TopTabsDelegate {
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
-        overlayManager.openNewTab(nil, url: nil)
+        overlayManager.openNewTab(url: nil,
+                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
     }
-
-    // TODO: FXIOS-5639 Remove from protocol if it was used for keyboard handling
-    func topTabsDidTogglePrivateMode() { }
 
     func topTabsDidChangeTab() {
         // Only for iPad leave overlay mode on tab change

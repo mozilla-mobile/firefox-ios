@@ -112,7 +112,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
                                                    device: MockUIDevice(isIpad: true))
-        overlayState.openNewTab(nil, url: nil)
+        overlayState.openNewTab(url: nil, newTabSettings: .topSites)
         let result = subject.canPresent(.jumpBackIn)
         XCTAssertFalse(result)
     }
@@ -135,7 +135,7 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
         subject = ContextualHintEligibilityUtility(with: profile,
                                                    overlayState: overlayState,
                                                    device: MockUIDevice(isIpad: true))
-        overlayState.openNewTab(nil, url: nil)
+        overlayState.openNewTab(url: nil, newTabSettings: .topSites)
         let result = subject.canPresent(.jumpBackInSyncedTab)
         XCTAssertFalse(result)
     }

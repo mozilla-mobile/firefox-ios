@@ -19,13 +19,13 @@ protocol OverlayModeManager: OverlayStateProtocol {
 
     /// Enter overlay mode when opening a new tab
     /// - Parameters:
-    ///   - locationText: String with initial search text
     ///   - url: Tab url to determine if is the url is homepage or nil
-    func openNewTab(_ locationText: String?, url: URL?)
+    ///   - newTabSettings: User option for new tab, if it's a custom url (homepage) the keyboard is not raised
+    func openNewTab(url: URL?, newTabSettings: NewTabPage)
 
-    /// Leave overlay mode when user finish edition, either pressing the go button, enter etc
+    /// Leave overlay mode when user finishes editing, either by pressing the go button, enter etc
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
-    func finishEdition(shouldCancelLoading: Bool)
+    func finishEditing(shouldCancelLoading: Bool)
 
     /// Leave overlay mode when tab change happens, like switching tabs or open a site from any homepage section
     /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
@@ -49,18 +49,30 @@ class DefaultOverlayModeManager: OverlayModeManager {
         enterOverlayMode(pasteContent, pasted: true, search: true)
     }
 
-    func openNewTab(_ locationText: String?, url: URL?) {
-        if url == nil || url?.isFxHomeUrl ?? false {
-            enterOverlayMode(locationText, pasted: false, search: true)
-        }
+    func openNewTab(url: URL?, newTabSettings: NewTabPage) {
+        guard shouldEnterOverlay(for: url, newTabSettings: newTabSettings) else { return }
+
+        enterOverlayMode(nil, pasted: false, search: true)
     }
 
-    func finishEdition(shouldCancelLoading: Bool) {
+    func finishEditing(shouldCancelLoading: Bool) {
         leaveOverlayMode(didCancel: shouldCancelLoading)
     }
 
     func switchTab(shouldCancelLoading: Bool) {
+        guard inOverlayMode else { return }
+
         leaveOverlayMode(didCancel: shouldCancelLoading)
+    }
+
+    private func shouldEnterOverlay(for url: URL?, newTabSettings: NewTabPage) -> Bool {
+        // The NewTabPage cases are weird topSites = homepage
+        // and homepage = customURL
+        switch newTabSettings {
+        case .topSites: return url?.isFxHomeUrl ?? true
+        case .blankPage: return true
+        case .homePage: return false
+        }
     }
 
     private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
