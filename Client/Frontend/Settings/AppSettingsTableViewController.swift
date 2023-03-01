@@ -200,6 +200,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         ]
 
         privacySettings.append(ContentBlockerSetting(settings: self))
+        privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: self.profile))
 
         privacySettings += [
             PrivacyPolicySetting()

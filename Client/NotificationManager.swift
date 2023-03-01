@@ -42,6 +42,16 @@ class NotificationManager: NotificationManagerProtocol {
         }
     }
 
+    func requestAuthorization(completion: @escaping (Result<Bool, Error>) -> Void) {
+        self.requestAuthorization { granted, error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(granted))
+            }
+        }
+    }
+
     // Retrieves the authorization and feature-related notification settings and sends Telemetry
     func getNotificationSettings(sendTelemetry: Bool = false,
                                  completion: @escaping (UNNotificationSettings) -> Void) {
