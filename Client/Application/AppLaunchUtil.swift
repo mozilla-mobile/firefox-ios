@@ -40,9 +40,9 @@ class AppLaunchUtil {
         KeyboardHelper.defaultHelper.startObserving()
         DynamicFontHelper.defaultHelper.startObserving()
         MenuHelper.defaultHelper.setItems()
-        
-        //Initialize conversion value by specifing fineValue and coarseValue.
-        //Setup postback for update conversion install event.
+
+        // Initialize conversion value by specifing fineValue and coarseValue.
+        // Setup postback for update conversion install event.
         let conversionValue = ConversionValue(fineValue: 0, coarseValue: .low)
         adNetworkAttributionUpdateConversionInstallEvent(conversionValue: conversionValue)
 
@@ -209,8 +209,7 @@ class AppLaunchUtil {
         }
     }
 
-    private func adNetworkAttributionUpdateConversionInstallEvent(conversionValue: ConversionValue,  completionHandler completion: ((Error?) -> Void)? = nil) {
-
+    private func adNetworkAttributionUpdateConversionInstallEvent(conversionValue: ConversionValue, completionHandler completion: ((Error?) -> Void)? = nil) {
         if #available(iOS 16.1, *) {
             SKAdNetwork.updatePostbackConversionValue(conversionValue.fineValue, coarseValue: conversionValue.coarseValue.value) { [weak self] error in
                 self?.handleUpdateConversionInstallEvent(error: error)
