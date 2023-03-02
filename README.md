@@ -17,7 +17,7 @@ Ecosia for iOS is based on a fork of the code of "Firefox for iOS". We want to e
 -----------------
 This branch works with [Xcode 14.2](https://developer.apple.com/download/more/?=xcode)
 
-1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install the latest [Xcode developer tools]([https://developer.apple.com/xcode/downloads](https://developer.apple.com/download/applications/) from Apple.
 1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
 
     ```shell
