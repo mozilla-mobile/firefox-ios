@@ -8,7 +8,6 @@ import Shared
 import Storage
 import Account
 import Glean
-import StoreKit
 
 class AppLaunchUtil {
     private var logger: Logger
@@ -42,9 +41,9 @@ class AppLaunchUtil {
         MenuHelper.defaultHelper.setItems()
 
         // Initialize conversion value by specifing fineValue and coarseValue.
-        // Setup postback for update conversion install event.
-        let conversionValue = ConversionValue(fineValue: 0, coarseValue: .low)
-        adNetworkAttributionUpdateConversionInstallEvent(conversionValue: conversionValue)
+        // call postback for conversion install event.
+        let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
+        conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
 
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
@@ -178,62 +177,6 @@ class AppLaunchUtil {
             self.logger.log("History Migration skipped",
                             level: .debug,
                             category: .sync)
-        }
-    }
-
-    // MARK: - SKAdNetwork Postbacks
-
-   private struct ConversionValue {
-        //  fineValue - An unsigned 6-bit value ≥0 and ≤63. The app or the ad network defines the meaning of the fine conversion value.
-        //  coarseValue - An SKAdNetwork.CoarseConversionValue value of low, medium, or high. The app or the ad network defines the meaning of the coarse conversion value.
-
-        var fineValue: Int
-        var coarseValue: CoarseCoversionValue
-
-        enum CoarseCoversionValue {
-            case low
-            case medium
-            case high
-
-            @available(iOS 16.0, *)
-            var value: SKAdNetwork.CoarseConversionValue {
-                switch self {
-                case .low:
-                    return .low
-                case .medium:
-                    return .medium
-                case .high:
-                    return .high
-                }
-            }
-        }
-    }
-
-    private func adNetworkAttributionUpdateConversionInstallEvent(conversionValue: ConversionValue, completionHandler completion: ((Error?) -> Void)? = nil) {
-        if #available(iOS 16.1, *) {
-            SKAdNetwork.updatePostbackConversionValue(conversionValue.fineValue, coarseValue: conversionValue.coarseValue.value) { [weak self] error in
-                self?.handleUpdateConversionInstallEvent(error: error)
-            }
-        } else if #available(iOS 15.4, *) {
-            SKAdNetwork.updatePostbackConversionValue(conversionValue.fineValue) { [weak self] error in
-                self?.handleUpdateConversionInstallEvent(error: error)
-            }
-        } else {
-            SKAdNetwork.registerAppForAdNetworkAttribution()
-        }
-    }
-
-    private func handleUpdateConversionInstallEvent(error: Error?) {
-        if let error = error {
-            logger.log("Postback Conversion Install Error",
-                       level: .warning,
-                       category: .setup,
-                       description: "Update conversion value failed with error - \(error.localizedDescription)")
-        } else {
-            logger.log("Update install conversion success",
-                       level: .debug,
-                       category: .setup,
-                       description: "Update conversion value was successful for Install Event")
         }
     }
 }
