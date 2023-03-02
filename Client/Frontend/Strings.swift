@@ -2403,12 +2403,12 @@ extension String {
             "Engagement.Notification.Title.v112",
             tableName: "EngagementNotification",
             value: "Try private browsing",
-            comment: "Title of notification send to user after inactivity.")
+            comment: "Title of notification send to user after inactivity to encourage them to try the private browsing.")
         public static let Body = MZLocalizedString(
             "Engagement.Notification.Body.v112",
             tableName: "EngagementNotification",
             value: "Browse with no saved cookies or history in %@.",
-            comment: "Body of notification send to user after inactivity. Placeholder is the app name.")
+            comment: "Body of notification send to user after inactivity to encourage them to try the private browsing. Placeholder is the app name.")
     }
 }
 
