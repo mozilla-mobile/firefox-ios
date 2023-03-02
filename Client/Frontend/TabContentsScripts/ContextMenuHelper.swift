@@ -23,81 +23,11 @@ class ContextMenuHelper: NSObject {
 
     weak var delegate: ContextMenuHelperDelegate?
 
-    fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
-
-    lazy var gestureRecognizer: UILongPressGestureRecognizer = {
-        let g = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressGestureDetected))
-        g.delegate = self
-        return g
-    }()
-
     fileprivate(set) var elements: Elements?
 
     required init(tab: Tab) {
         super.init()
         self.tab = tab
-    }
-}
-
-@available(iOS, obsoleted: 14.0)
-extension ContextMenuHelper: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-
-    // BVC KVO events for all changes on the webview will call this. 
-    // It is called frequently during a page load (particularly on progress changes and URL changes).
-    // As of iOS 12, WKContentView gesture setup is async, but it has been called by the time
-    // the webview is ready to load an URL. After this has happened, we can override the gesture.
-    func replaceGestureHandlerIfNeeded() {
-        DispatchQueue.main.async {
-            if self.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil {
-                self.replaceWebViewLongPress()
-            }
-        }
-    }
-
-    private func replaceWebViewLongPress() {
-        // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
-        // See also https://bugs.webkit.org/show_bug.cgi?id=193366
-
-        nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:")
-
-        if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
-            nativeLongPressRecognizer.removeTarget(nil, action: nil)
-            nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
-        }
-    }
-
-    private func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UILongPressGestureRecognizer? {
-        let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: {
-            (($0 as? UILongPressGestureRecognizer) != nil) && $0.description.contains(descriptionFragment)
-        })
-        return result as? UILongPressGestureRecognizer
-    }
-
-    @objc func longPressGestureDetected(_ sender: UIGestureRecognizer) {
-        if sender.state == .cancelled {
-            delegate?.contextMenuHelper(self, didCancelGestureRecognizer: sender)
-            return
-        }
-
-        guard sender.state == .began else { return }
-
-        // To prevent the tapped link from proceeding with navigation, "cancel" the native WKWebView
-        // `_highlightLongPressRecognizer`. This preserves the original behavior as seen here:
-        // https://github.com/WebKit/webkit/blob/d591647baf54b4b300ca5501c21a68455429e182/Source/WebKit/UIProcess/ios/WKContentViewInteraction.mm#L1600-L1614
-        if let nativeHighlightLongPressRecognizer = self.nativeHighlightLongPressRecognizer,
-            nativeHighlightLongPressRecognizer.isEnabled {
-            nativeHighlightLongPressRecognizer.isEnabled = false
-            nativeHighlightLongPressRecognizer.isEnabled = true
-        }
-
-        if let elements = self.elements {
-            delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: sender)
-
-            self.elements = nil
-        }
     }
 }
 
