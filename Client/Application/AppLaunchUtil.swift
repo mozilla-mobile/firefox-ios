@@ -141,7 +141,7 @@ class AppLaunchUtil {
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started
             // this will help us identify how often the migration starts, but never ends
-            // additionally, we have a seperate metric for error rates
+            // additionally, we have a separate metric for error rates
             GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
             GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             browserProfile?.migrateHistoryToPlaces(
