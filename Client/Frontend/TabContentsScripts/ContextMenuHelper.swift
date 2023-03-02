@@ -39,7 +39,6 @@ class ContextMenuHelper: NSObject {
     }
 }
 
-@available(iOS, obsoleted: 14.0)
 extension ContextMenuHelper: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
