@@ -249,7 +249,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable {
     }
 
     @objc private func dismissKeyboard() {
-        currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false ? urlBar.leaveOverlayMode() : nil
+        // Ecosia: only leave overlay mode if active
+        guard urlBar.inOverlayMode,
+                currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") == true else { return }
+
+        urlBar.leaveOverlayMode()
     }
 
     func updatePocketCellsWithVisibleRatio(cells: [UICollectionViewCell], relativeRect: CGRect) {

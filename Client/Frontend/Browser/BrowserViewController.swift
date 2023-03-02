@@ -922,9 +922,9 @@ class BrowserViewController: UIViewController {
 
         // Ecosia: show Default Browser promo if needed
         // Workaround for time of experiment
-        // -> artificial delay of 0.3s to wait for animations and dismissals to finish
+        // -> delay of 0.5s to wait for animations and dismissals to finish
         if inline, !User.shared.firstTime {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.presentDefaultBrowserPromoIfNeeded()
             }
         }
