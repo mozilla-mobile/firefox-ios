@@ -2,13 +2,13 @@ name: UnitTests
 
 on:
   push:
-    branches: [ main, main-39 ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, main-39, main-104 ]
+    branches: [ main ]
 
 jobs:
   test:
-    runs-on: macos-12
+    runs-on: macos-latest
     env:
       DEVELOPER_DIR: /Applications/Xcode_14.2.0.app/Contents/Developer
 
