@@ -479,8 +479,9 @@ public class GleanSyncOperationHelper {
         for sync in telemetry.syncs {
             _ = GleanMetrics.Sync.syncUuid.generateAndSet()
 
-            if let failureReason = sync.failureReason {
-                GleanMetrics.Sync.failureReason[String(describing: failureReason)].add()
+            if let reason = sync.failureReason {
+                let failureReason = convertSyncFailureReason(reason: String(describing: reason))
+                GleanMetrics.Sync.failureReason[failureReason].add()
             }
 
             for engine in sync.engines {
@@ -489,9 +490,10 @@ public class GleanSyncOperationHelper {
                                                    incoming: engine.incoming,
                                                    outgoing: engine.outgoing)
                 } else {
+                    let reason = convertEngineFailureReason(String(describing: engine.failureReason))
                     self.recordSyncEngineFailure(
                         engine.name,
-                        String(describing: engine.failureReason))
+                        reason)
                 }
 
                 self.submitSyncEnginePing(engine.name)
@@ -572,6 +574,85 @@ public class GleanSyncOperationHelper {
             incomingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.incoming[l].add(Int32(v))}
             outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.outgoing[l].add(Int32(v)) }
         case "logins":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.outgoing[l].add(Int32(v)) }
+        case "clients":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.outgoing[l].add(Int32(v)) }
+        default:
+            break
+        }
+    }
+    
+    private func recordRustSyncEngineStats(_ engineName: String,
+                                           incoming: IncomingInfo?,
+                                           outgoing: [OutgoingInfo])
+    {
+        let incomingLabelsToValue = [
+            ("applied", incoming?.applied ?? 0),
+            ("reconciled", incoming?.reconciled ?? 0),
+            ("failed_to_apply", incoming?.failed ?? 0)
+        ].filter { (_, stat) in stat > 0 }
+
+        let outgoingLabelsToValue = [
+            ("uploaded", outgoing.reduce (0, { totalUploaded, rec in
+                totalUploaded + rec.sent
+            })),
+            ("failed_to_upload", outgoing.reduce (0, { totalFailed, rec in
+                totalFailed + rec.failed
+            }))
+        ].filter { (_, stat) in stat > 0 }
+        
+        switch engineName {
+        case "tabs":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.outgoing[l].add(Int32(v)) }
+        case "bookmarks":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.outgoing[l].add(Int32(v)) }
+        case "history":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.outgoing[l].add(Int32(v)) }
+        case "logins":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.outgoing[l].add(Int32(v)) }
+        case "clients":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.ClientsSync.outgoing[l].add(Int32(v)) }
+        default:
+            break
+        }
+    }
+
+    private func recordRustSyncEngineStats(_ engineName: String,
+                                           incoming: IncomingInfo?,
+                                           outgoing: [OutgoingInfo]) {
+        let incomingLabelsToValue = [
+            ("applied", incoming?.applied ?? 0),
+            ("reconciled", incoming?.reconciled ?? 0),
+            ("failed_to_apply", incoming?.failed ?? 0)
+        ].filter { (_, stat) in stat > 0 }
+
+        let outgoingLabelsToValue = [
+            ("uploaded", outgoing.reduce(0, { totalUploaded, rec in
+                totalUploaded + rec.sent
+            })),
+            ("failed_to_upload", outgoing.reduce(0, { totalFailed, rec in
+                totalFailed + rec.failed
+            }))
+        ].filter { (_, stat) in stat > 0 }
+
+        switch engineName {
+        case "tabs":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.RustTabsSync.outgoing[l].add(Int32(v)) }
+        case "bookmarks":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.BookmarksSync.outgoing[l].add(Int32(v)) }
+        case "history":
+            incomingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.incoming[l].add(Int32(v))}
+            outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.HistorySync.outgoing[l].add(Int32(v)) }
+        case "passwords":
             incomingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.incoming[l].add(Int32(v))}
             outgoingLabelsToValue.forEach { (l, v) in GleanMetrics.LoginsSync.outgoing[l].add(Int32(v)) }
         case "clients":
