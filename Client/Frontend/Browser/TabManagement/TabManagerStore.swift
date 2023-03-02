@@ -39,11 +39,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
     private var writeOperation = DispatchWorkItem {}
     private let serialQueue: DispatchQueueInterface
     private var lockedForReading = false
-
-    private var deprecatedTabDataRetriever: TabDataRetriever
     private var tabDataRetriever: TabDataRetriever
     static let storePath = "codableTabsState.archive"
-    static let deprecatedStorePath = "tabsState.archive"
 
     var isRestoringTabs: Bool {
         return lockedForReading
@@ -65,10 +62,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
         self.fileManager = fileManager
         self.serialQueue = serialQueue
         self.logger = logger
-
-        self.deprecatedTabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
         self.tabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
-        deprecatedTabDataRetriever.tabsStateArchivePath = deprecatedTabsStateArchivePath()
         tabDataRetriever.tabsStateArchivePath = tabsStateArchivePath()
     }
 
@@ -154,7 +148,6 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
     }
 
     func clearArchive() {
-        clearDeprecatedArchive()
         guard let path = tabsStateArchivePath() else { return }
 
         do {
@@ -186,8 +179,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
 
     private var tabs: [SavedTab] {
         guard let tabData = tabDataRetriever.getTabData() else {
-            // In case tabs aren't migrated yet, we retrieve with deprecated methods
-            return getDeprecatedTabsToMigrate()
+            return []
         }
 
         do {
@@ -254,49 +246,6 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
             logger.log("PreserveTabs write failed with bytes count: \(data.count)",
                        level: .debug,
                        category: .tabs)
-        }
-    }
-
-    // MARK: - Deprecated
-    // To remove once migration is completed, see FXIOS-4913
-
-    func getDeprecatedTabsToMigrate() -> [SavedTab] {
-        guard let tabData = deprecatedTabDataRetriever.getTabData() else { return [SavedTab]() }
-
-        // In case tabs aren't migrated to Codable yet
-        // We'll be able to remove this when adoption rate to v106 and greater is high enough
-        let deprecatedUnarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
-        deprecatedUnarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
-        deprecatedUnarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
-        deprecatedUnarchiver.decodingFailurePolicy = .setErrorAndReturn
-        guard let migratedTabs = deprecatedUnarchiver.decodeObject(forKey: tabsKey) as? [SavedTab] else {
-            let error = String(describing: deprecatedUnarchiver.error)
-            return savedTabError(description: "Deprecated unarchiver could not decode Saved tab with: \(error)")
-        }
-        return migratedTabs
-    }
-
-    private func deprecatedTabsStateArchivePath() -> URL? {
-        let profilePath: String?
-        if  AppConstants.isRunningUITests || AppConstants.isRunningPerfTests {
-            profilePath = (UIApplication.shared.delegate as? UITestAppDelegate)?.dirForTestProfile
-        } else {
-            profilePath = fileManager.tabPath
-        }
-        guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent(TabManagerStoreImplementation.deprecatedStorePath)
-    }
-
-    private func clearDeprecatedArchive() {
-        guard let deprecatedPath = deprecatedTabsStateArchivePath() else { return }
-
-        do {
-            try fileManager.removeItem(at: deprecatedPath)
-        } catch let error {
-            logger.log("Clear deprecated archive couldn't be completed",
-                       level: .warning,
-                       category: .tabs,
-                       description: error.localizedDescription)
         }
     }
 }
