@@ -373,18 +373,10 @@ class TabTrayViewController: UIViewController {
 
     private func updateToolbarItems(forSyncTabs showSyncItems: Bool = false) {
         if shouldUseiPadSetup() {
-            if navigationMenu.selectedSegmentIndex == TabTrayViewModel.Segment.syncedTabs.rawValue {
-                navigationItem.rightBarButtonItems = (showSyncItems ? [doneButton, fixedSpace, syncTabButton] : [doneButton])
-                navigationItem.leftBarButtonItem = nil
-            } else {
-                navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
-                navigationItem.leftBarButtonItem = deleteButton
-            }
+            navigationItem.rightBarButtonItems = [doneButton, fixedSpace, newTabButton]
+            navigationItem.leftBarButtonItem = deleteButton
         } else {
-            var newToolbarItems: [UIBarButtonItem]? = bottomToolbarItems
-            if navigationMenu.selectedSegmentIndex == TabTrayViewModel.Segment.syncedTabs.rawValue {
-                newToolbarItems = showSyncItems ? bottomToolbarItemsForSync : nil
-            }
+            let newToolbarItems: [UIBarButtonItem]? = bottomToolbarItems
             setToolbarItems(newToolbarItems, animated: true)
         }
     }
