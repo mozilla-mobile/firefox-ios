@@ -27,14 +27,13 @@ protocol TabContentScript {
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
 }
 
-@objc
-protocol TabDelegate {
+protocol TabDelegate: AnyObject {
     func tab(_ tab: Tab, didAddSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String)
     func tab(_ tab: Tab, didSelectSearchWithFirefoxForSelection selection: String)
-    @objc optional func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
-    @objc optional func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
+    func tab(_ tab: Tab, didCreateWebView webView: WKWebView)
+    func tab(_ tab: Tab, willDeleteWebView webView: WKWebView)
 }
 
 @objc
@@ -457,11 +456,24 @@ class Tab: NSObject {
             restore(webView)
 
             self.webView = webView
+
+            /// FXIOS-5549
+            /// There is a crash in didCreateWebView for when webview becomes nil.
+            /// We are adding a check before that method gets called as the webview
+            /// should not be nil at this point considering we created it above.
+            guard let wkWebView = self.webView else {
+                logger.log("No webview found for didCreateWebView.",
+                           level: .fatal,
+                           category: .tabs)
+                return
+            }
+
             configureEdgeSwipeGestureRecognizers()
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
             self.webView?.addObserver(self, forKeyPath: KVOConstants.title.rawValue, options: .new, context: nil)
             UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: nightMode, noImageMode: noImageMode)
-            tabDelegate?.tab?(self, didCreateWebView: webView)
+
+            tabDelegate?.tab(self, didCreateWebView: webView)
         }
     }
 
@@ -539,7 +551,7 @@ class Tab: NSObject {
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
 
         if let webView = webView {
-            tabDelegate?.tab?(self, willDeleteWebView: webView)
+            tabDelegate?.tab(self, willDeleteWebView: webView)
         }
 
         webView?.navigationDelegate = nil
