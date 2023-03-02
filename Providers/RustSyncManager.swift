@@ -246,7 +246,7 @@ public class RustSyncManager: NSObject, SyncManager {
             }
             return succeed()
         }
-        self.syncManagerAPI.disconnect()
+        syncManagerAPI.disconnect()
         return clearPrefs()
     }
 
