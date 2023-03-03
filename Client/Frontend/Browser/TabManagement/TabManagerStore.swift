@@ -121,7 +121,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
     // MARK: - Restoration
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
-                            addTabClosure: @escaping (Bool) -> Tab) -> Tab? {
+                            addTabClosure: (Bool) -> Tab) -> Tab? {
         return restoreTabs(savedTabs: tabs,
                            clearPrivateTabs: clearPrivateTabs,
                            addTabClosure: addTabClosure)
@@ -129,33 +129,33 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
 
     func restoreTabs(savedTabs: [SavedTab],
                      clearPrivateTabs: Bool,
-                     addTabClosure: @escaping (Bool) -> Tab) -> Tab? {
-        guard !lockedForReading, !savedTabs.isEmpty else { return nil }
+                     addTabClosure: (Bool) -> Tab) -> Tab? {
+        // We are told "Restoration is a main-only operation"
+        guard !lockedForReading,
+                Thread.current.isMainThread,
+                !savedTabs.isEmpty
+        else { return nil }
+
         lockedForReading = true
         defer { lockedForReading = false }
 
-        // Restoration is a main-only operation.
-        ensureMainThread { [weak self] in
-            var savedTabs = savedTabs
-            // Make sure to wipe the private tabs if the user has the pref turned on
-            if clearPrivateTabs {
-                savedTabs = savedTabs.filter { !$0.isPrivate }
-            }
-
-            var tabToSelect: Tab?
-            for savedTab in savedTabs {
-                // Provide an empty request to prevent a new tab from loading the home screen
-                var tab = addTabClosure(savedTab.isPrivate)
-                tab = savedTab.configureSavedTabUsing(tab, imageStore: self?.imageStore)
-                if savedTab.isSelected {
-                    tabToSelect = tab
-                }
-            }
-
-            return tabToSelect
+        var savedTabs = savedTabs
+        // Make sure to wipe the private tabs if the user has the pref turned on
+        if clearPrivateTabs {
+            savedTabs = savedTabs.filter { !$0.isPrivate }
         }
 
-        return nil
+        var tabToSelect: Tab?
+        for savedTab in savedTabs {
+            // Provide an empty request to prevent a new tab from loading the home screen
+            var tab = addTabClosure(savedTab.isPrivate)
+            tab = savedTab.configureSavedTabUsing(tab, imageStore: imageStore)
+            if savedTab.isSelected {
+                tabToSelect = tab
+            }
+        }
+
+        return tabToSelect
     }
 
     func clearArchive() {
