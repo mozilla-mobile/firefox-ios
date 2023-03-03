@@ -17,7 +17,7 @@ class SensitiveViewController: UIViewController {
 
         willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [self] notification in
             if !isAuthenticated {
-                AppAuthenticator.authenticateWithDeviceOwnerAuthentication { [self] result in
+                AppAuthenticator().authenticateWithDeviceOwnerAuthentication { [self] result in
                     switch result {
                     case .success:
                         isAuthenticated = false

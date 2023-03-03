@@ -14,18 +14,18 @@ class SensitiveHostingController<Content>: UIHostingController<Content> where Co
     private var isAuthenticated = false
     private var willEnterForegroundNotificationObserver: NSObjectProtocol?
     private var didEnterBackgroundNotificationObserver: NSObjectProtocol?
-    private var localAuthenticator: AppAuthenticator?
-    var notificationCenter: NotificationProtocol?
+    private var appAuthenticator: AppAuthenticator?
+    var notificationCenter: NotificationCenter?
 
     init(
         rootView: Content,
-        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        notificationCenter: NotificationCenter = NotificationCenter.default,
         localAuthenticator: AppAuthenticator = AppAuthenticator()
     ) {
         super.init(rootView: rootView)
 
         self.notificationCenter = notificationCenter
-        self.localAuthenticator = localAuthenticator
+        self.appAuthenticator = localAuthenticator
 
         setupNotifications(forObserver: self, observing: [UIApplication.didEnterBackgroundNotification,
                                                           UIApplication.willEnterForegroundNotification])
@@ -64,10 +64,10 @@ class SensitiveHostingController<Content>: UIHostingController<Content> where Co
     }
 
     private func configureOverlay() {
-        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { [self] result in
+        appAuthenticator?.authenticateWithDeviceOwnerAuthentication { [self] result in
             switch result {
             case .success:
-                isAuthenticated = false
+                isAuthenticated = true
                 removedBlurredOverlay()
             case .failure:
                 isAuthenticated = false

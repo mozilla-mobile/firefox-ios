@@ -15,6 +15,9 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
 
+    private let appAuthenticator: AppAuthenticatorProtocol
+    private let logger: Logger
+
     // MARK: Views
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
     var creditCardAddEditView: UIHostingController<CreditCardEditView>
@@ -24,11 +27,16 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     init(creditCardViewModel: CreditCardSettingsViewModel,
          startingConfig: CreditCardSettingsStartingConfig?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationCenter = NotificationCenter.default,
+         appAuthenticator: AppAuthenticatorProtocol = AppAuthenticator(),
+         logger: Logger = DefaultLogger.shared
+    ) {
         self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.appAuthenticator = appAuthenticator
+        self.logger = logger
         self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.creditCardTableViewModel)
 
         let theme = themeManager.currentTheme
@@ -153,14 +161,14 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     // MARK: - Private helpers
 
     private func updateStateForEditView() {
-        if AppAuthenticator.canAuthenticateDeviceOwner() {
-            AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
-                switch result {
-                case .success:
-                    self.creditCardAddEditView.view.isHidden = false
-                case .failure:
-                    DefaultLogger.shared.log("Failed to authenticate", level: .debug, category: .creditcard)
-                }
+        guard appAuthenticator.canAuthenticateDeviceOwner() else { return }
+
+        appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+            switch result {
+            case .success:
+                self.creditCardAddEditView.view.isHidden = false
+            case .failure:
+                self.logger.log("Failed to authenticate", level: .debug, category: .creditcard)
             }
         }
     }
