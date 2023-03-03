@@ -100,7 +100,7 @@ async def async_main(token, branch, commit, workflow, artifacts_directory, local
             await download_log(client, build_slug, artifacts_directory)
 
 
-async def schedule_build(client, branch, commit, workflow, *locales, derived_data_path=None):
+async def schedule_build(client, branch, commit, workflow, locales=None, derived_data_path=None):
     url = BITRISE_URL_TEMPLATE.format(suffix="builds")
 
     if locales:
