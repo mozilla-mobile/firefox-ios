@@ -263,7 +263,14 @@ class FirefoxAccountSignInViewController: UIViewController {
 
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
+            isOnboarding: telemetryObject == .onboarding)
+
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow,
+                                            profile: profile,
+                                            dismissalStyle: fxaDismissStyle,
+                                            deepLinkParams: deepLinkParams,
+                                            shouldAskForNotificationPermission: askForPermission)
         fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
             self?.shouldReload?()
             self?.dismissVC()
@@ -276,7 +283,14 @@ class FirefoxAccountSignInViewController: UIViewController {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
+            isOnboarding: telemetryObject == .onboarding)
+
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
+                                      profile: profile,
+                                      dismissalStyle: fxaDismissStyle,
+                                      deepLinkParams: deepLinkParams,
+                                      shouldAskForNotificationPermission: askForPermission)
         navigationController?.pushViewController(vc, animated: true)
     }
 
