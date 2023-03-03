@@ -440,6 +440,7 @@
 		602A2B9727F6243A00C3CB78 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86E4F702493BA8E0087BFD9 /* Metrics.swift */; };
 		602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455880A027B42F720078DEBB /* FxNimbus.swift */; };
 		602A2BA527F6298600C3CB78 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602A2BA427F6298600C3CB78 /* Metrics.swift */; };
+		602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
 		60D71AEC26AAF45E00355588 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D71AEB26AAF45E00355588 /* UIColorExtension.swift */; };
 		63306D3921103EAE00F25400 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
@@ -2952,6 +2953,7 @@
 		6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRecordExtension.swift; sourceTree = "<group>"; };
 		6025B110267B6EE100F59F6B /* CredentialWelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialWelcomeViewController.swift; sourceTree = "<group>"; };
 		602A2BA427F6298600C3CB78 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Metrics.swift; path = Generated/Metrics.swift; sourceTree = "<group>"; };
+		602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValueUtil.swift; sourceTree = "<group>"; };
 		604B4E078B7907FA2595345D /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Shared.strings; sourceTree = "<group>"; };
 		605D466193C1DA0CDACFA4AC /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Intro.strings; sourceTree = "<group>"; };
 		6075454195BAE1F144470192 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/Search.strings; sourceTree = "<group>"; };
@@ -8332,6 +8334,7 @@
 				8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */,
 				5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */,
 				5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtil.swift */,
+				602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -10288,6 +10291,7 @@
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
 				F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */,
+				602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */,
 				8ADED7EE276A7750009C19E6 /* CumulativeDaysOfUseCounter.swift in Sources */,
 				4346FF08295BA6A300F4D220 /* CreditCardSettingsViewController.swift in Sources */,
 				E19B38B528A42EBC00D8C541 /* WallpaperCellViewModel.swift in Sources */,
