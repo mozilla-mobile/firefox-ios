@@ -1040,6 +1040,7 @@
 		E169C6E82979CA0E0017B8D7 /* URLMailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */; };
 		E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */; };
 		E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */; };
+		E18259DB29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */; };
 		E1877A81286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */; };
 		E1877A832875DEDE00F5BDF2 /* SyncedTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */; };
 		E18BAAFD28E4A44500098AE2 /* TopTabFader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */; };
@@ -4823,6 +4824,7 @@
 		E169C6E72979CA0E0017B8D7 /* URLMailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLMailTests.swift; sourceTree = "<group>"; };
 		E16E1C9528BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModelTests.swift; sourceTree = "<group>"; };
 		E16E1C9728C25F1D00EE2EF5 /* SiteTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteTableViewHeader.swift; sourceTree = "<group>"; };
+		E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationCardHelper.swift; sourceTree = "<group>"; };
 		E1877A80286E0EFD00F5BDF2 /* WebViewNavigationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewNavigationHandler.swift; sourceTree = "<group>"; };
 		E1877A822875DEDE00F5BDF2 /* SyncedTabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCell.swift; sourceTree = "<group>"; };
 		E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopTabFader.swift; sourceTree = "<group>"; };
@@ -5992,6 +5994,7 @@
 				D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */,
 				E65075531E37F6FC006961AC /* DynamicFontHelper.swift */,
 				E65075601E37F77D006961AC /* MenuHelper.swift */,
+				E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */,
 				39455F761FC83F430088A22C /* TabEventHandler.swift */,
 				39F819C51FD70F5D009E31E4 /* TabEventHandlers.swift */,
 				39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */,
@@ -10624,6 +10627,7 @@
 				EBB89508219398E500EB91A0 /* ContentBlocker+Safelist.swift in Sources */,
 				437A9B6A2681257F00FB41C1 /* InactiveTabViewModel.swift in Sources */,
 				C838FD5E289981240068F60B /* WallpaperURLProvider.swift in Sources */,
+				E18259DB29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift in Sources */,
 				D0B9483422A03468002F4AA1 /* BookmarkDetailPanel.swift in Sources */,
 				3B6889C51D66950E002AC85E /* UIImageColors.swift in Sources */,
 				968BD7EB27DFF0F8003148B3 /* ASGroup.swift in Sources */,
