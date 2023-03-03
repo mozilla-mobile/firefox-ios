@@ -13,7 +13,11 @@ class PocketStandardCellViewModel {
         if let sponsor = story.sponsor {
             return sponsor
         } else {
-            return "\(story.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, story.timeToRead ?? 0))"
+            if let timeToRead = story.timeToRead {
+                return "\(story.domain) • \(String.localizedStringWithFormat(String.FirefoxHomepage.Pocket.NumberOfMinutes, timeToRead))"
+            } else {
+               return  "\(story.domain)"
+            }
         }
     }
     var accessibilityLabel: String {
