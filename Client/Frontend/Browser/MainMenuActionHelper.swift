@@ -62,7 +62,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     var bookmarksHandler: BookmarksHandler
     let profile: Profile
     let tabManager: TabManager
-    let appAuthenticator: AppAuthenticatorProtocol
+    let appAuthenticator: AppAuthenticationProtocol
 
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
@@ -79,7 +79,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
          buttonView: UIButton,
          showFXASyncAction: @escaping (FXASyncClosure) -> Void,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         appAuthenticator: AppAuthenticatorProtocol = AppAuthenticator()
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         self.profile = profile
         self.bookmarksHandler = profile.places

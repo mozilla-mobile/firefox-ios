@@ -12,15 +12,13 @@ import SwiftUI
 class SensitiveHostingController<Content>: UIHostingController<Content> where Content: View {
     private var blurredOverlay: UIImageView?
     private var isAuthenticated = false
-    private var willEnterForegroundNotificationObserver: NSObjectProtocol?
-    private var didEnterBackgroundNotificationObserver: NSObjectProtocol?
-    private var appAuthenticator: AppAuthenticator?
+    private var appAuthenticator: AppAuthenticationProtocol?
     var notificationCenter: NotificationCenter?
 
     init(
         rootView: Content,
         notificationCenter: NotificationCenter = NotificationCenter.default,
-        localAuthenticator: AppAuthenticator = AppAuthenticator()
+        localAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         super.init(rootView: rootView)
 

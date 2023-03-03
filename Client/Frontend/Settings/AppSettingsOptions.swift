@@ -887,7 +887,7 @@ class SearchSetting: Setting {
 class LoginsSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
-    private let appAuthenticator: AppAuthenticatorProtocol
+    private let appAuthenticator: AppAuthenticationProtocol
     weak var navigationController: UINavigationController?
     weak var settings: AppSettingsTableViewController?
 
@@ -897,7 +897,7 @@ class LoginsSetting: Setting {
 
     init(settings: SettingsTableViewController,
          delegate: SettingsDelegate?,
-         appAuthenticator: AppAuthenticatorProtocol = AppAuthenticator()
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager

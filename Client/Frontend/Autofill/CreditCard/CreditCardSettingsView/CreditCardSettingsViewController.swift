@@ -15,7 +15,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
 
-    private let appAuthenticator: AppAuthenticatorProtocol
+    private let appAuthenticator: AppAuthenticationProtocol
     private let logger: Logger
 
     // MARK: Views
@@ -28,7 +28,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
          startingConfig: CreditCardSettingsStartingConfig?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationCenter = NotificationCenter.default,
-         appAuthenticator: AppAuthenticatorProtocol = AppAuthenticator(),
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
          logger: Logger = DefaultLogger.shared
     ) {
         self.startingConfig = startingConfig

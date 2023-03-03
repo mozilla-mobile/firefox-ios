@@ -10,12 +10,12 @@ enum AuthenticationError: Error {
     case failedAutentication(message: String)
 }
 
-protocol AppAuthenticatorProtocol {
+protocol AppAuthenticationProtocol {
     func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void)
     func canAuthenticateDeviceOwner() -> Bool
 }
 
-class AppAuthenticator: AppAuthenticatorProtocol {
+class AppAuthenticator: AppAuthenticationProtocol {
     func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void) {
         // Get a fresh context for each login. If you use the same context on multiple attempts
         //  (by commenting out the next line), then a previously successful authentication

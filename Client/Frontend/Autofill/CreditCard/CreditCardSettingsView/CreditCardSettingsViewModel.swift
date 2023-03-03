@@ -23,14 +23,14 @@ struct CreditCardSettingsStartingConfig {
 class CreditCardSettingsViewModel {
     var autofill: RustAutofill?
     var profile: Profile
-    var appAuthenticator: AppAuthenticatorProtocol?
+    var appAuthenticator: AppAuthenticationProtocol?
 
     lazy var addEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel(profile: profile)
     var creditCardTableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
     var toggleModel: ToggleModel!
 
     public init(profile: Profile,
-                appAuthenticator: AppAuthenticatorProtocol = AppAuthenticator()
+                appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         self.profile = profile
         guard let profile = profile as? BrowserProfile else { return }
