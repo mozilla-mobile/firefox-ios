@@ -114,7 +114,7 @@ class TabManagerStoreTests: XCTestCase {
         let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
                                                      addTabClosure: { isPrivate in
             XCTFail("Should not be called since there's no tabs to restore")
-            return self.createTab(isPrivate: isPrivate)
+            return createTab(isPrivate: isPrivate)
         })
 
         XCTAssertNil(tabToSelect, "There's no tabs to restore, so nothing is selected")
@@ -131,7 +131,7 @@ class TabManagerStoreTests: XCTestCase {
         let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
                                                      addTabClosure: { isPrivate in
             XCTAssertFalse(isPrivate)
-            return self.createTab(isPrivate: isPrivate)
+            return createTab(isPrivate: isPrivate)
         })
 
         XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
@@ -148,7 +148,7 @@ class TabManagerStoreTests: XCTestCase {
         let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
                                                      addTabClosure: { isPrivate in
             XCTAssertFalse(isPrivate)
-            return self.createTab(isPrivate: isPrivate)
+            return createTab(isPrivate: isPrivate)
         })
 
         XCTAssertNotNil(tabToSelect, "Tab was selected in restore")
@@ -166,7 +166,7 @@ class TabManagerStoreTests: XCTestCase {
         let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
                                                      addTabClosure: { isPrivate in
             XCTAssertTrue(isPrivate)
-            return self.createTab(isPrivate: isPrivate)
+            return createTab(isPrivate: isPrivate)
         })
 
         XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
@@ -183,7 +183,7 @@ class TabManagerStoreTests: XCTestCase {
         let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
                                                      addTabClosure: { isPrivate in
             XCTAssertTrue(isPrivate)
-            return self.createTab(isPrivate: isPrivate)
+            return createTab(isPrivate: isPrivate)
         })
 
         XCTAssertNotNil(tabToSelect, "Tab was selected in restore")
@@ -201,7 +201,7 @@ class TabManagerStoreTests: XCTestCase {
         let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: true,
                                                      addTabClosure: { isPrivate in
             XCTFail("Shouldn't be called as there's no more tabs after clear private tabs is done")
-            return self.createTab(isPrivate: isPrivate)
+            return createTab(isPrivate: isPrivate)
         })
 
         XCTAssertNil(tabToSelect, "No tab is selected since all tabs were removed (since they were private)")
@@ -217,7 +217,7 @@ class TabManagerStoreTests: XCTestCase {
         let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: true,
                                                      addTabClosure: { isPrivate in
             XCTAssertFalse(isPrivate)
-            return self.createTab(isPrivate: isPrivate)
+            return createTab(isPrivate: isPrivate)
         })
 
         XCTAssertNil(tabToSelect, "No tab selected since the selected one was deleted, tab manager will deal with it")
@@ -235,7 +235,7 @@ class TabManagerStoreTests: XCTestCase {
         let tabToSelect = manager.restoreStartupTabs(clearPrivateTabs: false,
                                                      addTabClosure: { isPrivate in
             XCTAssertFalse(isPrivate)
-            return self.createTab(isPrivate: isPrivate)
+            return createTab(isPrivate: isPrivate)
         })
 
         XCTAssertNil(tabToSelect, "No tab was selected in restore, tab manager is expected to select one")
