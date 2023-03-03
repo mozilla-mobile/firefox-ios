@@ -40,7 +40,7 @@ class AppLaunchUtil {
         DynamicFontHelper.defaultHelper.startObserving()
         MenuHelper.defaultHelper.setItems()
 
-        // Initialize conversion value by specifing fineValue and coarseValue.
+        // Initialize conversion value by specifying fineValue and coarseValue.
         // call postback for conversion install event.
         let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
         conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
