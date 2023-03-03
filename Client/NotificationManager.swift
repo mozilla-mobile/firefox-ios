@@ -42,12 +42,21 @@ class NotificationManager: NotificationManagerProtocol {
         }
     }
 
+    @available(*, renamed: "requestAuthorization()")
     func requestAuthorization(completion: @escaping (Result<Bool, Error>) -> Void) {
         self.requestAuthorization { granted, error in
             if let error = error {
                 completion(.failure(error))
             } else {
                 completion(.success(granted))
+            }
+        }
+    }
+
+    func requestAuthorization() async throws -> Bool {
+        return try await withCheckedThrowingContinuation { continuation in
+            requestAuthorization { result in
+                continuation.resume(with: result)
             }
         }
     }
@@ -76,6 +85,14 @@ class NotificationManager: NotificationManagerProtocol {
                 hasPermission = false
             }
             completion(hasPermission)
+        }
+    }
+
+    func getNotificationSettings() async -> UNNotificationSettings {
+        return await withCheckedContinuation { continuation in
+            getNotificationSettings { result in
+                continuation.resume(returning: result)
+            }
         }
     }
 

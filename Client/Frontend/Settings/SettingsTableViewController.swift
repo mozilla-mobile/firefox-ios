@@ -428,7 +428,6 @@ class BoolSettingSettable: Setting, FeatureFlaggable {
         super.onConfigureCell(cell, theme: theme)
         control.onTintColor = theme.colors.actionPrimary
 
-
         if let title = title {
             if let status = status {
                 control.accessibilityLabel = "\(title.string), \(status.string)"

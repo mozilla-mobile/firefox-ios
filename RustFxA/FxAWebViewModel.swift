@@ -261,6 +261,10 @@ extension FxAWebViewModel {
             NotificationManager().requestAuthorization { granted, error in
                 guard error == nil else { return }
                 if granted {
+                    self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.AllowAllNotifications)
+                    self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.TabsNotifications)
+                    self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.SyncSignInNotifications)
+                    self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
 
                     // schedule engagement notification if necessary after user allowed notification permission
