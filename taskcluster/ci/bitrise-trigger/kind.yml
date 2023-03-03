@@ -13,7 +13,7 @@ transforms:
 
 tasks:
     workflow_1:
-        bitrise-workflow: pipeline_multiple_shards
+        bitrise-workflow: RunUnitTests
         description: Trigger bitrise workflow on github events
         optimization: 
             skip-unless-changed:
