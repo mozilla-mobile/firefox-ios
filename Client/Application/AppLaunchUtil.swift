@@ -41,7 +41,7 @@ class AppLaunchUtil {
         MenuHelper.defaultHelper.setItems()
 
         // Initialize conversion value by specifying fineValue and coarseValue.
-        // call postback for conversion install event.
+        // Call update postback conversion value for install event.
         let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
         conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
 
