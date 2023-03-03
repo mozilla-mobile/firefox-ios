@@ -21,6 +21,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case jumpBackInSyncedTab
     case onboardingUpgrade
     case onboardingFreshInstall
+    case onboardingNotificationCard
     case pocket
     case pullToRefresh
     case recentlySaved
@@ -42,8 +43,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
-    case startAtHome
+    case onboardingNotificationCard
     case searchBarPosition
+    case startAtHome
     case wallpaperVersion
 }
 
@@ -92,6 +94,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .jumpBackInSyncedTab,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
+                .onboardingNotificationCard,
                 .reportSiteIssue,
                 .searchHighlights,
                 .shakeToRestore,
@@ -152,6 +155,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
+
+        case .onboardingNotificationCard:
+            return nimbusLayer.checkNimbusConfigForOnboardingNotificationCard().rawValue
 
         case .startAtHome:
             return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue
