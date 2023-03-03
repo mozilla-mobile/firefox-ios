@@ -16,6 +16,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
     init(prefs: Prefs) {
         let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
+
         self.allowAllNotifications = BoolSettingSettable(
             title: .Settings.Notifications.AllowAllNotificationsTitle,
             prefs: prefs,
@@ -55,16 +56,20 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             .sink { [weak self] value in
                 guard let self = self else { return }
 
-                self.tabsNotifications.isOn = value
-                self.syncSignInNotifications.isOn = value
-                self.tipsAndFeaturesNotifications.isOn = value
+                Task {
+                    let shouldEnable = await self.notificationsChanged(value)
+                    self.allowAllNotifications.isOn = shouldEnable
+                    self.tabsNotifications.isOn = shouldEnable
+                    self.syncSignInNotifications.isOn = shouldEnable
+                    self.tipsAndFeaturesNotifications.isOn = shouldEnable
 
-                self.tabsNotifications.enabled = value
-                self.syncSignInNotifications.enabled = value
-                self.tipsAndFeaturesNotifications.enabled = value
+                    self.tabsNotifications.enabled = shouldEnable
+                    self.syncSignInNotifications.enabled = shouldEnable
+                    self.tipsAndFeaturesNotifications.enabled = shouldEnable
 
-                self.tableView.reloadData()
-
+                    self.tableView.reloadData()
+                }
+                
                 print("allowAllNotifications is \(value)")
             }
             .store(in: &self.cancellables)
@@ -108,5 +113,40 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             SettingSection(children: [allowAllNotifications]),
             SettingSection(children: [tabsNotifications, syncSignInNotifications, tipsAndFeaturesNotifications])
         ]
+    }
+
+    func notificationsChanged(_ sendNotifications: Bool) async -> Bool {
+        guard sendNotifications else { return false }
+
+        let notificationManager = NotificationManager()
+        var sendNotifications = true
+        let settings = await notificationManager.getNotificationSettings()
+
+        switch settings.authorizationStatus {
+        case .notDetermined, .authorized, .provisional, .ephemeral:
+            sendNotifications = true
+            do {
+                sendNotifications = try await notificationManager.requestAuthorization()
+            } catch {
+                sendNotifications = false
+            }
+
+        case .denied:
+            sendNotifications = false
+            await MainActor.run {
+                let accessDenied = UIAlertController(title: "Notifications Disabled", message: "You need to enable permissions from iOS Settings", preferredStyle: .alert)
+                let dismissAction = UIAlertAction(title: .CancelString, style: .default, handler: nil)
+                accessDenied.addAction(dismissAction)
+                let settingsAction = UIAlertAction(title: .OpenSettingsString, style: .default ) { _ in
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+                }
+                accessDenied.addAction(settingsAction)
+                self.present(accessDenied, animated: true, completion: nil)
+            }
+
+        @unknown default:
+            ()
+        }
+        return sendNotifications
     }
 }

@@ -47,6 +47,7 @@ class NotificationManager {
         }
     }
 
+    @available(*, renamed: "requestAuthorization()")
     func requestAuthorization(completion: @escaping (Result<Bool, Error>) -> Void) {
         self.requestAuthorization { granted, error in
             if let error = error {
@@ -57,7 +58,16 @@ class NotificationManager {
         }
     }
 
+    func requestAuthorization() async throws -> Bool {
+        return try await withCheckedThrowingContinuation { continuation in
+            requestAuthorization { result in
+                continuation.resume(with: result)
+            }
+        }
+    }
+
     // Retrieves the authorization and feature-related notification settings and sends Telemetry
+    @available(*, renamed: "getNotificationSettings()")
     func getNotificationSettings(completion: @escaping (UNNotificationSettings) -> Void) {
         center.getNotificationSettings { settings in
             completion(settings)
@@ -91,6 +101,15 @@ class NotificationManager {
                                          extras: extras)
         }
     }
+
+    func getNotificationSettings() async -> UNNotificationSettings {
+        return await withCheckedContinuation { continuation in
+            getNotificationSettings() { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+    
 
     // Scheduling push notification based on the Date trigger (Ex 25 December at 10:00PM)
     func schedule(title: String,
