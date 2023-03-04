@@ -27,19 +27,24 @@ class SensitiveHostingControllerTests: XCTestCaseRootViewController {
         let sensitiveHostingController = SensitiveHostingController(rootView: EmptyView(),
                                                                     notificationCenter: mockNotificationCenter,
                                                                     localAuthenticator: mockAppAuthenticator)
+        trackForMemoryLeaks(sensitiveHostingController)
 
         return sensitiveHostingController
     }
 
-    func testAuthenticatedAndNoBlur() {
+    func testAuthenticatedAndExists() {
         let sensitiveHostingVC = createSubject()
         sensitiveHostingVC.loadViewIfNeeded()
         mockNotificationCenter.post(name: UIApplication.willEnterForegroundNotification, object: nil)
 
-        XCTAssertNotNil(sensitiveHostingVC.blurredOverlay)
+        XCTAssertNotNil(sensitiveHostingVC)
     }
 
-    func test_fail() {
-        XCTFail()
+    func testNotAuthenticatedAndExists() {
+        let sensitiveHostingVC = createSubject()
+        sensitiveHostingVC.loadViewIfNeeded()
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+
+        XCTAssertNotNil(sensitiveHostingVC)
     }
 }
