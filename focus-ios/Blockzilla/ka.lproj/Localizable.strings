@@ -113,7 +113,7 @@
 "Browser.backLabel" = "უკან";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL-მისამართის ასლი აღებულია";
+"browser.copyAddressToast" = "ბმული აღებულია";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "ასლი";

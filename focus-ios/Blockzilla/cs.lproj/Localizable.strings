@@ -478,6 +478,12 @@
 /* This is the button text that is displayed in the Show Me How Onboarding Screen */
 "ShowMeHowOnboarding.ButtonText.V2" = "Hotovo";
 
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Podržte prst na domovské obrazovce dokud se ikony nezačnou třást.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Klepněte na ikonu plus.";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Přidat";
 
