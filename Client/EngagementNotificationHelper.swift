@@ -52,8 +52,10 @@ class EngagementNotificationHelper: FeatureFlaggable {
         // If they are not active in the second 24 hours after first use we send them a notification.
         if now > Date.fromTimestamp(firstAppUse + Constant.twentyFourHours) {
             // cancel as user used app between firstAppUse + 24h and firstAppUse + 48h
-            // add telemetry
             notificationManager.removePendingNotificationsWithId(ids: [Constant.notificationId])
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .cancel,
+                                         object: .engagementNotification)
         } else {
             // schedule or update notification
             notificationManager.schedule(title: .EngagementNotification.Title,
