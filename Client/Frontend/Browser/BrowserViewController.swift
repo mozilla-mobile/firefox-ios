@@ -2787,6 +2787,6 @@ extension BrowserViewController {
     }
 
     func trackNotificationPermission() {
-        NotificationManager().getNotificationSettings { _ in }
+        NotificationManager().getNotificationSettings(sendTelemetry: true) { _ in }
     }
 }

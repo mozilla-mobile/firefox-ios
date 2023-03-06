@@ -7,10 +7,19 @@ import Foundation
 import UserNotifications
 import Shared
 
+protocol NotificationManagerProtocol {
+    func requestAuthorization(completion: @escaping (Bool, Error?) -> Void)
+    func getNotificationSettings(sendTelemetry: Bool, completion: @escaping (UNNotificationSettings) -> Void)
+    func hasPermission(completion: @escaping (Bool) -> Void)
+    func schedule(title: String, body: String, id: String, date: Date, repeats: Bool)
+    func schedule(title: String, body: String, id: String, interval: TimeInterval, repeats: Bool)
+    func findDeliveredNotifications(completion: @escaping ([UNNotification]) -> Void)
+    func findDeliveredNotificationForId(id: String, completion: @escaping (UNNotification?) -> Void)
+    func removeAllPendingNotifications()
+    func removePendingNotificationsWithId(ids: [String])
 }
 
-
-class NotificationManager {
+class NotificationManager: NotificationManagerProtocol {
     private var center: UserNotificationCenterProtocol
 
     init(center: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
@@ -34,37 +43,29 @@ class NotificationManager {
     }
 
     // Retrieves the authorization and feature-related notification settings and sends Telemetry
-    func getNotificationSettings(completion: @escaping (UNNotificationSettings) -> Void) {
+    func getNotificationSettings(sendTelemetry: Bool = false,
+                                 completion: @escaping (UNNotificationSettings) -> Void) {
         center.getNotificationSettings { settings in
             completion(settings)
 
-            guard !AppConstants.isRunningUnitTest else { return }
+            guard sendTelemetry else { return }
+            self.sendTelemetry(settings: settings)
+        }
+    }
 
-            var authorizationStatus = ""
+    // Determines if the user has allowed notifications
+    func hasPermission(completion: @escaping (Bool) -> Void) {
+        getNotificationSettings { settings in
+            var hasPermission = false
             switch settings.authorizationStatus {
-            case .authorized: authorizationStatus = "authorized"
-            case .denied: authorizationStatus = "denied"
-            case .ephemeral: authorizationStatus = "ephemeral"
-            case .provisional: authorizationStatus = "provisional"
-            case .notDetermined: authorizationStatus = "notDetermined"
-            @unknown default: authorizationStatus = "notDetermined"
+            case .authorized, .ephemeral, .provisional:
+                hasPermission = true
+            case .notDetermined, .denied:
+                hasPermission = false
+            @unknown default:
+                hasPermission = false
             }
-
-            var alertSetting = ""
-            switch settings.alertSetting {
-            case .enabled: alertSetting = "enabled"
-            case .disabled: alertSetting = "disabled"
-            case .notSupported: alertSetting = "notSupported"
-            @unknown default: alertSetting = "notSupported"
-            }
-
-            let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue: authorizationStatus,
-                          TelemetryWrapper.EventExtraKey.notificationPermissionAlertSetting.rawValue: alertSetting]
-
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .view,
-                                         object: .notificationPermission,
-                                         extras: extras)
+            completion(hasPermission)
         }
     }
 
@@ -136,5 +137,35 @@ class NotificationManager {
                                             content: notificationContent,
                                             trigger: trigger)
         center.add(request, withCompletionHandler: nil)
+    }
+
+    private func sendTelemetry(settings: UNNotificationSettings) {
+        guard !AppConstants.isRunningUnitTest else { return }
+
+        var authorizationStatus = ""
+        switch settings.authorizationStatus {
+        case .authorized: authorizationStatus = "authorized"
+        case .denied: authorizationStatus = "denied"
+        case .ephemeral: authorizationStatus = "ephemeral"
+        case .provisional: authorizationStatus = "provisional"
+        case .notDetermined: authorizationStatus = "notDetermined"
+        @unknown default: authorizationStatus = "notDetermined"
+        }
+
+        var alertSetting = ""
+        switch settings.alertSetting {
+        case .enabled: alertSetting = "enabled"
+        case .disabled: alertSetting = "disabled"
+        case .notSupported: alertSetting = "notSupported"
+        @unknown default: alertSetting = "notSupported"
+        }
+
+        let extras = [TelemetryWrapper.EventExtraKey.notificationPermissionStatus.rawValue: authorizationStatus,
+                      TelemetryWrapper.EventExtraKey.notificationPermissionAlertSetting.rawValue: alertSetting]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .view,
+                                     object: .notificationPermission,
+                                     extras: extras)
     }
 }
