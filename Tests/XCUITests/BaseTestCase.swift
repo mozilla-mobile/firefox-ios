@@ -112,6 +112,140 @@ class BaseTestCase: XCTestCase {
         }
     }
 
+    func bookmark10Pages() {
+            navigator.openURL("google.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("twitter.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("facebook.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("microsoft.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("bing.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("Youtube.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("Yahoo.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("apple.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("gmail.com")
+            waitUntilPageLoad()
+            bookmark()
+            navigator.openURL("espn.com")
+            waitUntilPageLoad()
+            bookmark()
+        }
+
+    func bookmark() {
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: TIMEOUT_LONG)
+        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
+        navigator.nowAt(BrowserTab)
+    }
+
+    func unbookmark() {
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
+        app.otherElements["menu-Bookmark-Remove"].tap()
+        navigator.nowAt(BrowserTab)
+    }
+
+    func checkRecentlyVisitedBookmarks() {
+        let numberOfRecentlyVisitedBookmarks = app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].otherElements.otherElements.otherElements.count
+        if !iPad() {
+            let numberOfExpectedRecentlyVisitedBookmarks = 6
+            XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
+        } else {
+            let numberOfExpectedRecentlyVisitedBookmarks = 10
+            XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
+        }
+    }
+
+    func checkBookmarked() {
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
+        if iPad() {
+            app.otherElements["PopoverDismissRegion"].tap()
+            navigator.nowAt(BrowserTab)
+        } else {
+            navigator.goto(BrowserTab)
+        }
+    }
+
+    func undoBookmarkRemoval() {
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
+        app.otherElements["menu-Bookmark-Remove"].tap()
+        navigator.nowAt(BrowserTab)
+        waitForExistence(app.buttons["Undo"], timeout: 3)
+        app.buttons["Undo"].tap()
+    }
+
+    func checkUnbookmarked() {
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements["menu-Bookmark"])
+        if iPad() {
+            app.otherElements["PopoverDismissRegion"].tap()
+            navigator.nowAt(BrowserTab)
+        } else {
+            navigator.goto(BrowserTab)
+        }
+    }
+
+    func checkEmptyBookmarkList() {
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
+        let list = app.tables["Bookmarks List"].cells.count
+        XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
+    }
+
+    func checkItemInBookmarkList() {
+        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
+        let bookmarksList = app.tables["Bookmarks List"]
+        let list = bookmarksList.cells.count
+        XCTAssertEqual(list, 2, "There should be an entry in the bookmarks list")
+        XCTAssertTrue(bookmarksList.cells.element(boundBy: 0).staticTexts["Desktop Bookmarks"].exists)
+        XCTAssertTrue(bookmarksList.cells.element(boundBy: 1).staticTexts[url_2["bookmarkLabel"]!].exists)
+    }
+
+    func checkItemsInBookmarksList(items: Int) {
+        waitForExistence(app.tables["Bookmarks List"], timeout: 3)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, items)
+    }
+
+    // TODO: Fine better way to update screen graph when necessary
+    func updateScreenGraph() {
+        navigator = createScreenGraph(for: self, with: app).navigator()
+        userState = navigator.userState
+    }
+
+    func addContentToReaderView() {
+        updateScreenGraph()
+        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        waitUntilPageLoad()
+        waitForExistence(app.buttons["Reader View"], timeout: TIMEOUT)
+        app.buttons["Reader View"].tap()
+        waitUntilPageLoad()
+        waitForExistence(app.buttons["Add to Reading List"])
+        app.buttons["Add to Reading List"].tap()
+    }
+
+    func checkReadingListNumberOfItems(items: Int) {
+        waitForExistence(app.tables["ReadingTable"])
+        let list = app.tables["ReadingTable"].cells.count
+        XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
+    }
+
      func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells.otherElements[option].exists)
         app.tables["Context Menu"].cells.otherElements[option].tap()
