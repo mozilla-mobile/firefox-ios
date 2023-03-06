@@ -169,6 +169,9 @@ open class MockProfile: Client.Profile {
         return MockProfilePrefs()
     }()
 
+    lazy var autofillDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("autofill.db").path
+    lazy public var autofill = RustAutofill(databasePath: autofillDbPath)
+
     lazy public var readingList: ReadingList = {
         return SQLiteReadingList(db: self.readingListDB)
     }()
