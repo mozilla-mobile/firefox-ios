@@ -204,7 +204,7 @@ extension AppDelegate: Notifiable {
                                                           UIApplication.didEnterBackgroundNotification])
     }
 
-    /// When migrated to Scenes, these methods aren't called. Consider this a tempoary solution to calling into those methods.
+    /// When migrated to Scenes, these methods aren't called. Consider this a temporary solution to calling into those methods.
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.didBecomeActiveNotification:
