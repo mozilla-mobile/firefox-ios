@@ -10,7 +10,7 @@ class EngagementNotificationHelper: FeatureFlaggable {
         #if MOZ_CHANNEL_FENNEC
         // shorter time interval for development
         static let timeUntilNotification: UInt64 = UInt64(60 * 2 * 1000) // 2 minutes in milliseconds
-        static let twentyFourHours: UInt64 = UInt64(60 * 1 * 1000) // 1 minutes in milliseconds
+        static let twentyFourHours: UInt64 = timeUntilNotification / 2 // 1 minutes in milliseconds
         #else
         static let timeUntilNotification: UInt64 = UInt64(60 * 60 * 48 * 1000) // 48 hours in milliseconds
         static let twentyFourHours: UInt64 = UInt64(60 * 60 * 24 * 1000) // 24 hours in milliseconds
@@ -19,12 +19,15 @@ class EngagementNotificationHelper: FeatureFlaggable {
     }
 
     private var notificationManager: NotificationManagerProtocol
-    private var firstAppUse: Timestamp?
+    private var prefs: Prefs?
+    private var firstAppUse: Timestamp? {
+        prefs?.timestampForKey(PrefsKeys.KeyFirstAppUse)
+    }
     private lazy var featureEnabled: Bool = featureFlags.isFeatureEnabled(.engagementNotificationStatus,
                                                                           checking: .buildOnly)
 
-    init(profile: Profile?, notificationManager: NotificationManagerProtocol = NotificationManager()) {
-        self.firstAppUse = profile?.prefs.timestampForKey(PrefsKeys.KeyFirstAppUse)
+    init(prefs: Prefs?, notificationManager: NotificationManagerProtocol = NotificationManager()) {
+        self.prefs = prefs
         self.notificationManager = notificationManager
     }
 

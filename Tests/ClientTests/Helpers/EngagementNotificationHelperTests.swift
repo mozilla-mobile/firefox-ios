@@ -10,14 +10,13 @@ class EngagementNotificationHelperTests: XCTestCase {
     private var engagementNotificationHelper: EngagementNotificationHelper!
     private var notificationManager: MockNotificationManager!
     private var profile: MockProfile!
-    private let twentyFourHours = UInt64(60 * 60 * 24 * 1000) // 24 hours in milliseconds
 
     override func setUp() {
         super.setUp()
         notificationManager = MockNotificationManager()
         profile = MockProfile(databasePrefix: "EngagementNotificationHelper_tests")
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        engagementNotificationHelper = EngagementNotificationHelper(profile: profile,
+        engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs,
                                                                     notificationManager: notificationManager)
     }
 
@@ -42,7 +41,7 @@ class EngagementNotificationHelperTests: XCTestCase {
     }
 
     func testSchedule_pastNotificationTime() {
-        let timestamp = Date.now() + 500000000000 // todo
+        let timestamp = Date.now() - EngagementNotificationHelper.Constant.timeUntilNotification * 2
         profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
         engagementNotificationHelper.schedule()
         XCTAssertFalse(notificationManager.scheduleWithDateWasCalled)
@@ -51,7 +50,7 @@ class EngagementNotificationHelperTests: XCTestCase {
     }
 
     func testSchedule_notUsedInSecond24Hours() {
-        let timestamp = Date.now() + twentyFourHours // todo
+        let timestamp = Date.now() - EngagementNotificationHelper.Constant.twentyFourHours * UInt64(0.5)
         profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
         engagementNotificationHelper.schedule()
         XCTAssertTrue(notificationManager.scheduleWithDateWasCalled)
@@ -60,7 +59,8 @@ class EngagementNotificationHelperTests: XCTestCase {
     }
 
     func testSchedule_usedInSecond24Hours() {
-        let timestamp = Date.now() + twentyFourHours // todo
+        let timestamp = Date.now() - EngagementNotificationHelper.Constant.twentyFourHours * UInt64(1.5)
+        profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
         engagementNotificationHelper.schedule()
         XCTAssertFalse(notificationManager.scheduleWithDateWasCalled)
         XCTAssertTrue(notificationManager.removePendingNotificationsWithIdWasCalled)

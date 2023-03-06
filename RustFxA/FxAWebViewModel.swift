@@ -39,7 +39,7 @@ class FxAWebViewModel {
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper(profile: profile)
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
 
     func setupUserScript(for controller: WKUserContentController) {
         guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"),

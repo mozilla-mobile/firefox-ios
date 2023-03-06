@@ -16,7 +16,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
 
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper(profile: profile)
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
 
     struct UX {
         static let closeButtonSize: CGFloat = 30
