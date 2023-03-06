@@ -170,7 +170,7 @@ class GroupedTabContainerCell: UITableViewCell,
                                ReusableCell,
                                ThemeApplicable {
     // Delegate
-    var delegate: GroupedTabsDelegate?
+    weak var delegate: GroupedTabsDelegate?
 
     // Views
     var selectedView = UIView()
