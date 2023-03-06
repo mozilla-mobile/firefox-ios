@@ -15,7 +15,7 @@ struct PocketFeedStory {
     let title: String
     let url: URL
     let domain: String
-    let timeToRead: Int64
+    let timeToRead: Int64?
     let storyDescription: String
     let imageURL: URL
 
@@ -25,7 +25,6 @@ struct PocketFeedStory {
                   let domain = storyDict["domain"] as? String,
                   let imageURLS = storyDict["image_src"] as? String,
                   let title = storyDict["title"] as? String,
-                  let timeToRead = storyDict["time_to_read"] as? Int64,
                   let description = storyDict["excerpt"] as? String else {
                       return nil
                   }
@@ -38,7 +37,7 @@ struct PocketFeedStory {
                 title: title,
                 url: url,
                 domain: domain,
-                timeToRead: timeToRead,
+                timeToRead: storyDict["time_to_read"] as? Int64,
                 storyDescription: description,
                 imageURL: imageURL
             )

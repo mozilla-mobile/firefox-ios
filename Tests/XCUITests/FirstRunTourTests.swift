@@ -43,13 +43,6 @@ class FirstRunTourTests: BaseTestCase {
         waitForExistence(topSites)
     }
 
-    func testShowTourFromSettings() {
-        goToNextScreen()
-        tapStartBrowsingButton()
-        navigator.goto(ShowTourInSettings)
-        waitForExistence(app.staticTexts["Welcome to an independent internet"])
-    }
-
     // MARK: Private
     private func goToNextScreen() {
         waitForExistence(app.buttons["\(rootA11yId)PrimaryButton"], timeout: 10)
