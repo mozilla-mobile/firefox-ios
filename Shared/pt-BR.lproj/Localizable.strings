@@ -689,7 +689,7 @@
 "LoginsList.LoginsListSearchPlaceholder" = "Filtrar";
 
 /* Label shown when there are no logins to list */
-"LoginsList.NoLoginsFound.Description" = "Contas salvas aparecem aqui. Se você salvou suas contas no Firefox em outro dispositivo, entre na sua Conta Firefox.";
+"LoginsList.NoLoginsFound.Description" = "Contas salvas aparecem aqui. Se você salvou suas contas no Firefox em outro dispositivo, entre na sua conta Firefox.";
 
 /* Label shown when there are no logins saved */
 "LoginsList.NoLoginsFound.Title" = "Nenhuma conta encontrada";
@@ -1160,13 +1160,13 @@
 "SendTo.NavBar.Title" = "Enviar aba";
 
 /* Error message shown in the remote tabs panel */
-"SendTo.NoDevicesFound.Message" = "Você não tem nenhum outro dispositivo conectado a esta Conta Firefox, disponível para sincronizar.";
+"SendTo.NoDevicesFound.Message" = "Você não tem nenhum outro dispositivo conectado a esta conta Firefox, disponível para sincronizar.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Message" = "Abra o Firefox, vá em Configurações e identifique-se para continuar.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Title" = "Você não entrou na sua Conta Firefox.";
+"SendTo.NotSignedIn.Title" = "Você não entrou na sua conta Firefox.";
 
 /* Navigation bar button to Send the current page to a device */
 "SendTo.SendAction.Text" = "Enviar";
