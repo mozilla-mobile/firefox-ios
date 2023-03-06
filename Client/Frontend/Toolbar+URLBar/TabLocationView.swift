@@ -33,7 +33,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     // MARK: Variables
-    var delegate: TabLocationViewDelegate?
+    weak var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
     var contentView: UIStackView!
