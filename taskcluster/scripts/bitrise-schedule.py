@@ -116,17 +116,30 @@ async def schedule_build(client, branch, commit, workflow, locales=None, derived
         ("MOZ_DERIVED_DATA_PATH", derived_data_path),
     ) if environment_variable_value]
 
-    data = {
-        "hook_info": {
-            "type": "bitrise",
-        },
-        "build_params": {
-            "branch": branch,
-            "commit_hash": commit,
-            "environments": environment_variables,
-            "workflow_id": workflow,
-        },
-    }
+    if workflow.startswith("pipeline"):
+        data = {
+            "hook_info": {
+                "type": "bitrise",
+            },
+            "build_params": {
+                "branch": branch,
+                "commit_hash": commit,
+                "environments": environment_variables,
+                "pipeline_id": workflow,
+            },
+        }
+    else: 
+        data = {
+            "hook_info": {
+                "type": "bitrise",
+            },
+            "build_params": {
+                "branch": branch,
+                "commit_hash": commit,
+                "environments": environment_variables,
+                "workflow_id": workflow,
+            },
+        }
 
     response = await do_http_request_json(client, url, method="post", json=data)
     if response.get("status", "") != "ok":
