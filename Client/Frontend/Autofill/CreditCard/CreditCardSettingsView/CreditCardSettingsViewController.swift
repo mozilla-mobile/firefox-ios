@@ -15,6 +15,9 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
 
+    private let appAuthenticator: AppAuthenticationProtocol
+    private let logger: Logger
+
     // MARK: Views
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
     var creditCardAddEditView: UIHostingController<CreditCardEditView>
@@ -24,11 +27,16 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     init(creditCardViewModel: CreditCardSettingsViewModel,
          startingConfig: CreditCardSettingsStartingConfig?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+         notificationCenter: NotificationCenter = NotificationCenter.default,
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
+         logger: Logger = DefaultLogger.shared
+    ) {
         self.startingConfig = startingConfig
         self.viewModel = creditCardViewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.appAuthenticator = appAuthenticator
+        self.logger = logger
         self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.creditCardTableViewModel)
 
         let theme = themeManager.currentTheme
@@ -38,11 +46,10 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         let emptyView = CreditCardSettingsEmptyView(colors: colors, toggleModel: viewModel.toggleModel)
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
 
-        self.creditCardAddEditView =
-        UIHostingController(rootView: CreditCardEditView(
-            viewModel: viewModel.addEditViewModel,
-            removeButtonColor: themeManager.currentTheme.colors.textWarning.color,
-            borderColor: themeManager.currentTheme.colors.borderPrimary.color))
+        let creditCardEditView = CreditCardEditView(viewModel: viewModel.addEditViewModel,
+                                                    removeButtonColor: themeManager.currentTheme.colors.textWarning.color,
+                                                    borderColor: themeManager.currentTheme.colors.borderPrimary.color)
+        self.creditCardAddEditView = SensitiveHostingController(rootView: creditCardEditView)
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,7 +61,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 
@@ -127,7 +134,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         case .empty:
             creditCardEmptyView.view.isHidden = false
         case .add:
-            creditCardAddEditView.view.isHidden = false
+            updateStateForEditView()
         case .edit:
             creditCardAddEditView.view.isHidden = false
         case .list:
@@ -149,5 +156,20 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     deinit {
         notificationCenter.removeObserver(self)
+    }
+
+    // MARK: - Private helpers
+
+    private func updateStateForEditView() {
+        guard appAuthenticator.canAuthenticateDeviceOwner() else { return }
+
+        appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+            switch result {
+            case .success:
+                self.creditCardAddEditView.view.isHidden = false
+            case .failure:
+                self.logger.log("Failed to authenticate", level: .debug, category: .creditcard)
+            }
+        }
     }
 }
