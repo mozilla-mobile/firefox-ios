@@ -1022,7 +1022,7 @@
 "RecentlyClosedTabsPanel.Title" = "Nedávno zatvorené karty";
 
 /* More button text for Recently Saved items at the home page. */
-"RecentlySaved.Actions.More" = "Zobraziť všetko";
+"RecentlySaved.Actions.More" = "Zobraziť všetky";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Znova načítať";
