@@ -403,7 +403,7 @@ extension GridTabViewController {
 // MARK: - App Notifications
 extension GridTabViewController {
     @objc func appWillResignActiveNotification() {
-        if tabDisplayManager.isPrivate {
+        if tabDisplayManager.isPrivate && !tabManager.privateTabs.isEmpty {
             backgroundPrivacyOverlay.alpha = 1
             view.bringSubviewToFront(backgroundPrivacyOverlay)
             collectionView.alpha = 0
