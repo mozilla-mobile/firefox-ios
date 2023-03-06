@@ -887,6 +887,7 @@ class SearchSetting: Setting {
 class LoginsSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
+    private let appAuthenticator: AppAuthenticationProtocol
     weak var navigationController: UINavigationController?
     weak var settings: AppSettingsTableViewController?
 
@@ -894,9 +895,12 @@ class LoginsSetting: Setting {
 
     override var accessibilityIdentifier: String? { return "Logins" }
 
-    init(settings: SettingsTableViewController, delegate: SettingsDelegate?) {
+    init(settings: SettingsTableViewController,
+         delegate: SettingsDelegate?,
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
+        self.appAuthenticator = appAuthenticator
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
 
@@ -925,7 +929,7 @@ class LoginsSetting: Setting {
             self.delegate?.settingsOpenURLInNewTab(url)
         }
 
-        if AppAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner() {
             if LoginOnboarding.shouldShow() {
                 let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
 
