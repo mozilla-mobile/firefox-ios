@@ -94,7 +94,7 @@ class CreditCardEditViewModel: ObservableObject {
         self.creditCard = creditCard
     }
 
-    // MARK: - Private helpers
+    // MARK: - Helpers
 
     private func removeSelectedCreditCard(creditCard: CreditCard) {
         autofill.deleteCreditCard(id: creditCard.guid) { _, error in
