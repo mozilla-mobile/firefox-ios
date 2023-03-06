@@ -897,8 +897,7 @@ class LoginsSetting: Setting {
 
     init(settings: SettingsTableViewController,
          delegate: SettingsDelegate?,
-         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
-    ) {
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
         self.appAuthenticator = appAuthenticator

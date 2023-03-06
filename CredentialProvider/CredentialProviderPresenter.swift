@@ -14,8 +14,7 @@ class CredentialProviderPresenter {
 
     init(view: CredentialProviderViewProtocol,
          profile: Profile = ExtensionProfile(localName: "profile"),
-         appAuthenticator: AppAuthenticator = AppAuthenticator()
-    ) {
+         appAuthenticator: AppAuthenticator = AppAuthenticator()) {
         self.view = view
         self.profile = profile
         self.appAuthenticator = appAuthenticator

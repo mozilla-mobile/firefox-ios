@@ -31,9 +31,11 @@ class SensitiveViewController: UIViewController {
             }
         }
 
-        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [self] notification in
-            isAuthenticated = false
-            installBlurredOverlay()
+        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+
+            self.isAuthenticated = false
+            self.installBlurredOverlay()
         }
     }
 
