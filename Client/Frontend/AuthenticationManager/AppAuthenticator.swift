@@ -5,13 +5,18 @@
 import LocalAuthentication
 import WebKit
 
-class AppAuthenticator {
-    enum AuthenticationError: Error {
-        case failedEvaluation(message: String)
-        case failedAutentication(message: String)
-    }
+enum AuthenticationError: Error {
+    case failedEvaluation(message: String)
+    case failedAutentication(message: String)
+}
 
-    static func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void) {
+protocol AppAuthenticationProtocol {
+    func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void)
+    func canAuthenticateDeviceOwner() -> Bool
+}
+
+class AppAuthenticator: AppAuthenticationProtocol {
+    func authenticateWithDeviceOwnerAuthentication(_ completion: @escaping (Result<Void, AuthenticationError>) -> Void) {
         // Get a fresh context for each login. If you use the same context on multiple attempts
         //  (by commenting out the next line), then a previously successful authentication
         //  causes the next policy evaluation to succeed without testing biometry again.
@@ -39,7 +44,7 @@ class AppAuthenticator {
         }
     }
 
-    static func canAuthenticateDeviceOwner() -> Bool {
+    func canAuthenticateDeviceOwner() -> Bool {
         return LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
 }

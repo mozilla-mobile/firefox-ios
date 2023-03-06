@@ -19,6 +19,7 @@ protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView {
 
 class CredentialProviderViewController: ASCredentialProviderViewController {
     private var presenter: CredentialProviderPresenter?
+    private let appAuthenticator = AppAuthenticator()
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -42,7 +43,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
     }
 
     override func prepareInterfaceForExtensionConfiguration() {
-        if AppAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner() {
             self.presenter?.extensionConfigurationRequested()
         } else {
             self.presenter?.showPasscodeRequirement()
@@ -56,7 +57,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
 
     override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        if AppAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner() {
             self.presenter?.credentialList(for: serviceIdentifiers)
         } else {
             self.presenter?.showPasscodeRequirement()
@@ -73,7 +74,7 @@ class CredentialProviderViewController: ASCredentialProviderViewController {
      */
 
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-        if AppAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner() {
             self.presenter?.credentialProvisionRequested(for: credentialIdentity)
         } else {
             self.extensionContext.cancelRequest(withError: ASExtensionError(.userInteractionRequired))
