@@ -122,7 +122,7 @@
 "Bookmarks.Title.Label" = "Título";
 
 /* Describes the date on which the breach occurred */
-"BreachAlerts.BreachDate" = "Esta violación ocurrió el";
+"BreachAlerts.BreachDate" = "Esta filtración ocurrió el";
 
 /* Description of what a breach is */
 "BreachAlerts.Description" = "Las contraseñas se filtraron o se robaron desde la última vez que cambió su contraseña. Para proteger esta cuenta, inicie sesión en el sitio y cambie su contraseña.";
@@ -134,7 +134,7 @@
 "BreachAlerts.Link" = "Ir a";
 
 /* Title for the Breached Login Detail View. */
-"BreachAlerts.Title" = "Violación del sitio web";
+"BreachAlerts.Title" = "Filtración del sitio web";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Brillo";
