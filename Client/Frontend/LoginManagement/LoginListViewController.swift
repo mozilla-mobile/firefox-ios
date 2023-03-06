@@ -49,7 +49,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
         webpageNavigationHandler: ((_ url: URL?) -> Void)?,
         completion: @escaping ((LoginListViewController?) -> Void)
     ) {
-        AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+        AppAuthenticator().authenticateWithDeviceOwnerAuthentication { result in
             let viewController: LoginListViewController?
             switch result {
             case .success:
