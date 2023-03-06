@@ -6,12 +6,20 @@ import Foundation
 import Shared
 
 class EngagementNotificationHelper: FeatureFlaggable {
-    private let timeUntilNotification = UInt64(60 * 60 * 48 * 1000) // 48 hours in milliseconds
-    private let twentyFourHours = UInt64(60 * 60 * 24 * 1000) // 24 hours in milliseconds
+    struct Constant {
+        #if MOZ_CHANNEL_FENNEC
+        // shorter time interval for development
+        static let timeUntilNotification: UInt64 = UInt64(60 * 2 * 1000) // 2 minutes in milliseconds
+        static let twentyFourHours: UInt64 = UInt64(60 * 1 * 1000) // 1 minutes in milliseconds
+        #else
+        static let timeUntilNotification: UInt64 = UInt64(60 * 60 * 48 * 1000) // 48 hours in milliseconds
+        static let twentyFourHours: UInt64 = UInt64(60 * 60 * 24 * 1000) // 24 hours in milliseconds
+        #endif
+        static let notificationId: String = "org.mozilla.ios.engagementNotification"
+    }
+
     private var notificationManager: NotificationManagerProtocol
     private var firstAppUse: Timestamp?
-    private let notificationId = "org.mozilla.ios.engagementNotification"
-
     private lazy var featureEnabled: Bool = featureFlags.isFeatureEnabled(.engagementNotificationStatus,
                                                                           checking: .buildOnly)
 
@@ -35,22 +43,22 @@ class EngagementNotificationHelper: FeatureFlaggable {
         guard let firstAppUse = firstAppUse else { return }
 
         let now = Date()
-        let notificationDate = Date.fromTimestamp(firstAppUse + timeUntilNotification)
+        let notificationDate = Date.fromTimestamp(firstAppUse + Constant.timeUntilNotification)
 
         // check that we are not past the time the notification was supposed to be send
         guard now < notificationDate else { return }
 
         // We don't care how often the user is active in the first 24 hours after first use.
         // If they are not active in the second 24 hours after first use we send them a notification.
-        if now > Date.fromTimestamp(firstAppUse + twentyFourHours) {
+        if now > Date.fromTimestamp(firstAppUse + Constant.twentyFourHours) {
             // cancel as user used app between firstAppUse + 24h and firstAppUse + 48h
-            notificationManager.removePendingNotificationsWithId(ids: [notificationId])
             // add telemetry
+            notificationManager.removePendingNotificationsWithId(ids: [Constant.notificationId])
         } else {
             // schedule or update notification
             notificationManager.schedule(title: .EngagementNotification.Title,
                                          body: .EngagementNotification.Body,
-                                         id: notificationId,
+                                         id: Constant.notificationId,
                                          date: notificationDate,
                                          repeats: false)
         }
