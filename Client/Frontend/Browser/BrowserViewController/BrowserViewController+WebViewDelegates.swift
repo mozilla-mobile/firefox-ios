@@ -41,24 +41,6 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    private func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
-        // Treat `window.open("")` the same as `window.open("about:blank")`.
-        if request.url?.absoluteString.isEmpty ?? false {
-            return true
-        }
-
-        if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
-            return true
-        }
-
-        return false
-    }
-
-    private func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
-        // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
-    }
-
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
@@ -869,6 +851,25 @@ private extension BrowserViewController {
         snackBar.addButton(ok)
         snackBar.addButton(cancel)
         tab.addSnackbar(snackBar)
+    }
+
+    func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
+        // Treat `window.open("")` the same as `window.open("about:blank")`.
+        if request.url?.absoluteString.isEmpty ?? false {
+            return true
+        }
+
+        if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
+            return true
+        }
+
+        return false
+    }
+
+    func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+        // Only display a JS Alert if we are selected and there isn't anything being shown
+        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView))
+            && (self.presentedViewController == nil)
     }
 
      func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
