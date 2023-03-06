@@ -233,6 +233,7 @@ extension IntroViewController: OnboardingCardDelegate {
             DispatchQueue.main.async {
                 if granted {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+
                     self?.engagementNotificationHelper.schedule()
                 }
                 self?.showNextPage(.notification)

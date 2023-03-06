@@ -136,7 +136,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.ratingPromptManager.updateData()
         }
 
-        // Schedule and update engagement notifications if necessary
+        // Schedule and update engagement notifications if necessary every time the app becomes active
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
             self?.engagementNotificationHelper.schedule()
         }

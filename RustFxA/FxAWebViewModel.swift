@@ -262,6 +262,8 @@ extension FxAWebViewModel {
                 guard error == nil else { return }
                 if granted {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+
+                    // schedule engagement notification if necessary after user allowed notification permission
                     self.engagementNotificationHelper.schedule()
                 }
             }
