@@ -7,22 +7,8 @@ import Foundation
 import UserNotifications
 import Shared
 
-// Protocol with UNUserNotificationCenter methods so we can mock UNUserNotificationCenter for unit testing
-protocol UserNotificationCenterProtocol {
-    func getNotificationSettings(completionHandler: @escaping (UNNotificationSettings) -> Void)
-    func requestAuthorization(options: UNAuthorizationOptions,
-                              completionHandler: @escaping (Bool, Error?) -> Void)
-    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?)
-    func getPendingNotificationRequests(completionHandler: @escaping ([UNNotificationRequest]) -> Void)
-    func removePendingNotificationRequests(withIdentifiers identifiers: [String])
-    func removeAllPendingNotificationRequests()
-    func getDeliveredNotifications(completionHandler: @escaping ([UNNotification]) -> Void)
-    func removeDeliveredNotifications(withIdentifiers identifiers: [String])
-    func removeAllDeliveredNotifications()
 }
 
-extension UNUserNotificationCenter: UserNotificationCenterProtocol {
-}
 
 class NotificationManager {
     private var center: UserNotificationCenterProtocol
