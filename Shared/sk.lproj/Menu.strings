@@ -41,7 +41,7 @@
 "Menu.ReportSiteIssueAction.Title" = "Nahlásiť problém so stránkou";
 
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
-"Menu.SeeAllAction.Title" = "Zobraziť všetko";
+"Menu.SeeAllAction.Title" = "Zobraziť všetky";
 
 /* Label for the button, displayed in the menu, used to open the share dialog. */
 "Menu.SharePageAction.Title" = "Zdieľať stránku s…";
