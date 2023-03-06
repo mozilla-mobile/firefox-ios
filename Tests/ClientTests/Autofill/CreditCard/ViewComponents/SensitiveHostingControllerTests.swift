@@ -9,18 +9,21 @@ import XCTest
 @testable import Client
 
 class SensitiveHostingControllerTests: XCTestCaseRootViewController {
-    var mockNotificationCenter: SpyNotificationCenter!
-    var mockAppAuthenticator: AppAuthenticationProtocol!
+    var mockNotificationCenter: MockNotificationCenter!
+    var mockAppAuthenticator: MockAppAuthenticator!
 
     override func setUp() {
         super.setUp()
 
-        mockNotificationCenter = SpyNotificationCenter()
+        mockNotificationCenter = MockNotificationCenter()
         mockAppAuthenticator = MockAppAuthenticator()
     }
 
     override func tearDown() {
         super.tearDown()
+
+        mockNotificationCenter = nil
+        mockAppAuthenticator = nil
     }
 
     func createSubject() -> SensitiveHostingController<EmptyView> {
@@ -28,23 +31,30 @@ class SensitiveHostingControllerTests: XCTestCaseRootViewController {
                                                                     notificationCenter: mockNotificationCenter,
                                                                     localAuthenticator: mockAppAuthenticator)
         trackForMemoryLeaks(sensitiveHostingController)
-
         return sensitiveHostingController
     }
 
-    func testAuthenticatedAndExists() {
-        let sensitiveHostingVC = createSubject()
-        sensitiveHostingVC.loadViewIfNeeded()
-        mockNotificationCenter.post(name: UIApplication.willEnterForegroundNotification, object: nil)
+    func testAddObservers() {
+        _ = createSubject()
 
-        XCTAssertNotNil(sensitiveHostingVC)
+        XCTAssertEqual(mockNotificationCenter.addObserverCallCount, 2)
     }
 
-    func testNotAuthenticatedAndExists() {
+    func testRemoveObservers() {
+        _ = createSubject()
+
+        addTeardownBlock {
+            XCTAssertEqual(self.mockNotificationCenter.removeObserverCallCount, 1)
+        }
+    }
+
+    func testViewExistsAndNotificationCalled() {
         let sensitiveHostingVC = createSubject()
         sensitiveHostingVC.loadViewIfNeeded()
-        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification, object: nil)
+        mockNotificationCenter.post(name: UIApplication.willEnterForegroundNotification)
+        mockNotificationCenter.post(name: UIApplication.didEnterBackgroundNotification)
 
+        XCTAssertEqual(mockNotificationCenter.postCallCount, 2)
         XCTAssertNotNil(sensitiveHostingVC)
     }
 }

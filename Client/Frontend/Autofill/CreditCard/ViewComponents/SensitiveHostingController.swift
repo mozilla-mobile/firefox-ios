@@ -4,20 +4,21 @@
 
 import Foundation
 import SwiftUI
+import Common
 
 /// The `SensitiveHostingController` blurs the nested view on backgrounding and asks to authenticate before foregrounding.
 ///
 /// "Sensitive" refers to a screen with sensitive user data. Typically, this data is hidden behind `LocalAuthentication` and
 /// a user must authenticate each time.
 class SensitiveHostingController<Content>: UIHostingController<Content> where Content: View {
+    private var appAuthenticator: AppAuthenticationProtocol?
     private var blurredOverlay: UIImageView?
     private var isAuthenticated = false
-    private var appAuthenticator: AppAuthenticationProtocol?
-    var notificationCenter: NotificationCenter?
+    var notificationCenter: NotificationProtocol?
 
     init(
         rootView: Content,
-        notificationCenter: NotificationCenter = NotificationCenter.default,
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
         localAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
     ) {
         super.init(rootView: rootView)
