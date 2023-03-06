@@ -36,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
 
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(profile: profile)
+
     func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions
@@ -132,6 +134,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
             self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
+        }
+
+        // Schedule and update engagement notifications if necessary
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.engagementNotificationHelper.schedule()
         }
 
         logger.log("applicationDidBecomeActive end",
