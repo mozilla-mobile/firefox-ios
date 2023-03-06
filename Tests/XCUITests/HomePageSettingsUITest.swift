@@ -221,6 +221,15 @@ class HomePageSettingsUITests: BaseTestCase {
 //        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
     }
 
+    func testRecentlySaved() {
+        // Preconditons: Create 10 bookmarks & add 10 items to reading list
+        bookmark10Pages()
+        addContentToReaderView()
+        navigator.performAction(Action.GoToHomePage)
+        app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts["ESPN - Serving Sports Fans. Anytime. Anywhere."].swipeLeft()
+        checkRecentlyVisitedBookmarks()
+    }
+
     func testRecentlyVisited() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
         navigator.openURL(websiteUrl1)

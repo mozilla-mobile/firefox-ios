@@ -12,52 +12,6 @@ let urlLabelExample_4 = "Example Login Page 2"
 let url_4 = "test-password-2.html"
 
 class BookmarkingTests: BaseTestCase {
-    private func bookmark() {
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: TIMEOUT_LONG)
-        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
-    private func unbookmark() {
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
-        app.otherElements["menu-Bookmark-Remove"].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
-    private func checkBookmarked() {
-        navigator.goto(BrowserTabMenu)
-        print(app.debugDescription)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
-        if iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
-            navigator.nowAt(BrowserTab)
-        } else {
-            navigator.goto(BrowserTab)
-        }
-    }
-
-    private func undoBookmarkRemoval() {
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
-        app.otherElements["menu-Bookmark-Remove"].tap()
-        navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons["Undo"], timeout: 3)
-        app.buttons["Undo"].tap()
-    }
-
-    private func checkUnbookmarked() {
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark"])
-        if iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
-            navigator.nowAt(BrowserTab)
-        } else {
-            navigator.goto(BrowserTab)
-        }
-    }
 
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
@@ -97,21 +51,6 @@ class BookmarkingTests: BaseTestCase {
         unbookmark()
         waitForTabsButton()
         checkUnbookmarked()
-    }
-
-    private func checkEmptyBookmarkList() {
-        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
-        let list = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
-    }
-
-    private func checkItemInBookmarkList() {
-        waitForExistence(app.tables["Bookmarks List"], timeout: 5)
-        let bookmarksList = app.tables["Bookmarks List"]
-        let list = bookmarksList.cells.count
-        XCTAssertEqual(list, 2, "There should be an entry in the bookmarks list")
-        XCTAssertTrue(bookmarksList.cells.element(boundBy: 0).staticTexts["Desktop Bookmarks"].exists)
-        XCTAssertTrue(bookmarksList.cells.element(boundBy: 1).staticTexts[url_2["bookmarkLabel"]!].exists)
     }
 
     func testAccessBookmarksFromContextMenu() {
