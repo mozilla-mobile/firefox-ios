@@ -231,8 +231,10 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.ToggleRecentlyVisited)
         navigator.performAction(Action.GoToHomePage)
         XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel].exists)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
         navigator.performAction(Action.ToggleRecentlyVisited)
