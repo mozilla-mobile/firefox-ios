@@ -2844,28 +2844,13 @@ extension String {
     public static let TrackingProtectionLevelFooter = MZLocalizedString(
         "Settings.TrackingProtection.ProtectionLevel.Footer",
         tableName: nil,
-        value: "If a site doesn’t work as expected, tap the shield in the address bar and turn off Enhanced Tracking Protection for that page.",
+        value: "If a site doesn’t work as expected, tap the lock in the address bar and turn off Enhanced Tracking Protection for that page.",
         comment: "Footer information for tracker protection level.")
     public static let TrackerProtectionLearnMore = MZLocalizedString(
         "Settings.TrackingProtection.LearnMore",
         tableName: nil,
         value: "Learn more",
         comment: "'Learn more' info link on the Tracking Protection settings screen.")
-    public static let TrackerProtectionAlertTitle =  MZLocalizedString(
-        "Settings.TrackingProtection.Alert.Title",
-        tableName: nil,
-        value: "Heads up!",
-        comment: "Title for the tracker protection alert.")
-    public static let TrackerProtectionAlertDescription =  MZLocalizedString(
-        "Settings.TrackingProtection.Alert.Description",
-        tableName: nil,
-        value: "If a site doesn’t work as expected, tap the shield in the address bar and turn off Enhanced Tracking Protection for that page.",
-        comment: "Decription for the tracker protection alert.")
-    public static let TrackerProtectionAlertButton =  MZLocalizedString(
-        "Settings.TrackingProtection.Alert.Button",
-        tableName: nil,
-        value: "OK, Got It",
-        comment: "Dismiss button for the tracker protection alert.")
 }
 
 // MARK: - Tracking Protection menu
