@@ -630,7 +630,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
         // Remove inactive tabs from tab manager
         tabManager.removeTabs(tabs)
-
+        tabManager.selectTab(mostRecentTab(inTabs: tabManager.normalTabs) ?? tabManager.normalTabs.last)
         let allTabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
         inactiveViewModel?.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
