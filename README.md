@@ -45,11 +45,12 @@ Building the code
     sh ./bootstrap.sh
     ```
 1. Open `Client.xcodeproj` in Xcode.
-1. Build the `Fennec` scheme in Xcode.
+1. Make sure to select the `Fennec` [scheme](https://developer.apple.com/documentation/xcode/build-system?changes=_2) in Xcode.
+1. Select the destination device you want to build on.
+1. Run the app with `Cmd + R` or by pressing the `build and run` button.
 
-Note: In case you have dependencies issues with SPM, you can try:
+⚠️ Important: In case you have dependencies issues with SPM, please try the following:
 - Xcode -> File -> Packages -> Reset Package Caches
-- Xcode -> File -> Packages -> Resolve Package Versions
 
 Building User Scripts
 -----------------
