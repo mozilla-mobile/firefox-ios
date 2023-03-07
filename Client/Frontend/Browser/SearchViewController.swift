@@ -62,6 +62,7 @@ class SearchViewController: SiteTableViewController,
                             Notifiable {
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
+    private let model: SearchEngines
     private var suggestClient: SearchSuggestClient?
     private var remoteClientTabs = [ClientTabsSearchWrapper]()
     private var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
@@ -100,10 +101,12 @@ class SearchViewController: SiteTableViewController,
 
     init(profile: Profile,
          viewModel: SearchViewModel,
+         model: SearchEngines,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
          highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
         self.viewModel = viewModel
+        self.model = model
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
@@ -731,7 +734,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.remoteTabs.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
-            return true
+            return model.shouldShowSearchSuggestions
         default:
             return false
         }
