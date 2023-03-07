@@ -34,7 +34,7 @@ extension BlockingStrength {
     }
 }
 
-// Additional information shown when the info accessory button is tapped.
+// MARK: Additional information shown when the info accessory button is tapped.
 class TPAccessoryInfo: ThemedTableViewController {
     var isStrictMode = false
 
@@ -192,13 +192,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
                     if option == .strict {
                         self.button.isHidden = true
-                        let alert = UIAlertController(title: .TrackerProtectionAlertTitle,
-                                                      message: .TrackerProtectionAlertDescription,
-                                                      preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: .TrackerProtectionAlertButton,
-                                                      style: .default,
-                                                      handler: nil))
-                        self.present(alert, animated: true)
                     }
             })
 
