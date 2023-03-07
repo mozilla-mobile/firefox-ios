@@ -23,6 +23,8 @@ class EngagementNotificationHelperTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         engagementNotificationHelper = nil
+        profile = nil
+        notificationManager = nil
     }
 
     func testSchedule_noPermission() {
