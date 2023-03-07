@@ -79,7 +79,7 @@ platform :ios do
   desc "Testflight build for Live Channel"
   lane :testflight_live do
     match(
-      app_identifier: ['com.ecosia.ecosiaapp', 'com.ecosia.ecosiaapp.searchWidget', 'com.ecosia.ecosiaapp.WidgetKit', 'com.ecosia.ecosiaapp.ShareTo'], 
+      app_identifier: ['com.ecosia.ecosiaapp', 'com.ecosia.ecosiaapp.WidgetKit', 'com.ecosia.ecosiaapp.ShareTo'], 
       type: 'appstore',
       readonly: true
     )
