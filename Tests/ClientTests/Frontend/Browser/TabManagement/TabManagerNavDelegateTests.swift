@@ -80,6 +80,21 @@ class TabManagerNavDelegateTests: XCTestCase {
         XCTAssertEqual(delegate2.receivedMessages, [.webViewWebContentProcessDidTerminate])
     }
 
+    func test_webViewDidReceiveAuthenticationChallenge_sendsCorrectMessage() {
+        let subjectConstructor = createSubject()
+        let subject = subjectConstructor.subject
+        let delegate1 = subjectConstructor.delegate1
+        let delegate2 = subjectConstructor.delegate2
+
+        subject.insert(delegate1)
+        subject.insert(delegate2)
+        subject.webView(anyWebView(), didReceive: anyAuthenticationChallenge()) { (_, _) in  }
+
+        /// This message is send only to the first delegate that respond to to authentication challenge (BVC)
+        XCTAssertEqual(delegate1.receivedMessages, [.webViewDidReceiveAuthenticationChallenge])
+        XCTAssertEqual(delegate2.receivedMessages, [])
+    }
+
     func test_webViewDidReceiveServerRedirectForProvisionalNavigation_sendsCorrectMessage() {
         let subjectConstructor = createSubject()
         let subject = subjectConstructor.subject
@@ -169,6 +184,10 @@ private extension TabManagerNavDelegateTests {
     func anyError() -> NSError {
         return NSError(domain: "any error", code: 0)
     }
+
+    func anyAuthenticationChallenge() -> URLAuthenticationChallenge {
+        return URLAuthenticationChallenge()
+    }
 }
 
 // MARK: - WKNavigationDelegateSpy
@@ -179,6 +198,7 @@ private class WKNavigationDelegateSpy: NSObject, WKNavigationDelegate {
         case webViewDidFailProvisionalNavigation
         case webViewDidFinish
         case webViewWebContentProcessDidTerminate
+        case webViewDidReceiveAuthenticationChallenge
         case webViewDidReceiveServerRedirectForProvisionalNavigation
         case webViewDidStartProvisionalNavigation
         case webViewDecidePolicyWithActionPolicy
@@ -205,6 +225,10 @@ private class WKNavigationDelegateSpy: NSObject, WKNavigationDelegate {
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         receivedMessages.append(.webViewWebContentProcessDidTerminate)
+    }
+
+    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        receivedMessages.append(.webViewDidReceiveAuthenticationChallenge)
     }
 
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {

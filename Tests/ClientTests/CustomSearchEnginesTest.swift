@@ -12,10 +12,12 @@ import XCTest
 
 class CustomSearchEnginesTest: XCTestCase {
     override func setUp() {
+        super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
+        super.tearDown()
         AppContainer.shared.reset()
     }
 
