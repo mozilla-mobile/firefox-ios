@@ -34,7 +34,7 @@ extension BlockingStrength {
     }
 }
 
-//MARK: Additional information shown when the info accessory button is tapped.
+// MARK: Additional information shown when the info accessory button is tapped.
 class TPAccessoryInfo: ThemedTableViewController {
     var isStrictMode = false
 
