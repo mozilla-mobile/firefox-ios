@@ -1141,13 +1141,10 @@ class BrowserViewController: UIViewController {
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         urlBar.currentURL = url
-        urlBar.leaveOverlayMode()
+        leaveOverlayMode(didCancel: false)
 
-        // Ecosia: change cookie handling
-        tab.loadRequest(URLRequest(url: url)) { [weak self] (nav) in
-            if let nav = nav {
-                self?.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
-            }
+        if let nav = tab.loadRequest(URLRequest(url: url)) {
+            self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
 

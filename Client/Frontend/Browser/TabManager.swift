@@ -8,6 +8,7 @@ import Storage
 import Shared
 import XCGLogger
 import Core
+import Combine
 
 private let log = Logger.browserLogger
 
@@ -186,15 +187,26 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
 
         addNavigationDelegate(self)
 
-        // Ecosia: cookie observing
+        NotificationCenter.default.addObserver(self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+
+        // Ecosia: Cookie and settings observing
         configuration.websiteDataStore.httpCookieStore.add(self)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(prefsDidChange), name: UserDefaults.didChangeNotification, object: nil)
+        searchSettingsObserver = NotificationCenter.default
+            .publisher(for: .searchSettingsChanged)
+            .sink() { [privateConfiguration, configuration] _ in
+                configuration.websiteDataStore.httpCookieStore.setCookie(Cookie.standard)
+                privateConfiguration.websiteDataStore.httpCookieStore.setCookie(Cookie.incognito)
+            }
     }
 
-    // Ecosia: Cookie observing
+
+    // MARK: Ecosia: Observing Cookies and Search setting changes
+    var searchSettingsObserver: Cancellable?
+
     deinit {
         configuration.websiteDataStore.httpCookieStore.remove(self)
+        searchSettingsObserver?.cancel()
     }
 
     func addNavigationDelegate(_ delegate: WKNavigationDelegate) {

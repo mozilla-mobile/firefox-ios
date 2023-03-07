@@ -551,7 +551,7 @@ class Tab: NSObject {
     }
 
     // Ecosia: adding async callback for navigation result to inject cookie
-    func loadRequest(_ request: URLRequest, completion: ((WKNavigation?) -> ())? = nil ) {
+    @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url,
@@ -559,13 +559,11 @@ class Tab: NSObject {
                let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
                 lastRequest = readerModeRequest
-                let navigation = webView.load(readerModeRequest)
-                completion?(navigation)
+                return webView.load(readerModeRequest)
             }
             lastRequest = request
             if let url = request.url, url.isFileURL, request.isPrivileged {
-                let navigation = webView.loadFileURL(url, allowingReadAccessTo: url)
-                completion?(navigation)
+                return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
 
             var request = request
@@ -573,14 +571,9 @@ class Tab: NSObject {
                 // Ecosia: add analytics to url
                 request.url = request.url?.ecosified
             }
-
-            // Ecosia: inject cookie
-            let cookie: HTTPCookie = isPrivate ? Cookie.incognito : Cookie.standard
-            webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie) {
-                let navigation = webView.load(request)
-                completion?(navigation)
-            }
+            return webView.load(request)
         }
+        return nil
     }
 
     func stop() {
@@ -593,12 +586,7 @@ class Tab: NSObject {
             webView?.replaceLocation(with: page)
             return
         }
-
-        // Ecosia: Cookie inject before reload
-        let cookie: HTTPCookie = isPrivate ? Cookie.incognito : Cookie.standard
-        webView?.configuration.websiteDataStore.httpCookieStore.setCookie(cookie) { [weak self] in
-            self?.reloadOrRestore()
-        }
+        reloadOrRestore()
     }
 
     private func reloadOrRestore() {
