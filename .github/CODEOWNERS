@@ -1,1 +1,16 @@
+# By default, PRs needs an approval from a team member from fxios-eng
 * @mozilla-mobile/fxios-eng
+
+# Order is important; the last matching pattern takes the most
+# precedence. 
+
+# When someone opens a pull request that only modifies those folders / files, 
+# only @mozilla-mobile/fxios-automation and not the global
+# owners will be requested for a review.
+/Tests/UITests @mozilla-mobile/fxios-automation
+/Tests/XCUITests @mozilla-mobile/fxios-automation
+bitrise.yml @mozilla-mobile/fxios-automation
+.taskcluster.yml @mozilla-mobile/fxios-automation
+/taskcluster @mozilla-mobile/fxios-automation
+.github/workflows @mozilla-mobile/fxios-automation
+/test-fixtures @mozilla-mobile/fxios-automation
