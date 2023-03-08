@@ -39,6 +39,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case wallpapers
     case wallpaperOnboardingSheet
     case wallpaperVersion
+    case zoomFeature
 }
 
 /// This enum is a constraint for any feature flag options that have more than
@@ -103,7 +104,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .shareSheetChanges,
                 .shareToolbarChanges,
                 .wallpaperOnboardingSheet,
-                .wallpaperVersion:
+                .wallpaperVersion,
+                .zoomFeature:
             return nil
         }
     }

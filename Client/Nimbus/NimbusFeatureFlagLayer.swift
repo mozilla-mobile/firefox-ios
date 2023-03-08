@@ -69,11 +69,18 @@ final class NimbusFeatureFlagLayer {
         case .wallpaperOnboardingSheet:
             return checkNimbusForWallpaperOnboarding(using: nimbus)
 
+        case .shareSheetChanges,
+                .shareToolbarChanges:
+            return checkNimbusForShareSheet(for: featureID, from: nimbus)
+
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
         case .engagementNotificationStatus:
             return checkNimbusForEngagementNotification(for: featureID, from: nimbus)
+
+        case .zoomFeature:
+            return checkZoomFeature(from: nimbus)
         }
     }
 
@@ -272,5 +279,11 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.groupingEnabled[nimbusID] else { return false }
 
         return status
+    }
+
+    private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.zoomFeature.value()
+
+        return config.status
     }
 }
