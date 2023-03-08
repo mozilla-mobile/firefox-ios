@@ -125,7 +125,7 @@ extension BrowserViewController {
                                      extras: ["action": "new-tab"])
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+        keyboardPressesHandler().reset()
     }
 
     @objc func newPrivateTabKeyCommand() {
@@ -136,7 +136,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: true)
-        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+        keyboardPressesHandler().reset()
     }
 
     @objc func newNormalTabKeyCommand() {
@@ -145,7 +145,7 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
         openBlankNewTab(focusLocationField: true, isPrivate: false)
-        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+        keyboardPressesHandler().reset()
     }
 
     @objc func closeTabKeyCommand() {
@@ -155,7 +155,7 @@ extension BrowserViewController {
                                      extras: ["action": "close-tab"])
         guard let currentTab = tabManager.selectedTab else { return }
         tabManager.removeTab(currentTab)
-        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+        keyboardPressesHandler().reset()
     }
 
     @objc func undoLastTabClosedKeyCommand() {
@@ -198,7 +198,7 @@ extension BrowserViewController {
             tabManager.selectTab(firstTab)
         }
 
-        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+        keyboardPressesHandler().reset()
     }
 
     @objc func previousTabKeyCommand() {
@@ -215,7 +215,7 @@ extension BrowserViewController {
             tabManager.selectTab(lastTab)
         }
 
-        if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+        keyboardPressesHandler().reset()
     }
 
     @objc func selectFirstTab() {
@@ -268,10 +268,10 @@ extension BrowserViewController {
 
         if tabs.count > number {
             tabManager.selectTab(tabs[number])
-            if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+            keyboardPressesHandler().reset()
         } else if let lastTab = tabs.last {
             tabManager.selectTab(lastTab)
-            if #available(iOS 13.4, *) { keyboardPressesHandler().reset() }
+            keyboardPressesHandler().reset()
         }
     }
 
