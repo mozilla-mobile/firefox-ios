@@ -1843,10 +1843,10 @@ extension String {
         tableName: nil,
         value: "Blank Page",
         comment: "Option in settings to show a blank page when you open a new tab")
-    public static let SettingsNewTabHomePage = MZLocalizedString(
-        "Settings.NewTab.Option.HomePage",
+    public static let SettingsNewTabCustom = MZLocalizedString(
+        "Settings.NewTab.Option.Custom",
         tableName: nil,
-        value: "Homepage",
+        value: "Custom",
         comment: "Option in settings to show your homepage when you open a new tab")
 }
 

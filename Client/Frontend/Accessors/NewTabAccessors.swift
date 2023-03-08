@@ -47,7 +47,7 @@ enum NewTabPage: String {
         case .blankPage:
             return .SettingsNewTabBlankPage
         case .homePage:
-            return .SettingsNewTabHomePage
+            return .SettingsNewTabCustom
         case .topSites:
             return .SettingsNewTabTopSites
         }
