@@ -1259,7 +1259,7 @@ class OpenWithSetting: Setting {
     override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
 
     override var status: NSAttributedString {
-        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), provider != "mailto:" else {
+        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) else {
             return NSAttributedString(string: "")
         }
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
