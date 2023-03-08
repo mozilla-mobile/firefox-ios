@@ -2810,6 +2810,11 @@ extension String {
         tableName: nil,
         value: "Standard (default)",
         comment: "Tracking protection settings option for using the basic blocklist.")
+    public static let TrackingProtectionOptionBlockListLevelStandardStatus = MZLocalizedString(
+        "Settings.TrackingProtectionOption.BasicBlockList.Status",
+        tableName: nil,
+        value: "Standard",
+        comment: "Tracking protection settings status showing the current option selected.")
     public static let TrackingProtectionOptionBlockListLevelStrict = MZLocalizedString(
         "Settings.TrackingProtectionOption.BlockListStrict",
         tableName: nil,

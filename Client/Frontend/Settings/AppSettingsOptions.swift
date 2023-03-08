@@ -984,7 +984,7 @@ class ContentBlockerSetting: Setting {
                 .prefs
                 .stringForKey(ContentBlockingConfig.Prefs.StrengthKey)
                 .flatMap(BlockingStrength.init(rawValue:)) ?? .basic
-            return NSAttributedString(string: currentBlockingStrength.settingTitle)
+            return NSAttributedString(string: currentBlockingStrength.settingStatus)
         } else {
             return NSAttributedString(string: .Settings.Homepage.Shortcuts.ToggleOff)
         }
