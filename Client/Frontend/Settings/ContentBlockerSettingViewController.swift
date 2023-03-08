@@ -48,6 +48,8 @@ class TPAccessoryInfo: ThemedTableViewController {
     var isStrictMode = false
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+
         tableView.dataSource = self
         tableView.delegate = self
         tableView.estimatedRowHeight = 130

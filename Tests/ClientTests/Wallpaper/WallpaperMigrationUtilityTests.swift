@@ -12,10 +12,12 @@ class WallpaperMigrationUtilityTests: XCTestCase {
     private let migrationKey = PrefsKeys.LegacyFeatureFlags.WallpaperDirectoryMigrationCheck
 
     override func setUp() {
+        super.setUp()
         removeAllFolders()
     }
 
     override func tearDown() {
+        super.tearDown()
         removeAllFolders()
     }
 

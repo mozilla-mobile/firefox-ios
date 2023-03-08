@@ -9,6 +9,7 @@ let testBLOBFileSize = "35 bytes"
 
 class DownloadFilesTests: BaseTestCase {
     override func tearDown() {
+        super.tearDown()
         // The downloaded file has to be removed between tests
         waitForExistence(app.tables["DownloadsTable"])
         if processIsTranslatedStr() == m1Rosetta {
