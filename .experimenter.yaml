@@ -158,3 +158,11 @@ wallpaper-feature:
     onboarding-sheet:
       type: boolean
       description: This property defines whether the wallpaper onboarding is shown or not
+zoom-feature:
+  description: "The configuration for the status of the zoom feature\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    status:
+      type: boolean
+      description: "Whether the page zoom feature is enabled or not\n"

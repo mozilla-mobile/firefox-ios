@@ -11,16 +11,8 @@ features:
         default: false
     defaults:
       - channel: beta
-        value: {
-          "status": true
-          }
-        }
+        value:
+          status: true
       - channel: developer
-        value: {
-          "status": true
-          }
-        }
-
-objects:
-
-enums:
+        value:
+          status: true
