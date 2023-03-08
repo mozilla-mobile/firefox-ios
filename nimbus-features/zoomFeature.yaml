@@ -1,0 +1,18 @@
+# The configuration for the zoomFeature feature
+features:
+  zoom-feature:
+    description: >
+      The configuration for the status of the zoom feature
+    variables:
+      status:
+        description: >
+          Whether the page zoom feature is enabled or not
+        type: Boolean
+        default: false
+    defaults:
+      - channel: beta
+        value:
+          status: true
+      - channel: developer
+        value:
+          status: true
