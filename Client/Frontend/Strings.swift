@@ -1118,19 +1118,19 @@ extension String {
                 "Settings.Notifications.TipsAndFeaturesNotificationsStatus",
                 tableName: "Settings",
                 value: "Learn about useful features and how to get the most out of %@.",
-                comment: "This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section."
+                comment: "This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name."
             )
             public static let TurnOnNotificationsTitle = MZLocalizedString(
                 "Settings.Notifications.TurnOnNotificationsTitle",
                 tableName: "Settings",
                 value: "Turn on Notifications",
-                comment: "This is the title informating the user needs to turn on notifications in iOS Settings."
+                comment: "This is the title informing the user needs to turn on notifications in iOS Settings."
             )
             public static let TurnOnNotificationsMessage = MZLocalizedString(
                 "Settings.Notifications.TurnOnNotificationsTitle",
                 tableName: "Settings",
                 value: "Go to your device Settings to turn on notifications in %@",
-                comment: "This is the title informating the user needs to turn on notifications in iOS Settings."
+                comment: "This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
             )
         }
 
