@@ -23,6 +23,13 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     var creditCardAddEditView: UIHostingController<CreditCardEditView>
     var creditCardTableViewController: CreditCardTableViewController
 
+    private lazy var addCreditCardButton: UIBarButtonItem = {
+        return UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.navAdd),
+                               style: .plain,
+                               target: self,
+                               action: #selector(addCreditCard))
+    }()
+
     // MARK: Initializers
     init(creditCardViewModel: CreditCardSettingsViewModel,
          startingConfig: CreditCardSettingsStartingConfig?,
@@ -133,17 +140,21 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         switch type {
         case .empty:
             creditCardEmptyView.view.isHidden = false
+            navigationItem.rightBarButtonItem = addCreditCardButton
         case .add:
             updateStateForEditView()
+            navigationItem.rightBarButtonItem = nil
         case .edit:
             creditCardAddEditView.view.isHidden = false
+            navigationItem.rightBarButtonItem = nil
         case .list:
             creditCardTableViewController.reloadData()
             creditCardTableViewController.view.isHidden = false
+            navigationItem.rightBarButtonItem = addCreditCardButton
         }
     }
 
-    func hideAllViews() {
+    private func hideAllViews() {
         creditCardEmptyView.view.isHidden = true
         creditCardAddEditView.view.isHidden = true
         creditCardTableViewController.view.isHidden = true
@@ -171,5 +182,9 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
                 self.logger.log("Failed to authenticate", level: .debug, category: .creditcard)
             }
         }
+    }
+
+    @objc private func addCreditCard() {
+        updateState(type: .add)
     }
 }
