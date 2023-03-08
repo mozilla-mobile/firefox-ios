@@ -17,10 +17,7 @@ final class NimbusFeatureFlagLayer {
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .bottomSearchBar,
-                .searchHighlights,
-            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5362
-            // This is a temporary workaround for the toolbar experiment hack
-                .contextualHintForToolbar:
+                .searchHighlights:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .jumpBackIn,
@@ -30,8 +27,8 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-//        case .contextualHintForToolbar:
-        case .contextualHintForJumpBackInSyncedTab:
+        case .contextualHintForToolbar,
+                .contextualHintForJumpBackInSyncedTab:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
         case .jumpBackInSyncedTab:
@@ -109,7 +106,6 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         case .searchHighlights: return config.searchHighlights
-        case .contextualHintForToolbar: return config.position.isToolbarCfrOn
         default: return false
         }
     }

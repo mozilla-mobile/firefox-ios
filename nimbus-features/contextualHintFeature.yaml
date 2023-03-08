@@ -8,25 +8,19 @@ features:
           specific contextual hints are enabled.
         type: Map<ContextualHint, Boolean>
         default:
-        {
-          "jump-back-in-synced-tab-contextual-hint": true,
-          "toolbar-hint": false
-        }
+           jump-back-in-synced-tab-contextual-hint: true
+           toolbar-hint: true
     defaults:
       - channel: developer
-        value: {
-          "features-enabled": {
-            "jump-back-in-synced-tab-contextual-hint": false,
-            "toolbar-hint": false
-          }
-        }
+        value:
+           features-enabled:
+             jump-back-in-synced-tab-contextual-hint : false
+             toolbar-hint: true
       - channel: beta
-        value: {
-          "features-enabled": {
-            "jump-back-in-synced-tab-contextual-hint": true,
-            "toolbar-hint": true
-          }
-        }
+        value:
+           features-enabled:
+            jump-back-in-synced-tab-contextual-hint: true
+            toolbar-hint: true
 
 enums:
   ContextualHint:
