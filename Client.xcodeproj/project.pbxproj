@@ -103,6 +103,7 @@
 		21A7C45028353D0E0071D996 /* OnboardingCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */; };
 		21B2844A28464FF0003EA521 /* OnboardingCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */; };
 		21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */; };
+		21D0F62129B91BF500022292 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D0F62029B91BF500022292 /* ToastView.swift */; };
 		21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */; };
 		21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */; };
 		21E78A7228F9A93100F8D687 /* UIDeviceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A7128F9A93100F8D687 /* UIDeviceInterface.swift */; };
@@ -1919,6 +1920,7 @@
 		21A7C44F28353D0E0071D996 /* OnboardingCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewController.swift; sourceTree = "<group>"; };
 		21B2844928464FF0003EA521 /* OnboardingCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCardViewModel.swift; sourceTree = "<group>"; };
 		21B337BA29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerWebViewDelegateTests.swift; sourceTree = "<group>"; };
+		21D0F62029B91BF500022292 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		21D7B60528077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+ToolbarActions.swift"; sourceTree = "<group>"; };
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIDevice.swift; sourceTree = "<group>"; };
@@ -6326,6 +6328,7 @@
 				43D16B7929831C7F009F8279 /* CreditCardAutofillToggle.swift */,
 				E174963F2994302D0096900A /* PreferredFont.swift */,
 				963A879929AFE89B006DEE34 /* SensitiveHostingController.swift */,
+				21D0F62029B91BF500022292 /* ToastView.swift */,
 			);
 			path = ViewComponents;
 			sourceTree = "<group>";
@@ -10911,6 +10914,7 @@
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
 				21357F2F294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift in Sources */,
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
+				21D0F62129B91BF500022292 /* ToastView.swift in Sources */,
 				C849E46126B9C39B00260F0B /* EnhancedTrackingProtectionVC.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineImageOverlayCell.swift in Sources */,

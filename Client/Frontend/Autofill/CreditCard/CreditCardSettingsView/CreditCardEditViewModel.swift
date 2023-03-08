@@ -39,26 +39,24 @@ class CreditCardEditViewModel: ObservableObject {
         }
     }
 
-    var removeButtonDetails: RemoveCardButton.AlertDetails {
-        let isSignedIn = profile.hasSyncableAccount()
-
-        if isSignedIn {
-            return RemoveCardButton.AlertDetails(
-                alertTitle: Text(CreditCardText.RemoveCardTitle),
-                alertBody: Text(CreditCardText.RemoveCardSublabel),
-                primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
-                    guard let creditCard = creditCard else { return }
-
-                    removeSelectedCreditCard(creditCard: creditCard)
-                },
-                secondaryButtonStyleAndText: .cancel(),
-                primaryButtonAction: {},
-                secondaryButtonAction: {})
-        }
-
+    var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
-            alertBody: nil,
+            alertBody: Text(CreditCardText.RemoveCardSublabel),
+            primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
+                guard let creditCard = creditCard else { return }
+
+                removeSelectedCreditCard(creditCard: creditCard)
+            },
+            secondaryButtonStyleAndText: .cancel(),
+            primaryButtonAction: {},
+            secondaryButtonAction: {})
+    }
+
+    var regularRemoveButtonDetails: RemoveCardButton.AlertDetails {
+        return RemoveCardButton.AlertDetails(
+            alertTitle: Text(CreditCardText.RemoveCardTitle),
+            alertBody: Text("this is a text"),
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
                 guard let creditCard = creditCard else { return }
 
@@ -68,6 +66,10 @@ class CreditCardEditViewModel: ObservableObject {
             primaryButtonAction: {},
             secondaryButtonAction: {}
         )
+    }
+
+    var removeButtonDetails: RemoveCardButton.AlertDetails {
+        return profile.hasSyncableAccount() ? signInRemoveButtonDetails : regularRemoveButtonDetails
     }
 
     init(profile: Profile,

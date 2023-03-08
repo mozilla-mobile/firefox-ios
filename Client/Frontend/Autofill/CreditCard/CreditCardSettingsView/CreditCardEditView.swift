@@ -12,19 +12,13 @@ struct CreditCardEditView: View {
     let borderColor: Color
 
     var body: some View {
-        VStack(spacing: 11) {
-            let colors = FloatingTextField.Colors(
-                errorColor: .red,
-                titleColor: .gray,
-                textFieldColor: .gray)
+        ZStack {
 
-            FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
-                              textVal: $viewModel.nameOnCard,
-                              errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
-                              showError: !viewModel.nameIsValid,
-                              colors: colors)
-            Divider()
-                .frame(height: 0.7)
+            VStack(spacing: 11) {
+                let colors = FloatingTextField.Colors(
+                    errorColor: .red,
+                    titleColor: .gray,
+                    textFieldColor: .gray)
 
             FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
                               textVal: $viewModel.cardNumber,
@@ -42,17 +36,28 @@ struct CreditCardEditView: View {
             Divider()
                 .frame(height: 0.7)
 
-            Spacer()
-                .frame(height: 4)
+                FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
+                                  textVal: $viewModel.expirationDate,
+                                  errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel, // CardExpirationDateTitle,
+                                  showError: !viewModel.expirationIsValid,
+                                  colors: colors)
+                Divider()
+                    .frame(height: 0.7)
 
-            RemoveCardButton(
-                removeButtonColor: removeButtonColor,
-                borderColor: borderColor,
-                alertDetails: viewModel.removeButtonDetails
-            )
+                Spacer()
+                    .frame(height: 4)
+
+                RemoveCardButton(
+                    removeButtonColor: removeButtonColor,
+                    borderColor: borderColor,
+                    alertDetails: viewModel.removeButtonDetails
+                )
+                Spacer()
+            }
+            .padding(.top, 20)
+
+            ToastView(messageType: ToastView.MessageType.savedCard)
         }
-        .padding(.top, 20)
-        Spacer()
     }
 }
 
