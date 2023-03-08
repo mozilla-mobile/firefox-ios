@@ -738,7 +738,7 @@
 		C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C849E46426B9C3DD00260F0B /* SlideoverPresentationController.swift */; };
 		C8501F4F2850FB72003B09AB /* LegacyWallpaperMigrationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8501F4E2850FB72003B09AB /* LegacyWallpaperMigrationUtility.swift */; };
 		C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */; };
-		C855728229AE7F1700AF32B0 /* ResearchSurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C855728129AE7F1700AF32B0 /* ResearchSurfaceManager.swift */; };
+		C855728229AE7F1700AF32B0 /* SurveySurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C855728129AE7F1700AF32B0 /* SurveySurfaceManager.swift */; };
 		C855728429AEA3C300AF32B0 /* SurveySurfaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C855728329AEA3C300AF32B0 /* SurveySurfaceViewModel.swift */; };
 		C855728629AEA3FB00AF32B0 /* SurveySurfaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C855728529AEA3FB00AF32B0 /* SurveySurfaceViewController.swift */; };
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
@@ -4187,7 +4187,7 @@
 		C849E46426B9C3DD00260F0B /* SlideoverPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideoverPresentationController.swift; sourceTree = "<group>"; };
 		C8501F4E2850FB72003B09AB /* LegacyWallpaperMigrationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyWallpaperMigrationUtility.swift; sourceTree = "<group>"; };
 		C8501F5028510DA1003B09AB /* WallpaperMigrationUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMigrationUtilityTests.swift; sourceTree = "<group>"; };
-		C855728129AE7F1700AF32B0 /* ResearchSurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResearchSurfaceManager.swift; sourceTree = "<group>"; };
+		C855728129AE7F1700AF32B0 /* SurveySurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceManager.swift; sourceTree = "<group>"; };
 		C855728329AEA3C300AF32B0 /* SurveySurfaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceViewModel.swift; sourceTree = "<group>"; };
 		C855728529AEA3FB00AF32B0 /* SurveySurfaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceViewController.swift; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
@@ -7119,7 +7119,7 @@
 		C855728029AE7EF900AF32B0 /* SurveySurface */ = {
 			isa = PBXGroup;
 			children = (
-				C855728129AE7F1700AF32B0 /* ResearchSurfaceManager.swift */,
+				C855728129AE7F1700AF32B0 /* SurveySurfaceManager.swift */,
 				C855728329AEA3C300AF32B0 /* SurveySurfaceViewModel.swift */,
 				C855728529AEA3FB00AF32B0 /* SurveySurfaceViewController.swift */,
 			);
@@ -10660,7 +10660,7 @@
 				8AB8574827D97CD40075C173 /* HomePanelType.swift in Sources */,
 				2128E27B292E624400FB91BE /* SendToDeviceActivity.swift in Sources */,
 				E63ED7D81BFCD9990097D08E /* LoginDetailTableViewCell.swift in Sources */,
-				C855728229AE7F1700AF32B0 /* ResearchSurfaceManager.swift in Sources */,
+				C855728229AE7F1700AF32B0 /* SurveySurfaceManager.swift in Sources */,
 				66CE54A820FCF6CF00CC310B /* WebsiteDataManagementViewController.swift in Sources */,
 				C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */,
 				E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */,

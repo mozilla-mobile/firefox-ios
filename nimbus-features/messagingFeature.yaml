@@ -123,8 +123,8 @@ features:
               style: SURVEY
               trigger:
                 - ALWAYS
-              text: Research Surface/Body.Text
-              button-label: Research Surface/PrimaryButton.Label
+              text: ResearchSurface/Body.Text
+              button-label: ResearchSurface/PrimaryButton.Label
               action: https://www.macrumors.com
 
 objects:
