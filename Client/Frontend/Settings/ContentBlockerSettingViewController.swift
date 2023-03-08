@@ -6,6 +6,15 @@ import Foundation
 import Shared
 
 extension BlockingStrength {
+    var settingStatus: String {
+        switch self {
+        case .basic:
+            return .TrackingProtectionOptionBlockListLevelStandardStatus
+        case .strict:
+            return .TrackingProtectionOptionBlockListLevelStrict
+        }
+    }
+
     var settingTitle: String {
         switch self {
         case .basic:
