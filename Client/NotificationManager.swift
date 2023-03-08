@@ -104,12 +104,11 @@ class NotificationManager {
 
     func getNotificationSettings() async -> UNNotificationSettings {
         return await withCheckedContinuation { continuation in
-            getNotificationSettings() { result in
+            getNotificationSettings { result in
                 continuation.resume(returning: result)
             }
         }
     }
-    
 
     // Scheduling push notification based on the Date trigger (Ex 25 December at 10:00PM)
     func schedule(title: String,
