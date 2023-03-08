@@ -4,103 +4,83 @@
 
 import Foundation
 import Shared
-import Combine
 
 class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    let allowAllNotifications: BoolSettingSettable
-    let tabsNotifications: BoolSettingSettable
-    let syncSignInNotifications: BoolSettingSettable
-    let tipsAndFeaturesNotifications: BoolSettingSettable
-
-    private var cancellables = Set<AnyCancellable>()
-
-    init(prefs: Prefs) {
-        let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
-
-        self.allowAllNotifications = BoolSettingSettable(
+    lazy var allowAllNotifications: BoolSetting = {
+        return BoolSetting(
             title: .Settings.Notifications.AllowAllNotificationsTitle,
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.AllowAllNotifications
-        )
+        ) { [weak self] value in
+            guard let self = self else { return }
 
-        self.tabsNotifications = BoolSettingSettable(
+            Task {
+                let shouldEnable = await self.notificationsChanged(value)
+                self.allowAllNotifications.control.setOn(shouldEnable, animated: true)
+                self.allowAllNotifications.writeBool(self.allowAllNotifications.control)
+
+                self.tabsNotifications.control.setOn(shouldEnable, animated: true)
+                self.tabsNotifications.writeBool(self.tabsNotifications.control)
+
+                self.syncSignInNotifications.control.setOn(shouldEnable, animated: true)
+                self.syncSignInNotifications.writeBool(self.syncSignInNotifications.control)
+
+                self.tipsAndFeaturesNotifications.control.setOn(shouldEnable, animated: true)
+                self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control)
+
+                self.tabsNotifications.enabled = shouldEnable
+                self.syncSignInNotifications.enabled = shouldEnable
+                self.tipsAndFeaturesNotifications.enabled = shouldEnable
+
+                self.tableView.reloadData()
+            }
+        }
+    }()
+
+    lazy var tabsNotifications: BoolSetting = {
+        let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
+        return BoolSetting(
             title: .Settings.Notifications.TabsNotificationsTitle,
             description: .Settings.Notifications.TabsNotificationsStatus,
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.TabsNotifications,
             enabled: enabled
-        )
+        ) { value in
+            print("tabsNotifications is \(value)")
+        }
+    }()
 
-        self.syncSignInNotifications = BoolSettingSettable(
+    lazy var syncSignInNotifications: BoolSetting = {
+        let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
+        return BoolSetting(
             title: .Settings.Notifications.SyncSignInNotificationsTitle,
             description: .Settings.Notifications.SyncSignInNotificationsStatus,
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.SyncSignInNotifications,
             enabled: enabled
-        )
+        ) { value in
+            print("syncSignInNotifications is \(value)")
+        }
+    }()
 
-        self.tipsAndFeaturesNotifications = BoolSettingSettable(
+    lazy var tipsAndFeaturesNotifications: BoolSetting = {
+        let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
+        return BoolSetting(
             title: .Settings.Notifications.TipsAndFeaturesNotificationsTitle,
             description: .Settings.Notifications.TipsAndFeaturesNotificationsStatus,
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications,
             enabled: enabled
-        )
+        ) { value in
+            print("tipsAndFeaturesNotifications is \(value)")
+        }
+    }()
 
+    let prefs: Prefs
+
+    init(prefs: Prefs) {
+        self.prefs = prefs
         super.init(style: .grouped)
-
-        allowAllNotifications
-            .$isOn
-            .dropFirst()
-            .removeDuplicates()
-            .sink { [weak self] value in
-                guard let self = self else { return }
-
-                Task {
-                    let shouldEnable = await self.notificationsChanged(value)
-                    self.allowAllNotifications.isOn = shouldEnable
-                    self.tabsNotifications.isOn = shouldEnable
-                    self.syncSignInNotifications.isOn = shouldEnable
-                    self.tipsAndFeaturesNotifications.isOn = shouldEnable
-
-                    self.tabsNotifications.enabled = shouldEnable
-                    self.syncSignInNotifications.enabled = shouldEnable
-                    self.tipsAndFeaturesNotifications.enabled = shouldEnable
-
-                    self.tableView.reloadData()
-                }
-                
-                print("allowAllNotifications is \(value)")
-            }
-            .store(in: &self.cancellables)
-
-        tabsNotifications
-            .$isOn
-            .dropFirst()
-            .removeDuplicates()
-            .sink { value in
-                print("tabsNotifications is \(value)")
-            }
-            .store(in: &self.cancellables)
-
-        syncSignInNotifications
-            .$isOn
-            .dropFirst()
-            .removeDuplicates()
-            .sink { value in
-                print("syncSignInNotifications is \(value)")
-            }
-            .store(in: &self.cancellables)
-
-        tipsAndFeaturesNotifications
-            .$isOn
-            .dropFirst()
-            .removeDuplicates()
-            .sink { value in
-                print("tipsAndFeaturesNotifications is \(value)")
-            }
-            .store(in: &self.cancellables)
-
         self.title = .SettingsSiriSectionName
     }
 

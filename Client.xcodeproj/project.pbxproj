@@ -703,7 +703,6 @@
 		C82A94F3269F68F300624AA7 /* CoreFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82A94E4269CB77500624AA7 /* CoreFlaggableFeature.swift */; };
 		C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */; };
 		C82F4C2B29AE2DF1005BD116 /* NotificationsSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F4C2A29AE2DF0005BD116 /* NotificationsSettingsViewController.swift */; };
-		C82F4C2D29AF7937005BD116 /* ReactiveSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82F4C2C29AF7937005BD116 /* ReactiveSwitch.swift */; };
 		C8340C4824EC69EE00FE91A6 /* NSData+Base16.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BD624EC69EE00FE91A6 /* NSData+Base16.m */; };
 		C8340C4F24EC69EE00FE91A6 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8340BDE24EC69EE00FE91A6 /* libcrypto.a */; };
 		C8340C5024EC69EE00FE91A6 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8340BDF24EC69EE00FE91A6 /* libssl.a */; };
@@ -4074,7 +4073,6 @@
 		C82A94E6269CB77F00624AA7 /* FeatureFlagsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlagsManager.swift; sourceTree = "<group>"; };
 		C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgent.swift"; sourceTree = "<group>"; };
 		C82F4C2A29AE2DF0005BD116 /* NotificationsSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsViewController.swift; sourceTree = "<group>"; };
-		C82F4C2C29AF7937005BD116 /* ReactiveSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactiveSwitch.swift; sourceTree = "<group>"; };
 		C8340B7524EC69EE00FE91A6 /* NSData+Base16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base16.h"; sourceTree = "<group>"; };
 		C8340B8124EC69EE00FE91A6 /* pem2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pem2.h; sourceTree = "<group>"; };
 		C8340B8224EC69EE00FE91A6 /* kdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kdf.h; sourceTree = "<group>"; };
@@ -5912,7 +5910,6 @@
 				D04CD717215EBD85004FF5B0 /* SettingsLoadingView.swift */,
 				2F44FC711A9E840300FD20CC /* SettingsNavigationController.swift */,
 				2F44FCC41A9E85E900FD20CC /* SettingsTableViewController.swift */,
-				C82F4C2C29AF7937005BD116 /* ReactiveSwitch.swift */,
 				F85C7F0D2711C555004BDBA4 /* SettingsViewController.swift */,
 				D821E9052141B71C00452C55 /* SiriSettingsViewController.swift */,
 				CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */,
@@ -10641,7 +10638,6 @@
 				8AE1E1D227B1ADC40024C45E /* TopBottomInterchangeable.swift in Sources */,
 				8A7653BD28A2C61D00924ABF /* PocketDataAdaptor.swift in Sources */,
 				96EA9454293655BF00123345 /* AppSession+Enums.swift in Sources */,
-				C82F4C2D29AF7937005BD116 /* ReactiveSwitch.swift in Sources */,
 				C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
