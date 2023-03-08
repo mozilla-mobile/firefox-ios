@@ -467,7 +467,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
         }
-        locationView.reloadButton.isHidden = hideReloadButton
+        shouldHideReloadButton(hideReloadButton)
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -490,7 +490,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     /// We hide reload button on iPad, but not in multitasking mode
     func updateReaderModeState(_ state: ReaderModeState, hideReloadButton: Bool) {
         locationView.readerModeState = state
-        locationView.reloadButton.isHidden = hideReloadButton
+        shouldHideReloadButton(hideReloadButton)
     }
 
     /// We hide reload button on iPad, but not in multitasking mode
