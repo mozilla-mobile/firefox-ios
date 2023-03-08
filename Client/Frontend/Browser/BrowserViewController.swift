@@ -149,6 +149,10 @@ class BrowserViewController: UIViewController {
     var themeManager: ThemeManager
     var logger: Logger
 
+    var newTabSettings: NewTabPage {
+        return NewTabAccessors.getNewTabPage(profile.prefs)
+    }
+
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
         guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
@@ -2607,7 +2611,7 @@ extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         overlayManager.openNewTab(url: nil,
-                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
+                                  newTabSettings: newTabSettings)
     }
 
     func topTabsDidChangeTab() {
