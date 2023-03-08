@@ -976,6 +976,22 @@ class ContentBlockerSetting: Setting {
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
     override var accessibilityIdentifier: String? { return "TrackingProtection" }
 
+    override var status: NSAttributedString? {
+        let isOn = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
+
+        if isOn {
+            let currentBlockingStrength = profile
+                .prefs
+                .stringForKey(ContentBlockingConfig.Prefs.StrengthKey)
+                .flatMap(BlockingStrength.init(rawValue:)) ?? .basic
+            return NSAttributedString(string: currentBlockingStrength.settingTitle)
+        } else {
+            return NSAttributedString(string: .Settings.Homepage.Shortcuts.ToggleOff)
+        }
+    }
+
+    override var style: UITableViewCell.CellStyle { return .value1 }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
