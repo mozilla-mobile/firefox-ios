@@ -1,4 +1,4 @@
-# By default, PRs needs an approval from a team member from fxios-eng
+# Global owners, PRs needs an approval from a team member from fxios-eng by default
 * @mozilla-mobile/fxios-eng
 
 # Order is important; the last matching pattern takes the most
