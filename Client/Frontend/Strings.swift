@@ -81,6 +81,34 @@ extension String {
     }
 }
 
+// MARK: - Biometric Authentication
+extension String {
+    public struct Biometry {
+        public struct Screen {
+            public static let PasswordsWithFingerprint = MZLocalizedString(
+                "Biometry.Screen.PasswordsWithFingerprint.v112",
+                tableName: "BiometricAuthentication",
+                value: "Use your fingerprint to access passwords.",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with fingerprint before accessing the Passwords screen.")
+            public static let PasswordsWithFaceId = MZLocalizedString(
+                "Biometry.Screen.PasswordsWithFaceId.v112",
+                tableName: "BiometricAuthentication",
+                value: "Use Face ID to access passwords.",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with Face ID before accessing the Passwords screen.")
+            public static let EditCreditCardWithFingerprint = MZLocalizedString(
+                "Biometry.Screen.EditCreditCardWithFingerprint.v112",
+                tableName: "BiometricAuthentication",
+                value: "Use your fingerprint to access credit cards.",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with fingerprint before accessing the Edit Credit Card screen.")
+            public static let EditCreditCardWithFaceId = MZLocalizedString(
+                "Biometry.Screen.EditCreditCardWithFaceId.v112",
+                tableName: "BiometricAuthentication",
+                value: "Use Face ID to access credit cards.",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with Face ID before accessing the Edit Credit Card screen.")
+        }
+    }
+}
+
 // MARK: - Bookmarks Menu
 extension String {
     public struct Bookmarks {
@@ -165,6 +193,174 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Move the toolbar to the top if that’s more your style.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.")
+        }
+    }
+}
+
+// MARK: - Credit card
+extension String {
+    public struct CreditCard {
+        // Settings / Empty State / Keyboard input accessory view
+        public struct Settings {
+            public static let EmptyListTitle = MZLocalizedString(
+                "CreditCard.Settings.EmptyListTitle.v112",
+                tableName: "Settings",
+                value: "Save Credit Cards to %@",
+                comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered.")
+            public static let EmptyListDescription = MZLocalizedString(
+                "CreditCard.Settings.EmptyListDescription.v112",
+                tableName: "Settings",
+                value: "Save your card information securely to check out faster next time.",
+                comment: "Description label for when there are no credit cards shown in credit card list in autofill settings screen.")
+            public static let RememberThisCard = MZLocalizedString(
+                "CreditCard.Settings.RememberThisCard.v112",
+                tableName: "Settings",
+                value: "Remember this card?",
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used.")
+            public static let Yes = MZLocalizedString(
+                "CreditCard.Settings.Yes.v112",
+                tableName: "Settings",
+                value: "Yes",
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used.")
+            public static let NotNow = MZLocalizedString(
+                "CreditCard.Settings.NowNow.v112",
+                tableName: "Settings",
+                value: "Now now",
+                comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used.")
+            public static let UpdateThisCard = MZLocalizedString(
+                "CreditCard.Settings.UpdateThisCard.v112",
+                tableName: "Settings",
+                value: "Update this card?",
+                comment: "When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card.")
+            public static let ManageCards = MZLocalizedString(
+                "CreditCards.Settings.ManageCards.v112",
+                tableName: "Settings",
+                value: "Manage cards",
+                comment: "When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen.")
+            public static let UseASavedCard = MZLocalizedString(
+                "CreditCards.Settings.UseASavedCard.v112",
+                tableName: "Settings",
+                value: "Use a saved card?",
+                comment: "When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase.")
+            public static let UseSavedCardFromKeyboard = MZLocalizedString(
+                "CreditCards.Settings.UseSavedCardFromKeyboard.v112",
+                tableName: "Settings",
+                value: "Use saved card",
+                comment: "When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase.")
+            public static let ListItemA11y = MZLocalizedString(
+                "CreditCard.Settings.ListItemA11y.v112",
+                tableName: "Settings",
+                value: "%1$@ ending in %2$@, issued to %3$@, expires %4$@",
+                comment: "Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card type (e.g. Visa). The second parameter is the last 4 digits of the credit card. The third parameter is the name of the credit card holder. The fourth and fifth parameters are the month and year of the credit card's expiration date.")
+        }
+
+        // Editing and saving credit card
+        public struct EditCard {
+            public static let NameOnCardTitle = MZLocalizedString(
+                "CreditCard.EditCard.NameOnCardTitle.v112",
+                tableName: "EditCard",
+                value: "Name on Card",
+                comment: "Title label for user to input their name printed on their credit card in the text box below.")
+            public static let CardNumberTitle = MZLocalizedString(
+                "CreditCard.EditCard.CardNumberTitle.v112",
+                tableName: "EditCard",
+                value: "Card Number",
+                comment: "Title label for user to input their credit card number printed on their credit card in the text box below.")
+            public static let CardExpirationDateTitle = MZLocalizedString(
+                "CreditCard.EditCard.CardExpirationDateTitle.v112",
+                tableName: "EditCard",
+                value: "Expiration MM / YY",
+                comment: "Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below.")
+            public static let RemoveCardButtonTitle = MZLocalizedString(
+                "CreditCard.EditCard.RemoveCardButtonTitle.v112",
+                tableName: "EditCard",
+                value: "Remove Card",
+                comment: "Title label for button that allows user to remove their saved credit card.")
+            public static let ToggleToAllowAutofillTitle = MZLocalizedString(
+                "CreditCard.EditCard.ToggleToAllowAutofillTitle.v112",
+                tableName: "EditCard",
+                value: "Save and autofill cards",
+                comment: "Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages.")
+            public static let SavedCardListTitle = MZLocalizedString(
+                "CreditCard.EditCard.SavedCardListTitle.v112",
+                tableName: "EditCard",
+                value: "SAVED CARDS",
+                comment: "Title label for user to pick a credit card from the list below to be updated.")
+            public static let ExpiredDateTitle = MZLocalizedString(
+                "CreditCard.EditCard.ExpiredDateTitle.v112",
+                tableName: "EditCard",
+                value: "Expires %@",
+                comment: "Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation.")
+            public static let NavButtonSaveTitle = MZLocalizedString(
+                "CreditCard.EditCard.NavButtonSaveTitle.v112",
+                tableName: "EditCard",
+                value: "Save",
+                comment: "Button title which, when tapped, will allow the user to save valid credit card details.")
+        }
+
+        // Error States for wrong input while editing credit card
+        public struct ErrorState {
+            public static let NameOnCardSublabel = MZLocalizedString(
+                "CreditCard.ErrorState.NameOnCardSublabel.v112",
+                tableName: "ErrorState",
+                value: "Add a name",
+                comment: "Sub label error string that gets shown when user enters incorrect input for their name printed on their credit card in the text box.")
+            public static let CardNumberSublabel = MZLocalizedString(
+                "CreditCard.ErrorState.CardNumberSublabel.v112",
+                tableName: "ErrorState",
+                value: "Enter a valid card number",
+                comment: "Sub label error string that gets shown when user enters incorrect input for their number printed on their credit card in the text box.")
+            public static let CardExpirationDateSublabel = MZLocalizedString(
+                "CreditCard.ErrorState.CardExpirationDateSublabel.v112",
+                tableName: "ErrorState",
+                value: "Enter a valid expiration date",
+                comment: "Sub label error string that gets shown when user enters incorrect input for their expiration date on their credit card in the text box.")
+        }
+
+        // Snackbar / toast
+        public struct SnackBar {
+            public static let SavedCardLabel = MZLocalizedString(
+                "CreditCard.SnackBar.SavedCardLabel.v112",
+                tableName: "SnackBar",
+                value: "New card saved",
+                comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully")
+            public static let UpdatedCardLabel = MZLocalizedString(
+                "CreditCard.SnackBar.UpdatedCardLabel.v112",
+                tableName: "SnackBar",
+                value: "Card information updated",
+                comment: "Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully")
+            public static let RemovedCardLabel = MZLocalizedString(
+                "CreditCard.SnackBar.RemovedCardLabel.v112",
+                tableName: "SnackBar",
+                value: "Card removed",
+                comment: "Label text that gets presented as a confirmation at the bottom of screen when the credit card is successfully removed.")
+        }
+
+        // System alert actions and descriptions
+        public struct Alert {
+            public static let RemoveCardTitle = MZLocalizedString(
+                "CreditCard.SnackBar.RemoveCardTitle.v112",
+                tableName: "Alert",
+                value: "Remove the card?",
+                comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
+
+            public static let RemoveCardSublabel = MZLocalizedString(
+                "CreditCard.SnackBar.RemoveCardSublabel.v112",
+                tableName: "Alert",
+                value: "This will remove the card from all of your synced devices.",
+                comment: "Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices")
+
+            public static let CancelRemoveCardButton = MZLocalizedString(
+                "CreditCard.SnackBar.CancelRemoveCardButton.v112",
+                tableName: "Alert",
+                value: "Cancel",
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and cancel the the operation.")
+
+            public static let RemovedCardLabel = MZLocalizedString(
+                "CreditCard.SnackBar.RemovedCardButton.v112",
+                tableName: "Alert",
+                value: "Remove",
+                comment: "Button text to dismiss the dialog box that gets presented as a confirmation to to remove card and perform the operation of removing the credit card.")
         }
     }
 }
