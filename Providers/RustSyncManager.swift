@@ -10,6 +10,8 @@ import SyncTelemetry
 import AuthenticationServices
 import Common
 
+private typealias MZSyncResult = MozillaAppServices.SyncResult
+
 // Extends NSObject so we can use timers.
 public class RustSyncManager: NSObject, SyncManager {
     // We shouldn't live beyond our containing BrowserProfile, either in the main app
@@ -50,12 +52,27 @@ public class RustSyncManager: NSObject, SyncManager {
 
     public var syncDisplayState: SyncDisplayState?
 
+    var prefsForSync: Prefs {
+        return prefs.branch("sync")
+    }
+
+    init(profile: BrowserProfile,
+         logger: Logger = DefaultLogger.shared,
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.profile = profile
+        self.prefs = profile.prefs
+        self.logger = logger
+        self.notificationCenter = notificationCenter
+
+        super.init()
+    }
+
     @objc func syncOnTimer() {
         syncEverything(why: .scheduled)
         profile?.pollCommands()
     }
 
-    fileprivate func repeatingTimerAtInterval(
+    private func repeatingTimerAtInterval(
         _ interval: TimeInterval,
         selector: Selector
     ) -> Timer {
@@ -135,14 +152,12 @@ public class RustSyncManager: NSObject, SyncManager {
         backgrounded = true
     }
 
-    fileprivate func beginSyncing() {
+    private func beginSyncing() {
         syncDisplayState = .inProgress
         notifySyncing(notification: .ProfileDidStartSyncing)
     }
 
-    private func resolveSyncState(
-        result: MozillaAppServices.SyncResult
-    ) -> SyncDisplayState {
+    private func resolveSyncState(result: MZSyncResult) -> SyncDisplayState {
         let hasSynced = !result.successful.isEmpty
         let status = result.status
 
@@ -160,7 +175,7 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    fileprivate func endSyncing(_ result: MozillaAppServices.SyncResult) {
+    private func endSyncing(_ result: MZSyncResult) {
         logger.log("Ending all syncs.",
                    level: .info,
                    category: .sync)
@@ -195,26 +210,11 @@ public class RustSyncManager: NSObject, SyncManager {
         notificationCenter.post(name: notification)
     }
 
-    init(profile: BrowserProfile,
-         logger: Logger = DefaultLogger.shared,
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.profile = profile
-        self.prefs = profile.prefs
-        self.logger = logger
-        self.notificationCenter = notificationCenter
-
-        super.init()
-    }
-
     func doInBackgroundAfter(_ millis: Int64, _ block: @escaping () -> Void) {
         let queue = DispatchQueue.global(qos: DispatchQoS.background.qosClass)
         queue.asyncAfter(
             deadline: DispatchTime.now() + DispatchTimeInterval.milliseconds(Int(millis)),
             execute: block)
-    }
-
-    var prefsForSync: Prefs {
-        return prefs.branch("sync")
     }
 
     public func onAddedAccount() -> Success {
@@ -265,7 +265,6 @@ public class RustSyncManager: NSObject, SyncManager {
                 if prefsForSync.boolForKey(stateChangedPref) != nil,
                    let enabled = prefsForSync.boolForKey("engine.\(engine).enabled") {
                     engineEnablements[engine] = enabled
-                    prefsForSync.setObject(nil, forKey: stateChangedPref)
                 }
             }
         }
@@ -305,9 +304,8 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "Failed to get sync engine and key data."
     }
 
-    fileprivate func getEnginesAndKeys(
-        engines: [String]
-    ) -> Deferred<Maybe<([EngineIdentifier], [String: String])>> {
+    private func getEnginesAndKeys(engines: [String]) -> Deferred<Maybe<([EngineIdentifier],
+                                                                         [String: String])>> {
         let deferred = Deferred<Maybe<([EngineIdentifier], [String: String])>>()
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
@@ -343,11 +341,9 @@ public class RustSyncManager: NSObject, SyncManager {
         return deferred
     }
 
-    fileprivate func syncRustEngines(
-        why: MozillaAppServices.SyncReason,
-        engines: [String]
-    ) -> Deferred<Maybe<MozillaAppServices.SyncResult>> {
-        let deferred = Deferred<Maybe<MozillaAppServices.SyncResult>>()
+    private func syncRustEngines(why: MozillaAppServices.SyncReason,
+                                 engines: [String]) -> Deferred<Maybe<MZSyncResult>> {
+        let deferred = Deferred<Maybe<MZSyncResult>>()
 
         logger.log("Syncing \(engines)", level: .info, category: .sync)
         self.profile?.rustFxA.accountManager.upon { accountManager in
@@ -402,9 +398,11 @@ public class RustSyncManager: NSObject, SyncManager {
                         self.beginSyncing()
                         self.syncManagerAPI.sync(params: params) { syncResult in
                             // Save the persisted state
-                            self.prefs
-                                .setString(syncResult.persistedState,
-                                           forKey: PrefsKeys.RustSyncManagerPersistedState)
+                            if !syncResult.persistedState.isEmpty {
+                                self.prefs
+                                    .setString(syncResult.persistedState,
+                                               forKey: PrefsKeys.RustSyncManagerPersistedState)
+                            }
 
                             let declinedEngines = String(describing: syncResult.declined ?? [])
                             let telemetryData = syncResult.telemetryJson ??
@@ -424,9 +422,17 @@ public class RustSyncManager: NSObject, SyncManager {
                             // result of the sync manager `sync` are enabled.
                             let updateEnginePref:
                             (String, Bool) -> Void = { engine, enabled in
-                                self.prefsForSync
-                                    .setBool(enabled,
-                                             forKey: "engine.\(engine).enabled")
+                                let enabledPref = "engine.\(engine).enabled"
+                                self.prefsForSync.setBool(enabled, forKey: enabledPref)
+
+                                let stateChangedPref = "engine.\(engine).enabledStateChanged"
+                                self.prefsForSync.setObject(nil, forKey: stateChangedPref)
+
+                                let enablementDetails = [enabledPref: String(enabled)]
+                                self.logger.log("Finished setting \(engine) enablement prefs",
+                                                level: .info,
+                                                category: .sync,
+                                                extra: enablementDetails)
                             }
 
                             if let declined = syncResult.declined {
@@ -437,11 +443,8 @@ public class RustSyncManager: NSObject, SyncManager {
                                         updateEnginePref($0, true)
                                     }
                                 })
-                            } else {
-                                RustTogglableEngines.forEach({
-                                    updateEnginePref($0, true)
-                                })
                             }
+
                             deferred.fill(Maybe(success: syncResult))
                             self.endSyncing(syncResult)
                         }
@@ -452,9 +455,7 @@ public class RustSyncManager: NSObject, SyncManager {
         return deferred
     }
 
-    fileprivate func toSyncManagerDeviceType(
-        deviceType: DeviceType
-    ) -> SyncManagerDeviceType {
+    private func toSyncManagerDeviceType(deviceType: DeviceType) -> SyncManagerDeviceType {
         switch deviceType {
         case .desktop:
             return SyncManagerDeviceType.desktop
@@ -499,7 +500,7 @@ public class RustSyncManager: NSObject, SyncManager {
         return syncRustEngines(why: rustReason, engines: filteredEngines) >>> succeed
     }
 
-    public func syncTabs() -> Deferred<Maybe<MozillaAppServices.SyncResult>> {
+    private func syncTabs() -> Deferred<Maybe<MZSyncResult>> {
         return syncRustEngines(why: .user, engines: ["tabs"])
     }
 
