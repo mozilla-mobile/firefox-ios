@@ -95,7 +95,6 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
 
-        sleep(5)
         waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
         waitForExistence(app.webViews.staticTexts["Continue to Firefox accounts"], timeout: TIMEOUT_LONG)
         waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
