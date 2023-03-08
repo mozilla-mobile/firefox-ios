@@ -2102,10 +2102,10 @@ extension String {
         tableName: nil,
         value: "Blank Page",
         comment: "Option in settings to show a blank page when you open a new tab")
-    public static let SettingsNewTabHomePage = MZLocalizedString(
-        "Settings.NewTab.Option.HomePage",
+    public static let SettingsNewTabCustom = MZLocalizedString(
+        "Settings.NewTab.Option.Custom",
         tableName: nil,
-        value: "Homepage",
+        value: "Custom",
         comment: "Option in settings to show your homepage when you open a new tab")
 }
 
@@ -3069,6 +3069,11 @@ extension String {
         tableName: nil,
         value: "Standard (default)",
         comment: "Tracking protection settings option for using the basic blocklist.")
+    public static let TrackingProtectionOptionBlockListLevelStandardStatus = MZLocalizedString(
+        "Settings.TrackingProtectionOption.BasicBlockList.Status",
+        tableName: nil,
+        value: "Standard",
+        comment: "Tracking protection settings status showing the current option selected.")
     public static let TrackingProtectionOptionBlockListLevelStrict = MZLocalizedString(
         "Settings.TrackingProtectionOption.BlockListStrict",
         tableName: nil,
