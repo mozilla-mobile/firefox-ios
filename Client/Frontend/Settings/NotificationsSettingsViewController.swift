@@ -114,7 +114,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         case .denied:
             sendNotifications = false
             await MainActor.run {
-                let accessDenied = UIAlertController(title: "Notifications Disabled", message: "You need to enable permissions from iOS Settings", preferredStyle: .alert)
+                let accessDenied = UIAlertController(title: .Settings.Notifications.TurnOnNotificationsTitle , message: .Settings.Notifications.TurnOnNotificationsMessage, preferredStyle: .alert)
                 let dismissAction = UIAlertAction(title: .CancelString, style: .default, handler: nil)
                 accessDenied.addAction(dismissAction)
                 let settingsAction = UIAlertAction(title: .OpenSettingsString, style: .default ) { _ in
