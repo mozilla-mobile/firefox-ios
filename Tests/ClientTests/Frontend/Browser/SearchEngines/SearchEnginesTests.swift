@@ -92,7 +92,7 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testOrderedEngines() {
-        /// Persistance can't be tested without the default fixture changing.
+        // Persistance can't be tested without the default fixture changing.
         // Remaining engines should be appended in alphabetical order.
         let expectation = expectation(description: "Completed parse engines")
         engines.getOrderedEngines { [weak self] orderedEngines in
@@ -154,7 +154,7 @@ class SearchEnginesTests: XCTestCase {
         // By default, you should see search suggestions
         XCTAssertTrue(engines.shouldShowSearchSuggestions)
 
-        /// Persistance can't be tested without the default fixture changing.
+        // Persistance can't be tested without the default fixture changing.
         // Setting should be persisted.
         engines.shouldShowSearchSuggestions = false
         XCTAssertFalse(engines.shouldShowSearchSuggestions)
