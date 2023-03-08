@@ -1292,7 +1292,7 @@
 "Settings.DisplayTheme.SwitchTitle" = "โดยอัตโนมัติ";
 
 /* System theme settings section title */
-"Settings.DisplayTheme.SystemTheme.SectionHeader" = "ชุดตกแต่งระบบ";
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "ชุดรูปแบบของระบบ";
 
 /* System theme settings switch to choose whether to use the same theme as the system */
 "Settings.DisplayTheme.SystemTheme.SwitchTitle" = "ใช้โหมดสว่าง/มืดของระบบ";

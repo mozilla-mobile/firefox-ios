@@ -49,7 +49,7 @@ class RemoteTabsPanel: UIViewController, Themeable {
         super.viewDidLoad()
         tableViewController.remoteTabsPanel = self
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupLayout()
         applyTheme()
     }
@@ -158,7 +158,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         tableView.dataSource = nil
 
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

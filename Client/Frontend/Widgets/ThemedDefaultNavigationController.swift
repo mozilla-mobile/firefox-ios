@@ -25,7 +25,7 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

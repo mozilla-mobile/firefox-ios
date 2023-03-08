@@ -212,7 +212,7 @@ class TabTrayViewController: UIViewController, Themeable {
         super.viewDidLoad()
 
         viewSetup()
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
         updatePrivateUIState()
         changePanel()

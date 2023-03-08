@@ -75,7 +75,7 @@ class BackForwardListViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupLayout()
         applyTheme()
         scrollTableViewToIndex(currentRow)

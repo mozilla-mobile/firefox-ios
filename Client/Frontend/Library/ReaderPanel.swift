@@ -209,7 +209,7 @@ class ReadingListPanel: UITableViewController,
         tableView.dragDelegate = self
 
         applyTheme()
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     @objc func notificationReceived(_ notification: Notification) {

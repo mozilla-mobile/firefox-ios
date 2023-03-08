@@ -112,6 +112,12 @@ class BaseTestCase: XCTestCase {
         }
     }
 
+     func selectOptionFromContextMenu(option: String) {
+        XCTAssertTrue(app.tables["Context Menu"].cells.otherElements[option].exists)
+        app.tables["Context Menu"].cells.otherElements[option].tap()
+        waitForNoExistence(app.tables["Context Menu"])
+    }
+
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true, file: String = #file, line: UInt = #line) {
         let app = XCUIApplication()
         UIPasteboard.general.string = url

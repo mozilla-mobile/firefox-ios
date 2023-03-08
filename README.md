@@ -18,7 +18,12 @@ For bug fixes and features for a specific release, use the version branch.
 Getting involved
 ----------------
 
-Want to contribute but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK)
+We encourage you to participate in this open source project. We love Pull Requests, Issue Reports, Feature Requests or any kind of positive contribution. Please read the [Mozilla Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/) and our [Firefox for iOS contributing guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md) first.
+
+- Chat: See [#fx-ios](https://chat.mozilla.org/#/room/#fx-ios:mozilla.org) for general discussion, or open a [Github discussion](https://github.com/mozilla-mobile/firefox-ios/discussions).
+- Issues: [File a new issue](https://github.com/mozilla-mobile/firefox-ios/issues/new/choose) • [Existing bugs](https://github.com/mozilla-mobile/firefox-ios/issues)
+
+Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK). 
 
 Building the code
 -----------------
@@ -40,11 +45,12 @@ Building the code
     sh ./bootstrap.sh
     ```
 1. Open `Client.xcodeproj` in Xcode.
-1. Build the `Fennec` scheme in Xcode.
+1. Make sure to select the `Fennec` [scheme](https://developer.apple.com/documentation/xcode/build-system?changes=_2) in Xcode.
+1. Select the destination device you want to build on.
+1. Run the app with `Cmd + R` or by pressing the `build and run` button.
 
-Note: In case you have dependencies issues with SPM, you can try:
+⚠️ Important: In case you have dependencies issues with SPM, please try the following:
 - Xcode -> File -> Packages -> Reset Package Caches
-- Xcode -> File -> Packages -> Resolve Package Versions
 
 Building User Scripts
 -----------------
@@ -76,11 +82,6 @@ To simplify the build process, these compiled files are checked-in to this repos
 ```shell
 npm run build
 ```
-
-Contributing
------------------
-
-Want to contribute to this repository? Check out [Contributing Guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md)
 
 License
 -----------------

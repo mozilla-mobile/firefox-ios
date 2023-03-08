@@ -8,7 +8,7 @@
  */
 EnableEngines(["tabs"]);
 
-var phases = { "phase1": "profile1" };
+var phases = { "phase1": "profile1", "phase2": "profile1" };
 
 
 var tabs1 = [
@@ -19,7 +19,13 @@ var tabs1 = [
 
 // sync and verify tabs
 Phase("phase1", [
-  [Sync],
   [Tabs.add, tabs1],
+  [Sync]
+]);
+
+Phase("phase2", [
+  [Sync],
+  [Sync],
+  [Tabs.verify, tabs1],
   [Sync]
 ]);

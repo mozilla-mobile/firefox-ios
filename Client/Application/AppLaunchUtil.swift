@@ -40,6 +40,11 @@ class AppLaunchUtil {
         DynamicFontHelper.defaultHelper.startObserving()
         MenuHelper.defaultHelper.setItems()
 
+        // Initialize conversion value by specifying fineValue and coarseValue.
+        // Call update postback conversion value for install event.
+        let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
+        conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
+
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
         // i.e. this must be run before initializing those systems.

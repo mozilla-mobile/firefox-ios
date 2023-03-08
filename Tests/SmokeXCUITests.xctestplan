@@ -74,7 +74,6 @@
         "FindInPageTests\/testFindInPageTwoWordsSearch()",
         "FindInPageTests\/testFindInPageTwoWordsSearchLargeDoc()",
         "FindInPageTests\/testQueryWithNoMatches()",
-        "FirstRunTourTests\/testShowTourFromSettings()",
         "FirstRunTourTests\/testStartBrowsingFromSecondScreen()",
         "FxScreenGraphTests",
         "HistoryTests",
