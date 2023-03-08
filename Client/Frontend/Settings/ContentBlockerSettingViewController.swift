@@ -8,10 +8,10 @@ import Shared
 extension BlockingStrength {
     var settingStatus: String {
         switch self {
-            case .basic:
-                return .TrackingProtectionOptionBlockListLevelStandardStatus
-            case .strict:
-                return .TrackingProtectionOptionBlockListLevelStrict
+        case .basic:
+            return .TrackingProtectionOptionBlockListLevelStandardStatus
+        case .strict:
+            return .TrackingProtectionOptionBlockListLevelStrict
         }
     }
 
