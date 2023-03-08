@@ -223,9 +223,9 @@ extension String {
                 value: "Yes",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used.")
             public static let NotNow = MZLocalizedString(
-                "CreditCard.Settings.NowNow.v112",
+                "CreditCard.Settings.NotNow.v112",
                 tableName: "Settings",
-                value: "Now now",
+                value: "Not now",
                 comment: "When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used.")
             public static let UpdateThisCard = MZLocalizedString(
                 "CreditCard.Settings.UpdateThisCard.v112",
