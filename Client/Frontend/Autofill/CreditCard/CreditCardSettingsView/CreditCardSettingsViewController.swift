@@ -63,6 +63,9 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         viewSetup()
         listenForThemeChange(view)
         applyTheme()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, closure: { _ in
+            self.updateState(type: .add)
+        })
     }
 
     func viewSetup() {
