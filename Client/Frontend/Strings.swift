@@ -205,8 +205,8 @@ extension String {
             public static let EmptyListTitle = MZLocalizedString(
                 "CreditCard.Settings.EmptyListTitle.v112",
                 tableName: "Settings",
-                value: "Save Credit Cards to Firefox",
-                comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. Firefox is the product name and should not be altered.")
+                value: "Save Credit Cards to %@",
+                comment: "Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered.")
             public static let EmptyListDescription = MZLocalizedString(
                 "CreditCard.Settings.EmptyListDescription.v112",
                 tableName: "Settings",
