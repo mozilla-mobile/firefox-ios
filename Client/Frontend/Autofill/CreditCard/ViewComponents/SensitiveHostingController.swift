@@ -15,15 +15,15 @@ class SensitiveHostingController<Content>: UIHostingController<Content> where Co
     private var blurredOverlay: UIImageView?
     private var isAuthenticated = false
     var notificationCenter: NotificationProtocol?
-    
+
     init(rootView: Content,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          localAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         super.init(rootView: rootView)
-        
+
         self.notificationCenter = notificationCenter
         self.appAuthenticator = localAuthenticator
-        
+
         setupNotifications(forObserver: self, observing: [UIApplication.didEnterBackgroundNotification,
                                                           UIApplication.willEnterForegroundNotification])
     }
