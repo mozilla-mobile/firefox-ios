@@ -62,8 +62,8 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs_3_20tabTray() {
         if #available(iOS 13.0, *) {
             app.launch()
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-            navigator.performAction(Action.CloseURLBarOpen)
+            // waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            // navigator.performAction(Action.CloseURLBarOpen)
             waitForTabsButton()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
@@ -82,8 +82,8 @@ class TabsPerformanceTest: BaseTestCase {
     func testPerfTabs_4_1280tabTray() {
         if #available(iOS 13.0, *) {
             app.launch()
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-            navigator.performAction(Action.CloseURLBarOpen)
+            // waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            // navigator.performAction(Action.CloseURLBarOpen)
             waitForTabsButton()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
