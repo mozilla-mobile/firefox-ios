@@ -10,6 +10,7 @@ import Foundation
 struct OpenTabNotificationObject {
     enum ObjectType {
         case loadQueuedTabs([URL])
+        case openNewTab
         case openSearchNewTab(String)
         case switchToTabForURLOrOpen(URL)
         case debugOption(Int, URL)

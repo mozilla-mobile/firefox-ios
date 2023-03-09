@@ -15,6 +15,14 @@ credit-card-autofill:
     credit-card-autofill-status:
       type: boolean
       description: "If true, we will allow user to use the credit autofill feature"
+engagement-notification-feature:
+  description: "The feature that controls the engagement notifications.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    engagement-notification-feature-status:
+      type: boolean
+      description: "If true, we will allow user to use the engagement notification feature"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true
