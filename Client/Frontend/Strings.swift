@@ -1274,12 +1274,6 @@ extension String {
                 value: "Notifications",
                 comment: "In the settings menu, in the Privacy section, this is the title for Notifications customization section."
             )
-            public static let AllowAllNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.AllowAllNotificationsTitle",
-                tableName: "Settings",
-                value: "Allow All Notifications",
-                comment: "This is the title for the setting that toggles All Notifications feature in the settings menu under the Notifications section."
-            )
             public static let SyncNotificationsTitle = MZLocalizedString(
                 "Settings.Notifications.SyncNotificationsTitle",
                 tableName: "Settings",
