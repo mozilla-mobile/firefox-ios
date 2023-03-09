@@ -5,9 +5,9 @@
 import Foundation
 import Shared
 
-/// Accessors for homepage details from the app state.
-/// These are pure functions, so it's quite ok to have them
-/// as static.
+// Accessors for homepage details from the app state.
+// These are pure functions, so it's quite ok to have them
+// as static.
 
 // This HomePagePref is only used when setting the HomePage on the newTab and not setting a custom URL for the Home button.
 class NewTabHomePageAccessors {

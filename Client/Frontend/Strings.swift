@@ -38,20 +38,20 @@ private func MZLocalizedString(
                              comment: comment)
 }
 
-/// This file contains all strings for Firefox iOS.
-///
-/// As we continue to update strings, old strings may be present at the bottom of this
-/// file. To preserve a clean implementation of strings, this file should be organized
-/// alphabetically, according to specific screens or feature, on that screen. Each
-/// string should be under a struct giving a clear indication as to where it is being
-/// used. In this case we will prefer verbosity for the sake of accuracy, over brevity.
-/// Sub structs may, and should, also be used to separate functionality where it makes
-/// sense, but efforts should be made to keep structs two levels deep unless there are
-/// good reasons for doing otherwise.
-///
-/// Note that some strings belong to one feature that appears across mulitple screens
-/// throughout the application. An example is contextual hints. In this case, it makes
-/// more sense to organize all those strings under the specific feature.
+// This file contains all strings for Firefox iOS.
+//
+// As we continue to update strings, old strings may be present at the bottom of this
+// file. To preserve a clean implementation of strings, this file should be organized
+// alphabetically, according to specific screens or feature, on that screen. Each
+// string should be under a struct giving a clear indication as to where it is being
+// used. In this case we will prefer verbosity for the sake of accuracy, over brevity.
+// Sub structs may, and should, also be used to separate functionality where it makes
+// sense, but efforts should be made to keep structs two levels deep unless there are
+// good reasons for doing otherwise.
+//
+// Note that some strings belong to one feature that appears across mulitple screens
+// throughout the application. An example is contextual hints. In this case, it makes
+// more sense to organize all those strings under the specific feature.
 
 // MARK: - Alerts
 extension String {
