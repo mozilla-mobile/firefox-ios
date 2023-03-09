@@ -18,11 +18,11 @@ final class Unknown: NSObject, NSCoding {
     }
 }
 
+// TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 /**
  A singleton that wraps the Rust FxA library.
  The singleton design is poor for testability through dependency injection and may need to be changed in future.
  */
-// TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 open class RustFirefoxAccounts {
     public static let prefKeyLastDeviceName = "prefKeyLastDeviceName"
     private static let clientID = "1b1a3e44c54fbb58"

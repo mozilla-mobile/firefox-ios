@@ -179,32 +179,32 @@ class Tab: NSObject {
     /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal or not, it will
     /// resort to other displayable titles.
     var displayTitle: String {
-        /// First, check if the webView can give us a title.
+        // First, check if the webView can give us a title.
         if let title = webView?.title, !title.isEmpty {
             return title
         }
 
-        /// If the webView doesn't give a title. check the URL to see if it's our Home URL, with no sessionData on this tab.
+        // If the webView doesn't give a title. check the URL to see if it's our Home URL, with no sessionData on this tab.
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
         if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !isRestoring {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
-        /// Here's another check to see if we're at the Home URL, using sessionData.
+        // Here's another check to see if we're at the Home URL, using sessionData.
         // lets double check the sessionData in case this is a non-restored new tab
         if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
             return .AppMenu.AppMenuOpenHomePageTitleString
         }
 
-        /// Then, if it's not Home, and it's also not a complete and valid URL, display what was "entered" as the title.
+        // Then, if it's not Home, and it's also not a complete and valid URL, display what was "entered" as the title.
         if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {
             return shownUrl
         }
 
-        /// Finally, somehow lastTitle is persisted (and webView's title isn't).
+        // Finally, somehow lastTitle is persisted (and webView's title isn't).
         guard let lastTitle = lastTitle, !lastTitle.isEmpty else {
-            /// And if `lastTitle` fails, we'll take the URL itself (somewhat treated) as the last resort.
+            // And if `lastTitle` fails, we'll take the URL itself (somewhat treated) as the last resort.
             return self.url?.displayURL?.baseDomain ??  ""
         }
 
@@ -963,7 +963,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
     }
 
     /// Override evaluateJavascript - should not be called directly on TabWebViews any longer
-    // We should only be calling evaluateJavascriptInDefaultContentWorld in the future
+    /// We should only be calling evaluateJavascriptInDefaultContentWorld in the future
     @available(*,
                 unavailable,
                 message: "Do not call evaluateJavaScript directly on TabWebViews, should only be called on super class")

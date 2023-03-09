@@ -5,45 +5,43 @@
 import Foundation
 import Storage
 
-/**
- * A handler can be a plain old swift object. It does not need to extend any
- * other object, but can.
- *
- * ```
- * class HandoffHandler {
- *     init() {
- *         register(self, forTabEvents: .didLoadPageMetadata)
- *     }
- * }
- * ```
- *
- * Handlers can implement any or all `TabEventHandler` methods. If you
- * implement a method, you should probably `registerFor` the event above.
- *
- * ```
- * extension HandoffHandler: TabEventHandler {
- *     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
- *     }
- * }
- * ```
- *
- * Tab events should probably be only posted from one place, to avoid cycles.
- *
- * ```
- * TabEvent.post(.didLoadPageMetadata(aPageMetadata), for: tab)
- * ```
- *
- * In this manner, we are able to use the notification center and have type safety.
- *
- */
-// As we want more events we add more here.
-// Each event needs:
-// 1. a method in the TabEventHandler.
-// 2. a default implementation of the method – so not everyone needs to implement it
-// 3. a TabEventLabel, which is needed for registration
-// 4. a TabEvent, with whatever parameters are needed.
-//    i) a case to map the event to the event label (var label)
-//   ii) a case to map the event to the event handler (func handle:with:)
+/// A handler can be a plain old swift object. It does not need to extend any
+/// other object, but can.
+///
+/// ```
+/// class HandoffHandler {
+///     init() {
+///         register(self, forTabEvents: .didLoadPageMetadata)
+///     }
+/// }
+/// ```
+///
+/// Handlers can implement any or all `TabEventHandler` methods. If you
+/// implement a method, you should probably `registerFor` the event above.
+///
+/// ```
+/// extension HandoffHandler: TabEventHandler {
+///     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
+///     }
+/// }
+/// ```
+///
+/// Tab events should probably be only posted from one place, to avoid cycles.
+///
+/// ```
+/// TabEvent.post(.didLoadPageMetadata(aPageMetadata), for: tab)
+/// ```
+///
+/// In this manner, we are able to use the notification center and have type safety.
+///
+/// As we want more events we add more here.
+/// Each event needs:
+/// 1. a method in the TabEventHandler.
+/// 2. a default implementation of the method – so not everyone needs to implement it
+/// 3. a TabEventLabel, which is needed for registration
+/// 4. a TabEvent, with whatever parameters are needed.
+///    i) a case to map the event to the event label (var label)
+///   ii) a case to map the event to the event handler (func handle:with:)
 protocol TabEventHandler: AnyObject {
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
