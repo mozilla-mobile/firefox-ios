@@ -15,6 +15,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
     let sleepTime: UInt64 = 100_000_000
+    let webViewConfig: WKWebViewConfiguration = WKWebViewConfiguration()
 
     override func setUp() {
         super.setUp()
@@ -33,6 +34,8 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     func testEmptyData_tabTrayGroupsDisabled() async {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
+        try? await Task.sleep(nanoseconds: sleepTime)
+        
         let recentTabs = await subject.getRecentTabData()
         let synced = await subject.getSyncedTabData()
 
@@ -158,8 +161,7 @@ extension JumpBackInDataAdaptorTests {
 
     func createTab(profile: MockProfile,
                    urlString: String? = "www.website.com") -> Tab {
-        let configuration: WKWebViewConfiguration = WKWebViewConfiguration()
-        let tab = Tab(profile: profile, configuration: configuration)
+        let tab = Tab(profile: profile, configuration: webViewConfig)
 
         if let urlString = urlString {
             tab.url = URL(string: urlString)!
