@@ -259,4 +259,8 @@ public struct AccessibilityIdentifiers {
         static let cancelDownloadResume = "cancelDownloadAlert.resume"
         static let cancelDownloadCancel = "cancelDownloadAlert.cancel"
     }
+
+    struct Setting {
+        static let notifications = "NotificationsSetting"
+    }
 }

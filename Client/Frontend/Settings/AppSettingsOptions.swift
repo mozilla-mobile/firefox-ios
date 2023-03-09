@@ -1194,7 +1194,7 @@ class TabsSetting: Setting {
 class NotificationsSetting: Setting {
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
 
-    override var accessibilityIdentifier: String? { return "NotificationsSetting" }
+    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Setting.notifications }
 
     let profile: Profile
 
