@@ -4,7 +4,7 @@
 ### Description
 TODO
 
-### Pull requests checks where applicable:
+### Pull requests checks where applicable
 - [ ] Fill in the three TODOs above (tickets number and description of your work)
 - [ ] The PR name follows our [naming guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide)
 - [ ] Accessibility implemented and tested (minimum Dynamic Text and VoiceOver)
