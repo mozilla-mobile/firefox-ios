@@ -1995,6 +1995,7 @@ extension BrowserViewController {
     func performSurveySurfaceCheck() {
         if surveySurfaceManager.shouldShowSurveySurface {
             guard let surveySurface = surveySurfaceManager.surveySurface() else { return }
+            surveySurface.modalPresentationStyle = .fullScreen
 
             self.present(surveySurface, animated: false)
         }

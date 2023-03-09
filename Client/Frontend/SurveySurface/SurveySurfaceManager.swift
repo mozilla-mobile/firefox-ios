@@ -6,7 +6,13 @@ import Common
 import Foundation
 import Shared
 
-class SurveySurfaceManager {
+protocol SurveySurfaceDelegate: AnyObject {
+    func didDisplayMessage()
+    func didTapTakeSurvey()
+    func didTapDismissSurvey()
+}
+
+class SurveySurfaceManager: SurveySurfaceDelegate {
     private var message: GleanPlumbMessage?
     private var messagingManager: GleanPlumbMessageManagerProtocol
     private var themeManager: ThemeManager
@@ -41,13 +47,11 @@ class SurveySurfaceManager {
                                           dismissActionLabel: .ResearchSurface.DismissButtonLabel,
                                           image: image)
 
-        let viewModel = SurveySurfaceViewModel(with: info)
+        let viewModel = SurveySurfaceViewModel(with: info, andDelegate: self)
 
-        let viewController = SurveySurfaceViewController(viewModel: viewModel,
-                                                         themeManager: themeManager,
-                                                         notificationCenter: notificationCenter)
-
-        return viewController
+        return SurveySurfaceViewController(viewModel: viewModel,
+                                           themeManager: themeManager,
+                                           notificationCenter: notificationCenter)
     }
 
     /// Call messagingManager to retrieve the message for research surface.
@@ -60,5 +64,18 @@ class SurveySurfaceManager {
         if !validMessage.isExpired {
             message = validMessage
         }
+    }
+
+    // MARK: - MessageSurfaceProtocol
+    func didDisplayMessage() {
+        message.map(messagingManager.onMessageDisplayed)
+    }
+
+    func didTapTakeSurvey() {
+        message.map(messagingManager.onMessagePressed)
+    }
+
+    func didTapDismissSurvey() {
+        message.map(messagingManager.onMessageDismissed)
     }
 }

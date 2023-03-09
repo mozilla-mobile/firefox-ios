@@ -20,8 +20,11 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         static let buttonBottomMarginMultiplier: CGFloat  = 0.1
 
         static let titleFontSize: CGFloat = 20
+        static let titleDistanceFromImage: CGFloat = 16
+        static let titleWidth: CGFloat = 343
 
-        static let imageViewSize = CGSize(width: 128, height: 128)
+        static let imageViewSize = CGSize(width: 123.87, height: 128)
+        static let imageViewCenterYOffset: CGFloat = 0.15
     }
 
     // MARK: - Variables
@@ -40,11 +43,11 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     private lazy var titleLabel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
                                                                        size: UX.titleFontSize)
-        label.isHidden = true
         label.numberOfLines = 0
         label.textAlignment = .center
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.textLabel
+        label.alpha = 0.0
     }
 
     private lazy var takeSurveyButton: ResizableButton = .build { button in
@@ -60,6 +63,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
                                                 right: UX.buttonHorizontalInset)
+        button.alpha = 0.0
     }
 
     private lazy var dismissSurveyButton: ResizableButton = .build { button in
@@ -75,7 +79,10 @@ class SurveySurfaceViewController: UIViewController, Themeable {
                                                 left: UX.buttonHorizontalInset,
                                                 bottom: UX.buttonVerticalInset,
                                                 right: UX.buttonHorizontalInset)
+        button.alpha = 0.0
     }
+
+    var imageViewYConstraint: NSLayoutConstraint!
 
     // MARK: - View Lifecyle
     init(viewModel: SurveySurfaceViewModel,
@@ -98,32 +105,49 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
         listenForThemeChange(view)
         setupView()
-        updateLayout()
+        updateContent()
         applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //        viewModel.sendCardViewTelemetry()
+    }
 
-//        delegate?.pageChanged(viewModel.cardType)
-//        viewModel.sendCardViewTelemetry()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.didDisplayMessage()
+        animateElements()
     }
 
     func setupView() {
+        view.addSubview(imageView)
+        view.addSubview(titleLabel)
         view.addSubview(dismissSurveyButton)
         view.addSubview(takeSurveyButton)
 
         let buttonSideMargin = view.frame.width * UX.buttonSideMarginMultiplier
+        imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
 
         NSLayoutConstraint.activate([
+            imageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize.height),
+            imageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize.width),
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageViewYConstraint,
+
+            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor,
+                                            constant: UX.titleDistanceFromImage),
+            titleLabel.widthAnchor.constraint(equalToConstant: UX.titleWidth),
+            titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+
             takeSurveyButton.widthAnchor.constraint(lessThanOrEqualToConstant: UX.buttonMaxWidth),
             takeSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
             takeSurveyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                         constant: buttonSideMargin),
+                                                      constant: buttonSideMargin),
             takeSurveyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                          constant: -buttonSideMargin),
-            dismissSurveyButton.bottomAnchor.constraint(equalTo: dismissSurveyButton.topAnchor,
-                                                        constant: UX.buttonSeparation),
+                                                       constant: -buttonSideMargin),
+            takeSurveyButton.bottomAnchor.constraint(equalTo: dismissSurveyButton.topAnchor,
+                                                     constant: -UX.buttonSeparation),
 
             dismissSurveyButton.widthAnchor.constraint(lessThanOrEqualToConstant: UX.buttonMaxWidth),
             dismissSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
@@ -136,25 +160,51 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         ])
     }
 
-    private func updateLayout() {
+    private func updateContent() {
         titleLabel.text = viewModel.info.text
         imageView.image = viewModel.info.image
         takeSurveyButton.setTitle(viewModel.info.takeSurveyButtonLabel, for: .normal)
         dismissSurveyButton.setTitle(viewModel.info.dismissActionLabel, for: .normal)
-//        handleSecondaryButton()
     }
 
+    private func animateElements() {
+        changeImageViewConstraint()
+        UIView.animate(
+            withDuration: 0.3,
+            animations: ({
+                self.view.layoutIfNeeded()
+            })
+        ) { _ in
+            UIView.animate(withDuration: 0.3, delay: 0) {
+                self.titleLabel.alpha = 1
+                self.takeSurveyButton.alpha = 1
+                self.dismissSurveyButton.alpha = 1
+            }
+        }
+    }
+
+    private func changeImageViewConstraint() {
+        NSLayoutConstraint.deactivate([
+            imageViewYConstraint
+        ])
+        imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor,
+                                                                  constant: -(view.frame.height * UX.imageViewCenterYOffset))
+        NSLayoutConstraint.activate([
+            imageViewYConstraint
+        ])
+    }
+
+    // MARK: - Button Actions
     @objc func takeSurveyAction() {
+        viewModel.didTapTakeSurvey()
         print("RGB - take the survey!")
-//        viewModel.sendTelemetryButton(isPrimaryAction: true)
-//        delegate?.primaryAction(viewModel.cardType)
+        //        viewModel.sendTelemetryButton(isPrimaryAction: true)
     }
 
     @objc func dismissAction() {
+        viewModel.didTapDismissSurvey()
         dismiss(animated: true)
-        print("RGB - dismiss me!")
-//        viewModel.sendTelemetryButton(isPrimaryAction: false)
-//        delegate?.showNextPage(viewModel.cardType)
+        //        viewModel.sendTelemetryButton(isPrimaryAction: false)
     }
 
     // MARK: - Themable
@@ -170,6 +220,6 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
         dismissSurveyButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
         dismissSurveyButton.backgroundColor = theme.colors.actionSecondary
-//        handleSecondaryButton()
+        //        handleSecondaryButton()
     }
 }

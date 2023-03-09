@@ -6,40 +6,31 @@ import Foundation
 import Shared
 
 class SurveySurfaceViewModel {
-//    private var message: GleanPlumbMessage
-//    private var messagingManager: GleanPlumbMessageManagerProtocol
+    //    private var message: GleanPlumbMessage
+    //    private var messagingManager: GleanPlumbMessageManagerProtocol
 
-//    weak var delegate: HomepageDataModelDelegate?
-//    weak var homepanelDelegate: HomePanelDelegate?
-//    var dismissClosure: (() -> Void)?
+    weak var delegate: SurveySurfaceDelegate?
+    //    weak var homepanelDelegate: HomePanelDelegate?
+    //    var dismissClosure: (() -> Void)?
 
     var info: SurveySurfaceInfoProtocol
 
-    init(with info: SurveySurfaceInfoProtocol) {
+    init(with info: SurveySurfaceInfoProtocol,
+         andDelegate delegate: SurveySurfaceDelegate
+    ) {
         self.info = info
+        self.delegate = delegate
     }
 
-//    func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage {
-//        return message
-//    }
+    func didDisplayMessage() {
+//        delegate?.didDisplayMessage()
+    }
 
-//    var shouldDisplayMessageCard: Bool {
-//        guard let message = message else { return false }
-//
-//        return !message.isExpired
-//    }
+    func didTapTakeSurvey() {
+//        delegate?.didTapTakeSurvey()
+    }
 
-//    func handleMessageDisplayed() {
-//        message.map(messagingManager.onMessageDisplayed)
-//    }
-//
-//    func handleMessagePressed() {
-//        message.map(messagingManager.onMessagePressed)
-//        dismissClosure?()
-//    }
-//
-//    func handleMessageDismiss() {
-//        message.map(messagingManager.onMessageDismissed)
-//        dismissClosure?()
-//    }
+    func didTapDismissSurvey() {
+//        delegate?.didTapDismissSurvey()
+    }
 }
