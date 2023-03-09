@@ -17,6 +17,8 @@ Ecosia for iOS is based on a fork of the code of "Firefox for iOS". We want to e
 -----------------
 This branch works with [Xcode 14.2](https://developer.apple.com/download/more/?=xcode)
 
+:construction: **Note**: For building on **Apple Silicon** for Simulator you need to enable **Rosetta** for now.
+
 1. Install the latest [Xcode developer tools](https://developer.apple.com/download/applications/) from Apple.
 1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
 
@@ -60,7 +62,7 @@ Our certs and profiles are managed centrally by [fastlane match](https://docs.fa
 
 Find the repo is [here](https://github.com/ecosia/IosSearchSigning)
 
-Run `bundle exec fastlane match --readonly` to add certs and profiles to your system. You can append  `-p "keychain password"` to avoid keychain prompts during the proces
+Run `bundle exec fastlane match --readonly` to add certs and profiles to your system. You can append  `-p "keychain password"` to avoid keychain prompts during the process. The passphrase to decrypt the repo can be found in LastPass.
 
 #### Adding your own device
 
