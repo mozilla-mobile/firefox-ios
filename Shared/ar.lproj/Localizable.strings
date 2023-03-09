@@ -1222,9 +1222,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "حسنًا، فهمت";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "إن لم يعمل أحد المواقع كما يجب، اضغط أيقونة الدرع في شريط العنوان وعطّل الحماية الموسّعة من التعقب في الصفحة.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "انتبه!";
 
@@ -1236,9 +1233,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "تقلّل الإعلانات المستهدفة وتُساعد على منع المُعلنين من تعقب تصفحّك.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "إن لم يعمل أحد المواقع كما يجب، اضغط أيقونة الدرع في شريط العنوان وعطّل الحماية المحسّنة من التعقب في الصفحة.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "اسمح ببعض المتعقّبات الإعلانية لتعمل المواقع كما ينبغي.";

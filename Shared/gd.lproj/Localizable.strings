@@ -1486,9 +1486,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Ceart, tha mi agaibh";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Mur eil làrach ag obair mar bu chòir, thoir gnogag air an sgiath ann am bàr an t-seòlaidh agus cuir dheth an dìon leasaichte o thracadh air an duilleag sin.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "An aire!";
 
@@ -1500,9 +1497,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Lùghdaichidh seo an t-sanasachd thargaidichte agus cuiridh e bacadh air luchd-sanasachd o bhith a’ tracadh na nì thu air an lìon.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Mur eil làrach ag obair mar bu chòir, thoir gnogag air an sgiath ann am bàr an t-seòlaidh agus cuir dheth an dìon leasaichte o thracadh air an duilleag sin.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Bheir seo cead do chuid a thracadh sanasachd ach an obraich làraichean-lìn mar bu chòir.";

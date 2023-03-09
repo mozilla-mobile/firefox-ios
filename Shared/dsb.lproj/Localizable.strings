@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "W pórěźe, som zrozměł";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Jolic sedło ako wótcakane njefunkcioněrujo, pótusniśo šćit w adresowem pólu a znjemóžniśo pólěpšony slědowański šćit za ten bok.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Glědajśo!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reducěrujo zaměrne wabjenje a zajźujo tomu, až wabjerje waše pśeglědowanje slěduju.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Jolic sedło ako wótcakane njefunkcioněrujo, pótusniśo šćit w adresowem pólu a znjemóžniśo pólěpšony slědowański šćit za ten bok.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dowólujo tšochu wabjeńskego slědowanja, aby websydła pórědnje funkcioněrowali.";

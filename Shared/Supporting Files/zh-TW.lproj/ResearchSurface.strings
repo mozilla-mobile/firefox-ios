@@ -1,0 +1,9 @@
+/* On the Research Survey popup, the text that explains what the screen is about. Placeholder is for the app name. */
+"Body.Text.v112" = "請協助填寫簡短問卷，讓 %@ 變得更好。";
+
+/* On the Research Survey popup, the text for the button that, when tapped, will dismiss the popup and take the user to a survey. */
+"PrimaryButton.Label.v112" = "填寫問卷";
+
+/* On the Research Survey popup, the text for the button that, when tapped, will dismiss this screen, and the user will not be taken to the survey. */
+"SecondaryButton.Label.v112" = "不要，謝謝";
+

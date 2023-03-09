@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Ados, ulertuta";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Gune bat ez badabil espero bezala, sakatu helbide-barrako babesaren ikonoa eta desaktibatu jarraipenaren babes hobetua orri horretarako.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Argi!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Pertsonalizatutako iragarkiak murrizten ditu eta iragarleek zure nabigazioaren jarraipena ez egitea laguntzen du.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Gune bat ez badabil espero bezala, sakatu helbide-barrako babesaren ikonoa eta desaktibatu jarraipenaren babes hobetua orri horretarako.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Baimendu neurri baterainoko iragarkien jarraipena webguneak ondo ibil daitezen.";

@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "En ordo, mi komprenis";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Se retejo me funkcias bone, tuŝetu la ŝildon en la adresa strio kaj malŝaltu la pligbonigitan protekton kontraŭ spurado por tiu paĝo.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Atento!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Tio ĉi reduktas alcelajn reklamojn kaj helpas eviti ke reklamistoj spuru vian retumon.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Se retejo me funkcias bone, tuŝetu la ŝildon en la adresa strio kaj malŝaltu la pligbonigitan protekton kontraŭ spurado por tiu paĝo.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permesi kelkajn reklamajn spurilojn, tiel ke retejoj bone funkcios.";

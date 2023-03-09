@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Rendben, értem";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Ha egy webhely nem a várt módon működik, akkor koppintson a pajzsra a címsorban, és kapcsolja ki az oldal fokozott követés elleni védelmét.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Figyelem!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Csökkenti a célzott hirdetések számát, és segít megakadályozni, hogy a hirdetők nyomon kövessék az Ön böngészését.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ha egy webhely nem a várt módon működik, akkor koppintson a pajzsra a címsorban, és kapcsolja ki az oldal fokozott követés elleni védelmét.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Néhány hirdetéskövető engedélyezése, hogy a weboldalak megfelelően működjenek.";
