@@ -3106,7 +3106,7 @@ extension String {
         value: "Blocks more trackers, ads, and popups. Pages load faster, but some functionality may not work.",
         comment: "Description for strict level tracker protection")
     public static let TrackingProtectionLevelFooter = MZLocalizedString(
-        "Settings.TrackingProtection.ProtectionLevel.Footer",
+        "Settings.TrackingProtection.ProtectionLevel.Footer.Lock",
         tableName: nil,
         value: "If a site doesn’t work as expected, tap the lock in the address bar and turn off Enhanced Tracking Protection for that page.",
         comment: "Footer information for tracker protection level.")
