@@ -1,0 +1,12 @@
+/* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
+"Onboarding.Notification.Continue.Action.v112" = "Tiếp tục";
+
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Description.v112" = "Gửi các thẻ giữa các thiết bị của bạn và nhận các mẹo về cách tận dụng tối đa %@.";
+
+/* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
+"Onboarding.Notification.Skip.Action.v112" = "Không phải bây giờ";
+
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v112" = "Thông báo giúp bạn làm được nhiều việc hơn với %@";
+

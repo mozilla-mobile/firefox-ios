@@ -1414,9 +1414,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Olgu, sain aru";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Kui sait ei tööta ootuspäraselt, siis puuduta aadressiribal olevat kilpi ning lülita selle lehe jaoks täiustatud jälitamisvastane kaitse välja.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Tähelepanu!";
 
@@ -1428,9 +1425,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Vähendab sihitud reklaame ja takistab reklaamijatel sinu tegevuse jälitamist.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Kui sait ei tööta ootuspäraselt, siis puuduta aadressiribal olevat kilpi ning lülita selle lehe jaoks täiustatud jälitamisvastane kaitse välja.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Mõned jälitavad reklaamid on lubatud, nii et saidid töötaksid ootuspäraselt.";

@@ -1,0 +1,6 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Tìm một cái gì đó gần đây. Hoặc khám phá một cái gì đó thú vị.";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Bắt đầu tìm kiếm đầu tiên của bạn";
+

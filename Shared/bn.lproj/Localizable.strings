@@ -1210,9 +1210,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ঠিক আছে, বুঝেছি";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "যদি কোন সাইট প্রত্যাশিতভাবে কাজ না করে তবে ঠিকানা বারে শিল্ডটিতে ট্যাপ করুন এবং সেই পৃষ্ঠার জন্য বর্ধিত ট্র্যাকিং সুরক্ষা বন্ধ করুন।";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "প্রস্তুত হোন!";
 
@@ -1224,9 +1221,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "লক্ষ্যযুক্ত বিজ্ঞাপনগুলি হ্রাস করে এবং বিজ্ঞাপনদাতাদেরকে আপনার ব্রাউজিং ট্র্যাক করা থেকে বিরত রাখতে সহায়তা করে।";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "যদি কোন সাইট প্রত্যাশিতভাবে কাজ না করে তবে ঠিকানা বারে শিল্ডটিতে ট্যাপ করুন এবং সেই পৃষ্ঠার জন্য বর্ধিত ট্র্যাকিং সুরক্ষা বন্ধ করুন।";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "কিছু অ্যাড ট্র্যাকিং অনুমোদন করুন যেন ওয়েবসাইট সঠিকভাবে চলতে পারে।";

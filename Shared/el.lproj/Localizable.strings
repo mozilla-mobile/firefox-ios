@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, το 'πιασα";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Αν μια ιστοσελίδα δεν λειτουργεί όπως πρέπει, πατήστε την ασπίδα στη γραμμή διευθύνσεων και απενεργοποιήστε την ενισχυμένη προστασία από καταγραφή για αυτή τη σελίδα.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Προσοχή!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Μειώνει τις στοχευμένες διαφημίσεις και εμποδίζει την καταγραφή της περιήγησής σας από διαφημιστές.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Αν μια ιστοσελίδα δεν λειτουργεί όπως πρέπει, πατήστε την ασπίδα στη γραμμή διευθύνσεων και απενεργοποιήστε την ενισχυμένη προστασία από καταγραφή για αυτή τη σελίδα.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Επιτρέπει κάποια καταγραφή διαφημίσεων, ώστε να λειτουργούν σωστά οι ιστοσελίδες.";

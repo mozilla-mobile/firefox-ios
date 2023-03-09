@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Entesos";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Si un lloc no funciona com s'espera, toqueu l'escut a la barra d'adreces i desactiveu la protecció contra el seguiment millorada per a aquella pàgina.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Atenció!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Redueix els anuncis personalitzats i ajuda a evitar que els anunciants facin seguiment de la vostra navegació.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un lloc no funciona com s'espera, toqueu l'escut a la barra d'adreces i desactiveu la protecció contra el seguiment millorada per a aquella pàgina.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permet alguns elements de seguiment de publicitat necessaris perquè els llocs web funcionin correctament.";

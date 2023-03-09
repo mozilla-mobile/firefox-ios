@@ -1474,9 +1474,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "U redu, razumijem";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Ako web-stranica ne funkcionira kako treba, dodirni štit u adresnoj traci i isključi pojačanu zaštitu od praćenja za tu stranicu.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Oprez!";
 
@@ -1488,9 +1485,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Smanjuje broj ciljanih oglasa i pomaže spriječiti oglašivače da prate tvoje kretanje internetom.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ako web-stranica ne funkcionira kako treba, dodirni štit u adresnoj traci i isključi pojačanu zaštitu od praćenja za tu stranicu.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dopušta neke programe za praćenje, kako bi web stranice mogle ispravno funkcionirati.";

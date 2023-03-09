@@ -1,0 +1,3 @@
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v112" = "Bildirimler sayesinde %@ ile daha fazlasını yapın";
+

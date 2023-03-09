@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "კარგი, გასაგებია";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად აღნიშნულ გვერდზე.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ყურადღება!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ამცირებს მიზნობრივ რეკლამებს და გეხმარებათ აირიდოთ სარეკლამოებისგან თვალის დევნება.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად აღნიშნულ გვერდზე.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის, ზოგიერთი მეთვალყურე ნებადართულია.";
