@@ -12,24 +12,8 @@ let urlLabelExample_4 = "Example Login Page 2"
 let url_4 = "test-password-2.html"
 
 class BookmarkingTests: BaseTestCase {
-    private func bookmark() {
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: TIMEOUT_LONG)
-        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
-    private func unbookmark() {
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
-        app.otherElements["menu-Bookmark-Remove"].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
     private func checkBookmarked() {
         navigator.goto(BrowserTabMenu)
-        print(app.debugDescription)
         waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()

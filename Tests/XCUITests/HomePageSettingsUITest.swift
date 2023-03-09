@@ -8,6 +8,7 @@ let websiteUrl1 = "www.mozilla.org"
 let websiteUrl2 = "developer.mozilla.org"
 let invalidUrl = "1-2-3"
 let exampleUrl = "test-example.html"
+let urlExampleLabel = "Example Domain"
 let urlMozillaLabel = "Internet for people, not profit — Mozilla"
 
 class HomePageSettingsUITests: BaseTestCase {
@@ -219,6 +220,44 @@ class HomePageSettingsUITests: BaseTestCase {
 //        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
 //        // Tab tray is open with recently open tab
 //        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
+    }
+
+    func testRecentlySaved() {
+        // Preconditons: Create 6 bookmarks & add 1 items to reading list
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        bookmarkPages()
+        addContentToReaderView()
+        navigator.performAction(Action.GoToHomePage)
+        waitForTabsButton()
+        checkRecentlySaved()
+        navigator.performAction(Action.ToggleRecentlySaved)
+        navigator.performAction(Action.GoToHomePage)
+        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved].exists)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.ToggleRecentlySaved)
+        navigator.nowAt(HomeSettings)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        checkRecentlySaved()
+        app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts[urlExampleLabel].tap()
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        unbookmark()
+        if !iPad() {
+            navigator.performAction(Action.CloseTab)
+        }
+        removeContentFromReaderView()
+        navigator.nowAt(LibraryPanel_ReadingList)
+        navigator.performAction(Action.CloseReadingListPanel)
+        navigator.goto(NewTabScreen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        checkRecentlySavedUpdated()
     }
 
     func testRecentlyVisited() {
