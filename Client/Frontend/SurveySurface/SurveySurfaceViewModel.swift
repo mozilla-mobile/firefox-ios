@@ -5,46 +5,41 @@
 import Foundation
 import Shared
 
-class SurveySurfaceViewModel: MessageSurfaceProtocol {
-    private var message: GleanPlumbMessage
-    private var messagingManager: GleanPlumbMessageManagerProtocol
+class SurveySurfaceViewModel {
+//    private var message: GleanPlumbMessage
+//    private var messagingManager: GleanPlumbMessageManagerProtocol
 
 //    weak var delegate: HomepageDataModelDelegate?
 //    weak var homepanelDelegate: HomePanelDelegate?
-    var dismissClosure: (() -> Void)?
-    var theme: Theme
+//    var dismissClosure: (() -> Void)?
 
-    init(
-        with message: GleanPlumbMessage,
-        theme: Theme,
-        and messagingManager: GleanPlumbMessageManagerProtocol
-    ) {
-        self.message = message
-        self.theme = theme
-        self.messagingManager = messagingManager
+    var info: SurveySurfaceInfoProtocol
+
+    init(with info: SurveySurfaceInfoProtocol) {
+        self.info = info
     }
 
-    func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage {
-        return message
-    }
+//    func getMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage {
+//        return message
+//    }
 
-    var shouldDisplayMessageCard: Bool {
-        guard let message = message else { return false }
+//    var shouldDisplayMessageCard: Bool {
+//        guard let message = message else { return false }
+//
+//        return !message.isExpired
+//    }
 
-        return !message.isExpired
-    }
-
-    func handleMessageDisplayed() {
-        message.map(messagingManager.onMessageDisplayed)
-    }
-
-    func handleMessagePressed() {
-        message.map(messagingManager.onMessagePressed)
-        dismissClosure?()
-    }
-
-    func handleMessageDismiss() {
-        message.map(messagingManager.onMessageDismissed)
-        dismissClosure?()
-    }
+//    func handleMessageDisplayed() {
+//        message.map(messagingManager.onMessageDisplayed)
+//    }
+//
+//    func handleMessagePressed() {
+//        message.map(messagingManager.onMessagePressed)
+//        dismissClosure?()
+//    }
+//
+//    func handleMessageDismiss() {
+//        message.map(messagingManager.onMessageDismissed)
+//        dismissClosure?()
+//    }
 }

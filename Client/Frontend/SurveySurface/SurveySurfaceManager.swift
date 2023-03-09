@@ -8,8 +8,9 @@ import Shared
 
 class SurveySurfaceManager {
     private var message: GleanPlumbMessage?
-    private let messagingManager: GleanPlumbMessageManagerProtocol
-    private let themeManager: ThemeManager
+    private var messagingManager: GleanPlumbMessageManagerProtocol
+    private var themeManager: ThemeManager
+    private var notificationCenter: NotificationProtocol
 
     private var viewModel: SurveySurfaceViewModel?
     private var viewController: SurveySurfaceViewController?
@@ -20,21 +21,31 @@ class SurveySurfaceManager {
         return false
     }
 
-    init(with themeManager: ThemeManager,
+    init(with themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
          and messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared
     ) {
         self.messagingManager = messagingManager
         self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
     }
 
     func surveySurface() -> SurveySurfaceViewController? {
-        guard let message = message else { return nil }
-        
-        let viewModel = SurveySurfaceViewModel(with: message,
-                                               theme: theme,
-                                               and: messagingManager)
+        guard let message = message,
+              !message.isExpired,
+              let image = UIImage(named: ImageIdentifiers.logo)
+        else { return nil }
 
-        let viewController = SurveySurfaceViewController(viewModel: viewModel)
+        let info = SurveySurfaceInfoModel(text: message.data.text,
+                                          takeSurveyButtonLabel: message.data.buttonLabel ?? .ResearchSurface.TakeSurveyButtonLabel,
+                                          dismissActionLabel: .ResearchSurface.DismissButtonLabel,
+                                          image: image)
+
+        let viewModel = SurveySurfaceViewModel(with: info)
+
+        let viewController = SurveySurfaceViewController(viewModel: viewModel,
+                                                         themeManager: themeManager,
+                                                         notificationCenter: notificationCenter)
 
         return viewController
     }
