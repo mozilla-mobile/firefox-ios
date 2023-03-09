@@ -1305,7 +1305,7 @@ extension String {
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings."
             )
             public static let TurnOnNotificationsMessage = MZLocalizedString(
-                "Settings.Notifications.TurnOnNotificationsTitle.v112",
+                "Settings.Notifications.TurnOnNotificationsMessage.v112",
                 tableName: "Settings",
                 value: "Go to your device Settings to turn on notifications in %@",
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
