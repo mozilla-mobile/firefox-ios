@@ -1280,29 +1280,17 @@ extension String {
                 value: "Allow All Notifications",
                 comment: "This is the title for the setting that toggles All Notifications feature in the settings menu under the Notifications section."
             )
-            public static let TabsNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.TabsNotificationsTitle",
+            public static let SyncNotificationsTitle = MZLocalizedString(
+                "Settings.Notifications.SyncNotificationsTitle",
                 tableName: "Settings",
-                value: "Tabs Sent From Other Devices",
-                comment: "This is the title for the setting that toggles Tabs Sent From Other Devices feature in the settings menu under the Notifications section."
+                value: "Sync",
+                comment: "This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section."
             )
-            public static let TabsNotificationsStatus = MZLocalizedString(
-                "Settings.Notifications.TabsNotificationsStatus",
+            public static let SyncNotificationsStatus = MZLocalizedString(
+                "Settings.Notifications.SyncNotificationsStatus",
                 tableName: "Settings",
-                value: "This must be turned on to receive tabs.",
-                comment: "This is the description for the setting that toggles Tabs Sent From Other Devices feature in the settings menu under the Notifications section."
-            )
-            public static let SyncSignInNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.SyncSignInNotificationsTitle",
-                tableName: "Settings",
-                value: "Sync Sign In Confirmation",
-                comment: "This is the title for the setting that toggles Sync Sign In Confirmation feature in the settings menu under the Notifications section."
-            )
-            public static let SyncSignInNotificationsStatus = MZLocalizedString(
-                "Settings.Notifications.SyncSignInNotificationsStatus",
-                tableName: "Settings",
-                value: "Get notified when your account is signed in on another device.",
-                comment: "This is the description for the setting that toggles Sync Sign In Confirmation feature in the settings menu under the Notifications section."
+                value: "This must be turned on to receive tabs and get notified when you sign in on another device.",
+                comment: "This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section."
             )
             public static let TipsAndFeaturesNotificationsTitle = MZLocalizedString(
                 "Settings.Notifications.TipsAndFeaturesNotificationsTitle",
