@@ -1,9 +1,12 @@
-*Thank you for submitting a pull request, your contributions are greatly appreciated!*
+[Jira ticket](https://mozilla-hub.atlassian.net/browse/FXIOS-TODO)
+[Github issue](https://github.com/mozilla-mobile/firefox-ios/issues/TODO)
 
-Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
+### Description
+TODO
 
-Please make sure you've run the test scheme and all the tests pass. If your changes affect existing tests please make sure to update the tests as well.
-
-Below is the PR naming guidelines we follow:
-
-https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide
+### Pull requests checks where applicable
+- [ ] Fill in the three TODOs above (tickets number and description of your work)
+- [ ] The PR name follows our [naming guidelines](https://github.com/mozilla-mobile/firefox-ios/wiki/Pull-Request-Naming-Guide)
+- [ ] Accessibility implemented and tested (minimum Dynamic Text and VoiceOver)
+- [ ] Unit tests written and passing
+- [ ] Documentation / comments for complex code and public methods
