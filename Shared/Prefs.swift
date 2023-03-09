@@ -32,6 +32,7 @@ public struct PrefsKeys {
     public static let SessionCount = "sessionCount"
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
+    public static let KeyFirstAppUse = "firstAppUse"
     public static let KeySecondRun = "SecondRun"
 
     public struct AppVersion {
