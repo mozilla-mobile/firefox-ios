@@ -86,7 +86,7 @@ class SessionData: NSObject, Codable, NSCoding {
         assert(currentPage > -urls.count && currentPage <= 0, "Session index is valid")
     }
 
-    // This is temprorary in order to fix a migration error, can be removed after v107 has been well adopted
+    // This is temporary in order to fix a migration error, can be removed after v107 has been well adopted
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         do {

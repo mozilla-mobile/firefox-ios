@@ -39,6 +39,8 @@ class FxAWebViewModel {
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
+
     func setupUserScript(for controller: WKUserContentController) {
         guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"),
               let source = try? String(contentsOfFile: path, encoding: .utf8)
@@ -260,6 +262,9 @@ extension FxAWebViewModel {
                 guard error == nil else { return }
                 if granted {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+
+                    // schedule engagement notification if necessary after user allowed notification permission
+                    self.engagementNotificationHelper.schedule()
                 }
             }
         }
