@@ -89,7 +89,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     func applyTheme() {

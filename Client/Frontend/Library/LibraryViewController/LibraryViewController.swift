@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Common
-import Logger
 import Shared
 import Storage
 import UIKit
@@ -88,7 +87,7 @@ class LibraryViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupNotifications(forObserver: self, observing: [.LibraryPanelStateDidChange])
     }
 

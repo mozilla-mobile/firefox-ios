@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
       "state" : {
-        "revision" : "b2f10c97dcc18c219f7488b22214e962fa9f33e3",
-        "version" : "51.8.3"
+        "revision" : "80f176317e3b25befaebb48a1009753358fa37b8",
+        "version" : "52.3.1"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/adjust/ios_sdk.git",
       "state" : {
-        "revision" : "43c5bb5eb8f77c72da856637dac5c46087c27848",
-        "version" : "4.29.6"
+        "revision" : "6ae03883c3b7d22e72e2a5937ad5dd8765d9c31d",
+        "version" : "4.33.4"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kif-framework/KIF.git",
       "state" : {
-        "revision" : "709adbc64f2d8d40d48136cdd56b0a706010904b",
-        "version" : "3.8.6"
+        "revision" : "60c0b1b429ba15c065c5cc67609371fe8cfcb7bf",
+        "version" : "3.8.7"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
       "state" : {
-        "revision" : "59eb199fdb8dd47733624e8b0277822d0232579e",
-        "version" : "7.2.2"
+        "revision" : "415b1d97fb38bda1e5a6b2dde63354720832110b",
+        "version" : "7.6.1"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-        "revision" : "34abd7056e973a2edf04a79a8d1bb759243b50f3",
-        "version" : "96.3.0"
+        "revision" : "e8753f796db870ef36664bf476e82f97710e9bc2",
+        "version" : "97.1.0"
       }
     },
     {
@@ -106,15 +106,6 @@
       "state" : {
         "revision" : "f222cbdf325885926566172f6f5f06af95473158",
         "version" : "5.6.0"
-      }
-    },
-    {
-      "identity" : "swift-protobuf",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-protobuf.git",
-      "state" : {
-        "revision" : "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
-        "version" : "1.18.0"
       }
     },
     {

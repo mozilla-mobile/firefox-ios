@@ -13,7 +13,6 @@ import Account
 import MobileCoreServices
 import Telemetry
 import Common
-import Logger
 
 struct UrlToOpenModel {
     var url: URL?
@@ -614,6 +613,8 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
         }
+
+        showQueuedAlertIfAvailable()
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -1077,7 +1078,7 @@ class BrowserViewController: UIViewController {
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
-        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, tabManager: tabManager)
+        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, model: profile.searchEngines, tabManager: tabManager)
         searchController.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
@@ -1097,7 +1098,7 @@ class BrowserViewController: UIViewController {
         // No content is showing in between the bottom search bar and the searchViewController
         if isBottomSearchBar, keyboardBackdrop == nil {
             keyboardBackdrop = UIView()
-            keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
+            keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
             view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
             keyboardBackdrop?.snp.makeConstraints { make in
                 make.edges.equalTo(view)
@@ -2611,8 +2612,8 @@ extension BrowserViewController: NotificationThemeable {
                                             topTabsViewController]
         ui.forEach { $0?.applyTheme() }
 
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
-        keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
+        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.legacyTheme.topTabs.background : urlBar.backgroundColor
+        keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
         setNeedsStatusBarAppearanceUpdate()
 
         (presentedViewController as? NotificationThemeable)?.applyTheme()

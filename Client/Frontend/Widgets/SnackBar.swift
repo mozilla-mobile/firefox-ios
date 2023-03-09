@@ -23,7 +23,7 @@ class SnackButton: UIButton {
 
     override open var isHighlighted: Bool {
         didSet {
-            self.backgroundColor = isHighlighted ? UIColor.theme.snackbar.highlight : .clear
+            self.backgroundColor = isHighlighted ? UIColor.legacyTheme.snackbar.highlight : .clear
         }
     }
 
@@ -39,8 +39,8 @@ class SnackButton: UIButton {
         }
         titleLabel?.adjustsFontForContentSizeCategory = false
         setTitle(title, for: .normal)
-        setTitleColor(UIColor.theme.snackbar.highlightText, for: .highlighted)
-        setTitleColor(UIColor.theme.snackbar.title, for: .normal)
+        setTitleColor(UIColor.legacyTheme.snackbar.highlightText, for: .highlighted)
+        setTitleColor(UIColor.legacyTheme.snackbar.title, for: .normal)
         addTarget(self, action: #selector(onClick), for: .touchUpInside)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
@@ -55,7 +55,7 @@ class SnackButton: UIButton {
 
     func drawSeparator() {
         let separator = UIView()
-        separator.backgroundColor = UIColor.theme.snackbar.border
+        separator.backgroundColor = UIColor.legacyTheme.snackbar.border
         self.addSubview(separator)
         separator.snp.makeConstraints { make in
             make.leading.equalTo(self)
@@ -68,6 +68,7 @@ class SnackButton: UIButton {
 class SnackBar: UIView {
     let snackbarClassIdentifier: String
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+    private let scrollView: UIScrollView = .build()
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -83,9 +84,8 @@ class SnackBar: UIView {
         let label = UILabel()
         label.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
         label.lineBreakMode = .byWordWrapping
-        label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.numberOfLines = 0
-        label.textColor = UIColor.Photon.Grey90 // If making themeable, change to UIColor.theme.tableView.rowText
+        label.textColor = UIColor.Photon.Grey90 // If making themeable, change to UIColor.legacyTheme.tableView.rowText
         label.backgroundColor = UIColor.clear
         return label
     }()
@@ -102,6 +102,8 @@ class SnackBar: UIView {
         stack.distribution = .fill
         stack.axis = .horizontal
         stack.alignment = .center
+        stack.layoutMargins = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        stack.isLayoutMarginsRelativeArrangement = true
         return stack
     }()
 
@@ -118,13 +120,16 @@ class SnackBar: UIView {
 
     fileprivate func setup() {
         addSubview(backgroundView)
+        addSubview(scrollView)
+
+        scrollView.addSubview(titleView)
+
         titleView.addArrangedSubview(imageView)
         titleView.addArrangedSubview(textLabel)
 
         let separator = UIView()
-        separator.backgroundColor = UIColor.theme.snackbar.border
+        separator.backgroundColor = UIColor.legacyTheme.snackbar.border
 
-        addSubview(titleView)
         addSubview(separator)
         addSubview(buttonsView)
 
@@ -140,8 +145,8 @@ class SnackBar: UIView {
         }
 
         titleView.snp.makeConstraints { make in
-            make.top.equalTo(self).offset(UIConstants.DefaultPadding)
-            make.height.greaterThanOrEqualTo(UIConstants.SnackbarButtonHeight - 2 * UIConstants.DefaultPadding)
+            make.top.bottom.equalToSuperview()
+            make.height.equalTo(scrollView).priority(250)
             make.centerX.equalTo(self).priority(500)
             make.width.lessThanOrEqualTo(self).inset(UIConstants.DefaultPadding * 2).priority(1000)
         }
@@ -149,7 +154,7 @@ class SnackBar: UIView {
         backgroundColor = UIColor.clear
         self.clipsToBounds = true // overridden by masksToBounds = false
         self.layer.borderWidth = SnackBarUX.BorderWidth
-        self.layer.borderColor = UIColor.theme.snackbar.border.cgColor
+        self.layer.borderColor = UIColor.legacyTheme.snackbar.border.cgColor
         self.layer.cornerRadius = 8
         self.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
     }
@@ -167,12 +172,9 @@ class SnackBar: UIView {
         return true
     }
 
-    override func updateConstraints() {
-        super.updateConstraints()
-
+    private func setupButtonViewLayout(constant: CGFloat = 0) {
         buttonsView.snp.remakeConstraints { make in
-            make.top.equalTo(titleView.snp.bottom).offset(UIConstants.DefaultPadding)
-            make.bottom.equalTo(self.snp.bottom)
+            make.bottom.equalTo(self.snp.bottom).inset(constant)
             make.leading.trailing.equalTo(self)
             if !self.buttonsView.subviews.isEmpty {
                 make.height.equalTo(UIConstants.SnackbarButtonHeight)
@@ -180,6 +182,29 @@ class SnackBar: UIView {
                 make.height.equalTo(0)
             }
         }
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        scrollView.snp.remakeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(buttonsView.snp.top)
+            make.height.lessThanOrEqualTo(UIScreen.main.bounds.height / 2)
+        }
+    }
+
+    override func updateConstraints() {
+        super.updateConstraints()
+        setupButtonViewLayout()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if traitCollection.horizontalSizeClass == .compact
+            && UIDevice.current.userInterfaceIdiom == .pad {
+            setupButtonViewLayout(constant: UIConstants.ToolbarHeight)
+        } else { setupButtonViewLayout() }
     }
 
     var showing: Bool {

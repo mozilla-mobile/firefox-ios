@@ -6,7 +6,6 @@ import UIKit
 import Shared
 import Storage
 import WebKit
-import Logger
 import Common
 import SiteImageView
 
@@ -173,7 +172,7 @@ class HistoryPanel: UIViewController,
             NotificationCenter.default.addObserver(self, selector: #selector(handleNotifications), name: $0, object: nil)
         }
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         handleRefreshControl()
         setupLayout()
         configureDatasource()

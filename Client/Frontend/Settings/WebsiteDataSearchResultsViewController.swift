@@ -64,7 +64,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         }
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

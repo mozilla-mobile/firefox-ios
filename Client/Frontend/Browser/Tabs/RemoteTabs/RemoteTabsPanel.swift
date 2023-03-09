@@ -49,7 +49,7 @@ class RemoteTabsPanel: UIViewController, Themeable {
         super.viewDidLoad()
         tableViewController.remoteTabsPanel = self
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupLayout()
         applyTheme()
     }
@@ -149,6 +149,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
+        tableView.alwaysBounceVertical = false
 
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0.0
@@ -158,7 +159,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         tableView.dataSource = nil
 
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.syncedTabs
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

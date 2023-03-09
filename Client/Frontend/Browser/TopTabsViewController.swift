@@ -140,7 +140,7 @@ class TopTabsViewController: UIViewController, Themeable {
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupLayout()
 
         // Setup UIDropInteraction to handle dragging and dropping
@@ -290,7 +290,7 @@ extension TopTabsViewController: TabDisplayer {
                               theme: themeManager.currentTheme)
         // Not all cells are visible when the appearance changes. Let's make sure
         // the cell has the proper theme when recycled.
-        tabCell.applyTheme()
+        tabCell.applyTheme(theme: themeManager.currentTheme)
         return tabCell
     }
 }

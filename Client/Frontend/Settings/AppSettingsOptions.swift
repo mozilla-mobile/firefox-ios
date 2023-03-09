@@ -8,7 +8,6 @@ import Shared
 import Account
 import LocalAuthentication
 import Glean
-import Logger
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -501,10 +500,10 @@ class ChangeToChinaSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if UserDefaults.standard.bool(forKey: debugPrefIsChinaEdition) {
-            UserDefaults.standard.removeObject(forKey: debugPrefIsChinaEdition)
+        if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
+            UserDefaults.standard.removeObject(forKey: AppInfo.debugPrefIsChinaEdition)
         } else {
-            UserDefaults.standard.set(true, forKey: debugPrefIsChinaEdition)
+            UserDefaults.standard.set(true, forKey: AppInfo.debugPrefIsChinaEdition)
         }
     }
 }
@@ -763,32 +762,6 @@ class YourRightsSetting: Setting {
     }
 }
 
-// Opens the on-boarding screen again
-class ShowIntroductionSetting: Setting {
-    let profile: Profile
-
-    override var accessibilityIdentifier: String? { return "ShowTour" }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: .AppSettingsShowTour, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.dismiss(animated: true, completion: {
-            // TODO: Temporary.
-            // This instance of foregroundBVC is going to be revisited after having enough telemetry of ShowTour.
-            BrowserViewController.foregroundBVC()?.presentIntroViewController(true)
-
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .tap,
-                object: .settingsMenuShowTour
-            )
-        })
-    }
-}
-
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .AppSettingsSendFeedback, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
@@ -812,7 +785,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 
         super.init(
             prefs: prefs,
-            prefKey: AppConstants.PrefSendUsageData,
+            prefKey: AppConstants.prefSendUsageData,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
             attributedStatusText: statusText,
@@ -824,7 +797,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
         )
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
+        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
     }
 
     override var accessibilityIdentifier: String? { return "SendAnonymousUsageData" }
@@ -847,7 +820,7 @@ class StudiesToggleSetting: BoolSetting {
 
         super.init(
             prefs: prefs,
-            prefKey: AppConstants.PrefStudiesToggle,
+            prefKey: AppConstants.prefStudiesToggle,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .SettingsStudiesToggleTitle),
             attributedStatusText: statusText,
@@ -857,7 +830,7 @@ class StudiesToggleSetting: BoolSetting {
         )
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.PrefStudiesToggle) ?? true)
+        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true)
     }
 
     override var accessibilityIdentifier: String? { return "StudiesToggle" }
@@ -1002,6 +975,22 @@ class ContentBlockerSetting: Setting {
     var tabManager: TabManager!
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
     override var accessibilityIdentifier: String? { return "TrackingProtection" }
+
+    override var status: NSAttributedString? {
+        let isOn = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
+
+        if isOn {
+            let currentBlockingStrength = profile
+                .prefs
+                .stringForKey(ContentBlockingConfig.Prefs.StrengthKey)
+                .flatMap(BlockingStrength.init(rawValue:)) ?? .basic
+            return NSAttributedString(string: currentBlockingStrength.settingStatus)
+        } else {
+            return NSAttributedString(string: .Settings.Homepage.Shortcuts.ToggleOff)
+        }
+    }
+
+    override var style: UITableViewCell.CellStyle { return .value1 }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -1270,7 +1259,7 @@ class OpenWithSetting: Setting {
     override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
 
     override var status: NSAttributedString {
-        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), provider != "mailto:" else {
+        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) else {
             return NSAttributedString(string: "")
         }
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {

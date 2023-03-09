@@ -442,7 +442,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
 
         locationTextField.applyTheme()
-        locationTextField.backgroundColor = UIColor.theme.textField.backgroundInOverlay
+        locationTextField.backgroundColor = UIColor.legacyTheme.textField.backgroundInOverlay
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -744,7 +744,7 @@ extension URLBarView: TabLocationViewDelegate {
 
         var overlayText = locationText
         // Make sure to use the result from urlBarDisplayTextForURL as it is responsible for extracting out search terms when on a search page
-        if let text = locationText, let url = URL(string: text), let host = url.host, AppConstants.MOZ_PUNYCODE {
+        if let text = locationText, let url = URL(string: text), let host = url.host, AppConstants.punyCode {
             overlayText = url.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         }
         enterOverlayMode(overlayText, pasted: false, search: isSearchQuery)
@@ -848,18 +848,18 @@ extension URLBarView: NotificationThemeable {
         tabsButton.applyTheme()
         addNewTabButton.applyTheme()
 
-        cancelTintColor = UIColor.theme.browser.tint
-        showQRButtonTintColor = UIColor.theme.browser.tint
-        backgroundColor = UIColor.theme.browser.background
-        line.backgroundColor = UIColor.theme.browser.urlBarDivider
+        cancelTintColor = UIColor.legacyTheme.browser.tint
+        showQRButtonTintColor = UIColor.legacyTheme.browser.tint
+        backgroundColor = UIColor.legacyTheme.browser.background
+        line.backgroundColor = UIColor.legacyTheme.browser.urlBarDivider
 
-        locationBorderColor = UIColor.theme.urlbar.border
-        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
-        locationContainer.backgroundColor = UIColor.theme.textField.background
+        locationBorderColor = UIColor.legacyTheme.urlbar.border
+        locationView.backgroundColor = inOverlayMode ? UIColor.legacyTheme.textField.backgroundInOverlay : UIColor.legacyTheme.textField.background
+        locationContainer.backgroundColor = UIColor.legacyTheme.textField.background
 
-        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        privateModeBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
+        appMenuBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
+        warningMenuBadge.badge.tintBackground(color: UIColor.legacyTheme.browser.background)
     }
 }
 
@@ -870,10 +870,10 @@ extension URLBarView: PrivateModeUI {
             privateModeBadge.show(isPrivate)
         }
 
-        locationActiveBorderColor = UIColor.theme.urlbar.activeBorder(isPrivate)
-        progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start(isPrivate),
-                                      middleColor: UIColor.theme.loadingBar.middle(isPrivate),
-                                      endColor: UIColor.theme.loadingBar.end(isPrivate))
+        locationActiveBorderColor = UIColor.legacyTheme.urlbar.activeBorder(isPrivate)
+        progressBar.setGradientColors(startColor: UIColor.legacyTheme.loadingBar.start(isPrivate),
+                                      middleColor: UIColor.legacyTheme.loadingBar.middle(isPrivate),
+                                      endColor: UIColor.legacyTheme.loadingBar.end(isPrivate))
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)
 
         applyTheme()

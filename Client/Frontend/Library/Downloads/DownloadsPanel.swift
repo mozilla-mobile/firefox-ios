@@ -6,7 +6,6 @@ import UIKit
 import Shared
 import Storage
 import Common
-import Logger
 
 class DownloadsPanel: UIViewController,
                       UITableViewDelegate,
@@ -85,7 +84,7 @@ class DownloadsPanel: UIViewController,
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

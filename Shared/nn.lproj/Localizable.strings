@@ -343,9 +343,6 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Fjern";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "Nettstadar: %d";
-
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Innstillingar";
 
@@ -933,9 +930,6 @@
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Bakgrunn i avgrensa utgåve";
-
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "Utforsk fleire bakgrunnsbilde";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Vel det perfekte bakgrunnsbildet for deg.";
@@ -1730,7 +1724,7 @@
 "TabTray.Header.FilteredTabs.SectionHeader" = "Andre";
 
 /* Title for the inactive tabs section. This section groups all tabs that haven't been used in a while. */
-"TabTray.InactiveTabs.SectionTitle" = "Uverksam faner";
+"TabTray.InactiveTabs.SectionTitle" = "Uverksame faner";
 
 /* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "TabTray.OpenNewTab.KeyCodeTitle" = "Opne ny fane";

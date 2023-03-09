@@ -2061,18 +2061,6 @@ settings_menu:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
-  show_tour_pressed:
-    type: event
-    description: |
-      Metric recorded when a user taps on the Show Tour option
-      from the app settings menu.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/12433
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12462
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-06-01"
 
 # Search and search releated metrics
 search:

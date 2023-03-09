@@ -188,7 +188,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
         definesPresentationContext = true
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 

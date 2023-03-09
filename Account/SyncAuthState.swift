@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Logger
+import Common
 import MozillaAppServices
 import Shared
 import SwiftyJSON

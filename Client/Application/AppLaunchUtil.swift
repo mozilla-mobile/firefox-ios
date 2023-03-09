@@ -8,7 +8,6 @@ import Shared
 import Storage
 import Account
 import Glean
-import Logger
 
 class AppLaunchUtil {
     private var logger: Logger
@@ -32,7 +31,7 @@ class AppLaunchUtil {
         TelemetryWrapper.shared.setup(profile: profile)
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
+        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendUsageData) ?? true
         logger.setup(sendUsageData: sendUsageData)
 
         setUserAgent()
@@ -40,6 +39,11 @@ class AppLaunchUtil {
         KeyboardHelper.defaultHelper.startObserving()
         DynamicFontHelper.defaultHelper.startObserving()
         MenuHelper.defaultHelper.setItems()
+
+        // Initialize conversion value by specifying fineValue and coarseValue.
+        // Call update postback conversion value for install event.
+        let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
+        conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
 
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
@@ -133,7 +137,7 @@ class AppLaunchUtil {
         let migrationSucceeded = UserDefaults.standard.bool(forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
         let migrationAttemptNumber = UserDefaults.standard.integer(forKey: PrefsKeys.HistoryMigrationAttemptNumber)
         UserDefaults.standard.setValue(migrationAttemptNumber + 1, forKey: PrefsKeys.HistoryMigrationAttemptNumber)
-        if !migrationSucceeded && migrationAttemptNumber < AppConstants.MAX_HISTORY_MIGRATION_ATTEMPT {
+        if !migrationSucceeded && migrationAttemptNumber < AppConstants.maxHistoryMigrationAttempt {
             logger.log("Migrating Application services history",
                        level: .info,
                        category: .sync)

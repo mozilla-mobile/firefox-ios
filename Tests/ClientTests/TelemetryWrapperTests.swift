@@ -413,18 +413,6 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Accessibility.dynamicText)
     }
 
-    // MARK: - App Settings Menu
-
-    func test_showTour_GleanIsCalled() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .settingsMenuShowTour
-        )
-
-        testEventMetricRecordingSuccess(metric: GleanMetrics.SettingsMenu.showTourPressed)
-    }
-
     // MARK: - Credit card autofill
 
     func test_autofill_credit_card_settings_tapped_GleanIsCalled() {
@@ -468,11 +456,11 @@ class TelemetryWrapperTests: XCTestCase {
 
 // MARK: - Helper functions to test telemetry
 extension XCTestCase {
-    func testEventMetricRecordingSuccess<Keys: EventExtraKey, Extras: EventExtras>(
-        metric: EventMetricType<Keys, Extras>,
+    func testEventMetricRecordingSuccess<ExtraObject>(
+        metric: EventMetricType<ExtraObject>,
         file: StaticString = #file,
         line: UInt = #line
-    ) {
+    ) where ExtraObject: EventExtras {
         XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
         XCTAssertEqual(metric.testGetValue()!.count, 1, file: file, line: line)
 

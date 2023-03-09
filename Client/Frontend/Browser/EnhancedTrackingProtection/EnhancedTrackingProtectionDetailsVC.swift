@@ -82,7 +82,7 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 
