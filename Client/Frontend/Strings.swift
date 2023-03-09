@@ -1269,61 +1269,43 @@ extension String {
 
         public struct Notifications {
             public static let Title = MZLocalizedString(
-                "Settings.Notifications.Title",
+                "Settings.Notifications.Title.v112",
                 tableName: "Settings",
                 value: "Notifications",
                 comment: "In the settings menu, in the Privacy section, this is the title for Notifications customization section."
             )
-            public static let AllowAllNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.AllowAllNotificationsTitle",
+            public static let SyncNotificationsTitle = MZLocalizedString(
+                "Settings.Notifications.SyncNotificationsTitle.v112",
                 tableName: "Settings",
-                value: "Allow All Notifications",
-                comment: "This is the title for the setting that toggles All Notifications feature in the settings menu under the Notifications section."
+                value: "Sync",
+                comment: "This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section."
             )
-            public static let TabsNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.TabsNotificationsTitle",
+            public static let SyncNotificationsStatus = MZLocalizedString(
+                "Settings.Notifications.SyncNotificationsStatus.v112",
                 tableName: "Settings",
-                value: "Tabs Sent From Other Devices",
-                comment: "This is the title for the setting that toggles Tabs Sent From Other Devices feature in the settings menu under the Notifications section."
-            )
-            public static let TabsNotificationsStatus = MZLocalizedString(
-                "Settings.Notifications.TabsNotificationsStatus",
-                tableName: "Settings",
-                value: "This must be turned on to receive tabs.",
-                comment: "This is the description for the setting that toggles Tabs Sent From Other Devices feature in the settings menu under the Notifications section."
-            )
-            public static let SyncSignInNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.SyncSignInNotificationsTitle",
-                tableName: "Settings",
-                value: "Sync Sign In Confirmation",
-                comment: "This is the title for the setting that toggles Sync Sign In Confirmation feature in the settings menu under the Notifications section."
-            )
-            public static let SyncSignInNotificationsStatus = MZLocalizedString(
-                "Settings.Notifications.SyncSignInNotificationsStatus",
-                tableName: "Settings",
-                value: "Get notified when your account is signed in on another device.",
-                comment: "This is the description for the setting that toggles Sync Sign In Confirmation feature in the settings menu under the Notifications section."
+                value: "This must be turned on to receive tabs and get notified when you sign in on another device.",
+                comment: "This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section."
             )
             public static let TipsAndFeaturesNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.TipsAndFeaturesNotificationsTitle",
+                "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112",
                 tableName: "Settings",
                 value: "Tips and Features",
                 comment: "This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section."
             )
             public static let TipsAndFeaturesNotificationsStatus = MZLocalizedString(
-                "Settings.Notifications.TipsAndFeaturesNotificationsStatus",
+                "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112",
                 tableName: "Settings",
                 value: "Learn about useful features and how to get the most out of %@.",
                 comment: "This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name."
             )
             public static let TurnOnNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.TurnOnNotificationsTitle",
+                "Settings.Notifications.TurnOnNotificationsTitle.v112",
                 tableName: "Settings",
                 value: "Turn on Notifications",
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings."
             )
             public static let TurnOnNotificationsMessage = MZLocalizedString(
-                "Settings.Notifications.TurnOnNotificationsTitle",
+                "Settings.Notifications.TurnOnNotificationsMessage.v112",
                 tableName: "Settings",
                 value: "Go to your device Settings to turn on notifications in %@",
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
