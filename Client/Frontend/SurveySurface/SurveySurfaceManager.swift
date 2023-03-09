@@ -50,8 +50,11 @@ class SurveySurfaceManager {
         return viewController
     }
 
-    /// Call messagingManager to retrieve the message for research surface
+    /// Call messagingManager to retrieve the message for research surface.
     private func updateMessage(for surface: MessageSurfaceId = .survey) {
+        // Set the message to nil just to make sure we're not accidentally showing an
+        // old message.
+        message = nil
         guard let validMessage = messagingManager.getNextMessage(for: surface) else { return }
 
         if !validMessage.isExpired {

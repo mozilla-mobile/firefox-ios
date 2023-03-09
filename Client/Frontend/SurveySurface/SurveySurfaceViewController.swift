@@ -5,16 +5,21 @@
 import Common
 import Foundation
 import Shared
+import UIKit
 
 class SurveySurfaceViewController: UIViewController, Themeable {
     struct UX {
-        static let buttonCornerRadius = 13
-        static let buttonFontSize = 16
-        static let buttonMaxWidth = 400
+        static let buttonCornerRadius: CGFloat = 13
+        static let buttonFontSize: CGFloat  = 16
+        static let buttonMaxWidth: CGFloat  = 400
+        static let buttonHeight: CGFloat = 45
+        static let buttonSeparation: CGFloat = 8
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
-        static let buttonSideMarginMultiplier = 0.05
-        static let buttonBottomMarginMultiplier = 0.1
+        static let buttonSideMarginMultiplier: CGFloat  = 0.05
+        static let buttonBottomMarginMultiplier: CGFloat  = 0.1
+
+        static let titleFontSize: CGFloat = 20
 
         static let imageViewSize = CGSize(width: 128, height: 128)
     }
@@ -33,11 +38,11 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private lazy var titleLabel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
+                                                                       size: UX.titleFontSize)
+        label.isHidden = true
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .title3,
-                                                                       size: UX.descriptionBoldFontSize)
-        label.isHidden = true
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.textLabel
     }
@@ -48,7 +53,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
-        button.addTarget(self, action: #selector(self.primaryAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.takeSurveyAction), for: .touchUpInside)
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.takeSurveyButton
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
@@ -63,7 +68,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
             size: UX.buttonFontSize)
         button.layer.cornerRadius = UX.buttonCornerRadius
         button.titleLabel?.textAlignment = .center
-        button.addTarget(self, action: #selector(self.secondaryAction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.dismissAction), for: .touchUpInside)
         button.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.dismissButton
         button.titleLabel?.adjustsFontForContentSizeCategory = true
         button.contentEdgeInsets = UIEdgeInsets(top: UX.buttonVerticalInset,
@@ -105,80 +110,59 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     func setupView() {
-        view.backgroundColor = .red
+        view.addSubview(dismissSurveyButton)
+        view.addSubview(takeSurveyButton)
 
-//        contentStackView.addArrangedSubview(imageView)
-//        contentStackView.addArrangedSubview(titleLabel)
-//        contentStackView.addArrangedSubview(descriptionBoldLabel)
-//        contentStackView.addArrangedSubview(descriptionLabel)
-//        contentContainerView.addSubviews(contentStackView)
-//
-//        buttonStackView.addArrangedSubview(primaryButton)
-//        buttonStackView.addArrangedSubview(secondaryButton)
-//
-//        containerView.addSubviews(contentContainerView)
-//        containerView.addSubviews(buttonStackView)
-//        scrollView.addSubviews(containerView)
-//        view.addSubview(scrollView)
-//
-//        // Adapt layout for smaller screens
-//        let scrollViewVerticalPadding = shouldUseSmallDeviceLayout ? UX.smallScrollViewVerticalPadding :  UX.scrollViewVerticalPadding
-//        let stackViewSpacingButtons = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacingButtons :  UX.stackViewSpacingButtons
-//        let imageViewHeight = shouldUseSmallDeviceLayout ?
-//            UX.imageViewSize.height : UX.smallImageViewSize.height
-//
-//        NSLayoutConstraint.activate([
-//            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: scrollViewVerticalPadding),
-//            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -scrollViewVerticalPadding),
-//
-//            scrollView.frameLayoutGuide.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            scrollView.frameLayoutGuide.topAnchor.constraint(equalTo: view.topAnchor, constant: scrollViewVerticalPadding),
-//            scrollView.frameLayoutGuide.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            scrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -scrollViewVerticalPadding),
-//            scrollView.frameLayoutGuide.heightAnchor.constraint(equalTo: containerView.heightAnchor).priority(.defaultLow),
-//
-//            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-//            scrollView.contentLayoutGuide.topAnchor.constraint(equalTo: containerView.topAnchor),
-//            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-//            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-//            scrollView.contentLayoutGuide.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
-//
-//            // Content view wrapper around text
-//            contentContainerView.topAnchor.constraint(equalTo: containerView.topAnchor),
-//            contentContainerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewPadding),
-//            contentContainerView.bottomAnchor.constraint(equalTo: buttonStackView.topAnchor, constant: -stackViewSpacingButtons),
-//            contentContainerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
-//
-//            contentStackView.topAnchor.constraint(greaterThanOrEqualTo: contentContainerView.topAnchor, constant: UX.stackViewPadding),
-//            contentStackView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
-//            contentStackView.bottomAnchor.constraint(greaterThanOrEqualTo: contentContainerView.bottomAnchor, constant: -UX.stackViewPadding).priority(.defaultLow),
-//            contentStackView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor),
-//            contentStackView.centerYAnchor.constraint(equalTo: contentContainerView.centerYAnchor),
-//
-//            buttonStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: UX.stackViewPadding),
-//            buttonStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -UX.stackViewPadding),
-//            buttonStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -UX.stackViewPadding),
-//
-//            imageView.heightAnchor.constraint(equalToConstant: imageViewHeight)
-//        ])
-//
-//        contentStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
-//        buttonStackView.spacing = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacing : UX.stackViewSpacing
+        let buttonSideMargin = view.frame.width * UX.buttonSideMarginMultiplier
+
+        NSLayoutConstraint.activate([
+            takeSurveyButton.widthAnchor.constraint(lessThanOrEqualToConstant: UX.buttonMaxWidth),
+            takeSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
+            takeSurveyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                         constant: buttonSideMargin),
+            takeSurveyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                          constant: -buttonSideMargin),
+            dismissSurveyButton.bottomAnchor.constraint(equalTo: dismissSurveyButton.topAnchor,
+                                                        constant: UX.buttonSeparation),
+
+            dismissSurveyButton.widthAnchor.constraint(lessThanOrEqualToConstant: UX.buttonMaxWidth),
+            dismissSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
+            dismissSurveyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
+                                                         constant: buttonSideMargin),
+            dismissSurveyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                                          constant: -buttonSideMargin),
+            dismissSurveyButton.bottomAnchor.constraint(equalTo: view.bottomAnchor,
+                                                        constant: -(view.frame.height * UX.buttonBottomMarginMultiplier))
+        ])
     }
 
     private func updateLayout() {
-        titleLabel.text = viewModel.infoModel.title
-        imageView.image = viewModel.infoModel.image
+        titleLabel.text = viewModel.info.text
+        imageView.image = viewModel.info.image
         takeSurveyButton.setTitle(viewModel.info.takeSurveyButtonLabel, for: .normal)
         dismissSurveyButton.setTitle(viewModel.info.dismissActionLabel, for: .normal)
 //        handleSecondaryButton()
     }
 
+    @objc func takeSurveyAction() {
+        print("RGB - take the survey!")
+//        viewModel.sendTelemetryButton(isPrimaryAction: true)
+//        delegate?.primaryAction(viewModel.cardType)
+    }
+
+    @objc func dismissAction() {
+        dismiss(animated: true)
+        print("RGB - dismiss me!")
+//        viewModel.sendTelemetryButton(isPrimaryAction: false)
+//        delegate?.showNextPage(viewModel.cardType)
+    }
+
     // MARK: - Themable
     func applyTheme() {
         let theme = themeManager.currentTheme
+
+        view.backgroundColor = theme.colors.layer2
+
         titleLabel.textColor = theme.colors.textPrimary
 
         takeSurveyButton.setTitleColor(theme.colors.textInverted, for: .normal)
