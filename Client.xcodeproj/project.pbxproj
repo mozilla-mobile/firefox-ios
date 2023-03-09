@@ -673,6 +673,7 @@
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
 		AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */; };
+		B6148E1E29B9AC6B00951B91 /* GroupedTabContainerCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6148E1D29B9AC6B00951B91 /* GroupedTabContainerCellTests.swift */; };
 		B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */; };
 		B6148E1E29B9AC6B00951B91 /* GroupedTabContainerCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6148E1D29B9AC6B00951B91 /* GroupedTabContainerCellTests.swift */; };
 		BA6E311FBCA7A2157F48568A /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA6E371A3948814CAA0C83E4 /* Telemetry.swift */; };
@@ -8404,6 +8405,7 @@
 				E4CD9F1C1A6D9C2800318571 /* WebServerTests.swift */,
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
+				B6148E1D29B9AC6B00951B91 /* GroupedTabContainerCellTests.swift */,
 				B640467D29B9B58200C5C7B6 /* TabLocationViewTests.swift */,
 				B6148E1D29B9AC6B00951B91 /* GroupedTabContainerCellTests.swift */,
 			);
