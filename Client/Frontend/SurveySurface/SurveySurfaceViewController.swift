@@ -23,8 +23,8 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         static let titleDistanceFromImage: CGFloat = 16
         static let titleWidth: CGFloat = 343
 
-        static let imageViewSize = CGSize(width: 123.87, height: 128)
-        static let imageViewCenterYOffset: CGFloat = 0.15
+        static let imageViewSize = CGSize(width: 130, height: 130)
+        static let imageViewCenterYOffset: CGFloat = 0.1
     }
 
     // MARK: - Variables
