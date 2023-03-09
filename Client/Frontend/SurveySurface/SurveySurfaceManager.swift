@@ -47,7 +47,11 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
                                           dismissActionLabel: .ResearchSurface.DismissButtonLabel,
                                           image: image)
 
-        let viewModel = SurveySurfaceViewModel(with: info, andDelegate: self)
+        let telemetry = SurveySurfaceTelemetry()
+
+        let viewModel = SurveySurfaceViewModel(with: info,
+                                               telemetry: telemetry,
+                                               andDelegate: self)
 
         return SurveySurfaceViewController(viewModel: viewModel,
                                            themeManager: themeManager,

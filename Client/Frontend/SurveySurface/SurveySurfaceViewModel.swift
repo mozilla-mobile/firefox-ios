@@ -14,11 +14,14 @@ class SurveySurfaceViewModel {
     //    var dismissClosure: (() -> Void)?
 
     var info: SurveySurfaceInfoProtocol
+    var telemetry: SurveySurfaceTelemetry
 
     init(with info: SurveySurfaceInfoProtocol,
+         telemetry: SurveySurfaceTelemetry,
          andDelegate delegate: SurveySurfaceDelegate
     ) {
         self.info = info
+        self.telemetry = telemetry
         self.delegate = delegate
     }
 
