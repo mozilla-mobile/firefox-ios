@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "IH, awi-t-id";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Ma yella smel ur iteddu ara akken yuɣ tanumi, tekki ɣef ẓẓerb-nni deg ufeggag n tensa, sakin sens ammesten uḥriṣ mgal aḍfaṛ i usebter-a.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Aqeṛṛu d afella!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Ad isenɣeṣ adellel yeṭṭafaṛen daɣen ad isewḥel iberraḥen ur ṭṭafaṛen ara tunigin-ik.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ma yella smel ur iteddu ara akken yuɣ tanumi, tekki ɣef ẓẓerb-nni deg ufeggag n tensa, sakin sens ammesten uḥriṣ mgal aḍfaṛ i usebter-a.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Sireg kra n yineḍfaṛen n udellel akken ismal web ad ddun akken iwata.";

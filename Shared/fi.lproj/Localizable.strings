@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Poista";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Sivut: %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Asetukset";
 
@@ -1576,9 +1579,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Selvä";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Jos sivusto ei toimi odotetulla tavalla, napauta kilpeä osoiterivillä ja poista kyseisen sivun tehostettu seurannan suojaus käytöstä.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Huomio!";
 
@@ -1590,9 +1590,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Vähentää kohdennettua mainontaa ja auttaa estämään mainostajia seuraamasta selaamistasi.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Jos sivusto ei toimi odotetulla tavalla, napauta kilpeä osoiterivillä ja poista kyseisen sivun tehostettu seurannan suojaus käytöstä.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Salli joitain seuraimia, jotta sivustot toimivat oikein.";

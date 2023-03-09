@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, e mora vesh";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Nëse një sajt nuk funksionon si pritej, prekni mburojën te shtylla e adresave dhe çaktivizoni Mbrojtjen e Thelluar Nga Gjurmimet për atë faqe.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Kini mendjen!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Ul numrin e reklamave të qepura enkas për ju dhe ndihmon të ndalen gjurmimi i shfletimeve tuaja nga reklamues.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Nëse një sajt nuk funksionon si pritej, prekni mburojën te shtylla e adresave dhe çaktivizoni Mbrojtjen e Thelluar Nga Gjurmimet për atë faqe.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Lejon disa reklama gjurmimi, kështu që sajtet punojnë si pritet.";

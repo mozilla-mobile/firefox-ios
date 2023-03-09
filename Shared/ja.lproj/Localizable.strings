@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "サイトが期待通りに動作しない場合は、アドレスバー内の盾アイコンをタップして、そのページの強化型トラッキング防止をオフにしてください。";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "注意！";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ターゲット型広告を減らし、ユーザーのブラウジングを追跡する広告を止めるのを助けます。";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "サイトが期待通りに動作しない場合は、アドレスバー内の盾アイコンをタップして、そのページの強化型トラッキング防止をオフにしてください。";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ウェブサイトが正常に機能するよう、一部のトラッカー広告を許可します。";

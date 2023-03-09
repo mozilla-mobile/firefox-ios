@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, chapì";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Sch'ina pagina na funcziuna betg sco spetgà, pos ti tippar sin il scut en la trav d'adressas e deactivar la protecziun avanzada cunter il fastizar per quella pagina.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Attenziun!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reducescha reclamas tenor profil e gida ad impedir che incumbensaders da reclama ta suondan en il web.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Sch'ina pagina na funcziuna betg sco spetgà, pos ti tippar sin il scut en la trav d'adressas e deactivar la protecziun avanzada cunter il fastizar per quella pagina.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permetta tscherts fastizaders per che las paginas d'internet funcziunian correctamain.";

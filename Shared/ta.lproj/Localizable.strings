@@ -970,9 +970,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "சரி, புரிந்தது!";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "ஒரு தளம் எதிர்பார்த்தபடி செயல்படவில்லை என்றால், முகவரிப் பட்டியில் உள்ள கவசத்தைத் தட்டி, அந்தப் பக்கத்திற்கான மேம்பட்ட கண்காணிப்பு பாதுகாப்பை அணைக்கவும்.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "முன்னறிவிப்பு";
 
@@ -984,9 +981,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "இலக்கு விளம்பரங்களைக் குறைக்கிறது மற்றும் விளம்பரதாரர்கள் உங்கள் உலாவலைக் கண்காணிப்பதைத் தடுக்க உதவுகிறது.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "ஒரு தளம் எதிர்பார்த்தபடி செயல்படவில்லை என்றால், முகவரிப் பட்டியில் உள்ள கவசத்தைத் தட்டி, அந்தப் பக்கத்திற்கான மேம்பட்ட கண்காணிப்பு பாதுகாப்பை அணைக்கவும்.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "வலைதளம் முறையாக இயங்க சில தடமறிகளை அனுமதி.";

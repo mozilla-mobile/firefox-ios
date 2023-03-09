@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Entfernen";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Seiten: %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Einstellungen";
 
@@ -1576,9 +1579,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Ok, verstanden";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Wenn eine Website nicht wie erwartet funktioniert, tippen Sie auf den Schild in der Adressleiste und deaktivieren Sie den verbesserten Tracking-Schutz für diese Seite.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Achtung!";
 
@@ -1590,9 +1590,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduziert gezielte Anzeigen und verhindert, dass Werbetreibende Ihre Online-Aktivitäten verfolgen.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Wenn eine Website nicht wie erwartet funktioniert, tippen Sie auf den Schild in der Adressleiste und deaktivieren Sie den verbesserten Tracking-Schutz für diese Seite.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Erlaubt einigen System („Trackern“), Ihre Aktivitäten zu verfolgen, damit Websites wie erwartet funktionieren.";

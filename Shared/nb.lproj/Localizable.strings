@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Fjern";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Sider: %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Innstillinger";
 
@@ -1576,9 +1579,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, jeg skjønner";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Hvis et nettsted ikke fungerer som forventet, kan du trykke på skjoldet i adressefeltet og slå av Utvidet sporingsbeskyttelse for det nettstedet.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Varsel!";
 
@@ -1590,9 +1590,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduserer målrettede annonser og hjelper med å hindre annonsører fra å spore surfing.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Hvis et nettsted ikke fungerer som forventet, kan du trykke på skjoldet i adressefeltet og slå av Utvidet sporingsbeskyttelse for det nettstedet.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Tillater noe sporing fra reklamer slik at nettsteder fungerer riktig.";

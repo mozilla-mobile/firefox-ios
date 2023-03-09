@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, eg forstår";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Dersom ein nettstad ikkje fungerer som forventa, kan du trykkje på skjoldet i adressefeltet og slå av Utvida sporingsvern for den nettstaden.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Varsel!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduserer målretta annonsar og hjelper med å hindre annonsørar frå å spore surfing.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Dersom ein nettstad ikkje fungerer som forventa, kan du trykkje på skjoldet i adressefeltet og slå av Utvida sporingssvern for denne nettstaden.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Tillèt noko sporing frå reklamar slik at nettstadar fungerer rett.";

@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "ລຶບ";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "ໜ້າ: %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "ການຕັ້ງຄ່າ";
 
@@ -1576,9 +1579,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "ຖ້າເວັບໄຊທ໌ບໍ່ສາມາດເຮັດວຽກໄດ້ຕາມທີ່ຄາດຫວັງ ໃຫ້ແຕະໄສໂລ່ໃນແຖບທີ່ຢູ່ ແລະ ປິດການປັບປຸງການປ້ອງກັນການຕິດຕາມສຳລັບໜ້ານັ້ນ.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ລະວັງ!";
 
@@ -1590,9 +1590,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ລຸດຜ່ອນການໂຄສະນາ ແລະ ຊ່ວຍຢຸດຜູ້ໂຄສະນາບໍ່ໃຫ້ຕິດຕາມການທ່ອງເນັດຂອງທ່ານ.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "ຖ້າເວັບໄຊທບໍ່ເຮັດວຽກຕາມທີ່ຄາດໄວ້ ໃຫ້ແຕະໃສ່ໂລ້ໃນແທັບທີ່ຢູ່ ແລະ ປິດການປ້ອງກັນການຕິດຕາມສຳລັບຫນ້ານັ້ນ.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ອະນຸຍາດໃຫ້ມີການຕິດຕາມໂຄສະນາບາງສ່ວນ ເພື່ອເຮັດໃຫ້ເວັບໄຊທເຮັດວຽກໄດ້ຕາມປົກກະຕິ.";

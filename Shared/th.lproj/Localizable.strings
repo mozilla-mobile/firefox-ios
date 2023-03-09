@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ตกลง เข้าใจแล้ว";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "ถ้าเว็บไซต์ไม่ทำงานตามที่คาดไว้ แตะที่โล่ในแถบที่อยู่และปิด การป้องการติดตามที่มากขึ้น สำหรับหน้านั้น";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ระวัง!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ลดโฆษณาที่กำหนดเป้าหมายและช่วยหยุดผู้โฆษณาไม่ให้ติดตามการเรียกดูของคุณ";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "ถ้าเว็บไซต์ไม่ทำงานตามที่คาดไว้ แตะที่โล่ในแถบที่อยู่และปิด การป้องการติดตามที่มากขึ้น สำหรับหน้านั้น";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "อนุญาตให้มีการติดตามโฆษณาบางส่วนเพื่อให้เว็บไซต์ทำงานได้ถูกต้อง";
