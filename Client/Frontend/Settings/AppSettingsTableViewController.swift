@@ -99,7 +99,12 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     }
 
     override func generateSettings() -> [SettingSection] {
-        var settings = [SettingSection]()
+        let footerTitle = NSAttributedString(
+            string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
+        var settings = [
+            SettingSection(footerTitle: footerTitle,
+                           children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])
+        ]
 
         let prefs = profile.prefs
         var generalSettings: [Setting] = [
@@ -158,13 +163,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 titleText: .SettingsShowLinkPreviewsTitle,
                 statusText: .SettingsShowLinkPreviewsStatus)
         ]
-
-        if #available(iOS 14.0, *) {
-            settings += [
-                SettingSection(footerTitle: NSAttributedString(string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription),
-                               children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])
-            ]
-        }
 
         let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
