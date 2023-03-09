@@ -149,6 +149,7 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
 
         tableView.rowHeight = UX.rowHeight
         tableView.separatorInset = .zero
+        tableView.alwaysBounceVertical = false
 
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0.0
