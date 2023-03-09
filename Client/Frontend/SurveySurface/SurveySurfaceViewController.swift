@@ -161,7 +161,8 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private func updateContent() {
-        titleLabel.text = viewModel.info.text
+        let titleString = String(format: viewModel.info.text, AppName.shortName.rawValue)
+        titleLabel.text = titleString
         imageView.image = viewModel.info.image
         takeSurveyButton.setTitle(viewModel.info.takeSurveyButtonLabel, for: .normal)
         dismissSurveyButton.setTitle(viewModel.info.dismissActionLabel, for: .normal)
