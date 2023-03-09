@@ -125,7 +125,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             }
 
         @unknown default:
-            ()
+            sendNotifications = false
         }
         return sendNotifications
     }
