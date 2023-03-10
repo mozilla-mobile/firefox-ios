@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    lazy var allowAllNotifications: BoolSetting = {
+    private lazy var allowAllNotifications: BoolSetting = {
         return BoolSetting(
             title: .Settings.Notifications.AllowAllNotificationsTitle,
             prefs: prefs,
@@ -37,7 +37,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         }
     }()
 
-    lazy var tabsNotifications: BoolSetting = {
+    private lazy var tabsNotifications: BoolSetting = {
         let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
         return BoolSetting(
             title: .Settings.Notifications.TabsNotificationsTitle,
@@ -50,7 +50,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         }
     }()
 
-    lazy var syncSignInNotifications: BoolSetting = {
+    private lazy var syncSignInNotifications: BoolSetting = {
         let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
         return BoolSetting(
             title: .Settings.Notifications.SyncSignInNotificationsTitle,
@@ -63,7 +63,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         }
     }()
 
-    lazy var tipsAndFeaturesNotifications: BoolSetting = {
+    private lazy var tipsAndFeaturesNotifications: BoolSetting = {
         let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
         return BoolSetting(
             title: .Settings.Notifications.TipsAndFeaturesNotificationsTitle,
@@ -76,7 +76,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         }
     }()
 
-    let prefs: Prefs
+    private let prefs: Prefs
 
     init(prefs: Prefs) {
         self.prefs = prefs
