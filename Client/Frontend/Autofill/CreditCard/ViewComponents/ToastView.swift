@@ -5,6 +5,37 @@
 import Foundation
 import SwiftUI
 
+struct ToastModifier: ViewModifier {
+    @Binding var isShowing: Bool
+    let duration: TimeInterval
+
+    func body(content: Content) -> some View {
+        ZStack {
+            content
+            if isShowing {
+                toast
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                        withAnimation {
+                            isShowing = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var toast: some View {
+        return ToastView()
+    }
+}
+
+extension View {
+    func toast(isShowing: Binding<Bool>, duration: TimeInterval = 3) -> some View {
+        modifier(ToastModifier(isShowing: isShowing, duration: duration))
+    }
+}
+
 struct ToastView: View {
     enum MessageType {
         case savedCard
@@ -31,8 +62,8 @@ struct ToastView: View {
             Text(message)
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .padding()
-                .foregroundColor(textColor)
                 .background(backgroundColor)
+                .foregroundColor(textColor)
         }
     }
 }

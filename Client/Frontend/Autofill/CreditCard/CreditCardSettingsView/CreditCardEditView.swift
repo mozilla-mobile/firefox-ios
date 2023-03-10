@@ -11,53 +11,57 @@ struct CreditCardEditView: View {
     let removeButtonColor: Color
     let borderColor: Color
 
+    @State private var isShowingToast = false
+
     var body: some View {
-        ZStack {
+        VStack(spacing: 11) {
+            let colors = FloatingTextField.Colors(
+                errorColor: .red,
+                titleColor: .gray,
+                textFieldColor: .gray)
 
-            VStack(spacing: 11) {
-                let colors = FloatingTextField.Colors(
-                    errorColor: .red,
-                    titleColor: .gray,
-                    textFieldColor: .gray)
+        FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
+                          textVal: $viewModel.cardNumber,
+                          errorString: String.CreditCard.ErrorState.CardNumberSublabel,
+                          showError: !viewModel.numberIsValid,
+                          colors: colors)
+        .onTapGesture { // TODO: Temporary to show toast easier
+                isShowingToast = true
+            }
+        Divider()
+            .frame(height: 0.7)
 
-            FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
-                              textVal: $viewModel.cardNumber,
-                              errorString: String.CreditCard.ErrorState.CardNumberSublabel,
-                              showError: !viewModel.numberIsValid,
-                              colors: colors)
-            Divider()
-                .frame(height: 0.7)
+        FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
+                          textVal: $viewModel.expirationDate,
+                          errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
+                          showError: !viewModel.expirationIsValid,
+                          colors: colors)
+        Divider()
+            .frame(height: 0.7)
 
             FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
                               textVal: $viewModel.expirationDate,
-                              errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
+                              errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel, // CardExpirationDateTitle,
                               showError: !viewModel.expirationIsValid,
                               colors: colors)
             Divider()
                 .frame(height: 0.7)
 
-                FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
-                                  textVal: $viewModel.expirationDate,
-                                  errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel, // CardExpirationDateTitle,
-                                  showError: !viewModel.expirationIsValid,
-                                  colors: colors)
-                Divider()
-                    .frame(height: 0.7)
+            Spacer()
+                .frame(height: 4)
 
-                Spacer()
-                    .frame(height: 4)
-
-                RemoveCardButton(
-                    removeButtonColor: removeButtonColor,
-                    borderColor: borderColor,
-                    alertDetails: viewModel.removeButtonDetails
-                )
-                Spacer()
-            }
-            .padding(.top, 20)
-
-            ToastView(messageType: ToastView.MessageType.savedCard)
+            RemoveCardButton(
+                removeButtonColor: removeButtonColor,
+                borderColor: borderColor,
+                alertDetails: viewModel.removeButtonDetails
+            )
+            Spacer()
         }
+        .padding(.top, 20)
+        .toast(isShowing: $isShowingToast)
+        .edgesIgnoringSafeArea(.bottom) // iOS 13 version
+        // TODO: Switch to use iOS 14 version after iOS 13 is dropped
+//        .ignoresSafeArea(edges: [.bottom])
     }
 }
 
