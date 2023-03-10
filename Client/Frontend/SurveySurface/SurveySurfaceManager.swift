@@ -21,6 +21,8 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     private var viewModel: SurveySurfaceViewModel?
     private var viewController: SurveySurfaceViewController?
 
+    var dismissClosure: (() -> Void)?
+
     var shouldShowSurveySurface: Bool {
         updateMessage()
         if message != nil { return true }
@@ -72,14 +74,16 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
 
     // MARK: - MessageSurfaceProtocol
     func didDisplayMessage() {
-        message.map(messagingManager.onMessageDisplayed)
+//        message.map(messagingManager.onMessageDisplayed)
     }
 
     func didTapTakeSurvey() {
-        message.map(messagingManager.onMessagePressed)
+//        message.map(messagingManager.onMessagePressed)
+//        dismissClosure?()
     }
 
     func didTapDismissSurvey() {
-        message.map(messagingManager.onMessageDismissed)
+//        message.map(messagingManager.onMessageDismissed)
+//        dismissClosure?()
     }
 }

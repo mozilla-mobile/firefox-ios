@@ -26,14 +26,17 @@ class SurveySurfaceViewModel {
     }
 
     func didDisplayMessage() {
-//        delegate?.didDisplayMessage()
+        telemetry.sendSurfaceDisplayedEvent()
+        delegate?.didDisplayMessage()
     }
 
     func didTapTakeSurvey() {
-//        delegate?.didTapTakeSurvey()
+        telemetry.sendTakeSurveyButtonTappedEvent()
+        delegate?.didTapTakeSurvey()
     }
 
     func didTapDismissSurvey() {
-//        delegate?.didTapDismissSurvey()
+        telemetry.sendDismissSurveySurfaceButtonTappedEvent()
+        delegate?.didTapDismissSurvey()
     }
 }

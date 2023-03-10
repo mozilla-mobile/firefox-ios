@@ -198,14 +198,11 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     // MARK: - Button Actions
     @objc func takeSurveyAction() {
         viewModel.didTapTakeSurvey()
-        print("RGB - take the survey!")
-        //        viewModel.sendTelemetryButton(isPrimaryAction: true)
     }
 
     @objc func dismissAction() {
         viewModel.didTapDismissSurvey()
         dismiss(animated: true)
-        //        viewModel.sendTelemetryButton(isPrimaryAction: false)
     }
 
     // MARK: - Themable

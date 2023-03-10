@@ -66,7 +66,7 @@ class BrowserViewController: UIViewController {
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
 
-    var surveySurfaceManager: SurveySurfaceManager
+    var surveySurfaceManager: SurveySurfaceManager?
     var contextHintVC: ContextualHintViewController
 
     // To avoid presenting multiple times in same launch when forcing to show
@@ -175,8 +175,6 @@ class BrowserViewController: UIViewController {
         self.readerModeCache = DiskReaderModeCache.sharedInstance
         self.downloadQueue = downloadQueue
         self.logger = logger
-
-        self.surveySurfaceManager = SurveySurfaceManager()
 
         let contextViewModel = ContextualHintViewModel(forHintType: .toolbarLocation,
                                                        with: profile)
@@ -1992,12 +1990,27 @@ extension BrowserViewController: HomePanelDelegate {
 // MARK: - Research Surface
 
 extension BrowserViewController {
+    /// This function will:
+    /// 1. Create a new instance of the SurveySurfaceManager & make sure that it is
+    ///    deallocated when dismissed from the user interacting with it.
+    /// 2. Check whether or not there's a new message that needs to be shown.
+    ///     - true: show the surface
+    ///     - false: deallocate the survey surface manager as BVC doesn't need to hold it
     func performSurveySurfaceCheck() {
-        if surveySurfaceManager.shouldShowSurveySurface {
+        surveySurfaceManager = SurveySurfaceManager()
+
+        surveySurfaceManager?.dismissClosure = { [weak self] in
+            self?.surveySurfaceManager = nil
+        }
+
+        if let surveySurfaceManager = surveySurfaceManager,
+            surveySurfaceManager.shouldShowSurveySurface {
             guard let surveySurface = surveySurfaceManager.surveySurface() else { return }
             surveySurface.modalPresentationStyle = .fullScreen
 
             self.present(surveySurface, animated: false)
+        } else {
+            self.surveySurfaceManager = nil
         }
     }
 }
