@@ -7,6 +7,7 @@ import SwiftUI
 
 struct ToastModifier: ViewModifier {
     @Binding var isShowing: Bool
+    @Binding var animationAmount: Double
     let duration: TimeInterval
 
     func body(content: Content) -> some View {
@@ -18,6 +19,7 @@ struct ToastModifier: ViewModifier {
                     DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                         withAnimation {
                             isShowing = false
+                            animationAmount = 0
                         }
                     }
                 }
@@ -31,8 +33,12 @@ struct ToastModifier: ViewModifier {
 }
 
 extension View {
-    func toast(isShowing: Binding<Bool>, duration: TimeInterval = 3) -> some View {
-        modifier(ToastModifier(isShowing: isShowing, duration: duration))
+    func toast(isShowing: Binding<Bool>,
+               animationAmount: Binding<Double>,
+               duration: TimeInterval = 3) -> some View {
+        modifier(ToastModifier(isShowing: isShowing,
+                               animationAmount: animationAmount,
+                               duration: duration))
     }
 }
 
@@ -43,10 +49,10 @@ struct ToastView: View {
         case removedCard
     }
 
-    @State private var shouldShowToast = false
     var messageType: MessageType = .savedCard
     var textColor: Color = .white
     var backgroundColor: Color = .blue
+    @State var animationAmount = 1.0
 
     private var message: String {
         switch messageType {
@@ -64,6 +70,7 @@ struct ToastView: View {
                 .padding()
                 .background(backgroundColor)
                 .foregroundColor(textColor)
+                .scaleEffect(animationAmount)
         }
     }
 }

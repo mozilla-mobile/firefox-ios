@@ -12,6 +12,7 @@ struct CreditCardEditView: View {
     let borderColor: Color
 
     @State private var isShowingToast = false
+    @State private var animationAmount = 1.0
 
     var body: some View {
         VStack(spacing: 11) {
@@ -27,6 +28,7 @@ struct CreditCardEditView: View {
                           colors: colors)
         .onTapGesture { // TODO: Temporary to show toast easier
                 isShowingToast = true
+                animationAmount = 1
             }
         Divider()
             .frame(height: 0.7)
@@ -58,7 +60,7 @@ struct CreditCardEditView: View {
             Spacer()
         }
         .padding(.top, 20)
-        .toast(isShowing: $isShowingToast)
+        .toast(isShowing: $isShowingToast, animationAmount: $animationAmount.animation())
         .edgesIgnoringSafeArea(.bottom) // iOS 13 version
         // TODO: Switch to use iOS 14 version after iOS 13 is dropped
 //        .ignoresSafeArea(edges: [.bottom])
