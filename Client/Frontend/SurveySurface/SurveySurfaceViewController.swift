@@ -111,13 +111,18 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //        viewModel.sendCardViewTelemetry()
+        setOrientationLockTo(on: true)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.didDisplayMessage()
         animateElements()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setOrientationLockTo(on: false)
     }
 
     func setupView() {
@@ -193,6 +198,20 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         NSLayoutConstraint.activate([
             imageViewYConstraint
         ])
+    }
+
+    private func setOrientationLockTo(on: Bool) {
+        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
+
+        if on {
+            // Portrait orientation: lock enable
+            OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
+                                                   andRotateTo: UIInterfaceOrientation.portrait)
+        } else {
+            // Portrait orientation: lock disable
+            OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.all)
+        }
+
     }
 
     // MARK: - Button Actions
