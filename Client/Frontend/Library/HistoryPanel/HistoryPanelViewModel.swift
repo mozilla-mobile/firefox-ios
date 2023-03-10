@@ -182,7 +182,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     func removeAllData() {
-        /// Since we remove all data, we reset our fetchOffset back to the start.
+        // Since we remove all data, we reset our fetchOffset back to the start.
         currentFetchOffset = 0
 
         searchTermGroups.removeAll()

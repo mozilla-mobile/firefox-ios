@@ -84,8 +84,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
     /// Toolbar description copy depends on the arrow direction.
     private func getToolbarDescriptionCopy(with arrowDirection: UIPopoverArrowDirection?) -> String {
-        /// Toolbar description should never be empty! If it is, find where this struct is being
-        /// created for toolbar and ensure there's an arrowDirection passed.
+        // Toolbar description should never be empty! If it is, find where this struct is being
+        // created for toolbar and ensure there's an arrowDirection passed.
         guard let arrowDirection = arrowDirection else { return "" }
 
         switch arrowDirection {
