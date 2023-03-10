@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Logger
+import Common
 import Shared
 @_exported import MozillaAppServices
 
@@ -17,14 +17,14 @@ open class RustSyncManagerAPI {
     }
 
     public func disconnect() {
-        DispatchQueue.global(qos: .background).async { [unowned self] in
+        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             self.api.disconnect()
         }
     }
 
     public func sync(params: SyncParams,
                      completion: @escaping (MozillaAppServices.SyncResult) -> Void) {
-        DispatchQueue.global(qos: .background).async { [unowned self] in
+        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             do {
                 let result = try self.api.sync(params: params)
                 completion(result)
@@ -32,8 +32,8 @@ open class RustSyncManagerAPI {
                 if let syncError = err as? SyncManagerError {
                     let syncErrDescription = syncError.localizedDescription
                     self.logger.log("Rust SyncManager sync error: \(syncErrDescription)",
-                                                        level: .warning,
-                                                        category: .sync)
+                                    level: .warning,
+                                    category: .sync)
                 } else {
                     let errDescription = err.localizedDescription
                     self.logger.log("""
@@ -48,14 +48,14 @@ open class RustSyncManagerAPI {
     }
 
     public func getAvailableEngines(completion: @escaping ([String]) -> Void) {
-        DispatchQueue.global(qos: .background).async { [unowned self] in
+        DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
             let engines = self.api.getAvailableEngines()
             completion(engines)
         }
     }
 }
 
-public func toRustSyncReason(reason: Sync.SyncReason) -> MozillaAppServices.SyncReason {
+public func toRustSyncReason(reason: OldSyncReason) -> MozillaAppServices.SyncReason {
     switch reason {
     case .startup:
         return MozillaAppServices.SyncReason.startup
@@ -72,8 +72,8 @@ public func toRustSyncReason(reason: Sync.SyncReason) -> MozillaAppServices.Sync
 
 // Names of collections that can be enabled/disabled locally.
 public let RustTogglableEngines: [String] = [
+    "tabs",
     "bookmarks",
     "history",
-    "tabs",
-    "passwords"
+    "passwords",
 ]
