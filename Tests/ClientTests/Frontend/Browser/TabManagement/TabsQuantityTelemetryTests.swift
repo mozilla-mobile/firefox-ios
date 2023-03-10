@@ -11,7 +11,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
         Glean.shared.enableTestingMode()
     }
 
