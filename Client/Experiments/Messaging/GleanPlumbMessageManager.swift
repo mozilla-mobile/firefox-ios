@@ -85,17 +85,17 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     /// Returns the next valid and triggered message for the surface, if one exists.
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
-        /// All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
+        // All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
         let messages = getAllValidMessagesFor(surface, with: feature)
 
-        /// If `GleanPlumbHelper` creation fails, we cannot continue with this feature! For that reason, return `nil`.
-        /// We need to recreate the helper for each request to get a message because device context can change.
+        // If `GleanPlumbHelper` creation fails, we cannot continue with this feature! For that reason, return `nil`.
+        // We need to recreate the helper for each request to get a message because device context can change.
         guard let gleanPlumbHelper = messagingUtility.createGleanPlumbHelper() else { return nil }
 
-        /// Take the first triggered message.
+        // Take the first triggered message.
         guard let message = getNextTriggeredMessage(messages, gleanPlumbHelper) else { return nil }
 
-        /// If it's a message under experiment, we need to react to whether it's a control or not.
+        // If it's a message under experiment, we need to react to whether it's a control or not.
         if message.isUnderExperimentWith(key: feature.messageUnderExperiment) {
             guard let nextTriggeredMessage = handleMessageUnderExperiment(message,
                                                                           messages,
@@ -126,19 +126,19 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         guard let messageUtility = messagingUtility.createGleanPlumbHelper() else { return }
 
-        /// Make substitutions where they're needed.
+        // Make substitutions where they're needed.
         let template = message.action
         let uuid = messageUtility.getUuid(template: template)
         let action = messageUtility.stringFormat(template: template, uuid: uuid)
 
-        /// Create the message action URL.
+        // Create the message action URL.
         let urlString = action.hasPrefix("://") ? URL.mozInternalScheme + action : action
         guard let url = URL(string: urlString) else {
             self.onMalformedMessage(messageKey: message.id)
             return
         }
 
-        /// With our well-formed URL, we can handle the action here.
+        // With our well-formed URL, we can handle the action here.
         if url.isWebPage() {
             pressedDelegate?.openURLInNewTab(url: url)
         } else {
@@ -177,7 +177,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     /// - Returns: All well-formed, non-expired messages for a surface in descending priority order for a specified surface.
     private func getAllValidMessagesFor(_ surface: MessageSurfaceId, with feature: Messaging) -> [GleanPlumbMessage] {
-        /// All these are non-expired, well formed, and descending priority messages for a requested surface.
+        // All these are non-expired, well formed, and descending priority messages for a requested surface.
         let messages = feature.messages.compactMap { key, messageData -> GleanPlumbMessage? in
             guard let message = self.createMessage(messageId: key,
                                                    message: messageData,
@@ -201,13 +201,13 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// We assemble one message at a time. If there's any issue with it, return `nil`.
     /// Reporting a malformed message is done at the call site when reacting to a `nil`.
     private func createMessage(messageId: String, message: MessageData, lookupTables: Messaging) -> GleanPlumbMessage? {
-        /// Guard against a message with a blank `text` property.
+        // Guard against a message with a blank `text` property.
         guard !message.text.isEmpty else { return nil }
 
-        /// Ascertain a Message's style, to know priority and max impressions.
+        // Ascertain a Message's style, to know priority and max impressions.
         guard let style = lookupTables.styles[message.style] else { return nil }
 
-        /// The message action should be either from the lookup table OR a URL.
+        // The message action should be either from the lookup table OR a URL.
         let action = lookupTables.actions[message.action] ?? message.action
         guard action.contains("://") else { return nil }
 
@@ -215,9 +215,9 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             lookupTables.triggers[trigger]
         }
 
-        /// Be sure the count on `triggers` and `message.triggers` are equal.
-        /// If these mismatch, that means a message contains a trigger not in the triggers lookup table.
-        /// JEXLS can only be evaluated on supported triggers. Otherwise, consider the message malformed.
+        // Be sure the count on `triggers` and `message.triggers` are equal.
+        // If these mismatch, that means a message contains a trigger not in the triggers lookup table.
+        // JEXLS can only be evaluated on supported triggers. Otherwise, consider the message malformed.
         if triggers.count != message.trigger.count {
             return nil
         }

@@ -113,25 +113,25 @@ extension URL {
             return ""
         }
 
-        /// The following algorithm breaks apart the domain and checks each sub domain against the effective TLD
-        /// entries from the effective_tld_names.dat file. It works like this:
-        ///
-        /// Example Domain: test.bbc.co.uk
-        /// TLD Entry: bbc
-        ///
-        /// 1. Start off by checking the current domain (test.bbc.co.uk)
-        /// 2. Also store the domain after the next dot (bbc.co.uk)
-        /// 3. If we find an entry that matches the current domain (test.bbc.co.uk), perform the following checks:
-        ///   i. If the domain is a wildcard AND the previous entry is not nil, then the current domain matches
-        ///      since it satisfies the wildcard requirement.
-        ///   ii. If the domain is normal (no wildcard) and we don't have anything after the next dot, then
-        ///       currentDomain is a valid TLD
-        ///   iii. If the entry we matched is an exception case, then the base domain is the part after the next dot
-        ///
-        /// On the next run through the loop, we set the new domain to check as the part after the next dot,
-        /// update the next dot reference to be the string after the new next dot, and check the TLD entries again.
-        /// If we reach the end of the host (nextDot = nil) and we haven't found anything, then we've hit the
-        /// top domain level so we use it by default.
+        // The following algorithm breaks apart the domain and checks each sub domain against the effective TLD
+        // entries from the effective_tld_names.dat file. It works like this:
+        //
+        // Example Domain: test.bbc.co.uk
+        // TLD Entry: bbc
+        //
+        // 1. Start off by checking the current domain (test.bbc.co.uk)
+        // 2. Also store the domain after the next dot (bbc.co.uk)
+        // 3. If we find an entry that matches the current domain (test.bbc.co.uk), perform the following checks:
+        //   i. If the domain is a wildcard AND the previous entry is not nil, then the current domain matches
+        //      since it satisfies the wildcard requirement.
+        //   ii. If the domain is normal (no wildcard) and we don't have anything after the next dot, then
+        //       currentDomain is a valid TLD
+        //   iii. If the entry we matched is an exception case, then the base domain is the part after the next dot
+        //
+        // On the next run through the loop, we set the new domain to check as the part after the next dot,
+        // update the next dot reference to be the string after the new next dot, and check the TLD entries again.
+        // If we reach the end of the host (nextDot = nil) and we haven't found anything, then we've hit the
+        // top domain level so we use it by default.
 
         let tokens = host.components(separatedBy: ".")
         let tokenCount = tokens.count

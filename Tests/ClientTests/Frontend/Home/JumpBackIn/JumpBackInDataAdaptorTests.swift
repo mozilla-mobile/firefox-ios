@@ -35,7 +35,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         FeatureFlagsManager.shared.set(feature: .tabTrayGroups, to: false)
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
-        
+
         let recentTabs = await subject.getRecentTabData()
         let synced = await subject.getSyncedTabData()
 
