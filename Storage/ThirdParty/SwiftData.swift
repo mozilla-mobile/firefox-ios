@@ -109,7 +109,10 @@ open class SwiftData {
     /// FailedSQLiteDBConnection will be returned.
     fileprivate(set) var closed = false
 
-    init(filename: String, schema: Schema, files: FileAccessor) {
+    init(filename: String,
+         schema: Schema,
+         files: FileAccessor,
+         logger: Logger = DefaultLogger.shared) {
         self.filename = filename
         self.schema = schema
         self.files = files
@@ -121,6 +124,11 @@ open class SwiftData {
         // `SQLITE_THREADSAFE=1` or `SQLITE_THREADSAFE=2`.
         // https://www.sqlite.org/compile.html#threadsafe
         // https://www.sqlite.org/threadsafe.html
+        if sqlite3_threadsafe() < 0 {
+            logger.log("SQLite/SQLCipher was not compiled with SQLITE_THREADSAFE=1 or SQLITE_THREADSAFE=2",
+                       level: .warning,
+                       category: .storage)
+        }
         assert(sqlite3_threadsafe() > 0)
     }
 

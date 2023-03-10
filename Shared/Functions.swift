@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import SwiftyJSON
+import Common
 
 // Pipelining.
 precedencegroup PipelinePrecedence {
@@ -109,7 +110,11 @@ public func chunk<T>(_ arr: [T], by: Int) -> [ArraySlice<T>] {
 }
 
 public func chunkCollection<E, X, T: Collection>(_ items: T, by: Int, f: ([E]) -> [X]) -> [X] where T.Iterator.Element == E {
-    assert(by >= 0)
+    guard by >= 0 else {
+        DefaultLogger.shared.log("Chunking must be done with a non-negative value.", level: .warning, category: .unlabeled)
+        return []
+    }
+
     let max = by > 0 ? by : 1
     var i = 0
     var acc: [E] = []
