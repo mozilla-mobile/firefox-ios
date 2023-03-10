@@ -6,16 +6,12 @@ import Foundation
 import Shared
 
 class SurveySurfaceViewModel {
-    //    private var message: GleanPlumbMessage
-    //    private var messagingManager: GleanPlumbMessageManagerProtocol
-
+    // MARK: - Properties
     weak var delegate: SurveySurfaceDelegate?
-    //    weak var homepanelDelegate: HomePanelDelegate?
-    //    var dismissClosure: (() -> Void)?
-
     var info: SurveySurfaceInfoProtocol
     var telemetry: SurveySurfaceTelemetry
 
+    // MARK: - Initialization
     init(with info: SurveySurfaceInfoProtocol,
          telemetry: SurveySurfaceTelemetry,
          andDelegate delegate: SurveySurfaceDelegate
@@ -25,6 +21,7 @@ class SurveySurfaceViewModel {
         self.delegate = delegate
     }
 
+    // MARK: - Functionality
     func didDisplayMessage() {
         telemetry.sendSurfaceDisplayedEvent()
         delegate?.didDisplayMessage()

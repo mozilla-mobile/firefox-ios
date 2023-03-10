@@ -5,22 +5,21 @@
 import Foundation
 
 class SurveySurfaceTelemetry {
-
     func sendSurfaceDisplayedEvent() {
-        TelemetryWrapper.recordEvent(category: .prompt,
-                                     method: .view,
-                                     object: .surveySeen)
+//        TelemetryWrapper.recordEvent(category: .prompt,
+//                                     method: .view,
+//                                     object: .surveySeen)
     }
 
     func sendTakeSurveyButtonTappedEvent() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .surveyTakeSurveyButton)
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .surveyTakeSurveyButton)
     }
 
     func sendDismissSurveySurfaceButtonTappedEvent() {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .surveyDismissSurveySurface)
+//        TelemetryWrapper.recordEvent(category: .action,
+//                                     method: .tap,
+//                                     object: .surveyDismissSurveySurface)
     }
 }

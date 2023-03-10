@@ -198,6 +198,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     // MARK: - Button Actions
     @objc func takeSurveyAction() {
         viewModel.didTapTakeSurvey()
+        dismiss(animated: true)
     }
 
     @objc func dismissAction() {
@@ -218,6 +219,5 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
         dismissSurveyButton.setTitleColor(theme.colors.textSecondaryAction, for: .normal)
         dismissSurveyButton.backgroundColor = theme.colors.actionSecondary
-        //        handleSecondaryButton()
     }
 }

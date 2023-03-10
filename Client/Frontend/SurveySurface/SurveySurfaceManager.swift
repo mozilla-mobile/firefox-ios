@@ -12,7 +12,8 @@ protocol SurveySurfaceDelegate: AnyObject {
     func didTapDismissSurvey()
 }
 
-class SurveySurfaceManager: SurveySurfaceDelegate {
+class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDelegate {
+    // MARK: - Properties
     private var message: GleanPlumbMessage?
     private var messagingManager: GleanPlumbMessageManagerProtocol
     private var themeManager: ThemeManager
@@ -22,6 +23,7 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
     private var viewController: SurveySurfaceViewController?
 
     var dismissClosure: (() -> Void)?
+    weak var homepanelDelegate: HomePanelDelegate?
 
     var shouldShowSurveySurface: Bool {
         updateMessage()
@@ -29,15 +31,20 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
         return false
     }
 
-    init(with themeManager: ThemeManager = AppContainer.shared.resolve(),
+    // MARK: - Initialization
+    init(with homepageDelegate: HomePanelDelegate,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          and messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared
     ) {
-        self.messagingManager = messagingManager
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.messagingManager = messagingManager
+        self.homepanelDelegate = homepageDelegate
+        self.messagingManager.pressedDelegate = self
     }
 
+    // MARK: - Functionality
     func surveySurface() -> SurveySurfaceViewController? {
         guard let message = message,
               !message.isExpired,
@@ -74,16 +81,23 @@ class SurveySurfaceManager: SurveySurfaceDelegate {
 
     // MARK: - MessageSurfaceProtocol
     func didDisplayMessage() {
-//        message.map(messagingManager.onMessageDisplayed)
+        message.map(messagingManager.onMessageDisplayed)
     }
 
     func didTapTakeSurvey() {
-//        message.map(messagingManager.onMessagePressed)
-//        dismissClosure?()
+        message.map(messagingManager.onMessagePressed)
     }
 
     func didTapDismissSurvey() {
-//        message.map(messagingManager.onMessageDismissed)
-//        dismissClosure?()
+        message.map(messagingManager.onMessageDismissed)
+        dismissClosure?()
+    }
+
+    // MARK: Pressed Delegate
+    func openURLInNewTab(url: URL) {
+        homepanelDelegate?.homePanelDidRequestToOpenInNewTab(url,
+                                                             isPrivate: false,
+                                                             selectNewTab: true)
+        dismissClosure?()
     }
 }
