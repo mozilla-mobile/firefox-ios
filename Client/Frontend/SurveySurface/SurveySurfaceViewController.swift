@@ -137,7 +137,11 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private func constrainViews() {
-        let buttonSideMargin = view.frame.width * UX.buttonSideMarginMultiplier
+        // The side margins are at 5%, thus the button width would have to be 2*5, or, 90%
+        // of the screen width. Thus, we set whichever width is smaller.
+        let buttonWidthBasedOnFrame = view.frame.width * (1.0 - (2 * UX.buttonSideMarginMultiplier))
+        guard let buttonWidth = [UX.buttonMaxWidth, buttonWidthBasedOnFrame].min() else { return }
+
         imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
 
         NSLayoutConstraint.activate([
@@ -151,21 +155,15 @@ class SurveySurfaceViewController: UIViewController, Themeable {
             titleLabel.widthAnchor.constraint(equalToConstant: UX.titleWidth),
             titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
 
-            takeSurveyButton.widthAnchor.constraint(lessThanOrEqualToConstant: UX.buttonMaxWidth),
+            takeSurveyButton.widthAnchor.constraint(equalToConstant: buttonWidth),
             takeSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
-            takeSurveyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                      constant: buttonSideMargin),
-            takeSurveyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                       constant: -buttonSideMargin),
+            takeSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             takeSurveyButton.bottomAnchor.constraint(equalTo: dismissSurveyButton.topAnchor,
                                                      constant: -UX.buttonSeparation),
 
-            dismissSurveyButton.widthAnchor.constraint(lessThanOrEqualToConstant: UX.buttonMaxWidth),
+            dismissSurveyButton.widthAnchor.constraint(equalToConstant: buttonWidth),
             dismissSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
-            dismissSurveyButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                         constant: buttonSideMargin),
-            dismissSurveyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                          constant: -buttonSideMargin),
+            dismissSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             dismissSurveyButton.bottomAnchor.constraint(equalTo: view.bottomAnchor,
                                                         constant: -(view.frame.height * UX.buttonBottomMarginMultiplier))
         ])

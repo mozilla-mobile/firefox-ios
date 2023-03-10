@@ -118,7 +118,7 @@ features:
       - channel: developer
         value:
           messages:
-            research-survey12:
+            research-survey15:
               surface: survey
               style: SURVEY
               trigger:

@@ -541,6 +541,7 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.alpha = 0
         // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
         // not flash before we present. This change of alpha also participates in the animation when
         // the intro view is dismissed.
@@ -2010,6 +2011,7 @@ extension BrowserViewController {
             surveySurface.modalPresentationStyle = .fullScreen
 
             self.present(surveySurface, animated: false)
+            self.view.alpha = 1.0
         } else {
             self.surveySurfaceManager = nil
         }
