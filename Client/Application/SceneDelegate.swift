@@ -116,7 +116,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
         // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
         if let url = userActivity.webpageURL {
-            let query = url.getQuery()
             browserViewController.switchToTabForURLOrOpen(url)
         }
 
