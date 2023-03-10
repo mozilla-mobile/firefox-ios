@@ -11,15 +11,12 @@ class TabLocationViewTests: XCTestCase {
         let tabLocationView = TabLocationView()
         let delegate = MockTabLocationViewDelegate()
         tabLocationView.delegate = delegate
-        delegate.cleanup()
-        trackForMemoryLeaks(delegate)
+        trackForMemoryLeaks(tabLocationView)
     }
 }
 
 // A mock delegate
 class MockTabLocationViewDelegate: TabLocationViewDelegate {
-    weak var delegate: TabLocationViewDelegate?
-
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView) {}
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView) {}
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {}
@@ -33,10 +30,5 @@ class MockTabLocationViewDelegate: TabLocationViewDelegate {
     func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView) {}
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {
         return nil
-    }
-
-    // cleanup
-    func cleanup() {
-        delegate = nil
     }
 }
