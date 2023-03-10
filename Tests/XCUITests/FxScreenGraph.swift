@@ -146,7 +146,6 @@ class Action {
     static let ToggleRecentlyVisited = "ToggleRecentlyVisited"
     static let ToggleRecentlySaved = "ToggleRecentlySaved"
 
-
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
     static let SelectNewTabAsFirefoxHomePage = "SelectNewTabAsFirefoxHomePage"
     static let SelectNewTabAsCustomURL = "SelectNewTabAsCustomURL"

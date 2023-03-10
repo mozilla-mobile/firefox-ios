@@ -115,7 +115,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func bookmarkPages() {
-        let listWebsitesToBookmark = [page1, page2,]
+        let listWebsitesToBookmark = [page1, page2]
         for site in listWebsitesToBookmark {
             navigator.openURL(site)
             waitUntilPageLoad()
@@ -139,15 +139,17 @@ class BaseTestCase: XCTestCase {
     }
 
     func checkRecentlySaved() {
+        waitForTabsButton()
         let numberOfRecentlyVisitedBookmarks = app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].otherElements.otherElements.otherElements.otherElements.count
-            let numberOfExpectedRecentlyVisitedBookmarks = 3
-            XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
+        let numberOfExpectedRecentlyVisitedBookmarks = 3
+        XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
     func checkRecentlySavedUpdated() {
+        waitForTabsButton()
         let numberOfRecentlyVisitedBookmarks = app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].otherElements.otherElements.otherElements.otherElements.count
-            let numberOfExpectedRecentlyVisitedBookmarks = 1
-            XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
+        let numberOfExpectedRecentlyVisitedBookmarks = 1
+        XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
     // TODO: Fine better way to update screen graph when necessary
