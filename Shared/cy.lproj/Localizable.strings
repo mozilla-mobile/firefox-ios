@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Tynnu";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Tudalennau: %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Gosodiadau";
 
@@ -1576,9 +1579,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Iawn, Wedi deall!";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Os nad yw gwefan yn gweithio yn ôl y disgwyl, tapiwch y darian yn y bar cyfeiriad a diffoddwch Diogelwch rhag Tracio Uwch ar gyfer y dudalen honno.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Rhybudd!";
 
@@ -1590,9 +1590,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Yn lleihau hysbysebion wedi'u targedu ac yn helpu i atal hysbysebwyr rhag tracio'ch pori.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Os nad yw gwefan yn gweithio yn ôl y disgwyl, tapiwch y darian yn y bar cyfeiriad a diffoddwch Diogelwch rhag Tracio Uwch ar gyfer y dudalen honno.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Caniatáu rhai tracwyr hysbysebion fel bod gwefannau'n gweithio'n iawn.";

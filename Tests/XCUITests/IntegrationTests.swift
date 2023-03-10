@@ -94,12 +94,11 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(Intro_FxASignin)
         navigator.performAction(Action.OpenEmailToSignIn)
-        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
-        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextFieldChinaFxA], timeout: TIMEOUT_LONG)
 
-        // Wait for element not present on FxA sign in page China FxA server
-        waitForNoExistence(app.webViews.otherElements.staticTexts["Firefox Monitor"])
-        XCTAssertFalse(app.webViews.otherElements.staticTexts["Firefox Monitor"].exists)
+        waitForExistence(app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar], timeout: TIMEOUT_LONG)
+        waitForExistence(app.webViews.staticTexts["Continue to Firefox accounts"], timeout: TIMEOUT_LONG)
+        waitForExistence(app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField])
+        waitForExistence(app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton])
     }
 
     func testFxASyncBookmark () {

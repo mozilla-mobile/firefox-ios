@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Listo, entendido";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Si un sitio no funciona como se esperaba, toca el escudo en la barra de direcciones y desactiva la protección de seguimiento mejorada para esa página.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "¡Atención!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduce las publicidades personalizadas y ayuda a detener a los anunciantes para que no te rastreen al navegar.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un sitio no funciona como se esperaba, toca el escudo en la barra de direcciones y desactiva la protección de seguimiento mejorada para esa página.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permite a algunas publicidades rastreadoras por lo que los sitios funcionan adecuadamente.";

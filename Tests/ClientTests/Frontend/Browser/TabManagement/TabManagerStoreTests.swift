@@ -103,7 +103,7 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertEqual(retrievedTabs[0].title, "Title 0 isPrivate: false")
         XCTAssertEqual(retrievedTabs[1].title, "Title 1 isPrivate: false")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
-        XCTAssertEqual(fileManager.remoteItemCalledCount, 4)
+        XCTAssertEqual(fileManager.remoteItemCalledCount, 2)
         XCTAssertEqual(fileManager.fileExistsCalledCount, 2)
     }
 

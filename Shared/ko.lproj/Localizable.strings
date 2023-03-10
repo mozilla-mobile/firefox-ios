@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "네, 알겠습니다";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "사이트가 예상대로 작동하지 않으면 검색 주소 표시 줄에서 방패를 탭하고 해당 페이지에 대한 향상된 추적 보호를 끕니다.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "주의하세요!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "타겟팅된 광고를 줄이고 광고주가 사용자의 브라우징을 추적하지 못하게 돕습니다.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "사이트가 의도한 대로 동작하지 않는다면 주소 표시 줄의 방패 아이콘을 선택해서 페이지의 향상된 추적 차단 기능을 끄세요.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "웹사이트가 잘 작동하도록 몇몇 광고 추적을 허용합니다.";

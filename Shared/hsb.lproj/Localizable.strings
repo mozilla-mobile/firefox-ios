@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "W porjadku, sym zrozumił";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Jeli sydło kaž wočakowane njefunguje, podótkńće so tarče w adresowym polu a znjemóžńće polěpšeny slědowanski škit za tu stronu.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Kedźbu!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Redukuje zaměrne wabjenje a zadźěwa tomu, zo wabjerjo waše přehladowanje slěduja.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Jeli sydło kaž wočakowane njefunguje, podótkńće so tarče w adresowym polu a znjemóžńće polěpšeny slědowanski škit za tu stronu.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dowola trochu wabjenskeho slědowanja, zo bychu websydła porjadnje fungowali.";

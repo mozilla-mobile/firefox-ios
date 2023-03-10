@@ -316,7 +316,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     }
 
     func scrollToTop(animated: Bool = false) {
-        collectionView?.setContentOffset(.zero, animated: animated)
+        let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
+        collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

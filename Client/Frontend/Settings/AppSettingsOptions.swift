@@ -976,6 +976,22 @@ class ContentBlockerSetting: Setting {
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
     override var accessibilityIdentifier: String? { return "TrackingProtection" }
 
+    override var status: NSAttributedString? {
+        let isOn = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
+
+        if isOn {
+            let currentBlockingStrength = profile
+                .prefs
+                .stringForKey(ContentBlockingConfig.Prefs.StrengthKey)
+                .flatMap(BlockingStrength.init(rawValue:)) ?? .basic
+            return NSAttributedString(string: currentBlockingStrength.settingStatus)
+        } else {
+            return NSAttributedString(string: .Settings.Homepage.Shortcuts.ToggleOff)
+        }
+    }
+
+    override var style: UITableViewCell.CellStyle { return .value1 }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
@@ -1243,7 +1259,7 @@ class OpenWithSetting: Setting {
     override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
 
     override var status: NSAttributedString {
-        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), provider != "mailto:" else {
+        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) else {
             return NSAttributedString(string: "")
         }
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {

@@ -1345,9 +1345,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ठीक छ, थाहा पाएँ";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "यदि साइटले अपेक्षित रूपमा काम गर्दैन भने, ठेगाना पट्टीमा शिल्ड ट्याप गर्नुहोस् र त्यो पृष्ठको लागि, परिष्कृत ट्र्याकिङ्ग सुरक्षा बन्द गर्नुहोस्।";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "चेतावनी!";
 
@@ -1359,9 +1356,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "लक्षित विज्ञापनहरू घटाउँछ र विज्ञापनदाताहरूलाई तपाईंको ब्राउजिङ्ग ट्र्याक गर्नबाट रोक्न मद्दत गर्छ।";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "यदि साइटले अपेक्षित रूपमा काम गर्दैन भने, ठेगाना पट्टीमा शिल्ड ट्याप गर्नुहोस् र त्यो पृष्ठको लागि, परिष्कृत ट्र्याकिङ्ग सुरक्षा बन्द गर्नुहोस्।";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "वेबसाइटहरू राम्रोसँग काम गर्नका लागि केहि बिज्ञापन ट्रयाकरहरूलाई अनुमति दिनुहोस् ।";

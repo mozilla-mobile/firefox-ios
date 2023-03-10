@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Okéh, Ngarti";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Upama loka teu jalan, toél taméng dina papan alamat sarta pareuman Perlindungan Palacakan Lanjutan pikeun éta kaca.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Awas!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Ngurangan iklan ditargét sarta mantuan ngeureunan pangiklan ngalacak pamaluruhan anjeun.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Upama loka teu jalan, toél taméng dina papan alamat sarta pareuman Perlindungan Palacakan Lanjutan pikeun éta kaca.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Idinan sababaraha palacak iklan sangkan raramatloka bisa bener midang.";

@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "移除";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "页数：%d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "设置";
 
@@ -593,7 +596,7 @@
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "删除";
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
-"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "要删除 %@ 中的所有网站？";
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "要删除 %@ 中的所有网站吗？";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "删除历史记录（包含同步自其他设备的记录）、Cookie 和其他浏览数据。";
@@ -956,7 +959,7 @@
 "Oops! Firefox crashed" = "啊哦！Firefox 崩溃了";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "当书本图标出现在标题栏时，轻按它即可在阅读模式下阅读文章。";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "当书本图标出现在标题栏时，轻点它即可在阅读模式下阅读文章。";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "打开设置";
@@ -1052,7 +1055,7 @@
 "Sans-serif" = "无衬线";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "在阅读模式下轻按书本与加号图标，可将页面保存到您的阅读列表。";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "在阅读模式下轻点书本与加号图标，可将页面保存到您的阅读列表。";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "确定";
@@ -1576,9 +1579,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "好，知道了";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请点按地址栏中的“盾牌”，关闭该网站的增强型跟踪保护。";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "注意！";
 
@@ -1590,9 +1590,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "减少定向广告，并阻止广告商跟踪您的浏览。";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请点按地址栏中的“盾牌”，关闭该网站的增强型跟踪保护。";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "允许部分广告跟踪行为，同时让网站功能保持正常。";

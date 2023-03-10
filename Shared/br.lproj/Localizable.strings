@@ -1567,9 +1567,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Mat, komprenet am eus";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Ma n’ez a ket en dro ul lec’hienn, klikit war ar skoed er varrenn chomlec’h evit diweredekaat ar gwarez araokaet a-enep d’an heuliañ evit ar bajenn-mañ.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Diwallit!";
 
@@ -1581,9 +1578,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Digreskiñ a ra ar bruderezhioù dibabet ha mirout a ra ouzh ar gemennerien da heuliañ ho merdeiñ.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ma n’ez a ket en dro ul lec’hienn, klikit war ar skoed er varrenn chomlec’h evit diweredekaat ar gwarez araokaet a-enep d’an heuliañ evit ar bajenn-mañ.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Aotren heulierien ’zo evit ma ’afe en dro lec’hiennoù.";

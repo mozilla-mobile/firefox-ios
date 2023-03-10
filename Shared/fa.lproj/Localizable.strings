@@ -1063,9 +1063,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "باشه، گرفتم!";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "اگر سایتی مطابق آنچه انتظار می رود کار نکند ، به سپر موجود در نوار آدرس ضربه بزنید و محافظت پیشرفته ردیابی را برای آن صفحه خاموش کنید.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "هوشیار باشید!";
 
@@ -1077,9 +1074,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "تبلیغات هدفمند را کاهش می دهد و به جلوگیری از ردیابی تبلیغات در مرور شما کمک می کند.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "اگر سایتی مطابق آنچه انتظار می رود کار نکند ، به سپر موجود در نوار آدرس ضربه بزنید و محافظت پیشرفته ردیابی را برای آن صفحه خاموش کنید.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "جهت عملکرد مناسب پایگاه‌ها به چند دنبال کننده اجازه فعالیت داده می‌شود.";

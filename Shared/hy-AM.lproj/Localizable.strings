@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Հեռացնել";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Էջեր՝ %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Կարգավորումներ";
 
@@ -1576,9 +1579,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Լավ, հասկացա";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Եթե կայքը չի գործում, ինչպես սպասվում էր, հպեք վահանին հասցեի տողում և անջատեք Հետագծումների ընդլայնված պաշտպանությունը էջի համար:";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Ուշադրություն։";
 
@@ -1590,9 +1590,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Նվազեցնում է նպատակային գովազդը և օգնում է դադարեցնել գովազդատուներին ձեր զննարկումը հետևելու համար:";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Եթե կայքը չի գործում, ինչպես սպասվում էր, հպեք վահանին հասցեի տողում և անջատեք Հետագծումների ընդլայնված պաշտպանությունը էջի համար:";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Թույլատրել որոշ հետագծումներ, որպեսզի կայքը նորմալ աշխատի:";

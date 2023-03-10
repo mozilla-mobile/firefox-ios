@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Oke, paham!";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Jika situs tidak berfungsi seperti yang diharapkan, ketuk perisai di bilah alamat dan nonaktifkan Perlindungan Pelacakan yang Ditingkatkan untuk halaman tersebut.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Perhatian!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Mengurangi iklan yang ditargetkan dan membantu menghentikan pengiklan melacak penjelajahan Anda.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Jika situs tidak berfungsi seperti yang diharapkan, ketuk perisai di bilah alamat dan nonaktifkan Perlindungan Pelacakan yang Ditingkatkan untuk halaman tersebut.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Mengizinkan beberapa pelacak agar situs web berfungsi dengan baik.";
