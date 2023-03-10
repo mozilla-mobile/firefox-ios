@@ -45,8 +45,8 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.TabsNotifications,
             enabled: enabled
-        ) { value in
-            print("tabsNotifications is \(value)")
+        ) { _ in
+            // enable/disable tabs notifications
         }
     }()
 
@@ -58,8 +58,8 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.SyncSignInNotifications,
             enabled: enabled
-        ) { value in
-            print("syncSignInNotifications is \(value)")
+        ) { _ in
+            // enable/disable syncSignIn notifications
         }
     }()
 
@@ -71,8 +71,8 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications,
             enabled: enabled
-        ) { value in
-            print("tipsAndFeaturesNotifications is \(value)")
+        ) { _ in
+            // enable/disable tipsAndFeatures notifications
         }
     }()
 
@@ -114,13 +114,6 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         case .denied:
             sendNotifications = false
             await MainActor.run {
-                let accessDenied = UIAlertController(title: .Settings.Notifications.TurnOnNotificationsTitle, message: .Settings.Notifications.TurnOnNotificationsMessage, preferredStyle: .alert)
-                let dismissAction = UIAlertAction(title: .CancelString, style: .default, handler: nil)
-                accessDenied.addAction(dismissAction)
-                let settingsAction = UIAlertAction(title: .OpenSettingsString, style: .default ) { _ in
-                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
-                }
-                accessDenied.addAction(settingsAction)
                 self.present(accessDenied, animated: true, completion: nil)
             }
 
@@ -128,5 +121,27 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             sendNotifications = false
         }
         return sendNotifications
+    }
+
+    var accessDenied: UIAlertController {
+        let accessDenied = UIAlertController(
+            title: .Settings.Notifications.TurnOnNotificationsTitle,
+            message: .Settings.Notifications.TurnOnNotificationsMessage,
+            preferredStyle: .alert
+        )
+        let dismissAction = UIAlertAction(
+            title: .CancelString,
+            style: .default,
+            handler: nil
+        )
+        accessDenied.addAction(dismissAction)
+        let settingsAction = UIAlertAction(
+            title: .OpenSettingsString,
+            style: .default
+        ) { _ in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        }
+        accessDenied.addAction(settingsAction)
+        return accessDenied
     }
 }
