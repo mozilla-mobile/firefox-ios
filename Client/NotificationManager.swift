@@ -88,9 +88,9 @@ class NotificationManager: NotificationManagerProtocol {
         }
     }
 
-    func getNotificationSettings() async -> UNNotificationSettings {
+    func getNotificationSettings(sendTelemetry: Bool = false) async -> UNNotificationSettings {
         return await withCheckedContinuation { continuation in
-            getNotificationSettings { result in
+            getNotificationSettings(sendTelemetry: sendTelemetry) { result in
                 continuation.resume(returning: result)
             }
         }
