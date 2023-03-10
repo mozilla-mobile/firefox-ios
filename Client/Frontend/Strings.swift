@@ -341,7 +341,7 @@ extension String {
             public static let RemoveCardTitle = MZLocalizedString(
                 "CreditCard.SnackBar.RemoveCardTitle.v112",
                 tableName: "Alert",
-                value: "Remove the card?",
+                value: "Remove This Card?",
                 comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
 
             public static let RemoveCardSublabel = MZLocalizedString(
