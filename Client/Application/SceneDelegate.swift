@@ -61,7 +61,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard !AppConstants.isRunningUnitTest else { return }
 
-        /// Resume previously stopped downloads for, and on, THIS scene only.
+        // Resume previously stopped downloads for, and on, THIS scene only.
         downloadQueue.resumeAll()
     }
 

@@ -19,9 +19,9 @@ public class AppContainer: ServiceProvider {
         do {
             return try container.resolve(T.self) as! T
         } catch {
-            /// If a service we thought was registered can't be resolved, this is likely an issue within
-            /// bootstrapping. Double check your registrations and their types.
-            /// We've made bad assumptions, and there's something very wrong with container setup! This is fatal.
+            // If a service we thought was registered can't be resolved, this is likely an issue within
+            // bootstrapping. Double check your registrations and their types.
+            // We've made bad assumptions, and there's something very wrong with container setup! This is fatal.
             fatalError("\(error)")
         }
     }
@@ -39,7 +39,7 @@ public class AppContainer: ServiceProvider {
         do {
             try container.bootstrap()
         } catch {
-            /// If resolution of one item fails, the entire object graph won't be resolved. This is a fatal error.
+            // If resolution of one item fails, the entire object graph won't be resolved. This is a fatal error.
             fatalError("\(error)")
         }
     }
