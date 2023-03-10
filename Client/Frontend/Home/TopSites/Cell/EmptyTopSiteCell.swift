@@ -13,7 +13,6 @@ class EmptyTopSiteCell: UICollectionViewCell, ReusableCell {
 
     lazy private var emptyBG: UIView = .build { view in
         view.layer.cornerRadius = HomepageViewModel.UX.generalCornerRadius
-        view.layer.borderWidth = HomepageViewModel.UX.generalBorderWidth
     }
 
     override init(frame: CGRect) {
