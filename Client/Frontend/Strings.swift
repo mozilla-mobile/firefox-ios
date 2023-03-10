@@ -1707,9 +1707,9 @@ extension String {
         value: "Copied to clipboard",
         comment: "Copy app version alert shown in settings.")
     public static let SettingsAutofillCreditCard = MZLocalizedString(
-        "Settings.AutofillCreditCard.Title.v110",
+        "Settings.AutofillCreditCard.Title.v112",
         tableName: nil,
-        value: "Autofill Credit Card",
+        value: "Autofill Credit Cards",
         comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
 }
 
