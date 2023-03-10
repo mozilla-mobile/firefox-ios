@@ -1280,6 +1280,7 @@
 		F8708D321A0970B70051AB07 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8708D291A0970990051AB07 /* ShareViewController.swift */; };
 		F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F886218B270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift */; };
 		F886BFBD29AD56A400F77224 /* RustSyncManagerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F886BFBC29AD56A400F77224 /* RustSyncManagerAPI.swift */; };
+		F8A0B08229AD61FA0091C75B /* RustSyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */; };
 		F8AAC1B429663619000BCDEC /* RustAutofill.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AAC1B329663618000BCDEC /* RustAutofill.swift */; };
 		F8AAC1B7296637CE000BCDEC /* RustAutofillTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AAC1B5296637B7000BCDEC /* RustAutofillTests.swift */; };
 		FA6B2AC21D41F02D00429414 /* String+Punycode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6B2AC11D41F02D00429414 /* String+Punycode.swift */; };
@@ -5556,6 +5557,7 @@
 		F886218B270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicePasscodeRequiredViewController.swift; sourceTree = "<group>"; };
 		F886BFBC29AD56A400F77224 /* RustSyncManagerAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustSyncManagerAPI.swift; sourceTree = "<group>"; };
 		F8984594958004CB86902EE3 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustSyncManager.swift; sourceTree = "<group>"; };
 		F8AAC1B329663618000BCDEC /* RustAutofill.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustAutofill.swift; sourceTree = "<group>"; };
 		F8AAC1B5296637B7000BCDEC /* RustAutofillTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustAutofillTests.swift; sourceTree = "<group>"; };
 		F8CA43008FC72296965ED032 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/ClearPrivateDataConfirm.strings"; sourceTree = "<group>"; };
@@ -7764,6 +7766,7 @@
 				D34DC84D1A16C40C00D49B7B /* Profile.swift */,
 				1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */,
 				8A5BD95E2878B7B6000FE773 /* TopSitesWidgetManager.swift */,
+				F8A0B08129AD61FA0091C75B /* RustSyncManager.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -10634,6 +10637,7 @@
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				C87DC85C27B2C94D006EFCE2 /* LegacyWallpaperResourceManager.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
+				F8A0B08229AD61FA0091C75B /* RustSyncManager.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
 				E195440528A5AFDE00304CF0 /* BottomSheetViewController.swift in Sources */,

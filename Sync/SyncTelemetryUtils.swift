@@ -479,8 +479,9 @@ public class GleanSyncOperationHelper {
         for sync in telemetry.syncs {
             _ = GleanMetrics.Sync.syncUuid.generateAndSet()
 
-            if let failureReason = sync.failureReason {
-                GleanMetrics.Sync.failureReason[String(describing: failureReason)].add()
+            if let reason = sync.failureReason {
+                let failureReason = convertSyncFailureReason(reason: reason)
+                GleanMetrics.Sync.failureReason[failureReason].add()
             }
 
             for engine in sync.engines {
@@ -488,10 +489,11 @@ public class GleanSyncOperationHelper {
                     self.recordRustSyncEngineStats(engine.name,
                                                    incoming: engine.incoming,
                                                    outgoing: engine.outgoing)
-                } else {
+                } else if let reason = engine.failureReason {
+                    let reason = convertEngineFailureReason(reason: reason)
                     self.recordSyncEngineFailure(
                         engine.name,
-                        String(describing: engine.failureReason))
+                        reason)
                 }
 
                 self.submitSyncEnginePing(engine.name)

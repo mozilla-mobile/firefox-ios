@@ -221,13 +221,13 @@ public extension ClientRemoteTabs {
 
     func toRemoteClient() -> RemoteClient {
         let remoteClient = RemoteClient(guid: self.clientId,
-                            name: self.clientName,
-                            modified: UInt64(self.lastModified),
-                            type: "\(self.deviceType)",
-                            formfactor: nil,
-                            os: nil,
-                            version: nil,
-                            fxaDeviceId: self.clientId)
+                                        name: self.clientName,
+                                        modified: UInt64(self.lastModified),
+                                        type: "\(self.deviceType)",
+                                        formfactor: nil,
+                                        os: nil,
+                                        version: nil,
+                                        fxaDeviceId: self.clientId)
         return remoteClient
     }
 }
