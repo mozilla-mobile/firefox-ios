@@ -12,12 +12,12 @@ class OnboardingCardViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
     }
 
     override func tearDown() {
         super.tearDown()
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
         subject = nil
     }
 
