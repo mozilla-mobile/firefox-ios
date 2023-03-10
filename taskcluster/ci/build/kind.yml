@@ -11,7 +11,7 @@ transforms:
     - taskgraph.transforms.task:transforms
 
 
-jobs:
+tasks:
     screenshots:
         attributes:
             chunk_locales: ["en-US"]
