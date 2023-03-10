@@ -14,11 +14,11 @@ protocol SurveySurfaceDelegate: AnyObject {
 
 class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDelegate {
     // MARK: - Properties
+    private let surveySurfaceID: MessageSurfaceId = .survey
     private var message: GleanPlumbMessage?
     private var messagingManager: GleanPlumbMessageManagerProtocol
     private var themeManager: ThemeManager
     private var notificationCenter: NotificationProtocol
-
     private var viewModel: SurveySurfaceViewModel?
     private var viewController: SurveySurfaceViewController?
 
@@ -45,7 +45,11 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
     }
 
     // MARK: - Functionality
-    func surveySurface() -> SurveySurfaceViewController? {
+    /// Checks whether a message exists, and is not expired, and attempts to
+    /// build a `SurveySurfaceViewController` to be presented.
+    ///
+    /// - Returns: An optional `SurveySurfaceViewController`
+    func getSurveySurface() -> SurveySurfaceViewController? {
         guard let message = message,
               !message.isExpired,
               let image = UIImage(named: ImageIdentifiers.logo)
@@ -68,15 +72,12 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
     }
 
     /// Call messagingManager to retrieve the message for research surface.
-    private func updateMessage(for surface: MessageSurfaceId = .survey) {
-        // Set the message to nil just to make sure we're not accidentally showing an
-        // old message.
+    private func updateMessage() {
+        // Set the message to nil just to make sure we're not accidentally
+        // showing an old message.
         message = nil
-        guard let validMessage = messagingManager.getNextMessage(for: surface) else { return }
-
-        if !validMessage.isExpired {
-            message = validMessage
-        }
+        guard let newMessage = messagingManager.getNextMessage(for: surveySurfaceID) else { return }
+        if !newMessage.isExpired { message = newMessage }
     }
 
     // MARK: - MessageSurfaceProtocol

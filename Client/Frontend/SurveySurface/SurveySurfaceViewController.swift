@@ -124,12 +124,19 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     // MARK: - View setup
-    func setupView() {
+    private func setupView() {
+        addViews()
+        constrainViews()
+    }
+
+    private func addViews() {
         view.addSubview(imageView)
         view.addSubview(titleLabel)
         view.addSubview(dismissSurveyButton)
         view.addSubview(takeSurveyButton)
+    }
 
+    private func constrainViews() {
         let buttonSideMargin = view.frame.width * UX.buttonSideMarginMultiplier
         imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
 
@@ -172,6 +179,10 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         dismissSurveyButton.setTitle(viewModel.info.dismissActionLabel, for: .normal)
     }
 
+    /// Animates the elements of the view from their initial position
+    /// and alpha settings, to their final positions & alpha settings.
+    /// This animation exists to make the transition from the splash
+    /// screen to the survey surface very smooth.
     private func animateElements() {
         changeImageViewConstraint()
         UIView.animate(
@@ -188,15 +199,13 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         }
     }
 
+    /// Changes the constraint of the imageView. This needs to be done separately
+    /// if we want to do it in an animation.
     private func changeImageViewConstraint() {
-        NSLayoutConstraint.deactivate([
-            imageViewYConstraint
-        ])
+        NSLayoutConstraint.deactivate([imageViewYConstraint])
         imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor,
                                                                   constant: -(view.frame.height * UX.imageViewCenterYOffset))
-        NSLayoutConstraint.activate([
-            imageViewYConstraint
-        ])
+        NSLayoutConstraint.activate([imageViewYConstraint])
     }
 
     // MARK: - Button Actions

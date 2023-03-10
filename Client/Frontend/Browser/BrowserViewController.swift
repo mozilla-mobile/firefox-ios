@@ -2006,7 +2006,7 @@ extension BrowserViewController {
 
         if let surveySurfaceManager = surveySurfaceManager,
             surveySurfaceManager.shouldShowSurveySurface {
-            guard let surveySurface = surveySurfaceManager.surveySurface() else { return }
+            guard let surveySurface = surveySurfaceManager.getSurveySurface() else { return }
             surveySurface.modalPresentationStyle = .fullScreen
 
             self.present(surveySurface, animated: false)

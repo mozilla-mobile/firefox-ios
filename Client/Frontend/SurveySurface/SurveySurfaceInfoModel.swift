@@ -10,10 +10,7 @@ protocol SurveySurfaceInfoProtocol {
     var takeSurveyButtonLabel: String { get set }
     var dismissActionLabel: String { get set }
 
-    init(text: String,
-         takeSurveyButtonLabel: String,
-         dismissActionLabel: String,
-         image: UIImage)
+    init(text: String, takeSurveyButtonLabel: String, dismissActionLabel: String, image: UIImage)
 }
 
 struct SurveySurfaceInfoModel: SurveySurfaceInfoProtocol {
