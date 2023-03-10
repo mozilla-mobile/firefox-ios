@@ -6,9 +6,37 @@ import XCTest
 
 @testable import Client
 
-final class TabLocationViewTests: XCTestCase {
-    func testTabLocationView_hasNoLeaks() {
+class TabLocationViewTests: XCTestCase {
+    func testDelegateMemoryLeak() {
         let tabLocationView = TabLocationView()
-        trackForMemoryLeaks(tabLocationView)
+        let delegate = MockTabLocationViewDelegate()
+        tabLocationView.delegate = delegate
+        delegate.cleanup()
+        trackForMemoryLeaks(delegate)
+    }
+}
+
+// A mock delegate
+class MockTabLocationViewDelegate: TabLocationViewDelegate {
+    weak var delegate: TabLocationViewDelegate?
+
+    func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView) {}
+    func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView) {}
+    func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView) {}
+    func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {}
+    func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView) {}
+    func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView) {}
+    func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton) {}
+    func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool {
+        return false
+    }
+    func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView) {}
+    func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]? {
+        return nil
+    }
+
+    // cleanup
+    func cleanup() {
+        delegate = nil
     }
 }
