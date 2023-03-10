@@ -29,13 +29,13 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
     // MARK: - Variables
     var viewModel: SurveySurfaceViewModel
-
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    var imageViewYConstraint: NSLayoutConstraint!
 
     // MARK: - UI Elements
-    lazy var imageView: UIImageView = .build { imageView in
+    private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.imageView
     }
@@ -82,8 +82,6 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         button.alpha = 0.0
     }
 
-    var imageViewYConstraint: NSLayoutConstraint!
-
     // MARK: - View Lifecyle
     init(viewModel: SurveySurfaceViewModel,
          themeManager: ThemeManager,
@@ -111,7 +109,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setOrientationLockTo(on: true)
+        viewModel.setOrientationLockTo(on: true)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -122,9 +120,10 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        setOrientationLockTo(on: false)
+        viewModel.setOrientationLockTo(on: false)
     }
 
+    // MARK: - View setup
     func setupView() {
         view.addSubview(imageView)
         view.addSubview(titleLabel)
@@ -198,20 +197,6 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         NSLayoutConstraint.activate([
             imageViewYConstraint
         ])
-    }
-
-    private func setOrientationLockTo(on: Bool) {
-        guard UIDevice.current.userInterfaceIdiom == .phone else { return }
-
-        if on {
-            // Portrait orientation: lock enable
-            OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.portrait,
-                                                   andRotateTo: UIInterfaceOrientation.portrait)
-        } else {
-            // Portrait orientation: lock disable
-            OrientationLockUtility.lockOrientation(UIInterfaceOrientationMask.all)
-        }
-
     }
 
     // MARK: - Button Actions
