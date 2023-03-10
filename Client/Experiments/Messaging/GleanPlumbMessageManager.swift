@@ -204,17 +204,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     /// We assemble one message at a time. If there's any issue with it, return `nil`.
     /// Reporting a malformed message is done at the call site when reacting to a `nil`.
-<<<<<<< HEAD
-    private func createMessage(messageId: String, message: MessageData, lookupTables: Messaging) -> GleanPlumbMessage? {
-        // Guard against a message with a blank `text` property.
-=======
     private func createMessage(
         messageId: String,
         message: MessageData,
         lookupTables: Messaging
     ) -> GleanPlumbMessage? {
         /// Guard against a message with a blank `text` property.
->>>>>>> 93a14bfe2 (first pass)
         guard !message.text.isEmpty else { return nil }
 
         // Ascertain a Message's style, to know priority and max impressions.
