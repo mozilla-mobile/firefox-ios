@@ -210,6 +210,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
 
+            if self.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) == false {
+                setting.enabled = false
+            }
             return setting
         }
 
