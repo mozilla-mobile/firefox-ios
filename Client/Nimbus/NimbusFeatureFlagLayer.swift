@@ -49,6 +49,10 @@ final class NimbusFeatureFlagLayer {
                 .onboardingNotificationCard:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
 
+        case .shareSheetChanges,
+                .shareToolbarChanges:
+            return checkNimbusForShareSheet(for: featureID, from: nimbus)
+
         case .sponsoredTiles:
             return checkSponsoredTilesFeature(from: nimbus)
 
