@@ -43,6 +43,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
     }
 
     static func create(
+        didShowFromAppMenu: Bool,
         authenticateInNavigationController navigationController: UINavigationController,
         profile: Profile,
         settingsDelegate: SettingsDelegate? = nil,
@@ -54,6 +55,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
             switch result {
             case .success:
                 viewController = LoginListViewController(
+                    shownFromAppMenu: didShowFromAppMenu,
                     profile: profile,
                     webpageNavigationHandler: webpageNavigationHandler
                 )
@@ -67,7 +69,8 @@ class LoginListViewController: SensitiveViewController, Themeable {
         }
     }
 
-    private init(profile: Profile,
+    private init(shownFromAppMenu: Bool,
+                 profile: Profile,
                  webpageNavigationHandler: ((_ url: URL?) -> Void)?,
                  themeManager: ThemeManager = AppContainer.shared.resolve(),
                  notificationCenter: NotificationCenter = NotificationCenter.default) {
@@ -78,6 +81,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
         self.webpageNavigationHandler = webpageNavigationHandler
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.shownFromAppMenu = shownFromAppMenu
         super.init(nibName: nil, bundle: nil)
         listenForThemeChange(view)
     }
