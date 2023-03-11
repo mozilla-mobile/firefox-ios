@@ -25,7 +25,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
     fileprivate let loadingView: SettingsLoadingView = .build()
     fileprivate var deleteAlert: UIAlertController?
     fileprivate var selectionButtonHeightConstraint: NSLayoutConstraint?
-    fileprivate var selectedIndexPaths = [IndexPath]()
+    fileprivate var selectedLoginRecords = [LoginRecord]()
     fileprivate let tableView: UITableView = .build()
 
     weak var settingsDelegate: SettingsDelegate?
@@ -291,6 +291,9 @@ private extension LoginListViewController {
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
         loadingView.applyTheme(theme: themeManager.currentTheme)
+        selectedLoginRecords = loginSelectionController.selectedIndexPaths.compactMap {
+            self.viewModel.loginAtIndexPath($0)
+        }
         viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 
@@ -493,6 +496,11 @@ extension LoginListViewController: LoginViewModelDelegate {
     }
 
     func restoreSelectedRows() {
+        let selectedIndexPaths = selectedLoginRecords.compactMap {
+            self.viewModel.indexPathForLogin($0)
+        }
+        loginSelectionController.deselectAll()
+        loginSelectionController.selectIndexPaths(selectedIndexPaths)
         for path in self.loginSelectionController.selectedIndexPaths {
             tableView.selectRow(at: path, animated: false, scrollPosition: .none)
         }
