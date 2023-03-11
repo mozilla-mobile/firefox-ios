@@ -6,9 +6,17 @@ import XCTest
 
 @testable import Client
 
-final class GroupedTabContainerCellTests: XCTestCase {
+class GroupedTabContainerCellTests: XCTestCase {
     func testGroupedTabContainerCell_hasNoLeaks() throws {
         let cell = GroupedTabContainerCell()
+        let delegate = MockGroupedTabsDelegate()
+        cell.delegate = delegate
         trackForMemoryLeaks(cell)
     }
+}
+
+class MockGroupedTabsDelegate: GroupedTabsDelegate {
+    func didSelectGroupedTab(tab: Client.Tab?) {}
+    func closeTab(tab: Client.Tab) {}
+    func performSearchOfGroupInNewTab(searchTerm: String?) {}
 }
