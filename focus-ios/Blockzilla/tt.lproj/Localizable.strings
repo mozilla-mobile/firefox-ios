@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "Төп сайтлар";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "Ачу";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Яңа утырыш";
 
@@ -177,6 +180,42 @@
 
 /* Text for a label that indicates the title of button from onboarding screen version 2. */
 "NewOnboarding.Button.Title.V2" = "Башлау";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "Тиз. Хосусый. Бүлдерүләрсез.";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "Гизүне башлау";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "Калдырып тору";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "Өстәмә хосусыйлык өчен кушымта ябылганда без тарихыгызны чистартабыз.";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "Һәр сылтаманы ачканда да мәгълүматыгыз саклансын өчен %@ браузерын төп браузер итеп билгеләгез.";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ башка браузерлар кебек түгел";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Төп браузер итеп билгеләү";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "Гизү тарихыгызны, серсүзләрегезне, кукиларны бетерегез һәм бер басу белән кирәкмәгән рекламаларны күзәтчелек итүдән тыегыз!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "Сезнең тарихыгыз Сезне эзәрлекләмәячәк";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ — күзәтелүдән саклау һәм эчтәлекне блоклау мөмкинлекләре булган, хосусыйлыкны беренче урынга куючы браузер.";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "Инкогнито режимы гына түгел";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "Көйләүләрне үзгәртеп, никадәр мәгълүмат белән бүлешәчәгегез хакында үзезез карар бирегез.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari-га басыгыз һәм эчтәлек тыючыларны сайлагыз";

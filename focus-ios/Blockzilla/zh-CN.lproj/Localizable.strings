@@ -227,7 +227,7 @@
 "Onboarding.Title" = "欢迎使用 Firefox %@！";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsContentBlockers" = "点按“Safari 浏览器”，然后选择“内容拦截器”";
+"Safari.instructionsContentBlockers" = "轻点“Safari 浏览器”，然后选择“内容拦截器”";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "启用 %@";
@@ -485,7 +485,7 @@
 "ShowMeHowOnboarding.SubtitleStepThree.V2" = "搜索 %@ 然后选择小组件。";
 
 /* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
-"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "点按加号（+）图标。";
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "轻点加号（+）图标。";
 
 /* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
 "ShowMeHowOnboarding.Title.V2" = "添加 %@ 小组件";
@@ -578,16 +578,16 @@
 "TooltipBodyText.SearchBar" = "进入隐私浏览模式，我们会在您上网时拦截跟踪器和其他脏东西。";
 
 /* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
-"TooltipBodyText.ShieldIcon" = "%@ 已阻止此网站跟踪您，点按盾牌可了解已拦截的内容。";
+"TooltipBodyText.ShieldIcon" = "%@ 已阻止此网站跟踪您，轻点盾牌可了解已拦截的内容。";
 
 /* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
-"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "抓到了！我们已阻止此网站的跟踪，您可随时点按盾牌了解已拦截哪些内容。";
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "抓到了！我们已阻止此网站的跟踪，您可随时轻点盾牌了解已拦截哪些内容。";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon" = "随时点按垃圾桶，清除当前会话的全部痕迹。";
+"TooltipBodyText.TrashIcon" = "随时轻点垃圾桶，清除当前会话的全部痕迹。";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon.V2" = "点按此处即可删除浏览记录、Cookie 等所有数据，并新建一个全新标签页。";
+"TooltipBodyText.TrashIcon.V2" = "轻点此处即可删除浏览记录、Cookie 等所有数据，并新建一个全新标签页。";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "保护您是我的首要职责";
