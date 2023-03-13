@@ -37,7 +37,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         self.prefs = prefs
         self.hasAccount = hasAccount
         super.init(style: .grouped)
-        self.title = .SettingsSiriSectionName
+        self.title = .Settings.Notifications.Title
     }
 
     required init?(coder aDecoder: NSCoder) {
