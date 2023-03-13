@@ -8,12 +8,13 @@ import Shared
 class SnackBar: UIView {
     let snackbarClassIdentifier: String
 
-    private struct SnackBarUX {
+    private struct UX {
         static var MaxWidth: CGFloat = 400
         static let BorderWidth: CGFloat = 0.5
+        static let fontSize: CGFloat = 14
     }
 
-    private var scrollViewConstraints = [NSLayoutConstraint]()
+    private var scrollViewHeightConstraint = NSLayoutConstraint()
     private var buttonsViewConstraints = [NSLayoutConstraint]()
 
     private lazy var scrollView: UIScrollView = .build()
@@ -31,7 +32,7 @@ class SnackBar: UIView {
     }
 
     private lazy var textLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title1, size: UX.fontSize)
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         label.textColor = UIColor.Photon.Grey90 // If making themeable, change to UIColor.legacyTheme.tableView.rowText
@@ -63,7 +64,7 @@ class SnackBar: UIView {
     private func setupUI() {
         backgroundColor = UIColor.clear
         clipsToBounds = true // overridden by masksToBounds = false
-        layer.borderWidth = SnackBarUX.BorderWidth
+        layer.borderWidth = UX.BorderWidth
         layer.borderColor = UIColor.legacyTheme.snackbar.border.cgColor
         layer.cornerRadius = 8
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
@@ -89,13 +90,18 @@ class SnackBar: UIView {
         NSLayoutConstraint.activate([
             separator.leadingAnchor.constraint(equalTo: leadingAnchor),
             separator.trailingAnchor.constraint(equalTo: trailingAnchor),
-            separator.heightAnchor.constraint(equalToConstant: SnackBarUX.BorderWidth),
+            separator.heightAnchor.constraint(equalToConstant: UX.BorderWidth),
             separator.topAnchor.constraint(equalTo: buttonsView.topAnchor, constant: -1),
 
             backgroundView.topAnchor.constraint(equalTo: topAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
             backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
             backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: buttonsView.topAnchor),
 
             titleView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             titleView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
@@ -127,21 +133,17 @@ class SnackBar: UIView {
         NSLayoutConstraint.activate(buttonsViewConstraints)
     }
 
-    private func remakeScrollViewConstraints() {
-        NSLayoutConstraint.deactivate(scrollViewConstraints)
-        scrollViewConstraints = [
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: buttonsView.topAnchor),
-            scrollView.heightAnchor.constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.height / 2)
-        ]
-        NSLayoutConstraint.activate(scrollViewConstraints)
+    private func remakeScrollViewHeightConstraint() {
+        scrollViewHeightConstraint.isActive = false
+        scrollViewHeightConstraint = scrollView
+            .heightAnchor
+            .constraint(lessThanOrEqualToConstant: UIScreen.main.bounds.height / 2)
+        scrollViewHeightConstraint.isActive = true
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        remakeScrollViewConstraints()
+        remakeScrollViewHeightConstraint()
     }
 
     override func updateConstraints() {

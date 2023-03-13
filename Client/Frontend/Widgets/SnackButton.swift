@@ -14,8 +14,9 @@ class SnackButton: UIButton {
     let callback: SnackBarCallback?
     var bar: SnackBar!
 
-    private struct SnackBarUX {
+    private struct UX {
         static let BorderWidth: CGFloat = 0.5
+        static let fontSize: CGFloat = 14
     }
 
     override open var isHighlighted: Bool {
@@ -30,11 +31,11 @@ class SnackButton: UIButton {
         super.init(frame: .zero)
 
         if bold {
-            titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFontBold
+            titleLabel?.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .largeTitle, size: UX.fontSize)
         } else {
-            titleLabel?.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
+            titleLabel?.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .largeTitle, size: UX.fontSize)
         }
-        titleLabel?.adjustsFontForContentSizeCategory = false
+        titleLabel?.adjustsFontForContentSizeCategory = true
         setTitle(title, for: .normal)
         setTitleColor(UIColor.legacyTheme.snackbar.highlightText, for: .highlighted)
         setTitleColor(UIColor.legacyTheme.snackbar.title, for: .normal)
@@ -57,7 +58,7 @@ class SnackButton: UIButton {
             separator.topAnchor.constraint(equalTo: topAnchor),
             separator.bottomAnchor.constraint(equalTo: bottomAnchor),
             separator.leadingAnchor.constraint(equalTo: leadingAnchor),
-            separator.widthAnchor.constraint(equalToConstant: SnackBarUX.BorderWidth)
+            separator.widthAnchor.constraint(equalToConstant: UX.BorderWidth)
         ])
     }
 }
