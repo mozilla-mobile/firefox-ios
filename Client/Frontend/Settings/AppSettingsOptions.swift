@@ -1205,7 +1205,7 @@ class NotificationsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = NotificationsSettingsViewController(prefs: profile.prefs)
+        let viewController = NotificationsSettingsViewController(prefs: profile.prefs, hasAccount: profile.hasAccount())
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

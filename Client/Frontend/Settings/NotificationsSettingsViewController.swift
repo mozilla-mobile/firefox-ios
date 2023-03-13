@@ -7,35 +7,35 @@ import Shared
 
 class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     private lazy var syncSignInNotifications: BoolSetting = {
-        let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
         return BoolSetting(
             title: .Settings.Notifications.SyncNotificationsTitle,
             description: .Settings.Notifications.SyncNotificationsStatus,
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.SyncSignInNotifications,
-            enabled: enabled
+            enabled: true
         ) { _ in
             // enable/disable syncSignIn notifications
         }
     }()
 
     private lazy var tipsAndFeaturesNotifications: BoolSetting = {
-        let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
         return BoolSetting(
             title: .Settings.Notifications.TipsAndFeaturesNotificationsTitle,
-            description: .Settings.Notifications.TipsAndFeaturesNotificationsStatus,
+            description: String(format: .Settings.Notifications.TipsAndFeaturesNotificationsStatus, AppName.shortName.rawValue),
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications,
-            enabled: enabled
+            enabled: true
         ) { _ in
             // enable/disable tipsAndFeatures notifications
         }
     }()
 
     private let prefs: Prefs
+    private let hasAccount: Bool
 
-    init(prefs: Prefs) {
+    init(prefs: Prefs, hasAccount: Bool) {
         self.prefs = prefs
+        self.hasAccount = hasAccount
         super.init(style: .grouped)
         self.title = .SettingsSiriSectionName
     }
@@ -45,8 +45,15 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
     }
 
     override func generateSettings() -> [SettingSection] {
+        let childrenSection: [Setting]
+        if hasAccount {
+            childrenSection = [syncSignInNotifications, tipsAndFeaturesNotifications]
+        } else {
+            childrenSection = [tipsAndFeaturesNotifications]
+        }
+
         return [
-            SettingSection(children: [syncSignInNotifications, tipsAndFeaturesNotifications])
+            SettingSection(children: childrenSection)
         ]
     }
 }
