@@ -27,7 +27,7 @@ protocol TabContentScript {
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage)
 }
 
-protocol TabDelegate: AnyObject {
+protocol LegacyTabDelegate: AnyObject {
     func tab(_ tab: Tab, didAddSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didRemoveSnackbar bar: SnackBar)
     func tab(_ tab: Tab, didSelectFindInPageForSelection selection: String)
@@ -77,7 +77,7 @@ class Tab: NSObject {
     var timerPerWebsite: [String: StopWatchTimer] = [:]
 
     // Tab Groups
-    var metadataManager: TabMetadataManager?
+    var metadataManager: LegacyTabMetadataManager?
 
     // PageMetadata is derived from the page content itself, and as such lags behind the
     // rest of the tab.
@@ -235,12 +235,12 @@ class Tab: NSObject {
 
     var userActivity: NSUserActivity?
     var webView: WKWebView?
-    var tabDelegate: TabDelegate?
+    var tabDelegate: LegacyTabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
     var bars = [SnackBar]()
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
-    var sessionData: SessionData?
+    var sessionData: LegacySessionData?
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
@@ -384,7 +384,7 @@ class Tab: NSObject {
         self.nightMode = false
         self.noImageMode = false
         self.profile = profile
-        self.metadataManager = TabMetadataManager(metadataObserver: profile.places)
+        self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
         self.logger = logger
         super.init()
@@ -478,7 +478,7 @@ class Tab: NSObject {
     }
 
     func restore(_ webView: WKWebView) {
-        // Pulls restored session data from a previous SavedTab to load into the Tab. If it's nil, a session restore
+        // Pulls restored session data from a previous LegacySavedTab to load into the Tab. If it's nil, a session restore
         // has already been triggered via custom URL, so we use the last request to trigger it again; otherwise,
         // we extract the information needed to restore the tabs and create a NSURLRequest with the custom session restore URL
         // to trigger the session restore via custom handlers
@@ -539,7 +539,7 @@ class Tab: NSObject {
         guard let currentlyOpenUrl = lastKnownUrl ?? historyList.last else { return }
 
         url = currentlyOpenUrl
-        sessionData = SessionData(currentPage: 0, urls: [currentlyOpenUrl], lastUsedTime: Date.now())
+        sessionData = LegacySessionData(currentPage: 0, urls: [currentlyOpenUrl], lastUsedTime: Date.now())
 
         close()
     }

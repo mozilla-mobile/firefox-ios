@@ -40,7 +40,7 @@ private func migrate(urls: [URL]) -> [URL] {
     }
 }
 
-class SessionData: Codable {
+class LegacySessionData: Codable {
     let currentPage: Int
     let lastUsedTime: Timestamp
     let urls: [URL]

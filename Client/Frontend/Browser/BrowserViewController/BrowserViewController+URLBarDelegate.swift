@@ -317,7 +317,7 @@ extension BrowserViewController: URLBarDelegate {
         GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
         searchTelemetry?.shouldSetUrlTypeSearch = true
 
-        let searchData = TabGroupData(searchTerm: text,
+        let searchData = LegacyTabGroupData(searchTerm: text,
                                       searchUrl: searchURL.absoluteString,
                                       nextReferralUrl: "")
         tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)

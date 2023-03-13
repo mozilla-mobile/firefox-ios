@@ -42,7 +42,7 @@ extension SimpleTab {
         }
     }
 
-    static func convertToSimpleTabs(_ tabs: [SavedTab]) -> [String: SimpleTab] {
+    static func convertToSimpleTabs(_ tabs: [LegacySavedTab]) -> [String: SimpleTab] {
         var simpleTabs: [String: SimpleTab] = [:]
         for tab in tabs {
             var url: URL?

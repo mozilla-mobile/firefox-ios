@@ -4,16 +4,16 @@
 
 import Foundation
 
-protocol TabDataRetriever {
+protocol LegacyTabDataRetriever {
     var tabsStateArchivePath: URL? { get set }
     func getTabData() -> Data?
 }
 
-struct TabDataRetrieverImplementation: TabDataRetriever {
+struct LegacyTabDataRetrieverImplementation: LegacyTabDataRetriever {
     var tabsStateArchivePath: URL?
-    let fileManager: TabFileManager
+    let fileManager: LegacyTabFileManager
 
-    init(fileManager: TabFileManager = FileManager.default) {
+    init(fileManager: LegacyTabFileManager = FileManager.default) {
         self.fileManager = fileManager
     }
 

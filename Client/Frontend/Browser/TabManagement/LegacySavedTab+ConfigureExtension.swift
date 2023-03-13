@@ -8,7 +8,7 @@ import Storage
 import Shared
 
 // This cannot be easily imported into extension targets, so we break it out here.
-extension SavedTab {
+extension LegacySavedTab {
     convenience init?(tab: Tab, isSelected: Bool) {
         var sessionData = tab.sessionData
 
@@ -24,7 +24,7 @@ extension SavedTab {
                     let forwardList = tab.webView?.backForwardList.forwardList ?? []
                     let urls = (backList + [currentItem] + forwardList).map { $0.url }
                     let currentPage = -forwardList.count
-                    sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now())
+                    sessionData = LegacySessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now())
                 }
             }
         }
@@ -59,7 +59,7 @@ extension SavedTab {
         tab.sessionData = sessionData
         tab.lastTitle = title
         tab.tabUUID = UUID ?? ""
-        tab.metadataManager?.tabGroupData = tabGroupData ?? TabGroupData()
+        tab.metadataManager?.tabGroupData = tabGroupData ?? LegacyTabGroupData()
         tab.screenshotUUID = screenshotUUID
         tab.firstCreatedTime = createdAt ?? sessionData?.lastUsedTime ?? Date.now()
         tab.hasHomeScreenshot = hasHomeScreenshot

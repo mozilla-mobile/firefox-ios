@@ -5,16 +5,16 @@
 import Foundation
 import Shared
 
-class SavedTab: Codable {
+class LegacySavedTab: Codable {
     var isSelected: Bool
     var title: String?
     var url: URL?
     var isPrivate: Bool
-    var sessionData: SessionData?
+    var sessionData: LegacySessionData?
     var screenshotUUID: UUID?
     var faviconURL: String?
     var UUID: String?
-    var tabGroupData: TabGroupData?
+    var tabGroupData: LegacyTabGroupData?
     var createdAt: Timestamp?
     var hasHomeScreenshot: Bool
 
@@ -39,9 +39,9 @@ class SavedTab: Codable {
         isPrivate: Bool,
         faviconURL: String?,
         url: URL?,
-        sessionData: SessionData?,
+        sessionData: LegacySessionData?,
         uuid: String,
-        tabGroupData: TabGroupData?,
+        tabGroupData: LegacyTabGroupData?,
         createdAt: Timestamp?,
         hasHomeScreenshot: Bool
     ) {

@@ -170,7 +170,7 @@ extension BrowserViewController: WKUIDelegate {
                     let searchTerm = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchTerm ?? ""
                     let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
                     if !searchTerm.isEmpty, !searchUrl.isEmpty {
-                        let searchData = TabGroupData(searchTerm: searchTerm,
+                        let searchData = LegacyTabGroupData(searchTerm: searchTerm,
                                                       searchUrl: searchUrl,
                                                       nextReferralUrl: tab.url?.absoluteString ?? "")
                         tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData, isPrivate: tab.isPrivate)
@@ -775,7 +775,7 @@ extension BrowserViewController: WKNavigationDelegate {
             if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
                 updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString, isPrivate: tab.isPrivate)
             } else if !tab.isFxHomeTab {
-                let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+                let searchData = LegacyTabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
                                               searchUrl: webView.url?.absoluteString ?? "",
                                               nextReferralUrl: "")
                 metadataManager.updateTimerAndObserving(state: .openURLOnly,
@@ -902,8 +902,8 @@ private extension BrowserViewController {
         completionHandler(.useCredential, URLCredential(trust: trust))
     }
 
-    func updateObservationReferral(metadataManager: TabMetadataManager, url: String?, isPrivate: Bool) {
-        let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+    func updateObservationReferral(metadataManager: LegacyTabMetadataManager, url: String?, isPrivate: Bool) {
+        let searchData = LegacyTabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
                                       searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
                                       nextReferralUrl: url ?? "")
         metadataManager.updateTimerAndObserving(

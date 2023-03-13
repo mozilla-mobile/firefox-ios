@@ -6,11 +6,11 @@ import MozillaAppServices
 import Shared
 import Storage
 
-class TabMetadataManager {
+class LegacyTabMetadataManager {
     let metadataObserver: HistoryMetadataObserver
 
     // Tab Groups
-    var tabGroupData = TabGroupData()
+    var tabGroupData = LegacyTabGroupData()
     var tabGroupsTimerHelper = StopWatchTimer()
     var shouldResetTabGroupData = false
     let minViewTimeInSeconds = 7
@@ -36,7 +36,7 @@ class TabMetadataManager {
     }
 
     func updateTimerAndObserving(state: TabGroupTimerState,
-                                 searchData: TabGroupData = TabGroupData(),
+                                 searchData: LegacyTabGroupData = LegacyTabGroupData(),
                                  tabTitle: String? = nil, isPrivate: Bool) {
         guard !isPrivate else { return }
 
@@ -108,24 +108,24 @@ class TabMetadataManager {
         }
     }
 
-    private func updateNavSearchLoadedState(searchData: TabGroupData) {
+    private func updateNavSearchLoadedState(searchData: LegacyTabGroupData) {
         shouldResetTabGroupData = false
         tabGroupsTimerHelper.startOrResume()
         tabGroupData = searchData
         tabGroupData.tabHistoryCurrentState = TabGroupTimerState.navSearchLoaded.rawValue
     }
 
-    private func updateNewTabState(searchData: TabGroupData) {
+    private func updateNewTabState(searchData: LegacyTabGroupData) {
         shouldResetTabGroupData = false
         tabGroupsTimerHelper.resetTimer()
         tabGroupsTimerHelper.startOrResume()
         tabGroupData.tabHistoryCurrentState = TabGroupTimerState.newTab.rawValue
     }
 
-    private func updateNavigatedToDifferentUrl(searchData: TabGroupData) {
+    private func updateNavigatedToDifferentUrl(searchData: LegacyTabGroupData) {
         if !tabGroupData.tabAssociatedNextUrl.isEmpty && tabGroupData.tabAssociatedSearchUrl.isEmpty || shouldResetTabGroupData {
             // reset tab group
-            tabGroupData = TabGroupData()
+            tabGroupData = LegacyTabGroupData()
             shouldResetTabGroupData = true
         // To also capture any server redirects we check if user spent less than 7 sec on the same website before moving to another one
         } else if tabGroupData.tabAssociatedNextUrl.isEmpty || tabGroupsTimerHelper.elapsedTime < minViewTimeInSeconds {
@@ -140,7 +140,7 @@ class TabMetadataManager {
         }
     }
 
-    private func updateTabSelected(searchData: TabGroupData) {
+    private func updateTabSelected(searchData: LegacyTabGroupData) {
         if !shouldResetTabGroupData {
             if tabGroupsTimerHelper.isPaused {
                 tabGroupsTimerHelper.startOrResume()
@@ -149,7 +149,7 @@ class TabMetadataManager {
         }
     }
 
-    private func updateTabSwitched(searchData: TabGroupData) {
+    private func updateTabSwitched(searchData: LegacyTabGroupData) {
         if !shouldResetTabGroupData {
             updateObservationViewTime()
             tabGroupsTimerHelper.pauseOrStop()
@@ -157,7 +157,7 @@ class TabMetadataManager {
         }
     }
 
-    private func updateOpenInNewTab(searchData: TabGroupData) {
+    private func updateOpenInNewTab(searchData: LegacyTabGroupData) {
         shouldResetTabGroupData = false
         if !searchData.tabAssociatedSearchUrl.isEmpty {
             tabGroupData = searchData
@@ -170,7 +170,7 @@ class TabMetadataManager {
     /// - Parameters:
     ///   - searchData: Tab Group Data
     ///   - title: Site title from webview can be empty for slow loading pages
-    private func updateOpenURLOnlyState(searchData: TabGroupData, title: String?) {
+    private func updateOpenURLOnlyState(searchData: LegacyTabGroupData, title: String?) {
         tabGroupData = searchData
         tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openURLOnly.rawValue
         tabGroupsTimerHelper.startOrResume()
