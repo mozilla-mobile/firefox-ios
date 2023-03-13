@@ -156,9 +156,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return UIWindow(frame: UIScreen.main.bounds)
         }
 
-        if #available(iOS 14, *) {
-            windowScene.screenshotService?.delegate = self
-        }
+        windowScene.screenshotService?.delegate = self
 
         let window = UIWindow(windowScene: windowScene)
 

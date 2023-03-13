@@ -3535,17 +3535,6 @@ extension String {
 
 // MARK: - Today Widget Strings - [New Search - Private Search]
 extension String {
-    public static let NewTabButtonLabel = MZLocalizedString(
-        "TodayWidget.NewTabButtonLabelV1",
-        tableName: "Today",
-        value: "New Search",
-        comment: "Open New Tab button label")
-    public static let NewPrivateTabButtonLabel = MZLocalizedString(
-        "TodayWidget.PrivateTabButtonLabelV1",
-        tableName: "Today",
-        value: "Private Search",
-        comment: "Open New Private Tab button label")
-
     // Widget - Shared
 
     public static let QuickActionsGalleryTitle = MZLocalizedString(

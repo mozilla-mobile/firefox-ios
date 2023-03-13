@@ -32,64 +32,56 @@ class TabsPerformanceTest: BaseTestCase {
     // Taking the edges, low and high load. For more values in the middle
     // check the available archives
     func testPerfTabs_1_20startup() {
-        if #available(iOS 13.0, *) {
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-            }
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            app.launch()
         }
     }
 
     func testPerfTabs_2_1280startup() {
-        if #available(iOS 13.0, *) {
-            measure(metrics: [
-                XCTMemoryMetric(),
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                // activity measurement here
-                app.launch()
-            }
+        measure(metrics: [
+            XCTMemoryMetric(),
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // activity measurement here
+            app.launch()
         }
     }
 
     func testPerfTabs_3_20tabTray() {
-        if #available(iOS 13.0, *) {
-            app.launch()
-            waitForTabsButton()
-            measure(metrics: [
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                // go to tab tray
-                waitForExistence(app.buttons["TabToolbar.tabsButton"])
-                app.buttons["TabToolbar.tabsButton"].tap()
-                waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
-                app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
-            }
+        app.launch()
+        waitForTabsButton()
+        measure(metrics: [
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // go to tab tray
+            waitForExistence(app.buttons["TabToolbar.tabsButton"])
+            app.buttons["TabToolbar.tabsButton"].tap()
+            waitForExistence(app.buttons[AccessibilityIdentifiers.TabTray.doneButton])
+            app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
         }
     }
 
     func testPerfTabs_4_1280tabTray() {
-        if #available(iOS 13.0, *) {
-            app.launch()
-            waitForTabsButton()
-            measure(metrics: [
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                // go to tab tray
-                app.buttons["TabToolbar.tabsButton"].tap()
-                app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
-            }
+        app.launch()
+        waitForTabsButton()
+        measure(metrics: [
+            XCTClockMetric(), // to measure timeClock Mon
+            XCTCPUMetric(), // to measure cpu cycles
+            XCTStorageMetric(), // to measure storage consuming
+            XCTMemoryMetric()]) {
+            // go to tab tray
+            app.buttons["TabToolbar.tabsButton"].tap()
+            app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
         }
     }
 

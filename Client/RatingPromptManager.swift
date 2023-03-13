@@ -129,11 +129,6 @@ final class RatingPromptManager {
         lastRequestDate = date
         requestCount += 1
 
-        guard #available(iOS 14, *) else {
-            SKStoreReviewController.requestReview()
-            return
-        }
-
         guard let scene = UIApplication.shared.connectedScenes.first(where: {
             $0.activationState == .foregroundActive
         }) as? UIWindowScene else { return }
