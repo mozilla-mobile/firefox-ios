@@ -541,13 +541,10 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // Setting the view alpha to 0 so that there's no weird flash in between the
+        // check of view appearance and the `performSurveySurfaceCheck`, where the
+        // alpha will be set to 1.
         self.view.alpha = 0
-        // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
-        // not flash before we present. This change of alpha also participates in the animation when
-        // the intro view is dismissed.
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
-        }
 
         if !displayedRestoreTabsAlert && crashedLastLaunch() {
             logger.log("The application crashed on last session",

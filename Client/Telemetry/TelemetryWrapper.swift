@@ -414,10 +414,6 @@ extension TelemetryWrapper {
         case onboardingSelectWallpaper = "onboarding-select-wallpaper"
         case onboarding = "onboarding"
         case onboardingWallpaperSelector = "onboarding-wallpaper-selector"
-        // MARK: Survey Surface
-        case surveySeen = "survey-surface-seen"
-        case surveyTakeSurveyButton = "survey-take-survey-button"
-        case surveyDismissSurveySurface = "survey-dismiss-survey-surface"
         // MARK: New Upgrade screen
         case upgradeOnboardingClose = "upgrade-onboarding-close"
         case upgradeOnboardingCardView = "upgrade-onboarding-card-view"
