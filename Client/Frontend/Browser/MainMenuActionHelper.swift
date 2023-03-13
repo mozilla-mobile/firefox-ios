@@ -802,6 +802,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func showLoginListVC(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
         guard let menuActionDelegate = menuActionDelegate else { return }
         LoginListViewController.create(
+            didShowFromAppMenu: true,
             authenticateInNavigationController: navigationController,
             profile: self.profile,
             settingsDelegate: menuActionDelegate,
@@ -813,7 +814,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func presentLoginList(_ loginsVC: LoginListViewController?) {
         guard let loginsVC = loginsVC else { return }
-        loginsVC.shownFromAppMenu = true
         let navController = ThemedNavigationController(rootViewController: loginsVC)
         delegate?.showViewController(viewController: navController)
 
