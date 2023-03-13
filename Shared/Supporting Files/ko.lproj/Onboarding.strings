@@ -1,12 +1,12 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Continue.Action.v112" = "Շարունակել";
+"Onboarding.Notification.Continue.Action.v112" = "계속";
 
 /* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Description.v112" = "Ուղարկեք ներդիրներ ձեր սարքերի միջև և ստացեք խորհուրդներ %@-ից առավելագույն օգուտ քաղելու վերաբերյալ:";
+"Onboarding.Notification.Description.v112" = "기기 간에 탭을 보내고 %@를 최대한 활용하는 방법에 대한 팁을 얻으세요.";
 
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
-"Onboarding.Notification.Skip.Action.v112" = "Ոչ հիմա";
+"Onboarding.Notification.Skip.Action.v112" = "나중에";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v112" = "Ծանուցումներն օգնում են ձեզ ավելին անել %@-ի հետ";
+"Onboarding.Notification.Title.v112" = "알림은 %@로 더 많은 일을 할 수 있도록 도와줍니다.";
 
