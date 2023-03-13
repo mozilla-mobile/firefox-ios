@@ -9,9 +9,8 @@ class SnackBar: UIView {
     let snackbarClassIdentifier: String
 
     private struct UX {
-        static var MaxWidth: CGFloat = 400
-        static let BorderWidth: CGFloat = 0.5
-        static let fontSize: CGFloat = 14
+        static let borderWidth: CGFloat = 0.5
+        static let fontSize: CGFloat = 17
     }
 
     private var scrollViewHeightConstraint = NSLayoutConstraint()
@@ -32,7 +31,7 @@ class SnackBar: UIView {
     }
 
     private lazy var textLabel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .title1, size: UX.fontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, size: UX.fontSize)
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         label.textColor = UIColor.Photon.Grey90 // If making themeable, change to UIColor.legacyTheme.tableView.rowText
@@ -64,7 +63,7 @@ class SnackBar: UIView {
     private func setupUI() {
         backgroundColor = UIColor.clear
         clipsToBounds = true // overridden by masksToBounds = false
-        layer.borderWidth = UX.BorderWidth
+        layer.borderWidth = UX.borderWidth
         layer.borderColor = UIColor.legacyTheme.snackbar.border.cgColor
         layer.cornerRadius = 8
         layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
@@ -90,7 +89,7 @@ class SnackBar: UIView {
         NSLayoutConstraint.activate([
             separator.leadingAnchor.constraint(equalTo: leadingAnchor),
             separator.trailingAnchor.constraint(equalTo: trailingAnchor),
-            separator.heightAnchor.constraint(equalToConstant: UX.BorderWidth),
+            separator.heightAnchor.constraint(equalToConstant: UX.borderWidth),
             separator.topAnchor.constraint(equalTo: buttonsView.topAnchor, constant: -1),
 
             backgroundView.topAnchor.constraint(equalTo: topAnchor),
