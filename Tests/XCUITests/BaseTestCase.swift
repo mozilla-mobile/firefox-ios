@@ -5,6 +5,8 @@
 import MappaMundi
 import XCTest
 
+let page1 = "http://localhost:\(serverPort)/test-fixture/find-in-page-test.html"
+let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
 let serverPort = Int.random(in: 1025..<65000)
 
 func path(forTestPage page: String) -> String {
@@ -109,6 +111,81 @@ class BaseTestCase: XCTestCase {
             let location = XCTSourceCodeLocation(filePath: file, lineNumber: Int(line))
             issue.sourceCodeContext = XCTSourceCodeContext(location: location)
             self.record(issue)
+        }
+    }
+
+    func bookmarkPages() {
+        let listWebsitesToBookmark = [page1, page2]
+        for site in listWebsitesToBookmark {
+            navigator.openURL(site)
+            waitUntilPageLoad()
+            bookmark()
+        }
+    }
+
+    func bookmark() {
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: TIMEOUT_LONG)
+        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
+        navigator.nowAt(BrowserTab)
+    }
+
+    func unbookmark() {
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
+        app.otherElements["menu-Bookmark-Remove"].tap()
+        navigator.nowAt(BrowserTab)
+    }
+
+    func checkRecentlySaved() {
+        waitForTabsButton()
+        let numberOfRecentlyVisitedBookmarks = app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].otherElements.otherElements.otherElements.otherElements.count
+        let numberOfExpectedRecentlyVisitedBookmarks = 3
+        XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
+    }
+
+    func checkRecentlySavedUpdated() {
+        waitForTabsButton()
+        let numberOfRecentlyVisitedBookmarks = app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].otherElements.otherElements.otherElements.otherElements.count
+        let numberOfExpectedRecentlyVisitedBookmarks = 1
+        XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
+    }
+
+    // TODO: Fine better way to update screen graph when necessary
+    func updateScreenGraph() {
+        navigator = createScreenGraph(for: self, with: app).navigator()
+        userState = navigator.userState
+    }
+
+    func addContentToReaderView() {
+        updateScreenGraph()
+        userState.url = path(forTestPage: "test-mozilla-book.html")
+        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        waitUntilPageLoad()
+        waitForExistence(app.buttons["Reader View"], timeout: TIMEOUT)
+        app.buttons["Reader View"].tap()
+        waitUntilPageLoad()
+        waitForExistence(app.buttons["Add to Reading List"])
+        app.buttons["Add to Reading List"].tap()
+    }
+    func removeContentFromReaderView() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(LibraryPanel_ReadingList)
+        let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
+        waitForExistence(savedToReadingList)
+
+        // Remove the item from reading list
+        if processIsTranslatedStr() == m1Rosetta {
+            savedToReadingList.press(forDuration: 2)
+            waitForExistence(app.otherElements["Remove"])
+            app.otherElements["Remove"].tap()
+        } else {
+            savedToReadingList.swipeLeft()
+            waitForExistence(app.buttons["Remove"])
+            app.buttons["Remove"].tap()
         }
     }
 

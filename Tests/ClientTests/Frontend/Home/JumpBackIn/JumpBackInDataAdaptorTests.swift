@@ -38,7 +38,6 @@ class JumpBackInDataAdaptorTests: XCTestCase {
 
         let recentTabs = await subject.getRecentTabData()
         let synced = await subject.getSyncedTabData()
-
         XCTAssertEqual(recentTabs.count, 0)
         XCTAssertNil(synced)
     }

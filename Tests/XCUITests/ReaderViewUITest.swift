@@ -17,24 +17,6 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
     }
 
-    // TODO: Fine better way to update screen graph when necessary
-    private func updateScreenGraph() {
-        navigator = createScreenGraph(for: self, with: app).navigator()
-        userState = navigator.userState
-    }
-
-    private func addContentToReaderView() {
-        updateScreenGraph()
-        userState.url = path(forTestPage: "test-mozilla-book.html")
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
-        waitUntilPageLoad()
-        waitForExistence(app.buttons["Reader View"], timeout: TIMEOUT)
-        app.buttons["Reader View"].tap()
-        waitUntilPageLoad()
-        waitForExistence(app.buttons["Add to Reading List"])
-        app.buttons["Add to Reading List"].tap()
-    }
-
     private func checkReadingListNumberOfItems(items: Int) {
         waitForExistence(app.tables["ReadingTable"])
         let list = app.tables["ReadingTable"].cells.count
