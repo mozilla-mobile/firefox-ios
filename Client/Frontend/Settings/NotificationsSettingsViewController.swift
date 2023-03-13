@@ -6,55 +6,11 @@ import Foundation
 import Shared
 
 class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    private lazy var allowAllNotifications: BoolSetting = {
-        return BoolSetting(
-            title: .Settings.Notifications.AllowAllNotificationsTitle,
-            prefs: prefs,
-            prefKey: PrefsKeys.Notifications.AllowAllNotifications
-        ) { [weak self] value in
-            guard let self = self else { return }
-
-            Task {
-                let shouldEnable = await self.notificationsChanged(value)
-                self.allowAllNotifications.control.setOn(shouldEnable, animated: true)
-                self.allowAllNotifications.writeBool(self.allowAllNotifications.control)
-
-                self.tabsNotifications.control.setOn(shouldEnable, animated: true)
-                self.tabsNotifications.writeBool(self.tabsNotifications.control)
-
-                self.syncSignInNotifications.control.setOn(shouldEnable, animated: true)
-                self.syncSignInNotifications.writeBool(self.syncSignInNotifications.control)
-
-                self.tipsAndFeaturesNotifications.control.setOn(shouldEnable, animated: true)
-                self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control)
-
-                self.tabsNotifications.enabled = shouldEnable
-                self.syncSignInNotifications.enabled = shouldEnable
-                self.tipsAndFeaturesNotifications.enabled = shouldEnable
-
-                self.tableView.reloadData()
-            }
-        }
-    }()
-
-    private lazy var tabsNotifications: BoolSetting = {
-        let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
-        return BoolSetting(
-            title: .Settings.Notifications.TabsNotificationsTitle,
-            description: .Settings.Notifications.TabsNotificationsStatus,
-            prefs: prefs,
-            prefKey: PrefsKeys.Notifications.TabsNotifications,
-            enabled: enabled
-        ) { _ in
-            // enable/disable tabs notifications
-        }
-    }()
-
     private lazy var syncSignInNotifications: BoolSetting = {
         let enabled = prefs.boolForKey(PrefsKeys.Notifications.AllowAllNotifications) ?? false
         return BoolSetting(
-            title: .Settings.Notifications.SyncSignInNotificationsTitle,
-            description: .Settings.Notifications.SyncSignInNotificationsStatus,
+            title: .Settings.Notifications.SyncNotificationsTitle,
+            description: .Settings.Notifications.SyncNotificationsStatus,
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.SyncSignInNotifications,
             enabled: enabled
@@ -90,58 +46,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
     override func generateSettings() -> [SettingSection] {
         return [
-            SettingSection(children: [allowAllNotifications]),
-            SettingSection(children: [tabsNotifications, syncSignInNotifications, tipsAndFeaturesNotifications])
+            SettingSection(children: [syncSignInNotifications, tipsAndFeaturesNotifications])
         ]
-    }
-
-    func notificationsChanged(_ sendNotifications: Bool) async -> Bool {
-        guard sendNotifications else { return false }
-
-        let notificationManager = NotificationManager()
-        var sendNotifications = true
-        let settings = await notificationManager.getNotificationSettings()
-
-        switch settings.authorizationStatus {
-        case .notDetermined, .authorized, .provisional, .ephemeral:
-            sendNotifications = true
-            do {
-                sendNotifications = try await notificationManager.requestAuthorization()
-            } catch {
-                sendNotifications = false
-            }
-
-        case .denied:
-            sendNotifications = false
-            await MainActor.run {
-                self.present(accessDenied, animated: true, completion: nil)
-            }
-
-        @unknown default:
-            sendNotifications = false
-        }
-        return sendNotifications
-    }
-
-    var accessDenied: UIAlertController {
-        let accessDenied = UIAlertController(
-            title: .Settings.Notifications.TurnOnNotificationsTitle,
-            message: .Settings.Notifications.TurnOnNotificationsMessage,
-            preferredStyle: .alert
-        )
-        let dismissAction = UIAlertAction(
-            title: .CancelString,
-            style: .default,
-            handler: nil
-        )
-        accessDenied.addAction(dismissAction)
-        let settingsAction = UIAlertAction(
-            title: .OpenSettingsString,
-            style: .default
-        ) { _ in
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
-        }
-        accessDenied.addAction(settingsAction)
-        return accessDenied
     }
 }

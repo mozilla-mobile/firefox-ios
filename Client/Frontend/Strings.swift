@@ -1310,18 +1310,6 @@ extension String {
                 value: "Go to your device Settings to turn on notifications in %@",
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
             )
-            public static let TurnOnNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.TurnOnNotificationsTitle",
-                tableName: nil,
-                value: "Turn on Notifications",
-                comment: "This is the title informating the user needs to turn on notifications in iOS Settings."
-            )
-            public static let TurnOnNotificationsMessage = MZLocalizedString(
-                "Settings.Notifications.TurnOnNotificationsTitle",
-                tableName: nil,
-                value: "Go to your device Settings to turn on notifications in Firefox",
-                comment: "This is the title informating the user needs to turn on notifications in iOS Settings."
-            )
         }
 
         public struct Toolbar {
