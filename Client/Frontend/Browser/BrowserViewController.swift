@@ -1990,7 +1990,6 @@ extension BrowserViewController: HomePanelDelegate {
 }
 
 // MARK: - Research Surface
-
 extension BrowserViewController {
     /// This function will:
     /// 1. Create a new instance of the SurveySurfaceManager & make sure that it is
@@ -1999,6 +1998,10 @@ extension BrowserViewController {
     ///     - true: show the surface
     ///     - false: deallocate the survey surface manager as BVC doesn't need to hold it
     func performSurveySurfaceCheck() {
+        // No matter what the result of the check, we want to make sure to
+        // always bring the alpha back to 1.0
+        defer { self.view.alpha = 1.0 }
+
         surveySurfaceManager = SurveySurfaceManager(with: self)
 
         surveySurfaceManager?.dismissClosure = { [weak self] in
@@ -2011,10 +2014,8 @@ extension BrowserViewController {
             surveySurface.modalPresentationStyle = .fullScreen
 
             self.present(surveySurface, animated: false)
-            self.view.alpha = 1.0
         } else {
             self.surveySurfaceManager = nil
-            self.view.alpha = 1.0
         }
     }
 }

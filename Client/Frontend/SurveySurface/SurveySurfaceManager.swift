@@ -27,8 +27,7 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
 
     var shouldShowSurveySurface: Bool {
         updateMessage()
-        if message != nil { return true }
-        return false
+        return message != nil
     }
 
     // MARK: - Initialization

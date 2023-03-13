@@ -35,6 +35,8 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     var imageViewYConstraint: NSLayoutConstraint!
 
     // MARK: - UI Elements
+    // Other than the imageView, all elements begin with an alpha of 0.0 as,
+    // they are meant to be invisible, and appear during the animation.
     private lazy var imageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.SurveySurface.imageView
@@ -137,11 +139,7 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private func constrainViews() {
-        // The side margins are at 5%, thus the button width would have to be 2*5, or, 90%
-        // of the screen width. Thus, we set whichever width is smaller.
-        let buttonWidthBasedOnFrame = view.frame.width * (1.0 - (2 * UX.buttonSideMarginMultiplier))
-        guard let buttonWidth = [UX.buttonMaxWidth, buttonWidthBasedOnFrame].min() else { return }
-
+        let buttonWidth = calculateButtonWidth()
         imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
 
         NSLayoutConstraint.activate([
@@ -169,6 +167,16 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         ])
     }
 
+    private func calculateButtonWidth() -> CGFloat {
+        // The side margins are at a certain percentage, thus the button width would have
+        // to be the inverse of 2*that or the max width determined  by design.
+        let buttonWidthBasedOnFrame = view.frame.width * (1.0 - (2 * UX.buttonSideMarginMultiplier))
+        let buttonWidth = [UX.buttonMaxWidth, buttonWidthBasedOnFrame].min()
+        guard let buttonWidth = buttonWidth else { return UX.buttonMaxWidth }
+
+        return buttonWidth
+    }
+
     private func updateContent() {
         let titleString = String(format: viewModel.info.text, AppName.shortName.rawValue)
         titleLabel.text = titleString
@@ -177,10 +185,9 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         dismissSurveyButton.setTitle(viewModel.info.dismissActionLabel, for: .normal)
     }
 
-    /// Animates the elements of the view from their initial position
-    /// and alpha settings, to their final positions & alpha settings.
-    /// This animation exists to make the transition from the splash
-    /// screen to the survey surface very smooth.
+    /// Animates the elements of the view from their initial position and alpha settings,
+    /// to their final positions & alpha settings. This animation exists to make the
+    /// transition from the splash screen to the survey surface very smooth.
     private func animateElements() {
         changeImageViewConstraint()
         UIView.animate(
