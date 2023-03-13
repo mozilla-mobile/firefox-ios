@@ -6,6 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Shared-Bridging-Header.h"
+//bridgding header from the client that was previously implicitely imported
 #import "Client-Bridging-Header.h"
 
 #endif
