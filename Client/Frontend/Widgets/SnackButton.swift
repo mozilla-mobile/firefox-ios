@@ -12,7 +12,7 @@ import Foundation
 typealias SnackBarCallback = (_ bar: SnackBar) -> Void
 class SnackButton: UIButton {
     let callback: SnackBarCallback?
-    var bar: SnackBar!
+    var bar: SnackBar?
 
     private struct UX {
         static let BorderWidth: CGFloat = 0.5
@@ -48,7 +48,7 @@ class SnackButton: UIButton {
     }
 
     @objc func onClick() {
-        callback?(bar)
+        if let bar { callback?(bar) }
     }
 
     func drawSeparator() {
