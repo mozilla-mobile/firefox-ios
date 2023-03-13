@@ -26,6 +26,9 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
     weak var homepanelDelegate: HomePanelDelegate?
 
     var shouldShowSurveySurface: Bool {
+        // Fix to avoid showing SurveySurface in UITest
+        if AppConstants.isRunningTest { return false }
+        
         updateMessage()
         return message != nil
     }
