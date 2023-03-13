@@ -1101,12 +1101,14 @@ extension URLBar: AutocompleteTextFieldDelegate {
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         // If the new search string is not longer than the previous
         // we don't need to find an autocomplete suggestion.
+        var source = Source.action
         if let autocompleteText = autocompleteTextField.text, autocompleteText != userInputText {
+            source = .topsite
             Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.autofill))
         }
         userInputText = nil
 
-        delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "", source: .action)
+        delegate?.urlBar(self, didSubmitText: autocompleteTextField.text ?? "", source: source)
 
         if Settings.getToggle(.enableSearchSuggestions) {
             Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected))

@@ -913,6 +913,7 @@ class BrowserViewController: UIViewController {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            recordSearchEvent(source)
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
@@ -932,8 +933,6 @@ class BrowserViewController: UIViewController {
     func submit(url: URL, source: Source) {
         // If this is the first navigation, show the browser and the toolbar.
         guard isViewLoaded else { initialUrl = url; return }
-
-        recordSearchEvent(source)
 
         shortcutsPresenter.shortcutsState = .none
         SearchInContentTelemetry.shouldSetUrlTypeSearch = true
@@ -1351,6 +1350,7 @@ extension BrowserViewController: URLBarDelegate {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            recordSearchEvent(source)
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
@@ -1568,7 +1568,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if searchEngineManager.activeEngine.urlForQuery(query) != nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.selectQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
-            urlBar(urlBar, didSubmitText: query, source: .topsite)
+            urlBar(urlBar, didSubmitText: query, source: .suggestion)
         }
 
         urlBar.dismiss()
@@ -1610,6 +1610,7 @@ extension BrowserViewController: OverlayViewDelegate {
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: searchEngineManager.activeEngine.getNameOrCustom())
+            recordSearchEvent(.suggestion)
             url = searchEngineManager.activeEngine.urlForQuery(text)
         } else {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeURL, object: TelemetryEventObject.searchBar)
