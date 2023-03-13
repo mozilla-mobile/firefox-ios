@@ -176,12 +176,16 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     // MARK: - Misc. Private helpers
 
     /// - Returns: All well-formed, non-expired messages for a surface in descending priority order for a specified surface.
-    private func getAllValidMessagesFor(_ surface: MessageSurfaceId, with feature: Messaging) -> [GleanPlumbMessage] {
-        // All these are non-expired, well formed, and descending priority messages for a requested surface.
+    private func getAllValidMessagesFor(
+        _ surface: MessageSurfaceId,
+        with feature: Messaging
+    ) -> [GleanPlumbMessage] {
+        /// All these are non-expired, well formed, and descending priority messages for a requested surface.
         let messages = feature.messages.compactMap { key, messageData -> GleanPlumbMessage? in
             guard let message = self.createMessage(messageId: key,
                                                    message: messageData,
-                                                   lookupTables: feature) else {
+                                                   lookupTables: feature)
+            else {
                 onMalformedMessage(messageKey: key)
                 return nil
             }
@@ -200,8 +204,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     /// We assemble one message at a time. If there's any issue with it, return `nil`.
     /// Reporting a malformed message is done at the call site when reacting to a `nil`.
-    private func createMessage(messageId: String, message: MessageData, lookupTables: Messaging) -> GleanPlumbMessage? {
-        // Guard against a message with a blank `text` property.
+    private func createMessage(
+        messageId: String,
+        message: MessageData,
+        lookupTables: Messaging
+    ) -> GleanPlumbMessage? {
+        /// Guard against a message with a blank `text` property.
         guard !message.text.isEmpty else { return nil }
 
         // Ascertain a Message's style, to know priority and max impressions.
