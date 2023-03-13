@@ -62,26 +62,19 @@ class LoginListDataSourceHelper {
         var sections = [Character: [LoginRecord]]()
         var titleSet = Set<Character>()
 
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            guard let self = self else {
-                completion( ([Character](), [Character: [LoginRecord]]()) )
-                return
-            }
+        self.setDomainLookup(logins)
+        // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
+        logins.forEach { titleSet.insert(self.titleForLogin($0)) }
 
-            self.setDomainLookup(logins)
-            // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
-            logins.forEach { titleSet.insert(self.titleForLogin($0)) }
+        // 2. Setup an empty list for each title found.
+        titleSet.forEach { sections[$0] = [LoginRecord]() }
 
-            // 2. Setup an empty list for each title found.
-            titleSet.forEach { sections[$0] = [LoginRecord]() }
+        // 3. Go through our logins and put them in the right section.
+        logins.forEach { sections[self.titleForLogin($0)]?.append($0) }
 
-            // 3. Go through our logins and put them in the right section.
-            logins.forEach { sections[self.titleForLogin($0)]?.append($0) }
+        // 4. Go through each section and sort.
+        sections.forEach { sections[$0] = $1.sorted(by: self.sortByDomain) }
 
-            // 4. Go through each section and sort.
-            sections.forEach { sections[$0] = $1.sorted(by: self.sortByDomain) }
-
-            completion( (Array(titleSet).sorted(), sections) )
-        }
+        completion( (Array(titleSet).sorted(), sections) )
     }
 }
