@@ -2014,6 +2014,7 @@ extension BrowserViewController {
             self.view.alpha = 1.0
         } else {
             self.surveySurfaceManager = nil
+            self.view.alpha = 1.0
         }
     }
 }

@@ -39,8 +39,8 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
     ) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.messagingManager = messagingManager
         self.homepanelDelegate = homepageDelegate
+        self.messagingManager = messagingManager
         self.messagingManager.pressedDelegate = self
     }
 

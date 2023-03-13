@@ -12,19 +12,16 @@ import UIKit
 class SurveySurfaceManagerTests: XCTestCase {
     private var homepanelDelegate: MockHomePanelDelegate!
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
-    private var themeManager: ThemeManager!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        themeManager = AppContainer.shared.resolve()
         homepanelDelegate = MockHomePanelDelegate()
         messageManager = MockGleanPlumbMessageManagerProtocol()
     }
 
     override func tearDown() {
         super.tearDown()
-        themeManager = nil
         homepanelDelegate = nil
         messageManager = nil
     }
@@ -124,7 +121,6 @@ extension SurveySurfaceManagerTests {
                        line: UInt = #line
     ) -> SurveySurfaceManager {
         let subject = SurveySurfaceManager(with: homepanelDelegate,
-                                           themeManager: themeManager,
                                            and: messageManager)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
@@ -171,7 +167,6 @@ class MockSurveyMessageDataProtocol: MessageDataProtocol {
 
 // MARK: - MockHomePanelDelegate
 class MockHomePanelDelegate: HomePanelDelegate {
-
     func homePanel(didSelectURL url: URL, visitType: Storage.VisitType, isGoogleTopSite: Bool) {
     }
 
