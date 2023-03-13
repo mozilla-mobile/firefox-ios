@@ -60,7 +60,9 @@ struct CreditCardEditView: View {
             Spacer()
         }
         .padding(.top, 20)
-        .toast(isShowing: $isShowingToast, animationAmount: $animationAmount.animation())
+        .toast(isShowing: $isShowingToast,
+               animationAmount: $animationAmount.animation(
+                .easeIn(duration: 3)))
         .edgesIgnoringSafeArea(.bottom) // iOS 13 version
         // TODO: Switch to use iOS 14 version after iOS 13 is dropped
 //        .ignoresSafeArea(edges: [.bottom])

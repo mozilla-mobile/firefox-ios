@@ -15,20 +15,22 @@ struct ToastModifier: ViewModifier {
             content
             if isShowing {
                 toast
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                        withAnimation {
-                            isShowing = false
-                            animationAmount = 0
-                        }
-                    }
-                }
+                .onAppear(perform: hideToast)
             }
         }
     }
 
     private var toast: some View {
         return ToastView()
+    }
+
+    func hideToast() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            withAnimation {
+                isShowing = false
+                animationAmount = 0
+            }
+        }
     }
 }
 
