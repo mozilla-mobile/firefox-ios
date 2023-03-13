@@ -73,20 +73,20 @@ final class LoginListViewModel {
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
     func queryLogins(_ query: String, completion: @escaping (([LoginRecord]) -> Void)) {
         profile.logins.searchLoginsWithQuery(query).upon { result in
-            // Check any failure, Ex. database is closed
-            guard result.failureValue == nil else {
-                DispatchQueue.main.async {
+            ensureMainThread {
+                // Check any failure, Ex. database is closed
+                guard result.failureValue == nil else {
                     self.delegate?.loginSectionsDidUpdate()
+                    completion([])
+                    return
                 }
-                completion([])
-                return
+                // Make sure logins exist
+                guard let logins = result.successValue else {
+                    completion([])
+                    return
+                }
+                completion(logins.asArray())
             }
-            // Make sure logins exist
-            guard let logins = result.successValue else {
-                completion([])
-                return
-            }
-            completion(logins.asArray())
         }
     }
 
@@ -130,31 +130,26 @@ final class LoginListViewModel {
     }
 
     func setLogins(_ logins: [LoginRecord]) {
-        // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
-        //     prevent race conditions between data/UI indexing.
-
         helper.computeSectionsFromLogins(logins) { [weak self] result in
             let titles = result.0
             let sections = result.1
-            DispatchQueue.main.async {
-                guard !logins.isEmpty else {
-                    self?.count = 0
-                    self?.hasData = false
-                    self?.titles = []
-                    self?.loginRecordSections = [:]
-                    return
-                }
+            guard !logins.isEmpty else {
+                self?.count = 0
+                self?.hasData = false
+                self?.titles = []
+                self?.loginRecordSections = [:]
+                return
+            }
 
-                self?.count = logins.count
-                self?.hasData = !logins.isEmpty
-                self?.titles = titles
-                self?.loginRecordSections = sections
+            self?.count = logins.count
+            self?.hasData = !logins.isEmpty
+            self?.titles = titles
+            self?.loginRecordSections = sections
 
-                // Disable the search controller if there are no logins saved
-                if !(self?.searchController?.isActive ?? true) {
-                    self?.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
-                    self?.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
-                }
+            // Disable the search controller if there are no logins saved
+            if !(self?.searchController?.isActive ?? true) {
+                self?.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
+                self?.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
             }
         }
     }
