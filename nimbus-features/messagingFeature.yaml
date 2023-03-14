@@ -112,6 +112,7 @@ features:
               trigger:
                 - I_AM_NOT_DEFAULT_BROWSER
                 - SUPPORTS_DEFAULT_BROWSER
+                - USER_INSTALLED_THREE_DAYS_AGO
               title: Default Browser/DefaultBrowserCard.Title
               text: Default Browser/DefaultBrowserCard.Description
               button-label: Default Browser/DefaultBrowserCard.Button.v2
