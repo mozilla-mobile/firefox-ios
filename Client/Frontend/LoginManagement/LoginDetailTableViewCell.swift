@@ -14,12 +14,6 @@ protocol LoginDetailTableViewCellDelegate: AnyObject {
     func textFieldDidEndEditing(_ cell: LoginDetailTableViewCell)
 }
 
-public struct LoginTableViewCellUX {
-    static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
-    static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
-    static let HorizontalMargin: CGFloat = 14
-}
-
 enum LoginTableViewCellStyle {
     case iconAndBothLabels
     case noIconAndBothLabels
@@ -27,6 +21,12 @@ enum LoginTableViewCellStyle {
 }
 
 class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
+    private struct UX {
+        static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
+        static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
+        static let horizontalMargin: CGFloat = 14
+    }
+
     fileprivate lazy var labelContainer: UIView = .build { _ in }
 
     weak var delegate: LoginDetailTableViewCellDelegate?
@@ -50,7 +50,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     lazy var descriptionLabel: UITextField = .build { [weak self] label in
         guard let self = self else { return }
 
-        label.font = LoginTableViewCellUX.descriptionLabelFont
+        label.font = UX.descriptionLabelFont
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -65,7 +65,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     // produce a EX_BAD_ACCESS error when dequeuing the cell. For now, this label is made private
     // and the text property is exposed using a get/set property below.
     fileprivate lazy var highlightedLabel: UILabel = .build { label in
-        label.font = LoginTableViewCellUX.highlightedLabelFont
+        label.font = UX.highlightedLabelFont
         label.numberOfLines = 1
     }
 
@@ -88,7 +88,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         guard let descriptionText = descriptionLabel.text else { return nil }
 
         let attributes = [
-            NSAttributedString.Key.font: LoginTableViewCellUX.descriptionLabelFont
+            NSAttributedString.Key.font: UX.descriptionLabelFont
         ]
 
         return descriptionText.size(withAttributes: attributes)
@@ -149,8 +149,8 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
     fileprivate func configureLayout() {
         NSLayoutConstraint.activate([
             labelContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -LoginTableViewCellUX.HorizontalMargin),
-            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
+            labelContainer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin),
+            labelContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
 
             highlightedLabel.leadingAnchor.constraint(equalTo: labelContainer.leadingAnchor),
             highlightedLabel.topAnchor.constraint(equalTo: labelContainer.topAnchor),
