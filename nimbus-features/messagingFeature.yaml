@@ -56,6 +56,7 @@ features:
             AFTER_THREE_LAUNCHES_THIS_WEEK: app_cycle.foreground|eventSum('Weeks', 1, 0) >= 3
             USER_RECENTLY_INSTALLED:  days_since_install < 7
             USER_RECENTLY_UPDATED:    days_since_update < 7 && days_since_install != days_since_update
+            USER_INSTALLED_THREE_DAYS_AGO: days_since_install >= 3
             USER_TIER_ONE_COUNTRY:    ('US' in locale || 'GB' in locale || 'CA' in locale || 'DE' in locale || 'FR' in locale)
             USER_EN_SPEAKER:          "'en' in locale"
             USER_DE_SPEAKER:          "'de' in locale"
@@ -111,6 +112,7 @@ features:
               trigger:
                 - I_AM_NOT_DEFAULT_BROWSER
                 - SUPPORTS_DEFAULT_BROWSER
+                - USER_INSTALLED_THREE_DAYS_AGO
               title: Default Browser/DefaultBrowserCard.Title
               text: Default Browser/DefaultBrowserCard.Description
               button-label: Default Browser/DefaultBrowserCard.Button.v2
