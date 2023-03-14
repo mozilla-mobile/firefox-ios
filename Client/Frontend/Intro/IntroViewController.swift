@@ -232,6 +232,13 @@ extension IntroViewController: OnboardingCardDelegate {
 
             DispatchQueue.main.async {
                 if granted {
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.SyncSignInNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.SyncSignInNotifications)
+                    }
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+                    }
+
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
 
                     self?.engagementNotificationHelper.schedule()
