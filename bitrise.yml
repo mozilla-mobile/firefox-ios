@@ -1141,10 +1141,6 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: Extensions/Today/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
