@@ -49,6 +49,10 @@ private class CenteredDetailCell: ThemedTableViewCell, ReusableCell {
 }
 
 class LoginDetailViewController: SensitiveViewController, Themeable {
+    private struct UX {
+        static let horizontalMargin: CGFloat = 14
+    }
+
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -156,14 +160,18 @@ extension LoginDetailViewController: UITableViewDataSource {
             }
             guard let breach = breach else { return breachCell }
             breachCell.isHidden = false
-            let breachDetailView = BreachAlertsDetailView()
+            let breachDetailView: BreachAlertsDetailView = .build()
             breachCell.contentView.addSubview(breachDetailView)
 
             NSLayoutConstraint.activate([
-                breachDetailView.leadingAnchor.constraint(equalTo: breachCell.contentView.leadingAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
-                breachDetailView.topAnchor.constraint(equalTo: breachCell.contentView.topAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
-                breachDetailView.trailingAnchor.constraint(equalTo: breachCell.contentView.trailingAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
-                breachDetailView.bottomAnchor.constraint(equalTo: breachCell.contentView.bottomAnchor, constant: LoginTableViewCellUX.HorizontalMargin)
+                breachDetailView.leadingAnchor.constraint(equalTo: breachCell.contentView.leadingAnchor,
+                                                          constant: UX.horizontalMargin),
+                breachDetailView.topAnchor.constraint(equalTo: breachCell.contentView.topAnchor,
+                                                      constant: UX.horizontalMargin),
+                breachDetailView.trailingAnchor.constraint(equalTo: breachCell.contentView.trailingAnchor,
+                                                           constant: -UX.horizontalMargin),
+                breachDetailView.bottomAnchor.constraint(equalTo: breachCell.contentView.bottomAnchor,
+                                                         constant: -UX.horizontalMargin)
             ])
             breachDetailView.setup(breach)
 

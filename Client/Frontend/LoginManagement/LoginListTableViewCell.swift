@@ -16,6 +16,10 @@ class LoginListTableViewSettingsCell: ThemedTableViewCell, ReusableCell {
 }
 
 class LoginListTableViewCell: ThemedTableViewCell, ReusableCell {
+    private struct UX {
+        static let horizontalMargin: CGFloat = 14
+    }
+
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = .build { imageView in
         imageView.image = BreachAlertsManager.icon
@@ -30,7 +34,7 @@ class LoginListTableViewCell: ThemedTableViewCell, ReusableCell {
     }
 
     lazy var breachMargin: CGFloat = {
-        return breachAlertSize + LoginTableViewCellUX.HorizontalMargin * 2
+        return breachAlertSize + UX.horizontalMargin * 2
     }()
 
     lazy var hostnameLabel: UILabel = .build { label in

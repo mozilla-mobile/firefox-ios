@@ -7,10 +7,14 @@ import Shared
 
 // TODO: FXIOS-4995 - BreachAlertsManager theming
 class BreachAlertsDetailView: UIView {
+    private struct UX {
+        static let horizontalMargin: CGFloat = 14
+    }
+
     private let textColor = UIColor.white
     private let titleIconSize: CGFloat = 24
     private lazy var titleIconContainerSize: CGFloat = {
-        return titleIconSize + LoginTableViewCellUX.HorizontalMargin * 2
+        return titleIconSize + UX.horizontalMargin * 2
     }()
 
     lazy var titleIcon: UIImageView = {
@@ -147,7 +151,7 @@ class BreachAlertsDetailView: UIView {
             make.trailing.equalToSuperview()
         }
         contentStack.snp.remakeConstraints { make in
-            make.bottom.trailing.equalToSuperview().inset(LoginTableViewCellUX.HorizontalMargin)
+            make.bottom.trailing.equalToSuperview().inset(UX.horizontalMargin)
             make.leading.top.equalToSuperview()
         }
         self.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
