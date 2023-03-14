@@ -49,7 +49,7 @@ protocol TabManagerProtocol {
 class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
-    private let store: TabManagerStore
+    private let store: LegacyTabManagerStore
     private let profile: Profile
     private var isRestoringTabs = false
     private(set) var tabs = [Tab]()
@@ -63,7 +63,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
     // Enables undo of recently closed tabs
-    var recentlyClosedForUndo = [SavedTab]()
+    var recentlyClosedForUndo = [LegacySavedTab]()
 
     var normalTabs: [Tab] {
         return tabs.filter { !$0.isPrivate }
@@ -138,7 +138,7 @@ class TabManager: NSObject, FeatureFlaggable, TabManagerProtocol {
         self.tabEventHandlers = TabEventHandlers.create(with: profile)
         self.logger = logger
 
-        self.store = TabManagerStoreImplementation(prefs: profile.prefs, imageStore: imageStore)
+        self.store = LegacyTabManagerStoreImplementation(prefs: profile.prefs, imageStore: imageStore)
         super.init()
 
         register(self, forTabEvents: .didSetScreenshot)

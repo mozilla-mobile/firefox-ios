@@ -7,7 +7,7 @@ import Foundation
 import Storage
 import Shared
 
-protocol TabManagerStore {
+protocol LegacyTabManagerStore {
     var isRestoringTabs: Bool { get }
     var hasTabsToRestoreAtStartup: Bool { get }
 
@@ -23,23 +23,23 @@ protocol TabManagerStore {
     func clearArchive()
 }
 
-extension TabManagerStore {
+extension LegacyTabManagerStore {
     func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
         preserveTabs(tabs, selectedTab: selectedTab)
     }
 }
 
-class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
+class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggable {
     // MARK: - Variables
     private let logger: Logger
     private let tabsKey = "tabs"
     private let prefs: Prefs
     private let imageStore: DiskImageStore?
-    private var fileManager: TabFileManager
+    private var fileManager: LegacyTabFileManager
     private var writeOperation = DispatchWorkItem {}
     private let serialQueue: DispatchQueueInterface
     private var lockedForReading = false
-    private var tabDataRetriever: TabDataRetriever
+    private var tabDataRetriever: LegacyTabDataRetriever
     static let storePath = "codableTabsState.archive"
 
     var isRestoringTabs: Bool {
@@ -54,7 +54,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
 
     init(prefs: Prefs,
          imageStore: DiskImageStore?,
-         fileManager: TabFileManager = FileManager.default,
+         fileManager: LegacyTabFileManager = FileManager.default,
          serialQueue: DispatchQueueInterface = DispatchQueue(label: "tab-manager-write-queue"),
          logger: Logger = DefaultLogger.shared) {
         self.prefs = prefs
@@ -62,7 +62,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
         self.fileManager = fileManager
         self.serialQueue = serialQueue
         self.logger = logger
-        self.tabDataRetriever = TabDataRetrieverImplementation(fileManager: fileManager)
+        self.tabDataRetriever = LegacyTabDataRetrieverImplementation(fileManager: fileManager)
         tabDataRetriever.tabsStateArchivePath = tabsStateArchivePath()
     }
 
@@ -121,7 +121,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
                            addTabClosure: addTabClosure)
     }
 
-    func restoreTabs(savedTabs: [SavedTab],
+    func restoreTabs(savedTabs: [LegacySavedTab],
                      clearPrivateTabs: Bool,
                      addTabClosure: (Bool) -> Tab) -> Tab? {
         // We are told "Restoration is a main-only operation"
@@ -167,7 +167,7 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
 
     // MARK: - Private
 
-    private func archive(savedTabs: [SavedTab]) -> Data? {
+    private func archive(savedTabs: [LegacySavedTab]) -> Data? {
         let archiver = NSKeyedArchiver(requiringSecureCoding: false)
         do {
             try archiver.encodeEncodable(savedTabs, forKey: tabsKey)
@@ -182,14 +182,14 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
         return archiver.encodedData
     }
 
-    private var tabs: [SavedTab] {
+    private var tabs: [LegacySavedTab] {
         guard let tabData = tabDataRetriever.getTabData() else {
             return []
         }
 
         do {
             let unarchiver = try NSKeyedUnarchiver(forReadingFrom: tabData)
-            guard let tabs = unarchiver.decodeDecodable([SavedTab].self, forKey: tabsKey) else {
+            guard let tabs = unarchiver.decodeDecodable([LegacySavedTab].self, forKey: tabsKey) else {
                 let message = "\(unarchiver.error?.localizedDescription ?? "Couldn't decode from tabsKey")"
                 return savedTabError(description: message)
             }
@@ -199,13 +199,13 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
         }
     }
 
-    private func savedTabError(description: String) -> [SavedTab] {
+    private func savedTabError(description: String) -> [LegacySavedTab] {
         logger.log("Failed to restore tabs",
                    level: .warning,
                    category: .tabs,
                    description: description)
         SimpleTab.saveSimpleTab(tabs: nil)
-        return [SavedTab]()
+        return [LegacySavedTab]()
     }
 
     private func tabsStateArchivePath() -> URL? {
@@ -216,17 +216,17 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
             profilePath = fileManager.tabPath
         }
         guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent(TabManagerStoreImplementation.storePath)
+        return URL(fileURLWithPath: path).appendingPathComponent(LegacyTabManagerStoreImplementation.storePath)
     }
 
-    private func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
-        var savedTabs = [SavedTab]()
+    private func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [LegacySavedTab]? {
+        var savedTabs = [LegacySavedTab]()
         var savedUUIDs = Set<String>()
         for tab in tabs {
             tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
             tab.screenshotUUID = tab.screenshotUUID ?? UUID()
             tab.firstCreatedTime = tab.firstCreatedTime ?? tab.sessionData?.lastUsedTime ?? Date.now()
-            if let savedTab = SavedTab(tab: tab, isSelected: tab == selectedTab) {
+            if let savedTab = LegacySavedTab(tab: tab, isSelected: tab == selectedTab) {
                 savedTabs.append(savedTab)
                 if let uuidString = tab.screenshotUUID?.uuidString {
                     savedUUIDs.insert(uuidString)
@@ -256,8 +256,8 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
 }
 
 // MARK: Tests
-extension TabManagerStoreImplementation {
-    func testTabOnDisk() -> [SavedTab] {
+extension LegacyTabManagerStoreImplementation {
+    func testTabOnDisk() -> [LegacySavedTab] {
         assert(AppConstants.isRunningTest)
         return tabs
     }

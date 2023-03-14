@@ -1350,7 +1350,7 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
-            let searchData = tab.metadataManager?.tabGroupData ?? TabGroupData()
+            let searchData = tab.metadataManager?.tabGroupData ?? LegacyTabGroupData()
             searchData.tabAssociatedNextUrl = displayUrl.absoluteString
             tab.metadataManager?.updateTimerAndObserving(
                 state: .tabNavigatedToDifferentUrl,
@@ -1467,9 +1467,9 @@ class BrowserViewController: UIViewController {
         openURLInNewTab(searchURL, isPrivate: isPrivate)
 
         if let tab = tabManager.selectedTab {
-            let searchData = TabGroupData(searchTerm: text,
-                                          searchUrl: searchURL.absoluteString,
-                                          nextReferralUrl: "")
+            let searchData = LegacyTabGroupData(searchTerm: text,
+                                                searchUrl: searchURL.absoluteString,
+                                                nextReferralUrl: "")
             tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         }
     }
@@ -1743,8 +1743,8 @@ extension BrowserViewController {
     }
 }
 
-// MARK: - TabDelegate
-extension BrowserViewController: TabDelegate {
+// MARK: - LegacyTabDelegate
+extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
@@ -2015,9 +2015,9 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
 
-        let searchData = TabGroupData(searchTerm: searchTerm ?? "",
-                                      searchUrl: url.absoluteString,
-                                      nextReferralUrl: "")
+        let searchData = LegacyTabGroupData(searchTerm: searchTerm ?? "",
+                                            searchUrl: url.absoluteString,
+                                            nextReferralUrl: "")
         tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)

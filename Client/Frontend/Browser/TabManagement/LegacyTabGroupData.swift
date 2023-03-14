@@ -16,7 +16,7 @@ enum TabGroupTimerState: String, Codable {
     case none
 }
 
-class TabGroupData: Codable {
+class LegacyTabGroupData: Codable {
     var tabAssociatedSearchTerm: String = ""
     var tabAssociatedSearchUrl: String = ""
     var tabAssociatedNextUrl: String = ""
