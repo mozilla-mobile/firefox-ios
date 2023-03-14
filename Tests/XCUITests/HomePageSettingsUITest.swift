@@ -185,7 +185,7 @@ class HomePageSettingsUITests: BaseTestCase {
         enterWebPageAsHomepage(text: websiteUrl1)
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Homepage")
+        XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Custom")
         // Switch to FXHome and check label
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.nowAt(HomeSettings)
