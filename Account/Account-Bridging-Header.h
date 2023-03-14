@@ -6,5 +6,6 @@
 
 #import <Foundation/Foundation.h>
 #import "Shared-Bridging-Header.h"
+#import "Client-Bridging-Header.h"
 
 #endif
