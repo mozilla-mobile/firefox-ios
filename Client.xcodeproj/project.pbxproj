@@ -2181,7 +2181,7 @@
 		394344CA90682A8640FDE3DF /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAPushMessageTest.swift; sourceTree = "<group>"; };
 		39444D13AAEACA4C6EF83703 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
-		39455F761FC83F430088A22C /* TabEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TabEventHandler.swift; path = Helpers/TabEventHandler.swift; sourceTree = "<group>"; };
+		39455F761FC83F430088A22C /* TabEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabEventHandler.swift; sourceTree = "<group>"; };
 		394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSuggestedSites.swift; sourceTree = "<group>"; };
 		395C8F201E796AD600A68E8C /* PushCrypto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushCrypto.swift; sourceTree = "<group>"; };
 		3964B0991EA8F06F00F2EEF4 /* FeatureSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeatureSwitch.swift; sourceTree = "<group>"; };
@@ -6056,8 +6056,6 @@
 				D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */,
 				E65075531E37F6FC006961AC /* DynamicFontHelper.swift */,
 				E65075601E37F77D006961AC /* MenuHelper.swift */,
-				39455F761FC83F430088A22C /* TabEventHandler.swift */,
-				39F819C51FD70F5D009E31E4 /* TabEventHandlers.swift */,
 				39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */,
 				962F39492672D57A006BDA2A /* RecentItemsHelper.swift */,
 				8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */,
@@ -6299,6 +6297,21 @@
 			path = DependencyInjection;
 			sourceTree = "<group>";
 		};
+		5A9FFB3629C0F99C001793A0 /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				63306D3821103EAE00F25400 /* LegacySavedTab.swift */,
+				1DA3CE6224EEE83200422BB2 /* LegacySavedTab+ConfigureExtension.swift */,
+				74C027441B2A348C001B1E88 /* LegacySessionData.swift */,
+				1DA3CE5E24EEE7C600422BB2 /* LegacyTabDataRetriever.swift */,
+				8A03309428C2653600286539 /* LegacyTabFileManager.swift */,
+				215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */,
+				63306D422110B3CD00F25400 /* LegacyTabManagerStore.swift */,
+				215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
 		5AF6254128A5799D00A90253 /* HistoryHighlights */ = {
 			isa = PBXGroup;
 			children = (
@@ -6503,18 +6516,13 @@
 		8A590C6228C13E1D0032F1AA /* TabManagement */ = {
 			isa = PBXGroup;
 			children = (
-				63306D3821103EAE00F25400 /* LegacySavedTab.swift */,
-				1DA3CE6224EEE83200422BB2 /* LegacySavedTab+ConfigureExtension.swift */,
-				74C027441B2A348C001B1E88 /* LegacySessionData.swift */,
+				5A9FFB3629C0F99C001793A0 /* Legacy */,
+				39455F761FC83F430088A22C /* TabEventHandler.swift */,
+				39F819C51FD70F5D009E31E4 /* TabEventHandlers.swift */,
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
 				C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */,
-				1DA3CE5E24EEE7C600422BB2 /* LegacyTabDataRetriever.swift */,
-				8A03309428C2653600286539 /* LegacyTabFileManager.swift */,
-				215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				6ACB550B28633860007A6ABD /* TabManagerNavDelegate.swift */,
-				63306D422110B3CD00F25400 /* LegacyTabManagerStore.swift */,
-				215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */,
 			);
 			path = TabManagement;
 			sourceTree = "<group>";
@@ -7580,7 +7588,6 @@
 			children = (
 				8A1E3BE428CBBF1E003388C4 /* SearchEngines */,
 				8A590C5F28C122FF0032F1AA /* OpenInHelper */,
-				8A590C6228C13E1D0032F1AA /* TabManagement */,
 				C849E45F26B9C36600260F0B /* EnhancedTrackingProtection */,
 				23F2C365244E44FA00FA4496 /* Tabs */,
 				D38F02D01C05127100175932 /* Authenticator.swift */,
@@ -8298,6 +8305,7 @@
 		F84B21C01A090F8100AAB793 /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				8A590C6228C13E1D0032F1AA /* TabManagement */,
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
 				E60961841B62B7E100DD640F /* Configuration */,
