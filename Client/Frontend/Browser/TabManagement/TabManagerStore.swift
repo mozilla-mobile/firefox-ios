@@ -18,7 +18,7 @@ protocol TabManagerStore {
                       selectedTab: Tab?)
 
     func restoreStartupTabs(clearPrivateTabs: Bool,
-                            addTabClosure: (Bool) -> Tab) -> Tab?
+                            addTabClosure: @escaping (Bool) -> Tab) -> Tab?
 
     func clearArchive()
 }
@@ -88,27 +88,28 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
     ///   - tabs: The tabs to preserve
     ///   - selectedTab: One of the saved tabs will be saved as the selected tab.
     func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) {
-        assertIsMainThread("Preserving tabs is a main-only operation")
-        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab)
-        else {
+        guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab) else {
             clearArchive()
             return
         }
 
-        writeOperation.cancel()
+        // Preserving tabs is a main-only operation
+        ensureMainThread { [self] in
+            writeOperation.cancel()
 
-        let path = tabsStateArchivePath()
-        let tabStateData = archive(savedTabs: savedTabs)
-        let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
+            let path = tabsStateArchivePath()
+            let tabStateData = archive(savedTabs: savedTabs)
+            let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
 
-        writeOperation = DispatchWorkItem { [weak self] in
-            SimpleTab.saveSimpleTab(tabs: simpleTabs)
-            self?.write(tabStateData: tabStateData, path: path)
+            writeOperation = DispatchWorkItem { [weak self] in
+                SimpleTab.saveSimpleTab(tabs: simpleTabs)
+                self?.write(tabStateData: tabStateData, path: path)
+            }
+
+            // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
+            // Notice above that a repeated 'preserveTabs' call will 'cancel()' a pending write operation.
+            serialQueue.asyncAfter(deadline: .now() + .milliseconds(100), execute: writeOperation)
         }
-
-        // Delay by 100ms to debounce repeated calls to preserveTabs in quick succession.
-        // Notice above that a repeated 'preserveTabs' call will 'cancel()' a pending write operation.
-        serialQueue.asyncAfter(deadline: .now() + .milliseconds(100), execute: writeOperation)
     }
 
     // MARK: - Restoration
@@ -123,8 +124,12 @@ class TabManagerStoreImplementation: TabManagerStore, FeatureFlaggable {
     func restoreTabs(savedTabs: [SavedTab],
                      clearPrivateTabs: Bool,
                      addTabClosure: (Bool) -> Tab) -> Tab? {
-        assertIsMainThread("Restoration is a main-only operation")
-        guard !lockedForReading, !savedTabs.isEmpty else { return nil }
+        // We are told "Restoration is a main-only operation"
+        guard !lockedForReading,
+                Thread.current.isMainThread,
+                !savedTabs.isEmpty
+        else { return nil }
+
         lockedForReading = true
         defer { lockedForReading = false }
 

@@ -385,17 +385,19 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func getCachedTabs() {
-        assert(Thread.isMainThread)
         // Short circuit if the user is not logged in
         guard profile.hasSyncableAccount() else { return }
-        // Get cached tabs
-        self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-            guard let clientAndTabs = result.successValue else { return }
-            self.remoteClientTabs.removeAll()
-            // Update UI with cached data.
-            clientAndTabs.forEach { value in
-                value.tabs.forEach { (tab) in
-                    self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
+
+        ensureMainThread {
+            // Get cached tabs
+            self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
+                guard let clientAndTabs = result.successValue else { return }
+                self.remoteClientTabs.removeAll()
+                // Update UI with cached data.
+                clientAndTabs.forEach { value in
+                    value.tabs.forEach { (tab) in
+                        self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
+                    }
                 }
             }
         }

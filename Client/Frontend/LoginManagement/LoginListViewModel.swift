@@ -23,8 +23,9 @@ final class LoginListViewModel {
     private(set) var titles = [Character]()
     private(set) var loginRecordSections = [Character: [LoginRecord]]() {
         didSet {
-            assert(Thread.isMainThread)
-            delegate?.loginSectionsDidUpdate()
+            ensureMainThread {
+                self.delegate?.loginSectionsDidUpdate()
+            }
         }
     }
     fileprivate let helper = LoginListDataSourceHelper()
