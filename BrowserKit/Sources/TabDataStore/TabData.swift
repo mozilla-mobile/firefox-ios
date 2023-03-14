@@ -9,6 +9,7 @@ struct TabData: Codable {
     let title: String
     let siteUrl: String
     let faviconURL: String
-    let lastUsedTime: Date
     let isPrivate: Bool
+    let lastUsedTime: Date
+    let createdAtTime: Date
 }
