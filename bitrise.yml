@@ -1452,7 +1452,7 @@ meta:
 
 trigger_map:
 - push_branch: main
-  pipeline: pipeline_multiple_shards
+  workflow: SPM_Nightly_Beta_Only
 - push_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: release/v112
