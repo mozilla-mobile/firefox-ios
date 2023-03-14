@@ -1255,8 +1255,10 @@ class BrowserViewController: UIViewController {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        // Ecosia: additional guard to ensure view components are loaded
         guard let webView = object as? WKWebView,
-              let tab = tabManager[webView]
+              let tab = tabManager[webView],
+              let urlBar = urlBar
         else { return }
 
         guard let kp = keyPath,
