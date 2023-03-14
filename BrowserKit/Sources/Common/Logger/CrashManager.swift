@@ -78,6 +78,7 @@ public class DefaultCrashManager: CrashManager {
             options.enableFileIOTracing = false
             options.enableNetworkTracking = false
             options.enableAppHangTracking = self.shouldEnableAppHangTracking
+            options.enableCaptureFailedRequests = false
             options.beforeBreadcrumb = { crumb in
                 if crumb.type == "http" || crumb.category == "http" {
                     return nil
