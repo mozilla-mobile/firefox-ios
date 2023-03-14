@@ -1458,6 +1458,6 @@ trigger_map:
 - push_branch: release/v112
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipeline: SPM_Nightly_Beta_Only
+  workflow: SPM_Nightly_Beta_Only
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
