@@ -308,6 +308,9 @@ open class BrowserProfile: Profile {
 
         if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) != 1 {
             // never been installed or launched v112 or a version with BrowserSyncManager
+            let msg = "Setting `syncManager` property to `BrowserSyncManager"
+            logger.log(msg, level: .debug, category: .sync)
+
             self.syncManager = BrowserSyncManager(profile: self)
 
             // update prefs so that when we try again next time we know its our 2nd launch
@@ -318,9 +321,15 @@ open class BrowserProfile: Profile {
             // Initiating the sync manager has to happen prior to the databases being opened,
             // because opening them can trigger events to which the SyncManager listens.
             if self.rustSyncManagerEnabled {
+                let msg = "Setting `syncManager` property to `RustSyncManager"
+                logger.log(msg, level: .debug, category: .sync)
+
                 self.syncManager = RustSyncManager(profile: self)
                 prefs.setInt(2, forKey: PrefsKeys.SecondProfileLaunchKey)
             } else {
+                let msg = "Setting `syncManager` property to `BrowserSyncManager"
+                logger.log(msg, level: .debug, category: .sync)
+
                 self.syncManager = BrowserSyncManager(profile: self)
             }
         }
@@ -531,8 +540,14 @@ open class BrowserProfile: Profile {
     // will be removed after the rust sync manager rollout is complete
     public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
         if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
+            let msg = "Retrieving client records from rust tabs component"
+            logger.log(msg, level: .debug, category: .sync)
+
             return tabs.getClient(fxaDeviceId: fxaDeviceId)
         } else {
+            let msg = "Retrieving client records from BrowserDB clients table"
+            logger.log(msg, level: .debug, category: .sync)
+
             return remoteClientsAndTabs.getClient(fxaDeviceId: fxaDeviceId)
         }
     }
@@ -541,6 +556,9 @@ open class BrowserProfile: Profile {
     // will be removed after the rust sync manager rollout is complete
     public func getClientGUIDs(completion: @escaping (Set<GUID>) -> Void) {
         if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
+            let msg = "Retrieving client GUIDs from rust tabs component"
+            logger.log(msg, level: .debug, category: .sync)
+
             tabs.getClientGUIDs { (result, error) in
                 guard let guids = result else {
                     return
@@ -548,6 +566,9 @@ open class BrowserProfile: Profile {
                 completion(guids)
             }
         } else {
+            let msg = "Retrieving client GUIDs from BrowserDB clients table"
+            logger.log(msg, level: .debug, category: .sync)
+
             remoteClientsAndTabs.getClientGUIDs().upon { result in
                 guard let guids = result.successValue else {
                     return
@@ -589,8 +610,14 @@ open class BrowserProfile: Profile {
         // user's device constellation. Once the sync manager rollout is complete this
         // will be the way this data is retrieved unconditionally.
         if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
+            let msg = "Retrieving tabs with clients and filtering on remote devices"
+            logger.log(msg, level: .debug, category: .sync)
+
             return getRustTabsWithClients()
         } else {
+            let msg = "Retrieving tabs with clients and filtering on BrowserDB clients table"
+            logger.log(msg, level: .debug, category: .sync)
+
             return tabs.getAll().bind { tabsResult in
                 guard tabsResult.failureValue == nil else {
                     return deferMaybe(tabsResult.failureValue!)
