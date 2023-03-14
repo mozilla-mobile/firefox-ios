@@ -189,11 +189,6 @@ class TopTabsViewController: UIViewController, Themeable {
                                                shouldSelectMostRecentTab: true)
         delegate?.topTabsDidTogglePrivateMode()
         self.privateModeButton.setSelected(topTabDisplayManager.isPrivate, animated: true)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            guard let self = self else { return }
-            self.collectionView.reloadData()
-        }
     }
 
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
