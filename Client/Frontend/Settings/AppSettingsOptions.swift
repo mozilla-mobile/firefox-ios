@@ -935,6 +935,7 @@ class LoginsSetting: Setting {
 
                 loginOnboardingViewController.proceedHandler = {
                     LoginListViewController.create(
+                        didShowFromAppMenu: false,
                         authenticateInNavigationController: navController,
                         profile: self.profile,
                         webpageNavigationHandler: navigationHandler
@@ -953,6 +954,7 @@ class LoginsSetting: Setting {
                 LoginOnboarding.setShown()
             } else {
                 LoginListViewController.create(
+                    didShowFromAppMenu: false,
                     authenticateInNavigationController: navController,
                     profile: profile,
                     webpageNavigationHandler: navigationHandler

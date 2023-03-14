@@ -1210,9 +1210,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "ඒ.ස.නි. (විමසුම %s සමඟ ප්‍රතිස්ථාපනය)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "ණයපත් ස්වයං පිරවුම";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "සියළුම අඩවිවල දත්ත මකන්න";
 
@@ -1570,9 +1567,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "හරි, තේරුණා";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "අඩවියක් අපේක්‍ෂිත පරිදි වැඩ නොකරයි නම්, ලිපින තීරුවේ තිබෙන පලිහ මත තට්ටු කර එම පිටුව සඳහා වැඩිදියුණු කළ ලුහුබැඳීමේ රැකවරණය අක්‍රිය කරන්න.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "අවධානය!";
 
@@ -1584,9 +1578,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ඉලක්කගත දැන්වීම් අඩු කරන අතර දැන්වීම්කරුවන් ඔබගේ පිරික්සීම් ලුහුබැඳීම නතර කිරීමට උපකාරී වේ.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "අඩවියක් අපේක්‍ෂිත පරිදි වැඩ නොකරයි නම්, ලිපින තීරුවේ තිබෙන පලිහ මත තට්ටු කර එම පිටුව සඳහා වැඩිදියුණු කළ ලුහුබැඳීමේ රැකවරණය අක්‍රිය කරන්න.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "අඩවි නිසි ලෙස ක්‍රියාත්මක වීමට ලුහුබැඳීමේ දැන්වීම් කිහිපයකට ඉඩ දෙයි.";

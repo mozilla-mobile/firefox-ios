@@ -58,7 +58,7 @@ def set_worker_config(config, tasks):
             "path": f"{_ARTIFACTS_DIRECTORY}/bitrise.log",
         })
 
-        for locale in task["attributes"]["chunk_locales"]:
+        for locale in task.get("atributes", {}).get("chunk_locales", []):
             artifacts.append({
                 "type": "file",
                 "name": f"public/screenshots/{locale}.zip",
@@ -89,7 +89,7 @@ def add_bitrise_command(config, tasks):
             "--artifacts-directory", _ARTIFACTS_DIRECTORY
         ]
 
-        for locale in task["attributes"]["chunk_locales"]:
+        for locale in task.get("atributes", {}).get("chunk_locales", []):
             command.extend(["--importLocales", locale])
 
         derived_data_path = task.pop("build-derived-data-path", "")

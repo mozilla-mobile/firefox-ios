@@ -985,9 +985,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Vale, entendiu";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Si un puesto no funciona com oye esperable, toca lo escudo en a barra d'adrezas y desactiva la protección contra lo seguimiento millorada pa ixa pachina.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Atención!";
 
@@ -999,9 +996,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduce los anuncios personalizaus y aduya a privar que los anunciants fagan seguimiento d'a tuya navegación.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un puesto no funciona como s'espera, toca lo escudio d'a barra d'adrezas y desactiva la protecció contra lo seguimiento millorada pa ixa pachina.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permite bell seguimiento publicitario pa que as webs funcionen correctament.";

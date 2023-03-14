@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Αφαίρεση";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Σελίδες: %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Ρυθμίσεις";
 
@@ -1216,9 +1219,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Αντικατάσταση ερωτήματος με %s)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Αυτόματη συμπλήρωση πιστωτικής κάρτας";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Απαλοιφή όλων των δεδομένων ιστοτόπων";
 
@@ -1576,9 +1576,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, το 'πιασα";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Αν μια ιστοσελίδα δεν λειτουργεί όπως πρέπει, πατήστε την ασπίδα στη γραμμή διευθύνσεων και απενεργοποιήστε την ενισχυμένη προστασία από καταγραφή για αυτή τη σελίδα.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Προσοχή!";
 
@@ -1590,9 +1587,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Μειώνει τις στοχευμένες διαφημίσεις και εμποδίζει την καταγραφή της περιήγησής σας από διαφημιστές.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Αν μια ιστοσελίδα δεν λειτουργεί όπως πρέπει, πατήστε την ασπίδα στη γραμμή διευθύνσεων και απενεργοποιήστε την ενισχυμένη προστασία από καταγραφή για αυτή τη σελίδα.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Επιτρέπει κάποια καταγραφή διαφημίσεων, ώστε να λειτουργούν σωστά οι ιστοσελίδες.";

@@ -18,7 +18,7 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         profile = MockProfile()
 
         featureFlags.initializeDeveloperFeatures(with: profile)
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
     }
 
     override func tearDown() {
@@ -48,16 +48,17 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
         subject.didLoadNewData()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         collectionView.register(cellType: PocketStandardCell.self)
-        XCTAssertNil(GleanMetrics.Pocket.sectionImpressions.testGetValue())
+        // Glean store isn't reset until we have FXIOS-5957, need to adjust our test expectation accounting that
+        let actualGleanValue = GleanMetrics.Pocket.sectionImpressions.testGetValue() ?? 0
 
         _ = subject.configure(collectionView, at: IndexPath(item: 0, section: 0))
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Pocket.sectionImpressions,
-                                          value: 1)
+                                          value: actualGleanValue + 1)
 
         // Calling configure again doesn't add another count
         _ = subject.configure(collectionView, at: IndexPath(item: 0, section: 0))
         testCounterMetricRecordingSuccess(metric: GleanMetrics.Pocket.sectionImpressions,
-                                          value: 1)
+                                          value: actualGleanValue + 1)
     }
 
     // MARK: - Dimension

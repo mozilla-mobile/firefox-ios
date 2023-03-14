@@ -1573,9 +1573,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ᱴᱷᱤᱠ, ᱭᱟᱢᱮᱱᱟ";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "ᱥᱟᱭᱤᱡ ᱡᱮᱞᱡᱠᱟ ᱞᱟᱸᱢᱤ ᱠᱟᱛᱷᱟ ᱵᱟᱭ ᱠᱟᱹᱢᱤ ᱞᱮᱫᱟᱭ, ᱡᱟᱹᱱᱠᱟᱨ ᱨᱮᱭᱟᱜ ᱥᱤᱞᱰ ᱨᱮ ᱴᱤᱯᱹᱟᱣ ᱢᱮ ᱟᱨ ᱥᱟᱠᱟᱢ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱲᱦᱟᱣᱟᱠᱟᱱ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱪᱤᱱᱦᱟᱹ ᱟᱰ ᱵᱚᱸᱫᱚᱭ ᱢᱮ ᱾";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ᱵᱚᱦᱚ ᱪᱦᱚᱴ ᱥᱮ!";
 
@@ -1587,9 +1584,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ᱴᱟᱨᱜᱮᱴ ᱰᱷᱟᱣᱨᱟᱹ ᱠᱚᱢ ᱟᱭ ᱟᱨ ᱰᱷᱟᱣᱨᱟᱸ ᱠᱚ ᱜᱷᱮᱨ ᱮᱥᱮᱫ ᱠᱷᱚᱱ ᱵᱚᱸᱫᱚ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱮᱢᱟᱭ ᱾";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "ᱥᱟᱭᱤᱡ ᱡᱮᱞᱡᱠᱟ ᱞᱟᱸᱢᱤ ᱠᱟᱛᱷᱟ ᱵᱟᱭ ᱠᱟᱹᱢᱤ ᱞᱮᱫᱟᱭ, ᱡᱟᱹᱱᱠᱟᱨ ᱨᱮᱭᱟᱜ ᱥᱤᱞᱰ ᱨᱮ ᱴᱤᱯᱹᱟᱣ ᱢᱮ ᱟᱨ ᱥᱟᱠᱟᱢ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱲᱦᱟᱣᱟᱠᱟᱱ ᱯᱟᱧᱡᱟ ᱫᱟᱱᱟᱲ ᱪᱤᱱᱦᱟᱹ ᱟᱰ ᱵᱚᱸᱫᱚᱭ ᱢᱮ ᱾";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ᱰᱷᱟᱣᱨᱟᱹ ᱞᱟᱹᱜᱤᱫ ᱠᱤᱪᱷᱤ ᱜᱷᱮᱨ ᱮᱥᱮᱫ ᱢᱟᱸᱡᱩᱨ ᱮᱢᱟᱭ ᱠᱤᱪᱷᱤ ᱣᱮᱵᱥᱟᱭᱤᱴ ᱠᱟᱫᱢᱤ ᱟᱭ";

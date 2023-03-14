@@ -215,12 +215,10 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // Set as Default browser screenshot
         navigator.goto(NewTabScreen)
-        if #available(iOS 14, *) {
-            waitForExistence(app.buttons[homeTabBannerA11y.ctaButton], timeout: 15)
-            app.buttons[homeTabBannerA11y.ctaButton].tap()
-            waitForExistence(app.buttons["HomeTabBanner.goToSettingsButton"], timeout: 15)
-            snapshot("HomeDefaultBrowserLearnMore")
-        }
+        waitForExistence(app.buttons[homeTabBannerA11y.ctaButton], timeout: 15)
+        app.buttons[homeTabBannerA11y.ctaButton].tap()
+        waitForExistence(app.buttons["HomeTabBanner.goToSettingsButton"], timeout: 15)
+        snapshot("HomeDefaultBrowserLearnMore")
     }
 
     func testSettings() {

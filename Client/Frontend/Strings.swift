@@ -38,20 +38,20 @@ private func MZLocalizedString(
                              comment: comment)
 }
 
-/// This file contains all strings for Firefox iOS.
-///
-/// As we continue to update strings, old strings may be present at the bottom of this
-/// file. To preserve a clean implementation of strings, this file should be organized
-/// alphabetically, according to specific screens or feature, on that screen. Each
-/// string should be under a struct giving a clear indication as to where it is being
-/// used. In this case we will prefer verbosity for the sake of accuracy, over brevity.
-/// Sub structs may, and should, also be used to separate functionality where it makes
-/// sense, but efforts should be made to keep structs two levels deep unless there are
-/// good reasons for doing otherwise.
-///
-/// Note that some strings belong to one feature that appears across mulitple screens
-/// throughout the application. An example is contextual hints. In this case, it makes
-/// more sense to organize all those strings under the specific feature.
+// This file contains all strings for Firefox iOS.
+//
+// As we continue to update strings, old strings may be present at the bottom of this
+// file. To preserve a clean implementation of strings, this file should be organized
+// alphabetically, according to specific screens or feature, on that screen. Each
+// string should be under a struct giving a clear indication as to where it is being
+// used. In this case we will prefer verbosity for the sake of accuracy, over brevity.
+// Sub structs may, and should, also be used to separate functionality where it makes
+// sense, but efforts should be made to keep structs two levels deep unless there are
+// good reasons for doing otherwise.
+//
+// Note that some strings belong to one feature that appears across mulitple screens
+// throughout the application. An example is contextual hints. In this case, it makes
+// more sense to organize all those strings under the specific feature.
 
 // MARK: - Alerts
 extension String {
@@ -341,7 +341,7 @@ extension String {
             public static let RemoveCardTitle = MZLocalizedString(
                 "CreditCard.SnackBar.RemoveCardTitle.v112",
                 tableName: "Alert",
-                value: "Remove the card?",
+                value: "Remove This Card?",
                 comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
 
             public static let RemoveCardSublabel = MZLocalizedString(
@@ -1269,61 +1269,43 @@ extension String {
 
         public struct Notifications {
             public static let Title = MZLocalizedString(
-                "Settings.Notifications.Title",
+                "Settings.Notifications.Title.v112",
                 tableName: "Settings",
                 value: "Notifications",
                 comment: "In the settings menu, in the Privacy section, this is the title for Notifications customization section."
             )
-            public static let AllowAllNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.AllowAllNotificationsTitle",
+            public static let SyncNotificationsTitle = MZLocalizedString(
+                "Settings.Notifications.SyncNotificationsTitle.v112",
                 tableName: "Settings",
-                value: "Allow All Notifications",
-                comment: "This is the title for the setting that toggles All Notifications feature in the settings menu under the Notifications section."
+                value: "Sync",
+                comment: "This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section."
             )
-            public static let TabsNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.TabsNotificationsTitle",
+            public static let SyncNotificationsStatus = MZLocalizedString(
+                "Settings.Notifications.SyncNotificationsStatus.v112",
                 tableName: "Settings",
-                value: "Tabs Sent From Other Devices",
-                comment: "This is the title for the setting that toggles Tabs Sent From Other Devices feature in the settings menu under the Notifications section."
-            )
-            public static let TabsNotificationsStatus = MZLocalizedString(
-                "Settings.Notifications.TabsNotificationsStatus",
-                tableName: "Settings",
-                value: "This must be turned on to receive tabs.",
-                comment: "This is the description for the setting that toggles Tabs Sent From Other Devices feature in the settings menu under the Notifications section."
-            )
-            public static let SyncSignInNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.SyncSignInNotificationsTitle",
-                tableName: "Settings",
-                value: "Sync Sign In Confirmation",
-                comment: "This is the title for the setting that toggles Sync Sign In Confirmation feature in the settings menu under the Notifications section."
-            )
-            public static let SyncSignInNotificationsStatus = MZLocalizedString(
-                "Settings.Notifications.SyncSignInNotificationsStatus",
-                tableName: "Settings",
-                value: "Get notified when your account is signed in on another device.",
-                comment: "This is the description for the setting that toggles Sync Sign In Confirmation feature in the settings menu under the Notifications section."
+                value: "This must be turned on to receive tabs and get notified when you sign in on another device.",
+                comment: "This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section."
             )
             public static let TipsAndFeaturesNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.TipsAndFeaturesNotificationsTitle",
+                "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112",
                 tableName: "Settings",
                 value: "Tips and Features",
                 comment: "This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section."
             )
             public static let TipsAndFeaturesNotificationsStatus = MZLocalizedString(
-                "Settings.Notifications.TipsAndFeaturesNotificationsStatus",
+                "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112",
                 tableName: "Settings",
                 value: "Learn about useful features and how to get the most out of %@.",
                 comment: "This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name."
             )
             public static let TurnOnNotificationsTitle = MZLocalizedString(
-                "Settings.Notifications.TurnOnNotificationsTitle",
+                "Settings.Notifications.TurnOnNotificationsTitle.v112",
                 tableName: "Settings",
                 value: "Turn on Notifications",
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings."
             )
             public static let TurnOnNotificationsMessage = MZLocalizedString(
-                "Settings.Notifications.TurnOnNotificationsTitle",
+                "Settings.Notifications.TurnOnNotificationsMessage.v112",
                 tableName: "Settings",
                 value: "Go to your device Settings to turn on notifications in %@",
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
@@ -1725,9 +1707,9 @@ extension String {
         value: "Copied to clipboard",
         comment: "Copy app version alert shown in settings.")
     public static let SettingsAutofillCreditCard = MZLocalizedString(
-        "Settings.AutofillCreditCard.Title.v110",
+        "Settings.AutofillCreditCard.Title.v112",
         tableName: nil,
-        value: "Autofill Credit Card",
+        value: "Autofill Credit Cards",
         comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
 }
 
@@ -3106,7 +3088,7 @@ extension String {
         value: "Blocks more trackers, ads, and popups. Pages load faster, but some functionality may not work.",
         comment: "Description for strict level tracker protection")
     public static let TrackingProtectionLevelFooter = MZLocalizedString(
-        "Settings.TrackingProtection.ProtectionLevel.Footer",
+        "Settings.TrackingProtection.ProtectionLevel.Footer.Lock",
         tableName: nil,
         value: "If a site doesn’t work as expected, tap the lock in the address bar and turn off Enhanced Tracking Protection for that page.",
         comment: "Footer information for tracker protection level.")
@@ -3553,17 +3535,6 @@ extension String {
 
 // MARK: - Today Widget Strings - [New Search - Private Search]
 extension String {
-    public static let NewTabButtonLabel = MZLocalizedString(
-        "TodayWidget.NewTabButtonLabelV1",
-        tableName: "Today",
-        value: "New Search",
-        comment: "Open New Tab button label")
-    public static let NewPrivateTabButtonLabel = MZLocalizedString(
-        "TodayWidget.PrivateTabButtonLabelV1",
-        tableName: "Today",
-        value: "Private Search",
-        comment: "Open New Private Tab button label")
-
     // Widget - Shared
 
     public static let QuickActionsGalleryTitle = MZLocalizedString(

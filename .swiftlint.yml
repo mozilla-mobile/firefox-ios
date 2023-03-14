@@ -31,7 +31,6 @@ disabled_rules: # rule identifiers to exclude from running
 - no_fallthrough_only
 - notification_center_detachment
 - nsobject_prefer_isequal
-- orphaned_doc_comment
 - private_unit_test
 - reduce_boolean
 - redundant_set_access_control
@@ -83,6 +82,7 @@ opt_in_rules: # some rules are only opt-in
   - last_where
   - multiline_arguments
   - opening_brace
+  - optional_enum_case_matching
   - return_arrow_whitespace
   - vertical_parameter_alignment_on_call
   - vertical_whitespace_closing_braces

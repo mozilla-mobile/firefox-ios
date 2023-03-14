@@ -1216,9 +1216,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Adres (wyszukiwany tekst zastąp „%s”)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Uzupełnij dane karty płatniczej";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Wyczyść wszystkie dane witryn";
 
@@ -1576,9 +1573,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Jeśli witryna nie działa jak powinna, stuknij tarczę na pasku adresu i wyłącz wzmocnioną ochronę przed śledzeniem dla tej strony.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Uwaga!";
 
@@ -1590,9 +1584,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Zmniejsza liczbę reklam personalizowanych i pomaga uniemożliwić reklamodawcom śledzenie użytkownika.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Jeśli witryna nie działa jak powinna, stuknij tarczę na pasku adresu i wyłącz wzmocnioną ochronę przed śledzeniem dla tej strony.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dopuszcza pewne reklamy śledzące, by strony działały prawidłowo.";

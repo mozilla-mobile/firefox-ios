@@ -1216,9 +1216,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Indirizzu web (Rimpiazzà a ricerca da %s)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Riempie autumaticamente u campu di e carte bancarie";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Squassà tutti dati di siti";
 
@@ -1576,9 +1573,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Iè, aghju capitu";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "S’è un situ ùn funziona micca cum’è previstu, picchichjate nant’à u scudu in a barra d’indirizzu è disattivate a prutezzione rinfurzata contr’à u spiunagiu per sta pagina.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Fate casu !";
 
@@ -1590,9 +1584,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Riduce e publicità sibulate è vi aiuta à impedisce i siti di seguità a vostra navigazione.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "S’è un situ ùn funziona micca cum’è previstu, picchichjate nant’à u scudu in a barra d’indirizzu è disattivate a prutezzione rinfurzata contr’à u spiunagiu per sta pagina.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permette qualchì elementu di spiunagiu da e publicità per chì i siti funziuneghjinu currettamente.";

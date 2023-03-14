@@ -61,7 +61,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard !AppConstants.isRunningUnitTest else { return }
 
-        /// Resume previously stopped downloads for, and on, THIS scene only.
+        // Resume previously stopped downloads for, and on, THIS scene only.
         downloadQueue.resumeAll()
     }
 
@@ -116,20 +116,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
         // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
         if let url = userActivity.webpageURL {
-            let query = url.getQuery()
-
-            // Check for fxa sign-in code and launch the login screen directly
-            if query["signin"] != nil {
-                // bvc.launchFxAFromDeeplinkURL(url) // Was using Adjust. Consider hooking up again when replacement system in-place.
-            }
-
-            // Per Adjust documentation, https://docs.adjust.com/en/universal-links/#running-campaigns-through-universal-links,
-            // it is recommended that links contain the `deep_link` query parameter. This link will also
-            // be url encoded.
-            if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
-                browserViewController.switchToTabForURLOrOpen(url)
-            }
-
             browserViewController.switchToTabForURLOrOpen(url)
         }
 
@@ -170,9 +156,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return UIWindow(frame: UIScreen.main.bounds)
         }
 
-        if #available(iOS 14, *) {
-            windowScene.screenshotService?.delegate = self
-        }
+        windowScene.screenshotService?.delegate = self
 
         let window = UIWindow(windowScene: windowScene)
 

@@ -16,9 +16,7 @@ enum TabGroupTimerState: String, Codable {
     case none
 }
 
-// We have both Codable and NSCoding protocol conformance since we're currently migrating users to
-// Codable for TabGroupData. We'll be able to remove NSCoding when adoption rate to v106 and greater is high enough.
-class TabGroupData: NSObject, Codable, NSCoding {
+class TabGroupData: Codable {
     var tabAssociatedSearchTerm: String = ""
     var tabAssociatedSearchUrl: String = ""
     var tabAssociatedNextUrl: String = ""
@@ -35,16 +33,7 @@ class TabGroupData: NSObject, Codable, NSCoding {
         case tabHistoryCurrentState
     }
 
-    var jsonDictionary: [String: Any] {
-        return [
-            CodingKeys.tabAssociatedSearchTerm.rawValue: String(self.tabAssociatedSearchTerm),
-            CodingKeys.tabAssociatedSearchUrl.rawValue: String(self.tabAssociatedSearchUrl),
-            CodingKeys.tabAssociatedNextUrl.rawValue: String(self.tabAssociatedNextUrl),
-            CodingKeys.tabHistoryCurrentState.rawValue: String(self.tabHistoryCurrentState),
-        ]
-    }
-
-    convenience override init() {
+    convenience init() {
         self.init(searchTerm: "",
                   searchUrl: "",
                   nextReferralUrl: "",
@@ -56,19 +45,5 @@ class TabGroupData: NSObject, Codable, NSCoding {
         self.tabAssociatedSearchUrl = searchUrl
         self.tabAssociatedNextUrl = nextReferralUrl
         self.tabHistoryCurrentState = tabHistoryCurrentState
-    }
-
-    required public init?(coder: NSCoder) {
-        self.tabAssociatedSearchTerm = coder.decodeObject(forKey: CodingKeys.tabAssociatedSearchTerm.rawValue) as? String ?? ""
-        self.tabAssociatedSearchUrl = coder.decodeObject(forKey: CodingKeys.tabAssociatedSearchUrl.rawValue) as? String ?? ""
-        self.tabAssociatedNextUrl = coder.decodeObject(forKey: CodingKeys.tabAssociatedNextUrl.rawValue) as? String ?? ""
-        self.tabHistoryCurrentState = coder.decodeObject(forKey: CodingKeys.tabHistoryCurrentState.rawValue) as? String ?? ""
-    }
-
-    public func encode(with coder: NSCoder) {
-        coder.encode(tabAssociatedSearchTerm, forKey: CodingKeys.tabAssociatedSearchTerm.rawValue)
-        coder.encode(tabAssociatedSearchUrl, forKey: CodingKeys.tabAssociatedSearchUrl.rawValue)
-        coder.encode(tabAssociatedNextUrl, forKey: CodingKeys.tabAssociatedNextUrl.rawValue)
-        coder.encode(tabHistoryCurrentState, forKey: CodingKeys.tabHistoryCurrentState.rawValue)
     }
 }

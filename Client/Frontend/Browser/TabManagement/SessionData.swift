@@ -40,33 +40,15 @@ private func migrate(urls: [URL]) -> [URL] {
     }
 }
 
-// We have both Codable and NSCoding protocol conformance since we're currently migrating users to
-// Codable for SessionData. We'll be able to remove NSCoding when adoption rate to v106 and greater is high enough.
-class SessionData: NSObject, Codable, NSCoding {
+class SessionData: Codable {
     let currentPage: Int
     let lastUsedTime: Timestamp
     let urls: [URL]
-
-    // This is temprorary in order to fix a migration error, can be removed after v107 has been well adopted
-    private let legacyCurrentPage: Int? = nil
-    private let legacyLastUsedTime: Timestamp? = nil
 
     enum CodingKeys: String, CodingKey {
         case currentPage
         case lastUsedTime
         case urls
-
-        // This is temprorary in order to fix a migration error, can be removed after v107 has been well adopted
-        case legacyCurrentPage = "user_first_name"
-        case legacyLastUsedTime = "user_last_name"
-    }
-
-    var jsonDictionary: [String: Any] {
-        return [
-            CodingKeys.currentPage.rawValue: String(self.currentPage),
-            CodingKeys.lastUsedTime.rawValue: String(self.lastUsedTime),
-            CodingKeys.urls.rawValue: urls.map { $0.absoluteString }
-        ]
     }
 
     /**
@@ -81,38 +63,5 @@ class SessionData: NSObject, Codable, NSCoding {
         self.currentPage = currentPage
         self.urls = migrate(urls: urls)
         self.lastUsedTime = lastUsedTime
-
-        assert(!urls.isEmpty, "Session has at least one entry")
-        assert(currentPage > -urls.count && currentPage <= 0, "Session index is valid")
-    }
-
-    // This is temprorary in order to fix a migration error, can be removed after v107 has been well adopted
-    required init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        do {
-            currentPage = try values.decode(Int.self, forKey: .currentPage)
-        } catch {
-            currentPage = try values.decode(Int.self, forKey: .legacyCurrentPage)
-        }
-
-        do {
-            lastUsedTime = try values.decode(Timestamp.self, forKey: .lastUsedTime)
-        } catch {
-            lastUsedTime = try values.decode(Timestamp.self, forKey: .legacyLastUsedTime)
-        }
-
-        urls = try values.decode([URL].self, forKey: .urls)
-    }
-
-    required init?(coder: NSCoder) {
-        self.currentPage = coder.decodeAsInt(forKey: CodingKeys.currentPage.rawValue)
-        self.urls = migrate(urls: coder.decodeObject(forKey: CodingKeys.urls.rawValue) as? [URL] ?? [URL]())
-        self.lastUsedTime = coder.decodeAsUInt64(forKey: CodingKeys.lastUsedTime.rawValue)
-    }
-
-    func encode(with coder: NSCoder) {
-        coder.encode(currentPage, forKey: CodingKeys.currentPage.rawValue)
-        coder.encode(migrate(urls: urls), forKey: CodingKeys.urls.rawValue)
-        coder.encode(Int64(lastUsedTime), forKey: CodingKeys.lastUsedTime.rawValue)
     }
 }

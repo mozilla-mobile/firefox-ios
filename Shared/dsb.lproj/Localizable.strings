@@ -1216,9 +1216,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (napšašowanje pśez %s wuměniś)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Kreditowu kórtu awtomatiski wupołniś";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Wšykne daty websydła wulašowaś";
 
@@ -1576,9 +1573,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "W pórěźe, som zrozměł";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Jolic sedło ako wótcakane njefunkcioněrujo, pótusniśo šćit w adresowem pólu a znjemóžniśo pólěpšony slědowański šćit za ten bok.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Glědajśo!";
 
@@ -1590,9 +1584,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reducěrujo zaměrne wabjenje a zajźujo tomu, až wabjerje waše pśeglědowanje slěduju.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Jolic sedło ako wótcakane njefunkcioněrujo, pótusniśo šćit w adresowem pólu a znjemóžniśo pólěpšony slědowański šćit za ten bok.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dowólujo tšochu wabjeńskego slědowanja, aby websydła pórědnje funkcioněrowali.";

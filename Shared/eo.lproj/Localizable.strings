@@ -1216,9 +1216,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Retadreso (anstataŭigi serĉo per %s)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Aŭtomate plenigi kreditkartojn";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Viŝi ĉiujn retejajn datumojn";
 
@@ -1576,9 +1573,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "En ordo, mi komprenis";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Se retejo me funkcias bone, tuŝetu la ŝildon en la adresa strio kaj malŝaltu la pligbonigitan protekton kontraŭ spurado por tiu paĝo.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Atento!";
 
@@ -1590,9 +1584,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Tio ĉi reduktas alcelajn reklamojn kaj helpas eviti ke reklamistoj spuru vian retumon.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Se retejo me funkcias bone, tuŝetu la ŝildon en la adresa strio kaj malŝaltu la pligbonigitan protekton kontraŭ spurado por tiu paĝo.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permesi kelkajn reklamajn spurilojn, tiel ke retejoj bone funkcios.";

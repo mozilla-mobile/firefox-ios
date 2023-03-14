@@ -84,16 +84,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appLaunchUtil?.setUpPostLaunchDependencies()
         backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
 
-        // Widgets are available on iOS 14 and up only.
-        if #available(iOS 14.0, *) {
-            let topSitesProvider = TopSitesProviderImplementation(
-                placesFetcher: profile.places,
-                pinnedSiteFetcher: profile.pinnedSites,
-                prefs: profile.prefs
-            )
+        let topSitesProvider = TopSitesProviderImplementation(
+            placesFetcher: profile.places,
+            pinnedSiteFetcher: profile.pinnedSites,
+            prefs: profile.prefs
+        )
 
-            widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
-        }
+        widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
 
         addObservers()
 
@@ -183,10 +180,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func updateTopSitesWidget() {
         // Since we only need the topSites data in the archiver, let's write it
-        // only if iOS 14 is available.
-        if #available(iOS 14.0, *) {
-            widgetManager?.writeWidgetKitTopSites()
-        }
+        widgetManager?.writeWidgetKitTopSites()
     }
 }
 

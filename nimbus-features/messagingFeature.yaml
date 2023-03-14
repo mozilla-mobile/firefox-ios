@@ -118,14 +118,15 @@ features:
       - channel: developer
         value:
           messages:
-            research-survey:
+            # Serves as an example of how survey message might be formatted
+            survey-surface-message:
               surface: survey
               style: SURVEY
               trigger:
-                - ALWAYS
-              text: Research Surface/Body.Text
-              button-label: Research Surface/PrimaryButton.Label
-              action: www.macrumors.com
+                - NEVER
+              text: ResearchSurface/Body.Text.v112
+              button-label: ResearchSurface/PrimaryButton.Label.v112
+              action: https://www.macrumors.com
 
 objects:
   MessageData:

@@ -25,11 +25,11 @@ class GleanPlumbMessageUtility {
     func createGleanPlumbHelper() -> GleanPlumbMessageHelper? {
         let contextProvider = GleanPlumbContextProvider()
 
-        /// Create our GleanPlumbMessageHelper.
+        // Create our GleanPlumbMessageHelper.
         do {
             return try Experiments.shared.createMessageHelper(additionalContext: contextProvider.createAdditionalDeviceContext())
         } catch {
-            /// If we're here, then all of Messaging is in limbo! Report the error and let the surface handle this `nil`
+            // If we're here, then all of Messaging is in limbo! Report the error and let the surface handle this `nil`
             logger.log("GleanPlumbMessageHelper could not be created! With error \(error)",
                        level: .warning,
                        category: .experiments)
@@ -39,19 +39,19 @@ class GleanPlumbMessageUtility {
 
     /// We check whether this message is triggered by evaluating message JEXLs.
     func isMessageEligible(_ message: GleanPlumbMessage, messageHelper: GleanPlumbMessageHelper) throws -> Bool {
-        /// Some unit test are failing in Bitrise during the jexlEvaluation process we will bypass the check for unit test while we find a solution to mock properly
-        /// `GleanPlumbMessageUtility` that right now is highly tied to `Experiments.shared`
+        // Some unit test are failing in Bitrise during the jexlEvaluation process we will bypass the check for unit test while we find a solution to mock properly
+        // `GleanPlumbMessageUtility` that right now is highly tied to `Experiments.shared`
         guard !AppConstants.isRunningTest else { return true }
 
         return try message.triggers.reduce(true) { accumulator, trigger in
             guard accumulator else { return false }
             var isTriggered: Bool
 
-            /// Check the jexlMap for the `Bool`, in the case we already evaluated it.
+            // Check the jexlMap for the `Bool`, in the case we already evaluated it.
             if jexlMap[trigger] != nil, let jexlEvaluation = jexlMap[trigger] {
                 isTriggered = jexlEvaluation
             } else {
-                /// Otherwise, perform this expensive Foreign Function Interface operation once for the trigger.
+                // Otherwise, perform this expensive Foreign Function Interface operation once for the trigger.
                 isTriggered = try messageHelper.evalJexl(expression: trigger)
                 jexlMap[trigger] = isTriggered
             }

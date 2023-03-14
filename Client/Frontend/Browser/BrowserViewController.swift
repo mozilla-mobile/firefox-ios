@@ -66,6 +66,7 @@ class BrowserViewController: UIViewController {
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
 
+    var surveySurfaceManager: SurveySurfaceManager?
     var contextHintVC: ContextualHintViewController
 
     // To avoid presenting multiple times in same launch when forcing to show
@@ -395,8 +396,8 @@ class BrowserViewController: UIViewController {
         tabManager.startAtHomeCheck()
         updateWallpaperMetadata()
 
-        /// When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
-        /// So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
+        // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
+        // So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
             self?.loadQueuedTabs()
         }
@@ -540,12 +541,10 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
-        // not flash before we present. This change of alpha also participates in the animation when
-        // the intro view is dismissed.
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
-        }
+        // Setting the view alpha to 0 so that there's no weird flash in between the
+        // check of view appearance and the `performSurveySurfaceCheck`, where the
+        // alpha will be set to 1.
+        self.view.alpha = 0
 
         if !displayedRestoreTabsAlert && crashedLastLaunch() {
             logger.log("The application crashed on last session",
@@ -558,6 +557,7 @@ class BrowserViewController: UIViewController {
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
+        performSurveySurfaceCheck()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1275,13 +1275,6 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
-            // This is zero-cost if already installed. It needs to be checked frequently
-            // (hence every event here triggers this function), as when a new tab is
-            // created it requires multiple attempts to setup the handler correctly.
-            helper.replaceGestureHandlerIfNeeded()
-        }
-
         switch path {
         case .estimatedProgress:
             guard tab === tabManager.selectedTab else { break }
@@ -1873,7 +1866,7 @@ extension BrowserViewController: LibraryPanelDelegate {
         guard let tab = tabManager.selectedTab else { return }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if  #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
+        if navigateLinkShortcutIfNeeded(url: url) {
             return
         }
 
@@ -1935,7 +1928,7 @@ extension BrowserViewController: HomePanelDelegate {
         }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
+        if navigateLinkShortcutIfNeeded(url: url) {
             return
         }
 
@@ -1943,6 +1936,7 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
+        leaveOverlayMode(didCancel: false)
         let tab = tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
         // Select new tab automatically if needed
         guard !selectNewTab else {
@@ -1982,6 +1976,37 @@ extension BrowserViewController: HomePanelDelegate {
 
     func homePanelDidRequestToOpenSettings(at settingsPage: AppSettingsDeeplinkOption) {
         showSettingsWithDeeplink(to: settingsPage)
+    }
+}
+
+// MARK: - Research Surface
+extension BrowserViewController {
+    /// This function will:
+    /// 1. Create a new instance of the SurveySurfaceManager & make sure that it is
+    ///    deallocated when dismissed from the user interacting with it.
+    /// 2. Check whether or not there's a new message that needs to be shown.
+    ///     - true: show the surface
+    ///     - false: deallocate the survey surface manager as BVC doesn't need to hold it
+    func performSurveySurfaceCheck() {
+        // No matter what the result of the check, we want to make sure to
+        // always bring the alpha back to 1.0
+        defer { self.view.alpha = 1.0 }
+
+        surveySurfaceManager = SurveySurfaceManager(with: self)
+
+        surveySurfaceManager?.dismissClosure = { [weak self] in
+            self?.surveySurfaceManager = nil
+        }
+
+        if let surveySurfaceManager = surveySurfaceManager,
+            surveySurfaceManager.shouldShowSurveySurface {
+            guard let surveySurface = surveySurfaceManager.getSurveySurface() else { return }
+            surveySurface.modalPresentationStyle = .fullScreen
+
+            self.present(surveySurface, animated: false)
+        } else {
+            self.surveySurfaceManager = nil
+        }
     }
 }
 
@@ -2235,8 +2260,6 @@ extension BrowserViewController {
 
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
-        guard #available(iOS 14.0, *) else { return }
-
         guard force || DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
             else { return }
 
@@ -2506,16 +2529,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        if #available(iOS 13.4, *) {
-            keyboardPressesHandler().handlePressesBegan(presses, with: event)
-        }
+        keyboardPressesHandler().handlePressesBegan(presses, with: event)
         super.pressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        if #available(iOS 13.4, *) {
-            keyboardPressesHandler().handlePressesEnded(presses, with: event)
-        }
+        keyboardPressesHandler().handlePressesEnded(presses, with: event)
         super.pressesEnded(presses, with: event)
     }
 }

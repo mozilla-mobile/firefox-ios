@@ -249,6 +249,13 @@ public struct AccessibilityIdentifiers {
         }
     }
 
+    struct SurveySurface {
+        static let takeSurveyButton = "takeSurveyButton"
+        static let dismissButton = "dismissSurveyButton"
+        static let textLabel = "surveyDescriptionLabel"
+        static let imageView = "surveyImageView"
+    }
+
     struct Photon {
         static let closeButton = "PhotonMenu.close"
         static let view = "Action Sheet"
