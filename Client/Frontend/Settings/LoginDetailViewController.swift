@@ -156,14 +156,14 @@ extension LoginDetailViewController: UITableViewDataSource {
             }
             guard let breach = breach else { return breachCell }
             breachCell.isHidden = false
-            let breachDetailView = BreachAlertsDetailView()
+            let breachDetailView: BreachAlertsDetailView = .build()
             breachCell.contentView.addSubview(breachDetailView)
 
             NSLayoutConstraint.activate([
                 breachDetailView.leadingAnchor.constraint(equalTo: breachCell.contentView.leadingAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
                 breachDetailView.topAnchor.constraint(equalTo: breachCell.contentView.topAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
-                breachDetailView.trailingAnchor.constraint(equalTo: breachCell.contentView.trailingAnchor, constant: LoginTableViewCellUX.HorizontalMargin),
-                breachDetailView.bottomAnchor.constraint(equalTo: breachCell.contentView.bottomAnchor, constant: LoginTableViewCellUX.HorizontalMargin)
+                breachDetailView.trailingAnchor.constraint(equalTo: breachCell.contentView.trailingAnchor, constant: -LoginTableViewCellUX.HorizontalMargin),
+                breachDetailView.bottomAnchor.constraint(equalTo: breachCell.contentView.bottomAnchor, constant: -LoginTableViewCellUX.HorizontalMargin)
             ])
             breachDetailView.setup(breach)
 
