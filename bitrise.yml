@@ -719,7 +719,6 @@ workflows:
 
             cd Client.xcodeproj
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/' project.pbxproj
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev - Fennec Today/' project.pbxproj
             sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
             sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj
             sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/' project.pbxproj
@@ -1141,10 +1140,6 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_RELEASE_VERSION"
-        - plist_path: Extensions/Today/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - build_short_version_string: "$BITRISE_RELEASE_VERSION"
         - plist_path: WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
@@ -1271,10 +1266,6 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_BETA_VERSION"
-        - plist_path: Extensions/Today/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - build_short_version_string: "$BITRISE_BETA_VERSION"
         - plist_path: WidgetKit/Info.plist
     - set-xcode-build-number@1:
         inputs:
@@ -1369,10 +1360,6 @@ workflows:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
         - plist_path: Extensions/ShareTo/Info.plist
-    - set-xcode-build-number@1:
-        inputs:
-        - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
-        - plist_path: Extensions/Today/Info.plist
     - set-xcode-build-number@1:
         inputs:
         - build_short_version_string: "$BITRISE_NIGHTLY_VERSION"
