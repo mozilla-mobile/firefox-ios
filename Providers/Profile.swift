@@ -317,8 +317,12 @@ open class BrowserProfile: Profile {
 
             // Initiating the sync manager has to happen prior to the databases being opened,
             // because opening them can trigger events to which the SyncManager listens.
-            self.syncManager = self.rustSyncManagerEnabled ?
-                RustSyncManager(profile: self) : BrowserSyncManager(profile: self)
+            if self.rustSyncManagerEnabled {
+                self.syncManager = RustSyncManager(profile: self)
+                prefs.setInt(2, forKey: PrefsKeys.SecondProfileLaunchKey)
+            } else {
+                self.syncManager = BrowserSyncManager(profile: self)
+            }
         }
 
         let notificationCenter = NotificationCenter.default
@@ -526,7 +530,7 @@ open class BrowserProfile: Profile {
     // This function exists to service the `FxaPushMessengerHandler.handle` function and
     // will be removed after the rust sync manager rollout is complete
     public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
-        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 1 && rustSyncManagerEnabled {
+        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
             return tabs.getClient(fxaDeviceId: fxaDeviceId)
         } else {
             return remoteClientsAndTabs.getClient(fxaDeviceId: fxaDeviceId)
@@ -536,7 +540,7 @@ open class BrowserProfile: Profile {
     // This function exists to service the `TabPeekViewController.setState` function and
     // will be removed after the rust sync manager rollout is complete
     public func getClientGUIDs(completion: @escaping (Set<GUID>) -> Void) {
-        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 1 && rustSyncManagerEnabled {
+        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
             tabs.getClientGUIDs { (result, error) in
                 guard let guids = result else {
                     return
@@ -584,7 +588,7 @@ open class BrowserProfile: Profile {
         // the tab component's database table and filtered by the remote devices in the
         // user's device constellation. Once the sync manager rollout is complete this
         // will be the way this data is retrieved unconditionally.
-        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 1 && rustSyncManagerEnabled {
+        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
             return getRustTabsWithClients()
         } else {
             return tabs.getAll().bind { tabsResult in
