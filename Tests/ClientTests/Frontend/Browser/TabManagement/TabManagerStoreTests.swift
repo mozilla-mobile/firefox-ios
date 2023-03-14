@@ -250,9 +250,9 @@ private extension TabManagerStoreTests {
     func createManager(file: StaticString = #file,
                        line: UInt = #line) -> LegacyTabManagerStoreImplementation {
         let manager = LegacyTabManagerStoreImplementation(prefs: profile.prefs,
-                                                    imageStore: nil,
-                                                    fileManager: fileManager,
-                                                    serialQueue: serialQueue)
+                                                          imageStore: nil,
+                                                          fileManager: fileManager,
+                                                          serialQueue: serialQueue)
         manager.clearArchive()
         trackForMemoryLeaks(manager, file: file, line: line)
         return manager

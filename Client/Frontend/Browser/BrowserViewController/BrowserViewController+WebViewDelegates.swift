@@ -171,8 +171,8 @@ extension BrowserViewController: WKUIDelegate {
                     let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
                     if !searchTerm.isEmpty, !searchUrl.isEmpty {
                         let searchData = LegacyTabGroupData(searchTerm: searchTerm,
-                                                      searchUrl: searchUrl,
-                                                      nextReferralUrl: tab.url?.absoluteString ?? "")
+                                                            searchUrl: searchUrl,
+                                                            nextReferralUrl: tab.url?.absoluteString ?? "")
                         tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData, isPrivate: tab.isPrivate)
                     }
 
@@ -776,8 +776,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString, isPrivate: tab.isPrivate)
             } else if !tab.isFxHomeTab {
                 let searchData = LegacyTabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                              searchUrl: webView.url?.absoluteString ?? "",
-                                              nextReferralUrl: "")
+                                                    searchUrl: webView.url?.absoluteString ?? "",
+                                                    nextReferralUrl: "")
                 metadataManager.updateTimerAndObserving(state: .openURLOnly,
                                                         searchData: searchData,
                                                         tabTitle: webView.title,
@@ -904,8 +904,8 @@ private extension BrowserViewController {
 
     func updateObservationReferral(metadataManager: LegacyTabMetadataManager, url: String?, isPrivate: Bool) {
         let searchData = LegacyTabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                      searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
-                                      nextReferralUrl: url ?? "")
+                                            searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
+                                            nextReferralUrl: url ?? "")
         metadataManager.updateTimerAndObserving(
             state: .tabNavigatedToDifferentUrl,
             searchData: searchData,

@@ -1468,8 +1468,8 @@ class BrowserViewController: UIViewController {
 
         if let tab = tabManager.selectedTab {
             let searchData = LegacyTabGroupData(searchTerm: text,
-                                          searchUrl: searchURL.absoluteString,
-                                          nextReferralUrl: "")
+                                                searchUrl: searchURL.absoluteString,
+                                                nextReferralUrl: "")
             tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         }
     }
@@ -2016,8 +2016,8 @@ extension BrowserViewController: SearchViewControllerDelegate {
         guard let tab = tabManager.selectedTab else { return }
 
         let searchData = LegacyTabGroupData(searchTerm: searchTerm ?? "",
-                                      searchUrl: url.absoluteString,
-                                      nextReferralUrl: "")
+                                            searchUrl: url.absoluteString,
+                                            nextReferralUrl: "")
         tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
