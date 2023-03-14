@@ -85,26 +85,11 @@ extension String {
 extension String {
     public struct Biometry {
         public struct Screen {
-            public static let PasswordsWithFingerprint = MZLocalizedString(
-                "Biometry.Screen.PasswordsWithFingerprint.v112",
+            public static let UniversalAuthenticationReason = MZLocalizedString(
+                "Biometry.Screen.UniversalAuthenticationReason.v113",
                 tableName: "BiometricAuthentication",
-                value: "Use your fingerprint to access passwords.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with fingerprint before accessing the Passwords screen.")
-            public static let PasswordsWithFaceId = MZLocalizedString(
-                "Biometry.Screen.PasswordsWithFaceId.v112",
-                tableName: "BiometricAuthentication",
-                value: "Use Face ID to access passwords.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with Face ID before accessing the Passwords screen.")
-            public static let EditCreditCardWithFingerprint = MZLocalizedString(
-                "Biometry.Screen.EditCreditCardWithFingerprint.v112",
-                tableName: "BiometricAuthentication",
-                value: "Use your fingerprint to access credit cards.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with fingerprint before accessing the Edit Credit Card screen.")
-            public static let EditCreditCardWithFaceId = MZLocalizedString(
-                "Biometry.Screen.EditCreditCardWithFaceId.v112",
-                tableName: "BiometricAuthentication",
-                value: "Use Face ID to access credit cards.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with Face ID before accessing the Edit Credit Card screen.")
+                value: "Enter your device passcode",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
         }
     }
 }
@@ -3815,15 +3800,6 @@ extension String {
         tableName: "LoginManager",
         value: nil,
         comment: "Label for the button used to delete the current login.")
-}
-
-// MARK: - Strings used in multiple areas within the Authentication Manager
-extension String {
-    public static let AuthenticationEnterPasscode = MZLocalizedString(
-        "Enter passcode",
-        tableName: "AuthenticationManager",
-        value: nil,
-        comment: "Text displayed above the input field when changing the existing passcode")
 }
 
 // MARK: - Authenticator strings

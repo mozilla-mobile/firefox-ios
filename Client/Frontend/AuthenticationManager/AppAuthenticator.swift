@@ -18,12 +18,10 @@ class AppAuthenticator {
         //  That's usually not what you want.
         let context = LAContext()
 
-        context.localizedFallbackTitle = .AuthenticationEnterPasscode
-
         // First check if we have the needed hardware support.
         var error: NSError?
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
-            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: .Settings.Passwords.FingerPrintReason) { success, error in
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: .Biometry.Screen.UniversalAuthenticationReason) { success, error in
                 if success {
                     DispatchQueue.main.async {
                         completion(.success(()))
