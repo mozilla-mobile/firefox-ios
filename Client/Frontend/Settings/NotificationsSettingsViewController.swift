@@ -6,14 +6,22 @@ import Foundation
 import Shared
 
 class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    private lazy var syncSignInNotifications: BoolSetting = {
+    private lazy var syncNotifications: BoolSetting = {
         return BoolSetting(
             title: .Settings.Notifications.SyncNotificationsTitle,
             description: .Settings.Notifications.SyncNotificationsStatus,
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.SyncSignInNotifications,
             enabled: true
-        ) { _ in
+        ) { [weak self] value in
+            guard let self = self else { return }
+
+            Task {
+                let shouldEnable = await self.notificationsChanged(value)
+                self.syncNotifications.control.setOn(shouldEnable, animated: true)
+                self.syncNotifications.writeBool(self.syncNotifications.control)
+            }
+
             // enable/disable syncSignIn notifications
         }
     }()
@@ -25,7 +33,15 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             prefs: prefs,
             prefKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications,
             enabled: true
-        ) { _ in
+        ) { [weak self] value in
+            guard let self = self else { return }
+
+            Task {
+                let shouldEnable = await self.notificationsChanged(value)
+                self.tipsAndFeaturesNotifications.control.setOn(shouldEnable, animated: true)
+                self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control)
+            }
+
             // enable/disable tipsAndFeatures notifications
         }
     }()
@@ -47,7 +63,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
     override func generateSettings() -> [SettingSection] {
         let childrenSection: [Setting]
         if hasAccount {
-            childrenSection = [syncSignInNotifications, tipsAndFeaturesNotifications]
+            childrenSection = [syncNotifications, tipsAndFeaturesNotifications]
         } else {
             childrenSection = [tipsAndFeaturesNotifications]
         }
@@ -55,5 +71,53 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         return [
             SettingSection(children: childrenSection)
         ]
+    }
+
+    func notificationsChanged(_ sendNotifications: Bool) async -> Bool {
+        guard sendNotifications else { return false }
+
+        let notificationManager = NotificationManager()
+        var sendNotifications = true
+        let settings = await notificationManager.getNotificationSettings()
+
+        switch settings.authorizationStatus {
+        case .notDetermined, .authorized, .provisional, .ephemeral:
+            sendNotifications = true
+            do {
+                sendNotifications = try await notificationManager.requestAuthorization()
+            } catch {
+                sendNotifications = false
+            }
+        case .denied:
+            sendNotifications = false
+            await MainActor.run {
+                self.present(accessDenied, animated: true, completion: nil)
+            }
+        @unknown default:
+            sendNotifications = false
+        }
+        return sendNotifications
+    }
+
+    var accessDenied: UIAlertController {
+        let accessDenied = UIAlertController(
+            title: .Settings.Notifications.TurnOnNotificationsTitle,
+            message: String(format: .Settings.Notifications.TurnOnNotificationsMessage, AppName.shortName.rawValue),
+            preferredStyle: .alert
+        )
+        let dismissAction = UIAlertAction(
+            title: .CancelString,
+            style: .default,
+            handler: nil
+        )
+        accessDenied.addAction(dismissAction)
+        let settingsAction = UIAlertAction(
+            title: .OpenSettingsString,
+            style: .default
+        ) { _ in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        }
+        accessDenied.addAction(settingsAction)
+        return accessDenied
     }
 }
