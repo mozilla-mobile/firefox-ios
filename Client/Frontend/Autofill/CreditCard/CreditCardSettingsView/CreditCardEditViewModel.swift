@@ -14,8 +14,6 @@ class CreditCardEditViewModel: ObservableObject {
     let autofill: RustAutofill
     let creditCard: CreditCard?
 
-    @Published var isShowingToast: Bool = false
-
     @Published var firstName: String = ""
     @Published var lastName: String = ""
     @Published var errorState: String = ""
@@ -23,6 +21,7 @@ class CreditCardEditViewModel: ObservableObject {
     @Published var nameIsValid = true
     @Published var numberIsValid = true
     @Published var expirationIsValid = true
+    @Published var shouldShowToast = false
     @Published var nameOnCard: String = "" {
         didSet (val) {
             nameIsValid = nameOnCard.isEmpty
@@ -58,7 +57,7 @@ class CreditCardEditViewModel: ObservableObject {
     var regularRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
-            alertBody: Text("this is a text"),
+            alertBody: nil,
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
                 guard let creditCard = creditCard else { return }
 
@@ -104,7 +103,7 @@ class CreditCardEditViewModel: ObservableObject {
         autofill.deleteCreditCard(id: creditCard.guid) { success, error in
             guard success else { return }
 
-            self.isShowingToast.toggle()
+            self.shouldShowToast.toggle()
         }
     }
 }

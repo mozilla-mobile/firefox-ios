@@ -11,34 +11,36 @@ struct CreditCardEditView: View {
     let removeButtonColor: Color
     let borderColor: Color
 
+    private var colors: FloatingTextField.Colors {
+        return FloatingTextField.Colors(errorColor: .red,
+                                        titleColor: .gray,
+                                        textFieldColor: .gray)
+    }
+
     var body: some View {
         VStack(spacing: 11) {
-            let colors = FloatingTextField.Colors(
-                errorColor: .red,
-                titleColor: .gray,
-                textFieldColor: .gray)
+            FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
+                              textVal: $viewModel.nameOnCard,
+                              errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
+                              showError: !viewModel.nameIsValid,
+                              colors: colors)
+            Divider()
+                .frame(height: 0.7)
 
-        FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
-                          textVal: $viewModel.cardNumber,
-                          errorString: String.CreditCard.ErrorState.CardNumberSublabel,
-                          showError: !viewModel.numberIsValid,
-                          colors: colors)
-        Divider()
-            .frame(height: 0.7)
-
-        FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
-                          textVal: $viewModel.expirationDate,
-                          errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
-                          showError: !viewModel.expirationIsValid,
-                          colors: colors)
-        Divider()
-            .frame(height: 0.7)
+            FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
+                              textVal: $viewModel.cardNumber,
+                              errorString: String.CreditCard.ErrorState.CardNumberSublabel,
+                              showError: !viewModel.numberIsValid,
+                              colors: colors)
+            Divider()
+                .frame(height: 0.7)
 
             FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
                               textVal: $viewModel.expirationDate,
-                              errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel, // CardExpirationDateTitle,
+                              errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
                               showError: !viewModel.expirationIsValid,
                               colors: colors)
+
             Divider()
                 .frame(height: 0.7)
 
@@ -54,8 +56,8 @@ struct CreditCardEditView: View {
         }
         .padding(.top, 20)
         .toast(
-            toastView: ToastView(messageType: .removedCard, isShowing: $viewModel.isShowingToast),
-            isShowing: $viewModel.isShowingToast
+            toastView: ToastView(messageType: .removedCard, isShowing: $viewModel.shouldShowToast),
+            isShowing: $viewModel.shouldShowToast
         )
     }
 }

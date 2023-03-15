@@ -23,6 +23,7 @@ struct ToastView: View {
     var messageType: MessageType
     var textColor: Color = .white
     var backgroundColor: Color = .blue
+    var duration: TimeInterval = 3
     @Binding var isShowing: Bool
 
     var body: some View {
@@ -37,7 +38,7 @@ struct ToastView: View {
         .animation(.easeInOut)
         .transition(AnyTransition.move(edge: .bottom))
         .onAppear(perform: {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                 withAnimation {
                     isShowing.toggle()
                 }
@@ -49,7 +50,6 @@ struct ToastView: View {
 struct ToastModifier<T: View>: ViewModifier {
     @Binding var isShowing: Bool
     let toastView: T
-    let duration: TimeInterval
 
     func body(content: Content) -> some View {
         ZStack {
@@ -63,8 +63,7 @@ struct ToastModifier<T: View>: ViewModifier {
 
 extension View {
     func toast<T: View>(toastView: T,
-                        isShowing: Binding<Bool>,
-                        duration: TimeInterval = 3) -> some View {
-        modifier(ToastModifier(isShowing: isShowing, toastView: toastView, duration: 3))
+                        isShowing: Binding<Bool>) -> some View {
+        modifier(ToastModifier(isShowing: isShowing, toastView: toastView))
     }
 }
