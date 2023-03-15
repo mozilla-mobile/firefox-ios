@@ -11,7 +11,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             title: .Settings.Notifications.SyncNotificationsTitle,
             description: .Settings.Notifications.SyncNotificationsStatus,
             prefs: prefs,
-            prefKey: PrefsKeys.Notifications.SyncSignInNotifications,
+            prefKey: PrefsKeys.Notifications.SyncNotifications,
             enabled: true
         ) { [weak self] value in
             guard let self = self else { return }

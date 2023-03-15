@@ -50,7 +50,7 @@ public struct PrefsKeys {
     }
 
     public struct Notifications {
-        public static let SyncSignInNotifications = "SyncSignInNotificationsUserPrefsKey"
+        public static let SyncNotifications = "SyncNotificationsUserPrefsKey"
         public static let TipsAndFeaturesNotifications = "TipsAndFeaturesNotificationsUserPrefsKey"
     }
 

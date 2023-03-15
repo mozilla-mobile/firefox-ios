@@ -261,8 +261,8 @@ extension FxAWebViewModel {
             NotificationManager().requestAuthorization { granted, error in
                 guard error == nil else { return }
                 if granted {
-                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.SyncSignInNotifications) == nil {
-                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.SyncSignInNotifications)
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.SyncNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
                     }
                     if self.profile.prefs.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
                         self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
