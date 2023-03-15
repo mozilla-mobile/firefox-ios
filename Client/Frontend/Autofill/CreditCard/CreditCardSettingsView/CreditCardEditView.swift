@@ -11,8 +11,6 @@ struct CreditCardEditView: View {
     let removeButtonColor: Color
     let borderColor: Color
 
-    @State private var isShowingToast = false
-
     var body: some View {
         VStack(spacing: 11) {
             let colors = FloatingTextField.Colors(
@@ -25,11 +23,6 @@ struct CreditCardEditView: View {
                           errorString: String.CreditCard.ErrorState.CardNumberSublabel,
                           showError: !viewModel.numberIsValid,
                           colors: colors)
-        .onTapGesture { // TODO: Temporary to show toast easier
-            withAnimation {
-                isShowingToast = true
-            }
-        }
         Divider()
             .frame(height: 0.7)
 
@@ -60,11 +53,10 @@ struct CreditCardEditView: View {
             Spacer()
         }
         .padding(.top, 20)
-        .toast(toastView: ToastView(messageType: .savedCard, textColor: .white, backgroundColor: .blue, isShowing: $isShowingToast),
-               isShowing: $isShowingToast)
-        .edgesIgnoringSafeArea(.bottom) // iOS 13 version
-        // TODO: Switch to use iOS 14 version after iOS 13 is dropped
-//        .ignoresSafeArea(edges: [.bottom])
+        .toast(
+            toastView: ToastView(messageType: .removedCard, isShowing: $viewModel.isShowingToast),
+            isShowing: $viewModel.isShowingToast
+        )
     }
 }
 

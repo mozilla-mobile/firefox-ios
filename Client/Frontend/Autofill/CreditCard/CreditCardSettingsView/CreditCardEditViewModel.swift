@@ -14,6 +14,8 @@ class CreditCardEditViewModel: ObservableObject {
     let autofill: RustAutofill
     let creditCard: CreditCard?
 
+    @Published var isShowingToast: Bool = false
+
     @Published var firstName: String = ""
     @Published var lastName: String = ""
     @Published var errorState: String = ""
@@ -99,8 +101,10 @@ class CreditCardEditViewModel: ObservableObject {
     // MARK: - Helpers
 
     private func removeSelectedCreditCard(creditCard: CreditCard) {
-        autofill.deleteCreditCard(id: creditCard.guid) { _, error in
-            // no-op
+        autofill.deleteCreditCard(id: creditCard.guid) { success, error in
+            guard success else { return }
+
+            self.isShowingToast.toggle()
         }
     }
 }

@@ -39,7 +39,7 @@ struct ToastView: View {
         .onAppear(perform: {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 withAnimation {
-                    isShowing = false
+                    isShowing.toggle()
                 }
             }
         })
