@@ -77,29 +77,26 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         guard sendNotifications else { return false }
 
         let notificationManager = NotificationManager()
-        var sendNotifications = true
         let settings = await notificationManager.getNotificationSettings()
 
         switch settings.authorizationStatus {
         case .notDetermined, .authorized, .provisional, .ephemeral:
-            sendNotifications = true
             do {
-                sendNotifications = try await notificationManager.requestAuthorization()
+                return try await notificationManager.requestAuthorization()
             } catch {
-                sendNotifications = false
+                return false
             }
         case .denied:
-            sendNotifications = false
             await MainActor.run {
-                self.present(accessDenied, animated: true, completion: nil)
+                self.present(accessDeniedAlert, animated: true, completion: nil)
             }
+            return false
         @unknown default:
-            sendNotifications = false
+            return false
         }
-        return sendNotifications
     }
 
-    var accessDenied: UIAlertController {
+    var accessDeniedAlert: UIAlertController {
         let accessDenied = UIAlertController(
             title: .Settings.Notifications.TurnOnNotificationsTitle,
             message: String(format: .Settings.Notifications.TurnOnNotificationsMessage, AppName.shortName.rawValue),
