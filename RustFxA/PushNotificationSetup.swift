@@ -10,7 +10,7 @@ open class PushNotificationSetup {
     private var pushClient: PushClient?
     private var pushRegistration: PushRegistration?
 
-    public func didRegister(withDeviceToken deviceToken: Data) {
+    public func didRegister(withDeviceToken deviceToken: Data, notificationAllowed: Bool) {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
@@ -26,9 +26,15 @@ open class PushNotificationSetup {
                 self?.pushRegistration = pushRegistration
 
                 let subscription = pushRegistration.defaultSubscription
-                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString,
-                                                        publicKey: subscription.p256dhPublicKey,
-                                                        authKey: subscription.authKey)
+
+                // send empty parameters for push subscription if no notifications should be send to device
+                let endpoint = notificationAllowed ? subscription.endpoint.absoluteString : ""
+                let publicKey = notificationAllowed ? subscription.p256dhPublicKey : ""
+                let authKey = notificationAllowed ? subscription.authKey : ""
+
+                let devicePush = DevicePushSubscription(endpoint: endpoint,
+                                                        publicKey: publicKey,
+                                                        authKey: authKey)
                 accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
                 // We set our apnsToken **after** the call to set the push subscription completes
                 // This helps ensure that if that call fails, we will try again with a new token next time

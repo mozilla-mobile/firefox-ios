@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Common
+import MozillaAppServices
 
 class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: prefs)
@@ -23,9 +24,13 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
                 let shouldEnable = await self.notificationsChanged(value)
                 self.syncNotifications.control.setOn(shouldEnable, animated: true)
                 self.syncNotifications.writeBool(self.syncNotifications.control)
-            }
 
-            // enable/disable syncSignIn notifications
+                // enable/disable sync notifications
+                MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(
+                    forKey: KeychainKey.apnsToken,
+                    withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
+                NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            }
         }
     }()
 
