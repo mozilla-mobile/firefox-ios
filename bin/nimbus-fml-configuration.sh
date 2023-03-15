@@ -33,7 +33,7 @@ fml_file=nimbus.fml.yaml
 ## Set the list of directories to scan for *.fml.yaml files.
 ## This can have individual files, but are relative to SOURCE_ROOT
 ## Default: $PROJECT
-export MODULES=$fml_file
+export MODULES="$fml_file Providers"
 
 ## Set the directory where the generated files are placed.
 ## This is relative to SOURCE_ROOT.

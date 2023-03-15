@@ -12,6 +12,9 @@ channels:
   - developer
   - beta
   - release
+import:
+  - path: Providers/providers.fml.yaml
+    channel: release
 include:
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/creditCardAutofillFeature.yaml

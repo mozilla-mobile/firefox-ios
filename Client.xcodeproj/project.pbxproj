@@ -236,6 +236,10 @@
 		39C22C291E89791C000C0E56 /* PushCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395C8F201E796AD600A68E8C /* PushCrypto.swift */; };
 		39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */; };
 		39D056382665235700FBEE59 /* initial_experiments.json in Resources */ = {isa = PBXBuildFile; fileRef = 3964F5FB2656D2B500065278 /* initial_experiments.json */; };
+		39D0DA6829C1E772000760B8 /* ProvidersNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA6729C1E772000760B8 /* ProvidersNimbus.swift */; };
+		39D0DA6929C1E775000760B8 /* ProvidersNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA6729C1E772000760B8 /* ProvidersNimbus.swift */; };
+		39D0DA6A29C1E775000760B8 /* ProvidersNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA6729C1E772000760B8 /* ProvidersNimbus.swift */; };
+		39D0DA6B29C1E776000760B8 /* ProvidersNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D0DA6729C1E772000760B8 /* ProvidersNimbus.swift */; };
 		39E65D271CA5B92000C63CE3 /* AsyncReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */; };
 		39EB469A1E26DDB4006346E8 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39EF434E260A73950011E22E /* Experiments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EF434D260A73950011E22E /* Experiments.swift */; };
@@ -2199,6 +2203,7 @@
 		39C137962655798A003DC662 /* NimbusIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusIntegrationTests.swift; sourceTree = "<group>"; };
 		39C22C2C1E897B9A000C0E56 /* PushClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushClientTests.swift; sourceTree = "<group>"; };
 		39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxScreenGraphTests.swift; sourceTree = "<group>"; };
+		39D0DA6729C1E772000760B8 /* ProvidersNimbus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProvidersNimbus.swift; sourceTree = "<group>"; };
 		39DB4F1AA7B4688949522C99 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		39DD4C8BA7FCE677AFDACC2D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		39E65D261CA5B92000C63CE3 /* AsyncReducerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncReducerTests.swift; sourceTree = "<group>"; };
@@ -6076,6 +6081,14 @@
 			path = Push;
 			sourceTree = "<group>";
 		};
+		39D0DA6629C1E73F000760B8 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				39D0DA6729C1E772000760B8 /* ProvidersNimbus.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
 		39EF434C260A736D0011E22E /* Experiments */ = {
 			isa = PBXGroup;
 			children = (
@@ -7486,6 +7499,7 @@
 		D34DC84C1A16C40C00D49B7B /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				39D0DA6629C1E73F000760B8 /* Generated */,
 				C8B0F5EE283B7CCE007AE65D /* Pocket */,
 				6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */,
 				E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */,
@@ -9724,6 +9738,7 @@
 			);
 			outputPaths = (
 				"$(SRCROOT)/Client/Generated/FxNimbus.swift",
+				"$(SRCROOT)/Providers/Generated/ProvidersNimbus.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -10063,6 +10078,7 @@
 				396E38CC1EE0816C00CC180F /* Profile.swift in Sources */,
 				396E38DD1EE081DA00CC180F /* SyncStatusResolver.swift in Sources */,
 				6025B10E267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */,
+				39D0DA6929C1E775000760B8 /* ProvidersNimbus.swift in Sources */,
 				396E38F21EE0C8ED00CC180F /* FxAPushMessageHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10242,6 +10258,7 @@
 				C87DF962267246730097E707 /* photon-colors.swift in Sources */,
 				6025B10A267B6BB300F59F6B /* SelectPasswordCell.swift in Sources */,
 				8AB8574127D9630E0075C173 /* LegacyTheme.swift in Sources */,
+				39D0DA6B29C1E776000760B8 /* ProvidersNimbus.swift in Sources */,
 				F8324B122649B707007E4BFA /* Profile.swift in Sources */,
 				F8324B262649B76E007E4BFA /* SyncStatusResolver.swift in Sources */,
 				C87DF976267246830097E707 /* LegacyThemeManager.swift in Sources */,
@@ -10596,6 +10613,7 @@
 				6025B10D267B6C5400F59F6B /* LoginRecordExtension.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
 				8A3233FC286270CF003E1C33 /* FxBookmarkNode.swift in Sources */,
+				39D0DA6829C1E772000760B8 /* ProvidersNimbus.swift in Sources */,
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
 				433396C827ACE92500491049 /* CellWithRoundedButton.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
@@ -10958,6 +10976,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39D0DA6A29C1E775000760B8 /* ProvidersNimbus.swift in Sources */,
 				E1CD81C6290C6D5800124B27 /* HelpView.swift in Sources */,
 				E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */,
 				FA6B2AC41D41F02D00429414 /* String+Punycode.swift in Sources */,

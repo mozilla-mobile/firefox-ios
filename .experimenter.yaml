@@ -83,6 +83,14 @@ onboarding-feature:
     upgrade-flow:
       type: boolean
       description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
+rust-sync-manager-component:
+  description: This property defines the rust sync manager feature
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    rust-sync-manager-status:
+      type: boolean
+      description: "If true, we will allow the user to use the rust sync manager feature"
 search:
   description: "Configuring the functionality to do with search. This will be separated into smaller sub-features in later releases.\n"
   hasExposure: true

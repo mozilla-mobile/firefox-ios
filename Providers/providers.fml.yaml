@@ -1,0 +1,31 @@
+---
+# The features to be included in the nimbus.fml will be listed
+# in the `include` block. This should not be a manual process.
+# Please see the documentation in `iOSNimbusFeatureUtility`
+# for more information
+about:
+  description: The Feature Manifest for the Providers module.
+  ios:
+    class: ProvidersNimbus
+    module: Client
+channels:
+  - developer
+  - beta
+  - release
+features:
+  rust-sync-manager-component:
+    description: This property defines the rust sync manager feature
+    variables:
+      rust-sync-manager-status:
+        description: If true, we will allow the user to use the rust sync manager feature
+        type: Boolean
+        default: false
+    defaults:
+      - channel: developer
+        value: {
+            "rust-sync-manager-status": true
+        }
+      - channel: beta
+        value: {
+            "rust-sync-manager-status": true
+        }
