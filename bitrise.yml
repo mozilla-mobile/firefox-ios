@@ -502,6 +502,27 @@ workflows:
         inputs:
         - scheme: Fennec
         - simulator_device: iPhone 8
+  Bitrise-device-testing:
+    steps:
+    - cache-pull@2.1:
+        is_always_run: true
+    - xcode-build-for-test@2:
+        inputs:
+        - test_plan: Smoketest3
+        - scheme: Fennec
+    - virtual-device-testing-for-ios@1:
+        inputs:
+        - test_devices: iphone13pro,15.2,en,portrait
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.1.x-ventura
+        machine_type_id: g2.4core
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
+    after_run:
+    - 5_deploy_and_slack
   5_deploy_and_slack:
     steps:
     - deploy-to-bitrise-io@1.9: {}
@@ -1449,6 +1470,7 @@ trigger_map:
 - push_branch: release/v112
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  #pipeline: pipeline_multiple_shards
+  workflow: Bitrise-device-testing
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
