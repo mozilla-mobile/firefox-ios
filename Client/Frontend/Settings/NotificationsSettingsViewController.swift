@@ -80,7 +80,9 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         let settings = await notificationManager.getNotificationSettings()
 
         switch settings.authorizationStatus {
-        case .notDetermined, .authorized, .provisional, .ephemeral:
+        case .authorized, .provisional, .ephemeral:
+            return true
+        case .notDetermined:
             do {
                 return try await notificationManager.requestAuthorization()
             } catch {
