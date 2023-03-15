@@ -535,8 +535,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         whatsNewAction = SingleActionViewModel(title: .AppMenu.WhatsNewString,
                                                iconString: ImageIdentifiers.whatsNew,
                                                isEnabled: showBadgeForWhatsNew) { _ in
-            if let whatsNewTopic = AppInfo.whatsNewTopic,
-                let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
+            if let whatsNewURL = SupportUtils.URLForWhatsNew {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
             }
