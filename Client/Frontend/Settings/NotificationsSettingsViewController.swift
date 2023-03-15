@@ -6,7 +6,9 @@ import Foundation
 import Shared
 import Common
 
-class NotificationsSettingsViewController: SettingsTableViewController {
+class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: prefs)
+    
     private lazy var syncNotifications: BoolNotificationSetting = {
         return BoolNotificationSetting(
             title: .Settings.Notifications.SyncNotificationsTitle,
@@ -41,9 +43,15 @@ class NotificationsSettingsViewController: SettingsTableViewController {
                 let shouldEnable = await self.notificationsChanged(value)
                 self.tipsAndFeaturesNotifications.control.setOn(shouldEnable, animated: true)
                 self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control)
-            }
 
-            // enable/disable tipsAndFeatures notifications
+                if shouldEnable {
+                    // schedule engagement notifications if necessary
+                    self.engagementNotificationHelper.schedule()
+                } else {
+                    // cancel all pending engagement notifications
+                    self.engagementNotificationHelper.cancelAll()
+                }
+            }
         }
     }()
 
