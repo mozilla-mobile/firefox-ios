@@ -55,10 +55,6 @@ struct CreditCardEditView: View {
             Spacer()
         }
         .padding(.top, 20)
-        .toast(
-            toastView: ToastView(messageType: .removedCard, isShowing: $viewModel.shouldShowToast),
-            isShowing: $viewModel.shouldShowToast
-        )
     }
 }
 

@@ -21,7 +21,6 @@ class CreditCardEditViewModel: ObservableObject {
     @Published var nameIsValid = true
     @Published var numberIsValid = true
     @Published var expirationIsValid = true
-    @Published var shouldShowToast = false
     @Published var nameOnCard: String = "" {
         didSet (val) {
             nameIsValid = nameOnCard.isEmpty
@@ -100,10 +99,8 @@ class CreditCardEditViewModel: ObservableObject {
     // MARK: - Helpers
 
     private func removeSelectedCreditCard(creditCard: CreditCard) {
-        autofill.deleteCreditCard(id: creditCard.guid) { success, error in
-            guard success else { return }
-
-            self.shouldShowToast.toggle()
+        autofill.deleteCreditCard(id: creditCard.guid) { _, error in
+            // no-op
         }
     }
 }
