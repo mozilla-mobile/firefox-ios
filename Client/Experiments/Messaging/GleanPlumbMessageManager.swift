@@ -173,8 +173,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                                      method: .application,
                                      object: .messaging,
                                      value: .messageMalformed,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageKey,
-                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue])
+                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageKey])
     }
 
     // MARK: - Misc. Private helpers
