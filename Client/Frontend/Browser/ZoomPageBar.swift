@@ -51,9 +51,9 @@ class ZoomPageBar: UIView {
     private let zoomInButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.add), for: [])
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.stepperLeadingTrailingMargin,
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.stepperTopBottomMargin,
                                                 left: UX.stepperLeadingTrailingMargin,
-                                                bottom: UX.stepperLeadingTrailingMargin,
+                                                bottom: UX.stepperTopBottomMargin,
                                                 right: UX.stepperLeadingTrailingMargin)
     }
 
