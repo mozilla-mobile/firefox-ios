@@ -1,17 +1,13 @@
 features:
   rust-sync-manager-component:
-    description: This property defines the rust sync manager feature
+    description: The feature that controls whether we use the rust sync manager
     variables:
-      rust-sync-manager-status:
-        description: If true, we will allow the user to use the rust sync manager feature
+      use-rust-sync-manager:
+        description: If true, syncs will be performed by the `RustSyncManager` class backed by the rust sync manager component.
         type: Boolean
         default: false
     defaults:
-      - channel: developer
+      - channel: developer, beta
         value: {
-            "rust-sync-manager-status": true
-        }
-      - channel: beta
-        value: {
-            "rust-sync-manager-status": true
+            "use-rust-sync-manager": true
         }

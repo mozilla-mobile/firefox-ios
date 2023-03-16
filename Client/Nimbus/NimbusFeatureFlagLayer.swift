@@ -70,7 +70,7 @@ final class NimbusFeatureFlagLayer {
 
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
-        case .rustSyncManagerStatus:
+        case .rustSyncManagerComponent:
             return checkNimbusForRustSyncManager(for: featureID, from: nimbus)
         }
     }
@@ -195,7 +195,7 @@ final class NimbusFeatureFlagLayer {
             let config = nimbus.features.rustSyncManagerComponent.value()
 
             switch featureID {
-            case .rustSyncManagerStatus: return config.rustSyncManagerStatus
+            case .rustSyncManagerComponent: return config.useRustSyncManager
             default: return false
             }
     }

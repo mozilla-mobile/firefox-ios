@@ -306,32 +306,18 @@ open class BrowserProfile: Profile {
         // By default, filter logging from Rust below `.info` level.
         try? RustLog.shared.setLevelFilter(filter: .info)
 
-        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) != 1 {
-            // never been installed or launched v112 or a version with BrowserSyncManager
+        // Initiating the sync manager has to happen prior to the databases being opened,
+        // because opening them can trigger events to which the SyncManager listens.
+        if self.rustSyncManagerEnabled {
+            let msg = "Setting `syncManager` property to `RustSyncManager"
+            logger.log(msg, level: .debug, category: .sync)
+
+            self.syncManager = RustSyncManager(profile: self)
+        } else {
             let msg = "Setting `syncManager` property to `BrowserSyncManager"
             logger.log(msg, level: .debug, category: .sync)
 
             self.syncManager = BrowserSyncManager(profile: self)
-
-            // update prefs so that when we try again next time we know its our 2nd launch
-            prefs.setInt(1, forKey: PrefsKeys.SecondProfileLaunchKey)
-        } else {
-            // This is our second launch, we should have nimbus value here so lets check what nimbus says here
-
-            // Initiating the sync manager has to happen prior to the databases being opened,
-            // because opening them can trigger events to which the SyncManager listens.
-            if self.rustSyncManagerEnabled {
-                let msg = "Setting `syncManager` property to `RustSyncManager"
-                logger.log(msg, level: .debug, category: .sync)
-
-                self.syncManager = RustSyncManager(profile: self)
-                prefs.setInt(2, forKey: PrefsKeys.SecondProfileLaunchKey)
-            } else {
-                let msg = "Setting `syncManager` property to `BrowserSyncManager"
-                logger.log(msg, level: .debug, category: .sync)
-
-                self.syncManager = BrowserSyncManager(profile: self)
-            }
         }
 
         let notificationCenter = NotificationCenter.default
@@ -539,7 +525,7 @@ open class BrowserProfile: Profile {
     // This function exists to service the `FxaPushMessengerHandler.handle` function and
     // will be removed after the rust sync manager rollout is complete
     public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
-        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
+        if rustSyncManagerEnabled {
             let msg = "Retrieving client records from rust tabs component"
             logger.log(msg, level: .debug, category: .sync)
 
@@ -555,7 +541,7 @@ open class BrowserProfile: Profile {
     // This function exists to service the `TabPeekViewController.setState` function and
     // will be removed after the rust sync manager rollout is complete
     public func getClientGUIDs(completion: @escaping (Set<GUID>) -> Void) {
-        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
+        if rustSyncManagerEnabled {
             let msg = "Retrieving client GUIDs from rust tabs component"
             logger.log(msg, level: .debug, category: .sync)
 
@@ -609,7 +595,7 @@ open class BrowserProfile: Profile {
         // the tab component's database table and filtered by the remote devices in the
         // user's device constellation. Once the sync manager rollout is complete this
         // will be the way this data is retrieved unconditionally.
-        if prefs.intForKey(PrefsKeys.SecondProfileLaunchKey) == 2 && rustSyncManagerEnabled {
+        if rustSyncManagerEnabled {
             let msg = "Retrieving tabs with clients and filtering on remote devices"
             logger.log(msg, level: .debug, category: .sync)
 

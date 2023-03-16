@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                 .features
                                                 .rustSyncManagerComponent
                                                 .value()
-                                                .rustSyncManagerStatus
+                                                .useRustSyncManager
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
         syncDelegate: UIApplication.shared.syncDelegate,
