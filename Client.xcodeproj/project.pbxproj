@@ -777,7 +777,6 @@
 		C889D7D52858CD8800121E1D /* HistoryHighlightsTestEntryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C889D7D42858CD8800121E1D /* HistoryHighlightsTestEntryProvider.swift */; };
 		C893075D265501EE00A1DB2F /* CredentialAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C893075C265501EE00A1DB2F /* CredentialAssets.xcassets */; };
 		C8A012F126AB07D70096A7A7 /* JumpBackInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A012F026AB07D70096A7A7 /* JumpBackInViewModel.swift */; };
-		C8A0CA3329BA67D400FAD7FC /* SurveySurfaceTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A0CA3229BA67D400FAD7FC /* SurveySurfaceTelemetry.swift */; };
 		C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4137328BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift */; };
 		C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */; };
 		C8B0F5EB283B7BF9007AE65D /* pocketsponsoredfeed.json in Resources */ = {isa = PBXBuildFile; fileRef = C8B0F5EA283B7BF9007AE65D /* pocketsponsoredfeed.json */; };
@@ -4220,7 +4219,6 @@
 		C8954A4F2729AD9C001C7283 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		C8954A502729AD9D001C7283 /* DarkTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarkTheme.swift; sourceTree = "<group>"; };
 		C8A012F026AB07D70096A7A7 /* JumpBackInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInViewModel.swift; sourceTree = "<group>"; };
-		C8A0CA3229BA67D400FAD7FC /* SurveySurfaceTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceTelemetry.swift; sourceTree = "<group>"; };
 		C8A4137328BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataCodableProtocol.swift; sourceTree = "<group>"; };
 		C8A74FF69C3971EDBE73157F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFlaggableFeature.swift; sourceTree = "<group>"; };
@@ -7097,7 +7095,6 @@
 				C855728329AEA3C300AF32B0 /* SurveySurfaceViewModel.swift */,
 				C855728529AEA3FB00AF32B0 /* SurveySurfaceViewController.swift */,
 				C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */,
-				C8A0CA3229BA67D400FAD7FC /* SurveySurfaceTelemetry.swift */,
 			);
 			path = SurveySurface;
 			sourceTree = "<group>";
@@ -10332,7 +10329,6 @@
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				8AE80BBC2891C20D00BC12EA /* JumpBackInList.swift in Sources */,
 				8A395552299AF83400B2AFBB /* UIControl+Extension.swift in Sources */,
-				C8A0CA3329BA67D400FAD7FC /* SurveySurfaceTelemetry.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,
 				DF036E43274FD434002E834E /* HistoryHighlightsCell.swift in Sources */,
 				EB9A179C20E69A7F00B12184 /* LegacyDarkTheme.swift in Sources */,
