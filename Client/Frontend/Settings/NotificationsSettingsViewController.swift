@@ -60,6 +60,10 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return .zero
+    }
+
     override func generateSettings() -> [SettingSection] {
         let childrenSection: [Setting]
         if hasAccount {
