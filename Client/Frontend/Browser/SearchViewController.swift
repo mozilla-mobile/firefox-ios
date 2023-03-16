@@ -843,12 +843,8 @@ extension SearchViewController {
                     return
                 } else {
                     // We can go to the next section.
-                    if current.section + 1 == initialSection {
-                        nextSection = current.section + 1
-                        nextItem = 0
-                    } else {
-                        return
-                    }
+                    nextSection = current.section + 1
+                    nextItem = 0
                 }
             } else {
                 nextSection = current.section
