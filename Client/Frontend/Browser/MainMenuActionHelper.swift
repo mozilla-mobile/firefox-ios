@@ -23,7 +23,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showMenuPresenter(url: URL, tab: Tab, view: UIView)
     func showFindInPage()
     func showCustomizeHomePage()
-	func showZoomPage(tab: Tab)
+    func showZoomPage(tab: Tab)
 }
 
 enum MenuButtonToastAction {
@@ -763,7 +763,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
         guard let tab = selectedTab else { return section }
         let zoomLevel = String(format: "%.0f%%", tab.pageZoom * 100.0)
-		let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
+        let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
         let zoomAction = SingleActionViewModel(title: title) { _ in
             self.delegate?.showZoomPage(tab: tab)
         }

@@ -15,7 +15,7 @@ public struct ImageIdentifiers {
     public static let actionAddBookmark = "action_bookmark"
     public static let actionRemove = "action_remove"
     public static let actionRemoveBookmark = "action_bookmark_remove"
-	public static let add = "add"
+    public static let add = "add"
     public static let addShortcut = "action_pin"
     public static let addToBookmark = "menu-Bookmark"
     public static let addToReadingList = "addToReadingList"

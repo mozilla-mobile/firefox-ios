@@ -17,7 +17,10 @@ class ZoomPageBar: UIView {
         static let stepperWidth: CGFloat = 222
         static let stepperHeight: CGFloat = 36
         static let stepperLeadingTrailingMargin: CGFloat = 12
+        static let stepperTopBottomMargin: CGFloat = 6
         static let fontSize: CGFloat = 16
+        static let lowerZoomLimit: CGFloat = 0.5
+        static let upperZoomLimit: CGFloat = 2.0
     }
 
     weak var delegate: ZoomPageBarDelegate?
@@ -38,19 +41,19 @@ class ZoomPageBar: UIView {
 
     private let zoomOutButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.subtract), for: [])
-        button.accessibilityIdentifier = "ZoomPage.zoomOut"
-        button.contentEdgeInsets = UIEdgeInsets(top: 6,
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.stepperTopBottomMargin,
                                                 left: UX.stepperLeadingTrailingMargin,
-                                                bottom: 6,
+                                                bottom: UX.stepperTopBottomMargin,
                                                 right: UX.stepperLeadingTrailingMargin)
     }
 
     private let zoomInButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.add), for: [])
-        button.accessibilityIdentifier = "ZoomPage.zoomIn"
-        button.contentEdgeInsets = UIEdgeInsets(top: 6,
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
+        button.contentEdgeInsets = UIEdgeInsets(top: UX.stepperLeadingTrailingMargin,
                                                 left: UX.stepperLeadingTrailingMargin,
-                                                bottom: 6,
+                                                bottom: UX.stepperLeadingTrailingMargin,
                                                 right: UX.stepperLeadingTrailingMargin)
     }
 
@@ -65,7 +68,7 @@ class ZoomPageBar: UIView {
     private let closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.xMark), for: [])
         button.accessibilityLabel = .FindInPageDoneAccessibilityLabel
-        button.accessibilityIdentifier = "FindInPage.close"
+        button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findInPageCloseButton
     }
 
     init(tab: Tab, isIpad: Bool) {
@@ -92,7 +95,7 @@ class ZoomPageBar: UIView {
 
         updateZoomLabel()
 
-        if tab.pageZoom <= 0.5 {
+        if tab.pageZoom <= UX.lowerZoomLimit {
             zoomInButton.isEnabled = false
         }
 
@@ -134,7 +137,7 @@ class ZoomPageBar: UIView {
         updateZoomLabel()
 
         zoomOutButton.isEnabled = true
-        if tab.pageZoom >= 2.0 {
+        if tab.pageZoom >= UX.upperZoomLimit {
             zoomInButton.isEnabled = false
         }
     }
@@ -144,7 +147,7 @@ class ZoomPageBar: UIView {
         updateZoomLabel()
 
         zoomInButton.isEnabled = true
-        if tab.pageZoom <= 0.5 {
+        if tab.pageZoom <= UX.lowerZoomLimit {
             zoomOutButton.isEnabled = false
         }
     }

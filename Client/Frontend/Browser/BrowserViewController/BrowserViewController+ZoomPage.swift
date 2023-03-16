@@ -6,10 +6,8 @@ import Shared
 
 extension BrowserViewController {
     func updateZoomPageBarVisibility(visible: Bool) {
-        if visible {
-            if zoomPageBar == nil {
-                setupZoomPageBar()
-            }
+        if visible, zoomPageBar == nil {
+            setupZoomPageBar()
         } else if let zoomPageBar = zoomPageBar {
             removeZoomPageBar(zoomPageBar)
         }
