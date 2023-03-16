@@ -250,7 +250,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     func updateSearchEngineImage() {
         if inOverlayMode {
             if isPrivate {
-                searchIconImageView.image = .init(named: "privateSearch")
+                searchIconImageView.image = .init(named: ImageIdentifiers.newPrivateTab)
             } else {
                 searchIconImageView.image = .init(themed: "searchLogo")
             }

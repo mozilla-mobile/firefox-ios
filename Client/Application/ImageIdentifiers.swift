@@ -50,7 +50,7 @@ public struct ImageIdentifiers {
     public static let navAdd = "nav-add"
     public static let navTabCounter = "nav-tabcounter"
     public static let navMenu = "nav-menu"
-    public static let newPrivateTab = "quick_action_new_private_tab"
+    public static let newPrivateTab = "privateSearch"
     public static let newTab = "quick_action_new_tab"
     public static let nightMode = "menu-NightMode"
     public static let noImageMode = "menu-NoImageMode"

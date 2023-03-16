@@ -141,7 +141,7 @@
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
-			<string>quick_action_new_private_tab</string>
+			<string>privateSearch</string>
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>ShortcutItemTitleNewPrivateTab</string>
 			<key>UIApplicationShortcutItemType</key>
