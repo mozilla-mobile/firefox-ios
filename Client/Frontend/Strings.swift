@@ -2962,7 +2962,7 @@ extension String {
             tableName: nil,
             value: "Zoom (%@)",
             comment: "Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent.")
-
+        
         // Toolbar
         public struct Toolbar {
             public static let MenuButtonAccessibilityLabel = MZLocalizedString(
