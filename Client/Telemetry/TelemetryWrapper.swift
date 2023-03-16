@@ -367,6 +367,7 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
+        case messaging = "messaging"
         case qrCodeText = "qr-code-text"
         case qrCodeURL = "qr-code-url"
         case readerModeCloseButton = "reader-mode-close-button"
@@ -444,7 +445,6 @@ extension TelemetryWrapper {
         case siteMenu = "site-menu"
         case library = "library"
         case home = "home-page"
-        case messagingSurface = "messaging-surface"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
         case navigateTabHistoryBack = "navigate-tab-history-back"
@@ -613,8 +613,9 @@ extension TelemetryWrapper {
         case inactiveTabsExpanded = "expanded"
 
         // GleanPlumb
-        case messageKey = "message-key"
         case actionUUID = "action-uuid"
+        case messageKey = "message-key"
+        case messageSurface = "message-surface"
         // Accessibility
         case isVoiceOverRunning = "is-voice-over-running"
         case isSwitchControlRunning = "is-switch-control-running"

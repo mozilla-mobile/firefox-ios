@@ -61,8 +61,6 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
                                           dismissActionLabel: .ResearchSurface.DismissButtonLabel,
                                           image: image)
 
-        let telemetry = SurveySurfaceTelemetry()
-
         let viewModel = SurveySurfaceViewModel(with: info,
                                                telemetry: telemetry,
                                                andDelegate: self)
