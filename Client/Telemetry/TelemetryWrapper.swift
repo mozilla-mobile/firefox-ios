@@ -367,6 +367,7 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
+        case messaging = "messaging"
         case qrCodeText = "qr-code-text"
         case qrCodeURL = "qr-code-url"
         case readerModeCloseButton = "reader-mode-close-button"
@@ -444,7 +445,6 @@ extension TelemetryWrapper {
         case siteMenu = "site-menu"
         case library = "library"
         case home = "home-page"
-        case messagingSurface = "messaging-surface"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
         case navigateTabHistoryBack = "navigate-tab-history-back"
@@ -613,8 +613,9 @@ extension TelemetryWrapper {
         case inactiveTabsExpanded = "expanded"
 
         // GleanPlumb
-        case messageKey = "message-key"
         case actionUUID = "action-uuid"
+        case messageKey = "message-key"
+        case messageSurface = "message-surface"
         // Accessibility
         case isVoiceOverRunning = "is-voice-over-running"
         case isSwitchControlRunning = "is-switch-control-running"
@@ -1302,19 +1303,19 @@ extension TelemetryWrapper {
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
-        case (.information, .view, .messagingSurface, .messageImpression, let extras):
+        case (.information, .view, .messaging, .messageImpression, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.shown.record(
                     GleanMetrics.Messaging.ShownExtra(messageKey: messageId)
                 )
             }
-        case(.action, .tap, .messagingSurface, .messageDismissed, let extras):
+        case(.action, .tap, .messaging, .messageDismissed, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.dismissed.record(
                     GleanMetrics.Messaging.DismissedExtra(messageKey: messageId)
                 )
             }
-        case(.action, .tap, .messagingSurface, .messageInteracted, let extras):
+        case(.action, .tap, .messaging, .messageInteracted, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String,
                 let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
                 GleanMetrics.Messaging.clicked.record(
@@ -1325,13 +1326,13 @@ extension TelemetryWrapper {
                     GleanMetrics.Messaging.ClickedExtra(messageKey: messageId)
                 )
             }
-        case(.information, .view, .messagingSurface, .messageExpired, let extras):
+        case(.information, .view, .messaging, .messageExpired, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.expired.record(
                     GleanMetrics.Messaging.ExpiredExtra(messageKey: messageId)
                 )
             }
-        case(.information, .application, .messagingSurface, .messageMalformed, let extras):
+        case(.information, .application, .messaging, .messageMalformed, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.malformed.record(
                     GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
