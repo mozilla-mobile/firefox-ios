@@ -77,10 +77,9 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
         if shouldReport {
             TelemetryWrapper.recordEvent(category: .information,
                                          method: .view,
-                                         object: .messagingSurface,
+                                         object: .messaging,
                                          value: .messageExpired,
-                                         extras:
-                                            [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageData.id])
+                                         extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageData.id])
         }
     }
 

@@ -115,9 +115,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
-                                     object: .messagingSurface,
+                                     object: .messaging,
                                      value: .messageImpression,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id])
+                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
+                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue])
     }
 
     /// Handle when a user hits the CTA of the surface, and forward the bookkeeping to the store.
@@ -147,9 +148,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
-                                     object: .messagingSurface,
+                                     object: .messaging,
                                      value: .messageInteracted,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
+                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue,
                                               TelemetryWrapper.EventExtraKey.actionUUID.rawValue: uuid ?? "nil"])
     }
 
@@ -160,15 +162,16 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
-                                     object: .messagingSurface,
+                                     object: .messaging,
                                      value: .messageDismissed,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id])
+                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
+                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue])
     }
 
     func onMalformedMessage(messageKey: String) {
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .application,
-                                     object: .messagingSurface,
+                                     object: .messaging,
                                      value: .messageMalformed,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageKey])
     }
