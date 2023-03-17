@@ -436,7 +436,6 @@ class HistoryTests: BaseTestCase {
         } else {
             navigateToGoogle()
             navigator.goto(LibraryPanel_History)
-            print(app.debugDescription)
             waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: TIMEOUT)
             app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
             waitForExistence(app.buttons["Delete"], timeout: TIMEOUT)
