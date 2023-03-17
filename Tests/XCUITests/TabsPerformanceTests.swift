@@ -17,6 +17,11 @@ class TabsPerformanceTest: BaseTestCase {
             launchArguments.append(LaunchArguments.LoadTabsStateArchive + archiveName!)
         }
         super.setUp()
+        // Workaround: Welcome screen shows up first time after the simulator has been erased.
+        // The LaunchArguments could not suppress the welcome screen when PerformanceTest is specified.
+        if (app.buttons["No Thanks"].exists) {
+            app.buttons["No Thanks"].tap()
+        }
     }
 
     override func tearDown() {
