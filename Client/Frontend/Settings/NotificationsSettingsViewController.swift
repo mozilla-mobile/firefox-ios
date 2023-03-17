@@ -88,7 +88,7 @@ class NotificationsSettingsViewController: SettingsTableViewController {
             self.footerTitle = ""
             shouldEnable = true
         case .denied:
-            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue)
+            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue, AppName.shortName.rawValue)
             shouldEnable = false
         case .notDetermined:
             self.footerTitle = ""
@@ -125,7 +125,7 @@ class NotificationsSettingsViewController: SettingsTableViewController {
                 return false
             }
         case .denied:
-            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue)
+            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue, AppName.shortName.rawValue)
             self.settings = generateSettings()
             self.tableView.reloadData()
             await MainActor.run {

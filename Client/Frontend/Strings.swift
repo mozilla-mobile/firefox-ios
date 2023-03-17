@@ -1313,7 +1313,7 @@ extension String {
             public static let systemNotificationsDisabledMessage = MZLocalizedString(
                 "Settings.Notifications.SystemNotificationsDisabledMessage.v112",
                 tableName: "Settings",
-                value: "You turned off all Firefox notifications. Turn them on by going to device Settings > Notifications > %@",
+                value: "You turned off all %@ notifications. Turn them on by going to device Settings > Notifications > %@",
                 comment: "This is the footer title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
             )
         }
