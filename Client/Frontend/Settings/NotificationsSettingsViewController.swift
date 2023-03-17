@@ -85,16 +85,16 @@ class NotificationsSettingsViewController: SettingsTableViewController {
         let shouldEnable: Bool
         switch settings.authorizationStatus {
         case .authorized, .provisional, .ephemeral:
-            footerTitle = ""
+            self.footerTitle = ""
             shouldEnable = true
         case .denied:
-            footerTitle = "You turned off all Firefox notifications. Turn them on by going to device Settings > Notifications > Firefox"
+            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue)
             shouldEnable = false
         case .notDetermined:
-            footerTitle = ""
+            self.footerTitle = ""
             shouldEnable = false
         @unknown default:
-            footerTitle = ""
+            self.footerTitle = ""
             shouldEnable = false
         }
 
@@ -125,7 +125,7 @@ class NotificationsSettingsViewController: SettingsTableViewController {
                 return false
             }
         case .denied:
-            self.footerTitle = "You turned off all Firefox notifications. Turn them on by going to device Settings > Notifications > Firefox"
+            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue)
             self.settings = generateSettings()
             self.tableView.reloadData()
             await MainActor.run {
