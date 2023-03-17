@@ -4,8 +4,9 @@
 
 import Foundation
 import Shared
+import Common
 
-class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
+class NotificationsSettingsViewController: SettingsTableViewController {
     private lazy var syncNotifications: BoolSetting = {
         return BoolSetting(
             title: .Settings.Notifications.SyncNotificationsTitle,
@@ -48,20 +49,22 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
     private let prefs: Prefs
     private let hasAccount: Bool
+    private var footerTitle = ""
 
     init(prefs: Prefs, hasAccount: Bool) {
         self.prefs = prefs
         self.hasAccount = hasAccount
         super.init(style: .grouped)
         self.title = .Settings.Notifications.Title
+        self.addObservers()
+
+        Task {
+            await self.checkForSystemNotifications()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return .zero
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -73,11 +76,40 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         }
 
         return [
-            SettingSection(children: childrenSection)
+            SettingSection(footerTitle: NSAttributedString(string: footerTitle), children: childrenSection)
         ]
     }
 
-    func notificationsChanged(_ sendNotifications: Bool) async -> Bool {
+    func checkForSystemNotifications() async {
+        let settings = await NotificationManager().getNotificationSettings()
+        let shouldEnable: Bool
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            footerTitle = ""
+            shouldEnable = true
+        case .denied:
+            footerTitle = "You turned off all Firefox notifications. Turn them on by going to device Settings > Notifications > Firefox"
+            shouldEnable = false
+        case .notDetermined:
+            footerTitle = ""
+            shouldEnable = false
+        @unknown default:
+            footerTitle = ""
+            shouldEnable = false
+        }
+
+        if !shouldEnable {
+            self.syncNotifications.control.setOn(shouldEnable, animated: true)
+            self.syncNotifications.writeBool(self.syncNotifications.control)
+            self.tipsAndFeaturesNotifications.control.setOn(shouldEnable, animated: true)
+            self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control)
+        }
+
+        self.settings = generateSettings()
+        self.tableView.reloadData()
+    }
+
+    private func notificationsChanged(_ sendNotifications: Bool) async -> Bool {
         guard sendNotifications else { return false }
 
         let notificationManager = NotificationManager()
@@ -93,6 +125,9 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
                 return false
             }
         case .denied:
+            self.footerTitle = "You turned off all Firefox notifications. Turn them on by going to device Settings > Notifications > Firefox"
+            self.settings = generateSettings()
+            self.tableView.reloadData()
             await MainActor.run {
                 self.present(accessDeniedAlert, animated: true, completion: nil)
             }
@@ -122,5 +157,21 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
         }
         accessDenied.addAction(settingsAction)
         return accessDenied
+    }
+}
+
+extension NotificationsSettingsViewController: Notifiable {
+    func addObservers() {
+        setupNotifications(forObserver: self, observing: [UIApplication.willEnterForegroundNotification])
+    }
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willEnterForegroundNotification:
+            Task {
+                await checkForSystemNotifications()
+            }
+        default: break
+        }
     }
 }
