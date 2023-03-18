@@ -92,6 +92,13 @@ class DownloadQueueTests: XCTestCase {
         queue.download(download, didCompleteWithError: DownloadTestError.noError("OK"))
         XCTAssertEqual(mockQueueDelegate.methodCalled, didCompleteWithError)
     }
+
+    func testDelegateMemoryLeak() {
+        let mockQueueDelegate = MockDownloadQueueDelegate()
+        queue.delegate = mockQueueDelegate
+        trackForMemoryLeaks(queue)
+        queue = nil
+    }
 }
 
 private enum DownloadTestError: Error {
