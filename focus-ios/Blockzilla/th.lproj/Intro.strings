@@ -1,5 +1,5 @@
 /* Description for the 'History' panel in the First Run tour. */
-"Intro.Slides.History.Description" = "ล้างประวัติ, รหัสผ่าน และคุกกี้ในวาระการท่องเว็บทั้งหมดของคุณได้ทุกเวลาด้วยการแตะครั้งเดียว";
+"Intro.Slides.History.Description" = "ล้างประวัติ รหัสผ่าน และคุกกี้ในวาระการเรียกดูเว็บทั้งหมดของคุณได้ทุกเวลาด้วยเพียงแตะเดียว";
 
 /* Title for the third  panel 'History' in the First Run tour. */
 "Intro.Slides.History.Title" = "ประวัติของคุณคือประวัติ";

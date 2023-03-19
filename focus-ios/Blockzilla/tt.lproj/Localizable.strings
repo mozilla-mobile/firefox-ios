@@ -217,17 +217,32 @@
 /* Text for a label that indicates the description of protection section from onboarding screen. */
 "Onboarding.Protection.Description" = "Көйләүләрне үзгәртеп, никадәр мәгълүмат белән бүлешәчәгегез хакында үзезез карар бирегез.";
 
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "Сезнең ихтыярыгыз буенча саклау";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "Сезнең хосусый гизү режимын киләсе дәрәҗәгә күтәрегез.";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Firefox %@ кушымтасына рәхим итегез!";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari-га басыгыз һәм эчтәлек тыючыларны сайлагыз";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "%@-ны кабызу";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "Башта Safari-ны, аннан соң Киңәйтүләрне сайлагыз";
+
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ кабызылмаган.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "Көйләүләр кушымтасын ачу";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "Җиһаз көйләүләрен ачу";
 
 /* Save button label */
 "Save" = "Саклау";
@@ -334,6 +349,12 @@
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "ХОСУСЫЙЛЫК";
 
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "Стандарт браузер итеп билгеләү";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "Вебсайтлар, эл. хатлар һәм хәбәрләрдәге сылтамалар автоматик рәвештә %@ эчендә ачылсын.";
+
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "Система темасы";
 
@@ -403,6 +424,9 @@
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "Ярлыкларга өстәү";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "Ярлыкларга өстәлде";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "Адресны күчереп алу";
 
@@ -411,6 +435,9 @@
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "Ярлыклардан бетерү";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "Ярлык бетерелде";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Сайтның тулы версиясен сорау";
@@ -426,6 +453,9 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox-та ачу";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "Сылтаманы ачу";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "Битне уртаклашу…";
@@ -444,6 +474,21 @@
 
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "Баш тарту";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "Әзер";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "Тамгалар чайкала башлаганчы Өй экранына озак итеп басып торыгыз.";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "%@ дип эзләү. Аннан соң виджетны сайлагыз.";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "Плюс тамгасына басыгыз.";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "%@ виджетын өстәү";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Өстәү";
@@ -520,6 +565,33 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "Сайтта нидер төшеп калган яки сәер кебекме?";
 
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "%@ белән эзләү";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "Аерым хосусыйлык һәм хәвефсезлек параметрлары белән идарә итү өчен көйләүләргә күчегез.";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "Бу стандарт көйләүләр көчле саклану тәэмин итә, ләкин ихтыяҗларыгызга күрә аларны үзгәртү җиңел.";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "Хосусый гизү сеансын башлап җибәрегез, без исә трекерларны һәм башка начар нәрсәләрне блокларбыз.";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ бу сайтны сезне күзәтүдән тыйды. Без блоклаган әйберләр турында мәгълүмат өчен калканга басыгыз.";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "Тотылды! Без бу сайтны сезне күзәтүдән тыйдык. Ниләр блоклаганганын һәрвакыт калканга басып күреп була.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "Агымдагы сеансның барлык эзләрен дә бетерү өчен теләсә кайсы вакытта чүп савытына басыгыз.";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "Тарих, сookie файллары, аслында һәрнәрсәне дә бетереп, яңа табта эшне яңадан башлар өчен монда басыгыз.";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "Сез саклангансыз!";
+
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "Хәвефсез булмаган бәйләнеш";
 
@@ -570,4 +642,13 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Күзәтүчеләр блокланды";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "Ничек икәнен күрсәтегез";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "%@ виджетын Өй экранына куйсагыз, киләчәктә хосусый режимга тизрәк керә алачаксыз. Хәзер хосусый режм дәвам итәчәк.";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "Гизү тарихы бетерелде! 🎉";
 

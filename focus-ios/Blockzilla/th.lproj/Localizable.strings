@@ -608,7 +608,7 @@
 "trackingProtection.statusOn" = "การป้องกันถูก เปิด สำหรับวาระนี้";
 
 /* Text for the toggle that enables/disables tracking protection. */
-"trackingProtection.toggleLabel2" = "การป้องกันการติดตามที่มากขึ้น";
+"trackingProtection.toggleLabel2" = "การป้องกันการติดตามแบบพิเศษ";
 
 /* Text for tracking protection screen showing the number of trackers blocked since the app install. The placeholder is replaced with the install date of the application. */
 "trackingProtection.trackersBlockedLabel" = "ตัวติดตามถูกปิดกั้นตั้งแต่ %@";
