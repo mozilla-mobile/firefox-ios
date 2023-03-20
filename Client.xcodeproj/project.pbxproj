@@ -628,6 +628,9 @@
 		8AFE4C2127480D0C00B97C65 /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE4C2027480D0B00B97C65 /* TabTrayViewControllerTests.swift */; };
 		8D8251811F4DE67F00780643 /* AdvancedAccountSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8251721F4DE67E00780643 /* AdvancedAccountSettingViewController.swift */; };
 		9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9609F4C926B57CE800F81493 /* Calendar+Extension.swift */; };
+		96137F7C29C913CF0008304F /* CreditCardInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96137F7B29C913CF0008304F /* CreditCardInputField.swift */; };
+		96137F7F29C914180008304F /* CreditCardInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96137F7E29C914180008304F /* CreditCardInputViewModel.swift */; };
+		96137F8229C9144C0008304F /* CreditCardInputViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96137F8029C914470008304F /* CreditCardInputViewModelTests.swift */; };
 		9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */; };
 		9614BF4428AD1C6700D3F7EA /* AccountSyncHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9614BF4328AD1C6700D3F7EA /* AccountSyncHandler.swift */; };
 		961D6B832995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961D6B822995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift */; };
@@ -3649,6 +3652,9 @@
 		95E1479BB09F1395795E7A42 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Storage.strings; sourceTree = "<group>"; };
 		95FD4D8DB09F3540CC7651A1 /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/Intro.strings; sourceTree = "<group>"; };
 		9609F4C926B57CE800F81493 /* Calendar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extension.swift"; sourceTree = "<group>"; };
+		96137F7B29C913CF0008304F /* CreditCardInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardInputField.swift; sourceTree = "<group>"; };
+		96137F7E29C914180008304F /* CreditCardInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardInputViewModel.swift; sourceTree = "<group>"; };
+		96137F8029C914470008304F /* CreditCardInputViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardInputViewModelTests.swift; sourceTree = "<group>"; };
 		9614BF4028A53F7C00D3F7EA /* ContextualHintEligibilityUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintEligibilityUtilityTests.swift; sourceTree = "<group>"; };
 		9614BF4328AD1C6700D3F7EA /* AccountSyncHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSyncHandler.swift; sourceTree = "<group>"; };
 		961D6B822995AF84001B9CF1 /* GeneralizedImageFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralizedImageFetcherTests.swift; sourceTree = "<group>"; };
@@ -6322,6 +6328,7 @@
 		43D16B8329831E8D009F8279 /* ViewComponents */ = {
 			isa = PBXGroup;
 			children = (
+				96137F7D29C914040008304F /* CreditCardInput */,
 				43D16B8429831EA5009F8279 /* Style.swift */,
 				43D16B8629831EEF009F8279 /* RemoveCardButton.swift */,
 				43D16B8129831E6A009F8279 /* FloatingTextField.swift */,
@@ -6855,6 +6862,15 @@
 			path = TabManagement;
 			sourceTree = "<group>";
 		};
+		96137F7D29C914040008304F /* CreditCardInput */ = {
+			isa = PBXGroup;
+			children = (
+				96137F7B29C913CF0008304F /* CreditCardInputField.swift */,
+				96137F7E29C914180008304F /* CreditCardInputViewModel.swift */,
+			);
+			path = CreditCardInput;
+			sourceTree = "<group>";
+		};
 		9614BF3F28A53F2000D3F7EA /* ContextualHints */ = {
 			isa = PBXGroup;
 			children = (
@@ -6940,6 +6956,7 @@
 			isa = PBXGroup;
 			children = (
 				96CB5D6229B22EF50034AE0A /* SensitiveHostingControllerTests.swift */,
+				96137F8029C914470008304F /* CreditCardInputViewModelTests.swift */,
 			);
 			path = ViewComponents;
 			sourceTree = "<group>";
@@ -10606,6 +10623,7 @@
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
 				8A285B08294A5D4C00149B0F /* HomepageHeroImageViewModel.swift in Sources */,
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
+				96137F7C29C913CF0008304F /* CreditCardInputField.swift in Sources */,
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetView.swift in Sources */,
 				E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */,
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
@@ -10816,6 +10834,7 @@
 				E10A1F752863BC51001EEA80 /* InactiveTabItemCell.swift in Sources */,
 				8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */,
 				8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */,
+				96137F7F29C914180008304F /* CreditCardInputViewModel.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */,
 				96A562A027D6D0E80045144A /* ContileProvider.swift in Sources */,
@@ -10970,6 +10989,7 @@
 				8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */,
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
+				96137F8229C9144C0008304F /* CreditCardInputViewModelTests.swift in Sources */,
 				C80C11EE28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift in Sources */,
 				8AEE284B276A973400C7104D /* RatingPromptManagerTests.swift in Sources */,
 				5A9A09D828B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift in Sources */,

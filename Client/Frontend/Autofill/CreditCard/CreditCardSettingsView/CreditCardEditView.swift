@@ -6,53 +6,48 @@ import Foundation
 import Storage
 import SwiftUI
 
+private struct CreditCardInputText {
+    var name = ""
+    var number = ""
+    var expiration = ""
+    var securityCode = ""
+}
+
 struct CreditCardEditView: View {
+    @State private var text = CreditCardInputText()
     @ObservedObject var viewModel: CreditCardEditViewModel
+
     let removeButtonColor: Color
     let borderColor: Color
+    let colors = CreditCardInputField.Colors(errorColor: .red,
+                                             titleColor: .gray,
+                                             textFieldColor: .gray)
 
     var body: some View {
         VStack(spacing: 11) {
-            let colors = FloatingTextField.Colors(
-                errorColor: .red,
-                titleColor: .gray,
-                textFieldColor: .gray)
+            CreditCardInputField(creditCardInputType: .name,
+                                 text: $text.name,
+                                 colors: colors)
+            Divider().frame(height: 0.7)
+            CreditCardInputField(creditCardInputType: .number,
+                                 text: $text.number,
+                                 colors: colors)
+            Divider().frame(height: 0.7)
+            CreditCardInputField(creditCardInputType: .expiration,
+                                 text: $text.expiration,
+                                 colors: colors)
+            Divider().frame(height: 0.7)
 
-            FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
-                              textVal: $viewModel.nameOnCard,
-                              errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
-                              showError: !viewModel.nameIsValid,
-                              colors: colors)
-            Divider()
-                .frame(height: 0.7)
-
-            FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
-                              textVal: $viewModel.cardNumber,
-                              errorString: String.CreditCard.ErrorState.CardNumberSublabel,
-                              showError: !viewModel.numberIsValid,
-                              colors: colors)
-            Divider()
-                .frame(height: 0.7)
-
-            FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
-                              textVal: $viewModel.expirationDate,
-                              errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
-                              showError: !viewModel.expirationIsValid,
-                              colors: colors)
-            Divider()
-                .frame(height: 0.7)
-
-            Spacer()
-                .frame(height: 4)
+            Spacer().frame(height: 4)
 
             RemoveCardButton(
                 removeButtonColor: removeButtonColor,
                 borderColor: borderColor,
                 alertDetails: viewModel.removeButtonDetails
             )
-            Spacer()
         }
         .padding(.top, 20)
+        Spacer()
     }
 }
 
@@ -77,7 +72,7 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                                 creditCard: sampleCreditCard)
 
         CreditCardEditView(viewModel: viewModel,
-                           removeButtonColor: .gray,
-                           borderColor: .gray)
+                           removeButtonColor: .blue,
+                           borderColor: .purple)
     }
 }
