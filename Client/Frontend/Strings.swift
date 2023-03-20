@@ -85,26 +85,11 @@ extension String {
 extension String {
     public struct Biometry {
         public struct Screen {
-            public static let PasswordsWithFingerprint = MZLocalizedString(
-                "Biometry.Screen.PasswordsWithFingerprint.v112",
+            public static let UniversalAuthenticationReason = MZLocalizedString(
+                "Biometry.Screen.UniversalAuthenticationReason.v113",
                 tableName: "BiometricAuthentication",
-                value: "Use your fingerprint to access passwords.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with fingerprint before accessing the Passwords screen.")
-            public static let PasswordsWithFaceId = MZLocalizedString(
-                "Biometry.Screen.PasswordsWithFaceId.v112",
-                tableName: "BiometricAuthentication",
-                value: "Use Face ID to access passwords.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with Face ID before accessing the Passwords screen.")
-            public static let EditCreditCardWithFingerprint = MZLocalizedString(
-                "Biometry.Screen.EditCreditCardWithFingerprint.v112",
-                tableName: "BiometricAuthentication",
-                value: "Use your fingerprint to access credit cards.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with fingerprint before accessing the Edit Credit Card screen.")
-            public static let EditCreditCardWithFaceId = MZLocalizedString(
-                "Biometry.Screen.EditCreditCardWithFaceId.v112",
-                tableName: "BiometricAuthentication",
-                value: "Use Face ID to access credit cards.",
-                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks users to verify with Face ID before accessing the Edit Credit Card screen.")
+                value: "Enter your device passcode",
+                comment: "Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen.")
         }
     }
 }
@@ -341,7 +326,7 @@ extension String {
             public static let RemoveCardTitle = MZLocalizedString(
                 "CreditCard.SnackBar.RemoveCardTitle.v112",
                 tableName: "Alert",
-                value: "Remove the card?",
+                value: "Remove This Card?",
                 comment: "Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card")
 
             public static let RemoveCardSublabel = MZLocalizedString(
@@ -1713,9 +1698,9 @@ extension String {
         value: "Copied to clipboard",
         comment: "Copy app version alert shown in settings.")
     public static let SettingsAutofillCreditCard = MZLocalizedString(
-        "Settings.AutofillCreditCard.Title.v110",
+        "Settings.AutofillCreditCard.Title.v112",
         tableName: nil,
-        value: "Autofill Credit Card",
+        value: "Autofill Credit Cards",
         comment: "Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage.")
 }
 
@@ -3541,17 +3526,6 @@ extension String {
 
 // MARK: - Today Widget Strings - [New Search - Private Search]
 extension String {
-    public static let NewTabButtonLabel = MZLocalizedString(
-        "TodayWidget.NewTabButtonLabelV1",
-        tableName: "Today",
-        value: "New Search",
-        comment: "Open New Tab button label")
-    public static let NewPrivateTabButtonLabel = MZLocalizedString(
-        "TodayWidget.PrivateTabButtonLabelV1",
-        tableName: "Today",
-        value: "Private Search",
-        comment: "Open New Private Tab button label")
-
     // Widget - Shared
 
     public static let QuickActionsGalleryTitle = MZLocalizedString(
@@ -3832,15 +3806,6 @@ extension String {
         tableName: "LoginManager",
         value: nil,
         comment: "Label for the button used to delete the current login.")
-}
-
-// MARK: - Strings used in multiple areas within the Authentication Manager
-extension String {
-    public static let AuthenticationEnterPasscode = MZLocalizedString(
-        "Enter passcode",
-        tableName: "AuthenticationManager",
-        value: nil,
-        comment: "Text displayed above the input field when changing the existing passcode")
 }
 
 // MARK: - Authenticator strings

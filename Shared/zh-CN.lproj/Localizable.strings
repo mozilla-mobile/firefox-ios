@@ -1219,9 +1219,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "网址（请用 %s 替换查询内容）";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "自动填充信用卡";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "清除所有网站数据";
 

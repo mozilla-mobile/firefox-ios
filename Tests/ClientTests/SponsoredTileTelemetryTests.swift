@@ -130,7 +130,7 @@ class SponsoredTileTelemetryTests: XCTestCase {
 // MARK: Helper methods
 extension SponsoredTileTelemetryTests {
     func clearTest() {
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
         Glean.shared.enableTestingMode()
         SponsoredTileTelemetry.clearUserDefaults()
     }

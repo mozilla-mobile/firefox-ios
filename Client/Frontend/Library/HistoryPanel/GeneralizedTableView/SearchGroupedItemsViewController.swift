@@ -84,7 +84,7 @@ class SearchGroupedItemsViewController: UIViewController {
     // MARK: - Misc. helpers
 
     private func setupLayout() {
-        /// This View needs to be configured a certain way based on who's presenting it.
+        // This View needs to be configured a certain way based on who's presenting it.
         switch viewModel.presenter {
         case .recentlyVisited:
             title = viewModel.asGroup.displayTitle

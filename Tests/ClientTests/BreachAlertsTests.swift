@@ -51,6 +51,7 @@ class BreachAlertsTests: XCTestCase {
     let breachedLoginSet = Set<LoginRecord>(arrayLiteral: breachedLogin)
 
     override func setUp() {
+        super.setUp()
         self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient(), profile: MockProfile())
     }
 

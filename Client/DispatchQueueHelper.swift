@@ -15,3 +15,13 @@ public func ensureMainThread(execute work: @escaping @convention(block) () -> Sw
         }
     }
 }
+
+public func ensureMainThread<T>(execute work: @escaping () -> T) {
+    if Thread.isMainThread {
+        _ = work()
+    } else {
+        DispatchQueue.main.async {
+            _ = work()
+        }
+    }
+}

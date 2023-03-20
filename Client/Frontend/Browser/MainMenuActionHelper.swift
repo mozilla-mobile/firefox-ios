@@ -535,8 +535,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         whatsNewAction = SingleActionViewModel(title: .AppMenu.WhatsNewString,
                                                iconString: ImageIdentifiers.whatsNew,
                                                isEnabled: showBadgeForWhatsNew) { _ in
-            if let whatsNewTopic = AppInfo.whatsNewTopic,
-                let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
+            if let whatsNewURL = SupportUtils.URLForWhatsNew {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
             }
@@ -802,6 +801,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func showLoginListVC(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
         guard let menuActionDelegate = menuActionDelegate else { return }
         LoginListViewController.create(
+            didShowFromAppMenu: true,
             authenticateInNavigationController: navigationController,
             profile: self.profile,
             settingsDelegate: menuActionDelegate,
@@ -813,7 +813,6 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func presentLoginList(_ loginsVC: LoginListViewController?) {
         guard let loginsVC = loginsVC else { return }
-        loginsVC.shownFromAppMenu = true
         let navController = ThemedNavigationController(rootViewController: loginsVC)
         delegate?.showViewController(viewController: navController)
 

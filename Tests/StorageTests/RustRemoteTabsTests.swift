@@ -11,6 +11,7 @@ class RustRemoteTabsTests: XCTestCase {
     var tabs: RustRemoteTabs!
 
     override func setUp() {
+        super.setUp()
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {

@@ -200,7 +200,7 @@ protocol DownloadQueueDelegate: AnyObject {
 class DownloadQueue {
     var downloads: [Download]
 
-    var delegate: DownloadQueueDelegate?
+    weak var delegate: DownloadQueueDelegate?
 
     var isEmpty: Bool {
         return downloads.isEmpty

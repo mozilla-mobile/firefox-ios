@@ -1219,9 +1219,6 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Adres (Sorgunun yerine %s gelecek)";
 
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Kredi kartını otomatik doldur";
-
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Tüm web sitesi verilerini temizle";
 

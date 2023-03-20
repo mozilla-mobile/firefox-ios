@@ -88,7 +88,7 @@ class SearchEnginesTests: XCTestCase {
         // The first ordered engine is the default.
         XCTAssertEqual(engines.orderedEngines[0].shortName, engineSet?[1].shortName)
 
-        /// Persistance can't be tested without the fixture changing. 
+        // Persistance can't be tested without the fixture changing. 
     }
 
     func testOrderedEngines() {

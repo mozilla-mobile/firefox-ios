@@ -54,6 +54,7 @@ class MetaGlobalTests: XCTestCase {
     var stateMachine: SyncStateMachine!
 
     override func setUp() {
+        super.setUp()
         kSync = Data.randomOfLength(64)!
         server = MockSyncServer(username: "1234567")
         server.start()

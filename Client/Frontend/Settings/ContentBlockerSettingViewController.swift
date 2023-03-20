@@ -48,6 +48,8 @@ class TPAccessoryInfo: ThemedTableViewController {
     var isStrictMode = false
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+
         tableView.dataSource = self
         tableView.delegate = self
         tableView.estimatedRowHeight = 130
@@ -210,6 +212,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
 
+            if self.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) == false {
+                setting.enabled = false
+            }
             return setting
         }
 

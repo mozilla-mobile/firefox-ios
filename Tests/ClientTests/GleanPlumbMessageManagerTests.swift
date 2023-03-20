@@ -15,7 +15,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        Glean.shared.resetGlean(clearStores: true)
+        Glean.shared.resetGlean(clearStores: false)
         Glean.shared.enableTestingMode()
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         subject = GleanPlumbMessageManager(messagingStore: messagingStore)

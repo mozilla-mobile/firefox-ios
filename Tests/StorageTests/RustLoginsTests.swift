@@ -12,6 +12,7 @@ class RustLoginsTests: XCTestCase {
     var encryptionKey: String!
 
     override func setUp() {
+        super.setUp()
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {

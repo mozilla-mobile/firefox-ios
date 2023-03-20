@@ -1,0 +1,6 @@
+/* On the Research Survey popup, the text for the button that, when tapped, will dismiss the popup and take the user to a survey. */
+"PrimaryButton.Label.v112" = "Έναρξη έρευνας";
+
+/* On the Research Survey popup, the text for the button that, when tapped, will dismiss this screen, and the user will not be taken to the survey. */
+"SecondaryButton.Label.v112" = "Όχι, ευχαριστώ";
+
