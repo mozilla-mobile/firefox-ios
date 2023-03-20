@@ -50,9 +50,9 @@ struct CreditCardEditView: View {
                 borderColor: borderColor,
                 alertDetails: viewModel.removeButtonDetails
             )
+            Spacer()
         }
         .padding(.top, 20)
-        Spacer()
     }
 }
 
