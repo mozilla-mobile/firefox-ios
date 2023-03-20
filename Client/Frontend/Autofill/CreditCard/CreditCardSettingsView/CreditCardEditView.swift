@@ -11,14 +11,13 @@ struct CreditCardEditView: View {
     let removeButtonColor: Color
     let borderColor: Color
 
-    private var colors: FloatingTextField.Colors {
-        return FloatingTextField.Colors(errorColor: .red,
-                                        titleColor: .gray,
-                                        textFieldColor: .gray)
-    }
-
     var body: some View {
         VStack(spacing: 11) {
+            let colors = FloatingTextField.Colors(
+                errorColor: .red,
+                titleColor: .gray,
+                textFieldColor: .gray)
+
             FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
                               textVal: $viewModel.nameOnCard,
                               errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
@@ -40,7 +39,6 @@ struct CreditCardEditView: View {
                               errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
                               showError: !viewModel.expirationIsValid,
                               colors: colors)
-
             Divider()
                 .frame(height: 0.7)
 
