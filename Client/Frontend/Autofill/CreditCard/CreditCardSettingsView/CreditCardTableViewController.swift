@@ -62,7 +62,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
 
         let toastView = ToastView(messageType: .removedCard,
-                                    isShowing: true)
+                                  isShowing: true)
         self.toastView = UIHostingController(rootView: toastView)
 
         super.init(nibName: nil, bundle: nil)
