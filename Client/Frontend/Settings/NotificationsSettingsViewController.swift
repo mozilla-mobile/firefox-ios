@@ -9,7 +9,7 @@ import MozillaAppServices
 
 class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
     private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: prefs)
-    
+
     private lazy var syncNotifications: BoolNotificationSetting = {
         return BoolNotificationSetting(
             title: .Settings.Notifications.SyncNotificationsTitle,
