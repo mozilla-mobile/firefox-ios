@@ -82,9 +82,8 @@ class BookmarkDetailPanel: SiteTableViewController {
 
     // MARK: - Initializers
     convenience init(profile: Profile, bookmarkNode: FxBookmarkNode, parentBookmarkFolder: FxBookmarkNode, presentedFromToast fromToast: Bool = false) {
-        self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
+        self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder, presentedFromToast: fromToast)
 
-        self.isPresentedFromToast = fromToast
         self.bookmarkItemPosition = bookmarkNode.position
 
         if let bookmarkItem = bookmarkNode as? BookmarkItemData {
@@ -114,10 +113,11 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
-    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode) {
+    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, presentedFromToast fromToast: Bool = false) {
         self.bookmarkNodeGUID = bookmarkNodeGUID
         self.bookmarkNodeType = bookmarkNodeType
         self.parentBookmarkFolder = parentBookmarkFolder
+        self.isPresentedFromToast = fromToast
 
         super.init(profile: profile)
 
