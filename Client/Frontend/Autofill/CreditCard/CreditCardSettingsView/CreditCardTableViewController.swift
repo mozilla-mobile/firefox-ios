@@ -28,6 +28,8 @@ class CreditCardTableViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
 
     // MARK: View
+    var toastView: UIHostingController<ToastView>
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(HostingTableViewCell<CreditCardItemRow>.self,
@@ -58,6 +60,11 @@ class CreditCardTableViewController: UIViewController, Themeable {
         self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+
+        let toastView = ToastView(messageType: .removedCard,
+                                  isShowing: true)
+        self.toastView = UIHostingController(rootView: toastView)
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -87,6 +94,22 @@ class CreditCardTableViewController: UIViewController, Themeable {
         ])
 
         view.bringSubviewToFront(tableView)
+    }
+
+    private func setupToastView() {
+        guard let toast = toastView.view else { return }
+        toast.translatesAutoresizingMaskIntoConstraints = false
+
+        addChild(toastView)
+        view.addSubview(toast)
+
+        NSLayoutConstraint.activate([
+            toast.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            toast.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            toast.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            toast.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+        ])
+        toastView.view.backgroundColor = .clear
     }
 
     func applyTheme() {
