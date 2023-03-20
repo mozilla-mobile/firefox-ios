@@ -218,7 +218,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
         if !isHomePage && !isFileURL {
             // Feature flag for the Zoom In/Out feature
-            if featureFlags.isFeatureEnabled(.zoomFeature, checking: .buildAndUser) {
+            if featureFlags.isFeatureEnabled(.zoomFeature, checking: .buildOnly) {
                 let zoomSection = getZoomSection()
                 append(to: &section, action: zoomSection)
             }
