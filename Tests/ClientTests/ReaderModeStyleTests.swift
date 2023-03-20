@@ -110,10 +110,9 @@ class ReaderModeStyleTests: XCTestCase {
     func test_DelegateMemoryLeak() {
         let mockReaderModeStyleViewControllerDelegate = MockReaderModeStyleViewControllerDelegate()
         let readerModeStyleViewModel = ReaderModeStyleViewModel(isBottomPresented: false)
-        var readerModeStyleViewController: ReaderModeStyleViewController! = ReaderModeStyleViewController(viewModel: readerModeStyleViewModel)
+        var readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeStyleViewModel)
         readerModeStyleViewController.delegate = mockReaderModeStyleViewControllerDelegate
         trackForMemoryLeaks(readerModeStyleViewController)
-        readerModeStyleViewController = nil
     }
 }
 
