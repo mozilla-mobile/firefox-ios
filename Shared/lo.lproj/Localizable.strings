@@ -1219,6 +1219,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (ແທນທີ່ Query ດ້ວຍ %s)";
 
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v112" = "ຕື່ມບັດເຄຣດິດອັດຕະໂນມັດ";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "ລົບລ້າງຂໍ້ມູນເວັບໄຊທັງໝົດ";
 
@@ -1450,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ຫນ້າວ່າງ";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "ປັບແຕ່ງ";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "ຫນ້າຫລັກຂອງ Firefox";
 
@@ -1576,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "ຖ້າເວັບໄຊທ໌ບໍ່ເຮັດວຽກຕາມທີ່ຄາດໄວ້, ແຕະທີ່ລັອກຢູ່ໃນແຖບທີ່ຢູ່ແລະປິດການປົກປ້ອງການຕິດຕາມທີ່ປັບປຸງໃຫ້ດີຂຶ້ນສໍາລັບຫນ້ານັ້ນ.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ລະວັງ!";
 
@@ -1587,6 +1596,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ລຸດຜ່ອນການໂຄສະນາ ແລະ ຊ່ວຍຢຸດຜູ້ໂຄສະນາບໍ່ໃຫ້ຕິດຕາມການທ່ອງເນັດຂອງທ່ານ.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "ຖ້າເວັບໄຊທ໌ບໍ່ສາມາດເຮັດວຽກໄດ້ຕາມທີ່ຄາດຫວັງ ໃຫ້ແຕະໃນແຖບທີ່ຢູ່ ແລະ ປິດການປັບປຸງການປ້ອງກັນການຕິດຕາມສຳລັບໜ້ານັ້ນ.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "ຖ້າເວັບໄຊທ໌ບໍ່ສາມາດເຮັດວຽກໄດ້ຕາມທີ່ຄາດຫວັງ ໃຫ້ແຕະໃນແຖບທີ່ຢູ່ ແລະ ປິດການປັບປຸງການປ້ອງກັນການຕິດຕາມສຳລັບໜ້ານັ້ນ.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ອະນຸຍາດໃຫ້ມີການຕິດຕາມໂຄສະນາບາງສ່ວນ ເພື່ອເຮັດໃຫ້ເວັບໄຊທເຮັດວຽກໄດ້ຕາມປົກກະຕິ.";
@@ -1602,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "ມາດຕະຖານ (ຄ່າພື້ນຖານ)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "ມາດຕະຖານ";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "ເຄັ່ງຄັດ";

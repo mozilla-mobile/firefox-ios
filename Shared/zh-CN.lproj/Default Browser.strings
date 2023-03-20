@@ -32,7 +32,7 @@
 "DefaultBrowserOnboarding.Description1" = "1. 转至设置";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description2" = "2. 点按“默认浏览器 App”";
+"DefaultBrowserOnboarding.Description2" = "2. 轻点“默认浏览器 App”";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description3" = "3. 选择 Firefox";
