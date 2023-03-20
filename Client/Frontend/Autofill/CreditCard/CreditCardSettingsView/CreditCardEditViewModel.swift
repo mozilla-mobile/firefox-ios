@@ -7,12 +7,67 @@ import SwiftUI
 import Common
 import Storage
 
+//enum leftBarButtonState: String, Equatable, CaseIterable {
+//    case close
+//    case cancel
+//}
+//
+//enum rightBarButtonState: String, Equatable, CaseIterable {
+//    case save
+//    case edit
+//}
+
+enum CreditCardEditState: String, Equatable, CaseIterable {
+    case add
+    case edit
+    case view
+    
+    var title: String {
+        switch self {
+        case .add:
+            return String.CreditCard.EditCard.AddCreditCardTitle
+        case .edit, .view:
+            return String.CreditCard.EditCard.EditCreditCardTitle
+        }
+    }
+    
+    var leftBarTitle: String {
+        switch self {
+        case .add:
+            // close -- save (active / non-active)
+            return "close"
+        case .edit:
+            // cancel -- save (active / non-active)
+            return "cancel"
+        case .view:
+            // close -- edit
+            return "close"
+        }
+    }
+    
+    var rightBarTitle: String {
+        switch self {
+        case .add:
+            // close -- save (active / non-active)
+            return "save"
+        case .edit:
+            // cancel -- save (active / non-active)
+            return "save"
+        case .view:
+            // close -- edit
+            return "edit"
+        }
+    }
+    
+}
+
 class CreditCardEditViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
 
     let profile: Profile
     let autofill: RustAutofill
     let creditCard: CreditCard?
+    @Published var state: CreditCardEditState
 
     @Published var firstName: String = ""
     @Published var lastName: String = ""
@@ -78,6 +133,7 @@ class CreditCardEditViewModel: ObservableObject {
         self.profile = profile
         self.autofill = profile.autofill
         self.creditCard = creditCard
+        self.state = .add
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -85,7 +141,8 @@ class CreditCardEditViewModel: ObservableObject {
          lastName: String,
          errorState: String,
          enteredValue: String,
-         creditCard: CreditCard? = nil
+         creditCard: CreditCard? = nil,
+         state: CreditCardEditState
     ) {
         self.profile = profile
         self.firstName = firstName
@@ -94,6 +151,7 @@ class CreditCardEditViewModel: ObservableObject {
         self.enteredValue = enteredValue
         self.autofill = profile.autofill
         self.creditCard = creditCard
+        self.state = state
     }
 
     // MARK: - Helpers
