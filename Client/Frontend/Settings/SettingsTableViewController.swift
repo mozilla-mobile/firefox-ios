@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Account
+import Common
 import Shared
 import UIKit
 
@@ -344,6 +345,34 @@ class BoolSetting: Setting, FeatureFlaggable {
         } else {
             guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
+        }
+    }
+}
+
+class BoolNotificationSetting: BoolSetting {
+    override func displayBool(_ control: UISwitch) {
+        if let featureFlagName = featureFlagName {
+            control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
+        } else {
+            guard let key = prefKey, let defaultValue = defaultValue else { return }
+
+            Task { @MainActor in
+                let isSystemNotificationOn = await isSystemNotificationOn()
+                control.isOn = (prefs?.boolForKey(key) ?? defaultValue) && isSystemNotificationOn
+            }
+        }
+    }
+
+    private func isSystemNotificationOn() async -> Bool {
+        let settings = await NotificationManager().getNotificationSettings()
+
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            return true
+        case .denied, .notDetermined:
+            return false
+        @unknown default:
+            return false
         }
     }
 }

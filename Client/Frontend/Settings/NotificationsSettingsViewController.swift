@@ -7,8 +7,8 @@ import Shared
 import Common
 
 class NotificationsSettingsViewController: SettingsTableViewController {
-    private lazy var syncNotifications: BoolSetting = {
-        return BoolSetting(
+    private lazy var syncNotifications: BoolNotificationSetting = {
+        return BoolNotificationSetting(
             title: .Settings.Notifications.SyncNotificationsTitle,
             description: .Settings.Notifications.SyncNotificationsStatus,
             prefs: prefs,
@@ -27,8 +27,8 @@ class NotificationsSettingsViewController: SettingsTableViewController {
         }
     }()
 
-    private lazy var tipsAndFeaturesNotifications: BoolSetting = {
-        return BoolSetting(
+    private lazy var tipsAndFeaturesNotifications: BoolNotificationSetting = {
+        return BoolNotificationSetting(
             title: .Settings.Notifications.TipsAndFeaturesNotificationsTitle,
             description: String(format: .Settings.Notifications.TipsAndFeaturesNotificationsStatus, AppName.shortName.rawValue),
             prefs: prefs,
@@ -82,27 +82,16 @@ class NotificationsSettingsViewController: SettingsTableViewController {
 
     func checkForSystemNotifications() async {
         let settings = await NotificationManager().getNotificationSettings()
-        let shouldEnable: Bool
+
         switch settings.authorizationStatus {
         case .authorized, .provisional, .ephemeral:
             self.footerTitle = ""
-            shouldEnable = true
         case .denied:
             self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue, AppName.shortName.rawValue)
-            shouldEnable = false
         case .notDetermined:
             self.footerTitle = ""
-            shouldEnable = false
         @unknown default:
             self.footerTitle = ""
-            shouldEnable = false
-        }
-
-        if !shouldEnable {
-            self.syncNotifications.control.setOn(shouldEnable, animated: true)
-            self.syncNotifications.writeBool(self.syncNotifications.control)
-            self.tipsAndFeaturesNotifications.control.setOn(shouldEnable, animated: true)
-            self.tipsAndFeaturesNotifications.writeBool(self.tipsAndFeaturesNotifications.control)
         }
 
         self.settings = generateSettings()
