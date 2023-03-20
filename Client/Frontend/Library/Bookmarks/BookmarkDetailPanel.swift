@@ -96,6 +96,10 @@ class BookmarkDetailPanel: SiteTableViewController {
 
             self.title = .BookmarksEditFolder
         }
+        
+        if fromToast {
+            updateSaveButton()
+        }
     }
 
     convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode) {
