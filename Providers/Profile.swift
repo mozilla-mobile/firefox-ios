@@ -213,7 +213,7 @@ open class BrowserProfile: Profile {
     var syncManager: SyncManager!
 
     var syncDelegate: SyncDelegate?
-    var rustSyncManagerEnabled: Bool
+    var useRustSyncManager: Bool = false
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -239,7 +239,6 @@ open class BrowserProfile: Profile {
         self.files = ProfileFileAccessor(localName: localName)
         self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         self.syncDelegate = syncDelegate
-        self.rustSyncManagerEnabled = rustSyncManagerEnabled
         self.logger = logger
 
         if clear {
@@ -306,13 +305,25 @@ open class BrowserProfile: Profile {
         // By default, filter logging from Rust below `.info` level.
         try? RustLog.shared.setLevelFilter(filter: .info)
 
+        // Set to true if either the Nimbus flag is enabled or RustSyncManager has been
+        // used before. Using these two values to check whether RustSyncManager has been
+        // used will prevent BrowserSyncManager being used after upgrading to RustSyncManager
+        // in the event the Nimbus experiment is ended prematurely.
+        self.useRustSyncManager = rustSyncManagerEnabled ||
+            self.prefs.boolForKey(PrefsKeys.HasRustSyncManagerEverBeenUsed) ?? false
+
         // Initiating the sync manager has to happen prior to the databases being opened,
         // because opening them can trigger events to which the SyncManager listens.
-        if self.rustSyncManagerEnabled {
+        if self.useRustSyncManager {
             let msg = "Setting `syncManager` property to `RustSyncManager"
             logger.log(msg, level: .debug, category: .sync)
 
             self.syncManager = RustSyncManager(profile: self)
+
+            // Setting this pref to true in the event this is the first time
+            // RustSyncManager is being used. If it's been used before setting this pref
+            // to true does no harm.
+            self.prefs.setBool(true, forKey: PrefsKeys.HasRustSyncManagerEverBeenUsed)
         } else {
             let msg = "Setting `syncManager` property to `BrowserSyncManager"
             logger.log(msg, level: .debug, category: .sync)
@@ -523,9 +534,9 @@ open class BrowserProfile: Profile {
     }
 
     // This function exists to service the `FxaPushMessengerHandler.handle` function and
-    // will be removed after the rust sync manager rollout is complete
+    // will be removed after the rust sync manager experiment is complete
     public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
-        if rustSyncManagerEnabled {
+        if useRustSyncManager {
             let msg = "Retrieving client records from rust tabs component"
             logger.log(msg, level: .debug, category: .sync)
 
@@ -539,9 +550,9 @@ open class BrowserProfile: Profile {
     }
 
     // This function exists to service the `TabPeekViewController.setState` function and
-    // will be removed after the rust sync manager rollout is complete
+    // will be removed after the rust sync manager experiment is complete
     public func getClientGUIDs(completion: @escaping (Set<GUID>) -> Void) {
-        if rustSyncManagerEnabled {
+        if useRustSyncManager {
             let msg = "Retrieving client GUIDs from rust tabs component"
             logger.log(msg, level: .debug, category: .sync)
 
@@ -593,9 +604,9 @@ open class BrowserProfile: Profile {
         // The new `RustSyncManager` class has no reliance on the `ClientSynchronizer` or
         // the clients table. So when it's being used tabs with clients can be pulled from
         // the tab component's database table and filtered by the remote devices in the
-        // user's device constellation. Once the sync manager rollout is complete this
+        // user's device constellation. Once the sync manager experiment is complete this
         // will be the way this data is retrieved unconditionally.
-        if rustSyncManagerEnabled {
+        if useRustSyncManager {
             let msg = "Retrieving tabs with clients and filtering on remote devices"
             logger.log(msg, level: .debug, category: .sync)
 

@@ -13,9 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
-    // This variable is used to determine whether the rust
-    // sync manager will be used during the Nimbus rollout.
-    // It will be removed when the rollout is complete.
+    // This variable is used to determine whether the rust sync manager will be used
+    // during the Nimbus experiment and will be removed when it is complete.
     private let rustSyncManagerStatus = FxNimbus.shared
                                                 .features
                                                 .rustSyncManagerComponent
