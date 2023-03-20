@@ -68,4 +68,24 @@ class EngagementNotificationHelperTests: XCTestCase {
         XCTAssertTrue(notificationManager.removePendingNotificationsWithIdWasCalled)
         XCTAssertEqual(notificationManager.scheduledNotifications, -1)
     }
+
+    func testSchedule_userPrefOff() {
+        let timestamp = Date.now() - EngagementNotificationHelper.Constant.twentyFourHours * UInt64(0.5)
+        profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        profile.prefs.setBool(false, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+        engagementNotificationHelper.schedule()
+        XCTAssertFalse(notificationManager.scheduleWithDateWasCalled)
+        XCTAssertFalse(notificationManager.removePendingNotificationsWithIdWasCalled)
+        XCTAssertEqual(notificationManager.scheduledNotifications, 0)
+    }
+
+    func testSchedule_userPrefOn() {
+        let timestamp = Date.now() - EngagementNotificationHelper.Constant.twentyFourHours * UInt64(0.5)
+        profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        profile.prefs.setBool(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+        engagementNotificationHelper.schedule()
+        XCTAssertTrue(notificationManager.scheduleWithDateWasCalled)
+        XCTAssertFalse(notificationManager.removePendingNotificationsWithIdWasCalled)
+        XCTAssertEqual(notificationManager.scheduledNotifications, 1)
+    }
 }
