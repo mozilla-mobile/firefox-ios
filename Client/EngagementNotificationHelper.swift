@@ -25,6 +25,11 @@ class EngagementNotificationHelper: FeatureFlaggable {
     }
     private lazy var featureEnabled: Bool = featureFlags.isFeatureEnabled(.engagementNotificationStatus,
                                                                           checking: .buildOnly)
+    private var allowedTipsNotifications: Bool {
+        let featureEnabled = featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly)
+        let userPreference = prefs?.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) ?? true
+        return featureEnabled && userPreference
+    }
 
     init(prefs: Prefs?, notificationManager: NotificationManagerProtocol = NotificationManager()) {
         self.prefs = prefs
@@ -36,9 +41,9 @@ class EngagementNotificationHelper: FeatureFlaggable {
 
         // schedule notifications only if notification permission was granted and the tips notifications are allowed
         notificationManager.hasPermission { [weak self] hasPermission in
-            guard hasPermission, self?.prefs?.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) ?? true
+            guard let strongSelf = self, hasPermission, strongSelf.allowedTipsNotifications
             else { return }
-            self?.scheduleNotification()
+            strongSelf.scheduleNotification()
         }
     }
 
