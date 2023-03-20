@@ -266,4 +266,13 @@ public struct AccessibilityIdentifiers {
         static let cancelDownloadResume = "cancelDownloadAlert.resume"
         static let cancelDownloadCancel = "cancelDownloadAlert.cancel"
     }
+
+    struct ZoomPageBar {
+        static let zoomPageZoomInButton = "ZoomPage.zoomInButton"
+        static let zoomPageZoomOutButton = "ZoomPage.zoomOutButton"
+    }
+
+    struct FindInPage {
+        static let findInPageCloseButton = "FindInPage.closeButton"
+    }
 }

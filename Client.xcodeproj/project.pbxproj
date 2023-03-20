@@ -984,11 +984,13 @@
 		D980063D26D8308700321BC1 /* RustPlacesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D980063C26D8308700321BC1 /* RustPlacesTests.swift */; };
 		DA27EEDB28BADF4700DD6F5D /* MenuBuilderHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA27EEDA28BADF4700DD6F5D /* MenuBuilderHelper.swift */; };
 		DA3A4FE9254A781A00C4A9C9 /* TabTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA3A4FE8254A781A00C4A9C9 /* TabTableViewHeader.swift */; };
+		DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4F826629AD221600189590 /* ZoomPageBar.swift */; };
 		DA52E1DA25F5961F0092204C /* TabTrayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA52E1D925F5961F0092204C /* TabTrayViewController.swift */; };
 		DA9FD88424E213B500168D1E /* SmallQuickLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88224E213B400168D1E /* SmallQuickLink.swift */; };
 		DA9FD88624E213CD00168D1E /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88524E213CC00168D1E /* Helpers.swift */; };
 		DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA9FD88724E213DC00168D1E /* QuickLink.swift */; };
 		DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACDE995225E537900C8F37F /* VersionSettingTests.swift */; };
+		DAE6DF1B29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE6DF1A29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift */; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
@@ -4969,6 +4971,7 @@
 		DA27EEDA28BADF4700DD6F5D /* MenuBuilderHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuBuilderHelper.swift; path = Helpers/MenuBuilderHelper.swift; sourceTree = "<group>"; };
 		DA3A4FE8254A781A00C4A9C9 /* TabTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTableViewHeader.swift; sourceTree = "<group>"; };
 		DA4446B0870E847782CEFAF4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		DA4F826629AD221600189590 /* ZoomPageBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomPageBar.swift; sourceTree = "<group>"; };
 		DA52E1D925F5961F0092204C /* TabTrayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewController.swift; sourceTree = "<group>"; };
 		DA654F2582BF9863A719CB00 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Shared.strings"; sourceTree = "<group>"; };
 		DA744D888927B768AD70ECF4 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -4981,6 +4984,7 @@
 		DACDE995225E537900C8F37F /* VersionSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSettingTests.swift; sourceTree = "<group>"; };
 		DAD46F3324A1606C001B3967 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		DAD46F3524A1606C001B3967 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		DAE6DF1A29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+ZoomPage.swift"; sourceTree = "<group>"; };
 		DB7B460BB39A2062E44CB8EF /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/Menu.strings; sourceTree = "<group>"; };
 		DBA640A89E36CC846A5AE368 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		DC2B41EC8CA7785480D94F0D /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
@@ -7529,6 +7533,7 @@
 				D0C95EF5201A55A800E4E51C /* BrowserViewController+UIDropInteractionDelegate.swift */,
 				C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */,
 				434E733625EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift */,
+				DAE6DF1A29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift */,
 			);
 			path = BrowserViewController;
 			sourceTree = "<group>";
@@ -7807,6 +7812,7 @@
 				884CA7482344A301002E4711 /* TextContentDetector.swift */,
 				43BDBBFD2752FA8600254DE4 /* TabCell.swift */,
 				E1877A7F286E0EFD00F5BDF2 /* WebView */,
+				DA4F826629AD221600189590 /* ZoomPageBar.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -10853,6 +10859,7 @@
 				213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */,
 				E10A1F752863BC51001EEA80 /* InactiveTabItemCell.swift in Sources */,
 				8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */,
+				DAE6DF1B29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift in Sources */,
 				8AB8574A27D97CE90075C173 /* HomePanelDelegate.swift in Sources */,
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */,
@@ -10911,6 +10918,7 @@
 				F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */,
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
+				DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* BookmarksPanel.swift in Sources */,
 				BD4B2DE429BB4D9A005FAA50 /* TimerSnackBar.swift in Sources */,
 				D04D1B862097859B0074B35F /* DownloadToast.swift in Sources */,

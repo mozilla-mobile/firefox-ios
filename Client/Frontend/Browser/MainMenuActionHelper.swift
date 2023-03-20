@@ -23,6 +23,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showMenuPresenter(url: URL, tab: Tab, view: UIView)
     func showFindInPage()
     func showCustomizeHomePage()
+    func showZoomPage(tab: Tab)
 }
 
 enum MenuButtonToastAction {
@@ -216,6 +217,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         if !isHomePage && !isFileURL {
+            if featureFlags.isFeatureEnabled(.zoomFeature, checking: .buildOnly) {
+                let zoomSection = getZoomSection()
+                append(to: &section, action: zoomSection)
+            }
+
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)
 
@@ -747,6 +753,21 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             }
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .removePinnedSite)
         }
+    }
+
+    // MARK: Zoom
+
+    private func getZoomSection() -> [PhotonRowActions] {
+        var section = [PhotonRowActions]()
+        guard let tab = selectedTab else { return section }
+        let zoomLevel = String(format: "%.0f%%", tab.pageZoom * 100.0)
+        let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
+        let zoomAction = SingleActionViewModel(title: title) { _ in
+            self.delegate?.showZoomPage(tab: tab)
+        }
+
+        section.append(PhotonRowActions([zoomAction]))
+        return section
     }
 
     // MARK: Password

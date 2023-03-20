@@ -2957,6 +2957,11 @@ extension String {
             tableName: nil,
             value: "Removed from Reading List",
             comment: "Toast displayed to confirm to the user that his reading list item was correctly removed.")
+        public static let ZoomPageTitle = MZLocalizedString(
+            "Menu.ZoomPage.Title.v113",
+            tableName: nil,
+            value: "Zoom (%@)",
+            comment: "Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent.")
 
         // Toolbar
         public struct Toolbar {
