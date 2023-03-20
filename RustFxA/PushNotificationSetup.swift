@@ -10,11 +10,17 @@ open class PushNotificationSetup {
     private var pushClient: PushClient?
     private var pushRegistration: PushRegistration?
 
+    /// Registers the users device with the push notification server. If notificationAllowed is false the device will
+    /// be unsubscribed from receiving notifications.
+    /// - Parameters:
+    ///   - deviceToken: A token that identifies the device to Apple Push Notification Service (APNS).
+    ///   - notificationAllowed: Indicates if the user allowed sync push notification in the settings.
     public func didRegister(withDeviceToken deviceToken: Data, notificationAllowed: Bool) {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else { return }
+        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken
+        else { return }
 
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
             let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
