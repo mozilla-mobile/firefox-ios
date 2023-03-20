@@ -28,7 +28,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
     var notificationCenter: NotificationProtocol
 
     // MARK: View
-    var toastView: UIHostingController<ToastUIView>
+    var toastView: UIHostingController<ToastView>
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -61,8 +61,8 @@ class CreditCardTableViewController: UIViewController, Themeable {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
 
-        let toastView = ToastUIView(messageType: .removedCard,
-                                    shouldShowToast: true)
+        let toastView = ToastView(messageType: .removedCard,
+                                    isShowing: true)
         self.toastView = UIHostingController(rootView: toastView)
 
         super.init(nibName: nil, bundle: nil)

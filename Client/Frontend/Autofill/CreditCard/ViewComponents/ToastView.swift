@@ -5,7 +5,7 @@
 import Foundation
 import SwiftUI
 
-struct ToastUIView: View {
+struct ToastView: View {
     enum MessageType {
         case savedCard
         case updatedCard
@@ -23,7 +23,7 @@ struct ToastUIView: View {
     var textColor: Color = .white
     var backgroundColor: Color = .blue
     var messageType: MessageType
-    @State var shouldShowToast = false
+    @State var isShowing = false
 
     var toast: some View {
         VStack {
@@ -34,15 +34,14 @@ struct ToastUIView: View {
                 .background(backgroundColor)
                 .foregroundColor(textColor)
         }
-        .animation(.default)
-        .transition(AnyTransition.move(edge: .bottom))
     }
 
     var body: some View {
         VStack {
         }
-        .toast(toastView: toast,
-               isShowing: $shouldShowToast.animation())
+        .toast(toastView: toast, isShowing: $isShowing)
+        .animation(.default)
+        .transition(AnyTransition.move(edge: .bottom))
     }
 }
 
