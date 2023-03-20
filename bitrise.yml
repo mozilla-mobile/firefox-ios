@@ -1452,3 +1452,5 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
+- pull_request_target_branch: release/v*
+  pipeline: pipeline_multiple_shards

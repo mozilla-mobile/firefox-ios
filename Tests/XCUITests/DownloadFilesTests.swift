@@ -31,6 +31,7 @@ class DownloadFilesTests: BaseTestCase {
                 }
             }
         }
+        super.tearDown()
     }
 
     private func deleteItem(itemName: String) {

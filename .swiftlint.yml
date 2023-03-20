@@ -57,7 +57,6 @@ opt_in_rules: # some rules are only opt-in
   # - file_header
   # - deployment_target
   # - discouraged_optional_collection
-  # - overridden_super_call
   # - prohibited_interface_builder
   # - prohibited_super_call
   # - protocol_property_accessors_order
@@ -82,7 +81,7 @@ opt_in_rules: # some rules are only opt-in
   - last_where
   - multiline_arguments
   - opening_brace
-  - optional_enum_case_matching
+  - overridden_super_call
   - return_arrow_whitespace
   - vertical_parameter_alignment_on_call
   - vertical_whitespace_closing_braces

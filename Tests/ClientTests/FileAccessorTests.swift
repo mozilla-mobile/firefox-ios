@@ -11,6 +11,7 @@ class FileAccessorTests: XCTestCase {
     fileprivate var files: FileAccessor!
 
     override func setUp() {
+        super.setUp()
         let docPath: NSString = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
         files = FileAccessor(rootPath: docPath.appendingPathComponent("filetest"))
 

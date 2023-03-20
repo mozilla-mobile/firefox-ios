@@ -8,6 +8,11 @@ import UIKit
 
 /// Utility functions related to SUMO and Webcompat
 public struct SupportUtils {
+    public static var URLForWhatsNew: URL? {
+        // Returns the predefined URL associated to what's new button action.
+        return URL(string: "https://www.mozilla.org/en-US/firefox/ios/notes/")
+    }
+
     public static func URLForTopic(_ topic: String) -> URL? {
         // Construct a NSURL pointing to a specific topic on SUMO. The topic should be a non-escaped string. It will
         // be properly escaped by this function.
