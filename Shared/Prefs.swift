@@ -49,6 +49,11 @@ public struct PrefsKeys {
         public static let v1MigrationCheck = "v1MigrationCheckUserPrefsKey"
     }
 
+    public struct Notifications {
+        public static let SyncNotifications = "SyncNotificationsUserPrefsKey"
+        public static let TipsAndFeaturesNotifications = "TipsAndFeaturesNotificationsUserPrefsKey"
+    }
+
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"

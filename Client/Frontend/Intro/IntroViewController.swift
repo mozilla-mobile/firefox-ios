@@ -228,15 +228,22 @@ extension IntroViewController: OnboardingCardDelegate {
     private func askForNotificationPermission() {
         let notificationManager = NotificationManager()
         notificationManager.requestAuthorization { [weak self] granted, error in
-            guard error == nil else { return }
+            guard error == nil, let self = self else { return }
 
             DispatchQueue.main.async {
                 if granted {
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.SyncNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
+                    }
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+                    }
+
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
 
-                    self?.engagementNotificationHelper.schedule()
+                    self.engagementNotificationHelper.schedule()
                 }
-                self?.showNextPage(.notification)
+                self.showNextPage(.notification)
             }
         }
     }

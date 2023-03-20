@@ -69,7 +69,7 @@ final class NimbusFeatureFlagLayer {
         case .shareSheetChanges,
                 .shareToolbarChanges:
             return checkNimbusForShareSheet(for: featureID, from: nimbus)
-            
+
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 
@@ -78,6 +78,9 @@ final class NimbusFeatureFlagLayer {
 
         case .engagementNotificationStatus:
             return checkNimbusForEngagementNotification(for: featureID, from: nimbus)
+
+        case .notificationSettings:
+            return checkNimbusForNotificationSettings(for: featureID, from: nimbus)
         }
     }
 
@@ -217,6 +220,17 @@ final class NimbusFeatureFlagLayer {
             default: return false
             }
     }
+
+    public func checkNimbusForNotificationSettings(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.notificationSettingsFeature.value()
+
+            switch featureID {
+            case .notificationSettings: return config.notificationSettingsFeatureStatus
+            default: return false
+            }
+        }
 
     private func checkNimbusForOnboardingFeature(
         for featureID: NimbusFeatureFlagID,
