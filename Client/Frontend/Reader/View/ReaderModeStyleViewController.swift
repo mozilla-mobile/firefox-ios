@@ -38,7 +38,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     private var isUsingUserDefinedColor = false
 
     private var viewModel: ReaderModeStyleViewModel!
-    var delegate: ReaderModeStyleViewControllerDelegate?
+    weak var delegate: ReaderModeStyleViewControllerDelegate?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol

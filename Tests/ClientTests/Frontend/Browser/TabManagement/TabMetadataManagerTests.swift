@@ -10,13 +10,13 @@ import Shared
 
 class TabMetadataManagerTests: XCTestCase {
     private var metadataObserver: HistoryMetadataObserverMock!
-    private var manager: TabMetadataManager!
+    private var manager: LegacyTabMetadataManager!
 
     override func setUp() {
         super.setUp()
 
         metadataObserver = HistoryMetadataObserverMock()
-        manager = TabMetadataManager(metadataObserver: metadataObserver)
+        manager = LegacyTabMetadataManager(metadataObserver: metadataObserver)
     }
 
     override func tearDown() {
@@ -72,10 +72,10 @@ class TabMetadataManagerTests: XCTestCase {
         let stringUrl = "https://www.developer.org/"
         let title = "updated title"
 
-        manager.tabGroupData = TabGroupData(searchTerm: "",
-                                            searchUrl: stringUrl,
-                                            nextReferralUrl: "",
-                                            tabHistoryCurrentState: TabGroupTimerState.openURLOnly.rawValue)
+        manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
+                                                  searchUrl: stringUrl,
+                                                  nextReferralUrl: "",
+                                                  tabHistoryCurrentState: TabGroupTimerState.openURLOnly.rawValue)
 
         manager.updateObservationTitle(title) {
             XCTAssertEqual(self.metadataObserver.observation?.url, stringUrl)
@@ -89,10 +89,10 @@ class TabMetadataManagerTests: XCTestCase {
         let referralURL = "https://www.developer.org/ref"
         let title = "updated title"
 
-        manager.tabGroupData = TabGroupData(searchTerm: "",
-                                            searchUrl: stringUrl,
-                                            nextReferralUrl: referralURL,
-                                            tabHistoryCurrentState: TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue)
+        manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
+                                                  searchUrl: stringUrl,
+                                                  nextReferralUrl: referralURL,
+                                                  tabHistoryCurrentState: TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue)
 
         manager.updateObservationTitle(title) {
             XCTAssertEqual(self.metadataObserver.observation?.url, stringUrl)
@@ -106,10 +106,10 @@ class TabMetadataManagerTests: XCTestCase {
         let referralURL = "https://www.developer.org/ref"
         let title = "updated title"
 
-        manager.tabGroupData = TabGroupData(searchTerm: "",
-                                            searchUrl: stringUrl,
-                                            nextReferralUrl: referralURL,
-                                            tabHistoryCurrentState: TabGroupTimerState.openInNewTab.rawValue)
+        manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
+                                                  searchUrl: stringUrl,
+                                                  nextReferralUrl: referralURL,
+                                                  tabHistoryCurrentState: TabGroupTimerState.openInNewTab.rawValue)
 
         // Title should not be updated for this state
         manager.updateObservationTitle(title) {
@@ -123,10 +123,10 @@ class TabMetadataManagerTests: XCTestCase {
         let referralURL = "https://www.developer.org/ref"
         let title = "updated title"
 
-        manager.tabGroupData = TabGroupData(searchTerm: "",
-                                            searchUrl: stringUrl,
-                                            nextReferralUrl: referralURL,
-                                            tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue)
+        manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
+                                                  searchUrl: stringUrl,
+                                                  nextReferralUrl: referralURL,
+                                                  tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue)
 
         // Title should not be updated for this state
         manager.updateObservationTitle(title) {
@@ -140,10 +140,10 @@ class TabMetadataManagerTests: XCTestCase {
         let referralURL = "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=https://www.mozilla.org/"
         let title = "Session restore title"
 
-        manager.tabGroupData = TabGroupData(searchTerm: "",
-                                            searchUrl: stringUrl,
-                                            nextReferralUrl: referralURL,
-                                            tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue)
+        manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
+                                                  searchUrl: stringUrl,
+                                                  nextReferralUrl: referralURL,
+                                                  tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue)
 
         // Title should not be updated for this state
         manager.updateObservationTitle(title) {

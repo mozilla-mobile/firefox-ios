@@ -129,6 +129,7 @@ class SQLRemoteClientsAndTabsTests: XCTestCase {
     lazy var clients: [ClientAndTabs] = MockRemoteClientsAndTabs().clientsAndTabs
 
     override func setUp() {
+        super.setUp()
         let files = MockFiles()
         do {
             try files.remove("browser.db")
