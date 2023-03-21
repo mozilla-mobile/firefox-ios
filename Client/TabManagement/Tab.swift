@@ -637,12 +637,12 @@ class Tab: NSObject {
     @objc func zoomIn() {
         switch pageZoom {
         case 0.75:
-            pageZoom = 0.85
-        case 0.85:
+            pageZoom = 0.9
+        case 0.9:
             pageZoom = 1.0
         case 1.0:
-            pageZoom = 1.15
-        case 1.15:
+            pageZoom = 1.10
+        case 1.10:
             pageZoom = 1.25
         case 3.0:
             return
@@ -655,14 +655,14 @@ class Tab: NSObject {
         switch pageZoom {
         case 0.5:
             return
-        case 0.85:
+        case 0.9:
             pageZoom = 0.75
         case 1.0:
-            pageZoom = 0.85
-        case 1.15:
+            pageZoom = 0.9
+        case 1.10:
             pageZoom = 1.0
         case 1.25:
-            pageZoom = 1.15
+            pageZoom = 1.10
         default:
             pageZoom -= 0.25
         }
