@@ -49,7 +49,6 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                         var readerModeStyle = DefaultReaderModeStyle
                         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
                            var style = ReaderModeStyle(dict: dict) {
-                                style.ensurePreferredColorThemeIfNeeded()
                                 readerModeStyle = style
                         } else {
                             readerModeStyle.theme = ReaderModeTheme.preferredTheme()

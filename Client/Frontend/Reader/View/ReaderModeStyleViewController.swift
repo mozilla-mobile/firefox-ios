@@ -225,7 +225,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
               let readerMode = contentScript as? ReaderMode,
               var style = ReaderModeStyle(dict: readerPreferences) else { return }
 
-        style.ensurePreferredColorThemeIfNeeded()
         readerMode.style = style
     }
 
