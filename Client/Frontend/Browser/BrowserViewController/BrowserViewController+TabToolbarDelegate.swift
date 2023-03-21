@@ -231,6 +231,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
         showSettingsWithDeeplink(to: .wallpaper)
     }
 
-    // TODO: Needs implementation for the Zoom Feature
-    func showZoomPage(tab: Tab) { }
+    func showZoomPage(tab: Tab) {
+        updateZoomPageBarVisibility(visible: true)
+    }
 }
