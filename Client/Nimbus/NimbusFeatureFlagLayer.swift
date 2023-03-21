@@ -66,10 +66,6 @@ final class NimbusFeatureFlagLayer {
         case .wallpaperOnboardingSheet:
             return checkNimbusForWallpaperOnboarding(using: nimbus)
 
-        case .shareSheetChanges,
-                .shareToolbarChanges:
-            return checkNimbusForShareSheet(for: featureID, from: nimbus)
-
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
 

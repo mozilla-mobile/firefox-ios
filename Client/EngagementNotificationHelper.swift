@@ -25,6 +25,11 @@ class EngagementNotificationHelper: FeatureFlaggable {
     }
     private lazy var featureEnabled: Bool = featureFlags.isFeatureEnabled(.engagementNotificationStatus,
                                                                           checking: .buildOnly)
+    private var allowedTipsNotifications: Bool {
+        let featureEnabled = featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly)
+        let userPreference = prefs?.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) ?? true
+        return featureEnabled && userPreference
+    }
 
     init(prefs: Prefs?, notificationManager: NotificationManagerProtocol = NotificationManager()) {
         self.prefs = prefs
@@ -34,10 +39,16 @@ class EngagementNotificationHelper: FeatureFlaggable {
     func schedule() {
         guard featureEnabled else { return }
 
+        // schedule notifications only if notification permission was granted and the tips notifications are allowed
         notificationManager.hasPermission { [weak self] hasPermission in
-            guard hasPermission else { return }
-            self?.scheduleNotification()
+            guard let self = self, hasPermission, self.allowedTipsNotifications
+            else { return }
+            self.scheduleNotification()
         }
+    }
+
+    func cancelAll() {
+        notificationManager.removePendingNotificationsWithId(ids: [Constant.notificationId])
     }
 
     // MARK: - Private
@@ -55,7 +66,7 @@ class EngagementNotificationHelper: FeatureFlaggable {
         // If they are not active in the second 24 hours after first use we send them a notification.
         if now > Date.fromTimestamp(firstAppUse + Constant.twentyFourHours) {
             // cancel as user used app between firstAppUse + 24h and firstAppUse + 48h
-            notificationManager.removePendingNotificationsWithId(ids: [Constant.notificationId])
+            cancelAll()
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .cancel,
                                          object: .engagementNotification)
