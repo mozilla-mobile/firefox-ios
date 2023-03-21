@@ -23,6 +23,7 @@ public struct UIConstants {
     static let TopToolbarHeight: CGFloat = 56
     static let TopToolbarHeightMax: CGFloat = 75
     static var ToolbarHeight: CGFloat = 46
+    static let ZoomPageBarHeight: CGFloat = 54
 
     static let SystemBlueColor = UIColor.Photon.Blue40
 
