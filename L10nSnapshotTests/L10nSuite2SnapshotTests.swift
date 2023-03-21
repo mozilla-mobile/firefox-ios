@@ -111,10 +111,11 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.cells["Search"].swipeUp()
         waitForExistence(app.cells["Logins"], timeout: 15)
         app.cells["Logins"].tap()
-
-        waitForExistence(app.navigationBars.buttons.firstMatch, timeout: 15)
-        app.otherElements.buttons.element(boundBy: 2).tap()
-
+        
+        if (springboard.buttons["Continue"].exists) {
+            springboard.buttons["Continue"].tap()
+        }
+            
         let passcodeInput = springboard.secureTextFields.firstMatch
         waitForExistence(passcodeInput, timeout: 20)
         passcodeInput.tap()

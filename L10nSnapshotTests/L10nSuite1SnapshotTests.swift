@@ -166,7 +166,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
 
         snapshot("TrackingProtectionStrictWarning-01")
-        app.alerts.buttons.firstMatch.tap()
 
         // Website without blocked elements
         navigator.openURL(loremIpsumURL)
