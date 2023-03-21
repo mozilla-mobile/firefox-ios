@@ -52,10 +52,9 @@ struct CreditCardInputField: View {
                 case .number:
                     viewModel.updateCardNumberValidity(userInputtedText: text)
                 case .expiration:
-                    var numbersCount = 0
-                    text.forEach { character in
-                        character.isNumber ? numbersCount += 1 : nil
-                    }
+                    guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
+
+                    let numbersCount = viewModel.countNumbersIn(text: text)
 
                     guard !(text.count > viewModel.formattedTextLimit) || !(numbersCount > 5) else {
                         text = oldValue

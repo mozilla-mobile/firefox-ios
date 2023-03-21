@@ -87,4 +87,13 @@ class CreditCardInputViewModel: ObservableObject {
 
         return formattedText
     }
+
+    func countNumbersIn(text: String) -> Int {
+        var numbersCount = 0
+        text.forEach { character in
+            character.isNumber ? numbersCount += 1 : nil
+        }
+
+        return numbersCount
+    }
 }

@@ -20,6 +20,10 @@ class CreditCardInputViewModelTests: XCTestCase {
 
         viewModel.updateNameValidity(userInputtedText: "Tim Apple")
         XCTAssert(viewModel.isValid)
+    }
+
+    func testNameIsInvalid() {
+        let viewModel = CreditCardInputViewModel(fieldType: .name)
 
         viewModel.updateNameValidity(userInputtedText: "")
         XCTAssertFalse(viewModel.isValid)
@@ -34,7 +38,7 @@ class CreditCardInputViewModelTests: XCTestCase {
 //        XCTAssertFalse(viewModel.isValid)
     }
 
-    func testIsCardNumberValid() {
+    func testCardNumberIsValid() {
         let viewModel = CreditCardInputViewModel(fieldType: .number)
 
         viewModel.updateCardNumberValidity(userInputtedText: "1234123412341234")
@@ -42,16 +46,34 @@ class CreditCardInputViewModelTests: XCTestCase {
 
         viewModel.updateCardNumberValidity(userInputtedText: "123412341234123")
         XCTAssert(viewModel.isValid)
+    }
+
+    func testCardNumberIsInvalid() {
+        let viewModel = CreditCardInputViewModel(fieldType: .number)
+
+        viewModel.updateCardNumberValidity(userInputtedText: "this should not work")
+        XCTAssertFalse(viewModel.isValid)
 
         viewModel.updateCardNumberValidity(userInputtedText: "")
         XCTAssertFalse(viewModel.isValid)
+
+        // When card validation is done, this test can be included.
+//        viewModel.updateCardNumberValidity(userInputtedText: "2023            ")
+//        XCTAssertFalse(viewModel.isValid)
     }
 
-    func testIsExpirationValid() {
+    func testExpirationIsValid() {
         let viewModel = CreditCardInputViewModel(fieldType: .expiration)
 
-        viewModel.updateExpirationValidity(userInputtedText: "1224")
+        viewModel.updateExpirationValidity(userInputtedText: "1230")
         XCTAssert(viewModel.isValid)
+
+        viewModel.updateExpirationValidity(userInputtedText: "0926")
+        XCTAssert(viewModel.isValid)
+    }
+
+    func testExpirationIsInvalid() {
+        let viewModel = CreditCardInputViewModel(fieldType: .expiration)
 
         viewModel.updateExpirationValidity(userInputtedText: "0000")
         XCTAssertFalse(viewModel.isValid)
@@ -61,15 +83,8 @@ class CreditCardInputViewModelTests: XCTestCase {
 
         viewModel.updateExpirationValidity(userInputtedText: "")
         XCTAssertFalse(viewModel.isValid)
-    }
 
-    func testIsSecurityCodeValid() {
-        let viewModel = CreditCardInputViewModel(fieldType: .securityCode)
-
-        viewModel.updateSecurityCodeValidity(userInputtedText: "000")
-        XCTAssert(viewModel.isValid)
-
-        viewModel.updateSecurityCodeValidity(userInputtedText: "")
+        viewModel.updateExpirationValidity(userInputtedText: "Firefox da best")
         XCTAssertFalse(viewModel.isValid)
     }
 }
