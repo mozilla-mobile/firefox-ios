@@ -8,14 +8,6 @@ import Shared
 import Storage
 import SwiftUI
 
-public final class TransparentHostingController<Content: View>: UIHostingController<Content> {
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        view.isOpaque = false
-        view.backgroundColor = .purple
-    }
-}
-
 class CreditCardSettingsViewController: UIViewController, Themeable {
     var viewModel: CreditCardSettingsViewModel
     var startingConfig: CreditCardSettingsStartingConfig?
@@ -30,7 +22,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
 
     var creditCardEditView: CreditCardEditView?
-    var creditCardAddEditView: TransparentHostingController<CreditCardEditView>?
+    var creditCardAddEditView: UIHostingController<CreditCardEditView>?
 
     var creditCardTableViewController: CreditCardTableViewController
 
@@ -64,8 +56,6 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         let emptyView = CreditCardSettingsEmptyView(colors: colors, toggleModel: viewModel.toggleModel)
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
         self.creditCardEmptyView.view.backgroundColor = .clear
-
-//        self.creditCardAddEditView = SensitiveHostingController(rootView: creditCardEditView)
 
         super.init(nibName: nil, bundle: nil)
         self.creditCardTableViewController.didSelectCardAtIndex = { [weak self] rowVal in
@@ -182,7 +172,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         })
 
         guard let creditCardEditView = creditCardEditView else { return }
-        creditCardAddEditView = TransparentHostingController(rootView: creditCardEditView)
+        creditCardAddEditView = UIHostingController(rootView: creditCardEditView)
         guard let creditCardAddEditView = creditCardAddEditView else { return }
         creditCardAddEditView.view.backgroundColor = .clear
         present(creditCardAddEditView, animated: true, completion: nil)

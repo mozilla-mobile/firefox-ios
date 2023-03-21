@@ -40,7 +40,6 @@ class SensitiveHostingController<Content>: UIHostingController<Content> where Co
         super.viewDidLoad()
         view.isOpaque = false
         view.backgroundColor = .clear
-//        navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     // MARK: - Private helpers
