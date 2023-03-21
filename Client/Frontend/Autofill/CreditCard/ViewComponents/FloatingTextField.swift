@@ -5,12 +5,14 @@
 import Foundation
 import SwiftUI
 import Shared
+import Combine
 
 struct FloatingTextField: View {
     var label: String
     @Binding var textVal: String
     var errorString: String = ""
     var showError: Bool = false
+    var keyboardType: UIKeyboardType = .default
 
     // Theming
     @Environment(\.themeType) var themeVal
@@ -29,6 +31,7 @@ struct FloatingTextField: View {
                     .font(.body)
                     .padding(.top, 7.5)
                     .foregroundColor(textFieldColor)
+                    .keyboardType(keyboardType)
                 if showError {
                     HStack(spacing: 0) {
                         Image(ImageIdentifiers.errorAutofill)
@@ -41,7 +44,7 @@ struct FloatingTextField: View {
                 }
             }
         }
-        .padding(.leading, 16)
+        .padding(.leading, 20)
         .onAppear {
             applyTheme(theme: themeVal.theme)
         }
