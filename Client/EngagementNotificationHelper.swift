@@ -41,9 +41,9 @@ class EngagementNotificationHelper: FeatureFlaggable {
 
         // schedule notifications only if notification permission was granted and the tips notifications are allowed
         notificationManager.hasPermission { [weak self] hasPermission in
-            guard let strongSelf = self, hasPermission, strongSelf.allowedTipsNotifications
+            guard let self = self, hasPermission, self.allowedTipsNotifications
             else { return }
-            strongSelf.scheduleNotification()
+            self.scheduleNotification()
         }
     }
 
