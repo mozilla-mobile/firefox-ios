@@ -88,9 +88,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
             childrenSection = [tipsAndFeaturesNotifications]
         }
 
-        return [
-            SettingSection(footerTitle: NSAttributedString(string: footerTitle), children: childrenSection)
-        ]
+        return [SettingSection(footerTitle: NSAttributedString(string: footerTitle), children: childrenSection)]
     }
 
     func checkForSystemNotifications() async {
