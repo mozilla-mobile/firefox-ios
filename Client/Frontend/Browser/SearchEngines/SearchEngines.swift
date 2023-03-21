@@ -172,11 +172,18 @@ class SearchEngines {
     }
 
     private lazy var customEngines: [OpenSearchEngine] = {
-        return NSKeyedUnarchiver.unarchiveObject(withFile: customEngineFilePath) as? [OpenSearchEngine] ?? []
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: customEngineFilePath)),
+           let unarchivedObject = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data),
+           let customEngines = unarchivedObject as? [OpenSearchEngine] {
+            return customEngines
+        } else {
+            return []
+        }
     }()
 
     private func saveCustomEngines() {
-        NSKeyedArchiver.archiveRootObject(customEngines, toFile: customEngineFilePath)
+        let data = try? NSKeyedArchiver.archivedData(withRootObject: customEngines, requiringSecureCoding: false)
+        try? data?.write(to: URL(fileURLWithPath: customEngineFilePath))
     }
 }
 
