@@ -8,5 +8,5 @@
 "Onboarding.Notification.Skip.Action.v112" = "Inte nu";
 
 /* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Notification.Title.v112" = "Aviseringar hjälper dig att göra mer med %@";
+"Onboarding.Notification.Title.v112" = "Notiser hjälper dig att göra mer med %@";
 

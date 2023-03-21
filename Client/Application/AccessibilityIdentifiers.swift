@@ -271,4 +271,13 @@ public struct AccessibilityIdentifiers {
     struct Setting {
         static let notifications = "NotificationsSetting"
     }
+
+    struct ZoomPageBar {
+        static let zoomPageZoomInButton = "ZoomPage.zoomInButton"
+        static let zoomPageZoomOutButton = "ZoomPage.zoomOutButton"
+    }
+
+    struct FindInPage {
+        static let findInPageCloseButton = "FindInPage.closeButton"
+    }
 }
