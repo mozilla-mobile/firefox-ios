@@ -106,4 +106,20 @@ class ReaderModeStyleTests: XCTestCase {
         readerModeStyle.ensurePreferredColorThemeIfNeeded()
         XCTAssertEqual(readerModeStyle.theme, .dark)
     }
+
+    func test_delegateMemoryLeak() {
+        let mockReaderModeStyleViewControllerDelegate = MockReaderModeStyleViewControllerDelegate()
+        let readerModeStyleViewModel = ReaderModeStyleViewModel(isBottomPresented: false)
+        let readerModeStyleViewController = ReaderModeStyleViewController(viewModel: readerModeStyleViewModel)
+        readerModeStyleViewController.delegate = mockReaderModeStyleViewControllerDelegate
+        trackForMemoryLeaks(readerModeStyleViewController)
+    }
+}
+
+class MockReaderModeStyleViewControllerDelegate: ReaderModeStyleViewControllerDelegate {
+    init() {}
+
+    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController,
+                                       didConfigureStyle style: ReaderModeStyle,
+                                       isUsingUserDefinedColor: Bool) {}
 }

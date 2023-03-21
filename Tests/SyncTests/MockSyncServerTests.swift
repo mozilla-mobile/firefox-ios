@@ -16,6 +16,7 @@ class MockSyncServerTests: XCTestCase {
     var client: Sync15StorageClient!
 
     override func setUp() {
+        super.setUp()
         server = MockSyncServer(username: "1234567")
         server.start()
         client = getClient(server: server)

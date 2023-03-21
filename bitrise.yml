@@ -1492,3 +1492,5 @@ trigger_map:
   pipeline: pipeline_multiple_shards
 - push_branch: jjSDET/mte-755
     workflow: Jackie-perf-testing
+- pull_request_target_branch: release/v*
+  pipeline: pipeline_multiple_shards

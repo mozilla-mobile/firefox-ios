@@ -248,11 +248,11 @@ class TabManagerStoreTests: XCTestCase {
 // MARK: - Helper methods
 private extension TabManagerStoreTests {
     func createManager(file: StaticString = #file,
-                       line: UInt = #line) -> TabManagerStoreImplementation {
-        let manager = TabManagerStoreImplementation(prefs: profile.prefs,
-                                                    imageStore: nil,
-                                                    fileManager: fileManager,
-                                                    serialQueue: serialQueue)
+                       line: UInt = #line) -> LegacyTabManagerStoreImplementation {
+        let manager = LegacyTabManagerStoreImplementation(prefs: profile.prefs,
+                                                          imageStore: nil,
+                                                          fileManager: fileManager,
+                                                          serialQueue: serialQueue)
         manager.clearArchive()
         trackForMemoryLeaks(manager, file: file, line: line)
         return manager
@@ -282,7 +282,7 @@ private extension TabManagerStoreTests {
         return tabs
     }
 
-    // Without session data, a Tab can't become a SavedTab and get archived
+    // Without session data, a Tab can't become a LegacySavedTab and get archived
     func createTab(title: String? = nil,
                    isPrivate: Bool = false,
                    file: StaticString = #file,
@@ -292,12 +292,12 @@ private extension TabManagerStoreTests {
         let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate)
         tab.url = URL(string: "http://yahoo.com/")!
         tab.lastTitle = title
-        tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
+        tab.sessionData = LegacySessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
         return tab
     }
 }
 
-class MockFileManager: TabFileManager {
+class MockFileManager: LegacyTabFileManager {
     var remoteItemCalledCount = 0
     func removeItem(at URL: URL) throws {
         remoteItemCalledCount += 1

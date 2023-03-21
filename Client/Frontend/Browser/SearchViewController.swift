@@ -845,6 +845,7 @@ extension SearchViewController {
                     return
                 } else {
                     // We can go to the next section.
+                    guard current.section + 1 < initialSection else { return }
                     nextSection = current.section + 1
                     nextItem = 0
                 }

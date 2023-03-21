@@ -1,0 +1,24 @@
+/* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardExpirationDateTitle.v112" = "Vencimiento MM / AA";
+
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "Número de tarjeta";
+
+/* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "Vence %@";
+
+/* Title label for user to input their name printed on their credit card in the text box below. */
+"CreditCard.EditCard.NameOnCardTitle.v112" = "Nombre en la tarjeta";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "Guardar";
+
+/* Title label for button that allows user to remove their saved credit card. */
+"CreditCard.EditCard.RemoveCardButtonTitle.v112" = "Eliminar tarjeta";
+
+/* Title label for user to pick a credit card from the list below to be updated. */
+"CreditCard.EditCard.SavedCardListTitle.v112" = "TARJETAS GUARDADAS";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Guardar y autocompletar tarjetas";
+

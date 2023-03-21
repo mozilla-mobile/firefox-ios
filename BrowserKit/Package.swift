@@ -14,6 +14,9 @@ let package = Package(
         .library(
             name: "Common",
             targets: ["Common"]),
+        .library(
+            name: "TabDataStore",
+            targets: ["TabDataStore"])
     ],
     dependencies: [
         .package(
@@ -49,5 +52,11 @@ let package = Package(
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),
+        .target(
+            name: "TabDataStore",
+            swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(
+            name: "TabDataStoreTests",
+            dependencies: ["TabDataStore"])
     ]
 )
