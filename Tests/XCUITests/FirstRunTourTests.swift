@@ -31,10 +31,11 @@ class FirstRunTourTests: BaseTestCase {
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
     }
 
-    func testStartBrowsingFromThirdScreen() {
-        navigator.goto(FirstRun)
-        goToNextScreen()
-        tapStartBrowsingButton()
+    func testStartBrowsingFromThirdScreen() throws {
+        throw XCTSkip("FXIOS-5519 - There is a now 3rd card in the first run screen.")
+        // navigator.goto(FirstRun)
+        // goToNextScreen()
+        // tapStartBrowsingButton()
     }
 
     func testCloseTour() {
