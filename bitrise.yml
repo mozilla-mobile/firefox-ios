@@ -1418,6 +1418,39 @@ workflows:
       bitrise.io:
         stack: osx-xcode-14.1.x-ventura
         machine_type_id: g2.8core
+  Archive_Dev_Test:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@6.2: {}
+    - cache-pull@2.1: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - xcode-archive@4.0:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: development
+        - distribution_method: development
+        - export_development_team: 43AQ936H96
+        - output_tool: xcodebuild
+        - scheme: Fennec
+        - configuration: Fennec
+        - project_path: "$BITRISE_PROJECT_PATH"
+    - deploy-to-bitrise-io@2.0: {}
+
+
 app:
   envs:
   - opts:
@@ -1449,7 +1482,7 @@ trigger_map:
 - push_branch: release/v112
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  workflow: Archive_Dev_Test
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
