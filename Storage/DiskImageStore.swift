@@ -43,7 +43,7 @@ open class DiskImageStore {
     }
 
     /// Gets an image for the given key if it is in the store.
-    open func getImageForKey(_ key: String) async throws -> UIImage {
+    public func getImageForKey(_ key: String) async throws -> UIImage {
         return try await withCheckedThrowingContinuation { continuation in
             queue.async {
                 if !self.keys.contains(key) {
@@ -69,9 +69,8 @@ open class DiskImageStore {
     /// Adds an image for the given key.
     /// This put is asynchronous; the image is not recorded in the cache until the write completes.
     /// Does nothing if this key already exists in the store.
-    @discardableResult
-    open func saveImageForKey(_ key: String, image: UIImage) async throws -> Success {
-        return try await withCheckedThrowingContinuation { continuation in
+    public func saveImageForKey(_ key: String, image: UIImage) async throws {
+        try await withCheckedThrowingContinuation { continuation in
             queue.async {
                 let size = CGSize(width: image.size.width / 2, height: image.size.height / 2)
                 let renderer = UIGraphicsImageRenderer(size: size)
@@ -84,7 +83,7 @@ open class DiskImageStore {
                     do {
                         try data.write(to: imageURL, options: .noFileProtection)
                         self.keys.insert(key)
-                        continuation.resume(returning: Success())
+                        continuation.resume()
                     } catch {
                         continuation.resume(throwing: error)
                     }
@@ -96,31 +95,29 @@ open class DiskImageStore {
     }
 
     /// Clears all images from the cache, excluding the given set of keys.
-    open func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws -> Success {
-        return try await withCheckedThrowingContinuation { continuation in
-            queue.async {
-                let keysToDelete = self.keys.subtracting(keys)
+    public func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { taskGroup in
+            let keysToDelete = self.keys.subtracting(keys)
 
-                for key in keysToDelete {
+            for key in keysToDelete {
+                taskGroup.addTask {
                     let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
                     do {
                         try FileManager.default.removeItem(at: url)
                     } catch {
-                        continuation.resume(throwing: error)
-                        return
+                        throw error
                     }
                 }
-
-                self.keys = self.keys.intersection(keys)
-
-                continuation.resume(returning: Success())
             }
+
+            await try? taskGroup.waitForAll()
+            self.keys = self.keys.intersection(keys)
         }
     }
 
     /// Remove image with provided key
-    open func deleteImageForKey(_ key: String) async -> Success {
-        return await withCheckedContinuation { continuation in
+    public func deleteImageForKey(_ key: String) async {
+        await withCheckedContinuation { continuation in
             queue.async {
                 let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
                 do {
@@ -130,7 +127,7 @@ open class DiskImageStore {
                                     level: .warning,
                                     category: .storage)
                 }
-                continuation.resume(returning: Success())
+                continuation.resume()
             }
         }
     }
