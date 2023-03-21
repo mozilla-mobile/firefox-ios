@@ -16,10 +16,10 @@ class ZoomPageBar: UIView {
         static let topBottomPadding: CGFloat = 18
         static let stepperWidth: CGFloat = 222
         static let stepperHeight: CGFloat = 36
-        static let stepperLeadingTrailingMargin: CGFloat = 18
-        static let stepperTopBottomMargin: CGFloat = 6
+        static let stepperTopBottomPadding: CGFloat = 10
         static let stepperCornerRadius: CGFloat = 8
         static let stepperShadowRadius: CGFloat = 4
+        static let stepperSpacing: CGFloat = 10
         static let stepperShadowOpacity: Float = 1
         static let stepperShadowOffset = CGSize(width: 0, height: 4)
         static let separatorWidth: CGFloat = 1
@@ -27,6 +27,8 @@ class ZoomPageBar: UIView {
         static let fontSize: CGFloat = 16
         static let lowerZoomLimit: CGFloat = 0.5
         static let upperZoomLimit: CGFloat = 2.0
+        static let zoomInButtonInsets = UIEdgeInsets(top: 6, left: 8, bottom: 6, right: 18)
+        static let zoomOutButtonInsets = UIEdgeInsets(top: 6, left: 18, bottom: 6, right: 8)
     }
 
     weak var delegate: ZoomPageBarDelegate?
@@ -37,13 +39,14 @@ class ZoomPageBar: UIView {
     private let tab: Tab
     private let isIpad: Bool
 
-    private let separator1: UIView = .build()
-    private let separator2: UIView = .build()
+    private let leftSeparator: UIView = .build()
+    private let rightSeparator: UIView = .build()
 
     private let stepperContainer: UIStackView = .build { view in
         view.axis = .horizontal
         view.alignment = .center
         view.distribution = .fill
+        view.spacing = UX.stepperSpacing
         view.layer.cornerRadius = UX.stepperCornerRadius
         view.layer.shadowRadius = UX.stepperShadowRadius
         view.layer.shadowOffset = UX.stepperShadowOffset
@@ -55,26 +58,23 @@ class ZoomPageBar: UIView {
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.subtract), for: [])
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton
         button.setContentHuggingPriority(.required, for: .horizontal)
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.stepperTopBottomMargin,
-                                                left: UX.stepperLeadingTrailingMargin,
-                                                bottom: UX.stepperTopBottomMargin,
-                                                right: UX.stepperLeadingTrailingMargin)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.contentEdgeInsets = UX.zoomOutButtonInsets
     }
 
     private let zoomInButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.add), for: [])
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
         button.setContentHuggingPriority(.required, for: .horizontal)
-        button.contentEdgeInsets = UIEdgeInsets(top: UX.stepperTopBottomMargin,
-                                                left: UX.stepperLeadingTrailingMargin,
-                                                bottom: UX.stepperTopBottomMargin,
-                                                right: UX.stepperLeadingTrailingMargin)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.contentEdgeInsets = UX.zoomInButtonInsets
     }
 
     private let zoomLevel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .callout,
                                                                        size: UX.fontSize)
         label.isUserInteractionEnabled = true
+        label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
     }
 
@@ -125,7 +125,7 @@ class ZoomPageBar: UIView {
             zoomInButton.isEnabled = false
         }
 
-        [zoomOutButton, separator1, zoomLevel, separator2, zoomInButton].forEach {
+        [zoomOutButton, leftSeparator, zoomLevel, rightSeparator, zoomInButton].forEach {
             stepperContainer.addArrangedSubview($0)
         }
 
@@ -140,12 +140,14 @@ class ZoomPageBar: UIView {
             stepperCenterXConstraint.isActive = true
         } else { stepperLeadingConstraint.isActive = true }
 
-        setupSeparator(separator1)
-        setupSeparator(separator2)
+        setupSeparator(leftSeparator)
+        setupSeparator(rightSeparator)
 
         NSLayoutConstraint.activate([
-            stepperContainer.heightAnchor.constraint(equalToConstant: UX.stepperHeight),
-            stepperContainer.widthAnchor.constraint(equalToConstant: UX.stepperWidth),
+            stepperContainer.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.stepperTopBottomPadding),
+            stepperContainer.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: UX.stepperTopBottomPadding),
+            stepperContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperHeight),
+            stepperContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperWidth),
             stepperContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -210,8 +212,8 @@ extension ZoomPageBar: ThemeApplicable {
         stepperContainer.backgroundColor = theme.colors.layer5
         stepperContainer.layer.shadowColor = theme.colors.shadowDefault.cgColor
 
-        separator1.backgroundColor = theme.colors.borderPrimary
-        separator2.backgroundColor = theme.colors.borderPrimary
+        leftSeparator.backgroundColor = theme.colors.borderPrimary
+        rightSeparator.backgroundColor = theme.colors.borderPrimary
 
         zoomLevel.tintColor = theme.colors.textPrimary
 

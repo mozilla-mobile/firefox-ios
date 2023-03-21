@@ -30,8 +30,7 @@ extension BrowserViewController {
             })
         }
 
-        zoomPageBar.heightAnchor.constraint(equalToConstant: UIConstants.ZoomPageBarHeight).isActive = true
-
+        zoomPageBar.heightAnchor.constraint(greaterThanOrEqualToConstant: UIConstants.ZoomPageBarHeight).isActive = true
         zoomPageBar.applyTheme(theme: themeManager.currentTheme)
 
         updateViewConstraints()
