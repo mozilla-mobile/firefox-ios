@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Common
 import SwiftUI
 
 private struct CreditCardInputText {
@@ -65,10 +66,7 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                           timeLastModified: 1234,
                                           timesUsed: 1234)
 
-        let viewModel = CreditCardEditViewModel(firstName: "Mike",
-                                                lastName: "Simmons",
-                                                errorState: "Temp",
-                                                enteredValue: "",
+        let viewModel = CreditCardEditViewModel(profile: AppContainer.shared.resolve(),
                                                 creditCard: sampleCreditCard)
 
         CreditCardEditView(viewModel: viewModel,

@@ -6,7 +6,7 @@ import SwiftUI
 
 /// For the Credit Card feature, this enum holds four cases that describe different parts of a credit card.
 enum CreditCardInputType {
-    case name, number, expiration, securityCode
+    case name, number, expiration
 }
 
 struct CreditCardInputField: View {
@@ -33,7 +33,8 @@ struct CreditCardInputField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             getInputFieldViewWith(inputType: creditCardInputType)
-        }.padding(.leading, 16)
+        }
+        .padding(.leading, 16)
     }
 
     @ViewBuilder private func getInputFieldViewWith(inputType: CreditCardInputType) -> some View {
@@ -70,8 +71,6 @@ struct CreditCardInputField: View {
 
                     guard let formattedText = viewModel.separate(inputType: inputType, for: text) else { return }
                     text = formattedText
-                case .securityCode:
-                    viewModel.updateSecurityCodeValidity(userInputtedText: text)
                 }
             }
         if !viewModel.isValid {

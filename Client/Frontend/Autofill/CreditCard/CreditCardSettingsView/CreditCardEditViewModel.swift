@@ -14,31 +14,6 @@ class CreditCardEditViewModel: ObservableObject {
     let autofill: RustAutofill
     let creditCard: CreditCard?
 
-    @Published var firstName: String = ""
-    @Published var lastName: String = ""
-    @Published var errorState: String = ""
-    @Published var enteredValue: String = ""
-    @Published var nameIsValid = true
-    @Published var numberIsValid = true
-    @Published var expirationIsValid = true
-    @Published var nameOnCard: String = "" {
-        didSet (val) {
-            nameIsValid = nameOnCard.isEmpty
-        }
-    }
-
-    @Published var expirationDate: String = "" {
-        didSet (val) {
-            numberIsValid = true
-        }
-    }
-
-    @Published var cardNumber: String = "" {
-        didSet (val) {
-            expirationIsValid = true
-        }
-    }
-
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {
         return RemoveCardButton.AlertDetails(
             alertTitle: Text(CreditCardText.RemoveCardTitle),
@@ -76,22 +51,6 @@ class CreditCardEditViewModel: ObservableObject {
          creditCard: CreditCard? = nil
     ) {
         self.profile = profile
-        self.autofill = profile.autofill
-        self.creditCard = creditCard
-    }
-
-    init(profile: Profile = AppContainer.shared.resolve(),
-         firstName: String,
-         lastName: String,
-         errorState: String,
-         enteredValue: String,
-         creditCard: CreditCard? = nil
-    ) {
-        self.profile = profile
-        self.firstName = firstName
-        self.lastName = lastName
-        self.errorState = errorState
-        self.enteredValue = enteredValue
         self.autofill = profile.autofill
         self.creditCard = creditCard
     }

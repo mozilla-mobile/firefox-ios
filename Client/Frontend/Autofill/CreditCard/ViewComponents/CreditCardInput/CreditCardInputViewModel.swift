@@ -28,19 +28,13 @@ class CreditCardInputViewModel: ObservableObject {
             self.fieldHeadline = .CreditCard.EditCard.CardNumberTitle
             self.errorString = .CreditCard.ErrorState.CardNumberSublabel
             self.formattedTextLimit = 20
-            self.delimiterCharacter = " "
+            self.delimiterCharacter = "-"
             self.keyboardType = .numberPad
         case .expiration:
             self.fieldHeadline = .CreditCard.EditCard.CardExpirationDateTitle
             self.errorString = .CreditCard.ErrorState.CardExpirationDateSublabel
             self.formattedTextLimit = 7
             self.delimiterCharacter = " / "
-            self.keyboardType = .numberPad
-        case .securityCode: // Design feedback needed
-            self.fieldHeadline = "Security Code"
-            self.errorString = "Enter the three digit security code"
-            self.formattedTextLimit = 3
-            self.delimiterCharacter = nil
             self.keyboardType = .numberPad
         }
     }
@@ -54,10 +48,11 @@ class CreditCardInputViewModel: ObservableObject {
     }
 
     func updateExpirationValidity(userInputtedText: String) {
-        let year = Calendar(identifier: .gregorian).dateComponents([.year], from: Date()).year ?? 2023
+        let year = Calendar(identifier: .gregorian).dateComponents([.year], from: Date()).year
 
         guard let month = Int(userInputtedText.prefix(2)),
               let inputYear = Int(userInputtedText.suffix(2)),
+              let year = year,
               userInputtedText.count < 5,
               month < 13 && month > 0,
               (inputYear + 2000) < 2099 && (inputYear + 2000) >= year else {
@@ -66,10 +61,6 @@ class CreditCardInputViewModel: ObservableObject {
         }
 
         isValid = true
-    }
-
-    func updateSecurityCodeValidity(userInputtedText: String) {
-        isValid = userInputtedText.count == 3
     }
 
     /// This function takes a credit card input string and returns it in a user readable format.
@@ -83,9 +74,13 @@ class CreditCardInputViewModel: ObservableObject {
         var formattedText = ""
         switch inputType {
         case .number:
-            formattedText = textInput.enumerated().map { $0.isMultiple(of: 4) && ($0 != 0) ? "\(delimiterCharacter)\($1)" : String($1) }.joined()
+            formattedText = textInput.enumerated().map {
+                $0.isMultiple(of: 4) && ($0 != 0) ? "\(delimiterCharacter)\($1)" : String($1)
+            }.joined()
         case .expiration:
-            formattedText = textInput.enumerated().map { $0.isMultiple(of: 2) && ($0 != 0) ? "\(delimiterCharacter)\($1)" : String($1) }.joined()
+            formattedText = textInput.enumerated().map {
+                $0.isMultiple(of: 2) && ($0 != 0) ? "\(delimiterCharacter)\($1)" : String($1)
+            }.joined()
 
         default: break
         }
