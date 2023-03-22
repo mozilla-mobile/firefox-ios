@@ -173,9 +173,22 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
         guard let creditCardEditView = creditCardEditView else { return }
         creditCardAddEditView = UIHostingController(rootView: creditCardEditView)
-        guard let creditCardAddEditView = creditCardAddEditView else { return }
-        creditCardAddEditView.view.backgroundColor = .clear
-        present(creditCardAddEditView, animated: true, completion: nil)
+        creditCardAddEditView?.view.backgroundColor = .clear
+//        guard let creditCardAddEditView = creditCardAddEditView else { return }
+//        self.creditCardAddEditView!.view.window?.backgroundColor = .blue
+//        1
+//        self.navigationController?.modalPresentationStyle = .fullScreen
+//        self.modalPresentationStyle = .fullScreen
+        self.creditCardAddEditView?.modalPresentationStyle = .formSheet
+//        self.creditCardAddEditView?.view.backgroundColor = .blue
+//        self.creditCardAddEditView?.rootView.backgroundColor = .pink
+//        self.presentedViewController?.view.backgroundColor = .blue
+//        self.creditCardAddEditView?.rootView.backgroundColor = .blue
+//
+//        UIApplication.shared.keyWindow?.rootViewController?.present(alertController, animated: true, completion: nil)
+//        UIWindow.keyWindow?.rootViewController?.present(self.creditCardAddEditView!, animated: true)
+
+        self.present(self.creditCardAddEditView!, animated: true, completion: nil)
     }
 
     @objc private func addCreditCard() {

@@ -43,6 +43,7 @@ struct FloatingTextField: View {
                     .padding(.top, 7.4)
                 }
             }
+            .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
         }
         .padding(.leading, 20)
         .onAppear {
@@ -58,6 +59,6 @@ struct FloatingTextField: View {
         errorColor = Color(color.textWarning)
         titleColor = Color(color.textPrimary)
         textFieldColor = Color(color.textSecondary)
-        backgroundColor = Color(color.layer1)
+        backgroundColor = Color(color.layer2)
     }
 }

@@ -13,20 +13,40 @@ enum CreditCardEditState: String, Equatable, CaseIterable {
     case view
 
     enum leftBarButtonState: String, Equatable, CaseIterable {
-        case close
-        case cancel
+        case Close
+        case Cancel
+
+        var title: String {
+            switch self {
+            case .Cancel:
+                return String.CreditCard.EditCard.CancelNavBarButtonLabel
+            case .Close:
+                return String.CreditCard.EditCard.CloseNavBarButtonLabel
+            }
+        }
     }
 
     enum rightBarButtonState: String, Equatable, CaseIterable {
-        case save
-        case edit
+        case Save
+        case Edit
+
+        var title: String {
+            switch self {
+            case .Save:
+                return String.CreditCard.EditCard.SaveNavBarButtonLabel
+            case .Edit:
+                return String.CreditCard.EditCard.EditNavBarButtonLabel
+            }
+        }
     }
 
     var title: String {
         switch self {
         case .add:
             return String.CreditCard.EditCard.AddCreditCardTitle
-        case .edit, .view:
+        case .view:
+            return String.CreditCard.EditCard.ViewCreditCardTitle
+        case .edit:
             return String.CreditCard.EditCard.EditCreditCardTitle
         }
     }
@@ -34,18 +54,18 @@ enum CreditCardEditState: String, Equatable, CaseIterable {
     var leftBarBtn: leftBarButtonState {
         switch self {
         case .add, .view:
-            return .close
+            return .Close
         case .edit:
-            return .cancel
+            return .Cancel
         }
     }
 
     var rightBarBtn: rightBarButtonState {
         switch self {
         case .add, .edit:
-            return .save
+            return .Save
         case .view:
-            return .edit
+            return .Edit
         }
     }
 }
@@ -187,5 +207,8 @@ class CreditCardEditViewModel: ObservableObject {
         nameOnCard = ""
         cardNumber = ""
         expirationDate = ""
+        nameIsValid = true
+        expirationIsValid = true
+        numberIsValid = true
     }
 }
