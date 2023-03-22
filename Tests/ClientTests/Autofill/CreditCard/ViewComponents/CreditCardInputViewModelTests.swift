@@ -87,4 +87,26 @@ class CreditCardInputViewModelTests: XCTestCase {
         viewModel.updateExpirationValidity(userInputtedText: "Firefox da best")
         XCTAssertFalse(viewModel.isValid)
     }
+
+    func testUserInputFormattingForExpiry() {
+        let viewModel = CreditCardInputViewModel(fieldType: .expiration)
+
+        guard let testableString = viewModel.separate(inputType: .expiration, for: "1236") else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(testableString, "12 / 36")
+
+        guard let testableString = viewModel.separate(inputType: .expiration, for: "8888") else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual(testableString, "88 / 88")
+    }
+
+    func testCountNumbersIn() {
+        let viewModel = CreditCardInputViewModel(fieldType: .name)
+
+        XCTAssertEqual(viewModel.countNumbersIn(text: "1234567890"), 10)
+    }
 }

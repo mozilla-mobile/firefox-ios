@@ -55,7 +55,7 @@ class CreditCardInputViewModel: ObservableObject {
               let year = year,
               userInputtedText.count < 5,
               month < 13 && month > 0,
-              (inputYear + 2000) < 2099 && (inputYear + 2000) >= year else {
+              (inputYear + 2000) < year + 100 && (inputYear + 2000) >= year else {
             isValid = false
             return
         }
