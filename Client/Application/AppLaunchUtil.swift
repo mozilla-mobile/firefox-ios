@@ -99,8 +99,10 @@ class AppLaunchUtil {
             // fresh install - Intro screen not yet shown
             InstallType.set(type: .fresh)
             InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+
             // Profile setup
             profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest)
+            profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.KeyFirstAppUse)
         } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
             profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
         }
@@ -144,7 +146,7 @@ class AppLaunchUtil {
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started
             // this will help us identify how often the migration starts, but never ends
-            // additionally, we have a seperate metric for error rates
+            // additionally, we have a separate metric for error rates
             GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
             GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             browserProfile?.migrateHistoryToPlaces(

@@ -32,6 +32,7 @@ public struct PrefsKeys {
     public static let SessionCount = "sessionCount"
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
+    public static let KeyFirstAppUse = "firstAppUse"
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
 
@@ -47,6 +48,11 @@ public struct PrefsKeys {
 
         public static let legacyAssetMigrationCheck = "legacyAssetMigrationCheckUserPrefsKey"
         public static let v1MigrationCheck = "v1MigrationCheckUserPrefsKey"
+    }
+
+    public struct Notifications {
+        public static let SyncNotifications = "SyncNotificationsUserPrefsKey"
+        public static let TipsAndFeaturesNotifications = "TipsAndFeaturesNotificationsUserPrefsKey"
     }
 
     // For ease of use, please list keys alphabetically.

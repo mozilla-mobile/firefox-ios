@@ -213,6 +213,22 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.notificationPermissionPrompt)
     }
 
+    func test_onboardingEngagementNotificationTapped_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .engagementNotification)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationTapped)
+    }
+
+    func test_onboardingEngagementNotificationCancel_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .cancel,
+                                     object: .engagementNotification)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationCancel)
+    }
+
     // MARK: - Upgrade onboarding
     func test_upgradeCardViewWithExtras_GleanIsCalled() {
         let cardTypeKey = TelemetryWrapper.EventExtraKey.cardType.rawValue

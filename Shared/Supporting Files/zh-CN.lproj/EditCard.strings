@@ -1,0 +1,24 @@
+/* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardExpirationDateTitle.v112" = "有效期 MM / YY";
+
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "卡号";
+
+/* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "有效期 %@";
+
+/* Title label for user to input their name printed on their credit card in the text box below. */
+"CreditCard.EditCard.NameOnCardTitle.v112" = "持卡人姓名";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "保存";
+
+/* Title label for button that allows user to remove their saved credit card. */
+"CreditCard.EditCard.RemoveCardButtonTitle.v112" = "移除卡片";
+
+/* Title label for user to pick a credit card from the list below to be updated. */
+"CreditCard.EditCard.SavedCardListTitle.v112" = "已保存的卡片";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "保存并自动填充卡片信息";
+

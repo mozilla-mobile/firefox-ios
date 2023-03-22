@@ -1219,6 +1219,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Vervang zoekterm door %s)";
 
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v112" = "Creditcards automatisch invullen";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Alle websitegegevens wissen";
 
@@ -1450,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Lege pagina";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "Aangepast";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox-startpagina";
 
@@ -1576,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, begrepen";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Als een website niet werkt zoals verwacht, tik dan op het slot in de adresbalk en schakel Verbeterde bescherming tegen volgen voor die pagina uit.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Opgelet!";
 
@@ -1587,6 +1596,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Vermindert gerichte advertenties en voorkomt dat adverteerders uw surfactiviteiten volgen.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Als een website niet werkt zoals verwacht, tik dan op het slot in de adresbalk en schakel Verbeterde bescherming tegen volgen voor die pagina uit.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Als een website niet werkt zoals verwacht, tik dan op het slot in de adresbalk en schakel Verbeterde bescherming tegen volgen voor die pagina uit.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Staat enkele advertentietrackers toe, zodat websites goed functioneren.";
@@ -1602,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standaard (standaard)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Standaard";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Streng";

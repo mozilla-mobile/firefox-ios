@@ -230,4 +230,8 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
     func showWallpaperSettings() {
         showSettingsWithDeeplink(to: .wallpaper)
     }
+
+    func showZoomPage(tab: Tab) {
+        updateZoomPageBarVisibility(visible: true)
+    }
 }

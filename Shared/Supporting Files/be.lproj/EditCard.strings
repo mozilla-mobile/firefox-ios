@@ -1,0 +1,15 @@
+/* Title label for user to input their name printed on their credit card in the text box below. */
+"CreditCard.EditCard.NameOnCardTitle.v112" = "Імя на карце";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "Захаваць";
+
+/* Title label for button that allows user to remove their saved credit card. */
+"CreditCard.EditCard.RemoveCardButtonTitle.v112" = "Выдаліць карту";
+
+/* Title label for user to pick a credit card from the list below to be updated. */
+"CreditCard.EditCard.SavedCardListTitle.v112" = "ЗАХАВАНЫЯ КАРТЫ";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Захоўваць і аўтаматычна запаўняць карты";
+
