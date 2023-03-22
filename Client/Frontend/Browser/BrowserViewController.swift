@@ -1043,6 +1043,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func enterOverlayMode() {
+        scrollController.isKeyboardOpen = true
         // Delay enterOverlay mode after dismissableView is dismiss
         if let viewcontroller = presentedViewController as? OnViewDismissable {
             viewcontroller.onViewDismissed = { [weak self] in
@@ -1060,6 +1061,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func leaveOverlayMode(didCancel cancel: Bool) {
+        scrollController.isKeyboardOpen = false
         urlBar.leaveOverlayMode(didCancel: cancel)
     }
 

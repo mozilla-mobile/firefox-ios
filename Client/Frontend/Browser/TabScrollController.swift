@@ -36,6 +36,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     weak var header: BaseAlphaStackView?
     weak var overKeyboardContainer: BaseAlphaStackView?
     weak var bottomContainer: BaseAlphaStackView?
+    var isKeyboardOpen: Bool = false
 
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
@@ -43,7 +44,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
 
     var toolbarsShowing: Bool {
         let bottomShowing = overKeyboardContainerOffset == 0 && bottomContainerOffset == 0
-        return isBottomSearchBar ? bottomShowing : headerTopOffset == 0
+        return isBottomSearchBar ? bottomShowing : toolbarState == .visible
     }
 
     private var isZoomedOut: Bool = false
@@ -198,11 +199,13 @@ private extension TabScrollingController {
         return scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) && scrollView.contentSize.height > scrollView.frame.size.height
     }
 
-    @objc
-    func handlePan(_ gesture: UIPanGestureRecognizer) {
-        if tabIsLoading() {
-            return
-        }
+    func shouldAllowScroll(with topIsRubberbanding: Bool,
+                           and bottomIsNotRubberbanding: Bool) -> Bool {
+        return (toolbarState != .collapsed || topIsRubberbanding) && bottomIsNotRubberbanding
+    }
+
+    @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
+        guard !tabIsLoading() || !isKeyboardOpen else { return }
 
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
@@ -218,7 +221,8 @@ private extension TabScrollingController {
             if checkRubberbandingForDelta(delta) && checkScrollHeightIsLargeEnoughForScrolling() {
                 let bottomIsNotRubberbanding = contentOffset.y + scrollViewHeight < contentSize.height
                 let topIsRubberbanding = contentOffset.y <= 0
-                if (toolbarState != .collapsed || topIsRubberbanding) && bottomIsNotRubberbanding {
+
+                if shouldAllowScroll(with: topIsRubberbanding, and: bottomIsNotRubberbanding) {
                     scrollWithDelta(delta)
                 }
 
@@ -252,7 +256,7 @@ private extension TabScrollingController {
 
         let updatedOffset = headerTopOffset - delta
         headerTopOffset = clamp(updatedOffset, min: -topScrollHeight, max: 0)
-        if isHeaderDisplayedForGivenOffset(updatedOffset) {
+        if isHeaderDisplayedForGivenOffset(headerTopOffset) {
             scrollView?.contentOffset = CGPoint(x: contentOffset.x, y: contentOffset.y - delta)
         }
 
@@ -354,9 +358,8 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 
 extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if tabIsLoading() || isBouncingAtBottom() {
-            return
-        }
+        guard !tabIsLoading(), !isBouncingAtBottom(),
+                checkScrollHeightIsLargeEnoughForScrolling() else { return }
 
         if (decelerate || (toolbarState == .animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .up {
@@ -368,7 +371,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        // Only mess with the zoom level if the user did not initate the zoom via a zoom gesture
+        // Only mess with the zoom level if the user did not initiate the zoom via a zoom gesture
         if self.isUserZoom {
             return
         }
