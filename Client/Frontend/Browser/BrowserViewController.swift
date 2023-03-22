@@ -1840,8 +1840,8 @@ extension BrowserViewController: LegacyTabDelegate {
         }
 
         // TODO: Wrap this in a feature flag FXIOS-5041
-        // let creditCardHelper = CreditCardHelper(tab: tab)
-        // tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
+        let creditCardHelper = CreditCardHelper(tab: tab)
+        tab.addContentScript(creditCardHelper, name: CreditCardHelper.name())
 
         let contextMenuHelper = ContextMenuHelper(tab: tab)
         contextMenuHelper.delegate = self

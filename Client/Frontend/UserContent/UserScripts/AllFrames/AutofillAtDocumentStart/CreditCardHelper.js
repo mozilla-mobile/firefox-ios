@@ -6,18 +6,51 @@
 
 import { CreditCardAutofill } from "Assets/CC_Script/CreditCardAutofill.js";
 
+const messageTypes = {
+  FILL_CREDIT_CARD_FORM: "fill-credit-card-form",
+  CAPTURE_CREDIT_CARD_FORM: "capture-credit-card-form",
+};
+
+// TODO: Extract this to its own module
+const sendMessage = (type) => (payload) =>
+  window.webkit.messageHandlers.creditCardMessageHandler?.postMessage({
+    type,
+    payload,
+  });
+
+const sendCaptureCreditCardFormMessage = sendMessage(
+  messageTypes.CAPTURE_CREDIT_CARD_FORM
+);
+
+const sendFillCreditCardFormMessage = sendMessage(
+  messageTypes.FILL_CREDIT_CARD_FORM
+);
+
 class CreditCardHelper {
   constructor() {
+    this.creditCardAutofill = new CreditCardAutofill();
     this.onLoad = this.onLoad.bind(this);
     this.onFocus = this.onFocus.bind(this);
-    this.creditCardAutofill = new CreditCardAutofill();
+    this.onSumbit = this.onSumbit.bind(this);
     window.addEventListener("load", this.onLoad);
+    window.addEventListener("submit", this.onSumbit);
+  }
+
+  attachFieldListeners() {
+    [...document.forms].forEach((form) => {
+      const { formInfo } = this.creditCardAutofill.getSection(form);
+      if (formInfo) return;
+      const allFields = this.creditCardAutofill.findCreditCardForms(form);
+      allFields.forEach((field) => (field.onfocus = this.onFocus));
+      form.submit = (ev) => this.onSumbit(ev, "submit");
+    });
   }
 
   onLoad() {
+    // TODO: This is a hack to detect when the DOM changes,
     const observer = new MutationObserver((mutations) => {
       for (var idx = 0; idx < mutations.length; ++idx) {
-        this.findForms(mutations[idx].addedNodes);
+        this.attachFieldListeners();
       }
     });
     observer.observe(document.body, {
@@ -26,26 +59,36 @@ class CreditCardHelper {
       characterData: false,
       subtree: true,
     });
+    this.attachFieldListeners();
+  }
 
-    [...document.forms].forEach((form) => {
-      const allFields = this.creditCardAutofill.findCreditCardForms(form);
-      allFields.forEach((field) =>
-        field.addEventListener("focus", this.onFocus)
-      );
-    });
+  fieldsToPayload(fields) {
+    return fields.map((field) => ({
+      type: field.fieldName,
+      value: field.elementWeakRef.get().value,
+    }));
   }
 
   onFocus(ev) {
-    this.sendMessage({
-      msg: "cc-form",
-      id: this.creditCardAutofill.getSectionId(ev.target),
+    const { id, formInfo } = this.creditCardAutofill.getSection(ev.target.form);
+    if (!formInfo) return;
+    sendFillCreditCardFormMessage({
+      id,
+      fieldTypes: this.fieldsToPayload(formInfo.fields),
     });
   }
 
-  sendMessage(payload) {
-    window.webkit.messageHandlers.creditCardMessageHandler?.postMessage(
-      payload
-    );
+  onSumbit(ev) {
+    // This is a hack to prevent the form from submitting,
+    // we need to find a better way to intercept the submit event
+    ev.preventDefault();
+    const rootForm = ev.target.tagName === "FORM" ? ev.target : ev.target.form;
+    const { id, formInfo } = this.creditCardAutofill.getSection(rootForm);
+    if (!formInfo) return;
+    sendCaptureCreditCardFormMessage({
+      id,
+      fieldTypes: this.fieldsToPayload(formInfo.fields),
+    });
   }
 
   fillCreditCardInfo(payload) {

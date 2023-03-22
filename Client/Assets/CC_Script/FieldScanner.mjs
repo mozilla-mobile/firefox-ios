@@ -1,12 +1,12 @@
 import { FormAutofillHeuristicsShared } from "resource://gre/modules/FormAutofillHeuristics.shared.mjs";
 import { FormAutofillUtilsShared } from "resource://gre/modules/FormAutofillUtils.shared.mjs";
-
+import { creditCardRulesets } from "resource://gre/modules/CreditCardRuleset.mjs";
 // TODO(HACK): Update this
 const lazy = { log: { debug: () => {} } };
-// TODO(HACK): Update this
-const creditCardRulesets = {
-  types: ["cc-number", "cc-name"],
-};
+// // TODO(HACK): Update this
+// const creditCardRulesets = {
+//   types: ["cc-number", "cc-name"],
+// };
 
 // TODO(HACK): Update this
 const fathomTmpValues = {
@@ -493,12 +493,12 @@ export class FieldScanner {
       return [null, null];
     }
 
-    // Used by test ONLY! This ensure testcases always get the same confidence
-    //TODO(HACK): Update this
-    if (fathomTmpValues.ccFathomTestConfidence > 0) {
-      //TODO(HACK): Update this
-      highestConfidence = fathomTmpValues.ccFathomTestConfidence;
-    }
+    // // Used by test ONLY! This ensure testcases always get the same confidence
+    // //TODO(HACK): Update this
+    // if (fathomTmpValues.ccFathomTestConfidence > 0) {
+    //   //TODO(HACK): Update this
+    //   highestConfidence = fathomTmpValues.ccFathomTestConfidence;
+    // }
 
     return [highestField, highestConfidence];
   }
