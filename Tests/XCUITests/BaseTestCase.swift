@@ -170,8 +170,10 @@ class BaseTestCase: XCTestCase {
         app.buttons["Add to Reading List"].tap()
     }
     func removeContentFromReaderView() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_ReadingList)
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
