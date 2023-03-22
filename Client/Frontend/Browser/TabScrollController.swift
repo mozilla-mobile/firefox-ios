@@ -53,6 +53,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
 
     private var headerTopOffset: CGFloat = 0 {
         didSet {
+            print("YRD \(headerTopOffset)")
             headerTopConstraint?.update(offset: headerTopOffset)
             header?.superview?.setNeedsLayout()
         }
@@ -107,11 +108,9 @@ class TabScrollingController: NSObject, FeatureFlaggable {
         super.init()
     }
 
-    func showToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
-        if toolbarState == .visible {
-            completion?(true)
-            return
-        }
+    func showToolbars(animated: Bool) {
+        print("YRD showToolbars")
+        guard toolbarState != .visible else { return }
         toolbarState = .visible
 
         let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * showDurationRatio)
@@ -122,13 +121,13 @@ class TabScrollingController: NSObject, FeatureFlaggable {
             bottomContainerOffset: 0,
             overKeyboardOffset: 0,
             alpha: 1,
-            completion: completion)
+            completion: nil)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
             if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
-                showToolbars(animated: true, completion: nil)
+                showToolbars(animated: true)
             }
         }
     }
@@ -156,11 +155,9 @@ extension TabScrollingController: SearchBarLocationProvider {}
 
 // MARK: - Private
 private extension TabScrollingController {
-    func hideToolbars(animated: Bool, completion: ((_ finished: Bool) -> Void)? = nil) {
-        if toolbarState == .collapsed {
-            completion?(true)
-            return
-        }
+    func hideToolbars(animated: Bool) {
+        print("YRD hideToolbar")
+        guard toolbarState != .collapsed else { return }
         toolbarState = .collapsed
 
         let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
@@ -171,7 +168,7 @@ private extension TabScrollingController {
             bottomContainerOffset: bottomContainerScrollHeight,
             overKeyboardOffset: overKeyboardScrollHeight,
             alpha: 0,
-            completion: completion)
+            completion: nil)
     }
 
     func configureRefreshControl() {
@@ -205,6 +202,12 @@ private extension TabScrollingController {
     }
 
     @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
+        guard gesture.state != .ended, gesture.state != .cancelled else {
+            print("YRD gesture ended")
+            lastContentOffset = 0
+            return
+        }
+
         guard !tabIsLoading() || !isKeyboardOpen else { return }
 
         if let containerView = scrollView?.superview {
@@ -235,10 +238,6 @@ private extension TabScrollingController {
                 } else {
                     toolbarState = .animating
                 }
-            }
-
-            if gesture.state == .ended || gesture.state == .cancelled {
-                lastContentOffset = 0
             }
         }
     }
@@ -360,6 +359,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(),
                 checkScrollHeightIsLargeEnoughForScrolling() else { return }
+        print("YRD scrollEndDragging")
 
         if (decelerate || (toolbarState == .animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
             if scrollDirection == .up {
@@ -396,6 +396,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        print("YRD scrollViewShouldScrollToTop")
         if toolbarState == .collapsed {
             showToolbars(animated: true)
             return false

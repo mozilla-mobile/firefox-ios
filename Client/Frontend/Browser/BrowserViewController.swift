@@ -2565,7 +2565,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         keyboardState = state
         updateViewConstraints()
         scrollController.isKeyboardOpen = true
-        print("YRD keyboard open")
 
         UIView.animate(
             withDuration: state.animationDuration,
