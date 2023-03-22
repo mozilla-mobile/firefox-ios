@@ -370,7 +370,7 @@ class BoolNotificationSetting: BoolSetting {
         case .authorized, .provisional, .ephemeral:
             return true
         case .denied, .notDetermined:
-            return false
+            fallthrough
         @unknown default:
             return false
         }

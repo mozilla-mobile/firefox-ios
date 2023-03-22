@@ -80,7 +80,7 @@ class NotificationManager: NotificationManagerProtocol {
             case .authorized, .ephemeral, .provisional:
                 hasPermission = true
             case .notDetermined, .denied:
-                hasPermission = false
+                fallthrough
             @unknown default:
                 hasPermission = false
             }

@@ -21,7 +21,7 @@ class EngagementNotificationHelper: FeatureFlaggable {
     private var notificationManager: NotificationManagerProtocol
     private var prefs: Prefs?
     private var firstAppUse: Timestamp? {
-        prefs?.timestampForKey(PrefsKeys.KeyFirstAppUse)
+        return prefs?.timestampForKey(PrefsKeys.KeyFirstAppUse)
     }
     private lazy var featureEnabled: Bool = featureFlags.isFeatureEnabled(.engagementNotificationStatus,
                                                                           checking: .buildOnly)

@@ -96,8 +96,10 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
 
         switch settings.authorizationStatus {
         case .denied:
-            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue, AppName.shortName.rawValue)
-        case .authorized, .provisional, .ephemera, .notDetermined:
+            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage,
+                                      AppName.shortName.rawValue,
+                                      AppName.shortName.rawValue)
+        case .authorized, .provisional, .ephemeral, .notDetermined:
             fallthrough
         @unknown default:
             self.footerTitle = ""
