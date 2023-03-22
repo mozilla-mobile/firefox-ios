@@ -738,6 +738,31 @@ onboarding:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-07-01"
+<<<<<<< HEAD
+=======
+  engagement_notification_tapped:
+    type: event
+    description: |
+      Records the users interaction with the engagement notification.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-09-01"
+  engagement_notification_cancel:
+    type: event
+    description: |
+      Records the cancelation of a scheduled engagement notification.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-09-01"
+>>>>>>> d904b2397 (Bugfix FXIOS-5519 [v112] Re-engagement Notifications (#13697))
 
 # Upgrade onboarding metrics
 upgrade:
