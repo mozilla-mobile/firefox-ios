@@ -9,8 +9,12 @@ import Shared
 
 protocol NotificationManagerProtocol {
     func requestAuthorization(completion: @escaping (Bool, Error?) -> Void)
+    func requestAuthorization(completion: @escaping (Result<Bool, Error>) -> Void)
+    func requestAuthorization() async throws -> Bool
     func getNotificationSettings(sendTelemetry: Bool, completion: @escaping (UNNotificationSettings) -> Void)
+    func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings
     func hasPermission(completion: @escaping (Bool) -> Void)
+    func hasPermission() async -> Bool
     func schedule(title: String, body: String, id: String, date: Date, repeats: Bool)
     func schedule(title: String, body: String, id: String, interval: TimeInterval, repeats: Bool)
     func findDeliveredNotifications(completion: @escaping ([UNNotification]) -> Void)
@@ -72,6 +76,14 @@ class NotificationManager: NotificationManagerProtocol {
         }
     }
 
+    func getNotificationSettings(sendTelemetry: Bool = false) async -> UNNotificationSettings {
+        return await withCheckedContinuation { continuation in
+            getNotificationSettings(sendTelemetry: sendTelemetry) { result in
+                continuation.resume(returning: result)
+            }
+        }
+    }
+
     // Determines if the user has allowed notifications
     func hasPermission(completion: @escaping (Bool) -> Void) {
         getNotificationSettings { settings in
@@ -88,10 +100,11 @@ class NotificationManager: NotificationManagerProtocol {
         }
     }
 
-    func getNotificationSettings(sendTelemetry: Bool = false) async -> UNNotificationSettings {
-        return await withCheckedContinuation { continuation in
-            getNotificationSettings(sendTelemetry: sendTelemetry) { result in
-                continuation.resume(returning: result)
+    // Determines if the user has allowed notifications
+    func hasPermission() async -> Bool {
+        await withCheckedContinuation { continuation in
+            hasPermission { hasPermission in
+                continuation.resume(returning: hasPermission)
             }
         }
     }
