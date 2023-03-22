@@ -36,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
 
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
+
     func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions
@@ -131,6 +133,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.ratingPromptManager.updateData()
         }
 
+        // Schedule and update engagement notifications if necessary every time the app becomes active
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.engagementNotificationHelper.schedule()
+        }
+
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
@@ -191,7 +198,7 @@ extension AppDelegate: Notifiable {
                                                           UIApplication.didEnterBackgroundNotification])
     }
 
-    /// When migrated to Scenes, these methods aren't called. Consider this a tempoary solution to calling into those methods.
+    /// When migrated to Scenes, these methods aren't called. Consider this a temporary solution to calling into those methods.
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.didBecomeActiveNotification:

@@ -16,6 +16,8 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
 
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
+
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24
@@ -124,8 +126,9 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     // Used to programmatically set the pageViewController to show next card
     func moveToNextPage(cardType: IntroViewModel.InformationCards) {
-        if let nextViewController = getNextOnboardingCard(index: cardType.rawValue, goForward: true) {
-            pageControl.currentPage = cardType.rawValue + 1
+        let index = viewModel.enabledCards.firstIndex(of: cardType) ?? 0
+        if let nextViewController = getNextOnboardingCard(index: index, goForward: true) {
+            pageControl.currentPage = index + 1
             pageController.setViewControllers([nextViewController], direction: .forward, animated: false)
         }
     }
@@ -183,6 +186,8 @@ extension IntroViewController: OnboardingCardDelegate {
         case .signSync:
             let fxaPrams = FxALaunchParams(entrypoint: .introOnboarding, query: [:])
             presentSignToSync(fxaPrams)
+        case .notification:
+            askForNotificationPermission()
         default:
             break
         }
@@ -202,7 +207,7 @@ extension IntroViewController: OnboardingCardDelegate {
         flowType: FxAPageType = .emailLoginFlow,
         referringPage: ReferringPage = .onboarding
     ) {
-        let singInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
+        let signInSyncVC = FirefoxAccountSignInViewController.getSignInOrFxASettingsVC(fxaOptions,
                                                                                        flowType: flowType,
                                                                                        referringPage: referringPage,
                                                                                        profile: profile)
@@ -212,17 +217,39 @@ extension IntroViewController: OnboardingCardDelegate {
                                          target: self,
                                          action: #selector(dismissSignInViewController))
         buttonItem.tintColor = themeManager.currentTheme.colors.actionPrimary
-        singInSyncVC.navigationItem.rightBarButtonItem = buttonItem
-        controller = DismissableNavigationViewController(rootViewController: singInSyncVC)
+        signInSyncVC.navigationItem.rightBarButtonItem = buttonItem
+        controller = DismissableNavigationViewController(rootViewController: signInSyncVC)
         controller.onViewDismissed = {
-            self.closeOnboarding()
+            self.showNextPage(.signSync)
         }
         self.present(controller, animated: true)
     }
 
+    private func askForNotificationPermission() {
+        let notificationManager = NotificationManager()
+        notificationManager.requestAuthorization { [weak self] granted, error in
+            guard error == nil, let self = self else { return }
+
+            DispatchQueue.main.async {
+                if granted {
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.SyncNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
+                    }
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+                    }
+
+                    NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+
+                    self.engagementNotificationHelper.schedule()
+                }
+                self.showNextPage(.notification)
+            }
+        }
+    }
+
     @objc func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
-        closeOnboarding()
     }
 }
 

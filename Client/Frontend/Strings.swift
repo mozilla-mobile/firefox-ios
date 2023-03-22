@@ -1295,6 +1295,12 @@ extension String {
                 value: "Go to your device Settings to turn on notifications in %@",
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
             )
+            public static let systemNotificationsDisabledMessage = MZLocalizedString(
+                "Settings.Notifications.SystemNotificationsDisabledMessage.v112",
+                tableName: "Settings",
+                value: "You turned off all %@ notifications. Turn them on by going to device Settings > Notifications > %@",
+                comment: "This is the footer title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
+            )
         }
 
         public struct Toolbar {
