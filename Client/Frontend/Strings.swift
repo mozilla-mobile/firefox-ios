@@ -241,6 +241,41 @@ extension String {
 
         // Editing and saving credit card
         public struct EditCard {
+            public static let CloseNavBarButtonLabel = MZLocalizedString(
+                "CreditCard.EditCard.CloseNavBarButtonLabel.v113",
+                tableName: "EditCard",
+                value: "Close",
+                comment: "Button label for closing the view where user can view their credit card info")
+            public static let SaveNavBarButtonLabel = MZLocalizedString(
+                "CreditCard.EditCard.SaveNavBarButtonLabel.v113",
+                tableName: "EditCard",
+                value: "Save",
+                comment: "Button label for saving the credit card details user entered in the form")
+            public static let EditNavBarButtonLabel = MZLocalizedString(
+                "CreditCard.EditCard.EditNavBarButtonLabel.v113",
+                tableName: "EditCard",
+                value: "Edit",
+                comment: "Button label for editing the credit card details shown in the form")
+            public static let CancelNavBarButtonLabel = MZLocalizedString(
+                "CreditCard.EditCard.CancelNavBarButtonLabel.v113",
+                tableName: "EditCard",
+                value: "Cancel",
+                comment: "Button label for cancelling editing of the credit card details shown in the form")
+            public static let ViewCreditCardTitle = MZLocalizedString(
+                "CreditCard.EditCard.ViewCreditCardTitle.v113",
+                tableName: "EditCard",
+                value: "View Credit Card",
+                comment: "Title label for the view where user can view their credit card info")
+            public static let AddCreditCardTitle = MZLocalizedString(
+                "CreditCard.EditCard.AddCreditCardTitle.v113",
+                tableName: "EditCard",
+                value: "Add Credit Card",
+                comment: "Title label for the view where user can add their credit card info")
+            public static let EditCreditCardTitle = MZLocalizedString(
+                "CreditCard.EditCard.EditCreditCardTitle.v113",
+                tableName: "Edit Card",
+                value: "Edit Credit Card",
+                comment: "Title label for the view where user can edit their credit card info")
             public static let NameOnCardTitle = MZLocalizedString(
                 "CreditCard.EditCard.NameOnCardTitle.v112",
                 tableName: "EditCard",
