@@ -82,6 +82,7 @@ struct CreditCardInputField: View {
             Image(ImageIdentifiers.errorAutofill)
                 .renderingMode(.template)
                 .foregroundColor(colors.errorColor)
+                .accessibilityHidden(true)
             Text(errorString)
                 .errorTextStyle(color: colors.errorColor)
         }
