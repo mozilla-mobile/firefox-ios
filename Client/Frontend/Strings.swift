@@ -241,6 +241,11 @@ extension String {
 
         // Editing and saving credit card
         public struct EditCard {
+            public static let CopyLabel = MZLocalizedString(
+                "CreditCard.EditCard.CopyLabel.v113",
+                tableName: "EditCard",
+                value: "Copy",
+                comment: "Label for copying contents of the form")
             public static let CloseNavBarButtonLabel = MZLocalizedString(
                 "CreditCard.EditCard.CloseNavBarButtonLabel.v113",
                 tableName: "EditCard",
