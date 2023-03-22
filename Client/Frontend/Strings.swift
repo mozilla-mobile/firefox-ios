@@ -245,12 +245,12 @@ extension String {
                 "CreditCard.EditCard.CloseNavBarButtonLabel.v113",
                 tableName: "EditCard",
                 value: "Close",
-                comment: "Button label for the closing the view where user can view their credit card info")
+                comment: "Button label for closing the view where user can view their credit card info")
             public static let SaveNavBarButtonLabel = MZLocalizedString(
                 "CreditCard.EditCard.SaveNavBarButtonLabel.v113",
                 tableName: "EditCard",
                 value: "Save",
-                comment: "Button label for the saving the credit card details user entered in the form")
+                comment: "Button label for saving the credit card details user entered in the form")
             public static let EditNavBarButtonLabel = MZLocalizedString(
                 "CreditCard.EditCard.EditNavBarButtonLabel.v113",
                 tableName: "EditCard",
