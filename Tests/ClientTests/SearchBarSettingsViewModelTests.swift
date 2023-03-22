@@ -92,54 +92,54 @@ class SearchBarSettingsViewModelTests: XCTestCase {
     // MARK: Notification
 
     func testNoNotificationSent_withoutDefaultPref() {
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let mockNotificationCenter = MockNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: mockNotificationCenter)
         let searchBarPosition = viewModel.searchBarPosition
 
         XCTAssertEqual(searchBarPosition, .top)
-        XCTAssertNil(spyNotificationCenter.notificationNameSent)
-        XCTAssertNil(spyNotificationCenter.notificationObjectSent)
+        XCTAssertNil(mockNotificationCenter.notificationNameSent)
+        XCTAssertNil(mockNotificationCenter.notificationObjectSent)
     }
 
     func testNotificationSent_onBottomSetting() {
         setDefault(defaultPosition: .top)
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let mockNotificationCenter = MockNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: mockNotificationCenter)
         viewModel.bottomSetting.onChecked()
 
-        XCTAssertNotNil(spyNotificationCenter.notificationNameSent)
-        XCTAssertNotNil(spyNotificationCenter.notificationObjectSent)
+        XCTAssertNotNil(mockNotificationCenter.notificationNameSent)
+        XCTAssertNotNil(mockNotificationCenter.notificationObjectSent)
     }
 
     func testNotificationSent_onTopSetting() {
         setDefault(defaultPosition: .bottom)
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let mockNotificationCenter = MockNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: mockNotificationCenter)
         viewModel.topSetting.onChecked()
 
-        XCTAssertNotNil(spyNotificationCenter.notificationNameSent)
-        XCTAssertNotNil(spyNotificationCenter.notificationObjectSent)
+        XCTAssertNotNil(mockNotificationCenter.notificationNameSent)
+        XCTAssertNotNil(mockNotificationCenter.notificationObjectSent)
     }
 
     func testNotificationSent_topIsReceived() {
         setDefault(defaultPosition: .bottom)
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let mockNotificationCenter = MockNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: mockNotificationCenter)
         viewModel.topSetting.onChecked()
 
-        verifyNotification(name: spyNotificationCenter.notificationNameSent,
-                           object: spyNotificationCenter.notificationObjectSent,
+        verifyNotification(name: mockNotificationCenter.notificationNameSent,
+                           object: mockNotificationCenter.notificationObjectSent,
                            expectedPosition: .top)
     }
 
     func testNotificationSent_bottomIsReceived() {
         setDefault(defaultPosition: .top)
-        let spyNotificationCenter = SpyNotificationCenter()
-        let viewModel = createViewModel(notificationCenter: spyNotificationCenter)
+        let mockNotificationCenter = MockNotificationCenter()
+        let viewModel = createViewModel(notificationCenter: mockNotificationCenter)
         viewModel.bottomSetting.onChecked()
 
-        verifyNotification(name: spyNotificationCenter.notificationNameSent,
-                           object: spyNotificationCenter.notificationObjectSent,
+        verifyNotification(name: mockNotificationCenter.notificationNameSent,
+                           object: mockNotificationCenter.notificationObjectSent,
                            expectedPosition: .bottom)
     }
 }
