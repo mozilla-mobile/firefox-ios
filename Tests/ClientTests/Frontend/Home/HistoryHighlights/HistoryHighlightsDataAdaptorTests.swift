@@ -113,7 +113,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
 
         XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
     }
-    
+
     func testDelegateMemoryLeak() {
         let delegate = MockHistoryHighlightsDelegate()
         let deletionUtility = MockHistoryDeletionProtocol()
@@ -124,7 +124,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
             tabManager: MockTabManager(),
             notificationCenter: notificationCenter,
             deletionUtility: deletionUtility)
-        
+
         subject.delegate = delegate
         trackForMemoryLeaks(subject)
     }
