@@ -226,6 +226,8 @@ class BrowserViewController: UIViewController {
         switch openTabObject.type {
         case .loadQueuedTabs(let urls):
             loadQueuedTabs(receivedURLs: urls)
+        case .openNewTab:
+            openBlankNewTab(focusLocationField: true)
         case .openSearchNewTab(let searchTerm):
             openSearchNewTab(searchTerm)
         case .switchToTabForURLOrOpen(let url):
@@ -2806,6 +2808,6 @@ extension BrowserViewController {
     }
 
     func trackNotificationPermission() {
-        NotificationManager().getNotificationSettings { _ in }
+        NotificationManager().getNotificationSettings(sendTelemetry: true) { _ in }
     }
 }
