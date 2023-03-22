@@ -743,9 +743,9 @@ onboarding:
     description: |
       Records the users interaction with the engagement notification.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/?
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/?
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-09-01"
@@ -754,9 +754,9 @@ onboarding:
     description: |
       Records the cancelation of a scheduled engagement notification.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/?
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/?
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-09-01"
