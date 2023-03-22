@@ -7,7 +7,7 @@ import WebKit
 
 @testable import Client
 
-class MockTabManager: TabManagerProtocol {
+class MockTabManager: TabManager {
     var selectedTab: Tab?
 
     var nextRecentlyAccessedNormalTabs = [Tab]()
@@ -20,6 +20,22 @@ class MockTabManager: TabManagerProtocol {
 
     var lastSelectedTabs = [Tab]()
     var lastSelectedPreviousTabs = [Tab]()
+
+    var delaySelectingNewPopupTab: TimeInterval = 0
+    var count: Int = 0
+    var didChangedPanelSelection: Bool = false
+    var didAddNewTab: Bool = false
+    var normalTabs = [Tab]()
+    var privateTabs = [Tab]()
+    var tabDisplayType: TabDisplayType = .TabGrid
+
+    subscript(index: Int) -> Tab? {
+        return nil
+    }
+
+    subscript(webView: WKWebView) -> Tab? {
+        return nil
+    }
 
     func selectTab(_ tab: Tab?, previous: Tab?) {
         if let tab = tab {
@@ -42,4 +58,77 @@ class MockTabManager: TabManagerProtocol {
     func getMostRecentHomepageTab() -> Tab? {
         return addTab(nil, afterTab: nil, isPrivate: false)
     }
+
+    func addDelegate(_ delegate: TabManagerDelegate) {}
+
+    func addNavigationDelegate(_ delegate: WKNavigationDelegate) {}
+
+    func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {}
+
+    func addTabsForURLs(_ urls: [URL], zombie: Bool) {}
+
+    func removeTab(_ tab: Tab, completion: (() -> Void)?) {}
+
+    func removeTabs(_ tabs: [Tab]) {}
+
+    func getTabFor(_ url: URL) -> Tab? {
+        return nil
+    }
+
+    func clearAllTabsHistory() {}
+
+    func willSwitchTabMode(leavingPBM: Bool) {}
+
+    func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool) {}
+
+    func moveTab(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {}
+
+    func preserveTabs() {}
+
+    func restoreTabs(_ forced: Bool) {}
+
+    func startAtHomeCheck() {}
+
+    func hasTabsToRestoreAtStartup() -> Bool {
+        return false
+    }
+
+    func getTabForUUID(uuid: String) -> Tab? {
+        return nil
+    }
+
+    func getTabForURL(_ url: URL) -> Tab? {
+        return nil
+    }
+
+    func expireSnackbars() {}
+
+    func switchPrivacyMode() -> SwitchPrivacyModeResult {
+        return .createdNewTab
+    }
+
+    func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
+        return Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
+    }
+
+    func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
+                                         isPrivate: Bool,
+                                         previousTabUUID: String) {}
+
+    @discardableResult func addTab(_ request: URLRequest!,
+                                   configuration: WKWebViewConfiguration!,
+                                   afterTab: Tab?,
+                                   zombie: Bool,
+                                   isPrivate: Bool) -> Tab {
+        return Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
+    }
+
+    func backgroundRemoveAllTabs(isPrivate: Bool,
+                                 didClearTabs: @escaping (_ tabsToRemove: [Tab],
+                                                          _ isPrivate: Bool,
+                                                          _ previousTabUUID: String) -> Void) {}
+
+    func testRemoveAll() {}
+
+    func testClearArchive() {}
 }

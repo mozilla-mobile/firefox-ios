@@ -24,7 +24,7 @@ class TabDisplayManagerTests: XCTestCase {
         mockDataStore = WeakListMock<Tab>()
         dataStore = WeakList<Tab>()
         profile = TabManagerMockProfile(databasePrefix: "TabDisplayManagerTests") // not using the default prefix to avoid side effects with other tests
-        manager = TabManager(profile: profile, imageStore: nil)
+        manager = LegacyTabManager(profile: profile, imageStore: nil)
         collectionView = MockCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         UserDefaults().setValue(true, forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun)

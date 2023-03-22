@@ -29,7 +29,7 @@ class JumpBackInViewModelTests: XCTestCase {
         mockTabManager = MockTabManager()
         stubBrowserViewController = BrowserViewController(
             profile: mockProfile,
-            tabManager: TabManager(profile: mockProfile, imageStore: nil)
+            tabManager: LegacyTabManager(profile: mockProfile, imageStore: nil)
         )
         urlBar = MockURLBarView()
 
