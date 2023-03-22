@@ -145,7 +145,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
 extension JumpBackInDataAdaptorTests {
     func createSubject(file: StaticString = #file, line: UInt = #line) -> JumpBackInDataAdaptorImplementation {
         let dispatchQueue = MockDispatchQueue()
-        let notificationCenter = SpyNotificationCenter()
+        let notificationCenter = MockNotificationCenter()
 
         let subject = JumpBackInDataAdaptorImplementation(profile: mockProfile,
                                                           tabManager: mockTabManager,

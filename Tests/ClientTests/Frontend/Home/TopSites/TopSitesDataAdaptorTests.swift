@@ -11,12 +11,12 @@ import XCTest
 class TopSitesDataAdaptorTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
     private var contileProviderMock: ContileProviderMock!
-    private var notificationCenter: SpyNotificationCenter!
+    private var notificationCenter: MockNotificationCenter!
 
     override func setUp() {
         super.setUp()
 
-        notificationCenter = SpyNotificationCenter()
+        notificationCenter = MockNotificationCenter()
         profile = MockProfile(databasePrefix: "FxHomeTopSitesManagerTests")
         profile.reopen()
 
