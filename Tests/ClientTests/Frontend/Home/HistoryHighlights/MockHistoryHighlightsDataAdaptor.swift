@@ -9,7 +9,7 @@ class MockHistoryHighlightsDataAdaptor: HistoryHighlightsDataAdaptor {
     weak var delegate: HistoryHighlightsDelegate?
     var deleteCallCount = 0
 
-    func getHistoryHightlights() -> [HighlightItem] {
+    func getHistoryHighlights() -> [HighlightItem] {
         return mockHistoryItems
     }
 
