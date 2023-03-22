@@ -1043,7 +1043,6 @@ class BrowserViewController: UIViewController {
     }
 
     private func enterOverlayMode() {
-        scrollController.isKeyboardOpen = true
         // Delay enterOverlay mode after dismissableView is dismiss
         if let viewcontroller = presentedViewController as? OnViewDismissable {
             viewcontroller.onViewDismissed = { [weak self] in
@@ -1061,7 +1060,6 @@ class BrowserViewController: UIViewController {
     }
 
     private func leaveOverlayMode(didCancel cancel: Bool) {
-        scrollController.isKeyboardOpen = false
         urlBar.leaveOverlayMode(didCancel: cancel)
     }
 
@@ -2566,6 +2564,8 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
+        scrollController.isKeyboardOpen = true
+        print("YRD keyboard open")
 
         UIView.animate(
             withDuration: state.animationDuration,
@@ -2579,6 +2579,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         updateViewConstraints()
+        scrollController.isKeyboardOpen = false
 
         UIView.animate(
             withDuration: state.animationDuration,
