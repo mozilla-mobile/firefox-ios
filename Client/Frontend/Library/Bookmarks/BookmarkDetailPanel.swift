@@ -82,12 +82,17 @@ class BookmarkDetailPanel: SiteTableViewController {
 
     // MARK: - Initializers
     convenience init(profile: Profile, bookmarkNode: FxBookmarkNode, parentBookmarkFolder: FxBookmarkNode, presentedFromToast fromToast: Bool = false) {
-        self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
+        let bookmarkItemData = bookmarkNode as? BookmarkItemData
+        self.init(profile: profile,
+                  bookmarkNodeGUID: bookmarkNode.guid,
+                  bookmarkNodeType: bookmarkNode.type,
+                  parentBookmarkFolder: parentBookmarkFolder,
+                  presentedFromToast: fromToast,
+                  bookmarkItemURL: bookmarkItemData?.url)
 
-        self.isPresentedFromToast = fromToast
         self.bookmarkItemPosition = bookmarkNode.position
 
-        if let bookmarkItem = bookmarkNode as? BookmarkItemData {
+        if let bookmarkItem = bookmarkItemData {
             self.bookmarkItemOrFolderTitle = bookmarkItem.title
             self.bookmarkItemURL = bookmarkItem.url
 
@@ -114,10 +119,12 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
-    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode) {
+    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, presentedFromToast fromToast: Bool = false, bookmarkItemURL: String? = nil) {
         self.bookmarkNodeGUID = bookmarkNodeGUID
         self.bookmarkNodeType = bookmarkNodeType
         self.parentBookmarkFolder = parentBookmarkFolder
+        self.isPresentedFromToast = fromToast
+        self.bookmarkItemURL = bookmarkItemURL
 
         super.init(profile: profile)
 
