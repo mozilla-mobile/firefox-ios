@@ -63,10 +63,14 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
     private let prefs: Prefs
     private let hasAccount: Bool
     private var footerTitle = ""
+    private var notificationManager: NotificationManagerProtocol
 
-    init(prefs: Prefs, hasAccount: Bool) {
+    init(prefs: Prefs,
+         hasAccount: Bool,
+         notificationManager: NotificationManagerProtocol = NotificationManager()) {
         self.prefs = prefs
         self.hasAccount = hasAccount
+        self.notificationManager = notificationManager
         super.init(style: .grouped)
         self.title = .Settings.Notifications.Title
         self.addObservers()
@@ -92,7 +96,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
     }
 
     func checkForSystemNotifications() async {
-        let settings = await NotificationManager().getNotificationSettings()
+        let settings = await notificationManager.getNotificationSettings(sendTelemetry: false)
 
         switch settings.authorizationStatus {
         case .denied:
@@ -112,8 +116,7 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
     private func notificationsChanged(_ sendNotifications: Bool) async -> Bool {
         guard sendNotifications else { return false }
 
-        let notificationManager = NotificationManager()
-        let settings = await notificationManager.getNotificationSettings()
+        let settings = await notificationManager.getNotificationSettings(sendTelemetry: false)
 
         switch settings.authorizationStatus {
         case .authorized, .provisional, .ephemeral:
@@ -125,7 +128,9 @@ class NotificationsSettingsViewController: SettingsTableViewController, FeatureF
                 return false
             }
         case .denied:
-            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage, AppName.shortName.rawValue, AppName.shortName.rawValue)
+            self.footerTitle = String(format: .Settings.Notifications.systemNotificationsDisabledMessage,
+                                      AppName.shortName.rawValue,
+                                      AppName.shortName.rawValue)
             self.settings = generateSettings()
             self.tableView.reloadData()
             await MainActor.run {
