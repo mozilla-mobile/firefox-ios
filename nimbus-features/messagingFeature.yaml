@@ -65,6 +65,9 @@ features:
             I_AM_DEFAULT_BROWSER:     "is_default_browser"
             I_AM_NOT_DEFAULT_BROWSER: "is_default_browser == false"
             SUPPORTS_DEFAULT_BROWSER: os_version|versionCompare('14.!') >= 0
+            INACTIVE_NEW_USER:        "is_inactive_new_user"
+            HAS_NOTIFICATION_PERMISSION: "has_notification_permission"
+            ALLOWED_TIPS_NOTIFICATIONS: "allowed_tips_notifications"
             ALWAYS:                   "true"
             NEVER:                    "false"
           actions:
@@ -83,6 +86,7 @@ features:
             VIEW_HISTORY:                       ://deep-link?url=homepanel/history
             VIEW_DOWNLOADS:                     ://deep-link?url=homepanel/downloads
             ENABLE_PRIVATE_BROWSING:            ://deep-link?url=homepanel/new-private-tab
+            OPEN_NEW_TAB:                       ://deep-link?url=homepanel/new-tab
             MAKE_DEFAULT_BROWSER:               ://deep-link?url=default-browser/system-settings
             MAKE_DEFAULT_BROWSER_WITH_TUTORIAL: ://deep-link?url=default-browser/tutorial
           styles:
@@ -127,6 +131,16 @@ features:
               text: ResearchSurface/Body.Text.v112
               button-label: ResearchSurface/PrimaryButton.Label.v112
               action: https://www.macrumors.com
+            engagement-notification:
+              surface: notification
+              style: DEFAULT
+              trigger:
+                - INACTIVE_NEW_USER
+                - HAS_NOTIFICATION_PERMISSION
+                - ALLOWED_TIPS_NOTIFICATIONS
+              text: EngagementNotification/Engagement.Notification.Title
+              button-label: EngagementNotification/Engagement.Notification.Body
+              action: OPEN_NEW_TAB
 
 objects:
   MessageData:
@@ -208,6 +222,8 @@ enums:
         description: This is the card that appears at the top on the Firefox Home Page.
       survey:
         description: This is a full-page that appears providing a survey to the user.
+      notification:
+        description: This is a local notification send to the user periodically with tips and updates.
       Unknown:
         description: A message has NOT declared its target surface.
 
