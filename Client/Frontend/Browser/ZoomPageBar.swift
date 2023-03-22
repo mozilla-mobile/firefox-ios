@@ -12,7 +12,7 @@ protocol ZoomPageBarDelegate: AnyObject {
 
 class ZoomPageBar: UIView {
     private struct UX {
-        static let leadingTrailingPadding: CGFloat = 26
+        static let leadingTrailingPadding: CGFloat = 10
         static let topBottomPadding: CGFloat = 18
         static let stepperWidth: CGFloat = 222
         static let stepperHeight: CGFloat = 36
@@ -82,6 +82,7 @@ class ZoomPageBar: UIView {
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.xMark), for: [])
         button.accessibilityLabel = .FindInPageDoneAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findInPageCloseButton
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
     init(tab: Tab, isIpad: Bool) {
@@ -100,15 +101,7 @@ class ZoomPageBar: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        if UIDevice.current.isIphoneLandscape ||
-            UIDevice.current.userInterfaceIdiom == .pad {
-            stepperLeadingConstraint.isActive = false
-            stepperCenterXConstraint.isActive = true
-        } else {
-            stepperCenterXConstraint.isActive = false
-            stepperLeadingConstraint.isActive = true
-        }
+        updateStepperConstraintsBasedOnSizeClass()
     }
 
     private func setupViews() {
@@ -120,10 +113,7 @@ class ZoomPageBar: UIView {
         zoomLevel.addGestureRecognizer(gestureRecognizer)
 
         updateZoomLabel()
-
-        if tab.pageZoom <= UX.lowerZoomLimit {
-            zoomInButton.isEnabled = false
-        }
+        checkPageZoomLimits()
 
         [zoomOutButton, leftSeparator, zoomLevel, rightSeparator, zoomInButton].forEach {
             stepperContainer.addArrangedSubview($0)
@@ -136,16 +126,15 @@ class ZoomPageBar: UIView {
         stepperCenterXConstraint = stepperContainer.centerXAnchor.constraint(equalTo: centerXAnchor)
         stepperLeadingConstraint = stepperContainer.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                                              constant: UX.leadingTrailingPadding)
-        if isIpad {
-            stepperCenterXConstraint.isActive = true
-        } else { stepperLeadingConstraint.isActive = true }
-
         setupSeparator(leftSeparator)
         setupSeparator(rightSeparator)
 
         NSLayoutConstraint.activate([
-            stepperContainer.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.stepperTopBottomPadding),
-            stepperContainer.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor, constant: UX.stepperTopBottomPadding),
+            stepperContainer.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
+                                                  constant: UX.stepperTopBottomPadding),
+            stepperContainer.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor,
+                                                     constant: UX.stepperTopBottomPadding),
+            stepperContainer.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
             stepperContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperHeight),
             stepperContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperWidth),
             stepperContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -171,6 +160,27 @@ class ZoomPageBar: UIView {
     private func enableZoomButtons() {
         zoomInButton.isEnabled = true
         zoomOutButton.isEnabled = true
+    }
+
+    private func checkPageZoomLimits() {
+        if tab.pageZoom <= UX.lowerZoomLimit {
+            zoomOutButton.isEnabled = false
+        } else if tab.pageZoom >= UX.upperZoomLimit {
+            zoomInButton.isEnabled = false
+        }
+    }
+
+    private func updateStepperConstraintsBasedOnSizeClass() {
+        if traitCollection.horizontalSizeClass == .regular &&
+            traitCollection.verticalSizeClass == .regular ||
+            traitCollection.horizontalSizeClass == .compact &&
+            traitCollection.verticalSizeClass == .compact {
+            stepperLeadingConstraint.isActive = false
+            stepperCenterXConstraint.isActive = true
+        } else {
+            stepperCenterXConstraint.isActive = false
+            stepperLeadingConstraint.isActive = true
+        }
     }
 
     @objc private func didPressZoomIn(_ sender: UIButton) {
@@ -217,8 +227,8 @@ extension ZoomPageBar: ThemeApplicable {
 
         zoomLevel.tintColor = theme.colors.textPrimary
 
-        zoomInButton.tintColor = zoomInButton.isEnabled ? theme.colors.iconPrimary : theme.colors.iconDisabled
-        zoomOutButton.tintColor = zoomOutButton.isEnabled ? theme.colors.iconPrimary : theme.colors.iconDisabled
+        zoomInButton.tintColor = theme.colors.iconPrimary
+        zoomOutButton.tintColor = theme.colors.iconPrimary
         closeButton.tintColor = theme.colors.iconPrimary
     }
 }
