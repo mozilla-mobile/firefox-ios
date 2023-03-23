@@ -183,7 +183,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         _ surface: MessageSurfaceId,
         with feature: Messaging
     ) -> [GleanPlumbMessage] {
-        /// All these are non-expired, well formed, and descending priority messages for a requested surface.
+        // All these are non-expired, well formed, and descending priority messages for a requested surface.
         let messages = feature.messages.compactMap { key, messageData -> GleanPlumbMessage? in
             guard let message = self.createMessage(messageId: key,
                                                    message: messageData,
@@ -212,7 +212,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         message: MessageData,
         lookupTables: Messaging
     ) -> GleanPlumbMessage? {
-        /// Guard against a message with a blank `text` property.
+        // Guard against a message with a blank `text` property.
         guard !message.text.isEmpty else { return nil }
 
         // Ascertain a Message's style, to know priority and max impressions.
