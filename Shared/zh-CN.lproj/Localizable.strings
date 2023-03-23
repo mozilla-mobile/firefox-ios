@@ -1061,7 +1061,7 @@
 "ScanQRCode.Error.OK.Button" = "确定";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "将 QR 码置入框内以扫描";
+"ScanQRCode.Instructions.Label" = "将二维码置入框内以扫描";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "数据无效";
@@ -1070,7 +1070,7 @@
 "ScanQRCode.PermissionError.Message.v100" = "请到设备的“设置”>“Firefox”，允许 Firefox 访问相机。";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "扫描 QR 码";
+"ScanQRCode.View.Title" = "扫描二维码";
 
 /* Open search section of settings */
 "Search" = "搜索";
@@ -1181,7 +1181,7 @@
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ 收到新的标签页";
 
 /* Body of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.body" = "点按以开始";
+"SentTab.NoTabArrivingNotification.body" = "轻点以开始";
 
 /* Title of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.title" = "Firefox 同步";
@@ -1218,6 +1218,9 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "网址（请用 %s 替换查询内容）";
+
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v112" = "自动填充信用卡";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "清除所有网站数据";
@@ -1400,7 +1403,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "限定版";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "点按 Firefox 主页徽标以更换壁纸";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "轻点 Firefox 主页徽标以更换壁纸";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "壁纸";
@@ -1449,6 +1452,9 @@
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "空白页";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "自定义";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox 主页";
@@ -1576,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "好，知道了";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "注意！";
 
@@ -1587,6 +1596,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "减少定向广告，并阻止广告商跟踪您的浏览。";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "允许部分广告跟踪行为，同时让网站功能保持正常。";
@@ -1602,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "标准（默认）";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "标准";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "严格";
