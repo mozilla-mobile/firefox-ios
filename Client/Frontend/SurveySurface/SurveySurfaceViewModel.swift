@@ -9,31 +9,25 @@ class SurveySurfaceViewModel {
     // MARK: - Properties
     weak var delegate: SurveySurfaceDelegate?
     var info: SurveySurfaceInfoProtocol
-    var telemetry: SurveySurfaceTelemetry
 
     // MARK: - Initialization
     init(with info: SurveySurfaceInfoProtocol,
-         telemetry: SurveySurfaceTelemetry,
          andDelegate delegate: SurveySurfaceDelegate
     ) {
         self.info = info
-        self.telemetry = telemetry
         self.delegate = delegate
     }
 
     // MARK: - Functionality
     func didDisplayMessage() {
-        telemetry.sendSurfaceDisplayedEvent()
         delegate?.didDisplayMessage()
     }
 
     func didTapTakeSurvey() {
-        telemetry.sendTakeSurveyButtonTappedEvent()
         delegate?.didTapTakeSurvey()
     }
 
     func didTapDismissSurvey() {
-        telemetry.sendDismissSurveySurfaceButtonTappedEvent()
         delegate?.didTapDismissSurvey()
     }
 

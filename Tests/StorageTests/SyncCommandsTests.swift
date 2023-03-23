@@ -28,6 +28,7 @@ class SyncCommandsTests: XCTestCase {
     var db: BrowserDB!
 
     override func setUp() {
+        super.setUp()
         let files = MockFiles()
         do {
             try files.remove("browser.db")
@@ -77,6 +78,7 @@ class SyncCommandsTests: XCTestCase {
     }
 
     override func tearDown() {
+        super.tearDown()
         clientsAndTabs.deleteCommands().succeeded()
         clientsAndTabs.clear().succeeded()
     }

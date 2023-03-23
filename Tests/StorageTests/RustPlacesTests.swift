@@ -11,6 +11,7 @@ class RustPlacesTests: XCTestCase {
     var places: RustPlaces!
 
     override func setUp() {
+        super.setUp()
         files = MockFiles()
 
         let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testplaces.db").path
