@@ -16,7 +16,7 @@ extension BrowserViewController {
     private func setupZoomPageBar() {
         guard let tab = tabManager.selectedTab else { return }
 
-        let zoomPageBar = ZoomPageBar(tab: tab, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
+        let zoomPageBar = ZoomPageBar(tab: tab)
         self.zoomPageBar = zoomPageBar
         zoomPageBar.delegate = self
 

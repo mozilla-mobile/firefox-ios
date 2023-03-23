@@ -12,14 +12,15 @@ protocol ZoomPageBarDelegate: AnyObject {
 
 class ZoomPageBar: UIView {
     private struct UX {
-        static let leadingTrailingPadding: CGFloat = 10
+        static let leadingTrailingPadding: CGFloat = 20
         static let topBottomPadding: CGFloat = 18
         static let stepperWidth: CGFloat = 222
         static let stepperHeight: CGFloat = 36
         static let stepperTopBottomPadding: CGFloat = 10
         static let stepperCornerRadius: CGFloat = 8
+        static let stepperMinTrailing: CGFloat = 10
         static let stepperShadowRadius: CGFloat = 4
-        static let stepperSpacing: CGFloat = 10
+        static let stepperSpacing: CGFloat = 12
         static let stepperShadowOpacity: Float = 1
         static let stepperShadowOffset = CGSize(width: 0, height: 4)
         static let separatorWidth: CGFloat = 1
@@ -27,17 +28,16 @@ class ZoomPageBar: UIView {
         static let fontSize: CGFloat = 16
         static let lowerZoomLimit: CGFloat = 0.5
         static let upperZoomLimit: CGFloat = 2.0
-        static let zoomInButtonInsets = UIEdgeInsets(top: 6, left: 8, bottom: 6, right: 18)
-        static let zoomOutButtonInsets = UIEdgeInsets(top: 6, left: 18, bottom: 6, right: 8)
+        static let zoomInButtonInsets = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 12)
+        static let zoomOutButtonInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 0)
     }
 
     weak var delegate: ZoomPageBarDelegate?
     private let gestureRecognizer = UITapGestureRecognizer()
-    private var stepperLeadingConstraint = NSLayoutConstraint()
-    private var stepperCenterXConstraint = NSLayoutConstraint()
+    private var stepperCompactConstraints = [NSLayoutConstraint]()
+    private var stepperDefaultConstraints = [NSLayoutConstraint]()
 
     private let tab: Tab
-    private let isIpad: Bool
 
     private let leftSeparator: UIView = .build()
     private let rightSeparator: UIView = .build()
@@ -59,7 +59,7 @@ class ZoomPageBar: UIView {
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
-        button.contentEdgeInsets = UX.zoomOutButtonInsets
+        button.setInsets(forContentPadding: UX.zoomOutButtonInsets, imageTitlePadding: 0)
     }
 
     private let zoomInButton: UIButton = .build { button in
@@ -67,7 +67,7 @@ class ZoomPageBar: UIView {
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
-        button.contentEdgeInsets = UX.zoomInButtonInsets
+        button.setInsets(forContentPadding: UX.zoomInButtonInsets, imageTitlePadding: 0)
     }
 
     private let zoomLevel: UILabel = .build { label in
@@ -85,9 +85,8 @@ class ZoomPageBar: UIView {
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
-    init(tab: Tab, isIpad: Bool) {
+    init(tab: Tab) {
         self.tab = tab
-        self.isIpad = isIpad
 
         super.init(frame: .zero)
 
@@ -123,18 +122,21 @@ class ZoomPageBar: UIView {
     }
 
     private func setupLayout() {
-        stepperCenterXConstraint = stepperContainer.centerXAnchor.constraint(equalTo: centerXAnchor)
-        stepperLeadingConstraint = stepperContainer.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                                             constant: UX.leadingTrailingPadding)
+        stepperCompactConstraints.append(stepperContainer.leadingAnchor.constraint(equalTo: leadingAnchor,
+                                                                                   constant: UX.leadingTrailingPadding))
+        stepperDefaultConstraints.append(stepperContainer.centerXAnchor.constraint(equalTo: centerXAnchor))
+        stepperDefaultConstraints.append(stepperContainer.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor,
+                                                                                   constant: UX.leadingTrailingPadding))
         setupSeparator(leftSeparator)
         setupSeparator(rightSeparator)
 
         NSLayoutConstraint.activate([
-            stepperContainer.topAnchor.constraint(greaterThanOrEqualTo: topAnchor,
+            stepperContainer.topAnchor.constraint(equalTo: topAnchor,
                                                   constant: UX.stepperTopBottomPadding),
-            stepperContainer.bottomAnchor.constraint(greaterThanOrEqualTo: bottomAnchor,
-                                                     constant: UX.stepperTopBottomPadding),
-            stepperContainer.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor),
+            stepperContainer.bottomAnchor.constraint(equalTo: bottomAnchor,
+                                                     constant: -UX.stepperTopBottomPadding),
+            stepperContainer.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor,
+                                                       constant: -UX.stepperMinTrailing),
             stepperContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperHeight),
             stepperContainer.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.stepperWidth),
             stepperContainer.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -171,15 +173,12 @@ class ZoomPageBar: UIView {
     }
 
     private func updateStepperConstraintsBasedOnSizeClass() {
-        if traitCollection.horizontalSizeClass == .regular &&
-            traitCollection.verticalSizeClass == .regular ||
-            traitCollection.horizontalSizeClass == .compact &&
-            traitCollection.verticalSizeClass == .compact {
-            stepperLeadingConstraint.isActive = false
-            stepperCenterXConstraint.isActive = true
+        if traitCollection.horizontalSizeClass == .regular || UIWindow.isLandscape {
+            stepperDefaultConstraints.forEach { $0.isActive = true }
+            stepperCompactConstraints.forEach { $0.isActive = false }
         } else {
-            stepperCenterXConstraint.isActive = false
-            stepperLeadingConstraint.isActive = true
+            stepperDefaultConstraints.forEach { $0.isActive = false }
+            stepperCompactConstraints.forEach { $0.isActive = true }
         }
     }
 
