@@ -1487,10 +1487,8 @@ trigger_map:
 - push_branch: release/v112
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  workflow: perfherder-test
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
   pipeline: pipeline_multiple_shards
-- push_branch: jjSDET/mte-755
-  workflow: perfherder-test
