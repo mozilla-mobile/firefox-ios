@@ -103,14 +103,14 @@ class TabManagerTests: XCTestCase {
     let didRemoveAllTabs = MethodSpy(functionName: "tabManagerDidRemoveAllTabs(_:toast:)")
 
     var profile: TabManagerMockProfile!
-    var manager: TabManager!
+    var manager: LegacyTabManager!
     var delegate: MockTabManagerDelegate!
 
     override func setUp() {
         super.setUp()
 
         profile = TabManagerMockProfile()
-        manager = TabManager(profile: profile, imageStore: nil)
+        manager = LegacyTabManager(profile: profile, imageStore: nil)
         delegate = MockTabManagerDelegate()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
@@ -693,7 +693,7 @@ private extension TabManagerTests {
     // MARK: - Add multiple tabs next to parent
 
     func testInsertMultipleTabsNextToParentTab_TopTabTray() {
-        let manager = TabManager(profile: profile, imageStore: nil)
+        let manager = LegacyTabManager(profile: profile, imageStore: nil)
         manager.tabDisplayType = .TopTabTray
 
         let parentTab = manager.addTab()
@@ -714,7 +714,7 @@ private extension TabManagerTests {
     }
 
     func testInsertMultipleTabsNextToParentTab_TabGrid() {
-        let manager = TabManager(profile: profile, imageStore: nil)
+        let manager = LegacyTabManager(profile: profile, imageStore: nil)
         manager.tabDisplayType = .TabGrid // <- default
 
         let parentTab = manager.addTab()

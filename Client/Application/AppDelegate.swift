@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         localName: "profile",
         syncDelegate: UIApplication.shared.syncDelegate
     )
-    lazy var tabManager: TabManager = TabManager(
+    lazy var tabManager: TabManager = LegacyTabManager(
         profile: profile,
         imageStore: DiskImageStore(
             files: profile.files,

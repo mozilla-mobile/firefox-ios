@@ -109,7 +109,7 @@ class TopTabsViewController: UIViewController, Themeable {
                                                  tabDisplayType: .TopTabTray,
                                                  profile: profile,
                                                  theme: themeManager.currentTheme)
-        tabManager.tabDisplayType = .TopTabTray
+        self.tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }

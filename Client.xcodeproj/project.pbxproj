@@ -386,6 +386,7 @@
 		5A430D792853DFDD00782BFF /* OrientationLockUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */; };
 		5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */; };
 		5A5AB980296CA03500485E06 /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 5A5AB97F296CA03500485E06 /* SiteImageView */; };
+		5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A64225029CB506500EEC3E5 /* LegacyTabManager.swift */; };
 		5A70EF0E295DFCCF00790249 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A70EF0D295DFCCF00790249 /* Common */; };
 		5A70EF10295DFD4900790249 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A70EF0F295DFD4900790249 /* Common */; };
 		5A70EF12295DFD6400790249 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A70EF11295DFD6400790249 /* Common */; };
@@ -3151,6 +3152,7 @@
 		5A430D782853DFDD00782BFF /* OrientationLockUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationLockUtility.swift; sourceTree = "<group>"; };
 		5A43EC9228CBC25F003155A3 /* Themeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themeable.swift; sourceTree = "<group>"; };
 		5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchUtil.swift; sourceTree = "<group>"; };
+		5A64225029CB506500EEC3E5 /* LegacyTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabManager.swift; sourceTree = "<group>"; };
 		5A65BE172928619E00E841A7 /* BrowserKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BrowserKit; sourceTree = "<group>"; };
 		5A70EF18295E2E1600790249 /* DependencyHelperMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyHelperMock.swift; sourceTree = "<group>"; };
 		5A70EF1C295E3C3500790249 /* TestSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSetup.swift; sourceTree = "<group>"; };
@@ -6497,6 +6499,7 @@
 				215B457E27D7FD4B00E5E800 /* LegacyTabGroupData.swift */,
 				63306D422110B3CD00F25400 /* LegacyTabManagerStore.swift */,
 				215B458127DA420400E5E800 /* LegacyTabMetadataManager.swift */,
+				5A64225029CB506500EEC3E5 /* LegacyTabManager.swift */,
 			);
 			path = Legacy;
 			sourceTree = "<group>";
@@ -10695,6 +10698,7 @@
 				8A56955227C68AE00077A89E /* UILabel+Extension.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				8AD3271527E3B45D00EAF033 /* SponsoredTile.swift in Sources */,
+				5A64225129CB506500EEC3E5 /* LegacyTabManager.swift in Sources */,
 				C8417D222657F0600010B877 /* LibraryViewModel.swift in Sources */,
 				39A359E41BFCCE94006B9E87 /* UserActivityHandler.swift in Sources */,
 				4331A9BD271D267E005E8080 /* ContextualHintViewModel.swift in Sources */,
