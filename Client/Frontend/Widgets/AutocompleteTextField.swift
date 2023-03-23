@@ -256,6 +256,15 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return label
     }
 
+    public func refreshAutocompleteLabelTheme() {
+        if let autocompleteAttributed = self.autocompleteTextLabel?.attributedText {
+            self.autocompleteTextLabel?.backgroundColor = self.backgroundColor
+            self.autocompleteTextLabel?.textColor = self.textColor
+        } else {
+            /// probably no autocomplete label is presented to the user anyway so there is nothing to refresh
+        }
+    }
+
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         applyCompletion()
         return true
