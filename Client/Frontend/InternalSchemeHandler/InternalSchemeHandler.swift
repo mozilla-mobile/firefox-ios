@@ -32,7 +32,7 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
         let allowedInternalResources = [
             "/errorpage-resource/NetError.css",
             "/errorpage-resource/CertError.css",
-            "/errorpage-resource/EcosiaError.png",
+            "/errorpage-resource/EcosiaErrorPlaceholderPath.png",
            // "/reader-mode/..."
         ]
 
@@ -44,9 +44,8 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
                 urlSchemeTask.didReceive(data)
                 urlSchemeTask.didFinish()
                 return true
-            } else if path.hasSuffix("EcosiaError.png"),
-                      let res = Bundle.main.url(forResource: path, withExtension: nil),
-                      let data = try? Data(contentsOf: res) {
+            } else if path.hasSuffix("EcosiaErrorPlaceholderPath.png"),
+                      let data = UIImage(named: "noInternet")?.pngData() {
                 urlSchemeTask.didReceive(URLResponse(url: url, mimeType: nil, expectedContentLength: -1, textEncodingName: nil))
                 urlSchemeTask.didReceive(data)
                 urlSchemeTask.didFinish()

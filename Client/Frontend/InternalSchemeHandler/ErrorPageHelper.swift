@@ -167,11 +167,14 @@ class ErrorPageHandler: InternalSchemeResponse {
             "short_description": errDomain,
             ]
 
-        let tryAgain: String = .ErrorPageTryAgain
+        let tryAgain: String = noConnectionErrorButtonTitle
         var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
                     "</script><button onclick='reloader()'>\(tryAgain)</button>"
-
-        if errDomain == kCFErrorDomainCFNetwork as String {
+        
+        if errDomain == NSURLErrorDomain {
+            variables["error_title"] = noConnectionErrorTitle
+            variables["short_description"] = noConnectionErrorMessage
+        } else if errDomain == kCFErrorDomainCFNetwork as String {
             if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
                 errDomain = cfErrorToName(code)
             }
