@@ -20,4 +20,4 @@ with open('test.json') as f:
                 suite['subtests'] = subtests
                 PERFHERDER_DATA['suites'].append(suite)
 
-print(json.dumps(PERFHERDER_DATA))
+print("PERFHERDER_DATA: ", json.dumps(PERFHERDER_DATA))

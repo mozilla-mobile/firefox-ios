@@ -1418,7 +1418,7 @@ workflows:
       bitrise.io:
         stack: osx-xcode-14.1.x-ventura
         machine_type_id: g2.8core
-    Jackie-perf-testing:
+    perfherder-test:
     steps:
     - cache-pull@2.1:
         is_always_run: true
@@ -1430,7 +1430,7 @@ workflows:
         inputs:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan PerformanceTestPlan"
-        - simulator_device: "iphone 14"
+        - simulator_device: "iPhone 14"
     - script@1.1:
         title: Create perfherder data object
         inputs:
@@ -1491,4 +1491,4 @@ trigger_map:
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - push_branch: jjSDET/mte-755
-    workflow: Jackie-perf-testing
+  workflow: perfherder-test
