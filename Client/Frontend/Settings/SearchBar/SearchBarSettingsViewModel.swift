@@ -59,8 +59,8 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
     weak var delegate: SearchBarPreferenceDelegate?
 
     private let prefs: Prefs
-    private let notificationProtocol: NotificationProtocol
-    init(prefs: Prefs, notificationProtocol: NotificationProtocol = NotificationProtocol.default) {
+    private let notificationCenter: NotificationProtocol
+    init(prefs: Prefs, notificationProtocol: NotificationProtocol = NotificationCenter.default) {
         self.prefs = prefs
         self.notificationProtocol = notificationProtocol
     }
@@ -104,8 +104,16 @@ private extension SearchBarSettingsViewModel {
         recordPreferenceChange(searchBarPosition)
 
         let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
-        notificationProtocol.post(name: .SearchBarPositionDidChange, object: notificationObject)
-    }
+        
+        @objc public protocol NotificationProtocol {
+            func post(name: NSNotification.Name, object: Any?)
+            extension NotificationCenter: NotificationProtocol {
+                public func post(name: NSNotification.Name, object: Any?) {
+                    self.post(name: name, object: object)
+                }
+                notificationProtocol.post(name: .SearchBarPositionDidChange, object: notificationObject)
+            }
+        }
 
     func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
         let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.SearchBarPosition,
