@@ -36,7 +36,7 @@ extension NotificationCenter: NotificationProtocol {
                          queue: queue,
                          using: block)
     }
-}
+} 
 
 @objc
 public protocol Notifiable {

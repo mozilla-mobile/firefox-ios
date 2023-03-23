@@ -104,16 +104,9 @@ private extension SearchBarSettingsViewModel {
         recordPreferenceChange(searchBarPosition)
 
         let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
-        
-        @objc public protocol NotificationProtocol {
-            func post(name: NSNotification.Name, object: Any?)
-            extension NotificationCenter: NotificationProtocol {
-                public func post(name: NSNotification.Name, object: Any?) {
-                    self.post(name: name, object: object)
-                }
-                notificationProtocol.post(name: .SearchBarPositionDidChange, object: notificationObject)
+        notificationProtocol.post(name: .SearchBarPositionDidChange, object: notificationObject)
             }
-        }
+    
 
     func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
         let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.SearchBarPosition,
