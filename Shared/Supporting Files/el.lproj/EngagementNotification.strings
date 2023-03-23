@@ -1,0 +1,6 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Βρείτε κάτι κοντά σας. Ή ανακαλύψτε κάτι διασκεδαστικό.";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Κάντε την πρώτη σας αναζήτηση";
+

@@ -215,7 +215,7 @@
 "Could not load page." = "ไม่สามารถโหลดหน้า";
 
 /* Description for the new ETP mode i.e. standard vs strict */
-"CoverSheet.v24.ETP.Description" = "การป้องกันการติดตามที่มากขึ้นในตัวช่วยหยุดโฆษณาตามคุณไปในทุกที่ เปิดใช้แบบ เข้มงวด เพื่อเพิ่มการปิดกั้นจากตัวติดตาม โฆษณา และป๊อปอัป";
+"CoverSheet.v24.ETP.Description" = "การป้องกันการติดตามแบบพิเศษในตัวจะช่วยหยุดโฆษณาไม่ให้ตามคุณไปในทุกที่ เปิดใช้แบบเข้มงวดเพื่อปิดกั้นตัวติดตาม โฆษณา และป๊อปอัปได้มากขึ้น";
 
 /* Text for the new ETP settings button */
 "CoverSheet.v24.ETP.Settings.Button" = "ไปยังการตั้งค่า";
@@ -342,6 +342,9 @@
 
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "เอาออก";
+
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "หน้า: %d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "การตั้งค่า";
@@ -755,10 +758,10 @@
 "Menu.Downloads.Label" = "การดาวน์โหลด";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOff.Title" = "การป้องกันถูก ปิด สำหรับไซต์นี้";
+"Menu.EnhancedTrackingProtectionOff.Title" = "การป้องกันปิดอยู่สำหรับไซต์นี้";
 
 /* A switch to enable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtectionOn.Title" = "การป้องกันถูก เปิด สำหรับไซต์นี้";
+"Menu.EnhancedTrackingProtectionOn.Title" = "การป้องกันเปิดอยู่สำหรับไซต์นี้";
 
 /* Label for the help button in the menu page. Pressing this button opens the support page https://support.mozilla.org/en-US/products/ios */
 "Menu.Help.v99" = "ช่วยเหลือ";
@@ -1216,6 +1219,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (แทนที่คำสืบค้นด้วย %s)";
 
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v112" = "กรอกบัตรเครดิตอัตโนมัติ";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "ล้างข้อมูลเว็บไซต์ทั้งหมด";
 
@@ -1447,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "หน้าว่าง";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "กำหนดเอง";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "หน้าแรก Firefox";
 
@@ -1573,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ตกลง เข้าใจแล้ว";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "หากไซต์ไม่ทำงานตามที่คาดไว้ ให้แตะที่แม่กุญแจในแถบที่อยู่ แล้วปิดการป้องกันการติดตามแบบพิเศษสำหรับหน้านั้น";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ระวัง!";
 
@@ -1584,6 +1596,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ลดโฆษณาที่กำหนดเป้าหมายและช่วยหยุดผู้โฆษณาไม่ให้ติดตามการเรียกดูของคุณ";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "หากไซต์ไม่ทำงานตามที่คาดไว้ ให้แตะที่แม่กุญแจในแถบที่อยู่ แล้วปิดการป้องกันการติดตามแบบพิเศษสำหรับหน้านั้น";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "หากไซต์ไม่ทำงานตามที่คาดไว้ ให้แตะที่แม่กุญแจในแถบที่อยู่ แล้วปิดการป้องกันการติดตามแบบพิเศษสำหรับหน้านั้น";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "อนุญาตให้มีการติดตามโฆษณาบางส่วนเพื่อให้เว็บไซต์ทำงานได้ถูกต้อง";
@@ -1600,11 +1618,14 @@
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "มาตรฐาน (ค่าเริ่มต้น)";
 
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "มาตรฐาน";
+
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "เข้มงวด";
 
 /* Settings option to specify that Tracking Protection is on */
-"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "การป้องกันการติดตามที่มากขึ้น";
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "การป้องกันการติดตามแบบพิเศษ";
 
 /* Title of link to help page to find out how to solve Sync issues */
 "Settings.TroubleShootSync.Title" = "แก้ไขปัญหา";
