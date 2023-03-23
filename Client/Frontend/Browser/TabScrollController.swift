@@ -36,7 +36,6 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     weak var header: BaseAlphaStackView?
     weak var overKeyboardContainer: BaseAlphaStackView?
     weak var bottomContainer: BaseAlphaStackView?
-    var isKeyboardOpen: Bool = false
 
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
@@ -53,7 +52,6 @@ class TabScrollingController: NSObject, FeatureFlaggable {
 
     private var headerTopOffset: CGFloat = 0 {
         didSet {
-            print("YRD \(headerTopOffset)")
             headerTopConstraint?.update(offset: headerTopOffset)
             header?.superview?.setNeedsLayout()
         }
@@ -109,7 +107,6 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     }
 
     func showToolbars(animated: Bool) {
-        print("YRD showToolbars")
         guard toolbarState != .visible else { return }
         toolbarState = .visible
 
@@ -126,9 +123,10 @@ class TabScrollingController: NSObject, FeatureFlaggable {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
-            if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
-                showToolbars(animated: true)
-            }
+            guard checkScrollHeightIsLargeEnoughForScrolling(),
+                  toolbarsShowing else { return }
+
+            showToolbars(animated: true)
         }
     }
 
@@ -156,7 +154,6 @@ extension TabScrollingController: SearchBarLocationProvider {}
 // MARK: - Private
 private extension TabScrollingController {
     func hideToolbars(animated: Bool) {
-        print("YRD hideToolbar")
         guard toolbarState != .collapsed else { return }
         toolbarState = .collapsed
 
@@ -203,12 +200,11 @@ private extension TabScrollingController {
 
     @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
         guard gesture.state != .ended, gesture.state != .cancelled else {
-            print("YRD gesture ended")
             lastContentOffset = 0
             return
         }
 
-        guard !tabIsLoading() || !isKeyboardOpen else { return }
+        guard !tabIsLoading() else { return }
 
         if let containerView = scrollView?.superview {
             let translation = gesture.translation(in: containerView)
@@ -228,18 +224,28 @@ private extension TabScrollingController {
                 if shouldAllowScroll(with: topIsRubberbanding, and: bottomIsNotRubberbanding) {
                     scrollWithDelta(delta)
                 }
-
-                let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
-                let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
-                if headerTopOffset == -topScrollHeight && bottomContainerCollapsed && overKeyboardContainerCollapsed {
-                    toolbarState = .collapsed
-                } else if toolbarsShowing {
-                    toolbarState = .visible
-                } else {
-                    toolbarState = .animating
-                }
+                updateToolbarState()
             }
         }
+    }
+
+    func updateToolbarState() {
+        let bottomContainerCollapsed = bottomContainerOffset == bottomContainerScrollHeight
+        let overKeyboardContainerCollapsed = overKeyboardContainerOffset == overKeyboardScrollHeight
+
+        if headerTopOffset == -topScrollHeight && bottomContainerCollapsed && overKeyboardContainerCollapsed {
+            setToolbarState(state: .collapsed)
+        } else if toolbarsShowing {
+            setToolbarState(state: .visible)
+        } else {
+            setToolbarState(state: .animating)
+        }
+    }
+
+    private func setToolbarState(state: ToolbarState) {
+        guard toolbarState != state else { return }
+
+        toolbarState = state
     }
 
     func checkRubberbandingForDelta(_ delta: CGFloat) -> Bool {
@@ -308,7 +314,11 @@ private extension TabScrollingController {
         }
 
         if animated {
-            UIView.animate(withDuration: duration, delay: 0, options: .allowUserInteraction, animations: animation, completion: completion)
+            UIView.animate(withDuration: duration,
+                           delay: 0,
+                           options: .allowUserInteraction,
+                           animations: animation,
+                           completion: completion)
         } else {
             animation()
             completion?(true)
@@ -359,9 +369,8 @@ extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(),
                 checkScrollHeightIsLargeEnoughForScrolling() else { return }
-        print("YRD scrollEndDragging")
 
-        if (decelerate || (toolbarState == .animating && !decelerate)) && checkScrollHeightIsLargeEnoughForScrolling() {
+        if decelerate || (toolbarState == .animating && !decelerate) {
             if scrollDirection == .up {
                 showToolbars(animated: true)
             } else if scrollDirection == .down {
@@ -396,7 +405,6 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        print("YRD scrollViewShouldScrollToTop")
         if toolbarState == .collapsed {
             showToolbars(animated: true)
             return false

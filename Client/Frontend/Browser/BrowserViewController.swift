@@ -685,10 +685,6 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
-    }
-
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
 
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
@@ -700,6 +696,10 @@ class BrowserViewController: UIViewController {
                 make.left.right.equalTo(view)
             }
         }
+    }
+
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
@@ -2564,7 +2564,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
         updateViewConstraints()
-        scrollController.isKeyboardOpen = true
 
         UIView.animate(
             withDuration: state.animationDuration,
@@ -2578,7 +2577,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         updateViewConstraints()
-        scrollController.isKeyboardOpen = false
 
         UIView.animate(
             withDuration: state.animationDuration,
