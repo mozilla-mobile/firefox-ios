@@ -1447,7 +1447,7 @@ workflows:
             python3 xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             python3 perfTestTransform.py
-    - deploy-to-bitrise-io:{}
+    - deploy-to-bitrise-io@1.9:{}
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x-ventura
