@@ -48,7 +48,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                         // profile and then generate HTML from the Readability results.
                         var readerModeStyle = DefaultReaderModeStyle
                         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
-                           var style = ReaderModeStyle(dict: dict) {
+                           let style = ReaderModeStyle(dict: dict) {
                                 readerModeStyle = style
                         } else {
                             readerModeStyle.theme = ReaderModeTheme.preferredTheme()
