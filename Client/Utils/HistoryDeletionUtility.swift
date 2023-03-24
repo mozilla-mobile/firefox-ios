@@ -112,6 +112,12 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
         profile.places.deleteHistoryMetadata(since: dateInMilliseconds) { _ in }
     }
 
+    func deleteHistoryMetadataOlderThan(_ dateOption: HistoryDeletionUtilityDateOptions) {
+        guard let date = dateFor(dateOption) else { return }
+        let dateInMilliseconds = date.toMillisecondsSince1970()
+        self.profile.places.deleteHistoryMetadataOlderThan(olderThan: dateInMilliseconds).uponQueue(.global(qos: .userInteractive)) { _ in }
+    }
+
     private func clearRecentlyClosedTabs(using dateOption: HistoryDeletionUtilityDateOptions) {
         switch dateOption {
         case .allTime:

@@ -72,6 +72,9 @@ class ClearHistorySheetProvider {
                 deletionUtility.deleteHistoryFrom(timeRange) { dateOption in
                     NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
                     didComplete?(dateOption)
+                    DispatchQueue.main.async {
+                        deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
+                    }
                 }
             }
 
@@ -91,6 +94,9 @@ class ClearHistorySheetProvider {
                 }
                 NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
                 didComplete?(dateOption)
+                DispatchQueue.main.async {
+                    deletionUtilitiy.deleteHistoryMetadataOlderThan(dateOption)
+                }
             }
         })
     }
