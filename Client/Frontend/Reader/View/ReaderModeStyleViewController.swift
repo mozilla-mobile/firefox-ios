@@ -223,9 +223,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     func applyTheme(_ preferences: Prefs, contentScript: TabContentScript) {
         guard let readerPreferences = preferences.dictionaryForKey(ReaderModeProfileKeyStyle),
               let readerMode = contentScript as? ReaderMode,
-              var style = ReaderModeStyle(dict: readerPreferences) else { return }
+              let style = ReaderModeStyle(dict: readerPreferences) else { return }
 
-        style.ensurePreferredColorThemeIfNeeded()
         readerMode.style = style
     }
 
