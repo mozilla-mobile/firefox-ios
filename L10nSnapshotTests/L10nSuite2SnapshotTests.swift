@@ -116,8 +116,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         // by Face ID..." is present when the Firefox app is run after the
         // simulator has been erased.
         waitForNoExistence(app.navigationBars["settings"])
-        if app.buttons["Continue"].exists {
-            app.buttons["Continue"].tap()
+        if app.otherElements.buttons["Continue"].exists {
+            app.otherElements.buttons["Continue"].tap()
         }
 
         let passcodeInput = springboard.secureTextFields.firstMatch
