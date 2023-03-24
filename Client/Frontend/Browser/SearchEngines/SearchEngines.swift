@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
+import Common
 import Shared
 import Storage
 
@@ -40,6 +41,7 @@ class SearchEngines {
     private var engineProvider: SearchEngineProvider
 
     weak var delegate: SearchEngineDelegate?
+    private var logger: Logger = DefaultLogger.shared
 
     init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()) {
         self.prefs = prefs
@@ -182,8 +184,21 @@ class SearchEngines {
     }()
 
     private func saveCustomEngines() {
-        let data = try? NSKeyedArchiver.archivedData(withRootObject: customEngines, requiringSecureCoding: false)
-        try? data?.write(to: URL(fileURLWithPath: customEngineFilePath))
+        do {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: customEngines, requiringSecureCoding: false)
+
+            do {
+                try data.write(to: URL(fileURLWithPath: customEngineFilePath))
+            } catch {
+                logger.log("Error writing data to file: \(error.description)",
+                           level: .debug,
+                           category: .images)
+            }
+        } catch {
+            logger.log("Error archiving custom engines: \(error.description)",
+                       level: .debug,
+                       category: .images)
+        }
     }
 }
 
