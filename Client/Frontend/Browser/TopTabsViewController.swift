@@ -336,11 +336,3 @@ extension TopTabsViewController: TopTabsScrollDelegate {
         }
     }
 }
-
-// MARK: Functions for testing
-extension TopTabsViewController {
-    func test_getDisplayManager() -> TabDisplayManager {
-        assert(AppConstants.isRunningTest)
-        return topTabDisplayManager
-    }
-}

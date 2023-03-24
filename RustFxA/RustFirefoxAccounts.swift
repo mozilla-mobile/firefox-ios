@@ -34,6 +34,7 @@ open class RustFirefoxAccounts {
     public let syncAuthState: SyncAuthState
     fileprivate static var prefs: Prefs?
     public let pushNotifications = PushNotificationSetup()
+    private let logger: Logger
 
     // This is used so that if a migration failed, show a UI indicator for the user to manually log in to their account.
     public var accountMigrationFailed: Bool {
@@ -119,7 +120,10 @@ open class RustFirefoxAccounts {
 
     private func createAccountManager() -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
-        assert(prefs != nil)
+        if prefs == nil {
+            logger.log("prefs is unexpectedly nil", level: .warning, category: .sync)
+        }
+
         let server: FxAConfig.Server
         if prefs?.intForKey(PrefsKeys.UseStageServer) == 1 {
             server = FxAConfig.Server.stage
@@ -157,6 +161,7 @@ open class RustFirefoxAccounts {
         Viaduct.shared.useReqwestBackend()
 
         let prefs = RustFirefoxAccounts.prefs
+        self.logger = logger
         let cache = KeychainCache.fromBranch("rustAccounts.syncAuthState",
                                              withLabel: RustFirefoxAccounts.syncAuthStateUniqueId(prefs: prefs),
                                              factory: syncAuthStateCachefromJSON)

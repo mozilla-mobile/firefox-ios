@@ -24,12 +24,18 @@ open class SyncTelemetry {
     private static var telemetryVersion: Int = 4
 
     open class func initWithPrefs(_ prefs: Prefs) {
-        assert(self.prefs == nil, "Prefs already initialized")
+        guard self.prefs == nil else { return }
+
         self.prefs = prefs
     }
 
-    open class func recordEvent(_ event: SyncTelemetryEvent) {
+    open class func recordEvent(_ event: SyncTelemetryEvent,
+                                logger: Logger = DefaultLogger.shared) {
         guard let prefs = prefs else {
+            logger.log("Prefs were not initialized",
+                                     level: .warning,
+                                     category: .telemetry)
+
             assertionFailure("Prefs not initialized")
             return
         }

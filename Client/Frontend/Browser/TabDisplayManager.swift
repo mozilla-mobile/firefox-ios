@@ -74,7 +74,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var tabDisplayType: TabDisplayType = .TabGrid
     fileprivate let tabManager: TabManager
     fileprivate let collectionView: UICollectionView
-    fileprivate weak var tabDisplayer: TabDisplayer?
+    fileprivate var tabDisplayer: TabDisplayer
     private let tabReuseIdentifier: String
     private var hasSentInactiveTabShownEvent: Bool = false
     var profile: Profile
@@ -407,7 +407,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 self.collectionView.reloadItems(at: indexPaths)
             }
 
-            self.tabDisplayer?.focusSelectedTab()
+            self.tabDisplayer.focusSelectedTab()
             completion?()
         }
     }
@@ -552,10 +552,10 @@ extension TabDisplayManager: UICollectionViewDataSource {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
         if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
-            cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
+            cell = tabDisplayer.cellFactory(for: cell, using: tab)
             return cell
         }
-        assert(tabDisplayer != nil)
+
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.cellIdentifier, for: indexPath) as? InactiveTabCell {
@@ -585,7 +585,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
         case .regularTabs:
             guard let tab = dataStore.at(indexPath.row) else { return cell }
-            cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
+            cell = tabDisplayer.cellFactory(for: cell, using: tab)
 
         case .none:
             return cell
@@ -877,7 +877,7 @@ extension TabDisplayManager: TabEventHandler {
             var indexPaths = [IndexPath(row: index, section: section)]
 
             if selectedTabChanged {
-                self?.tabDisplayer?.focusSelectedTab()
+                self?.tabDisplayer.focusSelectedTab()
 
                 // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
                 // This method avoids relying on the state of the "previous" selected tab,
