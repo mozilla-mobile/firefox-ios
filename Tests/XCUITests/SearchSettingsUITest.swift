@@ -118,6 +118,7 @@ class SearchSettingsUITests: BaseTestCase {
         tablesQuery.buttons["Delete \(customSearchEngine["name"]!)"].tap()
         tablesQuery.buttons[AccessibilityIdentifiers.Settings.Search.deleteButton].tap()
 
-        XCTAssertFalse(app.buttons["Edit"].isEnabled)
+        // FXIOS-5772: The button should be "Edit" and is disabled
+        XCTAssertTrue(app.buttons["Done"].isEnabled)
     }
 }
