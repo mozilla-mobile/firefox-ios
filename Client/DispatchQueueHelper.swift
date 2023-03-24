@@ -25,3 +25,13 @@ public func ensureMainThread<T>(execute work: @escaping () -> T) {
         }
     }
 }
+
+public func ensureBackgroundThread(execute work: @escaping () -> Void) {
+    if !Thread.current.isMainThread {
+        work()
+    } else {
+        DispatchQueue.global(qos: .default).async {
+            work()
+        }
+    }
+}

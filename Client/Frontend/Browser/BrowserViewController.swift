@@ -825,39 +825,42 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func dequeueQueuedTabs(receivedURLs: [URL]) {
-        assert(!Thread.current.isMainThread, "This must be called in the background.")
-        self.profile.queue.getQueuedTabs() >>== { cursor in
-            // This assumes that the DB returns rows in some kind of sane order.
-            // It does in practice, so WFM.
-            let cursorCount = cursor.count
-            if cursorCount > 0 {
-                // Filter out any tabs received by a push notification to prevent dupes.
-                let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
-                if !urls.isEmpty {
+        ensureBackgroundThread { [weak self] in
+            guard let self = self else { return }
+
+            self.profile.queue.getQueuedTabs() >>== { cursor in
+                // This assumes that the DB returns rows in some kind of sane order.
+                // It does in practice, so WFM.
+                let cursorCount = cursor.count
+                if cursorCount > 0 {
+                    // Filter out any tabs received by a push notification to prevent dupes.
+                    let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
+                    if !urls.isEmpty {
+                        DispatchQueue.main.async {
+                            self.tabManager.addTabsForURLs(urls, zombie: false)
+                        }
+                    }
+
+                    // Clear *after* making an attempt to open. We're making a bet that
+                    // it's better to run the risk of perhaps opening twice on a crash,
+                    // rather than losing data.
+                    self.profile.queue.clearQueuedTabs()
+                }
+
+                // Then, open any received URLs from push notifications.
+                if !receivedURLs.isEmpty {
                     DispatchQueue.main.async {
-                        self.tabManager.addTabsForURLs(urls, zombie: false)
+                        self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
                     }
                 }
 
-                // Clear *after* making an attempt to open. We're making a bet that
-                // it's better to run the risk of perhaps opening twice on a crash,
-                // rather than losing data.
-                self.profile.queue.clearQueuedTabs()
-            }
-
-            // Then, open any received URLs from push notifications.
-            if !receivedURLs.isEmpty {
-                DispatchQueue.main.async {
-                    self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
+                if !receivedURLs.isEmpty || cursorCount > 0 {
+                    // Because the notification service runs as a seperate process
+                    // we need to make sure that our account manager picks up any persisted state
+                    // the notification services persisted.
+                    self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
+                    self.profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
                 }
-            }
-
-            if !receivedURLs.isEmpty || cursorCount > 0 {
-                // Because the notification service runs as a seperate process
-                // we need to make sure that our account manager picks up any persisted state
-                // the notification services persisted.
-                self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
-                self.profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
             }
         }
     }
