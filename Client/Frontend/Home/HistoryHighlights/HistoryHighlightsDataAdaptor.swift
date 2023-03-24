@@ -8,7 +8,7 @@ import Common
 protocol HistoryHighlightsDataAdaptor {
     var delegate: HistoryHighlightsDelegate? { get set }
 
-    func getHistoryHightlights() -> [HighlightItem]
+    func getHistoryHighlights() -> [HighlightItem]
     func delete(_ item: HighlightItem)
 }
 
@@ -42,7 +42,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         loadHistory()
     }
 
-    func getHistoryHightlights() -> [HighlightItem] {
+    func getHistoryHighlights() -> [HighlightItem] {
         return historyItems
     }
 

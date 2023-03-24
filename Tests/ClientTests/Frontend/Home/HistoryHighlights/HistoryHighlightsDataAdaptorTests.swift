@@ -46,7 +46,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         let item: HighlightItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
         historyManager.callGetHighlightsDataCompletion(result: [item])
 
-        let results = subject.getHistoryHightlights()
+        let results = subject.getHistoryHighlights()
 
         XCTAssertEqual(results.count, 1)
         XCTAssertEqual(historyManager.getHighlightsDataCallCount, 1)
@@ -57,7 +57,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
     func testInitialLoadWithNoHistoryData() {
         historyManager.callGetHighlightsDataCompletion(result: [])
 
-        let results = subject.getHistoryHightlights()
+        let results = subject.getHistoryHighlights()
 
         XCTAssert(results.isEmpty)
         XCTAssertEqual(historyManager.getHighlightsDataCallCount, 1)
@@ -74,7 +74,7 @@ class HistoryHighlightsDataAdaptorTests: XCTestCase {
         let item2: HighlightItem = HistoryHighlight(score: 0, placeId: 0, url: "", title: "", previewImageUrl: "")
         historyManager.callGetHighlightsDataCompletion(result: [item1, item2])
 
-        let results = subject.getHistoryHightlights()
+        let results = subject.getHistoryHighlights()
 
         XCTAssertEqual(results.count, 2)
         XCTAssertEqual(historyManager.getHighlightsDataCallCount, 2)
