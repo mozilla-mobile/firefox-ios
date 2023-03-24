@@ -29,13 +29,14 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
-    private var tabManager: TabManagerProtocol
+    private var tabManager: TabManager
     private var urlBar: URLBarViewProtocol
     private var userDefaults: UserDefaultsInterface
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
+    private var logger: Logger
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
@@ -61,11 +62,12 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     // MARK: - Initializers
     init(profile: Profile,
-         tabManager: TabManagerProtocol,
+         tabManager: TabManager,
          urlBar: URLBarViewProtocol,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared
     ) {
         self.urlBar = urlBar
         self.tabManager = tabManager
@@ -87,6 +89,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
 
         contextMenuHelper.delegate = self
@@ -129,7 +132,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         setupSectionsAction()
         reloadView()
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 
@@ -250,8 +253,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     /// This is a problem that need to be fixed but until then we have to rely on the methods here.
 
     func homepageWillAppear(isZeroSearch: Bool) {
+        logger.log("\(type(of: self)) will appear", level: .info, category: .lifecycle)
+
         viewModel.isZeroSearch = isZeroSearch
         viewModel.recordViewAppeared()
+        notificationCenter.post(name: .HistoryUpdated)
     }
 
     func homepageDidAppear() {
@@ -272,6 +278,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     /// is done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
     private func reloadOnRotation(newSize: CGSize) {
+        logger.log("Reload on rotation to new size \(newSize)", level: .info, category: .homepage)
+
         if presentedViewController as? PhotonActionSheet != nil {
             presentedViewController?.dismiss(animated: false, completion: nil)
         }
@@ -294,6 +302,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
               let isPrivate = dict[Tab.privateModeKey] as? Bool
         else { return }
 
+        let privacySectionState = isPrivate ? "Removing": "Adding"
+        logger.log("\(privacySectionState) privacy sensitive sections", level: .info, category: .homepage)
         viewModel.isPrivate = isPrivate
         reloadView()
     }
@@ -306,7 +316,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     }
 
     func scrollToTop(animated: Bool = false) {
-        collectionView?.setContentOffset(.zero, animated: animated)
+        let statusBarHeight = view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 50
+        collectionView?.setContentOffset(isBottomSearchBar ? CGPoint(x: 0, y: -statusBarHeight): .zero, animated: animated)
     }
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -419,9 +430,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     }
 
     @objc private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
-        // TODO: Temporary
-        // This is one case where foregroundBVC is accessed to check the existance of a property.
-        // See https://mozilla-hub.atlassian.net/browse/FXIOS-5286
         guard viewModel.viewAppeared, canModalBePresented else {
             contextualHintViewController.stopTimer()
             return

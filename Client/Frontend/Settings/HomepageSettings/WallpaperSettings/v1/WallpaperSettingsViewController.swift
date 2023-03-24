@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Logger
 import Shared
 
 class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
@@ -66,7 +65,7 @@ class WallpaperSettingsViewController: WallpaperBaseViewController, Themeable {
         applyTheme()
         setupNotifications(forObserver: self,
                            observing: [UIContentSizeCategory.didChangeNotification])
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

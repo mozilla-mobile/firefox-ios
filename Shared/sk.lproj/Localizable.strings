@@ -343,8 +343,8 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Odstrániť";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "Stránky: %d";
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Stránok: %d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Nastavenia";
@@ -934,9 +934,6 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Tapeta v limitovanej edícii";
 
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "Preskúmajte ďalšie tapety";
-
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Vyberte si tapetu, ktorá k vám hovorí.";
 
@@ -992,7 +989,7 @@
 "Privacy" = "Súkromie";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "Zásady ochrany súkromia";
+"Privacy Policy" = "Zásady ochrany osobných údajov";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
 "ProtectionStatus.NotSecure" = "Pripojenie nie je zabezpečené";
@@ -1028,7 +1025,7 @@
 "RecentlyClosedTabsPanel.Title" = "Nedávno zatvorené karty";
 
 /* More button text for Recently Saved items at the home page. */
-"RecentlySaved.Actions.More" = "Zobraziť všetko";
+"RecentlySaved.Actions.More" = "Zobraziť všetky";
 
 /* Accessibility Label for the tab toolbar Reload button */
 "Reload" = "Znova načítať";
@@ -1223,7 +1220,7 @@
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (nahraďte s %s)";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Automaticky dopĺňať informácie o platobných kartách";
+"Settings.AutofillCreditCard.Title.v112" = "Automaticky dopĺňať informácie o platobných kartách";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Vymazať všetky údaje webových stránok";
@@ -1456,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Zobraziť prázdnu stránku";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "Vlastná";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Domovská stránka Firefoxu";
 
@@ -1583,7 +1583,7 @@
 "Settings.TrackingProtection.Alert.Button" = "Ok, rozumiem";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Ak niektorá stránka nebude fungovať správne, ťuknite na ikonu štítu v paneli s adresou a rozšírenú ochranu pred sledovaním na danej stránke vypnite.";
+"Settings.TrackingProtection.Alert.Description" = "Ak stránka nefunguje podľa očakávania, ťuknite na zámok v paneli s adresou a vypnite pre danú stránku Rozšírenú ochranu pred sledovaním.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Pozor!";
@@ -1598,7 +1598,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "Obmedzuje množstvo cielených reklám a zabraňuje inzerentom sledovať vás na internete.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ak niektorá stránka nebude fungovať správne, ťuknite na ikonu štítu v paneli s adresou a rozšírenú ochranu pred sledovaním na danej stránke vypnite.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ak stránka nefunguje podľa očakávania, ťuknite na zámok v paneli s adresou a vypnite pre danú stránku Rozšírenú ochranu pred sledovaním.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ak stránka nefunguje podľa očakávania, ťuknite na zámok v paneli s adresou a vypnite pre danú stránku Rozšírenú ochranu pred sledovaním.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Niektoré sledovacie prvky sú povolené, takže webové stránky fungujú správne.";
@@ -1614,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Štandardná (predvolená)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Štandardná";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Prísna ochrana";

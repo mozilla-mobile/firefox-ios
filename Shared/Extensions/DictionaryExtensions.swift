@@ -3,10 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 extension Dictionary {
-    public func merge(with dictionary: Dictionary) -> Dictionary {
-        return self.merging(dictionary) { (_, new) in new }
-    }
-
     public var asString: String? {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: .prettyPrinted) else { return nil }
         let jsonString = String(data: jsonData, encoding: .utf8)

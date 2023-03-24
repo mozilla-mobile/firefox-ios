@@ -6,6 +6,15 @@ import Foundation
 import Shared
 
 extension BlockingStrength {
+    var settingStatus: String {
+        switch self {
+        case .basic:
+            return .TrackingProtectionOptionBlockListLevelStandardStatus
+        case .strict:
+            return .TrackingProtectionOptionBlockListLevelStrict
+        }
+    }
+
     var settingTitle: String {
         switch self {
         case .basic:
@@ -34,11 +43,13 @@ extension BlockingStrength {
     }
 }
 
-// Additional information shown when the info accessory button is tapped.
+// MARK: Additional information shown when the info accessory button is tapped.
 class TPAccessoryInfo: ThemedTableViewController {
     var isStrictMode = false
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+
         tableView.dataSource = self
         tableView.delegate = self
         tableView.estimatedRowHeight = 130
@@ -48,7 +59,7 @@ class TPAccessoryInfo: ThemedTableViewController {
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         applyTheme()
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     func headerView() -> UIView {
@@ -192,13 +203,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
 
                     if option == .strict {
                         self.button.isHidden = true
-                        let alert = UIAlertController(title: .TrackerProtectionAlertTitle,
-                                                      message: .TrackerProtectionAlertDescription,
-                                                      preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: .TrackerProtectionAlertButton,
-                                                      style: .default,
-                                                      handler: nil))
-                        self.present(alert, animated: true)
                     }
             })
 
@@ -208,6 +212,9 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
 
+            if self.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) == false {
+                setting.enabled = false
+            }
             return setting
         }
 

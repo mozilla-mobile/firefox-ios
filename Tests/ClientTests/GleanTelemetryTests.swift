@@ -33,12 +33,11 @@ class MockBrowserSyncManager: BrowserProfile.BrowserSyncManager {
 
 class GleanTelemetryTests: XCTestCase {
     override func setUp() {
-        Glean.shared.resetGlean(clearStores: true)
+        super.setUp()
+        Glean.shared.resetGlean(clearStores: false)
         Glean.shared.enableTestingMode()
 
-        RustFirefoxAccounts.startup(prefs: MockProfilePrefs()).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
-        }
+        RustFirefoxAccounts.startup(prefs: MockProfilePrefs()).uponQueue(.main) { _ in }
     }
 
     func testSyncPingIsSentOnSyncOperation() throws {
@@ -52,7 +51,7 @@ class GleanTelemetryTests: XCTestCase {
         }
 
         _ = syncManager.syncNamedCollections(
-            why: SyncReason.didLogin,
+            why: OldSyncReason.didLogin,
             names: ["tabs", "logins", "bookmarks", "history", "clients"]
         )
 

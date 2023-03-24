@@ -4,6 +4,7 @@
 
 import XCTest
 import Kingfisher
+import Common
 @testable import SiteImageView
 
 final class FaviconFetcherTests: XCTestCase {
@@ -21,10 +22,11 @@ final class FaviconFetcherTests: XCTestCase {
 
     func testReturnsFailure_onAnyError() async {
         mockImageDownloader.error = KingfisherError.requestError(reason: .emptyRequest)
-        let subject = DefaultFaviconFetcher(imageDownloader: mockImageDownloader)
+        let subject = DefaultFaviconFetcher()
 
         do {
-            _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
+            _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!,
+                                               imageDownloader: mockImageDownloader)
             XCTFail("Should have failed with error")
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: The request is empty or `nil`.",
@@ -37,10 +39,11 @@ final class FaviconFetcherTests: XCTestCase {
     func testReturnsSuccess_onImage() async {
         let resultImage = UIImage()
         mockImageDownloader.image = resultImage
-        let subject = DefaultFaviconFetcher(imageDownloader: mockImageDownloader)
+        let subject = DefaultFaviconFetcher()
 
         do {
-            let result = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
+            let result = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!,
+                                                        imageDownloader: mockImageDownloader)
             XCTAssertEqual(resultImage, result)
         } catch {
             XCTFail("Should have succeeded with image")
@@ -49,10 +52,11 @@ final class FaviconFetcherTests: XCTestCase {
 
     func testTimeout_completesWithoutImageOrError() async {
         mockImageDownloader.timeoutDelay = 1
-        let subject = DefaultFaviconFetcher(imageDownloader: mockImageDownloader)
+        let subject = DefaultFaviconFetcher()
 
         do {
-            _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!)
+            _ = try await subject.fetchFavicon(from: URL(string: "www.mozilla.com")!,
+                                               imageDownloader: mockImageDownloader)
             XCTFail("Should have failed with error")
         } catch let error as SiteImageError {
             XCTAssertEqual("Unable to download image with reason: Timeout reached", error.description)
@@ -64,6 +68,7 @@ final class FaviconFetcherTests: XCTestCase {
 
 // MARK: - MockSiteImageDownloader
 private class MockSiteImageDownloader: SiteImageDownloader {
+    var logger: Logger = DefaultLogger.shared
     var timeoutDelay: UInt64 = 10
     var continuation: CheckedContinuation<SiteImageLoadingResult, Error>?
 

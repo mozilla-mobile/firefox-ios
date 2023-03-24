@@ -343,8 +343,8 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "ລຶບ";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "ເວັບໄຊທ: %d";
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "ໜ້າ: %d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "ການຕັ້ງຄ່າ";
@@ -934,9 +934,6 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "ວໍເປເປີສະບັບຈໍາກັດ";
 
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "ສຳຫຼວດຮູບພື້ນຫຼັງເພີ່ມເຕີມ";
-
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "ເລືອກຮູບວໍເປເປີທີ່ບົ່ງບອກຄວາມເປັນໂຕຕົນຂອງທ່ານ.";
 
@@ -1223,7 +1220,7 @@
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (ແທນທີ່ Query ດ້ວຍ %s)";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "ຕື່ມບັດເຄຣດິດອັດຕະໂນມັດ";
+"Settings.AutofillCreditCard.Title.v112" = "ຕື່ມບັດເຄຣດິດອັດຕະໂນມັດ";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "ລົບລ້າງຂໍ້ມູນເວັບໄຊທັງໝົດ";
@@ -1456,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ຫນ້າວ່າງ";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "ປັບແຕ່ງ";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "ຫນ້າຫລັກຂອງ Firefox";
 
@@ -1583,7 +1583,7 @@
 "Settings.TrackingProtection.Alert.Button" = "ໂອເຄ, ເຂົ້າໃຈແລ້ວ";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "ຖ້າເວັບໄຊທ໌ບໍ່ສາມາດເຮັດວຽກໄດ້ຕາມທີ່ຄາດຫວັງ ໃຫ້ແຕະໄສໂລ່ໃນແຖບທີ່ຢູ່ ແລະ ປິດການປັບປຸງການປ້ອງກັນການຕິດຕາມສຳລັບໜ້ານັ້ນ.";
+"Settings.TrackingProtection.Alert.Description" = "ຖ້າເວັບໄຊທ໌ບໍ່ເຮັດວຽກຕາມທີ່ຄາດໄວ້, ແຕະທີ່ລັອກຢູ່ໃນແຖບທີ່ຢູ່ແລະປິດການປົກປ້ອງການຕິດຕາມທີ່ປັບປຸງໃຫ້ດີຂຶ້ນສໍາລັບຫນ້ານັ້ນ.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ລະວັງ!";
@@ -1598,7 +1598,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "ລຸດຜ່ອນການໂຄສະນາ ແລະ ຊ່ວຍຢຸດຜູ້ໂຄສະນາບໍ່ໃຫ້ຕິດຕາມການທ່ອງເນັດຂອງທ່ານ.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "ຖ້າເວັບໄຊທບໍ່ເຮັດວຽກຕາມທີ່ຄາດໄວ້ ໃຫ້ແຕະໃສ່ໂລ້ໃນແທັບທີ່ຢູ່ ແລະ ປິດການປ້ອງກັນການຕິດຕາມສຳລັບຫນ້ານັ້ນ.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "ຖ້າເວັບໄຊທ໌ບໍ່ສາມາດເຮັດວຽກໄດ້ຕາມທີ່ຄາດຫວັງ ໃຫ້ແຕະໃນແຖບທີ່ຢູ່ ແລະ ປິດການປັບປຸງການປ້ອງກັນການຕິດຕາມສຳລັບໜ້ານັ້ນ.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "ຖ້າເວັບໄຊທ໌ບໍ່ສາມາດເຮັດວຽກໄດ້ຕາມທີ່ຄາດຫວັງ ໃຫ້ແຕະໃນແຖບທີ່ຢູ່ ແລະ ປິດການປັບປຸງການປ້ອງກັນການຕິດຕາມສຳລັບໜ້ານັ້ນ.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ອະນຸຍາດໃຫ້ມີການຕິດຕາມໂຄສະນາບາງສ່ວນ ເພື່ອເຮັດໃຫ້ເວັບໄຊທເຮັດວຽກໄດ້ຕາມປົກກະຕິ.";
@@ -1614,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "ມາດຕະຖານ (ຄ່າພື້ນຖານ)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "ມາດຕະຖານ";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "ເຄັ່ງຄັດ";

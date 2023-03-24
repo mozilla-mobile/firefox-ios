@@ -64,7 +64,7 @@ class TabsButton: UIButton {
 
     fileprivate lazy var borderView: UIImageView = {
         let border = UIImageView(image: UIImage(named: ImageIdentifiers.navTabCounter)?.withRenderingMode(.alwaysTemplate))
-        border.tintColor = UIColor.theme.browser.tint
+        border.tintColor = UIColor.legacyTheme.browser.tint
         return border
     }()
 
@@ -205,11 +205,11 @@ class TabsButton: UIButton {
 
 extension TabsButton: NotificationThemeable {
     func applyTheme() {
-        borderView.tintColor = UIColor.theme.browser.tint
+        borderView.tintColor = UIColor.legacyTheme.browser.tint
         if inTopTabs {
-            textColor = UIColor.theme.topTabs.buttonTint
+            textColor = UIColor.legacyTheme.topTabs.buttonTint
         } else {
-            textColor = UIColor.theme.browser.tint
+            textColor = UIColor.legacyTheme.browser.tint
         }
     }
 }

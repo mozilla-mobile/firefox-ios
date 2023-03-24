@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "BrowserKit",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v14)
     ],
     products: [
         .library(
@@ -15,8 +15,8 @@ let package = Package(
             name: "Common",
             targets: ["Common"]),
         .library(
-            name: "Logger",
-            targets: ["Logger"]),
+            name: "TabDataStore",
+            targets: ["TabDataStore"])
     ],
     dependencies: [
         .package(
@@ -24,13 +24,16 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.2.2"),
+            exact: "7.6.1"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
         .package(
             url: "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
             exact: "1.9.6"),
+        .package(
+            url: "https://github.com/getsentry/sentry-cocoa.git",
+            exact: "8.1.0"),
     ],
     targets: [
         .target(
@@ -42,17 +45,18 @@ let package = Package(
             dependencies: ["SiteImageView"]),
         .target(
             name: "Common",
-            dependencies: ["Dip"],
+            dependencies: ["Dip",
+                           "SwiftyBeaver",
+                           .product(name: "Sentry", package: "sentry-cocoa")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "CommonTests",
             dependencies: ["Common"]),
         .target(
-            name: "Logger",
-            dependencies: ["SwiftyBeaver", "Common"],
+            name: "TabDataStore",
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
-            name: "LoggerTests",
-            dependencies: ["Logger"]),
+            name: "TabDataStoreTests",
+            dependencies: ["TabDataStore"])
     ]
 )

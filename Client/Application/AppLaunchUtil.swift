@@ -2,12 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 import Storage
 import Account
 import Glean
-import Logger
 
 class AppLaunchUtil {
     private var logger: Logger
@@ -30,16 +30,20 @@ class AppLaunchUtil {
 
         TelemetryWrapper.shared.setup(profile: profile)
 
-        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
-        // before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        SentryIntegration.shared.setup(sendUsageData: sendUsageData)
+        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
+        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendUsageData) ?? true
+        logger.setup(sendUsageData: sendUsageData)
 
         setUserAgent()
 
         KeyboardHelper.defaultHelper.startObserving()
         DynamicFontHelper.defaultHelper.startObserving()
         MenuHelper.defaultHelper.setItems()
+
+        // Initialize conversion value by specifying fineValue and coarseValue.
+        // Call update postback conversion value for install event.
+        let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
+        conversionValue.adNetworkAttributionUpdateConversionInstallEvent()
 
         // Initialize the feature flag subsystem.
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
@@ -70,8 +74,14 @@ class AppLaunchUtil {
         SystemUtils.onFirstRun()
 
         RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
+            self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
         }
+
+        // Add swizzle on UIViewControllers to automatically log when there's a new view showing
+        UIViewController.loggerSwizzle()
+
+        // Add swizzle on top of UIControl to automatically log when there's an action sent
+        UIControl.loggerSwizzle()
     }
 
     func setUpPostLaunchDependencies() {
@@ -89,8 +99,10 @@ class AppLaunchUtil {
             // fresh install - Intro screen not yet shown
             InstallType.set(type: .fresh)
             InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+
             // Profile setup
             profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest)
+            profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.KeyFirstAppUse)
         } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
             profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
         }
@@ -127,14 +139,14 @@ class AppLaunchUtil {
         let migrationSucceeded = UserDefaults.standard.bool(forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
         let migrationAttemptNumber = UserDefaults.standard.integer(forKey: PrefsKeys.HistoryMigrationAttemptNumber)
         UserDefaults.standard.setValue(migrationAttemptNumber + 1, forKey: PrefsKeys.HistoryMigrationAttemptNumber)
-        if !migrationSucceeded && migrationAttemptNumber < AppConstants.MAX_HISTORY_MIGRATION_ATTEMPT {
+        if !migrationSucceeded && migrationAttemptNumber < AppConstants.maxHistoryMigrationAttempt {
             logger.log("Migrating Application services history",
                        level: .info,
                        category: .sync)
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started
             // this will help us identify how often the migration starts, but never ends
-            // additionally, we have a seperate metric for error rates
+            // additionally, we have a separate metric for error rates
             GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
             GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             browserProfile?.migrateHistoryToPlaces(
@@ -162,8 +174,6 @@ class AppLaunchUtil {
                 GleanMetrics.PlacesHistoryMigration.duration.cancel(id)
                 GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToDenominator(1)
                 GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToDenominator(1)
-                // We also send the error to sentry
-                SentryIntegration.shared.sendWithStacktrace(message: "Error executing application services history migration", tag: SentryTag.rustPlaces, severity: .error, description: errDescription)
             })
         } else {
             self.logger.log("History Migration skipped",

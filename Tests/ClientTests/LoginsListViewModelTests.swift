@@ -50,21 +50,28 @@ class LoginsListViewModelTests: XCTestCase {
     }
 
     func testQueryLogins() {
-        let emptyQueryResult = self.viewModel.queryLogins("")
-        XCTAssertTrue(emptyQueryResult.value.isSuccess)
-        XCTAssertEqual(emptyQueryResult.value.successValue?.count, 10)
+        let expectation = XCTestExpectation()
+        viewModel.queryLogins("") { emptyQueryResult in
+            XCTAssertEqual(emptyQueryResult.count, 10)
+            expectation.fulfill()
+        }
 
-        let exampleQueryResult = self.viewModel.queryLogins("example")
-        XCTAssertTrue(exampleQueryResult.value.isSuccess)
-        XCTAssertEqual(exampleQueryResult.value.successValue?.count, 10)
+        viewModel.queryLogins("example") { exampleQueryResult in
+            XCTAssertEqual(exampleQueryResult.count, 10)
+            expectation.fulfill()
+        }
 
-        let threeQueryResult = self.viewModel.queryLogins("3")
-        XCTAssertTrue(threeQueryResult.value.isSuccess)
-        XCTAssertEqual(threeQueryResult.value.successValue?.count, 1)
+        viewModel.queryLogins("3") { threeQueryResult in
+            XCTAssertEqual(threeQueryResult.count, 1)
+            expectation.fulfill()
+        }
 
-        let zQueryResult = self.viewModel.queryLogins("yxz")
-        XCTAssertTrue(zQueryResult.value.isSuccess)
-        XCTAssertEqual(zQueryResult.value.successValue?.count, 0)
+        viewModel.queryLogins("yxz") { zQueryResult in
+            XCTAssertEqual(zQueryResult.count, 0)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 5)
     }
 
     func testIsDuringSearchControllerDismiss() {

@@ -12,24 +12,8 @@ let urlLabelExample_4 = "Example Login Page 2"
 let url_4 = "test-password-2.html"
 
 class BookmarkingTests: BaseTestCase {
-    private func bookmark() {
-        waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: TIMEOUT)
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[ImageIdentifiers.addToBookmark], timeout: TIMEOUT_LONG)
-        app.tables.otherElements[ImageIdentifiers.addToBookmark].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
-    private func unbookmark() {
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
-        app.otherElements["menu-Bookmark-Remove"].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
     private func checkBookmarked() {
         navigator.goto(BrowserTabMenu)
-        print(app.debugDescription)
         waitForExistence(app.tables.otherElements["menu-Bookmark-Remove"])
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
@@ -129,14 +113,15 @@ class BookmarkingTests: BaseTestCase {
         checkItemInBookmarkList()
     }
 
+    // Smoketest
     func testBookmarksAwesomeBar() {
         XCTExpectFailure("The app was not launched", strict: false) {
             waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         }
-        typeOnSearchBar(text: "www.ebay")
+        typeOnSearchBar(text: "www.google")
         waitForExistence(app.tables["SiteTable"])
-        waitForExistence(app.tables["SiteTable"].cells.staticTexts["www.ebay"], timeout: 5)
-        XCTAssertTrue(app.tables["SiteTable"].cells.staticTexts["www.ebay"].exists)
+        waitForExistence(app.tables["SiteTable"].cells.staticTexts["www.google"], timeout: 5)
+        XCTAssertTrue(app.tables["SiteTable"].cells.staticTexts["www.google"].exists)
         typeOnSearchBar(text: ".com")
         typeOnSearchBar(text: "\r")
         navigator.nowAt(BrowserTab)
@@ -145,7 +130,7 @@ class BookmarkingTests: BaseTestCase {
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(URLBarOpen)
-        typeOnSearchBar(text: "http://www.olx.ro")
+        typeOnSearchBar(text: "https://mozilla.org")
 
         // Site table exists but is empty
         waitForExistence(app.tables["SiteTable"])
@@ -163,9 +148,9 @@ class BookmarkingTests: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)
-        typeOnSearchBar(text: "olx.ro")
+        typeOnSearchBar(text: "mozilla.org")
         waitForExistence(app.tables["SiteTable"])
-        waitForExistence(app.cells.staticTexts["olx.ro"])
+        waitForExistence(app.cells.staticTexts["mozilla.org"])
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
     /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
@@ -267,7 +252,7 @@ class BookmarkingTests: BaseTestCase {
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 1 cell (desktop bookmark folder)
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
         }
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)

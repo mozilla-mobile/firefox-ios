@@ -343,8 +343,8 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Entfernen";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "Seiten: %d";
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Seiten: %d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Einstellungen";
@@ -934,9 +934,6 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Hintergrund „Limitierte Edition“";
 
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "Entdecken Sie weitere Hintergrundbilder";
-
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Wählen Sie ein Hintergrundbild, das Sie anspricht.";
 
@@ -1223,7 +1220,7 @@
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Anfrage durch %s ersetzen)";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Kreditkarten automatisch einfügen";
+"Settings.AutofillCreditCard.Title.v112" = "Kreditkarten automatisch einfügen";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Alle Website-Daten löschen";
@@ -1456,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Leere Seite";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "Benutzerdefiniert";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox Home";
 
@@ -1583,7 +1583,7 @@
 "Settings.TrackingProtection.Alert.Button" = "Ok, verstanden";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Wenn eine Website nicht wie erwartet funktioniert, tippen Sie auf den Schild in der Adressleiste und deaktivieren Sie den verbesserten Tracking-Schutz für diese Seite.";
+"Settings.TrackingProtection.Alert.Description" = "Wenn eine Website nicht wie erwartet funktioniert, tippen Sie auf das Schloss in der Adressleiste und deaktivieren Sie den erweiterten Tracking-Schutz für diese Seite.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Achtung!";
@@ -1598,7 +1598,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduziert gezielte Anzeigen und verhindert, dass Werbetreibende Ihre Online-Aktivitäten verfolgen.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Wenn eine Website nicht wie erwartet funktioniert, tippen Sie auf den Schild in der Adressleiste und deaktivieren Sie den verbesserten Tracking-Schutz für diese Seite.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Wenn eine Website nicht wie erwartet funktioniert, tippen Sie auf das Schloss in der Adressleiste und deaktivieren Sie den erweiterten Tracking-Schutz für diese Seite.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Wenn eine Website nicht wie erwartet funktioniert, tippen Sie auf das Schloss in der Adressleiste und deaktivieren Sie den erweiterten Tracking-Schutz für diese Seite.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Erlaubt einigen System („Trackern“), Ihre Aktivitäten zu verfolgen, damit Websites wie erwartet funktionieren.";
@@ -1614,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Standard";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Standard";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Streng";

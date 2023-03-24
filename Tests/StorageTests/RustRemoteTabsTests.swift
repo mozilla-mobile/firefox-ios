@@ -4,7 +4,6 @@
 
 import XCTest
 import Shared
-@testable import Client
 @testable import Storage
 
 class RustRemoteTabsTests: XCTestCase {
@@ -12,6 +11,7 @@ class RustRemoteTabsTests: XCTestCase {
     var tabs: RustRemoteTabs!
 
     override func setUp() {
+        super.setUp()
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {

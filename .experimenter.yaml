@@ -6,7 +6,7 @@ contextual-hint-feature:
   variables:
     features-enabled:
       type: json
-      description: This property provides a lookup table of whether specific contextual hints are enabled.
+      description: "This property provides a lookup table of whether specific contextual hints are enabled.\n"
 credit-card-autofill:
   description: This property defines the credit card autofill feature
   hasExposure: true
@@ -15,6 +15,14 @@ credit-card-autofill:
     credit-card-autofill-status:
       type: boolean
       description: "If true, we will allow user to use the credit autofill feature"
+engagement-notification-feature:
+  description: "The feature that controls the engagement notifications.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    engagement-notification-feature-status:
+      type: boolean
+      description: "If true, we will allow user to use the engagement notification feature"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true
@@ -59,7 +67,7 @@ messaging:
       description: Id or prefix of the message under experiment.
     messages:
       type: json
-      description: "A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData."
+      description: "A growable collection of messages, where the Key is the message identifier and the value is its associated MessageData.\n"
     on-control:
       type: string
       description: What should be displayed when a control message is selected.
@@ -72,6 +80,14 @@ messaging:
     triggers:
       type: json
       description: "A collection of out the box trigger expressions. Each entry maps to a valid JEXL expression.\n"
+notification-settings-feature:
+  description: "The feature that controls the notifications menu in Settings.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    notification-settings-feature-status:
+      type: boolean
+      description: "If true, we will allow user to use the the notifications menu in Settings"
 onboarding-feature:
   description: The feature that controls whether to show or not Upgrade onboarding
   hasExposure: true
@@ -80,6 +96,13 @@ onboarding-feature:
     first-run-flow:
       type: boolean
       description: "If true, we show the new Onboarding screen when the user for v106 version.\n"
+    notification-card-position:
+      type: string
+      description: "This provides the setting for how we show the notification card in onboarding.\n"
+      enum:
+        - after-sync
+        - before-sync
+        - no-card
     upgrade-flow:
       type: boolean
       description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"
@@ -158,3 +181,11 @@ wallpaper-feature:
     onboarding-sheet:
       type: boolean
       description: This property defines whether the wallpaper onboarding is shown or not
+zoom-feature:
+  description: "The configuration for the status of the zoom feature\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    status:
+      type: boolean
+      description: "Whether the page zoom feature is enabled or not\n"

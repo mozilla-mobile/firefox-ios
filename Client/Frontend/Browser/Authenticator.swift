@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import Storage
+import Common
 
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
@@ -47,7 +48,9 @@ class Authenticator {
         return self.promptForUsernamePassword(viewController, credentials: nil, protectionSpace: challenge.protectionSpace, loginsHelper: nil)
     }
 
-    static func findMatchingCredentialsForChallenge(_ challenge: URLAuthenticationChallenge, fromLoginsProvider loginsProvider: RustLogins) -> Deferred<Maybe<URLCredential?>> {
+    static func findMatchingCredentialsForChallenge(_ challenge: URLAuthenticationChallenge,
+                                                    fromLoginsProvider loginsProvider: RustLogins,
+                                                    logger: Logger = DefaultLogger.shared) -> Deferred<Maybe<URLCredential?>> {
         return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
             guard cursor.count >= 1 else { return deferMaybe(nil) }
 
@@ -88,7 +91,9 @@ class Authenticator {
             else if logins.count == 1 {
                 credentials = logins[0].credentials
             } else {
-                SentryIntegration.shared.send(message: "No logins found for Authenticator", severity: .warning)
+                logger.log("No logins found for Authenticator",
+                           level: .info,
+                           category: .webview)
             }
 
             return deferMaybe(credentials)
@@ -99,10 +104,11 @@ class Authenticator {
         _ viewController: UIViewController,
         credentials: URLCredential?,
         protectionSpace: URLProtectionSpace,
-        loginsHelper: LoginsHelper?
+        loginsHelper: LoginsHelper?,
+        logger: Logger = DefaultLogger.shared
     ) -> Deferred<Maybe<LoginEntry>> {
         if protectionSpace.host.isEmpty {
-            print("Unable to show a password prompt without a hostname")
+            logger.log("Unable to show a password prompt without a hostname", level: .warning, category: .sync)
             return deferMaybe(LoginRecordError(description: "Unable to show a password prompt without a hostname"))
         }
 

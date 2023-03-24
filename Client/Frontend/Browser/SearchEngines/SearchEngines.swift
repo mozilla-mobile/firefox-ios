@@ -6,6 +6,10 @@ import Foundation
 import Shared
 import Storage
 
+protocol SearchEngineDelegate: AnyObject {
+    func searchEnginesDidUpdate()
+}
+
 /// Manage a set of Open Search engines.
 ///
 /// The search engines are ordered.
@@ -33,23 +37,34 @@ class SearchEngines {
     private let showSearchSuggestionsOptIn = "search.suggestions.showOptIn"
     private let showSearchSuggestions = "search.suggestions.show"
     private let customSearchEnginesFileName = "customEngines.plist"
+    private var engineProvider: SearchEngineProvider
 
-    init(prefs: Prefs, files: FileAccessor) {
+    weak var delegate: SearchEngineDelegate?
+
+    init(prefs: Prefs, files: FileAccessor, engineProvider: SearchEngineProvider = DefaultSearchEngineProvider()) {
         self.prefs = prefs
         // By default, show search suggestions
         self.shouldShowSearchSuggestions = prefs.boolForKey(showSearchSuggestions) ?? true
         self.fileAccessor = files
+        self.engineProvider = engineProvider
+        self.orderedEngines = []
         self.disabledEngines = getDisabledEngines()
-        self.orderedEngines = getOrderedEngines()
+
+        getOrderedEngines { orderedEngines in
+            self.orderedEngines = orderedEngines
+            self.delegate?.searchEnginesDidUpdate()
+        }
     }
 
-    var defaultEngine: OpenSearchEngine {
+    var defaultEngine: OpenSearchEngine? {
         get {
-            return self.orderedEngines[0]
+            return self.orderedEngines[safe: 0]
         }
 
         set(defaultEngine) {
             // The default engine is always enabled.
+            guard let defaultEngine = defaultEngine else { return }
+
             self.enableEngine(defaultEngine)
             // The default engine is always first in the list.
             var orderedEngines = self.orderedEngines.filter { engine in engine.shortName != defaultEngine.shortName }
@@ -59,7 +74,7 @@ class SearchEngines {
     }
 
     func isEngineDefault(_ engine: OpenSearchEngine) -> Bool {
-        return defaultEngine.shortName == engine.shortName
+        return defaultEngine?.shortName == engine.shortName
     }
 
     // The keys of this dictionary are used as a set.
@@ -101,15 +116,19 @@ class SearchEngines {
         disabledEngines[engine.shortName] = true
     }
 
-    func deleteCustomEngine(_ engine: OpenSearchEngine) {
+    func deleteCustomEngine(_ engine: OpenSearchEngine, completion: @escaping () -> Void) {
         // We can't delete a preinstalled engine or an engine that is currently the default.
-        if !engine.isCustomEngine || isEngineDefault(engine) {
-            return
-        }
+        guard engine.isCustomEngine || isEngineDefault(engine) else { return }
 
         customEngines.remove(at: customEngines.firstIndex(of: engine)!)
         saveCustomEngines()
-        orderedEngines = getOrderedEngines()
+
+        getOrderedEngines { orderedEngines in
+            self.orderedEngines = orderedEngines
+            self.delegate?.searchEnginesDidUpdate()
+
+            completion()
+        }
     }
 
     /// Adds an engine to the front of the search engines list.
@@ -141,6 +160,12 @@ class SearchEngines {
         }
     }
 
+    func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
+        engineProvider.getOrderedEngines(customEngines: customEngines,
+                                         orderedEngineNames: prefs.stringArrayForKey(self.orderedEngineNames),
+                                         completion: completion)
+    }
+
     private var customEngineFilePath: String {
         let profilePath = try! self.fileAccessor.getAndEnsureDirectory() as NSString
         return profilePath.appendingPathComponent(customSearchEnginesFileName)
@@ -153,74 +178,12 @@ class SearchEngines {
     private func saveCustomEngines() {
         NSKeyedArchiver.archiveRootObject(customEngines, toFile: customEngineFilePath)
     }
+}
 
-    /// Get all known search engines, possibly as ordered by the user.
-    private func getOrderedEngines() -> [OpenSearchEngine] {
-        let locale = Locale(identifier: Locale.preferredLanguages.first ?? Locale.current.identifier)
-        let unorderedEngines = customEngines + getUnorderedBundledEnginesFor(locale: locale)
-
-        // might not work to change the default.
-        guard let orderedEngineNames = prefs.stringArrayForKey(orderedEngineNames) else {
-            // We haven't persisted the engine order, so return whatever order we got from disk.
-            return unorderedEngines
-        }
-
-        // We have a persisted order of engines, so try to use that order.
-        // We may have found engines that weren't persisted in the ordered list
-        // (if the user changed locales or added a new engine); these engines
-        // will be appended to the end of the list.
-        return unorderedEngines.sorted { engine1, engine2 in
-            let index1 = orderedEngineNames.firstIndex(of: engine1.shortName)
-            let index2 = orderedEngineNames.firstIndex(of: engine2.shortName)
-
-            if index1 == nil && index2 == nil {
-                return engine1.shortName < engine2.shortName
-            }
-
-            // nil < N for all non-nil values of N.
-            if index1 == nil || index2 == nil {
-                return index1 ?? -1 > index2 ?? -1
-            }
-
-            return index1! < index2!
-        }
-    }
-
-    /// Get all bundled (not custom) search engines, with the default search engine first,
-    /// but the others in no particular order.
-    func getUnorderedBundledEnginesFor(locale: Locale) -> [OpenSearchEngine] {
-        let languageIdentifier = locale.identifier
-        let region = locale.regionCode ?? "US"
-        let parser = OpenSearchParser(pluginMode: true)
-
-        guard let pluginDirectory = Bundle.main.resourceURL?.appendingPathComponent("SearchPlugins") else {
-            assertionFailure("Search plugins not found. Check bundle")
-            return []
-        }
-
-        guard let defaultSearchPrefs = DefaultSearchPrefs(with: pluginDirectory.appendingPathComponent("list.json")) else {
-            assertionFailure("Failed to parse List.json")
-            return []
-        }
-        let possibilities = possibilitiesForLanguageIdentifier(languageIdentifier)
-        let engineNames = defaultSearchPrefs.visibleDefaultEngines(for: possibilities, and: region)
-        let defaultEngineName = defaultSearchPrefs.searchDefault(for: possibilities, and: region)
-        assert(!engineNames.isEmpty, "No search engines")
-
-        return engineNames.map({ (name: $0, path: pluginDirectory.appendingPathComponent("\($0).xml").path) })
-            .filter({
-                FileManager.default.fileExists(atPath: $0.path)
-            }).compactMap({
-                parser.parse($0.path, engineID: $0.name)
-            }).sorted { e, _ in
-                e.shortName == defaultEngineName
-            }
-    }
-
-    /// Return all possible language identifiers in the order of most specific to least specific.
-    /// For example, zh-Hans-CN will return [zh-Hans-CN, zh-CN, zh].
-    private func possibilitiesForLanguageIdentifier(_ languageIdentifier: String) -> [String] {
+extension Locale {
+    func possibilitiesForLanguageIdentifier() -> [String] {
         var possibilities: [String] = []
+        let languageIdentifier = self.identifier
         let components = languageIdentifier.components(separatedBy: "-")
         possibilities.append(languageIdentifier)
 

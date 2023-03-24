@@ -7,19 +7,24 @@ import Kingfisher
 
 protocol FaviconFetcher {
     /// Fetches a favicon image from a specific URL
-    /// - Parameter imageURL: Given a certain image URL
+    /// - Parameters:
+    ///   - imageURL: Given a certain image URL
+    ///   - imageDownloader: The SiteImageDownloader the image will be downloaded with
     /// - Returns: An image or an image error following Result type
-    func fetchFavicon(from imageURL: URL) async throws -> UIImage
+    func fetchFavicon(from imageURL: URL,
+                      imageDownloader: SiteImageDownloader) async throws -> UIImage
+}
+
+extension FaviconFetcher {
+    func fetchFavicon(from imageURL: URL,
+                      imageDownloader: SiteImageDownloader = DefaultSiteImageDownloader()) async throws -> UIImage {
+        return try await fetchFavicon(from: imageURL, imageDownloader: imageDownloader)
+    }
 }
 
 struct DefaultFaviconFetcher: FaviconFetcher {
-    private let imageDownloader: SiteImageDownloader
-
-    init(imageDownloader: SiteImageDownloader = DefaultSiteImageDownloader()) {
-        self.imageDownloader = imageDownloader
-    }
-
-    func fetchFavicon(from imageURL: URL) async throws -> UIImage {
+    func fetchFavicon(from imageURL: URL,
+                      imageDownloader: SiteImageDownloader = DefaultSiteImageDownloader()) async throws -> UIImage {
         do {
             let result = try await imageDownloader.downloadImage(with: imageURL)
             return result.image

@@ -12,9 +12,7 @@ import SnapKit
 import Account
 import MobileCoreServices
 import Telemetry
-import Sentry
 import Common
-import Logger
 
 struct UrlToOpenModel {
     var url: URL?
@@ -60,6 +58,7 @@ class BrowserViewController: UIViewController {
     var searchTelemetry: SearchTelemetry?
     var searchLoader: SearchLoader?
     var findInPageBar: FindInPageBar?
+    var zoomPageBar: ZoomPageBar?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing: Bool = false
@@ -68,6 +67,7 @@ class BrowserViewController: UIViewController {
     var openedUrlFromExternalSource = false
     var passBookHelper: OpenPassBookHelper?
 
+    var surveySurfaceManager: SurveySurfaceManager?
     var contextHintVC: ContextualHintViewController
 
     // To avoid presenting multiple times in same launch when forcing to show
@@ -159,7 +159,7 @@ class BrowserViewController: UIViewController {
         return keyboardPressesHandlerValue
     }
 
-    private var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
+    fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
 
     init(
         profile: Profile,
@@ -227,6 +227,8 @@ class BrowserViewController: UIViewController {
         switch openTabObject.type {
         case .loadQueuedTabs(let urls):
             loadQueuedTabs(receivedURLs: urls)
+        case .openNewTab:
+            openBlankNewTab(focusLocationField: true)
         case .openSearchNewTab(let searchTerm):
             openSearchNewTab(searchTerm)
         case .switchToTabForURLOrOpen(let url):
@@ -397,8 +399,8 @@ class BrowserViewController: UIViewController {
         tabManager.startAtHomeCheck()
         updateWallpaperMetadata()
 
-        /// When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
-        /// So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
+        // When, for example, you "Load in Background" via the share sheet, the tab is added to `Profile`'s `TabQueue`.
+        // So, we delay five seconds because we need to wait for `Profile` to be initialized and setup for use.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
             self?.loadQueuedTabs()
         }
@@ -542,14 +544,15 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
-        // not flash before we present. This change of alpha also participates in the animation when
-        // the intro view is dismissed.
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            self.view.alpha = (profile.prefs.intForKey(PrefsKeys.IntroSeen) != nil) ? 1.0 : 0.0
-        }
+        // Setting the view alpha to 0 so that there's no weird flash in between the
+        // check of view appearance and the `performSurveySurfaceCheck`, where the
+        // alpha will be set to 1.
+        self.view.alpha = 0
 
         if !displayedRestoreTabsAlert && crashedLastLaunch() {
+            logger.log("The application crashed on last session",
+                       level: .info,
+                       category: .lifecycle)
             displayedRestoreTabsAlert = true
             showRestoreTabsAlert()
         } else {
@@ -557,6 +560,7 @@ class BrowserViewController: UIViewController {
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
+        performSurveySurfaceCheck()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -612,6 +616,7 @@ class BrowserViewController: UIViewController {
             make.top.left.right.equalTo(self.view)
             make.height.equalTo(self.view.safeAreaInsets.top)
         }
+
         showQueuedAlertIfAvailable()
     }
 
@@ -862,7 +867,7 @@ class BrowserViewController: UIViewController {
     var displayedRestoreTabsAlert = false
 
     fileprivate func crashedLastLaunch() -> Bool {
-        return SentryIntegration.shared.crashedLastLaunch
+        return logger.crashedLastLaunch
     }
 
     fileprivate func showRestoreTabsAlert() {
@@ -885,7 +890,7 @@ class BrowserViewController: UIViewController {
         isCrashAlertShowing = true
     }
 
-    private func showQueuedAlertIfAvailable() {
+    fileprivate func showQueuedAlertIfAvailable() {
         if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
@@ -1076,7 +1081,7 @@ class BrowserViewController: UIViewController {
 
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         let searchViewModel = SearchViewModel(isPrivate: isPrivate, isBottomSearchBar: isBottomSearchBar)
-        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, tabManager: tabManager)
+        let searchController = SearchViewController(profile: profile, viewModel: searchViewModel, model: profile.searchEngines, tabManager: tabManager)
         searchController.searchEngines = profile.searchEngines
         searchController.searchDelegate = self
 
@@ -1096,7 +1101,7 @@ class BrowserViewController: UIViewController {
         // No content is showing in between the bottom search bar and the searchViewController
         if isBottomSearchBar, keyboardBackdrop == nil {
             keyboardBackdrop = UIView()
-            keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
+            keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
             view.insertSubview(keyboardBackdrop!, belowSubview: overKeyboardContainer)
             keyboardBackdrop?.snp.makeConstraints { make in
                 make.edges.equalTo(view)
@@ -1266,19 +1271,11 @@ class BrowserViewController: UIViewController {
         guard let kp = keyPath,
               let path = KVOConstants(rawValue: kp)
         else {
-            SentryIntegration.shared.send(
-                message: "BVC observeValue webpage unhandled KVO",
-                tag: .general,
-                severity: .error,
-                description: "Unhandled KVO key: \(keyPath ?? "nil")")
+            logger.log("BVC observeValue webpage unhandled KVO",
+                       level: .info,
+                       category: .unlabeled,
+                       description: "Unhandled KVO key: \(keyPath ?? "nil")")
             return
-        }
-
-        if let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
-            // This is zero-cost if already installed. It needs to be checked frequently
-            // (hence every event here triggers this function), as when a new tab is
-            // created it requires multiple attempts to setup the handler correctly.
-            helper.replaceGestureHandlerIfNeeded()
         }
 
         switch path {
@@ -1356,7 +1353,7 @@ class BrowserViewController: UIViewController {
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         if tab == tabManager.selectedTab, let displayUrl = tab.url?.displayURL, urlBar.currentURL != displayUrl {
-            let searchData = tab.metadataManager?.tabGroupData ?? TabGroupData()
+            let searchData = tab.metadataManager?.tabGroupData ?? LegacyTabGroupData()
             searchData.tabAssociatedNextUrl = displayUrl.absoluteString
             tab.metadataManager?.updateTimerAndObserving(
                 state: .tabNavigatedToDifferentUrl,
@@ -1462,19 +1459,21 @@ class BrowserViewController: UIViewController {
 
     func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
         popToBVC()
-        let engine = profile.searchEngines.defaultEngine
-        if let searchURL = engine.searchURLForQuery(text) {
-            openURLInNewTab(searchURL, isPrivate: isPrivate)
-            if let tab = tabManager.selectedTab {
-                let searchData = TabGroupData(searchTerm: text,
-                                              searchUrl: searchURL.absoluteString,
-                                              nextReferralUrl: "")
-                tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
-            }
-        } else {
-            // We still don't have a valid URL, so something is broken. Give up.
-            print("Error handling URL entry: \"\(text)\".")
-            assertionFailure("Couldn't generate search URL: \(text)")
+
+        guard let engine = profile.searchEngines.defaultEngine,
+              let searchURL = engine.searchURLForQuery(text)
+        else {
+            DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
+            return
+        }
+
+        openURLInNewTab(searchURL, isPrivate: isPrivate)
+
+        if let tab = tabManager.selectedTab {
+            let searchData = LegacyTabGroupData(searchTerm: text,
+                                                searchUrl: searchURL.absoluteString,
+                                                nextReferralUrl: "")
+            tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         }
     }
 
@@ -1556,20 +1555,20 @@ class BrowserViewController: UIViewController {
     }
 
     @objc func openSettings() {
-        assert(Thread.isMainThread, "Opening settings requires being invoked on the main thread")
+        ensureMainThread { [self] in
+            if let presentedViewController = self.presentedViewController {
+                presentedViewController.dismiss(animated: true, completion: nil)
+            }
 
-        if let presentedViewController = self.presentedViewController {
-            presentedViewController.dismiss(animated: true, completion: nil)
+            let settingsTableViewController = AppSettingsTableViewController(
+                with: profile,
+                and: tabManager,
+                delegate: self)
+
+            let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+            controller.presentingModalViewControllerDelegate = self
+            self.present(controller, animated: true, completion: nil)
         }
-
-        let settingsTableViewController = AppSettingsTableViewController(
-            with: profile,
-            and: tabManager,
-            delegate: self)
-
-        let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.presentingModalViewControllerDelegate = self
-        self.present(controller, animated: true, completion: nil)
     }
 
     fileprivate func postLocationChangeNotificationForTab(_ tab: Tab, navigation: WKNavigation?) {
@@ -1594,10 +1593,7 @@ class BrowserViewController: UIViewController {
     func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil, webViewStatus: WebViewUpdateStatus) {
         tabManager.expireSnackbars()
 
-        guard let webView = tab.webView else {
-            print("Cannot navigate in tab without a webView")
-            return
-        }
+        guard let webView = tab.webView else { return }
 
         if let url = webView.url {
             if tab === tabManager.selectedTab {
@@ -1750,8 +1746,8 @@ extension BrowserViewController {
     }
 }
 
-// MARK: - TabDelegate
-extension BrowserViewController: TabDelegate {
+// MARK: - LegacyTabDelegate
+extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, didCreateWebView webView: WKWebView) {
         webView.frame = webViewContainer.frame
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
@@ -1873,7 +1869,7 @@ extension BrowserViewController: LibraryPanelDelegate {
         guard let tab = tabManager.selectedTab else { return }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if  #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
+        if navigateLinkShortcutIfNeeded(url: url) {
             return
         }
 
@@ -1881,7 +1877,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     }
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
-        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
+        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine?.searchURLForQuery(url) else {
             logger.log("Invalid URL, and couldn't generate a search URL for it.",
                        level: .warning,
                        category: .library)
@@ -1935,7 +1931,7 @@ extension BrowserViewController: HomePanelDelegate {
         }
 
         // Handle keyboard shortcuts from homepage with url selection (ex: Cmd + Tap on Link; which is a cell in this case)
-        if #available(iOS 13.4, *), navigateLinkShortcutIfNeeded(url: url) {
+        if navigateLinkShortcutIfNeeded(url: url) {
             return
         }
 
@@ -1943,6 +1939,7 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
+        leaveOverlayMode(didCancel: false)
         let tab = tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
         // Select new tab automatically if needed
         guard !selectNewTab else {
@@ -1985,14 +1982,45 @@ extension BrowserViewController: HomePanelDelegate {
     }
 }
 
+// MARK: - Research Surface
+extension BrowserViewController {
+    /// This function will:
+    /// 1. Create a new instance of the SurveySurfaceManager & make sure that it is
+    ///    deallocated when dismissed from the user interacting with it.
+    /// 2. Check whether or not there's a new message that needs to be shown.
+    ///     - true: show the surface
+    ///     - false: deallocate the survey surface manager as BVC doesn't need to hold it
+    func performSurveySurfaceCheck() {
+        // No matter what the result of the check, we want to make sure to
+        // always bring the alpha back to 1.0
+        defer { self.view.alpha = 1.0 }
+
+        surveySurfaceManager = SurveySurfaceManager(with: self)
+
+        surveySurfaceManager?.dismissClosure = { [weak self] in
+            self?.surveySurfaceManager = nil
+        }
+
+        if let surveySurfaceManager = surveySurfaceManager,
+            surveySurfaceManager.shouldShowSurveySurface {
+            guard let surveySurface = surveySurfaceManager.getSurveySurface() else { return }
+            surveySurface.modalPresentationStyle = .fullScreen
+
+            self.present(surveySurface, animated: false)
+        } else {
+            self.surveySurfaceManager = nil
+        }
+    }
+}
+
 // MARK: - SearchViewController
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL, searchTerm: String?) {
         guard let tab = tabManager.selectedTab else { return }
 
-        let searchData = TabGroupData(searchTerm: searchTerm ?? "",
-                                      searchUrl: url.absoluteString,
-                                      nextReferralUrl: "")
+        let searchData = LegacyTabGroupData(searchTerm: searchTerm ?? "",
+                                            searchUrl: url.absoluteString,
+                                            nextReferralUrl: "")
         tab.metadataManager?.updateTimerAndObserving(state: .navSearchLoaded, searchData: searchData, isPrivate: tab.isPrivate)
         searchTelemetry?.shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
@@ -2007,12 +2035,11 @@ extension BrowserViewController: SearchViewControllerDelegate {
     }
 
     func presentSearchSettingsController() {
-        let searchSettingsTableViewController = SearchSettingsTableViewController()
-        searchSettingsTableViewController.model = self.profile.searchEngines
-        searchSettingsTableViewController.profile = self.profile
+        let searchSettingsTableViewController = SearchSettingsTableViewController(profile: profile)
+
         // Update search icon when the searchengine changes
         searchSettingsTableViewController.updateSearchIcon = {
-            self.urlBar.updateSearchEngineImage()
+            self.urlBar.searchEnginesDidUpdate()
             self.searchController?.reloadSearchEngines()
             self.searchController?.reloadData()
         }
@@ -2236,8 +2263,6 @@ extension BrowserViewController {
 
     // Default browser onboarding
     func presentDBOnboardingViewController(_ force: Bool = false) {
-        guard #available(iOS 14.0, *) else { return }
-
         guard force || DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
             else { return }
 
@@ -2507,16 +2532,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        if #available(iOS 13.4, *) {
-            keyboardPressesHandler().handlePressesBegan(presses, with: event)
-        }
+        keyboardPressesHandler().handlePressesBegan(presses, with: event)
         super.pressesBegan(presses, with: event)
     }
 
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        if #available(iOS 13.4, *) {
-            keyboardPressesHandler().handlePressesEnded(presses, with: event)
-        }
+        keyboardPressesHandler().handlePressesEnded(presses, with: event)
         super.pressesEnded(presses, with: event)
     }
 }
@@ -2613,8 +2634,8 @@ extension BrowserViewController: NotificationThemeable {
                                             topTabsViewController]
         ui.forEach { $0?.applyTheme() }
 
-        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.theme.topTabs.background : urlBar.backgroundColor
-        keyboardBackdrop?.backgroundColor = UIColor.theme.browser.background
+        statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.legacyTheme.topTabs.background : urlBar.backgroundColor
+        keyboardBackdrop?.backgroundColor = UIColor.legacyTheme.browser.background
         setNeedsStatusBarAppearanceUpdate()
 
         (presentedViewController as? NotificationThemeable)?.applyTheme()
@@ -2732,15 +2753,19 @@ extension BrowserViewController {
     /// We're currently seeing crashes from cases of there being no `connectedScene`, or being unable to cast to a SceneDelegate.
     /// Although those instances should be rare, we will return an optional until we can investigate when and why we end up in this situation.
     ///
-    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now. 
+    /// With this change, we are aware that certain functionality that depends on a non-nil BVC will fail, but not fatally for now.
     public static func foregroundBVC() -> BrowserViewController? {
         guard let scene = UIApplication.shared.connectedScenes.first else {
-            SentryIntegration.shared.send(message: "No connected scenes exist.", severity: .fatal)
+            DefaultLogger.shared.log("No connected scenes exist.",
+                                     level: .fatal,
+                                     category: .lifecycle)
             return nil
         }
 
         guard let sceneDelegate = scene.delegate as? SceneDelegate else {
-            SentryIntegration.shared.send(message: "Scene could not be cast as SceneDelegate.", severity: .fatal)
+            DefaultLogger.shared.log("Scene could not be cast as SceneDelegate.",
+                                     level: .fatal,
+                                     category: .lifecycle)
             return nil
         }
 
@@ -2784,6 +2809,6 @@ extension BrowserViewController {
     }
 
     func trackNotificationPermission() {
-        NotificationManager().getNotificationSettings { _ in }
+        NotificationManager().getNotificationSettings(sendTelemetry: true) { _ in }
     }
 }

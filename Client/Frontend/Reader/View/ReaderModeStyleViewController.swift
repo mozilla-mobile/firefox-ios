@@ -38,7 +38,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     private var isUsingUserDefinedColor = false
 
     private var viewModel: ReaderModeStyleViewModel!
-    var delegate: ReaderModeStyleViewControllerDelegate?
+    weak var delegate: ReaderModeStyleViewControllerDelegate?
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -186,7 +186,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         selectTheme(viewModel.readerModeStyle.theme)
         slider.value = Float(UIScreen.main.brightness)
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
     }
 
@@ -223,9 +223,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     func applyTheme(_ preferences: Prefs, contentScript: TabContentScript) {
         guard let readerPreferences = preferences.dictionaryForKey(ReaderModeProfileKeyStyle),
               let readerMode = contentScript as? ReaderMode,
-              var style = ReaderModeStyle(dict: readerPreferences) else { return }
+              let style = ReaderModeStyle(dict: readerPreferences) else { return }
 
-        style.ensurePreferredColorThemeIfNeeded()
         readerMode.style = style
     }
 

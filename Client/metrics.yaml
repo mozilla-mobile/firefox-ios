@@ -738,6 +738,28 @@ onboarding:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-07-01"
+  engagement_notification_tapped:
+    type: event
+    description: |
+      Records the users interaction with the engagement notification.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-09-01"
+  engagement_notification_cancel:
+    type: event
+    description: |
+      Records the cancelation of a scheduled engagement notification.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13652
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2023-09-01"
 
 # Upgrade onboarding metrics
 upgrade:
@@ -2058,18 +2080,6 @@ settings_menu:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7090
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2023-06-01"
-  show_tour_pressed:
-    type: event
-    description: |
-      Metric recorded when a user taps on the Show Tour option
-      from the app settings menu.
-    bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/12433
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12462
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"

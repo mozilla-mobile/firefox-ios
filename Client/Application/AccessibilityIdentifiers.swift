@@ -156,6 +156,7 @@ public struct AccessibilityIdentifiers {
         static let welcomeCard = "WelcomeCard"
         static let wallpapersCard = "WallpapersCard"
         static let signSyncCard = "SignSyncCard"
+        static let notificationCard = "NotificationCard"
         static let closeButton = "CloseButton"
         static let pageControl = "PageControl"
 
@@ -163,7 +164,6 @@ public struct AccessibilityIdentifiers {
             static let card = "wallpaperCard"
             static let title = "wallpaperOnboardingTitle"
             static let description = "wallpaperOnboardingDescription"
-            static let settingsButton = "wallpaperOnboardingSettingsButton"
         }
     }
 
@@ -250,6 +250,13 @@ public struct AccessibilityIdentifiers {
         }
     }
 
+    struct SurveySurface {
+        static let takeSurveyButton = "takeSurveyButton"
+        static let dismissButton = "dismissSurveyButton"
+        static let textLabel = "surveyDescriptionLabel"
+        static let imageView = "surveyImageView"
+    }
+
     struct Photon {
         static let closeButton = "PhotonMenu.close"
         static let view = "Action Sheet"
@@ -259,5 +266,18 @@ public struct AccessibilityIdentifiers {
     struct Alert {
         static let cancelDownloadResume = "cancelDownloadAlert.resume"
         static let cancelDownloadCancel = "cancelDownloadAlert.cancel"
+    }
+
+    struct Setting {
+        static let notifications = "NotificationsSetting"
+    }
+
+    struct ZoomPageBar {
+        static let zoomPageZoomInButton = "ZoomPage.zoomInButton"
+        static let zoomPageZoomOutButton = "ZoomPage.zoomOutButton"
+    }
+
+    struct FindInPage {
+        static let findInPageCloseButton = "FindInPage.closeButton"
     }
 }

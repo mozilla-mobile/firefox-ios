@@ -31,7 +31,6 @@ disabled_rules: # rule identifiers to exclude from running
 - no_fallthrough_only
 - notification_center_detachment
 - nsobject_prefer_isequal
-- orphaned_doc_comment
 - private_unit_test
 - reduce_boolean
 - redundant_set_access_control
@@ -58,7 +57,6 @@ opt_in_rules: # some rules are only opt-in
   # - file_header
   # - deployment_target
   # - discouraged_optional_collection
-  # - overridden_super_call
   # - prohibited_interface_builder
   # - prohibited_super_call
   # - protocol_property_accessors_order
@@ -76,12 +74,14 @@ opt_in_rules: # some rules are only opt-in
   - empty_string
   - empty_xctest_method
   - explicit_init
+  - first_where
   - discouraged_assert
   - duplicate_imports
   - duplicate_enum_cases
   - last_where
   - multiline_arguments
   - opening_brace
+  - overridden_super_call
   - return_arrow_whitespace
   - vertical_parameter_alignment_on_call
   - vertical_whitespace_closing_braces
@@ -92,7 +92,8 @@ analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
-  - build
+  - build/
+  - .build/
   - Client/Assets/Search/get_supported_locales.swift
   - Client/Generated
   - fastlane/

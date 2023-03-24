@@ -62,6 +62,7 @@ class SearchViewController: SiteTableViewController,
                             Notifiable {
     var searchDelegate: SearchViewControllerDelegate?
     private let viewModel: SearchViewModel
+    private let model: SearchEngines
     private var suggestClient: SearchSuggestClient?
     private var remoteClientTabs = [ClientTabsSearchWrapper]()
     private var filteredRemoteClientTabs = [ClientTabsSearchWrapper]()
@@ -100,10 +101,12 @@ class SearchViewController: SiteTableViewController,
 
     init(profile: Profile,
          viewModel: SearchViewModel,
+         model: SearchEngines,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
          highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
         self.viewModel = viewModel
+        self.model = model
         self.tabManager = tabManager
         self.searchFeature = featureConfig
         self.highlightManager = highlightManager
@@ -207,8 +210,10 @@ class SearchViewController: SiteTableViewController,
         }
     }
 
-    var searchEngines: SearchEngines! {
+    var searchEngines: SearchEngines? {
         didSet {
+            guard let defaultEngine = searchEngines?.defaultEngine else { return }
+
             suggestClient?.cancelPendingRequest()
 
             // Query and reload the table with new search suggestions.
@@ -217,7 +222,7 @@ class SearchViewController: SiteTableViewController,
             // Show the default search engine first.
             if !viewModel.isPrivate {
                 let ua = SearchViewController.userAgent ?? "FxSearch"
-                suggestClient = SearchSuggestClient(searchEngine: searchEngines.defaultEngine, userAgent: ua)
+                suggestClient = SearchSuggestClient(searchEngine: defaultEngine, userAgent: ua)
             }
 
             // Reload the footer list of search engines.
@@ -226,12 +231,14 @@ class SearchViewController: SiteTableViewController,
     }
 
     private var quickSearchEngines: [OpenSearchEngine] {
-        var engines = searchEngines.quickSearchEngines
+        guard let defaultEngine = searchEngines?.defaultEngine else { return [] }
+
+        var engines = searchEngines?.quickSearchEngines
 
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
-        if viewModel.isPrivate || !searchEngines.shouldShowSearchSuggestions {
-            engines?.insert(searchEngines.defaultEngine, at: 0)
+        if viewModel.isPrivate || !(searchEngines?.shouldShowSearchSuggestions ?? false) {
+            engines?.insert(defaultEngine, at: 0)
         }
 
         return engines!
@@ -311,7 +318,7 @@ class SearchViewController: SiteTableViewController,
                 make.leading.equalTo(leftEdge)
                 make.top.equalTo(self.searchEngineScrollViewContent)
                 make.bottom.equalTo(self.searchEngineScrollViewContent)
-                if engine === self.searchEngines.quickSearchEngines.last {
+                if engine === self.searchEngines?.quickSearchEngines.last {
                     make.trailing.equalTo(self.searchEngineScrollViewContent)
                 }
             }
@@ -378,17 +385,19 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func getCachedTabs() {
-        assert(Thread.isMainThread)
         // Short circuit if the user is not logged in
         guard profile.hasSyncableAccount() else { return }
-        // Get cached tabs
-        self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-            guard let clientAndTabs = result.successValue else { return }
-            self.remoteClientTabs.removeAll()
-            // Update UI with cached data.
-            clientAndTabs.forEach { value in
-                value.tabs.forEach { (tab) in
-                    self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
+
+        ensureMainThread {
+            // Get cached tabs
+            self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
+                guard let clientAndTabs = result.successValue else { return }
+                self.remoteClientTabs.removeAll()
+                // Update UI with cached data.
+                clientAndTabs.forEach { value in
+                    value.tabs.forEach { (tab) in
+                        self.remoteClientTabs.append(ClientTabsSearchWrapper(client: value.client, tab: tab))
+                    }
                 }
             }
         }
@@ -462,7 +471,7 @@ class SearchViewController: SiteTableViewController,
     private func querySuggestClient() {
         suggestClient?.cancelPendingRequest()
 
-        if searchQuery.isEmpty || !searchEngines.shouldShowSearchSuggestions || searchQuery.looksLikeAURL() {
+        if searchQuery.isEmpty || !(searchEngines?.shouldShowSearchSuggestions ?? false) || searchQuery.looksLikeAURL() {
             suggestions = []
             tableView.reloadData()
             return
@@ -472,22 +481,7 @@ class SearchViewController: SiteTableViewController,
 
         let tempSearchQuery = searchQuery
         suggestClient?.query(searchQuery, callback: { suggestions, error in
-            if let error = error {
-                let isSuggestClientError = error.domain == SearchSuggestClientErrorDomain
-
-                switch error.code {
-                case NSURLErrorCancelled where error.domain == NSURLErrorDomain:
-                    // Request was cancelled. Do nothing.
-                    break
-                case SearchSuggestClientErrorInvalidEngine where isSuggestClientError:
-                    // Engine does not support search suggestions. Do nothing.
-                    break
-                case SearchSuggestClientErrorInvalidResponse where isSuggestClientError:
-                    print("Error: Invalid search suggestion data")
-                default:
-                    print("Error: \(error.description)")
-                }
-            } else {
+            if error == nil {
                 self.suggestions = suggestions!
                 // Remove user searching term inside suggestions list
                 self.suggestions?.removeAll(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines) == self.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines) })
@@ -518,16 +512,18 @@ class SearchViewController: SiteTableViewController,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
+            guard let defaultEngine = searchEngines?.defaultEngine else { return }
+
             recordSearchListSelectionTelemetry(type: .searchSuggestions)
             // Assume that only the default search engine can provide search suggestions.
-            let engine = searchEngines.defaultEngine
-            guard let suggestions = suggestions else { return }
-            guard let suggestion = suggestions[safe: indexPath.row] else { return }
-            if let url = engine.searchURLForQuery(suggestion) {
-                Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
-                GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
-                searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
-            }
+            guard let suggestions = suggestions,
+                  let suggestion = suggestions[safe: indexPath.row],
+                  let url = defaultEngine.searchURLForQuery(suggestion)
+            else { return }
+
+            Telemetry.default.recordSearch(location: .suggestion, searchEngine: defaultEngine.engineID ?? "other")
+            GleanMetrics.Search.counts["\(defaultEngine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
+            searchDelegate?.searchViewController(self, didSelectURL: url, searchTerm: suggestion)
         case .openedTabs:
             recordSearchListSelectionTelemetry(type: .openedTabs)
             let tab = self.filteredOpenedTabs[indexPath.row]
@@ -574,7 +570,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.remoteTabs.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
-            title = searchEngines.defaultEngine.headerSearchTitle
+            title = searchEngines?.defaultEngine?.headerSearchTitle ?? ""
         default:  title = ""
         }
 
@@ -640,8 +636,7 @@ class SearchViewController: SiteTableViewController,
         let range = searchPhrase.range(of: query)
         guard searchPhrase != query, let upperBound = range?.upperBound else { return nil }
 
-        let boldString = String(searchPhrase[upperBound..<searchPhrase.endIndex])
-        let attributedString = searchPhrase.attributedText(boldString: boldString,
+        let attributedString = searchPhrase.attributedText(boldIn: upperBound..<searchPhrase.endIndex,
                                                            font: DynamicFontHelper().DefaultStandardFont)
         return attributedString
     }
@@ -741,7 +736,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.remoteTabs.rawValue:
             return hasFirefoxSuggestions
         case SearchListSection.searchSuggestions.rawValue:
-            return true
+            return model.shouldShowSearchSuggestions
         default:
             return false
         }
@@ -850,6 +845,7 @@ extension SearchViewController {
                     return
                 } else {
                     // We can go to the next section.
+                    guard current.section + 1 < initialSection else { return }
                     nextSection = current.section + 1
                     nextItem = 0
                 }

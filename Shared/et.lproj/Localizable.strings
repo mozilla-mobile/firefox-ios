@@ -334,9 +334,6 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Eemalda";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "Saite: %d";
-
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Sätted";
 
@@ -1417,9 +1414,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Olgu, sain aru";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Kui sait ei tööta ootuspäraselt, siis puuduta aadressiribal olevat kilpi ning lülita selle lehe jaoks täiustatud jälitamisvastane kaitse välja.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Tähelepanu!";
 
@@ -1431,9 +1425,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Vähendab sihitud reklaame ja takistab reklaamijatel sinu tegevuse jälitamist.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Kui sait ei tööta ootuspäraselt, siis puuduta aadressiribal olevat kilpi ning lülita selle lehe jaoks täiustatud jälitamisvastane kaitse välja.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Mõned jälitavad reklaamid on lubatud, nii et saidid töötaksid ootuspäraselt.";

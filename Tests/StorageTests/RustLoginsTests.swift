@@ -4,7 +4,6 @@
 
 import XCTest
 import Shared
-@testable import Client
 @testable import Storage
 
 class RustLoginsTests: XCTestCase {
@@ -13,6 +12,7 @@ class RustLoginsTests: XCTestCase {
     var encryptionKey: String!
 
     override func setUp() {
+        super.setUp()
         files = MockFiles()
 
         if let rootDirectory = try? files.getAndEnsureDirectory() {

@@ -6,38 +6,6 @@ import XCTest
 @testable import Client
 
 class DictionaryExtensionsTests: XCTestCase {
-    // MARK: merge:withDictionary
-
-    func test_mergeTwoEmptyDict_returnEmptyDict() {
-        let dictionary: [String: String] = [:]
-        let result = dictionary.merge(with: [:])
-        XCTAssertEqual(result, [:])
-    }
-
-    func test_mergeNonEmptyDictWithEmpty() {
-        let dictionary = [1: 1, 2: 2, 3: 3]
-        let result = dictionary.merge(with: [:])
-        XCTAssertEqual(result, [1: 1, 2: 2, 3: 3])
-    }
-
-    func test_mergeEmptyDictWithNonEmpty() {
-        let dictionary: [Int: Int] = [:]
-        let result = dictionary.merge(with: [1: 1, 2: 2, 3: 3])
-        XCTAssertEqual(result, [1: 1, 2: 2, 3: 3])
-    }
-
-    func test_mergeTwoDict_withoutOverlappingValues() {
-        let dictionary = [1: 1, 2: 2, 3: 3]
-        let result = dictionary.merge(with: [4: 4, 5: 5, 6: 6])
-        XCTAssertEqual(result, [1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6])
-    }
-
-    func test_mergeTwoDict_withOverlappingValues() {
-        let dictionary = [1: 1, 2: 2, 3: 3]
-        let result = dictionary.merge(with: [4: 4, 5: 5, 6: 6, 1: 10, 2: 20, 3: 30])
-        XCTAssertEqual(result, [1: 10, 2: 20, 3: 30, 4: 4, 5: 5, 6: 6])
-    }
-
     // MARK: - asString
 
     func test_asString_emptyDictionary_returnsEmptyString() {

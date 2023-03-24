@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 @testable import Account
+import Common
 import Foundation
 import Shared
 import Storage
@@ -53,6 +54,7 @@ class MetaGlobalTests: XCTestCase {
     var stateMachine: SyncStateMachine!
 
     override func setUp() {
+        super.setUp()
         kSync = Data.randomOfLength(64)!
         server = MockSyncServer(username: "1234567")
         server.start()
@@ -61,9 +63,7 @@ class MetaGlobalTests: XCTestCase {
         authState = MockSyncAuthState(serverRoot: serverRoot, kSync: kSync)
         stateMachine = SyncStateMachine(prefs: syncPrefs)
 
-        RustFirefoxAccounts.startup(prefs: syncPrefs).uponQueue(.main) { _ in
-            print("RustFirefoxAccounts started")
-        }
+        RustFirefoxAccounts.startup(prefs: syncPrefs).uponQueue(.main) { _ in }
     }
 
     override func tearDown() {

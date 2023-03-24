@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Glean
 import Shared
 import Telemetry
@@ -41,9 +42,11 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
     private var crashedLastLaunch: Bool
 
     private var profile: Profile?
+    private var logger: Logger
 
-    init() {
-        crashedLastLaunch = SentryIntegration.shared.crashedLastLaunch
+    init(logger: Logger = DefaultLogger.shared) {
+        crashedLastLaunch = logger.crashedLastLaunch
+        self.logger = logger
     }
 
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
@@ -54,24 +57,16 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             create: false).appendingPathComponent(pathComponent).path,
               FileManager.default.fileExists(atPath: oldPath) else { return }
 
-        print("Migrating \(pathComponent) from ~/Documents to \(destinationSearchPath)")
         guard let newPath = try? FileManager.default.url(
             for: destinationSearchPath,
             in: .userDomainMask,
             appropriateFor: nil,
             create: true).appendingPathComponent(pathComponent).path
-        else {
-            print("Unable to get destination path \(destinationSearchPath) to move \(pathComponent)")
-            return
-        }
+        else { return }
 
         do {
             try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
-
-            print("Migrated \(pathComponent) to \(destinationSearchPath) successfully")
-        } catch let error as NSError {
-            print("Unable to move \(pathComponent) to \(destinationSearchPath): \(error.localizedDescription)")
-        }
+        } catch {}
     }
 
     func setup(profile: Profile) {
@@ -85,8 +80,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         telemetryConfig.appName = "Fennec"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.dataDirectory = .cachesDirectory
-        telemetryConfig.updateChannel = AppConstants.BuildChannel.rawValue
-        let sendUsageData = profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+        telemetryConfig.updateChannel = AppConstants.buildChannel.rawValue
+        let sendUsageData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
         telemetryConfig.isCollectionEnabled = sendUsageData
         telemetryConfig.isUploadEnabled = sendUsageData
 
@@ -133,7 +128,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             var settings: [String: String?] = inputDict["settings"] as? [String: String?] ?? [:]
 
             let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
-            settings["defaultSearchEngine"] = searchEngines.defaultEngine.engineID ?? "custom"
+            settings["defaultSearchEngine"] = searchEngines.defaultEngine?.engineID ?? "custom"
 
             if let windowBounds = UIWindow.keyWindow?.bounds {
                 settings["windowWidth"] = String(describing: windowBounds.width)
@@ -172,7 +167,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         }
 
         // Initialize Glean telemetry
-        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue), buildInfo: GleanMetrics.GleanBuild.info)
+        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.buildChannel.rawValue), buildInfo: GleanMetrics.GleanBuild.info)
 
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
@@ -228,7 +223,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
 
         // Record default search engine setting
         let searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
-        GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine.engineID ?? "custom")
+        GleanMetrics.Search.defaultEngine.set(searchEngines.defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
         let delegate = UIApplication.shared.delegate as? AppDelegate
@@ -308,7 +303,10 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
 
     @objc func uploadError(notification: NSNotification) {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
-        SentryIntegration.shared.send(message: "Upload Error", tag: SentryTag.unifiedTelemetry, severity: .info, description: error.debugDescription)
+        logger.log("Upload Error",
+                   level: .info,
+                   category: .telemetry,
+                   description: error.debugDescription)
     }
 }
 
@@ -369,6 +367,7 @@ extension TelemetryWrapper {
         case downloadsPanel = "downloads-panel"
         case keyCommand = "key-command"
         case locationBar = "location-bar"
+        case messaging = "messaging"
         case qrCodeText = "qr-code-text"
         case qrCodeURL = "qr-code-url"
         case readerModeCloseButton = "reader-mode-close-button"
@@ -406,9 +405,9 @@ extension TelemetryWrapper {
         case appMenu = "app_menu"
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
-        case settingsMenuShowTour = "show-tour"
         case creditCardAutofillSettings = "creditCardAutofillSettings"
         case notificationPermission = "notificationPermission"
+        case engagementNotification = "engagementNotification"
         // MARK: New Onboarding
         case onboardingClose = "onboarding-close"
         case onboardingCardView = "onboarding-card-view"
@@ -447,7 +446,6 @@ extension TelemetryWrapper {
         case siteMenu = "site-menu"
         case library = "library"
         case home = "home-page"
-        case homeTabBanner = "home-tab-banner"
         case blockImagesEnabled = "block-images-enabled"
         case blockImagesDisabled = "block-images-disabled"
         case navigateTabHistoryBack = "navigate-tab-history-back"
@@ -616,8 +614,9 @@ extension TelemetryWrapper {
         case inactiveTabsExpanded = "expanded"
 
         // GleanPlumb
-        case messageKey = "message-key"
         case actionUUID = "action-uuid"
+        case messageKey = "message-key"
+        case messageSurface = "message-surface"
         // Accessibility
         case isVoiceOverRunning = "is-voice-over-running"
         case isSwitchControlRunning = "is-switch-control-running"
@@ -782,8 +781,6 @@ extension TelemetryWrapper {
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
-        case(.action, .tap, .settingsMenuShowTour, _, _):
-            GleanMetrics.SettingsMenu.showTourPressed.record()
 
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
@@ -823,6 +820,10 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
+        case(.action, .tap, .engagementNotification, _, _):
+            GleanMetrics.Onboarding.engagementNotificationTapped.record()
+        case(.action, .cancel, .engagementNotification, _, _):
+            GleanMetrics.Onboarding.engagementNotificationCancel.record()
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
@@ -1307,19 +1308,19 @@ extension TelemetryWrapper {
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
-        case (.information, .view, .homeTabBanner, .messageImpression, let extras):
+        case (.information, .view, .messaging, .messageImpression, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.shown.record(
                     GleanMetrics.Messaging.ShownExtra(messageKey: messageId)
                 )
             }
-        case(.action, .tap, .homeTabBanner, .messageDismissed, let extras):
+        case(.action, .tap, .messaging, .messageDismissed, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.dismissed.record(
                     GleanMetrics.Messaging.DismissedExtra(messageKey: messageId)
                 )
             }
-        case(.action, .tap, .homeTabBanner, .messageInteracted, let extras):
+        case(.action, .tap, .messaging, .messageInteracted, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String,
                 let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
                 GleanMetrics.Messaging.clicked.record(
@@ -1330,13 +1331,13 @@ extension TelemetryWrapper {
                     GleanMetrics.Messaging.ClickedExtra(messageKey: messageId)
                 )
             }
-        case(.information, .view, .homeTabBanner, .messageExpired, let extras):
+        case(.information, .view, .messaging, .messageExpired, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.expired.record(
                     GleanMetrics.Messaging.ExpiredExtra(messageKey: messageId)
                 )
             }
-        case(.information, .application, .homeTabBanner, .messageMalformed, let extras):
+        case(.information, .application, .messaging, .messageMalformed, let extras):
             if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
                 GleanMetrics.Messaging.malformed.record(
                     GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
@@ -1363,8 +1364,10 @@ extension TelemetryWrapper {
         value: EventValue?,
         extras: [String: Any]?
     ) {
-        let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))"
-        SentryIntegration.shared.send(message: msg, severity: .info)
+        DefaultLogger.shared.log("Uninstrumented metric recorded",
+                                 level: .info,
+                                 category: .telemetry,
+                                 description: "\(category), \(method), \(object), \(String(describing: value)), \(String(describing: extras))")
     }
 }
 

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Shared
 import Account
 import Storage
@@ -15,6 +16,7 @@ class MockSyncServerTests: XCTestCase {
     var client: Sync15StorageClient!
 
     override func setUp() {
+        super.setUp()
         server = MockSyncServer(username: "1234567")
         server.start()
         client = getClient(server: server)

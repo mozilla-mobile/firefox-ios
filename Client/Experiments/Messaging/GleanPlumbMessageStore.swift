@@ -36,7 +36,7 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
 
     /// Returns the metadata that persists on system. If there's none, it returns default data.
     func getMessageMetadata(messageId: String) -> GleanPlumbMessageMetaData {
-        /// Return preexisting Message Metadata.
+        // Return preexisting Message Metadata.
         if let metadata = get(key: messageId) { return metadata }
 
         return GleanPlumbMessageMetaData(id: messageId,
@@ -77,10 +77,9 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
         if shouldReport {
             TelemetryWrapper.recordEvent(category: .information,
                                          method: .view,
-                                         object: .homeTabBanner,
+                                         object: .messaging,
                                          value: .messageExpired,
-                                         extras:
-                                            [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageData.id])
+                                         extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageData.id])
         }
     }
 
@@ -104,7 +103,7 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
 
     /// Return persisted message metadata.
     private func get(key: String) -> GleanPlumbMessageMetaData? {
-        /// Return a persisted message's metadata.
+        // Return a persisted message's metadata.
         if let decodableMessageMetaData = UserDefaults.standard.data(forKey: generateKey(from: key)),
            let decodedData = try? decoder.decode(GleanPlumbMessageMetaData.self, from: decodableMessageMetaData) {
             return decodedData

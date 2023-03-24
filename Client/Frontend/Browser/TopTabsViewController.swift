@@ -109,7 +109,7 @@ class TopTabsViewController: UIViewController, Themeable {
                                                  tabDisplayType: .TopTabTray,
                                                  profile: profile,
                                                  theme: themeManager.currentTheme)
-        tabManager.tabDisplayType = .TopTabTray
+        self.tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }
@@ -140,7 +140,7 @@ class TopTabsViewController: UIViewController, Themeable {
         collectionView.dragDelegate = topTabDisplayManager
         collectionView.dropDelegate = topTabDisplayManager
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         setupLayout()
 
         // Setup UIDropInteraction to handle dragging and dropping
@@ -192,25 +192,25 @@ class TopTabsViewController: UIViewController, Themeable {
     }
 
     func scrollToCurrentTab(_ animated: Bool = true, centerCell: Bool = false) {
-        assertIsMainThread("Only animate on the main thread")
-
         guard let currentTab = tabManager.selectedTab,
               let index = topTabDisplayManager.dataStore.index(of: currentTab),
               !collectionView.frame.isEmpty
         else { return }
 
-        if let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame {
-            if centerCell {
-                collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: false)
-            } else {
-                // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
-                let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
-                if animated {
-                    UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
-                        self.collectionView.scrollRectToVisible(padFrame, animated: true)
-                    })
+        ensureMainThread { [self] in
+            if let frame = collectionView.layoutAttributesForItem(at: IndexPath(row: index, section: 0))?.frame {
+                if centerCell {
+                    collectionView.scrollToItem(at: IndexPath(item: index, section: 0), at: .centeredHorizontally, animated: false)
                 } else {
-                    collectionView.scrollRectToVisible(padFrame, animated: false)
+                    // Padding is added to ensure the tab is completely visible (none of the tab is under the fader)
+                    let padFrame = frame.insetBy(dx: -(TopTabsUX.TopTabsBackgroundShadowWidth+TopTabsUX.FaderPading), dy: 0)
+                    if animated {
+                        UIView.animate(withDuration: TopTabsUX.AnimationSpeed, animations: {
+                            self.collectionView.scrollRectToVisible(padFrame, animated: true)
+                        })
+                    } else {
+                        collectionView.scrollRectToVisible(padFrame, animated: false)
+                    }
                 }
             }
         }
@@ -285,7 +285,7 @@ extension TopTabsViewController: TabDisplayer {
                               theme: themeManager.currentTheme)
         // Not all cells are visible when the appearance changes. Let's make sure
         // the cell has the proper theme when recycled.
-        tabCell.applyTheme()
+        tabCell.applyTheme(theme: themeManager.currentTheme)
         return tabCell
     }
 }
@@ -334,13 +334,5 @@ extension TopTabsViewController: TopTabsScrollDelegate {
         } else {
             topTabFader.setFader(forSides: .both)
         }
-    }
-}
-
-// MARK: Functions for testing
-extension TopTabsViewController {
-    func test_getDisplayManager() -> TabDisplayManager {
-        assert(AppConstants.isRunningTest)
-        return topTabDisplayManager
     }
 }

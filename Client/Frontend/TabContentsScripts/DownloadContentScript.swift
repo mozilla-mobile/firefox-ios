@@ -66,12 +66,10 @@ class DownloadContentScript: TabContentScript {
         }
 
         guard let requestedUrl = DownloadContentScript.blobUrlForDownload else {
-            print("DownloadContentScript: no url was requested")
             return
         }
 
         guard requestedUrl == url else {
-            print("DownloadContentScript: URL mismatch")
             return
         }
 

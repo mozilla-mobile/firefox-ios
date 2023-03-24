@@ -337,9 +337,6 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "ہٹائیں";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "سائٹس: %d";
-
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "سیٹنگز";
 
@@ -1321,9 +1318,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ٹھیک ہے مجھے سمجھ آگئی ہے";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "اگر کوئی سائٹ توقع کے مطابق کام نہیں کرتی ہے تو ، ایڈریس بار میں ڈھال کو تھپتھپائیں اور اس صفحے کے لئے بہتر ٹریکنگ پروٹیکشن کو بند کردیں۔";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "دھیان دیں!";
 
@@ -1335,9 +1329,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "چنے گئے اشتہارات کو کم کرتا ہے اور مشتھرین کو آپ کے براؤزنگ سے باخبر رہنے سے روکنے میں مدد کرتا ہے۔";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "اگر کوئی سائٹ توقع کے مطابق کام نہیں کرتی ہے تو ، ایڈریس بار میں ڈھال کو تھپتھپائیں اور اس صفحے کے لئے بہتر ٹریکنگ پروٹیکشن کو بند کردیں۔";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "چند اشتہاری ٹریکر کو اجازت دیں تاکہ ویب سائٹ فعال طرح سے فعل انجام دے سکے۔";

@@ -985,9 +985,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "အိုကေ၊ ရပြီ";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "အကယ်၍ ဆိုက်သည် မျှော်မှန်း သလို မလုပ်ဆောင်ပါက လိပ်စာ ဘားတန်း ရှိ ဒိုင်းပုံကို နှိပ် ကာ နောက်ယောင်ခံလိုက်ခြင်း အကာအကွယ် လုပ်ဆောင်ချက် ကို ဤ စာမျက်နှာ အတွက် ပိတ်လိုက်ပါ။";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ကြိုတင်အသိပေးချက်!";
 
@@ -999,9 +996,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ပစ်မှတ်ထားသောကြော်ငြာများကိုလျှော့ချပြီးကြော်ငြာရှင်များကိုသင်၏ရှာဖွေမှုကိုကြော်ငြာရှင်များခြေရာခံခြင်းမှရပ်တန့်စေသည်။";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "အကယ်၍ ဆိုက်သည် မျှော်မှန်း သလို မလုပ်ဆောင်ပါက လိပ်စာ ဘားတန်း ရှိ ဒိုင်းပုံကို နှိပ် ကာ နောက်ယောင်ခံလိုက်ခြင်း အကာအကွယ် လုပ်ဆောင်ချက် ကို ဤ စာမျက်နှာ အတွက် ပိတ်လိုက်ပါ။";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "လိုက်လံမှတ်သားသည့်ကြော်ငြာခြေရာခံစနစ်အချို့ကို ခွင့်ပြုပါ။ သို့မှသာ ဝဘ်ဆိုက်များသည် ကောင်းမွန်စွာ လုပ်ဆောင်ပါမည်။";

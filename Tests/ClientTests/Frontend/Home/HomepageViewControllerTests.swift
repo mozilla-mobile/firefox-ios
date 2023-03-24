@@ -24,14 +24,14 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testHomepageViewController_creationFromBVC_nilByDefault() {
-        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()
         XCTAssertNil(browserViewController.homepageViewController, "Homepage is nil on creation")
     }
 
     func testHomepageViewController_creationFromBVC_hideDoesntNil() {
-        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
 
         browserViewController.addSubviews()
@@ -48,7 +48,7 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testHomepageViewController_simpleCreation_hasNoLeaks() {
-        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let urlBar = URLBarView(profile: profile)
 
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -63,7 +63,7 @@ class HomepageViewControllerTests: XCTestCase {
     // MARK: - UpdateInContentHomePanel
 
     func testUpdateInContentHomePanel_nilURL_doesntShowHomepage() {
-        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()
 
@@ -73,7 +73,7 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testUpdateInContentHomePanel_homeURL_showHomepage() {
-        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()
 
@@ -84,7 +84,7 @@ class HomepageViewControllerTests: XCTestCase {
     }
 
     func testUpdateInContentHomePanel_notHomeURL_doesntShowHomepage() {
-        let tabManager = TabManager(profile: profile, imageStore: nil)
+        let tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         let browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()
 

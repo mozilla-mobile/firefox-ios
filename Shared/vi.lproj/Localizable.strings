@@ -343,8 +343,8 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Xóa";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "Trang web: %d";
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Trang: %d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Cài đặt";
@@ -934,9 +934,6 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Hình nền phiên bản giới hạn";
 
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "Khám phá các hình nền khác";
-
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Chọn một hình nền nói lên bạn.";
 
@@ -1223,7 +1220,7 @@
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Thay thế truy vấn bằng %s)";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Tự động điền thẻ tín dụng";
+"Settings.AutofillCreditCard.Title.v112" = "Tự động điền thẻ tín dụng";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Xóa tất cả dữ liệu trang web";
@@ -1456,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Trang trống";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "Tùy chỉnh";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Trang chủ Firefox";
 
@@ -1583,7 +1583,7 @@
 "Settings.TrackingProtection.Alert.Button" = "OK, đã hiểu";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Nếu một trang web không hoạt động như mong đợi, hãy chạm vào hình khiên trong thanh địa chỉ và tắt trình chống theo dõi nâng cao cho trang đó.";
+"Settings.TrackingProtection.Alert.Description" = "Nếu trang web không hoạt động như mong đợi, hãy nhấn vào ổ khóa trên thanh địa chỉ và tắt Trình chống theo dõi nâng cao cho trang đó.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Hãy cân nhắc!";
@@ -1598,7 +1598,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "Giảm quảng cáo được nhắm mục tiêu và giúp ngăn nhà quảng cáo theo dõi trình duyệt của bạn.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Nếu một trang web không hoạt động như mong đợi, hãy chạm vào hình khiên trong thanh địa chỉ và tắt trình chống theo dõi nâng cao cho trang đó.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Nếu trang web không hoạt động như mong đợi, hãy nhấn vào ổ khóa trên thanh địa chỉ và tắt Trình chống theo dõi nâng cao cho trang đó.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Nếu trang web không hoạt động như mong đợi, hãy nhấn vào ổ khóa trên thanh địa chỉ và tắt Trình chống theo dõi nâng cao cho trang đó.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Cho phép một số theo dõi quảng cáo để các trang web hoạt động đúng.";
@@ -1614,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Tiêu chuẩn (mặc định)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Tiêu chuẩn";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Nghiêm ngặt";

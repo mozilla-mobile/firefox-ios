@@ -1,0 +1,9 @@
+/* Sub label error string that gets shown when user enters incorrect input for their expiration date on their credit card in the text box. */
+"CreditCard.ErrorState.CardExpirationDateSublabel.v112" = "Geben Sie ein gültiges Ablaufdatum ein";
+
+/* Sub label error string that gets shown when user enters incorrect input for their number printed on their credit card in the text box. */
+"CreditCard.ErrorState.CardNumberSublabel.v112" = "Geben Sie eine gültige Kartennummer ein";
+
+/* Sub label error string that gets shown when user enters incorrect input for their name printed on their credit card in the text box. */
+"CreditCard.ErrorState.NameOnCardSublabel.v112" = "Fügen Sie einen Namen hinzu";
+

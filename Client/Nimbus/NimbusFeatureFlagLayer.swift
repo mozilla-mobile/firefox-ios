@@ -17,10 +17,7 @@ final class NimbusFeatureFlagLayer {
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .bottomSearchBar,
-                .searchHighlights,
-            // TODO: https://mozilla-hub.atlassian.net/browse/FXIOS-5362
-            // This is a temporary workaround for the toolbar experiment hack
-                .contextualHintForToolbar:
+                .searchHighlights:
             return checkAwesomeBarFeature(for: featureID, from: nimbus)
 
         case .jumpBackIn,
@@ -30,8 +27,8 @@ final class NimbusFeatureFlagLayer {
                 .topSites:
             return checkHomescreenSectionsFeature(for: featureID, from: nimbus)
 
-//        case .contextualHintForToolbar:
-        case .contextualHintForJumpBackInSyncedTab:
+        case .contextualHintForToolbar,
+                .contextualHintForJumpBackInSyncedTab:
             return checkNimbusForContextualHintsFeature(for: featureID, from: nimbus)
 
         case .jumpBackInSyncedTab:
@@ -48,8 +45,13 @@ final class NimbusFeatureFlagLayer {
             return checkGroupingFeature(for: featureID, from: nimbus)
 
         case .onboardingUpgrade,
-                .onboardingFreshInstall:
+                .onboardingFreshInstall,
+                .onboardingNotificationCard:
             return checkNimbusForOnboardingFeature(for: featureID, from: nimbus)
+
+        case .shareSheetChanges,
+                .shareToolbarChanges:
+            return checkNimbusForShareSheet(for: featureID, from: nimbus)
 
         case .sponsoredTiles:
             return checkSponsoredTilesFeature(from: nimbus)
@@ -64,11 +66,17 @@ final class NimbusFeatureFlagLayer {
         case .wallpaperOnboardingSheet:
             return checkNimbusForWallpaperOnboarding(using: nimbus)
 
-        case .shareSheetChanges,
-                .shareToolbarChanges:
-            return checkNimbusForShareSheet(for: featureID, from: nimbus)
         case .creditCardAutofillStatus:
             return checkNimbusForCreditCardAutofill(for: featureID, from: nimbus)
+
+        case .zoomFeature:
+            return checkZoomFeature(from: nimbus)
+
+        case .engagementNotificationStatus:
+            return checkNimbusForEngagementNotification(for: featureID, from: nimbus)
+
+        case .notificationSettings:
+            return checkNimbusForNotificationSettings(for: featureID, from: nimbus)
         }
     }
 
@@ -80,6 +88,18 @@ final class NimbusFeatureFlagLayer {
         case .disabled: return .disabled
         case .afterFourHours: return .afterFourHours
         case .always: return .always
+        }
+    }
+
+    public func checkNimbusConfigForOnboardingNotificationCard(
+        using nimbus: FxNimbus = FxNimbus.shared) -> OnboardingNotificationCardPosition {
+        let config = nimbus.features.onboardingFeature.value()
+        let nimbusSetting = config.notificationCardPosition
+
+        switch nimbusSetting {
+        case .noCard: return .noCard
+        case .afterSync: return .afterSync
+        case .beforeSync: return .beforeSync
         }
     }
 
@@ -105,7 +125,6 @@ final class NimbusFeatureFlagLayer {
         switch featureID {
         case .bottomSearchBar: return config.position.isPositionFeatureEnabled
         case .searchHighlights: return config.searchHighlights
-        case .contextualHintForToolbar: return config.position.isToolbarCfrOn
         default: return false
         }
     }
@@ -187,6 +206,28 @@ final class NimbusFeatureFlagLayer {
             }
     }
 
+    public func checkNimbusForEngagementNotification(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.engagementNotificationFeature.value()
+
+            switch featureID {
+            case .engagementNotificationStatus: return config.engagementNotificationFeatureStatus
+            default: return false
+            }
+    }
+
+    public func checkNimbusForNotificationSettings(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.notificationSettingsFeature.value()
+
+            switch featureID {
+            case .notificationSettings: return config.notificationSettingsFeatureStatus
+            default: return false
+            }
+        }
+
     private func checkNimbusForOnboardingFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -244,5 +285,11 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.groupingEnabled[nimbusID] else { return false }
 
         return status
+    }
+
+    private func checkZoomFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.zoomFeature.value()
+
+        return config.status
     }
 }

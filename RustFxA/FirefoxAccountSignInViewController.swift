@@ -41,6 +41,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     /// Dismissal style for FxAWebViewController
     /// Changes based on whether or not this VC is launched from the app menu or settings
     private let fxaDismissStyle: DismissType
+    private let logger: Logger
 
     // UI
     private lazy var scrollView: UIScrollView = .build { view in
@@ -136,7 +137,10 @@ class FirefoxAccountSignInViewController: UIViewController {
     ///   - profile: User Profile info
     ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
     ///   - deepLinkParams: URL args passed in from deep link that propagate to FxA web view
-    init(profile: Profile, parentType: FxASignInParentType, deepLinkParams: FxALaunchParams) {
+    init(profile: Profile,
+         parentType: FxASignInParentType,
+         deepLinkParams: FxALaunchParams,
+         logger: Logger = DefaultLogger.shared) {
         self.deepLinkParams = deepLinkParams
         self.profile = profile
         switch parentType {
@@ -156,6 +160,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             self.telemetryObject = .tabTray
             self.fxaDismissStyle = .popToTabTray
         }
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -237,7 +242,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             scanButton.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
                 .tinted(withColor: .black), for: .normal)
             scanButton.setTitleColor(.black, for: .normal)
-            scanButton.backgroundColor = UIColor.theme.homePanel.activityStreamHeaderButton
+            scanButton.backgroundColor = UIColor.legacyTheme.homePanel.activityStreamHeaderButton
         } else {
             scanButton.setImage(UIImage(named: ImageIdentifiers.signinSyncQRButton)?
                 .tinted(withColor: .white), for: .normal)
@@ -258,7 +263,14 @@ class FirefoxAccountSignInViewController: UIViewController {
 
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
+            isOnboarding: telemetryObject == .onboarding)
+
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow,
+                                            profile: profile,
+                                            dismissalStyle: fxaDismissStyle,
+                                            deepLinkParams: deepLinkParams,
+                                            shouldAskForNotificationPermission: askForPermission)
         fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
             self?.shouldReload?()
             self?.dismissVC()
@@ -271,12 +283,21 @@ class FirefoxAccountSignInViewController: UIViewController {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
+            isOnboarding: telemetryObject == .onboarding)
+
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
+                                      profile: profile,
+                                      dismissalStyle: fxaDismissStyle,
+                                      deepLinkParams: deepLinkParams,
+                                      shouldAskForNotificationPermission: askForPermission)
         navigationController?.pushViewController(vc, animated: true)
     }
 
     func didScanQRCodeWithText(_ text: String) {
-        SentryIntegration.shared.send(message: "FirefoxAccountSignInVC Error: `didScanQRCodeWithText` should not be called")
+        logger.log("FirefoxAccountSignInVC Error: `didScanQRCodeWithText` should not be called",
+                   level: .info,
+                   category: .sync)
     }
 }
 

@@ -343,9 +343,6 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Elimina";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "Llocs: %d";
-
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Paràmetres";
 
@@ -917,7 +914,7 @@
 "Onboarding.Sync.Skip.Action.v106" = "Omet";
 
 /* String used to describes the title of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Title.v106" = "Passeu del telèfon al portàtil, i viceversa";
+"Onboarding.Sync.Title.v106" = "Salteu del telèfon al portàtil, i viceversa";
 
 /* Describes an action on the sync onboarding page in our Onboarding screens. This string will be on a button so user can sign up or login directly in the onboarding. */
 "Onboarding.SyncAction.v102" = "Registre i inici de sessió";
@@ -933,9 +930,6 @@
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Fons de pantalla d'edició limitada";
-
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "Descobriu més fons de pantalla";
 
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Trieu un fons de pantalla que us representi.";
@@ -1221,9 +1215,6 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (substituïu la cerca per %s)";
-
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Emplenament automàtic de targetes de crèdit";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Esborra totes les dades de llocs web";
@@ -1582,9 +1573,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Entesos";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Si un lloc no funciona com s'espera, toqueu l'escut a la barra d'adreces i desactiveu la protecció contra el seguiment millorada per a aquella pàgina.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Atenció!";
 
@@ -1596,9 +1584,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Redueix els anuncis personalitzats i ajuda a evitar que els anunciants facin seguiment de la vostra navegació.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un lloc no funciona com s'espera, toqueu l'escut a la barra d'adreces i desactiveu la protecció contra el seguiment millorada per a aquella pàgina.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permet alguns elements de seguiment de publicitat necessaris perquè els llocs web funcionin correctament.";

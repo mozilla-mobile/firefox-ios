@@ -145,7 +145,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
 
         setupNotifications(forObserver: self, observing: [
@@ -254,7 +254,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
                     self.collectionView.scrollRectToVisible(rect, animated: false)
                 }
             } else {
-                self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally], animated: false)
+                DispatchQueue.main.async {
+                    self.collectionView.scrollToItem(at: indexPath,
+                                                     at: [.centeredVertically, .centeredHorizontally],
+                                                     animated: false)
+                }
             }
         }
     }
@@ -351,7 +355,7 @@ extension GridTabViewController {
 
             DispatchQueue.main.async { [unowned self] in
                 if isPrivateState {
-                    let previousTab = self.tabManager.tabs.filter { $0.tabUUID == previousTabUUID }.first
+                    let previousTab = self.tabManager.tabs.first(where: { $0.tabUUID == previousTabUUID })
                     self.tabManager.cleanupClosedTabs(recentlyClosedTabs,
                                                       previous: previousTab,
                                                       isPrivate: isPrivateState)
@@ -399,7 +403,7 @@ extension GridTabViewController {
 // MARK: - App Notifications
 extension GridTabViewController {
     @objc func appWillResignActiveNotification() {
-        if tabDisplayManager.isPrivate {
+        if tabDisplayManager.isPrivate && !tabManager.privateTabs.isEmpty {
             backgroundPrivacyOverlay.alpha = 1
             view.bringSubviewToFront(backgroundPrivacyOverlay)
             collectionView.alpha = 0

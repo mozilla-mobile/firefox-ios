@@ -2,8 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Shared
+import Common
 import MozillaAppServices
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
@@ -16,11 +18,11 @@ final class Unknown: NSObject, NSCoding {
     }
 }
 
+// TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 /**
  A singleton that wraps the Rust FxA library.
  The singleton design is poor for testability through dependency injection and may need to be changed in future.
  */
-// TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 open class RustFirefoxAccounts {
     public static let prefKeyLastDeviceName = "prefKeyLastDeviceName"
     private static let clientID = "1b1a3e44c54fbb58"
@@ -32,6 +34,7 @@ open class RustFirefoxAccounts {
     public let syncAuthState: SyncAuthState
     fileprivate static var prefs: Prefs?
     public let pushNotifications = PushNotificationSetup()
+    private let logger: Logger
 
     // This is used so that if a migration failed, show a UI indicator for the user to manually log in to their account.
     public var accountMigrationFailed: Bool {
@@ -117,7 +120,10 @@ open class RustFirefoxAccounts {
 
     private func createAccountManager() -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
-        assert(prefs != nil)
+        if prefs == nil {
+            logger.log("prefs is unexpectedly nil", level: .warning, category: .sync)
+        }
+
         let server: FxAConfig.Server
         if prefs?.intForKey(PrefsKeys.UseStageServer) == 1 {
             server = FxAConfig.Server.stage
@@ -149,12 +155,13 @@ open class RustFirefoxAccounts {
         return FxAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
     }
 
-    private init() {
+    private init(logger: Logger = DefaultLogger.shared) {
         // Set-up Rust network stack. Note that this has to be called
         // before any Application Services component gets used.
         Viaduct.shared.useReqwestBackend()
 
         let prefs = RustFirefoxAccounts.prefs
+        self.logger = logger
         let cache = KeychainCache.fromBranch("rustAccounts.syncAuthState",
                                              withLabel: RustFirefoxAccounts.syncAuthStateUniqueId(prefs: prefs),
                                              factory: syncAuthStateCachefromJSON)
@@ -180,7 +187,10 @@ open class RustFirefoxAccounts {
             if let error = notification.userInfo?["error"] as? Error {
                 info = error.localizedDescription
             }
-            SentryIntegration.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
+            logger.log("RustFxa failed account migration",
+                       level: .warning,
+                       category: .sync,
+                       description: info)
             self?.accountMigrationFailed = true
             NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
         }

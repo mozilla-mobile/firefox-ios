@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Foundation
 import Shared
 import Kingfisher
@@ -65,7 +66,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
                 if launchArguments.contains(LaunchArguments.ClearProfile) {
-                    fatalError("Clearing profile and loading a \(TabManagerStoreImplementation.storePath) is not a supported combination.")
+                    fatalError("Clearing profile and loading a \(LegacyTabManagerStoreImplementation.storePath) is not a supported combination.")
                 }
 
                 // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
@@ -74,7 +75,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                                                                                           ofType: nil,
                                                                                           inDirectory: "test-fixtures")!)
                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
-                let deprecatedOutput = URL(fileURLWithPath: "\(dirForTestProfile)/\(TabManagerStoreImplementation.deprecatedStorePath)")
+                let output = URL(fileURLWithPath: "\(dirForTestProfile)/\(LegacyTabManagerStoreImplementation.storePath)")
 
                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]
@@ -82,10 +83,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
                     try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
                 }
 
-                // When we remove migration code for tabs, make sure we migrate the archive test-fixtures data.
-                // See FXIOS-4913 for more details. Correct output will be:
-                // let output = URL(fileURLWithPath: "\(dirForTestProfile)/\(TabManagerStoreImplementation.storePath)")
-                try! FileManager.default.copyItem(at: input, to: deprecatedOutput)
+                try! FileManager.default.copyItem(at: input, to: output)
             }
         }
 

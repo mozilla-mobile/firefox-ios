@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Foundation
-import Logger
+import Common
 import WebKit
 import Shared
 import UIKit
@@ -11,14 +11,13 @@ import UIKit
 /// List of schemes that are allowed to be opened in new tabs.
 private let schemesAllowedToBeOpenedAsPopups = ["http", "https", "javascript", "data", "about"]
 
+// MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
         guard !navigationAction.isInternalUnprivileged,
               shouldRequestBeOpenedAsPopup(navigationAction.request)
         else {
-            print("Denying popup from request: \(navigationAction.request)")
-
             guard let url = navigationAction.request.url else { return nil }
 
             if url.scheme == "whatsapp" && UIApplication.shared.canOpenURL(url) {
@@ -42,37 +41,21 @@ extension BrowserViewController: WKUIDelegate {
         return newTab.webView
     }
 
-    fileprivate func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
-        // Treat `window.open("")` the same as `window.open("about:blank")`.
-        if request.url?.absoluteString.isEmpty ?? false {
-            return true
-        }
-
-        if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
-            return true
-        }
-
-        return false
-    }
-
-    private func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
-        // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)) && (self.presentedViewController == nil)
-    }
-
     func webView(
         _ webView: WKWebView,
         runJavaScriptAlertPanelWithMessage message: String,
         initiatedByFrame frame: WKFrameInfo,
-        completionHandler: @escaping () -> Void) {
-        let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
-        if shouldDisplayJSAlertForWebView(webView) {
+        completionHandler: @escaping () -> Void
+    ) {
+        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
+        let messageAlert = MessageAlert(message: message,
+                                        frame: frame,
+                                        completionHandler: completionHandler,
+                                        shouldCallCompletion: shouldShowAlert)
+        if shouldShowAlert {
             present(messageAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
-        } else {
-            // This should never happen since an alert needs to come from a web view but just in case call the handler
-            // since not calling it will result in a runtime exception.
             completionHandler()
         }
     }
@@ -83,12 +66,15 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        let confirmAlert = ConfirmPanelAlert(message: message, frame: frame, completionHandler: completionHandler)
+        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
+        let confirmAlert = ConfirmPanelAlert(message: message,
+                                             frame: frame,
+                                             completionHandler: completionHandler,
+                                             shouldCallCompletion: shouldShowAlert)
         if shouldDisplayJSAlertForWebView(webView) {
             present(confirmAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)
-        } else {
             completionHandler(false)
         }
     }
@@ -100,12 +86,16 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping (String?) -> Void
     ) {
-        let textInputAlert = TextInputAlert(message: prompt, frame: frame, completionHandler: completionHandler, defaultText: defaultText)
+        let shouldShowAlert = shouldDisplayJSAlertForWebView(webView)
+        let textInputAlert = TextInputAlert(message: prompt,
+                                            frame: frame,
+                                            completionHandler: completionHandler,
+                                            defaultText: defaultText,
+                                            shouldCallCompletion: shouldShowAlert)
         if shouldDisplayJSAlertForWebView(webView) {
             present(textInputAlert.alertController(), animated: true, completion: nil)
         } else if let promptingTab = tabManager[webView] {
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
-        } else {
             completionHandler(nil)
         }
     }
@@ -119,7 +109,11 @@ extension BrowserViewController: WKUIDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo, completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo,
+        completionHandler: @escaping (UIContextMenuConfiguration?) -> Void
+    ) {
         completionHandler(UIContextMenuConfiguration(
             identifier: nil,
             previewProvider: {
@@ -176,9 +170,9 @@ extension BrowserViewController: WKUIDelegate {
                     let searchTerm = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchTerm ?? ""
                     let searchUrl = currentTab.metadataManager?.tabGroupData.tabAssociatedSearchUrl ?? ""
                     if !searchTerm.isEmpty, !searchUrl.isEmpty {
-                        let searchData = TabGroupData(searchTerm: searchTerm,
-                                                      searchUrl: searchUrl,
-                                                      nextReferralUrl: tab.url?.absoluteString ?? "")
+                        let searchData = LegacyTabGroupData(searchTerm: searchTerm,
+                                                            searchUrl: searchUrl,
+                                                            nextReferralUrl: tab.url?.absoluteString ?? "")
                         tab.metadataManager?.updateTimerAndObserving(state: .openInNewTab, searchData: searchData, isPrivate: tab.isPrivate)
                     }
 
@@ -339,6 +333,21 @@ extension BrowserViewController: WKUIDelegate {
             }))
     }
 
+    @available(iOS 15, *)
+    func webView(_ webView: WKWebView,
+                 requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+                 initiatedByFrame frame: WKFrameInfo,
+                 type: WKMediaCaptureType,
+                 decisionHandler: @escaping (WKPermissionDecision) -> Void) {
+        // If the tab isn't the selected one, do not show the media capture prompt
+        guard tabManager.selectedTab?.webView == webView else {
+            decisionHandler(.deny)
+            return
+        }
+
+        decisionHandler(.prompt)
+    }
+
     func writeToPhotoAlbum(image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveError), nil)
     }
@@ -358,19 +367,7 @@ extension BrowserViewController: WKUIDelegate {
     }
 }
 
-extension WKNavigationAction {
-    /// Allow local requests only if the request is privileged.
-    var isInternalUnprivileged: Bool {
-        guard let url = request.url else { return true }
-
-        if let url = InternalURL(url) {
-            return !url.isAuthorized
-        } else {
-            return false
-        }
-    }
-}
-
+// MARK: - WKNavigationDelegate
 extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         guard let tab = tabManager[webView] else { return }
@@ -400,63 +397,14 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    // Handle Universal link for Firefox wallpaper setting
-    private func isFirefoxUniversalWallpaperSetting(_ url: URL) -> Bool {
-        guard let scheme = url.scheme,
-              [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
-        else { return false }
-
-        let deeplinkUrl = "\(scheme)://deep-link?url=/settings/wallpaper"
-        if url.absoluteString == deeplinkUrl { return true }
-
-        return false
-    }
-
-    // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
-    // it could just be a visit to a regular page on maps.apple.com.
-    fileprivate func isAppleMapsURL(_ url: URL) -> Bool {
-        if url.scheme == "http" || url.scheme == "https" {
-            if url.host == "maps.apple.com" && url.query != nil {
-                return true
-            }
-        }
-        return false
-    }
-
-    // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com
-    // used to be in this list. I have removed them because they now redirect to itunes.apple.com. If we special case
-    // them then iOS will actually first open Safari, which then redirects to the app store. This works but it will
-    // leave a 'Back to Safari' button in the status bar, which we do not want.
-    fileprivate func isStoreURL(_ url: URL) -> Bool {
-        if url.scheme == "http" || url.scheme == "https" || url.scheme == "itms-apps" {
-            if url.host == "itunes.apple.com" {
-                return true
-            }
-        }
-        return false
-    }
-
-    // Use for sms and mailto links, which do not show a confirmation before opening.
-    fileprivate func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> Void) {
-        let snackBar = TimerSnackBar(text: .ExternalLinkGenericConfirmation + "\n\(url.absoluteString)", img: nil)
-        let ok = SnackButton(title: .OKString, accessibilityIdentifier: "AppOpenExternal.button.ok") { bar in
-            tab.removeSnackbar(bar)
-            completion(true)
-        }
-        let cancel = SnackButton(title: .CancelString, accessibilityIdentifier: "AppOpenExternal.button.cancel") { bar in
-            tab.removeSnackbar(bar)
-            completion(false)
-        }
-        snackBar.addButton(ok)
-        snackBar.addButton(cancel)
-        tab.addSnackbar(snackBar)
-    }
-
     // This is the place where we decide what to do with a new navigation action. There are a number of special schemes
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
     // method.
-
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    ) {
         guard let url = navigationAction.request.url,
               let tab = tabManager[webView]
         else {
@@ -566,7 +514,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // Handle keyboard shortcuts on link presses from webpage navigation (ex: Cmd + Tap on Link)
-        if #available(iOS 13.4, *), navigationAction.navigationType == .linkActivated, navigateLinkShortcutIfNeeded(url: url) {
+        if navigationAction.navigationType == .linkActivated, navigateLinkShortcutIfNeeded(url: url) {
             decisionHandler(.cancel)
             return
         }
@@ -609,7 +557,11 @@ extension BrowserViewController: WKNavigationDelegate {
         decisionHandler(.cancel)
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationResponse: WKNavigationResponse,
+        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
+    ) {
         let response = navigationResponse.response
         let responseURL = response.url
 
@@ -648,7 +600,14 @@ extension BrowserViewController: WKNavigationDelegate {
             // block and use a temporary document instead
             tab.temporaryDocument = TemporaryDocument(preflightResponse: response,
                                                       request: request)
-            let url = tab.temporaryDocument?.getURL().value
+            let group = DispatchGroup()
+            var url: URL?
+            group.enter()
+            tab.temporaryDocument?.getURL(completionHandler: { docURL in
+                url = docURL
+                group.leave()
+            })
+            _ = group.wait(timeout: .distantFuture)
 
             if previewHelper.canOpen(url: url) {
                 // Open our helper and cancel this response from the webview.
@@ -704,7 +663,11 @@ extension BrowserViewController: WKNavigationDelegate {
     }
 
     /// Invoked when an error occurs while starting to load data for the main frame.
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    func webView(
+        _ webView: WKWebView,
+        didFailProvisionalNavigation navigation: WKNavigation!,
+        withError error: Error
+    ) {
         // Ignore the "Frame load interrupted" error that is triggered when we cancel a request
         // to open an external application and hand it over to UIApplication.openURL(). The result
         // will be that we switch to the external app, for example the app store, while keeping the
@@ -714,9 +677,7 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if checkIfWebContentProcessHasCrashed(webView, error: error as NSError) {
-            return
-        }
+        guard !checkIfWebContentProcessHasCrashed(webView, error: error as NSError) else { return }
 
         if error.code == Int(CFNetworkErrors.cfurlErrorCancelled.rawValue) {
             if let tab = tabManager[webView], tab === tabManager.selectedTab {
@@ -730,24 +691,13 @@ extension BrowserViewController: WKNavigationDelegate {
         }
     }
 
-    fileprivate func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
-        if error.code == WKError.webContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
-            print("WebContent process has crashed. Trying to reload to restart it.")
-            webView.reload()
-            return true
-        }
-
-        return false
-    }
-
-    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        // If this is a certificate challenge, see if the certificate has previously been
-        // accepted by the user.
-        let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
-        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-           let trust = challenge.protectionSpace.serverTrust,
-           let cert = SecTrustGetCertificateAtIndex(trust, 0), profile.certStore.containsCertificate(cert, forOrigin: origin) {
-            completionHandler(.useCredential, URLCredential(trust: trust))
+    func webView(
+        _ webView: WKWebView,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodServerTrust else {
+            handleServerTrust(challenge: challenge, completionHandler: completionHandler)
             return
         }
 
@@ -761,7 +711,8 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         // If this is a request to our local web server, use our private credentials.
-        if challenge.protectionSpace.host == "localhost" && challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
+        if challenge.protectionSpace.host == "localhost" &&
+            challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
             completionHandler(.useCredential, WebServer.sharedInstance.credentials)
             return
         }
@@ -824,9 +775,9 @@ extension BrowserViewController: WKNavigationDelegate {
             if metadataManager.shouldUpdateSearchTermData(webViewUrl: webView.url?.absoluteString) {
                 updateObservationReferral(metadataManager: metadataManager, url: webView.url?.absoluteString, isPrivate: tab.isPrivate)
             } else if !tab.isFxHomeTab {
-                let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                              searchUrl: webView.url?.absoluteString ?? "",
-                                              nextReferralUrl: "")
+                let searchData = LegacyTabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+                                                    searchUrl: webView.url?.absoluteString ?? "",
+                                                    nextReferralUrl: "")
                 metadataManager.updateTimerAndObserving(state: .openURLOnly,
                                                         searchData: searchData,
                                                         tabTitle: webView.title,
@@ -846,14 +797,131 @@ extension BrowserViewController: WKNavigationDelegate {
             }
         }
     }
+}
 
-    private func updateObservationReferral(metadataManager: TabMetadataManager, url: String?, isPrivate: Bool) {
-        let searchData = TabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
-                                      searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
-                                      nextReferralUrl: url ?? "")
+// MARK: - Private
+private extension BrowserViewController {
+    // Handle Universal link for Firefox wallpaper setting
+    func isFirefoxUniversalWallpaperSetting(_ url: URL) -> Bool {
+        guard let scheme = url.scheme,
+              [URL.mozPublicScheme, URL.mozInternalScheme].contains(scheme)
+        else { return false }
+
+        let deeplinkUrl = "\(scheme)://deep-link?url=/settings/wallpaper"
+        if url.absoluteString == deeplinkUrl { return true }
+
+        return false
+    }
+
+    // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
+    // it could just be a visit to a regular page on maps.apple.com.
+    func isAppleMapsURL(_ url: URL) -> Bool {
+        if url.scheme == "http" || url.scheme == "https" {
+            if url.host == "maps.apple.com" && url.query != nil {
+                return true
+            }
+        }
+        return false
+    }
+
+    // Recognize a iTunes Store URL. These all trigger the native apps. Note that appstore.com and phobos.apple.com
+    // used to be in this list. I have removed them because they now redirect to itunes.apple.com. If we special case
+    // them then iOS will actually first open Safari, which then redirects to the app store. This works but it will
+    // leave a 'Back to Safari' button in the status bar, which we do not want.
+    func isStoreURL(_ url: URL) -> Bool {
+        if url.scheme == "http" || url.scheme == "https" || url.scheme == "itms-apps" {
+            if url.host == "itunes.apple.com" {
+                return true
+            }
+        }
+        return false
+    }
+
+    // Use for sms and mailto links, which do not show a confirmation before opening.
+    func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> Void) {
+        let snackBar = TimerSnackBar(text: .ExternalLinkGenericConfirmation + "\n\(url.absoluteString)", img: nil)
+        let ok = SnackButton(title: .OKString, accessibilityIdentifier: "AppOpenExternal.button.ok") { bar in
+            tab.removeSnackbar(bar)
+            completion(true)
+        }
+        let cancel = SnackButton(title: .CancelString, accessibilityIdentifier: "AppOpenExternal.button.cancel") { bar in
+            tab.removeSnackbar(bar)
+            completion(false)
+        }
+        snackBar.addButton(ok)
+        snackBar.addButton(cancel)
+        tab.addSnackbar(snackBar)
+    }
+
+    func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {
+        // Treat `window.open("")` the same as `window.open("about:blank")`.
+        if request.url?.absoluteString.isEmpty ?? false {
+            return true
+        }
+
+        if let scheme = request.url?.scheme?.lowercased(), schemesAllowedToBeOpenedAsPopups.contains(scheme) {
+            return true
+        }
+
+        return false
+    }
+
+    func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
+        // Only display a JS Alert if we are selected and there isn't anything being shown
+        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView))
+            && (self.presentedViewController == nil)
+    }
+
+     func checkIfWebContentProcessHasCrashed(_ webView: WKWebView, error: NSError) -> Bool {
+        if error.code == WKError.webContentProcessTerminated.rawValue && error.domain == "WebKitErrorDomain" {
+            logger.log("WebContent process has crashed. Trying to reload to restart it.",
+                       level: .warning,
+                       category: .webview)
+            webView.reload()
+            return true
+        }
+
+        return false
+    }
+
+    func handleServerTrust(challenge: URLAuthenticationChallenge,
+                           completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        // If this is a certificate challenge, see if the certificate has previously been
+        // accepted by the user.
+        let origin = "\(challenge.protectionSpace.host):\(challenge.protectionSpace.port)"
+
+        guard let trust = challenge.protectionSpace.serverTrust,
+              let cert = SecTrustGetCertificateAtIndex(trust, 0),
+              profile.certStore.containsCertificate(cert, forOrigin: origin)
+        else {
+            completionHandler(.performDefaultHandling, nil)
+            return
+        }
+
+        completionHandler(.useCredential, URLCredential(trust: trust))
+    }
+
+    func updateObservationReferral(metadataManager: LegacyTabMetadataManager, url: String?, isPrivate: Bool) {
+        let searchData = LegacyTabGroupData(searchTerm: metadataManager.tabGroupData.tabAssociatedSearchTerm,
+                                            searchUrl: metadataManager.tabGroupData.tabAssociatedSearchUrl,
+                                            nextReferralUrl: url ?? "")
         metadataManager.updateTimerAndObserving(
             state: .tabNavigatedToDifferentUrl,
             searchData: searchData,
             isPrivate: isPrivate)
+    }
+}
+
+extension WKNavigationAction {
+    /// Allow local requests only if the request is privileged.
+    var isInternalUnprivileged: Bool {
+        guard let url = request.url else { return true }
+
+        if let url = InternalURL(url) {
+            return !url.isAuthorized
+        } else {
+            return false
+        }
     }
 }

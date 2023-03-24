@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
-import Logger
+import Common
 import UIKit
 import Shared
 import Storage
@@ -107,7 +107,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     public required init(scratchpad: Scratchpad,
                          delegate: SyncDelegate,
                          basePrefs: Prefs,
-                         why: SyncReason,
+                         why: OldSyncReason,
                          logger: Logger = DefaultLogger.shared) {
         self.logger = logger
         super.init(scratchpad: scratchpad, delegate: delegate, basePrefs: basePrefs, why: why, collection: "clients")
@@ -351,7 +351,9 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
                                level: .debug,
                                category: .sync)
                 } else {
-                    SentryIntegration.shared.send(message: "An unmigrated client record was found with a GUID for an ID", tag: SentryTag.clientSynchronizer, severity: .error)
+                    logger.log("An unmigrated client record was found with a GUID for an ID",
+                               level: .warning,
+                               category: .sync)
                 }
             } else if rec.id == ourFxaDeviceId {
                 ourClientRecordExists = true
@@ -400,7 +402,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
         }
     }
 
-    open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> SyncResult {
+    open func synchronizeLocalClients(_ localClients: RemoteClientsAndTabs, withServer storageClient: Sync15StorageClient, info: InfoCollections) -> OldSyncResult {
         logger.log("Synchronizing clients.",
                    level: .debug,
                    category: .sync)

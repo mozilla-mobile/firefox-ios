@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import UIKit
 import Shared
 
@@ -52,7 +53,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
-        //// profile.rustAccount.refreshProfile()
+        // profile.rustAccount.refreshProfile()
 
         checkForDeeplinkSetting()
     }
@@ -98,7 +99,12 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
     }
 
     override func generateSettings() -> [SettingSection] {
-        var settings = [SettingSection]()
+        let footerTitle = NSAttributedString(
+            string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
+        var settings = [
+            SettingSection(footerTitle: footerTitle,
+                           children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])
+        ]
 
         let prefs = profile.prefs
         var generalSettings: [Setting] = [
@@ -158,13 +164,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
                 statusText: .SettingsShowLinkPreviewsStatus)
         ]
 
-        if #available(iOS 14.0, *) {
-            settings += [
-                SettingSection(footerTitle: NSAttributedString(string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription),
-                               children: [DefaultBrowserSetting(theme: themeManager.currentTheme)])
-            ]
-        }
-
         let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: .Settings.Sync.ButtonDescription) : nil
@@ -200,6 +199,10 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         privacySettings.append(ContentBlockerSetting(settings: self))
 
+        if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
+            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: self.profile))
+        }
+
         privacySettings += [
             PrivacyPolicySetting()
         ]
@@ -207,7 +210,6 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         settings += [
             SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: [
-                ShowIntroductionSetting(settings: self),
                 SendFeedbackSetting(),
                 SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
                 StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),

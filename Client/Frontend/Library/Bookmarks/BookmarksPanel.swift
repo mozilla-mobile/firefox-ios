@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Logger
 import Storage
 import Shared
 import SiteImageView
@@ -107,6 +106,7 @@ class BookmarksPanel: SiteTableViewController,
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         tableView.allowsSelectionDuringEditing = true
+        tableView.dragInteractionEnabled = false
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -251,6 +251,7 @@ class BookmarksPanel: SiteTableViewController,
     func enableEditMode() {
         updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         self.tableView.setEditing(true, animated: true)
+        self.tableView.dragInteractionEnabled = true
         sendPanelChangeNotification()
     }
 
@@ -258,6 +259,7 @@ class BookmarksPanel: SiteTableViewController,
         let substate: LibraryPanelSubState = viewModel.isRootNode ? .mainView : .inFolder
         updatePanelState(newState: .bookmarks(state: substate))
         self.tableView.setEditing(false, animated: true)
+        self.tableView.dragInteractionEnabled = false
         sendPanelChangeNotification()
     }
 

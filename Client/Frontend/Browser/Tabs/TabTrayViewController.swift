@@ -212,7 +212,7 @@ class TabTrayViewController: UIViewController, Themeable {
         super.viewDidLoad()
 
         viewSetup()
-        listenForThemeChange()
+        listenForThemeChange(view)
         applyTheme()
         updatePrivateUIState()
         changePanel()
@@ -565,6 +565,9 @@ extension TabTrayViewController {
 
     @objc func didTapDone() {
         notificationCenter.post(name: .TabsTrayDidClose)
+        // Update Private mode when closing TabTray, if the mode toggle but no tab is pressed with return to previous state
+        updatePrivateUIState()
+        viewModel.tabTrayView.didTogglePrivateMode(viewModel.tabManager.selectedTab?.isPrivate ?? false)
         self.dismiss(animated: true, completion: nil)
     }
 }

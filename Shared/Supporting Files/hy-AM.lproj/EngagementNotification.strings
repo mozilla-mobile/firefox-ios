@@ -1,0 +1,6 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Գտեք մոտակայքում ինչ-որ բան: Կամ բացահայտել ինչ-որ զվարճալի բան:";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Սկսեք ձեր առաջին որոնումը";
+

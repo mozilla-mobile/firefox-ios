@@ -122,7 +122,7 @@
 "Bookmarks.Title.Label" = "Título";
 
 /* Describes the date on which the breach occurred */
-"BreachAlerts.BreachDate" = "Esta violación ocurrió el";
+"BreachAlerts.BreachDate" = "Esta filtración ocurrió el";
 
 /* Description of what a breach is */
 "BreachAlerts.Description" = "Las contraseñas se filtraron o se robaron desde la última vez que cambió su contraseña. Para proteger esta cuenta, inicie sesión en el sitio y cambie su contraseña.";
@@ -134,7 +134,7 @@
 "BreachAlerts.Link" = "Ir a";
 
 /* Title for the Breached Login Detail View. */
-"BreachAlerts.Title" = "Violación del sitio web";
+"BreachAlerts.Title" = "Filtración del sitio web";
 
 /* Accessibility label for brightness adjustment slider in Reader Mode display settings */
 "Brightness" = "Brillo";
@@ -343,8 +343,8 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Eliminar";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "Sitios: %d";
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Páginas: %d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Configuración";
@@ -934,9 +934,6 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "Fondo de pantalla de edición limitada";
 
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "Explorar más fondos de pantalla";
-
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "Elegí un fondo de pantalla que te represente.";
 
@@ -1223,7 +1220,7 @@
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Reemplazá tu búsqueda con %s)";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "Autollenar tarjeta de crédito";
+"Settings.AutofillCreditCard.Title.v112" = "Autocompletar tarjetas de crédito";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Eliminar todos los datos del sitio";
@@ -1456,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Página en blanco";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "Personalizar";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Página de Inicio de Firefox";
 
@@ -1583,7 +1583,7 @@
 "Settings.TrackingProtection.Alert.Button" = "¡Listo, lo entendí!";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "Si un sitio no funciona como se esperaba, toque el escudo en la barra de direcciones y desactive la Protección de rastreo aumentada para esa página.";
+"Settings.TrackingProtection.Alert.Description" = "Si un sitio no funciona como se esperaba, tocá el candado en la barra de direcciones y desactivá la protección de rastreo aumentada para esa página.";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "¡Atención!";
@@ -1598,7 +1598,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "Reduce la publicidad dirigida y ayuda a evitar que los anunciantes sigan su navegación.";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un sitio no funciona como se esperaba, toque el escudo en la barra de direcciones y desactive la Protección de rastreo aumentada para esa página.";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Si un sitio no funciona como se esperaba, tocá el candado en la barra de direcciones y desactivá la protección de rastreo aumentada para esa página.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Si un sitio no funciona como se esperaba, tocá el candado en la barra de direcciones y desactivá la protección de rastreo aumentada para esa página.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Permite cierto rastreo de publicidad para que los sitios web funcionen correctamente.";
@@ -1614,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "Estándar (predeterminado)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "Estándar";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "Estricta";

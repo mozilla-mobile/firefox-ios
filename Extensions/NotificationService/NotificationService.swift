@@ -2,16 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Account
 import Shared
 import Storage
 import Sync
 import UserNotifications
-import os.log
-
-func consoleLog(_ msg: String) {
-    os_log("%{public}@", log: OSLog(subsystem: "org.mozilla.firefox", category: "firefoxnotificationservice"), type: OSLogType.debug, msg)
-}
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
@@ -23,7 +19,6 @@ class NotificationService: UNNotificationServiceExtension {
     // AppDelegate.application(_:didReceiveRemoteNotification:completionHandler:)
     // Once the notification is tapped, then the same userInfo is passed to the same method in the AppDelegate.
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        consoleLog("push received")
         let userInfo = request.content.userInfo
 
         let content = request.content.mutableCopy() as! UNMutableNotificationContent
@@ -66,7 +61,6 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     func didFinish(_ what: PushMessage? = nil, with error: PushMessageError? = nil) {
-        consoleLog("push didFinish start")
         defer {
             // We cannot use tabqueue after the profile has shutdown;
             // however, we can't use weak references, because TabQueue isn't a class.
@@ -74,7 +68,6 @@ class NotificationService: UNNotificationServiceExtension {
             self.display?.tabQueue = nil
 
             profile?.shutdown()
-            consoleLog("push didFinish end")
         }
 
         guard let display = self.display else { return }
@@ -100,11 +93,12 @@ class SyncDataDisplay {
     var tabQueue: TabQueue?
     var messageDelivered: Bool = false
 
-    init(content: UNMutableNotificationContent, contentHandler: @escaping (UNNotificationContent) -> Void, tabQueue: TabQueue) {
+    init(content: UNMutableNotificationContent,
+         contentHandler: @escaping (UNNotificationContent) -> Void,
+         tabQueue: TabQueue) {
         self.contentHandler = contentHandler
         self.notificationContent = content
         self.tabQueue = tabQueue
-        SentryIntegration.shared.setup(sendUsageData: true)
     }
 
     func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
@@ -153,7 +147,6 @@ extension SyncDataDisplay {
     }
 
     func displayAccountVerifiedNotification() {
-        SentryIntegration.shared.send(message: "SentTab error: account not verified")
         #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
             return
@@ -163,7 +156,6 @@ extension SyncDataDisplay {
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
-        SentryIntegration.shared.send(message: "SentTab error: \(debugInfo)")
         #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: .SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
             return
@@ -206,7 +198,6 @@ extension SyncDataDisplay {
             #else
                 body = .SentTab_NoTabArrivingNotification_body
             #endif
-            SentryIntegration.shared.send(message: "SentTab error: no tab")
         } else {
             let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {

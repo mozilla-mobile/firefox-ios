@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import UIKit
 import Shared
 
@@ -32,7 +33,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     // MARK: Variables
-    var delegate: TabLocationViewDelegate?
+    weak var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
     var contentView: UIStackView!
@@ -252,7 +253,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     private func updateTextWithURL() {
-        if let host = url?.host, AppConstants.MOZ_PUNYCODE {
+        if let host = url?.host, AppConstants.punyCode {
             urlTextField.text = url?.absoluteString.replacingOccurrences(of: host, with: host.asciiHostToUTF8())
         } else {
             urlTextField.text = url?.absoluteString
@@ -331,11 +332,11 @@ extension TabLocationView: AccessibilityActionsSource {
 
 extension TabLocationView: NotificationThemeable {
     func applyTheme() {
-        urlTextField.textColor = UIColor.theme.textField.textAndTint
+        urlTextField.textColor = UIColor.legacyTheme.textField.textAndTint
         readerModeButton.applyTheme()
         trackingProtectionButton.applyTheme()
 
-        let color = LegacyThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
+        let color = LegacyThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.legacyTheme.textField.background
         menuBadge.badge.tintBackground(color: color)
     }
 }
@@ -346,27 +347,31 @@ extension TabLocationView: TabEventHandler {
     }
 
     private func updateBlockerStatus(forTab tab: Tab) {
-        assertIsMainThread("UI changes must be on the main thread")
         guard let blocker = tab.contentBlocker else { return }
-        trackingProtectionButton.alpha = 1.0
 
-        var lockImage: UIImage?
-        // TODO: FXIOS-5101 Use theme.type.getThemedImageName()
-        let imageID = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
-        if !(tab.webView?.hasOnlySecureContent ?? false) {
-            lockImage = UIImage(imageLiteralResourceName: imageID)
-        } else if let tintColor = trackingProtectionButton.tintColor {
-            lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed)
-                .withTintColor(tintColor, renderingMode: .alwaysTemplate)
-        }
+        ensureMainThread { [self] in
+            trackingProtectionButton.alpha = 1.0
 
-        switch blocker.status {
-        case .blocking, .noBlockedURLs:
-            trackingProtectionButton.setImage(lockImage, for: .normal)
-        case .safelisted:
-            trackingProtectionButton.setImage(lockImage?.overlayWith(image: UIImage(imageLiteralResourceName: "MarkAsRead")), for: .normal)
-        case .disabled:
-            trackingProtectionButton.setImage(lockImage, for: .normal)
+            var lockImage: UIImage?
+            // TODO: FXIOS-5101 Use theme.type.getThemedImageName()
+            let imageID = LegacyThemeManager.instance.currentName == .dark ? "lock_blocked_dark" : "lock_blocked"
+            if !(tab.webView?.hasOnlySecureContent ?? false) {
+                lockImage = UIImage(imageLiteralResourceName: imageID)
+            } else if let tintColor = trackingProtectionButton.tintColor {
+                lockImage = UIImage(imageLiteralResourceName: ImageIdentifiers.lockVerifed)
+                    .withTintColor(tintColor, renderingMode: .alwaysTemplate)
+            }
+
+            switch blocker.status {
+            case .blocking, .noBlockedURLs:
+                trackingProtectionButton.setImage(lockImage, for: .normal)
+            case .safelisted:
+                if let smallDotImage = UIImage(systemName: "circle.fill")?.withTintColor(UIColor.Photon.Blue40) {
+                    trackingProtectionButton.setImage(lockImage?.overlayWith(image: smallDotImage), for: .normal)
+                }
+            case .disabled:
+                trackingProtectionButton.setImage(lockImage, for: .normal)
+            }
         }
     }
 

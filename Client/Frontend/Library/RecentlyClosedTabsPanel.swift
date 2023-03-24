@@ -39,7 +39,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = UIColor.theme.tableView.headerBackground
+        view.backgroundColor = UIColor.legacyTheme.tableView.headerBackground
 
         tableViewController.libraryPanelDelegate = libraryPanelDelegate
         tableViewController.recentlyClosedTabsDelegate = recentlyClosedTabsDelegate
@@ -61,9 +61,9 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        /// BVC is assigned as `RecentlyClosedTabsPanel` delegate, to support opening tabs from within it.
-        /// Previously, BVC was assigned it on panel creation via a foregroundBVC call. But it can be done this way, to
-        /// avoid that call. `sceneForVC` will use the focused, active and foregrounded scene's BVC.
+        // BVC is assigned as `RecentlyClosedTabsPanel` delegate, to support opening tabs from within it.
+        // Previously, BVC was assigned it on panel creation via a foregroundBVC call. But it can be done this way, to
+        // avoid that call. `sceneForVC` will use the focused, active and foregrounded scene's BVC.
         guard recentlyClosedTabsDelegate != nil else {
             recentlyClosedTabsDelegate = sceneForVC?.browserViewController
 

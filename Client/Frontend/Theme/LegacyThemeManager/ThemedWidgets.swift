@@ -67,7 +67,7 @@ class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
 
 class ThemedTableViewController: UITableViewController, Themeable {
     var themeManager: ThemeManager
-    var notificationCenter: NotificationProtocol
+    @objc var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
 
     required init?(coder aDecoder: NSCoder) {
@@ -89,7 +89,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
-        listenForThemeChange()
+        listenForThemeChange(view)
     }
 
     func applyTheme() {

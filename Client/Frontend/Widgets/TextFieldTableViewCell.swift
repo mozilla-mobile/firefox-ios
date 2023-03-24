@@ -69,9 +69,9 @@ class TextFieldTableViewCell: UITableViewCell, NotificationThemeable {
     }
 
     func applyTheme() {
-        backgroundColor = UIColor.theme.tableView.rowBackground
+        backgroundColor = UIColor.legacyTheme.tableView.rowBackground
         titleLabel.textColor = TextFieldTableViewCellUX.TitleLabelTextColor
-        textField.textColor = UIColor.theme.tableView.rowText
+        textField.textColor = UIColor.legacyTheme.tableView.rowText
     }
 }
 

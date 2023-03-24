@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Logger
 import Storage
 import Shared
 import SiteImageView
@@ -85,7 +84,7 @@ class SearchGroupedItemsViewController: UIViewController {
     // MARK: - Misc. helpers
 
     private func setupLayout() {
-        /// This View needs to be configured a certain way based on who's presenting it.
+        // This View needs to be configured a certain way based on who's presenting it.
         switch viewModel.presenter {
         case .recentlyVisited:
             title = viewModel.asGroup.displayTitle
@@ -203,9 +202,9 @@ extension SearchGroupedItemsViewController: NotificationThemeable {
     func applyTheme() {
         let theme = BuiltinThemeName(rawValue: LegacyThemeManager.instance.current.name) ?? .normal
         if theme == .dark {
-            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+            tableView.backgroundColor = UIColor.legacyTheme.homePanel.panelBackground
         } else {
-            tableView.backgroundColor = UIColor.theme.homePanel.panelBackground
+            tableView.backgroundColor = UIColor.legacyTheme.homePanel.panelBackground
         }
 
         view.backgroundColor = .systemBackground

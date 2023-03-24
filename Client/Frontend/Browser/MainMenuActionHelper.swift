@@ -23,6 +23,7 @@ protocol ToolBarActionMenuDelegate: AnyObject {
     func showMenuPresenter(url: URL, tab: Tab, view: UIView)
     func showFindInPage()
     func showCustomizeHomePage()
+    func showZoomPage(tab: Tab)
 }
 
 enum MenuButtonToastAction {
@@ -216,6 +217,11 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         var section = [PhotonRowActions]()
 
         if !isHomePage && !isFileURL {
+            if featureFlags.isFeatureEnabled(.zoomFeature, checking: .buildOnly) {
+                let zoomSection = getZoomSection()
+                append(to: &section, action: zoomSection)
+            }
+
             let findInPageAction = getFindInPageAction()
             append(to: &section, action: findInPageAction)
 
@@ -535,8 +541,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         whatsNewAction = SingleActionViewModel(title: .AppMenu.WhatsNewString,
                                                iconString: ImageIdentifiers.whatsNew,
                                                isEnabled: showBadgeForWhatsNew) { _ in
-            if let whatsNewTopic = AppInfo.whatsNewTopic,
-                let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
+            if let whatsNewURL = SupportUtils.URLForWhatsNew {
                 TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.delegate?.openURLInNewTab(whatsNewURL, isPrivate: false)
             }
@@ -568,19 +573,24 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-            if let temporaryDocument = tab.temporaryDocument {
-                temporaryDocument.getURL().uponQueue(.main, block: { tempDocURL in
+
+            guard let temporaryDocument = tab.temporaryDocument else {
+                self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
+                return
+            }
+
+            temporaryDocument.getURL { tempDocURL in
+                DispatchQueue.main.async {
                     // If we successfully got a temp file URL, share it like a downloaded file,
                     // otherwise present the ordinary share menu for the web URL.
-                    if tempDocURL.isFileURL,
-                        let presentableVC = self.menuActionDelegate as? PresentableVC {
+                    if let tempDocURL = tempDocURL,
+                       tempDocURL.isFileURL,
+                       let presentableVC = self.menuActionDelegate as? PresentableVC {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView, presentableVC: presentableVC)
                     } else {
                         self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
                     }
-                })
-            } else {
-                self.delegate?.showMenuPresenter(url: url, tab: tab, view: self.buttonView)
+                }
             }
         }.items
     }
@@ -588,9 +598,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     // Main menu option Share page with when opening a file
     private func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
         let helper = ShareExtensionHelper(url: fileURL, tab: selectedTab)
-        let controller = helper.createActivityViewController { completed, activityType in
-            print("Shared downloaded file: \(completed)")
-        }
+        let controller = helper.createActivityViewController { _, _ in }
 
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = buttonView
@@ -747,6 +755,21 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }
     }
 
+    // MARK: Zoom
+
+    private func getZoomSection() -> [PhotonRowActions] {
+        var section = [PhotonRowActions]()
+        guard let tab = selectedTab else { return section }
+        let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
+        let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
+        let zoomAction = SingleActionViewModel(title: title) { _ in
+            self.delegate?.showZoomPage(tab: tab)
+        }
+
+        section.append(PhotonRowActions([zoomAction]))
+        return section
+    }
+
     // MARK: Password
 
     typealias NavigationHandlerType = (_ url: URL?) -> Void
@@ -798,17 +821,19 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     private func showLoginListVC(navigationHandler: @escaping NavigationHandlerType, navigationController: UINavigationController) {
         guard let menuActionDelegate = menuActionDelegate else { return }
-        LoginListViewController.create(authenticateInNavigationController: navigationController,
-                                       profile: self.profile,
-                                       settingsDelegate: menuActionDelegate,
-                                       webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-            self.presentLoginList(loginsVC)
+        LoginListViewController.create(
+            didShowFromAppMenu: true,
+            authenticateInNavigationController: navigationController,
+            profile: self.profile,
+            settingsDelegate: menuActionDelegate,
+            webpageNavigationHandler: navigationHandler
+        ) { [weak self] loginsVC in
+            self?.presentLoginList(loginsVC)
         }
     }
 
     private func presentLoginList(_ loginsVC: LoginListViewController?) {
         guard let loginsVC = loginsVC else { return }
-        loginsVC.shownFromAppMenu = true
         let navController = ThemedNavigationController(rootViewController: loginsVC)
         delegate?.showViewController(viewController: navController)
 

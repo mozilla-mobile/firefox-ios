@@ -343,8 +343,8 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "移除";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "%d 个网站";
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "页数：%d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "设置";
@@ -596,7 +596,7 @@
 "LibraryPanel.History.ClearGroupedTabsDelete.v100" = "删除";
 
 /* Within the History Panel, users can delete search group sites history. %@ represents the search group name. */
-"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "要删除 %@ 中的所有网站？";
+"LibraryPanel.History.ClearGroupedTabsTitle.v100" = "要删除 %@ 中的所有网站吗？";
 
 /* Within the History Panel, users can open an action menu to clear recent history. */
 "LibraryPanel.History.ClearHistoryMenuTitle.v100" = "删除历史记录（包含同步自其他设备的记录）、Cookie 和其他浏览数据。";
@@ -934,9 +934,6 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "限定版壁纸";
 
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "探索更多壁纸";
-
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "选择合您心意的壁纸。";
 
@@ -962,7 +959,7 @@
 "Oops! Firefox crashed" = "啊哦！Firefox 崩溃了";
 
 /* See http://mzl.la/1LXbDOL */
-"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "当书本图标出现在标题栏时，轻按它即可在阅读模式下阅读文章。";
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "当书本图标出现在标题栏时，轻点它即可在阅读模式下阅读文章。";
 
 /* See http://mzl.la/1G7uHo7 */
 "Open Settings" = "打开设置";
@@ -1058,13 +1055,13 @@
 "Sans-serif" = "无衬线";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "在阅读模式下轻按书本与加号图标，可将页面保存到您的阅读列表。";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "在阅读模式下轻点书本与加号图标，可将页面保存到您的阅读列表。";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "确定";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "将 QR 码置入框内以扫描";
+"ScanQRCode.Instructions.Label" = "将二维码置入框内以扫描";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "数据无效";
@@ -1073,7 +1070,7 @@
 "ScanQRCode.PermissionError.Message.v100" = "请到设备的“设置”>“Firefox”，允许 Firefox 访问相机。";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "扫描 QR 码";
+"ScanQRCode.View.Title" = "扫描二维码";
 
 /* Open search section of settings */
 "Search" = "搜索";
@@ -1184,7 +1181,7 @@
 "SentTab_TabArrivingNotification_WithDevice_title" = "%@ 收到新的标签页";
 
 /* Body of notification received after a spurious message from FxA has been received. */
-"SentTab.NoTabArrivingNotification.body" = "点按以开始";
+"SentTab.NoTabArrivingNotification.body" = "轻点以开始";
 
 /* Title of notification received after a spurious message from FxA has been received. */
 "SentTab.NoTabArrivingNotification.title" = "Firefox 同步";
@@ -1223,7 +1220,7 @@
 "Settings.AddCustomEngine.URLPlaceholder" = "网址（请用 %s 替换查询内容）";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "自动填充信用卡";
+"Settings.AutofillCreditCard.Title.v112" = "自动填充信用卡";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "清除所有网站数据";
@@ -1406,7 +1403,7 @@
 "Settings.Home.Option.Wallpaper.LimitedEdition.Title.v106" = "限定版";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the string titling the switch button's function, which allows a user to toggle wallpaper switching from the homepage logo on or off. */
-"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "点按 Firefox 主页徽标以更换壁纸";
+"Settings.Home.Option.Wallpaper.SwitchTitle.v99" = "轻点 Firefox 主页徽标以更换壁纸";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of that screen, which allows users to change the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper.Title" = "壁纸";
@@ -1455,6 +1452,9 @@
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "空白页";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "自定义";
 
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Firefox 主页";
@@ -1583,7 +1583,7 @@
 "Settings.TrackingProtection.Alert.Button" = "好，知道了";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请点按地址栏中的“盾牌”，关闭该网站的增强型跟踪保护。";
+"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "注意！";
@@ -1598,7 +1598,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "减少定向广告，并阻止广告商跟踪您的浏览。";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请点按地址栏中的“盾牌”，关闭该网站的增强型跟踪保护。";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "允许部分广告跟踪行为，同时让网站功能保持正常。";
@@ -1614,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "标准（默认）";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "标准";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "严格";

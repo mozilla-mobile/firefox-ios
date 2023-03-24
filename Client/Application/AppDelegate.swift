@@ -7,10 +7,9 @@ import Storage
 import CoreSpotlight
 import UIKit
 import Common
-import Logger
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let logger = DefaultLogger.shared
+    let logger = DefaultLogger.shared
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
@@ -18,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         localName: "profile",
         syncDelegate: UIApplication.shared.syncDelegate
     )
-    lazy var tabManager: TabManager = TabManager(
+    lazy var tabManager: TabManager = LegacyTabManager(
         profile: profile,
         imageStore: DiskImageStore(
             files: profile.files,
@@ -37,17 +36,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
 
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
+
     func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        // It's important this is the first thing that happens when the app is run
-        DependencyHelper().bootstrapDependencies()
+        // Configure app information for BrowserKit, needed for logger
+        BrowserKitInformation.shared.configure(buildChannel: AppConstants.buildChannel,
+                                               nightlyAppVersion: AppConstants.nightlyAppVersion,
+                                               sharedContainerIdentifier: AppInfo.sharedContainerIdentifier)
 
+        // Configure logger so we can start tracking logs early
+        logger.configure(crashManager: DefaultCrashManager())
         logger.log("willFinishLaunchingWithOptions begin",
                    level: .info,
                    category: .lifecycle)
+
+        // Then setup dependency container as it's needed for everything else
+        DependencyHelper().bootstrapDependencies()
 
         appLaunchUtil = AppLaunchUtil(profile: profile)
         appLaunchUtil?.setUpPreLaunchDependencies()
@@ -78,16 +86,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appLaunchUtil?.setUpPostLaunchDependencies()
         backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
 
-        // Widgets are available on iOS 14 and up only.
-        if #available(iOS 14.0, *) {
-            let topSitesProvider = TopSitesProviderImplementation(
-                placesFetcher: profile.places,
-                pinnedSiteFetcher: profile.pinnedSites,
-                prefs: profile.prefs
-            )
+        let topSitesProvider = TopSitesProviderImplementation(
+            placesFetcher: profile.places,
+            pinnedSiteFetcher: profile.pinnedSites,
+            prefs: profile.prefs
+        )
 
-            widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
-        }
+        widgetManager = TopSitesWidgetManager(topSitesProvider: topSitesProvider)
 
         addObservers()
 
@@ -126,6 +131,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
             self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
+        }
+
+        // Schedule and update engagement notifications if necessary every time the app becomes active
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.engagementNotificationHelper.schedule()
         }
 
         logger.log("applicationDidBecomeActive end",
@@ -171,12 +181,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profile.shutdown()
     }
 
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        logger.log("Received memory warning", level: .info, category: .lifecycle)
+    }
+
     private func updateTopSitesWidget() {
         // Since we only need the topSites data in the archiver, let's write it
-        // only if iOS 14 is available.
-        if #available(iOS 14.0, *) {
-            widgetManager?.writeWidgetKitTopSites()
-        }
+        widgetManager?.writeWidgetKitTopSites()
     }
 }
 
@@ -187,7 +198,7 @@ extension AppDelegate: Notifiable {
                                                           UIApplication.didEnterBackgroundNotification])
     }
 
-    /// When migrated to Scenes, these methods aren't called. Consider this a tempoary solution to calling into those methods.
+    /// When migrated to Scenes, these methods aren't called. Consider this a temporary solution to calling into those methods.
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.didBecomeActiveNotification:

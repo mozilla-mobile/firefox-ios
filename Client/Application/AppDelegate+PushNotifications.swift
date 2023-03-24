@@ -92,8 +92,19 @@ extension AppDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     // Called when the user taps on a sent-tab notification from the background.
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        openURLsInNewTabs(response.notification)
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        switch response.notification.request.identifier {
+        case EngagementNotificationHelper.Constant.notificationId:
+            let object = OpenTabNotificationObject(type: .openNewTab)
+            NotificationCenter.default.post(name: .OpenTabNotification, object: object)
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .engagementNotification)
+        default:
+            openURLsInNewTabs(response.notification)
+        }
     }
 
     // Called when the user receives a tab (or any other notification) while in foreground.
@@ -106,11 +117,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             profile.removeAccount()
 
             // show the notification
-            if #available(iOS 14, *) {
-                completionHandler([.list, .banner, .sound])
-            } else {
-                completionHandler([.alert, .sound])
-            }
+            completionHandler([.list, .banner, .sound])
         } else {
             openURLsInNewTabs(notification)
         }
@@ -118,12 +125,20 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 
 extension AppDelegate {
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken)
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        var notificationAllowed = true
+        if FeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
+            notificationAllowed = profile.prefs.boolForKey(PrefsKeys.Notifications.SyncNotifications) ?? true
+        }
+
+        RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken,
+                                                                 notificationAllowed: notificationAllowed)
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("failed to register. \(error)")
-        SentryIntegration.shared.send(message: "Failed to register for APNS")
+        logger.log("Failed to register for APNS",
+                   level: .info,
+                   category: .setup)
     }
 }

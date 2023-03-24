@@ -14,13 +14,16 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case contextualHintForJumpBackInSyncedTab
     case contextualHintForToolbar
     case creditCardAutofillStatus
+    case engagementNotificationStatus
     case historyHighlights
     case historyGroups
     case inactiveTabs
     case jumpBackIn
     case jumpBackInSyncedTab
+    case notificationSettings
     case onboardingUpgrade
     case onboardingFreshInstall
+    case onboardingNotificationCard
     case pocket
     case pullToRefresh
     case recentlySaved
@@ -37,13 +40,15 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case wallpapers
     case wallpaperOnboardingSheet
     case wallpaperVersion
+    case zoomFeature
 }
 
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
-    case startAtHome
+    case onboardingNotificationCard
     case searchBarPosition
+    case startAtHome
     case wallpaperVersion
 }
 
@@ -89,16 +94,20 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .contextualHintForJumpBackInSyncedTab,
                 .contextualHintForToolbar,
                 .creditCardAutofillStatus,
+                .engagementNotificationStatus,
                 .jumpBackInSyncedTab,
+                .notificationSettings,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
+                .onboardingNotificationCard,
                 .reportSiteIssue,
                 .searchHighlights,
                 .shakeToRestore,
                 .shareSheetChanges,
                 .shareToolbarChanges,
                 .wallpaperOnboardingSheet,
-                .wallpaperVersion:
+                .wallpaperVersion,
+                .zoomFeature:
             return nil
         }
     }
@@ -152,6 +161,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
+
+        case .onboardingNotificationCard:
+            return nimbusLayer.checkNimbusConfigForOnboardingNotificationCard().rawValue
 
         case .startAtHome:
             return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue

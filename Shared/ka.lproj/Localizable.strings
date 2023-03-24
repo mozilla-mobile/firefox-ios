@@ -343,9 +343,6 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "მოცილება";
 
-/* Label showing how many sites there is in a search group. %d represents a number */
-"FirefoxHomepage.Common.SitesCount.v101" = "საიტები: %d";
-
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "პარამეტრები";
 
@@ -934,9 +931,6 @@
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.LimitedEdition.v106" = "ფონი „შეზღუდული რაოდენობით“";
 
-/* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can set a wallpaper. */
-"Onboarding.Wallpaper.Action.v106" = "სხვა გაფორმების მოძიება";
-
 /* Description for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that they can choose different wallpapers. */
 "Onboarding.Wallpaper.Description.v106" = "აირჩიეთ ფონი, რომელიც შთაგაგონებთ.";
 
@@ -1221,9 +1215,6 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "მისამართი (%s აღნიშნავს საძიებო ტექსტს)";
-
-/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
-"Settings.AutofillCreditCard.Title.v110" = "საკრედიტო ბარათის ველების თვითშევსება";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "საიტების ყველა მონაცემის წაშლა";
@@ -1582,9 +1573,6 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "კარგი, გასაგებია";
 
-/* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად აღნიშნულ გვერდზე.";
-
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ყურადღება!";
 
@@ -1596,9 +1584,6 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ამცირებს მიზნობრივ რეკლამებს და გეხმარებათ აირიდოთ სარეკლამოებისგან თვალის დევნება.";
-
-/* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "თუ საიტი არ მუშაობს სათანადოდ, შეეხეთ ფარის ნიშანს მისამართების ველში, თვალთვალისგან გაძლიერებული დაცვის გამოსართავად აღნიშნულ გვერდზე.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "საიტის სათანადო მუშაობისთვის, ზოგიერთი მეთვალყურე ნებადართულია.";

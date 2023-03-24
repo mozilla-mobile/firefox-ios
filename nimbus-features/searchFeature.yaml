@@ -1,0 +1,74 @@
+features:
+  search:
+    description: >
+      Configuring the functionality to do with search.
+      This will be separated into smaller sub-features in later releases.
+    variables:
+      awesome-bar:
+        type: AwesomeBar
+        description: Configuring the awesome bar.
+        default: {}
+    defaults:
+      - value:
+          awesome-bar:
+            use-page-content: false
+            search-highlights: false
+            position:
+              is-position-feature-enabled: true
+              is-bottom: true
+      - channel: developer
+        value:
+          awesome-bar:
+            search-highlights: false
+            position:
+              is-position-feature-enabled: true
+              is-bottom: false
+      - channel: beta
+        value:
+          awesome-bar:
+            search-highlights: false
+            position:
+              is-position-feature-enabled: true
+              is-bottom: false
+
+objects:
+    AwesomeBar:
+      description: A configuration option for the awesome bar. Part of the `search` feature.
+      fields:
+        min-search-term:
+          description: The minimum number of characters that the user types before searching in the page.
+          type: Int
+          default: 3
+        use-page-content:
+          description: Search in the open tab's text content when typing.
+          type: Boolean
+          default: false
+        search-highlights:
+          description: "Whether or not search highlights are enabled"
+          type: Boolean
+          default: false
+        position:
+          description: >
+            This property defines whether or not the feature is
+            enabled, and the position of the search bar
+          type: SearchBarPositionFeature
+          default:
+            is-position-feature-enabled: true
+            is-bottom: true
+            is-toolbar-cfr-on: true
+
+    SearchBarPositionFeature:
+      description: "The configuration for the bottom search bar on the homescreen"
+      fields:
+        is-position-feature-enabled:
+          type: Boolean
+          description: Whether or not the feature is enabled
+          default: true
+        is-bottom:
+          type: Boolean
+          description: Whether or not the default position is at the bottom
+          default: true
+        is-toolbar-cfr-on:
+          type: Boolean
+          description: Whether or not the toolbar CFR shows. This is a temporary hack for Nimbus
+          default: true

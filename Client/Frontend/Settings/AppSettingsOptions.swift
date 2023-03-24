@@ -2,12 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
+import Common
 import Foundation
 import Shared
 import Account
 import LocalAuthentication
 import Glean
-import Logger
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -378,13 +378,10 @@ class AccountStatusSetting: WithAccountSetting {
                   let actionIconUrl = URL(string: str)
             else { return }
 
-            DefaultImageLoadingHandler.shared.getImageFromCacheOrDownload(
-                with: actionIconUrl,
-                limit: ImageLoadingConstants.NoLimitImageSize
-            ) { image, error in
-                guard error == nil, let image = image else { return }
+            GeneralizedImageFetcher().getImageFor(url: actionIconUrl) { image in
+                guard let avatar = image else { return }
 
-                imageView.image = image.createScaled(CGSize(width: 30, height: 30))
+                imageView.image = avatar.createScaled(CGSize(width: 30, height: 30))
                     .withRenderingMode(.alwaysOriginal)
             }
         }
@@ -429,9 +426,7 @@ class DeleteExportedDataSetting: HiddenSetting {
                     try fileManager.removeItemInDirectory(documentsPath, named: file)
                 }
             }
-        } catch {
-            print("Couldn't delete exported data: \(error).")
-        }
+        } catch {}
     }
 }
 
@@ -447,9 +442,7 @@ class ExportBrowserDataSetting: HiddenSetting {
             try self.settings.profile.files.copyMatching(fromRelativeDirectory: "", toAbsoluteDirectory: documentsPath) { file in
                 return file.hasPrefix("browser.") || file.hasPrefix("logins.") || file.hasPrefix("metadata.")
             }
-        } catch {
-            print("Couldn't export browser data: \(error).")
-        }
+        } catch {}
     }
 }
 
@@ -497,7 +490,7 @@ class ForceCrashSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        SentryIntegration.shared.crash()
+        fatalError("Force crash")
     }
 }
 
@@ -507,10 +500,10 @@ class ChangeToChinaSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if UserDefaults.standard.bool(forKey: debugPrefIsChinaEdition) {
-            UserDefaults.standard.removeObject(forKey: debugPrefIsChinaEdition)
+        if UserDefaults.standard.bool(forKey: AppInfo.debugPrefIsChinaEdition) {
+            UserDefaults.standard.removeObject(forKey: AppInfo.debugPrefIsChinaEdition)
         } else {
-            UserDefaults.standard.set(true, forKey: debugPrefIsChinaEdition)
+            UserDefaults.standard.set(true, forKey: AppInfo.debugPrefIsChinaEdition)
         }
     }
 }
@@ -769,32 +762,6 @@ class YourRightsSetting: Setting {
     }
 }
 
-// Opens the on-boarding screen again
-class ShowIntroductionSetting: Setting {
-    let profile: Profile
-
-    override var accessibilityIdentifier: String? { return "ShowTour" }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: .AppSettingsShowTour, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.dismiss(animated: true, completion: {
-            // TODO: Temporary.
-            // This instance of foregroundBVC is going to be revisited after having enough telemetry of ShowTour.
-            BrowserViewController.foregroundBVC()?.presentIntroViewController(true)
-
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .tap,
-                object: .settingsMenuShowTour
-            )
-        })
-    }
-}
-
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .AppSettingsSendFeedback, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
@@ -818,7 +785,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 
         super.init(
             prefs: prefs,
-            prefKey: AppConstants.PrefSendUsageData,
+            prefKey: AppConstants.prefSendUsageData,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
             attributedStatusText: statusText,
@@ -830,7 +797,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
         )
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
+        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
     }
 
     override var accessibilityIdentifier: String? { return "SendAnonymousUsageData" }
@@ -853,7 +820,7 @@ class StudiesToggleSetting: BoolSetting {
 
         super.init(
             prefs: prefs,
-            prefKey: AppConstants.PrefStudiesToggle,
+            prefKey: AppConstants.prefStudiesToggle,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .SettingsStudiesToggleTitle),
             attributedStatusText: statusText,
@@ -863,7 +830,7 @@ class StudiesToggleSetting: BoolSetting {
         )
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.PrefStudiesToggle) ?? true)
+        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true)
     }
 
     override var accessibilityIdentifier: String? { return "StudiesToggle" }
@@ -901,7 +868,7 @@ class SearchSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine.shortName) }
+    override var status: NSAttributedString { return NSAttributedString(string: profile.searchEngines.defaultEngine?.shortName ?? "") }
 
     override var accessibilityIdentifier: String? { return "Search" }
 
@@ -911,9 +878,8 @@ class SearchSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = SearchSettingsTableViewController()
-        viewController.model = profile.searchEngines
-        viewController.profile = profile
+        let viewController = SearchSettingsTableViewController(profile: profile)
+
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -969,16 +935,18 @@ class LoginsSetting: Setting {
 
                 loginOnboardingViewController.proceedHandler = {
                     LoginListViewController.create(
+                        didShowFromAppMenu: false,
                         authenticateInNavigationController: navController,
                         profile: self.profile,
-                        webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                            guard let loginsVC = loginsVC else { return }
-                            navController.pushViewController(loginsVC, animated: true)
-                            // Remove the onboarding from the navigation stack so that we go straight back to settings
-                            navController.viewControllers.removeAll { viewController in
-                                viewController == loginOnboardingViewController
-                            }
+                        webpageNavigationHandler: navigationHandler
+                    ) { loginsVC in
+                        guard let loginsVC = loginsVC else { return }
+                        navController.pushViewController(loginsVC, animated: true)
+                        // Remove the onboarding from the navigation stack so that we go straight back to settings
+                        navController.viewControllers.removeAll { viewController in
+                            viewController == loginOnboardingViewController
                         }
+                    }
                 }
 
                 navigationController?.pushViewController(loginOnboardingViewController, animated: true)
@@ -986,12 +954,14 @@ class LoginsSetting: Setting {
                 LoginOnboarding.setShown()
             } else {
                 LoginListViewController.create(
+                    didShowFromAppMenu: false,
                     authenticateInNavigationController: navController,
                     profile: profile,
-                    webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
-                        guard let loginsVC = loginsVC else { return }
-                        navController.pushViewController(loginsVC, animated: true)
-                    }
+                    webpageNavigationHandler: navigationHandler
+                ) { loginsVC in
+                    guard let loginsVC = loginsVC else { return }
+                    navController.pushViewController(loginsVC, animated: true)
+                }
             }
         } else {
             let viewController = DevicePasscodeRequiredViewController()
@@ -1007,6 +977,22 @@ class ContentBlockerSetting: Setting {
     var tabManager: TabManager!
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
     override var accessibilityIdentifier: String? { return "TrackingProtection" }
+
+    override var status: NSAttributedString? {
+        let isOn = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
+
+        if isOn {
+            let currentBlockingStrength = profile
+                .prefs
+                .stringForKey(ContentBlockingConfig.Prefs.StrengthKey)
+                .flatMap(BlockingStrength.init(rawValue:)) ?? .basic
+            return NSAttributedString(string: currentBlockingStrength.settingStatus)
+        } else {
+            return NSAttributedString(string: .Settings.Homepage.Shortcuts.ToggleOff)
+        }
+    }
+
+    override var style: UITableViewCell.CellStyle { return .value1 }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -1207,6 +1193,25 @@ class TabsSetting: Setting {
     }
 }
 
+class NotificationsSetting: Setting {
+    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+
+    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Setting.notifications }
+
+    let profile: Profile
+
+    init(theme: Theme, profile: Profile) {
+        self.profile = profile
+        super.init(title: NSAttributedString(string: .Settings.Notifications.Title,
+                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = NotificationsSettingsViewController(prefs: profile.prefs, hasAccount: profile.hasAccount())
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 class SiriPageSetting: Setting {
     let profile: Profile
 
@@ -1275,7 +1280,7 @@ class OpenWithSetting: Setting {
     override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
 
     override var status: NSAttributedString {
-        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), provider != "mailto:" else {
+        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption) else {
             return NSAttributedString(string: "")
         }
         if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {

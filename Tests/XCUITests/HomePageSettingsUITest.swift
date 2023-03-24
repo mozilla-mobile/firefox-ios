@@ -8,6 +8,8 @@ let websiteUrl1 = "www.mozilla.org"
 let websiteUrl2 = "developer.mozilla.org"
 let invalidUrl = "1-2-3"
 let exampleUrl = "test-example.html"
+let urlExampleLabel = "Example Domain"
+let urlMozillaLabel = "Internet for people, not profit — Mozilla"
 
 class HomePageSettingsUITests: BaseTestCase {
     private func enterWebPageAsHomepage(text: String) {
@@ -183,7 +185,7 @@ class HomePageSettingsUITests: BaseTestCase {
         enterWebPageAsHomepage(text: websiteUrl1)
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Homepage")
+        XCTAssertEqual(app.tables.cells["Home"].label, "Homepage, Custom")
         // Switch to FXHome and check label
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.nowAt(HomeSettings)
@@ -218,6 +220,76 @@ class HomePageSettingsUITests: BaseTestCase {
 //        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
 //        // Tab tray is open with recently open tab
 //        waitForExistence(app.cells.staticTexts["Example Domain"], timeout: 3)
+    }
+
+    func testRecentlySaved() {
+        // Preconditons: Create 6 bookmarks & add 1 items to reading list
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        bookmarkPages()
+        addContentToReaderView()
+        navigator.performAction(Action.GoToHomePage)
+        waitForTabsButton()
+        checkRecentlySaved()
+        navigator.performAction(Action.ToggleRecentlySaved)
+        navigator.performAction(Action.GoToHomePage)
+        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.recentlySaved].exists)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        navigator.nowAt(NewTabScreen)
+        navigator.performAction(Action.ToggleRecentlySaved)
+        navigator.nowAt(HomeSettings)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        checkRecentlySaved()
+        navigator.performAction(Action.CloseURLBarOpen)
+        app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts[urlExampleLabel].tap()
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        unbookmark()
+        if !iPad() {
+            navigator.performAction(Action.CloseTab)
+        }
+        removeContentFromReaderView()
+        navigator.nowAt(LibraryPanel_ReadingList)
+        navigator.performAction(Action.CloseReadingListPanel)
+        navigator.goto(NewTabScreen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        checkRecentlySavedUpdated()
+    }
+
+    func testRecentlyVisited() {
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+        navigator.openURL(websiteUrl1)
+        waitUntilPageLoad()
+        navigator.performAction(Action.GoToHomePage)
+        waitForExistence(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel])
+        navigator.goto(HomeSettings)
+        navigator.performAction(Action.ToggleRecentlyVisited)
+        navigator.performAction(Action.GoToHomePage)
+        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel].exists)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(HomeSettings)
+        navigator.performAction(Action.ToggleRecentlyVisited)
+        navigator.nowAt(HomeSettings)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        XCTAssert(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts[urlMozillaLabel].exists)
+
+//        Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/11271
+//        navigator.openURL("mozilla ")
+//        navigator.openURL(websiteUrl2)
+//        navigator.performAction(Action.GoToHomePage)
+//        XCTAssert(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].exists)
+//        app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].staticTexts["Mozilla , Pages: 2"].press(forDuration: 1.5)
+//        selectOptionFromContextMenu(option: "Remove")
+//        XCTAssertFalse(app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.HistoryHighlights.itemCell].staticTexts["Mozilla , Pages: 2"].exists)
     }
 
     func testCustomizeHomepage() {
