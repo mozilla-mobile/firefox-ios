@@ -2306,9 +2306,9 @@ extension String {
 // MARK: - Tabs Delete All Undo Toast
 extension String {
     public static let TabsDeleteAllUndoTitle = MZLocalizedString(
-        "Tabs.DeleteAllUndo.Title",
+        "Tabs.DeleteAllUndo.Title.v113",
         tableName: nil,
-        value: "%d tab(s) closed",
+        value: "%d Tab(s) Closed",
         comment: "The label indicating that all the tabs were closed")
     public static let TabsDeleteAllUndoAction = MZLocalizedString(
         "Tabs.DeleteAllUndo.Button",
