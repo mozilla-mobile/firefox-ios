@@ -39,10 +39,11 @@ for lang in $LOCALES; do
     echo "$(date) Snapshotting $lang"
     mkdir "l10n-screenshots/$lang"
     fastlane snapshot --project Client.xcodeproj --scheme L10nSnapshotTests \
+        --number_of_retries 0 \
         --skip_open_summary \
         --xcargs "-maximum-parallel-testing-workers 2" \
         --derived_data_path l10n-screenshots-dd \
-        --ios_version "16.0" \
+        --ios_version "16.1" \
         --erase_simulator --localize_simulator \
         --devices "iPhone 14" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
