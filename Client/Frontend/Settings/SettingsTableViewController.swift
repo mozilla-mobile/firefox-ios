@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Account
+import Common
 import Shared
 import UIKit
 
@@ -244,6 +245,25 @@ class BoolSetting: Setting, FeatureFlaggable {
             settingDidChange: settingDidChange)
     }
 
+        init(
+            title: String,
+            description: String? = nil,
+            prefs: Prefs?,
+            prefKey: String? = nil,
+            defaultValue: Bool = false,
+            featureFlagName: NimbusFeatureFlagID? = nil,
+            enabled: Bool = true,
+            settingDidChange: @escaping (Bool) -> Void
+        ) {
+            self.statusText = description.map(NSAttributedString.init(string:))
+            self.prefs = prefs
+            self.prefKey = prefKey
+            self.defaultValue = defaultValue
+            self.featureFlagName = featureFlagName
+            self.settingDidChange = settingDidChange
+            super.init(title: NSAttributedString(string: title), enabled: enabled)
+        }
+
     convenience init(
         with featureFlagID: NimbusFeatureFlagID,
         titleText: NSAttributedString,
@@ -261,13 +281,17 @@ class BoolSetting: Setting, FeatureFlaggable {
         return statusText
     }
 
+    public lazy var control: UISwitch = {
+        let control = UISwitch()
+        control.accessibilityIdentifier = prefKey
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+        return control
+    }()
+
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
 
-        let control = UISwitch()
         control.onTintColor = theme.colors.actionPrimary
-        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.accessibilityIdentifier = prefKey
         control.isEnabled = enabled
 
         displayBool(control)
@@ -321,6 +345,34 @@ class BoolSetting: Setting, FeatureFlaggable {
         } else {
             guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
+        }
+    }
+}
+
+class BoolNotificationSetting: BoolSetting {
+    override func displayBool(_ control: UISwitch) {
+        if let featureFlagName = featureFlagName {
+            control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
+        } else {
+            guard let key = prefKey, let defaultValue = defaultValue else { return }
+
+            Task { @MainActor in
+                let isSystemNotificationOn = await isSystemNotificationOn()
+                control.isOn = (prefs?.boolForKey(key) ?? defaultValue) && isSystemNotificationOn
+            }
+        }
+    }
+
+    private func isSystemNotificationOn() async -> Bool {
+        let settings = await NotificationManager().getNotificationSettings()
+
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            return true
+        case .denied, .notDetermined:
+            fallthrough
+        @unknown default:
+            return false
         }
     }
 }
