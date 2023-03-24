@@ -40,7 +40,7 @@ struct CreditCardEditView: View {
                             .padding(.top, 1)
                     }
                     .background(textFieldBackgroundColor)
- 
+
                     Group {
                         FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
                                           textVal: $viewModel.cardNumber,
@@ -89,7 +89,7 @@ struct CreditCardEditView: View {
                                     displayMode: .inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        let isDisabled = viewModel.state.rightBarBtn == .Save && (
+                        let isDisabled = viewModel.state.rightBarBtn == .save && (
                                            !viewModel.nameIsValid ||
                                            !viewModel.numberIsValid ||
                                            viewModel.expirationDate.isEmpty)
@@ -123,9 +123,9 @@ struct CreditCardEditView: View {
         let btnState = viewModel.state.rightBarBtn
         return Button(btnState.title) {
             switch btnState {
-            case .Edit:
+            case .edit:
                 viewModel.updateState(state: .edit)
-            case.Save:
+            case.save:
                 viewModel.saveCreditCard { _, error in
                     guard error != nil else {
                         dismiss(true)
@@ -141,9 +141,9 @@ struct CreditCardEditView: View {
         let btnState = viewModel.state.leftBarBtn
         return Button(btnState.title) {
             switch btnState {
-            case .Cancel:
+            case .cancel:
                 viewModel.updateState(state: .view)
-            case.Close:
+            case.close:
                 dismiss(false)
             }
         }

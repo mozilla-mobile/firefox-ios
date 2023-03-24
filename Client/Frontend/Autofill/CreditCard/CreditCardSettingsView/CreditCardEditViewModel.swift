@@ -7,65 +7,65 @@ import SwiftUI
 import Common
 import Storage
 
+enum CreditCardLeftBarButton: String, Equatable, CaseIterable {
+    case close
+    case cancel
+
+    var title: String {
+        switch self {
+        case .cancel:
+            return .CreditCard.EditCard.CancelNavBarButtonLabel
+        case .close:
+            return .CreditCard.EditCard.CloseNavBarButtonLabel
+        }
+    }
+}
+
+enum CreditCardRightBarButton: String, Equatable, CaseIterable {
+    case save
+    case edit
+
+    var title: String {
+        switch self {
+        case .save:
+            return .CreditCard.EditCard.SaveNavBarButtonLabel
+        case .edit:
+            return .CreditCard.EditCard.EditNavBarButtonLabel
+        }
+    }
+}
+
 enum CreditCardEditState: String, Equatable, CaseIterable {
     case add
     case edit
     case view
 
-    enum leftBarButtonState: String, Equatable, CaseIterable {
-        case Close
-        case Cancel
-
-        var title: String {
-            switch self {
-            case .Cancel:
-                return String.CreditCard.EditCard.CancelNavBarButtonLabel
-            case .Close:
-                return String.CreditCard.EditCard.CloseNavBarButtonLabel
-            }
-        }
-    }
-
-    enum rightBarButtonState: String, Equatable, CaseIterable {
-        case Save
-        case Edit
-
-        var title: String {
-            switch self {
-            case .Save:
-                return String.CreditCard.EditCard.SaveNavBarButtonLabel
-            case .Edit:
-                return String.CreditCard.EditCard.EditNavBarButtonLabel
-            }
-        }
-    }
-
     var title: String {
         switch self {
         case .add:
-            return String.CreditCard.EditCard.AddCreditCardTitle
+            return .CreditCard.EditCard.AddCreditCardTitle
         case .view:
-            return String.CreditCard.EditCard.ViewCreditCardTitle
+            return .CreditCard.EditCard.ViewCreditCardTitle
         case .edit:
-            return String.CreditCard.EditCard.EditCreditCardTitle
+            return .CreditCard.EditCard.EditCreditCardTitle
         }
     }
 
-    var leftBarBtn: leftBarButtonState {
+    var leftBarBtn: CreditCardLeftBarButton {
         switch self {
         case .add, .view:
-            return .Close
+            return .close
         case .edit:
-            return .Cancel
+            return .cancel
         }
     }
 
-    var rightBarBtn: rightBarButtonState {
+    var rightBarBtn: CreditCardRightBarButton {
         switch self {
         case .add, .edit:
-            return .Save
+            return .save
         case .view:
-            return .Edit
+            return .edit
         }
     }
 }
