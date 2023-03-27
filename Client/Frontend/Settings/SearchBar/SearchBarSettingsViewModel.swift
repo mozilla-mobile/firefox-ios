@@ -60,9 +60,9 @@ final class SearchBarSettingsViewModel: FeatureFlaggable {
 
     private let prefs: Prefs
     private let notificationCenter: NotificationProtocol
-    init(prefs: Prefs, notificationProtocol: NotificationProtocol = NotificationCenter.default) {
+    init(prefs: Prefs, notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.prefs = prefs
-        self.notificationProtocol = notificationProtocol
+        self.notificationCenter = notificationCenter
     }
 
     var searchBarTitle: String {
@@ -104,10 +104,10 @@ private extension SearchBarSettingsViewModel {
         recordPreferenceChange(searchBarPosition)
 
         let notificationObject = [PrefsKeys.FeatureFlags.SearchBarPosition: searchBarPosition]
-        notificationProtocol.post(name: .SearchBarPositionDidChange, object: notificationObject)
-            }
+        notificationCenter.post(name: .SearchBarPositionDidChange, anObject: nil)
+    }
     
-
+    
     func recordPreferenceChange(_ searchBarPosition: SearchBarPosition) {
         let extras = [TelemetryWrapper.EventExtraKey.preference.rawValue: PrefsKeys.FeatureFlags.SearchBarPosition,
                       TelemetryWrapper.EventExtraKey.preferenceChanged.rawValue: searchBarPosition.rawValue]

@@ -270,7 +270,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
         viewModel.isZeroSearch = isZeroSearch
         viewModel.recordViewAppeared()
-        notificationCenter.post(name: .HistoryUpdated)
+        notificationCenter.post(name: .HistoryUpdated, anObject: nil)
     }
 
     func homepageDidAppear() {
