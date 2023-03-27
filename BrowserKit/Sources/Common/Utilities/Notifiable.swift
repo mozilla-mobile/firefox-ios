@@ -16,9 +16,15 @@ import Foundation
     func removeObserver(_ observer: Any)
 }
 
+public extension NotificationProtocol {
+    func post(name: NSNotification.Name, anObject: Any? = nil) {
+        self.post(name: name, anObject: anObject)
+    }
+}
+
 extension NotificationCenter: NotificationProtocol {
     public func post(name: NSNotification.Name, anObject: Any?) {
-             self.post(name: name, anObject: anObject)
+        self.post(name: name, anObject: anObject)
     }
 
     public func addObserver(name: NSNotification.Name?,

@@ -384,7 +384,7 @@ extension GridTabViewController {
         } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
             self.tabManager.selectTab(tab)
             self.dismissTabTray()
-            notificationCenter.post(name: .TabsTrayDidClose, anObject: nil)
+            notificationCenter.post(name: .TabsTrayDidClose)
         }
     }
 
@@ -430,7 +430,7 @@ extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
             if tab.isFxHomeTab {
-                notificationCenter.post(name: .TabsTrayDidSelectHomeTab, anObject: nil)
+                notificationCenter.post(name: .TabsTrayDidSelectHomeTab)
             }
             tabManager.selectTab(tab)
             dismissTabTray()
@@ -550,7 +550,7 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         case .removedLastTab:
             // when removing the last tab (only in normal mode) we will automatically open a new tab.
             // When that happens focus it by dismissing the tab tray
-            notificationCenter.post(name: .TabsTrayDidClose, anObject: nil)
+            notificationCenter.post(name: .TabsTrayDidClose)
             if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
@@ -576,7 +576,7 @@ extension GridTabViewController {
         case .deleteTab:
             didTapToolbarDelete(sender)
         }
-        notificationCenter.post(name: .TabDataUpdated, anObject: nil)
+        notificationCenter.post(name: .TabDataUpdated)
     }
 
     func didTapToolbarAddTab() {

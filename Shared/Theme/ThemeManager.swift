@@ -79,7 +79,7 @@ final public class DefaultThemeManager: ThemeManager, Notifiable {
         window?.overrideUserInterfaceStyle = currentTheme.type.getInterfaceStyle()
 
         mainQueue.ensureMainThread { [weak self] in
-            self?.notificationCenter.post(name: .ThemeDidChange, anObject: nil)
+            self?.notificationCenter.post(name: .ThemeDidChange)
         }
     }
 
