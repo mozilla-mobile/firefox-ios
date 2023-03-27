@@ -345,7 +345,7 @@ extension SearchSettingsTableViewController {
     }
 
     @objc func dismissAnimated() {
-        notificationCenter.post(name: .SearchSettingsChanged)
+        notificationCenter.post(name: .SearchSettingsChanged, anObject: nil)
         dismiss(animated: true, completion: nil)
     }
 

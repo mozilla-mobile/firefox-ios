@@ -544,7 +544,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        notificationCenter.post(name: .TabsTrayDidClose)
+        notificationCenter.post(name: .TabsTrayDidClose, anObject: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 }
@@ -564,7 +564,7 @@ extension TabTrayViewController {
     }
 
     @objc func didTapDone() {
-        notificationCenter.post(name: .TabsTrayDidClose)
+        notificationCenter.post(name: .TabsTrayDidClose, anObject: nil)
         // Update Private mode when closing TabTray, if the mode toggle but no tab is pressed with return to previous state
         updatePrivateUIState()
         viewModel.tabTrayView.didTogglePrivateMode(viewModel.tabManager.selectedTab?.isPrivate ?? false)

@@ -5,7 +5,7 @@
 import Foundation
 
 @objc public protocol NotificationProtocol {
-    func post(name: NSNotification.Name, object: Any?)
+    func post(name: NSNotification.Name, anObject: Any?)
     func addObserver(_ observer: Any,
                      selector aSelector: Selector,
                      name aName: NSNotification.Name?,
@@ -17,8 +17,8 @@ import Foundation
 }
 
 extension NotificationCenter: NotificationProtocol {
-    public func post(name: NSNotification.Name, object: Any?) {
-        self.post(name: name, object: object)
+    public func post(name: NSNotification.Name, anObject: Any?) {
+             self.post(name: name, anObject: anObject)
     }
 
     public func addObserver(name: NSNotification.Name?,
@@ -29,7 +29,7 @@ extension NotificationCenter: NotificationProtocol {
                          queue: queue,
                          using: block)
     }
-} 
+}
 
 @objc public protocol Notifiable {
     var notificationCenter: NotificationProtocol { get set }
