@@ -55,8 +55,7 @@ class GleanPlumbContextProvider {
 
     private var allowedTipsNotifications: Bool {
         let featureEnabled = FeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly)
-        let userPreference = (UserDefaults.standard.value(
-            forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) as? Bool) ?? true
+        let userPreference = UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
         return featureEnabled && userPreference
     }
 
