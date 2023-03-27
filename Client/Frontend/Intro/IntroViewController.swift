@@ -15,8 +15,9 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    var userDefaults: UserDefaultsInterface = UserDefaults.standard
 
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
 
     struct UX {
         static let closeButtonSize: CGFloat = 30
@@ -232,11 +233,11 @@ extension IntroViewController: OnboardingCardDelegate {
 
             DispatchQueue.main.async {
                 if granted {
-                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.SyncNotifications) == nil {
-                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
+                    if self.userDefaults.object(forKey: PrefsKeys.Notifications.SyncNotifications) == nil {
+                        self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
                     }
-                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
-                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+                    if self.userDefaults.object(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
+                        self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
                     }
 
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)

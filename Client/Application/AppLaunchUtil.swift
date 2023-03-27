@@ -102,7 +102,7 @@ class AppLaunchUtil {
 
             // Profile setup
             profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest)
-            profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.KeyFirstAppUse)
+            UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.KeyFirstAppUse)
         } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
             profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
         }

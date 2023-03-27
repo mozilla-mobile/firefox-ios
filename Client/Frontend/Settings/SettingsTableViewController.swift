@@ -350,6 +350,8 @@ class BoolSetting: Setting, FeatureFlaggable {
 }
 
 class BoolNotificationSetting: BoolSetting {
+    var userDefaults: UserDefaultsInterface? = UserDefaults.standard
+
     override func displayBool(_ control: UISwitch) {
         if let featureFlagName = featureFlagName {
             control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
@@ -358,7 +360,19 @@ class BoolNotificationSetting: BoolSetting {
 
             Task { @MainActor in
                 let isSystemNotificationOn = await isSystemNotificationOn()
-                control.isOn = (prefs?.boolForKey(key) ?? defaultValue) && isSystemNotificationOn
+                control.isOn = (userDefaults?.bool(forKey: key) ?? defaultValue) && isSystemNotificationOn
+            }
+        }
+    }
+
+    override func writeBool(_ control: UISwitch) {
+        if let featureFlagName = featureFlagName {
+            featureFlags.set(feature: featureFlagName, to: control.isOn)
+        } else {
+            Task { @MainActor in
+                let isSystemNotificationOn = await isSystemNotificationOn()
+                guard let key = prefKey, isSystemNotificationOn else { return }
+                userDefaults?.set(control.isOn, forKey: key)
             }
         }
     }
