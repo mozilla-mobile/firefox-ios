@@ -65,11 +65,18 @@ struct CreditCardValidator {
 
     var creditCardNumber: Int
 
-    func check() -> CreditCardType? {
+    func cardType() -> CreditCardType? {
         let val = regEx.first { _, regex in
             let result = "\(creditCardNumber)".range(of: regex, options: .regularExpression)
             return (result != nil)
         }
         return val?.key
+    }
+
+    func isValid() -> Bool {
+        guard let cardType = cardType() else {
+            return false
+        }
+        return cardType.validNumberLength.contains(String(creditCardNumber).count)
     }
 }

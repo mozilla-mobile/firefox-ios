@@ -343,6 +343,7 @@
 		43AB6FA225DC53D30016B015 /* GoogleTopSiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */; };
 		43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
+		43B658D929CE251C00C9EF08 /* CreditCardEditViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B658D829CE251C00C9EF08 /* CreditCardEditViewModelTests.swift */; };
 		43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* TabCell.swift */; };
 		43BE5809278BA9D700491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
@@ -3219,6 +3220,7 @@
 		43B3D33929DAEB53006B3FBC /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ResearchSurface.strings"; sourceTree = "<group>"; };
 		43B3D33A29DAEB53006B3FBC /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Settings.strings"; sourceTree = "<group>"; };
 		43B3D33B29DAEB53006B3FBC /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/SnackBar.strings"; sourceTree = "<group>"; };
+		43B658D829CE251C00C9EF08 /* CreditCardEditViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditCardEditViewModelTests.swift; sourceTree = "<group>"; };
 		43B7BFCA28B905E700AAA92F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		43B7E64828B39D1E0003A141 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
 		43B7E64928B39D1E0003A141 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
@@ -7153,6 +7155,16 @@
 			path = AutofillAtDocumentStart;
 			sourceTree = "<group>";
 		};
+		43B658D729CE249D00C9EF08 /* CreditCard */ = {
+			isa = PBXGroup;
+			children = (
+				43B658D829CE251C00C9EF08 /* CreditCardInputViewModelTests.swift */,
+				967EDABC29D705300089208D /* CreditCardValidatorTests.swift */,
+				967EDABE29D769A10089208D /* CreditCardInputFieldTests.swift */,
+			);
+			path = CreditCard;
+			sourceTree = "<group>";
+		};
 		43C5A0972555DF7300BA37AD /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
@@ -9649,6 +9661,7 @@
 				E1E6F8CD29D4B7E700068D8D /* GleanPlumbContextProviderTests.swift */,
 				5F97DD5E27FB0FE800AD3C60 /* GleanTelemetryTests.swift */,
 				8ACA8F722919870B00D3075D /* Helpers */,
+				43B658D729CE249D00C9EF08 /* CreditCard */,
 				C889D7D32858CD4500121E1D /* HistoryHighlights */,
 				217AEF75284666D4004EED37 /* IntroViewModelTests.swift */,
 				8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */,
@@ -12243,6 +12256,7 @@
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
 				C8DC90D22A067C6D0008832B /* MarkupAttributionUtilityTests.swift in Sources */,
 				21737FB72878A4BD000A9A92 /* HistoryPanelViewModelTests.swift in Sources */,
+				43B658D929CE251C00C9EF08 /* CreditCardEditViewModelTests.swift in Sources */,
 				C8501F5128510DA1003B09AB /* WallpaperMigrationUtilityTests.swift in Sources */,
 				5A70EF1D295E3C3500790249 /* TestSetup.swift in Sources */,
 				E1442FDA294782F7003680B0 /* UIPasteboard+Extension.swift in Sources */,

@@ -20,7 +20,10 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     // MARK: Views
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
-    var creditCardAddEditView: UIHostingController<CreditCardEditView>
+
+    var creditCardEditView: CreditCardEditView?
+    var creditCardAddEditView: UIHostingController<CreditCardEditView>?
+
     var creditCardTableViewController: CreditCardTableViewController
 
     private lazy var addCreditCardButton: UIBarButtonItem = {
@@ -52,13 +55,12 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
                                                         toggleTextColor: theme.colors.textPrimary.color)
         let emptyView = CreditCardSettingsEmptyView(colors: colors, toggleModel: viewModel.toggleModel)
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
-
-        let creditCardEditView = CreditCardEditView(viewModel: viewModel.addEditViewModel,
-                                                    removeButtonColor: themeManager.currentTheme.colors.textWarning.color,
-                                                    borderColor: themeManager.currentTheme.colors.borderPrimary.color)
-        self.creditCardAddEditView = SensitiveHostingController(rootView: creditCardEditView)
+        self.creditCardEmptyView.view.backgroundColor = .clear
 
         super.init(nibName: nil, bundle: nil)
+        self.creditCardTableViewController.didSelectCardAtIndex = { [weak self] rowVal in
+            self?.editCreditCard()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -74,17 +76,13 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     func viewSetup() {
         guard let emptyCreditCardView = creditCardEmptyView.view,
-            let addEditCreditCardView = creditCardAddEditView.view,
-            let creditCardTableView = creditCardTableViewController.view else { return }
+              let creditCardTableView = creditCardTableViewController.view else { return }
         creditCardTableView.translatesAutoresizingMaskIntoConstraints = false
         emptyCreditCardView.translatesAutoresizingMaskIntoConstraints = false
-        addEditCreditCardView.translatesAutoresizingMaskIntoConstraints = false
 
         addChild(creditCardEmptyView)
-        addChild(creditCardAddEditView)
         addChild(creditCardTableViewController)
         view.addSubview(emptyCreditCardView)
-        view.addSubview(addEditCreditCardView)
         view.addSubview(creditCardTableView)
 
         NSLayoutConstraint.activate([
@@ -92,11 +90,6 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
             emptyCreditCardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             emptyCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             emptyCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-
-            addEditCreditCardView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            addEditCreditCardView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            addEditCreditCardView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            addEditCreditCardView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
 
             creditCardTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             creditCardTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -108,16 +101,10 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         hideAllViews()
 
         // Setup state and update view
-        setupState()
+        updateCreditCardList()
     }
 
-    func setupState() {
-        // check if there are any starting config
-        guard startingConfig == nil else {
-            updateState(type: .empty)
-            return
-        }
-
+    private func updateCreditCardList() {
         // Check if we have any credit cards to show in the list
         viewModel.listCreditCard { creditCards in
             guard let creditCards = creditCards, !creditCards.isEmpty else {
@@ -131,24 +118,23 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
                 self?.updateState(type: .list)
             }
         }
-
-        updateState(type: .edit)
     }
 
-    func updateState(type: CreditCardSettingsState) {
-        hideAllViews()
+    private func updateState(type: CreditCardSettingsState) {
         switch type {
         case .empty:
+            creditCardTableViewController.view.isHidden = true
             creditCardEmptyView.view.isHidden = false
             navigationItem.rightBarButtonItem = addCreditCardButton
         case .add:
-            updateStateForEditView()
-            navigationItem.rightBarButtonItem = nil
+            updateStateForEditView(editState: .add)
         case .edit:
-            creditCardAddEditView.view.isHidden = false
-            navigationItem.rightBarButtonItem = nil
+            updateStateForEditView(editState: .edit)
+        case .view:
+            updateStateForEditView(editState: .view)
         case .list:
             creditCardTableViewController.reloadData()
+            creditCardEmptyView.view.isHidden = true
             creditCardTableViewController.view.isHidden = false
             navigationItem.rightBarButtonItem = addCreditCardButton
         }
@@ -156,7 +142,6 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     private func hideAllViews() {
         creditCardEmptyView.view.isHidden = true
-        creditCardAddEditView.view.isHidden = true
         creditCardTableViewController.view.isHidden = true
     }
 
@@ -171,20 +156,34 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     // MARK: - Private helpers
 
-    private func updateStateForEditView() {
-        guard appAuthenticator.canAuthenticateDeviceOwner() else { return }
+    private func updateStateForEditView(editState: CreditCardEditState) {
+        // Update credit card edit view state before showing
+        viewModel.addEditViewModel.state = editState
+        creditCardEditView = CreditCardEditView(
+            viewModel: viewModel.addEditViewModel,
+            dismiss: { [weak self] successVal in
+                DispatchQueue.main.async {
+                    if successVal {
+                        self?.updateCreditCardList()
+                    }
+                    self?.creditCardAddEditView?.dismiss(animated: true)
+                    self?.viewModel.addEditViewModel.clearValues()
+                }
+        })
 
-        appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
-            switch result {
-            case .success:
-                self.creditCardAddEditView.view.isHidden = false
-            case .failure:
-                self.logger.log("Failed to authenticate", level: .debug, category: .creditcard)
-            }
-        }
+        guard let creditCardEditView = creditCardEditView else { return }
+        creditCardAddEditView = UIHostingController(rootView: creditCardEditView)
+        guard let creditCardAddEditView = creditCardAddEditView else { return}
+        creditCardAddEditView.view.backgroundColor = .clear
+        creditCardAddEditView.modalPresentationStyle = .formSheet
+        present(creditCardAddEditView, animated: true, completion: nil)
     }
 
     @objc private func addCreditCard() {
         updateState(type: .add)
+    }
+
+    private func editCreditCard() {
+        updateState(type: .view)
     }
 }
