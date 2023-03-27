@@ -660,6 +660,8 @@ extension TabDisplayManager: InactiveTabsDelegate {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
 
+        cfrDelegate?.presentUndoToast()
+
         // Close all inactive tabs
         if let inactiveTabs = inactiveViewModel?.inactiveTabs, !inactiveTabs.isEmpty {
             removeInactiveTabAndReloadView(tabs: inactiveTabs)

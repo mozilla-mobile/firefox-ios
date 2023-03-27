@@ -837,9 +837,10 @@ extension GridTabViewController: Notifiable {
 protocol InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel)
     func presentCFR()
+    func presentUndoToast()
 }
 
-// MARK: - Contextual Hint
+// MARK: - Contextual Hint and Toast
 extension GridTabViewController: InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel) {
         prepareJumpBackInContextualHint(on: view)
@@ -853,6 +854,37 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
         present(contextualHintViewController, animated: true, completion: nil)
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
+    }
+
+    func presentUndoToast() {
+        print("YRD present Undo toast")
+        let viewModel = ButtonToastViewModel(
+            labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, 33),
+            buttonText: .TabsDeleteAllUndoAction)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
+            // Handles undo to Close tabs
+            if buttonPressed {
+                print("YRD toast button pressed")
+                // TODO: Re-add tabs
+            } else {
+                // Finish clean up for recently close tabs
+//                DispatchQueue.global(qos: .background).async { [unowned self] in
+//                    Remove tabs
+//                }
+                print("YRD dismiss toast")
+            }
+        })
+
+        let delay = DispatchTimeInterval.seconds(3)
+        toast.showToast(viewController: self, delay: delay, duration: delay) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -83)
+            ]
+        }
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {
