@@ -4,40 +4,61 @@
 
 import Foundation
 import SwiftUI
+import Shared
+import Combine
 
 struct FloatingTextField: View {
-    struct Colors {
-        let errorColor: Color
-        let titleColor: Color
-        let textFieldColor: Color
-    }
-
     var label: String
     @Binding var textVal: String
     var errorString: String = ""
     var showError: Bool = false
-    var colors: Colors
+    var keyboardType: UIKeyboardType = .default
+
+    // Theming
+    @Environment(\.themeType) var themeVal
+    @State var errorColor: Color = .clear
+    @State var titleColor: Color = .clear
+    @State var textFieldColor: Color = .clear
+    @State var backgroundColor: Color = .clear
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text(label)
-                .font(.subheadline)
-                .foregroundColor(colors.titleColor)
-            TextField("", text: $textVal)
-                .font(.body)
-                .padding(.top, 7.5)
-                .foregroundColor(colors.textFieldColor)
-            if showError {
-                HStack(spacing: 0) {
-                    Image(ImageIdentifiers.errorAutofill)
-                        .renderingMode(.template)
-                        .foregroundColor(colors.errorColor)
-                    Text(errorString)
-                        .errorTextStyle(color: colors.errorColor)
+        ZStack {
+            VStack(alignment: .leading, spacing: 0) {
+                Text(label)
+                    .font(.subheadline)
+                    .foregroundColor(titleColor)
+                TextField("", text: $textVal)
+                    .font(.body)
+                    .padding(.top, 7.5)
+                    .foregroundColor(textFieldColor)
+                    .keyboardType(keyboardType)
+                if showError {
+                    HStack(spacing: 0) {
+                        Image(ImageIdentifiers.errorAutofill)
+                            .renderingMode(.template)
+                            .foregroundColor(errorColor)
+                        Text(errorString)
+                            .errorTextStyle(color: errorColor)
+                    }
+                    .padding(.top, 7.4)
                 }
-                .padding(.top, 7.4)
             }
+            .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
         }
-        .padding(.leading, 16)
+        .padding(.leading, 20)
+        .onAppear {
+            applyTheme(theme: themeVal.theme)
+        }
+        .onChange(of: themeVal) { val in
+            applyTheme(theme: val.theme)
+        }
+    }
+
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        errorColor = Color(color.textWarning)
+        titleColor = Color(color.textPrimary)
+        textFieldColor = Color(color.textSecondary)
+        backgroundColor = Color(color.layer2)
     }
 }
