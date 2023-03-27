@@ -258,7 +258,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     public func refreshAutocompleteLabelTheme() {
         // Only refresh if an autocomplete label is presented to the user
-        if let autocompleteAttributed = self.autocompleteTextLabel?.attributedText {
+        if self.autocompleteTextLabel?.attributedText != nil {
             self.autocompleteTextLabel?.backgroundColor = self.backgroundColor
             self.autocompleteTextLabel?.textColor = self.textColor
         }
