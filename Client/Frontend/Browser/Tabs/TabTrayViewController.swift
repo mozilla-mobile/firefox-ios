@@ -546,7 +546,7 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        notificationCenter.post(name: .TabsTrayDidClose, anObject: nil)
+        notificationCenter.post(name: .TabsTrayDidClose)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 }
