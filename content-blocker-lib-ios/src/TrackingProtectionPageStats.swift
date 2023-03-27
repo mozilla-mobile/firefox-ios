@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 import Shared
+import Common
 
 struct TPPageStats {
     var domains: [BlocklistCategory: Set<String>]
@@ -109,7 +110,12 @@ class TPStatsBlocklists {
         }
     }
 
+    private let logger: Logger
     private var blockRules = [String: [Rule]]()
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
 
     enum LoadType {
         case all
@@ -138,17 +144,20 @@ class TPStatsBlocklists {
             let list: [[String: AnyObject]]
             do {
                 guard let path = Bundle.main.path(forResource: blockListFile.filename, ofType: "json") else {
+                    logger.log("Blocklists: bad file path.", level: .warning, category: .webview)
                     assertionFailure("Blocklists: bad file path.")
                     return
                 }
 
                 let json = try Data(contentsOf: URL(fileURLWithPath: path))
                 guard let data = try JSONSerialization.jsonObject(with: json, options: []) as? [[String: AnyObject]] else {
+                    logger.log("Blocklists: bad JSON cast.", level: .warning, category: .webview)
                     assertionFailure("Blocklists: bad JSON cast.")
                     return
                 }
                 list = data
             } catch {
+                logger.log("Blocklists: \(error.localizedDescription)", level: .warning, category: .webview)
                 assertionFailure("Blocklists: \(error.localizedDescription)")
                 return
             }
@@ -157,22 +166,30 @@ class TPStatsBlocklists {
                 guard let trigger = rule["trigger"] as? [String: AnyObject],
                       let filter = trigger["url-filter"] as? String
                 else {
+                    logger.log("Blocklists error: Rule has unexpected format.", level: .warning, category: .webview)
                     assertionFailure("Blocklists error: Rule has unexpected format.")
                     continue
                 }
 
                 guard let loc = filter.range(of: standardPrefix) else {
+                    logger.log("url-filter code needs updating for new list format", level: .warning, category: .webview)
                     assertionFailure("url-filter code needs updating for new list format")
                     return
                 }
 
                 let baseDomain = String(filter[loc.upperBound...]).replacingOccurrences(of: "\\.", with: ".")
-                assert(!baseDomain.isEmpty)
+                if baseDomain.isEmpty {
+                    logger.log("baseDomain is unexpectedly empty!", level: .warning, category: .webview)
+                    assert(!baseDomain.isEmpty)
+                }
 
                 // Sanity check for the lists.
                 ["*", "?", "+"].forEach { x in
                     // This will only happen on debug
-                    assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
+                    if baseDomain.contains(x) {
+                        logger.log("Unexpectedly found a wildcard in baseDomain - wildcard: \(x)", level: .warning, category: .webview)
+                        assert(!baseDomain.contains(x), "No wildcards allowed in baseDomain")
+                    }
                 }
 
                 let domainExceptionsRegex = (trigger["unless-domain"] as? [String])?.compactMap { domain in

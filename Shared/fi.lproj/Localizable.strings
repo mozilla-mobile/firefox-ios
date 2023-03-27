@@ -1582,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "Selvä";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Jos sivusto ei toimi odotetulla tavalla, napauta osoitepalkin lukkoa ja poista tehostettu seurannan suojaus käytöstä kyseiseltä sivulta.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Huomio!";
 
@@ -1593,6 +1596,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Vähentää kohdennettua mainontaa ja auttaa estämään mainostajia seuraamasta selaamistasi.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Jos sivusto ei toimi odotetulla tavalla, napauta osoitepalkin lukkoa ja poista tehostettu seurannan suojaus käytöstä kyseiseltä sivulta.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Jos sivusto ei toimi odotetulla tavalla, napauta osoitepalkin lukkoa ja poista tehostettu seurannan suojaus käytöstä kyseiseltä sivulta.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Salli joitain seuraimia, jotta sivustot toimivat oikein.";

@@ -109,7 +109,7 @@ class TopTabsViewController: UIViewController, Themeable {
                                                  tabDisplayType: .TopTabTray,
                                                  profile: profile,
                                                  theme: themeManager.currentTheme)
-        tabManager.tabDisplayType = .TopTabTray
+        self.tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }
@@ -334,13 +334,5 @@ extension TopTabsViewController: TopTabsScrollDelegate {
         } else {
             topTabFader.setFader(forSides: .both)
         }
-    }
-}
-
-// MARK: Functions for testing
-extension TopTabsViewController {
-    func test_getDisplayManager() -> TabDisplayManager {
-        assert(AppConstants.isRunningTest)
-        return topTabDisplayManager
     }
 }

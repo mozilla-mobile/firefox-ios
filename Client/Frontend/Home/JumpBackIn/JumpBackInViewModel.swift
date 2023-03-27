@@ -43,7 +43,7 @@ class JumpBackInViewModel: FeatureFlaggable {
     private var isPrivate: Bool
     private var hasSentJumpBackInTileEvent = false
     private var hasSentSyncedTabTileEvent = false
-    private let tabManager: TabManagerProtocol
+    private let tabManager: TabManager
     private var wallpaperManager: WallpaperManager
     var sectionLayout: JumpBackInSectionLayout = .compactJumpBackIn // We use the compact layout as default
 
@@ -53,7 +53,7 @@ class JumpBackInViewModel: FeatureFlaggable {
         isPrivate: Bool,
         urlBar: URLBarViewProtocol,
         theme: Theme,
-        tabManager: TabManagerProtocol,
+        tabManager: TabManager,
         adaptor: JumpBackInDataAdaptor,
         wallpaperManager: WallpaperManager
     ) {
