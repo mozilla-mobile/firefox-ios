@@ -660,10 +660,23 @@ extension TabDisplayManager: InactiveTabsDelegate {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
 
-        cfrDelegate?.presentUndoToast()
+        // Reload collection view
+        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
+        collectionView.reloadItems(at: [indexPath])
 
-        // Close all inactive tabs
-        if let inactiveTabs = inactiveViewModel?.inactiveTabs, !inactiveTabs.isEmpty {
+        cfrDelegate?.presentUndoToast(completion: { shouldClose in
+            guard shouldClose else {
+                self.inactiveViewModel?.undoInactiveTabsClosure()
+                return
+            }
+
+            self.closeInactiveTabs()
+        })
+    }
+
+    private func closeInactiveTabs() {
+        if let inactiveTabs = inactiveViewModel?.inactiveTabs,
+           !inactiveTabs.isEmpty {
             removeInactiveTabAndReloadView(tabs: inactiveTabs)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabCloseAllButton, extras: nil)
         }

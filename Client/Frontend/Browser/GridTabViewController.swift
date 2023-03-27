@@ -20,6 +20,8 @@ struct GridTabTrayControllerUX {
     static let NumberOfColumnsWide = 3
     static let CompactNumberOfColumnsThin = 2
     static let MenuFixedWidth: CGFloat = 320
+    static let undoToastDelay = DispatchTimeInterval.seconds(0)
+    static let undoToastDuration = DispatchTimeInterval.seconds(3)
 }
 
 protocol TabTrayDelegate: AnyObject {
@@ -715,7 +717,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     private func calculateInactiveTabSizeHelper(_ collectionView: UICollectionView) -> CGSize {
         guard !tabDisplayManager.isPrivate,
               let inactiveTabViewModel = tabDisplayManager.inactiveViewModel,
-              !inactiveTabViewModel.activeTabs.isEmpty
+              !inactiveTabViewModel.isActiveTabsEmpty
         else {
             return CGSize(width: 0, height: 0)
         }
@@ -837,7 +839,7 @@ extension GridTabViewController: Notifiable {
 protocol InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel)
     func presentCFR()
-    func presentUndoToast()
+    func presentUndoToast(completion: @escaping (Bool) -> Void)
 }
 
 // MARK: - Contextual Hint and Toast
@@ -856,29 +858,19 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 
-    func presentUndoToast() {
-        print("YRD present Undo toast")
+    func presentUndoToast(completion: @escaping (Bool) -> Void) {
         let viewModel = ButtonToastViewModel(
             labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, 33),
             buttonText: .TabsDeleteAllUndoAction)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
                                 completion: { buttonPressed in
-            // Handles undo to Close tabs
-            if buttonPressed {
-                print("YRD toast button pressed")
-                // TODO: Re-add tabs
-            } else {
-                // Finish clean up for recently close tabs
-//                DispatchQueue.global(qos: .background).async { [unowned self] in
-//                    Remove tabs
-//                }
-                print("YRD dismiss toast")
-            }
+            completion(!buttonPressed)
         })
 
-        let delay = DispatchTimeInterval.seconds(3)
-        toast.showToast(viewController: self, delay: delay, duration: delay) { toast in
+        toast.showToast(viewController: self,
+                        delay: GridTabTrayControllerUX.undoToastDelay,
+                        duration: GridTabTrayControllerUX.undoToastDuration) { toast in
             [
                 toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
