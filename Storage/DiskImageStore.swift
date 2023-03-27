@@ -105,15 +105,11 @@ open class DiskImageStore {
             for key in keysToDelete {
                 taskGroup.addTask {
                     let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
-                    do {
-                        try FileManager.default.removeItem(at: url)
-                    } catch {
-                        throw error
-                    }
+                    try FileManager.default.removeItem(at: url)
                 }
             }
 
-            await try? taskGroup.waitForAll()
+            try await taskGroup.waitForAll()
             self.keys = self.keys.intersection(keys)
         }
     }

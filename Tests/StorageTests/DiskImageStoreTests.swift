@@ -74,14 +74,13 @@ class DiskImageStoreTests: XCTestCase {
             XCTAssertEqual(image.size.height / 2, fetchedImage!.size.height, "Fetched image height should be half the original height")
         }
     }
-
 }
 
 // MARK: Helper methods
 private extension DiskImageStoreTests {
     func clearStore() {
         Task {
-            let clearResult = try? await store?.clearAllScreenshotsExcluding(Set())
+            try? await store?.clearAllScreenshotsExcluding(Set())
         }
     }
 
