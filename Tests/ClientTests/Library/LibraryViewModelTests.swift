@@ -17,7 +17,7 @@ class LibraryViewModelTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile(databasePrefix: "historyHighlights_tests")
         profile.reopen()
-        tabManager = TabManager(profile: profile, imageStore: nil)
+        tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 

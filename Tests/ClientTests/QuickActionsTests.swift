@@ -17,7 +17,7 @@ class QuickActionsTest: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = TabManagerMockProfile()
-        tabManager = TabManager(profile: profile, imageStore: nil)
+        tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         browserViewController = SpyBrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()
         quickActions = QuickActionsImplementation()

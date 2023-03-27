@@ -4,6 +4,7 @@
 
 import UIKit
 import Shared
+import Common
 
 private let SectionArrow = 0
 private let SectionToggles = 1
@@ -147,7 +148,11 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
                     }
                     .allSucceed()
                     .uponQueue(.main) { result in
-                        assert(result.isSuccess, "Private data cleared successfully")
+                        guard result.isSuccess else {
+                            DefaultLogger.shared.log("Private data was not cleared.", level: .debug, category: .storage)
+                            return
+                        }
+
                         self.profile.prefs.setObject(self.toggles, forKey: TogglesPrefKey)
 
                         // Disable the Clear Private Data button after it's clicked.

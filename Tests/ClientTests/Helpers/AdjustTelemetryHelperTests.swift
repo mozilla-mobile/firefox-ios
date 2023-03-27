@@ -13,7 +13,7 @@ class AdjustTelemetryHelperTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        Glean.shared.resetGlean(clearStores: false)
+        Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
 
         // Setup mock profile

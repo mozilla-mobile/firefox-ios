@@ -11,12 +11,12 @@ class TabsQuantityTelemetryTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        Glean.shared.resetGlean(clearStores: false)
+        Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
     }
 
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
-        let tabManager = TabManager(profile: MockProfile(), imageStore: nil)
+        let tabManager = LegacyTabManager(profile: MockProfile(), imageStore: nil)
         tabManager.addTab()
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -31,7 +31,7 @@ class TabsQuantityTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_withPrivateTab_gleanIsCalled() {
-        let tabManager = TabManager(profile: MockProfile(), imageStore: nil)
+        let tabManager = LegacyTabManager(profile: MockProfile(), imageStore: nil)
         tabManager.addTab(isPrivate: true)
 
         TabsQuantityTelemetry.trackTabsQuantity(tabManager: tabManager)

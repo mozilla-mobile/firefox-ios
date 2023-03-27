@@ -10,12 +10,12 @@ import XCTest
 class TelemetryWrapperTests: XCTestCase {
     override func setUp() {
         super.setUp()
-        Glean.shared.resetGlean(clearStores: false)
+        Glean.shared.resetGlean(clearStores: true)
     }
 
     override func tearDown() {
         super.tearDown()
-        Glean.shared.resetGlean(clearStores: false)
+        Glean.shared.resetGlean(clearStores: true)
     }
 
     // MARK: - Top Site
@@ -154,6 +154,16 @@ class TelemetryWrapperTests: XCTestCase {
                                   failureMessage: "Should have \(expectTabCount) tabs for private tabs")
     }
 
+    func test_tabsNormalQuantityWithoutExtras_GleanIsNotCalled() {
+        TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabNormalQuantity, value: nil, extras: nil)
+        XCTAssertNil(GleanMetrics.Tabs.normalTabsQuantity.testGetValue())
+    }
+
+    func test_tabsPrivateQuantityWithoutExtras_GleanIsNotCalled() {
+        TelemetryWrapper.recordEvent(category: .information, method: .background, object: .tabPrivateQuantity, value: nil, extras: nil)
+        XCTAssertNil(GleanMetrics.Tabs.privateTabsQuantity.testGetValue())
+    }
+
     // MARK: - Onboarding
 
     func test_onboardingCardViewWithExtras_GleanIsCalled() {
@@ -211,6 +221,22 @@ class TelemetryWrapperTests: XCTestCase {
                                      extras: extras)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.notificationPermissionPrompt)
+    }
+
+    func test_onboardingEngagementNotificationTapped_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .engagementNotification)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationTapped)
+    }
+
+    func test_onboardingEngagementNotificationCancel_GleanIsCalled() {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .cancel,
+                                     object: .engagementNotification)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.engagementNotificationCancel)
     }
 
     // MARK: - Upgrade onboarding
