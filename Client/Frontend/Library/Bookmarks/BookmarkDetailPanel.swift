@@ -113,7 +113,6 @@ class BookmarkDetailPanel: SiteTableViewController {
 
         if bookmarkNodeType == .bookmark {
             self.bookmarkItemOrFolderTitle = ""
-            self.bookmarkItemURL = ""
 
             self.title = .BookmarksNewBookmark
         } else if bookmarkNodeType == .folder {
