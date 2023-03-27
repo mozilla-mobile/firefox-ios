@@ -258,7 +258,13 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
 // MARK: Tests
 extension LegacyTabManagerStoreImplementation {
     func testTabOnDisk() -> [LegacySavedTab] {
-        assert(AppConstants.isRunningTest)
+        guard AppConstants.isRunningTest else {
+            logger.log("This method is being called in NON-TESTING code. Do NOT do this!",
+                       level: .fatal,
+                       category: .tabs)
+            fatalError()
+        }
+
         return tabs
     }
 }

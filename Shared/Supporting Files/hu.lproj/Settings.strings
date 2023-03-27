@@ -43,3 +43,9 @@
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Értesítések";
 
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Ugorjon az eszköz beállításaihoz, hogy bekapcsolja a %@ értesítéseit";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "Értesítések bekapcsolása";
+

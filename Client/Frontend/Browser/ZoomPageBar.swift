@@ -154,7 +154,7 @@ class ZoomPageBar: UIView {
     }
 
     private func updateZoomLabel() {
-        zoomLevel.text = String(format: "%.0f%%", tab.pageZoom * 100.0)
+        zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         zoomLevel.isEnabled = tab.pageZoom == 1.0 ? false : true
         gestureRecognizer.isEnabled = !(tab.pageZoom == 1.0)
     }

@@ -34,7 +34,7 @@ class MockBrowserSyncManager: BrowserProfile.BrowserSyncManager {
 class GleanTelemetryTests: XCTestCase {
     override func setUp() {
         super.setUp()
-        Glean.shared.resetGlean(clearStores: false)
+        Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
 
         RustFirefoxAccounts.startup(prefs: MockProfilePrefs()).uponQueue(.main) { _ in }

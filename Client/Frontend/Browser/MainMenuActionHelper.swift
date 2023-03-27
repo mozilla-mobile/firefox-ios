@@ -760,7 +760,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getZoomSection() -> [PhotonRowActions] {
         var section = [PhotonRowActions]()
         guard let tab = selectedTab else { return section }
-        let zoomLevel = String(format: "%.0f%%", tab.pageZoom * 100.0)
+        let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
         let zoomAction = SingleActionViewModel(title: title) { _ in
             self.delegate?.showZoomPage(tab: tab)

@@ -5,6 +5,7 @@
 import Foundation
 import Account
 import Shared
+import Common
 
 import SwiftyJSON
 
@@ -52,9 +53,13 @@ public func keysPayloadSerializer<T: CleartextPayloadJSON>(keyBundle: KeyBundle,
         // guarantees UTF-8 encoded output.
 
         guard let bytes: Data = try? json.rawData(options: []) else { return nil }
+        guard !JSON(bytes).isNull() else {
+            DefaultLogger.shared.log("Given a valid non-null JSON object, we don't ever expect a round-trip to fail",
+                                     level: .warning,
+                                     category: .sync)
 
-        // Given a valid non-null JSON object, we don't ever expect a round-trip to fail.
-        assert(!JSON(bytes).isNull())
+            return nil
+        }
 
         // We pass a null IV, which means "generate me a new one".
         // We then include the generated IV in the resulting record.

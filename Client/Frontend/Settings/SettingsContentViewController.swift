@@ -116,7 +116,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     func makeWebView() -> WKWebView {
-        let config = TabManager.makeWebViewConfig(isPrivate: true, prefs: nil)
+        let config = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: nil)
         config.preferences.javaScriptCanOpenWindowsAutomatically = false
 
         let webView = WKWebView(
