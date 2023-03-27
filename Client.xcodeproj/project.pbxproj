@@ -1091,6 +1091,7 @@
 		E1D6F2D828E325D100B2C8CC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B04A9C28E20A8300670E54 /* InstructionsView.swift */; };
 		E1D6F2D928E32A5300B2C8CC /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */; };
+		E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */; };
 		E1FF93E228A2E55700E6360E /* WallpaperSelectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FF93E128A2E55700E6360E /* WallpaperSelectorViewController.swift */; };
 		E1FF93E428A2E74600E6360E /* WallpaperSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FF93E328A2E74600E6360E /* WallpaperSelectorViewModel.swift */; };
 		E402000A1E6493C800B45AFF /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
@@ -5206,6 +5207,7 @@
 		E1CD81C4290C6D5800124B27 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		E1D0406692C3B058BF50AA81 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
+		E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManager.swift; sourceTree = "<group>"; };
 		E1FF93E128A2E55700E6360E /* WallpaperSelectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewController.swift; sourceTree = "<group>"; };
 		E1FF93E328A2E74600E6360E /* WallpaperSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSelectorViewModel.swift; sourceTree = "<group>"; };
 		E21F49ABA8034B5C012367F5 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -8084,6 +8086,14 @@
 			path = WebView;
 			sourceTree = "<group>";
 		};
+		E1FE132D29C0B334002A65FF /* NotificationSurface */ = {
+			isa = PBXGroup;
+			children = (
+				E1FE132E29C0B3CB002A65FF /* NotificationSurfaceManager.swift */,
+			);
+			path = NotificationSurface;
+			sourceTree = "<group>";
+		};
 		E1FF93E028A2E13600E6360E /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -8760,6 +8770,7 @@
 				D05434F3225FDA3400FDE4EF /* Library */,
 				E63ED8DF1BFD254E0097D08E /* LoginManagement */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
+				E1FE132D29C0B334002A65FF /* NotificationSurface */,
 				F84B21F51A0910F600AAB793 /* Reader */,
 				2F44FC551A9E83E200FD20CC /* Settings */,
 				D3972BF01C22412B00035B87 /* Share */,
@@ -10864,6 +10875,7 @@
 				EBB89507219398E500EB91A0 /* ContentBlocker.swift in Sources */,
 				5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtil.swift in Sources */,
 				23ED80FF25C89C9800D0E9D5 /* DefaultBrowserOnboardingViewController.swift in Sources */,
+				E1FE132F29C0B3CB002A65FF /* NotificationSurfaceManager.swift in Sources */,
 				D88FDA9F1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift in Sources */,
 				E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */,
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
