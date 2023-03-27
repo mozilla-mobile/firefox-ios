@@ -26,6 +26,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
+    var didSelectCardAtIndex: ((_ rowVal: Int) -> Void)?
 
     // MARK: View
     var toastView: UIHostingController<ToastView>
@@ -158,6 +159,7 @@ extension CreditCardTableViewController: UITableViewDelegate,
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        didSelectCardAtIndex?(indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

@@ -7,6 +7,69 @@ import SwiftUI
 import Common
 import Storage
 
+enum CreditCardLeftBarButton: String, Equatable, CaseIterable {
+    case close
+    case cancel
+
+    var title: String {
+        switch self {
+        case .cancel:
+            return .CreditCard.EditCard.CancelNavBarButtonLabel
+        case .close:
+            return .CreditCard.EditCard.CloseNavBarButtonLabel
+        }
+    }
+}
+
+enum CreditCardRightBarButton: String, Equatable, CaseIterable {
+    case save
+    case edit
+
+    var title: String {
+        switch self {
+        case .save:
+            return .CreditCard.EditCard.SaveNavBarButtonLabel
+        case .edit:
+            return .CreditCard.EditCard.EditNavBarButtonLabel
+        }
+    }
+}
+
+enum CreditCardEditState: String, Equatable, CaseIterable {
+    case add
+    case edit
+    case view
+
+    var title: String {
+        switch self {
+        case .add:
+            return .CreditCard.EditCard.AddCreditCardTitle
+        case .view:
+            return .CreditCard.EditCard.ViewCreditCardTitle
+        case .edit:
+            return .CreditCard.EditCard.EditCreditCardTitle
+        }
+    }
+
+    var leftBarBtn: CreditCardLeftBarButton {
+        switch self {
+        case .add, .view:
+            return .close
+        case .edit:
+            return .cancel
+        }
+    }
+
+    var rightBarBtn: CreditCardRightBarButton {
+        switch self {
+        case .add, .edit:
+            return .save
+        case .view:
+            return .edit
+        }
+    }
+}
+
 class CreditCardEditViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
 
@@ -14,29 +77,46 @@ class CreditCardEditViewModel: ObservableObject {
     let autofill: RustAutofill
     let creditCard: CreditCard?
 
-    @Published var firstName: String = ""
-    @Published var lastName: String = ""
+    @Published var state: CreditCardEditState
     @Published var errorState: String = ""
     @Published var enteredValue: String = ""
+    @Published var cardType: CreditCardType?
     @Published var nameIsValid = true
     @Published var numberIsValid = true
     @Published var expirationIsValid = true
     @Published var nameOnCard: String = "" {
         didSet (val) {
-            nameIsValid = nameOnCard.isEmpty
+            nameIsValid = !nameOnCard.isEmpty
         }
     }
 
     @Published var expirationDate: String = "" {
         didSet (val) {
-            numberIsValid = true
+            guard !val.isEmpty else {
+                expirationIsValid = false
+                return
+            }
+            expirationIsValid = true
         }
     }
 
     @Published var cardNumber: String = "" {
-        didSet (val) {
-            expirationIsValid = true
+        willSet (val) {
+            guard let intVal = Int(val),
+                  CreditCardValidator(creditCardNumber: intVal).isValid() else {
+                numberIsValid = false
+                return
+            }
+            // Set the card type
+            self.cardType = CreditCardValidator(creditCardNumber: intVal).cardType()
+            numberIsValid = true
         }
+    }
+
+    var isRightBarButtonEnabled: Bool {
+        state.rightBarBtn == .save && (nameIsValid &&
+                                       numberIsValid &&
+                                       !expirationDate.isEmpty)
     }
 
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {
@@ -78,6 +158,7 @@ class CreditCardEditViewModel: ObservableObject {
         self.profile = profile
         self.autofill = profile.autofill
         self.creditCard = creditCard
+        self.state = .add
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -85,15 +166,15 @@ class CreditCardEditViewModel: ObservableObject {
          lastName: String,
          errorState: String,
          enteredValue: String,
-         creditCard: CreditCard? = nil
+         creditCard: CreditCard? = nil,
+         state: CreditCardEditState
     ) {
         self.profile = profile
-        self.firstName = firstName
-        self.lastName = lastName
         self.errorState = errorState
         self.enteredValue = enteredValue
         self.autofill = profile.autofill
         self.creditCard = creditCard
+        self.state = state
     }
 
     // MARK: - Helpers
@@ -102,5 +183,38 @@ class CreditCardEditViewModel: ObservableObject {
         autofill.deleteCreditCard(id: creditCard.guid) { _, error in
             // no-op
         }
+    }
+
+    public func updateState(state: CreditCardEditState) {
+        self.state = state
+    }
+
+    public func saveCreditCard(completion: @escaping (CreditCard?, Error?) -> Void) {
+        guard let cardType = cardType,
+              nameIsValid,
+              numberIsValid,
+              let month = Int64(expirationDate),
+              let year = Int64(expirationDate) else {
+            return
+        }
+
+        let creditCard = UnencryptedCreditCardFields(
+                         ccName: nameOnCard,
+                         ccNumber: cardNumber,
+                         ccNumberLast4: String(cardNumber.suffix(4)),
+                         ccExpMonth: month,
+                         ccExpYear: year,
+                         ccType: cardType.rawValue)
+
+        autofill.addCreditCard(creditCard: creditCard, completion: completion)
+    }
+
+    public func clearValues() {
+        nameOnCard = ""
+        cardNumber = ""
+        expirationDate = ""
+        nameIsValid = true
+        expirationIsValid = true
+        numberIsValid = true
     }
 }
