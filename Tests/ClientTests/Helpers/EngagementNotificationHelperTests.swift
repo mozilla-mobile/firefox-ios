@@ -4,20 +4,23 @@
 
 import XCTest
 import Shared
+import Common
 @testable import Client
 
 class EngagementNotificationHelperTests: XCTestCase {
     private var engagementNotificationHelper: EngagementNotificationHelper!
     private var notificationManager: MockNotificationManager!
     private var profile: MockProfile!
+    private var userDefaults: UserDefaultsInterface!
 
     override func setUp() {
         super.setUp()
         notificationManager = MockNotificationManager()
         profile = MockProfile(databasePrefix: "EngagementNotificationHelper_tests")
+        userDefaults = MockUserDefaults()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs,
-                                                                    notificationManager: notificationManager)
+        engagementNotificationHelper = EngagementNotificationHelper(notificationManager: notificationManager,
+                                                                    userDefaults: userDefaults)
     }
 
     override func tearDown() {
@@ -44,7 +47,7 @@ class EngagementNotificationHelperTests: XCTestCase {
 
     func testSchedule_pastNotificationTime() {
         let timestamp = Date.now() - EngagementNotificationHelper.Constant.timeUntilNotification * 2
-        profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
         engagementNotificationHelper.schedule()
         XCTAssertFalse(notificationManager.scheduleWithDateWasCalled)
         XCTAssertFalse(notificationManager.removePendingNotificationsWithIdWasCalled)
@@ -53,7 +56,8 @@ class EngagementNotificationHelperTests: XCTestCase {
 
     func testSchedule_notUsedInSecond24Hours() {
         let timestamp = Date.now() - EngagementNotificationHelper.Constant.twentyFourHours * UInt64(0.5)
-        profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
         engagementNotificationHelper.schedule()
         XCTAssertTrue(notificationManager.scheduleWithDateWasCalled)
         XCTAssertFalse(notificationManager.removePendingNotificationsWithIdWasCalled)
@@ -62,7 +66,8 @@ class EngagementNotificationHelperTests: XCTestCase {
 
     func testSchedule_usedInSecond24Hours() {
         let timestamp = Date.now() - EngagementNotificationHelper.Constant.twentyFourHours * UInt64(1.5)
-        profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
         engagementNotificationHelper.schedule()
         XCTAssertFalse(notificationManager.scheduleWithDateWasCalled)
         XCTAssertTrue(notificationManager.removePendingNotificationsWithIdWasCalled)
@@ -71,8 +76,8 @@ class EngagementNotificationHelperTests: XCTestCase {
 
     func testSchedule_userPrefOff() {
         let timestamp = Date.now() - EngagementNotificationHelper.Constant.twentyFourHours * UInt64(0.5)
-        profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
-        profile.prefs.setBool(false, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+        userDefaults.set(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(false, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
         engagementNotificationHelper.schedule()
         XCTAssertFalse(notificationManager.scheduleWithDateWasCalled)
         XCTAssertFalse(notificationManager.removePendingNotificationsWithIdWasCalled)
@@ -81,8 +86,8 @@ class EngagementNotificationHelperTests: XCTestCase {
 
     func testSchedule_userPrefOn() {
         let timestamp = Date.now() - EngagementNotificationHelper.Constant.twentyFourHours * UInt64(0.5)
-        profile.prefs.setTimestamp(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
-        profile.prefs.setBool(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+        userDefaults.set(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
         engagementNotificationHelper.schedule()
         XCTAssertTrue(notificationManager.scheduleWithDateWasCalled)
         XCTAssertFalse(notificationManager.removePendingNotificationsWithIdWasCalled)

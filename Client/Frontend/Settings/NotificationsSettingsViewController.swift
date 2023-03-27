@@ -8,7 +8,7 @@ import Common
 import MozillaAppServices
 
 class NotificationsSettingsViewController: SettingsTableViewController, FeatureFlaggable {
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: prefs)
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
 
     private lazy var syncNotifications: BoolNotificationSetting = {
         return BoolNotificationSetting(
