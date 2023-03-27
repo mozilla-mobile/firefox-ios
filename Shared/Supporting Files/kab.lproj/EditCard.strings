@@ -1,0 +1,12 @@
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "Uṭṭun n tkarḍa";
+
+/* Title label for user to input their name printed on their credit card in the text box below. */
+"CreditCard.EditCard.NameOnCardTitle.v112" = "Isem deg tkarḍa";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "Sekles";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v112" = "Asekles d taččart tawurmant n tkarḍiwin";
+
