@@ -15,8 +15,8 @@ protocol NotificationManagerProtocol {
     func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings
     func hasPermission(completion: @escaping (Bool) -> Void)
     func hasPermission() async -> Bool
-    func schedule(title: String, body: String, id: String, date: Date, repeats: Bool)
-    func schedule(title: String, body: String, id: String, interval: TimeInterval, repeats: Bool)
+    func schedule(title: String, body: String, id: String, userInfo: [AnyHashable: Any]?, date: Date, repeats: Bool)
+    func schedule(title: String, body: String, id: String, userInfo: [AnyHashable: Any]?, interval: TimeInterval, repeats: Bool)
     func findDeliveredNotifications(completion: @escaping ([UNNotification]) -> Void)
     func findDeliveredNotificationForId(id: String, completion: @escaping (UNNotification?) -> Void)
     func removeAllPendingNotifications()
@@ -113,24 +113,26 @@ class NotificationManager: NotificationManagerProtocol {
     func schedule(title: String,
                   body: String,
                   id: String,
+                  userInfo: [AnyHashable: Any]? = nil,
                   date: Date,
                   repeats: Bool = false) {
         let units: Set<Calendar.Component> = [.minute, .hour, .day, .month, .year]
         let dateComponents = Calendar.current.dateComponents(units, from: date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents,
                                                     repeats: repeats)
-        schedule(title: title, body: body, id: id, trigger: trigger)
+        schedule(title: title, body: body, id: id, userInfo: userInfo, trigger: trigger)
     }
 
     // Scheduling push notification based on the time interval trigger (Ex 2 sec, 10min)
     func schedule(title: String,
                   body: String,
                   id: String,
+                  userInfo: [AnyHashable: Any]? = nil,
                   interval: TimeInterval,
                   repeats: Bool = false) {
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval,
                                                         repeats: repeats)
-        schedule(title: title, body: body, id: id, trigger: trigger)
+        schedule(title: title, body: body, id: id, userInfo: userInfo, trigger: trigger)
     }
 
     // Fetches all delivered notifications that are still present in Notification Center.
@@ -167,11 +169,17 @@ class NotificationManager: NotificationManagerProtocol {
     private func schedule(title: String,
                           body: String,
                           id: String,
+                          userInfo: [AnyHashable: Any]? = nil,
                           trigger: UNNotificationTrigger) {
         let notificationContent = UNMutableNotificationContent()
         notificationContent.title = title
         notificationContent.body = body
         notificationContent.sound = UNNotificationSound.default
+
+        if let userInfo = userInfo {
+            notificationContent.userInfo = userInfo
+        }
+
         let trigger = trigger
         let request = UNNotificationRequest(identifier: id,
                                             content: notificationContent,
