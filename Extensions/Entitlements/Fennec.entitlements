@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.org.mozilla.ios.Fennec</string>
+		<string>group.com.aalaaeid.Fennec</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
