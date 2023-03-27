@@ -276,6 +276,7 @@ class BookmarksPanel: SiteTableViewController,
     private func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
         return indexPath.section < numberOfSections(in: tableView)
         && indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
+        && indexPath.row >= 0
         && viewModel.bookmarkFolderGUID != BookmarkRoots.MobileFolderGUID
     }
 
