@@ -4,6 +4,7 @@
 
 import Foundation
 import SwiftUI
+import Shared
 
 struct CreditCardSettingsEmptyView: View {
     struct Colors {
@@ -25,6 +26,8 @@ struct CreditCardSettingsEmptyView: View {
                         CreditCardAutofillToggle(
                             textColor: colors.toggleTextColor,
                             model: toggleModel)
+                        .background(Color.white)
+                        .padding(.top, 25)
                         Spacer()
                         Image(ImageIdentifiers.creditCardPlaceholder)
                             .resizable()
@@ -33,7 +36,8 @@ struct CreditCardSettingsEmptyView: View {
                             .fixedSize()
                             .padding([.top], 10)
                             .accessibility(hidden: true)
-                        Text(String.CreditCard.Settings.EmptyListTitle)
+                        Text(String(format: .CreditCard.Settings.EmptyListTitle,
+                                    AppName.shortName.rawValue))
                             .preferredBodyFont(size: 22)
                             .foregroundColor(colors.titleTextColor)
                             .multilineTextAlignment(.center)

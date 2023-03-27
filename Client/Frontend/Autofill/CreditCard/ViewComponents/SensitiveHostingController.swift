@@ -20,12 +20,12 @@ class SensitiveHostingController<Content>: UIHostingController<Content> where Co
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          localAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         super.init(rootView: rootView)
-
         self.notificationCenter = notificationCenter
         self.appAuthenticator = localAuthenticator
 
         setupNotifications(forObserver: self, observing: [UIApplication.didEnterBackgroundNotification,
                                                           UIApplication.willEnterForegroundNotification])
+        view.backgroundColor = .clear
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -34,6 +34,12 @@ class SensitiveHostingController<Content>: UIHostingController<Content> where Co
 
     deinit {
         notificationCenter?.removeObserver(self)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.isOpaque = false
+        view.backgroundColor = .clear
     }
 
     // MARK: - Private helpers
