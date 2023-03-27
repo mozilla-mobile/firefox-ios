@@ -245,24 +245,24 @@ class BoolSetting: Setting, FeatureFlaggable {
             settingDidChange: settingDidChange)
     }
 
-        init(
-            title: String,
-            description: String? = nil,
-            prefs: Prefs?,
-            prefKey: String? = nil,
-            defaultValue: Bool = false,
-            featureFlagName: NimbusFeatureFlagID? = nil,
-            enabled: Bool = true,
-            settingDidChange: @escaping (Bool) -> Void
-        ) {
-            self.statusText = description.map(NSAttributedString.init(string:))
-            self.prefs = prefs
-            self.prefKey = prefKey
-            self.defaultValue = defaultValue
-            self.featureFlagName = featureFlagName
-            self.settingDidChange = settingDidChange
-            super.init(title: NSAttributedString(string: title), enabled: enabled)
-        }
+    init(
+        title: String,
+        description: String? = nil,
+        prefs: Prefs?,
+        prefKey: String? = nil,
+        defaultValue: Bool = false,
+        featureFlagName: NimbusFeatureFlagID? = nil,
+        enabled: Bool = true,
+        settingDidChange: @escaping (Bool) -> Void
+    ) {
+        self.statusText = description.map(NSAttributedString.init(string:))
+        self.prefs = prefs
+        self.prefKey = prefKey
+        self.defaultValue = defaultValue
+        self.featureFlagName = featureFlagName
+        self.settingDidChange = settingDidChange
+        super.init(title: NSAttributedString(string: title), enabled: enabled)
+    }
 
     convenience init(
         with featureFlagID: NimbusFeatureFlagID,
