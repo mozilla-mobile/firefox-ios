@@ -240,7 +240,7 @@ public class RustSyncManager: NSObject, SyncManager {
                 // `SyncStateMachine.clearStateFromPrefs` to reduce RustSyncManager's
                 // dependence on the swift sync state machine logic. This will make
                 // refactoring or eliminating that code easier once the rust sync manager
-                // rollout is complete.
+                // experiment is complete.
                 Scratchpad.clearFromPrefs(self.prefsForSync.branch("scratchpad"))
                 self.prefsForSync.clearAll()
             }
@@ -315,12 +315,12 @@ public class RustSyncManager: NSObject, SyncManager {
             switch engine {
             case "tabs":
                 profile?.tabs.registerWithSyncManager()
-                rustEngines.append("tabs")
+                rustEngines.append(engine)
             case "passwords":
                 profile?.logins.registerWithSyncManager()
                 if let key = try? profile?.logins.getStoredKey() {
-                    localEncryptionKeys["passwords"] = key
-                    rustEngines.append("passwords")
+                    localEncryptionKeys[engine] = key
+                    rustEngines.append(engine)
                 } else {
                     logger.log("Login encryption key could not be retrieved for syncing",
                                level: .warning,
@@ -331,7 +331,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     profile?.places.registerWithSyncManager()
                     registeredPlaces = true
                 }
-                rustEngines.append("bookmarks")
+                rustEngines.append(engine)
             default:
                 continue
             }
@@ -506,8 +506,8 @@ public class RustSyncManager: NSObject, SyncManager {
 
     public func syncClientsThenTabs() -> OldSyncResult {
         // This function exists to comply with the `SyncManager` protocol while the
-        // rust sync manager rollout is enabled. To be safe, `syncTabs` is called. Once
-        // the rollout is complete this can be removed along with an update to the
+        // rust sync manager experiment is enabled. To be safe, `syncTabs` is called. Once
+        // the experiment is complete this can be removed along with an update to the
         // protocol.
 
         return syncTabs().bind { result in
@@ -524,15 +524,15 @@ public class RustSyncManager: NSObject, SyncManager {
 
     public func syncClients() -> OldSyncResult {
         // This function exists to to comply with the `SyncManager` protocol and has
-        // no callers. It will be removed when the rust sync manager rollout is complete.
-        // To be safe, `syncClientsThenTabs` is called.
+        // no callers. It will be removed when the rust sync manager experiment is
+        // complete. To be safe, `syncClientsThenTabs` is called.
         return syncClientsThenTabs()
     }
 
     public func syncHistory() -> OldSyncResult {
         // The return type of this function has been changed to comply with the
-        // `SyncManager` protocol during the rust sync manager rollout. It will be updated
-        // once the rollout is complete.
+        // `SyncManager` protocol during the rust sync manager experiment. It will be updated
+        // once the experiment is complete.
         return syncRustEngines(why: .user, engines: ["history"]).bind { result in
             if let error = result.failureValue {
                 return deferMaybe(error)

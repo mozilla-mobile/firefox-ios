@@ -72,6 +72,9 @@ final class NimbusFeatureFlagLayer {
         case .zoomFeature:
             return checkZoomFeature(from: nimbus)
 
+        case .rustSyncManagerComponent:
+            return checkNimbusForRustSyncManager(for: featureID, from: nimbus)
+
         case .engagementNotificationStatus:
             return checkNimbusForEngagementNotification(for: featureID, from: nimbus)
 
@@ -206,6 +209,17 @@ final class NimbusFeatureFlagLayer {
             }
     }
 
+    public func checkNimbusForRustSyncManager(
+        for featureID: NimbusFeatureFlagID,
+        from nimbus: FxNimbus) -> Bool {
+            let config = nimbus.features.rustSyncManagerComponent.value()
+
+            switch featureID {
+            case .rustSyncManagerComponent: return config.useRustSyncManager
+            default: return false
+            }
+    }
+
     public func checkNimbusForEngagementNotification(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus) -> Bool {
@@ -226,7 +240,7 @@ final class NimbusFeatureFlagLayer {
             case .notificationSettings: return config.notificationSettingsFeatureStatus
             default: return false
             }
-        }
+    }
 
     private func checkNimbusForOnboardingFeature(
         for featureID: NimbusFeatureFlagID,
