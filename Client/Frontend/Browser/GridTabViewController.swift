@@ -7,23 +7,6 @@ import Storage
 import Shared
 import Common
 
-struct GridTabTrayControllerUX {
-    static let CornerRadius = CGFloat(6.0)
-    static let TextBoxHeight = CGFloat(32.0)
-    static let FaviconSize = CGFloat(20)
-    static let Margin = CGFloat(15)
-    static let ToolbarButtonOffset = CGFloat(10.0)
-    static let CloseButtonSize = CGFloat(32)
-    static let CloseButtonMargin = CGFloat(6.0)
-    static let CloseButtonEdgeInset = CGFloat(7)
-    static let NumberOfColumnsThin = 1
-    static let NumberOfColumnsWide = 3
-    static let CompactNumberOfColumnsThin = 2
-    static let MenuFixedWidth: CGFloat = 320
-    static let undoToastDelay = DispatchTimeInterval.seconds(0)
-    static let undoToastDuration = DispatchTimeInterval.seconds(3)
-}
-
 protocol TabTrayDelegate: AnyObject {
     func tabTrayDidDismiss(_ tabTray: GridTabViewController)
     func tabTrayDidAddTab(_ tabTray: GridTabViewController, tab: Tab)
@@ -34,6 +17,23 @@ protocol TabTrayDelegate: AnyObject {
 }
 
 class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
+    struct UX {
+        static let cornerRadius: CGFloat = 6
+        static let textBoxHeight: CGFloat = 32
+        static let faviconSize: CGFloat = 20
+        static let margin: CGFloat = 15
+        static let toolbarButtonOffset: CGFloat = 10
+        static let closeButtonSize: CGFloat = 32
+        static let closeButtonMargin: CGFloat = 6
+        static let closeButtonEdgeInset: CGFloat = 7
+        static let numberOfColumnsThin = 1
+        static let numberOfColumnsWide = 3
+        static let compactNumberOfColumnsThin = 2
+        static let menuFixedWidth: CGFloat = 320
+        static let undoToastDelay = DispatchTimeInterval.seconds(0)
+        static let undoToastDuration = DispatchTimeInterval.seconds(3)
+    }
+
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
@@ -635,9 +635,9 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     fileprivate var numberOfColumns: Int {
         // iPhone 4-6+ portrait
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
-            return GridTabTrayControllerUX.CompactNumberOfColumnsThin
+            return GridTabViewController.UX.compactNumberOfColumnsThin
         } else {
-            return GridTabTrayControllerUX.NumberOfColumnsWide
+            return GridTabViewController.UX.numberOfColumnsWide
         }
     }
 
@@ -649,14 +649,14 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     }
 
     fileprivate func cellHeightForCurrentDevice() -> CGFloat {
-        let shortHeight = GridTabTrayControllerUX.TextBoxHeight * 6
+        let shortHeight = GridTabViewController.UX.textBoxHeight * 6
 
         if self.traitCollection.verticalSizeClass == .compact {
             return shortHeight
         } else if self.traitCollection.horizontalSizeClass == .compact {
             return shortHeight
         } else {
-            return GridTabTrayControllerUX.TextBoxHeight * 8
+            return GridTabViewController.UX.textBoxHeight * 8
         }
     }
 
@@ -684,7 +684,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return GridTabTrayControllerUX.Margin
+        return GridTabViewController.UX.margin
     }
 
     @objc func collectionView(
@@ -692,7 +692,7 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        let margin = GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)
+        let margin = GridTabViewController.UX.margin * CGFloat(numberOfColumns + 1)
         let calculatedWidth = collectionView.bounds.width - collectionView.safeAreaInsets.left - collectionView.safeAreaInsets.right - margin
         let cellWidth = floor(calculatedWidth / CGFloat(numberOfColumns))
         switch TabDisplaySection(rawValue: indexPath.section) {
@@ -746,29 +746,29 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         switch TabDisplaySection(rawValue: section) {
         case .regularTabs, .none:
             return UIEdgeInsets(
-                top: GridTabTrayControllerUX.Margin,
-                left: GridTabTrayControllerUX.Margin + collectionView.safeAreaInsets.left,
-                bottom: GridTabTrayControllerUX.Margin,
-                right: GridTabTrayControllerUX.Margin + collectionView.safeAreaInsets.right)
+                top: GridTabViewController.UX.margin,
+                left: GridTabViewController.UX.margin + collectionView.safeAreaInsets.left,
+                bottom: GridTabViewController.UX.margin,
+                right: GridTabViewController.UX.margin + collectionView.safeAreaInsets.right)
 
         case .inactiveTabs:
             guard !tabDisplayManager.isPrivate,
                   tabDisplayManager.inactiveViewModel?.inactiveTabs.count ?? 0 > 0
             else { return .zero }
 
-            return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
+            return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
 
         case .groupedTabs:
             guard tabDisplayManager.shouldEnableGroupedTabs,
                   tabDisplayManager.tabGroups?.count ?? 0 > 0
             else { return .zero }
 
-            return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
+            return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
         }
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return GridTabTrayControllerUX.Margin
+        return GridTabViewController.UX.margin
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -869,8 +869,8 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
         })
 
         toast.showToast(viewController: self,
-                        delay: GridTabTrayControllerUX.undoToastDelay,
-                        duration: GridTabTrayControllerUX.undoToastDuration) { toast in
+                        delay: UX.undoToastDelay,
+                        duration: UX.undoToastDuration) { toast in
             [
                 toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),

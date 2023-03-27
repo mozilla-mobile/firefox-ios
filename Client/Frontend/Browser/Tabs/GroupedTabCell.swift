@@ -293,18 +293,18 @@ class GroupedTabContainerCell: UITableViewCell,
     fileprivate var numberOfColumns: Int {
         // iPhone 4-6+ portrait
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
-            return GridTabTrayControllerUX.CompactNumberOfColumnsThin
+            return GridTabViewController.UX.compactNumberOfColumnsThin
         } else {
-            return GridTabTrayControllerUX.NumberOfColumnsWide
+            return GridTabViewController.UX.numberOfColumnsWide
         }
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return GridTabTrayControllerUX.Margin
+        return GridTabViewController.UX.margin
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
+        let cellWidth = floor((collectionView.bounds.width - GridTabViewController.UX.margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         let padding = isIpad && !UIWindow.isLandscape ? 75 : (isIpad && UIWindow.isLandscape) ? 105 : 10
         let width = (Int(cellWidth) - padding) >= 0 ? Int(cellWidth) - padding : 0
@@ -312,11 +312,11 @@ class GroupedTabContainerCell: UITableViewCell,
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
+        return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return GridTabTrayControllerUX.Margin
+        return GridTabViewController.UX.margin
     }
 
     @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
