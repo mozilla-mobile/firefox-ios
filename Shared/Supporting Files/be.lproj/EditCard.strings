@@ -1,3 +1,12 @@
+/* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardExpirationDateTitle.v112" = "Тэрмін дзеяння ММ / ГГ";
+
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "Нумар карты";
+
+/* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "Тэрмін дзеяння %@";
+
 /* Title label for user to input their name printed on their credit card in the text box below. */
 "CreditCard.EditCard.NameOnCardTitle.v112" = "Імя на карце";
 
