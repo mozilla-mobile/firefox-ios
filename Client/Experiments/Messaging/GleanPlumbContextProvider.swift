@@ -11,7 +11,6 @@ class GleanPlumbContextProvider {
         case todayDate = "date_string"
         case isDefaultBrowser = "is_default_browser"
         case isInactiveNewUser = "is_inactive_new_user"
-        case hasNotificationPermission = "has_notification_permission"
         case allowedTipsNotifications = "allowed_tips_notifications"
     }
 
@@ -54,13 +53,6 @@ class GleanPlumbContextProvider {
         return now < Date.fromTimestamp(firstAppUse + Constant.inactivityPeriod)
     }
 
-    private var hasNotificationPermission: Bool {
-        Task {
-            return await notificationManager.hasPermission()
-        }
-        return false
-    }
-
     private var allowedTipsNotifications: Bool {
         let featureEnabled = FeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly)
         let userPreference = (UserDefaults.standard.value(
@@ -76,7 +68,6 @@ class GleanPlumbContextProvider {
         return [ContextKey.todayDate.rawValue: todaysDate,
                 ContextKey.isDefaultBrowser.rawValue: isDefaultBrowser,
                 ContextKey.isInactiveNewUser.rawValue: isInactiveNewUser,
-                ContextKey.hasNotificationPermission.rawValue: hasNotificationPermission,
                 ContextKey.allowedTipsNotifications.rawValue: allowedTipsNotifications]
     }
 }
