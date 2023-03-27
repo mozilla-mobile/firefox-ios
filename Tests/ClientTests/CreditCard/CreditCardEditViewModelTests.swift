@@ -37,7 +37,7 @@ class CreditCardEditViewModelTests: XCTestCase {
         }
 
         profile = MockProfile()
-        profile.autofill.reopenIfClosed()
+        _ = profile.autofill.reopenIfClosed()
         viewModel = CreditCardEditViewModel(profile: profile)
     }
 
@@ -64,7 +64,7 @@ class CreditCardEditViewModelTests: XCTestCase {
         }
         waitForExpectations(timeout: 1.0)
     }
-    
+
     func testEditSate_setup() {
         // Setup edit state
         viewModel.state = .edit
@@ -72,7 +72,7 @@ class CreditCardEditViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.rightBarBtn, .save)
         XCTAssertEqual(viewModel.state.title, .CreditCard.EditCard.EditCreditCardTitle)
     }
-    
+
     func testAddSate_setup() {
         // Setup add state
         viewModel.state = .add
@@ -80,7 +80,7 @@ class CreditCardEditViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.rightBarBtn, .save)
         XCTAssertEqual(viewModel.state.title, .CreditCard.EditCard.AddCreditCardTitle)
     }
-    
+
     func testViewSate_setup() {
         // Setup view state
         viewModel.state = .view

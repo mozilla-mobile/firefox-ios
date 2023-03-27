@@ -173,9 +173,10 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
         guard let creditCardEditView = creditCardEditView else { return }
         creditCardAddEditView = UIHostingController(rootView: creditCardEditView)
-        creditCardAddEditView?.view.backgroundColor = .clear
-        creditCardAddEditView?.modalPresentationStyle = .formSheet
-        present(creditCardAddEditView!, animated: true, completion: nil)
+        guard let creditCardAddEditView = creditCardAddEditView else { return}
+        creditCardAddEditView.view.backgroundColor = .clear
+        creditCardAddEditView.modalPresentationStyle = .formSheet
+        present(creditCardAddEditView, animated: true, completion: nil)
     }
 
     @objc private func addCreditCard() {
