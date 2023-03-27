@@ -12,6 +12,7 @@ enum CreditCardSettingsState: String, Equatable, CaseIterable {
     case empty = "Empty"
     case add = "Add"
     case edit = "Edit"
+    case view = "View"
     case list = "List"
 }
 

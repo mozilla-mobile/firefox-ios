@@ -28,8 +28,6 @@ struct RemoveCardButton: View {
                 .fill(borderColor)
                 .frame(maxWidth: .infinity)
                 .frame(height: 0.7)
-                .padding(.leading, 10)
-                .padding(.trailing, 10)
             VStack {
                 Button(String.CreditCard.EditCard.RemoveCardButtonTitle) {
                     showAlert.toggle()
@@ -51,8 +49,6 @@ struct RemoveCardButton: View {
                 .fill(borderColor)
                 .frame(maxWidth: .infinity)
                 .frame(height: 0.7)
-                .padding(.leading, 10)
-                .padding(.trailing, 10)
         }
     }
 }
