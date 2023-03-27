@@ -129,7 +129,7 @@ extension AppDelegate {
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         var notificationAllowed = true
         if FeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
-            notificationAllowed = profile.prefs.boolForKey(PrefsKeys.Notifications.SyncNotifications) ?? true
+            notificationAllowed = UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.SyncNotifications)
         }
 
         RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken,
