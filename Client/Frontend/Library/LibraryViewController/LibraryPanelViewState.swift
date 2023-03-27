@@ -60,7 +60,7 @@ enum LibraryPanelSubState {
         case .inFolder:
             if oldState == .inFolderEditMode { return true }
         case .inFolderEditMode:
-            if oldState == .itemEditMode { return true }
+            if oldState == .itemEditMode || oldState == .itemEditModeInvalidField { return true }
         default:
             return false
         }
@@ -73,7 +73,7 @@ enum LibraryPanelSubState {
             if oldState == .mainView { return true }
         case .inFolderEditMode:
             if oldState == .inFolder { return true }
-        case .itemEditMode:
+        case .itemEditMode, .itemEditModeInvalidField:
             if oldState == .inFolderEditMode { return true }
         default:
             return false
