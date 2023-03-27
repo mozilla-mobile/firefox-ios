@@ -46,6 +46,7 @@ enum LibraryPanelSubState {
     case inFolder
     case inFolderEditMode
     case itemEditMode
+    case itemEditModeInvalidField
     case search
 
     // The following two functions enable checking that substate moves are legal.

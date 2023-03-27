@@ -147,10 +147,13 @@ class BookmarksPanel: SiteTableViewController,
                                      tapHandler: { _ in
             guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
-            self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
+            self.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
             let detailController = BookmarkDetailPanel(profile: self.profile,
                                                        withNewBookmarkNodeType: .bookmark,
-                                                       parentBookmarkFolder: bookmarkFolder)
+                                                       parentBookmarkFolder: bookmarkFolder) { state in
+                self.updatePanelState(newState: .bookmarks(state: state))
+                self.sendPanelChangeNotification()
+            }
             self.navigationController?.pushViewController(detailController, animated: true)
         }).items
     }
@@ -563,6 +566,9 @@ extension BookmarksPanel {
             presentInFolderActions()
 
         case .itemEditMode:
+            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+
+        case .itemEditModeInvalidField:
             updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
 
         default:
