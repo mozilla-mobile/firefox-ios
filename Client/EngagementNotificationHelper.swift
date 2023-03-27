@@ -28,7 +28,7 @@ class EngagementNotificationHelper: FeatureFlaggable {
                                                                           checking: .buildOnly)
     private var allowedTipsNotifications: Bool {
         let featureEnabled = featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly)
-        let userPreference = userDefaults.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications) ?? true
+        let userPreference = userDefaults.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
         return featureEnabled && userPreference
     }
 
