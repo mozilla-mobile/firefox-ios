@@ -5,54 +5,145 @@
 import Foundation
 import Storage
 import SwiftUI
+import Shared
 
 struct CreditCardEditView: View {
     @ObservedObject var viewModel: CreditCardEditViewModel
-    let removeButtonColor: Color
-    let borderColor: Color
+    var dismiss: ((_ successVal: Bool) -> Void)
+
+    // Theming
+    @Environment(\.themeType) var themeVal
+    @State var backgroundColor: Color = .clear
+    @State var removeButtonColor: Color = .clear
+    @State var borderColor: Color = .clear
+    @State var textFieldBackgroundColor: Color = .clear
 
     var body: some View {
-        VStack(spacing: 11) {
-            let colors = FloatingTextField.Colors(
-                errorColor: .red,
-                titleColor: .gray,
-                textFieldColor: .gray)
+        NavigationView {
+            ZStack {
+                backgroundColor.ignoresSafeArea()
+                VStack(spacing: 0) {
+                    Divider()
+                        .frame(height: 0.7)
+                        .foregroundColor(borderColor)
 
-            FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
-                              textVal: $viewModel.nameOnCard,
-                              errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
-                              showError: !viewModel.nameIsValid,
-                              colors: colors)
-            Divider()
-                .frame(height: 0.7)
+                    Group {
+                        FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
+                                          textVal: $viewModel.nameOnCard,
+                                          errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
+                                          showError: !viewModel.nameIsValid)
+                        .padding(.top, 11)
 
-            FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
-                              textVal: $viewModel.cardNumber,
-                              errorString: String.CreditCard.ErrorState.CardNumberSublabel,
-                              showError: !viewModel.numberIsValid,
-                              colors: colors)
-            Divider()
-                .frame(height: 0.7)
+                        Divider()
+                            .frame(height: 0.7)
+                            .foregroundColor(borderColor)
+                            .padding(.top, 1)
+                    }
+                    .background(textFieldBackgroundColor)
 
-            FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
-                              textVal: $viewModel.expirationDate,
-                              errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
-                              showError: !viewModel.expirationIsValid,
-                              colors: colors)
-            Divider()
-                .frame(height: 0.7)
+                    Group {
+                        FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
+                                          textVal: $viewModel.cardNumber,
+                                          errorString: String.CreditCard.ErrorState.CardNumberSublabel,
+                                          showError: !viewModel.numberIsValid,
+                                          keyboardType: .numberPad)
+                        .padding(.top, 11)
 
-            Spacer()
-                .frame(height: 4)
+                        Divider()
+                            .frame(height: 0.7)
+                            .foregroundColor(borderColor)
+                            .padding(.top, 1)
+                    }
+                    .background(textFieldBackgroundColor)
 
-            RemoveCardButton(
-                removeButtonColor: removeButtonColor,
-                borderColor: borderColor,
-                alertDetails: viewModel.removeButtonDetails
-            )
-            Spacer()
+                    Group {
+                        FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
+                                          textVal: $viewModel.expirationDate,
+                                          errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
+                                          showError: !viewModel.expirationIsValid,
+                                          keyboardType: .numberPad)
+                        .padding(.top, 11)
+
+                        Divider()
+                            .frame(height: 0.7)
+                            .foregroundColor(borderColor)
+                            .padding(.top, 1)
+                    }
+                    .background(textFieldBackgroundColor)
+
+                    Spacer()
+                        .frame(height: 4)
+
+                    if viewModel.state == .edit {
+                        RemoveCardButton(
+                            removeButtonColor: removeButtonColor,
+                            borderColor: borderColor,
+                            alertDetails: viewModel.removeButtonDetails
+                        )
+                        .padding(.top, 28)
+                    }
+
+                    Spacer()
+                }
+                .navigationBarTitle(viewModel.state.title,
+                                    displayMode: .inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        rightBarButton()
+                            .disabled(!viewModel.isRightBarButtonEnabled)
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        leftBarButton()
+                    }
+                }
+                .padding(.top, 0)
+                .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
+            }
+            .onAppear {
+                applyTheme(theme: themeVal.theme)
+            }
+            .onChange(of: themeVal) { val in
+                applyTheme(theme: val.theme)
+            }
         }
-        .padding(.top, 20)
+    }
+
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        backgroundColor = Color(color.layer1)
+        removeButtonColor = Color(color.textWarning)
+        borderColor = Color(color.borderPrimary)
+        textFieldBackgroundColor = Color(color.layer2)
+    }
+
+    func rightBarButton() -> some View {
+        let btnState = viewModel.state.rightBarBtn
+        return Button(btnState.title) {
+            switch btnState {
+            case .edit:
+                viewModel.updateState(state: .edit)
+            case.save:
+                viewModel.saveCreditCard { _, error in
+                    guard error != nil else {
+                        dismiss(true)
+                        return
+                    }
+                    dismiss(false)
+                }
+            }
+        }
+    }
+
+    func leftBarButton() -> some View {
+        let btnState = viewModel.state.leftBarBtn
+        return Button(btnState.title) {
+            switch btnState {
+            case .cancel:
+                viewModel.updateState(state: .view)
+            case.close:
+                dismiss(false)
+            }
+        }
     }
 }
 
@@ -74,10 +165,13 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                                 lastName: "Simmons",
                                                 errorState: "Temp",
                                                 enteredValue: "",
-                                                creditCard: sampleCreditCard)
+                                                creditCard: sampleCreditCard,
+                                                state: .view)
 
-        CreditCardEditView(viewModel: viewModel,
-                           removeButtonColor: .gray,
-                           borderColor: .gray)
+        let editView = CreditCardEditView(
+            viewModel: viewModel,
+            dismiss: { successVal in
+            // didmiss view
+        })
     }
 }
