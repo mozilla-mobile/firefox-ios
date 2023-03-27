@@ -303,11 +303,13 @@ class LegacyTabManagerTests: XCTestCase {
         let tab = manager.addTab()
         manager.selectTab(tab)
         manager.selectTab(manager.addTab())
-        manager.selectTab(manager.addTab(isPrivate: true))
 
         manager.willSwitchTabMode(leavingPBM: false)
+        manager.selectTab(manager.addTab(isPrivate: true))
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be 1 private tab")
+
         manager.willSwitchTabMode(leavingPBM: true)
+        manager.selectTab(tab)
         XCTAssertEqual(manager.privateTabs.count, 0, "There should be 0 private tab")
 
         removeTabAndAssert(tab: tab) {
