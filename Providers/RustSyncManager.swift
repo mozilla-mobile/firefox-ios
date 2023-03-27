@@ -525,7 +525,7 @@ public class RustSyncManager: NSObject, SyncManager {
     public func syncClients() -> OldSyncResult {
         // This function exists to to comply with the `SyncManager` protocol and has
         // no callers. It will be removed when the rust sync manager experiment is
-        //complete. To be safe, `syncClientsThenTabs` is called.
+        // complete. To be safe, `syncClientsThenTabs` is called.
         return syncClientsThenTabs()
     }
 
