@@ -18,13 +18,6 @@ struct CreditCardEditView: View {
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
 
-    private var isRightBarButtonEnabled: Bool {
-        viewModel.state.rightBarBtn == .save &&
-        (viewModel.nameIsValid &&
-         viewModel.numberIsValid &&
-         !viewModel.expirationDate.isEmpty)
-    }
-
     var body: some View {
         NavigationView {
             ZStack {
@@ -96,7 +89,8 @@ struct CreditCardEditView: View {
                                     displayMode: .inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        rightBarButton().disabled(!isRightBarButtonEnabled)
+                        rightBarButton()
+                            .disabled(!viewModel.isRightBarButtonEnabled)
                     }
                     ToolbarItem(placement: .navigationBarLeading) {
                         leftBarButton()
