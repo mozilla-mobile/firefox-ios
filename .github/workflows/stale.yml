@@ -18,9 +18,6 @@ jobs:
       - uses: actions/stale@v7.0.0
         with:
           ### GENERAL ###
-          # Idle number of days before closing stale issues/PRs
-          days-before-close: 30
-
           # Max number of operations per run
           operations-per-run: 1000
 
@@ -31,6 +28,9 @@ jobs:
           # Idle number of days before marking issues stale, set `-1` to disable
           # 350 days (a little less than a year) for now, can be evaluated later if needs to be lowered more
           days-before-issue-stale: 350
+
+          # Idle number of days before closing stale issues
+          days-before-issue-close: 30
 
           # Comment on the staled issues
           stale-issue-message: "This issue has been automatically marked as stale. Has the issue been fixed, or does it still require the community's attention? Please leave any comment to keep this issue opened. It will be closed automatically if no further update occurs in the next 30 days. Thank you for your contributions!"
@@ -48,12 +48,16 @@ jobs:
           stale-issue-label: "stale"
 
           ### PULL REQUESTS ###
-          # Idle number of days before marking issues stale, set `-1` to disable
-          # We need to review PRs faster than 3 months
-          days-before-pr-stale: 90
+          # Idle number of days before marking PRs stale
+          # We need to review PRs faster than 1 month. If there's no action on a PR for a month
+          # we should close it.
+          days-before-pr-stale: 30
+
+          # Idle number of days before closing stale PRs
+          days-before-pr-close: 7
 
           # Comment on the staled PRs
-          stale-pr-message: "This PR has been automatically marked as stale. Please leave any comment to keep this PR opened. It will be closed automatically if no further update occurs in the next 30 days. Thank you for your contributions!"
+          stale-pr-message: "This PR has been automatically marked as stale. Please leave any comment to keep this PR opened. It will be closed automatically if no further update occurs in the next 7 days. Thank you for your contributions!"
 
           # Label to apply on staled PRs
           stale-pr-label: "stale"
