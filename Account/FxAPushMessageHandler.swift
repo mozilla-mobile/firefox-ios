@@ -125,7 +125,7 @@ extension FxAPushMessageHandler {
                             }
 
                             waitForClient = Deferred<Maybe<String>>()
-                            profile.remoteClientsAndTabs.getClient(fxaDeviceId: deviceId).uponQueue(.main) { result in
+                            profile.getClient(fxaDeviceId: deviceId).uponQueue(.main) { result in
                                 guard let device = result.successValue else {
                                     waitForClient?.fill(Maybe(failure: result.failureValue ?? "Unknown Error"))
                                     return
