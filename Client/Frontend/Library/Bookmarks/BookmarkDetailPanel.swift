@@ -63,8 +63,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     // along with their indentation depth.
     var bookmarkFolders: [(folder: BookmarkFolderData, indent: Int)] = []
 
-    // When `BookmarkDetailPanel` is not presented from toast, the save button is disabled.
-    // When fields are valid, updatePanelState updates Toolbar appropriaetly.
+    // When `bookmarkItemURL` and `bookmarkItemOrFolderTitle` are valid updatePanelState updates Toolbar appropriaetly.
     var updatePanelState: ((LibraryPanelSubState) -> Void)?
 
     private var maxIndentationLevel: Int {
