@@ -79,7 +79,7 @@ class LegacyTabManagerStoreImplementation: LegacyTabManagerStore, FeatureFlaggab
     func removeScreenshot(forTab tab: Tab?) {
         if let tab = tab, let screenshotUUID = tab.screenshotUUID {
             Task {
-                try await imageStore?.deleteImageForKey(screenshotUUID.uuidString)
+                await imageStore?.deleteImageForKey(screenshotUUID.uuidString)
             }
         }
     }
