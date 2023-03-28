@@ -48,7 +48,8 @@ extension LegacySavedTab {
         if let screenshotUUID = screenshotUUID, let imageStore = imageStore {
             tab.screenshotUUID = screenshotUUID
             if let uuidString = tab.screenshotUUID?.uuidString {
-                imageStore.get(uuidString) >>== { screenshot in
+                Task {
+                    let screenshot = try? await imageStore.getImageForKey(uuidString)
                     if tab.screenshotUUID == screenshotUUID {
                         tab.setScreenshot(screenshot)
                     }

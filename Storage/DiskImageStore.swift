@@ -6,11 +6,10 @@ import Shared
 import UIKit
 import Common
 
-private class DiskImageStoreErrorType: MaybeErrorType {
-    let description: String
-    init(description: String) {
-        self.description = description
-    }
+enum DiskImageStoreErrorCase: Error {
+    case notFound(description: String)
+    case invalidImageData(description: String)
+    case cannotWrite(description: String)
 }
 
 /**
@@ -44,50 +43,81 @@ open class DiskImageStore {
     }
 
     /// Gets an image for the given key if it is in the store.
-    open func get(_ key: String) -> Deferred<Maybe<UIImage>> {
-        return deferDispatchAsync(queue) { () -> Deferred<Maybe<UIImage>> in
-            if !self.keys.contains(key) {
-                return deferMaybe(DiskImageStoreErrorType(description: "Image key not found"))
-            }
+    public func getImageForKey(_ key: String) async throws -> UIImage {
+        return try await withCheckedThrowingContinuation { continuation in
+            queue.async {
+                if !self.keys.contains(key) {
+                    continuation.resume(throwing: DiskImageStoreErrorCase.notFound(description: "Image key not found"))
+                    return
+                }
 
-            let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
-            if let data = try? Data(contentsOf: imagePath),
-               let image = UIImage.imageFromDataThreadSafe(data) {
-                return deferMaybe(image)
+                let imagePath = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+                do {
+                    let data = try Data(contentsOf: imagePath)
+                    if let image = UIImage.imageFromDataThreadSafe(data) {
+                        continuation.resume(returning: image)
+                    } else {
+                        continuation.resume(throwing: DiskImageStoreErrorCase.invalidImageData(description: "Invalid image data"))
+                    }
+                } catch {
+                    continuation.resume(throwing: error)
+                }
             }
-
-            return deferMaybe(DiskImageStoreErrorType(description: "Invalid image data"))
         }
     }
 
     /// Adds an image for the given key.
     /// This put is asynchronous; the image is not recorded in the cache until the write completes.
     /// Does nothing if this key already exists in the store.
-    @discardableResult open func put(_ key: String, image: UIImage) -> Success {
-        return deferDispatchAsync(queue) { () -> Success in
-            let imageURL = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
-            if let data = image.jpegData(compressionQuality: self.quality) {
-                do {
-                    try data.write(to: imageURL, options: .noFileProtection)
-                    self.keys.insert(key)
-                    return succeed()
-                } catch {
-                    self.logger.log("Unable to write image to disk: \(error)",
-                                    level: .warning,
-                                    category: .storage)
+    public func saveImageForKey(_ key: String, image: UIImage) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            queue.async {
+                let size = CGSize(width: image.size.width / 2, height: image.size.height / 2)
+
+                let format = UIGraphicsImageRendererFormat()
+                format.scale = 1
+                let renderer = UIGraphicsImageRenderer(size: size, format: format)
+                let scaledImage = renderer.image { _ in
+                    image.draw(in: CGRect(origin: .zero, size: size))
+                }
+
+                let imageURL = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+                if let data = scaledImage.jpegData(compressionQuality: self.quality) {
+                    do {
+                        try data.write(to: imageURL, options: .noFileProtection)
+                        self.keys.insert(key)
+                        continuation.resume()
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                } else {
+                    continuation.resume(throwing: DiskImageStoreErrorCase.cannotWrite(description: "Could not write image to file"))
                 }
             }
-
-            return deferMaybe(DiskImageStoreErrorType(description: "Could not write image to file"))
         }
     }
 
     /// Clears all images from the cache, excluding the given set of keys.
-    open func clearExcluding(_ keys: Set<String>) -> Success {
-        return deferDispatchAsync(queue) { () -> Success in
+    public func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { taskGroup in
             let keysToDelete = self.keys.subtracting(keys)
 
             for key in keysToDelete {
+                taskGroup.addTask {
+                    let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
+                    try FileManager.default.removeItem(at: url)
+                }
+            }
+
+            try await taskGroup.waitForAll()
+            self.keys = self.keys.intersection(keys)
+        }
+    }
+
+    /// Remove image with provided key
+    public func deleteImageForKey(_ key: String) async {
+        await withCheckedContinuation { continuation in
+            queue.async {
                 let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
                 do {
                     try FileManager.default.removeItem(at: url)
@@ -96,28 +126,8 @@ open class DiskImageStore {
                                     level: .warning,
                                     category: .storage)
                 }
+                continuation.resume()
             }
-
-            self.keys = self.keys.intersection(keys)
-
-            return succeed()
-        }
-    }
-
-    /// Remove image with provided key
-    open func removeImage(_ key: String) -> Success {
-        return deferDispatchAsync(queue) { () -> Success in
-            let url = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
-
-            do {
-                try FileManager.default.removeItem(at: url)
-            } catch {
-                self.logger.log("Failed to remove DiskImageStore item at \(url.absoluteString): \(error)",
-                                level: .warning,
-                                category: .storage)
-            }
-
-            return succeed()
         }
     }
 }
