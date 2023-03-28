@@ -1449,7 +1449,6 @@ workflows:
             echo $BITRISE_XCRESULT_PATH
             ls
             ls $BITRISE_XCRESULT_PATH
-            ls $BITRISE_XCRESULT_PATH/Test-Fennec_Enterprise_XCUITests-*
 
             xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH/Test-Fennec_Enterprise_XCUITests-*
             ls ..
