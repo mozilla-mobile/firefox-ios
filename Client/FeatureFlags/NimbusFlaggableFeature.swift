@@ -28,7 +28,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case pullToRefresh
     case recentlySaved
     case reportSiteIssue
-    case rustSyncManagerComponent
     case searchHighlights
     case shakeToRestore
     case shareSheetChanges
@@ -102,7 +101,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .onboardingFreshInstall,
                 .onboardingNotificationCard,
                 .reportSiteIssue,
-                .rustSyncManagerComponent,
                 .searchHighlights,
                 .shakeToRestore,
                 .shareSheetChanges,
