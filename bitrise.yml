@@ -1431,6 +1431,8 @@ workflows:
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: "-testPlan PerformanceTestPlan"
         - simulator_device: "iPhone 14"
+    
+    - deploy-to-bitrise-io@1.9: {}
     - script@1.1:
         title: Create perfherder data object
         inputs:
@@ -1447,7 +1449,6 @@ workflows:
             python3 xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             python3 perfTestTransform.py
-    - deploy-to-bitrise-io@1.9: {}
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x-ventura
