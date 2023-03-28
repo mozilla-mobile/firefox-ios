@@ -371,8 +371,7 @@ public class RustSyncManager: NSObject, SyncManager {
                     }
 
                     self.getEnginesAndKeys(engines: engines).upon { result in
-                        guard let (rustEngines, localEncryptionKeys) = result
-                            .successValue else {
+                        guard let (rustEngines, localEncryptionKeys) = result.successValue else {
                             deferred.fill(Maybe(failure: EngineAndKeyRetrievalError()))
                             return
                         }
