@@ -190,12 +190,12 @@ class SearchEngines {
             do {
                 try data.write(to: URL(fileURLWithPath: customEngineFilePath))
             } catch {
-                logger.log("Error writing data to file: \(error.description)",
+                logger.log("Error writing data to file: \(error.localizedDescription)",
                            level: .debug,
                            category: .images)
             }
         } catch {
-            logger.log("Error archiving custom engines: \(error.description)",
+            logger.log("Error archiving custom engines: \(error.localizedDescription)",
                        level: .debug,
                        category: .images)
         }
