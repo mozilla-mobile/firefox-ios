@@ -1434,7 +1434,6 @@ workflows:
         - simulator_device: "iPhone 14"
         - test_plan: PerformanceTestPlan
     
-    - deploy-to-bitrise-io@1.9: {}
     - script@1.1:
         title: Create perfherder data object
         inputs:
@@ -1447,10 +1446,19 @@ workflows:
             # get dependency
             cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
             
-            xcrun xcresulttool graph --path $BITRISE_XCODEBUILD_TEST_LOG_PATH/Test-Fennec_Enterprise_XCUITests-*
+            echo $BITRISE_XCRESULT_PATH
+            ls
+            ls $BITRISE_XCRESULT_PATH
+            ls $BITRISE_XCRESULT_PATH/Test-Fennec_Enterprise_XCUITests-*
+
+            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH/Test-Fennec_Enterprise_XCUITests-*
+            ls ..
             python3 xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
+            cat data.txt
+            cat test.json
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             python3 perfTestTransform.py
+    - deploy-to-bitrise-io@1.9: {}
     meta:
       bitrise.io:
         stack: osx-xcode-14.1.x-ventura
