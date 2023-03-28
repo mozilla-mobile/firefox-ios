@@ -575,7 +575,8 @@ open class BrowserProfile: Profile {
         logger.log("Getting all tabs and clients", level: .debug, category: .tabs)
 
         guard let accountManager = self.rustFxA.accountManager.peek(),
-              let state = accountManager.deviceConstellation()?.state() else {
+              let state = accountManager.deviceConstellation()?.state()
+        else {
             return deferMaybe([])
         }
 
