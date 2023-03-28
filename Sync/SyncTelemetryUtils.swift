@@ -470,11 +470,8 @@ public class GleanSyncOperationHelper {
 
     public func reportTelemetry(_ result: MozillaAppServices.SyncResult) {
         guard let json = result.telemetryJson,
-              let telemetry = try? RustSyncTelemetryPing.fromJSONString(
-                jsonObjectText: json
-              ) else {
-            return
-        }
+              let telemetry = try? RustSyncTelemetryPing.fromJSONString(jsonObjectText: json)
+        else { return }
 
         for sync in telemetry.syncs {
             _ = GleanMetrics.Sync.syncUuid.generateAndSet()
