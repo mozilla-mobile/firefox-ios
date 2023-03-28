@@ -49,7 +49,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     var contextualHintViewController: ContextualHintViewController
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var toolbarHeight: CGFloat = 0
+
+    var toolbarHeight: CGFloat {
+        return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
+    }
 
     // This is an optional variable used if we wish to focus a tab that is not the
     // currently selected tab. This allows us to force the scroll behaviour to move
@@ -522,6 +525,7 @@ extension GridTabViewController: TabPeekDelegate {
     }
 
     func tabPeekDidCopyUrl() {
+        print("YRD height \(toolbarHeight)")
         SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
                                         bottomContainer: view,
                                         theme: themeManager.currentTheme,
@@ -606,10 +610,6 @@ extension GridTabViewController {
                              accessibilityIdentifier: AccessibilityIdentifiers.TabTray.deleteCancelButton)
         controller.popoverPresentationController?.barButtonItem = sender
         present(controller, animated: true, completion: nil)
-    }
-
-    func setToolbarHeight(height: CGFloat) {
-        toolbarHeight = height
     }
 }
 
@@ -874,7 +874,8 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
             [
                 toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
                 toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -83)
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
+                                              constant: -self.toolbarHeight)
             ]
         }
     }
