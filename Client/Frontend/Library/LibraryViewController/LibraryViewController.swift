@@ -269,7 +269,7 @@ class LibraryViewController: UIViewController, Themeable {
         case .bookmarks(state: .itemEditModeInvalidField):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
             navigationItem.rightBarButtonItem = topRightButton
-            navigationItem.rightBarButtonItem?.isEnabled = false 
+            navigationItem.rightBarButtonItem?.isEnabled = false
         default:
             topRightButton.title = String.AppSettingsDone
             navigationItem.rightBarButtonItem = topRightButton
