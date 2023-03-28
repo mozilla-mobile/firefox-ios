@@ -557,9 +557,7 @@ open class BrowserProfile: Profile {
             logger.log(msg, level: .debug, category: .sync)
 
             tabs.getClientGUIDs { (result, error) in
-                guard let guids = result else {
-                    return
-                }
+                guard let guids = result else { return }
                 completion(guids)
             }
         } else {
