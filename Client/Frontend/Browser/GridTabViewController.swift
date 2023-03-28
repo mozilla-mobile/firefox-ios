@@ -839,7 +839,7 @@ extension GridTabViewController: Notifiable {
 protocol InactiveTabsCFRProtocol {
     func setupCFR(with view: UILabel)
     func presentCFR()
-    func presentUndoToast(completion: @escaping (Bool) -> Void)
+    func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void)
 }
 
 // MARK: - Contextual Hint and Toast
@@ -858,9 +858,9 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: contextualHintViewController)
     }
 
-    func presentUndoToast(completion: @escaping (Bool) -> Void) {
+    func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
         let viewModel = ButtonToastViewModel(
-            labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, 33),
+            labelText: String.localizedStringWithFormat(.TabsDeleteAllUndoTitle, tabsCount),
             buttonText: .TabsDeleteAllUndoAction)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,

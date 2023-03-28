@@ -15,7 +15,7 @@ enum InactiveTabSection: Int, CaseIterable {
 protocol InactiveTabsDelegate: AnyObject {
     func toggleInactiveTabSection(hasExpanded: Bool)
     func didSelectInactiveTab(tab: Tab?)
-    func didTapCloseAllTabs()
+    func didTapCloseAllTabs(tabsCount: Int)
     func shouldCloseInactiveTab(tab: Tab)
     func setupCFR(with view: UILabel)
     func presentCFR()
@@ -144,8 +144,9 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
             }
 
             cell.buttonClosure = {
-                self.delegate?.didTapCloseAllTabs()
+                let inactiveTabsCount = self.inactiveTabsViewModel?.inactiveTabs.count
                 self.inactiveTabsViewModel?.closeInactivateTabs()
+                self.delegate?.didTapCloseAllTabs(tabsCount: inactiveTabsCount ?? 0)
             }
 
             return cell
