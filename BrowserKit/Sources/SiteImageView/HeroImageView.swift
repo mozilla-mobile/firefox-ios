@@ -79,6 +79,7 @@ public class HeroImageView: UIView, SiteImageView {
     func setURL(_ siteURLString: String, type: SiteImageType) {
         guard canMakeRequest(with: siteURLString) else { return }
 
+        heroImageView.image = nil
         let id = UUID()
         uniqueID = id
 
