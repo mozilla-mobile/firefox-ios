@@ -130,7 +130,7 @@ class HistoryDeletionUtility: HistoryDeletionProtocol {
     }
 
     // MARK: - Helper functions
-    
+
     public func deletionReferenceValue(for dateOption: HistoryDeletionUtilityDateOptions) -> Int64 {
         return dateFor(dateOption)?.toMillisecondsSince1970() ?? Int64.max
     }
