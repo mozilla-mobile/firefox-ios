@@ -567,9 +567,7 @@ open class BrowserProfile: Profile {
             logger.log(msg, level: .debug, category: .sync)
 
             remoteClientsAndTabs.getClientGUIDs().upon { result in
-                guard let guids = result.successValue else {
-                    return
-                }
+                guard let guids = result.successValue else { return }
                 completion(guids)
             }
         }
