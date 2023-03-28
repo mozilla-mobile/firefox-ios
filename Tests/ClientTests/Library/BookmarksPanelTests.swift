@@ -72,7 +72,7 @@ class BookmarksPanelTests: XCTestCase {
         XCTAssertNotNil(mockNavigationController.pushedViewController)
         XCTAssertTrue(mockNavigationController.pushedViewController is BookmarkDetailPanel)
 
-        XCTAssertEqual(panel.state, .bookmarks(state: .itemEditMode))
+        XCTAssertEqual(panel.state, .bookmarks(state: .itemEditModeInvalidField))
         let toolbarItems = panel.bottomToolbarItems
         // We need to account for the flexibleSpace item
         XCTAssertEqual(toolbarItems.count, 2, "Expected Edit button and flexibleSpace")
@@ -180,6 +180,21 @@ class BookmarksPanelTests: XCTestCase {
 
         panel.handleRightTopButton()
         XCTAssertEqual(panel.state, .bookmarks(state: .inFolderEditMode), "State changes")
+    }
+
+    func testBookmarks_ItemEditModeInvalidField_RightTopButton_WithBookmarkDetailPanel_NoStateChange() {
+        let panel = createPanel()
+        let mockNavigationController = SpyNavigationController(rootViewController: panel)
+        panel.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
+
+        // Pushing bookmark detail panel as if we are truly in .itemEditMode
+        let bookmarkDetailPanel = BookmarkDetailPanel(profile: MockProfile(),
+                                                      withNewBookmarkNodeType: .bookmark,
+                                                      parentBookmarkFolder: LocalDesktopFolder())
+        mockNavigationController.setViewControllers([panel, bookmarkDetailPanel], animated: false)
+
+        panel.handleRightTopButton()
+        XCTAssertEqual(panel.state, .bookmarks(state: .itemEditModeInvalidField), "No state change when right top button is disabled")
     }
 }
 

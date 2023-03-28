@@ -250,7 +250,7 @@ class LibraryViewController: UIViewController, Themeable {
              .history(state: .inFolder):
             topLeftButton.image = UIImage.templateImageNamed(ImageIdentifiers.menuGoBack)?.imageFlippedForRightToLeftLayoutDirection()
             navigationItem.leftBarButtonItem = topLeftButton
-        case .bookmarks(state: .itemEditMode):
+        case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField):
             topLeftButton.image = UIImage.templateImageNamed("nav-stop")
             navigationItem.leftBarButtonItem = topLeftButton
         default:
@@ -265,9 +265,15 @@ class LibraryViewController: UIViewController, Themeable {
         case .bookmarks(state: .itemEditMode):
             topRightButton.title = .SettingsAddCustomEngineSaveButtonText
             navigationItem.rightBarButtonItem = topRightButton
+            navigationItem.rightBarButtonItem?.isEnabled = true
+        case .bookmarks(state: .itemEditModeInvalidField):
+            topRightButton.title = .SettingsAddCustomEngineSaveButtonText
+            navigationItem.rightBarButtonItem = topRightButton
+            navigationItem.rightBarButtonItem?.isEnabled = false
         default:
             topRightButton.title = String.AppSettingsDone
             navigationItem.rightBarButtonItem = topRightButton
+            navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
 
