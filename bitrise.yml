@@ -1450,7 +1450,7 @@ workflows:
             ls
             ls $BITRISE_XCRESULT_PATH
 
-            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH/Test-Fennec_Enterprise_XCUITests-*
+            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
             ls ..
             python3 xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
             cat data.txt
