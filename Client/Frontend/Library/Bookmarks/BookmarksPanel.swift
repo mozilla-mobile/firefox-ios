@@ -49,8 +49,13 @@ class BookmarksPanel: SiteTableViewController,
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
-        case .bookmarks(state: .itemEditMode), .bookmarks(state: .itemEditModeInvalidField):
+        case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
+            bottomRightButton.isEnabled = true
+            return [flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .itemEditModeInvalidField):
+            bottomRightButton.title = String.AppSettingsDone
+            bottomRightButton.isEnabled = false
             return [flexibleSpace, bottomRightButton]
         default:
             return [UIBarButtonItem]()
