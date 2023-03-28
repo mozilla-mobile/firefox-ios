@@ -33,8 +33,8 @@ open class SyncTelemetry {
                                 logger: Logger = DefaultLogger.shared) {
         guard let prefs = prefs else {
             logger.log("Prefs were not initialized",
-                                     level: .warning,
-                                     category: .telemetry)
+                       level: .warning,
+                       category: .telemetry)
 
             assertionFailure("Prefs not initialized")
             return

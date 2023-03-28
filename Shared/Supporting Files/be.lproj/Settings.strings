@@ -1,3 +1,12 @@
+/* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
+"CreditCard.Settings.EmptyListDescription.v112" = "Надзейна захавайце інфармацыю аб вашай карце, каб у наступны раз хутчэй разлічыцца.";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v112" = "Захаваць крэдытныя карты ў %@";
+
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card type (e.g. Visa). The second parameter is the last 4 digits of the credit card. The third parameter is the name of the credit card holder. The fourth and fifth parameters are the month and year of the credit card's expiration date. */
+"CreditCard.Settings.ListItemA11y.v112" = "%1$@, якая заканчваецца на %2$@, выдадзена %3$@, тэрмін дзеяння %4$@";
+
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
 "CreditCard.Settings.NotNow.v112" = "Не зараз";
 
@@ -15,6 +24,12 @@
 
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseASavedCard.v112" = "Выкарыстоўваць захаваную карту?";
+
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "Выкарыстаць захаваную карту";
+
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "Опцыя павінна быць уключана, каб атрымліваць карткі і атрымліваць апавяшчэнні пры ўваходзе на іншай прыладзе.";
 
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Сінхранізаваць";

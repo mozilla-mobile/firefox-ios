@@ -1,0 +1,3 @@
+/* Sub label error string that gets shown when user enters incorrect input for their name printed on their credit card in the text box. */
+"CreditCard.ErrorState.NameOnCardSublabel.v112" = "Rnu isem";
+

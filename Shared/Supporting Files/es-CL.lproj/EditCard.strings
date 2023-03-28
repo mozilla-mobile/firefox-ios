@@ -5,7 +5,7 @@
 "CreditCard.EditCard.CardNumberTitle.v112" = "Número de tarjeta";
 
 /* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
-"CreditCard.EditCard.ExpiredDateTitle.v112" = "Vence el";
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "Expira el %@";
 
 /* Title label for user to input their name printed on their credit card in the text box below. */
 "CreditCard.EditCard.NameOnCardTitle.v112" = "Nombre en la tarjeta";
