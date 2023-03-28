@@ -1452,7 +1452,7 @@ workflows:
 
             xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
             ls ..
-            python3 xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
+            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
             cat data.txt
             cat test.json
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
