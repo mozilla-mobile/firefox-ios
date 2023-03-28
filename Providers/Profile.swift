@@ -213,6 +213,7 @@ open class BrowserProfile: Profile {
     var syncManager: SyncManager!
 
     var syncDelegate: SyncDelegate?
+    var useRustSyncManager: Bool = false
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -228,6 +229,7 @@ open class BrowserProfile: Profile {
      */
     init(localName: String,
          syncDelegate: SyncDelegate? = nil,
+         rustSyncManagerEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
         logger.log("Initing profile \(localName) on thread \(Thread.current).",
@@ -303,9 +305,31 @@ open class BrowserProfile: Profile {
         // By default, filter logging from Rust below `.info` level.
         try? RustLog.shared.setLevelFilter(filter: .info)
 
-        // This has to happen prior to the databases being opened, because opening them can trigger
-        // events to which the SyncManager listens.
-        self.syncManager = BrowserSyncManager(profile: self)
+        // Set to true if either the Nimbus flag is enabled or RustSyncManager has been
+        // used before. Using these two values to check whether RustSyncManager has been
+        // used will prevent BrowserSyncManager being used after upgrading to RustSyncManager
+        // in the event the Nimbus experiment is ended prematurely.
+        self.useRustSyncManager = rustSyncManagerEnabled ||
+            self.prefs.boolForKey(PrefsKeys.HasRustSyncManagerEverBeenUsed) ?? false
+
+        // Initiating the sync manager has to happen prior to the databases being opened,
+        // because opening them can trigger events to which the SyncManager listens.
+        if self.useRustSyncManager {
+            let msg = "Setting `syncManager` property to `RustSyncManager"
+            logger.log(msg, level: .debug, category: .sync)
+
+            self.syncManager = RustSyncManager(profile: self)
+
+            // Setting this pref to true in the event this is the first time
+            // RustSyncManager is being used. If it's been used before setting this pref
+            // to true does no harm.
+            self.prefs.setBool(true, forKey: PrefsKeys.HasRustSyncManagerEverBeenUsed)
+        } else {
+            let msg = "Setting `syncManager` property to `BrowserSyncManager"
+            logger.log(msg, level: .debug, category: .sync)
+
+            self.syncManager = BrowserSyncManager(profile: self)
+        }
 
         let notificationCenter = NotificationCenter.default
 
@@ -509,43 +533,114 @@ open class BrowserProfile: Profile {
         return syncDelegate ?? CommandStoringSyncDelegate(profile: self)
     }
 
-    func getTabsWithNativeClients() -> Deferred<Maybe<[ClientAndTabs]>> {
-        // Because we are now using the application services tabs component with
-        // the iOS clients component (which has additional client data), we need
-        // to ensure that the clients we get from the tabs `getAll` call also
-        // exists in the clients BrowserDB table. This function will be obsolete
-        // once the sync manager component has been integrated into iOS and the
-        // iOS client synchronizer has been removed.
+    // This function exists to service the `FxaPushMessengerHandler.handle` function and
+    // will be removed after the rust sync manager experiment is complete
+    public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
+        if useRustSyncManager {
+            let msg = "Retrieving client records from rust tabs component"
+            logger.log(msg, level: .debug, category: .sync)
 
-        return self.tabs.getAll().bind { tabsResult in
-            if let tabsError = tabsResult.failureValue { return deferMaybe(tabsError) }
+            return tabs.getClient(fxaDeviceId: fxaDeviceId)
+        } else {
+            let msg = "Retrieving client records from BrowserDB clients table"
+            logger.log(msg, level: .debug, category: .sync)
 
-            guard let clientRemoteTabs = tabsResult.successValue else { return
-                deferMaybe([])
+            return remoteClientsAndTabs.getClient(fxaDeviceId: fxaDeviceId)
+        }
+    }
+
+    // This function exists to service the `TabPeekViewController.setState` function and
+    // will be removed after the rust sync manager experiment is complete
+    public func getClientGUIDs(completion: @escaping (Set<GUID>) -> Void) {
+        if useRustSyncManager {
+            let msg = "Retrieving client GUIDs from rust tabs component"
+            logger.log(msg, level: .debug, category: .sync)
+
+            tabs.getClientGUIDs { (result, error) in
+                guard let guids = result else { return }
+                completion(guids)
             }
+        } else {
+            let msg = "Retrieving client GUIDs from BrowserDB clients table"
+            logger.log(msg, level: .debug, category: .sync)
 
-            return self.remoteClientsAndTabs.getClients().bind { result in
-                if let error = result.failureValue { return deferMaybe(error) }
+            remoteClientsAndTabs.getClientGUIDs().upon { result in
+                guard let guids = result.successValue else { return }
+                completion(guids)
+            }
+        }
+    }
 
-                guard let clients = result.successValue else { return deferMaybe([]) }
+    func getRustTabsWithClients() -> Deferred<Maybe<[ClientAndTabs]>> {
+        logger.log("Getting all tabs and clients", level: .debug, category: .tabs)
 
-                let clientAndTabs: [ClientAndTabs] = clientRemoteTabs.map { record in
-                    // We check if the application services clientId matches any client
-                    // GUID. If a client is found we return a record, otherwise we
-                    // continue to the next application services record.
-                    let localClient = clients.first(where: { $0.guid == record.clientId })
+        guard let accountManager = self.rustFxA.accountManager.peek(),
+              let state = accountManager.deviceConstellation()?.state()
+        else {
+            return deferMaybe([])
+        }
 
-                    if let client = localClient {
-                        return record.toClientAndTabs(client: client)
-                    }
+        let remoteDeviceIds: [String] = state.remoteDevices.compactMap {
+            guard $0.capabilities.contains(.sendTab) else { return nil }
+            return $0.id
+        }
 
-                    self.logger.log("Could not find client data for appservices client ID \(record.clientId).",
-                                    level: .debug,
-                                    category: .tabs)
-                    return nil
-                }.compactMap { $0 }
+        let clientAndTabs = tabs.getRemoteClients(remoteDeviceIds: remoteDeviceIds)
+        return clientAndTabs
+    }
 
-                return deferMaybe(clientAndTabs)
+    func getTabsWithNativeClients() -> Deferred<Maybe<[ClientAndTabs]>> {
+        // Retrieving tabs with clients is handled differently depending on whether the
+        // rust sync manager component is being used. The `BrowserSyncManager` class syncs
+        // tabs with the rust tabs component and clients with the `ClientSynchronizer`
+        // class. So in order to ensure accurate tabs with clients data is returned while
+        // using these classes for syncing, tab records are pulled from the component's
+        // database table and filtered by the client records in the iOS BrowserDB database
+        // table.
+
+        // The new `RustSyncManager` class has no reliance on the `ClientSynchronizer` or
+        // the clients table. So when it's being used tabs with clients can be pulled from
+        // the tab component's database table and filtered by the remote devices in the
+        // user's device constellation. Once the sync manager experiment is complete this
+        // will be the way this data is retrieved unconditionally.
+        if useRustSyncManager {
+            let msg = "Retrieving tabs with clients and filtering on remote devices"
+            logger.log(msg, level: .debug, category: .sync)
+
+            return getRustTabsWithClients()
+        } else {
+            let msg = "Retrieving tabs with clients and filtering on BrowserDB clients table"
+            logger.log(msg, level: .debug, category: .sync)
+
+            return tabs.getAll().bind { tabsResult in
+                guard tabsResult.failureValue == nil else {
+                    return deferMaybe(tabsResult.failureValue!)
+                }
+                guard let clientRemoteTabs = tabsResult.successValue else {
+                    return deferMaybe([])
+                }
+
+                return self.remoteClientsAndTabs.getClients().bind { result in
+                    guard result.failureValue == nil else { return deferMaybe(result.failureValue!)}
+                    guard let clients = result.successValue else { return deferMaybe([]) }
+
+                    let clientAndTabs: [ClientAndTabs] = clientRemoteTabs.map { record in
+                        // We check if the application services clientId matches any
+                        // client GUID. If a client is found we return a record, otherwise
+                        // we continue to the next application services record.
+                        let localClient = clients
+                                            .first(where: { $0.guid == record.clientId })
+
+                        if let client = localClient {
+                            return record.toClientAndTabs(client: client)
+                        }
+                        let msg = "Could not find client data for appservices client ID \(record.clientId)."
+                        self.logger.log(msg, level: .debug, category: .tabs)
+                        return nil
+                    }.compactMap { $0 }
+
+                    return deferMaybe(clientAndTabs)
+                }
             }
         }
     }
