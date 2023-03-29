@@ -10,20 +10,42 @@ body {
 }
 
 body {
-    background-color: #F8F8F6;
+    background-color: var(--body-bg);
     padding: 0 65px;
-    color: #333;
+    color: var(--body-color);
     font-size: 16px;
     -webkit-text-size-adjust: none;
     font: -apple-system-body;
 }
 
 h1 {
-    color: #333;
+    color: var(--body-color);
     font-size: 16px;
     -webkit-text-size-adjust: none;
     font: -apple-system-body;
     font-weight: 300;
+}
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+   :root {
+       --body-bg: #F0F0EB;
+       --body-color: #333333;
+       --error-title-text-color: #333333;
+       --error-short-desc-color: #6C6C6C;
+       --refresh-button-color: #008009;
+   }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+   :root {
+       --body-bg: #1A1A1A;
+       --body-color: #FFFFFF;
+       --error-title-text-color: #FFFFFF;
+       --error-short-desc-color: #DEDED9;
+       --refresh-button-color: #5DD25E;
+   }
 }
 
 /* Add a set of stripes at the top of pages */
@@ -38,20 +60,15 @@ h1 {
 /*    width: 100%;*/
 /*}*/
 
-a {
-    color: rgb(76, 158, 255);
-    text-decoration: none;
-}
-
 #errorTitleText {
-    color: #0F0F0F;
+    color: var(--error-title-text-color);
     font-size: 17px;
     font-weight: 600;
     text-align: center;
 }
 
 #errorShortDescText {
-    color: #6C6C6C;
+    color: var(--error-short-desc-color);
     font-size: 17px;
     font-weight: 400;
     text-align: center;
@@ -78,40 +95,16 @@ button {
     bottom: 5px;
     font-weight: 400;
     font-size: 17px;
-    color: #008009;
+    color: var(--refresh-button-color);
 }
 
 #errorPageContainer {
-    /* If the page is greater than 550px center the content.
-     * This number should be kept in sync with the media query for tablets below */
-    max-width: 550px;
-    margin: 0 auto;
     -webkit-transform: translateY(127px);
     padding-bottom: 10px;
-
     min-height: calc(100% - 127px - 10px);
     display: flex;
     flex-direction: column;
-}
-
-/* On large screen devices (hopefully a 7+ inch tablet, we already center content (see #errorPageContainer above).
- Apply tablet specific styles here */
-@media (min-width: 550px) {
-    #errorTitle,
-    #errorShortDescText {
-        width: 50%;
-    }
-
-    button {
-        position: absolute;
-        top: -0.5em;
-        right: 0px;
-        bottom: auto;
-        padding-left: 5%;
-        padding-right: 5%;
-        min-width: 40%;
-        width: auto;
-    }
+    align-items: center;
 }
 
 #errorLongContent {
@@ -124,11 +117,9 @@ button {
     margin-bottom: 78px;
 }
 
-#errorImage {
-    display: inline-block;
-    text-align: center;
-}
-
 #errorImage img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     width: 50%;
 }
