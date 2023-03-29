@@ -9,37 +9,39 @@ class MockRouter: NSObject, Router {
     var navigationController: NavigationController
     var rootViewController: UIViewController?
 
+    var presentCalled = 0
+    var dismissCalled = 0
+    var pushCalled = 0
+    var popViewControllerCalled = 0
+    var setRootViewControllerCalled = 0
+    var popToRootModuleCalled = 0
+
     init(navigationController: NavigationController) {
         self.navigationController = navigationController
         super.init()
     }
 
-    var presentCalled = 0
     func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
         presentCalled += 1
     }
 
-    var dismissCalled = 0
+
     func dismiss(animated: Bool, completion: (() -> Void)?) {
         dismissCalled += 1
     }
 
-    var pushCalled = 0
     func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
         pushCalled += 1
     }
 
-    var popViewControllerCalled = 0
     func popViewController(animated: Bool) {
         popViewControllerCalled += 1
     }
 
-    var setRootViewControllerCalled = 0
     func setRootViewController(_ viewController: UIViewController, hideBar: Bool) {
         setRootViewControllerCalled += 1
     }
 
-    var popToRootModuleCalled = 0
     func popToRootViewController(animated: Bool) {
         popToRootModuleCalled += 1
     }
