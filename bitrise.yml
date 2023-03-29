@@ -1454,6 +1454,9 @@ workflows:
             echo "DerivedData/Client/Log/Tests"
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test
+            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test/Test-Fennec_Enterprise_XCUITests.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test/Test-Fennec_Enterprise_XCUITests-test.xcresult
+
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test
 
             xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
             ls ..
