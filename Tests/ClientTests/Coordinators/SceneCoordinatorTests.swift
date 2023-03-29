@@ -10,12 +10,12 @@ import Common
 final class SceneCoordinatorTests: XCTestCase {
     override func setUp() {
         super.setUp()
-        addContainerDependencies()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
         super.tearDown()
-        resetContainerDependencies()
+        AppContainer.shared.reset()
     }
 
     func testInitialState() {
@@ -33,17 +33,5 @@ final class SceneCoordinatorTests: XCTestCase {
 
         XCTAssertNotNil(subject.window)
         XCTAssertNotNil(subject.browserCoordinator)
-    }
-
-    // MARK: - Helpers
-    func addContainerDependencies() {
-        resetContainerDependencies()
-        let themeManager: ThemeManager = DefaultThemeManager()
-        AppContainer.shared.register(service: themeManager)
-        AppContainer.shared.bootstrap()
-    }
-
-    func resetContainerDependencies() {
-        AppContainer.shared.reset()
     }
 }
