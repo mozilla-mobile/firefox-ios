@@ -16,7 +16,7 @@ extension BrowserViewController {
     private func setupZoomPageBar() {
         guard let tab = tabManager.selectedTab else { return }
 
-        let zoomPageBar = ZoomPageBar(tab: tab, isIpad: UIDevice.current.userInterfaceIdiom == .pad)
+        let zoomPageBar = ZoomPageBar(tab: tab)
         self.zoomPageBar = zoomPageBar
         zoomPageBar.delegate = self
 
@@ -30,8 +30,7 @@ extension BrowserViewController {
             })
         }
 
-        zoomPageBar.heightAnchor.constraint(equalToConstant: 54).isActive = true
-
+        zoomPageBar.heightAnchor.constraint(greaterThanOrEqualToConstant: UIConstants.ZoomPageBarHeight).isActive = true
         zoomPageBar.applyTheme(theme: themeManager.currentTheme)
 
         updateViewConstraints()

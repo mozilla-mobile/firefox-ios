@@ -135,6 +135,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
             XCTAssertEqual(timeframe, returnedTimeFrame)
             self.assertDBIsEmpty(with: profile, shouldSkipMetadata: true)
         }
+        deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
     func testDeletingItemsInLastHour_WithFurtherHistory() {
@@ -159,6 +160,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
             XCTAssertEqual(timeframe, returnedTimeFrame)
             self.assertDBHistoryStateFor(sitesToRemain, with: profile)
         }
+        deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
     func testDeletingAllItemsInHistoryUsingToday() {
@@ -181,6 +183,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
             XCTAssertEqual(timeframe, returnedTimeFrame)
             self.assertDBIsEmpty(with: profile, shouldSkipMetadata: true)
         }
+        deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
     func testDeletingItemsInHistoryUsingToday_WithFurtherHistory() {
@@ -206,6 +209,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
             XCTAssertEqual(timeframe, returnedTimeFrame)
             self.assertDBHistoryStateFor(sitesToRemain, with: profile)
         }
+        deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
     func testDeletingAllItemsInHistoryUsingYesterday() {
@@ -226,6 +230,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
             XCTAssertEqual(timeframe, returnedTimeFrame)
             self.assertDBIsEmpty(with: profile, shouldSkipMetadata: true)
         }
+        deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
     func testDeletingItemsInHistoryUsingYesterday_WithFurtherHistory() {
@@ -250,6 +255,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
             XCTAssertEqual(timeframe, returnedTimeFrame)
             self.assertDBHistoryStateFor(sitesToRemain, with: profile)
         }
+        deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 
     func testDeletingAllItemsInHistoryUsingAllTime() {
@@ -286,6 +292,7 @@ class HistoryDeletionUtilityTests: XCTestCase {
             XCTAssertEqual(timeframe, returnedTimeFrame)
             self.assertDBIsEmpty(with: profile, shouldSkipMetadata: true)
         }
+        deleteHistoryMetadataOlderThan(dateOption: timeframe, using: profile)
     }
 }
 
@@ -333,6 +340,17 @@ private extension HistoryDeletionUtilityTests {
         }
 
         waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    func deleteHistoryMetadataOlderThan(dateOption: HistoryDeletionUtilityDateOptions,
+                                        using profile: MockProfile) {
+        let deletionUtility = HistoryDeletionUtility(with: profile)
+        trackForMemoryLeaks(deletionUtility)
+        deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
+        let emptyResultsRead = profile.places.getHistoryMetadataSince(since: deletionUtility.deletionReferenceValue(for: dateOption)).value
+        XCTAssertTrue(emptyResultsRead.isSuccess)
+        XCTAssertNotNil(emptyResultsRead.successValue)
+        XCTAssertEqual(emptyResultsRead.successValue!.count, 0)
     }
 
     func emptyDB(

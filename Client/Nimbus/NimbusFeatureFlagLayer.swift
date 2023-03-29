@@ -226,7 +226,7 @@ final class NimbusFeatureFlagLayer {
             case .notificationSettings: return config.notificationSettingsFeatureStatus
             default: return false
             }
-        }
+    }
 
     private func checkNimbusForOnboardingFeature(
         for featureID: NimbusFeatureFlagID,

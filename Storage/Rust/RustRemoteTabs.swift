@@ -157,6 +157,64 @@ public class RustRemoteTabs {
 
         return deferred
     }
+
+    public func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>> {
+        return self.getAll().bind { result in
+            guard result.failureValue == nil else {
+                return deferMaybe(result.failureValue as! String)
+            }
+
+            guard let records = result.successValue else {
+                return deferMaybe(nil)
+            }
+
+            let client = records.first(where: { $0.clientId == fxaDeviceId })?.toRemoteClient()
+            return deferMaybe(client)
+        }
+    }
+
+    public func getClientGUIDs(completion: @escaping (Set<GUID>?, Error?) -> Void) {
+        self.getAll().upon { result in
+            guard result.failureValue == nil else {
+                completion(nil, result.failureValue as! String)
+                return
+            }
+            guard let records = result.successValue else {
+                completion(Set<GUID>(), nil)
+                return
+            }
+
+            let guids = records.map({ $0.clientId })
+            completion(Set(guids), nil)
+        }
+    }
+
+    public func getRemoteClients(remoteDeviceIds: [String]) -> Deferred<Maybe<[ClientAndTabs]>> {
+        return self.getAll().bind { result in
+            guard result.failureValue == nil else {
+                return deferMaybe(result.failureValue!)
+            }
+            guard let rustClientAndTabs = result.successValue else {
+                return deferMaybe([])
+            }
+
+            let clientAndTabs = rustClientAndTabs
+                .map { $0.toClientAndTabs() }
+                .filter({ record in
+                    remoteDeviceIds.contains { deviceId in
+                        return record.client.fxaDeviceId != nil &&
+                            record.client.fxaDeviceId! == deviceId
+                    }
+                })
+            return deferMaybe(clientAndTabs)
+        }
+    }
+
+    public func registerWithSyncManager() {
+        queue.async { [unowned self] in
+           self.storage?.registerWithSyncManager()
+        }
+    }
 }
 
 public extension RemoteTabRecord {
@@ -172,5 +230,25 @@ public extension RemoteTabRecord {
 public extension ClientRemoteTabs {
     func toClientAndTabs(client: RemoteClient) -> ClientAndTabs {
         return ClientAndTabs(client: client, tabs: self.remoteTabs.map { $0.toRemoteTab(client: client)}.compactMap { $0 })
+    }
+
+    func toClientAndTabs() -> ClientAndTabs {
+        let client = self.toRemoteClient()
+        let tabs = self.remoteTabs.map { $0.toRemoteTab(client: client)}.compactMap { $0 }
+
+        let clientAndTabs = ClientAndTabs(client: client, tabs: tabs)
+        return clientAndTabs
+    }
+
+    func toRemoteClient() -> RemoteClient {
+        let remoteClient = RemoteClient(guid: self.clientId,
+                                        name: self.clientName,
+                                        modified: UInt64(self.lastModified),
+                                        type: "\(self.deviceType)",
+                                        formfactor: nil,
+                                        os: nil,
+                                        version: nil,
+                                        fxaDeviceId: self.clientId)
+        return remoteClient
     }
 }

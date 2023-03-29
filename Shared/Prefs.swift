@@ -9,6 +9,14 @@ public struct PrefsKeys {
     // When this pref is set (by the user) it overrides default behaviour which is just based on app locale.
     public static let KeyEnableChinaSyncService = "useChinaSyncService"
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
+
+    // Global sync state for rust sync manager
+    public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
+
+    // When this pref is set to true it signifies that RustSyncManager has been set as the
+    // sync manager
+    public static let HasRustSyncManagerEverBeenUsed = "hasRustSyncManagerEverBeenUsedKey"
+
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
