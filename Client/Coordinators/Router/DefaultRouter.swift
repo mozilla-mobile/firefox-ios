@@ -84,9 +84,8 @@ class DefaultRouter: NSObject, Router {
         // that view controller. If it does it means we’re pushing a different view controller on top rather than
         // popping it, so exit. Otherwise run the completion of that popped view controller.
         guard let fromViewController = navigationController.fromViewController,
-              !navigationController.viewControllers.contains(fromViewController) else {
-            return
-        }
+              !navigationController.viewControllers.contains(fromViewController)
+        else { return }
 
         runCompletion(for: fromViewController)
     }
