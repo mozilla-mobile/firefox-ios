@@ -525,7 +525,6 @@ extension GridTabViewController: TabPeekDelegate {
     }
 
     func tabPeekDidCopyUrl() {
-        print("YRD height \(toolbarHeight)")
         SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
                                         bottomContainer: view,
                                         theme: themeManager.currentTheme,
