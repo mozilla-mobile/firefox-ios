@@ -25,7 +25,6 @@ class MockRouter: NSObject, Router {
         presentCalled += 1
     }
 
-
     func dismiss(animated: Bool, completion: (() -> Void)?) {
         dismissCalled += 1
     }
