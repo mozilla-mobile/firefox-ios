@@ -767,6 +767,7 @@ class SettingsTableViewController: ThemedTableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
+        tableView.rowHeight = UITableView.automaticDimension
 
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
         tableView.addGestureRecognizer(longPressGestureRecognizer)
