@@ -120,7 +120,6 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testCloseAllTabsUndo() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -246,8 +245,6 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testOpenNewTabLandscape() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
         if iPad() {
@@ -372,8 +369,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
@@ -385,8 +380,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)
