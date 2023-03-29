@@ -26,7 +26,9 @@ actor DefaultURLCacheFileManager: URLCacheFileManager {
             return try? Data(contentsOf: directory)
         } else {
             let oldDirectory = getOldCacheDirectory()
-            return try? Data(contentsOf: oldDirectory)
+            let data = try? Data(contentsOf: oldDirectory)
+            try? fileManager.removeItem(atPath: oldDirectory.path)
+            return data
         }
     }
 
