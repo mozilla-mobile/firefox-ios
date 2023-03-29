@@ -24,7 +24,7 @@ final class CoordinatorTests: XCTestCase {
     func testAddChild() {
         let subject = BaseCoordinator(router: router)
         let child = BaseCoordinator(router: router)
-        subject.addChild(child)
+        subject.add(child: child)
 
         XCTAssertEqual(subject.childCoordinators[0].id, child.id)
     }
@@ -32,49 +32,9 @@ final class CoordinatorTests: XCTestCase {
     func testRemoveChild() {
         let subject = BaseCoordinator(router: router)
         let child = BaseCoordinator(router: router)
-        subject.addChild(child)
-        subject.removeChild(child)
+        subject.add(child: child)
+        subject.remove(child: child)
 
         XCTAssertTrue(subject.childCoordinators.isEmpty)
-    }
-}
-
-class MockRouter: NSObject, Router {
-    var navigationController: NavigationController
-    var rootViewController: UIViewController?
-
-    init(navigationController: NavigationController) {
-        self.navigationController = navigationController
-        super.init()
-    }
-
-    var presentCalled = 0
-    func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
-        presentCalled += 1
-    }
-
-    var dismissCalled = 0
-    func dismiss(animated: Bool, completion: (() -> Void)?) {
-        dismissCalled += 1
-    }
-
-    var pushCalled = 0
-    func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
-        pushCalled += 1
-    }
-
-    var popViewControllerCalled = 0
-    func popViewController(animated: Bool) {
-        popViewControllerCalled += 1
-    }
-
-    var setRootViewControllerCalled = 0
-    func setRootViewController(_ viewController: UIViewController, hideBar: Bool) {
-        setRootViewControllerCalled += 1
-    }
-
-    var popToRootModuleCalled = 0
-    func popToRootViewController(animated: Bool) {
-        popToRootModuleCalled += 1
     }
 }

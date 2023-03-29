@@ -9,8 +9,8 @@ protocol Coordinator {
     var childCoordinators: [Coordinator] { get }
     var router: Router { get }
 
-    func addChild(_ coordinator: Coordinator)
-    func removeChild(_ coordinator: Coordinator?)
+    func add(child coordinator: Coordinator)
+    func remove(child coordinator: Coordinator?)
 }
 
 open class BaseCoordinator: Coordinator {
@@ -22,11 +22,11 @@ open class BaseCoordinator: Coordinator {
         self.router = router
     }
 
-    func addChild(_ coordinator: Coordinator) {
+    func add(child coordinator: Coordinator) {
         childCoordinators.append(coordinator)
     }
 
-    func removeChild(_ coordinator: Coordinator?) {
+    func remove(child coordinator: Coordinator?) {
         guard let coordinator = coordinator,
               let index = childCoordinators.firstIndex(where: { $0.id == coordinator.id })
         else { return }
