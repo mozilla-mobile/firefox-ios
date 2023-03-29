@@ -1,33 +1,113 @@
 {
-  "pins" : [
-    {
-      "identity" : "a-star",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Dev1an/A-Star",
-      "state" : {
-        "revision" : "036256f9a8d1dda44085a2b92fa58199446a8339",
-        "version" : "3.0.0-beta-1"
+  "object": {
+    "pins": [
+        "state": {
+          "branch": null,
+          "revision": "b2f10c97dcc18c219f7488b22214e962fa9f33e3",
+          "version": "51.8.3"
+        }
+      },
+      {
+        "package": "KIF",
+        "repositoryURL": "https://github.com/kif-framework/KIF.git",
+        "state": {
+          "branch": null,
+          "revision": "709adbc64f2d8d40d48136cdd56b0a706010904b",
+          "version": "3.8.6"
+        }
+      },
+      {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": null,
+          "revision": "af4be924ad984cf4d16f4ae4df424e79a443d435",
+          "version": "7.6.2"
+        }
+      },
+      {
+        "package": "MappaMundi",
+        "repositoryURL": "https://github.com/nbhasin2/MappaMundi.git",
+        "state": {
+          "branch": "master",
+          "revision": "ded1e15d9e3a973f723185e07d0f2573a7fe1034",
+          "version": null
+        }
+      },
+      {
+        "package": "MozillaRustComponentsSwift",
+        "repositoryURL": "https://github.com/mozilla/rust-components-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "90a4bb34e6205d25fa6f67a04f71d9a6f31a91f4",
+          "version": "96.1.3"
+        }
+      },
+      {
+        "package": "SDWebImage",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
+        "state": {
+          "branch": null,
+          "revision": "2e63d0061da449ad0ed130768d05dceb1496de44",
+          "version": "5.12.5"
+        }
+      },
+      {
+        "package": "SnapKit",
+        "repositoryURL": "https://github.com/SnapKit/SnapKit.git",
+        "state": {
+          "branch": null,
+          "revision": "f222cbdf325885926566172f6f5f06af95473158",
+          "version": "5.6.0"
+        }
+      },
+      {
+        "package": "SnowplowTracker",
+        "repositoryURL": "https://github.com/snowplow/snowplow-objc-tracker.git",
+        "state": {
+          "branch": null,
+          "revision": "dc5ecb6ad2921a50f629ef600cc1ee700e608f66",
+          "version": "3.2.0"
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
+        "state": {
+          "branch": null,
+          "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
+          "version": "1.18.0"
+        }
+      },
+      {
+        "package": "SwiftSoup",
+        "repositoryURL": "https://github.com/scinfu/SwiftSoup",
+        "state": {
+          "branch": "2.5.3",
+          "revision": "f707b8680cddb96dc1855632340a572ef37bbb98",
+          "version": null
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON",
+        "state": {
+          "branch": null,
+          "revision": "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
+          "version": "5.0.1"
+        }
+      },
+      {
+        "package": "XCGLogger",
+        "repositoryURL": "https://github.com/DaveWoodCom/XCGLogger.git",
+        "state": {
+          "branch": null,
+          "revision": "a9c4667b247928a29bdd41be2ec2c8d304215a54",
+          "version": "7.0.1"
+        }
       }
-    },
-    {
-      "identity" : "dip",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/AliSoftware/Dip.git",
-      "state" : {
-        "revision" : "7ec008a5c09520b67f07669ad5a753d757f05bbe"
-      }
-    },
-    {
-      "identity" : "fmdb",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ccgus/fmdb",
-      "state" : {
-        "revision" : "61e51fde7f7aab6554f30ab061cc588b28a97d04",
-        "version" : "2.7.7"
-      }
-    },
-    {
-      "identity" : "fuzi",
+    ]
+  },
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nbhasin2/Fuzi.git",
       "state" : {
@@ -153,5 +233,5 @@
       }
     }
   ],
-  "version" : 2
+  "version": 1
 }

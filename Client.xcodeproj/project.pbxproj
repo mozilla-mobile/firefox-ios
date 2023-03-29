@@ -1693,6 +1693,7 @@
 		2A3D4EA49B5305FFF85BDAC4 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		2A4C4EDA8A7CAAAA8CCA80CD /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		2A5A40D78F386CBD3170D073 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Storage.strings; sourceTree = "<group>"; };
+		2A840B9229CC8E390013EAE4 /* ios-core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "ios-core"; path = "../ios-core"; sourceTree = "<group>"; };
 		2A874B029FBA8C728218EB48 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Storage.strings; sourceTree = "<group>"; };
 		2AA943B2B505224956D1B5CD /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2ABD4C8DA1B0527B9F88E597 /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/ErrorPages.strings; sourceTree = "<group>"; };
@@ -7471,6 +7472,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				2A840B9229CC8E390013EAE4 /* ios-core */,
 				C8E2E80623D20FB3005AACE6 /* RustFxA */,
 				2FA435FC1ABB83B4008031D1 /* Account */,
 				F84B21C01A090F8100AAB793 /* Client */,
@@ -14054,7 +14056,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ecosia/ios-core.git";
 			requirement = {
-				branch = main;
+				branch = "MOB-1759_BookmarkParser";
 				kind = branch;
 			};
 		};
