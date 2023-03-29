@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 import Shared
+import Core
 
 class BookmarksPanelViewModel {
 
@@ -60,10 +61,47 @@ class BookmarksPanelViewModel {
     func didAddBookmarkNode() {
         flashLastRowOnNextReload = true
     }
+    
+    func getBookmarksForExport() async throws -> [Core.BookmarkItem] {
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
+            guard let self = self else {
+                return continuation.resume(returning: [])
+            }
+            
+            profile.places
+                .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: true)
+                .uponQueue(.main) { result in
+                    guard let mobileFolder = result.successValue as? BookmarkFolderData else {
+                        self.setErrorCase()
+                        return
+                    }
+
+                    self.bookmarkFolder = mobileFolder
+                    let bookmarkNodes = mobileFolder.fxChildren ?? []
+
+                    let items: [Core.BookmarkItem] = bookmarkNodes
+                        .compactMap { $0 as? BookmarkNodeData }
+                        .compactMap { bookmarkNode in
+                            self.exportNode(bookmarkNode)
+                        }
+                    
+                    continuation.resume(returning: items)
+                }
+        }
+    }
 
 
     // MARK: - Private
-
+    private func exportNode(_ node: BookmarkNodeData) -> Core.BookmarkItem? {
+        if let folder = node as? BookmarkFolderData {
+            return .folder(folder.title, folder.children?.compactMap { exportNode($0) } ?? [], .empty)
+        } else if let bookmark = node as? BookmarkItemData {
+            return .bookmark(bookmark.title, bookmark.url, .empty)
+        }
+        assertionFailure("This should not happen")
+        return nil
+    }
+    
     private func setupMobileFolderData(completion: @escaping () -> Void) {
         profile.places
             .getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false)

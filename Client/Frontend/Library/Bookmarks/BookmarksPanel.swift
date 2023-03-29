@@ -6,6 +6,7 @@ import UIKit
 import Storage
 import Shared
 import XCGLogger
+import Core
 
 let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
@@ -40,12 +41,15 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
 
     private var toolbarButtonItems: [UIBarButtonItem] {
         switch state {
-        case .bookmarks(state: .mainView), .bookmarks(state: .inFolder):
+        case .bookmarks(state: .mainView):
+            bottomRightButton.title = .BookmarksEdit
+            return [exportBookmarksButton, flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
             return [flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolderEditMode):
             bottomRightButton.title = String.AppSettingsDone
-            return [bottomLeftButton, flexibleSpace, bottomRightButton]
+            return [addBookmarkButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
             return [flexibleSpace, bottomRightButton]
@@ -54,7 +58,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         }
     }
 
-    private lazy var bottomLeftButton: UIBarButtonItem = {
+    private lazy var addBookmarkButton: UIBarButtonItem = {
         let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.navAdd),
                                      style: .plain,
                                      target: self,
@@ -62,7 +66,16 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
         return button
     }()
-
+    
+    private lazy var exportBookmarksButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.share),
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(exportBookmarksAction))
+//        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
+        return button
+    }()
+    
     private lazy var bottomRightButton: UIBarButtonItem = {
         let button = UIBarButtonItem(title: .BookmarksEdit, style: .plain, target: self, action: #selector(bottomRightButtonAction))
         button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomRightButton
@@ -562,6 +575,26 @@ extension BookmarksPanel {
             presentInFolderActions()
         }
     }
+    
+
+    
+    func exportBookmarksAction() {
+        Task {
+            let serializer = BookmarkSerializer()
+            
+            let items = try await viewModel.getBookmarksForExport()
+            
+            let htmlExport = serializer.serializeBookmarks(items)
+            
+            let exportedBooksmarksUrl = FileManager.default.temporaryDirectory.appendingPathComponent("Bookmarks.html")
+            try htmlExport.data(using: .utf8)?.write(to: exportedBooksmarksUrl)
+            
+            let controller = UIDocumentInteractionController(url: exportedBooksmarksUrl)
+            controller.uti = "public.html"
+            controller.delegate = self
+            controller.presentPreview(animated: true)
+        }
+    }
 
     func handleLeftTopButton() {
         guard case .bookmarks(let subState) = state else { return }
@@ -619,5 +652,11 @@ extension BookmarksPanel {
                 self.viewModel.didAddBookmarkNode()
             }
         }
+    }
+}
+
+extension BookmarksPanel: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        self
     }
 }
