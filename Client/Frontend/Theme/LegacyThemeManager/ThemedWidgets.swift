@@ -59,7 +59,7 @@ class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
     override func systemLayoutSizeFitting(_ targetSize: CGSize,
                                           withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
                                           verticalFittingPriority: UILayoutPriority) -> CGSize {
-        self.layoutIfNeeded()
+        self.layoutSubviews()
         var size = super.systemLayoutSizeFitting(targetSize,
                                                  withHorizontalFittingPriority: horizontalFittingPriority,
                                                  verticalFittingPriority: verticalFittingPriority)
