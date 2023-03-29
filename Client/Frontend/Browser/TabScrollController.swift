@@ -88,9 +88,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     private var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
-    lazy var contentSize: CGSize = {
-        return scrollView?.contentSize ?? .zero
-    }()
+    private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
 
     // Over keyboard content and bottom content
     private var overKeyboardScrollHeight: CGFloat {
@@ -159,21 +157,6 @@ class TabScrollingController: NSObject, FeatureFlaggable {
             completion: nil)
     }
 
-    func hideToolbars(animated: Bool) {
-        guard toolbarState != .collapsed else { return }
-        toolbarState = .collapsed
-
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
-        self.animateToolbarsWithOffsets(
-            animated,
-            duration: actualDuration,
-            headerOffset: -topScrollHeight,
-            bottomContainerOffset: bottomContainerScrollHeight,
-            overKeyboardOffset: overKeyboardScrollHeight,
-            alpha: 0,
-            completion: nil)
-    }
-
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
             guard isAbleToScroll, toolbarsShowing else { return }
@@ -206,6 +189,21 @@ extension TabScrollingController: SearchBarLocationProvider {}
 
 // MARK: - Private
 private extension TabScrollingController {
+    func hideToolbars(animated: Bool) {
+        guard toolbarState != .collapsed else { return }
+        toolbarState = .collapsed
+
+        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
+        self.animateToolbarsWithOffsets(
+            animated,
+            duration: actualDuration,
+            headerOffset: -topScrollHeight,
+            bottomContainerOffset: bottomContainerScrollHeight,
+            overKeyboardOffset: overKeyboardScrollHeight,
+            alpha: 0,
+            completion: nil)
+    }
+
     func configureRefreshControl() {
         scrollView?.refreshControl = UIRefreshControl()
         scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)

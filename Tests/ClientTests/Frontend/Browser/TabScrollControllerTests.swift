@@ -34,8 +34,8 @@ final class TabScrollControllerTests: XCTestCase {
 
     func testHandlePan_ScrollingUp() {
         tab.createWebview()
+        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
         subject.tab = tab
-        subject.contentSize = CGSize(width: 200, height: 2000)
 
         mockGesture.gestureTranslation = CGPoint(x: 0, y: 100)
         subject.handlePan(mockGesture)
@@ -45,8 +45,8 @@ final class TabScrollControllerTests: XCTestCase {
 
     func testHandlePan_ScrollingDown() {
         tab.createWebview()
+        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
         subject.tab = tab
-        subject.contentSize = CGSize(width: 200, height: 2000)
 
         mockGesture.gestureTranslation = CGPoint(x: 0, y: -100)
         subject.handlePan(mockGesture)
