@@ -15,6 +15,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     struct Constant {
         static let notificationBaseId: String = "org.mozilla.ios.notification"
         static let messageDelay: CGFloat = 3 // seconds
+        static let messageIdKey: String = "messageId"
     }
 
     // MARK: - Properties
@@ -45,7 +46,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
         guard let message = message, !message.isExpired else { return }
 
         let notificationId = Constant.notificationBaseId + ".\(message.id)"
-        let userInfo = ["messageId": message.id]
+        let userInfo = [Constant.messageIdKey: message.id]
         notificationManager.schedule(title: message.data.title ?? "",
                                      body: message.data.text,
                                      id: notificationId,
@@ -65,7 +66,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     }
 
     func didTapNotification(_ userInfo: [AnyHashable: Any]) {
-        guard let messageId = userInfo["messageId"] as? String,
+        guard let messageId = userInfo[Constant.messageIdKey] as? String,
               let message = messagingManager.messageForId(messageId, surface: notificationSurfaceID)
         else { return }
 
