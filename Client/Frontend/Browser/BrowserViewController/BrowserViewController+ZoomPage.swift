@@ -13,6 +13,20 @@ extension BrowserViewController {
         }
     }
 
+    func resetZoomPageBar() {
+        if let zoomPageBar = zoomPageBar {
+            zoomPageBar.resetZoomLevel()
+            removeZoomPageBar(zoomPageBar)
+        }
+    }
+
+    func returnZoomPageScale() -> CGFloat {
+        if let zoomPageBar = zoomPageBar {
+            return zoomPageBar.tab.pageZoom
+        }
+        return CGFloat(1)
+    }
+
     private func setupZoomPageBar() {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -51,5 +65,13 @@ extension BrowserViewController {
 extension BrowserViewController: ZoomPageBarDelegate {
     func zoomPageDidPressClose() {
         updateZoomPageBarVisibility(visible: false)
+    }
+
+    func zoomPageDidEnterReaderMode() {
+        
+    }
+
+    func zoomPageURLDidUpdate() {
+        resetZoomPageBar()
     }
 }

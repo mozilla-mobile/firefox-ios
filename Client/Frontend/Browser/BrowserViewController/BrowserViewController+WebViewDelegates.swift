@@ -769,6 +769,7 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let tab = tabManager[webView],
            let metadataManager = tab.metadataManager {
+            zoomPageBar?.delegate?.zoomPageURLDidUpdate()
             navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
             // Only update search term data with valid search term data

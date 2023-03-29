@@ -8,6 +8,8 @@ import Shared
 
 protocol ZoomPageBarDelegate: AnyObject {
     func zoomPageDidPressClose()
+    func zoomPageURLDidUpdate()
+    func zoomPageDidEnterReaderMode()
 }
 
 class ZoomPageBar: UIView {
@@ -125,6 +127,17 @@ class ZoomPageBar: UIView {
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.leadingTrailingPadding),
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
+    }
+
+    func resetZoomLevel() {
+        tab.resetZoom()
+        updateButtons()
+    }
+
+    func updateButtons() {
+        updateZoomLabel()
+        zoomOutButton.isEnabled = true
+        zoomInButton.isEnabled = true
     }
 
     private func updateZoomLabel() {
