@@ -13,6 +13,8 @@ final class TabScrollControllerTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockGesture: UIPanGestureRecognizerMock!
 
+    var header: BaseAlphaStackView = .build { _ in }
+
     override func setUp() {
         super.setUp()
 
@@ -33,9 +35,7 @@ final class TabScrollControllerTests: XCTestCase {
     }
 
     func testHandlePan_ScrollingUp() {
-        tab.createWebview()
-        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
-        subject.tab = tab
+        setupTabScroll()
 
         mockGesture.gestureTranslation = CGPoint(x: 0, y: 100)
         subject.handlePan(mockGesture)
@@ -44,13 +44,55 @@ final class TabScrollControllerTests: XCTestCase {
     }
 
     func testHandlePan_ScrollingDown() {
-        tab.createWebview()
-        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
-        subject.tab = tab
+        setupTabScroll()
 
         mockGesture.gestureTranslation = CGPoint(x: 0, y: -100)
         subject.handlePan(mockGesture)
 
         XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.visible)
+    }
+
+    func testShowToolbar_AfterHidingWithScroll() {
+        setupTabScroll()
+
+        // Hide toolbar
+        mockGesture.gestureTranslation = CGPoint(x: 0, y: 100)
+        subject.handlePan(mockGesture)
+
+        // Force call to showToolbars like clicking on top bar area
+        subject.showToolbars(animated: true)
+        XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.visible)
+        XCTAssertEqual(subject.header?.alpha, 1)
+    }
+
+    func testScrollDidEndDragging_ScrollingUp() {
+        setupTabScroll()
+
+        // Hide toolbar
+        mockGesture.gestureTranslation = CGPoint(x: 0, y: 100)
+        subject.handlePan(mockGesture)
+        subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
+
+        XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.visible)
+        XCTAssertEqual(subject.header?.alpha, 1)
+    }
+
+    func testScrollDidEndDragging_ScrollingDown() {
+        setupTabScroll()
+
+        // Hide toolbar
+        mockGesture.gestureTranslation = CGPoint(x: 0, y: -100)
+        subject.handlePan(mockGesture)
+        subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
+
+        XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.collapsed)
+    }
+
+    private func setupTabScroll() {
+        tab.createWebview()
+        tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
+        tab.webView?.scrollView.delegate = subject
+        subject.tab = tab
+        subject.header = header
     }
 }
