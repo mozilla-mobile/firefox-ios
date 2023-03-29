@@ -1450,7 +1450,10 @@ workflows:
             ls
             ls $BITRISE_XCRESULT_PATH
 
-            cp -r $BITRISE_XCRESULT_PATH /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test
+            cp -r $BITRISE_XCRESULT_PATH /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test/
+            echo "DerivedData/Client/Log/Tests"
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test
 
             xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
             ls ..
