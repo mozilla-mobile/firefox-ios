@@ -118,6 +118,15 @@ features:
               text: Default Browser/DefaultBrowserCard.Description
               button-label: Default Browser/DefaultBrowserCard.Button.v2
               action: MAKE_DEFAULT_BROWSER_WITH_TUTORIAL
+            engagement-notification:
+              surface: notification
+              style: DEFAULT
+              trigger:
+                - INACTIVE_NEW_USER
+                - ALLOWED_TIPS_NOTIFICATIONS
+              text: EngagementNotification/Engagement.Notification.Title
+              button-label: EngagementNotification/Engagement.Notification.Body
+              action: OPEN_NEW_TAB
       - channel: developer
         value:
           messages:
@@ -130,15 +139,6 @@ features:
               text: ResearchSurface/Body.Text.v112
               button-label: ResearchSurface/PrimaryButton.Label.v112
               action: https://www.macrumors.com
-            engagement-notification:
-              surface: notification
-              style: DEFAULT
-              trigger:
-                - INACTIVE_NEW_USER
-                - ALLOWED_TIPS_NOTIFICATIONS
-              text: EngagementNotification/Engagement.Notification.Title
-              button-label: EngagementNotification/Engagement.Notification.Body
-              action: OPEN_NEW_TAB
 
 objects:
   MessageData:
