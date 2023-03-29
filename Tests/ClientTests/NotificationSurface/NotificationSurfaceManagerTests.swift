@@ -176,7 +176,7 @@ class MockNotificationMessageDataProtocol: MessageDataProtocol {
     var text: String = "text label test"
     var buttonLabel: String? = "button label test"
 
-    init(surface: MessageSurfaceId = .survey) {
+    init(surface: MessageSurfaceId = .notification) {
         self.surface = surface
     }
 }
