@@ -1453,10 +1453,10 @@ workflows:
             cp -r $BITRISE_XCRESULT_PATH /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test/
             echo "DerivedData/Client/Log/Tests"
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData
-            ls /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test
-            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test/Test-Fennec_Enterprise_XCUITests.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test/Test-Fennec_Enterprise_XCUITests-test.xcresult
+            CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
+            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec_Enterprise_XCUITests.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec_Enterprise_XCUITests-test.xcresult
 
-            ls /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
 
             xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
             ls ..
