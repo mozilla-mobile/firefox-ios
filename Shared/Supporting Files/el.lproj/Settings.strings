@@ -1,5 +1,11 @@
+/* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
+"CreditCard.Settings.EmptyListDescription.v112" = "Αποθηκεύστε τα στοιχεία της κάρτας σας με ασφάλεια για πιο γρήγορες πληρωμές.";
+
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v112" = "Αποθήκευση πιστωτικών καρτών στο %@";
+
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card type (e.g. Visa). The second parameter is the last 4 digits of the credit card. The third parameter is the name of the credit card holder. The fourth and fifth parameters are the month and year of the credit card's expiration date. */
+"CreditCard.Settings.ListItemA11y.v112" = "%1$@ με κατάληξη: %2$@, όνομα κατόχου: %3$@, ημερομηνία λήξης: %4$@";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
 "CreditCard.Settings.NotNow.v112" = "Όχι τώρα";
@@ -22,14 +28,23 @@
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "Χρήση αποθηκευμένης κάρτας";
 
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "Αυτό πρέπει να ενεργοποιηθεί για τη μεταφορά καρτελών και τη λήψη ειδοποιήσεων όταν συνδέεστε σε άλλη συσκευή.";
+
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Συγχρονισμός";
+
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Μάθετε σχετικά με χρήσιμες λειτουργίες και πώς να αξιοποιήσετε στο έπακρο το %@.";
 
 /* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
 "Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Συμβουλές και δυνατότητες";
 
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Ειδοποιήσεις";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Μεταβείτε στις ρυθμίσεις της συσκευής σας για να ενεργοποιήσετε τις ειδοποιήσεις στο %@";
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Ενεργοποίηση ειδοποιήσεων";

@@ -2655,6 +2655,7 @@ extension BrowserViewController: NotificationThemeable {
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+        zoomPageBar?.applyTheme(theme: themeManager.currentTheme)
     }
 }
 

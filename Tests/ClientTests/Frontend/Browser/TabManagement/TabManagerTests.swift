@@ -96,7 +96,7 @@ open class MockTabManagerDelegate: TabManagerDelegate {
     }
 }
 
-class TabManagerTests: XCTestCase {
+class LegacyTabManagerTests: XCTestCase {
     let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:isRestoring:)")
     let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:placeNextToParentTab:isRestoring:)")
     let didSelect = MethodSpy(functionName: spyDidSelectedTabChange)
@@ -303,11 +303,13 @@ class TabManagerTests: XCTestCase {
         let tab = manager.addTab()
         manager.selectTab(tab)
         manager.selectTab(manager.addTab())
-        manager.selectTab(manager.addTab(isPrivate: true))
 
         manager.willSwitchTabMode(leavingPBM: false)
+        manager.selectTab(manager.addTab(isPrivate: true))
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be 1 private tab")
+
         manager.willSwitchTabMode(leavingPBM: true)
+        manager.selectTab(tab)
         XCTAssertEqual(manager.privateTabs.count, 0, "There should be 0 private tab")
 
         removeTabAndAssert(tab: tab) {
@@ -680,7 +682,7 @@ class TabManagerTests: XCTestCase {
 }
 
 // MARK: - Helper methods
-private extension TabManagerTests {
+private extension LegacyTabManagerTests {
     func removeTabAndAssert(tab: Tab, completion: @escaping () -> Void) {
         let expectation = self.expectation(description: "Tab is removed")
         manager.removeTab(tab) {

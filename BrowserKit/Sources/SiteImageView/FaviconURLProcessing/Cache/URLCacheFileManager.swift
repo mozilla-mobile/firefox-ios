@@ -19,9 +19,15 @@ actor DefaultURLCacheFileManager: URLCacheFileManager {
     }
 
     func getURLCache() async -> Data? {
+        // Migrate file to new location
+        // TODO: FXIOS-6086 Cleanup once v113 has been well adopted
         let directory = getCacheDirectory()
-        guard fileManager.fileExists(atPath: directory.path) else { return nil }
-        return try? Data(contentsOf: directory)
+        if fileManager.fileExists(atPath: directory.path) {
+            return try? Data(contentsOf: directory)
+        } else {
+            let oldDirectory = getOldCacheDirectory()
+            return try? Data(contentsOf: oldDirectory)
+        }
     }
 
     func saveURLCache(data: Data) {
@@ -35,6 +41,11 @@ actor DefaultURLCacheFileManager: URLCacheFileManager {
     }
 
     private func getCacheDirectory() -> URL {
+        let paths = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
+        return paths[0].appendingPathComponent(fileName)
+    }
+
+    private func getOldCacheDirectory() -> URL {
         let paths = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0].appendingPathComponent(fileName)
     }

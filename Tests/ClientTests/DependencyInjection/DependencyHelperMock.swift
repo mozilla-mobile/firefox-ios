@@ -17,7 +17,7 @@ class DependencyHelperMock {
         )
         AppContainer.shared.register(service: profile)
 
-        let tabManager: TabManager = LegacyTabManager(
+        let tabManager: TabManager = TabManagerImplementation(
             profile: profile,
             imageStore: DiskImageStore(
                 files: profile.files,

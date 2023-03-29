@@ -179,9 +179,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                 self.isBookmarked = isBookmarked
             }
 
-            browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(.main) {
-                guard let clientGUIDs = $0.successValue else { return }
-
+            browserProfile.getClientGUIDs { clientGUIDs in
                 self.hasRemoteClients = !clientGUIDs.isEmpty
                 let clientPickerController = DevicePickerViewController(profile: browserProfile)
                 clientPickerController.pickerDelegate = clientPickerDelegate
@@ -190,7 +188,9 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
                     clientPickerController.shareItem = ShareItem(url: url, title: tab.title)
                 }
 
-                self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
+                DispatchQueue.main.async {
+                    self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
+                }
             }
 
             let result = browserProfile.readingList.getRecordWithURL(displayURL).value.successValue

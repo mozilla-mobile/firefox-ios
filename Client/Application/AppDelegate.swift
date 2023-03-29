@@ -13,11 +13,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
+    // This variable is used to determine whether the rust sync manager will be used
+    // during the Nimbus experiment and will be removed when it is complete.
+    private let rustSyncManagerStatus = FxNimbus.shared
+                                                .features
+                                                .rustSyncManagerComponent
+                                                .value()
+                                                .useRustSyncManager
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
-        syncDelegate: UIApplication.shared.syncDelegate
+        syncDelegate: UIApplication.shared.syncDelegate,
+        rustSyncManagerEnabled: rustSyncManagerStatus
     )
-    lazy var tabManager: TabManager = LegacyTabManager(
+    lazy var tabManager: TabManager = TabManagerImplementation(
         profile: profile,
         imageStore: DiskImageStore(
             files: profile.files,
@@ -36,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
 
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
 
     func application(
         _ application: UIApplication,
