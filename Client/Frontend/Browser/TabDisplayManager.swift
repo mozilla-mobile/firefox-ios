@@ -646,20 +646,25 @@ extension TabDisplayManager: InactiveTabsDelegate {
 
         cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
                                       completion: { shouldClose in
-            if shouldClose {
-                self.closeInactiveTabs()
-            } else {
+            guard shouldClose else {
                 self.undoInactiveTabsClose()
+                return
             }
+
+            self.closeInactiveTabs()
         })
     }
 
     private func closeInactiveTabs() {
-        if let inactiveTabs = inactiveViewModel?.inactiveTabs,
-           !inactiveTabs.isEmpty {
-            removeInactiveTabAndReloadView(tabs: inactiveTabs)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabCloseAllButton, extras: nil)
-        }
+        guard let inactiveTabs = inactiveViewModel?.inactiveTabs,
+              !inactiveTabs.isEmpty else { return }
+
+        removeInactiveTabAndReloadView(tabs: inactiveTabs)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .inactiveTabCloseAllButton,
+                                     extras: nil)
     }
 
     // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs

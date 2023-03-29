@@ -229,11 +229,6 @@ class TabTrayViewController: UIViewController, Themeable {
         updateLayout()
     }
 
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        viewModel.tabTrayView.setToolbarHeight(height: view.safeAreaInsets.bottom)
-//    }
-
     private func viewSetup() {
         viewModel.syncedTabsController.remotePanelDelegate = self
 
