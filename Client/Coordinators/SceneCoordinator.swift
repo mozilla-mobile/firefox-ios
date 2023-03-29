@@ -9,13 +9,16 @@ import Shared
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator {
     var window: UIWindow?
-    var mainCoordinator: Coordinator?
+    var browserCoordinator: BrowserCoordinator?
 
     func start(with scene: UIScene) {
         self.window = configureWindowFor(scene)
         let navigationController = createNavigationController()
 
-        // FXIOS-5986: Add launch instructor to either start onboarding or normal browsing
+        // FXIOS-5986: Add launch instructor to either start onboarding or browser
+        let router = DefaultRouter(navigationController: navigationController)
+        browserCoordinator = BrowserCoordinator(router: router)
+        browserCoordinator?.start()
 
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()

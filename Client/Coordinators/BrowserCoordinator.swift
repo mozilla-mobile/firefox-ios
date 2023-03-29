@@ -4,4 +4,6 @@
 
 import Foundation
 
-class BrowserCoordinator: BaseCoordinator {}
+class BrowserCoordinator: BaseCoordinator {
+    func start() {}
+}
