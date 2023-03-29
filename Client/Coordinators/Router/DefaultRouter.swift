@@ -34,11 +34,6 @@ class DefaultRouter: NSObject, Router {
     }
 
     func push(_ viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
-        // Avoid pushing UINavigationController onto stack
-        guard viewController is UINavigationController == false else {
-            return
-        }
-
         if let completion = completion {
             completions[viewController] = completion
         }

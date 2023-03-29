@@ -54,15 +54,6 @@ final class DefaultRouterTests: XCTestCase {
         XCTAssertEqual(navigationController.dismissCalled, 1)
     }
 
-    func testPushModule_doesntPushNavigationController() {
-        let subject = DefaultRouter(navigationController: navigationController)
-        let navController = UINavigationController()
-        subject.push(navController)
-
-        XCTAssertEqual(navigationController.pushCalled, 0)
-        XCTAssertEqual(navigationController.topViewController, nil)
-    }
-
     func testPushModule_pushViewController() {
         let subject = DefaultRouter(navigationController: navigationController)
         let viewController = UIViewController()

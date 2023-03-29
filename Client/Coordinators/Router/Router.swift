@@ -27,7 +27,7 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     func dismiss(animated: Bool, completion: (() -> Void)?)
 
     /// When a ViewController is pushed for an horizontal flow, we store a completion handler in a dictionary with the key being the view controller, so we can call
-    /// an action when the view controller is done with the presentation. We check to ensure we don't push navigation controllers.
+    /// an action when the view controller is done with the presentation. FYI, pushing navigation controllers isn't supported.
     /// - Parameters:
     ///   - viewController: The view controller to push
     ///   - animated: true means it will be animated
