@@ -7,6 +7,12 @@ import Storage
 import SwiftUI
 import Shared
 
+private struct CreditCardInputText {
+    var name = ""
+    var number = ""
+    var expiration = ""
+}
+
 struct CreditCardEditView: View {
     @ObservedObject var viewModel: CreditCardEditViewModel
     var dismiss: ((_ successVal: Bool) -> Void)
@@ -17,6 +23,7 @@ struct CreditCardEditView: View {
     @State var removeButtonColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
+    @State private var text = CreditCardInputText()
 
     var body: some View {
         NavigationView {
@@ -28,10 +35,10 @@ struct CreditCardEditView: View {
                         .foregroundColor(borderColor)
 
                     Group {
-                        FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
-                                          textVal: $viewModel.nameOnCard,
-                                          errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
-                                          showError: !viewModel.nameIsValid)
+                        FloatingTextField(inputType: .name,
+                                          text: $text.name,
+                                          showError: !viewModel.nameIsValid,
+                                          editViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -42,11 +49,10 @@ struct CreditCardEditView: View {
                     .background(textFieldBackgroundColor)
 
                     Group {
-                        FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
-                                          textVal: $viewModel.cardNumber,
-                                          errorString: String.CreditCard.ErrorState.CardNumberSublabel,
+                        FloatingTextField(inputType: .number,
+                                          text: $text.number,
                                           showError: !viewModel.numberIsValid,
-                                          keyboardType: .numberPad)
+                                          editViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -57,11 +63,10 @@ struct CreditCardEditView: View {
                     .background(textFieldBackgroundColor)
 
                     Group {
-                        FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
-                                          textVal: $viewModel.expirationDate,
-                                          errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
+                        FloatingTextField(inputType: .expiration,
+                                          text: $text.expiration,
                                           showError: !viewModel.expirationIsValid,
-                                          keyboardType: .numberPad)
+                                          editViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()

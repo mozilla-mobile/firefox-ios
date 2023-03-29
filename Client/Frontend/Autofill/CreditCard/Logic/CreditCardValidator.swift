@@ -63,20 +63,33 @@ struct CreditCardValidator {
         .unionpay: "^62[0-5]\\d{13,16}$"
     ]
 
-    var creditCardNumber: Int
-
-    func cardType() -> CreditCardType? {
+    func cardTypeFor(_ card: Int) -> CreditCardType? {
         let val = regEx.first { _, regex in
-            let result = "\(creditCardNumber)".range(of: regex, options: .regularExpression)
+            let result = "\(card)".range(of: regex, options: .regularExpression)
             return (result != nil)
         }
         return val?.key
     }
 
-    func isValid() -> Bool {
-        guard let cardType = cardType() else {
+    func isCardNumberValidFor(card: Int) -> Bool {
+        guard let cardType = cardTypeFor(card) else {
             return false
         }
-        return cardType.validNumberLength.contains(String(creditCardNumber).count)
+        return cardType.validNumberLength.contains(String(card).count)
+    }
+
+    // TODO: Write unit test for this
+    func isExpirationValidFor(date: String) -> Bool {
+        guard date.count == 4,
+              let inputMonth = Int(date.prefix(2)),
+              let inputYear = Int(date.suffix(2)),
+              let currentYear = Calendar(identifier: .gregorian).dateComponents([.year], from: Date()).year,
+              let currentMonth = Calendar(identifier: .gregorian).dateComponents([.month], from: Date()).month,
+              inputMonth < 13 && inputMonth > 0 && inputMonth >= currentMonth,
+              (inputYear + 2000) < currentYear + 100 && (inputYear + 2000) >= currentYear else {
+            return false
+        }
+
+        return true
     }
 }
