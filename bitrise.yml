@@ -1462,8 +1462,8 @@ workflows:
             ls ..
             python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
             cat data.txt
-            cat test.json
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
+            cat test.json
             python3 perfTestTransform.py
     - deploy-to-bitrise-io@1.9: {}
     meta:
