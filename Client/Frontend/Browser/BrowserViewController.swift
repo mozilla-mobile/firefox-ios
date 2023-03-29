@@ -258,6 +258,7 @@ class BrowserViewController: UIViewController {
 
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
+        updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
     }
@@ -686,6 +687,10 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(view)
         }
 
+        updateHeaderConstraints()
+    }
+
+    private func updateHeaderConstraints() {
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(view)

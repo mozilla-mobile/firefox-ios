@@ -6,8 +6,6 @@ import UIKit
 import SnapKit
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
-
-
 class TabScrollingController: NSObject, FeatureFlaggable {
     enum ScrollDirection {
         case up
@@ -48,7 +46,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
 
     private var toolbarsShowing: Bool {
         let bottomShowing = overKeyboardContainerOffset == 0 && bottomContainerOffset == 0
-        return isBottomSearchBar ? bottomShowing : toolbarState == .visible
+        return isBottomSearchBar ? bottomShowing : headerTopOffset == 0
     }
 
     private var isZoomedOut: Bool = false
@@ -108,7 +106,7 @@ class TabScrollingController: NSObject, FeatureFlaggable {
     // If scrollview contentSize height is bigger that device height plus delta
     var isAbleToScroll: Bool {
         return (UIScreen.main.bounds.size.height + 2 * UIConstants.ToolbarHeight) <
-            contentSize.height ?? 0
+            contentSize.height
     }
 
     override init() {
