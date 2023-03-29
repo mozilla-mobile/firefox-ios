@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
 
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
 
     func application(
         _ application: UIApplication,
