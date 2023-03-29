@@ -42,8 +42,9 @@ class ThemedTableViewCellViewModel {
 
 class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
     var viewModel: ThemedTableViewCellViewModel?
-
+    var cellStyle: UITableViewCell.CellStyle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        self.cellStyle = style
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
 
@@ -62,18 +63,22 @@ class ThemedTableViewCell: UITableViewCell, ThemeApplicable {
         var size = super.systemLayoutSizeFitting(targetSize,
                                                  withHorizontalFittingPriority: horizontalFittingPriority,
                                                  verticalFittingPriority: verticalFittingPriority)
-        if let textLabel = self.textLabel, let detailTextLabel = self.detailTextLabel {
-            let detailHeight = detailTextLabel.frame.size.height
-            if detailTextLabel.frame.origin.x > textLabel.frame.origin.x { // style = Value1 or Value2
-                let textHeight = textLabel.frame.size.height
-                if detailHeight > textHeight {
-                    size.height += detailHeight - textHeight
+        if cellStyle == .value2 || cellStyle == .value1 {
+            if let textLabel = self.textLabel, let detailTextLabel = self.detailTextLabel {
+                let detailHeight = detailTextLabel.frame.size.height
+                if detailTextLabel.frame.minX > textLabel.frame.minX { // style = Value1 or Value2
+                    let textHeight = textLabel.frame.size.height
+                    if detailHeight > textHeight {
+                        size.height += detailHeight - textHeight
+                    }
+                } else { // style = Subtitle, so always add subtitle height
+                    size.height += detailHeight
                 }
-            } else { // style = Subtitle, so always add subtitle height
-                size.height += detailHeight
             }
+            return size
+        } else {
+            return size
         }
-        return size
     }
     func applyTheme(theme: Theme) {
         self.viewModel?.setColors(theme: theme)
