@@ -74,16 +74,18 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
 
         switch featureID {
-        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
+        case .onboardingNotificationCard: return OnboardingNotificationCardPosition(rawValue: userSetting) as? T
         case .searchBarPosition: return SearchBarPosition(rawValue: userSetting) as? T
+        case .startAtHome: return StartAtHomeSetting(rawValue: userSetting) as? T
         case .wallpaperVersion: return WallpaperVersion(rawValue: userSetting) as? T
         }
     }
 
     private func convertCustomIDToStandard(_ featureID: NimbusFeatureFlagWithCustomOptionsID) -> NimbusFeatureFlagID {
         switch featureID {
-        case .startAtHome: return .startAtHome
+        case .onboardingNotificationCard: return .onboardingNotificationCard
         case .searchBarPosition: return .bottomSearchBar
+        case .startAtHome: return .startAtHome
         case .wallpaperVersion: return .wallpaperVersion
         }
     }
@@ -107,17 +109,17 @@ class FeatureFlagsManager: HasNimbusFeatureFlags {
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
         switch featureID {
-        case .startAtHome:
-            if let option = desiredState as? StartAtHomeSetting {
-                feature.setUserPreference(to: option.rawValue)
-            }
-
         case .searchBarPosition:
             if let option = desiredState as? SearchBarPosition {
                 feature.setUserPreference(to: option.rawValue)
             }
 
-        case .wallpaperVersion: return
+        case .startAtHome:
+            if let option = desiredState as? StartAtHomeSetting {
+                feature.setUserPreference(to: option.rawValue)
+            }
+
+        case .wallpaperVersion, .onboardingNotificationCard: return
         }
     }
 

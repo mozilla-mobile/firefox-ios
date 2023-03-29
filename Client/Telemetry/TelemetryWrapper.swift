@@ -407,6 +407,7 @@ extension TelemetryWrapper {
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case creditCardAutofillSettings = "creditCardAutofillSettings"
         case notificationPermission = "notificationPermission"
+        case engagementNotification = "engagementNotification"
         // MARK: New Onboarding
         case onboardingClose = "onboarding-close"
         case onboardingCardView = "onboarding-card-view"
@@ -819,6 +820,10 @@ extension TelemetryWrapper {
                     value: value,
                     extras: extras)
             }
+        case(.action, .tap, .engagementNotification, _, _):
+            GleanMetrics.Onboarding.engagementNotificationTapped.record()
+        case(.action, .cancel, .engagementNotification, _, _):
+            GleanMetrics.Onboarding.engagementNotificationCancel.record()
         case (.action, .tap, .dismissDefaultBrowserOnboarding, _, _):
             GleanMetrics.DefaultBrowserOnboarding.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserOnboarding, _, _):
