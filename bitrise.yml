@@ -1450,6 +1450,8 @@ workflows:
             ls
             ls $BITRISE_XCRESULT_PATH
 
+            cp -r $BITRISE_XCRESULT_PATH /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test
+
             xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
             ls ..
             python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
