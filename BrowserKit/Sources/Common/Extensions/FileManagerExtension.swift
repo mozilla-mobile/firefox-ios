@@ -10,4 +10,9 @@ public extension FileManager {
             .filter { $0.hasPrefix("\(prefix).") }
             .sorted { $0 < $1 }
     }
+
+    static var documentsDirectoryURL: URL {
+        print("-> \(`default`.urls(for: .documentDirectory, in: .userDomainMask)[0].absoluteURL)")
+      return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
 }
