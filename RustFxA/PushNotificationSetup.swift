@@ -10,11 +10,17 @@ open class PushNotificationSetup {
     private var pushClient: PushClient?
     private var pushRegistration: PushRegistration?
 
-    public func didRegister(withDeviceToken deviceToken: Data) {
+    /// Registers the users device with the push notification server. If notificationAllowed is false the device will
+    /// be unsubscribed from receiving notifications.
+    /// - Parameters:
+    ///   - deviceToken: A token that identifies the device to Apple Push Notification Service (APNS).
+    ///   - notificationAllowed: Indicates if the user allowed sync push notification in the settings.
+    public func didRegister(withDeviceToken deviceToken: Data, notificationAllowed: Bool) {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else { return }
+        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken
+        else { return }
 
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
             let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
@@ -26,9 +32,15 @@ open class PushNotificationSetup {
                 self?.pushRegistration = pushRegistration
 
                 let subscription = pushRegistration.defaultSubscription
-                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString,
-                                                        publicKey: subscription.p256dhPublicKey,
-                                                        authKey: subscription.authKey)
+
+                // send empty parameters for push subscription if no notifications should be send to device
+                let endpoint = notificationAllowed ? subscription.endpoint.absoluteString : ""
+                let publicKey = notificationAllowed ? subscription.p256dhPublicKey : ""
+                let authKey = notificationAllowed ? subscription.authKey : ""
+
+                let devicePush = DevicePushSubscription(endpoint: endpoint,
+                                                        publicKey: publicKey,
+                                                        authKey: authKey)
                 accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
                 // We set our apnsToken **after** the call to set the push subscription completes
                 // This helps ensure that if that call fails, we will try again with a new token next time

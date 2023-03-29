@@ -1193,6 +1193,25 @@ class TabsSetting: Setting {
     }
 }
 
+class NotificationsSetting: Setting {
+    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+
+    override var accessibilityIdentifier: String? { return AccessibilityIdentifiers.Setting.notifications }
+
+    let profile: Profile
+
+    init(theme: Theme, profile: Profile) {
+        self.profile = profile
+        super.init(title: NSAttributedString(string: .Settings.Notifications.Title,
+                                             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = NotificationsSettingsViewController(prefs: profile.prefs, hasAccount: profile.hasAccount())
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 class SiriPageSetting: Setting {
     let profile: Profile
 

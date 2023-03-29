@@ -15,6 +15,14 @@ credit-card-autofill:
     credit-card-autofill-status:
       type: boolean
       description: "If true, we will allow user to use the credit autofill feature"
+engagement-notification-feature:
+  description: "The feature that controls the engagement notifications.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    engagement-notification-feature-status:
+      type: boolean
+      description: "If true, we will allow user to use the engagement notification feature"
 general-app-features:
   description: The feature that contains feature flags for the entire application
   hasExposure: true
@@ -72,6 +80,14 @@ messaging:
     triggers:
       type: json
       description: "A collection of out the box trigger expressions. Each entry maps to a valid JEXL expression.\n"
+notification-settings-feature:
+  description: "The feature that controls the notifications menu in Settings.\n"
+  hasExposure: true
+  exposureDescription: ""
+  variables:
+    notification-settings-feature-status:
+      type: boolean
+      description: "If true, we will allow user to use the the notifications menu in Settings"
 onboarding-feature:
   description: The feature that controls whether to show or not Upgrade onboarding
   hasExposure: true
@@ -80,6 +96,13 @@ onboarding-feature:
     first-run-flow:
       type: boolean
       description: "If true, we show the new Onboarding screen when the user for v106 version.\n"
+    notification-card-position:
+      type: string
+      description: "This provides the setting for how we show the notification card in onboarding.\n"
+      enum:
+        - after-sync
+        - before-sync
+        - no-card
     upgrade-flow:
       type: boolean
       description: "If true, we show the Upgrade onboarding screen when the user upgrades the version.\n"

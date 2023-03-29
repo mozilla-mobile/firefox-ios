@@ -15,9 +15,11 @@ channels:
 include:
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/creditCardAutofillFeature.yaml
+  - nimbus-features/engagementNotificationFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/homescreenFeature.yaml
   - nimbus-features/messagingFeature.yaml
+  - nimbus-features/notificationSettingsFeature.yaml
   - nimbus-features/onboardingFeature.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/searchTermGroupsFeature.yaml

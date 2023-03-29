@@ -29,10 +29,14 @@ class OnboardingCardViewController: UIViewController, Themeable {
         static let imageViewSize = CGSize(width: 240, height: 300)
 
         // small device
+        static let smallTitleFontSize: CGFloat = 28
         static let smallStackViewSpacing: CGFloat = 8
         static let smallStackViewSpacingButtons: CGFloat = 16
         static let smallScrollViewVerticalPadding: CGFloat = 20
         static let smallImageViewSize = CGSize(width: 240, height: 300)
+
+        // tiny device (SE 1st gen)
+        static let tinyImageViewSize = CGSize(width: 144, height: 180)
     }
 
     var viewModel: OnboardingCardProtocol
@@ -45,6 +49,11 @@ class OnboardingCardViewController: UIViewController, Themeable {
     // including now iPhone SE 2nd generation and iPad
     var shouldUseSmallDeviceLayout: Bool {
         return view.frame.height <= 667 || UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    // Adjusting layout for tiny devices (iPhone SE 1st generation)
+    var shouldUseTinyDeviceLayout: Bool {
+        return UIDevice().isTinyFormFactor
     }
 
     private lazy var scrollView: UIScrollView = .build { view in
@@ -75,8 +84,9 @@ class OnboardingCardViewController: UIViewController, Themeable {
     private lazy var titleLabel: UILabel = .build { label in
         label.numberOfLines = 0
         label.textAlignment = .center
+        let fontSize = self.shouldUseSmallDeviceLayout ? UX.smallTitleFontSize : UX.titleFontSize
         label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .largeTitle,
-                                                                       size: UX.titleFontSize)
+                                                                       size: fontSize)
         label.adjustsFontForContentSizeCategory = true
         label.accessibilityIdentifier = "\(self.viewModel.infoModel.a11yIdRoot)TitleLabel"
     }
@@ -138,6 +148,16 @@ class OnboardingCardViewController: UIViewController, Themeable {
                                                 right: UX.buttonHorizontalInset)
     }
 
+    private var imageViewHeight: CGFloat {
+        if shouldUseTinyDeviceLayout {
+            return UX.tinyImageViewSize.height
+        } else if shouldUseSmallDeviceLayout {
+            return UX.imageViewSize.height
+        } else {
+            return UX.smallImageViewSize.height
+        }
+    }
+
     init(viewModel: OnboardingCardProtocol,
          delegate: OnboardingCardDelegate?,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -190,8 +210,6 @@ class OnboardingCardViewController: UIViewController, Themeable {
         // Adapt layout for smaller screens
         let scrollViewVerticalPadding = shouldUseSmallDeviceLayout ? UX.smallScrollViewVerticalPadding :  UX.scrollViewVerticalPadding
         let stackViewSpacingButtons = shouldUseSmallDeviceLayout ? UX.smallStackViewSpacingButtons :  UX.stackViewSpacingButtons
-        let imageViewHeight = shouldUseSmallDeviceLayout ?
-            UX.imageViewSize.height : UX.smallImageViewSize.height
 
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -268,7 +286,7 @@ class OnboardingCardViewController: UIViewController, Themeable {
         delegate?.showNextPage(viewModel.cardType)
     }
 
-    // MARK: - Themable
+    // MARK: - Themeable
     func applyTheme() {
         let theme = themeManager.currentTheme
         titleLabel.textColor = theme.colors.textPrimary
