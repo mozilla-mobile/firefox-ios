@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
 import Shared
 import Storage
 
@@ -25,7 +26,7 @@ class GleanPlumbContextProvider {
         #endif
     }
 
-    var notificationManager: NotificationManagerProtocol = NotificationManager()
+    var userDefaults: UserDefaultsInterface = UserDefaults.standard
 
     private var todaysDate: String {
         let dateFormatter = DateFormatter()
@@ -34,12 +35,12 @@ class GleanPlumbContextProvider {
     }
 
     private var isDefaultBrowser: Bool {
-        return UserDefaults.standard.bool(forKey: RatingPromptManager.UserDefaultsKey.keyIsBrowserDefault.rawValue)
+        return userDefaults.bool(forKey: RatingPromptManager.UserDefaultsKey.keyIsBrowserDefault.rawValue)
     }
 
-    private var isInactiveNewUser: Bool {
+    var isInactiveNewUser: Bool {
         // existing users don't have firstAppUse set
-        guard let firstAppUse = UserDefaults.standard.value(forKey: PrefsKeys.KeyFirstAppUse) as? UInt64
+        guard let firstAppUse = userDefaults.object(forKey: PrefsKeys.KeyFirstAppUse) as? UInt64
         else { return false }
 
         let now = Date()
@@ -55,7 +56,7 @@ class GleanPlumbContextProvider {
 
     private var allowedTipsNotifications: Bool {
         let featureEnabled = FeatureFlagsManager.shared.isFeatureEnabled(.notificationSettings, checking: .buildOnly)
-        let userPreference = UserDefaults.standard.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+        let userPreference = userDefaults.bool(forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
         return featureEnabled && userPreference
     }
 
