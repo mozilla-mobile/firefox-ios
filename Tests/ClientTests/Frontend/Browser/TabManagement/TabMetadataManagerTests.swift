@@ -75,7 +75,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
                                                   searchUrl: stringUrl,
                                                   nextReferralUrl: "",
-                                                  tabHistoryCurrentState: TabGroupTimerState.openURLOnly.rawValue)
+                                                  tabHistoryCurrentState: LegacyTabGroupTimerState.openURLOnly.rawValue)
 
         manager.updateObservationTitle(title) {
             XCTAssertEqual(self.metadataObserver.observation?.url, stringUrl)
@@ -92,7 +92,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
                                                   searchUrl: stringUrl,
                                                   nextReferralUrl: referralURL,
-                                                  tabHistoryCurrentState: TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue)
+                                                  tabHistoryCurrentState: LegacyTabGroupTimerState.tabNavigatedToDifferentUrl.rawValue)
 
         manager.updateObservationTitle(title) {
             XCTAssertEqual(self.metadataObserver.observation?.url, stringUrl)
@@ -109,7 +109,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
                                                   searchUrl: stringUrl,
                                                   nextReferralUrl: referralURL,
-                                                  tabHistoryCurrentState: TabGroupTimerState.openInNewTab.rawValue)
+                                                  tabHistoryCurrentState: LegacyTabGroupTimerState.openInNewTab.rawValue)
 
         // Title should not be updated for this state
         manager.updateObservationTitle(title) {
@@ -126,7 +126,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
                                                   searchUrl: stringUrl,
                                                   nextReferralUrl: referralURL,
-                                                  tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue)
+                                                  tabHistoryCurrentState: LegacyTabGroupTimerState.tabSwitched.rawValue)
 
         // Title should not be updated for this state
         manager.updateObservationTitle(title) {
@@ -143,7 +143,7 @@ class TabMetadataManagerTests: XCTestCase {
         manager.tabGroupData = LegacyTabGroupData(searchTerm: "",
                                                   searchUrl: stringUrl,
                                                   nextReferralUrl: referralURL,
-                                                  tabHistoryCurrentState: TabGroupTimerState.tabSwitched.rawValue)
+                                                  tabHistoryCurrentState: LegacyTabGroupTimerState.tabSwitched.rawValue)
 
         // Title should not be updated for this state
         manager.updateObservationTitle(title) {
