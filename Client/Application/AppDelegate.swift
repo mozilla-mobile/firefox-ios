@@ -36,7 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var themeManager: ThemeManager = DefaultThemeManager()
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
-    lazy var notificationSurfaceManager = NotificationSurfaceManager()
 
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
@@ -44,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var backgroundSyncUtil: BackgroundSyncUtil?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
+
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
 
     func application(
         _ application: UIApplication,
@@ -138,6 +139,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) { [weak self] in
             self?.profile.cleanupHistoryIfNeeded()
             self?.ratingPromptManager.updateData()
+        }
+
+        // Schedule and update engagement notifications if necessary every time the app becomes active
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.engagementNotificationHelper.schedule()
         }
 
         logger.log("applicationDidBecomeActive end",
