@@ -97,7 +97,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         switch response.notification.request.identifier {
         case let identifier where identifier.starts(with: NotificationSurfaceManager.Constant.notificationBaseId):
-            notificationSurfaceManager.didTapNotification(response)
+            notificationSurfaceManager.didTapNotification(response.notification.request.content.userInfo)
         default:
             openURLsInNewTabs(response.notification)
         }

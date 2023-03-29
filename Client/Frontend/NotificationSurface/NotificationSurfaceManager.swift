@@ -8,7 +8,7 @@ import Shared
 
 protocol NotificationSurfaceDelegate: AnyObject {
     func didDisplayMessage(_ message: GleanPlumbMessage)
-    func didTapNotification(_ response: UNNotificationResponse)
+    func didTapNotification(_ userInfo: [AnyHashable: Any])
 }
 
 class NotificationSurfaceManager: NotificationSurfaceDelegate {
@@ -22,6 +22,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     private var message: GleanPlumbMessage?
     private var messagingManager: GleanPlumbMessageManagerProtocol
     private var notificationManager: NotificationManagerProtocol
+    private var notificationCenter: NotificationProtocol
 
     var shouldShowSurface: Bool {
         updateMessage()
@@ -30,9 +31,11 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
 
     // MARK: - Initialization
     init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
-         notificationManager: NotificationManagerProtocol = NotificationManager()) {
+         notificationManager: NotificationManagerProtocol = NotificationManager(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.messagingManager = messagingManager
         self.notificationManager = notificationManager
+        self.notificationCenter = notificationCenter
     }
 
     // MARK: - Functionality
@@ -61,15 +64,15 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
         messagingManager.onMessageDisplayed(message)
     }
 
-    func didTapNotification(_ response: UNNotificationResponse) {
-        guard let messageId = response.notification.request.content.userInfo["messageId"] as? String,
+    func didTapNotification(_ userInfo: [AnyHashable: Any]) {
+        guard let messageId = userInfo["messageId"] as? String,
               let message = messagingManager.messageForId(messageId, surface: notificationSurfaceID)
         else { return }
 
         switch message.action {
         case "OPEN_NEW_TAB":
             let object = OpenTabNotificationObject(type: .openNewTab)
-            NotificationCenter.default.post(name: .OpenTabNotification, object: object)
+            notificationCenter.post(name: .OpenTabNotification, withObject: object)
             messagingManager.onMessagePressed(message)
         default:
             // do nothing
