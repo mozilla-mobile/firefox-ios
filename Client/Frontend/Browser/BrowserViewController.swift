@@ -159,8 +159,6 @@ class BrowserViewController: UIViewController {
         return keyboardPressesHandlerValue
     }
 
-    fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
-
     init(
         profile: Profile,
         tabManager: TabManager,
@@ -594,7 +592,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func presentContextualHint() {
-        if shouldShowIntroScreen { return }
+        if IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen { return }
         present(contextHintVC, animated: true)
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)
@@ -2259,7 +2257,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     func presentIntroViewController(_ alwaysShow: Bool = false) {
-        if alwaysShow || shouldShowIntroScreen {
+        if alwaysShow || IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen {
             showProperIntroVC()
         }
     }
@@ -2322,7 +2320,7 @@ extension BrowserViewController {
         let introViewModel = IntroViewModel()
         let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
         introViewController.didFinishFlow = {
-            self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+            IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
             introViewController.dismiss(animated: true)
         }
         self.introVCPresentHelper(introViewController: introViewController)
