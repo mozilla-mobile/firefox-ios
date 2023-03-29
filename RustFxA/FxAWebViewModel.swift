@@ -34,9 +34,12 @@ class FxAWebViewModel {
     fileprivate var deepLinkParams: FxALaunchParams
     fileprivate(set) var baseURL: URL?
     let fxAWebViewTelemetry = FxAWebViewTelemetry()
+    private var shouldAskForNotificationPermission: Bool
     private let logger: Logger
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
+
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper(prefs: profile.prefs)
 
     func setupUserScript(for controller: WKUserContentController) {
         guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"),
@@ -55,14 +58,17 @@ class FxAWebViewModel {
      - parameter pageType: Specify login flow or settings page if already logged in.
      - parameter profile: a Profile.
      - parameter deepLinkParams: url parameters that originate from a deep link
+     - parameter shouldAskForNotificationPermission: indicator if notification permissions should be requested from the user upon login.
      */
     required init(pageType: FxAPageType,
                   profile: Profile,
                   deepLinkParams: FxALaunchParams,
+                  shouldAskForNotificationPermission: Bool = true,
                   logger: Logger = DefaultLogger.shared) {
         self.pageType = pageType
         self.profile = profile
         self.deepLinkParams = deepLinkParams
+        self.shouldAskForNotificationPermission = shouldAskForNotificationPermission
         self.logger = logger
 
         // If accountMigrationFailed then the app menu has a caution icon,
@@ -248,12 +254,23 @@ extension FxAWebViewModel {
         profile.rustFxA.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager.onAddedAccount()
 
-            // ask for push notification
+            // only ask for notification permission if it's not onboarding related (e.g. settings)
+            guard self.shouldAskForNotificationPermission else { return }
+
             MZKeychainWrapper.sharedClientAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: MZKeychainItemAccessibility.afterFirstUnlock)
             NotificationManager().requestAuthorization { granted, error in
                 guard error == nil else { return }
                 if granted {
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.SyncNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.SyncNotifications)
+                    }
+                    if self.profile.prefs.boolForKey(PrefsKeys.Notifications.TipsAndFeaturesNotifications) == nil {
+                        self.profile.prefs.setBool(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+                    }
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+
+                    // schedule engagement notification if necessary after user allowed notification permission
+                    self.engagementNotificationHelper.schedule()
                 }
             }
         }
