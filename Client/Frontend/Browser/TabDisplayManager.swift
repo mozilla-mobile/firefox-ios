@@ -635,7 +635,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
     }
 
-    func didTapCloseAllTabs(tabsCount: Int) {
+    func didTapCloseInactiveTabs(tabsCount: Int) {
         // Haptic feedback for when a user closes all inactive tabs
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred()
@@ -683,7 +683,7 @@ extension TabDisplayManager: InactiveTabsDelegate {
     }
 
     private func undoInactiveTabsClose() {
-        inactiveViewModel?.undoInactiveTabsClosure()
+        inactiveViewModel?.shouldHideInactiveTabs = false
         let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
         collectionView.reloadItems(at: [indexPath])
     }

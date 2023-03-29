@@ -61,13 +61,12 @@ class InactiveTabViewModel {
     private var selectedTab: Tab?
     var inactiveTabs = [Tab]()
     var activeTabs = [Tab]()
-
-    private var backupInactiveTabs = [Tab]()
+    var shouldHideInactiveTabs = false
 
     private var appSessionManager: AppSessionProvider
 
     var isActiveTabsEmpty: Bool {
-        return activeTabs.isEmpty
+        return activeTabs.isEmpty || shouldHideInactiveTabs
     }
 
     init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve()) {
@@ -85,18 +84,6 @@ class InactiveTabViewModel {
         appSessionManager.tabUpdateState = .sameSession
 
         updateFilteredTabs()
-    }
-
-    func closeInactivateTabs() {
-        print("YRD close was pressed")
-        backupInactiveTabs = inactiveTabs
-        inactiveTabs.removeAll()
-    }
-
-    func undoInactiveTabsClosure() {
-        print("YRD undoClose")
-        inactiveTabs = backupInactiveTabs
-        backupInactiveTabs.removeAll()
     }
 
     /// This function returns any tabs that are less than four days old.
