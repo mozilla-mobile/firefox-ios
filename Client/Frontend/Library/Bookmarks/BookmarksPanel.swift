@@ -43,7 +43,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         switch state {
         case .bookmarks(state: .mainView):
             bottomRightButton.title = .BookmarksEdit
-            return [exportBookmarksButton, flexibleSpace, bottomRightButton]
+            return [moreButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .inFolder):
             bottomRightButton.title = .BookmarksEdit
             return [flexibleSpace, bottomRightButton]
@@ -67,12 +67,12 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel, CanRemoveQuickActio
         return button
     }()
     
-    private lazy var exportBookmarksButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(image: UIImage.templateImageNamed(ImageIdentifiers.share),
+    private lazy var moreButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: "More",
                                      style: .plain,
                                      target: self,
-                                     action: #selector(exportBookmarksAction))
-//        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
+                                     action: #selector(showMoreDialog))
+        button.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.bottomLeftButton
         return button
     }()
     
@@ -576,9 +576,21 @@ extension BookmarksPanel {
         }
     }
     
-
+    func showMoreDialog() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        [
+            UIAlertAction(title: "Import Bookmarks", style: .default, handler: importBookmarksActionHandler),
+            UIAlertAction(title: "Export Bookmarks", style: .default, handler: exportBookmarksActionHandler),
+            UIAlertAction(title: "Cancel", style: .cancel)
+        ].forEach(alert.addAction)
+        present(alert, animated: true)
+    }
     
-    func exportBookmarksAction() {
+    func importBookmarksActionHandler(_ action: UIAlertAction) {
+        assertionFailure("Not yet implemented")
+    }
+
+    func exportBookmarksActionHandler(_ action: UIAlertAction) {
         Task {
             let serializer = BookmarkSerializer()
             
