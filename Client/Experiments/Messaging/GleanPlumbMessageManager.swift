@@ -191,10 +191,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         }
 
         guard let messageData = messageData,
-                let message = self.createMessage(messageId: messageData.key,
-                                                 message: messageData.value,
-                                                 lookupTables: feature)
+              let message = self.createMessage(messageId: messageData.key,
+                                               message: messageData.value,
+                                               lookupTables: feature)
         else { return nil }
+
         return message
     }
 
