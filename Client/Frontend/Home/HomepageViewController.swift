@@ -237,7 +237,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
 
         let point = longPressGestureRecognizer.location(in: collectionView)

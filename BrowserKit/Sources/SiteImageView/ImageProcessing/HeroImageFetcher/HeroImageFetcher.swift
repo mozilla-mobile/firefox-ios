@@ -12,20 +12,23 @@ protocol HeroImageFetcher {
     ///   - siteURL: the url to fetch the hero image with
     ///   - metadataProvider: LPMetadataProvider
     /// - Returns: the hero image
-    @MainActor func fetchHeroImage(from siteURL: URL, metadataProvider: LPMetadataProvider) async throws -> UIImage
+    @MainActor
+    func fetchHeroImage(from siteURL: URL, metadataProvider: LPMetadataProvider) async throws -> UIImage
 }
 
 extension HeroImageFetcher {
-    @MainActor func fetchHeroImage(from siteURL: URL,
-                                   metadataProvider: LPMetadataProvider = LPMetadataProvider()
+    @MainActor
+    func fetchHeroImage(from siteURL: URL,
+                        metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
         try await fetchHeroImage(from: siteURL, metadataProvider: metadataProvider)
     }
 }
 
 class DefaultHeroImageFetcher: HeroImageFetcher {
-    @MainActor func fetchHeroImage(from siteURL: URL,
-                                   metadataProvider: LPMetadataProvider = LPMetadataProvider()
+    @MainActor
+    func fetchHeroImage(from siteURL: URL,
+                        metadataProvider: LPMetadataProvider = LPMetadataProvider()
     ) async throws -> UIImage {
         do {
             let metadata = try await metadataProvider.startFetchingMetadata(for: siteURL)

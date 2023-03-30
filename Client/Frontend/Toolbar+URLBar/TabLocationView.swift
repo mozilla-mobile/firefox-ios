@@ -16,7 +16,8 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
-    @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
+    @discardableResult
+    func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
     func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView)
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }

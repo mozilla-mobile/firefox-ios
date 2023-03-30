@@ -12,7 +12,8 @@ private struct SearchInputViewUX {
     static let closeButtonSize: CGFloat = 36
 }
 
-@objc protocol SearchInputViewDelegate: AnyObject {
+@objc
+protocol SearchInputViewDelegate: AnyObject {
     func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String)
 
     func searchInputViewBeganEditing(_ searchView: SearchInputView)

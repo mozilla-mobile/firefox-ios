@@ -29,7 +29,8 @@ protocol TabDisplayCompletionDelegate: AnyObject {
     func completedAnimation(for: TabAnimationType)
 }
 
-@objc protocol TabSelectionDelegate: AnyObject {
+@objc
+protocol TabSelectionDelegate: AnyObject {
     func didSelectTabAtIndex(_ index: Int)
 }
 

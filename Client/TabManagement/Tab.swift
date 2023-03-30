@@ -571,7 +571,8 @@ class Tab: NSObject {
         _ = webView?.go(to: item)
     }
 
-    @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
+    @discardableResult
+    func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url,

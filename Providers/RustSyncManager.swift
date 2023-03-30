@@ -472,7 +472,8 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    @discardableResult public func syncEverything(why: OldSyncReason) -> Success {
+    @discardableResult
+    public func syncEverything(why: OldSyncReason) -> Success {
         let rustReason = toRustSyncReason(reason: why)
         return syncRustEngines(why: rustReason, engines: RustTogglableEngines) >>> succeed
     }
