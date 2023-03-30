@@ -27,7 +27,7 @@ class CreditCardSettingsViewModel {
     var appAuthenticator: AppAuthenticationProtocol?
 
     lazy var addEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel(profile: profile)
-    var creditCardTableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
+    var tableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
     var toggleModel: ToggleModel!
 
     public init(profile: Profile,
@@ -38,7 +38,7 @@ class CreditCardSettingsViewModel {
         self.autofill = profile.autofill
         self.appAuthenticator = appAuthenticator
         self.toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
-        creditCardTableViewModel.toggleModel = toggleModel
+        tableViewModel.toggleModel = toggleModel
     }
 
     var isAutofillEnabled: Bool {
@@ -57,19 +57,21 @@ class CreditCardSettingsViewModel {
         }
     }
 
-    func listCreditCard(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
+    func getCreditCardList(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
         autofill?.listCreditCards(completion: { creditCards, error in
-            guard error == nil else {
+            guard let cards = creditCards,
+                  error == nil else {
                 completionHandler(nil)
                 return
             }
+            self.updateCreditCardsList(creditCards: cards)
             completionHandler(creditCards)
         })
     }
 
-    func updateCreditCardsList(creditCards: [CreditCard]) {
+    private func updateCreditCardsList(creditCards: [CreditCard]) {
         DispatchQueue.main.async { [weak self] in
-            self?.creditCardTableViewModel.creditCards = creditCards
+            self?.tableViewModel.creditCards = creditCards
         }
     }
 }
