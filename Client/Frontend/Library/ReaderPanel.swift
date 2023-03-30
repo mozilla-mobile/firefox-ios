@@ -212,7 +212,8 @@ class ReadingListPanel: UITableViewController,
         listenForThemeChange(view)
     }
 
-    @objc func notificationReceived(_ notification: Notification) {
+    @objc
+    func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .DynamicFontChanged:
             refreshReadingList()

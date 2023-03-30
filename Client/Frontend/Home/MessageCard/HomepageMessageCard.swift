@@ -206,7 +206,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     /// The surface needs to handle CTAs a certain way when there's a message.
-    @objc func handleCTA() {
+    @objc
+    func handleCTA() {
         viewModel?.handleMessagePressed()
     }
 }

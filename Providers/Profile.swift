@@ -1042,11 +1042,13 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @objc func onStartSyncing(_ notification: NSNotification) {
+        @objc
+        func onStartSyncing(_ notification: NSNotification) {
             syncDisplayState = .inProgress
         }
 
-        @objc func onFinishSyncing(_ notification: NSNotification) {
+        @objc
+        func onFinishSyncing(_ notification: NSNotification) {
             if let syncState = syncDisplayState, syncState == .good {
                 self.lastSyncFinishTime = Date.now()
             }
@@ -1620,7 +1622,8 @@ open class BrowserProfile: Profile {
             return self.syncSeveral(why: why, synchronizers: synchronizers) >>> succeed
         }
 
-        @objc func syncOnTimer() {
+        @objc
+        func syncOnTimer() {
             self.syncEverything(why: .scheduled)
             self.profile.pollCommands()
         }

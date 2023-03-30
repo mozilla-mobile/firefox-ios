@@ -241,7 +241,8 @@ extension InactiveTabCell: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
-    @objc func toggleInactiveTabSection() {
+    @objc
+    func toggleInactiveTabSection() {
         hasExpanded = !hasExpanded
         tableView.reloadData()
         delegate?.toggleInactiveTabSection(hasExpanded: hasExpanded)

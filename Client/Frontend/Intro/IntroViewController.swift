@@ -249,7 +249,8 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
-    @objc func dismissSignInViewController() {
+    @objc
+    func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
     }
 }

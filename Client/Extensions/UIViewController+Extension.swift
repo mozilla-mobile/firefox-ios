@@ -76,7 +76,8 @@ extension UIViewController {
         presentWithModalDismissIfNeeded(themedNavigationController, animated: true)
     }
 
-    @objc func dismissVC() {
+    @objc
+    func dismissVC() {
         self.dismiss(animated: true, completion: nil)
     }
 

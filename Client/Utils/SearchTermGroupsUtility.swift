@@ -274,7 +274,8 @@ class StopWatchTimer {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(incrementValue), userInfo: nil, repeats: true)
     }
 
-    @objc func incrementValue() {
+    @objc
+    func incrementValue() {
         elapsedTime += 1
     }
 

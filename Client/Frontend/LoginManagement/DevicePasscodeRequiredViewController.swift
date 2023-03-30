@@ -58,11 +58,13 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         ])
     }
 
-    @objc func doneButtonTapped(_ sender: UIButton) {
+    @objc
+    func doneButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
     }
 
-    @objc func learnMoreButtonTapped(_ sender: UIButton) {
+    @objc
+    func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("manage-saved-passwords-firefox-ios")
         navigationController?.pushViewController(viewController, animated: true)

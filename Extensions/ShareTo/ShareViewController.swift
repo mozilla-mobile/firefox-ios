@@ -257,7 +257,8 @@ class ShareViewController: UIViewController {
         }
     }
 
-    @objc func finish(afterDelay: TimeInterval = UX.durationToShowDoneDialog) {
+    @objc
+    func finish(afterDelay: TimeInterval = UX.durationToShowDoneDialog) {
         delegate?.finish(afterDelay: afterDelay)
     }
 
@@ -320,7 +321,8 @@ class ShareViewController: UIViewController {
 }
 
 extension ShareViewController {
-    @objc func actionLoadInBackground(gesture: UIGestureRecognizer) {
+    @objc
+    func actionLoadInBackground(gesture: UIGestureRecognizer) {
         // To avoid re-rentry from double tap, each action function disables the gesture
         gesture.isEnabled = false
         animateToActionDoneView(withTitle: .ShareLoadInBackgroundDone)
@@ -337,7 +339,8 @@ extension ShareViewController {
         finish()
     }
 
-    @objc func actionBookmarkThisPage(gesture: UIGestureRecognizer) {
+    @objc
+    func actionBookmarkThisPage(gesture: UIGestureRecognizer) {
         gesture.isEnabled = false
         animateToActionDoneView(withTitle: .ShareBookmarkThisPageDone)
 
@@ -358,7 +361,8 @@ extension ShareViewController {
         finish()
     }
 
-    @objc func actionAddToReadingList(gesture: UIGestureRecognizer) {
+    @objc
+    func actionAddToReadingList(gesture: UIGestureRecognizer) {
         gesture.isEnabled = false
         animateToActionDoneView(withTitle: .ShareAddToReadingListDone)
 
@@ -374,7 +378,8 @@ extension ShareViewController {
         finish()
     }
 
-    @objc func actionSendToDevice(gesture: UIGestureRecognizer) {
+    @objc
+    func actionSendToDevice(gesture: UIGestureRecognizer) {
         guard let shareItem = shareItem, case .shareItem(let item) = shareItem else { return }
 
         gesture.isEnabled = false
@@ -416,7 +421,8 @@ extension ShareViewController {
         }
     }
 
-    @objc func actionSearchInFirefox(gesture: UIGestureRecognizer) {
+    @objc
+    func actionSearchInFirefox(gesture: UIGestureRecognizer) {
         gesture.isEnabled = false
 
         if let shareItem = shareItem, case .rawText(let text) = shareItem {
@@ -426,7 +432,8 @@ extension ShareViewController {
         finish(afterDelay: 0)
     }
 
-    @objc func actionOpenInFirefoxNow(gesture: UIGestureRecognizer) {
+    @objc
+    func actionOpenInFirefoxNow(gesture: UIGestureRecognizer) {
         gesture.isEnabled = false
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {

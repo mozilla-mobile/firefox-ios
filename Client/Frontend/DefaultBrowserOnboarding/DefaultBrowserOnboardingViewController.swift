@@ -259,7 +259,8 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     // Theme
-    @objc func updateTheme() {
+    @objc
+    func updateTheme() {
         let textColor: UIColor = theme.currentName == .dark ? .white : .black
 
         view.backgroundColor = .systemBackground

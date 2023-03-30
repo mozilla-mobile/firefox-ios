@@ -67,7 +67,8 @@ public class RustSyncManager: NSObject, SyncManager {
         super.init()
     }
 
-    @objc func syncOnTimer() {
+    @objc
+    func syncOnTimer() {
         syncEverything(why: .scheduled)
         profile?.pollCommands()
     }

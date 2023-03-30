@@ -79,17 +79,20 @@ class LoginOnboardingViewController: SettingsViewController {
         ])
     }
 
-    @objc func doneButtonTapped(_ sender: UIButton) {
+    @objc
+    func doneButtonTapped(_ sender: UIButton) {
         self.doneHandler()
     }
 
-    @objc func learnMoreButtonTapped(_ sender: UIButton) {
+    @objc
+    func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("set-passcode-and-touch-id-firefox")
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    @objc func proceedButtonTapped(_ sender: UIButton) {
+    @objc
+    func proceedButtonTapped(_ sender: UIButton) {
         self.proceedHandler()
     }
 

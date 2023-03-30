@@ -95,7 +95,8 @@ class DownloadsPanel: UIViewController,
         tableView.delegate = nil
     }
 
-    @objc func notificationReceived(_ notification: Notification) {
+    @objc
+    func notificationReceived(_ notification: Notification) {
         DispatchQueue.main.async {
             self.reloadData()
 

@@ -275,7 +275,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         tabLayoutDelegate.traitCollection = traitCollection
     }
 
-    @objc func didTogglePrivateMode() {
+    @objc
+    func didTogglePrivateMode() {
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
@@ -345,7 +346,8 @@ extension GridTabViewController: TabDisplayer {
 }
 
 extension GridTabViewController {
-    @objc func didTapLearnMore() {
+    @objc
+    func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         if let langID = Locale.preferredLanguages.first {
             let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion ?? "0.0")/iOS/\(langID)/private-browsing-ios".asURL!)
@@ -408,7 +410,8 @@ extension GridTabViewController {
 
 // MARK: - App Notifications
 extension GridTabViewController {
-    @objc func appWillResignActiveNotification() {
+    @objc
+    func appWillResignActiveNotification() {
         if tabDisplayManager.isPrivate && !tabManager.privateTabs.isEmpty {
             backgroundPrivacyOverlay.alpha = 1
             view.bringSubviewToFront(backgroundPrivacyOverlay)
@@ -417,7 +420,8 @@ extension GridTabViewController {
         }
     }
 
-    @objc func appDidBecomeActiveNotification() {
+    @objc
+    func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animate(
@@ -678,7 +682,8 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         return true
     }
 
-    @objc func collectionView(
+    @objc
+    func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
@@ -686,7 +691,8 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         return GridTabViewController.UX.margin
     }
 
-    @objc func collectionView(
+    @objc
+    func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
@@ -766,11 +772,13 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
         }
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return GridTabViewController.UX.margin
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         tabSelectionDelegate?.didSelectTabAtIndex(indexPath.row)
     }
 

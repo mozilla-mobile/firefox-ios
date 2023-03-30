@@ -248,7 +248,8 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     // MARK: - Theme
 
-    @objc func reduceTransparencyChanged() {
+    @objc
+    func reduceTransparencyChanged() {
         // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
         applyTheme()
     }

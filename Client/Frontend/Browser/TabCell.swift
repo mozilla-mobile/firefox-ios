@@ -238,7 +238,8 @@ class TabCell: UICollectionViewCell,
         return true
     }
 
-    @objc func close() {
+    @objc
+    func close() {
         delegate?.tabCellDidClose(self)
     }
 

@@ -286,12 +286,14 @@ class TabTrayViewController: UIViewController, Themeable {
         regularContainerTopConstraint.isActive = !isCompact
     }
 
-    @objc func segmentIphoneChanged() {
+    @objc
+    func segmentIphoneChanged() {
         segmentedControlIpad.selectedSegmentIndex = segmentedControlIphone.selectedSegmentIndex
         changePanel()
     }
 
-    @objc func segmentIpadChanged() {
+    @objc
+    func segmentIpadChanged() {
         segmentedControlIphone.selectedSegmentIndex = segmentedControlIpad.selectedSegmentIndex
         changePanel()
     }
@@ -551,19 +553,23 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
 
 // MARK: - Button actions
 extension TabTrayViewController {
-    @objc func didTapAddTab(_ sender: UIBarButtonItem) {
+    @objc
+    func didTapAddTab(_ sender: UIBarButtonItem) {
         viewModel.didTapAddTab(sender)
     }
 
-    @objc func didTapDeleteTabs(_ sender: UIBarButtonItem) {
+    @objc
+    func didTapDeleteTabs(_ sender: UIBarButtonItem) {
         viewModel.didTapDeleteTab(sender)
     }
 
-    @objc func didTapSyncTabs(_ sender: UIBarButtonItem) {
+    @objc
+    func didTapSyncTabs(_ sender: UIBarButtonItem) {
         viewModel.didTapSyncTabs(sender)
     }
 
-    @objc func didTapDone() {
+    @objc
+    func didTapDone() {
         notificationCenter.post(name: .TabsTrayDidClose)
         // Update Private mode when closing TabTray, if the mode toggle but no tab is pressed with return to previous state
         updatePrivateUIState()

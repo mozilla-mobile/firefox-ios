@@ -347,15 +347,18 @@ extension LoginDetailViewController: KeyboardHelperDelegate {
 
 // MARK: - Selectors
 extension LoginDetailViewController {
-    @objc func dismissAlertController() {
+    @objc
+    func dismissAlertController() {
         deleteAlert?.dismiss(animated: false, completion: nil)
     }
 
-    @objc func didTapBreachLearnMore() {
+    @objc
+    func didTapBreachLearnMore() {
         webpageNavigationHandler?(BreachAlertsManager.monitorAboutUrl)
     }
 
-    @objc func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
+    @objc
+    func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
         guard let domain = breach?.domain else { return }
         var urlComponents = URLComponents()
         urlComponents.host = domain
@@ -384,14 +387,16 @@ extension LoginDetailViewController {
         }
     }
 
-    @objc func edit() {
+    @objc
+    func edit() {
         isEditingFieldData = true
         guard let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as? LoginDetailTableViewCell else { return }
         cell.descriptionLabel.becomeFirstResponder()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
     }
 
-    @objc func doneEditing() {
+    @objc
+    func doneEditing() {
         isEditingFieldData = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 

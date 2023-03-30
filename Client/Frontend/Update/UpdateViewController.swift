@@ -191,7 +191,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         self.present(controller, animated: true)
     }
 
-    @objc func dismissSignInViewController() {
+    @objc
+    func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
         closeUpdate()
     }
