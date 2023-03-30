@@ -319,7 +319,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         isPrivate = isOn
 
-        UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
+        UserDefaults.standard.set(isPrivate, forKey: PrefsKeys.LastSessionWasPrivate)
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 

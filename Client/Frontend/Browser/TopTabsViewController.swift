@@ -156,7 +156,8 @@ class TopTabsViewController: UIViewController, Themeable {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
+        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false,
+                                  forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
     func switchForegroundStatus(isInForeground reveal: Bool) {

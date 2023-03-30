@@ -41,3 +41,4 @@ extension UIWindow {
         keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
     }
 }
+// swiftlint:enable first_where
