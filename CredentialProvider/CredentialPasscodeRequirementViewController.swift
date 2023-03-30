@@ -97,7 +97,8 @@ class CredentialPasscodeRequirementViewController: UIViewController {
         ])
     }
 
-    @objc func cancelButtonTapped(_ sender: UIButton) {
+    @objc
+    func cancelButtonTapped(_ sender: UIButton) {
         delegate?.credentialPasscodeRequirementViewControllerDidDismiss()
     }
 }

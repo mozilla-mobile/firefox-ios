@@ -170,7 +170,8 @@ class ButtonToast: Toast {
     }
 
     // MARK: - Button action
-    @objc func buttonPressed() {
+    @objc
+    func buttonPressed() {
         completionHandler?(true)
         dismiss(true)
     }

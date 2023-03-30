@@ -93,11 +93,13 @@ class CredentialWelcomeViewController: UIViewController {
         ])
     }
 
-    @objc func cancelButtonTapped(_ sender: UIButton) {
+    @objc
+    func cancelButtonTapped(_ sender: UIButton) {
         delegate?.credentialWelcomeViewControllerDidCancel()
     }
 
-    @objc func proceedButtonTapped(_ sender: UIButton) {
+    @objc
+    func proceedButtonTapped(_ sender: UIButton) {
         delegate?.credentialWelcomeViewControllerDidProceed()
     }
 }
