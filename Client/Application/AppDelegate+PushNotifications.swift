@@ -96,12 +96,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         switch response.notification.request.identifier {
-        case EngagementNotificationHelper.Constant.notificationId:
-            let object = OpenTabNotificationObject(type: .openNewTab)
-            NotificationCenter.default.post(name: .OpenTabNotification, object: object)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .tap,
-                                         object: .engagementNotification)
         default:
             openURLsInNewTabs(response.notification)
         }
