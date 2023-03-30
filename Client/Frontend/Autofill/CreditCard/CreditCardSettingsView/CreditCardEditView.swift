@@ -168,10 +168,10 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                                 creditCard: sampleCreditCard,
                                                 state: .view)
 
-        let editView = CreditCardEditView(
+        return CreditCardEditView(
             viewModel: viewModel,
             dismiss: { successVal in
-            // didmiss view
+            // dismiss view
         })
     }
 }
