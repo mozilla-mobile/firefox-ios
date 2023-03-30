@@ -366,7 +366,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        // Only mess with the zoom level if the user did not initate the zoom via a zoom gesture
+        // Only mess with the zoom level if the user did not initiate the zoom via a zoom gesture
         if self.isUserZoom {
             return
         }
@@ -377,7 +377,7 @@ extension TabScrollingController: UIScrollViewDelegate {
             scrollView.zoomScale = scrollView.minimumZoomScale
         } else if roundNum(scrollView.zoomScale) > roundNum(self.lastZoomedScale) && self.lastZoomedScale != 0 {
             // When we have manually zoomed in we want to preserve that scale.
-            // But sometimes when we rotate a larger zoomScale is appled. In that case apply the lastZoomedScale
+            // But sometimes when we rotate a larger zoomScale is applied. In that case apply the lastZoomedScale
             scrollView.zoomScale = self.lastZoomedScale
         }
     }
