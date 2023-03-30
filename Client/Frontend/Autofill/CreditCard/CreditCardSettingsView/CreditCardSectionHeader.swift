@@ -3,9 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Shared
 
 struct CreditCardSectionHeader: View {
-    var textColor: Color
+    // Theming
+    @Environment(\.themeType) var themeVal
+    @State var textColor: Color = .clear
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,11 +22,22 @@ struct CreditCardSectionHeader: View {
                             leading: 16,
                             bottom: 8,
                             trailing: 16))
+        .onAppear {
+            applyTheme(theme: themeVal.theme)
+        }
+        .onChange(of: themeVal) { val in
+            applyTheme(theme: val.theme)
+        }
+    }
+
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        textColor = Color(color.textSecondary)
     }
 }
 
 struct CreditCardSectionHeader_Previews: PreviewProvider {
     static var previews: some View {
-        CreditCardSectionHeader(textColor: .black)
+        CreditCardSectionHeader()
     }
 }

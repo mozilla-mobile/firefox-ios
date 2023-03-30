@@ -116,6 +116,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
     func applyTheme() {
         let theme = themeManager.currentTheme
         view.backgroundColor = theme.colors.layer1
+        tableView.backgroundColor = theme.colors.layer1
     }
 
     func reloadData() {
@@ -183,19 +184,9 @@ extension CreditCardTableViewController: UITableViewDelegate,
             return UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
         }
 
-        let theme = themeManager.currentTheme
-        let titleTextColor = theme.colors.textPrimary.color
-        let subTextColor = theme.colors.textSecondary.color
-        let separatorColor = theme.colors.borderPrimary.color
-        let colors = CreditCardItemRow.Colors(
-            titleTextColor: titleTextColor,
-            subTextColor: subTextColor,
-            separatorColor: separatorColor)
-
         let creditCard = viewModel.creditCards[indexPath.row]
         let creditCardRow = CreditCardItemRow(
             item: creditCard,
-            colors: colors,
             isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         hostingCell.host(creditCardRow, parentController: self)
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: indexPath)
