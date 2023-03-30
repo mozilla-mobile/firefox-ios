@@ -123,7 +123,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         if AppConstants.useCoordinators {
-            // FXIOS-5985: Handle deeplinks from openURLContexts
+            // FXIOS-5985: Handle deeplinks from userActivity
         } else {
             if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
                 browserViewController.openBlankNewTab(focusLocationField: false)
@@ -160,7 +160,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         completionHandler: @escaping (Bool) -> Void
     ) {
         if AppConstants.useCoordinators {
-            // FXIOS-5983: Handle deeplinks from openURLContexts
+            // FXIOS-5983: Handle deeplinks from shortcuts
         } else {
             QuickActionsImplementation().handleShortCutItem(
                 shortcutItem,
