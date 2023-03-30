@@ -4,20 +4,33 @@
 
 import UIKit
 
-class PageActionMenu: UIViewController, UIGestureRecognizerDelegate {
+final class PageActionMenu: UIViewController, UIGestureRecognizerDelegate {
+
+    // MARK: - UX
 
     struct UX {
-        static let Spacing: CGFloat = 16
-        static let Cell = "Cell"
-        static let Shortcuts = "Shortcuts"
-        static let RowHeight: CGFloat = 50
+        static let spacing: CGFloat = 16
+        static let estimatedSectionHeaderHeight: CGFloat = 16
+        static let shortcuts = "Shortcuts"
+        static let rowHeight: CGFloat = 50
     }
 
     // MARK: - Variables
-    private var tableView = UITableView(frame: .zero, style: .insetGrouped)
+    
+    private var tableView = UITableView(frame: .zero, style: .plain)
     private var knob = UIView()
-    let viewModel: PhotonActionSheetViewModel
-    weak var delegate: PageActionsShortcutsDelegate?
+    private var contentSizeObserver : NSKeyValueObservation?
+    private lazy var swipeDown: UISwipeGestureRecognizer = {
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(close))
+        swipeDown.direction = .down
+        swipeDown.isEnabled = false
+        swipeDown.delegate = self
+        view.addGestureRecognizer(swipeDown)
+        return swipeDown
+    }()
+    
+    private let viewModel: PhotonActionSheetViewModel
+    private weak var delegate: PageActionsShortcutsDelegate?
 
     // MARK: - Init
 
@@ -28,7 +41,6 @@ class PageActionMenu: UIViewController, UIGestureRecognizerDelegate {
 
         title = viewModel.title
         modalPresentationStyle = viewModel.modalStyle
-        tableView.estimatedRowHeight = UX.RowHeight
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -39,46 +51,15 @@ class PageActionMenu: UIViewController, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.addSubview(tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(PageActionMenuCell.self, forCellReuseIdentifier: UX.Cell)
-        tableView.register(PageActionsShortcutsHeader.self, forHeaderFooterViewReuseIdentifier: UX.Shortcuts)
-        tableView.estimatedSectionHeaderHeight = UX.Spacing
-        tableView.sectionFooterHeight = 0
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(knob)
-        knob.layer.cornerRadius = 2
-
+        setupTableView()
+        setupKnob()
         setupConstraints()
         applyTheme()
     }
 
-    // MARK: - Setup
-
-    private func setupConstraints() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        knob.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            knob.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
-            knob.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            knob.widthAnchor.constraint(equalToConstant: 32),
-            knob.heightAnchor.constraint(equalToConstant: 4)
-        ])
-    }
-
-    private var contentSizeObserver : NSKeyValueObservation?
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkSwipeDown()
-
         guard traitCollection.userInterfaceIdiom == .pad else { return }
         contentSizeObserver = tableView.observe(\.contentSize) { [weak self] tableView, _ in
             self?.preferredContentSize = CGSize(width: 350, height: tableView.contentSize.height)
@@ -90,17 +71,26 @@ class PageActionMenu: UIViewController, UIGestureRecognizerDelegate {
         contentSizeObserver?.invalidate()
         contentSizeObserver = nil
     }
+}
 
-    // MARK: Swipe down to close in iPhone Landscape
-    lazy var swipeDown: UISwipeGestureRecognizer = {
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(close))
-        swipeDown.direction = .down
-        swipeDown.isEnabled = false
-        swipeDown.delegate = self
-        view.addGestureRecognizer(swipeDown)
-        return swipeDown
-    }()
+// MARK: Swipe down to close in iPhone Landscape
 
+extension PageActionMenu {
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        checkSwipeDown()
+    }
+
+    @objc func close() {
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - Gestures
+
+extension PageActionMenu {
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer === swipeDown else { return false }
         return tableView.contentOffset.y <= 0
@@ -113,18 +103,48 @@ class PageActionMenu: UIViewController, UIGestureRecognizerDelegate {
 
         swipeDown.isEnabled = orientation.isLandscape
     }
+}
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        checkSwipeDown()
+// MARK: - Setup PageActionMenu
+
+extension PageActionMenu {
+        
+    private func setupTableView() {
+        view.addSubview(tableView)
+        tableView.estimatedRowHeight = UX.rowHeight
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(PageActionMenuCell.self, forCellReuseIdentifier: PageActionMenuCell.UX.cellIdentifier)
+        tableView.register(PageActionsShortcutsHeader.self, forHeaderFooterViewReuseIdentifier: UX.shortcuts)
+        tableView.estimatedSectionHeaderHeight = UX.estimatedSectionHeaderHeight
+        tableView.sectionFooterHeight = 0
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    private func setupKnob() {
+        view.addSubview(knob)
+        knob.translatesAutoresizingMaskIntoConstraints = false
+        knob.layer.cornerRadius = 2
     }
 
-    @objc func close() {
-        dismiss(animated: true, completion: nil)
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            knob.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
+            knob.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            knob.widthAnchor.constraint(equalToConstant: 32),
+            knob.heightAnchor.constraint(equalToConstant: 4)
+        ])
     }
 }
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
+
 extension PageActionMenu: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -140,29 +160,9 @@ extension PageActionMenu: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: UX.Cell, for: indexPath)
-        cell.separatorInset.left = UX.Spacing
-        cell.backgroundColor = .theme.ecosia.impactMultiplyCardBackground
-        let actions = viewModel.actions[indexPath.section][indexPath.row]
-        let item = actions.item
-
-        cell.textLabel?.text = item.currentTitle
-        cell.textLabel?.textColor = .theme.ecosia.primaryText
-        cell.detailTextLabel?.text = item.text
-        cell.detailTextLabel?.textColor = .theme.ecosia.secondaryText
-
-        cell.accessibilityIdentifier = item.iconString ?? item.accessibilityId
-        cell.accessibilityLabel = item.currentTitle
-
-        if let iconName = item.iconString {
-            cell.imageView?.image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
-            cell.imageView?.tintColor = .theme.ecosia.secondaryText
-        } else {
-            cell.imageView?.image = nil
-        }
-        
-        (cell as? PageActionMenuCell)?.isNew(actions.item.isNew)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: PageActionMenuCell.UX.cellIdentifier, for: indexPath) as! PageActionMenuCell
+        cell.determineTableViewCellPositionAt(indexPath, forActions: viewModel.actions)
+        cell.configure(with: viewModel, at: indexPath)
         return cell
     }
 
@@ -174,14 +174,14 @@ extension PageActionMenu: UITableViewDataSource, UITableViewDelegate {
         if section == 0 {
             return UITableView.automaticDimension
         } else {
-            return UX.Spacing
+            return UX.spacing
         }
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == 0 else { return UIView() }
 
-        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.Shortcuts) as! PageActionsShortcutsHeader
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.shortcuts) as! PageActionsShortcutsHeader
         header.delegate = delegate
         return header
     }
@@ -198,6 +198,7 @@ extension PageActionMenu: UITableViewDataSource, UITableViewDelegate {
 }
 
 // MARK: - NotificationThemeable
+
 extension PageActionMenu: NotificationThemeable {
 
     func applyTheme() {
@@ -205,52 +206,5 @@ extension PageActionMenu: NotificationThemeable {
         tableView.backgroundColor = .theme.ecosia.modalBackground
         tableView.separatorColor = .theme.ecosia.border
         knob.backgroundColor = .theme.ecosia.secondaryText
-    }
-}
-
-// MARK: Cell
-
-class PageActionMenuCell: UITableViewCell {
-    private weak var badge: UIView?
-    private weak var badgeLabel: UILabel?
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func isNew(_ isNew: Bool) {
-        if isNew {
-            if badge == nil {
-                let badge = UIView()
-                badge.isUserInteractionEnabled = false
-                accessoryView = badge
-                
-                let badgeLabel = UILabel()
-                badgeLabel.translatesAutoresizingMaskIntoConstraints = false
-                badgeLabel.font = .preferredFont(forTextStyle: .footnote).bold()
-                badgeLabel.adjustsFontForContentSizeCategory = true
-                badgeLabel.text = .localized(.new)
-                badge.addSubview(badgeLabel)
-                
-                badgeLabel.topAnchor.constraint(equalTo: badge.topAnchor, constant: 2.5).isActive = true
-                badgeLabel.leftAnchor.constraint(equalTo: badge.leftAnchor, constant: 8).isActive = true
-                
-                self.badge = badge
-                self.badgeLabel = badgeLabel
-            }
-            
-            let size = badgeLabel?.sizeThatFits(.init(width: CGFloat.greatestFiniteMagnitude, height: .greatestFiniteMagnitude)) ?? .zero
-            let height = size.height + 5
-            badge?.layer.cornerRadius = height / 2
-            badge?.frame.size = .init(width: size.width + 16, height: height)
-            badge?.backgroundColor = .theme.ecosia.primaryBrand
-            badgeLabel?.textColor = .theme.ecosia.primaryTextInverted
-        } else {
-            accessoryView = nil
-        }
     }
 }
