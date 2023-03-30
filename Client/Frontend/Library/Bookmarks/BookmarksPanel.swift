@@ -588,11 +588,9 @@ extension BookmarksPanel {
             
             let exportedBooksmarksUrl = FileManager.default.temporaryDirectory.appendingPathComponent("Bookmarks.html")
             try htmlExport.data(using: .utf8)?.write(to: exportedBooksmarksUrl)
-            
-            let controller = UIDocumentInteractionController(url: exportedBooksmarksUrl)
-            controller.uti = "public.html"
-            controller.delegate = self
-            controller.presentPreview(animated: true)
+
+            let activityViewController = UIActivityViewController(activityItems: [exportedBooksmarksUrl], applicationActivities: nil)
+            present(activityViewController, animated: true)
         }
     }
 
