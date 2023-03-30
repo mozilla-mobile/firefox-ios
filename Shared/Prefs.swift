@@ -42,6 +42,7 @@ public struct PrefsKeys {
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeyFirstAppUse = "firstAppUse"
     public static let KeySecondRun = "SecondRun"
+    public static let KeyLastSession = "lastSession"
 
     public struct AppVersion {
         public static let Latest = "latestAppVersion"

@@ -26,26 +26,45 @@ class GleanPlumbContextProviderTests: XCTestCase {
     }
 
     func testIsInactiveNewUser_noFirstAppUse() {
+        userDefaults.set(Date.now(), forKey: PrefsKeys.KeyLastSession)
         XCTAssertFalse(contextProvider.isInactiveNewUser)
     }
 
-    func testIsInactiveNewUser_pastNotificationTime() {
-        let timestamp = Date.now() - GleanPlumbContextProvider.Constant.activityReferencePeriod * 2
-        userDefaults.set(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
+    func testIsInactiveNewUser_noLastSession() {
+        userDefaults.set(Date.now(), forKey: PrefsKeys.KeyFirstAppUse)
         XCTAssertFalse(contextProvider.isInactiveNewUser)
     }
 
-    func testIsInactiveNewUser_notUsedInSecond24Hours() {
-        let timestamp = Date.now() - GleanPlumbContextProvider.Constant.inactivityPeriod * UInt64(0.5)
-        userDefaults.set(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
-        userDefaults.set(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+    func testIsInactiveNewUser_beforeNotificationTime() {
+        let firstAppUse = Date.now() - timestampMultiplied(GleanPlumbContextProvider.Constant.activityReferencePeriod, 0.9)
+        userDefaults.set(firstAppUse, forKey: PrefsKeys.KeyFirstAppUse)
+
+        let lastSession = firstAppUse + timestampMultiplied(GleanPlumbContextProvider.Constant.inactivityPeriod, 0.9)
+        userDefaults.set(lastSession, forKey: PrefsKeys.KeyLastSession)
+        XCTAssertFalse(contextProvider.isInactiveNewUser)
+    }
+
+    func testIsInactiveNewUser_usedInFirst24Hours() {
+        let firstAppUse = Date.now() - timestampMultiplied(GleanPlumbContextProvider.Constant.activityReferencePeriod, 1.1)
+        userDefaults.set(firstAppUse, forKey: PrefsKeys.KeyFirstAppUse)
+
+        let lastSession = firstAppUse + timestampMultiplied(GleanPlumbContextProvider.Constant.inactivityPeriod, 0.9)
+        userDefaults.set(lastSession, forKey: PrefsKeys.KeyLastSession)
         XCTAssertTrue(contextProvider.isInactiveNewUser)
     }
 
     func testIsInactiveNewUser_usedInSecond24Hours() {
-        let timestamp = Date.now() - GleanPlumbContextProvider.Constant.inactivityPeriod * UInt64(1.5)
-        userDefaults.set(timestamp, forKey: PrefsKeys.KeyFirstAppUse)
-        userDefaults.set(true, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
+        let firstAppUse = Date.now() - timestampMultiplied(GleanPlumbContextProvider.Constant.activityReferencePeriod, 1.1)
+        userDefaults.set(firstAppUse, forKey: PrefsKeys.KeyFirstAppUse)
+
+        let lastSession = firstAppUse + timestampMultiplied(GleanPlumbContextProvider.Constant.inactivityPeriod, 1.1)
+        userDefaults.set(lastSession, forKey: PrefsKeys.KeyLastSession)
         XCTAssertFalse(contextProvider.isInactiveNewUser)
+    }
+
+    // MARK: Helpers
+    private func timestampMultiplied(_ timestamp: Timestamp, _ multiplier: CGFloat) -> Timestamp {
+        let result = CGFloat(timestamp) * multiplier
+        return UInt64(result)
     }
 }

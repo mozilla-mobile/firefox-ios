@@ -129,6 +129,7 @@ class AppLaunchUtil {
         }
         // increase session count value
         profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
+        UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.KeyLastSession)
     }
 
     // MARK: - Application Services History Migration

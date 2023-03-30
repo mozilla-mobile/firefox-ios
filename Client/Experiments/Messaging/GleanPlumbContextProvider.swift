@@ -40,18 +40,18 @@ class GleanPlumbContextProvider {
 
     var isInactiveNewUser: Bool {
         // existing users don't have firstAppUse set
-        guard let firstAppUse = userDefaults.object(forKey: PrefsKeys.KeyFirstAppUse) as? UInt64
+        guard let firstAppUse = userDefaults.object(forKey: PrefsKeys.KeyFirstAppUse) as? UInt64,
+              let lastSession = userDefaults.object(forKey: PrefsKeys.KeyLastSession) as? UInt64
         else { return false }
 
         let now = Date()
         let notificationDate = Date.fromTimestamp(firstAppUse + Constant.activityReferencePeriod)
 
-        // check that we are not past the reference time for inactive user check
-        guard now < notificationDate else { return false }
-
         // We don't care how often the user is active in the first 24 hours after first use.
         // If they are not active in the second 24 hours after first use they are considered inactive.
-        return now < Date.fromTimestamp(firstAppUse + Constant.inactivityPeriod)
+        let lastSessionDate = Date.fromTimestamp(lastSession)
+        return now >= Date.fromTimestamp(firstAppUse + Constant.activityReferencePeriod) &&
+            lastSessionDate <= Date.fromTimestamp(firstAppUse + Constant.inactivityPeriod)
     }
 
     private var allowedTipsNotifications: Bool {
