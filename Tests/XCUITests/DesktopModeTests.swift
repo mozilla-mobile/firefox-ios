@@ -198,3 +198,4 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 }
+// swiftlint:enable empty_count

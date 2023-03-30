@@ -4873,3 +4873,4 @@ extension String {
         value: "Connection is not secure",
         comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
 }
+// swiftlint:enable line_length

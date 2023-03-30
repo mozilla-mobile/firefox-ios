@@ -267,7 +267,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         // Note: we setup last session private case as the session is tied to user's selected
         // tab but there are times when tab manager isn't available and we need to know
         // users's last state (Private vs Regular)
-        UserDefaults.standard.set(selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
+        UserDefaults.standard.set(selectedTab?.isPrivate ?? false,
+                                  forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
     func getMostRecentHomepageTab() -> Tab? {

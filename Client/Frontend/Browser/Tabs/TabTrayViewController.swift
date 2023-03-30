@@ -270,7 +270,7 @@ class TabTrayViewController: UIViewController, Themeable {
     }
 
     func updatePrivateUIState() {
-        UserDefaults.standard.set(viewModel.tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
+        UserDefaults.standard.set(viewModel.tabManager.selectedTab?.isPrivate ?? false, forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
     private func updateTitle() {

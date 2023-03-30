@@ -148,6 +148,9 @@ public struct PrefsKeys {
 
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"
+
+    // Representing whether or not the last user session was private
+    public static let LastSessionWasPrivate = "wasLastSessionPrivate"
 }
 
 public struct PrefsDefaults {
