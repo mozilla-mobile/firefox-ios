@@ -35,10 +35,10 @@ struct CreditCardEditView: View {
                         .foregroundColor(borderColor)
 
                     Group {
-                        FloatingTextField(inputType: .name,
-                                          text: $text.name,
-                                          showError: !viewModel.nameIsValid,
-                                          editViewModel: viewModel)
+                        CreditCardInputField(inputType: .name,
+                                             text: $text.name,
+                                             showError: !viewModel.nameIsValid,
+                                             editViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -49,10 +49,10 @@ struct CreditCardEditView: View {
                     .background(textFieldBackgroundColor)
 
                     Group {
-                        FloatingTextField(inputType: .number,
-                                          text: $text.number,
-                                          showError: !viewModel.numberIsValid,
-                                          editViewModel: viewModel)
+                        CreditCardInputField(inputType: .number,
+                                             text: $text.number,
+                                             showError: !viewModel.numberIsValid,
+                                             editViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -63,10 +63,10 @@ struct CreditCardEditView: View {
                     .background(textFieldBackgroundColor)
 
                     Group {
-                        FloatingTextField(inputType: .expiration,
-                                          text: $text.expiration,
-                                          showError: !viewModel.expirationIsValid,
-                                          editViewModel: viewModel)
+                        CreditCardInputField(inputType: .expiration,
+                                             text: $text.expiration,
+                                             showError: !viewModel.expirationIsValid,
+                                             editViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()

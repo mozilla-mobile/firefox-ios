@@ -10,8 +10,7 @@ enum CreditCardInputType {
     case name, number, expiration
 }
 
-// TODO: Rename to CreditCardInputField
-struct FloatingTextField: View {
+struct CreditCardInputField: View {
     var fieldHeadline: String
     var errorString: String
     var delimiterCharacter: String?
@@ -69,43 +68,8 @@ struct FloatingTextField: View {
     var body: some View {
         ZStack {
             VStack(alignment: .leading, spacing: 0) {
-                // TODO: Move this to a separate viewBuilder func
-                Text(fieldHeadline)
-                    .font(.subheadline)
-                    .foregroundColor(titleColor)
-                TextField("", text: $text)
-                    .font(.body)
-                    .padding(.top, 7.5)
-                    .foregroundColor(textFieldColor)
-                    .keyboardType(keyboardType)
-                    .onChange(of: text) { [oldValue = text] newValue in
-                        switch inputType {
-                        case .name:
-                            print()
-                        case .number:
-                            print()
-                        case .expiration:
-                            guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
+                provideInputField()
 
-                            let numbersCount = countNumbersIn(text: text)
-
-                            guard !(text.count > formattedTextLimit) || !(numbersCount > 4) else {
-                                text = oldValue
-                                return
-                            }
-
-                            guard text.count % 4 == 0 else {
-                                text = text.removingOccurrences(of: " / ")
-                                return
-                            }
-
-                            editViewModel.expirationDate = text.removingOccurrences(of: " / ")
-
-                            guard let formattedText = separate(inputType: inputType, for: text) else { return }
-                            text = formattedText
-                        }
-                    }
-                // TODO: Can replace this with viewModel.is[THING] valid
                 if showError {
                     errorViewWith(errorString: errorString)
                 }
@@ -127,6 +91,45 @@ struct FloatingTextField: View {
         titleColor = Color(color.textPrimary)
         textFieldColor = Color(color.textSecondary)
         backgroundColor = Color(color.layer2)
+    }
+
+    @ViewBuilder private func provideInputField() -> some View {
+        Text(fieldHeadline)
+            .font(.subheadline)
+            .foregroundColor(titleColor)
+        TextField("", text: $text)
+            .font(.body)
+            .padding(.top, 7.5)
+            .foregroundColor(textFieldColor)
+            .keyboardType(keyboardType)
+            .onChange(of: text) { [oldValue = text] newValue in
+                switch inputType {
+                case .name:
+                    print()
+                case .number:
+                    print()
+                case .expiration:
+                    guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
+
+                    let numbersCount = countNumbersIn(text: text)
+
+                    guard !(text.count > formattedTextLimit) || !(numbersCount > 4) else {
+                        text = oldValue
+                        return
+                    }
+
+                    guard numbersCount % 4 == 0 else {
+                        text = text.removingOccurrences(of: " / ")
+                        return
+                    }
+
+                    editViewModel.expirationDate = text.removingOccurrences(of: " / ")
+
+                    guard let formattedText = separate(inputType: inputType,
+                                                       for: text.removingOccurrences(of: " / ")) else { return }
+                    text = formattedText
+                }
+            }
     }
 
     @ViewBuilder private func errorViewWith(errorString: String) -> some View {
