@@ -126,8 +126,8 @@ features:
               trigger:
                 - INACTIVE_NEW_USER
                 - ALLOWED_TIPS_NOTIFICATIONS
-              text: EngagementNotification/Engagement.Notification.Title
-              button-label: EngagementNotification/Engagement.Notification.Body
+              title: EngagementNotification/Engagement.Notification.Title.v112
+              text: EngagementNotification/Engagement.Notification.Body.v112
               action: OPEN_NEW_TAB
       - channel: developer
         value:
