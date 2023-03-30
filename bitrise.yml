@@ -1418,6 +1418,62 @@ workflows:
       bitrise.io:
         stack: osx-xcode-14.1.x-ventura
         machine_type_id: g2.8core
+  perfherder-test:
+    steps:
+    - cache-pull@2.1:
+        is_always_run: true
+    - xcode-build-for-simulator@0.12:
+        inputs:
+        - test_plan: PerformanceTestPlan
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Fennec_Enterprise_XCUITests
+    - xcode-test@4.5:
+        inputs:
+        - scheme: Fennec_Enterprise_XCUITests
+        - xcodebuild_test_options: "-testPlan PerformanceTestPlan"
+        - simulator_device: "iPhone 14"
+        - test_plan: PerformanceTestPlan
+    
+    - script@1.1:
+        title: Create perfherder data object
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+            # get dependency
+            cd ./test-fixtures && git clone https://github.com/isabelrios/xcresult_extract.git
+            
+            echo $BITRISE_XCRESULT_PATH
+            ls
+            ls $BITRISE_XCRESULT_PATH
+
+            cp -r $BITRISE_XCRESULT_PATH /Users/vagrant/Library/Developer/Xcode/DerivedData/**/Logs/Test/
+            echo "DerivedData/Client/Log/Tests"
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData
+            CLIENT_PATH=$(ls /Users/vagrant/Library/Developer/Xcode/DerivedData | grep 'Client-')
+            mv /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec_Enterprise_XCUITests.xcresult /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test/Test-Fennec_Enterprise_XCUITests-test.xcresult
+
+            ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
+
+            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
+            ls ..
+            python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec_Enterprise_XCUITests
+            cat data.txt
+            sed 's/.*=//;s/'\''/"/g' data.txt > test.json
+            cat test.json
+            python3 perfTestTransform.py
+    - deploy-to-bitrise-io@1.9: {}
+    meta:
+      bitrise.io:
+        stack: osx-xcode-14.1.x-ventura
+        machine_type_id: g2.4core
+    before_run:
+    - 1_git_clone_and_post_clone
+    - 2_certificate_and_profile
+    - 3_provisioning_and_npm_installation
 app:
   envs:
   - opts:
