@@ -116,6 +116,7 @@ class CreditCardTableViewController: UIViewController, Themeable {
     func applyTheme() {
         let theme = themeManager.currentTheme
         view.backgroundColor = theme.colors.layer1
+        tableView.backgroundColor = theme.colors.layer1
     }
 
     func reloadData() {
