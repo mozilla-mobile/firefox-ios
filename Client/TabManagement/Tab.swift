@@ -805,11 +805,11 @@ class Tab: NSObject {
         guard let url = self.webView?.url else {
             return .none
         }
-        for provider in SearchEngine.allCases {
-            if url.absoluteString.contains(provider.rawValue) {
-                return provider
-            }
+
+        for provider in SearchEngine.allCases where url.absoluteString.contains(provider.rawValue) {
+            return provider
         }
+
         return .none
     }
 }

@@ -115,11 +115,10 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
     fileprivate func simplifiedHostnameFromURL(_ url: URL) -> String {
         let hostname = url.host ?? ""
-        for prefix in prefixesToSimplify {
-            if hostname.hasPrefix(prefix) {
-                return String(hostname[hostname.index(hostname.startIndex, offsetBy: prefix.count)...])
-            }
+        for prefix in prefixesToSimplify where hostname.hasPrefix(prefix) {
+            return String(hostname[hostname.index(hostname.startIndex, offsetBy: prefix.count)...])
         }
+
         return hostname
     }
 
