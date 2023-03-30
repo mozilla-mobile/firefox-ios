@@ -47,7 +47,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         self.notificationCenter = notificationCenter
         self.appAuthenticator = appAuthenticator
         self.logger = logger
-        self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.creditCardTableViewModel)
+        self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.tableViewModel)
 
         let theme = themeManager.currentTheme
         let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: theme.colors.textPrimary.color,
@@ -106,16 +106,10 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     private func updateCreditCardList() {
         // Check if we have any credit cards to show in the list
-        viewModel.listCreditCard { creditCards in
-            guard let creditCards = creditCards, !creditCards.isEmpty else {
-                DispatchQueue.main.async { [weak self] in
-                    self?.updateState(type: .empty)
-                }
-                return
-            }
+        viewModel.getCreditCardList { creditCards in
             DispatchQueue.main.async { [weak self] in
-                self?.viewModel.updateCreditCardsList(creditCards: creditCards)
-                self?.updateState(type: .list)
+                let newState = creditCards?.isEmpty ?? true ? CreditCardSettingsState.empty : CreditCardSettingsState.list
+                self?.updateState(type: newState)
             }
         }
     }

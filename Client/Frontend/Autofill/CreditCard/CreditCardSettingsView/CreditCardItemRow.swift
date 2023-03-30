@@ -5,17 +5,18 @@
 import Foundation
 import SwiftUI
 import Storage
+import Shared
 
 struct CreditCardItemRow: View {
-    struct Colors {
-        let titleTextColor: Color
-        let subTextColor: Color
-        let separatorColor: Color
-    }
-
     let item: CreditCard
-    let colors: Colors
     let isAccessibilityCategory: Bool
+
+    // Theming
+    @Environment(\.themeType) var themeVal
+    @State var titleTextColor: Color = .clear
+    @State var subTextColor: Color = .clear
+    @State var separatorColor: Color = .clear
+    @State var backgroundColor: Color = .clear
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -32,7 +33,7 @@ struct CreditCardItemRow: View {
                 VStack(spacing: 0) {
                     Text(item.ccName)
                         .font(.body)
-                        .foregroundColor(colors.titleTextColor)
+                        .foregroundColor(titleTextColor)
                         .frame(maxWidth: .infinity,
                                alignment: .leading)
 
@@ -41,10 +42,10 @@ struct CreditCardItemRow: View {
                                   isAccessibilityCategory: isAccessibilityCategory) {
                         Text(item.ccType)
                             .font(.body)
-                            .foregroundColor(colors.titleTextColor)
+                            .foregroundColor(titleTextColor)
                         Text(item.ccNumberLast4)
                             .font(.subheadline)
-                            .foregroundColor(colors.subTextColor)
+                            .foregroundColor(subTextColor)
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
@@ -56,10 +57,10 @@ struct CreditCardItemRow: View {
                                   isAccessibilityCategory: isAccessibilityCategory) {
                         Text("Expires")
                             .font(.body)
-                            .foregroundColor(colors.subTextColor)
+                            .foregroundColor(subTextColor)
                         Text(String(item.ccExpYear))
                             .font(.subheadline)
-                            .foregroundColor(colors.subTextColor)
+                            .foregroundColor(subTextColor)
                     }
                     .frame(maxWidth: .infinity,
                            alignment: .leading)
@@ -71,11 +72,17 @@ struct CreditCardItemRow: View {
             .padding(.bottom, 11)
 
             Rectangle()
-                .fill(colors.separatorColor)
+                .fill(separatorColor)
                 .frame(maxWidth: .infinity)
                 .frame(height: 0.7)
                 .padding(.leading, 10)
                 .padding(.trailing, 10)
+        }
+        .onAppear {
+            applyTheme(theme: themeVal.theme)
+        }
+        .onChange(of: themeVal) { val in
+            applyTheme(theme: val.theme)
         }
     }
 
@@ -88,6 +95,14 @@ struct CreditCardItemRow: View {
         }
 
         return Image(uiImage: image)
+    }
+
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        titleTextColor = Color(color.textPrimary)
+        subTextColor = Color(color.textSecondary)
+        separatorColor = Color(color.borderPrimary)
+        backgroundColor = Color(color.layer2)
     }
 }
 
@@ -104,22 +119,16 @@ struct CreditCardItemRow_Previews: PreviewProvider {
                                     timeLastUsed: nil,
                                     timeLastModified: 123123,
                                     timesUsed: 123123)
-        let colors = CreditCardItemRow.Colors(titleTextColor: .gray,
-                                              subTextColor: .gray,
-                                              separatorColor: .gray)
 
         CreditCardItemRow(item: creditCard,
-                          colors: colors,
                           isAccessibilityCategory: false)
 
         CreditCardItemRow(item: creditCard,
-                          colors: colors,
                           isAccessibilityCategory: true)
             .environment(\.sizeCategory, .accessibilityExtraExtraExtraLarge)
             .previewDisplayName("Large")
 
         CreditCardItemRow(item: creditCard,
-                          colors: colors,
                           isAccessibilityCategory: false)
             .environment(\.sizeCategory, .extraSmall)
             .previewDisplayName("Small")
