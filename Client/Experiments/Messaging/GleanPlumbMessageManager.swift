@@ -35,6 +35,9 @@ protocol GleanPlumbMessageManagerProtocol {
     /// report the malformed message.
     /// Manager calls.
     func onMalformedMessage(messageKey: String)
+
+    /// Finds a message for a specified id on a specified surface.
+    func messageForId(_ id: String, surface: MessageSurfaceId) -> GleanPlumbMessage?
 }
 
 protocol GleanPlumbMessagePressedDelegate: AnyObject {
@@ -174,6 +177,26 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                                      object: .messaging,
                                      value: .messageMalformed,
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageKey])
+    }
+
+
+    /// Finds a message for a specified id on a specified surface.
+    /// - Parameters:
+    ///   - id: the id of the message.
+    ///   - surface: the surface the message should be disaplayed on.
+    /// - Returns: the message if existent, otherwise nil.
+    func messageForId(_ id: String, surface: MessageSurfaceId) -> GleanPlumbMessage? {
+        let messageData = feature.messages.first { key, messageData in
+            return key == id && messageData.surface == surface
+        }
+
+        guard let messageData = messageData,
+              let message = self.createMessage(messageId: messageData.key,
+                                               message: messageData.value,
+                                               lookupTables: feature)
+        else { return nil }
+
+        return message
     }
 
     // MARK: - Misc. Private helpers

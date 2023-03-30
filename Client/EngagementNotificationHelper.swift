@@ -77,6 +77,7 @@ class EngagementNotificationHelper: FeatureFlaggable {
             notificationManager.schedule(title: .EngagementNotification.Title,
                                          body: .EngagementNotification.Body,
                                          id: Constant.notificationId,
+                                         userInfo: nil,
                                          date: notificationDate,
                                          repeats: false)
         }
