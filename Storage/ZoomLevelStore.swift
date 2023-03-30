@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Common
 
 public struct DomainZoomLevel: Codable, Equatable {
     let host: String
@@ -18,42 +19,57 @@ public struct DomainZoomLevel: Codable, Equatable {
 public class ZoomLevelStore {
     public static let shared = ZoomLevelStore()
 
-    private var domainZoomLevels = [DomainZoomLevel]()
+    private(set) var domainZoomLevels = [DomainZoomLevel]()
+    private var logger: Logger
 
-    private init() {
+    private static let fileName = "domain-zoom-levels"
+    private static let pathExtension = "json"
+
+    private let url = URL(fileURLWithPath: fileName,
+                          relativeTo: FileManager.documentsDirectoryURL).appendingPathExtension(pathExtension)
+
+    private init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
         domainZoomLevels = loadAll()
     }
 
     public func save(_ domainZoomLevel: DomainZoomLevel) {
-        if let dzl = findZoomLevel(forHost: domainZoomLevel.host) {
-            let index = domainZoomLevels.firstIndex { $0.host == dzl.host }
-            domainZoomLevels.remove(at: index!)
+        if let dzl = findZoomLevel(forDomain: domainZoomLevel.host),
+           let index = domainZoomLevels
+            .firstIndex(where: { $0.host == dzl.host }) {
+            domainZoomLevels.remove(at: index)
         }
         if domainZoomLevel.zoomLevel != 1.0 {
             domainZoomLevels.append(domainZoomLevel)
         }
         let encoder = JSONEncoder()
         do {
-            let data = try encoder.encode(domainZoomLevels)
-            let url = URL(fileURLWithPath: "DomainZoomLevels",
-                          relativeTo: FileManager.documentsDirectoryURL).appendingPathExtension("json")
-            try data.write(to: url, options: .atomic)
-        } catch {}
+            if let data = try? encoder.encode(domainZoomLevels) {
+                try data.write(to: url, options: .atomic)
+            }
+        } catch {
+            logger.log("Unable to write data to disk: \(error)",
+                       level: .warning,
+                       category: .storage)
+        }
     }
 
     private func loadAll() -> [DomainZoomLevel] {
-        let decoder = JSONDecoder()
         var domainZoomLevels = [DomainZoomLevel]()
-        let url = URL(fileURLWithPath: "DomainZoomLevels",
-                      relativeTo: FileManager.documentsDirectoryURL).appendingPathExtension("json")
+        let decoder = JSONDecoder()
         do {
-            let data = try Data(contentsOf: url)
-            domainZoomLevels = try decoder.decode([DomainZoomLevel].self, from: data)
-        } catch {}
+            if let data = try? Data(contentsOf: url) {
+                domainZoomLevels = try decoder.decode([DomainZoomLevel].self, from: data)
+            }
+        } catch {
+            logger.log("Failed to decode data from \(url.absoluteString): \(error)",
+                       level: .warning,
+                       category: .storage)
+        }
         return domainZoomLevels
     }
 
-    public func findZoomLevel(forHost host: String) -> DomainZoomLevel? {
+    public func findZoomLevel(forDomain host: String) -> DomainZoomLevel? {
         domainZoomLevels.first { $0.host == host }
     }
 }

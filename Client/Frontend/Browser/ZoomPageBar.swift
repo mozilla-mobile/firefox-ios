@@ -90,7 +90,7 @@ class ZoomPageBar: UIView {
         self.tab = tab
 
         super.init(frame: .zero)
-        self.tab.urlDidSetDelegate = self
+        self.tab.urlHostDelegate = self
 
         setupViews()
         setupLayout()
@@ -217,8 +217,8 @@ class ZoomPageBar: UIView {
     }
 }
 
-extension ZoomPageBar: URLDidSetDelegate {
-    func urlDidSet() {
+extension ZoomPageBar: URLHostDelegate {
+    func hostDidSet() {
         updateZoomLabel()
         checkPageZoomLimits()
     }

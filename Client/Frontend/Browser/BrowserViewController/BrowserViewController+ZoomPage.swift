@@ -60,6 +60,7 @@ extension BrowserViewController: ZoomPageBarDelegate {
         updateZoomPageBarVisibility(visible: false)
         guard let tab = tabManager.selectedTab else { return }
         guard let host = tab.url?.host else { return }
-        ZoomLevelStore.shared.save(DomainZoomLevel(host: host, zoomLevel: tab.pageZoom))
+        let domainZoomLevel = DomainZoomLevel(host: host, zoomLevel: tab.pageZoom)
+        ZoomLevelStore.shared.save(domainZoomLevel)
     }
 }

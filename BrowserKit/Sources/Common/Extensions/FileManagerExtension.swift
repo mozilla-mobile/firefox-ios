@@ -12,7 +12,6 @@ public extension FileManager {
     }
 
     static var documentsDirectoryURL: URL {
-        print("-> \(`default`.urls(for: .documentDirectory, in: .userDomainMask)[0].absoluteURL)")
       return `default`.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 }
