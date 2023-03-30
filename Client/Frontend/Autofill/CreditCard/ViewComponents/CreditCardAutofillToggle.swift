@@ -4,6 +4,7 @@
 
 import Foundation
 import SwiftUI
+import Shared
 
 protocol ToggleModelDelegate: AnyObject {
     func toggleDidChange(_ toggleModel: ToggleModel)
@@ -24,7 +25,9 @@ class ToggleModel: ObservableObject {
 }
 
 struct CreditCardAutofillToggle: View {
-    var textColor: Color
+    // Theming
+    @Environment(\.themeType) var themeVal
+    @State var textColor: Color = .clear
     @ObservedObject var model: ToggleModel
 
     var body: some View {
@@ -53,6 +56,17 @@ struct CreditCardAutofillToggle: View {
                 .frame(height: 0.7)
                 .padding(.leading, 16)
         }
+        .onAppear {
+            applyTheme(theme: themeVal.theme)
+        }
+        .onChange(of: themeVal) { val in
+            applyTheme(theme: val.theme)
+        }
+    }
+
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        textColor = Color(color.textPrimary)
     }
 }
 
