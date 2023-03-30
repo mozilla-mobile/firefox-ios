@@ -299,7 +299,8 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
                                                            theme: themeManager.currentTheme)
     }
 
-    @objc private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }

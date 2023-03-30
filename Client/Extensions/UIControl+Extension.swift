@@ -18,7 +18,8 @@ extension UIControl {
         method_exchangeImplementations(originalSingleMethod, swizzledSingleMethod)
     }
 
-    @objc private func loggerSendAction(_ action: Selector,
+    @objc
+    private func loggerSendAction(_ action: Selector,
                                         to target: Any?,
                                         for event: UIEvent?) {
         var message: String = "Button \(Self.self) [action: \(action)]"

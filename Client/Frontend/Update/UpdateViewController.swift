@@ -138,7 +138,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // Button Actions
-    @objc private func closeUpdate() {
+    @objc
+    private func closeUpdate() {
         didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }

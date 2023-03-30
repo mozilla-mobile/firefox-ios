@@ -201,7 +201,8 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: Actions
-    @objc private func dismissCard() {
+    @objc
+    private func dismissCard() {
         viewModel?.handleMessageDismiss()
     }
 

@@ -86,12 +86,14 @@ class LegacyThemeManager {
         }
     }
 
-    @objc private func brightnessChanged() {
+    @objc
+    private func brightnessChanged() {
         guard automaticBrightnessIsOn else { return }
         updateCurrentThemeBasedOnScreenBrightness()
     }
 
-    @objc private func applicationDidBecomeActive() {
+    @objc
+    private func applicationDidBecomeActive() {
         let nightMode = UserDefaults.standard.bool(forKey: "profile.NightModeStatus")
         if !nightMode && LegacyThemeManager.instance.systemThemeIsOn {
             let userInterfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle

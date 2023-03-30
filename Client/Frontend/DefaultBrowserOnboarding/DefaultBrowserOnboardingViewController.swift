@@ -247,12 +247,14 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     }
 
     // Button Actions
-    @objc private func dismissAnimated() {
+    @objc
+    private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
     }
 
-    @objc private func goToSettings() {
+    @objc
+    private func goToSettings() {
         viewModel.goToSettings?()
         UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage) // Don't show default browser card if this button is clicked
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)

@@ -324,7 +324,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         dismissKeyboard()
     }
 
-    @objc private func dismissKeyboard() {
+    @objc
+    private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
             urlBar.leaveOverlayMode()
         }
@@ -429,7 +430,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackInSyncedTab) })
     }
 
-    @objc private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
+    @objc
+    private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
         guard viewModel.viewAppeared, canModalBePresented else {
             contextualHintViewController.stopTimer()
             return

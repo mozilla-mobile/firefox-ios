@@ -301,7 +301,8 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     // MARK: - Actions
 
-    @objc private func stopRotateSyncIcon() {
+    @objc
+    private func stopRotateSyncIcon() {
         ensureMainThread {
             self.tableView.reloadData()
         }
@@ -322,7 +323,8 @@ class PhotonActionSheet: UIViewController, Themeable {
         }
     }
 
-    @objc private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
+    @objc
+    private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         dismissVC()
     }
 

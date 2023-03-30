@@ -153,7 +153,8 @@ class SearchGroupedItemsViewController: UIViewController {
         }
     }
 
-    @objc private func handleNotifications(_ notification: Notification) {
+    @objc
+    private func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DisplayThemeChanged:
             applyTheme()
@@ -162,7 +163,8 @@ class SearchGroupedItemsViewController: UIViewController {
         }
     }
 
-    @objc private func doneButtonAction() {
+    @objc
+    private func doneButtonAction() {
         dismiss(animated: true, completion: nil)
     }
 }

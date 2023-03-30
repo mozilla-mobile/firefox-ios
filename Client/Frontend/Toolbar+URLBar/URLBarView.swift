@@ -660,7 +660,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         delegate?.urlBarDidPressTabs(self)
     }
 
-    @objc private func didClickCancel() {
+    @objc
+    private func didClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
 

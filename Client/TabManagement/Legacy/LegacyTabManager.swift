@@ -746,7 +746,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     }
 
     // MARK: - Private
-    @objc private func prefsDidChange() {
+    @objc
+    private func prefsDidChange() {
         DispatchQueue.main.async {
             let allowPopups = !(self.profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true)
             // Each tab may have its own configuration, so we should tell each of them in turn.

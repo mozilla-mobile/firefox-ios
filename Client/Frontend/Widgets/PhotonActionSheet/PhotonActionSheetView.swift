@@ -162,7 +162,8 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         isSelected = false
     }
 
-    @objc private func didClick(_ gestureRecognizer: UITapGestureRecognizer?) {
+    @objc
+    private func didClick(_ gestureRecognizer: UITapGestureRecognizer?) {
         guard let item = item,
               let handler = item.tapHandler
         else { return }
