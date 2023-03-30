@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
     private var appLaunchUtil: AppLaunchUtil?
-    private var backgroundSyncUtil: BackgroundSyncUtil?
+    private var backgroundWorkUtil: BackgroundFetchAndProcessingUtil?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
 
@@ -92,7 +92,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         pushNotificationSetup()
         appLaunchUtil?.setUpPostLaunchDependencies()
-        backgroundSyncUtil = BackgroundSyncUtil(profile: profile, application: application)
+        backgroundWorkUtil = BackgroundFetchAndProcessingUtil()
+        backgroundWorkUtil?.registerUtil(BackgroundSyncUtil(profile: profile, application: application))
 
         let topSitesProvider = TopSitesProviderImplementation(
             placesFetcher: profile.places,
@@ -176,7 +177,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
-        backgroundSyncUtil?.scheduleSyncOnAppBackground()
+        backgroundWorkUtil?.scheduleOnAppBackground()
         tabManager.preserveTabs()
 
         logger.log("applicationDidEnterBackground end",
