@@ -34,4 +34,8 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.window)
         XCTAssertNotNil(subject.browserCoordinator)
     }
+
+    func testEnsureCoordinatorIsntEnabled() {
+        XCTAssertFalse(AppConstants.useCoordinators)
+    }
 }

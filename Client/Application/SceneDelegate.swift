@@ -25,6 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var sessionManager: AppSessionProvider = AppContainer.shared.resolve()
     var downloadQueue: DownloadQueue = AppContainer.shared.resolve()
 
+    var sceneCoordinator: SceneCoordinator?
+
     // MARK: - Connecting / Disconnecting Scenes
 
     /// Invoked when the app creates OR restores an instance of the UI.
@@ -38,18 +40,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard !AppConstants.isRunningUnitTest else { return }
 
-        let window = configureWindowFor(scene)
-        let rootVC = configureRootViewController()
+        if AppConstants.useCoordinators {
+            sceneCoordinator = SceneCoordinator()
+            sceneCoordinator?.start(with: scene)
 
-        window.rootViewController = rootVC
-        window.makeKeyAndVisible()
+            // FXIOS-5827: Handle deeplinks from willConnectTo
+        } else {
+            let window = configureWindowFor(scene)
+            let rootVC = configureRootViewController()
 
-        self.window = window
+            window.rootViewController = rootVC
+            window.makeKeyAndVisible()
 
-        var themeManager: ThemeManager = AppContainer.shared.resolve()
-        themeManager.window = window
+            self.window = window
 
-        handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
+            var themeManager: ThemeManager = AppContainer.shared.resolve()
+            themeManager.window = window
+
+            handleDeeplinkOrShortcutsAtLaunch(with: connectionOptions, on: scene)
+        }
     }
 
     // MARK: - Transitioning to Foreground
@@ -84,22 +93,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
-        guard let url = URLContexts.first?.url,
-              let routerPath = NavigationPath(url: url) else { return }
+        if AppConstants.useCoordinators {
+            // FXIOS-5984: Handle deeplinks from openURLContexts
+        } else {
+            guard let url = URLContexts.first?.url,
+                  let routerPath = NavigationPath(url: url) else { return }
 
-        if profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) != nil {
-            profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
+            if profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) != nil {
+                profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
 
-            var object = TelemetryWrapper.EventObject.url
-            if case .text = routerPath {
-                object = .searchText
+                var object = TelemetryWrapper.EventObject.url
+                if case .text = routerPath {
+                    object = .searchText
+                }
+
+                TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
             }
 
-            TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
-        }
-
-        DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerPath, with: self.browserViewController)
+            DispatchQueue.main.async {
+                NavigationPath.handle(nav: routerPath, with: self.browserViewController)
+            }
         }
 
         sessionManager.launchSessionProvider.openedFromExternalSource = true
@@ -109,23 +122,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     /// Use this method to handle Handoff-related data or other activities.
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
-        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
-            browserViewController.openBlankNewTab(focusLocationField: false)
-        }
+        if AppConstants.useCoordinators {
+            // FXIOS-5985: Handle deeplinks from userActivity
+        } else {
+            if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
+                browserViewController.openBlankNewTab(focusLocationField: false)
+            }
 
-        // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
-        // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
-        if let url = userActivity.webpageURL {
-            browserViewController.switchToTabForURLOrOpen(url)
-        }
-
-        // Otherwise, check if the `NSUserActivity` is a CoreSpotlight item and switch to its tab or
-        // open a new one.
-        if userActivity.activityType == CSSearchableItemActionType {
-            if let userInfo = userActivity.userInfo,
-                let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                let url = URL(string: urlString) {
+            // If the `NSUserActivity` has a `webpageURL`, it is either a deep link or an old history item
+            // reached via a "Spotlight" search before we began indexing visited pages via CoreSpotlight.
+            if let url = userActivity.webpageURL {
                 browserViewController.switchToTabForURLOrOpen(url)
+            }
+
+            // Otherwise, check if the `NSUserActivity` is a CoreSpotlight item and switch to its tab or
+            // open a new one.
+            if userActivity.activityType == CSSearchableItemActionType {
+                if let userInfo = userActivity.userInfo,
+                   let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
+                   let url = URL(string: urlString) {
+                    browserViewController.switchToTabForURLOrOpen(url)
+                }
             }
         }
     }
@@ -142,11 +159,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
-        QuickActionsImplementation().handleShortCutItem(
-            shortcutItem,
-            withBrowserViewController: browserViewController,
-            completionHandler: completionHandler
-        )
+        if AppConstants.useCoordinators {
+            // FXIOS-5983: Handle deeplinks from shortcuts
+        } else {
+            QuickActionsImplementation().handleShortCutItem(
+                shortcutItem,
+                withBrowserViewController: browserViewController,
+                completionHandler: completionHandler
+            )
+        }
     }
 
     // MARK: - Misc. Helpers
