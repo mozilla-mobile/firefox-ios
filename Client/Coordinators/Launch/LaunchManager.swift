@@ -6,14 +6,25 @@ import Common
 import Foundation
 
 // Helps manage the launch of different onboardings, defined in LaunchType
-struct LaunchManager {
+protocol LaunchManager {
+    var canLaunchFromSceneCoordinator: Bool { get }
+    func getLaunchType(appVersion: String) -> LaunchType?
+}
+
+extension LaunchManager {
+    func getLaunchType(appVersion: String = AppInfo.appVersion) -> LaunchType? {
+        getLaunchType(appVersion: appVersion)
+    }
+}
+
+struct DefaultLaunchManager: LaunchManager {
     var introScreenManager: IntroScreenManager
     var updateViewModel: UpdateViewModel
     var surveySurfaceManager: SurveySurfaceManager
     var isIphone: Bool
 
     init(profile: Profile,
-         openURLDelegate: OpenURLDelegate,
+         openURLDelegate: OpenURLDelegate?,
          messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
          isIphone: Bool = UIDevice.current.userInterfaceIdiom == .phone) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)

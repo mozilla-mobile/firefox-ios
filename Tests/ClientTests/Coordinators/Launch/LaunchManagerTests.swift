@@ -34,23 +34,23 @@ final class LaunchManagerTests: XCTestCase {
     }
 
     func testLaunchFromSceneCoordinator_isiPhone() {
-        let subject = LaunchManager(profile: profile,
-                                    openURLDelegate: delegate,
-                                    isIphone: true)
+        let subject = DefaultLaunchManager(profile: profile,
+                                           openURLDelegate: delegate,
+                                           isIphone: true)
         XCTAssertTrue(subject.canLaunchFromSceneCoordinator)
     }
 
     func testLaunchFromSceneCoordinator_isNotiPhone() {
-        let subject = LaunchManager(profile: profile,
-                                    openURLDelegate: delegate,
-                                    isIphone: false)
+        let subject = DefaultLaunchManager(profile: profile,
+                                           openURLDelegate: delegate,
+                                           isIphone: false)
         XCTAssertFalse(subject.canLaunchFromSceneCoordinator)
     }
 
     func testLaunchType_intro() {
-        let subject = LaunchManager(profile: profile,
-                                    openURLDelegate: delegate,
-                                    isIphone: true)
+        let subject = DefaultLaunchManager(profile: profile,
+                                           openURLDelegate: delegate,
+                                           isIphone: true)
         XCTAssertEqual(subject.getLaunchType(), .intro)
     }
 
@@ -58,9 +58,9 @@ final class LaunchManagerTests: XCTestCase {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 
-        let subject = LaunchManager(profile: profile,
-                                    openURLDelegate: delegate,
-                                    isIphone: true)
+        let subject = DefaultLaunchManager(profile: profile,
+                                           openURLDelegate: delegate,
+                                           isIphone: true)
 
         XCTAssertEqual(subject.getLaunchType(appVersion: "113.0"), .update)
     }
@@ -69,9 +69,9 @@ final class LaunchManagerTests: XCTestCase {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 
-        let subject = LaunchManager(profile: profile,
-                                    openURLDelegate: delegate,
-                                    isIphone: true)
+        let subject = DefaultLaunchManager(profile: profile,
+                                           openURLDelegate: delegate,
+                                           isIphone: true)
 
         XCTAssertEqual(subject.getLaunchType(appVersion: "112.0"), .survey)
     }
@@ -82,10 +82,10 @@ final class LaunchManagerTests: XCTestCase {
 
         let expiredMessage = createMessage(isExpired: true)
         messageManager.message = expiredMessage
-        let subject = LaunchManager(profile: profile,
-                                    openURLDelegate: delegate,
-                                    messageManager: messageManager,
-                                    isIphone: true)
+        let subject = DefaultLaunchManager(profile: profile,
+                                           openURLDelegate: delegate,
+                                           messageManager: messageManager,
+                                           isIphone: true)
 
         XCTAssertNil(subject.getLaunchType(appVersion: "112.0"))
     }

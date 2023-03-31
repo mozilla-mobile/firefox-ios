@@ -41,15 +41,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard !AppConstants.isRunningUnitTest else { return }
 
         if AppConstants.useCoordinators {
-            self.window = configureWindowFor(scene)
-            let navigationController = createNavigationController()
-            let router = DefaultRouter(navigationController: navigationController)
-
-            sceneCoordinator = SceneCoordinator(router: router)
-            sceneCoordinator?.start()
-
-            window?.rootViewController = navigationController
-            window?.makeKeyAndVisible()
+            sceneCoordinator = SceneCoordinator(scene: scene, sceneSetupHelper: SceneSetupHelper())
+            let launchManager = DefaultLaunchManager(profile: profile, openURLDelegate: sceneCoordinator)
+            sceneCoordinator?.start(with: launchManager)
 
             // FXIOS-5827: Handle deeplinks from willConnectTo
         } else {
@@ -184,7 +178,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return UIWindow(frame: UIScreen.main.bounds)
         }
 
-        // FXIOS-6087: Handle screenshot service since this won't be done from Scene Delegate anymore
         windowScene.screenshotService?.delegate = self
 
         let window = UIWindow(windowScene: windowScene)
@@ -203,15 +196,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.browserViewController = browserViewController
 
         let navigationController = UINavigationController(rootViewController: browserViewController)
-        navigationController.isNavigationBarHidden = true
-        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
-
-        return navigationController
-    }
-
-    // For coordinators
-    private func createNavigationController() -> UINavigationController {
-        let navigationController = UINavigationController()
         navigationController.isNavigationBarHidden = true
         navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
 
