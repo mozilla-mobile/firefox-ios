@@ -261,8 +261,6 @@ class SaveLoginTest: BaseTestCase {
     }
 
     func closeURLBar () {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
     }
