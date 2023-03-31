@@ -16,7 +16,6 @@ class UpdateViewModelTests: XCTestCase {
         profile = MockProfile(databasePrefix: "UpdateViewModel_tests")
         profile.reopen()
         viewModel = UpdateViewModel(profile: profile)
-        UserDefaults.standard.removeObject(forKey: UpdateViewModel.prefsKey)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
@@ -25,7 +24,8 @@ class UpdateViewModelTests: XCTestCase {
         profile.shutdown()
         profile = nil
         viewModel = nil
-        UserDefaults.standard.removeObject(forKey: UpdateViewModel.prefsKey)
+
+        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }
 
     // MARK: Enable cards
@@ -76,52 +76,64 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     // MARK: ShouldShowFeature
-    func testShouldNotShowCoverSheetCleanInstall() {
+    func testShouldShowCoverSheet_forceIsTrue() {
         let currentTestAppVersion = "22.0"
 
+        let shouldShow = viewModel.shouldShowUpdateSheet(force: true, appVersion: currentTestAppVersion)
+        XCTAssertTrue(shouldShow)
+    }
+
+    func testShouldNotShowCoverSheet_featureFlagOff_appVersionKeyNil() {
+        let currentTestAppVersion = "22.0"
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
-        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
     func testShouldNotShowCoverSheetForSameVersion() {
         let currentTestAppVersion = "22.0"
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
 
         // Setting clean install to false
         profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
-        profile.prefs.setString(currentTestAppVersion, forKey: UpdateViewModel.prefsKey)
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
-        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
     func testShouldNotShowCoverSheet_ForMinorVersionUpgrade() {
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+
         let olderTestAppVersion = "21.0"
         let updatedTestAppVersion = "21.1"
 
         // Setting clean install to false
         profile.prefs.setString(olderTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
-        profile.prefs.setString(updatedTestAppVersion, forKey: UpdateViewModel.prefsKey)
 
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
-        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), updatedTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), olderTestAppVersion)
         XCTAssertFalse(shouldShow)
     }
 
     func testShouldShowCoverSheetFromUpdateVersion() {
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+
         let olderTestAppVersion = "21.0"
         let updatedTestAppVersion = "22.0"
 
         // Setting clean install to false
         profile.prefs.setString(olderTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
-        profile.prefs.setString(olderTestAppVersion, forKey: UpdateViewModel.prefsKey)
 
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: updatedTestAppVersion)
-        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), updatedTestAppVersion)
-        XCTAssertFalse(shouldShow)
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), updatedTestAppVersion)
+        XCTAssertTrue(shouldShow)
     }
 
     func testShouldShowCoverSheetForVersionNil() {
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+
         let currentTestAppVersion = "22.0"
 
         let shouldShow = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
@@ -129,18 +141,22 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     func testShouldSaveVersion_CleanInstall() {
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+
         let currentTestAppVersion = "22.0"
 
         profile.prefs.setString(currentTestAppVersion, forKey: PrefsKeys.AppVersion.Latest)
         _ = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
-        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
     }
 
     func testShouldSaveVersion_UnsavedVersion() {
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+
         let currentTestAppVersion = "22.0"
 
         _ = viewModel.shouldShowUpdateSheet(appVersion: currentTestAppVersion)
-        XCTAssertEqual(profile.prefs.stringForKey(UpdateViewModel.prefsKey), currentTestAppVersion)
+        XCTAssertEqual(profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest), currentTestAppVersion)
     }
 
     func testGetViewModel_ForValidUpgradeCard() {
