@@ -8,31 +8,36 @@ import Common
 @testable import Client
 
 final class SceneCoordinatorTests: XCTestCase {
+    var profile: MockProfile!
+    var navigationController: NavigationController!
+    var router: MockRouter!
+
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        profile = MockProfile()
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        navigationController = MockNavigationController()
+        router = MockRouter(navigationController: navigationController)
     }
 
     override func tearDown() {
         super.tearDown()
         AppContainer.shared.reset()
+        profile = nil
+        navigationController = nil
+        router = nil
     }
 
     func testInitialState() {
-        let subject = SceneCoordinator()
-
-        XCTAssertNil(subject.window)
+        let subject = SceneCoordinator(router: router)
         XCTAssertNil(subject.browserCoordinator)
     }
 
     func testInitScene_createObjects() {
-        let subject = SceneCoordinator()
-
-        let scene = UIApplication.shared.windows.first?.windowScene
-        subject.start(with: scene!)
-
-        XCTAssertNotNil(subject.window)
-        XCTAssertNotNil(subject.browserCoordinator)
+        let subject = SceneCoordinator(router: router)
+        subject.start()
+        XCTAssertNotNil(subject.launchCoordinator)
     }
 
     func testEnsureCoordinatorIsntEnabled() {

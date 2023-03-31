@@ -18,19 +18,4 @@ enum LaunchType {
 
     // Show the default browser onboarding, only shown from deeplink
     case defaultBrowser
-
-    static func getLaunchType(introScreenManager: IntroScreenManager,
-                              updateViewModel: UpdateViewModel,
-                              surveySurfaceManager: SurveySurfaceManager
-    ) -> LaunchType? {
-        if introScreenManager.shouldShowIntroScreen {
-            return .intro
-        } else if updateViewModel.shouldShowUpdateSheet() {
-            return .update
-        } else if surveySurfaceManager.shouldShowSurveySurface {
-            return .survey
-        } else {
-            return nil
-        }
-    }
 }

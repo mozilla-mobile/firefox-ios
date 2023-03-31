@@ -7,8 +7,8 @@ import Foundation
 class BrowserCoordinator: BaseCoordinator {
     var launchCoordinator: LaunchCoordinator?
 
-    func start(launchHelper: LaunchHelper) {
-        if !launchHelper.launchFromSceneCoordinator, let launchType = launchHelper.launchType {
+    func start(launchHelper: LaunchManager) {
+        if !launchHelper.canLaunchFromSceneCoordinator, let launchType = launchHelper.getLaunchType() {
             launchCoordinator = LaunchCoordinator(router: router)
             launchCoordinator?.start(with: launchType)
         }

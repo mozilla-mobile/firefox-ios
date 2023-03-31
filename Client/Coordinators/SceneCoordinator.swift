@@ -12,8 +12,8 @@ class SceneCoordinator: BaseCoordinator, OpenURLDelegate {
     var launchCoordinator: LaunchCoordinator?
 
     func start(with profile: Profile = AppContainer.shared.resolve()) {
-        let launchHelper = LaunchHelper(profile: profile, openURLDelegate: self)
-        if launchHelper.launchFromSceneCoordinator, let launchType = launchHelper.launchType {
+        let launchHelper = LaunchManager(profile: profile, openURLDelegate: self)
+        if launchHelper.canLaunchFromSceneCoordinator, let launchType = launchHelper.getLaunchType() {
             launchCoordinator = LaunchCoordinator(router: router)
             launchCoordinator?.start(with: launchType)
         } else {
