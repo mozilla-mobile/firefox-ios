@@ -408,6 +408,7 @@ extension TelemetryWrapper {
         case appMenu = "app_menu"
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
+        case settingsMenuShowTour = "show-tour"
         case creditCardAutofillSettings = "creditCardAutofillSettings"
         case notificationPermission = "notificationPermission"
         case engagementNotification = "engagementNotification"
@@ -784,6 +785,9 @@ extension TelemetryWrapper {
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
+
+        case(.action, .tap, .settingsMenuShowTour, _, _):
+            GleanMetrics.SettingsMenu.showTourPressed.record()
 
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
