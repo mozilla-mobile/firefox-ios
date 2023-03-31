@@ -78,6 +78,9 @@ class ClearHistorySheetProvider {
                 deletionUtility.deleteHistoryFrom(timeRange) { dateOption in
                     NotificationCenter.default.post(name: .TopSitesUpdated, object: self)
                     didComplete?(dateOption)
+                    DispatchQueue.main.async {
+                        deletionUtility.deleteHistoryMetadataOlderThan(dateOption)
+                    }
                 }
             }
 
@@ -98,6 +101,11 @@ class ClearHistorySheetProvider {
                 }
                 NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
                 didComplete?(dateOption)
+                // perform history metadata deletion that sends a notification and updates
+                // the data and the UI for recently visited section, which can only happen on main thread
+                DispatchQueue.main.async {
+                    deletionUtilitiy.deleteHistoryMetadataOlderThan(dateOption)
+                }
             }
         })
     }
