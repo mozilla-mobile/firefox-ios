@@ -178,7 +178,8 @@ private extension TabScrollingController {
         scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
     }
 
-    @objc func reload() {
+    @objc
+    func reload() {
         guard let tab = tab else { return }
         tab.reloadPage()
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
@@ -197,7 +198,8 @@ private extension TabScrollingController {
         return scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.frame.size.height) && scrollView.contentSize.height > scrollView.frame.size.height
     }
 
-    @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
+    @objc
+    func handlePan(_ gesture: UIPanGestureRecognizer) {
         if tabIsLoading() {
             return
         }

@@ -22,7 +22,8 @@ class ActionButton: ResizableButton {
         addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
     }
 
-    @objc func touchUpInside(sender: UIButton) {
+    @objc
+    func touchUpInside(sender: UIButton) {
         touchUpAction?(sender)
     }
 }

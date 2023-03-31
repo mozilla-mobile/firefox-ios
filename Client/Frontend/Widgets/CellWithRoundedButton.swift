@@ -95,7 +95,8 @@ class CellWithRoundedButton: UITableViewCell, NotificationThemeable, ReusableCel
         applyTheme()
     }
 
-    @objc func buttonPressed() {
+    @objc
+    func buttonPressed() {
         self.buttonClosure?()
     }
 }

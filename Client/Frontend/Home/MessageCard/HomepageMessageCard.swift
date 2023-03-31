@@ -201,12 +201,14 @@ class HomepageMessageCardCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: Actions
-    @objc private func dismissCard() {
+    @objc
+    private func dismissCard() {
         viewModel?.handleMessageDismiss()
     }
 
     /// The surface needs to handle CTAs a certain way when there's a message.
-    @objc func handleCTA() {
+    @objc
+    func handleCTA() {
         viewModel?.handleMessagePressed()
     }
 }

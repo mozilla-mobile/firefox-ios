@@ -571,7 +571,8 @@ class Tab: NSObject {
         _ = webView?.go(to: item)
     }
 
-    @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
+    @discardableResult
+    func loadRequest(_ request: URLRequest) -> WKNavigation? {
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url,
@@ -629,12 +630,14 @@ class Tab: NSObject {
         }
     }
 
-    @objc func reloadPage() {
+    @objc
+    func reloadPage() {
         reload()
         self.webView?.scrollView.refreshControl?.endRefreshing()
     }
 
-    @objc func zoomIn() {
+    @objc
+    func zoomIn() {
         switch pageZoom {
         case 0.75:
             pageZoom = 0.9
@@ -651,7 +654,8 @@ class Tab: NSObject {
         }
     }
 
-    @objc func zoomOut() {
+    @objc
+    func zoomOut() {
         switch pageZoom {
         case 0.5:
             return
@@ -829,7 +833,8 @@ extension Tab: UIGestureRecognizerDelegate {
         webView.addGestureRecognizer(edgeSwipeGesture)
     }
 
-    @objc func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
+    @objc
+    func handleEdgeSwipeTabNavigation(_ sender: UIScreenEdgePanGestureRecognizer) {
         guard let webView = webView else { return }
 
         if sender.state == .ended, (sender.velocity(in: webView).x > 150) {
@@ -873,7 +878,8 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         }
     }
 
-    @objc func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+    @objc
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
             if let scriptMessageHandlerName = helper.scriptMessageHandlerName(), scriptMessageHandlerName == message.name {
                 helper.userContentController(userContentController, didReceiveScriptMessage: message)

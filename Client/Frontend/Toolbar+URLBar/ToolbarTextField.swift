@@ -89,7 +89,8 @@ extension ToolbarTextField {
         return commands
     }
 
-    @objc private func handleKeyboardArrowKey(sender: UIKeyCommand) {
+    @objc
+    private func handleKeyboardArrowKey(sender: UIKeyCommand) {
         self.selectedTextRange = nil
     }
 }

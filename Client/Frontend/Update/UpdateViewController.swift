@@ -138,7 +138,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // Button Actions
-    @objc private func closeUpdate() {
+    @objc
+    private func closeUpdate() {
         didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
@@ -191,7 +192,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         self.present(controller, animated: true)
     }
 
-    @objc func dismissSignInViewController() {
+    @objc
+    func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
         closeUpdate()
     }

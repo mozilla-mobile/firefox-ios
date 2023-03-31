@@ -11,7 +11,8 @@ protocol LetterImageGenerator {
     /// Runs main thread due to UILabel.initWithFrame(:)
     /// - Parameter domain: The string domain name
     /// - Returns: The generated letter image
-    @MainActor func generateLetterImage(siteString: String) async throws -> UIImage
+    @MainActor
+    func generateLetterImage(siteString: String) async throws -> UIImage
 }
 
 class DefaultLetterImageGenerator: LetterImageGenerator {
@@ -21,7 +22,8 @@ class DefaultLetterImageGenerator: LetterImageGenerator {
         self.logger = logger
     }
 
-    @MainActor func generateLetterImage(siteString: String) async throws -> UIImage {
+    @MainActor
+    func generateLetterImage(siteString: String) async throws -> UIImage {
         guard let letter: Character = siteString.first else {
             logger.log("No letter found for site, which should never happen",
                        level: .warning,

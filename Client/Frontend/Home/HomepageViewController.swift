@@ -237,7 +237,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
 
         let point = longPressGestureRecognizer.location(in: collectionView)
@@ -324,7 +325,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         dismissKeyboard()
     }
 
-    @objc private func dismissKeyboard() {
+    @objc
+    private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
             urlBar.leaveOverlayMode()
         }
@@ -429,7 +431,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackInSyncedTab) })
     }
 
-    @objc private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
+    @objc
+    private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
         guard viewModel.viewAppeared, canModalBePresented else {
             contextualHintViewController.stopTimer()
             return

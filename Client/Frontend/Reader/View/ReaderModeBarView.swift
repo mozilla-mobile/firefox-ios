@@ -122,15 +122,18 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         self.alpha = alpha
     }
 
-    @objc func tappedReadStatusButton(_ sender: UIButton!) {
+    @objc
+    func tappedReadStatusButton(_ sender: UIButton!) {
         delegate?.readerModeBar(self, didSelectButton: unread ? .markAsRead : .markAsUnread)
     }
 
-    @objc func tappedSettingsButton(_ sender: UIButton!) {
+    @objc
+    func tappedSettingsButton(_ sender: UIButton!) {
         delegate?.readerModeBar(self, didSelectButton: .settings)
     }
 
-    @objc func tappedListStatusButton(_ sender: UIButton!) {
+    @objc
+    func tappedListStatusButton(_ sender: UIButton!) {
         TelemetryWrapper.recordEvent(category: .action, method: added ? .delete : .add, object: .readingListItem, value: .readerModeToolbar)
         delegate?.readerModeBar(self, didSelectButton: added ? .removeFromReadingList : .addToReadingList)
     }

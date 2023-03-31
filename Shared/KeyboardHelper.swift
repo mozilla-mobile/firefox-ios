@@ -98,7 +98,8 @@ open class KeyboardHelper: NSObject {
         delegates.append(WeakKeyboardDelegate(delegate))
     }
 
-    @objc private func keyboardWillShow(_ notification: Notification) {
+    @objc
+    private func keyboardWillShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -107,7 +108,8 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc private func keyboardDidShow(_ notification: Notification) {
+    @objc
+    private func keyboardDidShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self,
@@ -116,7 +118,8 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc private func keyboardWillHide(_ notification: Notification) {
+    @objc
+    private func keyboardWillHide(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self,
@@ -125,7 +128,8 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc private func keyboardWillChange(_ notification: Notification) {
+    @objc
+    private func keyboardWillChange(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -135,7 +139,8 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc private func keyboardDidChange(_ notification: Notification) {
+    @objc
+    private func keyboardDidChange(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self,

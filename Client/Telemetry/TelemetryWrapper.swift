@@ -203,7 +203,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             GleanMetrics.Deletion.syncDeviceId.set(deviceId)
         }
     }
-    @objc func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
+    @objc
+    func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else { return }
         // Pocket stories visible
         if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
@@ -215,7 +216,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
 
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
-    @objc func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
+    @objc
+    func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else {
             assertionFailure("Error unwrapping profile")
             return
@@ -301,7 +303,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         }
     }
 
-    @objc func uploadError(notification: NSNotification) {
+    @objc
+    func uploadError(notification: NSNotification) {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
         logger.log("Upload Error",
                    level: .info,

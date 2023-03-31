@@ -40,7 +40,8 @@ extension UIBarButtonItem {
         targetClosure = closure
     }
 
-    @objc func closureAction() {
+    @objc
+    func closureAction() {
         targetClosure?(self)
     }
 }

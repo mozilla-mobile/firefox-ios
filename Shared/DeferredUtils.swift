@@ -17,7 +17,8 @@ precedencegroup MonadicDoPrecedence {
 infix operator >>== : MonadicBindPrecedence
 infix operator >>> : MonadicDoPrecedence
 
-@discardableResult public func >>== <T, U>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
+@discardableResult
+public func >>== <T, U>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
     return chainDeferred(x, f: f)
 }
 
@@ -31,7 +32,8 @@ public func >>== <T>(x: Deferred<Maybe<T>>, f: @escaping (T) -> Void) {
 }
 
 // Monadic `do` for Deferred.
-@discardableResult public func >>> <T, U>(x: Deferred<Maybe<T>>, f: @escaping () -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
+@discardableResult
+public func >>> <T, U>(x: Deferred<Maybe<T>>, f: @escaping () -> Deferred<Maybe<U>>) -> Deferred<Maybe<U>> {
     return x.bind { res in
         if res.isSuccess {
             return f()
@@ -72,7 +74,8 @@ public func deferMaybe<T>(_ e: MaybeErrorType) -> Deferred<Maybe<T>> {
 
 public typealias Success = Deferred<Maybe<Void>>
 
-@discardableResult public func succeed() -> Success {
+@discardableResult
+public func succeed() -> Success {
     return deferMaybe(())
 }
 

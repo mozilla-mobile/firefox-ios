@@ -220,7 +220,8 @@ class BackForwardListViewController: UIViewController,
         view.addGestureRecognizer(tap)
     }
 
-    @objc func handleTap() {
+    @objc
+    func handleTap() {
         dismiss(animated: true, completion: nil)
     }
 
@@ -235,7 +236,8 @@ class BackForwardListViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func reduceTransparencyChanged() {
+    @objc
+    func reduceTransparencyChanged() {
         // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
         applyTheme()
     }

@@ -202,14 +202,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     func getTabFor(_ url: URL) -> Tab? {
         for tab in tabs {
             if let webViewUrl = tab.webView?.url,
-                url.isEqual(webViewUrl) {
+               url.isEqual(webViewUrl) {
                 return tab
             }
 
             // Also look for tabs that haven't been restored yet.
             if let sessionData = tab.sessionData,
-                0..<sessionData.urls.count ~= sessionData.currentPage,
-                sessionData.urls[sessionData.currentPage] == url {
+               0..<sessionData.urls.count ~= sessionData.currentPage,
+               sessionData.urls[sessionData.currentPage] == url {
                 return tab
             }
         }
@@ -406,11 +406,12 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
                       isPrivate: isPrivate)
     }
 
-    @discardableResult func addTab(_ request: URLRequest! = nil,
-                                   configuration: WKWebViewConfiguration! = nil,
-                                   afterTab: Tab? = nil,
-                                   zombie: Bool = false,
-                                   isPrivate: Bool = false
+    @discardableResult
+    func addTab(_ request: URLRequest! = nil,
+                configuration: WKWebViewConfiguration! = nil,
+                afterTab: Tab? = nil,
+                zombie: Bool = false,
+                isPrivate: Bool = false
     ) -> Tab {
         return addTab(request,
                       configuration: configuration,
@@ -748,7 +749,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     }
 
     // MARK: - Private
-    @objc private func prefsDidChange() {
+    @objc
+    private func prefsDidChange() {
         DispatchQueue.main.async {
             let allowPopups = !(self.profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true)
             // Each tab may have its own configuration, so we should tell each of them in turn.

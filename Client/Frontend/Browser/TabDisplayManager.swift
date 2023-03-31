@@ -29,7 +29,8 @@ protocol TabDisplayCompletionDelegate: AnyObject {
     func completedAnimation(for: TabAnimationType)
 }
 
-@objc protocol TabSelectionDelegate: AnyObject {
+@objc
+protocol TabSelectionDelegate: AnyObject {
     func didSelectTabAtIndex(_ index: Int)
 }
 
@@ -509,7 +510,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
 // MARK: - UICollectionViewDataSource
 extension TabDisplayManager: UICollectionViewDataSource {
-    @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if tabDisplayType == .TopTabTray {
             return dataStore.count + (tabGroups?.count ?? 0)
         }
@@ -548,7 +550,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
         return UICollectionReusableView()
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
         if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
@@ -594,7 +597,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
         return cell
     }
 
-    @objc func numberOfSections(in collectionView: UICollectionView) -> Int {
+    @objc
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         if tabDisplayType == .TopTabTray { return 1 }
         return  TabDisplaySection.allCases.count
     }

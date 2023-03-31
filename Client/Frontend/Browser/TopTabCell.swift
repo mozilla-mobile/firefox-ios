@@ -85,7 +85,8 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, TabTrayCell, ReusableCe
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func closeTab() {
+    @objc
+    func closeTab() {
         delegate?.tabCellDidClose(self)
     }
 

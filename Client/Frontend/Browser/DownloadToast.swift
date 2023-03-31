@@ -176,7 +176,8 @@ class DownloadToast: Toast {
         return toastView
     }
 
-    @objc func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
+    @objc
+    func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
         let alert = AlertController(title: .CancelDownloadDialogTitle,
                                     message: .CancelDownloadDialogMessage,
                                     preferredStyle: .alert)

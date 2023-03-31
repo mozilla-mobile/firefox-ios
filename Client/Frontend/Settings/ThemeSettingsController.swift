@@ -52,7 +52,8 @@ class ThemeSettingsController: ThemedTableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
     }
 
-    @objc func brightnessChanged() {
+    @objc
+    func brightnessChanged() {
         guard LegacyThemeManager.instance.automaticBrightnessIsOn else { return }
         LegacyThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         applyTheme()
@@ -121,7 +122,8 @@ class ThemeSettingsController: ThemedTableViewController {
         return 120
     }
 
-    @objc func systemThemeSwitchValueChanged(control: UISwitch) {
+    @objc
+    func systemThemeSwitchValueChanged(control: UISwitch) {
         LegacyThemeManager.instance.systemThemeIsOn = control.isOn
         themeManager.setSystemTheme(isOn: control.isOn)
 
@@ -143,7 +145,8 @@ class ThemeSettingsController: ThemedTableViewController {
         }
     }
 
-    @objc func sliderValueChanged(control: UISlider, event: UIEvent) {
+    @objc
+    func sliderValueChanged(control: UISlider, event: UIEvent) {
         guard let touch = event.allTouches?.first, touch.phase == .ended else { return }
 
         themeManager.setAutomaticBrightnessValue(control.value)

@@ -111,7 +111,8 @@ class GroupedTabCell: UICollectionViewCell,
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    @objc func toggleInactiveTabSection() {
+    @objc
+    func toggleInactiveTabSection() {
         hasExpanded = !hasExpanded
         tableView.reloadData()
     }
@@ -299,11 +300,13 @@ class GroupedTabContainerCell: UITableViewCell,
         }
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return GridTabViewController.UX.margin
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cellWidth = floor((collectionView.bounds.width - GridTabViewController.UX.margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         let padding = isIpad && !UIWindow.isLandscape ? 75 : (isIpad && UIWindow.isLandscape) ? 105 : 10
@@ -311,21 +314,25 @@ class GroupedTabContainerCell: UITableViewCell,
         return CGSize(width: width, height: 188)
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return GridTabViewController.UX.margin
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let tab = tabs?[indexPath.item] {
             delegate?.didSelectGroupedTab(tab: tab)
         }
     }
 
-    @objc func handleSearchButtonTapped() {
+    @objc
+    func handleSearchButtonTapped() {
         delegate?.performSearchOfGroupInNewTab(searchTerm: titleLabel.text)
     }
 

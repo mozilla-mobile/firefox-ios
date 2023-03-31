@@ -99,7 +99,8 @@ class SyncNowSetting: WithAccountSetting {
         }
     }
 
-    @objc func stopRotateSyncIcon() {
+    @objc
+    func stopRotateSyncIcon() {
         DispatchQueue.main.async {
             self.imageView.layer.removeAllAnimations()
         }
@@ -203,7 +204,8 @@ class SyncNowSetting: WithAccountSetting {
 
     fileprivate let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")
 
-    @objc fileprivate func troubleshoot() {
+    @objc
+    fileprivate func troubleshoot() {
         let viewController = SettingsContentViewController()
         viewController.url = syncSUMOURL
         settings.navigationController?.pushViewController(viewController, animated: true)
@@ -306,7 +308,8 @@ class AccountStatusSetting: WithAccountSetting {
         NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
 
-    @objc func updateAccount(notification: Notification) {
+    @objc
+    func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
             self.settings.tableView.reloadData()
         }
@@ -1099,7 +1102,8 @@ class ChinaSyncServiceSetting: Setting {
         cell.selectionStyle = .none
     }
 
-    @objc func switchValueChanged(_ toggle: UISwitch) {
+    @objc
+    func switchValueChanged(_ toggle: UISwitch) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)
