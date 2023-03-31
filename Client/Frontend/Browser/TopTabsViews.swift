@@ -115,7 +115,6 @@ class TopTabCell: UICollectionViewCell, NotificationThemeable, TabTrayCell, Reus
         closeButton.accessibilityLabel = String(format: .TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
 
         favicon.image = UIImage(named: "defaultFavicon")
-        favicon.tintColor = UIColor.theme.tabTray.faviconTint
         favicon.contentMode = .scaleAspectFit
         favicon.backgroundColor = .clear
 
