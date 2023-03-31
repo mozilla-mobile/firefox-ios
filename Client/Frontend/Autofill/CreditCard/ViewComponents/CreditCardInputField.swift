@@ -4,6 +4,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 import Shared
 
 enum CreditCardInputType {
@@ -112,7 +113,9 @@ struct CreditCardInputField: View {
 
                     inputViewModel.nameOnCard = newValue
                 case .number:
-                    guard newValue.count >= 13 else {
+                    guard newValue.count >= 13,
+                          let lastInputtedCharacter = newValue.last,
+                          lastInputtedCharacter.isNumber else {
                         inputViewModel.numberIsValid = false
                         return
                     }
@@ -145,6 +148,17 @@ struct CreditCardInputField: View {
                     text = formattedText
                 }
             }
+            .onReceive(Just(text)) { newValue in
+                switch inputType {
+                case .number:
+                    let sanatized = newValue.filter { "0123456789".contains($0) }
+                    if sanatized != newValue {
+                        text = sanatized
+                    }
+
+                default: break
+                }
+            }
     }
 
     @ViewBuilder private func errorViewWith(errorString: String) -> some View {
@@ -159,7 +173,7 @@ struct CreditCardInputField: View {
         .padding(.top, 7.4)
     }
 
-    private func countNumbersIn(text: String) -> Int {
+    func countNumbersIn(text: String) -> Int {
         var numbersCount = 0
         text.forEach { character in
             character.isNumber ? numbersCount += 1 : nil

@@ -23,7 +23,7 @@ struct CreditCardInputView: View {
     @State var removeButtonColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
-    @State private var text = CreditCardInputText()
+    @State private var cardInputText = CreditCardInputText()
 
     var body: some View {
         NavigationView {
@@ -36,7 +36,7 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .name,
-                                             text: $text.name,
+                                             text: $cardInputText.name,
                                              showError: !viewModel.nameIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -50,7 +50,7 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .number,
-                                             text: $text.number,
+                                             text: $cardInputText.number,
                                              showError: !viewModel.numberIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -64,7 +64,7 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .expiration,
-                                             text: $text.expiration,
+                                             text: $cardInputText.expiration,
                                              showError: !viewModel.expirationIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)

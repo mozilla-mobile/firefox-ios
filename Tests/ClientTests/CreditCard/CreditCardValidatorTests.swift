@@ -21,6 +21,54 @@ class CreditCardValidatorTests: XCTestCase {
         creditCardValidator = nil
     }
 
+    func testCardTypeForVisa() {
+        let result = creditCardValidator.cardTypeFor(4004100120023003)
+
+        XCTAssertEqual(result, .visa)
+    }
+
+    func testCardTypeForMastercard() {
+        let result = creditCardValidator.cardTypeFor(5502100120023003)
+
+        XCTAssertEqual(result, .mastercard)
+    }
+
+    func testCardTypeForAmex() {
+        let result = creditCardValidator.cardTypeFor(34705123451234)
+
+        XCTAssertEqual(result, .amex)
+    }
+
+    func testCardTypeForDiners() {
+        let result = creditCardValidator.cardTypeFor(30068114212341234)
+
+        XCTAssertEqual(result, .diners)
+    }
+
+    func testCardTypeForJCB() {
+        let result = creditCardValidator.cardTypeFor(2131350313123456)
+
+        XCTAssertEqual(result, .jcb)
+    }
+
+    func testCardTypeForDiscover() {
+        let result = creditCardValidator.cardTypeFor(6011502031234123)
+
+        XCTAssertEqual(result, .discover)
+    }
+
+    func testCardTypeForMIR() {
+        let result = creditCardValidator.cardTypeFor(2060123412341234)
+
+        XCTAssertEqual(result, .mir)
+    }
+
+    func testCardTypeForUnionPay() {
+        let result = creditCardValidator.cardTypeFor(6240123412341216)
+
+        XCTAssertEqual(result, .unionpay)
+    }
+
     func testCardNumberInvalidForBeyondLimit() {
         _ = XCTSkip()
         // Fix int overflow issue before uncommenting these tests
@@ -50,7 +98,7 @@ class CreditCardValidatorTests: XCTestCase {
         XCTAssert(result)
     }
 
-    func testExpirationIsInValidOnIncorrectInput() {
+    func testExpirationIsInvalidOnIncorrectInput() {
         var result = creditCardValidator.isExpirationValidFor(date: "0000")
         XCTAssertFalse(result)
 
