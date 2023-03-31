@@ -6,8 +6,6 @@ import XCTest
 
 class JumpBackInTests: BaseTestCase {
     func closeKeyboard() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
     }

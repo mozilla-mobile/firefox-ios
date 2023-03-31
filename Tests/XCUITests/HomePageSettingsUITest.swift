@@ -37,7 +37,6 @@ class HomePageSettingsUITests: BaseTestCase {
         super.setUp()
     }
     func testCheckHomeSettingsByDefault() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
 
@@ -70,7 +69,6 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testTyping() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -99,7 +97,6 @@ class HomePageSettingsUITests: BaseTestCase {
         if processIsTranslatedStr() == m1Rosetta {
             throw XCTSkip("Copy & paste may not work on M1")
         } else {
-            navigator.performAction(Action.CloseURLBarOpen)
             navigator.nowAt(NewTabScreen)
             // Check that what's in clipboard is copied
             UIPasteboard.general.string = websiteUrl1
@@ -117,7 +114,6 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testSetFirefoxHomeAsHome() {
         // Start by setting to History since FF Home is default
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -138,7 +134,6 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testSetCustomURLAsHome() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -159,8 +154,6 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testDisableTopSitesSettingsRemovesSection() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
@@ -176,8 +169,6 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testChangeHomeSettingsLabel() {
-        navigator.performAction(Action.CloseURLBarOpen)
-        navigator.nowAt(NewTabScreen)
         // Go to New Tab settings and select Custom URL option
         navigator.performAction(Action.SelectHomeAsCustomURL)
         navigator.nowAt(HomeSettings)
@@ -224,7 +215,6 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testRecentlySaved() {
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
         bookmarkPages()
         addContentToReaderView()
         navigator.performAction(Action.GoToHomePage)
@@ -262,7 +252,6 @@ class HomePageSettingsUITests: BaseTestCase {
     }
 
     func testRecentlyVisited() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
         navigator.openURL(websiteUrl1)
         waitUntilPageLoad()
         navigator.performAction(Action.GoToHomePage)
@@ -294,7 +283,6 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testCustomizeHomepage() {
         if !iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
             waitForExistence(app.collectionViews.firstMatch, timeout: TIMEOUT)
             app.collectionViews.firstMatch.swipeUp()
             waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: TIMEOUT)
