@@ -2552,9 +2552,9 @@ extension String {
         value: "Switch",
         comment: "The button text in the Button Toast for switching to a fresh New Tab.")
     public static let ContextMenuButtonToastNewPrivateTabOpenedLabelText = MZLocalizedString(
-        "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText",
+        "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113",
         tableName: nil,
-        value: "New Private Tab opened",
+        value: "New Private Tab Opened",
         comment: "The label text in the Button Toast for switching to a fresh New Private Tab.")
 }
 
