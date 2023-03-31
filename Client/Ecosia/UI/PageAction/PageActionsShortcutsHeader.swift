@@ -70,7 +70,7 @@ class PageActionsShortcutsHeader: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme() {
+    private func applyTheme() {
         backgroundView?.backgroundColor = .clear
 
         shortcuts.forEach { item in

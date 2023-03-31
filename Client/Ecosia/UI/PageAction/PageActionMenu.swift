@@ -131,9 +131,9 @@ extension PageActionMenu {
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             knob.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
             knob.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -203,6 +203,7 @@ extension PageActionMenu: NotificationThemeable {
 
     func applyTheme() {
         tableView.reloadData()
+        view.backgroundColor = .theme.ecosia.modalBackground
         tableView.backgroundColor = .theme.ecosia.modalBackground
         tableView.separatorColor = .theme.ecosia.border
         knob.backgroundColor = .theme.ecosia.secondaryText

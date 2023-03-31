@@ -61,6 +61,7 @@ final class PageActionMenuCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        separatorView?.removeFromSuperview()
         separatorView = nil
         textLabel?.text = nil
         imageView?.image = nil
@@ -146,10 +147,18 @@ extension PageActionMenuCell {
         
         contentView.addSubview(separatorView)
         
+        updateSeparatorViewConstraints(separatorView)
+    }
+        
+    private func updateSeparatorViewConstraints(_ separatorView: UIView) {
         separatorView.heightAnchor.constraint(equalToConstant: UX.separatorHeight).isActive = true
-        separatorView.widthAnchor.constraint(equalToConstant: contentView.frame.width).isActive = true
         separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -UX.separatorHeight).isActive = true
-        separatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        separatorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.padding).isActive = true
+        if let imageView {
+            separatorView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
+        } else if let textLabel {
+            separatorView.leadingAnchor.constraint(equalTo: textLabel.leadingAnchor).isActive = true
+        }
     }
 }
 
@@ -185,8 +194,6 @@ extension PageActionMenuCell {
 
         if separatorCellsPositions.contains(position) {
             addCustomGroupedStyleLikeSeparator()
-        } else {
-            separatorView?.removeFromSuperview()
         }
     }
 }
