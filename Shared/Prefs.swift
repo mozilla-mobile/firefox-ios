@@ -151,6 +151,9 @@ public struct PrefsKeys {
 
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"
+
+    // Only used to force nimbus features to true with tests
+    public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"
 }
 
 public struct PrefsDefaults {
