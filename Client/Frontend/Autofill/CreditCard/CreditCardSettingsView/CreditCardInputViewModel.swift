@@ -70,7 +70,7 @@ enum CreditCardEditState: String, Equatable, CaseIterable {
     }
 }
 
-class CreditCardEditViewModel: ObservableObject {
+class CreditCardInputViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
 
     let profile: Profile

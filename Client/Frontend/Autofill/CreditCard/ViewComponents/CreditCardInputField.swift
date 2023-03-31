@@ -20,7 +20,7 @@ struct CreditCardInputField: View {
 
     @Binding var text: String
     let inputType: CreditCardInputType
-    let editViewModel: CreditCardEditViewModel
+    let inputViewModel: CreditCardInputViewModel
     var showError: Bool = false
 
     // Theming
@@ -33,12 +33,12 @@ struct CreditCardInputField: View {
     init(inputType: CreditCardInputType,
          text: Binding<String>,
          showError: Bool,
-         editViewModel: CreditCardEditViewModel
+         inputViewModel: CreditCardInputViewModel
     ) {
         self.inputType = inputType
         self._text = text
         self.showError = showError
-        self.editViewModel = editViewModel
+        self.inputViewModel = inputViewModel
 
         switch self.inputType {
         case .name:
@@ -105,9 +105,24 @@ struct CreditCardInputField: View {
             .onChange(of: text) { [oldValue = text] newValue in
                 switch inputType {
                 case .name:
-                    print()
+                    guard !newValue.isEmpty else {
+                        inputViewModel.nameIsValid = false
+                        return
+                    }
+
+                    inputViewModel.nameOnCard = newValue
                 case .number:
-                    print()
+                    guard newValue.count >= 13 else {
+                        inputViewModel.numberIsValid = false
+                        return
+                    }
+
+                    guard !(text.count > userInputLimit) else {
+                        text = oldValue
+                        return
+                    }
+
+                    inputViewModel.cardNumber = newValue
                 case .expiration:
                     guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
 
@@ -123,7 +138,7 @@ struct CreditCardInputField: View {
                         return
                     }
 
-                    editViewModel.expirationDate = text.removingOccurrences(of: " / ")
+                    inputViewModel.expirationDate = text.removingOccurrences(of: " / ")
 
                     guard let formattedText = separate(inputType: inputType,
                                                        for: text.removingOccurrences(of: " / ")) else { return }

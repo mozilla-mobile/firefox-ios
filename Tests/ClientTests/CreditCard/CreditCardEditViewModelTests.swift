@@ -10,7 +10,7 @@ import Storage
 
 class CreditCardEditViewModelTests: XCTestCase {
     private var profile: MockProfile!
-    private var viewModel: CreditCardEditViewModel!
+    private var viewModel: CreditCardInputViewModel!
     private var files: FileAccessor!
     private var autofill: RustAutofill!
     private var encryptionKey: String!
@@ -38,7 +38,7 @@ class CreditCardEditViewModelTests: XCTestCase {
 
         profile = MockProfile()
         _ = profile.autofill.reopenIfClosed()
-        viewModel = CreditCardEditViewModel(profile: profile)
+        viewModel = CreditCardInputViewModel(profile: profile)
     }
 
     override func tearDown() {

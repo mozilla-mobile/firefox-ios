@@ -13,8 +13,8 @@ private struct CreditCardInputText {
     var expiration = ""
 }
 
-struct CreditCardEditView: View {
-    @ObservedObject var viewModel: CreditCardEditViewModel
+struct CreditCardInputView: View {
+    @ObservedObject var viewModel: CreditCardInputViewModel
     var dismiss: ((_ successVal: Bool) -> Void)
 
     // Theming
@@ -38,7 +38,7 @@ struct CreditCardEditView: View {
                         CreditCardInputField(inputType: .name,
                                              text: $text.name,
                                              showError: !viewModel.nameIsValid,
-                                             editViewModel: viewModel)
+                                             inputViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -52,7 +52,7 @@ struct CreditCardEditView: View {
                         CreditCardInputField(inputType: .number,
                                              text: $text.number,
                                              showError: !viewModel.numberIsValid,
-                                             editViewModel: viewModel)
+                                             inputViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -66,7 +66,7 @@ struct CreditCardEditView: View {
                         CreditCardInputField(inputType: .expiration,
                                              text: $text.expiration,
                                              showError: !viewModel.expirationIsValid,
-                                             editViewModel: viewModel)
+                                             inputViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -166,14 +166,14 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                           timeLastModified: 1234,
                                           timesUsed: 1234)
 
-        let viewModel = CreditCardEditViewModel(firstName: "Mike",
+        let viewModel = CreditCardInputViewModel(firstName: "Mike",
                                                 lastName: "Simmons",
                                                 errorState: "Temp",
                                                 enteredValue: "",
                                                 creditCard: sampleCreditCard,
                                                 state: .view)
 
-        return CreditCardEditView(
+        return CreditCardInputView(
             viewModel: viewModel,
             dismiss: { successVal in
             // dismiss view
