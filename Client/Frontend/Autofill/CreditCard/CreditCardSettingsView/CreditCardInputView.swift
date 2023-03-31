@@ -167,11 +167,11 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                           timesUsed: 1234)
 
         let viewModel = CreditCardInputViewModel(firstName: "Mike",
-                                                lastName: "Simmons",
-                                                errorState: "Temp",
-                                                enteredValue: "",
-                                                creditCard: sampleCreditCard,
-                                                state: .view)
+                                                 lastName: "Simmons",
+                                                 errorState: "Temp",
+                                                 enteredValue: "",
+                                                 creditCard: sampleCreditCard,
+                                                 state: .view)
 
         return CreditCardInputView(
             viewModel: viewModel,

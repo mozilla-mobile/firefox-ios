@@ -78,7 +78,6 @@ struct CreditCardValidator {
         return cardType.validNumberLength.contains(String(card).count)
     }
 
-    // TODO: Write unit test for this --> 
     func isExpirationValidFor(date: String) -> Bool {
         guard date.count == 4,
               let inputMonth = Int(date.prefix(2)),
