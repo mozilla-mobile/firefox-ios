@@ -1339,7 +1339,7 @@ extension String {
                 "Settings.Notifications.SystemNotificationsDisabledMessage.v112",
                 tableName: "Settings",
                 value: "You turned off all %@ notifications. Turn them on by going to device Settings > Notifications > %@",
-                comment: "This is the footer title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
+                comment: "This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name."
             )
         }
 
