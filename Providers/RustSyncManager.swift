@@ -485,11 +485,9 @@ public class RustSyncManager: NSObject, SyncManager {
         // Massage the list of names into engine identifiers.var engines = [String]()
         var engines = [String]()
 
-        for name in names {
-            // There may be duplicates in `names` so we are removing them here
-            if !engines.contains(name) {
-                engines.append(name)
-            }
+        // There may be duplicates in `names` so we are removing them here
+        for name in names where !engines.contains(name) {
+            engines.append(name)
         }
 
         // Ensuring that only valid engines are submitted

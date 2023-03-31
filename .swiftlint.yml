@@ -15,7 +15,6 @@ disabled_rules: # rule identifiers to exclude from running
 - duplicated_key_in_dictionary_literal
 - fallthrough
 - file_length
-- for_where
 - force_cast
 - force_try
 - function_body_length

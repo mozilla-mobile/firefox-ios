@@ -207,10 +207,8 @@ public func mapValues<K, T, U>(_ source: [K: T], f: (T) -> U) -> [K: U] {
 }
 
 public func findOneValue<K, V>(_ map: [K: V], f: (V) -> Bool) -> V? {
-    for v in map.values {
-        if f(v) {
-            return v
-        }
+    for v in map.values where f(v) {
+        return v
     }
     return nil
 }

@@ -37,8 +37,8 @@ struct LegacyWallpaperManager {
         // If no wallpaper was ever set, then we must be at index 0
         guard let currentWallpaper = storageManager.getCurrentWallpaperObject() else { return 0 }
 
-        for (index, wallpaper) in dataManager.availableWallpapers.enumerated() {
-            if wallpaper == currentWallpaper { return index }
+        for (index, wallpaper) in dataManager.availableWallpapers.enumerated() where wallpaper == currentWallpaper {
+                return index
         }
 
         return nil
