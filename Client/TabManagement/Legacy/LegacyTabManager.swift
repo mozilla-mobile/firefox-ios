@@ -722,7 +722,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         let title = recentlyClosedTabs.count == 1 ? ToastString.TitleSingular : ToastString.TitlePlural
         let viewModel = ButtonToastViewModel(
             labelText: String.localizedStringWithFormat(title, recentlyClosedTabs.count),
-            buttonText: .TabsTray.CloseTabsToast.Action)
+            buttonText: ToastString.Action)
         // Passing nil theme because themeManager is not available,
         // calling to applyTheme with proper theme before showing
         let toast = ButtonToast(viewModel: viewModel,
