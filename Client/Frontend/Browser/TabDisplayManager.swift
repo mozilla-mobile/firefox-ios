@@ -632,7 +632,11 @@ extension TabDisplayManager: GroupedTabDelegate {
 extension TabDisplayManager: InactiveTabsDelegate {
     func shouldCloseInactiveTab(tab: Tab) {
         removeInactiveTabAndReloadView(tabs: [tab])
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .inactiveTabSwipeClose,
+                                     extras: nil)
     }
 
     func didTapCloseInactiveTabs(tabsCount: Int) {
