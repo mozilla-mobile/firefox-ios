@@ -1441,7 +1441,7 @@ extension String {
     public struct SyncScreen { }
 }
 
-// MARK: Tabs Tray
+// MARK: - Tabs Tray
 extension String {
     public struct TabsTray {
         public struct InactiveTabs {
@@ -1460,6 +1460,24 @@ extension String {
                 tableName: nil,
                 value: "Close All Inactive Tabs",
                 comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
+        }
+
+        public struct CloseTabsToast {
+            public static let TitleSingular = MZLocalizedString(
+                "CloseTabsToast.Title.Singular.v113",
+                tableName: "TabsTray",
+                value: "%d Tab Closed",
+                comment: "When the user closes tabs in the tab tray, a popup will appear. This is the title for the popup. If only one tab was closed, this is the title that will be used (in singular). The placeholder is the number of tabs; in this case, it would be '1'")
+            public static let TitlePlural = MZLocalizedString(
+                "CloseTabsToast.Title.Plural.v113",
+                tableName: "TabsTray",
+                value: "%d Tabs Closed",
+                comment: "When the user closes tabs in the tab tray, a popup will appear. This is the title for the popup. If multiple tabs were closed, this is the title that will be used (in plural form). The placeholder is the number of tabs; in this case, it would be '2' or more.")
+            public static let Action = MZLocalizedString(
+                "CloseTabsToast.Button.v113",
+                tableName: "TabsTray",
+                value: "Undo",
+                comment: "When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs")
         }
 
         public struct Sync {
@@ -2301,20 +2319,6 @@ extension String {
         tableName: nil,
         value: "URL",
         comment: "The label for the URL field when editing a bookmark")
-}
-
-// MARK: - Tabs Delete All Undo Toast
-extension String {
-    public static let TabsDeleteAllUndoTitle = MZLocalizedString(
-        "Tabs.DeleteAllUndo.Title.v113",
-        tableName: nil,
-        value: "%d Tab(s) Closed",
-        comment: "The label indicating that all the tabs were closed")
-    public static let TabsDeleteAllUndoAction = MZLocalizedString(
-        "Tabs.DeleteAllUndo.Button",
-        tableName: nil,
-        value: "Undo",
-        comment: "The button to undo the delete all tabs")
 }
 
 // MARK: - Tab tray (chronological tabs)
