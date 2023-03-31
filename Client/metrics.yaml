@@ -2093,7 +2093,7 @@ settings_menu:
       - https://github.com/mozilla-mobile/firefox-ios/issues/13814
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/12462
-      - https://github.com/mozilla-mobile/firefox-ios/pull/TODO
+      - https://github.com/mozilla-mobile/firefox-ios/pull/13827
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2023-06-01"
