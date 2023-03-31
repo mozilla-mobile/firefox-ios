@@ -50,7 +50,7 @@ class CreditCardEditViewModelTests: XCTestCase {
     func testEditViewModel_SavingCard() {
         viewModel.nameOnCard = "Ashton Mealy"
         viewModel.cardNumber = "4268811063712243"
-        viewModel.expirationDate = "1837539531"
+        viewModel.expirationDate = "1288"
         let expectation = expectation(description: "wait for credit card fields to be saved")
         viewModel.saveCreditCard { creditCard, error in
             guard error == nil, let creditCard = creditCard else {
