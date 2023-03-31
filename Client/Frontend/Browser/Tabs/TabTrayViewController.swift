@@ -17,7 +17,6 @@ enum TabTrayViewAction {
 protocol TabTrayViewDelegate: UIViewController {
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool)
     func performToolbarAction(_ action: TabTrayViewAction, sender: UIBarButtonItem)
-    func setToolbarHeight(height: CGFloat)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -228,11 +227,6 @@ class TabTrayViewController: UIViewController, Themeable {
         viewModel.layout = shouldUseiPadSetup() ? .regular : .compact
 
         updateLayout()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewModel.tabTrayView.setToolbarHeight(height: view.safeAreaInsets.bottom)
     }
 
     private func viewSetup() {

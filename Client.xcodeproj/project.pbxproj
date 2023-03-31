@@ -5939,6 +5939,18 @@
 			path = Downloads;
 			sourceTree = "<group>";
 		};
+		216E9A3829D2119300ABE69B /* InactiveTabs */ = {
+			isa = PBXGroup;
+			children = (
+				437A9B672681256800FB41C1 /* InactiveTabCell.swift */,
+				437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */,
+				E118B9282862674E00C84831 /* InactiveTabItemCellModel.swift */,
+				C889569927E8D1AC00E3779E /* InactiveTabHeader.swift */,
+				E10A1F742863BC51001EEA80 /* InactiveTabItemCell.swift */,
+			);
+			path = InactiveTabs;
+			sourceTree = "<group>";
+		};
 		2178A69D291453CC002EC290 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -5977,16 +5989,12 @@
 		23F2C365244E44FA00FA4496 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
+				216E9A3829D2119300ABE69B /* InactiveTabs */,
 				21357F2B293FDB07004BF9FD /* RemoteTabs */,
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
 				DA3A4FE8254A781A00C4A9C9 /* TabTableViewHeader.swift */,
 				DA52E1D925F5961F0092204C /* TabTrayViewController.swift */,
 				C81AC6B526160091007800C5 /* TabTrayViewModel.swift */,
-				437A9B672681256800FB41C1 /* InactiveTabCell.swift */,
-				437A9B692681257F00FB41C1 /* InactiveTabViewModel.swift */,
-				C889569927E8D1AC00E3779E /* InactiveTabHeader.swift */,
-				E10A1F742863BC51001EEA80 /* InactiveTabItemCell.swift */,
-				E118B9282862674E00C84831 /* InactiveTabItemCellModel.swift */,
 				439B008A26E6CE2100DFAF14 /* GroupedTabCell.swift */,
 				968BD7EA27DFF0F8003148B3 /* ASGroup.swift */,
 			);

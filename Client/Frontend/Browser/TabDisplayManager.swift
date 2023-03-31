@@ -630,6 +630,47 @@ extension TabDisplayManager: GroupedTabDelegate {
 
 // MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
+    func shouldCloseInactiveTab(tab: Tab) {
+        removeInactiveTabAndReloadView(tabs: [tab])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .inactiveTabSwipeClose,
+                                     extras: nil)
+    }
+
+    func didTapCloseInactiveTabs(tabsCount: Int) {
+        // Haptic feedback for when a user closes all inactive tabs
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+
+        // Reload Inactive Tabs section for user feedback
+        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
+        collectionView.reloadItems(at: [indexPath])
+
+        cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
+                                      completion: { shouldClose in
+            guard shouldClose else {
+                self.undoInactiveTabsClose()
+                return
+            }
+
+            self.closeInactiveTabs()
+        })
+    }
+
+    private func closeInactiveTabs() {
+        guard let inactiveTabs = inactiveViewModel?.inactiveTabs,
+              !inactiveTabs.isEmpty else { return }
+
+        removeInactiveTabAndReloadView(tabs: inactiveTabs)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .inactiveTabCloseAllButton,
+                                     extras: nil)
+    }
+
     // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
         // Remove inactive tabs from tab manager
@@ -650,21 +691,10 @@ extension TabDisplayManager: InactiveTabsDelegate {
         collectionView.reloadItems(at: [indexPath])
     }
 
-    func shouldCloseInactiveTab(tab: Tab) {
-        removeInactiveTabAndReloadView(tabs: [tab])
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
-    }
-
-    func didTapCloseAllTabs() {
-        // Haptic feedback for when a user closes all inactive tabs
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
-
-        // Close all inactive tabs
-        if let inactiveTabs = inactiveViewModel?.inactiveTabs, !inactiveTabs.isEmpty {
-            removeInactiveTabAndReloadView(tabs: inactiveTabs)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabCloseAllButton, extras: nil)
-        }
+    private func undoInactiveTabsClose() {
+        inactiveViewModel?.shouldHideInactiveTabs = false
+        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
+        collectionView.reloadItems(at: [indexPath])
     }
 
     func didSelectInactiveTab(tab: Tab?) {
