@@ -117,7 +117,7 @@ class CreditCardInputViewModel: ObservableObject {
     var isRightBarButtonEnabled: Bool {
         state.rightBarBtn == .save && (nameIsValid &&
                                        numberIsValid &&
-                                       !expirationDate.isEmpty)
+                                       expirationIsValid)
     }
 
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {

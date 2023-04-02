@@ -24,6 +24,7 @@ class CreditCardInputFieldTests: XCTestCase {
 
         profile = nil
         viewModel = nil
+        testableString = ""
     }
 
     func testInputFieldPropertiesOnName() {
@@ -94,5 +95,58 @@ class CreditCardInputFieldTests: XCTestCase {
             return
         }
         XCTAssertEqual(testableString, "88 / 88")
+    }
+
+    func testValidNameInput() {
+        let inputField = CreditCardInputField(inputType: .name,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        inputField.handleTextInputWith("", and: "H")
+        XCTAssert(viewModel.nameIsValid)
+        XCTAssertEqual(viewModel.nameOnCard, "H")
+    }
+
+    func testBlankNameInput() {
+        let inputField = CreditCardInputField(inputType: .name,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        inputField.handleTextInputWith("H", and: "")
+        XCTAssertFalse(viewModel.nameIsValid)
+    }
+
+    func testValidCardInput() {
+        let inputField = CreditCardInputField(inputType: .number,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        inputField.handleTextInputWith("412240004000400", and: "4122400040004000")
+        XCTAssert(viewModel.numberIsValid)
+        XCTAssertEqual(viewModel.cardNumber, "4122400040004000")
+    }
+
+    func testInvalidShorterCardInput() {
+        let inputField = CreditCardInputField(inputType: .number,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        inputField.handleTextInputWith("4", and: "44")
+        XCTAssertFalse(viewModel.numberIsValid)
+    }
+
+    func testValidExpirationInput() {
+        let inputField = CreditCardInputField(inputType: .expiration,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        inputField.handleTextInputWith("125", and: "1250")
+        XCTAssertEqual(viewModel.expirationDate, "1250")
+        XCTAssert(viewModel.expirationIsValid)
     }
 }

@@ -104,61 +104,69 @@ struct CreditCardInputField: View {
             .foregroundColor(textFieldColor)
             .keyboardType(keyboardType)
             .onChange(of: text) { [oldValue = text] newValue in
-                switch inputType {
-                case .name:
-                    guard !newValue.isEmpty else {
-                        inputViewModel.nameIsValid = false
-                        return
-                    }
-
-                    inputViewModel.nameOnCard = newValue
-                case .number:
-                    guard newValue.count >= 13,
-                          let lastInputtedCharacter = newValue.last,
-                          lastInputtedCharacter.isNumber else {
-                        inputViewModel.numberIsValid = false
-                        return
-                    }
-
-                    guard !(text.count > userInputLimit) else {
-                        text = oldValue
-                        return
-                    }
-
-                    inputViewModel.cardNumber = newValue
-                case .expiration:
-                    guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
-
-                    let numbersCount = countNumbersIn(text: text)
-
-                    guard !(text.count > formattedTextLimit) || !(numbersCount > 4) else {
-                        text = oldValue
-                        return
-                    }
-
-                    guard numbersCount % 4 == 0 else {
-                        text = text.removingOccurrences(of: " / ")
-                        return
-                    }
-
-                    inputViewModel.expirationDate = text.removingOccurrences(of: " / ")
-
-                    guard let formattedText = separate(inputType: inputType,
-                                                       for: text.removingOccurrences(of: " / ")) else { return }
-                    text = formattedText
-                }
+                handleTextInputWith(oldValue, and: newValue)
             }
             .onReceive(Just(text)) { newValue in
-                switch inputType {
-                case .number:
-                    let sanatized = newValue.filter { "0123456789".contains($0) }
-                    if sanatized != newValue {
-                        text = sanatized
-                    }
-
-                default: break
-                }
+                sanatizeInputOn(newValue)
             }
+    }
+
+    func handleTextInputWith(_ oldValue: String, and newValue: String) {
+        switch inputType {
+        case .name:
+            guard !newValue.isEmpty else {
+                inputViewModel.nameIsValid = false
+                return
+            }
+
+            inputViewModel.nameOnCard = newValue
+        case .number:
+            guard newValue.count >= 13,
+                  let lastInputtedCharacter = newValue.last,
+                  lastInputtedCharacter.isNumber else {
+                inputViewModel.numberIsValid = false
+                return
+            }
+
+            guard !(text.count > userInputLimit) else {
+                text = oldValue
+                return
+            }
+
+            inputViewModel.cardNumber = newValue
+        case .expiration:
+            guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
+
+            let numbersCount = countNumbersIn(text: newValue)
+
+            guard !(newValue.count > formattedTextLimit) || !(numbersCount > 4) else {
+                text = oldValue
+                return
+            }
+
+            guard numbersCount % 4 == 0 else {
+                text = newValue.removingOccurrences(of: " / ")
+                return
+            }
+
+            inputViewModel.expirationDate = newValue.removingOccurrences(of: " / ")
+
+            guard let formattedText = separate(inputType: inputType,
+                                               for: newValue.removingOccurrences(of: " / ")) else { return }
+            text = formattedText
+        }
+    }
+
+    private func sanatizeInputOn(_ newValue: String) {
+        switch inputType {
+        case .number:
+            let sanatized = newValue.filter { "0123456789".contains($0) }
+            if sanatized != newValue {
+                text = sanatized
+            }
+
+        default: break
+        }
     }
 
     @ViewBuilder private func errorViewWith(errorString: String) -> some View {
