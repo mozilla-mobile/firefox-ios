@@ -204,13 +204,6 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
     }
 
     func onMalformedMessage(id: String, surface: MessageSurfaceId) {}
-
-    func messageForId(_ id: String, surface: Client.MessageSurfaceId) -> Client.GleanPlumbMessage? {
-        recordedSurface = surface
-        if message?.data.surface == recordedSurface, message?.id == id { return message }
-
-        return nil
-    }
 }
 
 // MARK: SpyHomepageMessageCardCell
