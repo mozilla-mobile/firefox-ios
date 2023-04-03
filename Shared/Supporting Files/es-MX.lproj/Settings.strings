@@ -1,3 +1,6 @@
+/* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
+"CreditCard.Settings.EmptyListDescription.v112" = "Guarda la información de tu tarjeta de forma segura para pagar más rápido la próxima vez.";
+
 /* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
 "CreditCard.Settings.EmptyListTitle.v112" = "Guardar tarjetas de crédito en %@";
 
@@ -22,6 +25,9 @@
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "Usar tarjeta guardada";
 
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "Esto debe estar activado para recibir pestañas y recibir notificaciones cuando inicies sesión en otro dispositivo.";
+
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Sincronizar";
 
@@ -33,6 +39,9 @@
 
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Notificaciones";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Ve a los ajustes de tu dispositivo para activar las notificaciones en %@";
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Activar notificaciones";
