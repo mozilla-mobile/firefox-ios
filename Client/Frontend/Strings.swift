@@ -3939,6 +3939,30 @@ extension String {
         comment: "Done button in Find in Page Toolbar.")
 }
 
+// MARK: - Zoom Page Bar
+extension String {
+    public static let ZoomPageBarCloseAccessibilityLabel = MZLocalizedString(
+        "Close Zoom Panel",
+        tableName: nil,
+        value: nil,
+        comment: "Accessibility label for closing the zoom panel in Zoom Page Bar")
+    public static let ZoomPageBarIncreaseZoomAccessibilityLabel = MZLocalizedString(
+        "Increase Zoom Level",
+        tableName: nil,
+        value: nil,
+        comment: "Accessibility label for increasing the zoom level in Zoom Page Bar")
+    public static let ZoomPageBarDecreaseZoomAccessibilityLabel = MZLocalizedString(
+        "Decrease Zoom Level",
+        tableName: nil,
+        value: nil,
+        comment: "Accessibility label for decreasing the zoom level in Zoom Page Bar")
+    public static let ZoomPageBarCurrentZoomLevelAccessibilityLabel = MZLocalizedString(
+        "Current Zoom Level",
+        tableName: nil,
+        value: nil,
+        comment: "Accessibility label for current zoom level in Zoom Page Bar")
+}
+
 // MARK: - Reader Mode Bar
 extension String {
     public static let ReaderModeBarMarkAsRead = MZLocalizedString(
