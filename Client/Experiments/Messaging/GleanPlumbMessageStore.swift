@@ -21,7 +21,9 @@ protocol GleanPlumbMessageStoreProtocol {
     func onMessageDismissed(_ message: GleanPlumbMessage)
 
     /// Handle all points of expiry and Telemetry.
-    func onMessageExpired(_ message: GleanPlumbMessageMetaData, shouldReport: Bool)
+    func onMessageExpired(_ message: GleanPlumbMessageMetaData,
+                          surface: MessageSurfaceId,
+                          shouldReport: Bool)
 }
 
 class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
@@ -54,7 +56,9 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
 
     /// For the MVP, we always expire the message.
     func onMessagePressed(_ message: GleanPlumbMessage) {
-        onMessageExpired(message.metadata, shouldReport: false)
+        onMessageExpired(message.metadata,
+                         surface: message.data.surface,
+                         shouldReport: false)
 
         set(key: message.id, metadata: message.metadata)
     }
@@ -62,7 +66,9 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
     /// Depending on the surface, we may do different things with dismissal. But for the MVP,
     /// dismissal expires the message.
     func onMessageDismissed(_ message: GleanPlumbMessage) {
-        onMessageExpired(message.metadata, shouldReport: false)
+        onMessageExpired(message.metadata,
+                         surface: message.data.surface,
+                         shouldReport: false)
         message.metadata.dismissals += 1
 
         set(key: message.id, metadata: message.metadata)
@@ -71,15 +77,23 @@ class GleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
     /// Updates a message's metadata and reports expiration Telemetry when applicable.
     /// A message expires in three ways (dismissal, interaction and max impressions), but only
     /// impressions should report an expired message.
-    func onMessageExpired(_ messageData: GleanPlumbMessageMetaData, shouldReport: Bool) {
+    func onMessageExpired(
+        _ messageData: GleanPlumbMessageMetaData,
+        surface: MessageSurfaceId,
+        shouldReport: Bool
+    ) {
         messageData.isExpired = true
 
         if shouldReport {
-            TelemetryWrapper.recordEvent(category: .information,
-                                         method: .view,
-                                         object: .messaging,
-                                         value: .messageExpired,
-                                         extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageData.id])
+            TelemetryWrapper.recordEvent(
+                category: .information,
+                method: .view,
+                object: .messaging,
+                value: .messageExpired,
+                extras: [
+                    TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageData.id,
+                    TelemetryWrapper.EventExtraKey.messageSurface.rawValue: surface.rawValue
+                ])
         }
     }
 
