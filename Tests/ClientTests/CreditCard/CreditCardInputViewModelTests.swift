@@ -92,20 +92,36 @@ class CreditCardInputViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.rightBarBtn.title, .CreditCard.EditCard.EditNavBarButtonLabel)
     }
 
-    func testRightBarButtonEnabledEdit() {
+    func testRightBarButtonNotEnabledEdit() {
         viewModel.state = .edit
         viewModel.nameOnCard = "Kenny Champion"
         viewModel.expirationDate = "123"
         viewModel.cardNumber = "4871007782167426"
-        XCTAssertTrue(viewModel.isRightBarButtonEnabled)
+        XCTAssertFalse(viewModel.isRightBarButtonEnabled)
+    }
+
+    func testRightBarButtonEnabledEdit() {
+        viewModel.state = .edit
+        viewModel.nameOnCard = "Kenny Champion"
+        viewModel.expirationDate = "1239"
+        viewModel.cardNumber = "4871007782167426"
+        XCTAssert(viewModel.isRightBarButtonEnabled)
+    }
+
+    func testRightBarButtonNotEnabledAdd() {
+        viewModel.state = .add
+        viewModel.nameOnCard = "Jakyla Labarge"
+        viewModel.expirationDate = "123"
+        viewModel.cardNumber = "4717219604213696"
+        XCTAssertFalse(viewModel.isRightBarButtonEnabled)
     }
 
     func testRightBarButtonEnabledAdd() {
         viewModel.state = .add
         viewModel.nameOnCard = "Jakyla Labarge"
-        viewModel.expirationDate = "123"
+        viewModel.expirationDate = "1239"
         viewModel.cardNumber = "4717219604213696"
-        XCTAssertTrue(viewModel.isRightBarButtonEnabled)
+        XCTAssert(viewModel.isRightBarButtonEnabled)
     }
 
     func testRightBarButtonDisabled_AddState() {
