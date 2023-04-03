@@ -4,18 +4,20 @@
 
 import Foundation
 
-protocol TabDataStore {
-    func fetchTabData() async -> WindowData
+public protocol TabDataStore {
+    func fetchTabData() async -> WindowData?
     func saveTabData(window: WindowData) async
     func clearAllTabData() async
 }
 
-actor DefaultTabDataStore: TabDataStore {
-    func fetchTabData() async -> WindowData {
+public actor DefaultTabDataStore: TabDataStore {
+    public init() {}
+
+    public func fetchTabData() async -> WindowData? {
         return WindowData(id: UUID(), isPrimary: true, activeTabId: UUID(), tabData: [])
     }
 
-    func saveTabData(window: WindowData) async {}
+    public func saveTabData(window: WindowData) async {}
 
-    func clearAllTabData() async {}
+    public func clearAllTabData() async {}
 }

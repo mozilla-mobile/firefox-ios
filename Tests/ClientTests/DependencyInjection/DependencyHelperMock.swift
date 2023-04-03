@@ -19,7 +19,7 @@ class DependencyHelperMock {
 
         let tabManager: TabManager = TabManagerImplementation(
             profile: profile,
-            imageStore: DiskImageStore(
+            imageStore: DefaultDiskImageStore(
                 files: profile.files,
                 namespace: "TabManagerScreenshots",
                 quality: UIConstants.ScreenshotQuality)

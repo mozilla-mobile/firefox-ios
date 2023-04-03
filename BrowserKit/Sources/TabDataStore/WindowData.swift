@@ -4,9 +4,16 @@
 
 import Foundation
 
-struct WindowData: Codable {
-    let id: UUID
-    let isPrimary: Bool
-    let activeTabId: UUID
-    let tabData: [TabData]
+public struct WindowData: Codable {
+    public let id: UUID
+    public let isPrimary: Bool
+    public let activeTabId: UUID
+    public let tabData: [TabData]
+
+    public init(id: UUID, isPrimary: Bool, activeTabId: UUID, tabData: [TabData]) {
+        self.id = id
+        self.isPrimary = isPrimary
+        self.activeTabId = activeTabId
+        self.tabData = tabData
+    }
 }
