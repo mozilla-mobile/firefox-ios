@@ -35,9 +35,6 @@ protocol GleanPlumbMessageManagerProtocol {
     /// report the malformed message.
     /// Manager calls.
     func onMalformedMessage(id: String, surface: MessageSurfaceId)
-
-    /// Finds a message for a specified id on a specified surface.
-    func messageForId(_ id: String, surface: MessageSurfaceId) -> GleanPlumbMessage?
 }
 
 protocol GleanPlumbMessagePressedDelegate: AnyObject {
