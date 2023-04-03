@@ -53,7 +53,7 @@ def sync_main(
     parser.add_argument("--commit", required=True, help="the git commit hash to generate screenshots from")
     parser.add_argument("--workflow", required=True, help="the bitrise workflow to schedule")
     parser.add_argument("--artifacts-directory", required=True, help="The directory to store bitrise artifacts")
-    parser.add_argument("--importLocales", dest="locales", metavar="LOCALE", action="append", required=True, help="locale to generate the screenshots for (can be repeated)")
+    parser.add_argument("--importLocales", dest="locales", metavar="LOCALE", action="append", help="locale to generate the screenshots for (can be repeated)")
     parser.add_argument("--derived-data-path", default=None, help="the URL to download an existing build")
 
     result = parser.parse_args()
@@ -100,10 +100,13 @@ async def async_main(token, branch, commit, workflow, artifacts_directory, local
             await download_log(client, build_slug, artifacts_directory)
 
 
-async def schedule_build(client, branch, commit, workflow, locales, derived_data_path=None):
+async def schedule_build(client, branch, commit, workflow, locales=None, derived_data_path=None):
     url = BITRISE_URL_TEMPLATE.format(suffix="builds")
 
-    moz_locales_value = " ".join(locales)
+    if locales:
+        moz_locales_value = " ".join(locales)
+    else:
+        moz_locales_value = "en-US"
 
     environment_variables = [{
         "mapped_to": environment_variable_name,
@@ -113,17 +116,30 @@ async def schedule_build(client, branch, commit, workflow, locales, derived_data
         ("MOZ_DERIVED_DATA_PATH", derived_data_path),
     ) if environment_variable_value]
 
-    data = {
-        "hook_info": {
-            "type": "bitrise",
-        },
-        "build_params": {
-            "branch": branch,
-            "commit_hash": commit,
-            "environments": environment_variables,
-            "workflow_id": workflow,
-        },
-    }
+    if workflow.startswith("pipeline"):
+        data = {
+            "hook_info": {
+                "type": "bitrise",
+            },
+            "build_params": {
+                "branch": branch,
+                "commit_hash": commit,
+                "environments": environment_variables,
+                "pipeline_id": workflow,
+            },
+        }
+    else: 
+        data = {
+            "hook_info": {
+                "type": "bitrise",
+            },
+            "build_params": {
+                "branch": branch,
+                "commit_hash": commit,
+                "environments": environment_variables,
+                "workflow_id": workflow,
+            },
+        }
 
     response = await do_http_request_json(client, url, method="post", json=data)
     if response.get("status", "") != "ok":
