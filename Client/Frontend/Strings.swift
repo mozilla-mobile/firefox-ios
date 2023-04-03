@@ -1464,7 +1464,7 @@ extension String {
 
         public struct CloseTabsToast {
             public static let Title = MZLocalizedString(
-                "CloseTabsToast.Title.Singular.v113",
+                "CloseTabsToast.Title.v113",
                 tableName: "TabsTray",
                 value: "Tabs Closed: %d",
                 comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs")
