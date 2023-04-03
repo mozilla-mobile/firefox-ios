@@ -146,6 +146,7 @@ struct CreditCardInputField: View {
 
             guard numbersCount % 4 == 0 else {
                 text = newValue.removingOccurrences(of: " / ")
+                inputViewModel.expirationIsValid = false
                 return
             }
 

@@ -8,7 +8,7 @@ import Common
 import Storage
 @testable import Client
 
-class CreditCardEditViewModelTests: XCTestCase {
+class CreditCardInputViewModelTests: XCTestCase {
     private var profile: MockProfile!
     private var viewModel: CreditCardInputViewModel!
     private var files: FileAccessor!

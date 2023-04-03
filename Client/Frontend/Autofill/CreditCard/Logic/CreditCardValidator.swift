@@ -72,9 +72,8 @@ struct CreditCardValidator {
     }
 
     func isCardNumberValidFor(card: Int) -> Bool {
-        guard let cardType = cardTypeFor(card) else {
-            return false
-        }
+        guard let cardType = cardTypeFor(card) else { return false }
+
         return cardType.validNumberLength.contains(String(card).count)
     }
 

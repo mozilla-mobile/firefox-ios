@@ -93,10 +93,6 @@ class CreditCardInputViewModel: ObservableObject {
 
     @Published var expirationDate: String = "" {
         didSet {
-            if expirationDate.count > 4 {
-                expirationDate = oldValue
-                expirationIsValid = false
-            }
             expirationIsValid = creditCardValidator.isExpirationValidFor(date: expirationDate)
         }
     }
@@ -116,8 +112,11 @@ class CreditCardInputViewModel: ObservableObject {
 
     var isRightBarButtonEnabled: Bool {
         state.rightBarBtn == .save && (nameIsValid &&
+                                       !nameOnCard.isEmpty &&
                                        numberIsValid &&
-                                       expirationIsValid)
+                                       !cardNumber.isEmpty &&
+                                       expirationIsValid &&
+                                       !expirationDate.isEmpty)
     }
 
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {

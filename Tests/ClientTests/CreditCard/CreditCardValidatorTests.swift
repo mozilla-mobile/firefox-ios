@@ -34,7 +34,7 @@ class CreditCardValidatorTests: XCTestCase {
     }
 
     func testCardTypeForAmex() {
-        let result = creditCardValidator.cardTypeFor(34705123451234)
+        let result = creditCardValidator.cardTypeFor(347051234512349)
 
         XCTAssertEqual(result, .amex)
     }
@@ -46,7 +46,7 @@ class CreditCardValidatorTests: XCTestCase {
     }
 
     func testCardTypeForJCB() {
-        let result = creditCardValidator.cardTypeFor(2131350313123456)
+        let result = creditCardValidator.cardTypeFor(1800351313100010001)
 
         XCTAssertEqual(result, .jcb)
     }
@@ -90,6 +90,41 @@ class CreditCardValidatorTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
+    func testCardNumberIsValidForWellFormedInput() {
+        let result = creditCardValidator.isCardNumberValidFor(card: 4100410041004100)
+        XCTAssert(result)
+    }
+
+    func testCardNumberIsValidForAmex() {
+        let result = creditCardValidator.isCardNumberValidFor(card: 347051234512349)
+        XCTAssert(result)
+    }
+
+    func testCardNumberIsValidForDiners() {
+        let result = creditCardValidator.isCardNumberValidFor(card: 30068114212341234)
+        XCTAssert(result)
+    }
+
+    func testCardNumberIsValidForJcb() {
+        let result = creditCardValidator.isCardNumberValidFor(card: 1800351313100010001)
+        XCTAssert(result)
+    }
+
+    func testCardNumberIsValidForDiscover() {
+        let result = creditCardValidator.isCardNumberValidFor(card: 6011502031234123)
+        XCTAssert(result)
+    }
+
+    func testCardNumberIsValidForUnionPay() {
+        let result = creditCardValidator.isCardNumberValidFor(card: 6240123412341216)
+        XCTAssert(result)
+    }
+
+    func testCardNumberIsValidForMir() {
+        let result = creditCardValidator.isCardNumberValidFor(card: 2060123412341234)
+        XCTAssert(result)
+    }
+
     func testExpirationIsValidOnWellFormedInput() {
         var result = creditCardValidator.isExpirationValidFor(date: "1230")
         XCTAssert(result)
@@ -108,6 +143,11 @@ class CreditCardValidatorTests: XCTestCase {
 
     func tetsExpirationIsInvalidOnBlankInput() {
         let result = creditCardValidator.isExpirationValidFor(date: "")
+        XCTAssertFalse(result)
+    }
+
+    func testExpirationIsInvalidOnPastDate() {
+        let result = creditCardValidator.isExpirationValidFor(date: "1212")
         XCTAssertFalse(result)
     }
 

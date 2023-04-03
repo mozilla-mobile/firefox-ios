@@ -69,13 +69,22 @@ class CreditCardInputFieldTests: XCTestCase {
         XCTAssertEqual(inputField.keyboardType, .numberPad)
     }
 
-    func testCountNumbersIn() {
+    func testCountNumbersOnNumericInput() {
         let inputField = CreditCardInputField(inputType: .expiration,
                                               text: $testableString,
                                               showError: false,
                                               inputViewModel: viewModel)
 
         XCTAssertEqual(inputField.countNumbersIn(text: "12345"), 5)
+    }
+
+    func testCountNumbersOnAlphanumericAndSpecialCharcatersInput() {
+        let inputField = CreditCardInputField(inputType: .expiration,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        XCTAssertEqual(inputField.countNumbersIn(text: "//123)*gsgki45}{}{:"), 5)
     }
 
     func testUserInputFormattingForExpiry() {
@@ -148,5 +157,15 @@ class CreditCardInputFieldTests: XCTestCase {
         inputField.handleTextInputWith("125", and: "1250")
         XCTAssertEqual(viewModel.expirationDate, "1250")
         XCTAssert(viewModel.expirationIsValid)
+    }
+
+    func testInvalidShortenedExpirationInput() {
+        let inputField = CreditCardInputField(inputType: .expiration,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        inputField.handleTextInputWith("1255", and: "125")
+        XCTAssertFalse(viewModel.expirationIsValid)
     }
 }
