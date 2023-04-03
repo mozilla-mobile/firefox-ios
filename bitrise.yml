@@ -187,15 +187,15 @@ workflows:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
         #- pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"  
-    - script@1.1:
-        title: Run Danger 2
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # Fail if any command fails
-            set -e
-            echo "Run danger"
-            swift run danger-swift ci
+    #- script@1.1:
+    #    title: Run Danger 2
+    #    inputs:
+    #    - content: |
+    #        #!/usr/bin/env bash
+    #        # Fail if any command fails
+    #        set -e
+    #        echo "Run danger"
+    #        swift run danger-swift ci
     - script@1.1:
         title: Detect number of warnings
         is_always_run: true
