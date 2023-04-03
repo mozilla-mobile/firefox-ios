@@ -209,15 +209,18 @@ class BrowserViewController: UIViewController {
         LegacyThemeManager.instance.statusBarStyle
     }
 
-    @objc func displayThemeChanged(notification: Notification) {
+    @objc
+    func displayThemeChanged(notification: Notification) {
         applyTheme()
     }
 
-    @objc func didTapUndoCloseAllTabToast(notification: Notification) {
+    @objc
+    func didTapUndoCloseAllTabToast(notification: Notification) {
         leaveOverlayMode(didCancel: true)
     }
 
-    @objc func openTabNotification(notification: Notification) {
+    @objc
+    func openTabNotification(notification: Notification) {
         guard let openTabObject = notification.object as? OpenTabNotificationObject else {
             return
         }
@@ -236,7 +239,8 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    @objc func searchBarPositionDidChange(notification: Notification) {
+    @objc
+    func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
               urlBar != nil
@@ -254,6 +258,7 @@ class BrowserViewController: UIViewController {
 
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
+        updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
     }
@@ -266,7 +271,8 @@ class BrowserViewController: UIViewController {
         return newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
     }
 
-    @objc fileprivate func appMenuBadgeUpdate() {
+    @objc
+    fileprivate func appMenuBadgeUpdate() {
         let actionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = actionNeeded
 
@@ -332,7 +338,8 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    @objc func appDidEnterBackgroundNotification() {
+    @objc
+    func appDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
@@ -342,11 +349,13 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    @objc func tappedTopArea() {
+    @objc
+    func tappedTopArea() {
         scrollController.showToolbars(animated: true)
     }
 
-    @objc func appWillResignActiveNotification() {
+    @objc
+    func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
@@ -368,7 +377,8 @@ class BrowserViewController: UIViewController {
         presentedViewController?.view.alpha = 0
     }
 
-    @objc func appDidBecomeActiveNotification() {
+    @objc
+    func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animate(
@@ -503,6 +513,11 @@ class BrowserViewController: UIViewController {
             self,
             selector: #selector(openTabNotification),
             name: .OpenTabNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(presentIntroFrom),
+            name: .PresentIntroView,
             object: nil)
     }
 
@@ -676,11 +691,11 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
+
+        updateHeaderConstraints()
     }
 
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-
+    private func updateHeaderConstraints() {
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(view)
@@ -691,6 +706,10 @@ class BrowserViewController: UIViewController {
                 make.left.right.equalTo(view)
             }
         }
+    }
+
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
@@ -1555,7 +1574,8 @@ class BrowserViewController: UIViewController {
         showViewController(viewController: viewController)
     }
 
-    @objc func openSettings() {
+    @objc
+    func openSettings() {
         ensureMainThread { [self] in
             if let presentedViewController = self.presentedViewController {
                 presentedViewController.dismiss(animated: true, completion: nil)
@@ -2257,8 +2277,13 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController {
-    func presentIntroViewController(_ alwaysShow: Bool = false) {
-        if alwaysShow || IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen {
+    @objc
+    func presentIntroFrom(notification: Notification) {
+        presentIntroViewController(force: true)
+    }
+
+    func presentIntroViewController(force: Bool = false) {
+        if force || IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen {
             showProperIntroVC()
         }
     }
@@ -2355,7 +2380,8 @@ extension BrowserViewController {
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
-    @objc func dismissSignInViewController() {
+    @objc
+    func dismissSignInViewController() {
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -2546,7 +2572,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
 extension BrowserViewController {
     // no-op
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
+    @objc
+    func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {

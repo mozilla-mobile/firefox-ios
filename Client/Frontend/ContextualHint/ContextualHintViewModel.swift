@@ -155,7 +155,8 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     }
 
     // MARK: - Present
-    @objc private func presentHint() {
+    @objc
+    private func presentHint() {
         guard shouldPresentContextualHint() else { return }
 
         timer?.invalidate()

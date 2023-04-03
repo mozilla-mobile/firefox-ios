@@ -158,7 +158,8 @@ class EnhancedTrackingProtectionDetailsVC: UIViewController, Themeable {
 
     // MARK: - Actions
 
-    @objc func closeButtonTapped() {
+    @objc
+    func closeButtonTapped() {
         self.dismiss(animated: true)
     }
 }

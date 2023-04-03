@@ -175,16 +175,19 @@ class TopTabsViewController: UIViewController, Themeable {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
 
-    @objc func tabsTrayTapped() {
+    @objc
+    func tabsTrayTapped() {
         self.topTabDisplayManager.refreshStore(evenIfHidden: true)
         delegate?.topTabsDidPressTabs()
     }
 
-    @objc func newTabTapped() {
+    @objc
+    func newTabTapped() {
         self.delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
     }
 
-    @objc func togglePrivateModeTapped() {
+    @objc
+    func togglePrivateModeTapped() {
         topTabDisplayManager.togglePrivateMode(isOn: !topTabDisplayManager.isPrivate,
                                                createTabOnEmptyPrivateMode: true,
                                                shouldSelectMostRecentTab: true)

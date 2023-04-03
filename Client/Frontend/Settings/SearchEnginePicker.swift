@@ -44,7 +44,8 @@ class SearchEnginePicker: ThemedTableViewController {
         tableView.cellForRow(at: indexPath)?.accessoryType = .none
     }
 
-    @objc func cancel() {
+    @objc
+    func cancel() {
         delegate?.searchEnginePicker(self, didSelectSearchEngine: nil)
     }
 }

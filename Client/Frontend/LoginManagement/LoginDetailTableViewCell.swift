@@ -234,7 +234,8 @@ extension LoginDetailTableViewCell: UITextFieldDelegate {
         delegate?.textFieldDidEndEditing(self)
     }
 
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    @objc
+    func textFieldDidChange(_ textField: UITextField) {
         delegate?.textFieldDidChange(self)
     }
 }

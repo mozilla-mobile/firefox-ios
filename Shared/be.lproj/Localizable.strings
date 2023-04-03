@@ -1453,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Пустая старонка";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "Уласная";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "Хатняя старонка Firefox";
 
@@ -1579,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, зразумела";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Калі сайт не працуе належным чынам, краніце значок шчыта ў адрасным радку і адключыце ўзмоцненую ахову ад сачэння на гэтай старонцы.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Увага!";
 
@@ -1590,6 +1596,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Змяншае колькасць мэтавай рэкламы і дапамагае спыніць асочванне вашага вэб-сёрфінгу рэкламадаўцамі.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Калі сайт не працуе належным чынам, краніце значок шчыта ў адрасным радку і адключыце ўзмоцненую ахову ад сачэння на гэтай старонцы.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Калі сайт не працуе належным чынам, краніце значок шчыта ў адрасным радку і адключыце ўзмоцненую ахову ад сачэння на гэтай старонцы.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Дазваляе некаторыя трэкеры для карэктнай працы вэб-сайтаў.";

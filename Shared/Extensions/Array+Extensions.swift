@@ -18,19 +18,15 @@ public extension Array where Element: Comparable {
 
 public extension Array {
     func find(_ f: (Iterator.Element) -> Bool) -> Iterator.Element? {
-        for x in self {
-            if f(x) {
-                return x
-            }
+        for x in self where f(x) {
+            return x
         }
         return nil
     }
 
     func contains(_ x: Element, f: (Element, Element) -> Bool) -> Bool {
-        for y in self {
-            if f(x, y) {
-                return true
-            }
+        for y in self where f(x, y) {
+            return true
         }
         return false
     }
@@ -72,10 +68,8 @@ public extension Sequence where Iterator.Element: Hashable {
 
 public extension Sequence {
     func every(_ f: (Self.Iterator.Element) -> Bool) -> Bool {
-        for x in self {
-            if !f(x) {
-                return false
-            }
+        for x in self where !f(x) {
+            return false
         }
         return true
     }

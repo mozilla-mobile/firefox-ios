@@ -149,7 +149,8 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         tableView.register(EmptyPlaceholderCell.self, forCellReuseIdentifier: EmptyPlaceholderCell.identifier)
     }
 
-    @objc func cancelAction() {
+    @objc
+    func cancelAction() {
         presenter?.cancelRequest()
     }
 }

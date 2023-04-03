@@ -187,7 +187,8 @@ extension FxAWebViewController: WKUIDelegate {
         return helpBrowser
     }
 
-    @objc func closeHelpBrowser() {
+    @objc
+    func closeHelpBrowser() {
         UIView.animate(
             withDuration: 0.2,
             animations: {

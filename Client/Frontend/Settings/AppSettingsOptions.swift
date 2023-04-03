@@ -99,7 +99,8 @@ class SyncNowSetting: WithAccountSetting {
         }
     }
 
-    @objc func stopRotateSyncIcon() {
+    @objc
+    func stopRotateSyncIcon() {
         DispatchQueue.main.async {
             self.imageView.layer.removeAllAnimations()
         }
@@ -203,7 +204,8 @@ class SyncNowSetting: WithAccountSetting {
 
     fileprivate let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")
 
-    @objc fileprivate func troubleshoot() {
+    @objc
+    fileprivate func troubleshoot() {
         let viewController = SettingsContentViewController()
         viewController.url = syncSUMOURL
         settings.navigationController?.pushViewController(viewController, animated: true)
@@ -306,7 +308,8 @@ class AccountStatusSetting: WithAccountSetting {
         NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
 
-    @objc func updateAccount(notification: Notification) {
+    @objc
+    func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
             self.settings.tableView.reloadData()
         }
@@ -762,6 +765,32 @@ class YourRightsSetting: Setting {
     }
 }
 
+// Opens the on-boarding screen again
+class ShowIntroductionSetting: Setting {
+    let profile: Profile
+
+    override var accessibilityIdentifier: String? { return "ShowTour" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        let attributes = [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
+        super.init(title: NSAttributedString(string: .AppSettingsShowTour,
+                                             attributes: attributes))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        navigationController?.dismiss(animated: true, completion: {
+            NotificationCenter.default.post(name: .PresentIntroView, object: self)
+
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .settingsMenuShowTour
+            )
+        })
+    }
+}
+
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .AppSettingsSendFeedback, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
@@ -1099,7 +1128,8 @@ class ChinaSyncServiceSetting: Setting {
         cell.selectionStyle = .none
     }
 
-    @objc func switchValueChanged(_ toggle: UISwitch) {
+    @objc
+    func switchValueChanged(_ toggle: UISwitch) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)

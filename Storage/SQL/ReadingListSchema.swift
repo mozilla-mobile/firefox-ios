@@ -82,10 +82,8 @@ open class ReadingListSchema: Schema {
     }
 
     func run(_ db: SQLiteDBConnection, queries: [String]) -> Bool {
-        for sql in queries {
-            if !run(db, sql: sql, args: nil) {
-                return false
-            }
+        for sql in queries where !run(db, sql: sql, args: nil) {
+            return false
         }
         return true
     }

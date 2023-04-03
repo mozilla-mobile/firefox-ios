@@ -209,7 +209,8 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     }
 
     @MainActor
-    @objc func handleNotifications(_ notification: Notification) {
+    @objc
+    func handleNotifications(_ notification: Notification) {
         Task {
             switch notification.name {
             case .ShowHomepage,

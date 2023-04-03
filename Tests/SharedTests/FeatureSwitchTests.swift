@@ -14,11 +14,9 @@ class FeatureSwitchTests: XCTestCase {
         let prefs = MockProfilePrefs()
         var membership = featureSwitch.isMember(prefs)
         var changed = 0
-        for _ in 0..<100 {
-            if featureSwitch.isMember(prefs) != membership {
-                membership = !membership
-                changed += 1
-            }
+        for _ in 0..<100 where featureSwitch.isMember(prefs) != membership {
+            membership = !membership
+            changed += 1
         }
 
         XCTAssertEqual(changed, 0, "Users should get and keep the feature over restarts")

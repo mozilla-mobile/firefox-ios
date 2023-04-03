@@ -311,7 +311,8 @@ class BoolSetting: Setting, FeatureFlaggable {
         }
     }
 
-    @objc func switchValueChanged(_ control: UISwitch) {
+    @objc
+    func switchValueChanged(_ control: UISwitch) {
         writeBool(control)
         settingDidChange?(control.isOn)
 
@@ -561,17 +562,20 @@ class StringSetting: Setting, UITextFieldDelegate {
         return value
     }
 
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    @objc
+    func textFieldDidChange(_ textField: UITextField) {
         let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
         textField.textColor = color
     }
 
-    @objc func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    @objc
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return isValid(textField.text)
     }
 
-    @objc func textFieldDidEndEditing(_ textField: UITextField) {
+    @objc
+    func textFieldDidEndEditing(_ textField: UITextField) {
         let text = textField.text
         if !isValid(text) {
             return
@@ -807,23 +811,27 @@ class SettingsTableViewController: ThemedTableViewController {
         return []
     }
 
-    @objc fileprivate func syncDidChangeState() {
+    @objc
+    fileprivate func syncDidChangeState() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
 
-    @objc fileprivate func refresh() {
+    @objc
+    fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         // self.profile.rustAccount.refreshProfile()
         // TODO [rustfxa] listen to notification and refresh profile
     }
 
-    @objc func firefoxAccountDidChange() {
+    @objc
+    func firefoxAccountDidChange() {
         self.tableView.reloadData()
     }
 
-    @objc func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         let location = gestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else { return }
 

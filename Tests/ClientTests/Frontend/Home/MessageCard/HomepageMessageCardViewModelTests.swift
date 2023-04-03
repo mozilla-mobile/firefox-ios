@@ -203,7 +203,7 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
         onMessageDismissedCalled += 1
     }
 
-    func onMalformedMessage(messageKey: String) {}
+    func onMalformedMessage(id: String, surface: MessageSurfaceId) {}
 
     func messageForId(_ id: String, surface: Client.MessageSurfaceId) -> Client.GleanPlumbMessage? {
         recordedSurface = surface

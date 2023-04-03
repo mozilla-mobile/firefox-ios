@@ -182,7 +182,8 @@ class ZoomPageBar: UIView {
         }
     }
 
-    @objc private func didPressZoomIn(_ sender: UIButton) {
+    @objc
+    private func didPressZoomIn(_ sender: UIButton) {
         tab.zoomIn()
         updateZoomLabel()
 
@@ -192,7 +193,8 @@ class ZoomPageBar: UIView {
         }
     }
 
-    @objc private func didPressZoomOut(_ sender: UIButton) {
+    @objc
+    private func didPressZoomOut(_ sender: UIButton) {
         tab.zoomOut()
         updateZoomLabel()
 
@@ -202,7 +204,8 @@ class ZoomPageBar: UIView {
         }
     }
 
-    @objc private func didPressReset(_ recognizer: UITapGestureRecognizer) {
+    @objc
+    private func didPressReset(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .ended {
             tab.resetZoom()
             updateZoomLabel()
@@ -210,7 +213,8 @@ class ZoomPageBar: UIView {
         }
     }
 
-    @objc private func didPressClose(_ sender: UIButton) {
+    @objc
+    private func didPressClose(_ sender: UIButton) {
         delegate?.zoomPageDidPressClose()
     }
 }

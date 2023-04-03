@@ -49,11 +49,12 @@ protocol TabManager: AnyObject {
     func makeToastFromRecentlyClosedUrls(_ recentlyClosedTabs: [Tab],
                                          isPrivate: Bool,
                                          previousTabUUID: String)
-    @discardableResult func addTab(_ request: URLRequest!,
-                                   configuration: WKWebViewConfiguration!,
-                                   afterTab: Tab?,
-                                   zombie: Bool,
-                                   isPrivate: Bool) -> Tab
+    @discardableResult
+    func addTab(_ request: URLRequest!,
+                configuration: WKWebViewConfiguration!,
+                afterTab: Tab?,
+                zombie: Bool,
+                isPrivate: Bool) -> Tab
     func backgroundRemoveAllTabs(isPrivate: Bool,
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
@@ -87,11 +88,13 @@ extension TabManager {
                           isPrivate: isPrivate)
     }
 
-    @discardableResult func addTab(_ request: URLRequest! = nil,
-                                   configuration: WKWebViewConfiguration! = nil,
-                                   afterTab: Tab? = nil,
-                                   zombie: Bool = false,
-                                   isPrivate: Bool = false) -> Tab {
+    @discardableResult
+    func addTab(_ request: URLRequest! = nil,
+                configuration: WKWebViewConfiguration! = nil,
+                afterTab: Tab? = nil,
+                zombie: Bool = false,
+                isPrivate: Bool = false
+    ) -> Tab {
         addTab(request,
                configuration: configuration,
                afterTab: afterTab,

@@ -25,7 +25,8 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         super.init(rootViewController: rootViewController)
     }
 
-    @objc func done() {
+    @objc
+    func done() {
         if let delegate = presentingModalViewControllerDelegate {
             delegate.dismissPresentedModalViewController(self, animated: true)
         } else {

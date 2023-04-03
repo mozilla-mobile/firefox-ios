@@ -176,19 +176,15 @@ open class BrowserSchema: Schema {
 
     // TODO: transaction.
     func run(_ db: SQLiteDBConnection, queries: [(String, Args?)]) -> Bool {
-        for (sql, args) in queries {
-            if !run(db, sql: sql, args: args) {
+        for (sql, args) in queries where !run(db, sql: sql, args: args) {
                 return false
-            }
         }
         return true
     }
 
     func run(_ db: SQLiteDBConnection, queries: [String]) -> Bool {
-        for sql in queries {
-            if !run(db, sql: sql) {
-                return false
-            }
+        for sql in queries where !run(db, sql: sql) {
+            return false
         }
         return true
     }

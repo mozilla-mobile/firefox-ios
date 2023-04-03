@@ -35,7 +35,8 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForegroundNotification), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 
-    @objc private func UIPasteboardChanged() {
+    @objc
+    private func UIPasteboardChanged() {
         // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
         NotificationCenter.default.removeObserver(self, name: UIPasteboard.changedNotification, object: nil)
 
@@ -53,7 +54,8 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         }
     }
 
-    @objc private func appWillEnterForegroundNotification() {
+    @objc
+    private func appWillEnterForegroundNotification() {
         sessionStarted = true
         checkIfShouldDisplayBar()
     }

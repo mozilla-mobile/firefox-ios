@@ -115,11 +115,13 @@ class MockTabManager: TabManager {
                                          isPrivate: Bool,
                                          previousTabUUID: String) {}
 
-    @discardableResult func addTab(_ request: URLRequest!,
-                                   configuration: WKWebViewConfiguration!,
-                                   afterTab: Tab?,
-                                   zombie: Bool,
-                                   isPrivate: Bool) -> Tab {
+    @discardableResult
+    func addTab(_ request: URLRequest!,
+                configuration: WKWebViewConfiguration!,
+                afterTab: Tab?,
+                zombie: Bool,
+                isPrivate: Bool
+    ) -> Tab {
         return Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
     }
 

@@ -9,7 +9,8 @@ import Shared
 
 protocol WebServerProtocol {
     var server: GCDWebServer { get }
-    @discardableResult func start() throws -> Bool
+    @discardableResult
+    func start() throws -> Bool
 }
 
 class WebServer: WebServerProtocol {
@@ -39,7 +40,8 @@ class WebServer: WebServerProtocol {
         self.logger = logger
     }
 
-    @discardableResult func start() throws -> Bool {
+    @discardableResult
+    func start() throws -> Bool {
         if !server.isRunning {
             try server.start(options: [
                 GCDWebServerOption_Port: AppInfo.webserverPort,
