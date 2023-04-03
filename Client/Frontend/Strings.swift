@@ -1463,16 +1463,11 @@ extension String {
         }
 
         public struct CloseTabsToast {
-            public static let TitleSingular = MZLocalizedString(
+            public static let Title = MZLocalizedString(
                 "CloseTabsToast.Title.Singular.v113",
                 tableName: "TabsTray",
-                value: "%d Tab Closed",
-                comment: "When the user closes tabs in the tab tray, a popup will appear. This is the title for the popup. If only one tab was closed, this is the title that will be used (in singular). The placeholder is the number of tabs; in this case, it would be '1'")
-            public static let TitlePlural = MZLocalizedString(
-                "CloseTabsToast.Title.Plural.v113",
-                tableName: "TabsTray",
-                value: "%d Tabs Closed",
-                comment: "When the user closes tabs in the tab tray, a popup will appear. This is the title for the popup. If multiple tabs were closed, this is the title that will be used (in plural form). The placeholder is the number of tabs; in this case, it would be '2' or more.")
+                value: "Tabs Closed: %d",
+                comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs")
             public static let Action = MZLocalizedString(
                 "CloseTabsToast.Button.v113",
                 tableName: "TabsTray",
