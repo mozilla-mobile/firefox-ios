@@ -1316,40 +1316,70 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
-                GleanMetrics.Messaging.shown.record(
-                    GleanMetrics.Messaging.ShownExtra(messageKey: messageId)
+            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            GleanMetrics.Messaging.shown.record(
+                GleanMetrics.Messaging.ShownExtra(
+                    messageKey: messageId,
+                    messageSurface: messageSurface
                 )
-            }
+            )
         case(.action, .tap, .messaging, .messageDismissed, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
-                GleanMetrics.Messaging.dismissed.record(
-                    GleanMetrics.Messaging.DismissedExtra(messageKey: messageId)
+            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            GleanMetrics.Messaging.dismissed.record(
+                GleanMetrics.Messaging.DismissedExtra(
+                    messageKey: messageId,
+                    messageSurface: messageSurface
                 )
-            }
+            )
         case(.action, .tap, .messaging, .messageInteracted, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String,
-                let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
+            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            if let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
                 GleanMetrics.Messaging.clicked.record(
-                    GleanMetrics.Messaging.ClickedExtra(actionUuid: actionUUID, messageKey: messageId)
+                    GleanMetrics.Messaging.ClickedExtra(
+                        actionUuid: actionUUID,
+                        messageKey: messageId,
+                        messageSurface: messageSurface
+                    )
                 )
-            } else if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
+            } else {
                 GleanMetrics.Messaging.clicked.record(
-                    GleanMetrics.Messaging.ClickedExtra(messageKey: messageId)
+                    GleanMetrics.Messaging.ClickedExtra(
+                        messageKey: messageId,
+                        messageSurface: messageSurface
+                    )
                 )
             }
         case(.information, .view, .messaging, .messageExpired, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
-                GleanMetrics.Messaging.expired.record(
-                    GleanMetrics.Messaging.ExpiredExtra(messageKey: messageId)
+            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            GleanMetrics.Messaging.expired.record(
+                GleanMetrics.Messaging.ExpiredExtra(
+                    messageKey: messageId,
+                    messageSurface: messageSurface
                 )
-            }
+            )
         case(.information, .application, .messaging, .messageMalformed, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
-                GleanMetrics.Messaging.malformed.record(
-                    GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
+            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            GleanMetrics.Messaging.malformed.record(
+                GleanMetrics.Messaging.MalformedExtra(
+                    messageKey: messageId,
+                    messageSurface: messageSurface
                 )
-            }
+            )
         // MARK: - Share sheet actions
         case (.action, .tap, .shareSheet, .shareSendToDevice, _):
             GleanMetrics.ShareSheet.sendDeviceTapped.record()
