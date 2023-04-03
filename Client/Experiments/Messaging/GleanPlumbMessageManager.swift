@@ -179,7 +179,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                                      extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageKey])
     }
 
-
     /// Finds a message for a specified id on a specified surface.
     /// - Parameters:
     ///   - id: the id of the message.

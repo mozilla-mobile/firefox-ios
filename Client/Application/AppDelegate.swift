@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var themeManager: ThemeManager = DefaultThemeManager()
     lazy var ratingPromptManager = RatingPromptManager(profile: profile)
     lazy var appSessionManager: AppSessionProvider = AppSessionManager()
+    lazy var notificationSurfaceManager = NotificationSurfaceManager()
 
     private var shutdownWebServer: DispatchSourceTimer?
     private var webServerUtil: WebServerUtil?
@@ -92,6 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appLaunchUtil?.setUpPostLaunchDependencies()
         backgroundWorkUtil = BackgroundFetchAndProcessingUtil()
         backgroundWorkUtil?.registerUtil(BackgroundSyncUtil(profile: profile, application: application))
+        backgroundWorkUtil?.registerUtil(BackgroundNotificationSurfaceUtil())
 
         let topSitesProvider = TopSitesProviderImplementation(
             placesFetcher: profile.places,
