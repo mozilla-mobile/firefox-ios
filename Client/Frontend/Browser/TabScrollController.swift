@@ -111,7 +111,8 @@ class TabScrollingController: NSObject, FeatureFlaggable {
         super.init()
     }
 
-    @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
+    @objc
+    func handlePan(_ gesture: UIPanGestureRecognizer) {
         guard gesture.state != .ended, gesture.state != .cancelled else {
             lastContentOffset = 0
             return
