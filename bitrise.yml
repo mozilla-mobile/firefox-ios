@@ -193,7 +193,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: stage_1.configure_build_fennec_xcuitest
+        - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -244,7 +244,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: stage_1.configure_build_fennec_xcuitest
+        - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -295,7 +295,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: stage_1.configure_build_fennec_xcuitest
+        - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
