@@ -34,8 +34,17 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Сінхранізаваць";
 
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Даведайцеся аб карысных функцыях і як атрымаць максімум ад %@.";
+
+/* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
+"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "Парады і асаблівасці";
+
 /* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
 "Settings.Notifications.Title.v112" = "Апавяшчэнні";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Перайдзіце ў налады прылады, каб уключыць апавяшчэнні ў %@";
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Уключыць апавяшчэнні";

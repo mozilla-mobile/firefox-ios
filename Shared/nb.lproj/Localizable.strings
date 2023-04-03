@@ -911,7 +911,7 @@
 "Onboarding.LaterAction.v102" = "Ikke nå";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
-"Onboarding.Sync.Description.v106" = "Hent faner og passord fra de andre enhetene dine for å fortsette der du slapp.";
+"Onboarding.Sync.Description.v106" = "Hent faner og passord fra de andre enhetene dine for å fortsette der du sluttet.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for 106 version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v106" = "Hopp over";
@@ -1820,7 +1820,7 @@
 "Upgrade.SyncSign.Action.v106" = "Logg inn";
 
 /* Description string used to to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
-"Upgrade.SyncSign.Description.v106" = "Fortsett der du slapp med faner fra andre enheter nå på startsiden din.";
+"Upgrade.SyncSign.Description.v106" = "Fortsett der du sluttet med faner fra andre enheter nå på startsiden din.";
 
 /* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.SyncSign.Title.v106" = "Det er enklere enn noen gang å bytte skjerm";

@@ -908,7 +908,7 @@
 "Onboarding.IntroDescriptionPart2.v102" = "Kendimizi herkes için daha iyi bir internet inşa etmeye adadık.";
 
 /* Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page. */
-"Onboarding.LaterAction.v102" = "Daha sonra";
+"Onboarding.LaterAction.v102" = "Şimdi değil";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for 106 version in our Onboarding screens. */
 "Onboarding.Sync.Description.v106" = "Diğer cihazlarınızdaki sekmeleri ve parolaları alın, kaldığınız yerden devam edin.";
@@ -1772,7 +1772,7 @@
 "TimeConstants.Yesterday.v106" = "dün";
 
 /* label for Not Now button */
-"Toasts.NotNow" = "Daha sonra";
+"Toasts.NotNow" = "Şimdi değil";
 
 /* Open App Store button */
 "Toasts.OpenAppStore" = "App Store’u aç";
