@@ -3176,6 +3176,9 @@ messaging:
       message_key:
         description: The Id of the message
         type: string
+      message_surface:
+        description: The surface of the message
+        type: string
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/10395
     data_reviews:
@@ -3193,6 +3196,9 @@ messaging:
       message_key:
         description: The Id of the message
         type: string
+      message_surface:
+        description: The surface of the message
+        type: string
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/10395
     data_reviews:
@@ -3209,6 +3215,9 @@ messaging:
     extra_keys:
       message_key:
         description: The Id of the message
+        type: string
+      message_surface:
+        description: The surface of the message
         type: string
       action_uuid:
         description: The UUID of the action
@@ -3230,6 +3239,9 @@ messaging:
       message_key:
         description: The Id of the message
         type: string
+      message_surface:
+        description: The surface of the message
+        type: string
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/10395
     data_reviews:
@@ -3246,6 +3258,9 @@ messaging:
     extra_keys:
       message_key:
         description: The Id of the message
+        type: string
+      message_surface:
+        description: The surface of the message
         type: string
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/10395

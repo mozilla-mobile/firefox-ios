@@ -203,7 +203,18 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
         onMessageDismissedCalled += 1
     }
 
+<<<<<<< HEAD
     func onMalformedMessage(messageKey: String) {}
+=======
+    func onMalformedMessage(id: String, surface: MessageSurfaceId) {}
+
+    func messageForId(_ id: String, surface: Client.MessageSurfaceId) -> Client.GleanPlumbMessage? {
+        recordedSurface = surface
+        if message?.data.surface == recordedSurface, message?.id == id { return message }
+
+        return nil
+    }
+>>>>>>> 051e51ee3 (Refactor FXIOS-6119 [v112] Update messaging telemetry (#13840))
 }
 
 // MARK: SpyHomepageMessageCardCell
