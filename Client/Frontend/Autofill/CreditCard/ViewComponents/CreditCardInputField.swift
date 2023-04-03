@@ -107,7 +107,7 @@ struct CreditCardInputField: View {
                 handleTextInputWith(oldValue, and: newValue)
             }
             .onReceive(Just(text)) { newValue in
-                sanatizeInputOn(newValue)
+                sanitizeInputOn(newValue)
             }
     }
 
@@ -153,17 +153,19 @@ struct CreditCardInputField: View {
             inputViewModel.expirationDate = newValue.removingOccurrences(of: " / ")
 
             guard let formattedText = separate(inputType: inputType,
-                                               for: newValue.removingOccurrences(of: " / ")) else { return }
+                                               for: newValue.removingOccurrences(of: " / "))
+            else { return }
+
             text = formattedText
         }
     }
 
-    private func sanatizeInputOn(_ newValue: String) {
+    private func sanitizeInputOn(_ newValue: String) {
         switch inputType {
         case .number:
-            let sanatized = newValue.filter { "0123456789".contains($0) }
-            if sanatized != newValue {
-                text = sanatized
+            let sanitized = newValue.filter { "0123456789".contains($0) }
+            if sanitized != newValue {
+                text = sanitized
             }
 
         default: break
