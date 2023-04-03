@@ -162,8 +162,11 @@ workflows:
             set -euxo pipefail
             echo "$BITRISE_ARTIFACT_PATHS"
 
+            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            echo "$derived_data"
+
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "$derived_data"
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: UI Smoketest2
@@ -200,8 +203,11 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
+            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            echo "$derived_data"
+
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "$derived_data"
             echo "show dir"
             ls
     - script@1.1:
@@ -248,8 +254,11 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
+            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            echo "$derived_data"
+
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "$derived_data"
             echo "show dir"
             ls
     - script@1.1:
@@ -296,8 +305,11 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
+            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            echo "$derived_data"
+
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "$derived_data"
             echo "show dir"
             ls
     - xcode-test-without-building@0:
