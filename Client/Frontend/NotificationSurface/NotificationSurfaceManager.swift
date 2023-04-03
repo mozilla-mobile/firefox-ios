@@ -67,7 +67,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
 
     func didTapNotification(_ userInfo: [AnyHashable: Any]) {
         guard let messageId = userInfo[Constant.messageIdKey] as? String,
-              let message = messagingManager.messageForId(messageId, surface: notificationSurfaceID)
+              let message = messagingManager.messageForId(messageId)
         else { return }
 
         switch message.action {
