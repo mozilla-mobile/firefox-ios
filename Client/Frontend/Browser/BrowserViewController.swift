@@ -220,6 +220,8 @@ class BrowserViewController: UIViewController {
         applyTheme()
     }
 
+    /// If user manually opens the keyboard and presses undo, the app switches to the last
+    /// open tab, and because of that we need to leave overlay state
     @objc
     func didTapUndoCloseAllTabToast(notification: Notification) {
         overlayManager.switchTab(shouldCancelLoading: true)
