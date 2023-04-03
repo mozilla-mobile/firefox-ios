@@ -505,6 +505,11 @@ class BrowserViewController: UIViewController {
             selector: #selector(openTabNotification),
             name: .OpenTabNotification,
             object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(presentIntroFrom),
+            name: .PresentIntroView,
+            object: nil)
     }
 
     func addSubviews() {
@@ -2254,8 +2259,13 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController {
-    func presentIntroViewController(_ alwaysShow: Bool = false) {
-        if alwaysShow || shouldShowIntroScreen {
+    @objc
+    func presentIntroFrom(notification: Notification) {
+        presentIntroViewController(force: true)
+    }
+
+    func presentIntroViewController(force: Bool = false) {
+        if force || shouldShowIntroScreen {
             showProperIntroVC()
         }
     }
