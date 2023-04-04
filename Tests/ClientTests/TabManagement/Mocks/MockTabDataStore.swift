@@ -14,6 +14,6 @@ class MockTabDataStore: TabDataStore {
     }
 
     func saveTabData(window: WindowData) async {}
-    
+
     func clearAllTabData() async {}
 }
