@@ -76,6 +76,15 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         }
     }
 
+    func hasSyncableAccount() async -> Bool {
+        return await withCheckedContinuation { continuation in
+            profile.hasSyncAccount { hasSync in
+                self.hasSyncableAccount = hasSync
+                continuation.resume(returning: hasSync)
+            }
+        }
+    }
+
     func positionForCard(cardType: IntroViewModel.InformationCards) -> Int? {
         return enabledCards.firstIndex(of: cardType)
     }

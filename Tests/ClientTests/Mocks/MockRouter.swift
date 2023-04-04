@@ -9,8 +9,10 @@ class MockRouter: NSObject, Router {
     var navigationController: NavigationController
     var rootViewController: UIViewController?
 
+    var presentedViewController: UIViewController?
     var presentCalled = 0
     var dismissCalled = 0
+    var pushedViewController: UIViewController?
     var pushCalled = 0
     var popViewControllerCalled = 0
     var setRootViewControllerCalled = 0
@@ -22,6 +24,7 @@ class MockRouter: NSObject, Router {
     }
 
     func present(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
+        presentedViewController = viewController
         presentCalled += 1
     }
 
@@ -30,6 +33,7 @@ class MockRouter: NSObject, Router {
     }
 
     func push(_ viewController: UIViewController, animated: Bool, completion: (() -> Void)?) {
+        pushedViewController = viewController
         pushCalled += 1
     }
 
@@ -37,7 +41,8 @@ class MockRouter: NSObject, Router {
         popViewControllerCalled += 1
     }
 
-    func setRootViewController(_ viewController: UIViewController, hideBar: Bool) {
+    func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool) {
+        rootViewController = viewController
         setRootViewControllerCalled += 1
     }
 
