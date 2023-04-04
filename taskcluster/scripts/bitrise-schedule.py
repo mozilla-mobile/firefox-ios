@@ -103,7 +103,10 @@ async def async_main(token, branch, commit, workflow, artifacts_directory, local
 async def schedule_build(client, branch, commit, workflow, locales, derived_data_path=None):
     url = BITRISE_URL_TEMPLATE.format(suffix="builds")
 
-    moz_locales_value = " ".join(locales)
+    if locales:
+        moz_locales_value = " ".join(locales)
+    else:
+        moz_locales_value = "en-US"
 
     environment_variables = [{
         "mapped_to": environment_variable_name,
