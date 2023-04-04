@@ -86,7 +86,7 @@ extension PhotonActionSheetProtocol {
         let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle, iconString: ImageIdentifiers.copyLink) { _ in
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, image: "menu-Copy-Link", bottomContainer: webViewContainer)
+                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage, image: .named("menu-Copy-Link"), bottomContainer: webViewContainer)
             }
         }.items
 

@@ -221,15 +221,15 @@ extension BrowserViewController: ToolBarActionMenuDelegate {
             }
             show(toast: toast)
         case .addToReadingList:
-            SimpleToast().showAlertWithText(message, image: "reader-action-bar", bottomContainer: webViewContainer)
+            SimpleToast().showAlertWithText(message, image: .named("reader-action-bar"), bottomContainer: webViewContainer)
         case .removeFromReadingList:
-            SimpleToast().showAlertWithText(message, image: "libraryReading", bottomContainer: webViewContainer)
+            SimpleToast().showAlertWithText(message, image: .named("libraryReading"), bottomContainer: webViewContainer)
         case .pinPage:
-            SimpleToast().showAlertWithText(message, image: "action_unpin", bottomContainer: webViewContainer)
+            SimpleToast().showAlertWithText(message, image: .named("action_unpin"), bottomContainer: webViewContainer)
         case .removePinPage:
-            SimpleToast().showAlertWithText(message, image: "action_pin", bottomContainer: webViewContainer)
+            SimpleToast().showAlertWithText(message, image: .named("action_pin"), bottomContainer: webViewContainer)
         case .copyUrl:
-            SimpleToast().showAlertWithText(message, image: ImageIdentifiers.copyLink, bottomContainer: webViewContainer)
+            SimpleToast().showAlertWithText(message, image: .named(ImageIdentifiers.copyLink), bottomContainer: webViewContainer)
         case .share, .bookmarkPage:
             break
         }

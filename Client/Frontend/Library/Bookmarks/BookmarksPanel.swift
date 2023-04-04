@@ -531,7 +531,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                                                tapHandler: { _ in
             self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
-                    SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage, image: "action_pin",
+                    SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage, image: .named("action_pin"),
                                                     bottomContainer: self.view)
                 }
             }
@@ -591,7 +591,20 @@ extension BookmarksPanel {
     }
 
     func exportBookmarksActionHandler(_ action: UIAlertAction) {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.color = UIColor.theme.ecosia.primaryBrand
+        activityIndicator.startAnimating()
+        
+        let toast = SimpleToast().showAlertWithText(
+            "Exporting Bookmarks…",
+            image: .view(activityIndicator),
+            bottomContainer: view,
+            dismissAfter: nil,
+            bottomInset: view.layoutMargins.bottom
+        )
+
         Task {
+            
             let serializer = BookmarkSerializer()
             
             let items = try await viewModel.getBookmarksForExport()
@@ -602,7 +615,9 @@ extension BookmarksPanel {
             try htmlExport.data(using: .utf8)?.write(to: exportedBooksmarksUrl)
 
             let activityViewController = UIActivityViewController(activityItems: [exportedBooksmarksUrl], applicationActivities: nil)
-            present(activityViewController, animated: true)
+            present(activityViewController, animated: true) {
+                toast.dismiss()
+            }
         }
     }
 

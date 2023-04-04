@@ -19,8 +19,24 @@ struct SimpleToastUX {
     static let BottomToolbarHeight = CGFloat(45)
 }
 
-struct SimpleToast {
-    func showAlertWithText(_ text: String, image: String, bottomContainer: UIView) {
+class SimpleToast {
+    enum AccessoryImage {
+        case named(String), view(UIView)
+    }
+    
+    private var toastView: UIView?
+    private var dismissAfter: DispatchTimeInterval?
+
+    var onShown: (() -> Void)?
+    
+    @discardableResult
+    func showAlertWithText(
+        _ text: String,
+        image: AccessoryImage,
+        bottomContainer: UIView,
+        dismissAfter timeout: DispatchTimeInterval? = SimpleToastUX.ToastDismissAfter,
+        bottomInset: CGFloat? = nil
+    ) -> SimpleToast {
         let toast = self.createView(text: text, image: image)
         toast.layer.cornerRadius = 10
         toast.layer.masksToBounds = true
@@ -30,12 +46,15 @@ struct SimpleToast {
             make.left.equalTo(bottomContainer).offset(SimpleToastUX.Margin)
             make.right.equalTo(bottomContainer).offset(-SimpleToastUX.Margin)
             make.height.equalTo(SimpleToastUX.ToastHeight)
-            make.bottom.equalTo(bottomContainer).offset(-SimpleToastUX.Offset)
+            make.bottom.equalTo(bottomContainer).offset(-((bottomInset ?? 0) + SimpleToastUX.Offset))
         }
+        toastView = toast
+        dismissAfter = timeout
         animate(toast)
+        return self
     }
 
-    fileprivate func createView(text: String, image: String) -> UIStackView {
+    fileprivate func createView(text: String, image: AccessoryImage) -> UIStackView {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .center
@@ -54,10 +73,17 @@ struct SimpleToast {
         toast.textAlignment = .left
         toast.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
-        let imageView = UIImageView(image: .init(named: image)?.withRenderingMode(.alwaysTemplate))
-        imageView.tintColor = UIColor.theme.ecosia.toastImageTint
-        imageView.contentMode = .scaleAspectFit
-        imageView.setContentHuggingPriority(.required, for: .horizontal)
+        let imageView: UIView
+        
+        switch image {
+        case let .named(name):
+            imageView = UIImageView(image: .init(named: name)?.withRenderingMode(.alwaysTemplate))
+            imageView.tintColor = UIColor.theme.ecosia.toastImageTint
+            imageView.contentMode = .scaleAspectFit
+            imageView.setContentHuggingPriority(.required, for: .horizontal)
+        case let .view(view):
+            imageView = view
+        }
 
         let leftSpace = UIView()
         leftSpace.widthAnchor.constraint(equalToConstant: 8).isActive = true
@@ -69,6 +95,12 @@ struct SimpleToast {
         stack.addArrangedSubview(rightSpace)
         return stack
     }
+    
+    func dismiss() {
+        DispatchQueue.main.async {
+            self.toastView.map(self.dismiss)
+        }
+    }
 
     fileprivate func dismiss(_ toast: UIView) {
         var frame = toast.frame
@@ -78,8 +110,9 @@ struct SimpleToast {
             animations: {
                 toast.frame = frame
             },
-            completion: { finished in
+            completion: { [weak self] finished in
                 toast.removeFromSuperview()
+                self?.toastView = nil
             }
         )
     }
@@ -97,11 +130,12 @@ struct SimpleToast {
             animations: {
                 toast.frame = end
             },
-            completion: { finished in
-                let dispatchTime = DispatchTime.now() + SimpleToastUX.ToastDismissAfter
+            completion: { [weak self] finished in
+            guard let dismissAfter = self?.dismissAfter else { return }
+                let dispatchTime = DispatchTime.now() + dismissAfter
 
                 DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                    self.dismiss(toast)
+                    self?.dismiss(toast)
                 })
             }
         )
