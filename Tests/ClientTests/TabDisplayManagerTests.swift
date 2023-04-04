@@ -17,6 +17,7 @@ class TabDisplayManagerTests: XCTestCase {
     var collectionView: MockCollectionView!
     var profile: TabManagerMockProfile!
     var manager: TabManager!
+    var cfrDelegate: MockInactiveTabsCFRDelegate!
 
     override func setUp() {
         super.setUp()
@@ -26,6 +27,7 @@ class TabDisplayManagerTests: XCTestCase {
         profile = TabManagerMockProfile(databasePrefix: "TabDisplayManagerTests") // not using the default prefix to avoid side effects with other tests
         manager = LegacyTabManager(profile: profile, imageStore: nil)
         collectionView = MockCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        cfrDelegate = MockInactiveTabsCFRDelegate()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         UserDefaults().setValue(true, forKey: PrefsKeys.KeyInactiveTabsFirstTimeRun)
     }
@@ -39,6 +41,7 @@ class TabDisplayManagerTests: XCTestCase {
         profile = nil
         manager = nil
         collectionView = nil
+        cfrDelegate = nil
 
         dataStore.removeAll()
         mockDataStore.removeAll()
@@ -298,6 +301,62 @@ class TabDisplayManagerTests: XCTestCase {
         }
         waitForExpectations(timeout: 5)
     }
+
+    func testInactiveTabs_grid_closeTabs() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+        tabDisplayManager.inactiveViewModel = InactiveTabViewModel()
+
+        // Add four tabs (2 inactive, 2 active)
+        let inactiveTab1 = manager.addTab()
+        inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
+        let inactiveTab2 = manager.addTab()
+        inactiveTab2.lastExecutedTime = Date().older.toTimestamp()
+        let activeTab1 = manager.addTab()
+        _ = manager.addTab()
+        manager.selectTab(activeTab1)
+
+        tabDisplayManager.inactiveViewModel?.inactiveTabs = [inactiveTab1,
+                                                             inactiveTab2]
+
+        cfrDelegate.confirmClose = true
+        tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
+
+        let expectation = self.expectation(description: "TabDisplayManagerTests")
+        tabDisplayManager.refreshStore {
+            XCTAssertTrue(tabDisplayManager.inactiveViewModel?.inactiveTabs.isEmpty ?? false, "Inactive tabs should be empty after closing")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testInactiveTabs_grid_undoCloseTabs() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+        tabDisplayManager.inactiveViewModel = InactiveTabViewModel()
+
+        // Add four tabs (2 inactive, 2 active)
+        let inactiveTab1 = manager.addTab()
+        inactiveTab1.lastExecutedTime = Date().older.toTimestamp()
+        let inactiveTab2 = manager.addTab()
+        inactiveTab2.lastExecutedTime = Date().older.toTimestamp()
+        let activeTab1 = manager.addTab()
+        _ = manager.addTab()
+        manager.selectTab(activeTab1)
+
+        tabDisplayManager.inactiveViewModel?.inactiveTabs = [inactiveTab1,
+                                                             inactiveTab2]
+
+        cfrDelegate.confirmClose = false
+        tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
+
+        let expectation = self.expectation(description: "TabDisplayManagerTests")
+        tabDisplayManager.refreshStore {
+            XCTAssertEqual(tabDisplayManager.inactiveViewModel?.inactiveTabs.count, 2, "Expected 2 inactive tabs after undo")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
 }
 
 // Helper methods
@@ -318,6 +377,7 @@ extension TabDisplayManagerTests {
                                                   reuseID: TopTabCell.cellIdentifier,
                                                   tabDisplayType: .TopTabTray,
                                                   profile: profile,
+                                                  cfrDelegate: cfrDelegate,
                                                   theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
@@ -381,5 +441,16 @@ class MockCollectionView: UICollectionView {
     override func deleteItems(at indexPaths: [IndexPath]) {
         guard indexPaths[0].row <= numberOfItems(inSection: 0) - 1 else { return }
         super.deleteItems(at: indexPaths)
+    }
+}
+
+class MockInactiveTabsCFRDelegate: InactiveTabsCFRProtocol {
+    var confirmClose: Bool = true
+
+    func setupCFR(with view: UILabel) { }
+    func presentCFR() { }
+
+    func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
+        completion(confirmClose)
     }
 }

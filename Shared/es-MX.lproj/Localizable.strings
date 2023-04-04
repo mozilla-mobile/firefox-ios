@@ -1582,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "OK, entendí";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Si un sitio no funciona como se espera, presiona el candado en la barra de direcciones y desactiva la protección de rastreo mejorada para esa página.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "¡Aviso!";
 

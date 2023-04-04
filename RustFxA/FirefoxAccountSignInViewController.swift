@@ -254,7 +254,8 @@ class FirefoxAccountSignInViewController: UIViewController {
     // MARK: Button Tap Functions
 
     /// Scan QR code button tapped
-    @objc func scanbuttonTapped(_ sender: UIButton) {
+    @objc
+    func scanbuttonTapped(_ sender: UIButton) {
         let qrCodeVC = QRCodeViewController()
         qrCodeVC.qrCodeDelegate = self
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: telemetryObject, extras: ["flow_type": "pairing"])
@@ -262,7 +263,8 @@ class FirefoxAccountSignInViewController: UIViewController {
     }
 
     /// Use email login button tapped
-    @objc func emailLoginTapped(_ sender: UIButton) {
+    @objc
+    func emailLoginTapped(_ sender: UIButton) {
         let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
             isOnboarding: telemetryObject == .onboarding)
 

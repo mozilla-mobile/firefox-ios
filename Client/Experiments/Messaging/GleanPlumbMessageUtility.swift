@@ -15,11 +15,6 @@ class GleanPlumbMessageUtility {
         self.logger = logger
     }
 
-    // MARK: - Properties
-
-    /// Holds evaluations of JEXLS seen so far.
-    var jexlMap: [String: Bool] = [:]
-
     // MARK: - Public helpers
 
     func createGleanPlumbHelper() -> GleanPlumbMessageHelper? {
@@ -38,7 +33,9 @@ class GleanPlumbMessageUtility {
     }
 
     /// We check whether this message is triggered by evaluating message JEXLs.
-    func isMessageEligible(_ message: GleanPlumbMessage, messageHelper: GleanPlumbMessageHelper) throws -> Bool {
+    func isMessageEligible(_ message: GleanPlumbMessage,
+                           messageHelper: GleanPlumbMessageHelper,
+                           jexlCache: inout [String: Bool]) throws -> Bool {
         // Some unit test are failing in Bitrise during the jexlEvaluation process we will bypass the check for unit test while we find a solution to mock properly
         // `GleanPlumbMessageUtility` that right now is highly tied to `Experiments.shared`
         guard !AppConstants.isRunningTest else { return true }
@@ -47,13 +44,13 @@ class GleanPlumbMessageUtility {
             guard accumulator else { return false }
             var isTriggered: Bool
 
-            // Check the jexlMap for the `Bool`, in the case we already evaluated it.
-            if jexlMap[trigger] != nil, let jexlEvaluation = jexlMap[trigger] {
+            // Check the jexlCache for the `Bool`, in the case we already evaluated it.
+            if let jexlEvaluation = jexlCache[trigger] {
                 isTriggered = jexlEvaluation
             } else {
                 // Otherwise, perform this expensive Foreign Function Interface operation once for the trigger.
                 isTriggered = try messageHelper.evalJexl(expression: trigger)
-                jexlMap[trigger] = isTriggered
+                jexlCache[trigger] = isTriggered
             }
 
             return isTriggered

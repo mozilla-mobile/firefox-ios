@@ -320,7 +320,8 @@ class BookmarksPanel: SiteTableViewController,
 
     // MARK: - Long press
 
-    @objc private func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard longPressGestureRecognizer.state == .began,
               let indexPath = tableView.indexPathForRow(at: touchPoint) else {
@@ -330,7 +331,8 @@ class BookmarksPanel: SiteTableViewController,
         presentContextMenu(for: indexPath)
     }
 
-    @objc private func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         navigationController?.popToRootViewController(animated: true)

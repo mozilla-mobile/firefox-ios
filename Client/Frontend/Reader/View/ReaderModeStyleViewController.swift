@@ -252,7 +252,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         }
     }
 
-    @objc func changeFontType(_ button: ReaderModeFontTypeButton) {
+    @objc
+    func changeFontType(_ button: ReaderModeFontTypeButton) {
         selectFontType(button.fontType)
         delegate?.readerModeStyleViewController(self,
                                                 didConfigureStyle: viewModel.readerModeStyle,
@@ -270,7 +271,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         fontSizeLabel.fontType = fontType
     }
 
-    @objc func changeFontSize(_ button: ReaderModeFontSizeButton) {
+    @objc
+    func changeFontSize(_ button: ReaderModeFontSizeButton) {
         switch button.fontSizeAction {
         case .smaller:
             viewModel.readerModeStyle.fontSize = viewModel.readerModeStyle.fontSize.smaller()
@@ -301,7 +303,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         }
     }
 
-    @objc func changeTheme(_ button: ReaderModeThemeButton) {
+    @objc
+    func changeTheme(_ button: ReaderModeThemeButton) {
         selectTheme(button.readerModeTheme)
         isUsingUserDefinedColor = true
         delegate?.readerModeStyleViewController(self,
@@ -313,7 +316,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         viewModel.readerModeStyle.theme = theme
     }
 
-    @objc func changeBrightness(_ slider: UISlider) {
+    @objc
+    func changeBrightness(_ slider: UISlider) {
         UIScreen.main.brightness = CGFloat(slider.value)
     }
 }

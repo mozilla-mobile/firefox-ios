@@ -442,10 +442,8 @@ class SearchViewController: SiteTableViewController,
 
     func searchRemoteTabs(for searchString: String) {
         filteredRemoteClientTabs.removeAll()
-        for remoteClientTab in remoteClientTabs {
-            if remoteClientTab.tab.title.lowercased().contains(searchQuery) {
-                filteredRemoteClientTabs.append(remoteClientTab)
-            }
+        for remoteClientTab in remoteClientTabs where remoteClientTab.tab.title.lowercased().contains(searchQuery) {
+            filteredRemoteClientTabs.append(remoteClientTab)
         }
 
         let currentTabs = self.remoteClientTabs

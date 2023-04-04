@@ -3,14 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import Storage
 
 extension BrowserViewController {
     func updateZoomPageBarVisibility(visible: Bool) {
-        if visible, zoomPageBar == nil {
-            setupZoomPageBar()
-        } else if let zoomPageBar = zoomPageBar {
-            removeZoomPageBar(zoomPageBar)
-        }
+        toggleZoomPageBar(visible)
     }
 
     private func setupZoomPageBar() {
@@ -45,10 +42,25 @@ extension BrowserViewController {
         self.zoomPageBar = nil
         updateViewConstraints()
     }
+
+    private func toggleZoomPageBar(_ visible: Bool) {
+        if visible, zoomPageBar == nil {
+            setupZoomPageBar()
+        } else if visible, let zoomPageBar = zoomPageBar {
+            removeZoomPageBar(zoomPageBar)
+            setupZoomPageBar()
+        } else if let zoomPageBar = zoomPageBar {
+            removeZoomPageBar(zoomPageBar)
+        }
+    }
 }
 
 extension BrowserViewController: ZoomPageBarDelegate {
     func zoomPageDidPressClose() {
         updateZoomPageBarVisibility(visible: false)
+        guard let tab = tabManager.selectedTab else { return }
+        guard let host = tab.url?.host else { return }
+        let domainZoomLevel = DomainZoomLevel(host: host, zoomLevel: tab.pageZoom)
+        ZoomLevelStore.shared.save(domainZoomLevel)
     }
 }

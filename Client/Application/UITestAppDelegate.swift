@@ -124,7 +124,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         // Skip the intro when requested by for example tests or automation
         if launchArguments.contains(LaunchArguments.SkipIntro) {
-            profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+            IntroScreenManager(prefs: profile.prefs).didSeeIntroScreen()
         }
 
         if launchArguments.contains(LaunchArguments.StageServer) {

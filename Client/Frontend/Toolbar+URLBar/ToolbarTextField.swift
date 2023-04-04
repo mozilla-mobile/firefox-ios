@@ -67,6 +67,7 @@ extension ToolbarTextField: NotificationThemeable {
         textColor = UIColor.legacyTheme.textField.textAndTint
         clearButtonTintColor = textColor
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
+        self.refreshAutocompleteLabelTheme()
     }
 
     // ToolbarTextField is created on-demand, so the textSelectionColor is a static prop for use when created
@@ -88,7 +89,8 @@ extension ToolbarTextField {
         return commands
     }
 
-    @objc private func handleKeyboardArrowKey(sender: UIKeyCommand) {
+    @objc
+    private func handleKeyboardArrowKey(sender: UIKeyCommand) {
         self.selectedTextRange = nil
     }
 }

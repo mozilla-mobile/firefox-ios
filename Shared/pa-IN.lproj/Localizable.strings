@@ -1219,6 +1219,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (ਕਿਊਰੀ ਨੂੰ %s ਨਾਲ ਬਦਲੋ)";
 
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v112" = "ਕਰੈਡਿਟ ਕਾਰਡ ਜਾਣਕਾਰੀ ਆਪੇ ਭਰੋ";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "ਸਾਰੇ ਵੈੱਬਸਾਈਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
 
@@ -1450,6 +1453,9 @@
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "ਖਾਲੀ ਸਫ਼ਾ";
 
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.Custom" = "ਕਸਟਮ";
+
 /* Option in settings to show Firefox Home when you open a new tab */
 "Settings.NewTab.Option.FirefoxHome" = "ਫਾਇਰਫਾਕਸ ਮੁੱਖ-ਸਫ਼ਾ";
 
@@ -1576,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "ਠੀਕ ਹੈ, ਸਮਝ ਗਏ";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "ਜੇ ਕੋਈ ਸਾਈਟ ਉਮੀਦ ਮੁਤਾਬਕ ਕੰਮ ਨਹੀਂ ਕਰਦੀ ਹੈ ਤਾਂ ਸਿਰਨਾਵਾਂ ਪੱਟੀ ਵਿੱਚ ਢਾਲ ਨੂੰ ਛੂਹੋ ਅਤੇ ਉਸ ਸਫ਼਼ੇ ਲਈ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਬੰਦ ਕਰੋ।";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "ਧਿਆਨ ਰੱਖੋ!";
 
@@ -1587,6 +1596,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "ਟੀਚਾ ਬਣਾਏ ਇਸ਼ਤਿਹਾਰਾਂ ਨੂੰ ਘਟਾਉਂਦੀ ਹੈ ਅਤੇ ਇਸ਼ਤਿਹਾਰਦਾਤਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਿੰਗ ਨੂੰ ਟਰੈਕ ਕਰਨ ਤੋਂ ਰੋਕਣ ਵਿੱਚ ਮਦਦ ਕਰਦੀ ਹੈ।";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "ਜੇ ਕੋਈ ਸਾਈਟ ਉਮੀਦ ਮੁਤਾਬਕ ਕੰਮ ਨਹੀਂ ਕਰਦੀ ਹੈ ਤਾਂ ਸਿਰਨਾਵਾਂ ਪੱਟੀ ਵਿੱਚ ਢਾਲ ਨੂੰ ਛੂਹੋ ਅਤੇ ਉਸ ਸਫ਼਼ੇ ਲਈ ਵਧਾਈ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਬੰਦ ਕਰੋ।";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "ਜੇ ਕੋਈ ਸਾਈਟ ਉਮੀਦ ਮੁਤਾਬਕ ਕੰਮ ਨਹੀਂ ਕਰਦੀ ਹੈ ਤਾਂ ਸਿਰਨਾਵਾਂ ਪੱਟੀ ਵਿੱਚ ਢਾਲ ਨੂੰ ਛੂਹੋ ਅਤੇ ਉਸ ਸਫ਼਼ੇ ਲਈ ਵਾਧਾ ਕੀਤੀ ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨੂੰ ਬੰਦ ਕਰੋ।";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "ਕੁਝ ਇਸ਼ਤਿਹਾਰ ਟਰੈਕ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਦਿੰਦੀ ਹੈ, ਤਾਂ ਜੋ ਵੈੱਬਸਾਈਟਾਂ ਠੀਕ ਢੰਗ ਨਾਲ ਕੰਮ ਕਰ ਸਕਣ।";
@@ -1602,6 +1617,9 @@
 
 /* Tracking protection settings option for using the basic blocklist. */
 "Settings.TrackingProtectionOption.BasicBlockList" = "ਮਿਆਰੀ (ਮੂਲ)";
+
+/* Tracking protection settings status showing the current option selected. */
+"Settings.TrackingProtectionOption.BasicBlockList.Status" = "ਮਿਆਰੀ";
 
 /* Tracking protection settings option for using the strict blocklist. */
 "Settings.TrackingProtectionOption.BlockListStrict" = "ਸਖ਼ਤ";

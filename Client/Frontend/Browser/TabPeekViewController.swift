@@ -8,8 +8,9 @@ import Storage
 import WebKit
 
 protocol TabPeekDelegate: AnyObject {
+    @discardableResult
+    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabPeekDidAddBookmark(_ tab: Tab)
-    @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController)
     func tabPeekDidCloseTab(_ tab: Tab)
     func tabPeekDidCopyUrl()

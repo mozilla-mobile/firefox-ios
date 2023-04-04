@@ -120,8 +120,8 @@ extension SurveySurfaceManagerTests {
     func createSubject(file: StaticString = #file,
                        line: UInt = #line
     ) -> SurveySurfaceManager {
-        let subject = SurveySurfaceManager(with: homepanelDelegate,
-                                           and: messageManager)
+        let subject = SurveySurfaceManager(and: messageManager)
+        subject.homepanelDelegate = homepanelDelegate
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }

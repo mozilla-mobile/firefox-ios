@@ -5,5 +5,12 @@
 import Foundation
 
 class BrowserCoordinator: BaseCoordinator {
-    func start() {}
+    var launchCoordinator: LaunchCoordinator?
+
+    func start(launchManager: LaunchManager) {
+        if !launchManager.canLaunchFromSceneCoordinator, let launchType = launchManager.getLaunchType() {
+            launchCoordinator = LaunchCoordinator(router: router)
+            launchCoordinator?.start(with: launchType)
+        }
+    }
 }

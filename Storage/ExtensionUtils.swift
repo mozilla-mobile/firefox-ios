@@ -81,7 +81,8 @@ public struct ExtensionUtils {
         }
 
         // See if the text is URL-like enough to be an url, in particular, check if it has a valid TLD.
-        @Sendable func textToUrl(_ text: String) -> URL? {
+        @Sendable
+        func textToUrl(_ text: String) -> URL? {
             guard text.contains(".") else { return nil }
             var text = text
             if !text.hasPrefix("http") {

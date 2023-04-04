@@ -169,7 +169,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         return InterstitialViews(view: view, activityView: spinner, label: error)
     }
 
-    @objc func didTimeOut() {
+    @objc
+    func didTimeOut() {
         self.timer = nil
         self.isError = true
     }

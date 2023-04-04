@@ -30,7 +30,7 @@ class TabEventHandlerTests: XCTestCase {
 //        let manager = TabManager(profile: profile, imageStore: nil)
 //
 //        // Hide intro so it is easier to see the test running and debug it
-//        profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+//        IntroScreenManager(prefs: profile.prefs).didSeeIntroScreen()
 //
 //        let webServer = GCDWebServer()
 //        webServer.addHandler(forMethod: "GET", path: "/blankpopup", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in

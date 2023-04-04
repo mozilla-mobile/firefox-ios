@@ -22,7 +22,8 @@ class TabContentBlocker {
         return false
     }
 
-    @objc func notifiedTabSetupRequired() {}
+    @objc
+    func notifiedTabSetupRequired() {}
 
     func currentlyEnabledLists() -> [BlocklistFileName] {
         return []

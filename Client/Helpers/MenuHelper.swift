@@ -4,14 +4,22 @@
 
 import Foundation
 
-@objc public protocol MenuHelperInterface {
-    @objc optional func menuHelperCopy()
-    @objc optional func menuHelperOpenAndFill()
-    @objc optional func menuHelperReveal()
-    @objc optional func menuHelperSecure()
-    @objc optional func menuHelperFindInPage()
-    @objc optional func menuHelperSearchWithFirefox()
-    @objc optional func menuHelperPasteAndGo()
+@objc
+public protocol MenuHelperInterface {
+    @objc
+    optional func menuHelperCopy()
+    @objc
+    optional func menuHelperOpenAndFill()
+    @objc
+    optional func menuHelperReveal()
+    @objc
+    optional func menuHelperSecure()
+    @objc
+    optional func menuHelperFindInPage()
+    @objc
+    optional func menuHelperSearchWithFirefox()
+    @objc
+    optional func menuHelperPasteAndGo()
 }
 
 open class MenuHelper: NSObject {

@@ -262,13 +262,12 @@ extension ContentBlocker {
             }
 
             let blocklists = BlocklistFileName.allCases.map { $0.filename }
-            for listOnDisk in blocklists {
-                // If any file from the list on disk is not installed, remove all the rules and re-install them
-                if !available.contains(where: { $0 == listOnDisk}) {
-                    noMatchingIdentifierFoundForRule = true
-                    break
-                }
+            // If any file from the list on disk is not installed, remove all the rules and re-install them
+            for listOnDisk in blocklists where !available.contains(where: { $0 == listOnDisk}) {
+                noMatchingIdentifierFoundForRule = true
+                break
             }
+
             if !noMatchingIdentifierFoundForRule {
                 completion()
                 return

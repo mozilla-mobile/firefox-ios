@@ -259,7 +259,8 @@ class DevicePickerViewController: UITableViewController {
         }
     }
 
-    @objc func refresh() {
+    @objc
+    func refresh() {
         RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
         if let refreshControl = refreshControl {
             refreshControl.beginRefreshing()
@@ -268,11 +269,13 @@ class DevicePickerViewController: UITableViewController {
         }
     }
 
-    @objc func cancel() {
+    @objc
+    func cancel() {
         pickerDelegate?.devicePickerViewControllerDidCancel(self)
     }
 
-    @objc func send() {
+    @objc
+    func send() {
         var pickedItems = [RemoteDevice]()
         for id in selectedIdentifiers {
             if let item = devices.find({ $0.id == id }) {

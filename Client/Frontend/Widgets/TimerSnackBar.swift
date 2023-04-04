@@ -46,7 +46,8 @@ class TimerSnackBar: SnackBar {
         super.show()
     }
 
-    @objc func timerDone() {
+    @objc
+    func timerDone() {
         self.timer = nil
     }
 

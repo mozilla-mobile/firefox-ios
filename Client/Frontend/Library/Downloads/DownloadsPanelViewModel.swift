@@ -35,10 +35,8 @@ class DownloadsPanelViewModel {
     }
 
     func isFirstSection(_ section: Int) -> Bool {
-        for index in 0..<section {
-            if hasDownloadedItem(for: index) {
-                return false
-            }
+        for index in 0..<section where hasDownloadedItem(for: index) {
+            return false
         }
         return true
     }

@@ -326,7 +326,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
 
 // MARK: - Selectors
 extension SearchSettingsTableViewController {
-    @objc func didToggleEngine(_ toggle: UISwitch) {
+    @objc
+    func didToggleEngine(_ toggle: UISwitch) {
         let engine = model.orderedEngines[toggle.tag] // The tag is 1-based.
         if toggle.isOn {
             model.enableEngine(engine)
@@ -335,7 +336,8 @@ extension SearchSettingsTableViewController {
         }
     }
 
-    @objc func didToggleSearchSuggestions(_ toggle: UISwitch) {
+    @objc
+    func didToggleSearchSuggestions(_ toggle: UISwitch) {
         // Setting the value in settings dismisses any opt-in.
         model.shouldShowSearchSuggestions = toggle.isOn
     }
@@ -344,16 +346,19 @@ extension SearchSettingsTableViewController {
         _ = navigationController?.popViewController(animated: true)
     }
 
-    @objc func dismissAnimated() {
+    @objc
+    func dismissAnimated() {
         notificationCenter.post(name: .SearchSettingsChanged)
         dismiss(animated: true, completion: nil)
     }
 
-    @objc func beginEditing() {
+    @objc
+    func beginEditing() {
         setEditing(true, animated: false)
     }
 
-    @objc func finishEditing() {
+    @objc
+    func finishEditing() {
         setEditing(false, animated: false)
     }
 }

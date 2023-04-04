@@ -24,7 +24,7 @@ class ZoomPageBar: UIView {
         static let stepperShadowOpacity: Float = 1
         static let stepperShadowOffset = CGSize(width: 0, height: 4)
         static let separatorWidth: CGFloat = 1
-        static let separatorHeightMultiplier = 0.75
+        static let separatorHeightMultiplier = 0.74
         static let fontSize: CGFloat = 16
         static let lowerZoomLimit: CGFloat = 0.5
         static let upperZoomLimit: CGFloat = 2.0
@@ -71,8 +71,9 @@ class ZoomPageBar: UIView {
     }
 
     private let zoomLevel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .callout,
-                                                                       size: UX.fontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
+                                                                   size: UX.fontSize,
+                                                                   weight: .semibold)
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
@@ -89,6 +90,7 @@ class ZoomPageBar: UIView {
         self.tab = tab
 
         super.init(frame: .zero)
+        self.tab.urlHostDelegate = self
 
         setupViews()
         setupLayout()
@@ -169,7 +171,7 @@ class ZoomPageBar: UIView {
             zoomOutButton.isEnabled = false
         } else if tab.pageZoom >= UX.upperZoomLimit {
             zoomInButton.isEnabled = false
-        }
+        } else { enableZoomButtons() }
     }
 
     private func updateStepperConstraintsBasedOnSizeClass() {
@@ -182,7 +184,8 @@ class ZoomPageBar: UIView {
         }
     }
 
-    @objc private func didPressZoomIn(_ sender: UIButton) {
+    @objc
+    private func didPressZoomIn(_ sender: UIButton) {
         tab.zoomIn()
         updateZoomLabel()
 
@@ -192,7 +195,8 @@ class ZoomPageBar: UIView {
         }
     }
 
-    @objc private func didPressZoomOut(_ sender: UIButton) {
+    @objc
+    private func didPressZoomOut(_ sender: UIButton) {
         tab.zoomOut()
         updateZoomLabel()
 
@@ -202,7 +206,8 @@ class ZoomPageBar: UIView {
         }
     }
 
-    @objc private func didPressReset(_ recognizer: UITapGestureRecognizer) {
+    @objc
+    private func didPressReset(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .ended {
             tab.resetZoom()
             updateZoomLabel()
@@ -210,8 +215,16 @@ class ZoomPageBar: UIView {
         }
     }
 
-    @objc private func didPressClose(_ sender: UIButton) {
+    @objc
+    private func didPressClose(_ sender: UIButton) {
         delegate?.zoomPageDidPressClose()
+    }
+}
+
+extension ZoomPageBar: URLHostDelegate {
+    func hostDidSet() {
+        updateZoomLabel()
+        checkPageZoomLimits()
     }
 }
 

@@ -105,7 +105,8 @@ class WallpaperSettingsHeaderView: UICollectionReusableView, ReusableCell {
         applyTheme(theme: viewModel.theme)
     }
 
-    @objc func buttonTapped(_ sender: Any) {
+    @objc
+    func buttonTapped(_ sender: Any) {
         viewModel?.buttonAction?()
     }
 }
