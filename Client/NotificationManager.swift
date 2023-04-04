@@ -187,10 +187,6 @@ class NotificationManager: NotificationManagerProtocol {
         center.removePendingNotificationRequests(withIdentifiers: ids)
     }
 
-    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
-        center.setNotificationCategories(categories)
-    }
-
     // MARK: - Private
 
     // Helper method that takes trigger based on date or time interval

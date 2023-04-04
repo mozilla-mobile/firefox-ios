@@ -22,23 +22,26 @@ enum SentTabAction: String {
     static let TabSendTitleKey = "TabSendTitle"
     static let TabSendCategory = "TabSendCategory"
 
-    static func registerActions() {
-        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: .SentTabViewActionTitle, options: .foreground)
+    static var notificationCategory: UNNotificationCategory {
+        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue,
+                                              title: .SentTabViewActionTitle,
+                                              options: .foreground)
 
         // Register ourselves to handle the notification category set by NotificationService for APNS notifications
-        let sentTabCategory = UNNotificationCategory(
+        return UNNotificationCategory(
             identifier: "org.mozilla.ios.SentTab.placeholder",
             actions: [viewAction],
             intentIdentifiers: [],
             options: UNNotificationCategoryOptions(rawValue: 0))
-        UNUserNotificationCenter.current().setNotificationCategories([sentTabCategory])
     }
 }
 
 extension AppDelegate {
     func pushNotificationSetup() {
-       UNUserNotificationCenter.current().delegate = self
-       SentTabAction.registerActions()
+        UNUserNotificationCenter.current().delegate = self
+        let categories: Set<UNNotificationCategory> = [SentTabAction.notificationCategory,
+                                                       NotificationSurfaceManager.notificationCategory]
+        UNUserNotificationCenter.current().setNotificationCategories(categories)
 
         NotificationCenter.default.addObserver(forName: .RegisterForPushNotifications, object: nil, queue: .main) { _ in
             UNUserNotificationCenter.current().getNotificationSettings { settings in

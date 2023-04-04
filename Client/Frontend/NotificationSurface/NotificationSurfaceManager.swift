@@ -32,6 +32,14 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
         return message != nil
     }
 
+    static var notificationCategory: UNNotificationCategory {
+        return UNNotificationCategory(
+            identifier: Constant.notificationCategoryId,
+            actions: [],
+            intentIdentifiers: [],
+            options: .customDismissAction)
+    }
+
     // MARK: - Initialization
     init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
          notificationManager: NotificationManagerProtocol = NotificationManager(),
@@ -89,14 +97,6 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
 
     // MARK: - Private
     private func scheduleNotification(message: GleanPlumbMessage, notificationId: String) {
-        let notificationCategory = UNNotificationCategory(
-            identifier: Constant.notificationCategoryId,
-            actions: [],
-            intentIdentifiers: [],
-            options: .customDismissAction)
-
-        UNUserNotificationCenter.current().setNotificationCategories([notificationCategory])
-
         let userInfo = [Constant.messageIdKey: message.id]
         notificationManager.schedule(title: message.data.title ?? "",
                                      body: message.data.text,
