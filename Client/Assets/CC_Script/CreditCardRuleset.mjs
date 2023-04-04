@@ -308,7 +308,7 @@ function autocompleteStringMatches(element, ccString) {
 }
 
 function getFillableFormElements(element) {
-  //TODO(HACK): Update this
+  //TODO(HACK): FXIOS-6124
   // const formLike = lazy.FormLikeFactory.createFromField(element);
   const formLike = { elements: [element] };
   return Array.from(formLike.elements).filter((el) =>

@@ -4,7 +4,7 @@ import { LabelUtils } from "resource://gre/modules/LabelUtils.mjs";
 import { FieldScanner } from "resource://gre/modules/FieldScanner.mjs";
 import { creditCardRulesets } from "resource://gre/modules/CreditCardRuleset.mjs";
 
-// TODO(HACK): Update this
+// TODO(HACK): FXIOS-6124
 // const creditCardRulesets = {
 //   types: ["cc-number", "cc-name"],
 // };
@@ -13,11 +13,11 @@ import { creditCardRulesets } from "resource://gre/modules/CreditCardRuleset.mjs
  * Returns the autocomplete information of fields according to heuristics.
  */
 export const FormAutofillHeuristicsShared = {
-  // TODO(HACK): Update this
+  // TODO(HACK): FXIOS-6124
   RULES: {
     "cc-name":
       /(accountholdername|titulaire)|(cc-?name|card-?name|cardholder-?name|cardholder|(^nom$))|(card.?(?:holder|owner)|name.*(\b)?on(\b)?.*card|(?:card|cc).?name|cc.?full.?name|karteninhaber|nombre.*tarjeta|nom.*carte|nome.*cart|名前|имя.*карты|信用卡开户名|开户名|持卡人姓名|持卡人姓名)/u,
-    // TODO(HACK): This was updated to not use lookahead or lookbehind
+    // TODO(HACK): FXIOS-6124 This was updated to not use lookahead or lookbehind
     // ( because of lack of support in webkit ), Revisit this
     "cc-number":
       /(cc|kk)nr|(cc-?number|cc-?num|card-?number|card-?num|number|cc|cc-?no|card-?no|credit-?card|numero-?carte|carte|carte-?credit|num-?carte|cb-?num)|((add)?(card|cc|acct)[\s#]*)(number|no|num|field)|((telefon|haus|person|fødsels)?nummer[^\s]*|nummer[^\s]*|カード番号|номер.*карты|信用卡号(?:码|卡號)?|카드|(numero|número|numéro))(?:(?:document|fono|phone|réservation)\b|$)/u,
@@ -30,7 +30,7 @@ export const FormAutofillHeuristicsShared = {
     "cc-type":
       /(type|kartenmarke)|((^cc-?type$)|(^card-?type$)|(^card-?brand$)|(^cc-?brand$)|(^cb-?type$))/u,
   },
-  // TODO(HACK): Update this
+  // TODO(HACK): FXIOS-6124 Update this
   CREDIT_CARD_FIELDNAMES: [
     "cc-name",
     "cc-number",
@@ -550,7 +550,7 @@ export const FormAutofillHeuristicsShared = {
     let fieldNames = [];
     let isAutoCompleteOff =
       element.autocomplete == "off" || element.form?.autocomplete == "off";
-    //TODO(HACK): Update this
+    // TODO(HACK): FXIOS-6124
     // if (
     //   FormAutofill.isAutofillCreditCardsAvailable &&
     //   (!isAutoCompleteOff || FormAutofill.creditCardsAutocompleteOff)
@@ -559,7 +559,7 @@ export const FormAutofillHeuristicsShared = {
     // }
     fieldNames.push(...this.CREDIT_CARD_FIELDNAMES);
 
-    //TODO(HACK): Update this
+    // TODO(HACK): FXIOS-6124
     // if (
     //     FormAutofill.isAutofillAddressesAvailable &&
     //     (!isAutoCompleteOff || FormAutofill.addressesAutocompleteOff)
@@ -611,7 +611,7 @@ export const FormAutofillHeuristicsShared = {
       return info;
     }
 
-    // TODO(HACK): Update this
+    // TODO(HACK): FXIOS-6124
     // if (!this._prefEnabled) {
     //   return null;
     // }

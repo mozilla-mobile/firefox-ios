@@ -1,14 +1,14 @@
 import { FormAutofillHeuristicsShared } from "resource://gre/modules/FormAutofillHeuristics.shared.mjs";
 import { FormAutofillUtilsShared } from "resource://gre/modules/FormAutofillUtils.shared.mjs";
 import { creditCardRulesets } from "resource://gre/modules/CreditCardRuleset.mjs";
-// TODO(HACK): Update this
+// TODO(HACK): FXIOS-6124
 const lazy = { log: { debug: () => {} } };
-// // TODO(HACK): Update this
+// TODO(HACK): FXIOS-6124 Update this
 // const creditCardRulesets = {
 //   types: ["cc-number", "cc-name"],
 // };
 
-// TODO(HACK): Update this
+// TODO(HACK): FXIOS-6124
 const fathomTmpValues = {
   ccFathomConfidenceThreshold: 0.5,
   ccFathomTestConfidence: 0.5,
@@ -475,7 +475,7 @@ export class FieldScanner {
     }
 
     let highestField = null;
-    //TODO(HACK): Update this
+    // TODO(HACK): FXIOS-6124
     let highestConfidence = fathomTmpValues.ccFathomConfidenceThreshold; // Start with a threshold of 0.5
     for (let [key, value] of Object.entries(elementConfidences)) {
       if (!fields.includes(key)) {
@@ -494,12 +494,11 @@ export class FieldScanner {
     }
 
     // // Used by test ONLY! This ensure testcases always get the same confidence
-    // //TODO(HACK): Update this
+    // TODO(HACK): FXIOS-6124
     // if (fathomTmpValues.ccFathomTestConfidence > 0) {
     //   //TODO(HACK): Update this
     //   highestConfidence = fathomTmpValues.ccFathomTestConfidence;
     // }
-
     return [highestField, highestConfidence];
   }
 
@@ -508,7 +507,7 @@ export class FieldScanner {
    * @returns {object} Fathom confidence keyed by field-type.
    */
   static getFormAutofillConfidences(elements) {
-    //TODO(HACK): Update this
+    // TODO(HACK): FXIOS-6124
     if (
       fathomTmpValues.ccHeuristicsMode ==
       FormAutofillUtilsShared.CC_FATHOM_NATIVE

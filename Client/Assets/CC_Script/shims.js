@@ -18,7 +18,7 @@ HTMLFormElement.prototype.addEventListener = function () {
 };
 
 HTMLElement.prototype.getAutocompleteInfo = function () {
-  // TODO: Hack for PoC only
+  // TODO(HACK): FXIOS-6124 Hack for PoC only
   // Need to find a better way to get the autocomplete field name
   // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
   const validAutocompleteFields = [

@@ -11,7 +11,7 @@ const messageTypes = {
   CAPTURE_CREDIT_CARD_FORM: "capture-credit-card-form",
 };
 
-// TODO: Extract this to its own module
+// TODO(HACK): FXIOS-6124 Extract this to its own module
 const sendMessage = (type) => (payload) =>
   window.webkit.messageHandlers.creditCardMessageHandler?.postMessage({
     type,
