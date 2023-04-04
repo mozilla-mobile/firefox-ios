@@ -7,13 +7,12 @@ import SwiftUI
 import Shared
 
 struct CreditCardSettingsEmptyView: View {
-    struct Colors {
-        let titleTextColor: Color
-        let subTextColor: Color
-        let toggleTextColor: Color
-    }
+    // Theming
+    @Environment(\.themeType) var themeVal
+    @State var titleTextColor: Color = .clear
+    @State var subTextColor: Color = .clear
+    @State var toggleTextColor: Color = .clear
 
-    let colors: Colors
     @ObservedObject var toggleModel: ToggleModel
 
     var body: some View {
@@ -24,7 +23,7 @@ struct CreditCardSettingsEmptyView: View {
                 ScrollView {
                     VStack {
                         CreditCardAutofillToggle(
-                            textColor: colors.toggleTextColor,
+                            textColor: toggleTextColor,
                             model: toggleModel)
                         .background(Color.white)
                         .padding(.top, 25)
@@ -39,13 +38,13 @@ struct CreditCardSettingsEmptyView: View {
                         Text(String(format: .CreditCard.Settings.EmptyListTitle,
                                     AppName.shortName.rawValue))
                             .preferredBodyFont(size: 22)
-                            .foregroundColor(colors.titleTextColor)
+                            .foregroundColor(titleTextColor)
                             .multilineTextAlignment(.center)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
                         Text(String.CreditCard.Settings.EmptyListDescription)
                             .preferredBodyFont(size: 16)
-                            .foregroundColor(colors.subTextColor)
+                            .foregroundColor(subTextColor)
                             .multilineTextAlignment(.center)
                             .padding(.leading, 10)
                             .padding(.trailing, 10)
@@ -56,16 +55,25 @@ struct CreditCardSettingsEmptyView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
+        }.onAppear {
+            applyTheme(theme: themeVal.theme)
         }
+        .onChange(of: themeVal) { newThemeValue in
+            applyTheme(theme: newThemeValue.theme)
+        }
+    }
+
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        titleTextColor = Color(color.textPrimary)
+        subTextColor = Color(color.textSecondary)
+        toggleTextColor = Color(color.textPrimary)
     }
 }
 
 struct CreditCardSettingsEmptyView_Previews: PreviewProvider {
     static var previews: some View {
         let toggleModel = ToggleModel(isEnabled: true)
-        let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: .gray,
-                                                        subTextColor: .gray,
-                                                        toggleTextColor: .gray)
-        CreditCardSettingsEmptyView(colors: colors, toggleModel: toggleModel)
+        CreditCardSettingsEmptyView(toggleModel: toggleModel)
     }
 }
