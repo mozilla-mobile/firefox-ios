@@ -102,6 +102,18 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         }
     }
 
+    func tapKeyboardKey(_ key: Int) {
+        //let key = self.keyboards.buttons[key]
+        let key = app.keyboards.keys.element(boundBy: key)
+        if app.buttons["Continue"].exists == true {
+            // Attempt to find and tap the Continue button
+            // of the keyboard onboarding screen.
+            app.buttons.staticTexts["Continue"].tap()
+            app.tables["Add Credential"].cells.element(boundBy: 1).tap()
+        }
+        key.tap()
+    }
+
     func testLoginDetails() {
         waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         app.buttons["urlBar-cancel"].tap()
@@ -120,9 +132,12 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.otherElements.buttons.element(boundBy: 2).tap()
 
         let passcodeInput = springboard.secureTextFields.firstMatch
-        waitForExistence(passcodeInput, timeout: 20)
+        UIPasteboard.general.string = "foo"
+        waitForExistence(passcodeInput, timeout: 30)
         passcodeInput.tap()
-        sleep(1)
+        passcodeInput.press(forDuration: 2)
+        springboard.menuItems.firstMatch.tap()
+
         passcodeInput.typeText("foo\n")
 
         waitForExistence(app.tables["Login List"], timeout: 10)
@@ -130,16 +145,18 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.tables["Add Credential"], timeout: 10)
         snapshot("CreateLogin")
         app.tables["Add Credential"].cells.element(boundBy: 0).tap()
-        sleep(1)
-        app.keyboards.keys.element(boundBy: 3).tap()
-        app.tables["Add Credential"].cells.element(boundBy: 1).tap()
-        sleep(1)
-        app.keyboards.keys.element(boundBy: 3).tap()
-        app.tables["Add Credential"].cells.element(boundBy: 2).tap()
-        sleep(1)
-        app.keyboards.keys.element(boundBy: 3).tap()
-        app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).tap()
+        waitForExistence(app.keyboards.keys.element(boundBy: 13), timeout: 5)
+        app.keyboards.keys.element(boundBy: 13).tap()
+        waitForExistence(app.tables["Add Credential"].cells.element(boundBy: 1), timeout: 15)
 
+        app.tables["Add Credential"].cells.element(boundBy: 1).tap()
+        tapKeyboardKey(13)
+        waitForExistence(app.tables["Add Credential"].cells.element(boundBy: 2), timeout: 5)
+        app.tables["Add Credential"].cells.element(boundBy: 2).tap()
+        waitForExistence(app.keyboards.keys.element(boundBy: 13), timeout: 5)
+        app.keyboards.keys.element(boundBy: 13).tap()
+        waitForExistence(app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1), timeout: 5)
+        app.navigationBars["Client.AddCredentialView"].buttons.element(boundBy: 1).tap()
         waitForExistence(app.tables["Login List"], timeout: 15)
         snapshot("CreatedLoginView")
 
