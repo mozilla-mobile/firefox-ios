@@ -8,71 +8,75 @@ import Common
 @testable import Client
 
 final class SceneCoordinatorTests: XCTestCase {
-    var profile: MockProfile!
-    var launchManager: MockLaunchManager!
+    private var mockRouter: MockRouter!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
-        launchManager = MockLaunchManager()
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
+        self.mockRouter = MockRouter(navigationController: MockNavigationController())
     }
 
     override func tearDown() {
         super.tearDown()
+        mockRouter = nil
         AppContainer.shared.reset()
-        profile = nil
-        launchManager = nil
     }
 
     func testInitialState() {
         let scene = UIApplication.shared.windows.first?.windowScene
-        let subject = SceneCoordinator(scene: scene!)
+        let launchScreenManager = MockLaunchScreenManager(profile: MockProfile())
+        let subject = SceneCoordinator(scene: scene!, launchScreenManager: launchScreenManager)
+        trackForMemoryLeaks(subject)
+
         XCTAssertNotNil(subject.window)
-        XCTAssertNil(subject.browserCoordinator)
-        XCTAssertNil(subject.launchCoordinator)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+        XCTAssertEqual(launchScreenManager.setOpenURLDelegateCalled, 1)
     }
 
-    func testStartBrowserCoordinator_withoutCanLaunchfromScene() {
-        let scene = UIApplication.shared.windows.first?.windowScene
-        let subject = SceneCoordinator(scene: scene!)
-
-        launchManager.canLaunchFromSceneCoordinator = false
-        launchManager.mockLaunchType = nil
-        subject.start(with: launchManager)
+    func testStart_startsLaunchScreen() {
+        let launchScreenManager = MockLaunchScreenManager(profile: MockProfile())
+        let subject = createSubject(launchScreenManager: launchScreenManager)
+        subject.start()
 
         XCTAssertNotNil(subject.window)
-        XCTAssertNotNil(subject.browserCoordinator)
-        XCTAssertNil(subject.launchCoordinator)
+        XCTAssertNotNil(mockRouter.rootViewController as? LaunchScreenViewController)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
     }
 
-    func testStartBrowserCoordinator_withoutLaunchType() {
-        let scene = UIApplication.shared.windows.first?.windowScene
-        let subject = SceneCoordinator(scene: scene!)
+    func testLaunchTypeLoaded_noLaunchType_launchBrowser() {
+        let launchScreenManager = MockLaunchScreenManager(profile: MockProfile())
+        launchScreenManager.mockLaunchType = nil
+        let subject = createSubject(launchScreenManager: launchScreenManager)
+        subject.launchTypeLoaded()
 
-        launchManager.canLaunchFromSceneCoordinator = true
-        launchManager.mockLaunchType = nil
-        subject.start(with: launchManager)
-
-        XCTAssertNotNil(subject.window)
-        XCTAssertNotNil(subject.browserCoordinator)
-        XCTAssertNil(subject.launchCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
-    func testStartLaunchCoordinator() {
-        let scene = UIApplication.shared.windows.first?.windowScene
-        let subject = SceneCoordinator(scene: scene!)
+    func testLaunchTypeLoaded_withLaunchType_launchCoordinator() {
+        let launchScreenManager = MockLaunchScreenManager(profile: MockProfile())
+        launchScreenManager.mockLaunchType = .intro
+        let subject = createSubject(launchScreenManager: launchScreenManager)
+        subject.launchTypeLoaded()
 
-        launchManager.canLaunchFromSceneCoordinator = true
-        launchManager.mockLaunchType = .intro
-        subject.start(with: launchManager)
-
-        XCTAssertNotNil(subject.window)
-        XCTAssertNil(subject.browserCoordinator)
-        XCTAssertNotNil(subject.launchCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)
     }
 
     func testEnsureCoordinatorIsntEnabled() {
         XCTAssertFalse(AppConstants.useCoordinators)
+    }
+
+    // MARK: - Helpers
+    func createSubject(launchScreenManager: MockLaunchScreenManager,
+                       file: StaticString = #file,
+                       line: UInt = #line) -> SceneCoordinator {
+        let scene = UIApplication.shared.windows.first?.windowScene
+        let subject = SceneCoordinator(scene: scene!, launchScreenManager: launchScreenManager)
+        // Replace created router from scene with a mock router so we don't trigger real navigation in our tests
+        subject.router = mockRouter
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }
