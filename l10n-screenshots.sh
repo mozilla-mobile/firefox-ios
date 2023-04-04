@@ -47,7 +47,6 @@ for lang in $LOCALES; do
         --erase_simulator --localize_simulator \
         --devices "iPhone 14" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
-        --headless "false" \
         $EXTRA_FAST_LANE_ARGS
     echo "Fastlane exited with code: $?"
 done
