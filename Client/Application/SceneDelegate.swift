@@ -41,7 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard !AppConstants.isRunningUnitTest else { return }
 
         if AppConstants.useCoordinators {
-            sceneCoordinator = SceneCoordinator(scene: scene, sceneSetupHelper: SceneSetupHelper())
+            sceneCoordinator = SceneCoordinator(scene: scene)
             let launchManager = DefaultLaunchManager(profile: profile, openURLDelegate: sceneCoordinator)
             sceneCoordinator?.start(with: launchManager)
 

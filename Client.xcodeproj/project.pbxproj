@@ -548,6 +548,9 @@
 		8A7A26E829D4C0FE00EA76F1 /* IntroScreenManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A26E629D4C0D800EA76F1 /* IntroScreenManagerTests.swift */; };
 		8A7A26EA29D4C3C800EA76F1 /* LaunchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A26E929D4C3C800EA76F1 /* LaunchType.swift */; };
 		8A7A93EE2810ADF2005E7E1B /* ContileProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A93ED2810ADF2005E7E1B /* ContileProviderTests.swift */; };
+		8A832A9029DC96C50025D5DD /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A832A8F29DC96C50025D5DD /* LaunchScreenView.swift */; };
+		8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A832A9129DC99790025D5DD /* LaunchScreenViewModel.swift */; };
+		8A832A9429DC99BA0025D5DD /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A832A9329DC99BA0025D5DD /* LaunchScreenViewController.swift */; };
 		8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */; };
 		8A8629E72880B7330096DDB1 /* BookmarksPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E52880B69C0096DDB1 /* BookmarksPanelTests.swift */; };
 		8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */; };
@@ -3819,6 +3822,9 @@
 		8A7A26E629D4C0D800EA76F1 /* IntroScreenManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenManagerTests.swift; sourceTree = "<group>"; };
 		8A7A26E929D4C3C800EA76F1 /* LaunchType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchType.swift; sourceTree = "<group>"; };
 		8A7A93ED2810ADF2005E7E1B /* ContileProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContileProviderTests.swift; sourceTree = "<group>"; };
+		8A832A8F29DC96C50025D5DD /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
+		8A832A9129DC99790025D5DD /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
+		8A832A9329DC99BA0025D5DD /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksFolderCell.swift; sourceTree = "<group>"; };
 		8A8629E52880B69C0096DDB1 /* BookmarksPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelTests.swift; sourceTree = "<group>"; };
 		8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedTabsStoreTests.swift; sourceTree = "<group>"; };
@@ -6958,9 +6964,20 @@
 			path = Pocket;
 			sourceTree = "<group>";
 		};
+		8A832A8E29DC96AD0025D5DD /* LaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				8A832A8F29DC96C50025D5DD /* LaunchScreenView.swift */,
+				8A832A9329DC99BA0025D5DD /* LaunchScreenViewController.swift */,
+				8A832A9129DC99790025D5DD /* LaunchScreenViewModel.swift */,
+			);
+			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
 		8A93F85C29D36D9F004159D9 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
+				8A832A8E29DC96AD0025D5DD /* LaunchScreen */,
 				8AF10D8D29D773FC0086351D /* Scene */,
 				8AE3B14329D6704400255CA4 /* Launch */,
 				8A93F86E29D3A147004159D9 /* Router */,
@@ -10926,6 +10943,7 @@
 				96A562A327D7B32A0045144A /* Contile.swift in Sources */,
 				962F394A2672D57A006BDA2A /* RecentItemsHelper.swift in Sources */,
 				21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */,
+				8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */,
 				C869912C28917688007ACC5C /* WallpaperNetworkModule.swift in Sources */,
 				E1442FD8294782D9003680B0 /* UIPasteboard+Extension.swift in Sources */,
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
@@ -10944,6 +10962,7 @@
 				96C11E9B2864C2DD00840E7C /* DependencyHelper.swift in Sources */,
 				2386E4E624F8358E0072EF17 /* HomepageMessageCard.swift in Sources */,
 				E15DE7C2293A7AED00B32667 /* PhotonActionSheetLineSeparator.swift in Sources */,
+				8A832A9429DC99BA0025D5DD /* LaunchScreenViewController.swift in Sources */,
 				43BDBBFE2752FA8600254DE4 /* TabCell.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncStatusResolver.swift in Sources */,
 				8A9CB41E2846F0BF00CC3A16 /* FadeScrollView.swift in Sources */,
@@ -11178,6 +11197,7 @@
 				D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */,
 				C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */,
 				D5D0532E2645B3A700759F85 /* ExperimentsTableView.swift in Sources */,
+				8A832A9029DC96C50025D5DD /* LaunchScreenView.swift in Sources */,
 				2165B2C22860C2F4004C0786 /* AdjustTelemetryHelper.swift in Sources */,
 				8A2D593E27DC0AA100713EC9 /* TopSite.swift in Sources */,
 				434E733725EED32E006D3BDE /* BrowserViewController+URLBarDelegate.swift in Sources */,

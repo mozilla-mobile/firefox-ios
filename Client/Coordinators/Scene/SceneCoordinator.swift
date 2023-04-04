@@ -23,13 +23,17 @@ class SceneCoordinator: BaseCoordinator, OpenURLDelegate {
     }
 
     func start(with launchManager: LaunchManager) {
-        if launchManager.canLaunchFromSceneCoordinator, let launchType = launchManager.getLaunchType() {
-            launchCoordinator = LaunchCoordinator(router: router)
-            launchCoordinator?.start(with: launchType)
-        } else {
-            browserCoordinator = BrowserCoordinator(router: router)
-            browserCoordinator?.start(launchManager: launchManager)
-        }
+        let viewModel = LaunchScreenViewModel()
+        let launchScreenVC = LaunchScreenViewController(viewModel: viewModel)
+        router.setRootViewController(launchScreenVC, hideBar: true)
+
+//        if launchManager.canLaunchFromSceneCoordinator, let launchType = launchManager.getLaunchType() {
+//            launchCoordinator = LaunchCoordinator(router: router)
+//            launchCoordinator?.start(with: launchType)
+//        } else {
+//            browserCoordinator = BrowserCoordinator(router: router)
+//            browserCoordinator?.start(launchManager: launchManager)
+//        }
     }
 
     // MARK: - OpenURLDelegate
