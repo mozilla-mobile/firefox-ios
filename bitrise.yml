@@ -10,7 +10,6 @@ stages:
   stage_1:
     workflows:
     - configure_build_fennec: {}
-    - configure_build_fennec_xcuitest: {}
   stage_2:
     workflows:
     - build_and_test_1_SmokeTest2: {}
@@ -18,7 +17,7 @@ stages:
     - build_and_test_3_SmokeTest3: {}
     - build_and_test_4_SmokeTest4: {}
 workflows:
-  configure_build_fennec_xcuitest:
+  configure_build_fennec:
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -32,7 +31,7 @@ workflows:
         - xcode_project: Client.xcodeproj
         - target: Client
         - shards: '3'
-        - scheme: Fennec_Enterprise_XCUITests
+        - scheme: Fennec
         - test_plan: SmokeXCUITests.xctestplan
         - debug_mode: 'true'
         - test_path: ''
@@ -45,7 +44,14 @@ workflows:
             echo "-- build-for-testing --"
             mkdir DerivedData
             xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec_Enterprise_XCUITests" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_test.log
+            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
+    - xcode-test-without-building@0:
+        inputs:
+        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
+        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
+            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
+        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
+        - maximum_test_repetitions: 2
     - script@1.1:
         title: Compress Derived Data
         is_always_run: true
@@ -63,10 +69,10 @@ workflows:
             "$BITRISE_SOURCE_DIR/Tests/Smoketest3.xctestplan" \
             "$BITRISE_SOURCE_DIR/Tests/Smoketest4.xctestplan" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator16.1-x86_64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator16.1-x86_64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest3_iphonesimulator16.1-x86_64.xctestrun" \
-            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest4_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.1-x86_64.xctestrun" \
+            "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.1-x86_64.xctestrun" \
             "$BITRISE_SOURCE_DIR/DerivedData/Build/Products/Fennec-iphonesimulator/" \
             "$BITRISE_SOURCE_DIR/Tests/UnitTest.xctestplan" \
             "$BITRISE_SOURCE_DIR/Client/" \
@@ -74,82 +80,7 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-    - script@1.1:
-        title: Detect number of warnings
-        is_always_run: true
-        inputs:
-        - content: |
-            set -e
-            set -x
-
-            echo "bitrise_xcode"
-            COUNT_XCUI=$(./test-fixtures/generate-metrics.sh /Users/vagrant/git/xcodebuild_test.log all)
-            
-            envman add --key SHOW_WARNING_IN_SLACK --value Show_Warnings
-            envman add --key SHOW_WARNING_COUNT_XCUI --value "$COUNT_XCUI"
-
-            STR=$COUNT_XCUI
-            SUB='greater'
-            if [[ "$STR" == *"$SUB"* ]]; then
-                echo "Failure, the number of warnings increased"
-                exit 1
-            fi
-    - slack@3.1:
-        is_always_run: true
-        inputs:
-        - title: ''
-        - author_name: ''
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-        - footer_icon: https://emoji.slack-edge.com/T027LFU12/testops-notify/d350cecb43e9e630.png
-        - footer: Created by Mobile Test Engineering
-        - pretext_on_error: "*Firefox-iOS* :firefox: *Build/XCUITests* :x:"
-        - pretext: "*Firefox-iOS* :firefox: *Build/XCUITests* :white_check_mark:"
-        - timestamp: 'no'
-        - fields: |
-            Task | ${BITRISE_BUILD_URL}
-            Owner | ${GIT_CLONE_COMMIT_AUTHOR_NAME}
-            Commit | ${GIT_CLONE_COMMIT_MESSAGE_SUBJECT}
-            Source-Workflow | ${BITRISE_TRIGGERED_WORKFLOW_TITLE}
-            Branch | ${BITRISE_GIT_BRANCH}
-            Warnings-in-code-test | ${SHOW_WARNING_COUNT_XCUI}
-        - buttons: |
-            App|${BITRISE_APP_URL}
-            #mobile-testeng|https://mozilla.slack.com/archives/C02KDDS9QM9
-            Mana|https://mana.mozilla.org/wiki/display/MTE/Mobile+Test+Engineering
-    - slack@3.1:
-        is_always_run: true
-        run_if: '{{getenv "NEW_RC_VERSION" | eq "New_RC_Version"}}'
-        inputs:
-        - channel: "#firefox-ios"
-        - text: Build status using latest Rust-Component
-        - webhook_url: $WEBHOOK_SLACK_TOKEN_2
-  configure_build_fennec:
-    before_run:
-    - 1_git_clone_and_post_clone
-    - 2_certificate_and_profile
-    - 3_provisioning_and_npm_installation
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - script@1.1:
-        title: Build for Testing
-        inputs:
-        - content: |
-            set -euxo pipefail
-            echo "-- build-for-testing --"
-            mkdir DerivedData
-            xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile
-            xcodebuild "-project" "/Users/vagrant/git/Client.xcodeproj" "-scheme" "Fennec" -configuration "Fennec" "CODE_SIGNING_ALLOWED=NO" -sdk "iphonesimulator" "-destination" "platform=iOS Simulator,name=iPhone 14,OS=latest" "COMPILER_INDEX_STORE_ENABLE=NO" "build-for-testing" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO" -derivedDataPath "/Users/vagrant/git/DerivedData" | xcpretty | tee xcodebuild_fennec.log
-    - xcode-test-without-building@0:
-        inputs:
-        - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
-        - xcodebuild_options: '"COMPILER_INDEX_STORE_ENABLE=NO"
-            "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "/Users/vagrant/git/DerivedData/Build/Products/Fennec_UnitTest_iphonesimulator16.1-x86_64.xctestrun"
-        - maximum_test_repetitions: 2
-    - deploy-to-bitrise-io@2:
-        inputs:
-        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"  
+        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH" 
     - script@1.1:
         title: Run Danger 2
         inputs:
@@ -222,7 +153,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: stage_1.configure_build_fennec_xcuitest
+        - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -231,8 +162,11 @@ workflows:
             set -euxo pipefail
             echo "$BITRISE_ARTIFACT_PATHS"
 
+            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            echo "$derived_data"
+
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "$derived_data"
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: UI Smoketest2
@@ -240,7 +174,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest2_iphonesimulator16.1-x86_64.xctestrun"
+        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest2_iphonesimulator16.1-x86_64.xctestrun"
     - deploy-to-bitrise-io@2.1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -259,7 +193,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: stage_1.configure_build_fennec_xcuitest
+        - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -269,8 +203,11 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
+            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            echo "$derived_data"
+
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "$derived_data"
             echo "show dir"
             ls
     - script@1.1:
@@ -285,7 +222,7 @@ workflows:
             mv ./Users/vagrant/git/DerivedData .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_SmokeXCUITests_iphonesimulator16.1-x86_64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_SmokeXCUITests_iphonesimulator16.1-x86_64.xctestrun"
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -307,7 +244,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: stage_1.configure_build_fennec_xcuitest
+        - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -317,8 +254,11 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
+            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            echo "$derived_data"
+
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "$derived_data"
             echo "show dir"
             ls
     - script@1.1:
@@ -333,7 +273,7 @@ workflows:
             mv ./Users/vagrant/git/DerivedData .
             ls -la
             echo "-- test-without-building --"
-            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest3_iphonesimulator16.1-x86_64.xctestrun"
+            xcodebuild -resultBundlePath "xcodebuild.xcresult" -derivedDataPath "/Users/vagrant/git/DerivedData" -destination "platform=iOS Simulator,name=iPhone 14,OS=latest" test-without-building -xctestrun "/Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest3_iphonesimulator16.1-x86_64.xctestrun"
     - custom-test-results-export@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
@@ -355,7 +295,7 @@ workflows:
         title: Pull artifacts
         inputs:
         - verbose: true
-        - artifact_sources: stage_1.configure_build_fennec_xcuitest
+        - artifact_sources: stage_1.configure_build_fennec
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Unzip
@@ -365,18 +305,21 @@ workflows:
 
             echo "$BITRISE_ARTIFACT_PATHS"
 
+            derived_data=${BITRISE_ARTIFACT_PATHS#*|}
+            echo "$derived_data"
+
             echo "-- unzip -- "
-            exec unzip "${BITRISE_ARTIFACT_PATHS}"
+            exec unzip "$derived_data"
             echo "show dir"
             ls
     - xcode-test-without-building@0:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
-        title: UI Smoketest3
+        title: UI Smoketest4
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 14 Plus,OS=latest
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO"
             "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Enterprise_XCUITests_Smoketest4_iphonesimulator16.1-x86_64.xctestrun"
+        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest4_iphonesimulator16.1-x86_64.xctestrun"
     - deploy-to-bitrise-io@2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
