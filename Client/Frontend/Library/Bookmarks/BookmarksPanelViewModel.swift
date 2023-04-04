@@ -22,6 +22,7 @@ class BookmarksPanelViewModel {
     var bookmarkFolder: FxBookmarkNode?
     var bookmarkNodes = [FxBookmarkNode]()
     private var flashLastRowOnNextReload = false
+    private let bookmarksExchange: BookmarksExchangable
 
     /// Error case at the moment is setting data to nil and showing nothing
     private func setErrorCase() {
@@ -34,6 +35,7 @@ class BookmarksPanelViewModel {
          bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID) {
         self.profile = profile
         self.bookmarkFolderGUID = bookmarkFolderGUID
+        self.bookmarksExchange = BookmarksExchange()
     }
 
     var shouldFlashRow: Bool {
@@ -62,7 +64,13 @@ class BookmarksPanelViewModel {
         flashLastRowOnNextReload = true
     }
     
-    func getBookmarksForExport() async throws -> [Core.BookmarkItem] {
+    func bookmarkExportSelected(in viewController: UIViewController) async throws {
+        let bookmarks = try await getBookmarksForExport()
+        try await bookmarksExchange.export(bookmarks: bookmarks, in: viewController)
+    }
+
+    // MARK: - Private
+    private func getBookmarksForExport() async throws -> [Core.BookmarkItem] {
         return try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let self = self else {
                 return continuation.resume(returning: [])
@@ -89,9 +97,7 @@ class BookmarksPanelViewModel {
                 }
         }
     }
-
-
-    // MARK: - Private
+    
     private func exportNode(_ node: BookmarkNodeData) -> Core.BookmarkItem? {
         if let folder = node as? BookmarkFolderData {
             return .folder(folder.title, folder.children?.compactMap { exportNode($0) } ?? [], .empty)

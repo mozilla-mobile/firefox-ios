@@ -104,6 +104,7 @@
 		28E08C991AF44EF9009BA2FA /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
 		28E08C9A1AF44F00009BA2FA /* BrowserSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282915E51AF1A7920006EEB5 /* BrowserSchema.swift */; };
 		28EADE5D1AFC3A78007FB2FB /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EADE381AFC3898007FB2FB /* UIImageView+Extension.swift */; };
+		2AC54D3129DC50CE0034FA2E /* BookmarksExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC54D3029DC50CE0034FA2E /* BookmarksExchange.swift */; };
 		2C28F96C201B2D4C00ABA8A5 /* MailAppSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C28F96B201B2D4C00ABA8A5 /* MailAppSettingsTests.swift */; };
 		2C2A5EF41E68469500F02659 /* PrivateBrowsingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2A5EF31E68469500F02659 /* PrivateBrowsingTest.swift */; };
 		2C2A91291FA2410D002E36BD /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2A91281FA2410D002E36BD /* HistoryTests.swift */; };
@@ -1697,6 +1698,7 @@
 		2A874B029FBA8C728218EB48 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Storage.strings; sourceTree = "<group>"; };
 		2AA943B2B505224956D1B5CD /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2ABD4C8DA1B0527B9F88E597 /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		2AC54D3029DC50CE0034FA2E /* BookmarksExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExchange.swift; sourceTree = "<group>"; };
 		2B0842AE830BF873B368CEBB /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/ClearPrivateDataConfirm.strings"; sourceTree = "<group>"; };
 		2B1541FDB7ED1BC183797233 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2B31494CBFF9DF6FA41953B2 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/FindInPage.strings; sourceTree = "<group>"; };
@@ -5677,6 +5679,7 @@
 				8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */,
 				8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */,
 				8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */,
+				2AC54D3029DC50CE0034FA2E /* BookmarksExchange.swift */,
 			);
 			path = Bookmarks;
 			sourceTree = "<group>";
@@ -9256,6 +9259,7 @@
 				21D7B60628077CA5003F7E94 /* LibraryViewController+ToolbarActions.swift in Sources */,
 				C869912C28917688007ACC5C /* WallpaperNetworkModule.swift in Sources */,
 				8AB8573F27D961200075C173 /* DataObserver.swift in Sources */,
+				2AC54D3129DC50CE0034FA2E /* BookmarksExchange.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
 				F85C7F0E2711C556004BDBA4 /* SettingsViewController.swift in Sources */,
 				74C027451B2A348C001B1E88 /* SessionData.swift in Sources */,
