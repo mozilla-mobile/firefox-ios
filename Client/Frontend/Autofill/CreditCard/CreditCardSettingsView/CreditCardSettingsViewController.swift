@@ -21,8 +21,8 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
     // MARK: Views
     var creditCardEmptyView: UIHostingController<CreditCardSettingsEmptyView>
 
-    var creditCardEditView: CreditCardEditView?
-    var creditCardAddEditView: UIHostingController<CreditCardEditView>?
+    var creditCardEditView: CreditCardInputView?
+    var creditCardAddEditView: UIHostingController<CreditCardInputView>?
 
     var creditCardTableViewController: CreditCardTableViewController
 
@@ -152,16 +152,16 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
 
     private func updateStateForEditView(editState: CreditCardEditState) {
         // Update credit card edit view state before showing
-        viewModel.addEditViewModel.state = editState
-        creditCardEditView = CreditCardEditView(
-            viewModel: viewModel.addEditViewModel,
+        viewModel.cardInputViewModel.state = editState
+        creditCardEditView = CreditCardInputView(
+            viewModel: viewModel.cardInputViewModel,
             dismiss: { [weak self] successVal in
                 DispatchQueue.main.async {
                     if successVal {
                         self?.updateCreditCardList()
                     }
                     self?.creditCardAddEditView?.dismiss(animated: true)
-                    self?.viewModel.addEditViewModel.clearValues()
+                    self?.viewModel.cardInputViewModel.clearValues()
                 }
         })
 
