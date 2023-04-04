@@ -70,12 +70,13 @@ enum CreditCardEditState: String, Equatable, CaseIterable {
     }
 }
 
-class CreditCardEditViewModel: ObservableObject {
+class CreditCardInputViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
 
     let profile: Profile
     let autofill: RustAutofill
     let creditCard: CreditCard?
+    let creditCardValidator: CreditCardValidator
 
     @Published var state: CreditCardEditState
     @Published var errorState: String = ""
@@ -91,31 +92,30 @@ class CreditCardEditViewModel: ObservableObject {
     }
 
     @Published var expirationDate: String = "" {
-        didSet (val) {
-            guard !val.isEmpty else {
-                expirationIsValid = false
-                return
-            }
-            expirationIsValid = true
+        didSet {
+            expirationIsValid = creditCardValidator.isExpirationValidFor(date: expirationDate)
         }
     }
 
     @Published var cardNumber: String = "" {
         willSet (val) {
             guard let intVal = Int(val),
-                  CreditCardValidator(creditCardNumber: intVal).isValid() else {
+                  creditCardValidator.isCardNumberValidFor(card: intVal) else {
                 numberIsValid = false
                 return
             }
             // Set the card type
-            self.cardType = CreditCardValidator(creditCardNumber: intVal).cardType()
+            self.cardType = creditCardValidator.cardTypeFor(intVal)
             numberIsValid = true
         }
     }
 
     var isRightBarButtonEnabled: Bool {
         state.rightBarBtn == .save && (nameIsValid &&
+                                       !nameOnCard.isEmpty &&
                                        numberIsValid &&
+                                       !cardNumber.isEmpty &&
+                                       expirationIsValid &&
                                        !expirationDate.isEmpty)
     }
 
@@ -153,12 +153,14 @@ class CreditCardEditViewModel: ObservableObject {
     }
 
     init(profile: Profile,
-         creditCard: CreditCard? = nil
+         creditCard: CreditCard? = nil,
+         creditCardValidator: CreditCardValidator = CreditCardValidator()
     ) {
         self.profile = profile
         self.autofill = profile.autofill
         self.creditCard = creditCard
         self.state = .add
+        self.creditCardValidator = creditCardValidator
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -167,7 +169,8 @@ class CreditCardEditViewModel: ObservableObject {
          errorState: String,
          enteredValue: String,
          creditCard: CreditCard? = nil,
-         state: CreditCardEditState
+         state: CreditCardEditState,
+         creditCardValidator: CreditCardValidator = CreditCardValidator()
     ) {
         self.profile = profile
         self.errorState = errorState
@@ -175,6 +178,7 @@ class CreditCardEditViewModel: ObservableObject {
         self.autofill = profile.autofill
         self.creditCard = creditCard
         self.state = state
+        self.creditCardValidator = creditCardValidator
     }
 
     // MARK: - Helpers
