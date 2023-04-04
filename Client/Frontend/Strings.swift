@@ -1468,6 +1468,11 @@ extension String {
                 tableName: "TabsTray",
                 value: "Tabs Closed: %d",
                 comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs")
+            public static let SingleTabTitle = MZLocalizedString(
+                "CloseTabsToast.SingleTabTitle.v113",
+                tableName: "TabsTray",
+                value: "Tab Closed",
+                comment: "When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup.")
             public static let Action = MZLocalizedString(
                 "CloseTabsToast.Button.v113",
                 tableName: "TabsTray",
