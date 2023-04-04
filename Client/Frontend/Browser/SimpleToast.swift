@@ -131,6 +131,7 @@ class SimpleToast {
                 toast.frame = end
             },
             completion: { [weak self] finished in
+            self?.onShown?()
             guard let dismissAfter = self?.dismissAfter else { return }
                 let dispatchTime = DispatchTime.now() + dismissAfter
 

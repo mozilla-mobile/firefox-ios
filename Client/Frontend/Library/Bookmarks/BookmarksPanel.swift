@@ -602,21 +602,23 @@ extension BookmarksPanel {
             dismissAfter: nil,
             bottomInset: view.layoutMargins.bottom
         )
+        
+        toast.onShown = { [weak self] in
+            Task {
+                guard let self = self else { return }
+                let serializer = BookmarkSerializer()
+                
+                let items = try await self.viewModel.getBookmarksForExport()
+                
+                let htmlExport = serializer.serializeBookmarks(items)
+                
+                let exportedBooksmarksUrl = FileManager.default.temporaryDirectory.appendingPathComponent("Bookmarks.html")
+                try htmlExport.data(using: .utf8)?.write(to: exportedBooksmarksUrl)
 
-        Task {
-            
-            let serializer = BookmarkSerializer()
-            
-            let items = try await viewModel.getBookmarksForExport()
-            
-            let htmlExport = serializer.serializeBookmarks(items)
-            
-            let exportedBooksmarksUrl = FileManager.default.temporaryDirectory.appendingPathComponent("Bookmarks.html")
-            try htmlExport.data(using: .utf8)?.write(to: exportedBooksmarksUrl)
-
-            let activityViewController = UIActivityViewController(activityItems: [exportedBooksmarksUrl], applicationActivities: nil)
-            present(activityViewController, animated: true) {
-                toast.dismiss()
+                let activityViewController = UIActivityViewController(activityItems: [exportedBooksmarksUrl], applicationActivities: nil)
+                self.present(activityViewController, animated: true) {
+                    toast.dismiss()
+                }
             }
         }
     }
