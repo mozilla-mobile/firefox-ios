@@ -8,9 +8,9 @@ import Common
 import Storage
 @testable import Client
 
-class CreditCardEditViewModelTests: XCTestCase {
+class CreditCardInputViewModelTests: XCTestCase {
     private var profile: MockProfile!
-    private var viewModel: CreditCardEditViewModel!
+    private var viewModel: CreditCardInputViewModel!
     private var files: FileAccessor!
     private var autofill: RustAutofill!
     private var encryptionKey: String!
@@ -38,7 +38,7 @@ class CreditCardEditViewModelTests: XCTestCase {
 
         profile = MockProfile()
         _ = profile.autofill.reopenIfClosed()
-        viewModel = CreditCardEditViewModel(profile: profile)
+        viewModel = CreditCardInputViewModel(profile: profile)
     }
 
     override func tearDown() {
@@ -50,7 +50,7 @@ class CreditCardEditViewModelTests: XCTestCase {
     func testEditViewModel_SavingCard() {
         viewModel.nameOnCard = "Ashton Mealy"
         viewModel.cardNumber = "4268811063712243"
-        viewModel.expirationDate = "1837539531"
+        viewModel.expirationDate = "1288"
         let expectation = expectation(description: "wait for credit card fields to be saved")
         viewModel.saveCreditCard { creditCard, error in
             guard error == nil, let creditCard = creditCard else {
@@ -92,20 +92,36 @@ class CreditCardEditViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.rightBarBtn.title, .CreditCard.EditCard.EditNavBarButtonLabel)
     }
 
-    func testRightBarButtonEnabledEdit() {
+    func testRightBarButtonNotEnabledEdit() {
         viewModel.state = .edit
         viewModel.nameOnCard = "Kenny Champion"
         viewModel.expirationDate = "123"
         viewModel.cardNumber = "4871007782167426"
-        XCTAssertTrue(viewModel.isRightBarButtonEnabled)
+        XCTAssertFalse(viewModel.isRightBarButtonEnabled)
+    }
+
+    func testRightBarButtonEnabledEdit() {
+        viewModel.state = .edit
+        viewModel.nameOnCard = "Kenny Champion"
+        viewModel.expirationDate = "1239"
+        viewModel.cardNumber = "4871007782167426"
+        XCTAssert(viewModel.isRightBarButtonEnabled)
+    }
+
+    func testRightBarButtonNotEnabledAdd() {
+        viewModel.state = .add
+        viewModel.nameOnCard = "Jakyla Labarge"
+        viewModel.expirationDate = "123"
+        viewModel.cardNumber = "4717219604213696"
+        XCTAssertFalse(viewModel.isRightBarButtonEnabled)
     }
 
     func testRightBarButtonEnabledAdd() {
         viewModel.state = .add
         viewModel.nameOnCard = "Jakyla Labarge"
-        viewModel.expirationDate = "123"
+        viewModel.expirationDate = "1239"
         viewModel.cardNumber = "4717219604213696"
-        XCTAssertTrue(viewModel.isRightBarButtonEnabled)
+        XCTAssert(viewModel.isRightBarButtonEnabled)
     }
 
     func testRightBarButtonDisabled_AddState() {

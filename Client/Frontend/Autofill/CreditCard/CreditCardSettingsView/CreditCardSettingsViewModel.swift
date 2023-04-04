@@ -26,7 +26,7 @@ class CreditCardSettingsViewModel {
     var profile: Profile
     var appAuthenticator: AppAuthenticationProtocol?
 
-    lazy var addEditViewModel: CreditCardEditViewModel = CreditCardEditViewModel(profile: profile)
+    lazy var cardInputViewModel: CreditCardInputViewModel = CreditCardInputViewModel(profile: profile)
     var tableViewModel: CreditCardTableViewModel = CreditCardTableViewModel()
     var toggleModel: ToggleModel!
 
