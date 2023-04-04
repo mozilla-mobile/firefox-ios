@@ -12,6 +12,10 @@ protocol SurveySurfaceDelegate: AnyObject {
     func didTapDismissSurvey()
 }
 
+protocol OpenURLDelegate: AnyObject {
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool)
+}
+
 class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDelegate {
     // MARK: - Properties
     private let surveySurfaceID: MessageSurfaceId = .survey
@@ -23,7 +27,9 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
     private var viewController: SurveySurfaceViewController?
 
     var dismissClosure: (() -> Void)?
+    // FXIOS-6036: Remove HomepanelDelegate since surface survey isn't shown from BVC anymore
     weak var homepanelDelegate: HomePanelDelegate?
+    weak var openURLDelegate: OpenURLDelegate?
 
     var shouldShowSurveySurface: Bool {
         // TODO: Remove hack (temporary fix to avoid showing SurveySurface in UITest for release branch)
@@ -33,14 +39,12 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
     }
 
     // MARK: - Initialization
-    init(with homepageDelegate: HomePanelDelegate,
-         themeManager: ThemeManager = AppContainer.shared.resolve(),
+    init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          and messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared
     ) {
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
-        self.homepanelDelegate = homepageDelegate
         self.messagingManager = messagingManager
         self.messagingManager.pressedDelegate = self
     }
@@ -96,6 +100,7 @@ class SurveySurfaceManager: SurveySurfaceDelegate, GleanPlumbMessagePressedDeleg
         homepanelDelegate?.homePanelDidRequestToOpenInNewTab(url,
                                                              isPrivate: false,
                                                              selectNewTab: true)
+        openURLDelegate?.didRequestToOpenInNewTab(url: url, isPrivate: false, selectNewTab: true)
         dismissClosure?()
     }
 }

@@ -2016,7 +2016,8 @@ extension BrowserViewController {
         // always bring the alpha back to 1.0
         defer { self.view.alpha = 1.0 }
 
-        surveySurfaceManager = SurveySurfaceManager(with: self)
+        surveySurfaceManager = SurveySurfaceManager()
+        surveySurfaceManager?.homepanelDelegate = self
 
         surveySurfaceManager?.dismissClosure = { [weak self] in
             self?.surveySurfaceManager = nil
