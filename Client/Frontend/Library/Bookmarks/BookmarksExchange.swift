@@ -7,6 +7,7 @@ import Core
 
 protocol BookmarksExchangable {
     func export(bookmarks: [BookmarkItem], in viewController: UIViewController) async throws
+    func `import`(from url: URL, in viewController: UIViewController) async throws
 }
 
 class BookmarksExchange: BookmarksExchangable {
@@ -24,7 +25,7 @@ class BookmarksExchange: BookmarksExchangable {
             Task { [weak viewController] in
                 let serializer = BookmarkSerializer()
                 
-                let htmlExport = serializer.serializeBookmarks(bookmarks)
+                let htmlExport = try await serializer.serializeBookmarks(bookmarks)
                 
                 let exportedBooksmarksUrl = FileManager.default.temporaryDirectory.appendingPathComponent("Bookmarks.html")
                 try htmlExport.data(using: .utf8)?.write(to: exportedBooksmarksUrl)
@@ -38,6 +39,43 @@ class BookmarksExchange: BookmarksExchangable {
         
         toast.showAlertWithText(
             "Exporting Bookmarks…",
+            image: .view(activityIndicator),
+            bottomContainer: view,
+            dismissAfter: nil,
+            bottomInset: view.layoutMargins.bottom
+        )
+    }
+    
+    @MainActor
+    func `import`(from url: URL, in viewController: UIViewController) async throws {
+        guard let view = viewController.view else { return }
+        
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.color = UIColor.theme.ecosia.primaryBrand
+        activityIndicator.startAnimating()
+        
+        let toast = SimpleToast()
+        
+        toast.onShown = { [weak viewController] in
+            Task { [weak viewController] in
+                
+                let html = try String(contentsOf: url)
+                let parser = try BookmarkParser(html: html)
+                
+                let bookmarks = try await parser.parseBookmarks()
+                
+                // todo: import into database
+                
+                debugPrint("Importing bookmarks:", bookmarks)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    toast.dismiss()
+                }
+            }
+        }
+        
+        toast.showAlertWithText(
+            "Importing Bookmarks…",
             image: .view(activityIndicator),
             bottomContainer: view,
             dismissAfter: nil,

@@ -7,7 +7,7 @@ import Storage
 import Shared
 import Core
 
-class BookmarksPanelViewModel {
+class BookmarksPanelViewModel: NSObject {
 
     enum BookmarksSection: Int, CaseIterable {
         case bookmarks
@@ -23,6 +23,7 @@ class BookmarksPanelViewModel {
     var bookmarkNodes = [FxBookmarkNode]()
     private var flashLastRowOnNextReload = false
     private let bookmarksExchange: BookmarksExchangable
+    private var documentPickerPresentingViewController: UIViewController?
 
     /// Error case at the moment is setting data to nil and showing nothing
     private func setErrorCase() {
@@ -67,6 +68,13 @@ class BookmarksPanelViewModel {
     func bookmarkExportSelected(in viewController: UIViewController) async throws {
         let bookmarks = try await getBookmarksForExport()
         try await bookmarksExchange.export(bookmarks: bookmarks, in: viewController)
+    }
+    
+    func bookmarkImportSelected(in viewController: UIViewController) {
+        self.documentPickerPresentingViewController = viewController
+        let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.html"], in: .open)
+        documentPicker.delegate = self
+        viewController.present(documentPicker, animated: true)
     }
 
     // MARK: - Private
@@ -153,6 +161,19 @@ class BookmarksPanelViewModel {
             self.bookmarkNodes = folder.fxChildren ?? []
 
             completion()
+        }
+    }
+}
+
+extension BookmarksPanelViewModel: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard
+            let firstHtmlUrl = urls.first,
+            let viewController = documentPickerPresentingViewController
+        else { return }
+        
+        Task {
+            try await bookmarksExchange.import(from: firstHtmlUrl, in: viewController)
         }
     }
 }

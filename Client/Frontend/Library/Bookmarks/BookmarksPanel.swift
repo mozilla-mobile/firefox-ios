@@ -587,7 +587,7 @@ extension BookmarksPanel {
     }
     
     func importBookmarksActionHandler(_ action: UIAlertAction) {
-        assertionFailure("Not yet implemented")
+        viewModel.bookmarkImportSelected(in: self)
     }
 
     func exportBookmarksActionHandler(_ action: UIAlertAction) {
