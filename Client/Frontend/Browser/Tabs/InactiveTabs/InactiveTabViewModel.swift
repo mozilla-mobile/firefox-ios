@@ -7,6 +7,12 @@ import Storage
 import Shared
 import Common
 
+protocol InactiveTabsCFRProtocol {
+    func setupCFR(with view: UILabel)
+    func presentCFR()
+    func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void)
+}
+
 enum InactiveTabStatus: String, Codable {
     case normal
     case inactive

@@ -99,6 +99,30 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return filteredTabs
     }
 
+    var tabGroups: [ASGroup<Tab>]?
+    var tabsInAllGroups: [Tab]? {
+        (tabGroups?.map {$0.groupedItems}.flatMap {$0})
+    }
+
+    private(set) var isPrivate = false
+
+    // Dragging on the collection view is either an 'active drag' where the item is moved, or
+    // that the item has been long pressed on (and not moved yet), and this gesture recognizer has been triggered
+    var isDragging: Bool {
+        return collectionView.hasActiveDrag || isLongPressGestureStarted
+    }
+
+    private var isLongPressGestureStarted: Bool {
+        var started = false
+        collectionView.gestureRecognizers?.forEach { recognizer in
+            if let recognizer = recognizer as? UILongPressGestureRecognizer,
+               recognizer.state == .began || recognizer.state == .changed {
+                started = true
+            }
+        }
+        return started
+    }
+
     func getRegularOrderedTabs() -> [Tab]? {
         // Get current order
         guard let tabDisplayOrderDecoded = TabDisplayOrder.decode() else { return nil }
@@ -134,30 +158,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         let uuids: [String] = tabs.map { $0.tabUUID }
         tabDisplayOrder.regularTabUUID = uuids
         TabDisplayOrder.encode(tabDisplayOrder: tabDisplayOrder)
-    }
-
-    var tabGroups: [ASGroup<Tab>]?
-    var tabsInAllGroups: [Tab]? {
-        (tabGroups?.map {$0.groupedItems}.flatMap {$0})
-    }
-
-    private(set) var isPrivate = false
-
-    // Dragging on the collection view is either an 'active drag' where the item is moved, or
-    // that the item has been long pressed on (and not moved yet), and this gesture recognizer has been triggered
-    var isDragging: Bool {
-        return collectionView.hasActiveDrag || isLongPressGestureStarted
-    }
-
-    fileprivate var isLongPressGestureStarted: Bool {
-        var started = false
-        collectionView.gestureRecognizers?.forEach { recognizer in
-            if let recognizer = recognizer as? UILongPressGestureRecognizer,
-               recognizer.state == .began || recognizer.state == .changed {
-                started = true
-            }
-        }
-        return started
     }
 
     @discardableResult
@@ -314,7 +314,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return filteredTabs.firstIndex(of: tab)
     }
 
-    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool,
+    func togglePrivateMode(isOn: Bool,
+                           createTabOnEmptyPrivateMode: Bool,
                            shouldSelectMostRecentTab: Bool = false) {
         guard isPrivate != isOn else { return }
 
@@ -368,7 +369,9 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return nil
     }
 
-    func refreshStore(evenIfHidden: Bool = false, shouldAnimate: Bool = false, completion: (() -> Void)? = nil) {
+    func refreshStore(evenIfHidden: Bool = false,
+                      shouldAnimate: Bool = false,
+                      completion: (() -> Void)? = nil) {
         operations.removeAll()
         dataStore.removeAll()
 
@@ -442,11 +445,10 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
     // The user has tapped the close button or has swiped away the cell
     func closeActionPerformed(forCell cell: UICollectionViewCell) {
-        if isDragging {
-            return
-        }
+        guard !isDragging else { return }
 
-        guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else { return }
+        guard let index = collectionView.indexPath(for: cell)?.item,
+                let tab = dataStore.at(index) else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             if self.isPrivate == false, tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
@@ -457,6 +459,17 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
             self.tabManager.removeTab(tab)
         }
+    }
+
+    // Hide close tab to simulate user action
+    func animateClosedTab(forCell cell: UICollectionViewCell, shouldHide: Bool) {
+        UIView.animate(withDuration: 0.2,
+                       animations: {
+            cell.alpha = shouldHide ? 0 : 1
+        }, completion: { _ in
+            cell.alpha = shouldHide ? 1 : 0
+            cell.isHidden = shouldHide
+        })
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually

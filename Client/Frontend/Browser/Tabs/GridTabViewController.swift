@@ -34,6 +34,29 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         static let undoToastDuration = DispatchTimeInterval.seconds(3)
     }
 
+    enum UndoToastType {
+        case singleTab
+        case inactiveTabs(count: Int)
+
+        var title: String {
+            switch self {
+            case .singleTab:
+                return .TabsTray.CloseTabsToast.SingleTabTitle
+            case let .inactiveTabs(tabsCount):
+                return String.localizedStringWithFormat(
+                    .TabsTray.CloseTabsToast.Title,
+                    tabsCount)
+            }
+        }
+
+        var buttonText: String {
+            switch self {
+            case .singleTab, .inactiveTabs:
+                    return .TabsTray.CloseTabsToast.Action
+            }
+        }
+    }
+
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
@@ -281,7 +304,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
     }
 
-    fileprivate func privateTabsAreEmpty() -> Bool {
+    private func privateTabsAreEmpty() -> Bool {
         return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
     }
 
@@ -306,43 +329,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         collectionView.backgroundColor = themeManager.currentTheme.colors.layer3
         collectionView.reloadData()
     }
-}
 
-extension GridTabViewController: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
-    }
-    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
-
-    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-    }
-
-    func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        // No need to handle removeAll toast in TabTray.
-        // When closing all normal tabs we automatically focus a tab and show the BVC. Which will handle the Toast.
-        // We don't show the removeAll toast in PBM
-    }
-}
-
-extension GridTabViewController: TabDisplayer {
-    func focusSelectedTab() {
-        self.focusItem()
-    }
-
-    func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
-        guard let tabCell = cell as? TabCell else { return cell }
-        tabCell.animator?.delegate = self
-        tabCell.delegate = self
-        let selected = tab == tabManager.selectedTab
-        tabCell.configureWith(tab: tab, isSelected: selected, theme: themeManager.currentTheme)
-        return tabCell
-    }
-}
-
-extension GridTabViewController {
     @objc
     func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
@@ -403,6 +390,70 @@ extension GridTabViewController {
         self.navigationController?.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
+
+    func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
+        tabDisplayManager.tabDisplayCompletionDelegate = self
+        tabDisplayManager.closeActionPerformed(forCell: cell)
+    }
+
+    private func buildUndoToast(toastType: UndoToastType,
+                                completion: @escaping (Bool) -> Void) {
+        let viewModel = ButtonToastViewModel(
+            labelText: toastType.title,
+            buttonText: toastType.buttonText)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { buttonPressed in
+            completion(!buttonPressed)
+        })
+
+        toast.showToast(viewController: self,
+                        delay: UX.undoToastDelay,
+                        duration: UX.undoToastDuration) { toast in
+            [
+                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
+                                              constant: -self.toolbarHeight)
+            ]
+        }
+    }
+}
+
+// MARK: - TabManagerDelegate
+extension GridTabViewController: TabManagerDelegate {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+        NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+    }
+    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
+
+    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
+        self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+    }
+
+    func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
+        // No need to handle removeAll toast in TabTray.
+        // When closing all normal tabs we automatically focus a tab and show the BVC. Which will handle the Toast.
+        // We don't show the removeAll toast in PBM
+    }
+}
+
+// MARK: - TabDisplayer
+extension GridTabViewController: TabDisplayer {
+    func focusSelectedTab() {
+        self.focusItem()
+    }
+
+    func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell {
+        guard let tabCell = cell as? TabCell else { return cell }
+        tabCell.animator?.delegate = self
+        tabCell.delegate = self
+        let selected = tab == tabManager.selectedTab
+        tabCell.configureWith(tab: tab, isSelected: selected, theme: themeManager.currentTheme)
+        return tabCell
+    }
 }
 
 // MARK: - App Notifications
@@ -433,6 +484,7 @@ extension GridTabViewController {
     }
 }
 
+// MARK: - TabSelectionDelegate
 extension GridTabViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
@@ -497,8 +549,16 @@ extension GridTabViewController: SwipeAnimatorDelegate {
 
 extension GridTabViewController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
-        if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.dataStore.at(indexPath.item) {
-            removeByButtonOrSwipe(tab: tab, cell: cell)
+        if let indexPath = collectionView.indexPath(for: cell),
+           let tab = tabDisplayManager.dataStore.at(indexPath.item) {
+            tabDisplayManager.animateClosedTab(forCell: cell, shouldHide: true)
+            buildUndoToast(toastType: .singleTab) { confirm in
+                if confirm {
+                    self.removeByButtonOrSwipe(tab: tab, cell: cell)
+                } else {
+                    self.tabDisplayManager.animateClosedTab(forCell: cell, shouldHide: false)
+                }
+            }
         }
     }
 }
@@ -533,7 +593,7 @@ extension GridTabViewController: TabPeekDelegate {
     }
 }
 
-// MARK: - TabDisplayCompeltionDelegate & RecentlyClosedPanelDelegate
+// MARK: - TabDisplayCompletionDelegate & RecentlyClosedPanelDelegate
 extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPanelDelegate {
     // RecentlyClosedPanelDelegate
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
@@ -565,13 +625,6 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
         case .removedNonLastTab, .updateTab, .moveTab:
             break
         }
-    }
-}
-
-extension GridTabViewController {
-    func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
-        tabDisplayManager.tabDisplayCompletionDelegate = self
-        tabDisplayManager.closeActionPerformed(forCell: cell)
     }
 }
 
@@ -613,6 +666,7 @@ extension GridTabViewController {
     }
 }
 
+<<<<<<< main:Client/Frontend/Browser/GridTabViewController.swift
 // MARK: TabLayoutDelegate
 private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     weak var tabSelectionDelegate: TabSelectionDelegate?
@@ -796,6 +850,8 @@ private class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayout, U
     }
 }
 
+=======
+>>>>>>> Present toast to undo tab closure and hide/show tab on tab tray:Client/Frontend/Browser/Tabs/GridTabViewController.swift
 // MARK: - DevicePickerViewControllerDelegate
 extension GridTabViewController: DevicePickerViewControllerDelegate {
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
@@ -819,14 +875,11 @@ extension GridTabViewController: UIAdaptivePresentationControllerDelegate, UIPop
     }
 }
 
+// MARK: - PresentingModalViewControllerDelegate
 extension GridTabViewController: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
         dismiss(animated: animated, completion: { self.collectionView.reloadData() })
     }
-}
-
-protocol TabCellDelegate: AnyObject {
-    func tabCellDidClose(_ cell: TabCell)
 }
 
 // MARK: - Notifiable
@@ -840,12 +893,6 @@ extension GridTabViewController: Notifiable {
         default: break
         }
     }
-}
-
-protocol InactiveTabsCFRProtocol {
-    func setupCFR(with view: UILabel)
-    func presentCFR()
-    func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void)
 }
 
 // MARK: - Contextual Hint and Toast
@@ -865,27 +912,7 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
     }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
-        let viewModel = ButtonToastViewModel(
-            labelText: String.localizedStringWithFormat(
-                .TabsTray.CloseTabsToast.Title,
-                tabsCount),
-            buttonText: .TabsTray.CloseTabsToast.Action)
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: themeManager.currentTheme,
-                                completion: { buttonPressed in
-            completion(!buttonPressed)
-        })
-
-        toast.showToast(viewController: self,
-                        delay: UX.undoToastDelay,
-                        duration: UX.undoToastDuration) { toast in
-            [
-                toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                              constant: -self.toolbarHeight)
-            ]
-        }
+        buildUndoToast(toastType: .inactiveTabs(count: tabsCount), completion: completion)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {
