@@ -34,9 +34,9 @@ public class ZoomLevelStore {
     }
 
     public func save(_ domainZoomLevel: DomainZoomLevel) {
-        if let dzl = findZoomLevel(forDomain: domainZoomLevel.host),
+        if let foundDomainZoomLevel = findZoomLevel(forDomain: domainZoomLevel.host),
            let index = domainZoomLevels
-            .firstIndex(where: { $0.host == dzl.host }) {
+            .firstIndex(where: { $0.host == foundDomainZoomLevel.host }) {
             domainZoomLevels.remove(at: index)
         }
         if domainZoomLevel.zoomLevel != 1.0 {
@@ -44,9 +44,8 @@ public class ZoomLevelStore {
         }
         let encoder = JSONEncoder()
         do {
-            if let data = try? encoder.encode(domainZoomLevels) {
-                try data.write(to: url, options: .atomic)
-            }
+            guard let data = try? encoder.encode(domainZoomLevels) else { return }
+            try data.write(to: url, options: .atomic)
         } catch {
             logger.log("Unable to write data to disk: \(error)",
                        level: .warning,
@@ -58,9 +57,8 @@ public class ZoomLevelStore {
         var domainZoomLevels = [DomainZoomLevel]()
         let decoder = JSONDecoder()
         do {
-            if let data = try? Data(contentsOf: url) {
-                domainZoomLevels = try decoder.decode([DomainZoomLevel].self, from: data)
-            }
+            let data = try Data(contentsOf: url)
+            domainZoomLevels = try decoder.decode([DomainZoomLevel].self, from: data)
         } catch {
             logger.log("Failed to decode data from \(url.absoluteString): \(error)",
                        level: .warning,

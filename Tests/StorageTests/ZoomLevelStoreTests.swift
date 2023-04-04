@@ -6,15 +6,22 @@ import XCTest
 @testable import Storage
 
 class ZoomLevelStoreTests: XCTestCase {
-    let zoomLevelStore = ZoomLevelStore.shared
+    var zoomLevelStore: ZoomLevelStore!
 
     let testHost1 = "www.example1.com"
     let testHost2 = "www.example2.com"
     let testHost3 = "www.example3.com"
     let testZoomLevel: CGFloat = 2.0
 
+    override func setUp() {
+        super.setUp()
+        zoomLevelStore = ZoomLevelStore.shared
+        cleanUp()
+    }
+
     override func tearDown() {
         super.tearDown()
+        zoomLevelStore = nil
         cleanUp()
     }
 
@@ -32,9 +39,9 @@ class ZoomLevelStoreTests: XCTestCase {
 
     func testSaveAndFindZoomLevel() {
         let domainZoomLevel = DomainZoomLevel(host: testHost1, zoomLevel: testZoomLevel)
-        ZoomLevelStore.shared.save(domainZoomLevel)
+        zoomLevelStore.save(domainZoomLevel)
 
-        let retrievedZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: testHost1)
+        let retrievedZoomLevel = zoomLevelStore.findZoomLevel(forDomain: testHost1)
         XCTAssertEqual(retrievedZoomLevel, domainZoomLevel)
     }
 
