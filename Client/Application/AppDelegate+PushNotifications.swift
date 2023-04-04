@@ -95,12 +95,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
-        switch response.notification.request.identifier {
-        case let identifier where identifier.starts(with: NotificationSurfaceManager.Constant.notificationBaseId):
-            notificationSurfaceManager.didTapNotification(response.notification.request.content.userInfo)
-        default:
+        let content = response.notification.request.content
+
+        if content.categoryIdentifier == NotificationSurfaceManager.Constant.notificationCategoryId {
+           switch response.actionIdentifier {
+           case UNNotificationDismissActionIdentifier:
+               notificationSurfaceManager.didDismissNotification(content.userInfo)
+           default:
+               notificationSurfaceManager.didTapNotification(content.userInfo)
+           }
+        } else {
             openURLsInNewTabs(response.notification)
         }
+        completionHandler()
     }
 
     // Called when the user receives a tab (or any other notification) while in foreground.

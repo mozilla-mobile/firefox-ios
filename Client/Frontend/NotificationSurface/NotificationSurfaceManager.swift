@@ -9,11 +9,13 @@ import Shared
 protocol NotificationSurfaceDelegate: AnyObject {
     func didDisplayMessage(_ message: GleanPlumbMessage)
     func didTapNotification(_ userInfo: [AnyHashable: Any])
+    func didDismissNotification(_ userInfo: [AnyHashable: Any])
 }
 
 class NotificationSurfaceManager: NotificationSurfaceDelegate {
     struct Constant {
         static let notificationBaseId: String = "org.mozilla.ios.notification"
+        static let notificationCategoryId: String = "org.mozilla.ios.notification.category"
         static let messageDelay: CGFloat = 3 // seconds
         static let messageIdKey: String = "messageId"
     }
@@ -46,17 +48,13 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
         guard let message = message, !message.isExpired else { return }
 
         let notificationId = Constant.notificationBaseId + ".\(message.id)"
-        let userInfo = [Constant.messageIdKey: message.id]
-        notificationManager.schedule(title: message.data.title ?? "",
-                                     body: message.data.text,
-                                     id: notificationId,
-                                     userInfo: userInfo,
-                                     interval: TimeInterval(Constant.messageDelay),
-                                     repeats: false)
 
-        // Schedule notification telemetry for when notification gets displayed
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constant.messageDelay) { [weak self] in
-            self?.didDisplayMessage(message)
+        // Check if message is already getting displayed
+        notificationManager.findDeliveredNotificationForId(id: notificationId) { [weak self] notification in
+            // Don't schedule the notification again if it was already delivered
+            guard notification == nil else { return }
+
+            self?.scheduleNotification(message: message, notificationId: notificationId)
         }
     }
 
@@ -71,7 +69,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
         else { return }
 
         switch message.action {
-        case "OPEN_NEW_TAB":
+        case "://deep-link?url=homepanel/new-tab":
             let object = OpenTabNotificationObject(type: .openNewTab)
             notificationCenter.post(name: .OpenTabNotification, withObject: object)
             messagingManager.onMessagePressed(message)
@@ -81,7 +79,38 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
         }
     }
 
+    func didDismissNotification(_ userInfo: [AnyHashable: Any]) {
+        guard let messageId = userInfo[Constant.messageIdKey] as? String,
+              let message = messagingManager.messageForId(messageId, surface: notificationSurfaceID)
+        else { return }
+
+        messagingManager.onMessageDismissed(message)
+    }
+
     // MARK: - Private
+    private func scheduleNotification(message: GleanPlumbMessage, notificationId: String) {
+        let notificationCategory = UNNotificationCategory(
+            identifier: Constant.notificationCategoryId,
+            actions: [],
+            intentIdentifiers: [],
+            options: .customDismissAction)
+
+        UNUserNotificationCenter.current().setNotificationCategories([notificationCategory])
+
+        let userInfo = [Constant.messageIdKey: message.id]
+        notificationManager.schedule(title: message.data.title ?? "",
+                                     body: message.data.text,
+                                     id: notificationId,
+                                     userInfo: userInfo,
+                                     categoryIdentifier: Constant.notificationCategoryId,
+                                     interval: TimeInterval(Constant.messageDelay),
+                                     repeats: false)
+
+        // Schedule notification telemetry for when notification gets displayed
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constant.messageDelay) { [weak self] in
+            self?.didDisplayMessage(message)
+        }
+    }
 
     /// Call messagingManager to retrieve the message for notification surface.
     private func updateMessage() {
