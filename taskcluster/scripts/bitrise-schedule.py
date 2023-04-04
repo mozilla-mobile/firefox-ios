@@ -53,7 +53,7 @@ def sync_main(
     parser.add_argument("--commit", required=True, help="the git commit hash to generate screenshots from")
     parser.add_argument("--workflow", required=True, help="the bitrise workflow to schedule")
     parser.add_argument("--artifacts-directory", required=True, help="The directory to store bitrise artifacts")
-    parser.add_argument("--importLocales", dest="locales", metavar="LOCALE", action="append", required=True, help="locale to generate the screenshots for (can be repeated)")
+    parser.add_argument("--importLocales", dest="locales", metavar="LOCALE", action="append", help="locale to generate the screenshots for (can be repeated)")
     parser.add_argument("--derived-data-path", default=None, help="the URL to download an existing build")
 
     result = parser.parse_args()
