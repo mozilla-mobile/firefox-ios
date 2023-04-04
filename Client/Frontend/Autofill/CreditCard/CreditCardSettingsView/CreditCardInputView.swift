@@ -7,8 +7,14 @@ import Storage
 import SwiftUI
 import Shared
 
-struct CreditCardEditView: View {
-    @ObservedObject var viewModel: CreditCardEditViewModel
+private struct CreditCardInputText {
+    var name = ""
+    var number = ""
+    var expiration = ""
+}
+
+struct CreditCardInputView: View {
+    @ObservedObject var viewModel: CreditCardInputViewModel
     var dismiss: ((_ successVal: Bool) -> Void)
 
     // Theming
@@ -17,6 +23,7 @@ struct CreditCardEditView: View {
     @State var removeButtonColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
+    @State private var cardInputText = CreditCardInputText()
 
     var body: some View {
         NavigationView {
@@ -28,10 +35,10 @@ struct CreditCardEditView: View {
                         .foregroundColor(borderColor)
 
                     Group {
-                        FloatingTextField(label: String.CreditCard.EditCard.NameOnCardTitle,
-                                          textVal: $viewModel.nameOnCard,
-                                          errorString: String.CreditCard.ErrorState.NameOnCardSublabel,
-                                          showError: !viewModel.nameIsValid)
+                        CreditCardInputField(inputType: .name,
+                                             text: $cardInputText.name,
+                                             showError: !viewModel.nameIsValid,
+                                             inputViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -42,11 +49,10 @@ struct CreditCardEditView: View {
                     .background(textFieldBackgroundColor)
 
                     Group {
-                        FloatingTextField(label: String.CreditCard.EditCard.CardNumberTitle,
-                                          textVal: $viewModel.cardNumber,
-                                          errorString: String.CreditCard.ErrorState.CardNumberSublabel,
-                                          showError: !viewModel.numberIsValid,
-                                          keyboardType: .numberPad)
+                        CreditCardInputField(inputType: .number,
+                                             text: $cardInputText.number,
+                                             showError: !viewModel.numberIsValid,
+                                             inputViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -57,11 +63,10 @@ struct CreditCardEditView: View {
                     .background(textFieldBackgroundColor)
 
                     Group {
-                        FloatingTextField(label: String.CreditCard.EditCard.CardExpirationDateTitle,
-                                          textVal: $viewModel.expirationDate,
-                                          errorString: String.CreditCard.ErrorState.CardExpirationDateSublabel,
-                                          showError: !viewModel.expirationIsValid,
-                                          keyboardType: .numberPad)
+                        CreditCardInputField(inputType: .expiration,
+                                             text: $cardInputText.expiration,
+                                             showError: !viewModel.expirationIsValid,
+                                             inputViewModel: viewModel)
                         .padding(.top, 11)
 
                         Divider()
@@ -161,14 +166,14 @@ struct CreditCardEditView_Previews: PreviewProvider {
                                           timeLastModified: 1234,
                                           timesUsed: 1234)
 
-        let viewModel = CreditCardEditViewModel(firstName: "Mike",
-                                                lastName: "Simmons",
-                                                errorState: "Temp",
-                                                enteredValue: "",
-                                                creditCard: sampleCreditCard,
-                                                state: .view)
+        let viewModel = CreditCardInputViewModel(firstName: "Mike",
+                                                 lastName: "Simmons",
+                                                 errorState: "Temp",
+                                                 enteredValue: "",
+                                                 creditCard: sampleCreditCard,
+                                                 state: .view)
 
-        return CreditCardEditView(
+        return CreditCardInputView(
             viewModel: viewModel,
             dismiss: { successVal in
             // dismiss view
