@@ -28,11 +28,13 @@ class DefaultLaunchScreenManager: LaunchScreenManager {
     private var launchType: LaunchType?
 
     init(
+        delegate: LaunchFinishedLoadingDelegate?,
         profile: Profile = AppContainer.shared.resolve(),
         messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
         appVersion: String = AppInfo.appVersion
     ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
+        self.delegate = delegate
         self.updateViewModel = UpdateViewModel(profile: profile)
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
 
