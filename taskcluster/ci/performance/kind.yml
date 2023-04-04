@@ -15,3 +15,4 @@ tasks:
     tests:
         bitrise-workflow: perfherder-test
         description: Run performance tests and generate data
+        run-on-tasks-for: []
