@@ -6,6 +6,7 @@ import Foundation
 import XCTest
 import TabDataStore
 import WebKit
+import Shared
 @testable import Client
 
 class TabManagerTests: XCTestCase {
@@ -17,7 +18,7 @@ class TabManagerTests: XCTestCase {
     let sleepTime: UInt64 = 1_000_000_000
     override func setUp() {
         super.setUp()
-        useNewTabDataStore = true
+        AppConstants.useNewTabDataStore = true
         mockProfile = MockProfile()
         mockDiskImageStore = MockDiskImageStore()
         mockTabStore = MockTabDataStore()

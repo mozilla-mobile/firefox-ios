@@ -6,11 +6,7 @@ import Foundation
 import TabDataStore
 import Storage
 import Common
-
-// Hard coding a feature flag while the feature is in development
-// This will be replaced with a nimbus flag when the feature is ready
-// FXIOS-5885
-var useNewTabDataStore = false
+import Shared
 
 // This class subclasses the legacy tab manager temporarily so we can
 // gradually migrate to the new system
@@ -28,7 +24,7 @@ class TabManagerImplementation: LegacyTabManager {
     // MARK: - Restore tabs
 
     override func restoreTabs(_ forced: Bool = false) {
-        guard useNewTabDataStore else {
+        guard AppConstants.useNewTabDataStore else {
             super.restoreTabs(forced)
             return
         }
@@ -91,7 +87,7 @@ class TabManagerImplementation: LegacyTabManager {
     // MARK: - Save tabs
 
     override func preserveTabs() {
-        guard useNewTabDataStore else {
+        guard AppConstants.useNewTabDataStore else {
             super.preserveTabs()
             return
         }
@@ -100,7 +96,7 @@ class TabManagerImplementation: LegacyTabManager {
     }
 
     override func storeChanges() {
-        guard useNewTabDataStore else {
+        guard AppConstants.useNewTabDataStore else {
             super.storeChanges()
             return
         }
@@ -109,7 +105,7 @@ class TabManagerImplementation: LegacyTabManager {
     }
 
     override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
-        guard useNewTabDataStore else {
+        guard AppConstants.useNewTabDataStore else {
             super.selectTab(tab, previous: previous)
             return
         }
