@@ -941,7 +941,7 @@ class BrowserViewController: UIViewController {
                 }
 
                 if !receivedURLs.isEmpty || cursorCount > 0 {
-                    // Because the notification service runs as a seperate process
+                    // Because the notification service runs as a separate process
                     // we need to make sure that our account manager picks up any persisted state
                     // the notification services persisted.
                     self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
