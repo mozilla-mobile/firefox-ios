@@ -69,7 +69,7 @@ class TabCell: UICollectionViewCell,
     var animator: SwipeAnimator?
     var isSelectedTab = false
 
-    private var initialFrame: CGRect = .init()
+    private var initialFrame = CGRect()
 
     weak var delegate: TabCellDelegate?
 
