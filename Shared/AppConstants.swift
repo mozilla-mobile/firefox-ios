@@ -103,5 +103,5 @@ public class AppConstants {
     public static let nightlyAppVersion = "9000"
 
     /// A hard coded flag until development on the coordinator is done
-    public static let useCoordinators = true
+    public static let useCoordinators = false
 }
