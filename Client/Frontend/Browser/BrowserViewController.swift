@@ -258,6 +258,7 @@ class BrowserViewController: UIViewController {
 
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
+        updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
     }
@@ -690,11 +691,11 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
+
+        updateHeaderConstraints()
     }
 
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-
+    private func updateHeaderConstraints() {
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(view)
@@ -705,6 +706,10 @@ class BrowserViewController: UIViewController {
                 make.left.right.equalTo(view)
             }
         }
+    }
+
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
@@ -2011,7 +2016,8 @@ extension BrowserViewController {
         // always bring the alpha back to 1.0
         defer { self.view.alpha = 1.0 }
 
-        surveySurfaceManager = SurveySurfaceManager(with: self)
+        surveySurfaceManager = SurveySurfaceManager()
+        surveySurfaceManager?.homepanelDelegate = self
 
         surveySurfaceManager?.dismissClosure = { [weak self] in
             self?.surveySurfaceManager = nil

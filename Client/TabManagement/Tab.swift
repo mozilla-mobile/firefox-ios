@@ -41,6 +41,10 @@ protocol URLChangeDelegate {
     func tab(_ tab: Tab, urlDidChangeTo url: URL)
 }
 
+protocol URLHostDelegate: AnyObject {
+    func hostDidSet()
+}
+
 struct TabState {
     var isPrivate: Bool = false
     var url: URL?
@@ -237,6 +241,7 @@ class Tab: NSObject {
     var webView: WKWebView?
     var tabDelegate: LegacyTabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
+    weak var urlHostDelegate: URLHostDelegate?
     var bars = [SnackBar]()
     var lastExecutedTime: Timestamp?
     var firstCreatedTime: Timestamp?
@@ -255,7 +260,7 @@ class Tab: NSObject {
         didSet {
             if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
                 url = URL(string: internalUrl.stripAuthorization)
-            }
+            } else { setZoomLevelforDomain() }
         }
     }
     var lastKnownUrl: URL? {
@@ -647,7 +652,7 @@ class Tab: NSObject {
             pageZoom = 1.10
         case 1.10:
             pageZoom = 1.25
-        case 3.0:
+        case 2.0:
             return
         default:
             pageZoom += 0.25
@@ -674,6 +679,14 @@ class Tab: NSObject {
 
     func resetZoom() {
         pageZoom = 1.0
+    }
+
+    private func setZoomLevelforDomain() {
+        if let host = url?.host,
+           let domainZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: host) {
+            pageZoom = domainZoomLevel.zoomLevel
+            urlHostDelegate?.hostDidSet()
+        } else { resetZoom() }
     }
 
     func addContentScript(_ helper: TabContentScript, name: String) {

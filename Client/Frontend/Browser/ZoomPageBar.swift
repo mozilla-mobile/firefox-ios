@@ -24,7 +24,7 @@ class ZoomPageBar: UIView {
         static let stepperShadowOpacity: Float = 1
         static let stepperShadowOffset = CGSize(width: 0, height: 4)
         static let separatorWidth: CGFloat = 1
-        static let separatorHeightMultiplier = 0.75
+        static let separatorHeightMultiplier = 0.74
         static let fontSize: CGFloat = 16
         static let lowerZoomLimit: CGFloat = 0.5
         static let upperZoomLimit: CGFloat = 2.0
@@ -73,8 +73,9 @@ class ZoomPageBar: UIView {
     }
 
     private let zoomLevel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredBoldFont(withTextStyle: .callout,
-                                                                       size: UX.fontSize)
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
+                                                                   size: UX.fontSize,
+                                                                   weight: .semibold)
         label.accessibilityLabel = .ZoomPageBarCurrentZoomLevelAccessibilityLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel
         label.isUserInteractionEnabled = true
@@ -93,6 +94,7 @@ class ZoomPageBar: UIView {
         self.tab = tab
 
         super.init(frame: .zero)
+        self.tab.urlHostDelegate = self
 
         setupViews()
         setupLayout()
@@ -174,7 +176,7 @@ class ZoomPageBar: UIView {
             zoomOutButton.isEnabled = false
         } else if tab.pageZoom >= UX.upperZoomLimit {
             zoomInButton.isEnabled = false
-        }
+        } else { enableZoomButtons() }
     }
 
     private func updateStepperConstraintsBasedOnSizeClass() {
@@ -222,6 +224,13 @@ class ZoomPageBar: UIView {
     private func didPressClose(_ sender: UIButton) {
         delegate?.zoomPageDidPressClose()
         UIAccessibility.post(notification: .screenChanged, argument: nil)
+    }
+}
+
+extension ZoomPageBar: URLHostDelegate {
+    func hostDidSet() {
+        updateZoomLabel()
+        checkPageZoomLimits()
     }
 }
 

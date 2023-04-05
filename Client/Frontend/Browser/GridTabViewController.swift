@@ -866,11 +866,11 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
     }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
-        typealias ToastString = String.TabsTray.CloseTabsToast
-        let title = tabsCount == 1 ? ToastString.TitleSingular : ToastString.TitlePlural
         let viewModel = ButtonToastViewModel(
-            labelText: String.localizedStringWithFormat(title, tabsCount),
-            buttonText: ToastString.Action)
+            labelText: String.localizedStringWithFormat(
+                .TabsTray.CloseTabsToast.Title,
+                tabsCount),
+            buttonText: .TabsTray.CloseTabsToast.Action)
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
                                 completion: { buttonPressed in
