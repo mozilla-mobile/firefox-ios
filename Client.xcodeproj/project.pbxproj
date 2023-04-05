@@ -712,6 +712,7 @@
 		C80C11EE28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11ED28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift */; };
 		C80C11F028B3C9150062922A /* MockUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11EF28B3C9150062922A /* MockUserDefaults.swift */; };
 		C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C80C11F328B3CD580062922A /* MockUserDefaultsTests.swift */; };
+		C8124BB129D6F55400540B79 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8124BB029D6F55400540B79 /* Route.swift */; };
 		C8163851268A0899004C7160 /* AddCredentialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8163850268A0899004C7160 /* AddCredentialViewController.swift */; };
 		C81A8F2526D3ED1900EBA539 /* UIWindow+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81A8F2426D3ED1900EBA539 /* UIWindow+Extension.swift */; };
 		C81AC6B626160091007800C5 /* TabTrayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C81AC6B526160091007800C5 /* TabTrayViewModel.swift */; };
@@ -4443,6 +4444,7 @@
 		C80C11ED28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperMetadataTrackerTests.swift; sourceTree = "<group>"; };
 		C80C11EF28B3C9150062922A /* MockUserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaults.swift; sourceTree = "<group>"; };
 		C80C11F328B3CD580062922A /* MockUserDefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUserDefaultsTests.swift; sourceTree = "<group>"; };
+		C8124BB029D6F55400540B79 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		C8154C5887169941126C530A /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C8163850268A0899004C7160 /* AddCredentialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCredentialViewController.swift; sourceTree = "<group>"; };
 		C81A8F2426D3ED1900EBA539 /* UIWindow+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Extension.swift"; sourceTree = "<group>"; };
@@ -7021,6 +7023,7 @@
 			children = (
 				8A93F85F29D36EBD004159D9 /* Router.swift */,
 				8A93F86C29D3A131004159D9 /* DefaultRouter.swift */,
+				C8124BB029D6F55400540B79 /* Route.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -11185,6 +11188,7 @@
 				E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */,
 				DFEA639E279F468A00D489C3 /* DynamicHeightCollectionView.swift in Sources */,
 				C87DC85A27B2C8DE006EFCE2 /* LegacyWallpaperFilePathProtocol.swift in Sources */,
+				C8124BB129D6F55400540B79 /* Route.swift in Sources */,
 				63306D3921103EAE00F25400 /* LegacySavedTab.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
 				1DA3CE5F24EEE7C600422BB2 /* LegacyTabDataRetriever.swift in Sources */,
