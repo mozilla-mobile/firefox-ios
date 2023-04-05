@@ -923,7 +923,7 @@ class BrowserViewController: UIViewController {
                     let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
                     if !urls.isEmpty {
                         DispatchQueue.main.async {
-                            self.tabManager.addTabsForURLs(urls, zombie: false)
+                            self.tabManager.addTabsForURLs(urls, zombie: false, shouldSelectTab: false)
                         }
                     }
 
