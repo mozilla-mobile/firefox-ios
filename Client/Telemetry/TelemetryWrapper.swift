@@ -1304,7 +1304,7 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 
@@ -1315,7 +1315,7 @@ extension TelemetryWrapper {
                 )
             )
         case(.action, .tap, .messaging, .messageDismissed, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 
@@ -1326,7 +1326,7 @@ extension TelemetryWrapper {
                 )
             )
         case(.action, .tap, .messaging, .messageInteracted, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 
@@ -1347,7 +1347,7 @@ extension TelemetryWrapper {
                 )
             }
         case(.information, .view, .messaging, .messageExpired, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 
@@ -1358,7 +1358,7 @@ extension TelemetryWrapper {
                 )
             )
         case(.information, .application, .messaging, .messageMalformed, let extras):
-            guard let messageSurface = extras?[EventExtraKey.messageKey.rawValue] as? String,
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
                   let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
             else { return }
 

@@ -16,8 +16,9 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         static let buttonSeparation: CGFloat = 8
         static let buttonVerticalInset: CGFloat = 12
         static let buttonHorizontalInset: CGFloat = 16
-        static let buttonSideMarginMultiplier: CGFloat  = 0.05
         static let buttonBottomMarginMultiplier: CGFloat  = 0.1
+
+        static let sideMarginMultiplier: CGFloat  = 0.05
 
         static let titleFontSize: CGFloat = 20
         static let titleDistanceFromImage: CGFloat = 16
@@ -139,7 +140,6 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     private func constrainViews() {
-        let buttonWidth = calculateButtonWidth()
         imageViewYConstraint = imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
 
         NSLayoutConstraint.activate([
@@ -150,16 +150,16 @@ class SurveySurfaceViewController: UIViewController, Themeable {
 
             titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor,
                                             constant: UX.titleDistanceFromImage),
-            titleLabel.widthAnchor.constraint(equalToConstant: UX.titleWidth),
+            titleLabel.widthAnchor.constraint(equalToConstant: calculateElementWidthWith(max: UX.titleWidth)),
             titleLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
 
-            takeSurveyButton.widthAnchor.constraint(equalToConstant: buttonWidth),
+            takeSurveyButton.widthAnchor.constraint(equalToConstant: calculateElementWidthWith(max: UX.buttonMaxWidth)),
             takeSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
             takeSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             takeSurveyButton.bottomAnchor.constraint(equalTo: dismissSurveyButton.topAnchor,
                                                      constant: -UX.buttonSeparation),
 
-            dismissSurveyButton.widthAnchor.constraint(equalToConstant: buttonWidth),
+            dismissSurveyButton.widthAnchor.constraint(equalTo: takeSurveyButton.widthAnchor),
             dismissSurveyButton.heightAnchor.constraint(equalToConstant: UX.buttonHeight),
             dismissSurveyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             dismissSurveyButton.bottomAnchor.constraint(equalTo: view.bottomAnchor,
@@ -167,14 +167,13 @@ class SurveySurfaceViewController: UIViewController, Themeable {
         ])
     }
 
-    private func calculateButtonWidth() -> CGFloat {
+    private func calculateElementWidthWith(max maxWidth: CGFloat) -> CGFloat {
         // The side margins are at a certain percentage, thus the button width would have
         // to be the inverse of 2*that or the max width determined  by design.
-        let buttonWidthBasedOnFrame = view.frame.width * (1.0 - (2 * UX.buttonSideMarginMultiplier))
-        let buttonWidth = [UX.buttonMaxWidth, buttonWidthBasedOnFrame].min()
-        guard let buttonWidth = buttonWidth else { return UX.buttonMaxWidth }
+        let viewBasedWidth = view.frame.width * (1.0 - (2 * UX.sideMarginMultiplier))
+        guard let elementWidth = [maxWidth, viewBasedWidth].min() else { return maxWidth }
 
-        return buttonWidth
+        return elementWidth
     }
 
     private func updateContent() {
