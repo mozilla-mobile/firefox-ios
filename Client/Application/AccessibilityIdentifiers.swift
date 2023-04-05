@@ -156,6 +156,7 @@ public struct AccessibilityIdentifiers {
         static let welcomeCard = "WelcomeCard"
         static let wallpapersCard = "WallpapersCard"
         static let signSyncCard = "SignSyncCard"
+        static let notificationCard = "NotificationCard"
         static let closeButton = "CloseButton"
         static let pageControl = "PageControl"
 
@@ -265,6 +266,10 @@ public struct AccessibilityIdentifiers {
     struct Alert {
         static let cancelDownloadResume = "cancelDownloadAlert.resume"
         static let cancelDownloadCancel = "cancelDownloadAlert.cancel"
+    }
+
+    struct Setting {
+        static let notifications = "NotificationsSetting"
     }
 
     struct ZoomPageBar {

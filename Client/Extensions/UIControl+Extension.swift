@@ -13,14 +13,16 @@ extension UIControl {
         let swizzledSingleSelector = #selector(UIControl.loggerSendAction(_:to:for:))
 
         guard let originalSingleMethod = class_getInstanceMethod(self, originalSingleSelector),
-              let swizzledSingleMethod = class_getInstanceMethod(self, swizzledSingleSelector) else { return }
+              let swizzledSingleMethod = class_getInstanceMethod(self, swizzledSingleSelector)
+        else { return }
 
         method_exchangeImplementations(originalSingleMethod, swizzledSingleMethod)
     }
 
-    @objc private func loggerSendAction(_ action: Selector,
-                                        to target: Any?,
-                                        for event: UIEvent?) {
+    @objc
+    private func loggerSendAction(_ action: Selector,
+                                  to target: Any?,
+                                  for event: UIEvent?) {
         var message: String = "Button \(Self.self) [action: \(action)]"
         if let target = target {
             message.append(" [target: \(String(describing: type(of: target)))]")

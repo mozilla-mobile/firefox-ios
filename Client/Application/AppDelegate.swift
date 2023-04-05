@@ -13,11 +13,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     var orientationLock = UIInterfaceOrientationMask.all
 
+    // This variable is used to determine whether the rust sync manager will be used
+    // during the Nimbus experiment and will be removed when it is complete.
+    private let rustSyncManagerStatus = FxNimbus.shared
+                                                .features
+                                                .rustSyncManagerComponent
+                                                .value()
+                                                .useRustSyncManager
     lazy var profile: Profile = BrowserProfile(
         localName: "profile",
-        syncDelegate: UIApplication.shared.syncDelegate
+        syncDelegate: UIApplication.shared.syncDelegate,
+        rustSyncManagerEnabled: rustSyncManagerStatus
     )
-    lazy var tabManager: TabManager = TabManager(
+    lazy var tabManager: TabManager = TabManagerImplementation(
         profile: profile,
         imageStore: DiskImageStore(
             files: profile.files,
@@ -35,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var backgroundSyncUtil: BackgroundSyncUtil?
     private var widgetManager: TopSitesWidgetManager?
     private var menuBuilderHelper: MenuBuilderHelper?
+
+    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
 
     func application(
         _ application: UIApplication,
@@ -131,6 +141,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self?.ratingPromptManager.updateData()
         }
 
+        // Schedule and update engagement notifications if necessary every time the app becomes active
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.engagementNotificationHelper.schedule()
+        }
+
         logger.log("applicationDidBecomeActive end",
                    level: .info,
                    category: .lifecycle)
@@ -191,7 +206,7 @@ extension AppDelegate: Notifiable {
                                                           UIApplication.didEnterBackgroundNotification])
     }
 
-    /// When migrated to Scenes, these methods aren't called. Consider this a tempoary solution to calling into those methods.
+    /// When migrated to Scenes, these methods aren't called. Consider this a temporary solution to calling into those methods.
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.didBecomeActiveNotification:

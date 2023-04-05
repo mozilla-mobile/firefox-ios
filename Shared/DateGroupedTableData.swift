@@ -29,7 +29,8 @@ public struct DateGroupedTableData<T: Equatable> {
 
     public init() {}
 
-    @discardableResult mutating public func add(_ item: T, timestamp: TimeInterval) -> IndexPath {
+    @discardableResult
+    mutating public func add(_ item: T, timestamp: TimeInterval) -> IndexPath {
         if timestamp > todayTimestamp {
             today.append((item, timestamp))
             return IndexPath(row: today.count - 1, section: 0)

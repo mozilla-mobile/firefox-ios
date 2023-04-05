@@ -50,7 +50,8 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         self.prefs.setString(currentChoice, forKey: PrefsKeys.KeyMailToOption)
     }
 
-    @objc func appDidBecomeActive() {
+    @objc
+    func appDidBecomeActive() {
         reloadMailProviderSource()
         updateCurrentChoice()
         tableView.reloadData()

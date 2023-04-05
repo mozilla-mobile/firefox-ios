@@ -76,7 +76,8 @@ extension UIViewController {
         presentWithModalDismissIfNeeded(themedNavigationController, animated: true)
     }
 
-    @objc func dismissVC() {
+    @objc
+    func dismissVC() {
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -125,7 +126,8 @@ extension UIViewController {
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
 
-    @objc private func loggerViewWillAppear(_ animated: Bool) {
+    @objc
+    private func loggerViewWillAppear(_ animated: Bool) {
         let values: [String] = LoggerIgnoreViewController.allCases.map { $0.rawValue }
         if !values.contains("\(type(of: self))") {
             DefaultLogger.shared.log("\(type(of: self)) will appear", level: .info, category: .lifecycle)

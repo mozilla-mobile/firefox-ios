@@ -13,12 +13,14 @@ class AppLaunchUtil {
     private var logger: Logger
     private var adjustHelper: AdjustHelper
     private var profile: Profile
+    private let introScreenManager: IntroScreenManager
 
     init(logger: Logger = DefaultLogger.shared,
          profile: Profile) {
         self.logger = logger
         self.profile = profile
         self.adjustHelper = AdjustHelper(profile: profile)
+        self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
     }
 
     func setUpPreLaunchDependencies() {
@@ -86,21 +88,22 @@ class AppLaunchUtil {
 
     func setUpPostLaunchDependencies() {
         let persistedCurrentVersion = InstallType.persistedCurrentVersion()
-        let introScreen = profile.prefs.intForKey(PrefsKeys.IntroSeen)
         // upgrade install - Intro screen shown & persisted current version does not match
-        if introScreen != nil && persistedCurrentVersion != AppInfo.appVersion {
+        if !introScreenManager.shouldShowIntroScreen && persistedCurrentVersion != AppInfo.appVersion {
             InstallType.set(type: .upgrade)
             InstallType.updateCurrentVersion(version: AppInfo.appVersion)
         }
 
         // We need to check if the app is a clean install to use for
         // preventing the What's New URL from appearing.
-        if introScreen == nil {
+        if introScreenManager.shouldShowIntroScreen {
             // fresh install - Intro screen not yet shown
             InstallType.set(type: .fresh)
             InstallType.updateCurrentVersion(version: AppInfo.appVersion)
+
             // Profile setup
             profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest)
+            UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.KeyFirstAppUse)
         } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
             profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
         }
@@ -144,7 +147,7 @@ class AppLaunchUtil {
             let id = GleanMetrics.PlacesHistoryMigration.duration.start()
             // We mark that the migration started
             // this will help us identify how often the migration starts, but never ends
-            // additionally, we have a seperate metric for error rates
+            // additionally, we have a separate metric for error rates
             GleanMetrics.PlacesHistoryMigration.migrationEndedRate.addToNumerator(1)
             GleanMetrics.PlacesHistoryMigration.migrationErrorRate.addToNumerator(1)
             browserProfile?.migrateHistoryToPlaces(

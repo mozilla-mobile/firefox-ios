@@ -241,6 +241,46 @@ extension String {
 
         // Editing and saving credit card
         public struct EditCard {
+            public static let CopyLabel = MZLocalizedString(
+                "CreditCard.EditCard.CopyLabel.v113",
+                tableName: "EditCard",
+                value: "Copy",
+                comment: "Label for copying contents of the form")
+            public static let CloseNavBarButtonLabel = MZLocalizedString(
+                "CreditCard.EditCard.CloseNavBarButtonLabel.v113",
+                tableName: "EditCard",
+                value: "Close",
+                comment: "Button label for closing the view where user can view their credit card info")
+            public static let SaveNavBarButtonLabel = MZLocalizedString(
+                "CreditCard.EditCard.SaveNavBarButtonLabel.v113",
+                tableName: "EditCard",
+                value: "Save",
+                comment: "Button label for saving the credit card details user entered in the form")
+            public static let EditNavBarButtonLabel = MZLocalizedString(
+                "CreditCard.EditCard.EditNavBarButtonLabel.v113",
+                tableName: "EditCard",
+                value: "Edit",
+                comment: "Button label for editing the credit card details shown in the form")
+            public static let CancelNavBarButtonLabel = MZLocalizedString(
+                "CreditCard.EditCard.CancelNavBarButtonLabel.v113",
+                tableName: "EditCard",
+                value: "Cancel",
+                comment: "Button label for cancelling editing of the credit card details shown in the form")
+            public static let ViewCreditCardTitle = MZLocalizedString(
+                "CreditCard.EditCard.ViewCreditCardTitle.v113",
+                tableName: "EditCard",
+                value: "View Credit Card",
+                comment: "Title label for the view where user can view their credit card info")
+            public static let AddCreditCardTitle = MZLocalizedString(
+                "CreditCard.EditCard.AddCreditCardTitle.v113",
+                tableName: "EditCard",
+                value: "Add Credit Card",
+                comment: "Title label for the view where user can add their credit card info")
+            public static let EditCreditCardTitle = MZLocalizedString(
+                "CreditCard.EditCard.EditCreditCardTitle.v113",
+                tableName: "Edit Card",
+                value: "Edit Credit Card",
+                comment: "Title label for the view where user can edit their credit card info")
             public static let NameOnCardTitle = MZLocalizedString(
                 "CreditCard.EditCard.NameOnCardTitle.v112",
                 tableName: "EditCard",
@@ -1295,6 +1335,12 @@ extension String {
                 value: "Go to your device Settings to turn on notifications in %@",
                 comment: "This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
             )
+            public static let systemNotificationsDisabledMessage = MZLocalizedString(
+                "Settings.Notifications.SystemNotificationsDisabledMessage.v112",
+                tableName: "Settings",
+                value: "You turned off all %@ notifications. Turn them on by going to device Settings > Notifications > %@",
+                comment: "This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name."
+            )
         }
 
         public struct Toolbar {
@@ -1395,7 +1441,7 @@ extension String {
     public struct SyncScreen { }
 }
 
-// MARK: Tabs Tray
+// MARK: - Tabs Tray
 extension String {
     public struct TabsTray {
         public struct InactiveTabs {
@@ -1414,6 +1460,24 @@ extension String {
                 tableName: nil,
                 value: "Close All Inactive Tabs",
                 comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
+        }
+
+        public struct CloseTabsToast {
+            public static let Title = MZLocalizedString(
+                "CloseTabsToast.Title.v113",
+                tableName: "TabsTray",
+                value: "Tabs Closed: %d",
+                comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs")
+            public static let SingleTabTitle = MZLocalizedString(
+                "CloseTabsToast.SingleTabTitle.v113",
+                tableName: "TabsTray",
+                value: "Tab Closed",
+                comment: "When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup.")
+            public static let Action = MZLocalizedString(
+                "CloseTabsToast.Button.v113",
+                tableName: "TabsTray",
+                value: "Undo",
+                comment: "When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs")
         }
 
         public struct Sync {
@@ -2257,20 +2321,6 @@ extension String {
         comment: "The label for the URL field when editing a bookmark")
 }
 
-// MARK: - Tabs Delete All Undo Toast
-extension String {
-    public static let TabsDeleteAllUndoTitle = MZLocalizedString(
-        "Tabs.DeleteAllUndo.Title",
-        tableName: nil,
-        value: "%d tab(s) closed",
-        comment: "The label indicating that all the tabs were closed")
-    public static let TabsDeleteAllUndoAction = MZLocalizedString(
-        "Tabs.DeleteAllUndo.Button",
-        tableName: nil,
-        value: "Undo",
-        comment: "The button to undo the delete all tabs")
-}
-
 // MARK: - Tab tray (chronological tabs)
 extension String {
     public static let TabTrayV2Title = MZLocalizedString(
@@ -2506,9 +2556,9 @@ extension String {
         value: "Switch",
         comment: "The button text in the Button Toast for switching to a fresh New Tab.")
     public static let ContextMenuButtonToastNewPrivateTabOpenedLabelText = MZLocalizedString(
-        "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText",
+        "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113",
         tableName: nil,
-        value: "New Private Tab opened",
+        value: "New Private Tab Opened",
         comment: "The label text in the Button Toast for switching to a fresh New Private Tab.")
 }
 
@@ -4827,3 +4877,4 @@ extension String {
         value: "Connection is not secure",
         comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
 }
+// swiftlint:enable line_length

@@ -160,7 +160,7 @@ enum NavigationPath {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
             // Use the last browsing mode the user was in
-            let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+            let isPrivate = UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
             self = .url(webURL: url, isPrivate: isPrivate)
         } else {
             return nil
@@ -222,7 +222,7 @@ enum NavigationPath {
             return .openUrlFromComponents(components: components)
         case "widget-medium-quicklink-open-url":
             // Widget Quick Actions - medium - open url private or regular
-            let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+            let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ? .mediumQuickActionPrivateSearch : .mediumQuickActionSearch)
             return .openUrlFromComponents(components: components)
         case "widget-small-quicklink-open-copied", "widget-medium-quicklink-open-copied":
@@ -250,7 +250,7 @@ enum NavigationPath {
         let url = components.valueForQuery("url")?.asURL
         // Unless the `open-url` URL specifies a `private` parameter,
         // use the last browsing mode the user was in.
-        let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+        let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
         return .url(webURL: url, isPrivate: isPrivate)
     }
 
@@ -260,7 +260,7 @@ enum NavigationPath {
             return .text(searchText)
         }
         let url = UIPasteboard.general.url
-        let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+        let isPrivate = UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
         return .url(webURL: url, isPrivate: isPrivate)
     }
 

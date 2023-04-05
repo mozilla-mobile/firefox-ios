@@ -100,4 +100,6 @@ extension Notification.Name {
     public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
     public static let HistoryUpdated = Notification.Name("HistoryUpdated")
+
+    public static let PresentIntroView = Notification.Name("PresentIntroView")
 }

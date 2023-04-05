@@ -101,4 +101,7 @@ public class AppConstants {
 
     /// Fixed short version for nightly builds
     public static let nightlyAppVersion = "9000"
+
+    /// A hard coded flag until development on the coordinator is done
+    public static let useCoordinators = false
 }

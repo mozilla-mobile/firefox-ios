@@ -9,6 +9,14 @@ public struct PrefsKeys {
     // When this pref is set (by the user) it overrides default behaviour which is just based on app locale.
     public static let KeyEnableChinaSyncService = "useChinaSyncService"
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
+
+    // Global sync state for rust sync manager
+    public static let RustSyncManagerPersistedState = "rustSyncManagerPersistedStateKey"
+
+    // When this pref is set to true it signifies that RustSyncManager has been set as the
+    // sync manager
+    public static let HasRustSyncManagerEverBeenUsed = "hasRustSyncManagerEverBeenUsedKey"
+
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
@@ -32,6 +40,7 @@ public struct PrefsKeys {
     public static let SessionCount = "sessionCount"
     public static let InstallType = "InstallType"
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
+    public static let KeyFirstAppUse = "firstAppUse"
     public static let KeySecondRun = "SecondRun"
 
     public struct AppVersion {
@@ -46,6 +55,11 @@ public struct PrefsKeys {
 
         public static let legacyAssetMigrationCheck = "legacyAssetMigrationCheckUserPrefsKey"
         public static let v1MigrationCheck = "v1MigrationCheckUserPrefsKey"
+    }
+
+    public struct Notifications {
+        public static let SyncNotifications = "SyncNotificationsUserPrefsKey"
+        public static let TipsAndFeaturesNotifications = "TipsAndFeaturesNotificationsUserPrefsKey"
     }
 
     // For ease of use, please list keys alphabetically.
@@ -134,6 +148,12 @@ public struct PrefsKeys {
 
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"
+
+    // Representing whether or not the last user session was private
+    public static let LastSessionWasPrivate = "wasLastSessionPrivate"
+
+    // Only used to force nimbus features to true with tests
+    public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"
 }
 
 public struct PrefsDefaults {

@@ -448,7 +448,7 @@ extension HistoryHighlightsViewModel: HomepageSectionHandler {
 extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
     func didLoadNewData() {
         dispatchQueue.ensureMainThread {
-            self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHightlights()
+            self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHighlights()
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }

@@ -63,6 +63,9 @@ class BookmarkDetailPanel: SiteTableViewController {
     // along with their indentation depth.
     var bookmarkFolders: [(folder: BookmarkFolderData, indent: Int)] = []
 
+    // When `bookmarkItemURL` and `bookmarkItemOrFolderTitle` are valid updatePanelState updates Toolbar appropriaetly.
+    var updatePanelState: ((LibraryPanelSubState) -> Void)?
+
     private var maxIndentationLevel: Int {
         return Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
     }
@@ -82,12 +85,17 @@ class BookmarkDetailPanel: SiteTableViewController {
 
     // MARK: - Initializers
     convenience init(profile: Profile, bookmarkNode: FxBookmarkNode, parentBookmarkFolder: FxBookmarkNode, presentedFromToast fromToast: Bool = false) {
-        self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
+        let bookmarkItemData = bookmarkNode as? BookmarkItemData
+        self.init(profile: profile,
+                  bookmarkNodeGUID: bookmarkNode.guid,
+                  bookmarkNodeType: bookmarkNode.type,
+                  parentBookmarkFolder: parentBookmarkFolder,
+                  presentedFromToast: fromToast,
+                  bookmarkItemURL: bookmarkItemData?.url)
 
-        self.isPresentedFromToast = fromToast
         self.bookmarkItemPosition = bookmarkNode.position
 
-        if let bookmarkItem = bookmarkNode as? BookmarkItemData {
+        if let bookmarkItem = bookmarkItemData {
             self.bookmarkItemOrFolderTitle = bookmarkItem.title
             self.bookmarkItemURL = bookmarkItem.url
 
@@ -99,12 +107,11 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
-    convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode) {
+    convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, updatePanelState: ((LibraryPanelSubState) -> Void)? = nil) {
         self.init(profile: profile, bookmarkNodeGUID: nil, bookmarkNodeType: bookmarkNodeType, parentBookmarkFolder: parentBookmarkFolder)
 
         if bookmarkNodeType == .bookmark {
             self.bookmarkItemOrFolderTitle = ""
-            self.bookmarkItemURL = ""
 
             self.title = .BookmarksNewBookmark
         } else if bookmarkNodeType == .folder {
@@ -112,12 +119,16 @@ class BookmarkDetailPanel: SiteTableViewController {
 
             self.title = .BookmarksNewFolder
         }
+
+        self.updatePanelState = updatePanelState
     }
 
-    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode) {
+    private init(profile: Profile, bookmarkNodeGUID: GUID?, bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: FxBookmarkNode, presentedFromToast fromToast: Bool = false, bookmarkItemURL: String? = nil) {
         self.bookmarkNodeGUID = bookmarkNodeGUID
         self.bookmarkNodeType = bookmarkNodeType
         self.parentBookmarkFolder = parentBookmarkFolder
+        self.isPresentedFromToast = fromToast
+        self.bookmarkItemURL = bookmarkItemURL
 
         super.init(profile: profile)
 
@@ -219,8 +230,12 @@ class BookmarkDetailPanel: SiteTableViewController {
     func updateSaveButton() {
         guard bookmarkNodeType == .bookmark else { return }
 
+        navigationItem.rightBarButtonItem?.isEnabled = isBookmarkItemURLValid()
+    }
+
+    private func isBookmarkItemURLValid() -> Bool {
         let url = URL(string: bookmarkItemURL ?? "")
-        navigationItem.rightBarButtonItem?.isEnabled = url?.schemeIsValid == true && url?.host != nil
+        return url?.schemeIsValid == true && url?.host != nil
     }
 
     // MARK: - Button Actions
@@ -420,6 +435,14 @@ class BookmarkDetailPanel: SiteTableViewController {
         let header = view as? SiteTableViewHeader
         header?.showBorder(for: .top, section != 0)
     }
+
+    private func toggleSaveButton() {
+        if let title = bookmarkItemOrFolderTitle?.trimmingCharacters(in: .whitespacesAndNewlines), !title.isEmpty && isBookmarkItemURLValid() {
+            self.updatePanelState?(.itemEditMode)
+        } else {
+            self.updatePanelState?(.itemEditModeInvalidField)
+        }
+    }
 }
 
 extension BookmarkDetailPanel: TextFieldTableViewCellDelegate {
@@ -434,6 +457,10 @@ extension BookmarkDetailPanel: TextFieldTableViewCellDelegate {
             updateSaveButton()
         default:
             break
+        }
+
+        if !isPresentedFromToast {
+            toggleSaveButton()
         }
     }
 }

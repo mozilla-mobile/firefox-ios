@@ -115,11 +115,10 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
 
     fileprivate func simplifiedHostnameFromURL(_ url: URL) -> String {
         let hostname = url.host ?? ""
-        for prefix in prefixesToSimplify {
-            if hostname.hasPrefix(prefix) {
-                return String(hostname[hostname.index(hostname.startIndex, offsetBy: prefix.count)...])
-            }
+        for prefix in prefixesToSimplify where hostname.hasPrefix(prefix) {
+            return String(hostname[hostname.index(hostname.startIndex, offsetBy: prefix.count)...])
         }
+
         return hostname
     }
 
@@ -212,7 +211,8 @@ class ReadingListPanel: UITableViewController,
         listenForThemeChange(view)
     }
 
-    @objc func notificationReceived(_ notification: Notification) {
+    @objc
+    func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .DynamicFontChanged:
             refreshReadingList()
@@ -322,7 +322,8 @@ class ReadingListPanel: UITableViewController,
         return view
     }()
 
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }

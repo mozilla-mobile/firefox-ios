@@ -72,6 +72,7 @@ public struct ImageIdentifiers {
     public static let noImageMode = "menu-NoImageMode"
     public static let onboardingWelcomev106 = "onboardingWelcome"
     public static let onboardingSyncv106 = "onboardingSync"
+    public static let onboardingNotification = "onboardingNotification"
     public static let paste = "menu-Paste"
     public static let pasteAndGo = "menu-PasteAndGo"
     public static let pinSmall = "pin_small"
@@ -109,4 +110,5 @@ public struct ImageIdentifiers {
     public static let warning = "menu-warning"
     public static let whatsNew = "whatsnew"
     public static let xMark = "nav-stop"
+    public static let zoomIn = "menu-ZoomIn"
 }

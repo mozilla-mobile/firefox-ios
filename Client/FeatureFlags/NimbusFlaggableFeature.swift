@@ -14,13 +14,16 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case contextualHintForJumpBackInSyncedTab
     case contextualHintForToolbar
     case creditCardAutofillStatus
+    case engagementNotificationStatus
     case historyHighlights
     case historyGroups
     case inactiveTabs
     case jumpBackIn
     case jumpBackInSyncedTab
+    case notificationSettings
     case onboardingUpgrade
     case onboardingFreshInstall
+    case onboardingNotificationCard
     case pocket
     case pullToRefresh
     case recentlySaved
@@ -43,8 +46,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 /// This enum is a constraint for any feature flag options that have more than
 /// just an ON or OFF setting. These option must also be added to `NimbusFeatureFlagID`
 enum NimbusFeatureFlagWithCustomOptionsID {
-    case startAtHome
+    case onboardingNotificationCard
     case searchBarPosition
+    case startAtHome
     case wallpaperVersion
 }
 
@@ -90,9 +94,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         case .contextualHintForJumpBackInSyncedTab,
                 .contextualHintForToolbar,
                 .creditCardAutofillStatus,
+                .engagementNotificationStatus,
                 .jumpBackInSyncedTab,
+                .notificationSettings,
                 .onboardingUpgrade,
                 .onboardingFreshInstall,
+                .onboardingNotificationCard,
                 .reportSiteIssue,
                 .searchHighlights,
                 .shakeToRestore,
@@ -113,6 +120,11 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
 
     // MARK: - Public methods
     public func isNimbusEnabled(using nimbusLayer: NimbusFeatureFlagLayer) -> Bool {
+        // Provide a way to override nimbus feature enabled for tests
+        if AppConstants.isRunningUnitTest, UserDefaults.standard.bool(forKey: PrefsKeys.NimbusFeatureTestsOverride) {
+            return true
+        }
+
         let nimbusValue = nimbusLayer.checkNimbusConfigFor(featureID)
 
         switch featureID {
@@ -154,6 +166,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         switch featureID {
         case .bottomSearchBar:
             return nimbusSearchBar.getDefaultPosition().rawValue
+
+        case .onboardingNotificationCard:
+            return nimbusLayer.checkNimbusConfigForOnboardingNotificationCard().rawValue
 
         case .startAtHome:
             return nimbusLayer.checkNimbusConfigForStartAtHome().rawValue

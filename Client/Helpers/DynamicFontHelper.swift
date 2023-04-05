@@ -146,7 +146,8 @@ class DynamicFontHelper: NSObject {
         defaultSmallFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .caption2).pointSize
     }
 
-    @objc func contentSizeCategoryDidChange(_ notification: Notification) {
+    @objc
+    func contentSizeCategoryDidChange(_ notification: Notification) {
         refreshFonts()
         let notification = Notification(name: .DynamicFontChanged, object: nil)
         NotificationCenter.default.post(notification)

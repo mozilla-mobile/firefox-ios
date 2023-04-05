@@ -116,7 +116,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     }
 
     func makeWebView() -> WKWebView {
-        let config = TabManager.makeWebViewConfig(isPrivate: true, prefs: nil)
+        let config = LegacyTabManager.makeWebViewConfig(isPrivate: true, prefs: nil)
         config.preferences.javaScriptCanOpenWindowsAutomatically = false
 
         let webView = WKWebView(
@@ -169,7 +169,8 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         return InterstitialViews(view: view, activityView: spinner, label: error)
     }
 
-    @objc func didTimeOut() {
+    @objc
+    func didTimeOut() {
         self.timer = nil
         self.isError = true
     }

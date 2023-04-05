@@ -15,7 +15,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        Glean.shared.resetGlean(clearStores: false)
+        Glean.shared.resetGlean(clearStores: true)
         Glean.shared.enableTestingMode()
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         subject = GleanPlumbMessageManager(messagingStore: messagingStore)
@@ -110,20 +110,20 @@ class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
         metadata.impressions += 1
 
         if metadata.impressions > maxImpression {
-            onMessageExpired(metadata, shouldReport: true)
+            onMessageExpired(metadata, surface: message.data.surface, shouldReport: true)
         }
     }
 
     func onMessagePressed(_ message: GleanPlumbMessage) {
-        onMessageExpired(metadata, shouldReport: false)
+        onMessageExpired(metadata, surface: message.data.surface, shouldReport: false)
     }
 
     func onMessageDismissed(_ message: GleanPlumbMessage) {
         metadata.dismissals += 1
-        onMessageExpired(metadata, shouldReport: false)
+        onMessageExpired(metadata, surface: message.data.surface, shouldReport: false)
     }
 
-    func onMessageExpired(_ message: GleanPlumbMessageMetaData, shouldReport: Bool) {
+    func onMessageExpired(_ message: GleanPlumbMessageMetaData, surface: MessageSurfaceId, shouldReport: Bool) {
         metadata.isExpired = true
     }
 }

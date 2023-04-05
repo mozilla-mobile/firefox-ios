@@ -12,4 +12,5 @@ struct TabData: Codable {
     let isPrivate: Bool
     let lastUsedTime: Date
     let createdAtTime: Date
+    var tabGroupData: TabGroupData?
 }

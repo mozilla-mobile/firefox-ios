@@ -4,6 +4,7 @@
 
 import WebKit
 import Shared
+import Common
 
 enum BlocklistCategory: CaseIterable {
     case advertising
@@ -68,13 +69,24 @@ class ContentBlocker {
     let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
     var blockImagesRule: WKContentRuleList?
     var setupCompleted = false
+    let logger: Logger
 
     static let shared = ContentBlocker()
 
-    private init() {
+    private init(logger: Logger = DefaultLogger.shared) {
         let blockImages = NoImageModeDefaults.Script
+        self.logger = logger
         ruleStore.compileContentRuleList(forIdentifier: NoImageModeDefaults.ScriptName, encodedContentRuleList: blockImages) { rule, error in
-            assert(rule != nil && error == nil)
+            guard error == nil else {
+                logger.log("We errored with error: \(String(describing: error))", level: .warning, category: .webview)
+                assert(error == nil)
+                return
+            }
+            guard rule != nil else {
+                logger.log("We came across a nil rule set for NoImageMode at this point.", level: .warning, category: .webview)
+                assert(rule != nil)
+                return
+            }
             self.blockImagesRule = rule
         }
 
@@ -157,10 +169,11 @@ class ContentBlocker {
 // ruleStore.
 extension ContentBlocker {
     private func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
-        DispatchQueue.global().async {
+        DispatchQueue.global().async { [weak self] in
             guard let path = Bundle.main.path(forResource: file, ofType: "json"),
                   let source = try? String(contentsOfFile: path, encoding: .utf8)
             else {
+                self?.logger.log("Error unwrapping the resource contents", level: .warning, category: .webview)
                 assertionFailure("Error unwrapping the resource contents")
                 return
             }
@@ -249,13 +262,12 @@ extension ContentBlocker {
             }
 
             let blocklists = BlocklistFileName.allCases.map { $0.filename }
-            for listOnDisk in blocklists {
-                // If any file from the list on disk is not installed, remove all the rules and re-install them
-                if !available.contains(where: { $0 == listOnDisk}) {
-                    noMatchingIdentifierFoundForRule = true
-                    break
-                }
+            // If any file from the list on disk is not installed, remove all the rules and re-install them
+            for listOnDisk in blocklists where !available.contains(where: { $0 == listOnDisk}) {
+                noMatchingIdentifierFoundForRule = true
+                break
             }
+
             if !noMatchingIdentifierFoundForRule {
                 completion()
                 return
@@ -281,10 +293,16 @@ extension ContentBlocker {
                     guard let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
                     str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
                     self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
-                        if let error = error {
-                            assertionFailure("Content blocker error: \(error)")
+                        guard error == nil else {
+                            self.logger.log("Content blocker errored with: \(String(describing: error))", level: .warning, category: .webview)
+                            assert(error == nil)
+                            return
                         }
-                        assert(rule != nil)
+                        guard rule != nil else {
+                            self.logger.log("We came across a nil rule set for BlockList.", level: .warning, category: .webview)
+                            assert(rule != nil)
+                            return
+                        }
 
                         result.fill(())
                     }

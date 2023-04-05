@@ -51,6 +51,11 @@ class BookmarksPanel: SiteTableViewController,
             return [bottomLeftButton, flexibleSpace, bottomRightButton]
         case .bookmarks(state: .itemEditMode):
             bottomRightButton.title = String.AppSettingsDone
+            bottomRightButton.isEnabled = true
+            return [flexibleSpace, bottomRightButton]
+        case .bookmarks(state: .itemEditModeInvalidField):
+            bottomRightButton.title = String.AppSettingsDone
+            bottomRightButton.isEnabled = false
             return [flexibleSpace, bottomRightButton]
         default:
             return [UIBarButtonItem]()
@@ -147,10 +152,13 @@ class BookmarksPanel: SiteTableViewController,
                                      tapHandler: { _ in
             guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
-            self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
+            self.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
             let detailController = BookmarkDetailPanel(profile: self.profile,
                                                        withNewBookmarkNodeType: .bookmark,
-                                                       parentBookmarkFolder: bookmarkFolder)
+                                                       parentBookmarkFolder: bookmarkFolder) { state in
+                self.updatePanelState(newState: .bookmarks(state: state))
+                self.sendPanelChangeNotification()
+            }
             self.navigationController?.pushViewController(detailController, animated: true)
         }).items
     }
@@ -273,6 +281,7 @@ class BookmarksPanel: SiteTableViewController,
     private func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
         return indexPath.section < numberOfSections(in: tableView)
         && indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
+        && indexPath.row >= 0
         && viewModel.bookmarkFolderGUID != BookmarkRoots.MobileFolderGUID
     }
 
@@ -311,7 +320,8 @@ class BookmarksPanel: SiteTableViewController,
 
     // MARK: - Long press
 
-    @objc private func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard longPressGestureRecognizer.state == .began,
               let indexPath = tableView.indexPathForRow(at: touchPoint) else {
@@ -321,7 +331,8 @@ class BookmarksPanel: SiteTableViewController,
         presentContextMenu(for: indexPath)
     }
 
-    @objc private func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         navigationController?.popToRootViewController(animated: true)
@@ -563,6 +574,9 @@ extension BookmarksPanel {
             presentInFolderActions()
 
         case .itemEditMode:
+            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+
+        case .itemEditModeInvalidField:
             updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
 
         default:

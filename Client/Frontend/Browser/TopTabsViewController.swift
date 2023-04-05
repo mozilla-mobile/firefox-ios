@@ -109,7 +109,7 @@ class TopTabsViewController: UIViewController, Themeable {
                                                  tabDisplayType: .TopTabTray,
                                                  profile: profile,
                                                  theme: themeManager.currentTheme)
-        tabManager.tabDisplayType = .TopTabTray
+        self.tabManager.tabDisplayType = .TopTabTray
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }
@@ -156,7 +156,8 @@ class TopTabsViewController: UIViewController, Themeable {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
+        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false,
+                                  forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
     func switchForegroundStatus(isInForeground reveal: Bool) {
@@ -174,16 +175,19 @@ class TopTabsViewController: UIViewController, Themeable {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
 
-    @objc func tabsTrayTapped() {
+    @objc
+    func tabsTrayTapped() {
         self.topTabDisplayManager.refreshStore(evenIfHidden: true)
         delegate?.topTabsDidPressTabs()
     }
 
-    @objc func newTabTapped() {
+    @objc
+    func newTabTapped() {
         self.delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
     }
 
-    @objc func togglePrivateModeTapped() {
+    @objc
+    func togglePrivateModeTapped() {
         topTabDisplayManager.togglePrivateMode(isOn: !topTabDisplayManager.isPrivate,
                                                createTabOnEmptyPrivateMode: true,
                                                shouldSelectMostRecentTab: true)
@@ -334,13 +338,5 @@ extension TopTabsViewController: TopTabsScrollDelegate {
         } else {
             topTabFader.setFader(forSides: .both)
         }
-    }
-}
-
-// MARK: Functions for testing
-extension TopTabsViewController {
-    func test_getDisplayManager() -> TabDisplayManager {
-        assert(AppConstants.isRunningTest)
-        return topTabDisplayManager
     }
 }

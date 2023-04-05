@@ -89,7 +89,8 @@ class AddCredentialViewController: UIViewController, Themeable {
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
-    @objc func addCredential() {
+    @objc
+    func addCredential() {
         guard let hostname = websiteField.text,
               let username = usernameField.text,
               let password = passwordField.text else {
@@ -112,7 +113,8 @@ class AddCredentialViewController: UIViewController, Themeable {
         )
     }
 
-    @objc func cancel() {
+    @objc
+    func cancel() {
         dismiss(animated: true)
     }
 

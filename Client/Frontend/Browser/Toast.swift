@@ -85,7 +85,8 @@ class Toast: UIView, ThemeApplicable {
             }
     }
 
-    @objc func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
+    @objc
+    func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
         dismiss(false)
     }
 

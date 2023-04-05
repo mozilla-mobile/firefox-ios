@@ -51,7 +51,8 @@ class ExperimentsViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
 
-    @objc private func onExperimentsApplied() {
+    @objc
+    private func onExperimentsApplied() {
         DispatchQueue.main.async {
             self.availableExperiments = self.experiments.getAvailableExperiments()
             self.experimentsView.reloadData()

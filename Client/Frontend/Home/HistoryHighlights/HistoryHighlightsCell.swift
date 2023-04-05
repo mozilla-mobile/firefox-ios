@@ -72,7 +72,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
     // MARK: - Public methods
     func configureCell(with options: HistoryHighlightsModel, theme: Theme) {
         cellModel = options
-        itemTitle.text = options.title
+        itemTitle.text = !options.title.isEmpty ? options.title : options.urlString
 
         if let descriptionCount = options.description {
             itemDescription.text = descriptionCount

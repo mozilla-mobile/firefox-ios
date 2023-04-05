@@ -29,7 +29,8 @@ protocol TabDisplayCompletionDelegate: AnyObject {
     func completedAnimation(for: TabAnimationType)
 }
 
-@objc protocol TabSelectionDelegate: AnyObject {
+@objc
+protocol TabSelectionDelegate: AnyObject {
     func didSelectTabAtIndex(_ index: Int)
 }
 
@@ -74,7 +75,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     var tabDisplayType: TabDisplayType = .TabGrid
     fileprivate let tabManager: TabManager
     fileprivate let collectionView: UICollectionView
-    fileprivate weak var tabDisplayer: TabDisplayer?
+    fileprivate var tabDisplayer: TabDisplayer
     private let tabReuseIdentifier: String
     private var hasSentInactiveTabShownEvent: Bool = false
     var profile: Profile
@@ -319,7 +320,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
         isPrivate = isOn
 
-        UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
+        UserDefaults.standard.set(isPrivate, forKey: PrefsKeys.LastSessionWasPrivate)
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
@@ -407,7 +408,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 self.collectionView.reloadItems(at: indexPaths)
             }
 
-            self.tabDisplayer?.focusSelectedTab()
+            self.tabDisplayer.focusSelectedTab()
             completion?()
         }
     }
@@ -509,7 +510,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
 // MARK: - UICollectionViewDataSource
 extension TabDisplayManager: UICollectionViewDataSource {
-    @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if tabDisplayType == .TopTabTray {
             return dataStore.count + (tabGroups?.count ?? 0)
         }
@@ -548,14 +550,15 @@ extension TabDisplayManager: UICollectionViewDataSource {
         return UICollectionReusableView()
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
         if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
-            cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
+            cell = tabDisplayer.cellFactory(for: cell, using: tab)
             return cell
         }
-        assert(tabDisplayer != nil)
+
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
             if let inactiveCell = collectionView.dequeueReusableCell(withReuseIdentifier: InactiveTabCell.cellIdentifier, for: indexPath) as? InactiveTabCell {
@@ -585,7 +588,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 
         case .regularTabs:
             guard let tab = dataStore.at(indexPath.row) else { return cell }
-            cell = tabDisplayer?.cellFactory(for: cell, using: tab) ?? cell
+            cell = tabDisplayer.cellFactory(for: cell, using: tab)
 
         case .none:
             return cell
@@ -594,7 +597,8 @@ extension TabDisplayManager: UICollectionViewDataSource {
         return cell
     }
 
-    @objc func numberOfSections(in collectionView: UICollectionView) -> Int {
+    @objc
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         if tabDisplayType == .TopTabTray { return 1 }
         return  TabDisplaySection.allCases.count
     }
@@ -630,6 +634,47 @@ extension TabDisplayManager: GroupedTabDelegate {
 
 // MARK: - InactiveTabsDelegate
 extension TabDisplayManager: InactiveTabsDelegate {
+    func shouldCloseInactiveTab(tab: Tab) {
+        removeInactiveTabAndReloadView(tabs: [tab])
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .inactiveTabSwipeClose,
+                                     extras: nil)
+    }
+
+    func didTapCloseInactiveTabs(tabsCount: Int) {
+        // Haptic feedback for when a user closes all inactive tabs
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
+
+        // Reload Inactive Tabs section for user feedback
+        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
+        collectionView.reloadItems(at: [indexPath])
+
+        cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
+                                      completion: { shouldClose in
+            guard shouldClose else {
+                self.undoInactiveTabsClose()
+                return
+            }
+
+            self.closeInactiveTabs()
+        })
+    }
+
+    private func closeInactiveTabs() {
+        guard let inactiveTabs = inactiveViewModel?.inactiveTabs,
+              !inactiveTabs.isEmpty else { return }
+
+        removeInactiveTabAndReloadView(tabs: inactiveTabs)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .inactiveTabCloseAllButton,
+                                     extras: nil)
+    }
+
     // Note: This is a helper method for shouldCloseInactiveTab and didTapCloseAllTabs
     private func removeInactiveTabAndReloadView(tabs: [Tab]) {
         // Remove inactive tabs from tab manager
@@ -650,21 +695,10 @@ extension TabDisplayManager: InactiveTabsDelegate {
         collectionView.reloadItems(at: [indexPath])
     }
 
-    func shouldCloseInactiveTab(tab: Tab) {
-        removeInactiveTabAndReloadView(tabs: [tab])
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabSwipeClose, extras: nil)
-    }
-
-    func didTapCloseAllTabs() {
-        // Haptic feedback for when a user closes all inactive tabs
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
-
-        // Close all inactive tabs
-        if let inactiveTabs = inactiveViewModel?.inactiveTabs, !inactiveTabs.isEmpty {
-            removeInactiveTabAndReloadView(tabs: inactiveTabs)
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .inactiveTabCloseAllButton, extras: nil)
-        }
+    private func undoInactiveTabsClose() {
+        inactiveViewModel?.shouldHideInactiveTabs = false
+        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
+        collectionView.reloadItems(at: [indexPath])
     }
 
     func didSelectInactiveTab(tab: Tab?) {
@@ -877,7 +911,7 @@ extension TabDisplayManager: TabEventHandler {
             var indexPaths = [IndexPath(row: index, section: section)]
 
             if selectedTabChanged {
-                self?.tabDisplayer?.focusSelectedTab()
+                self?.tabDisplayer.focusSelectedTab()
 
                 // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
                 // This method avoids relying on the state of the "previous" selected tab,

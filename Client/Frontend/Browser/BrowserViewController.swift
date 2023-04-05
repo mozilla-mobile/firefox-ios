@@ -159,8 +159,6 @@ class BrowserViewController: UIViewController {
         return keyboardPressesHandlerValue
     }
 
-    fileprivate var shouldShowIntroScreen: Bool { profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil }
-
     init(
         profile: Profile,
         tabManager: TabManager,
@@ -211,15 +209,18 @@ class BrowserViewController: UIViewController {
         LegacyThemeManager.instance.statusBarStyle
     }
 
-    @objc func displayThemeChanged(notification: Notification) {
+    @objc
+    func displayThemeChanged(notification: Notification) {
         applyTheme()
     }
 
-    @objc func didTapUndoCloseAllTabToast(notification: Notification) {
+    @objc
+    func didTapUndoCloseAllTabToast(notification: Notification) {
         leaveOverlayMode(didCancel: true)
     }
 
-    @objc func openTabNotification(notification: Notification) {
+    @objc
+    func openTabNotification(notification: Notification) {
         guard let openTabObject = notification.object as? OpenTabNotificationObject else {
             return
         }
@@ -227,6 +228,8 @@ class BrowserViewController: UIViewController {
         switch openTabObject.type {
         case .loadQueuedTabs(let urls):
             loadQueuedTabs(receivedURLs: urls)
+        case .openNewTab:
+            openBlankNewTab(focusLocationField: true)
         case .openSearchNewTab(let searchTerm):
             openSearchNewTab(searchTerm)
         case .switchToTabForURLOrOpen(let url):
@@ -236,7 +239,8 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    @objc func searchBarPositionDidChange(notification: Notification) {
+    @objc
+    func searchBarPositionDidChange(notification: Notification) {
         guard let dict = notification.object as? NSDictionary,
               let newSearchBarPosition = dict[PrefsKeys.FeatureFlags.SearchBarPosition] as? SearchBarPosition,
               urlBar != nil
@@ -254,6 +258,7 @@ class BrowserViewController: UIViewController {
 
         isBottomSearchBar = newPositionIsBottom
         updateViewConstraints()
+        updateHeaderConstraints()
         toolbar.setNeedsDisplay()
         urlBar.updateConstraints()
     }
@@ -266,7 +271,8 @@ class BrowserViewController: UIViewController {
         return newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
     }
 
-    @objc fileprivate func appMenuBadgeUpdate() {
+    @objc
+    fileprivate func appMenuBadgeUpdate() {
         let actionNeeded = RustFirefoxAccounts.shared.isActionNeeded
         let showWarningBadge = actionNeeded
 
@@ -332,7 +338,8 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    @objc func appDidEnterBackgroundNotification() {
+    @objc
+    func appDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
@@ -342,11 +349,13 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    @objc func tappedTopArea() {
+    @objc
+    func tappedTopArea() {
         scrollController.showToolbars(animated: true)
     }
 
-    @objc func appWillResignActiveNotification() {
+    @objc
+    func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
             self.updateDisplayedPopoverProperties = nil
@@ -368,7 +377,8 @@ class BrowserViewController: UIViewController {
         presentedViewController?.view.alpha = 0
     }
 
-    @objc func appDidBecomeActiveNotification() {
+    @objc
+    func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animate(
@@ -504,6 +514,11 @@ class BrowserViewController: UIViewController {
             selector: #selector(openTabNotification),
             name: .OpenTabNotification,
             object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(presentIntroFrom),
+            name: .PresentIntroView,
+            object: nil)
     }
 
     func addSubviews() {
@@ -592,7 +607,7 @@ class BrowserViewController: UIViewController {
     }
 
     private func presentContextualHint() {
-        if shouldShowIntroScreen { return }
+        if IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen { return }
         present(contextHintVC, animated: true)
 
         UIAccessibility.post(notification: .layoutChanged, argument: contextHintVC)
@@ -676,11 +691,11 @@ class BrowserViewController: UIViewController {
         webViewContainerBackdrop.snp.makeConstraints { make in
             make.edges.equalTo(view)
         }
+
+        updateHeaderConstraints()
     }
 
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-
+    private func updateHeaderConstraints() {
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(view)
@@ -691,6 +706,10 @@ class BrowserViewController: UIViewController {
                 make.left.right.equalTo(view)
             }
         }
+    }
+
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
 
         topTouchArea.snp.remakeConstraints { make in
             make.top.left.right.equalTo(view)
@@ -823,39 +842,42 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func dequeueQueuedTabs(receivedURLs: [URL]) {
-        assert(!Thread.current.isMainThread, "This must be called in the background.")
-        self.profile.queue.getQueuedTabs() >>== { cursor in
-            // This assumes that the DB returns rows in some kind of sane order.
-            // It does in practice, so WFM.
-            let cursorCount = cursor.count
-            if cursorCount > 0 {
-                // Filter out any tabs received by a push notification to prevent dupes.
-                let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
-                if !urls.isEmpty {
+        ensureBackgroundThread { [weak self] in
+            guard let self = self else { return }
+
+            self.profile.queue.getQueuedTabs() >>== { cursor in
+                // This assumes that the DB returns rows in some kind of sane order.
+                // It does in practice, so WFM.
+                let cursorCount = cursor.count
+                if cursorCount > 0 {
+                    // Filter out any tabs received by a push notification to prevent dupes.
+                    let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
+                    if !urls.isEmpty {
+                        DispatchQueue.main.async {
+                            self.tabManager.addTabsForURLs(urls, zombie: false)
+                        }
+                    }
+
+                    // Clear *after* making an attempt to open. We're making a bet that
+                    // it's better to run the risk of perhaps opening twice on a crash,
+                    // rather than losing data.
+                    self.profile.queue.clearQueuedTabs()
+                }
+
+                // Then, open any received URLs from push notifications.
+                if !receivedURLs.isEmpty {
                     DispatchQueue.main.async {
-                        self.tabManager.addTabsForURLs(urls, zombie: false)
+                        self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
                     }
                 }
 
-                // Clear *after* making an attempt to open. We're making a bet that
-                // it's better to run the risk of perhaps opening twice on a crash,
-                // rather than losing data.
-                self.profile.queue.clearQueuedTabs()
-            }
-
-            // Then, open any received URLs from push notifications.
-            if !receivedURLs.isEmpty {
-                DispatchQueue.main.async {
-                    self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
+                if !receivedURLs.isEmpty || cursorCount > 0 {
+                    // Because the notification service runs as a seperate process
+                    // we need to make sure that our account manager picks up any persisted state
+                    // the notification services persisted.
+                    self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
+                    self.profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
                 }
-            }
-
-            if !receivedURLs.isEmpty || cursorCount > 0 {
-                // Because the notification service runs as a seperate process
-                // we need to make sure that our account manager picks up any persisted state
-                // the notification services persisted.
-                self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
-                self.profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
             }
         }
     }
@@ -1552,7 +1574,8 @@ class BrowserViewController: UIViewController {
         showViewController(viewController: viewController)
     }
 
-    @objc func openSettings() {
+    @objc
+    func openSettings() {
         ensureMainThread { [self] in
             if let presentedViewController = self.presentedViewController {
                 presentedViewController.dismiss(animated: true, completion: nil)
@@ -1993,7 +2016,8 @@ extension BrowserViewController {
         // always bring the alpha back to 1.0
         defer { self.view.alpha = 1.0 }
 
-        surveySurfaceManager = SurveySurfaceManager(with: self)
+        surveySurfaceManager = SurveySurfaceManager()
+        surveySurfaceManager?.homepanelDelegate = self
 
         surveySurfaceManager?.dismissClosure = { [weak self] in
             self?.surveySurfaceManager = nil
@@ -2253,8 +2277,13 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController {
-    func presentIntroViewController(_ alwaysShow: Bool = false) {
-        if alwaysShow || shouldShowIntroScreen {
+    @objc
+    func presentIntroFrom(notification: Notification) {
+        presentIntroViewController(force: true)
+    }
+
+    func presentIntroViewController(force: Bool = false) {
+        if force || IntroScreenManager(prefs: profile.prefs).shouldShowIntroScreen {
             showProperIntroVC()
         }
     }
@@ -2317,7 +2346,7 @@ extension BrowserViewController {
         let introViewModel = IntroViewModel()
         let introViewController = IntroViewController(viewModel: introViewModel, profile: profile)
         introViewController.didFinishFlow = {
-            self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+            IntroScreenManager(prefs: self.profile.prefs).didSeeIntroScreen()
             introViewController.dismiss(animated: true)
         }
         self.introVCPresentHelper(introViewController: introViewController)
@@ -2351,7 +2380,8 @@ extension BrowserViewController {
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
-    @objc func dismissSignInViewController() {
+    @objc
+    func dismissSignInViewController() {
         self.dismiss(animated: true, completion: nil)
     }
 }
@@ -2542,7 +2572,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
 extension BrowserViewController {
     // no-op
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
+    @objc
+    func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) { }
 }
 
 extension BrowserViewController: KeyboardHelperDelegate {
@@ -2650,6 +2681,7 @@ extension BrowserViewController: NotificationThemeable {
 
         guard let contentScript = tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         applyThemeForPreferences(profile.prefs, contentScript: contentScript)
+        zoomPageBar?.applyTheme(theme: themeManager.currentTheme)
     }
 }
 
@@ -2807,6 +2839,6 @@ extension BrowserViewController {
     }
 
     func trackNotificationPermission() {
-        NotificationManager().getNotificationSettings { _ in }
+        NotificationManager().getNotificationSettings(sendTelemetry: true) { _ in }
     }
 }

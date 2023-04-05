@@ -31,7 +31,8 @@ public class PushRegistration: NSObject, NSSecureCoding {
         self.init(uaid: uaid, secret: secret, subscriptions: [defaultSubscriptionID: subscription])
     }
 
-    @objc public convenience required init?(coder aDecoder: NSCoder) {
+    @objc
+    public convenience required init?(coder aDecoder: NSCoder) {
         guard let uaid = aDecoder.decodeObject(of: NSString.self, forKey: "uaid") as? String,
               let secret = aDecoder.decodeObject(of: NSString.self, forKey: "secret") as? String,
               let subscriptions = aDecoder.decodeObject(
@@ -44,7 +45,8 @@ public class PushRegistration: NSObject, NSSecureCoding {
         self.init(uaid: uaid, secret: secret, subscriptions: subscriptions)
     }
 
-    @objc public func encode(with aCoder: NSCoder) {
+    @objc
+    public func encode(with aCoder: NSCoder) {
         aCoder.encode(uaid, forKey: "uaid")
         aCoder.encode(secret, forKey: "secret")
         aCoder.encode(subscriptions, forKey: "subscriptions")
@@ -97,7 +99,8 @@ public class PushSubscription: NSObject, NSSecureCoding {
         self.init(channelID: channelID, endpoint: endpoint, keys: keys)
     }
 
-    @objc public convenience required init?(coder aDecoder: NSCoder) {
+    @objc
+    public convenience required init?(coder aDecoder: NSCoder) {
         guard let channelID = aDecoder.decodeObject(of: NSString.self, forKey: "channelID") as? String,
             let urlString = aDecoder.decodeObject(of: NSString.self, forKey: "endpoint") as? String,
             let endpoint = URL(string: urlString),
@@ -114,7 +117,8 @@ public class PushSubscription: NSObject, NSSecureCoding {
                   authKey: authKey)
     }
 
-    @objc public func encode(with aCoder: NSCoder) {
+    @objc
+    public func encode(with aCoder: NSCoder) {
         aCoder.encode(channelID, forKey: "channelID")
         aCoder.encode(endpoint.absoluteString, forKey: "endpoint")
         aCoder.encode(p256dhPrivateKey, forKey: "p256dhPrivateKey")

@@ -254,7 +254,8 @@ class FirefoxAccountSignInViewController: UIViewController {
     // MARK: Button Tap Functions
 
     /// Scan QR code button tapped
-    @objc func scanbuttonTapped(_ sender: UIButton) {
+    @objc
+    func scanbuttonTapped(_ sender: UIButton) {
         let qrCodeVC = QRCodeViewController()
         qrCodeVC.qrCodeDelegate = self
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: telemetryObject, extras: ["flow_type": "pairing"])
@@ -262,8 +263,16 @@ class FirefoxAccountSignInViewController: UIViewController {
     }
 
     /// Use email login button tapped
-    @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+    @objc
+    func emailLoginTapped(_ sender: UIButton) {
+        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
+            isOnboarding: telemetryObject == .onboarding)
+
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow,
+                                            profile: profile,
+                                            dismissalStyle: fxaDismissStyle,
+                                            deepLinkParams: deepLinkParams,
+                                            shouldAskForNotificationPermission: askForPermission)
         fxaWebVC.shouldDismissFxASignInViewController = { [weak self] in
             self?.shouldReload?()
             self?.dismissVC()
@@ -276,7 +285,14 @@ class FirefoxAccountSignInViewController: UIViewController {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
+            isOnboarding: telemetryObject == .onboarding)
+
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
+                                      profile: profile,
+                                      dismissalStyle: fxaDismissStyle,
+                                      deepLinkParams: deepLinkParams,
+                                      shouldAskForNotificationPermission: askForPermission)
         navigationController?.pushViewController(vc, animated: true)
     }
 

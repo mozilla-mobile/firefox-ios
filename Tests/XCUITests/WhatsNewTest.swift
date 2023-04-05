@@ -11,6 +11,6 @@ class WhatsNewTest: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.OpenWhatsNewPage)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "support")
+        waitForValueContains(app.textFields["url"], value: "releasenotes")
     }
 }

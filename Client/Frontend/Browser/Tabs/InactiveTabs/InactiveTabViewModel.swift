@@ -61,8 +61,13 @@ class InactiveTabViewModel {
     private var selectedTab: Tab?
     var inactiveTabs = [Tab]()
     var activeTabs = [Tab]()
+    var shouldHideInactiveTabs = false
 
     private var appSessionManager: AppSessionProvider
+
+    var isActiveTabsEmpty: Bool {
+        return activeTabs.isEmpty || shouldHideInactiveTabs
+    }
 
     init(appSessionManager: AppSessionProvider = AppContainer.shared.resolve()) {
         self.appSessionManager = appSessionManager
@@ -81,6 +86,33 @@ class InactiveTabViewModel {
         updateFilteredTabs()
     }
 
+    /// This function returns any tabs that are less than four days old.
+    ///
+    /// Because the "Jump Back In" and "Inactive Tabs" features are separate features,
+    /// it is not a given that a tab has an active/inactive state. Thus, we must
+    /// assume that if we want to use active/inactive state, we can do so without
+    /// that particular feature being active but still respecting that logic.
+    static func getActiveEligibleTabsFrom(_ tabs: [Tab], profile: Profile) -> [Tab] {
+        var activeTabs = [Tab]()
+
+        let currentDate = Date()
+        let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
+        let day14Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
+        let defaultOldDay = day14Old
+
+        for tab in tabs {
+            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
+            let tabDate = Date.fromTimestamp(tabTimeStamp)
+
+            if tabDate > defaultOldDay || tabTimeStamp == 0 {
+                activeTabs.append(tab)
+            }
+        }
+
+        return activeTabs
+    }
+
+    // MARK: - Private functions
     private func updateModelState(state: TabUpdateState) {
         let currentDate = Date()
         let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
@@ -162,33 +194,5 @@ class InactiveTabViewModel {
     private func clearAll() {
         activeTabs.removeAll()
         inactiveTabs.removeAll()
-    }
-}
-
-extension InactiveTabViewModel {
-    /// This function returns any tabs that are less than four days old.
-    ///
-    /// Because the "Jump Back In" and "Inactive Tabs" features are separate features,
-    /// it is not a given that a tab has an active/inactive state. Thus, we must
-    /// assume that if we want to use active/inactive state, we can do so without
-    /// that particular feature being active but still respecting that logic.
-    static func getActiveEligibleTabsFrom(_ tabs: [Tab], profile: Profile) -> [Tab] {
-        var activeTabs = [Tab]()
-
-        let currentDate = Date()
-        let noon = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: currentDate) ?? Date()
-        let day14Old = Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
-        let defaultOldDay = day14Old
-
-        for tab in tabs {
-            let tabTimeStamp = tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? tab.firstCreatedTime ?? 0
-            let tabDate = Date.fromTimestamp(tabTimeStamp)
-
-            if tabDate > defaultOldDay || tabTimeStamp == 0 {
-                activeTabs.append(tab)
-            }
-        }
-
-        return activeTabs
     }
 }

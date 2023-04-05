@@ -8,7 +8,7 @@ import Common
 protocol HistoryHighlightsDataAdaptor {
     var delegate: HistoryHighlightsDelegate? { get set }
 
-    func getHistoryHightlights() -> [HighlightItem]
+    func getHistoryHighlights() -> [HighlightItem]
     func delete(_ item: HighlightItem)
 }
 
@@ -20,14 +20,14 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
     private var historyItems = [HighlightItem]()
     private var historyManager: HistoryHighlightsManagerProtocol
     private var profile: Profile
-    private var tabManager: TabManagerProtocol
+    private var tabManager: TabManager
     private var deletionUtility: HistoryDeletionProtocol
     var notificationCenter: NotificationProtocol
     weak var delegate: HistoryHighlightsDelegate?
 
     init(historyManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
          profile: Profile,
-         tabManager: TabManagerProtocol,
+         tabManager: TabManager,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          deletionUtility: HistoryDeletionProtocol) {
         self.historyManager = historyManager
@@ -42,7 +42,7 @@ class HistoryHighlightsDataAdaptorImplementation: HistoryHighlightsDataAdaptor {
         loadHistory()
     }
 
-    func getHistoryHightlights() -> [HighlightItem] {
+    func getHistoryHighlights() -> [HighlightItem] {
         return historyItems
     }
 

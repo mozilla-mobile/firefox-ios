@@ -627,7 +627,8 @@ extension HistoryPanel: UITableViewDelegate {
         navigationController?.pushViewController(asGroupListVC, animated: true)
     }
 
-    @objc private func sectionHeaderTapped(sender: UIGestureRecognizer) {
+    @objc
+    private func sectionHeaderTapped(sender: UIGestureRecognizer) {
         guard let sectionNumber = sender.view?.tag else { return }
 
         viewModel.collapseSection(sectionIndex: sectionNumber)
@@ -759,7 +760,8 @@ extension HistoryPanel {
         navigationController?.pushViewController(nextController, animated: true)
     }
 
-    @objc private func onLongPressGestureRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func onLongPressGestureRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint),
@@ -769,7 +771,8 @@ extension HistoryPanel {
         presentContextMenu(for: indexPath)
     }
 
-    @objc private func onRefreshPulled() {
+    @objc
+    private func onRefreshPulled() {
         refreshControl?.beginRefreshing()
         resyncHistory()
     }

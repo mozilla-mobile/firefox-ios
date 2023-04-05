@@ -17,9 +17,11 @@ public protocol ReadingList {
     func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>>
     func getAvailableRecords(completion: @escaping ([ReadingListItem]) -> Void)
     func deleteRecord(_ record: ReadingListItem, completion: ((Bool) -> Void)?)
-    @discardableResult func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>>
+    @discardableResult
+    func createRecordWithURL(_ url: String, title: String, addedBy: String) -> Deferred<Maybe<ReadingListItem>>
     func getRecordWithURL(_ url: String) -> Deferred<Maybe<ReadingListItem>>
-    @discardableResult func updateRecord(_ record: ReadingListItem, unread: Bool) -> Deferred<Maybe<ReadingListItem>>
+    @discardableResult
+    func updateRecord(_ record: ReadingListItem, unread: Bool) -> Deferred<Maybe<ReadingListItem>>
 }
 
 public struct ReadingListItem: Equatable {

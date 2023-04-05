@@ -199,6 +199,10 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
 
         privacySettings.append(ContentBlockerSetting(settings: self))
 
+        if featureFlags.isFeatureEnabled(.notificationSettings, checking: .buildOnly) {
+            privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme, profile: self.profile))
+        }
+
         privacySettings += [
             PrivacyPolicySetting()
         ]
@@ -206,6 +210,7 @@ class AppSettingsTableViewController: SettingsTableViewController, FeatureFlagga
         settings += [
             SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
             SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: [
+                ShowIntroductionSetting(settings: self),
                 SendFeedbackSetting(),
                 SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),
                 StudiesToggleSetting(prefs: prefs, delegate: settingsDelegate, theme: themeManager.currentTheme),

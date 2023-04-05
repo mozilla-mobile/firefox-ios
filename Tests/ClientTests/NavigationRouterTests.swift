@@ -19,7 +19,7 @@ class NavigationRouterTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         profile = TabManagerMockProfile()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        tabManager = TabManager(profile: profile, imageStore: nil)
+        tabManager = LegacyTabManager(profile: profile, imageStore: nil)
         browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         browserViewController.addSubviews()
         gridTab = GridTabViewController(tabManager: tabManager, profile: profile)

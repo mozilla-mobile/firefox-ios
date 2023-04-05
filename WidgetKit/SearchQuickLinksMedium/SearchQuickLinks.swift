@@ -30,8 +30,7 @@ struct SimpleEntry: TimelineEntry {
 }
 
 struct SearchQuickLinksEntryView: View {
-    @ViewBuilder
-    var body: some View {
+    @ViewBuilder var body: some View {
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
                 ImageButtonWithLabel(isSmall: false, link: .search)

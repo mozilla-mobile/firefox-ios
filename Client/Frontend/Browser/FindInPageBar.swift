@@ -154,26 +154,31 @@ class FindInPageBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    @discardableResult override func becomeFirstResponder() -> Bool {
+    @discardableResult
+    override func becomeFirstResponder() -> Bool {
         searchText.becomeFirstResponder()
         return super.becomeFirstResponder()
     }
 
-    @objc fileprivate func didFindPrevious(_ sender: UIButton) {
+    @objc
+    fileprivate func didFindPrevious(_ sender: UIButton) {
         delegate?.findInPage(self, didFindPreviousWithText: searchText.text ?? "")
     }
 
-    @objc fileprivate func didFindNext(_ sender: UIButton) {
+    @objc
+    fileprivate func didFindNext(_ sender: UIButton) {
         delegate?.findInPage(self, didFindNextWithText: searchText.text ?? "")
     }
 
-    @objc fileprivate func didTextChange(_ sender: UITextField) {
+    @objc
+    fileprivate func didTextChange(_ sender: UITextField) {
         matchCountView.isHidden = searchText.text?.trimmingCharacters(in: .whitespaces).isEmpty ?? true
         saveSearchText(searchText.text)
         delegate?.findInPage(self, didTextChange: searchText.text ?? "")
     }
 
-    @objc fileprivate func didPressClose(_ sender: UIButton) {
+    @objc
+    fileprivate func didPressClose(_ sender: UIButton) {
         delegate?.findInPageDidPressClose(self)
     }
 

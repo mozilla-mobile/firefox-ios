@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Account
+import Common
 import Shared
 import UIKit
 
@@ -244,6 +245,25 @@ class BoolSetting: Setting, FeatureFlaggable {
             settingDidChange: settingDidChange)
     }
 
+    init(
+        title: String,
+        description: String? = nil,
+        prefs: Prefs?,
+        prefKey: String? = nil,
+        defaultValue: Bool = false,
+        featureFlagName: NimbusFeatureFlagID? = nil,
+        enabled: Bool = true,
+        settingDidChange: @escaping (Bool) -> Void
+    ) {
+        self.statusText = description.map(NSAttributedString.init(string:))
+        self.prefs = prefs
+        self.prefKey = prefKey
+        self.defaultValue = defaultValue
+        self.featureFlagName = featureFlagName
+        self.settingDidChange = settingDidChange
+        super.init(title: NSAttributedString(string: title), enabled: enabled)
+    }
+
     convenience init(
         with featureFlagID: NimbusFeatureFlagID,
         titleText: NSAttributedString,
@@ -261,13 +281,17 @@ class BoolSetting: Setting, FeatureFlaggable {
         return statusText
     }
 
+    public lazy var control: UISwitch = {
+        let control = UISwitch()
+        control.accessibilityIdentifier = prefKey
+        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
+        return control
+    }()
+
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
 
-        let control = UISwitch()
         control.onTintColor = theme.colors.actionPrimary
-        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.accessibilityIdentifier = prefKey
         control.isEnabled = enabled
 
         displayBool(control)
@@ -287,7 +311,8 @@ class BoolSetting: Setting, FeatureFlaggable {
         }
     }
 
-    @objc func switchValueChanged(_ control: UISwitch) {
+    @objc
+    func switchValueChanged(_ control: UISwitch) {
         writeBool(control)
         settingDidChange?(control.isOn)
 
@@ -321,6 +346,48 @@ class BoolSetting: Setting, FeatureFlaggable {
         } else {
             guard let key = prefKey else { return }
             prefs?.setBool(control.isOn, forKey: key)
+        }
+    }
+}
+
+class BoolNotificationSetting: BoolSetting {
+    var userDefaults: UserDefaultsInterface? = UserDefaults.standard
+
+    override func displayBool(_ control: UISwitch) {
+        if let featureFlagName = featureFlagName {
+            control.isOn = featureFlags.isFeatureEnabled(featureFlagName, checking: .userOnly)
+        } else {
+            guard let key = prefKey, let defaultValue = defaultValue else { return }
+
+            Task { @MainActor in
+                let isSystemNotificationOn = await isSystemNotificationOn()
+                control.isOn = (userDefaults?.bool(forKey: key) ?? defaultValue) && isSystemNotificationOn
+            }
+        }
+    }
+
+    override func writeBool(_ control: UISwitch) {
+        if let featureFlagName = featureFlagName {
+            featureFlags.set(feature: featureFlagName, to: control.isOn)
+        } else {
+            Task { @MainActor in
+                let isSystemNotificationOn = await isSystemNotificationOn()
+                guard let key = prefKey, isSystemNotificationOn else { return }
+                userDefaults?.set(control.isOn, forKey: key)
+            }
+        }
+    }
+
+    private func isSystemNotificationOn() async -> Bool {
+        let settings = await NotificationManager().getNotificationSettings()
+
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            return true
+        case .denied, .notDetermined:
+            fallthrough
+        @unknown default:
+            return false
         }
     }
 }
@@ -495,17 +562,20 @@ class StringSetting: Setting, UITextFieldDelegate {
         return value
     }
 
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    @objc
+    func textFieldDidChange(_ textField: UITextField) {
         let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
         textField.textColor = color
     }
 
-    @objc func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    @objc
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return isValid(textField.text)
     }
 
-    @objc func textFieldDidEndEditing(_ textField: UITextField) {
+    @objc
+    func textFieldDidEndEditing(_ textField: UITextField) {
         let text = textField.text
         if !isValid(text) {
             return
@@ -701,6 +771,7 @@ class SettingsTableViewController: ThemedTableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
+        tableView.rowHeight = UITableView.automaticDimension
 
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
         tableView.addGestureRecognizer(longPressGestureRecognizer)
@@ -740,23 +811,27 @@ class SettingsTableViewController: ThemedTableViewController {
         return []
     }
 
-    @objc fileprivate func syncDidChangeState() {
+    @objc
+    fileprivate func syncDidChangeState() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
 
-    @objc fileprivate func refresh() {
+    @objc
+    fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
         // self.profile.rustAccount.refreshProfile()
         // TODO [rustfxa] listen to notification and refresh profile
     }
 
-    @objc func firefoxAccountDidChange() {
+    @objc
+    func firefoxAccountDidChange() {
         self.tableView.reloadData()
     }
 
-    @objc func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
         let location = gestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else { return }
 

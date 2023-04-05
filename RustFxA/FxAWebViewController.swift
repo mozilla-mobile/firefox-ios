@@ -39,8 +39,12 @@ class FxAWebViewController: UIViewController {
          profile: Profile,
          dismissalStyle: DismissType,
          deepLinkParams: FxALaunchParams,
+         shouldAskForNotificationPermission: Bool = true,
          logger: Logger = DefaultLogger.shared) {
-        self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile, deepLinkParams: deepLinkParams)
+        self.viewModel = FxAWebViewModel(pageType: pageType,
+                                         profile: profile,
+                                         deepLinkParams: deepLinkParams,
+                                         shouldAskForNotificationPermission: shouldAskForNotificationPermission)
 
         self.dismissType = dismissalStyle
 
@@ -183,7 +187,8 @@ extension FxAWebViewController: WKUIDelegate {
         return helpBrowser
     }
 
-    @objc func closeHelpBrowser() {
+    @objc
+    func closeHelpBrowser() {
         UIView.animate(
             withDuration: 0.2,
             animations: {
