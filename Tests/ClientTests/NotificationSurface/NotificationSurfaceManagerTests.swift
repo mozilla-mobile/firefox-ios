@@ -138,7 +138,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
     private func createMessage(
         for surface: MessageSurfaceId = .notification,
         isExpired: Bool,
-        action: String = "OPEN_NEW_TAB"
+        action: String = "://deep-link?url=homepanel/new-tab"
     ) -> GleanPlumbMessage {
         let metadata = GleanPlumbMessageMetaData(id: "",
                                                  impressions: 0,
@@ -161,7 +161,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
         return GleanPlumbMessage(id: "test-notification",
                                  data: MockNotificationMessageDataProtocol(surface: surface),
-                                 action: "OPEN_NEW_TAB",
+                                 action: "://deep-link?url=homepanel/new-tab",
                                  triggers: ["INACTIVE_NEW_USER", "ALLOWED_TIPS_NOTIFICATIONS"],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)

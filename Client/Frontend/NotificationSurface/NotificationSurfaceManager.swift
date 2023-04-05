@@ -89,7 +89,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
 
     func didDismissNotification(_ userInfo: [AnyHashable: Any]) {
         guard let messageId = userInfo[Constant.messageIdKey] as? String,
-              let message = messagingManager.messageForId(messageId, surface: notificationSurfaceID)
+              let message = messagingManager.messageForId(messageId)
         else { return }
 
         messagingManager.onMessageDismissed(message)
