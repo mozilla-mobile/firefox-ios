@@ -3,20 +3,44 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
 /**
  An enumeration representing different navigational routes in an application.
  */
-enum Route {
+enum Route: Equatable {
 
     /**
-     Represents a search route that takes a URL string and a boolean value indicating whether the search is private or not.
+     Represents a search route that takes a URL and a boolean value indicating whether the search is private or not.
 
      - Parameters:
-     - url: A string representing the URL to be searched.
+     - url: A `URL` object representing the URL to be searched. Can be `nil`.
      - isPrivate: A boolean value indicating whether the search is private or not.
      */
-    case search(url: String, isPrivate: Bool)
+    case search(url: URL?, isPrivate: Bool)
+
+    /**
+     Represents a search route that takes a URL and a tab identifier.
+
+     - Parameters:
+     - url: A `URL` object representing the URL to be searched. Can be `nil`.
+     - tabId: A string representing the identifier of the tab where the search should be performed.
+     */
+    case search(url: URL?, tabId: String)
+
+    /**
+     Represents a search route that takes a query string.
+
+     - Parameter query: A string representing the query to be searched.
+     */
+    case search(query: String)
+
+    /**
+     Represents a route for sending Glean data.
+
+     - Parameter url: A `URL` object representing the URL to send Glean data to.
+     */
+    case glean(url: URL)
 
     /**
      Represents a home panel route that takes a `HomepanelSection` value indicating the section to be displayed.
@@ -40,19 +64,23 @@ enum Route {
     case action(action: AppAction)
 
     /**
-     Represents a Firefox account sign-in route that takes a `signIn` string, a `user` string, and an `email` string.
+     Represents a Firefox account sign-in route that takes an `FxALaunchParams` object indicating the parameters for the sign-in.
 
-     - Parameters:
-     - signIn: A string representing the sign-in action.
-     - user: A string representing the username of the account being signed in to.
-     - email: A string representing the email address associated with the account being signed in to.
+     - Parameter params: An instance of `FxALaunchParams` containing the parameters for the sign-in.
      */
-    case fxaSignIn(signIn: String, user: String, email: String)
+    case fxaSignIn(_ params: FxALaunchParams)
+
+    /**
+     Represents a default browser route that takes a `DefaultBrowserSection` value indicating the section to be displayed.
+
+     - Parameter section: An instance of `DefaultBrowserSection` indicating the section of the default browser settings to be displayed.
+     */
+    case defaultBrowser(section: DefaultBrowserSection)
 
     /**
      An enumeration representing different sections of the home panel.
      */
-    enum HomepanelSection: String, CaseIterable {
+    enum HomepanelSection: String, CaseIterable, Equatable {
         case bookmarks = "bookmarks"
         case topSites = "top-sites"
         case history = "history"
@@ -63,28 +91,37 @@ enum Route {
     /**
      An enumeration representing different sections of the settings menu.
      */
-    enum SettingsSection: String, CaseIterable {
+    enum SettingsSection: String, CaseIterable, Equatable {
         case clearPrivateData = "clear-private-data"
-        case newTab = "new-tab"
-        case homePage = "home-page"
+        case newTab = "newtab"
+        case homePage = "homepage"
         case mailto = "mailto"
         case search = "search"
         case fxa = "fxa"
         case systemDefaultBrowser = "system-default-browser"
-        case wallpaper
-        case theme
+        case wallpaper = "wallpaper"
+        case theme = "theme"
         case contentBlocker
         case toolbar
         case tabs
         case topSites
+        case general
     }
 
     /**
      An enumeration representing different actions that can be performed within the application.
      */
-    enum AppAction: String, CaseIterable {
+    enum AppAction: String, CaseIterable, Equatable {
         case closePrivateTabs = "close-private-tabs"
         case presentDefaultBrowserOnboarding
         case showQRCode
+    }
+
+    /**
+     An enumeration representing different sections of the default browser settings.
+     */
+    enum DefaultBrowserSection: String, CaseIterable, Equatable {
+        case tutorial = "tutorial"
+        case systemSettings = "system-settings"
     }
 }
