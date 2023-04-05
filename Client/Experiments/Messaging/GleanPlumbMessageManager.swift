@@ -69,6 +69,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     typealias MessagingKey = TelemetryWrapper.EventExtraKey
 
+    private enum CreateMessageError: Error {
+        case expired
+        case malformed
+    }
+
     // MARK: - Inits
 
     init(messagingUtility: GleanPlumbMessageUtility = GleanPlumbMessageUtility(),
@@ -122,12 +127,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessageDisplayed(_ message: GleanPlumbMessage) {
         messagingStore.onMessageDisplayed(message)
 
-        let extras = baseTelemetryExtras(using: message)
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
                                      object: .messaging,
                                      value: .messageImpression,
-                                     extras: extras)
+                                     extras: baseTelemetryExtras(using: message))
     }
 
     /// Handle when a user hits the CTA of the surface, and forward the bookkeeping to the store.
@@ -169,12 +173,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessageDismissed(_ message: GleanPlumbMessage) {
         messagingStore.onMessageDismissed(message)
 
-        let extras = baseTelemetryExtras(using: message)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .messaging,
                                      value: .messageDismissed,
-                                     extras: extras)
+                                     extras: baseTelemetryExtras(using: message))
     }
 
     func onMalformedMessage(id: String, surface: MessageSurfaceId) {
@@ -196,13 +199,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// - Returns: the message if existent, otherwise nil.
     func messageForId(_ id: String) -> GleanPlumbMessage? {
         let feature = messagingFeature.value()
-        guard let messageData = feature.messages[id],
-              let message = self.createMessage(messageId: id,
-                                               message: messageData,
-                                               lookupTables: feature)
-        else { return nil }
+        guard let messageData = feature.messages[id] else { return nil }
 
-        return message
+        switch createMessage(messageId: id, message: messageData, lookupTables: feature) {
+        case .success(let newMessage): return newMessage
+        case .failure: return nil
+        }
     }
 
     // MARK: - Misc. Private helpers
@@ -211,15 +213,15 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func getMessages(_ feature: Messaging) -> [GleanPlumbMessage] {
         // All these are non-expired, well formed, and descending priority messages.
         let messages = feature.messages.compactMap { key, messageData -> GleanPlumbMessage? in
-            guard let message = self.createMessage(messageId: key,
-                                                   message: messageData,
-                                                   lookupTables: feature)
-            else {
-                onMalformedMessage(id: key, surface: messageData.surface)
+            switch createMessage(messageId: key, message: messageData, lookupTables: feature) {
+            case .success(let newMessage):
+                return newMessage
+            case .failure(let failureReason):
+                if failureReason == .malformed {
+                    onMalformedMessage(id: key, surface: messageData.surface)
+                }
                 return nil
             }
-
-            return message
         }.filter { message in
             !message.isExpired
         }.sorted { message1, message2 in
@@ -235,16 +237,16 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         messageId: String,
         message: MessageData,
         lookupTables: Messaging
-    ) -> GleanPlumbMessage? {
+    ) -> Result<GleanPlumbMessage, CreateMessageError> {
         // Guard against a message with a blank `text` property.
-        guard !message.text.isEmpty else { return nil }
+        guard !message.text.isEmpty else { return .failure(.malformed) }
 
         // Ascertain a Message's style, to know priority and max impressions.
-        guard let style = lookupTables.styles[message.style] else { return nil }
+        guard let style = lookupTables.styles[message.style] else { return .failure(.malformed) }
 
         // The message action should be either from the lookup table OR a URL.
         let action = lookupTables.actions[message.action] ?? message.action
-        guard action.contains("://") else { return nil }
+        guard action.contains("://") else { return .failure(.malformed) }
 
         let triggers = message.trigger.compactMap { trigger in
             lookupTables.triggers[trigger]
@@ -254,7 +256,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // If these mismatch, that means a message contains a trigger not in the triggers lookup table.
         // JEXLS can only be evaluated on supported triggers. Otherwise, consider the message malformed.
         if triggers.count != message.trigger.count {
-            return nil
+            return .failure(.malformed)
         }
 
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
@@ -263,15 +265,17 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                 messageMetadata,
                 surface: message.surface,
                 shouldReport: true)
-            return nil
+            return .failure(.expired)
         }
 
-        return GleanPlumbMessage(id: messageId,
-                                 data: message,
-                                 action: action,
-                                 triggers: triggers,
-                                 style: style,
-                                 metadata: messageMetadata)
+        return .success(
+            GleanPlumbMessage(id: messageId,
+                              data: message,
+                              action: action,
+                              triggers: triggers,
+                              style: style,
+                              metadata: messageMetadata)
+        )
     }
 
     /// From the list of messages that are well-formed and non-expired, we return the next / first triggered message.
