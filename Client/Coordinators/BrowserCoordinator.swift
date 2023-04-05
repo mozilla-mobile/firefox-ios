@@ -6,22 +6,19 @@ import Common
 import Foundation
 
 class BrowserCoordinator: BaseCoordinator {
-    var launchScreenManager: LaunchScreenManager
     var browserViewController: BrowserViewController
 
     init(router: Router,
-         launchScreenManager: LaunchScreenManager,
          profile: Profile = AppContainer.shared.resolve(),
          tabManager: TabManager = AppContainer.shared.resolve()) {
-        self.launchScreenManager = launchScreenManager
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         super.init(router: router)
     }
 
-    func start() {
+    func start(with launchType: LaunchType?) {
         router.setRootViewController(browserViewController, hideBar: true, animated: true)
 
-        if let launchType = launchScreenManager.getLaunchType(forType: .BrowserCoordinator) {
+        if let launchType = launchType, launchType.canLaunch(fromType: .BrowserCoordinator) {
             startLaunch(with: launchType)
         }
     }
@@ -29,8 +26,7 @@ class BrowserCoordinator: BaseCoordinator {
     // MARK: - Helper methods
 
     private func startLaunch(with launchType: LaunchType) {
-        let launchCoordinator = LaunchCoordinator(router: router,
-                                                  launchScreenManager: launchScreenManager)
+        let launchCoordinator = LaunchCoordinator(router: router)
         add(child: launchCoordinator)
         launchCoordinator.start(with: launchType) {
             self.router.dismiss(animated: true, completion: nil)

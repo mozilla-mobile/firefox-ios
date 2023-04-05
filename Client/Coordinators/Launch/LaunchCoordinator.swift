@@ -6,14 +6,6 @@ import Foundation
 
 // Manages different types of onboarding that gets shown at the launch of the application
 class LaunchCoordinator: BaseCoordinator {
-    private let launchScreenManager: LaunchScreenManager
-
-    init(router: Router,
-         launchScreenManager: LaunchScreenManager) {
-        self.launchScreenManager = launchScreenManager
-        super.init(router: router)
-    }
-
     func start(with launchType: LaunchType, onCompletion: @escaping () -> Void) {
         // FXIOS-5989: Handle different onboarding types
         switch launchType {
@@ -27,4 +19,6 @@ class LaunchCoordinator: BaseCoordinator {
             break
         }
     }
+
+    // FXIOS-5989: Make sure OpenURLDelegate is set on survey manager
 }

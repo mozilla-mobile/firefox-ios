@@ -4,11 +4,26 @@
 
 import Foundation
 
-class LaunchScreenViewController: UIViewController {
+class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate {
     private lazy var launchScreen = LaunchScreenView.fromNib()
+    private var coordinator: LaunchFinishedLoadingDelegate
+    private var viewModel: LaunchScreenViewModel
+
+    init(coordinator: LaunchFinishedLoadingDelegate,
+         viewModel: LaunchScreenViewModel = LaunchScreenViewModel()) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        viewModel.delegate = self
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.startLoading()
         setupLayout()
     }
 
@@ -22,5 +37,15 @@ class LaunchScreenViewController: UIViewController {
             launchScreen.topAnchor.constraint(equalTo: view.topAnchor),
             launchScreen.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+
+    // MARK: LaunchFinishedLoadingDelegate
+
+    func launchWith(launchType: LaunchType) {
+        coordinator.launchWith(launchType: launchType)
+    }
+
+    func launchBrowser() {
+        coordinator.launchBrowser()
     }
 }

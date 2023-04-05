@@ -12,7 +12,7 @@ import Account
 import MozillaAppServices
 import Common
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate, LaunchFinishedLoadingDelegate {
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     /// This is temporary. We don't want to continue treating App / Scene delegates as containers for certain session specific properties.
@@ -41,8 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, LaunchFinishedLoadingDe
         guard !AppConstants.isRunningUnitTest else { return }
 
         if AppConstants.useCoordinators {
-            let launchScreenManager = DefaultLaunchScreenManager(delegate: self)
-            sceneCoordinator = SceneCoordinator(scene: scene, launchScreenManager: launchScreenManager)
+            sceneCoordinator = SceneCoordinator(scene: scene)
             sceneCoordinator?.start()
 
             // FXIOS-5827: Handle deeplinks from willConnectTo
@@ -218,12 +217,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, LaunchFinishedLoadingDe
                 completionHandler: { _ in }
             )
         }
-    }
-
-    // MARK: - LaunchFinishedLoadingDelegate
-
-    func launchTypeLoaded() {
-        sceneCoordinator?.launchTypeLoaded()
     }
 }
 
