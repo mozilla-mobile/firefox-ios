@@ -43,6 +43,7 @@ struct DefaultBrowserOnboardingModel {
 
 class DefaultBrowserOnboardingViewModel {
     var goToSettings: (() -> Void)?
+    var didAskToDismissView: (() -> Void)?
     var model: DefaultBrowserOnboardingModel?
 
     private static let maxSessionCount = 3
