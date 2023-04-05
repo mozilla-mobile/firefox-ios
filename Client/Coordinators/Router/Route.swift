@@ -84,5 +84,7 @@ enum Route {
      */
     enum AppAction: String, CaseIterable {
         case closePrivateTabs = "close-private-tabs"
+        case presentDefaultBrowserOnboarding
+        case showQRCode
     }
 }
