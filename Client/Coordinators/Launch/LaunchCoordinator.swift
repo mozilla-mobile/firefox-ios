@@ -6,10 +6,11 @@ import Common
 import Foundation
 
 // Manages different types of onboarding that gets shown at the launch of the application
-class LaunchCoordinator: BaseCoordinator {
+class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
     private let profile: Profile
     private let logger: Logger
     private let isIphone: Bool
+    weak var parentCoordinator: OpenURLDelegate?
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
@@ -39,8 +40,6 @@ class LaunchCoordinator: BaseCoordinator {
     deinit {
         print("Laurie - LaunchCoordinator deinit")
     }
-
-    // FXIOS-5989: Laurie - Make sure OpenURLDelegate is set on survey manager
 
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManager,
@@ -112,10 +111,17 @@ class LaunchCoordinator: BaseCoordinator {
             return
         }
         surveySurface.modalPresentationStyle = .fullScreen
+        manager.openURLDelegate = self
         manager.dismissClosure = {
             onCompletion()
         }
 
         router.setRootViewController(surveySurface, hideBar: true)
+    }
+
+    // MARK: OpenURLDelegate
+
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        parentCoordinator?.didRequestToOpenInNewTab(url: url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
 }

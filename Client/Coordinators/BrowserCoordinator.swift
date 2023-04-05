@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-class BrowserCoordinator: BaseCoordinator {
+class BrowserCoordinator: BaseCoordinator, OpenURLDelegate {
     var browserViewController: BrowserViewController
 
     init(router: Router,
@@ -27,10 +27,17 @@ class BrowserCoordinator: BaseCoordinator {
 
     private func startLaunch(with launchType: LaunchType) {
         let launchCoordinator = LaunchCoordinator(router: router)
+        launchCoordinator.parentCoordinator = self
         add(child: launchCoordinator)
         launchCoordinator.start(with: launchType) {
             self.router.dismiss(animated: true, completion: nil)
             self.remove(child: launchCoordinator)
         }
+    }
+
+    // MARK: - Routes
+
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        // FXIOS-6030: Handle open in new tab route
     }
 }

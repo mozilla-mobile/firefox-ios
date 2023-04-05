@@ -7,7 +7,7 @@ import UIKit
 import Shared
 
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
-class SceneCoordinator: BaseCoordinator, LaunchFinishedLoadingDelegate {
+class SceneCoordinator: BaseCoordinator, LaunchFinishedLoadingDelegate, OpenURLDelegate {
     var window: UIWindow?
 
     init(scene: UIScene,
@@ -45,6 +45,7 @@ class SceneCoordinator: BaseCoordinator, LaunchFinishedLoadingDelegate {
 
     private func startLaunch(with launchType: LaunchType) {
         let launchCoordinator = LaunchCoordinator(router: router)
+        launchCoordinator.parentCoordinator = self
         add(child: launchCoordinator)
         launchCoordinator.start(with: launchType) {
             self.remove(child: launchCoordinator)
@@ -56,5 +57,11 @@ class SceneCoordinator: BaseCoordinator, LaunchFinishedLoadingDelegate {
         let browserCoordinator = BrowserCoordinator(router: router)
         add(child: browserCoordinator)
         browserCoordinator.start(with: launchType)
+    }
+
+    // MARK: - Routes
+
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
+        // FXIOS-6030: Handle open in new tab route
     }
 }
