@@ -12,10 +12,17 @@ enum DiskImageStoreErrorCase: Error {
     case cannotWrite(description: String)
 }
 
+public protocol DiskImageStore {
+    func getImageForKey(_ key: String) async throws -> UIImage
+    func saveImageForKey(_ key: String, image: UIImage) async throws
+    func clearAllScreenshotsExcluding(_ keys: Set<String>) async throws
+    func deleteImageForKey(_ key: String) async
+}
+
 /**
  * Disk-backed key-value image store.
  */
-open class DiskImageStore {
+open class DefaultDiskImageStore: DiskImageStore {
     fileprivate let files: FileAccessor
     fileprivate let filesDir: String
     fileprivate let queue = DispatchQueue(label: "DiskImageStore")

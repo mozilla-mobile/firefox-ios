@@ -10,7 +10,7 @@ import WebKit
 
 import XCTest
 
-class TabManagerStoreTests: XCTestCase {
+class LegacyTabManagerStoreTests: XCTestCase {
     private var profile: MockProfile!
     private var fileManager: MockFileManager!
     private var serialQueue: MockDispatchQueue!
@@ -223,7 +223,7 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertNil(tabToSelect, "No tab selected since the selected one was deleted, tab manager will deal with it")
     }
 
-    // MARK: Migration
+    // MARK: - Migration
 
     func testMigrationForward_savingOnlyWithDeprecatedMethod() {
         let manager = createManager()
@@ -243,10 +243,9 @@ class TabManagerStoreTests: XCTestCase {
         XCTAssertEqual(retrievedTabs.count, 2, "Expected 2 tabs on disk")
         XCTAssertTrue(manager.hasTabsToRestoreAtStartup)
     }
-}
 
-// MARK: - Helper methods
-private extension TabManagerStoreTests {
+    // MARK: - Helper methods
+
     func createManager(file: StaticString = #file,
                        line: UInt = #line) -> LegacyTabManagerStoreImplementation {
         let manager = LegacyTabManagerStoreImplementation(prefs: profile.prefs,
