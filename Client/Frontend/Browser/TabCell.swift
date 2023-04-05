@@ -252,7 +252,7 @@ class TabCell: UICollectionViewCell,
         layoutMargins = UIEdgeInsets(top: TabCell.borderWidth, left: TabCell.borderWidth, bottom: TabCell.borderWidth, right: TabCell.borderWidth)
         layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
         layer.borderWidth = TabCell.borderWidth
-        layer.cornerRadius = GridTabViewController.UX.cornerRadius+TabCell.borderWidth
+        layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
     }
 }
 
