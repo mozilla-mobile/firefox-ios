@@ -168,4 +168,44 @@ class CreditCardInputFieldTests: XCTestCase {
         inputField.handleTextInputWith("1255", and: "125")
         XCTAssertFalse(viewModel.expirationIsValid)
     }
+
+    func testSanitizeGoodCardNumber() {
+        let inputField = CreditCardInputField(inputType: .number,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        let result = inputField.sanitizeInputOn("4100100010001000")
+        XCTAssertEqual(result, "4100100010001000")
+    }
+
+    func testSanitizeGarbledCardNumber() {
+        let inputField = CreditCardInputField(inputType: .number,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        let result = inputField.sanitizeInputOn("4100^&*(*&^%10    00100:><>?><> 0  *&*(100))----!!!!!0")
+        XCTAssertEqual(result, "4100100010001000")
+    }
+
+    func testSanitizeGoodExpiryInput() {
+        let inputField = CreditCardInputField(inputType: .expiration,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        let result = inputField.sanitizeInputOn("1029")
+        XCTAssertEqual(result, "1029")
+    }
+
+    func testSanitizeGarbledExpiryInput() {
+        let inputField = CreditCardInputField(inputType: .expiration,
+                                              text: $testableString,
+                                              showError: false,
+                                              inputViewModel: viewModel)
+
+        let result = inputField.sanitizeInputOn(" 1  )(*&^0 ><>::?:  2!!!&**&*~~@@@9")
+        XCTAssertEqual(result, "1029")
+    }
 }
