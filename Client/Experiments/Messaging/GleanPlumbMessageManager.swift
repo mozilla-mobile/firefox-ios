@@ -186,8 +186,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         )
     }
 
-<<<<<<< HEAD
-=======
     /// Finds a message for a specified id on a specified surface.
     /// - Parameters:
     ///   - id: the id of the message.
@@ -201,8 +199,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         case .failure: return nil
         }
     }
-
->>>>>>> dfda1e230 (Bugfix FXIOS-6127/6135/6139/6144 [v112] Nimbus telemetry, malformed fixes, and constraints (#13885))
     // MARK: - Misc. Private helpers
 
     /// - Returns: All well-formed, non-expired messages for a surface in descending priority order for a specified surface.
@@ -238,15 +234,9 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         messageId: String,
         message: MessageData,
         lookupTables: Messaging
-<<<<<<< HEAD
-    ) -> GleanPlumbMessage? {
-        /// Guard against a message with a blank `text` property.
-        guard !message.text.isEmpty else { return nil }
-=======
     ) -> Result<GleanPlumbMessage, CreateMessageError> {
         // Guard against a message with a blank `text` property.
         guard !message.text.isEmpty else { return .failure(.malformed) }
->>>>>>> dfda1e230 (Bugfix FXIOS-6127/6135/6139/6144 [v112] Nimbus telemetry, malformed fixes, and constraints (#13885))
 
         // Ascertain a Message's style, to know priority and max impressions.
         guard let style = lookupTables.styles[message.style] else { return .failure(.malformed) }
