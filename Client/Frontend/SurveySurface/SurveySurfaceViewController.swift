@@ -214,12 +214,14 @@ class SurveySurfaceViewController: UIViewController, Themeable {
     }
 
     // MARK: - Button Actions
-    @objc func takeSurveyAction() {
+    @objc
+    func takeSurveyAction() {
         viewModel.didTapTakeSurvey()
         dismiss(animated: true)
     }
 
-    @objc func dismissAction() {
+    @objc
+    func dismissAction() {
         viewModel.didTapDismissSurvey()
         dismiss(animated: true)
     }

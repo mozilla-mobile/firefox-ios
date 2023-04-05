@@ -114,7 +114,8 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         ])
     }
 
-    @objc private func closeOnboarding() {
+    @objc
+    private func closeOnboarding() {
         didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
@@ -249,7 +250,8 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
-    @objc func dismissSignInViewController() {
+    @objc
+    func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
     }
 }

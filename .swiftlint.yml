@@ -15,7 +15,6 @@ disabled_rules: # rule identifiers to exclude from running
 - duplicated_key_in_dictionary_literal
 - fallthrough
 - file_length
-- for_where
 - force_cast
 - force_try
 - function_body_length
@@ -64,6 +63,7 @@ opt_in_rules: # some rules are only opt-in
   # - redundant_type_annotation
   # Find all the available rules by running:
   # swiftlint rules
+  - attributes
   - closing_brace
   - contains_over_filter_count
   - contains_over_filter_is_empty

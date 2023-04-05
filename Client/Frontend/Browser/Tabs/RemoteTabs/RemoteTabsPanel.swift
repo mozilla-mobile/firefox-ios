@@ -80,7 +80,8 @@ class RemoteTabsPanel: UIViewController, Themeable {
         tableViewController.refreshTabs(updateCache: true)
     }
 
-    @objc func notificationReceived(_ notification: Notification) {
+    @objc
+    func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             DispatchQueue.main.async {
@@ -204,7 +205,8 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         refreshControl = nil
     }
 
-    @objc func onRefreshPulled() {
+    @objc
+    func onRefreshPulled() {
         refreshControl?.beginRefreshing()
         refreshTabs(updateCache: true)
     }
@@ -297,7 +299,8 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
                                                            theme: themeManager.currentTheme)
     }
 
-    @objc private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }

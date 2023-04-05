@@ -19,7 +19,8 @@ open class AccessibleAction: NSObject {
 }
 
 extension AccessibleAction { // UIAccessibilityCustomAction
-    @objc private func performAccessibilityAction() -> Bool {
+    @objc
+    private func performAccessibilityAction() -> Bool {
         return handler()
     }
 

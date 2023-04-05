@@ -410,7 +410,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
     }
 
-    @objc func showQRScanner() {
+    @objc
+    func showQRScanner() {
         self.delegate?.urlBarDidPressQRButton(self)
     }
 
@@ -659,11 +660,13 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         delegate?.urlBarDidPressTabs(self)
     }
 
-    @objc private func didClickCancel() {
+    @objc
+    private func didClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
 
-    @objc func tappedScrollToTopArea() {
+    @objc
+    func tappedScrollToTopArea() {
         delegate?.urlBarDidPressScrollToTop(self)
     }
 }

@@ -357,17 +357,20 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
 
     // MARK: - Button actions
 
-    @objc func closeButtonTapped() {
+    @objc
+    func closeButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
 
-    @objc func connectionDetailsTapped() {
+    @objc
+    func connectionDetailsTapped() {
         let detailsVC = EnhancedTrackingProtectionDetailsVC(with: viewModel.getDetailsViewModel())
         detailsVC.modalPresentationStyle = .pageSheet
         self.present(detailsVC, animated: true)
     }
 
-    @objc func trackingProtectionToggleTapped() {
+    @objc
+    func trackingProtectionToggleTapped() {
         // site is safelisted if site ETP is disabled
         viewModel.toggleSiteSafelistStatus()
         switch viewModel.isSiteETPEnabled {
@@ -376,7 +379,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
         }
     }
 
-    @objc func protectionSettingsTapped() {
+    @objc
+    func protectionSettingsTapped() {
         self.dismiss(animated: true) {
             self.viewModel.onOpenSettingsTapped?()
         }
@@ -389,7 +393,8 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
         view.addGestureRecognizer(panGesture)
     }
 
-    @objc func panGestureRecognizerAction(sender: UIPanGestureRecognizer) {
+    @objc
+    func panGestureRecognizerAction(sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: view)
         let originalYPosition = self.view.frame.origin.y
         let originalXPosition = self.view.frame.origin.x

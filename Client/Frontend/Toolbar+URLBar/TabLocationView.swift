@@ -16,7 +16,8 @@ protocol TabLocationViewDelegate: AnyObject {
     func tabLocationViewDidTapShare(_ tabLocationView: TabLocationView, button: UIButton)
 
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
-    @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
+    @discardableResult
+    func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
     func tabLocationViewDidLongPressReload(_ tabLocationView: TabLocationView)
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
@@ -210,45 +211,54 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // MARK: - User actions
 
-    @objc func tapReaderModeButton() {
+    @objc
+    func tapReaderModeButton() {
         delegate?.tabLocationViewDidTapReaderMode(self)
     }
 
-    @objc func tapReloadButton() {
+    @objc
+    func tapReloadButton() {
         delegate?.tabLocationViewDidTapReload(self)
     }
 
-    @objc func longPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
+    @objc
+    func longPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressReaderMode(self)
         }
     }
 
-    @objc func longPressReloadButton(_ recognizer: UILongPressGestureRecognizer) {
+    @objc
+    func longPressReloadButton(_ recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressReload(self)
         }
     }
 
-    @objc func longPressLocation(_ recognizer: UITapGestureRecognizer) {
+    @objc
+    func longPressLocation(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressLocation(self)
         }
     }
 
-    @objc func tapLocation(_ recognizer: UITapGestureRecognizer) {
+    @objc
+    func tapLocation(_ recognizer: UITapGestureRecognizer) {
         delegate?.tabLocationViewDidTapLocation(self)
     }
 
-    @objc func didPressTPShieldButton(_ button: UIButton) {
+    @objc
+    func didPressTPShieldButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapShield(self)
     }
 
-    @objc func didPressShareButton(_ button: UIButton) {
+    @objc
+    func didPressShareButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapShare(self, button: shareButton)
     }
 
-    @objc func readerModeCustomAction() -> Bool {
+    @objc
+    func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 

@@ -157,7 +157,8 @@ class LibraryViewController: UIViewController, Themeable {
         panel.navigationController?.isNavigationBarHidden = true
     }
 
-    @objc func panelChanged() {
+    @objc
+    func panelChanged() {
         var eventValue: TelemetryWrapper.EventValue
         var selectedPanel: LibraryPanelType
 

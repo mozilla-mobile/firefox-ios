@@ -47,8 +47,8 @@ extension UIView {
     }
 
     func removeVisualEffectView() {
-        for subview in self.subviews {
-            if subview is UIVisualEffectView { subview.removeFromSuperview() }
+        for subview in self.subviews where subview is UIVisualEffectView {
+            subview.removeFromSuperview()
         }
         // Set clipsToBounds to false to make sure shadows will be visible
         clipsToBounds = false

@@ -205,7 +205,8 @@ class LoginListViewController: SensitiveViewController, Themeable {
         }
     }
 
-    @objc func dismissLogins() {
+    @objc
+    func dismissLogins() {
         dismiss(animated: true)
     }
 
@@ -277,13 +278,15 @@ extension LoginListViewController: UISearchControllerDelegate {
 
 // MARK: - Selectors
 private extension LoginListViewController {
-    @objc func remoteLoginsDidChange() {
+    @objc
+    func remoteLoginsDidChange() {
         DispatchQueue.main.async {
             self.loadLogins()
         }
     }
 
-    @objc func dismissAlertController() {
+    @objc
+    func dismissAlertController() {
         self.deleteAlert?.dismiss(animated: false, completion: nil)
         navigationController?.view.endEditing(true)
     }
@@ -294,7 +297,8 @@ private extension LoginListViewController {
         viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 
-    @objc func beginEditing() {
+    @objc
+    func beginEditing() {
         navigationItem.rightBarButtonItems = nil
         navigationItem.leftBarButtonItems = [cancelSelectionButton]
         selectionButtonHeightConstraint?.constant = UIConstants.ToolbarHeight
@@ -304,7 +308,8 @@ private extension LoginListViewController {
         tableView.reloadData()
     }
 
-    @objc func presentAddCredential() {
+    @objc
+    func presentAddCredential() {
         let addController = AddCredentialViewController { [weak self] record in
             self?.presentedViewController?.dismiss(animated: true) {
                 self?.viewModel.save(loginRecord: record) { _ in
@@ -323,7 +328,8 @@ private extension LoginListViewController {
         present(controller, animated: true)
     }
 
-    @objc func cancelSelection() {
+    @objc
+    func cancelSelection() {
         // Update selection and select all button
         loginSelectionController.deselectAll()
         toggleSelectionTitle()
@@ -336,7 +342,8 @@ private extension LoginListViewController {
         tableView.reloadData()
     }
 
-    @objc func tappedDelete() {
+    @objc
+    func tappedDelete() {
         viewModel.profile.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
@@ -354,7 +361,8 @@ private extension LoginListViewController {
         }
     }
 
-    @objc func tappedSelectionButton() {
+    @objc
+    func tappedSelectionButton() {
         // If we haven't selected everything yet, select all
         if loginSelectionController.selectedCount < viewModel.count {
             // Find all unselected indexPaths

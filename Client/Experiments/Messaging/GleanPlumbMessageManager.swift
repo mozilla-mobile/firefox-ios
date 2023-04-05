@@ -34,10 +34,10 @@ protocol GleanPlumbMessageManagerProtocol {
     /// If the message is malformed (missing key elements the surface expects), then
     /// report the malformed message.
     /// Manager calls.
-    func onMalformedMessage(messageKey: String)
+    func onMalformedMessage(id: String, surface: MessageSurfaceId)
 
     /// Finds a message for a specified id on a specified surface.
-    func messageForId(_ id: String, surface: MessageSurfaceId) -> GleanPlumbMessage?
+    func messageForId(_ id: String) -> GleanPlumbMessage?
 }
 
 protocol GleanPlumbMessagePressedDelegate: AnyObject {
@@ -63,9 +63,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     private let messagingUtility: GleanPlumbMessageUtility
     private let messagingStore: GleanPlumbMessageStoreProtocol
-    private let feature = FxNimbus.shared.features.messaging.value()
+    private let messagingFeature = FxNimbus.shared.features.messaging
 
     weak var pressedDelegate: GleanPlumbMessagePressedDelegate?
+
+    typealias MessagingKey = TelemetryWrapper.EventExtraKey
 
     // MARK: - Inits
 
@@ -89,7 +91,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     /// Returns the next valid and triggered message for the surface, if one exists.
     func getNextMessage(for surface: MessageSurfaceId) -> GleanPlumbMessage? {
         // All these are non-expired, well formed, and descending priority ordered messages for a requested surface.
-        let messages = getAllValidMessagesFor(surface, with: feature)
+        let feature = messagingFeature.value()
+        let messages = getMessages(feature)
+            .filter {
+                $0.data.surface == surface
+            }
 
         // If `GleanPlumbHelper` creation fails, we cannot continue with this feature! For that reason, return `nil`.
         // We need to recreate the helper for each request to get a message because device context can change.
@@ -116,12 +122,12 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessageDisplayed(_ message: GleanPlumbMessage) {
         messagingStore.onMessageDisplayed(message)
 
+        let extras = baseTelemetryExtras(using: message)
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
                                      object: .messaging,
                                      value: .messageImpression,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
-                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue])
+                                     extras: extras)
     }
 
     /// Handle when a user hits the CTA of the surface, and forward the bookkeeping to the store.
@@ -138,7 +144,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         // Create the message action URL.
         let urlString = action.hasPrefix("://") ? URL.mozInternalScheme + action : action
         guard let url = URL(string: urlString) else {
-            self.onMalformedMessage(messageKey: message.id)
+            self.onMalformedMessage(id: message.id, surface: message.data.surface)
             return
         }
 
@@ -149,13 +155,13 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
             UIApplication.shared.open(url, options: [:])
         }
 
+        var extras = baseTelemetryExtras(using: message)
+        extras[MessagingKey.actionUUID.rawValue] = uuid ?? "nil"
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .messaging,
                                      value: .messageInteracted,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
-                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue,
-                                              TelemetryWrapper.EventExtraKey.actionUUID.rawValue: uuid ?? "nil"])
+                                     extras: extras)
     }
 
     /// For now, we will assume all dismissed messages should become expired right away. The
@@ -163,36 +169,36 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessageDismissed(_ message: GleanPlumbMessage) {
         messagingStore.onMessageDismissed(message)
 
+        let extras = baseTelemetryExtras(using: message)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .messaging,
                                      value: .messageDismissed,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: message.id,
-                                              TelemetryWrapper.EventExtraKey.messageSurface.rawValue: message.data.surface.rawValue])
+                                     extras: extras)
     }
 
-    func onMalformedMessage(messageKey: String) {
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .application,
-                                     object: .messaging,
-                                     value: .messageMalformed,
-                                     extras: [TelemetryWrapper.EventExtraKey.messageKey.rawValue: messageKey])
+    func onMalformedMessage(id: String, surface: MessageSurfaceId) {
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .application,
+            object: .messaging,
+            value: .messageMalformed,
+            extras: [
+                MessagingKey.messageKey.rawValue: id,
+                MessagingKey.messageSurface.rawValue: surface.rawValue,
+            ]
+        )
     }
-
 
     /// Finds a message for a specified id on a specified surface.
     /// - Parameters:
     ///   - id: the id of the message.
-    ///   - surface: the surface the message should be disaplayed on.
     /// - Returns: the message if existent, otherwise nil.
-    func messageForId(_ id: String, surface: MessageSurfaceId) -> GleanPlumbMessage? {
-        let messageData = feature.messages.first { key, messageData in
-            return key == id && messageData.surface == surface
-        }
-
-        guard let messageData = messageData,
-              let message = self.createMessage(messageId: messageData.key,
-                                               message: messageData.value,
+    func messageForId(_ id: String) -> GleanPlumbMessage? {
+        let feature = messagingFeature.value()
+        guard let messageData = feature.messages[id],
+              let message = self.createMessage(messageId: id,
+                                               message: messageData,
                                                lookupTables: feature)
         else { return nil }
 
@@ -201,26 +207,21 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
     // MARK: - Misc. Private helpers
 
-    /// - Returns: All well-formed, non-expired messages for a surface in descending priority order for a specified surface.
-    private func getAllValidMessagesFor(
-        _ surface: MessageSurfaceId,
-        with feature: Messaging
-    ) -> [GleanPlumbMessage] {
-        // All these are non-expired, well formed, and descending priority messages for a requested surface.
+    /// - Returns: All well-formed, non-expired messages in descending priority order.
+    func getMessages(_ feature: Messaging) -> [GleanPlumbMessage] {
+        // All these are non-expired, well formed, and descending priority messages.
         let messages = feature.messages.compactMap { key, messageData -> GleanPlumbMessage? in
             guard let message = self.createMessage(messageId: key,
                                                    message: messageData,
                                                    lookupTables: feature)
             else {
-                onMalformedMessage(messageKey: key)
+                onMalformedMessage(id: key, surface: messageData.surface)
                 return nil
             }
 
             return message
         }.filter { message in
             !message.isExpired
-        }.filter { message in
-            message.data.surface == surface
         }.sorted { message1, message2 in
             message1.style.priority > message2.style.priority
         }
@@ -258,7 +259,10 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
 
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         if messageMetadata.impressions >= style.maxDisplayCount || messageMetadata.isExpired {
-            _ = messagingStore.onMessageExpired(messageMetadata, shouldReport: true)
+            _ = messagingStore.onMessageExpired(
+                messageMetadata,
+                surface: message.surface,
+                shouldReport: true)
             return nil
         }
 
@@ -274,13 +278,14 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     ///
     /// - Returns: The next triggered message, if one exists.
     private func getNextTriggeredMessage(_ messages: [GleanPlumbMessage], _ helper: GleanPlumbMessageHelper) -> GleanPlumbMessage? {
-        messages.first( where: { message in
+        var jexlCache = [String: Bool]()
+        return messages.first { message in
             do {
-                return try messagingUtility.isMessageEligible(message, messageHelper: helper)
+                return try messagingUtility.isMessageEligible(message, messageHelper: helper, jexlCache: &jexlCache)
             } catch {
                 return false
             }
-        })
+        }
     }
 
     /// If a message is under experiment, we need to handle it a certain way.
@@ -301,7 +306,7 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
                                               _ messages: [GleanPlumbMessage],
                                               _ helper: GleanPlumbMessageHelper,
                                               _ onControl: ControlMessageBehavior) -> GleanPlumbMessage? {
-        FxNimbus.shared.features.messaging.recordExposure()
+        messagingFeature.recordExposure()
         let onControlActions = onControl
 
         if !message.data.isControl {
@@ -311,15 +316,21 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         case .showNone:
             return nil
         case .showNextMessage:
+            var jexlCache = [String: Bool]()
             return messages.first { message in
                 do {
-                    return try messagingUtility.isMessageEligible(message, messageHelper: helper)
+                    return try messagingUtility.isMessageEligible(message, messageHelper: helper, jexlCache: &jexlCache)
                     && !message.data.isControl
                 } catch {
-                    onMalformedMessage(messageKey: message.id)
+                    onMalformedMessage(id: message.id, surface: message.data.surface)
                     return false
                 }
             }
         }
+    }
+
+    private func baseTelemetryExtras(using message: GleanPlumbMessage) -> [String: String] {
+        return [MessagingKey.messageKey.rawValue: message.id,
+                MessagingKey.messageSurface.rawValue: message.data.surface.rawValue]
     }
 }

@@ -16,9 +16,9 @@ class LegacyTabMetadataManager {
     let minViewTimeInSeconds = 7
 
     private var shouldUpdateObservationTitle: Bool {
-        tabGroupData.tabHistoryCurrentState == TabGroupTimerState.navSearchLoaded.rawValue ||
-        tabGroupData.tabHistoryCurrentState == TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
-        tabGroupData.tabHistoryCurrentState == TabGroupTimerState.openURLOnly.rawValue
+        tabGroupData.tabHistoryCurrentState == LegacyTabGroupTimerState.navSearchLoaded.rawValue ||
+        tabGroupData.tabHistoryCurrentState == LegacyTabGroupTimerState.tabNavigatedToDifferentUrl.rawValue ||
+        tabGroupData.tabHistoryCurrentState == LegacyTabGroupTimerState.openURLOnly.rawValue
     }
 
     init(metadataObserver: HistoryMetadataObserver) {
@@ -35,7 +35,7 @@ class LegacyTabMetadataManager {
         nextUrl != tabGroupData.tabAssociatedNextUrl
     }
 
-    func updateTimerAndObserving(state: TabGroupTimerState,
+    func updateTimerAndObserving(state: LegacyTabGroupTimerState,
                                  searchData: LegacyTabGroupData = LegacyTabGroupData(),
                                  tabTitle: String? = nil, isPrivate: Bool) {
         guard !isPrivate else { return }
@@ -112,14 +112,14 @@ class LegacyTabMetadataManager {
         shouldResetTabGroupData = false
         tabGroupsTimerHelper.startOrResume()
         tabGroupData = searchData
-        tabGroupData.tabHistoryCurrentState = TabGroupTimerState.navSearchLoaded.rawValue
+        tabGroupData.tabHistoryCurrentState = LegacyTabGroupTimerState.navSearchLoaded.rawValue
     }
 
     private func updateNewTabState(searchData: LegacyTabGroupData) {
         shouldResetTabGroupData = false
         tabGroupsTimerHelper.resetTimer()
         tabGroupsTimerHelper.startOrResume()
-        tabGroupData.tabHistoryCurrentState = TabGroupTimerState.newTab.rawValue
+        tabGroupData.tabHistoryCurrentState = LegacyTabGroupTimerState.newTab.rawValue
     }
 
     private func updateNavigatedToDifferentUrl(searchData: LegacyTabGroupData) {
@@ -136,7 +136,7 @@ class LegacyTabMetadataManager {
             }
             tabGroupsTimerHelper.resetTimer()
             tabGroupsTimerHelper.startOrResume()
-            tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabNavigatedToDifferentUrl.rawValue
+            tabGroupData.tabHistoryCurrentState = LegacyTabGroupTimerState.tabNavigatedToDifferentUrl.rawValue
         }
     }
 
@@ -145,7 +145,7 @@ class LegacyTabMetadataManager {
             if tabGroupsTimerHelper.isPaused {
                 tabGroupsTimerHelper.startOrResume()
             }
-            tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabSelected.rawValue
+            tabGroupData.tabHistoryCurrentState = LegacyTabGroupTimerState.tabSelected.rawValue
         }
     }
 
@@ -153,7 +153,7 @@ class LegacyTabMetadataManager {
         if !shouldResetTabGroupData {
             updateObservationViewTime()
             tabGroupsTimerHelper.pauseOrStop()
-            tabGroupData.tabHistoryCurrentState = TabGroupTimerState.tabSwitched.rawValue
+            tabGroupData.tabHistoryCurrentState = LegacyTabGroupTimerState.tabSwitched.rawValue
         }
     }
 
@@ -162,7 +162,7 @@ class LegacyTabMetadataManager {
         if !searchData.tabAssociatedSearchUrl.isEmpty {
             tabGroupData = searchData
         }
-        tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openInNewTab.rawValue
+        tabGroupData.tabHistoryCurrentState = LegacyTabGroupTimerState.openInNewTab.rawValue
     }
 
     /// Update observation for Regular sites (not search term)
@@ -172,7 +172,7 @@ class LegacyTabMetadataManager {
     ///   - title: Site title from webview can be empty for slow loading pages
     private func updateOpenURLOnlyState(searchData: LegacyTabGroupData, title: String?) {
         tabGroupData = searchData
-        tabGroupData.tabHistoryCurrentState = TabGroupTimerState.openURLOnly.rawValue
+        tabGroupData.tabHistoryCurrentState = LegacyTabGroupTimerState.openURLOnly.rawValue
         tabGroupsTimerHelper.startOrResume()
 
         guard let title = title, !title.isEmpty else { return }

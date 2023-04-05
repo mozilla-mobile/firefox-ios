@@ -276,12 +276,14 @@ class OnboardingCardViewController: UIViewController, Themeable {
         secondaryButton.setTitle(buttonTitle, for: .normal)
     }
 
-    @objc func primaryAction() {
+    @objc
+    func primaryAction() {
         viewModel.sendTelemetryButton(isPrimaryAction: true)
         delegate?.primaryAction(viewModel.cardType)
     }
 
-    @objc func secondaryAction() {
+    @objc
+    func secondaryAction() {
         viewModel.sendTelemetryButton(isPrimaryAction: false)
         delegate?.showNextPage(viewModel.cardType)
     }

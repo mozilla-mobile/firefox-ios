@@ -203,7 +203,8 @@ private extension BottomSheetViewController {
         childViewController.view.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
+    @objc
+    func panGesture(_ recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .changed:
             viewTranslation = recognizer.translation(in: view)
@@ -237,7 +238,8 @@ private extension BottomSheetViewController {
         }
     }
 
-    @objc func closeTapped() {
+    @objc
+    func closeTapped() {
         dismissViewController()
     }
 }

@@ -8,8 +8,7 @@ import SwiftUI
 
 @main
 struct FirefoxWidgets: WidgetBundle {
-    @WidgetBundleBuilder
-    var body: some Widget {
+    @WidgetBundleBuilder var body: some Widget {
         SmallQuickLinkWidget()
         SearchQuickLinksWidget()
         OpenTabsWidget()

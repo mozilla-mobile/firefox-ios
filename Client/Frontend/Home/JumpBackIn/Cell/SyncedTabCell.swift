@@ -182,11 +182,13 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
         return cardTitle
     }
 
-    @objc func showAllSyncedTabs(_ sender: Any) {
+    @objc
+    func showAllSyncedTabs(_ sender: Any) {
         showAllSyncedTabsAction?()
     }
 
-    @objc func didTapSyncedTab(_ sender: Any) {
+    @objc
+    func didTapSyncedTab(_ sender: Any) {
         openSyncedTabAction?()
     }
 

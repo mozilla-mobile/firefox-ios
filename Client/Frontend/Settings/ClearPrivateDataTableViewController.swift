@@ -189,7 +189,8 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         return UITableView.automaticDimension
     }
 
-    @objc func switchValueChanged(_ toggle: UISwitch) {
+    @objc
+    func switchValueChanged(_ toggle: UISwitch) {
         toggles[toggle.tag] = toggle.isOn
 
         // Dim the clear button if no clearables are selected.

@@ -115,7 +115,8 @@ extension SwipeAnimator {
 
 // MARK: Selectors
 extension SwipeAnimator {
-    @objc func didPan(_ recognizer: UIPanGestureRecognizer!) {
+    @objc
+    func didPan(_ recognizer: UIPanGestureRecognizer!) {
         let translation = recognizer.translation(in: animatingView)
 
         switch recognizer.state {
@@ -146,14 +147,17 @@ extension SwipeAnimator {
         animateAwayWithVelocity(CGPoint(x: -direction * params.minExitVelocity, y: 0), speed: direction * params.minExitVelocity)
     }
 
-    @discardableResult @objc func closeWithoutGesture() -> Bool {
+    @objc
+    @discardableResult
+    func closeWithoutGesture() -> Bool {
         close(right: false)
         return true
     }
 }
 
 extension SwipeAnimator: UIGestureRecognizerDelegate {
-    @objc func gestureRecognizerShouldBegin(_ recognizer: UIGestureRecognizer) -> Bool {
+    @objc
+    func gestureRecognizerShouldBegin(_ recognizer: UIGestureRecognizer) -> Bool {
         let cellView = recognizer.view
         let panGesture = recognizer as! UIPanGestureRecognizer
         let translation = panGesture.translation(in: cellView?.superview)

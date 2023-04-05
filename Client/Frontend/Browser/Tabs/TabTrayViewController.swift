@@ -17,7 +17,6 @@ enum TabTrayViewAction {
 protocol TabTrayViewDelegate: UIViewController {
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool)
     func performToolbarAction(_ action: TabTrayViewAction, sender: UIBarButtonItem)
-    func setToolbarHeight(height: CGFloat)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -230,11 +229,6 @@ class TabTrayViewController: UIViewController, Themeable {
         updateLayout()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewModel.tabTrayView.setToolbarHeight(height: view.safeAreaInsets.bottom)
-    }
-
     private func viewSetup() {
         viewModel.syncedTabsController.remotePanelDelegate = self
 
@@ -292,12 +286,14 @@ class TabTrayViewController: UIViewController, Themeable {
         regularContainerTopConstraint.isActive = !isCompact
     }
 
-    @objc func segmentIphoneChanged() {
+    @objc
+    func segmentIphoneChanged() {
         segmentedControlIpad.selectedSegmentIndex = segmentedControlIphone.selectedSegmentIndex
         changePanel()
     }
 
-    @objc func segmentIpadChanged() {
+    @objc
+    func segmentIpadChanged() {
         segmentedControlIphone.selectedSegmentIndex = segmentedControlIpad.selectedSegmentIndex
         changePanel()
     }
@@ -557,19 +553,23 @@ extension TabTrayViewController: UIAdaptivePresentationControllerDelegate, UIPop
 
 // MARK: - Button actions
 extension TabTrayViewController {
-    @objc func didTapAddTab(_ sender: UIBarButtonItem) {
+    @objc
+    func didTapAddTab(_ sender: UIBarButtonItem) {
         viewModel.didTapAddTab(sender)
     }
 
-    @objc func didTapDeleteTabs(_ sender: UIBarButtonItem) {
+    @objc
+    func didTapDeleteTabs(_ sender: UIBarButtonItem) {
         viewModel.didTapDeleteTab(sender)
     }
 
-    @objc func didTapSyncTabs(_ sender: UIBarButtonItem) {
+    @objc
+    func didTapSyncTabs(_ sender: UIBarButtonItem) {
         viewModel.didTapSyncTabs(sender)
     }
 
-    @objc func didTapDone() {
+    @objc
+    func didTapDone() {
         notificationCenter.post(name: .TabsTrayDidClose)
         // Update Private mode when closing TabTray, if the mode toggle but no tab is pressed with return to previous state
         updatePrivateUIState()

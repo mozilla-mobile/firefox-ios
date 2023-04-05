@@ -7,6 +7,7 @@ import Shared
 
 /// Interface for saving and retrieving metadata web content
 public protocol Metadata {
-    @discardableResult func storeMetadata(_ metadata: PageMetadata, forPageURL: URL, expireAt: UInt64) -> Success
+    @discardableResult
+    func storeMetadata(_ metadata: PageMetadata, forPageURL: URL, expireAt: UInt64) -> Success
     func deleteExpiredMetadata() -> Success
 }

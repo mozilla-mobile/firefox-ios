@@ -25,15 +25,18 @@ public protocol SyncManager {
     func syncClients() -> OldSyncResult
     func syncClientsThenTabs() -> OldSyncResult
     func syncHistory() -> OldSyncResult
-    @discardableResult func syncEverything(why: OldSyncReason) -> Success
     func syncNamedCollections(why: OldSyncReason, names: [String]) -> Success
+    @discardableResult
+    func syncEverything(why: OldSyncReason) -> Success
 
     func endTimedSyncs()
     func applicationDidBecomeActive()
     func applicationDidEnterBackground()
 
-    @discardableResult func onRemovedAccount() -> Success
-    @discardableResult func onAddedAccount() -> Success
+    @discardableResult
+    func onRemovedAccount() -> Success
+    @discardableResult
+    func onAddedAccount() -> Success
 }
 
 typealias SyncFunction = (SyncDelegate, Prefs, Ready, OldSyncReason) -> OldSyncResult
@@ -126,7 +129,8 @@ protocol Profile: AnyObject {
 
     func cleanupHistoryIfNeeded()
 
-    @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+    @discardableResult
+    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
     func pollCommands(forcePoll: Bool)
@@ -1042,11 +1046,13 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @objc func onStartSyncing(_ notification: NSNotification) {
+        @objc
+        func onStartSyncing(_ notification: NSNotification) {
             syncDisplayState = .inProgress
         }
 
-        @objc func onFinishSyncing(_ notification: NSNotification) {
+        @objc
+        func onFinishSyncing(_ notification: NSNotification) {
             if let syncState = syncDisplayState, syncState == .good {
                 self.lastSyncFinishTime = Date.now()
             }
@@ -1560,7 +1566,8 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @discardableResult public func syncEverything(why: OldSyncReason) -> Success {
+        @discardableResult
+        public func syncEverything(why: OldSyncReason) -> Success {
             if let accountManager = RustFirefoxAccounts.shared.accountManager.peek(), accountManager.accountMigrationInFlight() {
                 accountManager.retryMigration { _ in }
                 return Success()
@@ -1620,7 +1627,8 @@ open class BrowserProfile: Profile {
             return self.syncSeveral(why: why, synchronizers: synchronizers) >>> succeed
         }
 
-        @objc func syncOnTimer() {
+        @objc
+        func syncOnTimer() {
             self.syncEverything(why: .scheduled)
             self.profile.pollCommands()
         }
