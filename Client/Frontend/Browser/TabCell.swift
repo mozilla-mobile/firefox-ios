@@ -176,6 +176,7 @@ class TabCell: UICollectionViewCell,
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layer.borderColor = UIColor.clear.cgColor
             layer.borderWidth = 0
+            layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
         }
 
         faviconBG.isHidden = true
