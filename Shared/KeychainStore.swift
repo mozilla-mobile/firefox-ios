@@ -11,7 +11,7 @@ public class KeychainStore {
 
     private let keychainWrapper: MZKeychainWrapper
 
-    private init() {
+    public init() {
         self.keychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
     }
 
