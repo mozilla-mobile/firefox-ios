@@ -392,13 +392,19 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
-        tabDisplayManager.animateClosedTab(forCell: cell, shouldHide: true)
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+
+        tabDisplayManager.animateClosedTab(forCell: cell,
+                                           animationType: .removedNonLastTab,
+                                           indexPath: indexPath)
         buildUndoToast(toastType: .singleTab) { confirm in
             if confirm {
                 self.tabDisplayManager.tabDisplayCompletionDelegate = self
                 self.tabDisplayManager.closeActionPerformed(forCell: cell)
             } else {
-                self.tabDisplayManager.animateClosedTab(forCell: cell, shouldHide: false)
+                self.tabDisplayManager.animateClosedTab(forCell: cell,
+                                                        animationType: .addTab,
+                                                        indexPath: indexPath)
             }
         }
     }
@@ -541,7 +547,8 @@ extension GridTabViewController: UIScrollViewAccessibilityDelegate {
 // MARK: - SwipeAnimatorDelegate
 extension GridTabViewController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
-        guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
+        guard let tabCell = animator.animatingView as? TabCell,
+              let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             self.removeByButtonOrSwipe(tab: tab, cell: tabCell)
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
@@ -555,6 +562,7 @@ extension GridTabViewController: SwipeAnimatorDelegate {
     }
 }
 
+// MARK: - TabCellDelegate
 extension GridTabViewController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell),
@@ -564,6 +572,7 @@ extension GridTabViewController: TabCellDelegate {
     }
 }
 
+// MARK: - TabPeekDelegate
 extension GridTabViewController: TabPeekDelegate {
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)

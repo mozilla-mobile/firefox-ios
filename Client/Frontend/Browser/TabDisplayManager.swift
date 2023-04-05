@@ -462,14 +462,26 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
+    private func shouldHide(_ animationType: TabAnimationType) -> Bool {
+        return animationType != .addTab
+    }
+
     // Hide close tab to simulate user action
-    func animateClosedTab(forCell cell: UICollectionViewCell, shouldHide: Bool) {
+    func animateClosedTab(forCell cell: UICollectionViewCell,
+                          animationType: TabAnimationType,
+                          indexPath: IndexPath) {
+        guard tabDisplayType == .TabGrid else { return }
+
         UIView.animate(withDuration: 0.2,
                        animations: {
-            cell.alpha = shouldHide ? 0 : 1
+            cell.alpha = self.shouldHide(animationType) ? 0 : 1
+            cell.isHidden = self.shouldHide(animationType)
         }, completion: { _ in
-            cell.alpha = shouldHide ? 1 : 0
-            cell.isHidden = shouldHide
+            if animationType == .removedNonLastTab {
+                self.collectionView.deleteItems(at: [indexPath])
+            } else if animationType == .addTab {
+                self.collectionView.insertItems(at: [indexPath])
+            }
         })
     }
 
