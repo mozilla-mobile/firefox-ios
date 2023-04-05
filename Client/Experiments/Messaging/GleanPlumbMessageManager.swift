@@ -127,12 +127,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessageDisplayed(_ message: GleanPlumbMessage) {
         messagingStore.onMessageDisplayed(message)
 
-        let extras = baseTelemetryExtras(using: message)
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .view,
                                      object: .messaging,
                                      value: .messageImpression,
-                                     extras: extras)
+                                     extras: baseTelemetryExtras(using: message))
     }
 
     /// Handle when a user hits the CTA of the surface, and forward the bookkeeping to the store.
@@ -174,12 +173,11 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessageDismissed(_ message: GleanPlumbMessage) {
         messagingStore.onMessageDismissed(message)
 
-        let extras = baseTelemetryExtras(using: message)
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .messaging,
                                      value: .messageDismissed,
-                                     extras: extras)
+                                     extras: baseTelemetryExtras(using: message))
     }
 
     func onMalformedMessage(id: String, surface: MessageSurfaceId) {
