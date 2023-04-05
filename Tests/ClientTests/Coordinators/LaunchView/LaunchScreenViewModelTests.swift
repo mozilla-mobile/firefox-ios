@@ -7,11 +7,13 @@ import Shared
 import XCTest
 @testable import Client
 
-final class LaunchScreenManagerTests: XCTestCase, LaunchFinishedLoadingDelegate {
+final class LaunchScreenViewModelTests: XCTestCase, LaunchFinishedLoadingDelegate {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
-    var delegate: MockOpenURLDelegate!
-    var profile: MockProfile!
-    var launchTypeLoadedClosure: (() -> Void)?
+    private var delegate: MockOpenURLDelegate!
+    private var profile: MockProfile!
+
+    private var launchTypeLoadedClosure: ((LaunchType) -> Void)?
+    private var launchBrowserClosure: (() -> Void)?
 
     override func setUp() {
         super.setUp()
@@ -31,21 +33,38 @@ final class LaunchScreenManagerTests: XCTestCase, LaunchFinishedLoadingDelegate 
         messageManager = nil
         delegate = nil
         launchTypeLoadedClosure = nil
+        launchBrowserClosure = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }
 
-    func testLaunchType_intro() {
+    func testLaunchDoesntCallLoadedIfNotStarted() {
         let expectation = expectation(description: "LaunchTypeLoaded called")
-        launchTypeLoadedClosure = { expectation.fulfill() }
-
-        let subject = DefaultLaunchScreenManager(delegate: self,
-                                                 profile: profile,
-                                                 messageManager: messageManager,
-                                                 appVersion: "112.0")
+        expectation.isInverted = true
+        launchTypeLoadedClosure = { _ in expectation.fulfill() }
+        let subject = LaunchScreenViewModel(profile: profile,
+                                            messageManager: messageManager)
+        subject.delegate = self
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(subject.getLaunchType(forType: .SceneCoordinator), .intro)
+    }
+
+    func testLaunchType_intro() {
+        let expectation = expectation(description: "LaunchTypeLoaded called")
+        launchTypeLoadedClosure = { launchType in
+            guard case .intro = launchType else {
+                XCTFail("Expected intro, but was \(launchType)")
+                return
+            }
+            expectation.fulfill()
+        }
+
+        let subject = LaunchScreenViewModel(profile: profile,
+                                            messageManager: messageManager)
+        subject.delegate = self
+        subject.startLoading(appVersion: "112.0")
+
+        waitForExpectations(timeout: 0.1)
     }
 
     func testLaunchType_update() {
@@ -53,13 +72,20 @@ final class LaunchScreenManagerTests: XCTestCase, LaunchFinishedLoadingDelegate 
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 
         let expectation = expectation(description: "LaunchTypeLoaded called")
-        launchTypeLoadedClosure = { expectation.fulfill() }
-        let subject = DefaultLaunchScreenManager(delegate: self,
-                                                 profile: profile,
-                                                 messageManager: messageManager,
-                                                 appVersion: "113.0")
+        launchTypeLoadedClosure = { launchType in
+            guard case .update = launchType else {
+                XCTFail("Expected update, but was \(launchType)")
+                return
+            }
+            expectation.fulfill()
+        }
+
+        let subject = LaunchScreenViewModel(profile: profile,
+                                            messageManager: messageManager)
+        subject.delegate = self
+        subject.startLoading(appVersion: "113.0")
+
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(subject.getLaunchType(forType: .SceneCoordinator), .update)
     }
 
     func testLaunchType_survey() {
@@ -69,47 +95,48 @@ final class LaunchScreenManagerTests: XCTestCase, LaunchFinishedLoadingDelegate 
         messageManager.message = message
 
         let expectation = expectation(description: "LaunchTypeLoaded called")
-        launchTypeLoadedClosure = { expectation.fulfill() }
-        let subject = DefaultLaunchScreenManager(delegate: self,
-                                                 profile: profile,
-                                                 messageManager: messageManager)
+        launchTypeLoadedClosure = { launchType in
+            guard case .survey = launchType else {
+                XCTFail("Expected survey, but was \(launchType)")
+                return
+            }
+            expectation.fulfill()
+        }
+        let subject = LaunchScreenViewModel(profile: profile,
+                                            messageManager: messageManager)
+        subject.delegate = self
+        subject.startLoading()
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(subject.getLaunchType(forType: .SceneCoordinator), .survey)
     }
 
-    func testLaunchType_nil() {
+    func testLaunchType_nilBrowserIsStarted() {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         let message = createMessage(isExpired: true)
         messageManager.message = message
 
-        let expectation = expectation(description: "LaunchTypeLoaded called")
-        launchTypeLoadedClosure = { expectation.fulfill() }
-        let subject = DefaultLaunchScreenManager(delegate: self,
-                                                 profile: profile,
-                                                 messageManager: messageManager)
+        let expectation = expectation(description: "LaunchBrowserClosure called")
+        launchBrowserClosure = { expectation.fulfill() }
+        let subject = LaunchScreenViewModel(profile: profile,
+                                            messageManager: messageManager)
+        subject.delegate = self
+        subject.startLoading()
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertNil(subject.getLaunchType(forType: .SceneCoordinator))
     }
 
-    func testSetDelegate() {
-        let subject = DefaultLaunchScreenManager(delegate: self,
-                                                 profile: profile,
-                                                 messageManager: messageManager)
-        XCTAssertNil(subject.surveySurfaceManager.openURLDelegate)
-        subject.set(openURLDelegate: delegate)
-        XCTAssertNotNil(subject.surveySurfaceManager.openURLDelegate)
+    // MARK: - LaunchFinishedLoadingDelegate
+
+    func launchWith(launchType: LaunchType) {
+        launchTypeLoadedClosure?(launchType)
     }
 
-    // MARK: LaunchFinishedLoadingDelegate
-
-    func launchTypeLoaded() {
-        launchTypeLoadedClosure?()
+    func launchBrowser() {
+        launchBrowserClosure?()
     }
 
-    // MARK: Helpers
+    // MARK: - Helpers
 
     private func createMessage(
         for surface: MessageSurfaceId = .survey,

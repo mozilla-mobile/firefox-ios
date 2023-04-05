@@ -5,26 +5,26 @@
 import Foundation
 @testable import Client
 
-class MockLaunchScreenManager: LaunchScreenManager {
+class MockLaunchScreenViewModel: LaunchScreenViewModel {
     var introScreenManager: IntroScreenManager
     var updateViewModel: UpdateViewModel
     var surveySurfaceManager: SurveySurfaceManager
-    weak var delegate: LaunchFinishedLoadingDelegate?
+    var startLoadingCalled = 0
     var mockLaunchType: LaunchType?
-    var setOpenURLDelegateCalled = 0
 
-    init(profile: Profile,
-         surveySurfaceManager: SurveySurfaceManager = SurveySurfaceManager()) {
+    override init(profile: Profile,
+                  messageManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared ) {
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         self.updateViewModel = UpdateViewModel(profile: profile)
-        self.surveySurfaceManager = surveySurfaceManager
+        self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
     }
 
-    func getLaunchType(forType type: LaunchCoordinatorType) -> LaunchType? {
-        return mockLaunchType
-    }
-
-    func set(openURLDelegate: OpenURLDelegate) {
-        setOpenURLDelegateCalled += 1
+    override func startLoading(appVersion: String) {
+        startLoadingCalled += 1
+        if let mockLaunchType = mockLaunchType {
+            delegate?.launchWith(launchType: mockLaunchType)
+        } else {
+            delegate?.launchBrowser()
+        }
     }
 }

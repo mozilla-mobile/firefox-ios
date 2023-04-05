@@ -6,7 +6,7 @@ import Foundation
 
 class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate {
     private lazy var launchScreen = LaunchScreenView.fromNib()
-    private var coordinator: LaunchFinishedLoadingDelegate
+    private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
 
     init(coordinator: LaunchFinishedLoadingDelegate,
@@ -24,6 +24,10 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.startLoading()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setupLayout()
     }
 
@@ -39,13 +43,13 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         ])
     }
 
-    // MARK: LaunchFinishedLoadingDelegate
+    // MARK: - LaunchFinishedLoadingDelegate
 
     func launchWith(launchType: LaunchType) {
-        coordinator.launchWith(launchType: launchType)
+        coordinator?.launchWith(launchType: launchType)
     }
 
     func launchBrowser() {
-        coordinator.launchBrowser()
+        coordinator?.launchBrowser()
     }
 }
