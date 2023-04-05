@@ -25,15 +25,43 @@ class AdjustTelemetryHelperTests: XCTestCase {
         telemetryHelper = nil
     }
 
-    func testFailSetAttribution_WithNilData() {
+    func testFailSetAttribution_WithAllNilData() {
         // Submit the ping.
-        let attribution = MockAdjustTelemetryData(campaign: nil)
+        let attribution = MockAdjustTelemetryData(campaign: nil,
+                                                  adgroup: nil,
+                                                  creative: nil,
+                                                  network: nil)
+        let expectation = expectation(description: "The first session ping was sent")
+
+        GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
+            XCTAssertNil(GleanMetrics.Adjust.campaign.testGetValue())
+            XCTAssertNil(GleanMetrics.Adjust.adGroup.testGetValue())
+            XCTAssertNil(GleanMetrics.Adjust.creative.testGetValue())
+            XCTAssertNil(GleanMetrics.Adjust.network.testGetValue())
+            expectation.fulfill()
+        }
+
         telemetryHelper.setAttributionData(attribution)
 
-        XCTAssertNil(GleanMetrics.Adjust.campaign.testGetValue())
-        XCTAssertNil(GleanMetrics.Adjust.adGroup.testGetValue())
-        XCTAssertNil(GleanMetrics.Adjust.creative.testGetValue())
-        XCTAssertNil(GleanMetrics.Adjust.network.testGetValue())
+        waitForExpectations(timeout: 5.0)
+    }
+
+    func testSetAttribution_WithSomeNilData() {
+        // Submit the ping.
+        let attribution = MockAdjustTelemetryData(campaign: nil)
+        let expectation = expectation(description: "The first session ping was sent")
+
+        GleanMetrics.Pings.shared.firstSession.testBeforeNextSubmit { _ in
+            XCTAssertNil(GleanMetrics.Adjust.campaign.testGetValue())
+            XCTAssertEqual("test_adgroup", GleanMetrics.Adjust.adGroup.testGetValue())
+            XCTAssertEqual("test_creative", GleanMetrics.Adjust.creative.testGetValue())
+            XCTAssertEqual("test_network", GleanMetrics.Adjust.network.testGetValue())
+            expectation.fulfill()
+        }
+
+        telemetryHelper.setAttributionData(attribution)
+
+        waitForExpectations(timeout: 5.0)
     }
 
     func testFirstSessionPing() {
