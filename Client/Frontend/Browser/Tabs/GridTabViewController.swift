@@ -392,9 +392,15 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
-        // TODO: YRD move call to toast here to cover x and swipe
-        tabDisplayManager.tabDisplayCompletionDelegate = self
-        tabDisplayManager.closeActionPerformed(forCell: cell)
+        tabDisplayManager.animateClosedTab(forCell: cell, shouldHide: true)
+        buildUndoToast(toastType: .singleTab) { confirm in
+            if confirm {
+                self.tabDisplayManager.tabDisplayCompletionDelegate = self
+                self.tabDisplayManager.closeActionPerformed(forCell: cell)
+            } else {
+                self.tabDisplayManager.animateClosedTab(forCell: cell, shouldHide: false)
+            }
+        }
     }
 
     private func buildUndoToast(toastType: UndoToastType,
@@ -538,7 +544,8 @@ extension GridTabViewController: SwipeAnimatorDelegate {
         guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             self.removeByButtonOrSwipe(tab: tab, cell: tabCell)
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: String.TabTrayClosingTabAccessibilityMessage)
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement,
+                                 argument: String.TabTrayClosingTabAccessibilityMessage)
         }
     }
 
@@ -552,14 +559,7 @@ extension GridTabViewController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell),
            let tab = tabDisplayManager.dataStore.at(indexPath.item) {
-            tabDisplayManager.animateClosedTab(forCell: cell, shouldHide: true)
-            buildUndoToast(toastType: .singleTab) { confirm in
-                if confirm {
-                    self.removeByButtonOrSwipe(tab: tab, cell: cell)
-                } else {
-                    self.tabDisplayManager.animateClosedTab(forCell: cell, shouldHide: false)
-                }
-            }
+            removeByButtonOrSwipe(tab: tab, cell: cell)
         }
     }
 }

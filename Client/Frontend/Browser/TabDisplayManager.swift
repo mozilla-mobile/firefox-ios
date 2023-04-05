@@ -451,7 +451,8 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
                 let tab = dataStore.at(index) else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            if self.isPrivate == false, tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
+            if self.isPrivate == false,
+               tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
                 self.tabManager.removeTabs([tab])
                 self.tabManager.selectTab(self.tabManager.addTab())
                 return
