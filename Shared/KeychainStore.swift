@@ -32,7 +32,7 @@ public class KeychainStore {
               let data = stringValue.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
         else { return nil }
-        
+
         return json
     }
 

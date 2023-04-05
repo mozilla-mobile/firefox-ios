@@ -7,17 +7,17 @@ import XCTest
 
 class KeychainStoreTests: XCTestCase {
     private var keychainStore: KeychainStore!
-    
+
     override func setUp() {
         super.setUp()
         keychainStore = KeychainStore()
     }
-    
+
     override func tearDown() {
         super.tearDown()
         keychainStore = nil
     }
-    
+
     func testDictionary() throws {
         let fakeKey = "fakeKey"
         var fakeKeychainDict: [String: Any] = [
@@ -25,21 +25,21 @@ class KeychainStoreTests: XCTestCase {
             "intValue": 123,
             "boolValue": true
         ]
-        
+
         keychainStore.setDictionary(fakeKeychainDict, forKey: fakeKey)
         var keychainDict = try XCTUnwrap(keychainStore.dictionary(forKey: fakeKey))
         XCTAssertEqual(keychainDict.count, 3)
-        
+
         fakeKeychainDict["anotherStringValue"] = "anotherStringKey"
         keychainStore.setDictionary(fakeKeychainDict, forKey: fakeKey)
         keychainDict = try XCTUnwrap(keychainStore.dictionary(forKey: fakeKey))
         XCTAssertEqual(keychainDict.count, 4)
     }
-    
+
     func testString() throws {
         let fakeKey = "fakeKey"
         let fakeValue = "fakeValue"
-        
+
         keychainStore.setString(fakeValue, forKey: fakeKey)
         let keychainString = try XCTUnwrap(keychainStore.string(forKey: fakeKey))
         XCTAssertEqual(keychainString, fakeValue)
