@@ -11,14 +11,14 @@ enum LaunchCoordinatorType {
 }
 
 enum LaunchType {
-    /// Showing the intro onboarding
-    case intro(IntroScreenManager)
+    /// Showing the intro onboarding, pass the intro screen manager 
+    case intro(manager: IntroScreenManager)
 
     /// Show the update onboarding
-    case update(UpdateViewModel)
+    case update(viewModel: UpdateViewModel)
 
     /// Show the surface survey
-    case survey(SurveySurfaceManager)
+    case survey(manager: SurveySurfaceManager)
 
     /// Show the default browser onboarding, only shown from deeplink
     case defaultBrowser

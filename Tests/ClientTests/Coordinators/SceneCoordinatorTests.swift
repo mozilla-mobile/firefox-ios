@@ -43,7 +43,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
     func testLaunchWithLaunchType_launchFromScene() {
         let subject = createSubject()
-        subject.launchWith(launchType: .intro(IntroScreenManager(prefs: MockProfile().prefs)))
+        subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? LaunchCoordinator)

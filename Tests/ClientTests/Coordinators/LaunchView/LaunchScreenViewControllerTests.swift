@@ -33,7 +33,7 @@ final class LaunchScreenViewControllerTests: XCTestCase, LaunchFinishedLoadingDe
     }
 
     func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() {
-        viewModel.mockLaunchType = .intro(viewModel.introScreenManager)
+        viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
         let expectation = expectation(description: "LaunchTypeLoaded called")
         launchTypeLoadedClosure = { launchType in
             guard case .intro = launchType else {

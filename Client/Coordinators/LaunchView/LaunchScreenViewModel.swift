@@ -33,12 +33,12 @@ class LaunchScreenViewModel {
     private func loadLaunchType(appVersion: String) async {
         var launchType: LaunchType?
         if introScreenManager.shouldShowIntroScreen {
-            launchType = .intro(introScreenManager)
+            launchType = .intro(manager: introScreenManager)
         } else if updateViewModel.shouldShowUpdateSheet(appVersion: appVersion),
                   await updateViewModel.hasSyncableAccount() {
-            launchType = .update(updateViewModel)
+            launchType = .update(viewModel: updateViewModel)
         } else if surveySurfaceManager.shouldShowSurveySurface {
-            launchType = .survey(surveySurfaceManager)
+            launchType = .survey(manager: surveySurfaceManager)
         }
 
         if let launchType = launchType {
