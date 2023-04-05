@@ -11,7 +11,7 @@ enum LaunchCoordinatorType {
 }
 
 enum LaunchType {
-    /// Showing the intro onboarding, pass the intro screen manager 
+    /// Showing the intro onboarding
     case intro(manager: IntroScreenManager)
 
     /// Show the update onboarding
