@@ -23,7 +23,6 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
     }
 
     func start(with launchType: LaunchType, onCompletion: @escaping () -> Void) {
-        print("Laurie - LaunchCoordinator init")
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
         case .intro(let manager):
@@ -35,10 +34,6 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
         case .survey(let manager):
             presentSurvey(with: manager, onCompletion: onCompletion)
         }
-    }
-
-    deinit {
-        print("Laurie - LaunchCoordinator deinit")
     }
 
     // MARK: - Intro

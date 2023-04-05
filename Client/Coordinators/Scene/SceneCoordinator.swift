@@ -47,9 +47,9 @@ class SceneCoordinator: BaseCoordinator, LaunchFinishedLoadingDelegate, OpenURLD
         let launchCoordinator = LaunchCoordinator(router: router)
         launchCoordinator.parentCoordinator = self
         add(child: launchCoordinator)
-        launchCoordinator.start(with: launchType) {
-            self.remove(child: launchCoordinator)
-            self.startBrowser(with: nil)
+        launchCoordinator.start(with: launchType) { [weak self] in
+            self?.remove(child: launchCoordinator)
+            self?.startBrowser(with: nil)
         }
     }
 

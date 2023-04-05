@@ -30,10 +30,6 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         viewModel.startLoading()
     }
 
-    deinit {
-        print("Laurie - LaunchScreenViewController deinit")
-    }
-
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupLayout()
