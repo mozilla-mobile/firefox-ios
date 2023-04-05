@@ -392,6 +392,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
+        // TODO: YRD move call to toast here to cover x and swipe
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.closeActionPerformed(forCell: cell)
     }

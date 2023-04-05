@@ -544,7 +544,9 @@ extension TabDisplayManager: UICollectionViewDataSource {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         if tabGroups != nil,
            let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                                       withReuseIdentifier: GridTabViewController.independentTabsHeaderIdentifier,
@@ -613,7 +615,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     @objc
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if tabDisplayType == .TopTabTray { return 1 }
-        return  TabDisplaySection.allCases.count
+        return TabDisplaySection.allCases.count
     }
 }
 
