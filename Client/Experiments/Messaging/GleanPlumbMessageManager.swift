@@ -186,19 +186,6 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         )
     }
 
-    /// Finds a message for a specified id on a specified surface.
-    /// - Parameters:
-    ///   - id: the id of the message.
-    /// - Returns: the message if existent, otherwise nil.
-    func messageForId(_ id: String) -> GleanPlumbMessage? {
-        let feature = messagingFeature.value()
-        guard let messageData = feature.messages[id] else { return nil }
-
-        switch createMessage(messageId: id, message: messageData, lookupTables: feature) {
-        case .success(let newMessage): return newMessage
-        case .failure: return nil
-        }
-    }
     // MARK: - Misc. Private helpers
 
     /// - Returns: All well-formed, non-expired messages for a surface in descending priority order for a specified surface.
