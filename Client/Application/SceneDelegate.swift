@@ -95,7 +95,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         if AppConstants.useCoordinators {
-            // FXIOS-5984: Handle deeplinks from openURLContexts
+            guard let url = URLContexts.first?.url,
+                  let route = Route(url: url) else { return }
+            sceneCoordinator?.handle(route: route)
+
         } else {
             guard let url = URLContexts.first?.url,
                   let routerPath = NavigationPath(url: url) else { return }

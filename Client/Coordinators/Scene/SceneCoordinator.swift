@@ -32,6 +32,14 @@ class SceneCoordinator: BaseCoordinator, OpenURLDelegate {
         }
     }
 
+    /// Handles the specified route.
+    ///
+    /// - Parameter route: The route to handle.
+    ///
+    func handle(route: Route) {
+        // TODO: Implement this function.
+    }
+
     // MARK: - OpenURLDelegate
 
     func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
