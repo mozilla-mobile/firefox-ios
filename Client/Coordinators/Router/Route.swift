@@ -122,6 +122,7 @@ enum Route: Equatable {
                 } else {
                     return nil
                 }
+
             case .fxaSignIn where urlScanner.value(query: "signin") != nil:
                 self = .fxaSignIn(FxALaunchParams(entrypoint: .fxaDeepLinkNavigation, query: url.getQuery()))
 
@@ -130,27 +131,24 @@ enum Route: Equatable {
 
             case .openText:
                 self = .search(query: urlScanner.value(query: "text") ?? "")
+
             case .glean:
                 self = .glean(url: url)
 
             case .widgetMediumTopSitesOpenUrl:
                 // Widget Top sites - open url
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)
                 self = .search(url: urlQuery, isPrivate: isPrivate)
 
             case .widgetSmallQuickLinkOpenUrl:
                 // Widget Quick links - small - open url private or regular
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
                 self = .search(url: urlQuery, isPrivate: isPrivate)
 
             case .widgetMediumQuickLinkOpenUrl:
                 // Widget Quick Actions - medium - open url private or regular
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ?.mediumQuickActionPrivateSearch:.mediumQuickActionSearch)
                 self = .search(url: urlQuery, isPrivate: isPrivate)
 
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionCopiedLink)
                 if !UIPasteboard.general.hasURLs {
                     let searchText = UIPasteboard.general.string ?? ""
                     self = .search(query: searchText)
@@ -162,12 +160,10 @@ enum Route: Equatable {
 
             case .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
                 // Widget Quick links - medium - close private tabs
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
                 self = .action(action: .closePrivateTabs)
 
             case .widgetTabsMediumOpenUrl:
                 // Widget Tabs Quick View - medium
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTabsOpenUrl)
                 let tabs = SimpleTab.getSimpleTabs()
                 if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
                     let tab = tabs[uuid]
@@ -178,7 +174,6 @@ enum Route: Equatable {
 
             case .widgetTabsLargeOpenUrl:
                 // Widget Tabs Quick View - large
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .largeTabsOpenUrl)
                 let tabs = SimpleTab.getSimpleTabs()
                 if let uuid = urlScanner.value(query: "uuid"), !tabs.isEmpty {
                     let tab = tabs[uuid]
@@ -186,10 +181,12 @@ enum Route: Equatable {
                 } else {
                     self = .search(url: nil, isPrivate: false)
                 }
-                    
+
             case .fxaSignIn:
                 return nil
             }
+
+            recordTelemetry(input: host, isPrivate: isPrivate)
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             RatingPromptManager.isBrowserDefault = true
@@ -198,6 +195,31 @@ enum Route: Equatable {
             self = .search(url: url, isPrivate: isPrivate)
         } else {
             return nil
+        }
+    }
+
+    func recordTelemetry(input: DeeplinkInput.Host, isPrivate: Bool) {
+        switch input {
+        case .deepLink, .fxaSignIn, .openUrl, .openText, .glean:
+            return
+        case .widgetMediumTopSitesOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)
+        case .widgetSmallQuickLinkOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
+        case .widgetMediumQuickLinkOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ?.mediumQuickActionPrivateSearch:.mediumQuickActionSearch)
+        case .widgetSmallQuickLinkOpenCopied:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionClosePrivate)
+        case .widgetMediumQuickLinkOpenCopied:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
+        case .widgetSmallQuickLinkClosePrivateTabs:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionClosePrivate)
+        case .widgetMediumQuickLinkClosePrivateTabs:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
+        case .widgetTabsMediumOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTabsOpenUrl)
+        case .widgetTabsLargeOpenUrl:
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .largeTabsOpenUrl)
         }
     }
 }

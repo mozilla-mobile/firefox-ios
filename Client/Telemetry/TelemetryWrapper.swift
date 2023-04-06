@@ -435,6 +435,8 @@ extension TelemetryWrapper {
         case mediumTabsOpenUrl = "medium-tabs-widget-url"
         case largeTabsOpenUrl = "large-tabs-widget-url"
         case smallQuickActionSearch = "small-quick-action-search"
+        case smallQuickActionClosePrivate = "small-quick-action-close-private"
+        case smallQuickActionCopiedLink = "small-quick-action-copied-link"
         case mediumQuickActionSearch = "medium-quick-action-search"
         case mediumQuickActionPrivateSearch = "medium-quick-action-private-search"
         case mediumQuickActionCopiedLink = "medium-quick-action-copied-link"

@@ -176,12 +176,6 @@ class RouteTests: XCTestCase {
         XCTAssertEqual(route, .action(action: .closePrivateTabs))
     }
 
-    func _testInvalidScheme() {
-        let url = URL(string: "ftp://example.com")!
-        let route = Route(url: url)
-        XCTAssertNil(route)
-    }
-
     func testUnsupportedScheme() {
         let url = URL(string: "chrome://example.com")!
         let route = Route(url: url)
@@ -194,7 +188,7 @@ class RouteTests: XCTestCase {
         XCTAssertNil(route)
     }
 
-    func _testInvalidDeepLink() {
+    func testInvalidDeepLinking() {
         let url = URL(string: "firefox://deep-link?url=/invalid-path")!
         let route = Route(url: url)
         XCTAssertNil(route)
@@ -210,5 +204,11 @@ class RouteTests: XCTestCase {
         let url = URL(string: "firefox://fxa-signin")!
         let route = Route(url: url)
         XCTAssertNil(route)
+    }
+
+    func testOpenText() {
+        let url = URL(string: "firefox://open-text?text=google")!
+        let route = Route(url: url)
+        XCTAssertEqual(route, .search(query: "google"))
     }
 }
