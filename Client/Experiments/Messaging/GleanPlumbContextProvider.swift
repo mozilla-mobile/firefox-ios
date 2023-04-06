@@ -49,9 +49,10 @@ class GleanPlumbContextProvider {
 
         // We don't care how often the user is active in the first 24 hours after first use.
         // If they are not active in the second 24 hours after first use they are considered inactive.
-        let lastSessionDate = Date.fromTimestamp(lastSession)
-        return now >= Date.fromTimestamp(firstAppUse + Constant.activityReferencePeriod) &&
-            lastSessionDate <= Date.fromTimestamp(firstAppUse + Constant.inactivityPeriod)
+        let isAfter48Hours = now >= Date.fromTimestamp(firstAppUse + Constant.activityReferencePeriod)
+        let usedInTheFirst24Hours = lastSessionDate <= Date.fromTimestamp(firstAppUse + Constant.inactivityPeriod)
+
+        return isAfter48Hours && usedInTheFirst24Hours
     }
 
     private var allowedTipsNotifications: Bool {
