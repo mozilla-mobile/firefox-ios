@@ -173,8 +173,6 @@ class SearchTests: BaseTestCase {
 
     // Smoketest
     func testSearchEngine() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // Change to the each search engine and verify the search uses it
         changeSearchEngine(searchEngine: "Bing")

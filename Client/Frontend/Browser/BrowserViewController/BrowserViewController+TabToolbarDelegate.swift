@@ -109,7 +109,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         func action() {
             let result = tabManager.switchPrivacyMode()
-            if result == .createdNewTab, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+            if result == .createdNewTab, self.newTabSettings == .blankPage {
                 focusLocationTextField(forTab: tabManager.selectedTab)
             }
         }
@@ -136,12 +136,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
         let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab, iconString: ImageIdentifiers.newTab, iconType: .Image) { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            let shouldFocusLocationField = self.newTabSettings == .blankPage
+            self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }.items
 
         let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab, iconString: ImageIdentifiers.newTab, iconType: .Image) { _ in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
+            let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
         }.items
 

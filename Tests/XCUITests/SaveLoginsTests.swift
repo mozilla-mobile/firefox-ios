@@ -223,7 +223,6 @@ class SaveLoginTest: BaseTestCase {
 
     // Smoketest
     func testCreateLoginManually() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
         closeURLBar()
         navigator.goto(LoginsSettings)
         // This only appears the first time
@@ -261,8 +260,6 @@ class SaveLoginTest: BaseTestCase {
     }
 
     func closeURLBar () {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
     }
