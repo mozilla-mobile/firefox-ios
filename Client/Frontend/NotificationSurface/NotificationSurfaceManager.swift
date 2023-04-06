@@ -98,7 +98,8 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     // MARK: - Private
     private func scheduleNotification(message: GleanPlumbMessage, notificationId: String) {
         let userInfo = [Constant.messageIdKey: message.id]
-        notificationManager.schedule(title: message.data.title ?? "",
+        let fallbackTitle = String(format: .Notification.FallbackTitle, AppInfo.displayName)
+        notificationManager.schedule(title: message.data.title ?? fallbackTitle,
                                      body: message.data.text,
                                      id: notificationId,
                                      userInfo: userInfo,
