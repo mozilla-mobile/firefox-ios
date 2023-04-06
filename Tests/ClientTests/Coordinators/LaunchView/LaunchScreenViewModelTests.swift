@@ -7,17 +7,16 @@ import Shared
 import XCTest
 @testable import Client
 
-final class LaunchScreenViewModelTests: XCTestCase, LaunchFinishedLoadingDelegate {
+final class LaunchScreenViewModelTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var profile: MockProfile!
-
-    private var launchTypeLoadedClosure: ((LaunchType) -> Void)?
-    private var launchBrowserClosure: (() -> Void)?
+    private var delegate: MockLaunchFinishedLoadingDelegate!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
+        delegate = MockLaunchFinishedLoadingDelegate()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         messageManager = MockGleanPlumbMessageManagerProtocol()
 
@@ -29,111 +28,89 @@ final class LaunchScreenViewModelTests: XCTestCase, LaunchFinishedLoadingDelegat
         AppContainer.shared.reset()
         profile = nil
         messageManager = nil
-        launchTypeLoadedClosure = nil
-        launchBrowserClosure = nil
+        delegate = nil
 
         UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
     }
 
     func testLaunchDoesntCallLoadedIfNotStarted() {
-        let expectation = expectation(description: "LaunchTypeLoaded called")
-        expectation.isInverted = true
-        launchTypeLoadedClosure = { _ in expectation.fulfill() }
-        let subject = LaunchScreenViewModel(profile: profile,
-                                            messageManager: messageManager)
-        subject.delegate = self
+        let subject = createSubject()
+        subject.delegate = delegate
 
-        waitForExpectations(timeout: 0.1)
+        XCTAssertEqual(delegate.launchBrowserCalled, 0)
+        XCTAssertEqual(delegate.launchWithTypeCalled, 0)
     }
 
-    func testLaunchType_intro() {
-        let expectation = expectation(description: "LaunchTypeLoaded called")
-        launchTypeLoadedClosure = { launchType in
-            guard case .intro = launchType else {
-                XCTFail("Expected intro, but was \(launchType)")
-                return
-            }
-            expectation.fulfill()
+    func testLaunchType_intro() async {
+        let subject = createSubject()
+        subject.delegate = delegate
+        await subject.startLoading(appVersion: "112.0")
+
+        guard case .intro = delegate.savedLaunchType else {
+            XCTFail("Expected intro, but was \(String(describing: delegate.savedLaunchType))")
+            return
         }
-
-        let subject = LaunchScreenViewModel(profile: profile,
-                                            messageManager: messageManager)
-        subject.delegate = self
-        subject.startLoading(appVersion: "112.0")
-
-        waitForExpectations(timeout: 0.1)
+        XCTAssertEqual(delegate.launchBrowserCalled, 0)
+        XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
-    func testLaunchType_update() {
+    func testLaunchType_update() async {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 
-        let expectation = expectation(description: "LaunchTypeLoaded called")
-        launchTypeLoadedClosure = { launchType in
-            guard case .update = launchType else {
-                XCTFail("Expected update, but was \(launchType)")
-                return
-            }
-            expectation.fulfill()
+        let subject = createSubject()
+        subject.delegate = delegate
+        await subject.startLoading(appVersion: "113.0")
+
+        guard case .update = delegate.savedLaunchType else {
+            XCTFail("Expected update, but was \(String(describing: delegate.savedLaunchType))")
+            return
         }
-
-        let subject = LaunchScreenViewModel(profile: profile,
-                                            messageManager: messageManager)
-        subject.delegate = self
-        subject.startLoading(appVersion: "113.0")
-
-        waitForExpectations(timeout: 0.1)
+        XCTAssertEqual(delegate.launchBrowserCalled, 0)
+        XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
-    func testLaunchType_survey() {
+    func testLaunchType_survey() async {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         let message = createMessage(isExpired: false)
         messageManager.message = message
 
-        let expectation = expectation(description: "LaunchTypeLoaded called")
-        launchTypeLoadedClosure = { launchType in
-            guard case .survey = launchType else {
-                XCTFail("Expected survey, but was \(launchType)")
-                return
-            }
-            expectation.fulfill()
-        }
-        let subject = LaunchScreenViewModel(profile: profile,
-                                            messageManager: messageManager)
-        subject.delegate = self
-        subject.startLoading()
+        let subject = createSubject()
+        subject.delegate = delegate
+        await subject.startLoading(appVersion: "112.0")
 
-        waitForExpectations(timeout: 0.1)
+        guard case .survey = delegate.savedLaunchType else {
+            XCTFail("Expected survey, but was \(String(describing: delegate.savedLaunchType))")
+            return
+        }
+        XCTAssertEqual(delegate.launchBrowserCalled, 0)
+        XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
-    func testLaunchType_nilBrowserIsStarted() {
+    func testLaunchType_nilBrowserIsStarted() async {
         profile.prefs.setString("112.0", forKey: PrefsKeys.AppVersion.Latest)
         profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         let message = createMessage(isExpired: true)
         messageManager.message = message
 
-        let expectation = expectation(description: "LaunchBrowserClosure called")
-        launchBrowserClosure = { expectation.fulfill() }
-        let subject = LaunchScreenViewModel(profile: profile,
-                                            messageManager: messageManager)
-        subject.delegate = self
-        subject.startLoading()
+        let subject = createSubject()
+        subject.delegate = delegate
+        await subject.startLoading(appVersion: "112.0")
 
-        waitForExpectations(timeout: 0.1)
-    }
-
-    // MARK: - LaunchFinishedLoadingDelegate
-
-    func launchWith(launchType: LaunchType) {
-        launchTypeLoadedClosure?(launchType)
-    }
-
-    func launchBrowser() {
-        launchBrowserClosure?()
+        XCTAssertEqual(delegate.launchBrowserCalled, 1)
+        XCTAssertEqual(delegate.launchWithTypeCalled, 0)
+        XCTAssertNil(delegate.savedLaunchType)
     }
 
     // MARK: - Helpers
+    private func createSubject(file: StaticString = #file,
+                               line: UInt = #line) -> LaunchScreenViewModel {
+        let subject = LaunchScreenViewModel(profile: profile,
+                                            messageManager: messageManager)
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
+    }
 
     private func createMessage(
         for surface: MessageSurfaceId = .survey,
