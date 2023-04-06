@@ -5,12 +5,17 @@
 import Common
 import Foundation
 
+protocol LaunchCoordinatorDelegate: AnyObject {
+    func didFinishLaunch(from coordinator: LaunchCoordinator)
+    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool)
+}
+
 // Manages different types of onboarding that gets shown at the launch of the application
 class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
     private let profile: Profile
     private let logger: Logger
     private let isIphone: Bool
-    weak var parentCoordinator: OpenURLDelegate?
+    weak var parentCoordinator: LaunchCoordinatorDelegate?
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
@@ -22,29 +27,29 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
         super.init(router: router)
     }
 
-    func start(with launchType: LaunchType, onCompletion: @escaping () -> Void) {
+    func start(with launchType: LaunchType) {
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
         case .intro(let manager):
-            presentIntroOnboarding(with: manager, isFullScreen: isFullScreen, onCompletion: onCompletion)
+            presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
         case .update(let viewModel):
-            presentUpdateOnboarding(with: viewModel, isFullScreen: isFullScreen, onCompletion: onCompletion)
+            presentUpdateOnboarding(with: viewModel, isFullScreen: isFullScreen)
         case .defaultBrowser:
-            presentDefaultBrowserOnboarding(onCompletion: onCompletion)
+            presentDefaultBrowserOnboarding()
         case .survey(let manager):
-            presentSurvey(with: manager, onCompletion: onCompletion)
+            presentSurvey(with: manager)
         }
     }
 
     // MARK: - Intro
     private func presentIntroOnboarding(with manager: IntroScreenManager,
-                                        isFullScreen: Bool,
-                                        onCompletion: @escaping () -> Void) {
+                                        isFullScreen: Bool) {
         let introViewModel = IntroViewModel(introScreenManager: manager)
         let introViewController = IntroViewController(viewModel: introViewModel,
                                                       profile: profile)
-        introViewController.didFinishFlow = {
-            onCompletion()
+        introViewController.didFinishFlow = { [weak self] in
+            guard let self = self else { return }
+            self.parentCoordinator?.didFinishLaunch(from: self)
         }
 
         if isFullScreen {
@@ -61,11 +66,11 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
 
     // MARK: - Update
     private func presentUpdateOnboarding(with updateViewModel: UpdateViewModel,
-                                         isFullScreen: Bool,
-                                         onCompletion: @escaping () -> Void) {
+                                         isFullScreen: Bool) {
         let updateViewController = UpdateViewController(viewModel: updateViewModel)
-        updateViewController.didFinishFlow = {
-            onCompletion()
+        updateViewController.didFinishFlow = { [weak self] in
+            guard let self = self else { return }
+            self.parentCoordinator?.didFinishLaunch(from: self)
         }
 
         if isFullScreen {
@@ -81,14 +86,16 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
     }
 
     // MARK: - Default Browser
-    func presentDefaultBrowserOnboarding(onCompletion: @escaping () -> Void) {
+    func presentDefaultBrowserOnboarding() {
         let defaultOnboardingViewController = DefaultBrowserOnboardingViewController()
-        defaultOnboardingViewController.viewModel.goToSettings = {
-            onCompletion()
+        defaultOnboardingViewController.viewModel.goToSettings = { [weak self] in
+            guard let self = self else { return }
+            self.parentCoordinator?.didFinishLaunch(from: self)
         }
 
-        defaultOnboardingViewController.viewModel.didAskToDismissView = {
-            onCompletion()
+        defaultOnboardingViewController.viewModel.didAskToDismissView = { [weak self] in
+            guard let self = self else { return }
+            self.parentCoordinator?.didFinishLaunch(from: self)
         }
 
         defaultOnboardingViewController.preferredContentSize = CGSize(
@@ -99,16 +106,17 @@ class LaunchCoordinator: BaseCoordinator, OpenURLDelegate {
     }
 
     // MARK: - Survey
-    func presentSurvey(with manager: SurveySurfaceManager, onCompletion: @escaping () -> Void) {
+    func presentSurvey(with manager: SurveySurfaceManager) {
         guard let surveySurface = manager.getSurveySurface() else {
             logger.log("Tried presenting survey but no surface was found", level: .warning, category: .lifecycle)
-            onCompletion()
+            parentCoordinator?.didFinishLaunch(from: self)
             return
         }
         surveySurface.modalPresentationStyle = .fullScreen
         manager.openURLDelegate = self
-        manager.dismissClosure = {
-            onCompletion()
+        manager.dismissClosure = { [weak self] in
+            guard let self = self else { return }
+            self.parentCoordinator?.didFinishLaunch(from: self)
         }
 
         router.setRootViewController(surveySurface, hideBar: true)

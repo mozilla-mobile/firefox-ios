@@ -9,7 +9,7 @@ import XCTest
 final class LaunchCoordinatorTests: XCTestCase {
     private var profile: MockProfile!
     private var mockRouter: MockRouter!
-    private var delegate: MockOpenURLDelegate!
+    private var delegate: MockLaunchCoordinatorDelegate!
 
     override func setUp() {
         super.setUp()
@@ -17,7 +17,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         profile = MockProfile()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         mockRouter = MockRouter(navigationController: MockNavigationController())
-        delegate = MockOpenURLDelegate()
+        delegate = MockLaunchCoordinatorDelegate()
     }
 
     override func tearDown() {
@@ -40,7 +40,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     func testStart_introNotIphone_present() throws {
         let introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: false)
-        subject.start(with: .intro(manager: introScreenManager)) {}
+        subject.start(with: .intro(manager: introScreenManager))
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
@@ -51,7 +51,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     func testStart_introIsIphone_setRootView() throws {
         let introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: true)
-        subject.start(with: .intro(manager: introScreenManager)) {}
+        subject.start(with: .intro(manager: introScreenManager))
 
         XCTAssertEqual(mockRouter.presentCalled, 0)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
@@ -63,7 +63,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     func testStart_updateNotIphone_present() throws {
         let viewModel = UpdateViewModel(profile: profile)
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: false)
-        subject.start(with: .update(viewModel: viewModel)) {}
+        subject.start(with: .update(viewModel: viewModel))
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
@@ -74,7 +74,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     func testStart_updateIsIphone_setRootView() throws {
         let viewModel = UpdateViewModel(profile: profile)
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: true)
-        subject.start(with: .update(viewModel: viewModel)) {}
+        subject.start(with: .update(viewModel: viewModel))
 
         XCTAssertEqual(mockRouter.presentCalled, 0)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
@@ -85,7 +85,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     // MARK: - Default browser
     func testStart_defaultBrowser_present() throws {
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: false)
-        subject.start(with: .defaultBrowser) {}
+        subject.start(with: .defaultBrowser)
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
@@ -97,12 +97,8 @@ final class LaunchCoordinatorTests: XCTestCase {
     func testStart_surveyNoMessage_completes() throws {
         let manager = SurveySurfaceManager()
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: false)
-        let expectation = expectation(description: "Completion is called")
-        subject.start(with: .survey(manager: manager)) {
-            expectation.fulfill()
-        }
+        subject.start(with: .survey(manager: manager))
 
-        waitForExpectations(timeout: 0.1)
         XCTAssertEqual(mockRouter.presentCalled, 0)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
         XCTAssertNil(mockRouter.presentedViewController)
@@ -116,7 +112,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertTrue(manager.shouldShowSurveySurface)
 
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: false)
-        subject.start(with: .survey(manager: manager)) {}
+        subject.start(with: .survey(manager: manager))
 
         XCTAssertEqual(mockRouter.presentCalled, 0)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
@@ -134,7 +130,7 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertTrue(manager.shouldShowSurveySurface)
 
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: false)
-        subject.start(with: .survey(manager: manager)) {}
+        subject.start(with: .survey(manager: manager))
 
         XCTAssertNotNil(manager.openURLDelegate)
         XCTAssertNotNil(manager.dismissClosure)
@@ -154,7 +150,7 @@ final class LaunchCoordinatorTests: XCTestCase {
     }
 
     // MARK: - Helpers
-    func createMessage(
+    private func createMessage(
         for surface: MessageSurfaceId = .survey,
         isExpired: Bool
     ) -> GleanPlumbMessage {

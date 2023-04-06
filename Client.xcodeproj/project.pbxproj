@@ -532,6 +532,8 @@
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */; };
 		8A4AC0EC28C929D700439F83 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0EA28C929D700439F83 /* URLSessionProtocol.swift */; };
+		8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */; };
+		8A5604F829DF0D2600035CA3 /* BrowserCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */; };
 		8A56955227C68AE00077A89E /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A56955127C68AE00077A89E /* UILabel+Extension.swift */; };
 		8A57519927AD80B800A84DBF /* ReaderModeStyleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */; };
 		8A590C6128C123100032F1AA /* OpenPassBookHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */; };
@@ -3804,6 +3806,8 @@
 		8A4AC0EA28C929D700439F83 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
 		8A4AC0F028C92BE500439F83 /* FxColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxColors.swift; sourceTree = "<group>"; };
 		8A5143D6BF179870414566ED /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Search.strings; sourceTree = "<group>"; };
+		8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLaunchCoordinatorDelegate.swift; sourceTree = "<group>"; };
+		8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A56955127C68AE00077A89E /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		8A57519827AD80B800A84DBF /* ReaderModeStyleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewModel.swift; sourceTree = "<group>"; };
 		8A590C6028C123100032F1AA /* OpenPassBookHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenPassBookHelper.swift; sourceTree = "<group>"; };
@@ -7035,6 +7039,7 @@
 				8A93F86429D37331004159D9 /* DefaultRouterTests.swift */,
 				8A93F86929D37FC9004159D9 /* CoordinatorTests.swift */,
 				8A7A26E229D4ACF300EA76F1 /* SceneCoordinatorTests.swift */,
+				8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -7828,6 +7833,7 @@
 				8AF10D8B29D714A90086351D /* MockOpenURLDelegate.swift */,
 				8AF10D9029D776190086351D /* MockLaunchScreenManager.swift */,
 				2173326929CCF901007F20C7 /* UIPanGestureRecognizerMock.swift */,
+				8A5604F529DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -11514,6 +11520,7 @@
 				5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */,
 				8A33222227DFE658008F809E /* NimbusMock.swift in Sources */,
 				8A8629E72880B7330096DDB1 /* BookmarksPanelTests.swift in Sources */,
+				8A5604F829DF0D2600035CA3 /* BrowserCoordinatorTests.swift in Sources */,
 				7BBFEE741BB405D900A305AA /* LegacyTabManagerTests.swift in Sources */,
 				39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */,
 				C83B7DD629BBB49D005565C2 /* SurveySurfaceManagerTests.swift in Sources */,
@@ -11546,6 +11553,7 @@
 				8A33221F27DFE318008F809E /* TopSitesDataAdaptorTests.swift in Sources */,
 				2165B2C02860BB41004C0786 /* AdjustTelemetryHelperTests.swift in Sources */,
 				C869915428917803007ACC5C /* WallpaperTestDataProvider.swift in Sources */,
+				8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */,
 				C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */,
 				8A5C3BC5282ABF8E003A8CCF /* RemoteTabsPanelTests.swift in Sources */,
 				D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */,
