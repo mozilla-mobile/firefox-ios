@@ -4,13 +4,31 @@
 
 import Foundation
 
-struct TabData: Codable {
-    let id: UUID
-    let title: String
-    let siteUrl: String
-    let faviconURL: String
-    let isPrivate: Bool
-    let lastUsedTime: Date
-    let createdAtTime: Date
-    var tabGroupData: TabGroupData?
+public struct TabData: Codable {
+    public let id: UUID
+    public let title: String
+    public let siteUrl: String
+    public let faviconURL: String
+    public let isPrivate: Bool
+    public let lastUsedTime: Date
+    public let createdAtTime: Date
+    public var tabGroupData: TabGroupData?
+
+    public init(id: UUID,
+                title: String,
+                siteUrl: String,
+                faviconURL: String,
+                isPrivate: Bool,
+                lastUsedTime: Date,
+                createdAtTime: Date,
+                tabGroupData: TabGroupData? = nil) {
+        self.id = id
+        self.title = title
+        self.siteUrl = siteUrl
+        self.faviconURL = faviconURL
+        self.isPrivate = isPrivate
+        self.lastUsedTime = lastUsedTime
+        self.createdAtTime = createdAtTime
+        self.tabGroupData = tabGroupData
+    }
 }

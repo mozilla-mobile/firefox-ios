@@ -7,12 +7,11 @@ import UIKit
 import Shared
 
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
-class SceneCoordinator: BaseCoordinator, OpenURLDelegate {
+class SceneCoordinator: BaseCoordinator, LaunchFinishedLoadingDelegate {
     var window: UIWindow?
-    var browserCoordinator: BrowserCoordinator?
-    var launchCoordinator: LaunchCoordinator?
 
-    init(scene: UIScene, sceneSetupHelper: SceneSetupHelper = SceneSetupHelper()) {
+    init(scene: UIScene,
+         sceneSetupHelper: SceneSetupHelper = SceneSetupHelper()) {
         self.window = sceneSetupHelper.configureWindowFor(scene, screenshotServiceDelegate: nil)
         let navigationController = sceneSetupHelper.createNavigationController()
         let router = DefaultRouter(navigationController: navigationController)
@@ -22,19 +21,40 @@ class SceneCoordinator: BaseCoordinator, OpenURLDelegate {
         window?.makeKeyAndVisible()
     }
 
-    func start(with launchManager: LaunchManager) {
-        if launchManager.canLaunchFromSceneCoordinator, let launchType = launchManager.getLaunchType() {
-            launchCoordinator = LaunchCoordinator(router: router)
-            launchCoordinator?.start(with: launchType)
-        } else {
-            browserCoordinator = BrowserCoordinator(router: router)
-            browserCoordinator?.start(launchManager: launchManager)
+    func start() {
+        let launchScreenVC = LaunchScreenViewController(coordinator: self)
+        router.setRootViewController(launchScreenVC, hideBar: true)
+    }
+
+    // MARK: - LaunchFinishedLoadingDelegate
+
+    func launchWith(launchType: LaunchType) {
+        guard launchType.canLaunch(fromType: .SceneCoordinator) else {
+            startBrowser(with: launchType)
+            return
+        }
+
+        startLaunch(with: launchType)
+    }
+
+    func launchBrowser() {
+        startBrowser(with: nil)
+    }
+
+    // MARK: - Helper methods
+
+    private func startLaunch(with launchType: LaunchType) {
+        let launchCoordinator = LaunchCoordinator(router: router)
+        add(child: launchCoordinator)
+        launchCoordinator.start(with: launchType) {
+            self.remove(child: launchCoordinator)
+            self.startBrowser(with: nil)
         }
     }
 
-    // MARK: - OpenURLDelegate
-
-    func didRequestToOpenInNewTab(url: URL, isPrivate: Bool, selectNewTab: Bool) {
-        // FXIOS-6030: openURL in new tab route
+    private func startBrowser(with launchType: LaunchType?) {
+        let browserCoordinator = BrowserCoordinator(router: router)
+        add(child: browserCoordinator)
+        browserCoordinator.start(with: launchType)
     }
 }

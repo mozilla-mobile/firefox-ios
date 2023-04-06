@@ -43,9 +43,37 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     /// - Parameters:
     ///   - viewController: The view controller to set as root
     ///   - hideBar: Hide the navigation bar or not
-    func setRootViewController(_ viewController: UIViewController, hideBar: Bool)
+    ///   - animated: Animates the transitions or not
+    func setRootViewController(_ viewController: UIViewController, hideBar: Bool, animated: Bool)
 
     /// Pop to the root view controller that was set with `setRootViewController`
     /// - Parameter animated: true means it will be animated
     func popToRootViewController(animated: Bool)
+}
+
+/// Adds default parameters on Router protocol
+extension Router {
+    func present(_ viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
+        present(viewController, animated: animated, completion: completion)
+    }
+
+    func dismiss(animated: Bool = true, completion: (() -> Void)? = nil) {
+        dismiss(animated: animated, completion: completion)
+    }
+
+    func push(_ viewController: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
+        push(viewController, animated: animated, completion: completion)
+    }
+
+    func popViewController(animated: Bool = true) {
+        popViewController(animated: animated)
+    }
+
+    func setRootViewController(_ viewController: UIViewController, hideBar: Bool = false, animated: Bool = false) {
+        setRootViewController(viewController, hideBar: hideBar, animated: animated)
+    }
+
+    func popToRootViewController(animated: Bool = true) {
+        popToRootViewController(animated: animated)
+    }
 }

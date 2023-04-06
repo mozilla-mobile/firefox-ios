@@ -14,7 +14,7 @@ class DiskImageStoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
         files = MockFiles()
-        store = DiskImageStore(files: files, namespace: "DiskImageStoreTests", quality: 1)
+        store = DefaultDiskImageStore(files: files, namespace: "DiskImageStoreTests", quality: 1)
 
         clearStore()
     }
