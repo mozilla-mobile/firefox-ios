@@ -173,7 +173,8 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         present(creditCardAddEditView, animated: true, completion: nil)
     }
 
-    @objc private func addCreditCard() {
+    @objc
+    private func addCreditCard() {
         updateState(type: .add)
     }
 
