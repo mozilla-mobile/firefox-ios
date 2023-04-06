@@ -54,6 +54,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
     private let logger: Logger
+    var backupDeletedTab: Tab?
 
     var didChangedPanelSelection = true
     var didAddNewTab = true
@@ -807,7 +808,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         }
     }
 
-    private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {
+    func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {
         tabs.append(contentsOf: tabsToAdd)
         let tabToSelect = tabs.first(where: { $0.tabUUID == previousTabUUID })
         let currentlySelectedTab = selectedTab

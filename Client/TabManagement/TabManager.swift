@@ -15,6 +15,7 @@ protocol TabManager: AnyObject {
     var tabs: [Tab] { get }
     var count: Int { get }
     var selectedTab: Tab? { get }
+    var backupDeletedTab: Tab? { get set }
     var didChangedPanelSelection: Bool { get set }
     var didAddNewTab: Bool { get set }
     var normalTabs: [Tab] { get }
@@ -29,6 +30,7 @@ protocol TabManager: AnyObject {
     func selectTab(_ tab: Tab?, previous: Tab?)
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool)
+    func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
     func removeTabs(_ tabs: [Tab])
     func getMostRecentHomepageTab() -> Tab?

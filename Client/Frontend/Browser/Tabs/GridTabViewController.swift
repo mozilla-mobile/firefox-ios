@@ -392,19 +392,14 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
-        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        tabManager.backupDeletedTab = tab
 
-        tabDisplayManager.animateClosedTab(forCell: cell,
-                                           animationType: .removedNonLastTab,
-                                           indexPath: indexPath)
-        buildUndoToast(toastType: .singleTab) { confirm in
-            if confirm {
-                self.tabDisplayManager.tabDisplayCompletionDelegate = self
-                self.tabDisplayManager.closeActionPerformed(forCell: cell)
-            } else {
-                self.tabDisplayManager.animateClosedTab(forCell: cell,
-                                                        animationType: .addTab,
-                                                        indexPath: indexPath)
+        tabDisplayManager.tabDisplayCompletionDelegate = self
+        tabDisplayManager.closeActionPerformed(forCell: cell)
+
+        buildUndoToast(toastType: .singleTab) { undoButtonPressed in
+            if undoButtonPressed, let tab = self.tabManager.backupDeletedTab {
+                self.tabDisplayManager.undoCloseTab(tab: tab, for: cell)
             }
         }
     }
@@ -417,7 +412,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
                                 completion: { buttonPressed in
-            completion(!buttonPressed)
+            completion(buttonPressed)
         })
 
         toast.showToast(viewController: self,

@@ -462,27 +462,14 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
-    private func shouldHide(_ animationType: TabAnimationType) -> Bool {
-        return animationType != .addTab
-    }
-
-    // Hide close tab to simulate user action
-    func animateClosedTab(forCell cell: UICollectionViewCell,
-                          animationType: TabAnimationType,
-                          indexPath: IndexPath) {
-        guard tabDisplayType == .TabGrid else { return }
-
-        UIView.animate(withDuration: 0.2,
-                       animations: {
-            cell.alpha = self.shouldHide(animationType) ? 0 : 1
-            cell.isHidden = self.shouldHide(animationType)
-        }, completion: { _ in
-            if animationType == .removedNonLastTab {
-                self.collectionView.deleteItems(at: [indexPath])
-            } else if animationType == .addTab {
-                self.collectionView.insertItems(at: [indexPath])
-            }
-        })
+    func undoCloseTab(tab: Tab, for cell: UICollectionViewCell) {
+        getTabsAndUpdateInactiveState { _, _ in
+            self.collectionView.reloadData()
+            self.tabManager.reAddTabs(tabsToAdd: [tab], previousTabUUID: "")
+            self.dataStore.insert(tab)
+            self.profile.recentlyClosedTabs.popFirstTab()
+            // TODO: YRD refresh tab count & show toast on homepage for last tab case & restore on right position
+        }
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
@@ -681,13 +668,13 @@ extension TabDisplayManager: InactiveTabsDelegate {
         collectionView.reloadItems(at: [indexPath])
 
         cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
-                                      completion: { shouldClose in
-            guard shouldClose else {
-                self.undoInactiveTabsClose()
+                                      completion: { undoButtonPressed in
+            guard undoButtonPressed else {
+                self.closeInactiveTabs()
                 return
             }
 
-            self.closeInactiveTabs()
+            self.undoInactiveTabsClose()
         })
     }
 
