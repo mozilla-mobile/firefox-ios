@@ -30,6 +30,7 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     private var profile: Profile
     private var hasSentTelemetryEvent = false
     var arrowDirection = UIPopoverArrowDirection.down
+    var overlayState: OverlayStateProtocol?
 
     // MARK: - Initializers
 
@@ -41,7 +42,8 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     // MARK: - Interface
 
     func shouldPresentContextualHint() -> Bool {
-        let hintEligibilityUtility = ContextualHintEligibilityUtility(with: profile)
+        let hintEligibilityUtility = ContextualHintEligibilityUtility(with: profile,
+                                                                      overlayState: overlayState)
 
         return hintEligibilityUtility.canPresent(hintType)
     }

@@ -47,10 +47,10 @@ class DefaultRouter: NSObject, Router {
         }
     }
 
-    func setRootViewController(_ viewController: UIViewController, hideBar: Bool = false) {
+    func setRootViewController(_ viewController: UIViewController, hideBar: Bool = false, animated: Bool = false) {
         // Call all completions so all coordinators can be deallocated
         completions.forEach { $0.value() }
-        navigationController.setViewControllers([viewController], animated: false)
+        navigationController.setViewControllers([viewController], animated: animated)
         navigationController.isNavigationBarHidden = hideBar
     }
 

@@ -177,6 +177,7 @@ class TabTrayViewController: UIViewController, Themeable {
          profile: Profile,
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
+         overlayManager: OverlayModeManager,
          focusedSegment: TabTrayViewModel.Segment? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
@@ -189,6 +190,7 @@ class TabTrayViewController: UIViewController, Themeable {
                                           profile: profile,
                                           tabToFocus: tabToFocus,
                                           tabManager: tabManager,
+                                          overlayManager: overlayManager,
                                           segmentToFocus: focusedSegment)
 
         super.init(nibName: nil, bundle: nil)
@@ -322,8 +324,6 @@ class TabTrayViewController: UIViewController, Themeable {
     }
 
     private func switchBetweenLocalPanels(withPrivateMode privateMode: Bool) {
-        viewModel.tabManager.didChangedPanelSelection = true
-        viewModel.tabManager.didAddNewTab = true
         if children.first != viewModel.tabTrayView {
             hideCurrentPanel()
             showPanel(viewModel.tabTrayView)

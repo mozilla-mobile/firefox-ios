@@ -6,7 +6,7 @@ import Foundation
 
 // Manages different types of onboarding that gets shown at the launch of the application
 class LaunchCoordinator: BaseCoordinator {
-    func start(with launchType: LaunchType) {
+    func start(with launchType: LaunchType, onCompletion: @escaping () -> Void) {
         // FXIOS-5989: Handle different onboarding types
         switch launchType {
         case .intro:
@@ -19,4 +19,6 @@ class LaunchCoordinator: BaseCoordinator {
             break
         }
     }
+
+    // FXIOS-5989: Make sure OpenURLDelegate is set on survey manager
 }

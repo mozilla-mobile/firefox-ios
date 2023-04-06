@@ -163,7 +163,6 @@ class ReaderViewTest: BaseTestCase {
     }
 
     func testAddToReadingListFromBrowserTabMenu() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
         navigator.goto(LibraryPanel_ReadingList)
