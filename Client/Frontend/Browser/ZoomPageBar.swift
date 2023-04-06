@@ -8,8 +8,6 @@ import Shared
 
 protocol ZoomPageBarDelegate: AnyObject {
     func zoomPageDidPressClose()
-    func zoomPageURLDidUpdate()
-    func zoomPageDidEnterReaderMode()
 }
 
 class ZoomPageBar: UIView {
@@ -153,13 +151,7 @@ class ZoomPageBar: UIView {
 
     func resetZoomLevel() {
         tab.resetZoom()
-        updateButtons()
-    }
-
-    func updateButtons() {
-        updateZoomLabel()
-        zoomOutButton.isEnabled = true
-        zoomInButton.isEnabled = true
+        checkPageZoomLimits()
     }
 
     private func setupSeparator(_ separator: UIView) {

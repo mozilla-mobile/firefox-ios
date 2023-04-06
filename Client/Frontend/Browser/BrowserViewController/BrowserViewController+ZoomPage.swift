@@ -17,13 +17,6 @@ extension BrowserViewController {
         }
     }
 
-    func returnZoomPageScale() -> CGFloat {
-        if let zoomPageBar = zoomPageBar {
-            return zoomPageBar.tab.pageZoom
-        }
-        return CGFloat(1)
-    }
-
     private func setupZoomPageBar() {
         guard let tab = tabManager.selectedTab else { return }
 
@@ -78,11 +71,14 @@ extension BrowserViewController: ZoomPageBarDelegate {
         ZoomLevelStore.shared.save(domainZoomLevel)
     }
 
-    func zoomPageDidEnterReaderMode() {
-        
+    func zoomPageHandleEnterReaderMode() {
+        guard let tab = tabManager.selectedTab else { return }
+        zoomPageDidPressClose()
+        tab.resetZoom()
     }
 
-    func zoomPageURLDidUpdate() {
-        resetZoomPageBar()
+    func zoomPageHandleExitReaderMode() {
+        guard let tab = tabManager.selectedTab else { return }
+        tab.setZoomLevelforDomain()
     }
 }
