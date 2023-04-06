@@ -29,6 +29,7 @@ struct CreditCardAutofillToggle: View {
     @Environment(\.themeType) var themeVal
     @State var textColor: Color = .clear
     @State var backgroundColor: Color = .clear
+    @State var toggleTintColor: Color = .clear
     @ObservedObject var model: ToggleModel
 
     var body: some View {
@@ -43,7 +44,7 @@ struct CreditCardAutofillToggle: View {
                     .foregroundColor(textColor)
                     .padding(.leading, 16)
                     .padding(.trailing, 16)
-                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+                    .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
             }
             Divider()
                 .frame(height: 0.7)
@@ -62,6 +63,7 @@ struct CreditCardAutofillToggle: View {
         let color = theme.colors
         textColor = Color(color.textPrimary)
         backgroundColor = Color(color.layer2)
+        toggleTintColor = Color(color.actionPrimary)
     }
 }
 
