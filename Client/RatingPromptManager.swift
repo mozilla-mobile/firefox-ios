@@ -96,7 +96,7 @@ final class RatingPromptManager {
 
     private var shouldShowPrompt: Bool {
         // Required: 5th launch or more
-        let currentSessionCount = profile.prefs.intForKey(PrefsKeys.SessionCount) ?? 0
+        let currentSessionCount = profile.prefs.intForKey(PrefsKeys.Session.Count) ?? 0
         guard currentSessionCount >= 5 else { return false }
 
         // Required: 5 consecutive days of use in the last 7 days

@@ -26,39 +26,39 @@ class GleanPlumbContextProviderTests: XCTestCase {
     }
 
     func testIsInactiveNewUser_noFirstAppUse() {
-        userDefaults.set(Date.now(), forKey: PrefsKeys.KeyLastSession)
+        userDefaults.set(Date.now(), forKey: PrefsKeys.Session.KeyLastSession)
         XCTAssertFalse(contextProvider.isInactiveNewUser)
     }
 
     func testIsInactiveNewUser_noLastSession() {
-        userDefaults.set(Date.now(), forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(Date.now(), forKey: PrefsKeys.Session.KeyFirstAppUse)
         XCTAssertFalse(contextProvider.isInactiveNewUser)
     }
 
     func testIsInactiveNewUser_beforeNotificationTime() {
         let firstAppUse = Date.now() - timestampMultiplied(GleanPlumbContextProvider.Constant.activityReferencePeriod, 0.9)
-        userDefaults.set(firstAppUse, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(firstAppUse, forKey: PrefsKeys.Session.KeyFirstAppUse)
 
         let lastSession = firstAppUse + timestampMultiplied(GleanPlumbContextProvider.Constant.inactivityPeriod, 0.9)
-        userDefaults.set(lastSession, forKey: PrefsKeys.KeyLastSession)
+        userDefaults.set(lastSession, forKey: PrefsKeys.Session.KeyLastSession)
         XCTAssertFalse(contextProvider.isInactiveNewUser)
     }
 
     func testIsInactiveNewUser_usedInFirst24Hours() {
         let firstAppUse = Date.now() - timestampMultiplied(GleanPlumbContextProvider.Constant.activityReferencePeriod, 1.1)
-        userDefaults.set(firstAppUse, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(firstAppUse, forKey: PrefsKeys.Session.KeyFirstAppUse)
 
         let lastSession = firstAppUse + timestampMultiplied(GleanPlumbContextProvider.Constant.inactivityPeriod, 0.9)
-        userDefaults.set(lastSession, forKey: PrefsKeys.KeyLastSession)
+        userDefaults.set(lastSession, forKey: PrefsKeys.Session.KeyLastSession)
         XCTAssertTrue(contextProvider.isInactiveNewUser)
     }
 
     func testIsInactiveNewUser_usedInSecond24Hours() {
         let firstAppUse = Date.now() - timestampMultiplied(GleanPlumbContextProvider.Constant.activityReferencePeriod, 1.1)
-        userDefaults.set(firstAppUse, forKey: PrefsKeys.KeyFirstAppUse)
+        userDefaults.set(firstAppUse, forKey: PrefsKeys.Session.KeyFirstAppUse)
 
         let lastSession = firstAppUse + timestampMultiplied(GleanPlumbContextProvider.Constant.inactivityPeriod, 1.1)
-        userDefaults.set(lastSession, forKey: PrefsKeys.KeyLastSession)
+        userDefaults.set(lastSession, forKey: PrefsKeys.Session.KeyLastSession)
         XCTAssertFalse(contextProvider.isInactiveNewUser)
     }
 
