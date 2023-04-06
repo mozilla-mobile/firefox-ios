@@ -41,9 +41,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard !AppConstants.isRunningUnitTest else { return }
 
         if AppConstants.useCoordinators {
-            sceneCoordinator = SceneCoordinator(scene: scene, sceneSetupHelper: SceneSetupHelper())
-            let launchManager = DefaultLaunchManager(profile: profile, openURLDelegate: sceneCoordinator)
-            sceneCoordinator?.start(with: launchManager)
+            sceneCoordinator = SceneCoordinator(scene: scene)
+            sceneCoordinator?.start()
 
             // FXIOS-5827: Handle deeplinks from willConnectTo
         } else {
