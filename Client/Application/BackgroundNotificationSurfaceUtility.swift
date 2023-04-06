@@ -7,7 +7,7 @@ import BackgroundTasks
 import Common
 import Shared
 
-class BackgroundNotificationSurfaceUtil: BackgroundUtilProtocol {
+class BackgroundNotificationSurfaceUtility: BackgroundUtilityProtocol {
     let taskIdentifier = "org.mozilla.ios.surface.notification.refresh"
     var surfaceManager: NotificationSurfaceManager
     var notificationManager: NotificationManagerProtocol

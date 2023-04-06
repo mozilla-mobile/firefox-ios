@@ -6,20 +6,20 @@ import Foundation
 import BackgroundTasks
 import Common
 
-protocol BackgroundUtilProtocol {
+protocol BackgroundUtilityProtocol {
     func scheduleTaskOnAppBackground()
 }
 
-class BackgroundFetchAndProcessingUtil {
-    private var backgroundUtils = [BackgroundUtilProtocol]()
+class BackgroundFetchAndProcessingUtility {
+    private var backgroundUtilities = [BackgroundUtilityProtocol]()
 
-    func registerUtil(_ util: BackgroundUtilProtocol) {
-        backgroundUtils.append(util)
+    func registerUtility(_ utility: BackgroundUtilityProtocol) {
+        backgroundUtilities.append(utility)
     }
 
     func scheduleOnAppBackground() {
-        for util in backgroundUtils {
-            util.scheduleTaskOnAppBackground()
+        for utility in backgroundUtilities {
+            utility.scheduleTaskOnAppBackground()
         }
     }
 }

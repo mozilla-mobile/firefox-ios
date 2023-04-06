@@ -6,7 +6,7 @@ import Foundation
 import BackgroundTasks
 import Common
 
-class BackgroundSyncUtil: BackgroundUtilProtocol {
+class BackgroundSyncUtility: BackgroundUtilityProtocol {
     let profile: Profile
     let application: UIApplication
     let logger: Logger
