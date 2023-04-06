@@ -50,7 +50,7 @@ struct GleanPlumbMessage {
 
         if data.isControl { return true }
 
-        if id.hasSuffix("-") {
+        if experimentKey.hasSuffix("-") {
             return id.hasPrefix(experimentKey)
         }
 

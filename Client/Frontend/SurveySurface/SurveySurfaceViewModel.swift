@@ -9,22 +9,18 @@ class SurveySurfaceViewModel {
     // MARK: - Properties
     weak var delegate: SurveySurfaceDelegate?
     var info: SurveySurfaceInfoProtocol
-    private var nimbus: FxNimbus
 
     // MARK: - Initialization
     init(with info: SurveySurfaceInfoProtocol,
-         delegate: SurveySurfaceDelegate,
-         and nimbus: FxNimbus = FxNimbus.shared
+         delegate: SurveySurfaceDelegate
     ) {
         self.info = info
         self.delegate = delegate
-        self.nimbus = nimbus
     }
 
     // MARK: - Functionality
     func didDisplayMessage() {
         delegate?.didDisplayMessage()
-        nimbus.features.messaging.recordExposure()
     }
 
     func didTapTakeSurvey() {
