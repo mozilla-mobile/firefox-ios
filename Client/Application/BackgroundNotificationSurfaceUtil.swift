@@ -41,14 +41,14 @@ class BackgroundNotificationSurfaceUtil: BackgroundUtilProtocol {
     // MARK: Private
     private func setUp() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: taskIdentifier, using: nil) { task in
+            // Schedule a new refresh task.
+            self.scheduleSyncOnAppBackground()
+
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
     }
 
     private func handleAppRefresh(task: BGAppRefreshTask) {
-        // Schedule a new refresh task.
-        scheduleSyncOnAppBackground()
-
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1
 
