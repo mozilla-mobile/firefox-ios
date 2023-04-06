@@ -64,7 +64,7 @@ final class BrowserCoordinatorTests: XCTestCase {
 
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
-                       line: UInt = #line) -> BrowserCoordinator {
+                               line: UInt = #line) -> BrowserCoordinator {
         let subject = BrowserCoordinator(router: mockRouter, profile: profile)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

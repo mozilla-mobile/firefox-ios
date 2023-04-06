@@ -82,7 +82,7 @@ final class SceneCoordinatorTests: XCTestCase {
 
     // MARK: - Helpers
     private func createSubject(file: StaticString = #file,
-                       line: UInt = #line) -> SceneCoordinator {
+                               line: UInt = #line) -> SceneCoordinator {
         let scene = UIApplication.shared.windows.first?.windowScene
         let subject = SceneCoordinator(scene: scene!)
         // Replace created router from scene with a mock router so we don't trigger real navigation in our tests
