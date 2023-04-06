@@ -107,7 +107,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
                                      repeats: false)
 
         // Schedule notification telemetry for when notification gets displayed
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constant.messageDelay) { [weak self] in
+        DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + Constant.messageDelay) { [weak self] in
             self?.didDisplayMessage(message)
         }
     }
