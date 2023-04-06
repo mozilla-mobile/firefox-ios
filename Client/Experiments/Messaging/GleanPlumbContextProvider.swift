@@ -44,12 +44,10 @@ class GleanPlumbContextProvider {
               let lastSession = userDefaults.object(forKey: PrefsKeys.Session.Last) as? UInt64
         else { return false }
 
-        let now = Date()
-        let notificationDate = Date.fromTimestamp(firstAppUse + Constant.activityReferencePeriod)
-
         // We check that it's 48 hours after first use and that the user only used the app in the first 24 hours
         // It doesn't matter how often the user is active in the first 24 hours of the 48 hour period.
         // If they are not active in the second 24 hours after first use they are considered inactive.
+        let now = Date()
         let lastSessionDate = Date.fromTimestamp(lastSession)
         let isAfter48Hours = now >= Date.fromTimestamp(firstAppUse + Constant.activityReferencePeriod)
         let usedInTheFirst24Hours = lastSessionDate <= Date.fromTimestamp(firstAppUse + Constant.inactivityPeriod)
