@@ -24,13 +24,13 @@ class GleanPlumbMessageTests: XCTestCase {
     }
 
     // MARK: - Test isUnderExperimentWith
-    func testMessageIsUnderExperiment_BadExperimentKey() {
+    func testMessageIsUnderExperiment_BadExperimentKey_fails() {
         subject = createMessage(messageId: messageID)
 
         XCTAssertFalse(subject.isUnderExperimentWith(key: nil))
     }
 
-    func testMessageIsUnderExperiment_isControlIsTrue() {
+    func testMessageIsUnderExperiment_isControlIsTrue_passes() {
         subject = createMessage(messageId: messageID,
                                 mockData: MockMessageData(isControl: true))
 
