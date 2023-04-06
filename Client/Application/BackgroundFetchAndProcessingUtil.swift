@@ -7,7 +7,7 @@ import BackgroundTasks
 import Common
 
 protocol BackgroundUtilProtocol {
-    func scheduleSyncOnAppBackground()
+    func scheduleTaskOnAppBackground()
 }
 
 class BackgroundFetchAndProcessingUtil {
@@ -19,7 +19,7 @@ class BackgroundFetchAndProcessingUtil {
 
     func scheduleOnAppBackground() {
         for util in backgroundUtils {
-            util.scheduleSyncOnAppBackground()
+            util.scheduleTaskOnAppBackground()
         }
     }
 }

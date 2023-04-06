@@ -21,7 +21,7 @@ class BackgroundSyncUtil: BackgroundUtilProtocol {
         setUpBackgroundSync()
     }
 
-    func scheduleSyncOnAppBackground() {
+    func scheduleTaskOnAppBackground() {
         if profile.syncManager.isSyncing {
             // If syncing, create a background task because _shutdown() is blocking and
             // might take a few seconds to complete

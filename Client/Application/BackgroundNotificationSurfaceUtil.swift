@@ -23,7 +23,7 @@ class BackgroundNotificationSurfaceUtil: BackgroundUtilProtocol {
         setUp()
     }
 
-    func scheduleSyncOnAppBackground() {
+    func scheduleTaskOnAppBackground() {
         let request = BGAppRefreshTaskRequest(identifier: taskIdentifier)
 
         // Fetch no earlier than 4 hours from now.
@@ -42,7 +42,7 @@ class BackgroundNotificationSurfaceUtil: BackgroundUtilProtocol {
     private func setUp() {
         BGTaskScheduler.shared.register(forTaskWithIdentifier: taskIdentifier, using: nil) { task in
             // Schedule a new refresh task.
-            self.scheduleSyncOnAppBackground()
+            self.scheduleTaskOnAppBackground()
 
             self.handleAppRefresh(task: task as! BGAppRefreshTask)
         }
