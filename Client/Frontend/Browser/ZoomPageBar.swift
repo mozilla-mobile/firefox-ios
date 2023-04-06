@@ -56,7 +56,7 @@ class ZoomPageBar: UIView {
 
     private let zoomOutButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.subtract), for: [])
-        button.accessibilityLabel = .ZoomPageBarDecreaseZoomAccessibilityLabel
+        button.accessibilityLabel = .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -65,7 +65,7 @@ class ZoomPageBar: UIView {
 
     private let zoomInButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.add), for: [])
-        button.accessibilityLabel = .ZoomPageBarIncreaseZoomAccessibilityLabel
+        button.accessibilityLabel = .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
@@ -76,7 +76,7 @@ class ZoomPageBar: UIView {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
                                                                    size: UX.fontSize,
                                                                    weight: .semibold)
-        label.accessibilityLabel = .ZoomPageBarCurrentZoomLevelAccessibilityLabel
+        label.accessibilityLabel = .AppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
@@ -85,7 +85,7 @@ class ZoomPageBar: UIView {
 
     private let closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.xMark), for: [])
-        button.accessibilityLabel = .ZoomPageBarCloseAccessibilityLabel
+        button.accessibilityLabel = .AppMenu.ZoomPageCloseAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findInPageCloseButton
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
