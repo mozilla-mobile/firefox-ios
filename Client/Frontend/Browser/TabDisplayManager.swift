@@ -462,13 +462,13 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
-    func undoCloseTab(tab: Tab, for cell: UICollectionViewCell) {
+    func undoCloseTab(tab: Tab, index: Int?) {
         getTabsAndUpdateInactiveState { _, _ in
             self.collectionView.reloadData()
             self.tabManager.reAddTabs(tabsToAdd: [tab], previousTabUUID: "")
-            self.dataStore.insert(tab)
-            self.profile.recentlyClosedTabs.popFirstTab()
-            // TODO: YRD refresh tab count & show toast on homepage for last tab case & restore on right position
+            self.dataStore.insert(tab, at: index)
+            _ = self.profile.recentlyClosedTabs.popFirstTab()
+            // TODO: show toast on homepage for last tab case
         }
     }
 

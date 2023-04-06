@@ -54,7 +54,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
     private let logger: Logger
-    var backupDeletedTab: Tab?
+    var backupDeletedTab: (Tab, Int?)?
 
     var didChangedPanelSelection = true
     var didAddNewTab = true

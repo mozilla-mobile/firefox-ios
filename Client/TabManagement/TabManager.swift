@@ -15,7 +15,7 @@ protocol TabManager: AnyObject {
     var tabs: [Tab] { get }
     var count: Int { get }
     var selectedTab: Tab? { get }
-    var backupDeletedTab: Tab? { get set }
+    var backupDeletedTab: (Tab, Int?)? { get set }
     var didChangedPanelSelection: Bool { get set }
     var didAddNewTab: Bool { get set }
     var normalTabs: [Tab] { get }

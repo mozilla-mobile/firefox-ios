@@ -392,20 +392,23 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
-        tabManager.backupDeletedTab = tab
-
+        saveTabToDelete(tab: tab, index: collectionView.indexPath(for: cell)?.row)
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.closeActionPerformed(forCell: cell)
 
         buildUndoToast(toastType: .singleTab) { undoButtonPressed in
-            if undoButtonPressed, let tab = self.tabManager.backupDeletedTab {
-                self.tabDisplayManager.undoCloseTab(tab: tab, for: cell)
+            if undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab {
+                self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
+                NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
             }
         }
     }
 
-    private func buildUndoToast(toastType: UndoToastType,
-                                completion: @escaping (Bool) -> Void) {
+    private func saveTabToDelete(tab: Tab, index: Int?) {
+        tabManager.backupDeletedTab = (tab, index)
+    }
+
+    private func buildUndoToast(toastType: UndoToastType, completion: @escaping (Bool) -> Void) {
         let viewModel = ButtonToastViewModel(
             labelText: toastType.title,
             buttonText: toastType.buttonText)
