@@ -68,24 +68,24 @@ class GleanPlumbMessageStoreTests: XCTestCase {
 
 // MARK: - MockStyleData
 class MockMessageData: MessageDataProtocol {
-    var surface: MessageSurfaceId {
-        return .newTabCard
-    }
+    var surface: MessageSurfaceId
+    var isControl: Bool
+    var title: String?
+    var text: String
+    var buttonLabel: String?
 
-    var isControl: Bool {
-        return false
-    }
-
-    var title: String? {
-        return "Title"
-    }
-
-    var text: String {
-        return "text"
-    }
-
-    var buttonLabel: String? {
-        return "Tap"
+    init(
+        surface: MessageSurfaceId = .newTabCard,
+        isControl: Bool = false,
+        title: String? = "Title",
+        text: String = "text",
+        buttonLabel: String? = "Tap"
+    ) {
+        self.surface = surface
+        self.isControl = isControl
+        self.title = title
+        self.text = text
+        self.buttonLabel = buttonLabel
     }
 }
 
