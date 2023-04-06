@@ -296,9 +296,8 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         FxNimbus.shared.features.messaging.recordExposure()
         let onControlActions = onControl
 
-        if !message.data.isControl {
-            return message
-        }
+        if !message.data.isControl { return message }
+
         switch onControlActions {
         case .showNone:
             return nil
