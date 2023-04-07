@@ -95,7 +95,8 @@ class SensitiveHostingController<Content>: UIHostingController<Content> where Co
         }
     }
 
-    @objc private func handleNotifications(_ notification: Notification) {
+    @objc
+    private func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIApplication.didEnterBackgroundNotification:
             isAuthenticated = false
