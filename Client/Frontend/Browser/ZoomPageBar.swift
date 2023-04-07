@@ -63,15 +63,6 @@ class ZoomPageBar: UIView {
         button.setInsets(forContentPadding: UX.zoomOutButtonInsets, imageTitlePadding: 0)
     }
 
-    private let zoomInButton: UIButton = .build { button in
-        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.add), for: [])
-        button.accessibilityLabel = .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
-        button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setContentCompressionResistancePriority(.required, for: .horizontal)
-        button.setInsets(forContentPadding: UX.zoomInButtonInsets, imageTitlePadding: 0)
-    }
-
     private let zoomLevel: UILabel = .build { label in
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
                                                                    size: UX.fontSize,
@@ -81,6 +72,15 @@ class ZoomPageBar: UIView {
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
+    }
+
+    private let zoomInButton: UIButton = .build { button in
+        button.setImage(UIImage.templateImageNamed(ImageIdentifiers.add), for: [])
+        button.accessibilityLabel = .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel
+        button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
+        button.setContentHuggingPriority(.required, for: .horizontal)
+        button.setContentCompressionResistancePriority(.required, for: .horizontal)
+        button.setInsets(forContentPadding: UX.zoomInButtonInsets, imageTitlePadding: 0)
     }
 
     private let closeButton: UIButton = .build { button in
@@ -98,6 +98,7 @@ class ZoomPageBar: UIView {
 
         setupViews()
         setupLayout()
+        focusOnZoomLevel()
     }
 
     required init?(coder: NSCoder) {
@@ -163,7 +164,6 @@ class ZoomPageBar: UIView {
         zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         zoomLevel.isEnabled = tab.pageZoom == 1.0 ? false : true
         gestureRecognizer.isEnabled = !(tab.pageZoom == 1.0)
-        UIAccessibility.post(notification: .screenChanged, argument: nil)
     }
 
     private func enableZoomButtons() {
@@ -186,6 +186,12 @@ class ZoomPageBar: UIView {
         } else {
             stepperDefaultConstraints.forEach { $0.isActive = false }
             stepperCompactConstraints.forEach { $0.isActive = true }
+        }
+    }
+
+    private func focusOnZoomLevel() {
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: zoomLevel)
         }
     }
 
@@ -223,7 +229,9 @@ class ZoomPageBar: UIView {
     @objc
     private func didPressClose(_ sender: UIButton) {
         delegate?.zoomPageDidPressClose()
-        UIAccessibility.post(notification: .screenChanged, argument: nil)
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: nil)
+        }
     }
 }
 
