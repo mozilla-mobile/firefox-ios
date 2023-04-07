@@ -259,7 +259,8 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         withActionBeforeAppearing preAction: (() -> Void)? = nil,
         actionOnDismiss postAction: (() -> Void)? = nil,
         andActionForButton buttonAction: (() -> Void)? = nil,
-        andShouldStartTimerRightAway shouldStartTimer: Bool = true
+        andShouldStartTimerRightAway shouldStartTimer: Bool = true,
+        overlayState: OverlayStateProtocol? = nil
     ) {
         stopTimer()
         modalPresentationStyle = .popover
@@ -272,6 +273,7 @@ class ContextualHintViewController: UIViewController, OnViewDismissable, Themeab
         onActionTapped = buttonAction
         viewModel.presentFromTimer = presentation
         viewModel.arrowDirection = arrowDirection
+        viewModel.overlayState = overlayState
 
         setupContent()
         toggleArrowBasedConstraints()

@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     )
     lazy var tabManager: TabManager = TabManagerImplementation(
         profile: profile,
-        imageStore: DiskImageStore(
+        imageStore: DefaultDiskImageStore(
             files: profile.files,
             namespace: "TabManagerScreenshots",
             quality: UIConstants.ScreenshotQuality)

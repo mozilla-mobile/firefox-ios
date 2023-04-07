@@ -1,0 +1,85 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+
+protocol OverlayStateProtocol {
+    var inOverlayMode: Bool { get }
+}
+
+protocol OverlayModeManager: OverlayStateProtocol {
+    /// Set URLBar which is not available when the manager is created
+    /// - Parameter urlBarView: URLBar that contains textfield which open and dismiss the keyboard
+    func setURLBar(urlBarView: URLBarViewProtocol)
+
+    /// Enter overlay mode with paste content
+    /// - Parameter pasteContent: String with the content to paste on the search
+    func openSearch(with pasteContent: String)
+
+    /// Enter overlay mode when opening a new tab
+    /// - Parameters:
+    ///   - url: Tab url to determine if is the url is homepage or nil
+    ///   - newTabSettings: User option for new tab, if it's a custom url (homepage) the keyboard is not raised
+    func openNewTab(url: URL?, newTabSettings: NewTabPage)
+
+    /// Leave overlay mode when user finishes editing, either by pressing the go button, enter etc
+    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
+    func finishEditing(shouldCancelLoading: Bool)
+
+    /// Leave overlay mode when tab change happens, like switching tabs or open a site from any homepage section
+    /// - Parameter shouldCancelLoading: Bool value determine if the loading animation of the current search should be canceled
+    func switchTab(shouldCancelLoading: Bool)
+}
+
+class DefaultOverlayModeManager: OverlayModeManager {
+    private var urlBarView: URLBarViewProtocol?
+
+    var inOverlayMode: Bool {
+        return urlBarView?.inOverlayMode ?? false
+    }
+
+    init() {}
+
+    func setURLBar(urlBarView: URLBarViewProtocol) {
+        self.urlBarView = urlBarView
+    }
+
+    func openSearch(with pasteContent: String) {
+        enterOverlayMode(pasteContent, pasted: true, search: true)
+    }
+
+    func openNewTab(url: URL?, newTabSettings: NewTabPage) {
+        guard shouldEnterOverlay(for: url, newTabSettings: newTabSettings) else { return }
+
+        enterOverlayMode(nil, pasted: false, search: true)
+    }
+
+    func finishEditing(shouldCancelLoading: Bool) {
+        leaveOverlayMode(didCancel: shouldCancelLoading)
+    }
+
+    func switchTab(shouldCancelLoading: Bool) {
+        guard inOverlayMode else { return }
+
+        leaveOverlayMode(didCancel: shouldCancelLoading)
+    }
+
+    private func shouldEnterOverlay(for url: URL?, newTabSettings: NewTabPage) -> Bool {
+        // The NewTabPage cases are weird topSites = homepage
+        // and homepage = customURL
+        switch newTabSettings {
+        case .topSites: return url?.isFxHomeUrl ?? true
+        case .blankPage: return true
+        case .homePage: return false
+        }
+    }
+
+    private func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
+        urlBarView?.enterOverlayMode(locationText, pasted: pasted, search: search)
+    }
+
+    private func leaveOverlayMode(didCancel cancel: Bool) {
+        urlBarView?.leaveOverlayMode(didCancel: cancel)
+    }
+}

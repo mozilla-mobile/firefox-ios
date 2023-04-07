@@ -69,6 +69,8 @@ class TabCell: UICollectionViewCell,
     var animator: SwipeAnimator?
     var isSelectedTab = false
 
+    private var initialFrame = CGRect()
+
     weak var delegate: TabCellDelegate?
 
     // Changes depending on whether we're full-screen or not.
@@ -77,7 +79,7 @@ class TabCell: UICollectionViewCell,
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
-
+        initialFrame = frame
         self.animator = SwipeAnimator(animatingView: self)
         self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
@@ -148,8 +150,6 @@ class TabCell: UICollectionViewCell,
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabViewController.UX.cornerRadius+TabCell.borderWidth).cgPath
     }
 
     // MARK: - Configure tab cell with a Tab
@@ -171,9 +171,12 @@ class TabCell: UICollectionViewCell,
         if selected {
             setTabSelected(tab.isPrivate, theme: theme)
         } else {
-            layer.shadowOffset = .zero
-            layer.shadowPath = nil
-            layer.shadowOpacity = 0
+            frame.size.width = initialFrame.width
+            frame.size.height = initialFrame.height
+            layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            layer.borderColor = UIColor.clear.cgColor
+            layer.borderWidth = 0
+            layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
         }
 
         faviconBG.isHidden = true
@@ -244,15 +247,13 @@ class TabCell: UICollectionViewCell,
     }
 
     private func setTabSelected(_ isPrivate: Bool, theme: Theme) {
-        // This creates a border around a tabcell. Using the shadow creates a border _outside_ of the tab frame.
-        layer.shadowColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 0 // A 0 radius creates a solid border instead of a gradient blur
-        layer.masksToBounds = false
-        // create a frame that is "BorderWidth" size bigger than the cell
-        layer.shadowOffset = CGSize(width: -TabCell.borderWidth, height: -TabCell.borderWidth)
-        let shadowPath = CGRect(width: layer.frame.width + (TabCell.borderWidth * 2), height: layer.frame.height + (TabCell.borderWidth * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: GridTabViewController.UX.cornerRadius+TabCell.borderWidth).cgPath
+        // This creates a border around a tabcell. Using edge insets is created a border _outside_ of the tab frame.
+        frame.size.height = initialFrame.height + TabCell.borderWidth
+        frame.size.width = initialFrame.width + TabCell.borderWidth
+        layoutMargins = UIEdgeInsets(top: TabCell.borderWidth, left: TabCell.borderWidth, bottom: TabCell.borderWidth, right: TabCell.borderWidth)
+        layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
+        layer.borderWidth = TabCell.borderWidth
+        layer.cornerRadius = GridTabViewController.UX.cornerRadius + TabCell.borderWidth
     }
 }
 
