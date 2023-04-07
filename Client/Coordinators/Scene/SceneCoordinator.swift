@@ -45,8 +45,6 @@ class SceneCoordinator: BaseCoordinator, LaunchFinishedLoadingDelegate {
         // TODO: Implement this function.
     }
 
-    // MARK: - OpenURLDelegate
-
     func launchBrowser() {
         startBrowser(with: nil)
     }
