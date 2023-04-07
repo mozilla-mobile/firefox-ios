@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 
-// TODO: FXIOS-4995 - BreachAlertsManager theming
 class BreachAlertsDetailView: UIView {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
@@ -126,8 +125,6 @@ class BreachAlertsDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        // TODO: FXIOS-4995 - BreachAlertsManager theming
-        self.backgroundColor = BreachAlertsManager.lightMode
         self.layer.cornerRadius = 5
         self.layer.masksToBounds = true
 
@@ -209,5 +206,12 @@ class BreachAlertsDetailView: UIView {
                 make.centerY.equalToSuperview()
             }
         }
+    }
+}
+
+// MARK: - ThemeApplicable
+extension BreachAlertsDetailView: ThemeApplicable {
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.iconWarning
     }
 }

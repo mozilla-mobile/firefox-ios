@@ -113,5 +113,6 @@ class LoginListTableViewCell: ThemedTableViewCell, ReusableCell {
         super.applyTheme(theme: theme)
         hostnameLabel.textColor = theme.colors.textPrimary
         usernameLabel.textColor = theme.colors.textSecondary
+        breachAlertImageView.tintColor = theme.colors.iconWarning
     }
 }

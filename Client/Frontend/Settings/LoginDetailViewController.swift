@@ -161,6 +161,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             guard let breach = breach else { return breachCell }
             breachCell.isHidden = false
             let breachDetailView: BreachAlertsDetailView = .build()
+            breachDetailView.applyTheme(theme: themeManager.currentTheme)
             breachCell.contentView.addSubview(breachDetailView)
 
             NSLayoutConstraint.activate([
