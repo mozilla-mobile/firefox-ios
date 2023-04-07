@@ -4,7 +4,6 @@
 
 import Foundation
 import SwiftUI
-import Combine
 import Shared
 
 enum CreditCardInputType {
@@ -106,9 +105,6 @@ struct CreditCardInputField: View {
             .onChange(of: text) { [oldValue = text] newValue in
                 handleTextInputWith(oldValue, and: newValue)
             }
-            .onReceive(Just(text)) { newValue in
-                sanitizeInputOn(newValue)
-            }
     }
 
     func handleTextInputWith(_ oldValue: String, and newValue: String) {
@@ -121,6 +117,8 @@ struct CreditCardInputField: View {
 
             inputViewModel.nameOnCard = newValue
         case .number:
+            text = sanitizeInputOn(newValue)
+
             guard newValue.count >= 13,
                   let lastInputtedCharacter = newValue.last,
                   lastInputtedCharacter.isNumber else {
@@ -137,7 +135,8 @@ struct CreditCardInputField: View {
         case .expiration:
             guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
 
-            let numbersCount = countNumbersIn(text: newValue)
+            let newSanitizedValue = sanitizeInputOn(newValue)
+            let numbersCount = countNumbersIn(text: newSanitizedValue)
 
             guard !(newValue.count > formattedTextLimit) || !(numbersCount > 4) else {
                 text = oldValue
@@ -145,31 +144,33 @@ struct CreditCardInputField: View {
             }
 
             guard numbersCount % 4 == 0 else {
-                text = newValue.removingOccurrences(of: " / ")
+                text = newSanitizedValue.removingOccurrences(of: " / ")
                 inputViewModel.expirationIsValid = false
                 return
             }
 
-            inputViewModel.expirationDate = newValue.removingOccurrences(of: " / ")
+            inputViewModel.expirationDate = newSanitizedValue.removingOccurrences(of: " / ")
 
             guard let formattedText = separate(inputType: inputType,
-                                               for: newValue.removingOccurrences(of: " / "))
+                                               for: newSanitizedValue.removingOccurrences(of: " / "))
             else { return }
 
             text = formattedText
         }
     }
 
-    private func sanitizeInputOn(_ newValue: String) {
+    func sanitizeInputOn(_ newValue: String) -> String {
         switch inputType {
-        case .number:
+        case .number, .expiration:
             let sanitized = newValue.filter { "0123456789".contains($0) }
             if sanitized != newValue {
-                text = sanitized
+                return sanitized
             }
 
         default: break
         }
+
+        return newValue
     }
 
     @ViewBuilder private func errorViewWith(errorString: String) -> some View {
