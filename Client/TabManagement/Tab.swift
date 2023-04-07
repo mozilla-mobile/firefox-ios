@@ -681,7 +681,7 @@ class Tab: NSObject {
         pageZoom = 1.0
     }
 
-     func setZoomLevelforDomain() {
+    func setZoomLevelforDomain() {
         if let host = url?.host,
            let domainZoomLevel = ZoomLevelStore.shared.findZoomLevel(forDomain: host) {
             pageZoom = domainZoomLevel.zoomLevel
