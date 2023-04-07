@@ -6,18 +6,6 @@ import Foundation
 
 /// A utility type for extracting information from URLs, specifically those with certain schemes and formats used by the Mozilla Firefox browser.
 ///
-/// Usage:
-/// ```
-/// let url = URL(string: "firefox://abcdefg/foo/bar?param1=value1&param2=value2")!
-/// let scanner = URLScanner(url: url)
-/// if scanner.isOurScheme {
-///     print("This URL uses a Mozilla Firefox extension scheme.")
-///     print("The path components are: \(scanner.components)")
-///     print("The host is: \(scanner.host)")
-///     print("The value of 'param1' is: \(scanner.value(query: "param1") ?? "N/A")")
-/// }
-/// ```
-///
 /// - Note: This type is designed for use with URLs that conform to the expected format. Unexpected URLs may result in nil values and/or incorrect information being returned.
 struct URLScanner {
     /// The path components of the URL, excluding the scheme, host, and query parameters.
