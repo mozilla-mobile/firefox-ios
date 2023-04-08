@@ -588,6 +588,7 @@ class BrowserViewController: UIViewController {
 
         updateTabCountUsingTabManager(tabManager, animated: false)
         performSurveySurfaceCheck()
+        urlBar.searchEnginesDidUpdate()
     }
 
     override func viewDidAppear(_ animated: Bool) {
