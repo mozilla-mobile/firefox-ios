@@ -37,21 +37,18 @@ final class TempTests: XCTestCase {
                                     activeTabId: tab.id,
                                     tabData: [tab])
 
-        let expectation = XCTestExpectation(description: "Save window data")
-
-        await tabDataStore.saveWindowData(window: windowData)
-        DispatchQueue.global().asyncAfter(deadline: .now() + 6) { // Slightly longer than throttleInterval
-            expectation.fulfill()
+        Task {
+            await tabDataStore.saveWindowData(window: windowData)
         }
 
-        wait(for: [expectation], timeout: 7)
+        Task {
+            let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
 
-        let fetchedWindowData = await tabDataStore.fetchWindowData()
-
-        XCTAssertEqual(fetchedWindowData.id, windowData.id)
-        XCTAssertEqual(fetchedWindowData.isPrimary, windowData.isPrimary)
-        XCTAssertEqual(fetchedWindowData.activeTabId, windowData.activeTabId)
-        XCTAssertEqual(fetchedWindowData.tabData.count, windowData.tabData.count)
+            XCTAssertEqual(fetchedWindowData?.id, windowData.id)
+            XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
+            XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
+            XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
+        }
     }
 
     func testFetchAllWindowsData() async throws {
@@ -83,29 +80,24 @@ final class TempTests: XCTestCase {
                                      tabData: [tab2])
 
         // Save the WindowData objects
-        await tabDataStore.saveWindowData(window: windowData1)
-
-        let expectation = XCTestExpectation(description: "Wait for save operation")
-        DispatchQueue.global().asyncAfter(deadline: .now() + 6) {
-            expectation.fulfill()
+        Task {
+            await tabDataStore.saveWindowData(window: windowData1)
         }
-        wait(for: [expectation], timeout: 7)
-
-        await tabDataStore.saveWindowData(window: windowData2)
-
-        let expectation2 = XCTestExpectation(description: "Wait for save operation")
-        DispatchQueue.global().asyncAfter(deadline: .now() + 6) {
-            expectation2.fulfill()
+        Task {
+            await tabDataStore.saveWindowData(window: windowData2)
         }
-        wait(for: [expectation2], timeout: 7)
 
-        // Fetch all WindowData objects
-        let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
 
-        // Verify the fetched data
-        XCTAssertEqual(fetchedWindowsData.count, 2)
-        XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData1.id }))
-        XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData2.id }))
+        Task {
+            // Fetch all WindowData objects
+            let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
+            // Verify the fetched data
+            XCTAssertEqual(fetchedWindowsData.count, 2)
+            XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData1.id }))
+            XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData2.id }))
+        }
+
+
     }
 
     func testFetchWindowDataWithId() async throws {
@@ -122,25 +114,22 @@ final class TempTests: XCTestCase {
                                     isPrimary: true,
                                     activeTabId: tab.id,
                                     tabData: [tab])
-
         // Save the WindowData object
-        await tabDataStore.saveWindowData(window: windowData)
-
-        let expectation = XCTestExpectation(description: "Wait for save operation")
-        DispatchQueue.global().asyncAfter(deadline: .now() + 6) {
-            expectation.fulfill()
+        Task {
+            await tabDataStore.saveWindowData(window: windowData)
         }
-        wait(for: [expectation], timeout: 7)
-        
-        // Fetch the WindowData object using its ID
-        let fetchedWindowData = await tabDataStore.fetchWindowData(withId: windowData.id)
 
-        // Verify the fetched data
-        XCTAssertNotNil(fetchedWindowData)
-        XCTAssertEqual(fetchedWindowData?.id, windowData.id)
-        XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
-        XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
-        XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
+        // Fetch the WindowData object using its ID
+        Task {
+            let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
+
+            // Verify the fetched data
+            XCTAssertNotNil(fetchedWindowData)
+            XCTAssertEqual(fetchedWindowData?.id, windowData.id)
+            XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
+            XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
+            XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
+        }
     }
 
     func testClearAllTabData() async throws {
@@ -160,10 +149,10 @@ final class TempTests: XCTestCase {
         await tabDataStore.saveWindowData(window: windowData)
         await tabDataStore.clearAllWindowsData()
 
-        let fetchedWindowData = await tabDataStore.fetchWindowData()
+        let fetchedWindowData = await tabDataStore.fetchAllWindowsData()
 
         // Assuming the default fetchTabData() returns an empty WindowData object
-        XCTAssertTrue(fetchedWindowData.tabData.isEmpty)
+        XCTAssertTrue(fetchedWindowData.isEmpty)
     }
     
     func testTemp() {

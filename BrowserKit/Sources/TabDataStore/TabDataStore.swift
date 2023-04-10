@@ -5,8 +5,9 @@
 import Foundation
 import UIKit
 import Common
+import Distributed
 
-//MARK: Protocol
+// MARK: Protocol
 protocol TabDataStore {
     func fetchWindowData() async -> WindowData
     func saveWindowData(window: WindowData) async
@@ -14,69 +15,46 @@ protocol TabDataStore {
 }
 
 actor DefaultTabDataStore: TabDataStore {
-    //MARK: Variables
+    // MARK: Variables
     let browserKitInfo = BrowserKitInformation.shared
     static let storePath = "codableWindowsState.archive"
+    static let profilePath = "profile.profile"
     private let saveQueue = DispatchQueue(label: "com.example.tabdatastore.save")
     private var saveWorkItem: DispatchWorkItem?
     private let throttleInterval: TimeInterval = 5
     private var logger: Logger = DefaultLogger.shared
 
-    //MARK: URL Utils
+    // MARK: URL Utils
     private var windowDataDirectoryURL: URL? {
         FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
-            .appendingPathComponent("profile.profile")
+            .appendingPathComponent(DefaultTabDataStore.profilePath)
     }
 
-    private func windowURLPath(for windowId: UUID) -> URL? {
-        if let profileURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
-            .appendingPathComponent("profile.profile") {
-
-            do {
-                try FileManager.default.createDirectory(at: profileURL, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                logger.log("Error creating profile.profile directory: \(error)",
-                           level: .debug,
-                           category: .tabs)
-                return nil
-            }
-
-            let filePath = DefaultTabDataStore.storePath + "_\(windowId.uuidString)"
-            return profileURL.appendingPathComponent(filePath)
+    private func windowURLPath(for windowID: UUID) -> URL? {
+        if let profileURL = windowDataDirectoryURL {
+            let filePath = DefaultTabDataStore.storePath + "_\(windowID.uuidString)"
+            let windowProfileURL = profileURL.appendingPathComponent(filePath)
+            return windowProfileURL
         }
         return nil
     }
 
-    //MARK: Fetching Window Data
+    // MARK: Fetching Window Data
     func fetchWindowData() async -> WindowData {
         return WindowData(id: UUID(), isPrimary: true, activeTabId: UUID(), tabData: [])
     }
 
-    func fetchWindowData(withId id: UUID) async -> WindowData? {
-        guard let profileURL = windowDataDirectoryURL else {
+    func fetchWindowData(withID id: UUID) async -> WindowData? {
+        guard let profileURL = self.windowURLPath(for: id) else {
             return nil
         }
-
         do {
-            let fileURLs = try FileManager.default.contentsOfDirectory(at: profileURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
 
-            let windowDataFiles = fileURLs.filter { $0.path.contains(DefaultTabDataStore.storePath) }
-
-            for fileURL in windowDataFiles {
-                do {
-                    let data = try Data(contentsOf: fileURL)
-                    let windowData = try JSONDecoder().decode(WindowData.self, from: data)
-                    if windowData.id == id {
-                        return windowData
-                    }
-                } catch {
-                    logger.log("Error decoding window data: \(error)",
-                               level: .debug,
-                               category: .tabs)
-                }
-            }
+            let data = try Data(contentsOf: profileURL)
+            let windowData = try JSONDecoder().decode(WindowData.self, from: data)
+            return windowData
         } catch {
-            logger.log("Error fetching window data with ID: \(error)",
+            logger.log("Error decoding window data: \(error)",
                        level: .debug,
                        category: .tabs)
         }
@@ -115,42 +93,39 @@ actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    //MARK: Saving Data
+    // MARK: Saving Data
     func saveWindowData(window: WindowData) async {
         saveWorkItem?.cancel()
 
         let workItem = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
-            Task.init(priority: .userInitiated) {
+            Task {
                 if let windowSavingPath = await self.windowURLPath(for: window.id) {
                     do {
                         try await self.writeWindowData(windowData: window, to: windowSavingPath)
                     } catch {
                         await self.logger.log("Failed to save window data: \(error)",
-                                   level: .debug,
-                                   category: .tabs)
+                                        level: .debug,
+                                        category: .tabs)
                     }
                 }
             }
         }
 
         saveWorkItem = workItem
-        saveQueue.asyncAfter(deadline: .now() + throttleInterval, execute: workItem)
+        saveQueue.asyncAfter(deadline: .now(), execute: workItem)
     }
 
     private func writeWindowData(windowData: WindowData, to url: URL) async throws {
-        try await withUnsafeThrowingContinuation { continuation in
-            do {
-                let data = try JSONEncoder().encode(windowData)
-                try data.write(to: url, options: .atomicWrite)
-                continuation.resume(returning: ())
-            } catch {
-                continuation.resume(throwing: error)
-            }
+        do {
+            let data = try JSONEncoder().encode(windowData)
+            try data.write(to: url, options: .atomicWrite)
+        } catch {
+            throw error
         }
     }
 
-    //MARK: Deleting Window Data
+    // MARK: Deleting Window Data
     func clearWindowData(for id: UUID) async {
         guard let profileURL = windowDataDirectoryURL else {
             return
@@ -163,12 +138,8 @@ actor DefaultTabDataStore: TabDataStore {
 
             for fileURL in windowDataFiles {
                 do {
-                    let data = try Data(contentsOf: fileURL)
-                    let windowData = try JSONDecoder().decode(WindowData.self, from: data)
-                    if windowData.id == id {
-                        try FileManager.default.removeItem(at: fileURL)
-                        return
-                    }
+                    try FileManager.default.removeItem(at: fileURL)
+                    return
                 } catch {
                     logger.log("Error while clearing window data: \(error)",
                                level: .debug,
@@ -189,10 +160,7 @@ actor DefaultTabDataStore: TabDataStore {
 
         do {
             let fileURLs = try FileManager.default.contentsOfDirectory(at: profileURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-
-            let windowDataFiles = fileURLs.filter { $0.path.contains(DefaultTabDataStore.storePath) }
-
-            for fileURL in windowDataFiles {
+            for fileURL in fileURLs {
                 do {
                     try FileManager.default.removeItem(at: fileURL)
                 } catch {
