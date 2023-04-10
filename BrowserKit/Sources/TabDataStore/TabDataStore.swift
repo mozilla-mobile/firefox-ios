@@ -95,25 +95,17 @@ actor DefaultTabDataStore: TabDataStore {
 
     // MARK: Saving Data
     func saveWindowData(window: WindowData) async {
-        saveWorkItem?.cancel()
-
-        let workItem = DispatchWorkItem { [weak self] in
-            guard let self = self else { return }
-            Task {
-                if let windowSavingPath = await self.windowURLPath(for: window.id) {
-                    do {
-                        try await self.writeWindowData(windowData: window, to: windowSavingPath)
-                    } catch {
-                        await self.logger.log("Failed to save window data: \(error)",
-                                        level: .debug,
-                                        category: .tabs)
-                    }
+        Task {
+            if let windowSavingPath = self.windowURLPath(for: window.id) {
+                do {
+                    try await self.writeWindowData(windowData: window, to: windowSavingPath)
+                } catch {
+                    self.logger.log("Failed to save window data: \(error)",
+                                    level: .debug,
+                                    category: .tabs)
                 }
             }
         }
-
-        saveWorkItem = workItem
-        saveQueue.asyncAfter(deadline: .now(), execute: workItem)
     }
 
     private func writeWindowData(windowData: WindowData, to url: URL) async throws {
