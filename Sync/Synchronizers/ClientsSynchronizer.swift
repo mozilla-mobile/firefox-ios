@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import UIKit
@@ -116,7 +116,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
     var localClients: RemoteClientsAndTabs?
     // Indicates whether the local client record has been updated to used the
     // FxA Device ID rather than the native client GUID
-    var clientGuidIsMigrated: Bool = false
+    var clientGuidIsMigrated = false
 
     override var storageVersion: Int {
         return ClientsStorageVersion
@@ -134,8 +134,8 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
     // Sync Object Format (Version 1) for Form Factors: http://docs.services.mozilla.com/sync/objectformats.html#id2
     fileprivate enum SyncFormFactorFormat: String {
-        case phone = "phone"
-        case tablet = "tablet"
+        case phone
+        case tablet
     }
 
     open func getOurClientRecord() -> Record<ClientPayload> {
@@ -335,7 +335,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         // Indicates whether the local client records include a record with an ID
         // matching the FxA Device ID
-        var ourClientRecordExists: Bool = false
+        var ourClientRecordExists = false
 
         for (rec) in records {
             guard rec.payload.isValid() else {

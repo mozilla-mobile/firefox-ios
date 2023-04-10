@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Storage
@@ -29,7 +29,7 @@ class LoginListViewController: SensitiveViewController, Themeable {
     fileprivate let tableView: UITableView = .build()
 
     weak var settingsDelegate: SettingsDelegate?
-    var shownFromAppMenu: Bool = false
+    var shownFromAppMenu = false
     var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
     fileprivate lazy var selectionButton: UIButton = .build { button in

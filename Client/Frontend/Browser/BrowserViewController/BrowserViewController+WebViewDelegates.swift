@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Common
@@ -303,7 +303,7 @@ extension BrowserViewController: WKUIDelegate {
                         pasteboard.url = url as URL
                         let changeCount = pasteboard.changeCount
                         let application = UIApplication.shared
-                        var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
+                        var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
                         taskId = application.beginBackgroundTask(expirationHandler: {
                             application.endBackgroundTask(taskId)
                         })

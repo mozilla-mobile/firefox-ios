@@ -13,7 +13,7 @@ class DevicePickerTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable 
     }
 
     var nameLabel: UILabel
-    var checked: Bool = false {
+    var checked = false {
         didSet {
             self.accessoryType = checked ? .checkmark : .none
         }

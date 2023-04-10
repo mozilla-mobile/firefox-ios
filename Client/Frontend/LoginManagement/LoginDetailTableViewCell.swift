@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Storage
@@ -99,13 +99,13 @@ class LoginDetailTableViewCell: ThemedTableViewCell, ReusableCell {
         set { descriptionLabel.placeholder = newValue }
     }
 
-    var displayDescriptionAsPassword: Bool = false {
+    var displayDescriptionAsPassword = false {
         didSet {
             descriptionLabel.isSecureTextEntry = displayDescriptionAsPassword
         }
     }
 
-    var isEditingFieldData: Bool = false {
+    var isEditingFieldData = false {
         didSet {
             guard isEditingFieldData != oldValue else { return }
             descriptionLabel.isUserInteractionEnabled = isEditingFieldData

@@ -32,10 +32,10 @@ class DependencyHelperMock {
         let themeManager: ThemeManager = DefaultThemeManager()
         AppContainer.shared.register(service: themeManager)
 
-        let ratingPromptManager: RatingPromptManager = RatingPromptManager(profile: profile)
+        let ratingPromptManager = RatingPromptManager(profile: profile)
         AppContainer.shared.register(service: ratingPromptManager)
 
-        let downloadQueue: DownloadQueue = DownloadQueue()
+        let downloadQueue = DownloadQueue()
         AppContainer.shared.register(service: downloadQueue)
 
         // Tell the container we are done registering

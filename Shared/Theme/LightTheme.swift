@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 
@@ -21,7 +21,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layer6: UIColor = FXColors.White
     var layer5Hover: UIColor = FXColors.LightGrey20
     var layerScrim: UIColor = FXColors.DarkGrey30.withAlphaComponent(0.95)
-    var layerGradient: Gradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
+    var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
     var layerAccentNonOpaque: UIColor = FXColors.Blue50.withAlphaComponent(0.1)
     var layerAccentPrivate: UIColor = FXColors.Purple60
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.1)

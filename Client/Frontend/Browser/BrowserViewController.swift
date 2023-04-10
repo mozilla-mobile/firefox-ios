@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Photos
@@ -52,7 +52,7 @@ class BrowserViewController: UIViewController {
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
-    var statusBarOverlay: UIView = UIView()
+    var statusBarOverlay = UIView()
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
@@ -61,7 +61,7 @@ class BrowserViewController: UIViewController {
     var zoomPageBar: ZoomPageBar?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
-    var isCrashAlertShowing: Bool = false
+    var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
     private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false

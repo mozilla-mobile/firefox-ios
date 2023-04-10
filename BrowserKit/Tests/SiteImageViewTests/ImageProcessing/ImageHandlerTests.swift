@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 import LinkPresentation
@@ -374,7 +374,7 @@ private class MockFaviconFetcher: FaviconFetcher {
 
 // MARK: - MockLetterImageGenerator
 private class MockLetterImageGenerator: LetterImageGenerator {
-    var image: UIImage = UIImage()
+    var image = UIImage()
     var generateLetterImageCalled = 0
 
     func generateLetterImage(siteString: String) -> UIImage {

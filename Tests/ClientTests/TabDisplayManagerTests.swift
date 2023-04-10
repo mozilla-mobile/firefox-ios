@@ -445,7 +445,7 @@ class MockCollectionView: UICollectionView {
 }
 
 class MockInactiveTabsCFRDelegate: InactiveTabsCFRProtocol {
-    var confirmClose: Bool = true
+    var confirmClose = true
 
     func setupCFR(with view: UILabel) { }
     func presentCFR() { }

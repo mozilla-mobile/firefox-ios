@@ -23,8 +23,8 @@ class MockTabManager: TabManager {
 
     var delaySelectingNewPopupTab: TimeInterval = 0
     var count: Int = 0
-    var didChangedPanelSelection: Bool = false
-    var didAddNewTab: Bool = false
+    var didChangedPanelSelection = false
+    var didAddNewTab = false
     var normalTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
