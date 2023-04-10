@@ -33,7 +33,6 @@ disabled_rules: # rule identifiers to exclude from running
 - private_unit_test
 - reduce_boolean
 - redundant_set_access_control
-- redundant_string_enum_value
 - self_in_property_initialization
 - shorthand_operator
 - superfluous_disable_command
@@ -53,14 +52,14 @@ opt_in_rules: # some rules are only opt-in
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.
   # - statement_position
-  # - file_header
+  - file_header
   # - deployment_target
   # - discouraged_optional_collection
   # - prohibited_interface_builder
   # - prohibited_super_call
   # - protocol_property_accessors_order
-  # - redundant_objc_attribute
-  # - redundant_type_annotation
+  - redundant_objc_attribute
+  - redundant_type_annotation
   # Find all the available rules by running:
   # swiftlint rules
   - attributes
@@ -88,6 +87,12 @@ opt_in_rules: # some rules are only opt-in
   - vertical_whitespace_opening_braces
   - yoda_condition
 
+file_header:
+  required_string: |
+                    // This Source Code Form is subject to the terms of the Mozilla Public
+                    // License, v. 2.0. If a copy of the MPL was not distributed with this
+                    // file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 analyzer_rules: # Rules run by `swiftlint analyze`
   - unused_import
 
@@ -108,6 +113,11 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Tests/UITests/
   - l10n-screenshots-dd/
   - DerivedData/
+  # Package.swift files need a custom header for swift-tools-version
+  # so must be excluded due to file_header rule
+  - Package.swift
+  - BrowserKit/Package.swift
+  - content-blocker-lib-ios/ContentBlockerGenerator/Package.swift
 
 # reporter: "json" # reporter type (xcode, json, csv, checkstyle)
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
