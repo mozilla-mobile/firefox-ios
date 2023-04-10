@@ -25,15 +25,27 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         fatalError()
     }
 
+    // MARK: - View cycles
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.startLoading()
+        Task {
+            await startLoading()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupLayout()
     }
+
+    // MARK: - Loading
+
+    func startLoading() async {
+        await viewModel.startLoading()
+    }
+
+    // MARK: - Setup
 
     private func setupLayout() {
         launchScreen.translatesAutoresizingMaskIntoConstraints = false
