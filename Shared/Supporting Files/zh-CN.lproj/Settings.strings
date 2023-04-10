@@ -34,6 +34,9 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "同步";
 
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "您已关闭 %1$@ 的所有通知，可到设备的“设置”>“通知”>“%2$@”重新开启";
+
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "了解实用功能，解锁 %@ 完整体验。";
 
