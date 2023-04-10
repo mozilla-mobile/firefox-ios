@@ -571,10 +571,12 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Setting the view alpha to 0 so that there's no weird flash in between the
-        // check of view appearance and the `performSurveySurfaceCheck`, where the
-        // alpha will be set to 1.
-        self.view.alpha = 0
+        if !AppConstants.useCoordinators {
+            // Setting the view alpha to 0 so that there's no weird flash in between the
+            // check of view appearance and the `performSurveySurfaceCheck`, where the
+            // alpha will be set to 1.
+            self.view.alpha = 0
+        }
 
         if !displayedRestoreTabsAlert && crashedLastLaunch() {
             logger.log("The application crashed on last session",
@@ -587,14 +589,19 @@ class BrowserViewController: UIViewController {
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        performSurveySurfaceCheck()
+
+        if !AppConstants.useCoordinators {
+            performSurveySurfaceCheck()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        presentIntroViewController()
-        presentUpdateViewController()
+        if !AppConstants.useCoordinators {
+            presentIntroViewController()
+            presentUpdateViewController()
+        }
         screenshotHelper.viewIsVisible = true
 
         if let toast = self.pendingToast {

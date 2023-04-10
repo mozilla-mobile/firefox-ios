@@ -65,13 +65,24 @@ final class SceneCoordinatorTests: XCTestCase {
         XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
     }
 
+    func testChildLaunchCoordinatorIsDone_startsBrowser() throws {
+        let subject = createSubject()
+        subject.launchWith(launchType: .intro(manager: IntroScreenManager(prefs: MockProfile().prefs)))
+
+        let childLaunchCoordinator = try XCTUnwrap(subject.childCoordinators[0] as? LaunchCoordinator)
+        subject.didFinishLaunch(from: childLaunchCoordinator)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertNotNil(subject.childCoordinators[0] as? BrowserCoordinator)
+    }
+
     func testEnsureCoordinatorIsntEnabled() {
         XCTAssertFalse(AppConstants.useCoordinators)
     }
 
     // MARK: - Helpers
-    func createSubject(file: StaticString = #file,
-                       line: UInt = #line) -> SceneCoordinator {
+    private func createSubject(file: StaticString = #file,
+                               line: UInt = #line) -> SceneCoordinator {
         let scene = UIApplication.shared.windows.first?.windowScene
         let subject = SceneCoordinator(scene: scene!)
         // Replace created router from scene with a mock router so we don't trigger real navigation in our tests

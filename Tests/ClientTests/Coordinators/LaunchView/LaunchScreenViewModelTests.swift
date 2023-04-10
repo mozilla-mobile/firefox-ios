@@ -9,7 +9,6 @@ import XCTest
 
 final class LaunchScreenViewModelTests: XCTestCase, LaunchFinishedLoadingDelegate {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
-    private var delegate: MockOpenURLDelegate!
     private var profile: MockProfile!
 
     private var launchTypeLoadedClosure: ((LaunchType) -> Void)?
@@ -20,7 +19,6 @@ final class LaunchScreenViewModelTests: XCTestCase, LaunchFinishedLoadingDelegat
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
-        delegate = MockOpenURLDelegate()
         messageManager = MockGleanPlumbMessageManagerProtocol()
 
         UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
@@ -31,7 +29,6 @@ final class LaunchScreenViewModelTests: XCTestCase, LaunchFinishedLoadingDelegat
         AppContainer.shared.reset()
         profile = nil
         messageManager = nil
-        delegate = nil
         launchTypeLoadedClosure = nil
         launchBrowserClosure = nil
 
