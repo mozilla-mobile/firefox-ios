@@ -3,9 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import UIKit
 import Common
-import Distributed
 
 // MARK: Protocol
 protocol TabDataStore {
@@ -46,17 +44,12 @@ actor DefaultTabDataStore: TabDataStore {
             return nil
         }
         do {
-
-            let data = try Data(contentsOf: profileURL)
-            let windowData = try JSONDecoder().decode(WindowData.self, from: data)
+            let windowData = try await decodeWindowData(from: profileURL)
             return windowData
-        } catch {
-            logger.log("Error decoding window data: \(error)",
-                       level: .debug,
-                       category: .tabs)
         }
-
-        return nil
+        catch {
+            return nil
+        }
     }
 
     func fetchAllWindowsData() async -> [WindowData] {
@@ -72,13 +65,8 @@ actor DefaultTabDataStore: TabDataStore {
             var windowsData: [WindowData] = []
             for fileURL in windowDataFiles {
                 do {
-                    let data = try Data(contentsOf: fileURL)
-                    let windowData = try JSONDecoder().decode(WindowData.self, from: data)
+                    let windowData = try await decodeWindowData(from: fileURL)
                     windowsData.append(windowData)
-                } catch {
-                    logger.log("Error decoding window data: \(error)",
-                               level: .debug,
-                               category: .tabs)
                 }
             }
             return windowsData
@@ -86,7 +74,20 @@ actor DefaultTabDataStore: TabDataStore {
             logger.log("Error fetching all window data: \(error)",
                        level: .debug,
                        category: .tabs)
-            return []
+            return [WindowData]()
+        }
+    }
+
+    private func decodeWindowData(from fileURL: URL) async throws -> WindowData {
+        do {
+            let data = try Data(contentsOf: fileURL)
+            let windowData = try JSONDecoder().decode(WindowData.self, from: data)
+            return windowData
+        } catch {
+            logger.log("Error decoding window data: \(error)",
+                       level: .debug,
+                       category: .tabs)
+            throw error
         }
     }
 
