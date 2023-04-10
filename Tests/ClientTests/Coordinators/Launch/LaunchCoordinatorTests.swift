@@ -151,8 +151,8 @@ final class LaunchCoordinatorTests: XCTestCase {
 
     // MARK: - Helpers
     private func createSubject(isIphone: Bool,
-                       file: StaticString = #file,
-                       line: UInt = #line) -> LaunchCoordinator {
+                               file: StaticString = #file,
+                               line: UInt = #line) -> LaunchCoordinator {
         let subject = LaunchCoordinator(router: mockRouter, profile: profile, isIphone: isIphone)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

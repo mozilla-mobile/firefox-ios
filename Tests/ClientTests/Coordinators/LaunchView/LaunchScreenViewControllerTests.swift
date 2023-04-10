@@ -29,6 +29,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.startLoadingCalled, 0)
     }
 
+    @MainActor
     func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() async {
         viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
         let subject = createSubject()
@@ -43,6 +44,7 @@ final class LaunchScreenViewControllerTests: XCTestCase {
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
+    @MainActor
     func testViewDidLoad_whenNilLaunchType_callsCoordinatorBrowser() async {
         viewModel.mockLaunchType = nil
         let subject = createSubject()
