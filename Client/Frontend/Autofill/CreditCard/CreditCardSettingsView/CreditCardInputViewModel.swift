@@ -75,8 +75,17 @@ class CreditCardInputViewModel: ObservableObject {
 
     let profile: Profile
     let autofill: RustAutofill
-    let creditCard: CreditCard?
+    var creditCard: CreditCard?
+//    let unencryptedCreditCard: UnencryptedCreditCardFields?
     let creditCardValidator: CreditCardValidator
+
+    var month: Int64? {
+        Int64(expirationDate.prefix(2))
+    }
+
+    var year: Int64? {
+        Int64(expirationDate.suffix(2))
+    }
 
     @Published var state: CreditCardEditState
     @Published var errorState: String = ""
@@ -126,7 +135,7 @@ class CreditCardInputViewModel: ObservableObject {
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
                 guard let creditCard = creditCard else { return }
 
-                removeSelectedCreditCard(creditCard: creditCard)
+                removeSelectedCreditCard(creditCardGUID: creditCard.guid)
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -140,7 +149,7 @@ class CreditCardInputViewModel: ObservableObject {
             primaryButtonStyleAndText: .destructive(Text(CreditCardText.RemovedCardLabel)) { [self] in
                 guard let creditCard = creditCard else { return }
 
-                removeSelectedCreditCard(creditCard: creditCard)
+                removeSelectedCreditCard(creditCardGUID: creditCard.guid)
             },
             secondaryButtonStyleAndText: .cancel(),
             primaryButtonAction: {},
@@ -154,6 +163,7 @@ class CreditCardInputViewModel: ObservableObject {
 
     init(profile: Profile,
          creditCard: CreditCard? = nil,
+//         unencryptedCreditCard: UnencryptedCreditCardFields? = nil,
          creditCardValidator: CreditCardValidator = CreditCardValidator()
     ) {
         self.profile = profile
@@ -161,6 +171,7 @@ class CreditCardInputViewModel: ObservableObject {
         self.creditCard = creditCard
         self.state = .add
         self.creditCardValidator = creditCardValidator
+//        self.unencryptedCreditCard = unencryptedCreditCard
     }
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -169,6 +180,7 @@ class CreditCardInputViewModel: ObservableObject {
          errorState: String,
          enteredValue: String,
          creditCard: CreditCard? = nil,
+//         unencryptedCreditCard: UnencryptedCreditCardFields? = nil,
          state: CreditCardEditState,
          creditCardValidator: CreditCardValidator = CreditCardValidator()
     ) {
@@ -179,26 +191,33 @@ class CreditCardInputViewModel: ObservableObject {
         self.creditCard = creditCard
         self.state = state
         self.creditCardValidator = creditCardValidator
+//        self.unencryptedCreditCard = unencryptedCreditCard
     }
 
     // MARK: - Helpers
 
-    private func removeSelectedCreditCard(creditCard: CreditCard) {
-        autofill.deleteCreditCard(id: creditCard.guid) { _, error in
+    private func removeSelectedCreditCard(creditCardGUID: String) {
+        autofill.deleteCreditCard(id: creditCardGUID) { _, error in
             // no-op
         }
     }
 
     public func updateState(state: CreditCardEditState) {
         self.state = state
+        switch state {
+        case .view:
+            setupViewValues()
+        default:
+            break
+        }
     }
 
     public func saveCreditCard(completion: @escaping (CreditCard?, Error?) -> Void) {
         guard let cardType = cardType,
               nameIsValid,
               numberIsValid,
-              let month = Int64(expirationDate),
-              let year = Int64(expirationDate) else {
+              let month = month,
+              let year = year else {
             return
         }
 
@@ -220,5 +239,16 @@ class CreditCardInputViewModel: ObservableObject {
         nameIsValid = true
         expirationIsValid = true
         numberIsValid = true
+    }
+
+    public func setupViewValues() {
+        guard let creditCard = creditCard else { return }
+        nameOnCard = creditCard.ccName
+        cardNumber = autofill.decryptCreditCardNumber(
+            encryptedCCNum: creditCard.ccNumberEnc) ?? ""
+        let month = creditCard.ccExpMonth
+        let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)
+
+        expirationDate = "\(formattedMonth) / \(creditCard.ccExpYear)"
     }
 }

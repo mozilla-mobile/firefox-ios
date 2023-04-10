@@ -11,14 +11,8 @@ enum CreditCardSettingsState: String, Equatable, CaseIterable {
     // Default state
     case empty = "Empty"
     case add = "Add"
-    case edit = "Edit"
     case view = "View"
     case list = "List"
-}
-
-struct CreditCardSettingsStartingConfig {
-    var actionToPerform: CreditCardSettingsState?
-    var creditCard: CreditCard?
 }
 
 class CreditCardSettingsViewModel {
