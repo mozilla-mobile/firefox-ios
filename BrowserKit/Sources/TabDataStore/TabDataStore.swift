@@ -19,9 +19,6 @@ actor DefaultTabDataStore: TabDataStore {
     let browserKitInfo = BrowserKitInformation.shared
     static let storePath = "codableWindowsState.archive"
     static let profilePath = "profile.profile"
-    private let saveQueue = DispatchQueue(label: "com.example.tabdatastore.save")
-    private var saveWorkItem: DispatchWorkItem?
-    private let throttleInterval: TimeInterval = 5
     private var logger: Logger = DefaultLogger.shared
 
     // MARK: URL Utils
@@ -119,27 +116,15 @@ actor DefaultTabDataStore: TabDataStore {
 
     // MARK: Deleting Window Data
     func clearWindowData(for id: UUID) async {
-        guard let profileURL = windowDataDirectoryURL else {
+        guard let profileURL = self.windowURLPath(for: id) else {
             return
         }
 
         do {
-            let fileURLs = try FileManager.default.contentsOfDirectory(at: profileURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-
-            let windowDataFiles = fileURLs.filter { $0.path.contains(DefaultTabDataStore.storePath) }
-
-            for fileURL in windowDataFiles {
-                do {
-                    try FileManager.default.removeItem(at: fileURL)
-                    return
-                } catch {
-                    logger.log("Error while clearing window data: \(error)",
-                               level: .debug,
-                               category: .tabs)
-                }
-            }
+            try FileManager.default.removeItem(at: profileURL)
+            return
         } catch {
-            logger.log("Error clearing window data for ID: \(error)",
+            logger.log("Error while clearing window data: \(error)",
                        level: .debug,
                        category: .tabs)
         }
