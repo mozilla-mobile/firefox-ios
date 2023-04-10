@@ -166,6 +166,9 @@
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "已開啟新隱私分頁";
 
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "已開啟新隱私分頁";
+
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "切換";
 
@@ -870,6 +873,9 @@
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "有什麼新鮮事？";
+
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "縮放（%@）";
 
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "行動裝置";
