@@ -16,6 +16,7 @@ protocol TabToolbarProtocol: AnyObject {
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var multiStateButton: ToolbarButton { get }
+    var summarizeButton: ToolbarButton { get }
     var actionButtons: [NotificationThemeable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
@@ -36,6 +37,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressSummarize(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressBookmarks(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
@@ -137,6 +139,12 @@ open class TabToolbarHelper: NSObject {
         toolbar.homeButton.accessibilityLabel = .AppMenu.Toolbar.HomeMenuButtonAccessibilityLabel
         toolbar.homeButton.addTarget(self, action: #selector(didClickHome), for: .touchUpInside)
         toolbar.homeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.homeButton
+        
+        toolbar.summarizeButton.contentMode = .center
+        toolbar.summarizeButton.setImage(UIImage.templateSystemImageNamed("doc.text"), for: .normal)
+        toolbar.summarizeButton.accessibilityLabel = .AppMenu.Toolbar.SummarizeMenuButtonAccessibilityLabel
+        toolbar.summarizeButton.addTarget(self, action: #selector(didClickSummarize), for: .touchUpInside)
+        toolbar.summarizeButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.summarizeButton
 
         toolbar.bookmarksButton.contentMode = .center
         toolbar.bookmarksButton.setImage(UIImage.templateImageNamed(ImageIdentifiers.bookmarks), for: .normal)
@@ -186,6 +194,10 @@ open class TabToolbarHelper: NSObject {
 
     func didClickHome() {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressHome(toolbar, button: toolbar.appMenuButton)
+    }
+    
+    func didClickSummarize() {
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressSummarize(toolbar, button: toolbar.summarizeButton)
     }
 
     func didClickLibrary() {

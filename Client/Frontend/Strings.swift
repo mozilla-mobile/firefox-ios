@@ -3025,6 +3025,11 @@ extension String {
                 tableName: nil,
                 value: "Home",
                 comment: "Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page.")
+            public static let SummarizeMenuButtonAccessibilityLabel = MZLocalizedString(
+                "Menu.Toolbar.Summarize.AccessibilityLabel.v99",
+                tableName: nil,
+                value: "Summarize",
+                comment: "Accessibility label for the Summarize button on the toolbar. Pressing this button generates summary of the currently opened page.")
             public static let BookmarksButtonAccessibilityLabel = MZLocalizedString(
                 "Menu.Toolbar.Bookmarks.AccessibilityLabel.v99",
                 tableName: nil,

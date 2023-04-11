@@ -30,6 +30,10 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 }
 
 extension BrowserViewController: URLBarDelegate {
+    func showSummarizeOverlay(for url: URL?) {
+        
+    }
+    
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
                      focusedSegment: TabTrayViewModel.Segment? = nil) {
         updateFindInPageVisibility(visible: false)

@@ -180,6 +180,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     var appMenuButton = ToolbarButton()
     var bookmarksButton = ToolbarButton()
     var homeButton = ToolbarButton()
+    var summarizeButton = ToolbarButton()
     var addNewTabButton = ToolbarButton()
     var forwardButton = ToolbarButton()
     var multiStateButton = ToolbarButton()

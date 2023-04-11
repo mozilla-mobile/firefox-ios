@@ -832,6 +832,9 @@
 /* Accessibility label for the Home button on the toolbar. Pressing this button brings the user to the home page. */
 "Menu.Toolbar.Home.AccessibilityLabel.v99" = "Home";
 
+/* Accessibility label for the Summarize button on the toolbar. Pressing this button generates summary of the currently opened page. */
+"Menu.Toolbar.Summarize.AccessibilityLabel.v99" = "Summarize";
+
 /* String to let users know the site verifier, where the placeholder represents the SSL certificate signer. */
 "Menu.TrackingProtection.Details.Verifier" = "Verified by %@";
 

@@ -17,6 +17,7 @@ class TabToolbar: UIView {
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let multiStateButton = ToolbarButton()
+    let summarizeButton = ToolbarButton()
     let actionButtons: [NotificationThemeable & UIButton]
 
     private let privateModeBadge = BadgeWithBackdrop(imageName: ImageIdentifiers.privateModeBadge,
@@ -30,7 +31,7 @@ class TabToolbar: UIView {
 
     // MARK: - Initializers
     private override init(frame: CGRect) {
-        actionButtons = [backButton, forwardButton, multiStateButton, addNewTabButton, tabsButton, appMenuButton]
+        actionButtons = [backButton, forwardButton, multiStateButton, summarizeButton, addNewTabButton, tabsButton, appMenuButton]
         super.init(frame: frame)
         setupAccessibility()
 

@@ -17,6 +17,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .home)
     }
 
+    func tabToolbarDidPressSummarize(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        showSummarizeOverlay(for: tabManager.selectedTab?.url)
+    }
+    
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
     }
 
