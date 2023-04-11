@@ -22,106 +22,104 @@ class CreditCardValidatorTests: XCTestCase {
     }
 
     func testCardTypeForVisa() {
-        let result = creditCardValidator.cardTypeFor(4004100120023003)
+        let result = creditCardValidator.cardTypeFor("4004100120023003")
 
         XCTAssertEqual(result, .visa)
     }
 
     func testCardTypeForMastercard() {
-        let result = creditCardValidator.cardTypeFor(5502100120023003)
+        let result = creditCardValidator.cardTypeFor("5502100120023003")
 
         XCTAssertEqual(result, .mastercard)
     }
 
     func testCardTypeForAmex() {
-        let result = creditCardValidator.cardTypeFor(347051234512349)
+        let result = creditCardValidator.cardTypeFor("347051234512349")
 
         XCTAssertEqual(result, .amex)
     }
 
     func testCardTypeForDiners() {
-        let result = creditCardValidator.cardTypeFor(30068114212341234)
+        let result = creditCardValidator.cardTypeFor("30068114212341234")
 
         XCTAssertEqual(result, .diners)
     }
 
     func testCardTypeForJCB() {
-        let result = creditCardValidator.cardTypeFor(1800351313100010001)
+        let result = creditCardValidator.cardTypeFor("1800351313100010001")
 
         XCTAssertEqual(result, .jcb)
     }
 
     func testCardTypeForDiscover() {
-        let result = creditCardValidator.cardTypeFor(6011502031234123)
+        let result = creditCardValidator.cardTypeFor("6011502031234123")
 
         XCTAssertEqual(result, .discover)
     }
 
     func testCardTypeForMIR() {
-        let result = creditCardValidator.cardTypeFor(2060123412341234)
+        let result = creditCardValidator.cardTypeFor("2060123412341234")
 
         XCTAssertEqual(result, .mir)
     }
 
     func testCardTypeForUnionPay() {
-        let result = creditCardValidator.cardTypeFor(6240123412341216)
+        let result = creditCardValidator.cardTypeFor("6240123412341216")
 
         XCTAssertEqual(result, .unionpay)
     }
 
     func testCardNumberInvalidForBeyondLimit() {
-        _ = XCTSkip()
-        // Fix int overflow issue before uncommenting these tests
-
         // 20 character input
-//        let result = creditCardValidator.isCardNumberValidFor(card: 6923965692209765999)
-//        XCTAssertFalse(result)
+        var result = creditCardValidator.isCardNumberValidFor(card: "6923965692209765999")
+        XCTAssertFalse(result)
+
         // 30 character input (technically impossible, but just in case)
-//        result = creditCardValidator.isCardNumberValidFor(card: 123456789012345678901234567890)
-//        XCTAssertFalse(result)
+        result = creditCardValidator.isCardNumberValidFor(card: "123456789012345678901234567890")
+        XCTAssertFalse(result)
     }
 
     func testCardNumberInvalidForUnderLimit() {
         // 10 character input
-        var result = creditCardValidator.isCardNumberValidFor(card: 1234567890)
+        var result = creditCardValidator.isCardNumberValidFor(card: "1234567890")
         XCTAssertFalse(result)
 
-        result = creditCardValidator.isCardNumberValidFor(card: 1)
+        result = creditCardValidator.isCardNumberValidFor(card: "1")
         XCTAssertFalse(result)
     }
 
     func testCardNumberIsValidForWellFormedInput() {
-        let result = creditCardValidator.isCardNumberValidFor(card: 4100410041004100)
+        let result = creditCardValidator.isCardNumberValidFor(card: "4100410041004100")
         XCTAssert(result)
     }
 
     func testCardNumberIsValidForAmex() {
-        let result = creditCardValidator.isCardNumberValidFor(card: 347051234512349)
+        let result = creditCardValidator.isCardNumberValidFor(card: "347051234512349")
         XCTAssert(result)
     }
 
     func testCardNumberIsValidForDiners() {
-        let result = creditCardValidator.isCardNumberValidFor(card: 30068114212341234)
+        let result = creditCardValidator.isCardNumberValidFor(card: "30068114212341234")
         XCTAssert(result)
     }
 
     func testCardNumberIsValidForJcb() {
-        let result = creditCardValidator.isCardNumberValidFor(card: 1800351313100010001)
+        let result = creditCardValidator.isCardNumberValidFor(card: "1800351313100010001")
         XCTAssert(result)
     }
 
     func testCardNumberIsValidForDiscover() {
-        let result = creditCardValidator.isCardNumberValidFor(card: 6011502031234123)
+        let result = creditCardValidator.isCardNumberValidFor(card: "6011502031234123")
         XCTAssert(result)
     }
 
     func testCardNumberIsValidForUnionPay() {
-        let result = creditCardValidator.isCardNumberValidFor(card: 6240123412341216)
+        let result = creditCardValidator.isCardNumberValidFor(card: "6240123412341216")
         XCTAssert(result)
     }
 
     func testCardNumberIsValidForMir() {
-        let result = creditCardValidator.isCardNumberValidFor(card: 2060123412341234)
+        let result = creditCardValidator.isCardNumberValidFor(card: "2060123412341234")
         XCTAssert(result)
     }
 
