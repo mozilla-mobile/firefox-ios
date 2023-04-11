@@ -6,78 +6,69 @@ import Common
 import XCTest
 @testable import Client
 
-final class LaunchScreenViewControllerTests: XCTestCase, LaunchFinishedLoadingDelegate {
+final class LaunchScreenViewControllerTests: XCTestCase {
     private var viewModel: MockLaunchScreenViewModel!
-    private var launchTypeLoadedClosure: ((LaunchType) -> Void)?
-    private var launchBrowserClosure: (() -> Void)?
+    private var coordinatorDelegate: MockLaunchFinishedLoadingDelegate!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         viewModel = MockLaunchScreenViewModel(profile: MockProfile())
-        viewModel.delegate = self
+        coordinatorDelegate = MockLaunchFinishedLoadingDelegate()
     }
 
     override func tearDown() {
         super.tearDown()
         AppContainer.shared.reset()
         viewModel = nil
-        launchTypeLoadedClosure = nil
-        launchBrowserClosure = nil
+        coordinatorDelegate = nil
     }
 
     func testNotLoaded_notCalled() {
-        _ = LaunchScreenViewController(coordinator: self,
-                                       viewModel: viewModel)
+        _ = createSubject()
         XCTAssertEqual(viewModel.startLoadingCalled, 0)
     }
 
-    func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() {
+    @MainActor
+    func testViewDidLoad_whenLaunchType_callsCoordinatorLaunch() async {
         viewModel.mockLaunchType = .intro(manager: viewModel.introScreenManager)
-        let expectation = expectation(description: "LaunchTypeLoaded called")
-        launchTypeLoadedClosure = { launchType in
-            guard case .intro = launchType else {
-                XCTFail("Expected intro, but was \(launchType)")
-                return
-            }
-            expectation.fulfill()
-        }
-        let subject = LaunchScreenViewController(coordinator: self,
-                                                 viewModel: viewModel)
-        subject.viewDidLoad()
+        let subject = createSubject()
+        await subject.startLoading()
 
-        waitForExpectations(timeout: 0.1)
+        guard case .intro = coordinatorDelegate.savedLaunchType else {
+            XCTFail("Expected intro, but was \(String(describing: coordinatorDelegate.savedLaunchType))")
+            return
+        }
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 1)
+        XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 0)
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
-    func testViewDidLoad_whenNilLaunchType_callsCoordinatorBrowser() {
+    @MainActor
+    func testViewDidLoad_whenNilLaunchType_callsCoordinatorBrowser() async {
         viewModel.mockLaunchType = nil
-        let expectation = expectation(description: "LaunchBrowserClosure called")
-        launchBrowserClosure = { expectation.fulfill() }
+        let subject = createSubject()
+        await subject.startLoading()
 
-        let subject = LaunchScreenViewController(coordinator: self,
-                                                 viewModel: viewModel)
-        subject.viewDidLoad()
-
-        waitForExpectations(timeout: 0.1)
+        XCTAssertEqual(coordinatorDelegate.launchWithTypeCalled, 0)
+        XCTAssertEqual(coordinatorDelegate.launchBrowserCalled, 1)
         XCTAssertEqual(viewModel.startLoadingCalled, 1)
     }
 
     func testAddLaunchView_whenViewWillAppear() {
-        let subject = LaunchScreenViewController(coordinator: self,
+        let subject = LaunchScreenViewController(coordinator: coordinatorDelegate,
                                                  viewModel: viewModel)
         XCTAssertTrue(subject.view.subviews.isEmpty)
         subject.viewWillAppear(false)
         XCTAssertNotNil(subject.view.subviews[0])
     }
 
-    // MARK: - LaunchFinishedLoadingDelegate
-
-    func launchWith(launchType: LaunchType) {
-        launchTypeLoadedClosure?(launchType)
-    }
-
-    func launchBrowser() {
-        launchBrowserClosure?()
+    // MARK: - Helpers
+    private func createSubject(file: StaticString = #file,
+                               line: UInt = #line) -> LaunchScreenViewController {
+        let subject = LaunchScreenViewController(coordinator: coordinatorDelegate,
+                                                 viewModel: viewModel)
+        trackForMemoryLeaks(subject, file: file, line: line)
+        return subject
     }
 }

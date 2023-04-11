@@ -109,7 +109,7 @@ extension BrowserViewController {
         guard let currentURL = webView.backForwardList.currentItem?.url,
                 let readerModeURL = currentURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL())
         else { return }
-
+        zoomPageHandleEnterReaderMode()
         if backList.count > 1 && backList.last?.url == readerModeURL {
             webView.go(to: backList.last!)
         } else if !forwardList.isEmpty && forwardList.first?.url == readerModeURL {
@@ -143,7 +143,7 @@ extension BrowserViewController {
         guard let currentURL = webView.backForwardList.currentItem?.url,
               let originalURL = currentURL.decodeReaderModeURL
         else { return }
-
+        zoomPageHandleExitReaderMode()
         if backList.count > 1 && backList.last?.url == originalURL {
             webView.go(to: backList.last!)
         } else if !forwardList.isEmpty && forwardList.first?.url == originalURL {

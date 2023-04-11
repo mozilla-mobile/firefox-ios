@@ -44,6 +44,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        zoomPageDidPressClose()
         tabManager.selectedTab?.goBack()
     }
 
@@ -54,6 +55,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        zoomPageDidPressClose()
         tabManager.selectedTab?.goForward()
     }
 

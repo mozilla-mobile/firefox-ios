@@ -114,6 +114,7 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
 
     @objc
     private func closeOnboarding() {
+        viewModel.saveHasSeenOnboarding()
         didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
@@ -172,6 +173,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 extension IntroViewController: OnboardingCardDelegate {
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
+            viewModel.saveHasSeenOnboarding()
             self.didFinishFlow?()
             return
         }

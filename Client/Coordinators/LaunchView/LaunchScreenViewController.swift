@@ -2,17 +2,21 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegate {
     private lazy var launchScreen = LaunchScreenView.fromNib()
     private weak var coordinator: LaunchFinishedLoadingDelegate?
     private var viewModel: LaunchScreenViewModel
+    private var mainQueue: DispatchQueueInterface
 
     init(coordinator: LaunchFinishedLoadingDelegate,
-         viewModel: LaunchScreenViewModel = LaunchScreenViewModel()) {
+         viewModel: LaunchScreenViewModel = LaunchScreenViewModel(),
+         mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.coordinator = coordinator
         self.viewModel = viewModel
+        self.mainQueue = mainQueue
         super.init(nibName: nil, bundle: nil)
         viewModel.delegate = self
     }
@@ -21,15 +25,27 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         fatalError()
     }
 
+    // MARK: - View cycles
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.startLoading()
+        Task {
+            await startLoading()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupLayout()
     }
+
+    // MARK: - Loading
+
+    func startLoading() async {
+        await viewModel.startLoading()
+    }
+
+    // MARK: - Setup
 
     private func setupLayout() {
         launchScreen.translatesAutoresizingMaskIntoConstraints = false
@@ -46,10 +62,14 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
     // MARK: - LaunchFinishedLoadingDelegate
 
     func launchWith(launchType: LaunchType) {
-        coordinator?.launchWith(launchType: launchType)
+        mainQueue.async {
+            self.coordinator?.launchWith(launchType: launchType)
+        }
     }
 
     func launchBrowser() {
-        coordinator?.launchBrowser()
+        mainQueue.async {
+            self.coordinator?.launchBrowser()
+        }
     }
 }
