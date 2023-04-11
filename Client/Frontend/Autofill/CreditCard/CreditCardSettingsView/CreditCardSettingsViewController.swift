@@ -49,11 +49,7 @@ class CreditCardSettingsViewController: UIViewController, Themeable {
         self.logger = logger
         self.creditCardTableViewController = CreditCardTableViewController(viewModel: viewModel.tableViewModel)
 
-        let theme = themeManager.currentTheme
-        let colors = CreditCardSettingsEmptyView.Colors(titleTextColor: theme.colors.textPrimary.color,
-                                                        subTextColor: theme.colors.textPrimary.color,
-                                                        toggleTextColor: theme.colors.textPrimary.color)
-        let emptyView = CreditCardSettingsEmptyView(colors: colors, toggleModel: viewModel.toggleModel)
+        let emptyView = CreditCardSettingsEmptyView(toggleModel: viewModel.toggleModel)
         self.creditCardEmptyView = UIHostingController(rootView: emptyView)
         self.creditCardEmptyView.view.backgroundColor = .clear
 
