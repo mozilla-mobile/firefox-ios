@@ -76,15 +76,7 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
               let message = messagingManager.messageForId(messageId)
         else { return }
 
-        switch message.action {
-        case "://deep-link?url=homepanel/new-tab":
-            let object = OpenTabNotificationObject(type: .openNewTab)
-            notificationCenter.post(name: .OpenTabNotification, withObject: object)
-            messagingManager.onMessagePressed(message)
-        default:
-            // do nothing
-            return
-        }
+        messagingManager.onMessagePressed(message)
     }
 
     func didDismissNotification(_ userInfo: [AnyHashable: Any]) {
