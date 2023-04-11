@@ -44,6 +44,9 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
         }
     }
 
+    // FXIOS-6036 - Make this non optional when coordinators are used
+    var introScreenManager: IntroScreenManager?
+
     var isFeatureEnabled: Bool {
         return featureFlags.isFeatureEnabled(.onboardingFreshInstall, checking: .buildOnly)
     }
@@ -105,5 +108,9 @@ struct IntroViewModel: OnboardingViewModelProtocol, FeatureFlaggable {
                                      method: .tap,
                                      object: .onboardingClose,
                                      extras: extra)
+    }
+
+    func saveHasSeenOnboarding() {
+        introScreenManager?.didSeeIntroScreen()
     }
 }

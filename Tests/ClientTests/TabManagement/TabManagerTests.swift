@@ -14,7 +14,7 @@ class TabManagerTests: XCTestCase {
     var mockTabStore: MockTabDataStore!
     var mockProfile: MockProfile!
     var mockDiskImageStore: MockDiskImageStore!
-    let webViewConfig: WKWebViewConfiguration = WKWebViewConfiguration()
+    let webViewConfig = WKWebViewConfiguration()
     let sleepTime: UInt64 = 1_000_000_000
     override func setUp() {
         super.setUp()

@@ -76,7 +76,8 @@ class PhotonActionSheetViewModel {
     /// This avoid us having to call Apple's API to scroll the tableview (with scrollToRow or
     /// with setContentOffset) which was causing an unwanted content size change (and
     /// menu apparation was wonky).
-    var isMainMenuInverted: Bool = false
+    var isMainMenuInverted = false
+
     private func setMainMenuStyle() {
         guard isMainMenuInverted else { return }
 

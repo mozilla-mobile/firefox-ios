@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Account
@@ -54,7 +54,7 @@ class StorageClientTests: XCTestCase {
     // Trivial test for struct semantics that we might want to pay attention to if they change,
     // and for response header parsing.
     func testResponseHeaders() {
-        let v: JSON = JSON(parseJSON: "{\"a:\": 2}")
+        let v = JSON(parseJSON: "{\"a:\": 2}")
         let m = ResponseMetadata(status: 200, headers: [
             "X-Weave-Timestamp": "1274380461.12",
             "X-Last-Modified": "2174380461.12",

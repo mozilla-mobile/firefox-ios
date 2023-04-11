@@ -50,7 +50,7 @@ public struct UnencryptedCreditCardFields {
 public class RustAutofillEncryptionKeys {
     public let ccKeychainKey = "appservices.key.creditcard.perfield"
 
-    let keychain: MZKeychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
+    let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
     let ccCanaryPhraseKey = "creditCardCanaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
 

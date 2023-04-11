@@ -871,6 +871,9 @@
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Τι νέο υπάρχει";
 
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "Ζουμ (%@)";
+
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "κινητή συσκευή";
 

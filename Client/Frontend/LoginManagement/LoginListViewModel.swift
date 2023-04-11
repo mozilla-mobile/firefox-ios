@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Storage
@@ -17,7 +17,7 @@ final class LoginListViewModel {
     private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0
-    private(set) var hasData: Bool = false
+    private(set) var hasData = false
     weak var searchController: UISearchController?
     weak var delegate: LoginViewModelDelegate?
     private(set) var titles = [Character]()
@@ -38,7 +38,7 @@ final class LoginListViewModel {
             delegate?.breachPathDidUpdate()
         }
     }
-    var hasLoadedBreaches: Bool = false
+    var hasLoadedBreaches = false
     var theme: Theme
 
     init(profile: Profile, searchController: UISearchController, theme: Theme) {

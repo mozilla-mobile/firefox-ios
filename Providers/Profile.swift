@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // IMPORTANT!: Please take into consideration when adding new imports to
 // this file that it is utilized by external components besides the core
@@ -217,7 +217,7 @@ open class BrowserProfile: Profile {
     var syncManager: SyncManager!
 
     var syncDelegate: SyncDelegate?
-    var useRustSyncManager: Bool = false
+    var useRustSyncManager = false
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -479,7 +479,7 @@ open class BrowserProfile: Profile {
 
     lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
     lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
-    lazy var places: RustPlaces = RustPlaces(databasePath: self.placesDbPath)
+    lazy var places = RustPlaces(databasePath: self.placesDbPath)
 
     public func migrateHistoryToPlaces(callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
         guard FileManager.default.fileExists(atPath: browserDbPath) else {
@@ -862,7 +862,7 @@ open class BrowserProfile: Profile {
 
         fileprivate var syncTimer: Timer?
 
-        fileprivate var backgrounded: Bool = true
+        fileprivate var backgrounded = true
         private let logger: Logger
 
         deinit {

@@ -166,6 +166,9 @@
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
 "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Открыта новая приватная вкладка";
 
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "Открыта новая приватная вкладка";
+
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Перейти";
 
@@ -239,7 +242,7 @@
 "DefaultBrowserCloseButtonAccessibility.v102" = "Закрыть";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
-"Display Settings" = "Параметры отображения";
+"Display Settings" = "Настройки отображения";
 
 /* Used as a button label for crash dialog prompt */
 "Don’t Send" = "Не отправлять";
@@ -871,6 +874,9 @@
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Что нового";
 
+/* Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent. */
+"Menu.ZoomPage.Title.v113" = "Масштаб (%@)";
+
 /* Accessibility label for Mobile Device image in remote tabs list */
 "mobile device" = "мобильное устройство";
 
@@ -962,7 +968,7 @@
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Открывайте статьи в виде для чтения, нажимая на значок книги, когда он появляется в адресной строке.";
 
 /* See http://mzl.la/1G7uHo7 */
-"Open Settings" = "Открыть Параметры";
+"Open Settings" = "Открыть настройки";
 
 /* Toggle tabs syncing setting */
 "Open Tabs" = "Открытые вкладки";
@@ -1160,7 +1166,7 @@
 "SendTo.NoDevicesFound.Message" = "У вас нет ни одного устройства, подключенного к этому Аккаунту Firefox и доступного для синхронизации.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Пожалуйста, откройте Firefox, перейдите в Параметры и войдите для продолжения.";
+"SendTo.NotSignedIn.Message" = "Пожалуйста, откройте Firefox, перейдите в «Настройки» и войдите для продолжения.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Вы не вошли в свой Аккаунт Firefox.";
@@ -1196,7 +1202,7 @@
 "Serif" = "С засечками";
 
 /* Title in the settings view controller title bar */
-"Settings" = "Параметры";
+"Settings" = "Настройки";
 
 /* The button text in Search Settings that opens the Custom Search Engine view. */
 "Settings.AddCustomEngine" = "Добавить поисковую систему";
@@ -1310,7 +1316,7 @@
 "Settings.FxA.DeviceName" = "Имя устройства";
 
 /* Label used as a section title in the Firefox Accounts Settings screen. */
-"Settings.FxA.Sync.SectionName" = "Параметры синхронизации";
+"Settings.FxA.Sync.SectionName" = "Настройки синхронизации";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title" = "Аккаунт Firefox";

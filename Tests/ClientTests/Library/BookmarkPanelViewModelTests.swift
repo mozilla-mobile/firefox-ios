@@ -159,7 +159,7 @@ class MockBookmarkNode: FxBookmarkNode {
     var guid: String = "12345"
     var parentGUID: String?
     var position: UInt32 = 0
-    var isRoot: Bool = false
+    var isRoot = false
     var title: String
 
     init(title: String) {

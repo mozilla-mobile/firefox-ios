@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Photos
@@ -52,7 +52,7 @@ class BrowserViewController: UIViewController {
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
-    var statusBarOverlay: UIView = UIView()
+    var statusBarOverlay = UIView()
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
     var searchTelemetry: SearchTelemetry?
@@ -61,7 +61,7 @@ class BrowserViewController: UIViewController {
     var zoomPageBar: ZoomPageBar?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
-    var isCrashAlertShowing: Bool = false
+    var isCrashAlertShowing = false
     var currentMiddleButtonState: MiddleButtonState?
     private var customSearchBarButton: UIBarButtonItem?
     var openedUrlFromExternalSource = false
@@ -396,11 +396,14 @@ class BrowserViewController: UIViewController {
             animations: {
                 self.webViewContainer.alpha = 1
                 self.urlBar.locationContainer.alpha = 1
-                self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
                 self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
                 self.presentedViewController?.view.alpha = 1
             }, completion: { _ in
                 self.webViewContainerBackdrop.alpha = 0
+                // This has to be at the end of the animation, because `switchForegroundStatus` gets the tab cells by
+                // using `collectionView.visibleCells` and before the animation is complete, the cells are not going to
+                // be visible, so it will always return an empty array.
+                self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
                 self.view.sendSubviewToBack(self.webViewContainerBackdrop)
             })
 
@@ -571,10 +574,12 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Setting the view alpha to 0 so that there's no weird flash in between the
-        // check of view appearance and the `performSurveySurfaceCheck`, where the
-        // alpha will be set to 1.
-        self.view.alpha = 0
+        if !AppConstants.useCoordinators {
+            // Setting the view alpha to 0 so that there's no weird flash in between the
+            // check of view appearance and the `performSurveySurfaceCheck`, where the
+            // alpha will be set to 1.
+            self.view.alpha = 0
+        }
 
         if !displayedRestoreTabsAlert && crashedLastLaunch() {
             logger.log("The application crashed on last session",
@@ -587,14 +592,19 @@ class BrowserViewController: UIViewController {
         }
 
         updateTabCountUsingTabManager(tabManager, animated: false)
-        performSurveySurfaceCheck()
+
+        if !AppConstants.useCoordinators {
+            performSurveySurfaceCheck()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        presentIntroViewController()
-        presentUpdateViewController()
+        if !AppConstants.useCoordinators {
+            presentIntroViewController()
+            presentUpdateViewController()
+        }
         screenshotHelper.viewIsVisible = true
 
         if let toast = self.pendingToast {

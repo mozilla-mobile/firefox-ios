@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // This code is loosely based on https://github.com/Antol/APAutocompleteTextField
 
@@ -23,7 +23,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
     private var autocompleteTextLabel: UILabel?
-    private var hideCursor: Bool = false
+    private var hideCursor = false
 
     private let copyShortcutKey = "c"
 
