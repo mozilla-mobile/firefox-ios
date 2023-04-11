@@ -25,7 +25,6 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     private var message: GleanPlumbMessage?
     private var messagingManager: GleanPlumbMessageManagerProtocol
     private var notificationManager: NotificationManagerProtocol
-    private var notificationCenter: NotificationProtocol
 
     var shouldShowSurface: Bool {
         updateMessage()
@@ -42,11 +41,9 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
 
     // MARK: - Initialization
     init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
-         notificationManager: NotificationManagerProtocol = NotificationManager(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationManager: NotificationManagerProtocol = NotificationManager()) {
         self.messagingManager = messagingManager
         self.notificationManager = notificationManager
-        self.notificationCenter = notificationCenter
     }
 
     // MARK: - Functionality
