@@ -852,6 +852,7 @@
 		C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80823D20FB3005AACE6 /* Avatar.swift */; };
 		C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */; };
 		C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */; };
+		C8E531C829E5EB6100E03FEF /* RouteBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E531C729E5EB6100E03FEF /* RouteBuilder.swift */; };
 		C8E78BDD27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */; };
 		C8EB60C41F1FB12500F9B5B3 /* navigationDelegate.html in Resources */ = {isa = PBXBuildFile; fileRef = C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */; };
 		C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */; };
@@ -4671,6 +4672,7 @@
 		C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAWebViewController.swift; sourceTree = "<group>"; };
 		C8E2E80823D20FB3005AACE6 /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustFirefoxAccounts.swift; sourceTree = "<group>"; };
+		C8E531C729E5EB6100E03FEF /* RouteBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBuilder.swift; sourceTree = "<group>"; };
 		C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDeletionUtilityTests.swift; sourceTree = "<group>"; };
 		C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigationDelegate.html; sourceTree = "<group>"; };
 		C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDelegateTests.swift; sourceTree = "<group>"; };
@@ -7058,6 +7060,7 @@
 				C8124BB029D6F55400540B79 /* Route.swift */,
 				C8EDDBF329DF119F003A4C07 /* DeeplinkInput.swift */,
 				C8EDDBF129DF1159003A4C07 /* URLScanner.swift */,
+				C8E531C729E5EB6100E03FEF /* RouteBuilder.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -11167,6 +11170,7 @@
 				8A7653BD28A2C61D00924ABF /* PocketDataAdaptor.swift in Sources */,
 				96EA9454293655BF00123345 /* AppSession+Enums.swift in Sources */,
 				C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */,
+				C8E531C829E5EB6100E03FEF /* RouteBuilder.swift in Sources */,
 				D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */,
 				D38A1BEE1A9FA2CA00F6A386 /* SiteTableViewController.swift in Sources */,
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,

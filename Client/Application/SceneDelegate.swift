@@ -27,6 +27,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var sceneCoordinator: SceneCoordinator?
 
+    var routeBuilder = RouteBuilder {
+        UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
+    }
+
     // MARK: - Connecting / Disconnecting Scenes
 
     /// Invoked when the app creates OR restores an instance of the UI.
@@ -95,9 +99,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         if AppConstants.useCoordinators {
             guard let url = URLContexts.first?.url,
-                  let route = Route(url: url) else { return }
+                  let route = routeBuilder.makeRoute(url: url) else { return }
             sceneCoordinator?.handle(route: route)
-
         } else {
             guard let url = URLContexts.first?.url,
                   let routerPath = NavigationPath(url: url) else { return }

@@ -26,7 +26,7 @@ struct URLScanner {
     ///
     /// - Returns: A new `URLScanner` object if the URL is valid and uses a recognized scheme, otherwise `nil`.
     init?(url: URL) {
-        let url = url.sanitized
+        let url = URLScanner.sanitized(url: url)
         guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
               let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
               let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String]
@@ -59,5 +59,18 @@ struct URLScanner {
     /// Returns a Boolean value indicating whether the URL uses either the "http" or "https" scheme.
     var isHTTPScheme: Bool {
         return ["http", "https"].contains(scheme)
+    }
+
+    /// Force the URL's scheme to lowercase to ensure the code below can cope with URLs like the following from an external source. E.g Notes.app
+    ///
+    /// Https://www.apple.com
+    ///
+    static func sanitized(url: URL) -> URL {
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+              let scheme = components.scheme, !scheme.isEmpty
+        else { return url }
+
+        components.scheme = scheme.lowercased()
+        return components.url ?? url
     }
 }
