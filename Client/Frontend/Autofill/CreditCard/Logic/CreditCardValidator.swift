@@ -63,7 +63,7 @@ struct CreditCardValidator {
         .unionpay: "^62[0-5]\\d{13,16}$"
     ]
 
-    func cardTypeFor(_ card: Int) -> CreditCardType? {
+    func cardTypeFor(_ card: String) -> CreditCardType? {
         let val = regEx.first { _, regex in
             let result = "\(card)".range(of: regex, options: .regularExpression)
             return (result != nil)
@@ -71,7 +71,7 @@ struct CreditCardValidator {
         return val?.key
     }
 
-    func isCardNumberValidFor(card: Int) -> Bool {
+    func isCardNumberValidFor(card: String) -> Bool {
         guard let cardType = cardTypeFor(card) else { return false }
 
         return cardType.validNumberLength.contains(String(card).count)
