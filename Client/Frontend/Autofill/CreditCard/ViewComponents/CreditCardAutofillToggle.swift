@@ -28,6 +28,8 @@ struct CreditCardAutofillToggle: View {
     // Theming
     @Environment(\.themeType) var themeVal
     @State var textColor: Color = .clear
+    @State var backgroundColor: Color = .clear
+    @State var toggleTintColor: Color = .clear
     @ObservedObject var model: ToggleModel
 
     var body: some View {
@@ -37,25 +39,18 @@ struct CreditCardAutofillToggle: View {
                 .padding(.leading, 16)
                 .hidden()
             HStack {
-                if #available(iOS 14.0, *) {
-                    Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
-                        .font(.body)
-                        .foregroundColor(textColor)
-                        .padding(.leading, 16)
-                        .padding(.trailing, 16)
-                        .toggleStyle(SwitchToggleStyle(tint: .blue))
-                } else {
-                    Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
-                        .font(.body)
-                        .foregroundColor(textColor)
-                        .padding(.leading, 16)
-                        .padding(.trailing, 16)
-                }
+                Toggle(String.CreditCard.EditCard.ToggleToAllowAutofillTitle, isOn: $model.isEnabled)
+                    .font(.body)
+                    .foregroundColor(textColor)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 16)
+                    .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
             }
             Divider()
                 .frame(height: 0.7)
                 .padding(.leading, 16)
         }
+        .background(backgroundColor)
         .onAppear {
             applyTheme(theme: themeVal.theme)
         }
@@ -67,6 +62,8 @@ struct CreditCardAutofillToggle: View {
     func applyTheme(theme: Theme) {
         let color = theme.colors
         textColor = Color(color.textPrimary)
+        backgroundColor = Color(color.layer2)
+        toggleTintColor = Color(color.actionPrimary)
     }
 }
 
