@@ -98,15 +98,10 @@ class CreditCardInputViewModel: ObservableObject {
     }
 
     @Published var cardNumber: String = "" {
-        willSet (val) {
-            guard let intVal = Int(val),
-                  creditCardValidator.isCardNumberValidFor(card: intVal) else {
-                numberIsValid = false
-                return
-            }
+        willSet {
             // Set the card type
-            self.cardType = creditCardValidator.cardTypeFor(intVal)
-            numberIsValid = true
+            self.cardType = creditCardValidator.cardTypeFor(newValue)
+            numberIsValid = creditCardValidator.isCardNumberValidFor(card: newValue)
         }
     }
 
