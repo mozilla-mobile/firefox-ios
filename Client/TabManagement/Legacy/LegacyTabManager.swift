@@ -715,7 +715,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         // Note: The recently closed tab list is only updated when the undo
         // snackbar disappears and does not update if someone taps on undo button
         recentlyClosedTabs.suffix(10).forEach { tab in
-            if let url = tab.lastKnownUrl, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
+            if let url = tab.lastKnownUrl,
+               !(InternalURL(url)?.isAboutURL ?? false),
+               !tab.isPrivate {
                 profile.recentlyClosedTabs.addTab(url as URL,
                                                   title: tab.lastTitle,
                                                   lastExecutedTime: tab.lastExecutedTime)

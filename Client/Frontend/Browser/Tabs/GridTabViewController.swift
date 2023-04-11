@@ -14,6 +14,7 @@ protocol TabTrayDelegate: AnyObject {
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabTrayOpenRecentlyClosedTab(_ url: URL)
     func tabTrayDidRequestTabsSettings()
+    func tabTrayDidCloseLastTab(toast: ButtonToast)
 }
 
 class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
@@ -103,6 +104,11 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     var numberOfColumns: Int {
         return tabLayoutDelegate.numberOfColumns
+    }
+
+    var shouldPresentUndoToastOnHomepage: Bool {
+        guard tabDisplayManager.isPrivate else { return false }
+        return tabManager.normalTabs.count == 1
     }
 
     // MARK: - Inits
@@ -396,12 +402,33 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.closeActionPerformed(forCell: cell)
 
+        guard shouldPresentUndoToastOnHomepage else {
+            // Show undo Toast on homepage
+            handleUndoToastForLastTab()
+            return
+        }
+
         buildUndoToast(toastType: .singleTab) { undoButtonPressed in
             if undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab {
                 self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
                 NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
             }
         }
+    }
+
+    private func handleUndoToastForLastTab() {
+        let viewModel = ButtonToastViewModel(
+            labelText: .TabsTray.CloseTabsToast.SingleTabTitle,
+            buttonText: .TabsTray.CloseTabsToast.Action)
+        let toast = ButtonToast(viewModel: viewModel,
+                                theme: themeManager.currentTheme,
+                                completion: { undoButtonPressed in
+            if undoButtonPressed,
+               let deletedTab = self.tabManager.backupDeletedTab {
+                self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
+            }
+        })
+        delegate?.tabTrayDidCloseLastTab(toast: toast)
     }
 
     private func saveTabToDelete(tab: Tab, index: Int?) {
@@ -605,13 +632,21 @@ extension GridTabViewController: TabPeekDelegate {
 extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPanelDelegate {
     // RecentlyClosedPanelDelegate
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .openRecentlyClosedTab,
+                                     extras: nil)
         delegate?.tabTrayOpenRecentlyClosedTab(url)
         dismissTabTray()
     }
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
-        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .inactiveTabTray, value: .openRecentlyClosedTab, extras: nil)
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .inactiveTabTray,
+                                     value: .openRecentlyClosedTab,
+                                     extras: nil)
         openNewTab(URLRequest(url: url), isPrivate: isPrivate)
         dismissTabTray()
     }

@@ -468,7 +468,6 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
             self.tabManager.reAddTabs(tabsToAdd: [tab], previousTabUUID: "")
             self.dataStore.insert(tab, at: index)
             _ = self.profile.recentlyClosedTabs.popFirstTab()
-            // TODO: show toast on homepage for last tab case
         }
     }
 
