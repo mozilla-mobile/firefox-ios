@@ -859,6 +859,7 @@
 		C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */; };
 		C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */; };
 		C8E531C829E5EB6100E03FEF /* RouteBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E531C729E5EB6100E03FEF /* RouteBuilder.swift */; };
+		C8E531CA29E5F7D300E03FEF /* URLScannerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E531C929E5F7D300E03FEF /* URLScannerTests.swift */; };
 		C8E78BDD27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */; };
 		C8EB60C41F1FB12500F9B5B3 /* navigationDelegate.html in Resources */ = {isa = PBXBuildFile; fileRef = C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */; };
 		C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */; };
@@ -4728,6 +4729,7 @@
 		C8E2E80823D20FB3005AACE6 /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustFirefoxAccounts.swift; sourceTree = "<group>"; };
 		C8E531C729E5EB6100E03FEF /* RouteBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBuilder.swift; sourceTree = "<group>"; };
+		C8E531C929E5F7D300E03FEF /* URLScannerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLScannerTests.swift; sourceTree = "<group>"; };
 		C8E78BDC27F4A1E700C48BAA /* HistoryDeletionUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDeletionUtilityTests.swift; sourceTree = "<group>"; };
 		C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigationDelegate.html; sourceTree = "<group>"; };
 		C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDelegateTests.swift; sourceTree = "<group>"; };
@@ -7102,6 +7104,7 @@
 				8A93F86429D37331004159D9 /* DefaultRouterTests.swift */,
 				8A93F86929D37FC9004159D9 /* CoordinatorTests.swift */,
 				C8EDDBEF29DD83FC003A4C07 /* RouteTests.swift */,
+				C8E531C929E5F7D300E03FEF /* URLScannerTests.swift */,
 				8A7A26E229D4ACF300EA76F1 /* SceneCoordinatorTests.swift */,
 				8A5604F729DF0D2600035CA3 /* BrowserCoordinatorTests.swift */,
 			);
@@ -11537,6 +11540,7 @@
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
 				C80C11EE28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift in Sources */,
+				C8E531CA29E5F7D300E03FEF /* URLScannerTests.swift in Sources */,
 				8AEE284B276A973400C7104D /* RatingPromptManagerTests.swift in Sources */,
 				8AF10D9129D7761A0086351D /* MockLaunchScreenManager.swift in Sources */,
 				5A9A09D828B2E8F000B6F51E /* MockHistoryDeletionProtocol.swift in Sources */,

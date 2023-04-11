@@ -27,9 +27,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var sceneCoordinator: SceneCoordinator?
 
-    var routeBuilder = RouteBuilder {
+    var routeBuilder = RouteBuilder(isPrivate: {
         UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
-    }
+    })
 
     // MARK: - Connecting / Disconnecting Scenes
 

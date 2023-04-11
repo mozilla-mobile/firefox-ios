@@ -57,9 +57,9 @@ enum Route: Equatable {
 
     /// An enumeration representing different sections of the home panel.
     enum HomepanelSection: String, CaseIterable, Equatable {
-        case bookmarks = "bookmarks"
+        case bookmarks
         case topSites = "top-sites"
-        case history = "history"
+        case history
         case readingList = "reading-list"
         case downloads
     }
@@ -69,12 +69,12 @@ enum Route: Equatable {
         case clearPrivateData = "clear-private-data"
         case newTab = "newtab"
         case homePage = "homepage"
-        case mailto = "mailto"
-        case search = "search"
-        case fxa = "fxa"
+        case mailto
+        case search
+        case fxa
         case systemDefaultBrowser = "system-default-browser"
-        case wallpaper = "wallpaper"
-        case theme = "theme"
+        case wallpaper
+        case theme
         case contentBlocker
         case toolbar
         case tabs
@@ -91,7 +91,7 @@ enum Route: Equatable {
 
     /// An enumeration representing different sections of the default browser settings.
     enum DefaultBrowserSection: String, CaseIterable, Equatable {
-        case tutorial = "tutorial"
+        case tutorial
         case systemSettings = "system-settings"
     }
 }
