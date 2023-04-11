@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -9,9 +9,9 @@ func ReadingListNow() -> Timestamp {
     return Timestamp(Date.timeIntervalSinceReferenceDate * 1000.0)
 }
 
-let ReadingListDefaultUnread: Bool = true
-let ReadingListDefaultArchived: Bool = false
-let ReadingListDefaultFavorite: Bool = false
+let ReadingListDefaultUnread = true
+let ReadingListDefaultArchived = false
+let ReadingListDefaultFavorite = false
 
 public protocol ReadingList {
     func getAvailableRecords() -> Deferred<Maybe<[ReadingListItem]>>

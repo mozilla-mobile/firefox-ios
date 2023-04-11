@@ -155,7 +155,7 @@ extension SurveySurfaceManagerTests {
 // MARK: - MockSurveyMessageDataProtocol
 class MockSurveyMessageDataProtocol: MessageDataProtocol {
     var surface: MessageSurfaceId
-    var isControl: Bool = true
+    var isControl = true
     var title: String? = "title label test"
     var text: String = "text label test"
     var buttonLabel: String? = "button label test"

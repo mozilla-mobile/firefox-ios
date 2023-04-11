@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -55,8 +55,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     var selectedIndex: Int { return _selectedIndex }
     private let logger: Logger
 
-    var didChangedPanelSelection: Bool = true
-    var didAddNewTab: Bool = true
+    var didChangedPanelSelection = true
+    var didAddNewTab = true
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 

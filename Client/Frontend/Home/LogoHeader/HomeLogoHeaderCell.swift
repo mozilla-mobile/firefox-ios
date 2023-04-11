@@ -37,7 +37,7 @@ class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     }
 
     // MARK: - Variables
-    private var userDefaults: UserDefaults = UserDefaults.standard
+    private var userDefaults = UserDefaults.standard
 
     // MARK: - Initializers
     override init(frame: CGRect) {

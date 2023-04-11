@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -23,8 +23,8 @@ open class EncryptedJSON {
     var _hmacBytes: Data?             // Cache decoded HMAC.
     var _ivBytes: Data?               // Cache decoded IV.
 
-    var valid: Bool = false
-    var validated: Bool = false
+    var valid = false
+    var validated = false
 
     let keyBundle: KeyBundle
 

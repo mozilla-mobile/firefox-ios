@@ -8,7 +8,7 @@ import UIKit
 class MockNavigationController: UIViewController, NavigationController {
     var viewControllers: [UIViewController] = []
     var delegate: UINavigationControllerDelegate?
-    var isNavigationBarHidden: Bool = false
+    var isNavigationBarHidden = false
     var topViewController: UIViewController?
     var fromViewController: UIViewController?
 

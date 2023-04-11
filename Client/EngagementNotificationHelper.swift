@@ -10,11 +10,11 @@ class EngagementNotificationHelper: FeatureFlaggable {
     struct Constant {
         #if MOZ_CHANNEL_FENNEC
         // shorter time interval for development
-        static let timeUntilNotification: UInt64 = UInt64(60 * 2 * 1000) // 2 minutes in milliseconds
-        static let twentyFourHours: UInt64 = timeUntilNotification / 2 // 1 minutes in milliseconds
+        static let timeUntilNotification = UInt64(60 * 2 * 1000) // 2 minutes in milliseconds
+        static let twentyFourHours = timeUntilNotification / 2 // 1 minutes in milliseconds
         #else
-        static let timeUntilNotification: UInt64 = UInt64(60 * 60 * 48 * 1000) // 48 hours in milliseconds
-        static let twentyFourHours: UInt64 = UInt64(60 * 60 * 24 * 1000) // 24 hours in milliseconds
+        static let timeUntilNotification = UInt64(60 * 60 * 48 * 1000) // 48 hours in milliseconds
+        static let twentyFourHours = UInt64(60 * 60 * 24 * 1000) // 24 hours in milliseconds
         #endif
         static let notificationId: String = "org.mozilla.ios.engagementNotification"
     }

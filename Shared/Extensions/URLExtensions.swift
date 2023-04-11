@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Common
@@ -345,16 +345,16 @@ public struct InternalURL {
     public static let scheme = "internal"
     public static let baseUrl = "\(scheme)://local"
     public enum Path: String {
-        case errorpage = "errorpage"
-        case sessionrestore = "sessionrestore"
+        case errorpage
+        case sessionrestore
         func matches(_ string: String) -> Bool {
             return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
         }
     }
 
     public enum Param: String {
-        case uuidkey = "uuidkey"
-        case url = "url"
+        case uuidkey
+        case url
         func matches(_ string: String) -> Bool { return string == self.rawValue }
     }
 
