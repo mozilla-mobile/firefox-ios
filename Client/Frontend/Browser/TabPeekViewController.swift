@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -21,10 +21,10 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     fileprivate weak var delegate: TabPeekDelegate?
     fileprivate var fxaDevicePicker: UINavigationController?
-    fileprivate var isBookmarked: Bool = false
-    fileprivate var isInReadingList: Bool = false
-    fileprivate var hasRemoteClients: Bool = false
-    fileprivate var ignoreURL: Bool = false
+    fileprivate var isBookmarked = false
+    fileprivate var isInReadingList = false
+    fileprivate var hasRemoteClients = false
+    fileprivate var ignoreURL = false
 
     fileprivate var screenShot: UIImageView?
     fileprivate var previewAccessibilityLabel: String!

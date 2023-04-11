@@ -1,13 +1,13 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Common
 
 /// For any work that needs to be delayed, you can wrap it inside a throttler and specify the delay time, in seconds, and queue.
 class Throttler {
-    private var task: DispatchWorkItem = DispatchWorkItem(block: {})
+    private var task = DispatchWorkItem(block: {})
     private let defaultDelay = 0.35
 
     private let delay: Double

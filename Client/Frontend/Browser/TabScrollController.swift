@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import SnapKit
@@ -49,9 +49,9 @@ class TabScrollingController: NSObject, FeatureFlaggable {
         return isBottomSearchBar ? bottomShowing : headerTopOffset == 0
     }
 
-    private var isZoomedOut: Bool = false
+    private var isZoomedOut = false
     private var lastZoomedScale: CGFloat = 0
-    private var isUserZoom: Bool = false
+    private var isUserZoom = false
 
     private var headerTopOffset: CGFloat = 0 {
         didSet {

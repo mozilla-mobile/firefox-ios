@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import UIKit
@@ -135,7 +135,7 @@ class EnhancedTrackingProtectionMenuVC: UIViewController, Themeable {
     private var viewModel: EnhancedTrackingProtectionMenuVM
     private var hasSetPointOrigin = false
     private var pointOrigin: CGPoint?
-    var asPopover: Bool = false
+    var asPopover = false
 
     private var toggleContainerShouldBeHidden: Bool {
         return !viewModel.globalETPIsEnabled

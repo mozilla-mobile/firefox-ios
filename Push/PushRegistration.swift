@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 
@@ -8,7 +8,7 @@ import Shared
 import SwiftyJSON
 
 public class PushRegistration: NSObject, NSSecureCoding {
-    public static var supportsSecureCoding: Bool = true
+    public static var supportsSecureCoding = true
 
     let uaid: String
     let secret: String
@@ -69,7 +69,7 @@ private let defaultSubscriptionID = "defaultSubscription"
 /// Small NSCodable class for persisting a channel subscription.
 /// We use NSCoder because we expect it to be stored in the profile.
 public class PushSubscription: NSObject, NSSecureCoding {
-    public static var supportsSecureCoding: Bool = true
+    public static var supportsSecureCoding = true
 
     public let channelID: String
     public let endpoint: URL

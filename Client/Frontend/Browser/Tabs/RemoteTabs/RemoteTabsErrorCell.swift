@@ -14,7 +14,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
         static let buttonSizeFont: CGFloat = 16
-        static let imageSize: CGSize = CGSize(width: 90, height: 60)
+        static let imageSize = CGSize(width: 90, height: 60)
         static let buttonVerticalInset: CGFloat = 12
     }
 
