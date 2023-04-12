@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebKit
 import Shared
@@ -66,7 +66,7 @@ struct NoImageModeDefaults {
 
 class ContentBlocker {
     var safelistedDomains = SafelistedDomains()
-    let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
+    let ruleStore = WKContentRuleListStore.default()
     var blockImagesRule: WKContentRuleList?
     var setupCompleted = false
     let logger: Logger
@@ -76,18 +76,22 @@ class ContentBlocker {
     private init(logger: Logger = DefaultLogger.shared) {
         let blockImages = NoImageModeDefaults.Script
         self.logger = logger
-        ruleStore.compileContentRuleList(forIdentifier: NoImageModeDefaults.ScriptName, encodedContentRuleList: blockImages) { rule, error in
-            guard error == nil else {
-                logger.log("We errored with error: \(String(describing: error))", level: .warning, category: .webview)
-                assert(error == nil)
-                return
-            }
-            guard rule != nil else {
-                logger.log("We came across a nil rule set for NoImageMode at this point.", level: .warning, category: .webview)
-                assert(rule != nil)
-                return
-            }
-            self.blockImagesRule = rule
+        ruleStore?.compileContentRuleList(
+            forIdentifier: NoImageModeDefaults.ScriptName,
+            encodedContentRuleList: blockImages) { rule, error in
+                guard error == nil else {
+                    logger.log("We errored with error: \(String(describing: error))", level: .warning, category: .webview)
+                    assert(error == nil)
+                    return
+                }
+
+                guard rule != nil else {
+                    logger.log("We came across a nil rule set for NoImageMode at this point.", level: .warning, category: .webview)
+                    assert(rule != nil)
+                    return
+                }
+
+                self.blockImagesRule = rule
         }
 
         // Read the safelist at startup
@@ -126,7 +130,7 @@ class ContentBlocker {
 
         for list in rules {
             let name = list.filename
-            ruleStore.lookUpContentRuleList(forIdentifier: name) { rule, error in
+            ruleStore?.lookUpContentRuleList(forIdentifier: name) { rule, error in
                 guard let rule = rule else { return }
                 self.add(contentRuleList: rule, toTab: tab)
             }
@@ -208,14 +212,14 @@ extension ContentBlocker {
     }
 
     func removeAllRulesInStore(completion: @escaping () -> Void) {
-        ruleStore.getAvailableContentRuleListIdentifiers { available in
+        ruleStore?.getAvailableContentRuleListIdentifiers { available in
             guard let available = available else {
                 completion()
                 return
             }
             let deferreds: [Deferred<Void>] = available.map { filename in
                 let result = Deferred<Void>()
-                self.ruleStore.removeContentRuleList(forIdentifier: filename) { _ in
+                self.ruleStore?.removeContentRuleList(forIdentifier: filename) { _ in
                     result.fill(())
                 }
                 return result
@@ -255,7 +259,7 @@ extension ContentBlocker {
     func removeOldListsByNameFromStore(completion: @escaping () -> Void) {
         var noMatchingIdentifierFoundForRule = false
 
-        ruleStore.getAvailableContentRuleListIdentifiers { available in
+        ruleStore?.getAvailableContentRuleListIdentifiers { available in
             guard let available = available else {
                 completion()
                 return
@@ -283,7 +287,7 @@ extension ContentBlocker {
         let blocklists = BlocklistFileName.allCases.map { $0.filename }
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
-            ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
+            ruleStore?.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in
                 if contentRuleList != nil {
                     result.fill(())
                     return
@@ -292,7 +296,7 @@ extension ContentBlocker {
                     var str = jsonString
                     guard let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
                     str = str.replacingCharacters(in: range, with: self.safelistAsJSON() + "]")
-                    self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
+                    self.ruleStore?.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
                         guard error == nil else {
                             self.logger.log("Content blocker errored with: \(String(describing: error))", level: .warning, category: .webview)
                             assert(error == nil)

@@ -24,10 +24,8 @@ class LaunchScreenViewModel {
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
     }
 
-    func startLoading(appVersion: String = AppInfo.appVersion) {
-        Task {
-            await loadLaunchType(appVersion: appVersion)
-        }
+    func startLoading(appVersion: String = AppInfo.appVersion) async {
+        await loadLaunchType(appVersion: appVersion)
     }
 
     private func loadLaunchType(appVersion: String) async {

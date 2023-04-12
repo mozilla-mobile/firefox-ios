@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -249,7 +249,12 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
     // Button Actions
     @objc
     private func dismissAnimated() {
-        self.dismiss(animated: true, completion: nil)
+        if AppConstants.useCoordinators {
+            // Note: this could be one closure only and not two with goToSettings
+            viewModel.didAskToDismissView?()
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
     }
 
@@ -258,6 +263,10 @@ class DefaultBrowserOnboardingViewController: UIViewController, OnViewDismissabl
         viewModel.goToSettings?()
         UserDefaults.standard.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage) // Don't show default browser card if this button is clicked
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
+
+        if AppConstants.useCoordinators {
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        }
     }
 
     // Theme

@@ -43,7 +43,7 @@ class HistoryHighlightsCell: UICollectionViewCell, ReusableCell {
         line.isHidden = false
     }
 
-    var isFillerCell: Bool = false {
+    var isFillerCell = false {
         didSet {
             itemTitle.isHidden = isFillerCell
             imageView.isHidden = isFillerCell

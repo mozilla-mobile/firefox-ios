@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Glean
@@ -46,7 +46,7 @@ public extension EncryptedLogin {
             secFields: ""
         )
 
-        let rustLoginsEncryption: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
+        let rustLoginsEncryption = RustLoginEncryptionKeys()
         let encryptedLogin = rustLoginsEncryption.encryptSecureFields(login: login)
         self.secFields = encryptedLogin?.secFields ?? ""
     }
@@ -134,7 +134,7 @@ public extension EncryptedLogin {
     }
 
     var credentials: URLCredential {
-        let rustLoginsEncryption: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
+        let rustLoginsEncryption = RustLoginEncryptionKeys()
         let login = rustLoginsEncryption.decryptSecureFields(login: self)
         return URLCredential(user: login?.secFields.username ?? "", password: login?.secFields.password ?? "", persistence: .forSession)
     }
@@ -179,13 +179,13 @@ public extension EncryptedLogin {
             secFields: ""
         )
 
-        let rustLoginsEncryption: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
+        let rustLoginsEncryption = RustLoginEncryptionKeys()
         let encryptedLogin = rustLoginsEncryption.encryptSecureFields(login: login)
         self.secFields = encryptedLogin?.secFields ?? ""
     }
 
     func toJSONDict() -> [String: Any] {
-        let rustLoginsEncryption: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
+        let rustLoginsEncryption = RustLoginEncryptionKeys()
         let login = rustLoginsEncryption.decryptSecureFields(login: self)
 
         var dict: [String: Any] = [
@@ -369,7 +369,7 @@ public class RustLoginEncryptionKeys {
     public let loginsPostMigrationSalt = "sqlcipher.key.logins.salt.post.migration"
     public let loginsPostMigrationKey = "sqlcipher.key.logins.db.post.migration"
 
-    let keychain: MZKeychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
+    let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
     let canaryPhraseKey = "canaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
 
@@ -858,7 +858,7 @@ public class RustLogins {
 
     private func migrateSQLCipherDBIfNeeded(key: String) {
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
-        let rustKeys: RustLoginEncryptionKeys = RustLoginEncryptionKeys()
+        let rustKeys = RustLoginEncryptionKeys()
         let sqlCipherLoginsKey: String? = keychain.string(forKey: rustKeys.loginsUnlockKeychainKey)
         let sqlCipherLoginsSalt: String? = keychain.string(forKey: rustKeys.loginsSaltKeychainKey)
 

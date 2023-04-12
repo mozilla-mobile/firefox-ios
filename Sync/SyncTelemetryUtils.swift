@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Glean
@@ -13,15 +13,15 @@ import SyncTelemetry
 public typealias OldSyncReason = SyncReason
 
 public enum SyncReason: String {
-    case startup = "startup"
-    case scheduled = "scheduled"
-    case backgrounded = "backgrounded"
-    case user = "user"
-    case syncNow = "syncNow"
-    case didLogin = "didLogin"
-    case push = "push"
-    case engineEnabled = "engineEnabled"
-    case clientNameChanged = "clientNameChanged"
+    case startup
+    case scheduled
+    case backgrounded
+    case user
+    case syncNow
+    case didLogin
+    case push
+    case engineEnabled
+    case clientNameChanged
 }
 
 public enum SyncPingReason: String {

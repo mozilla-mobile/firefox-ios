@@ -19,7 +19,7 @@ class MockLaunchScreenViewModel: LaunchScreenViewModel {
         self.surveySurfaceManager = SurveySurfaceManager(and: messageManager)
     }
 
-    override func startLoading(appVersion: String) {
+    override func startLoading(appVersion: String) async {
         startLoadingCalled += 1
         if let mockLaunchType = mockLaunchType {
             delegate?.launchWith(launchType: mockLaunchType)

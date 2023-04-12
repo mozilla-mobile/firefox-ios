@@ -39,7 +39,7 @@ class SingleActionViewModel {
     private(set) var needsIconActionableTint: Bool
 
     var isEnabled: Bool // Used by toggles like night mode to switch tint color
-    private(set) var bold: Bool = false
+    private(set) var bold = false
     private(set) var tabCount: String?
     private(set) var tapHandler: ((SingleActionViewModel) -> Void)?
     private(set) var badgeIconName: String?
@@ -47,7 +47,7 @@ class SingleActionViewModel {
     // Flip the cells for the main menu (hamburger menu) since content needs to appear at the bottom
     // Both cells and tableview are flipped so content already appears at bottom when the menu is opened.
     // This avoids having to scroll the table view.
-    public var isFlipped: Bool = false
+    public var isFlipped = false
 
     // Enable title customization beyond what the interface provides,
     public var customRender: ((_ title: UILabel, _ contentView: UIView) -> Void)?

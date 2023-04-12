@@ -15,7 +15,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
     let sleepTime: UInt64 = 100_000_000
-    let webViewConfig: WKWebViewConfiguration = WKWebViewConfiguration()
+    let webViewConfig = WKWebViewConfiguration()
 
     override func setUp() {
         super.setUp()

@@ -10,7 +10,7 @@ class WallpaperCollectionViewCell: UICollectionViewCell, ReusableCell {
         static let cornerRadius: CGFloat = 10
         static let borderWidth: CGFloat = 1
         static let selectedBorderWidth: CGFloat = 3
-        static let shadowOffset: CGSize = CGSize(width: 0, height: 5.0)
+        static let shadowOffset = CGSize(width: 0, height: 5.0)
         static let shadowOpacity: Float = 0.2
         static let shadowRadius: CGFloat = 4.0
     }

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import SnapKit
@@ -24,7 +24,7 @@ protocol SearchInputViewDelegate: AnyObject {
 class SearchInputView: UIView, NotificationThemeable {
     weak var delegate: SearchInputViewDelegate?
 
-    var showBottomBorder: Bool = true {
+    var showBottomBorder = true {
         didSet {
             bottomBorder.isHidden = !showBottomBorder
         }

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import SnapKit
@@ -23,7 +23,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
     var url: URL!
     var timer: Timer?
 
-    var isLoaded: Bool = false {
+    var isLoaded = false {
         didSet {
             if isLoaded {
                 UIView.transition(
@@ -39,7 +39,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         }
     }
 
-    fileprivate var isError: Bool = false {
+    fileprivate var isError = false {
         didSet {
             if isError {
                 interstitialErrorView.isHidden = false
