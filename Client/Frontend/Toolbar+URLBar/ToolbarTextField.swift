@@ -15,6 +15,7 @@ class ToolbarTextField: AutocompleteTextField {
     }
 
     private var tintedClearImage: UIImage?
+    static var isPrivate: Bool = false
 
     // MARK: - Initializers
 
@@ -67,6 +68,7 @@ extension ToolbarTextField: NotificationThemeable {
         textColor = UIColor.legacyTheme.textField.textAndTint
         clearButtonTintColor = textColor
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
+        ToolbarTextField.applyUIMode(isPrivate: ToolbarTextField.isPrivate)
         self.refreshAutocompleteLabelTheme()
     }
 
