@@ -67,7 +67,7 @@ class ZoomPageBar: UIView {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
                                                                    size: UX.fontSize,
                                                                    weight: .semibold)
-        label.accessibilityLabel = .AppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel
+//        label.accessibilityLabel = .AppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
@@ -124,6 +124,7 @@ class ZoomPageBar: UIView {
         [zoomOutButton, leftSeparator, zoomLevel, rightSeparator, zoomInButton].forEach {
             stepperContainer.addArrangedSubview($0)
         }
+        stepperContainer.accessibilityElements = [zoomOutButton, zoomLevel, zoomInButton]
 
         addSubviews(stepperContainer, closeButton)
     }
@@ -164,6 +165,8 @@ class ZoomPageBar: UIView {
         zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         zoomLevel.isEnabled = tab.pageZoom == 1.0 ? false : true
         gestureRecognizer.isEnabled = !(tab.pageZoom == 1.0)
+        zoomLevel.accessibilityLabel = String(format: .AppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel,
+                                              zoomLevel.text ?? "")
     }
 
     private func enableZoomButtons() {

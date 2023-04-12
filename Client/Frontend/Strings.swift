@@ -3032,7 +3032,7 @@ extension String {
         public static let ZoomPageCurrentZoomLevelAccessibilityLabel = MZLocalizedString(
             "Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113",
             tableName: "ZoomPageBar",
-            value: "Current Zoom Level",
+            value: "Current Zoom Level: %@",
             comment: "Accessibility label for current zoom level in Zoom Page Bar")
 
         // Toolbar
