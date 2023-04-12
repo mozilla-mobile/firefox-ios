@@ -693,6 +693,7 @@
 		96EB6C4027DBEE9800A9D159 /* SearchGroupedItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C3F27DBEE9800A9D159 /* SearchGroupedItemsViewController.swift */; };
 		96EB6C4327DC205D00A9D159 /* SearchGroupedItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96EB6C4227DC205D00A9D159 /* SearchGroupedItemsViewModel.swift */; };
 		96F8DA49280452CA00E53239 /* GleanPlumbContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F8DA48280452CA00E53239 /* GleanPlumbContextProvider.swift */; };
+		9C17AA6829E600F80076423C /* SummarizeFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 9C17AA6729E600F80076423C /* SummarizeFeature */; };
 		A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B181C1DA8BF0026D912 /* image.gif */; };
 		A83E5B1B1C1DA8BF0026D912 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = A83E5B191C1DA8BF0026D912 /* image.png */; };
 		A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */; };
@@ -4133,6 +4134,7 @@
 		9BA0422985D5448896A3EC26 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = "uk.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		9BAB4C0A93050A8433505859 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		9BCB46C0B4A2E1E8E41F84C2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9C17AA6629E600E20076423C /* SummarizeFeature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SummarizeFeature; sourceTree = "<group>"; };
 		9C214B508D4BCDCA6DE617D5 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9C2B4D879C3D4229E6AFF24D /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		9C394C648290198D6C3E1A10 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/FindInPage.strings"; sourceTree = "<group>"; };
@@ -4142,6 +4144,7 @@
 		9C8043F3BB77DF533FF48412 /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		9C8B45CBA683ED6ED42E65C4 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		9CBD4A5BA6812CB2D750FC54 /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9CD0E23329E615B400E27F27 /* OpenAIClient */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = OpenAIClient; sourceTree = "<group>"; };
 		9CE741DE985009A84C17055A /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
 		9CFA43989ED93A183C8AF998 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		9D0D40298CF6F2B8A1BF375E /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -5830,6 +5833,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A70EF0E295DFCCF00790249 /* Common in Frameworks */,
+				9C17AA6829E600F80076423C /* SummarizeFeature in Frameworks */,
 				8A08EC6427EBDCAD00E119C7 /* AdServices.framework in Frameworks */,
 				8A08EC6227EBDCA400E119C7 /* iAd.framework in Frameworks */,
 				43BE580E278BABCF00491291 /* RustMozillaAppServices.framework in Frameworks */,
@@ -8840,6 +8844,8 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				9CD0E23329E615B400E27F27 /* OpenAIClient */,
+				9C17AA6629E600E20076423C /* SummarizeFeature */,
 				962C6C39297054A700354BE8 /* Package.swift */,
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
 				962C6C3B297054EC00354BE8 /* Sources */,
@@ -9607,6 +9613,7 @@
 				5A70EF0D295DFCCF00790249 /* Common */,
 				5A37861829A2C337006B3A34 /* Sentry */,
 				5A06135929D6052E008F3D38 /* TabDataStore */,
+				9C17AA6729E600F80076423C /* SummarizeFeature */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -16950,6 +16957,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
+		};
+		9C17AA6729E600F80076423C /* SummarizeFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SummarizeFeature;
 		};
 		D433852B27ABC8150069DD33 /* MappaMundi */ = {
 			isa = XCSwiftPackageProductDependency;

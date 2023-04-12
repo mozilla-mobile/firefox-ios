@@ -7,6 +7,7 @@ import Storage
 import Telemetry
 import Glean
 import Common
+import SummarizeFeature
 
 protocol OnViewDismissable: AnyObject {
     var onViewDismissed: (() -> Void)? { get set }
@@ -31,7 +32,17 @@ class DismissableNavigationViewController: UINavigationController, OnViewDismiss
 
 extension BrowserViewController: URLBarDelegate {
     func showSummarizeOverlay(for url: URL?) {
+        guard let url = url else { return }
+                
+        let summarizeViewController = SummarizeViewController(url: url)
         
+        let navigationController = ThemedDefaultNavigationController(rootViewController: summarizeViewController)
+        navigationController.presentationController?.delegate = summarizeViewController
+        if #available(iOS 15.0, *) {
+            navigationController.sheetPresentationController?.detents = [.medium()]
+        }
+
+        self.present(navigationController, animated: true, completion: nil)
     }
     
     func showTabTray(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
