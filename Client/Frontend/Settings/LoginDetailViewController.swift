@@ -161,7 +161,6 @@ extension LoginDetailViewController: UITableViewDataSource {
             guard let breach = breach else { return breachCell }
             breachCell.isHidden = false
             let breachDetailView: BreachAlertsDetailView = .build()
-            breachDetailView.applyTheme(theme: themeManager.currentTheme)
             breachCell.contentView.addSubview(breachDetailView)
 
             NSLayoutConstraint.activate([
@@ -175,6 +174,7 @@ extension LoginDetailViewController: UITableViewDataSource {
                                                          constant: -UX.horizontalMargin)
             ])
             breachDetailView.setup(breach)
+            breachDetailView.applyTheme(theme: themeManager.currentTheme)
 
             breachDetailView.learnMoreButton.addTarget(self, action: #selector(LoginDetailViewController.didTapBreachLearnMore), for: .touchUpInside)
             let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(LoginDetailViewController
