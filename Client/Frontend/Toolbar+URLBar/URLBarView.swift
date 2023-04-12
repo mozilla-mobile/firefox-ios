@@ -878,7 +878,6 @@ extension URLBarView: PrivateModeUI {
         progressBar.setGradientColors(startColor: UIColor.legacyTheme.loadingBar.start(isPrivate),
                                       middleColor: UIColor.legacyTheme.loadingBar.middle(isPrivate),
                                       endColor: UIColor.legacyTheme.loadingBar.end(isPrivate))
-        ToolbarTextField.isPrivate = isPrivate
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)
 
         applyTheme()
