@@ -587,7 +587,9 @@ extension BookmarksPanel {
     }
     
     func importBookmarksActionHandler(_ action: UIAlertAction) {
-        viewModel.bookmarkImportSelected(in: self)
+        viewModel.bookmarkImportSelected(in: self) { [weak self] in
+            self?.reloadData()
+        }
     }
 
     func exportBookmarksActionHandler(_ action: UIAlertAction) {

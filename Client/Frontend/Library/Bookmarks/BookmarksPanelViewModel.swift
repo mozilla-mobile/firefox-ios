@@ -24,7 +24,8 @@ class BookmarksPanelViewModel: NSObject {
     private var flashLastRowOnNextReload = false
     private let bookmarksExchange: BookmarksExchangable
     private var documentPickerPresentingViewController: UIViewController?
-
+    private var onImportDoneHandler: (() -> Void)?
+    
     /// Error case at the moment is setting data to nil and showing nothing
     private func setErrorCase() {
         self.bookmarkFolder = nil
@@ -32,11 +33,13 @@ class BookmarksPanelViewModel: NSObject {
     }
 
     /// By default our root folder is the mobile folder. Desktop folders are shown in the local desktop folders.
-    init(profile: Profile,
-         bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID) {
+    init(
+        profile: Profile,
+        bookmarkFolderGUID: GUID = BookmarkRoots.MobileFolderGUID
+    ) {
         self.profile = profile
         self.bookmarkFolderGUID = bookmarkFolderGUID
-        self.bookmarksExchange = BookmarksExchange()
+        self.bookmarksExchange = BookmarksExchange(profile: profile)
     }
 
     var shouldFlashRow: Bool {
@@ -70,8 +73,9 @@ class BookmarksPanelViewModel: NSObject {
         try await bookmarksExchange.export(bookmarks: bookmarks, in: viewController)
     }
     
-    func bookmarkImportSelected(in viewController: UIViewController) {
+    func bookmarkImportSelected(in viewController: UIViewController, onDone: @escaping () -> Void) {
         self.documentPickerPresentingViewController = viewController
+        self.onImportDoneHandler = onDone
         let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.html"], in: .open)
         documentPicker.delegate = self
         viewController.present(documentPicker, animated: true)
@@ -174,6 +178,7 @@ extension BookmarksPanelViewModel: UIDocumentPickerDelegate {
         
         Task {
             try await bookmarksExchange.import(from: firstHtmlUrl, in: viewController)
+            onImportDoneHandler?()
         }
     }
 }

@@ -4,6 +4,7 @@
 
 import Foundation
 import Core
+import Shared
 
 protocol BookmarksExchangable {
     func export(bookmarks: [BookmarkItem], in viewController: UIViewController) async throws
@@ -11,6 +12,18 @@ protocol BookmarksExchangable {
 }
 
 class BookmarksExchange: BookmarksExchangable {
+    private let profile: Profile
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter
+    }()
+    
+    init(profile: Profile) {
+        self.profile = profile
+    }
+    
     @MainActor
     func export(bookmarks: [BookmarkItem], in viewController: UIViewController) async throws {
         guard let view = viewController.view else { return }
@@ -55,25 +68,11 @@ class BookmarksExchange: BookmarksExchangable {
         activityIndicator.startAnimating()
         
         let toast = SimpleToast()
-        
-        toast.onShown = { [weak viewController] in
-            Task { [weak viewController] in
+
+//        toast.onShown = { [weak viewController] in
+//
+//        }
                 
-                let html = try String(contentsOf: url)
-                let parser = try BookmarkParser(html: html)
-                
-                let bookmarks = try await parser.parseBookmarks()
-                
-                // todo: import into database
-                
-                debugPrint("Importing bookmarks:", bookmarks)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                    toast.dismiss()
-                }
-            }
-        }
-        
         toast.showAlertWithText(
             "Importing Bookmarks…",
             image: .view(activityIndicator),
@@ -81,5 +80,70 @@ class BookmarksExchange: BookmarksExchangable {
             dismissAfter: nil,
             bottomInset: view.layoutMargins.bottom
         )
+
+        let html = try String(contentsOf: url)
+        let parser = try BookmarkParser(html: html)
+        let bookmarks = try await parser.parseBookmarks()
+        
+        try await self.importBookmarks(bookmarks, viewController: viewController, toast: toast)
+    }
+    
+    private func importBookmarks(
+        _ bookmarks: [Core.BookmarkItem],
+        viewController: UIViewController,
+        toast: SimpleToast
+    ) async throws {        
+        /// create folder with date by import
+        let importGuid = try await createFolder(parentGUID: "mobile______", title: "Imported at \(dateFormatter.string(from: Date()))")
+        
+        try await processBookmarks(bookmarks, parentGUID: importGuid)
+        
+        DispatchQueue.main.async {
+            toast.dismiss()
+        }
+    }
+    
+    private func processBookmarks(_ bookmarks: [Core.BookmarkItem], parentGUID: GUID) async throws {
+        for bookmark in bookmarks {
+            switch bookmark {
+            case let .folder(title, children, _):
+                let subParentGuid = try await createFolder(parentGUID: parentGUID, title: title)
+                try await processBookmarks(children, parentGUID: subParentGuid)
+            case let .bookmark(title, url, _):
+                try await createBookmark(parentGUID: parentGUID, url: url, title: title)
+            }
+        }
+    }
+}
+
+private extension BookmarksExchange {
+    @discardableResult
+    func createFolder(parentGUID: GUID, title: String, position: UInt32? = nil) async throws -> GUID {
+        try await withCheckedThrowingContinuation { continuation in
+            profile.places.createFolder(parentGUID: parentGUID, title: title, position: position)
+                .uponQueue(.main) { result in
+                    switch result {
+                    case let .success(guid):
+                        continuation.resume(returning: guid)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+        }
+    }
+    
+    @discardableResult
+    func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) async throws -> GUID {
+        try await withCheckedThrowingContinuation { continuation in
+            profile.places.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
+                .uponQueue(.main) { result in
+                    switch result {
+                    case let .success(guid):
+                        continuation.resume(returning: guid)
+                    case let .failure(error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+        }
     }
 }
