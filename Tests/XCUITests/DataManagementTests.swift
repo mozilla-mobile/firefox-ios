@@ -7,7 +7,6 @@ import XCTest
 class DataManagementTests: BaseTestCase {
     // Testing the search bar, and clear website data option
     func testWebSiteDataOptions() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(WebsiteDataSettings)

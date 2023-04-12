@@ -45,7 +45,6 @@ class BookmarkingTests: BaseTestCase {
 
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
@@ -100,7 +99,6 @@ class BookmarkingTests: BaseTestCase {
 
     func testAccessBookmarksFromContextMenu() {
         // Add a bookmark
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitUntilPageLoad()

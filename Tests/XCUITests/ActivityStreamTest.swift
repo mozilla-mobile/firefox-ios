@@ -125,7 +125,6 @@ class ActivityStreamTest: BaseTestCase {
 
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
         let topSitesCells = app.collectionViews.cells["TopSitesCell"]
