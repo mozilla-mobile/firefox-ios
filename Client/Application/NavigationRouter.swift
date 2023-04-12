@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Glean
 
-struct FxALaunchParams {
+struct FxALaunchParams: Equatable {
     let entrypoint: FxAEntrypoint
     var query: [String: String]
 }
