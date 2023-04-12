@@ -5,7 +5,7 @@
 import UIKit
 import Shared
 
-class BreachAlertsDetailView: UIView {
+class BreachAlertsDetailView: UIView, ThemeApplicable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
     }
@@ -195,10 +195,8 @@ class BreachAlertsDetailView: UIView {
             }
         }
     }
-}
 
-// MARK: - ThemeApplicable
-extension BreachAlertsDetailView: ThemeApplicable {
+    // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2
         titleIcon.tintColor = theme.colors.iconWarning
