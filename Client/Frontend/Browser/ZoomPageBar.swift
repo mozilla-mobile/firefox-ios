@@ -67,7 +67,6 @@ class ZoomPageBar: UIView {
         label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
                                                                    size: UX.fontSize,
                                                                    weight: .semibold)
-//        label.accessibilityLabel = .AppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel
         label.isUserInteractionEnabled = true
         label.adjustsFontForContentSizeCategory = true
