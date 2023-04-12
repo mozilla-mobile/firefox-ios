@@ -10,7 +10,12 @@ public struct WindowData: Codable {
     public let activeTabId: UUID
     public let tabData: [TabData]
 
-    public init(id: UUID, isPrimary: Bool, activeTabId: UUID, tabData: [TabData]) {
+    /// Providing default values for id and isPrimary for now
+    /// This will change when multi-window support is added
+    public init(id: UUID = UUID(),
+                isPrimary: Bool = true,
+                activeTabId: UUID,
+                tabData: [TabData]) {
         self.id = id
         self.isPrimary = isPrimary
         self.activeTabId = activeTabId

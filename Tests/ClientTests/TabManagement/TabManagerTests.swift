@@ -45,6 +45,7 @@ class TabManagerTests: XCTestCase {
         subject.restoreTabs()
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(subject.tabs.count, 4)
+        XCTAssertEqual(mockTabStore.fetchTabDataCalledCount, 1)
     }
 
     func testRestoreTabsForced() async throws {
@@ -58,6 +59,32 @@ class TabManagerTests: XCTestCase {
         subject.restoreTabs(true)
         try await Task.sleep(nanoseconds: sleepTime)
         XCTAssertEqual(subject.tabs.count, 3)
+        XCTAssertEqual(mockTabStore.fetchTabDataCalledCount, 1)
+    }
+
+    // MARK: - Save tabs
+
+    func testPreserveTabsWithNoTabs() async throws {
+        subject.preserveTabs()
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
+        XCTAssertEqual(subject.tabs.count, 0)
+    }
+
+    func testPreserveTabsWithOneTab() async throws {
+        addTabs(count: 1)
+        subject.preserveTabs()
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
+        XCTAssertEqual(subject.tabs.count, 1)
+    }
+
+    func testPreserveTabsWithManyTabs() async throws {
+        addTabs(count: 5)
+        subject.preserveTabs()
+        try await Task.sleep(nanoseconds: sleepTime)
+        XCTAssertEqual(mockTabStore.saveTabDataCalledCount, 1)
+        XCTAssertEqual(subject.tabs.count, 5)
     }
 
     // MARK: - Helper methods

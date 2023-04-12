@@ -48,7 +48,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     // MARK: - Variables
     private let tabEventHandlers: [TabEventHandler]
     private let store: LegacyTabManagerStore
-    private let profile: Profile
+    let profile: Profile
     var isRestoringTabs = false
     var tabs = [Tab]()
     private var _selectedIndex = -1
@@ -248,7 +248,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
             _selectedIndex = -1
         }
 
-        store.preserveTabs(tabs, selectedTab: selectedTab)
+        preserveTabs()
 
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
@@ -308,7 +308,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         }
     }
 
-    private func saveTabs(toProfile profile: Profile, _ tabs: [Tab]) {
+    func saveTabs(toProfile profile: Profile, _ tabs: [Tab]) {
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = tabs.compactMap( Tab.toRemoteTab )
 
