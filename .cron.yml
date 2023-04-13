@@ -15,4 +15,4 @@ jobs:
           type: decision-task
           target-tasks-method: tab_performance_test
           treeherder-symbol: tab-performance-test
-      when: []  # Manual trigger only
+      when: [{weekday: 'Monday', hour: 1, minute: 0}]
