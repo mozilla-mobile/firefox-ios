@@ -343,6 +343,9 @@
 /* When a user taps and holds on an item from the Recently Visited section, this label will appear indicating the option to remove that item. */
 "FirefoxHome.RecentHistory.Remove" = "Kkes";
 
+/* Label showing how many pages there is in a search group. %d represents a number */
+"FirefoxHomepage.Common.PagesCount.v112" = "Isebtar: %d";
+
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
 "FirefoxHomepage.ContextualMenu.Settings.v101" = "Iɣewwaren";
 
@@ -1216,6 +1219,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Tansa URL (Semselsi anadi s %s)";
 
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v112" = "Smed s wudem awurman tikarḍiwin n usmad";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Sfeḍ akk isefka n usmel Web";
 
@@ -1576,6 +1582,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "IH, awi-t-id";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Ma yella asmel ur iteddu ara akken yuɣ tanumi, sit ɣef ukadna-nni deg ufeggag n tansa, sakin sens ammesten uḥriṣ mgal aḍfaṛ i usebter-a.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Aqeṛṛu d afella!";
 
@@ -1587,6 +1596,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Ad isenɣeṣ adellel yeṭṭafaṛen daɣen ad isewḥel iberraḥen ur ṭṭafaṛen ara tunigin-ik.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ma yella asmel ur iteddu ara akken yuɣ tanumi, sit ɣef ukadna-nni deg ufeggag n tansa, sakin sens ammesten uḥriṣ mgal aḍfaṛ i usebter-a.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ma yella asmel ur iteddu ara akken yuɣ tanumi, sit ɣef ukadna-nni deg ufeggag n tansa, sakin sens ammesten uḥriṣ mgal aḍfaṛ i usebter-a.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Sireg kra n yineḍfaṛen n udellel akken ismal web ad ddun akken iwata.";
