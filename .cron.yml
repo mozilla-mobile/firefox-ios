@@ -13,6 +13,6 @@ jobs:
     - name: tab-performance-test
       job:
           type: decision-task
-          target-tasks-method: tab-performance-test
+          target-tasks-method: tab_performance_test
           treeherder-symbol: tab-performance-test
       when: []  # Manual trigger only
