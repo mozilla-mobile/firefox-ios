@@ -30,8 +30,6 @@ class ZoomPageBar: UIView, ThemeApplicable {
         static let upperZoomLimit: CGFloat = 2.0
         static let zoomInButtonInsets = UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 12)
         static let zoomOutButtonInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 0)
-        static let startCGColor = UIColor(red: 58/255, green: 57/255, blue: 68/255, alpha: 0.0).cgColor
-        static let endCGColor = UIColor(red: 58/255, green: 57/255, blue: 68/255, alpha: 0.4).cgColor
     }
 
     weak var delegate: ZoomPageBarDelegate?
