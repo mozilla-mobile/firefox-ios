@@ -596,7 +596,7 @@ class BrowserViewController: UIViewController {
         if !AppConstants.useCoordinators {
             performSurveySurfaceCheck()
         }
-        
+
         urlBar.searchEnginesDidUpdate()
     }
 
