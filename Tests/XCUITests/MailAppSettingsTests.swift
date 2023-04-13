@@ -6,7 +6,6 @@ import XCTest
 
 class MailAppSettingsTests: BaseTestCase {
     func testOpenMailAppSettings() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(OpenWithSettings)

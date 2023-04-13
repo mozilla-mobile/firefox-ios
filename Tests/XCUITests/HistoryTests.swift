@@ -133,7 +133,6 @@ class HistoryTests: BaseTestCase {
 
         // On regular mode, the closed tab is listed in "Recently Closed Tabs List"
         navigator.nowAt(NewTabScreen)
-        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -176,6 +175,7 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
         // The closed tab is *not* listed in "Recently Closed Tabs List" (FXIOS-5128)
+        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
@@ -215,7 +215,6 @@ class HistoryTests: BaseTestCase {
 
         // Long tap a recently closed item launches a context menu
         navigator.nowAt(NewTabScreen)
-        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -232,7 +231,6 @@ class HistoryTests: BaseTestCase {
 
         // Open the page on a new tab from History Recently Closed screen
         navigator.nowAt(NewTabScreen)
-        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -259,7 +257,6 @@ class HistoryTests: BaseTestCase {
 
         // Open the page on a new private tab from History Recently Closed screen
         navigator.nowAt(NewTabScreen)
-        closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
@@ -286,7 +283,6 @@ class HistoryTests: BaseTestCase {
     }
 
     func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed() {
-//        closeKeyboard()
         navigator.nowAt(NewTabScreen)
 
         // Open the two tabs in private mode

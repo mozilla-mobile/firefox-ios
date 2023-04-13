@@ -114,7 +114,6 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     private func addCustomSearchEngine() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.AddCustomSearchEngine)
@@ -129,7 +128,6 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     func testCustomEngineFromIncorrectTemplate() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(AddCustomSearchSettings)
