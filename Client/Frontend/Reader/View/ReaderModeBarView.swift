@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -138,7 +138,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         delegate?.readerModeBar(self, didSelectButton: added ? .removeFromReadingList : .addToReadingList)
     }
 
-    var unread: Bool = true {
+    var unread = true {
         didSet {
             let buttonType: ReaderModeBarButtonType = unread && added ? .markAsRead : .markAsUnread
             readStatusButton.setImage(buttonType.image, for: [])
@@ -147,7 +147,7 @@ class ReaderModeBarView: UIView, AlphaDimmable, TopBottomInterchangeable {
         }
     }
 
-    var added: Bool = false {
+    var added = false {
         didSet {
             let buttonType: ReaderModeBarButtonType = added ? .removeFromReadingList : .addToReadingList
             listStatusButton.setImage(buttonType.image, for: [])

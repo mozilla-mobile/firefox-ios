@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -26,9 +26,9 @@ enum ReaderModeState: String {
 }
 
 enum ReaderModeTheme: String {
-    case light = "light"
-    case dark = "dark"
-    case sepia = "sepia"
+    case light
+    case dark
+    case sepia
 
     static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
         let themeManager: ThemeManager = AppContainer.shared.resolve()

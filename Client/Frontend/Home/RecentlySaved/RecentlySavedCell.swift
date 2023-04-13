@@ -12,7 +12,7 @@ class RecentlySavedCell: UICollectionViewCell, ReusableCell {
     private struct UX {
         static let bookmarkTitleFontSize: CGFloat = 12
         static let containerSpacing: CGFloat = 16
-        static let heroImageSize: CGSize = CGSize(width: 126, height: 82)
+        static let heroImageSize = CGSize(width: 126, height: 82)
         static let generalSpacing: CGFloat = 8
     }
 

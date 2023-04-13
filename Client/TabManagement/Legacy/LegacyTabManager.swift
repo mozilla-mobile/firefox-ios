@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -49,14 +49,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     private let tabEventHandlers: [TabEventHandler]
     private let store: LegacyTabManagerStore
     private let profile: Profile
-    private var isRestoringTabs = false
-    private(set) var tabs = [Tab]()
+    var isRestoringTabs = false
+    var tabs = [Tab]()
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
     private let logger: Logger
 
-    var didChangedPanelSelection: Bool = true
-    var didAddNewTab: Bool = true
+    var didChangedPanelSelection = true
+    var didAddNewTab = true
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -147,7 +147,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     }
 
     // MARK: - Delegates
-    private var delegates = [WeakTabManagerDelegate]()
+    var delegates = [WeakTabManagerDelegate]()
     private let navDelegate: TabManagerNavDelegate
 
     func addDelegate(_ delegate: TabManagerDelegate) {

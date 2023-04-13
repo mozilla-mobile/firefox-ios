@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -334,8 +334,6 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testPopUpBlocker() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         // Check that it is enabled by default
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
@@ -371,8 +369,6 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testSSL() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
@@ -405,8 +401,6 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testVerifyBrowserTabMenu() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -8,8 +8,6 @@ let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -21,8 +19,6 @@ class NewTabSettingsTest: BaseTestCase {
 
     // Smoketest
     func testChangeNewTabSettingsShowBlankPage() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
@@ -56,8 +52,6 @@ class NewTabSettingsTest: BaseTestCase {
     }
 
     func testChangeNewTabSettingsShowCustomURL() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])

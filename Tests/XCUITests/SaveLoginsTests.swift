@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -223,7 +223,6 @@ class SaveLoginTest: BaseTestCase {
 
     // Smoketest
     func testCreateLoginManually() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 25)
         closeURLBar()
         navigator.goto(LoginsSettings)
         // This only appears the first time
@@ -261,8 +260,6 @@ class SaveLoginTest: BaseTestCase {
     }
 
     func closeURLBar () {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 10)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
     }

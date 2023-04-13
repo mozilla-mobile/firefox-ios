@@ -157,6 +157,11 @@ class ZoomPageBar: UIView, ThemeApplicable {
         ])
     }
 
+    func resetZoomLevel() {
+        tab.resetZoom()
+        checkPageZoomLimits()
+    }
+
     private func setupSeparator(_ separator: UIView) {
         separator.widthAnchor.constraint(equalToConstant: UX.separatorWidth).isActive = true
         separator.heightAnchor.constraint(equalTo: stepperContainer.heightAnchor,

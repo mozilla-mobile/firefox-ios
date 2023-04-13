@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import UIKit
@@ -14,13 +14,13 @@ public enum AppName: String, CustomStringConvertible {
 }
 
 public enum KVOConstants: String {
-    case loading = "loading"
-    case estimatedProgress = "estimatedProgress"
-    case URL = "URL"
-    case title = "title"
-    case canGoBack = "canGoBack"
-    case canGoForward = "canGoForward"
-    case contentSize = "contentSize"
+    case loading
+    case estimatedProgress
+    case URL
+    case title
+    case canGoBack
+    case canGoForward
+    case contentSize
 }
 
 public struct KeychainKey {
@@ -104,4 +104,8 @@ public class AppConstants {
 
     /// A hard coded flag until development on the coordinator is done
     public static let useCoordinators = false
+
+    /// A hard coded flag to enable the refactored tab data store
+    /// FXIOS-5885 This will be replaced with a nimbus flag when the feature is ready
+    public static var useNewTabDataStore = false
 }

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import Storage
@@ -52,6 +52,7 @@ class TabTrayViewModel {
 
     let profile: Profile
     let tabManager: TabManager
+    let overlayManager: OverlayModeManager
 
     // Tab Tray Views
     let tabTrayView: TabTrayViewDelegate
@@ -68,9 +69,11 @@ class TabTrayViewModel {
          profile: Profile,
          tabToFocus: Tab? = nil,
          tabManager: TabManager,
+         overlayManager: OverlayModeManager,
          segmentToFocus: TabTrayViewModel.Segment? = nil) {
         self.profile = profile
         self.tabManager = tabManager
+        self.overlayManager = overlayManager
 
         self.tabTrayView = GridTabViewController(tabManager: self.tabManager,
                                                  profile: profile,
@@ -102,6 +105,8 @@ extension TabTrayViewModel {
 
     @objc
     func didTapAddTab(_ sender: UIBarButtonItem) {
+        overlayManager.openNewTab(url: nil,
+                                  newTabSettings: NewTabAccessors.getNewTabPage(profile.prefs))
         tabTrayView.performToolbarAction(.addTab, sender: sender)
     }
 

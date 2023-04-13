@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Storage
@@ -67,7 +67,6 @@ class HistoryHighlightsViewModel {
     var historyItems = [HighlightItem]()
     private var profile: Profile
     private var isPrivate: Bool
-    private var urlBar: URLBarViewProtocol
     private var hasSentSectionEvent = false
     private var historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor
     private let dispatchQueue: DispatchQueueInterface
@@ -109,7 +108,6 @@ class HistoryHighlightsViewModel {
     // MARK: - Inits
     init(with profile: Profile,
          isPrivate: Bool,
-         urlBar: URLBarViewProtocol,
          theme: Theme,
          historyHighlightsDataAdaptor: HistoryHighlightsDataAdaptor,
          dispatchQueue: DispatchQueueInterface = DispatchQueue.main,
@@ -117,7 +115,6 @@ class HistoryHighlightsViewModel {
          wallpaperManager: WallpaperManager) {
         self.profile = profile
         self.isPrivate = isPrivate
-        self.urlBar = urlBar
         self.theme = theme
         self.dispatchQueue = dispatchQueue
         self.telemetry = telemetry
@@ -140,8 +137,6 @@ class HistoryHighlightsViewModel {
     }
 
     func switchTo(_ highlight: HighlightItem) {
-        if urlBar.inOverlayMode { urlBar.leaveOverlayMode() }
-
         onTapItem?(highlight)
         telemetry.recordEvent(category: .action,
                               method: .tap,
