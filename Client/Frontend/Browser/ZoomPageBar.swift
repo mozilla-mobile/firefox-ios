@@ -56,32 +56,35 @@ class ZoomPageBar: UIView {
 
     private let zoomOutButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.subtract), for: [])
+        button.accessibilityLabel = .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setInsets(forContentPadding: UX.zoomOutButtonInsets, imageTitlePadding: 0)
     }
 
+    private let zoomLevel: UILabel = .build { label in
+        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
+                                                                   size: UX.fontSize,
+                                                                   weight: .semibold)
+        label.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel
+        label.isUserInteractionEnabled = true
+        label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .center
+    }
+
     private let zoomInButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.add), for: [])
+        button.accessibilityLabel = .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
         button.setInsets(forContentPadding: UX.zoomInButtonInsets, imageTitlePadding: 0)
     }
 
-    private let zoomLevel: UILabel = .build { label in
-        label.font = DynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .callout,
-                                                                   size: UX.fontSize,
-                                                                   weight: .semibold)
-        label.isUserInteractionEnabled = true
-        label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .center
-    }
-
     private let closeButton: UIButton = .build { button in
         button.setImage(UIImage.templateImageNamed(ImageIdentifiers.xMark), for: [])
-        button.accessibilityLabel = .FindInPageDoneAccessibilityLabel
+        button.accessibilityLabel = .AppMenu.ZoomPageCloseAccessibilityLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.FindInPage.findInPageCloseButton
         button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
@@ -94,6 +97,7 @@ class ZoomPageBar: UIView {
 
         setupViews()
         setupLayout()
+        focusOnZoomLevel()
     }
 
     required init?(coder: NSCoder) {
@@ -119,6 +123,7 @@ class ZoomPageBar: UIView {
         [zoomOutButton, leftSeparator, zoomLevel, rightSeparator, zoomInButton].forEach {
             stepperContainer.addArrangedSubview($0)
         }
+        stepperContainer.accessibilityElements = [zoomOutButton, zoomLevel, zoomInButton]
 
         addSubviews(stepperContainer, closeButton)
     }
@@ -164,6 +169,8 @@ class ZoomPageBar: UIView {
         zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         zoomLevel.isEnabled = tab.pageZoom == 1.0 ? false : true
         gestureRecognizer.isEnabled = !(tab.pageZoom == 1.0)
+        zoomLevel.accessibilityLabel = String(format: .AppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel,
+                                              zoomLevel.text ?? "")
     }
 
     private func enableZoomButtons() {
@@ -186,6 +193,12 @@ class ZoomPageBar: UIView {
         } else {
             stepperDefaultConstraints.forEach { $0.isActive = false }
             stepperCompactConstraints.forEach { $0.isActive = true }
+        }
+    }
+
+    private func focusOnZoomLevel() {
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: zoomLevel)
         }
     }
 
@@ -223,6 +236,9 @@ class ZoomPageBar: UIView {
     @objc
     private func didPressClose(_ sender: UIButton) {
         delegate?.zoomPageDidPressClose()
+        if UIAccessibility.isVoiceOverRunning {
+            UIAccessibility.post(notification: .layoutChanged, argument: nil)
+        }
     }
 }
 
