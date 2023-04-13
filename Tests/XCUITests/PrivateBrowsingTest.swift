@@ -46,7 +46,6 @@ class PrivateBrowsingTest: BaseTestCase {
 
     func testTabCountShowsOnlyNormalOrPrivateTabCount() {
         // Open two tabs in normal browsing and check the number of tabs open
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openNewURL(urlString: url2)
         waitUntilPageLoad()
@@ -81,7 +80,6 @@ class PrivateBrowsingTest: BaseTestCase {
 
     func testClosePrivateTabsOptionClosesPrivateTabs() {
         // Check that Close Private Tabs when closing the Private Browsing Button is off by default
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.goto(SettingsScreen)
@@ -103,8 +101,6 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         app.cells.staticTexts["Homepage"].tap()
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
 
         // Go back to private browsing and check that the tab has not been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -129,8 +125,6 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         app.cells.staticTexts["Homepage"].tap()
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         waitForNoExistence(app.cells.staticTexts["Internet for people, not profit — Mozilla. Currently selected tab."])
@@ -142,7 +136,6 @@ class PrivateBrowsingTest: BaseTestCase {
      https://bugzilla.mozilla.org/show_bug.cgi?id=1646756
      */
     func testClearIndexedDB() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         enableClosePrivateBrowsingOptionWhenLeaving()
 
@@ -164,7 +157,6 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     func testPrivateBrowserPanelView() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // If no private tabs are open, there should be a initial screen with label Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)

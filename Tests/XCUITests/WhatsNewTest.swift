@@ -6,7 +6,6 @@ import XCTest
 
 class WhatsNewTest: BaseTestCase {
     func testWhatsNew() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.OpenWhatsNewPage)

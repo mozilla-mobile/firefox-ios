@@ -185,14 +185,12 @@ class SearchTests: BaseTestCase {
     }
 
     func testDefaultSearchEngine() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         XCTAssert(app.tables.staticTexts["Google"].exists)
     }
 
     func testSearchWithFirefoxOption() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
@@ -228,7 +226,6 @@ class SearchTests: BaseTestCase {
         if iPad() {
             throw XCTSkip("iPad does not have search icon")
         } else {
-            navigator.performAction(Action.CloseURLBarOpen)
             waitForTabsButton()
 
             // Search icon is displayed.
