@@ -3033,7 +3033,7 @@ extension String {
             "Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113",
             tableName: "ZoomPageBar",
             value: "Current Zoom Level: %@",
-            comment: "Accessibility label for current zoom level in Zoom Page Bar. %@ represents the zoom level")
+            comment: "Accessibility label for current zoom level in Zoom Page Bar. The placeholder represents the zoom level")
 
         // Toolbar
         public struct Toolbar {
