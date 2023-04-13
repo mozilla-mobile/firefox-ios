@@ -336,7 +336,11 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            showHomepage(inline: false)
+            if !AppConstants.useCoordinators {
+                showHomepage(inline: false)
+            } else {
+                // FXIOS-6014 - Homepage in container
+            }
         }
     }
 
