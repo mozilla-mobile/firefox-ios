@@ -616,6 +616,8 @@ class BrowserViewController: UIViewController {
         if !AppConstants.useCoordinators {
             performSurveySurfaceCheck()
         }
+
+        urlBar.searchEnginesDidUpdate()
     }
 
     override func viewDidAppear(_ animated: Bool) {
