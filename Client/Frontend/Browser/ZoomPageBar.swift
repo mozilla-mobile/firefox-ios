@@ -10,7 +10,7 @@ protocol ZoomPageBarDelegate: AnyObject {
     func zoomPageDidPressClose()
 }
 
-class ZoomPageBar: UIView {
+class ZoomPageBar: UIView, ThemeApplicable {
     private struct UX {
         static let leadingTrailingPadding: CGFloat = 20
         static let topBottomPadding: CGFloat = 18
@@ -100,6 +100,7 @@ class ZoomPageBar: UIView {
         setupViews()
         setupLayout()
         setupGradientViewLayout()
+        setupGradient()
     }
 
     required init?(coder: NSCoder) {
@@ -108,7 +109,6 @@ class ZoomPageBar: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        setupGradient()
         remakeGradientViewHeightConstraint()
         updateStepperConstraintsBasedOnSizeClass()
     }
@@ -164,10 +164,6 @@ class ZoomPageBar: UIView {
     }
 
     private func setupGradient() {
-        gradient.frame = gradientView.bounds
-        gradient.colors = traitCollection.userInterfaceIdiom == .pad ?
-            [UX.endCGColor, UX.startCGColor] :
-            [UX.startCGColor, UX.endCGColor]
         gradient.locations = [0, 1]
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint = CGPoint(x: 0.5, y: 1)
@@ -191,6 +187,7 @@ class ZoomPageBar: UIView {
         gradientViewHeightConstraint.isActive = false
         gradientViewHeightConstraint = gradientView.heightAnchor.constraint(equalToConstant: viewPortHeight)
         gradientViewHeightConstraint.isActive = true
+        gradient.frame = gradientView.bounds
     }
 
     private func updateZoomLabel() {
@@ -257,16 +254,7 @@ class ZoomPageBar: UIView {
     private func didPressClose(_ sender: UIButton) {
         delegate?.zoomPageDidPressClose()
     }
-}
 
-extension ZoomPageBar: URLHostDelegate {
-    func hostDidSet() {
-        updateZoomLabel()
-        checkPageZoomLimits()
-    }
-}
-
-extension ZoomPageBar: ThemeApplicable {
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
         stepperContainer.backgroundColor = theme.colors.layer5
@@ -280,5 +268,16 @@ extension ZoomPageBar: ThemeApplicable {
         zoomInButton.tintColor = theme.colors.iconPrimary
         zoomOutButton.tintColor = theme.colors.iconPrimary
         closeButton.tintColor = theme.colors.iconPrimary
+
+        gradient.colors = traitCollection.userInterfaceIdiom == .pad ?
+        theme.colors.layerGradientOverlay.cgColors.reversed() :
+        theme.colors.layerGradientOverlay.cgColors
+    }
+}
+
+extension ZoomPageBar: URLHostDelegate {
+    func hostDidSet() {
+        updateZoomLabel()
+        checkPageZoomLimits()
     }
 }
