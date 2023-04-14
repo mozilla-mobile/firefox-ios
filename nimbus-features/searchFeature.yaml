@@ -15,7 +15,7 @@ features:
             search-highlights: false
             position:
               is-position-feature-enabled: true
-              is-bottom: true
+              is-bottom: false
       - channel: developer
         value:
           awesome-bar:
