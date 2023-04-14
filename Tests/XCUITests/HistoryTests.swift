@@ -175,7 +175,7 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
         // The closed tab is *not* listed in "Recently Closed Tabs List" (FXIOS-5128)
-        closeKeyboard()
+        navigator.goto(HomePanelsScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
@@ -201,7 +201,6 @@ class HistoryTests: BaseTestCase {
         app.alerts.buttons["OK"].tap()
 
         // The closed tab is *not* listed in "Recently Closed Tabs List"
-        navigator.goto(HomePanelsScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
