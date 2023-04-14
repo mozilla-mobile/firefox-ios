@@ -123,6 +123,11 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         return started
     }
 
+    var shouldPresentUndoToastOnHomepage: Bool {
+        guard !isPrivate else { return false }
+        return tabManager.normalTabs.count == 1
+    }
+
     func getRegularOrderedTabs() -> [Tab]? {
         // Get current order
         guard let tabDisplayOrderDecoded = TabDisplayOrder.decode() else { return nil }

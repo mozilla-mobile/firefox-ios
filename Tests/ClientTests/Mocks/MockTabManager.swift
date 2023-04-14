@@ -9,6 +9,7 @@ import WebKit
 
 class MockTabManager: TabManager {
     var selectedTab: Tab?
+    var backupDeletedTab: (Tab, Int?)?
 
     var nextRecentlyAccessedNormalTabs = [Tab]()
 
@@ -66,6 +67,8 @@ class MockTabManager: TabManager {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?) {}
 
     func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {}
+
+    func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {}
 
     func removeTab(_ tab: Tab, completion: (() -> Void)?) {}
 

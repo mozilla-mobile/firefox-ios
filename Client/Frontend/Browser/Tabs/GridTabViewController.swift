@@ -106,11 +106,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         return tabLayoutDelegate.numberOfColumns
     }
 
-    var shouldPresentUndoToastOnHomepage: Bool {
-        guard !tabDisplayManager.isPrivate else { return false }
-        return tabManager.normalTabs.count == 1
-    }
-
     // MARK: - Inits
     init(tabManager: TabManager,
          profile: Profile,
@@ -402,13 +397,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.closeActionPerformed(forCell: cell)
 
-        guard !shouldPresentUndoToastOnHomepage else {
+        guard !tabDisplayManager.shouldPresentUndoToastOnHomepage else {
             // Show undo Toast on homepage
             handleUndoToastForLastTab()
             return
         }
 
-        buildUndoToast(toastType: .singleTab) { undoButtonPressed in
+        presentUndoToast(toastType: .singleTab) { undoButtonPressed in
             if undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab {
                 self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
                 NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
@@ -435,7 +430,8 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         tabManager.backupDeletedTab = (tab, index)
     }
 
-    private func buildUndoToast(toastType: UndoToastType, completion: @escaping (Bool) -> Void) {
+    private func presentUndoToast(toastType: UndoToastType,
+                                  completion: @escaping (Bool) -> Void) {
         let viewModel = ButtonToastViewModel(
             labelText: toastType.title,
             buttonText: toastType.buttonText)
@@ -955,7 +951,8 @@ extension GridTabViewController: InactiveTabsCFRProtocol {
     }
 
     func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void) {
-        buildUndoToast(toastType: .inactiveTabs(count: tabsCount), completion: completion)
+        presentUndoToast(toastType: .inactiveTabs(count: tabsCount),
+                         completion: completion)
     }
 
     private func prepareJumpBackInContextualHint(on title: UILabel) {
