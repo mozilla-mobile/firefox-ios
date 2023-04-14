@@ -52,7 +52,10 @@ class UserScriptManager: FeatureFlaggable {
                     contentsOfFile: autofillScriptCompatPath,
                     encoding: String.Encoding.utf8.rawValue) as String {
                 let wrappedSource = "(function() { const APP_ID_TOKEN = '\(UserScriptManager.appIdToken)'; \(source) })()"
-                let userScript = WKUserScript.createInDefaultContentWorld(source: wrappedSource, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
+                let userScript = WKUserScript.createInDefaultContentWorld(
+                    source: wrappedSource,
+                    injectionTime: injectionTime,
+                    forMainFrameOnly: mainFrameOnly)
                 compiledUserScripts[autofillName] = userScript
             }
 
