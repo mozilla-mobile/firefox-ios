@@ -88,7 +88,7 @@ class TabManagerImplementation: LegacyTabManager {
     // MARK: - Save tabs
 
     override func preserveTabs() {
-        /// For now we want to continue writing to both data stores so that we can revert to the old system if needed
+        // For now we want to continue writing to both data stores so that we can revert to the old system if needed
         super.preserveTabs()
         guard shouldUseNewTabStore() else {
             return
