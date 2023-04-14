@@ -95,7 +95,7 @@ class TabManagerImplementation: LegacyTabManager {
         }
 
         Task {
-            /// This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
+            // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
             let windowData = WindowData(activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
