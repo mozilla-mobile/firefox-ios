@@ -107,7 +107,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     var shouldPresentUndoToastOnHomepage: Bool {
-        guard tabDisplayManager.isPrivate else { return false }
+        guard !tabDisplayManager.isPrivate else { return false }
         return tabManager.normalTabs.count == 1
     }
 
@@ -402,7 +402,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.closeActionPerformed(forCell: cell)
 
-        guard shouldPresentUndoToastOnHomepage else {
+        guard !shouldPresentUndoToastOnHomepage else {
             // Show undo Toast on homepage
             handleUndoToastForLastTab()
             return
