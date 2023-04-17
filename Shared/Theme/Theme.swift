@@ -51,6 +51,7 @@ public protocol ThemeColourPalette {
     var layer5Hover: UIColor { get }
     var layerScrim: UIColor { get }
     var layerGradient: Gradient { get }
+    var layerGradientOverlay: Gradient { get }
     var layerAccentNonOpaque: UIColor { get }
     var layerAccentPrivate: UIColor { get }
     var layerAccentPrivateNonOpaque: UIColor { get }

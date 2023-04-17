@@ -10,7 +10,7 @@ protocol ZoomPageBarDelegate: AnyObject {
     func zoomPageDidPressClose()
 }
 
-class ZoomPageBar: UIView {
+class ZoomPageBar: UIView, ThemeApplicable {
     private struct UX {
         static let leadingTrailingPadding: CGFloat = 20
         static let topBottomPadding: CGFloat = 18
@@ -36,11 +36,14 @@ class ZoomPageBar: UIView {
     private let gestureRecognizer = UITapGestureRecognizer()
     private var stepperCompactConstraints = [NSLayoutConstraint]()
     private var stepperDefaultConstraints = [NSLayoutConstraint]()
+    private var gradientViewHeightConstraint = NSLayoutConstraint()
 
     private let tab: Tab
 
     private let leftSeparator: UIView = .build()
     private let rightSeparator: UIView = .build()
+    private let gradientView: UIView = .build()
+    private let gradient = CAGradientLayer()
 
     private let stepperContainer: UIStackView = .build { view in
         view.axis = .horizontal
@@ -97,6 +100,8 @@ class ZoomPageBar: UIView {
 
         setupViews()
         setupLayout()
+        setupGradientViewLayout()
+        setupGradient()
         focusOnZoomLevel()
     }
 
@@ -106,6 +111,7 @@ class ZoomPageBar: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        remakeGradientViewHeightConstraint()
         updateStepperConstraintsBasedOnSizeClass()
     }
 
@@ -125,7 +131,7 @@ class ZoomPageBar: UIView {
         }
         stepperContainer.accessibilityElements = [zoomOutButton, zoomLevel, zoomInButton]
 
-        addSubviews(stepperContainer, closeButton)
+        addSubviews(gradientView, stepperContainer, closeButton)
     }
 
     private func setupLayout() {
@@ -163,6 +169,33 @@ class ZoomPageBar: UIView {
         separator.widthAnchor.constraint(equalToConstant: UX.separatorWidth).isActive = true
         separator.heightAnchor.constraint(equalTo: stepperContainer.heightAnchor,
                                           multiplier: UX.separatorHeightMultiplier).isActive = true
+    }
+
+    private func setupGradient() {
+        gradient.locations = [0, 1]
+        gradient.startPoint = CGPoint(x: 0.5, y: 0)
+        gradient.endPoint = CGPoint(x: 0.5, y: 1)
+        gradientView.layer.addSublayer(gradient)
+    }
+
+    private func setupGradientViewLayout() {
+        gradientView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        gradientView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        if traitCollection.userInterfaceIdiom == .pad {
+            gradientView.topAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        } else {
+            gradientView.bottomAnchor.constraint(equalTo: topAnchor).isActive = true
+        }
+    }
+
+    private func remakeGradientViewHeightConstraint() {
+        let viewPortHeight: CGFloat = (UIScreen.main.bounds.height -
+                                       UIConstants.TopToolbarHeightMax -
+                                       UIConstants.ZoomPageBarHeight) * 0.2
+        gradientViewHeightConstraint.isActive = false
+        gradientViewHeightConstraint = gradientView.heightAnchor.constraint(equalToConstant: viewPortHeight)
+        gradientViewHeightConstraint.isActive = true
+        gradient.frame = gradientView.bounds
     }
 
     private func updateZoomLabel() {
@@ -240,16 +273,7 @@ class ZoomPageBar: UIView {
             UIAccessibility.post(notification: .layoutChanged, argument: nil)
         }
     }
-}
 
-extension ZoomPageBar: URLHostDelegate {
-    func hostDidSet() {
-        updateZoomLabel()
-        checkPageZoomLimits()
-    }
-}
-
-extension ZoomPageBar: ThemeApplicable {
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
         stepperContainer.backgroundColor = theme.colors.layer5
@@ -263,5 +287,16 @@ extension ZoomPageBar: ThemeApplicable {
         zoomInButton.tintColor = theme.colors.iconPrimary
         zoomOutButton.tintColor = theme.colors.iconPrimary
         closeButton.tintColor = theme.colors.iconPrimary
+
+        gradient.colors = traitCollection.userInterfaceIdiom == .pad ?
+        theme.colors.layerGradientOverlay.cgColors.reversed() :
+        theme.colors.layerGradientOverlay.cgColors
+    }
+}
+
+extension ZoomPageBar: URLHostDelegate {
+    func hostDidSet() {
+        updateZoomLabel()
+        checkPageZoomLimits()
     }
 }
