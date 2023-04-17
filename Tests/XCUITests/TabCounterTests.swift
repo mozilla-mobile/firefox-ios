@@ -7,7 +7,6 @@ import XCTest
 class TabCounterTests: BaseTestCase {
     func testTabIncrement() throws {
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
         var tabsOpen = app.buttons["Show Tabs"].value
@@ -32,8 +31,6 @@ class TabCounterTests: BaseTestCase {
 
     func testTabDecrement() throws {
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
         var tabsOpen = app.buttons["Show Tabs"].value
@@ -63,8 +60,6 @@ class TabCounterTests: BaseTestCase {
 
         app.otherElements["Tabs Tray"].cells.element(boundBy: 0).tap()
         navigator.nowAt(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
 
         tabsOpen = app.buttons["Show Tabs"].value

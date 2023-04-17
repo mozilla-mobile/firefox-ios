@@ -25,10 +25,6 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReadingList() {
-        XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        }
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // Navigate to reading list
         navigator.goto(BrowserTabMenu)
@@ -50,8 +46,6 @@ class ReaderViewTest: BaseTestCase {
     }
 
     func testAddToReadingListPrivateMode() {
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)

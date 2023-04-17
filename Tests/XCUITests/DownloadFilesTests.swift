@@ -45,8 +45,6 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testDownloadFilesAppMenuFirstTime() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"], timeout: TIMEOUT)
@@ -180,11 +178,10 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testRemoveUserDataRemovesDownloadedFiles() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
         navigator.goto(ClearPrivateDataSettings)
-        XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correclty by default")
+        XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correctly by default")
 
         // Change the value of the setting to on (make an action for this)
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
@@ -206,8 +203,6 @@ class DownloadFilesTests: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
 
         navigator.goto(HomePanelsScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Downloads)
         // Check there is still one item

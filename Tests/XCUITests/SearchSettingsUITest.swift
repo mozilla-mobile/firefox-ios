@@ -10,7 +10,6 @@ let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?
 
 class SearchSettingsUITests: BaseTestCase {
     func testDefaultSearchEngine() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Check the default browser
@@ -25,7 +24,6 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     func testCustomSearchEngineIsEditable() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Add a custom search engine
@@ -56,7 +54,6 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     func testCustomSearchEngineAsDefaultIsNotEditable() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Edit is disabled
@@ -76,7 +73,6 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     func testNavigateToSearchPickerTurnsOffEditing() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Edit is disabled
@@ -102,7 +98,6 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     func testDeletingLastCustomEngineExitsEditing() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
         // Edit is disabled

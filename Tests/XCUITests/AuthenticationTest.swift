@@ -9,7 +9,6 @@ let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
 class AuthenticationTest: BaseTestCase {
     func testBasicHTTPAuthenticationPromptVisible() {
         waitForExistence(app.textFields["url"], timeout: 5)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(testBasicHTTPAuthURL)
         waitForExistence(app.staticTexts["Authentication required"], timeout: 100)

@@ -46,7 +46,6 @@ class ClipBoardTests: BaseTestCase {
 
     // This test is disabled in release, but can still run on master
     func testClipboard() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(url)
         waitUntilPageLoad()

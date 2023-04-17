@@ -40,6 +40,7 @@ class DomainAutocompleteTest: BaseTestCase {
         } else {
             navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         }
+        navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("moz")
 
         waitForValueContains(app.textFields["address"], value: website["value"]!)
@@ -53,6 +54,7 @@ class DomainAutocompleteTest: BaseTestCase {
         let value2 = app.textFields["address"].value
         XCTAssertEqual(value2 as? String, website["value"]!, "Wrong autocompletion")
     }
+
     // Test that deleting characters works correctly with autocomplete
     func test3AutocompleteDeletingChars() {
         // The autocomplete does not display the history item from the DB. Workaroud is to manually visit "mozilla.org".
@@ -62,6 +64,7 @@ class DomainAutocompleteTest: BaseTestCase {
         navigator.goto(TabTray)
         navigator.goto(CloseTabMenu)
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        navigator.goto(URLBarOpen)
         waitForExistence(app.textFields["address"])
         app.textFields["address"].typeText("moz")
 
@@ -79,6 +82,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Delete the entire string and verify that the home panels are shown again.
     func test6DeleteEntireString() {
+        navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
         waitForExistence(app.buttons["Clear text"])
         app.buttons["Clear text"].tap()
@@ -146,8 +150,10 @@ class DomainAutocompleteTest: BaseTestCase {
         let value7 = app.textFields["address"].value
         XCTAssertEqual(value7 as? String, "login", "Wrong autocompletion")
     }
+
     // Test default domains.
     func test2DefaultDomains() {
+        navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("a")
         waitForValueContains(app.textFields["address"], value: ".com")
         let value = app.textFields["address"].value
@@ -165,8 +171,10 @@ class DomainAutocompleteTest: BaseTestCase {
         let value3 = app.textFields["address"].value
         XCTAssertEqual(value3 as? String, "ancestry.com", "Wrong autocompletion")
     }
+
     // Test mixed case autocompletion.
     func testMixedCaseAutocompletion() {
+        navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("MoZ")
         waitForValueContains(app.textFields["address"], value: ".org")
         let value = app.textFields["address"].value
