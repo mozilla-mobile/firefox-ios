@@ -275,6 +275,7 @@ public struct AccessibilityIdentifiers {
     struct ZoomPageBar {
         static let zoomPageZoomInButton = "ZoomPage.zoomInButton"
         static let zoomPageZoomOutButton = "ZoomPage.zoomOutButton"
+        static let zoomPageZoomLevelLabel = "ZoomPage.zoomLevelLabel"
     }
 
     struct FindInPage {

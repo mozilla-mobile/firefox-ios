@@ -3007,11 +3007,33 @@ extension String {
             tableName: nil,
             value: "Removed from Reading List",
             comment: "Toast displayed to confirm to the user that his reading list item was correctly removed.")
+
+        // ZoomPageBar
         public static let ZoomPageTitle = MZLocalizedString(
             "Menu.ZoomPage.Title.v113",
-            tableName: nil,
+            tableName: "ZoomPageBar",
             value: "Zoom (%@)",
             comment: "Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent.")
+        public static let ZoomPageCloseAccessibilityLabel = MZLocalizedString(
+            "Menu.ZoomPage.Close.AccessibilityLabel.v113",
+            tableName: "ZoomPageBar",
+            value: "Close Zoom Panel",
+            comment: "Accessibility label for closing the zoom panel in Zoom Page Bar")
+        public static let ZoomPageIncreaseZoomAccessibilityLabel = MZLocalizedString(
+            "Menu.ZoomPage.IncreaseZoom.AccessibilityLabel.v113",
+            tableName: "ZoomPageBar",
+            value: "Increase Zoom Level",
+            comment: "Accessibility label for increasing the zoom level in Zoom Page Bar")
+        public static let ZoomPageDecreaseZoomAccessibilityLabel = MZLocalizedString(
+            "Menu.ZoomPage.DecreaseZoom.AccessibilityLabel.v113",
+            tableName: "ZoomPageBar",
+            value: "Decrease Zoom Level",
+            comment: "Accessibility label for decreasing the zoom level in Zoom Page Bar")
+        public static let ZoomPageCurrentZoomLevelAccessibilityLabel = MZLocalizedString(
+            "Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113",
+            tableName: "ZoomPageBar",
+            value: "Current Zoom Level: %@",
+            comment: "Accessibility label for current zoom level in Zoom Page Bar. The placeholder represents the zoom level")
 
         // Toolbar
         public struct Toolbar {
