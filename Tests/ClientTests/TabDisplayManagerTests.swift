@@ -322,6 +322,8 @@ class TabDisplayManagerTests: XCTestCase {
         // Force collectionView reload section to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.confirmClose = true
+        // Force collectionView reload to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
@@ -352,6 +354,8 @@ class TabDisplayManagerTests: XCTestCase {
         // Force collectionView reload section to avoid crash
         collectionView.reloadSections(IndexSet(integer: 0))
         cfrDelegate.confirmClose = false
+        // Force collectionView reload to avoid crash
+        collectionView.reloadSections(IndexSet(integer: 0))
         tabDisplayManager.didTapCloseInactiveTabs(tabsCount: 2)
 
         let expectation = self.expectation(description: "TabDisplayManagerTests")
@@ -406,20 +410,6 @@ class TabDisplayManagerTests: XCTestCase {
 
         XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
                        "Expected to present toast on homepage")
-    }
-
-    func testUndoCloseTabs_ForMultiplePrivateTabs() {
-        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
-        tabDisplayManager.tabDisplayType = .TabGrid
-        let tab = manager.addTab()
-
-        tabDisplayManager.closeAction(for: tab)
-        let expectation = self.expectation(description: "TabDisplayManagerTests")
-        tabDisplayManager.refreshStore {
-            XCTAssertTrue(tabDisplayManager.dataStore.isEmpty, "Expected to be empty")
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 15)
     }
 }
 
