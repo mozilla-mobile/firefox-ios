@@ -287,10 +287,6 @@ class BookmarkingTests: BaseTestCase {
 
     func testDesktopFoldersArePresent() {
         // Verify that there are only 1 cell (desktop bookmark folder)
-        XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        }
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(LibraryPanel_Bookmarks)

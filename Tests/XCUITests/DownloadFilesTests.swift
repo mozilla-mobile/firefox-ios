@@ -177,11 +177,11 @@ class DownloadFilesTests: BaseTestCase {
         checkTheNumberOfDownloadedItems(items: 2)
     }
 
-        func testRemoveUserDataRemovesDownloadedFiles() {
+    func testRemoveUserDataRemovesDownloadedFiles() {
         navigator.nowAt(NewTabScreen)
         // The option to remove downloaded files from clear private data is off by default
         navigator.goto(ClearPrivateDataSettings)
-        XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correclty by default")
+        XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correctly by default")
 
         // Change the value of the setting to on (make an action for this)
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
@@ -195,6 +195,8 @@ class DownloadFilesTests: BaseTestCase {
 
         // Remove private data once the switch to remove downloaded files is enabled
         navigator.goto(NewTabScreen)
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()
