@@ -756,7 +756,12 @@ extension HomepageViewController {
 
         // The scrollview content offset is automatically adjusted to account for the status bar.
         // We want to start showing the status bar background as soon as the user scrolls.
-        var offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight
+        var offset: CGFloat
+        if AppConstants.useCoordinators {
+            offset = scrollView.contentOffset.y / statusBarHeight
+        } else {
+            offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight
+        }
 
         if offset > 1 {
             offset = 1

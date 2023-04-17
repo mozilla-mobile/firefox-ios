@@ -107,9 +107,7 @@ class BrowserViewController: UIViewController {
     }
 
     // The content container contains the homepage or webview. Embeded by the coordinator.
-    var contentContainer: ContentContainer = .build { view in
-        view.backgroundColor = .red
-    }
+    var contentContainer: ContentContainer = .build { _ in }
 
     lazy var isBottomSearchBar: Bool = {
         guard isSearchBarLocationFeatureEnabled else { return false }
@@ -591,6 +589,11 @@ class BrowserViewController: UIViewController {
         toolbar = TabToolbar()
         bottomContainer.addArrangedSubview(toolbar)
         view.addSubview(bottomContainer)
+
+        if AppConstants.useCoordinators {
+            // Due to homepage constraints with wallpaper and status bar, we need to ensure content is at the top
+            view.bringSubviewToFront(contentContainer)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
