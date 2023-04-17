@@ -4,7 +4,6 @@
 
 import UIKit
 
-// TODO: Laurie - tests
 /// A container for view controllers, currently used to embed content in BrowserViewController
 class ContentContainer: UIView {
     private enum ContentType {

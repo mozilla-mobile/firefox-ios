@@ -57,7 +57,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
 
     // MARK: - BrowserDelegate
 
-    // Laurie - tests
     func showHomepage(inline: Bool,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
