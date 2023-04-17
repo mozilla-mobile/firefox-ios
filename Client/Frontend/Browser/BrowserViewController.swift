@@ -766,7 +766,6 @@ class BrowserViewController: UIViewController {
                     // Making sure we cover at least the status bar
                     make.bottom.equalTo(view.safeArea.top)
                 }
-
             } else {
                 scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
                 make.left.right.equalTo(view)
