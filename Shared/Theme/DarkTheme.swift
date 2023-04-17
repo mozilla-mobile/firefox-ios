@@ -21,7 +21,13 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layer6: UIColor = FXColors.DarkGrey60
     var layer5Hover: UIColor = FXColors.DarkGrey20
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)
+<<<<<<< HEAD
     var layerGradient: Gradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
+=======
+    var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
+    var layerGradientOverlay = Gradient(colors: [FXColors.LightGrey40.withAlphaComponent(0),
+                                                 FXColors.LightGrey40.withAlphaComponent(0.4)])
+>>>>>>> cee8bd6ee (Add FXIOS-6133 [v114] Add Linear Gradient to ZoomPageBar (#13876))
     var layerAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var layerAccentPrivate: UIColor = FXColors.Purple60
     var layerAccentPrivateNonOpaque: UIColor = FXColors.Purple60.withAlphaComponent(0.3)
