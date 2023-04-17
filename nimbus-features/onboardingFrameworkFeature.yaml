@@ -30,9 +30,9 @@ features:
     defaults:
       - channel: developer
         value:
-          cards: [],
-          card-ordering: [],
-          dismissable: true,
+          cards: []
+          card-ordering: []
+          dismissable: true
 
 objects:
   OnboardingCardData:
