@@ -176,6 +176,7 @@ class HistoryTests: BaseTestCase {
 
         // The closed tab is *not* listed in "Recently Closed Tabs List" (FXIOS-5128)
         navigator.goto(HomePanelsScreen)
+        navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
