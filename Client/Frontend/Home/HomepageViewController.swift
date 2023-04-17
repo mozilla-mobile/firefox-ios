@@ -732,14 +732,7 @@ extension HomepageViewController {
     var statusBarFrame: CGRect? {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
 
-        // Status bar constraint is above the homepage frame
-        if AppConstants.useCoordinators,
-            var statusBarFrame = keyWindow.windowScene?.statusBarManager?.statusBarFrame {
-            statusBarFrame.origin.y -= statusBarFrame.height
-            return statusBarFrame
-        } else {
-            return keyWindow.windowScene?.statusBarManager?.statusBarFrame
-        }
+        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
     }
 
     // Returns a value between 0 and 1 which indicates how far the user has scrolled.

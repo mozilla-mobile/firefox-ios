@@ -591,8 +591,8 @@ class BrowserViewController: UIViewController {
         view.addSubview(bottomContainer)
 
         if AppConstants.useCoordinators {
-            // Due to homepage constraints with wallpaper and status bar, we need to ensure content is at the top
-            view.bringSubviewToFront(contentContainer)
+            // StatusBarOverlay at the back so homepage wallpaper with bottom URL bar can be seen under the status bar
+            view.sendSubviewToBack(statusBarOverlay)
         }
     }
 
@@ -758,8 +758,15 @@ class BrowserViewController: UIViewController {
         header.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.left.right.top.equalTo(view)
-                // Making sure we cover at least the status bar
-                make.bottom.equalTo(view.safeArea.top)
+                if AppConstants.useCoordinators {
+                    // The status bar is covered by the statusBarOverlay,
+                    // if we don't have the URL bar at the top then header height is 0
+                    make.height.equalTo(0)
+                } else {
+                    // Making sure we cover at least the status bar
+                    make.bottom.equalTo(view.safeArea.top)
+                }
+
             } else {
                 scrollController.headerTopConstraint = make.top.equalTo(view.safeArea.top).constraint
                 make.left.right.equalTo(view)
