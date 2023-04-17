@@ -5,7 +5,7 @@
 import Common
 import Foundation
 
-protocol HomepageDelegate: AnyObject {
+protocol BrowserDelegate: AnyObject {
     func showHomepage(homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
@@ -13,7 +13,7 @@ protocol HomepageDelegate: AnyObject {
     func showWebView()
 }
 
-class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, HomepageDelegate {
+class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate {
     var browserViewController: BrowserViewController
     private var profile: Profile
 
@@ -23,7 +23,7 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, HomepageDe
         self.profile = profile
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
         super.init(router: router)
-        self.browserViewController.homepageDelegate = self
+        self.browserViewController.browserDelegate = self
     }
 
     func start(with launchType: LaunchType?) {
@@ -54,17 +54,17 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, HomepageDe
         // FXIOS-6030: Handle open in new tab route
     }
 
-    // MARK: - HomepageDelegate
+    // MARK: - BrowserDelegate
 
+    // Laurie - tests
     func showHomepage(homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       overlayManager: OverlayModeManager) {
-        let tabManager: TabManager = AppContainer.shared.resolve()
         let homepageViewController = HomepageViewController(
             profile: profile,
-            tabManager: tabManager,
-            overlayManager: overlayManager)
+            overlayManager: overlayManager
+        )
         homepageViewController.homePanelDelegate = homepanelDelegate
         homepageViewController.libraryPanelDelegate = libraryPanelDelegate
         homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate

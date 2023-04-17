@@ -62,7 +62,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     // MARK: - Initializers
     init(profile: Profile,
-         tabManager: TabManager,
+         tabManager: TabManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -197,8 +197,13 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
+        var wallpaperTopConstant: CGFloat = 0
+        if AppConstants.useCoordinators {
+            // Constraint so wallpaper appears under the status bar
+            wallpaperTopConstant = statusBarFrame?.height ?? 0
+        }
         NSLayoutConstraint.activate([
-            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
+            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -705,7 +710,14 @@ extension HomepageViewController {
     var statusBarFrame: CGRect? {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
 
-        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+        // Status bar constraint is above the homepage frame
+        if AppConstants.useCoordinators,
+            var statusBarFrame = keyWindow.windowScene?.statusBarManager?.statusBarFrame {
+            statusBarFrame.origin.y -= statusBarFrame.height
+            return statusBarFrame
+        } else {
+            return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+        }
     }
 
     // Returns a value between 0 and 1 which indicates how far the user has scrolled.

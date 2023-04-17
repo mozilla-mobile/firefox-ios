@@ -530,6 +530,7 @@
 		8A33222227DFE658008F809E /* NimbusMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33222127DFE658008F809E /* NimbusMock.swift */; };
 		8A355E5E27D267A400B9AF34 /* RecentItemsHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */; };
 		8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
+		8A36BE2929EDBC6900AC1C5C /* ContentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */; };
 		8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */; };
 		8A395552299AF83400B2AFBB /* UIControl+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A395551299AF83300B2AFBB /* UIControl+Extension.swift */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
@@ -3856,6 +3857,7 @@
 		8A33222127DFE658008F809E /* NimbusMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMock.swift; sourceTree = "<group>"; };
 		8A355E5D27D267A400B9AF34 /* RecentItemsHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsHelperTests.swift; sourceTree = "<group>"; };
 		8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabManager.swift; sourceTree = "<group>"; };
+		8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentContainer.swift; sourceTree = "<group>"; };
 		8A37C79E28DA4BA600B1FAD4 /* ContextualHintViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualHintViewModelTests.swift; sourceTree = "<group>"; };
 		8A395551299AF83300B2AFBB /* UIControl+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extension.swift"; sourceTree = "<group>"; };
 		8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelViewModel.swift; sourceTree = "<group>"; };
@@ -7317,6 +7319,7 @@
 				8A9CB41D2846F0BF00CC3A16 /* FadeScrollView.swift */,
 				43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */,
 				217AEF7728480844004EED37 /* ResizableButton.swift */,
+				8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -11276,6 +11279,7 @@
 				C82A94F3269F68F300624AA7 /* CoreFlaggableFeature.swift in Sources */,
 				F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,
+				8A36BE2929EDBC6900AC1C5C /* ContentContainer.swift in Sources */,
 				215B458227DA420400E5E800 /* LegacyTabMetadataManager.swift in Sources */,
 				E47616C71AB74CA600E7DD25 /* ReaderModeBarView.swift in Sources */,
 				D821E90E2141B71C00452C55 /* SiriSettingsViewController.swift in Sources */,
