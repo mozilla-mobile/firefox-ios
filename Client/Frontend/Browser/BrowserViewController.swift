@@ -1009,16 +1009,18 @@ class BrowserViewController: UIViewController {
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
     }
 
+    /// Show the home page embedded in the contentContainer
+    /// - Parameter inline: Inline is true when the homepage is created from the tab tray, a long press
+    /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
+    /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showEmbeddedHomepage(inline: Bool) {
         hideReaderModeBar(animated: false)
 
         // Make sure reload button is hidden on homepage
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
 
-        // TODO: Laurie - needed?
-//        view.setNeedsUpdateConstraints()
-
-        browserDelegate?.showHomepage(homepanelDelegate: self,
+        browserDelegate?.showHomepage(inline: inline,
+                                      homepanelDelegate: self,
                                       libraryPanelDelegate: self,
                                       sendToDeviceDelegate: self,
                                       overlayManager: overlayManager)

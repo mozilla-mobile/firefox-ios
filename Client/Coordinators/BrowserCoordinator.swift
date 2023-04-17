@@ -6,7 +6,8 @@ import Common
 import Foundation
 
 protocol BrowserDelegate: AnyObject {
-    func showHomepage(homepanelDelegate: HomePanelDelegate,
+    func showHomepage(inline: Bool,
+                      homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       overlayManager: OverlayModeManager)
@@ -57,12 +58,14 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
     // MARK: - BrowserDelegate
 
     // Laurie - tests
-    func showHomepage(homepanelDelegate: HomePanelDelegate,
+    func showHomepage(inline: Bool,
+                      homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       overlayManager: OverlayModeManager) {
         let homepageViewController = HomepageViewController(
             profile: profile,
+            isZeroSearch: inline,
             overlayManager: overlayManager
         )
         homepageViewController.homePanelDelegate = homepanelDelegate
@@ -70,12 +73,6 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
         homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
 
         browserViewController.embedContent(homepageViewController)
-
-        // TODO: Laurie - Put this in homepage view controller view did appear
-//        homepageViewController?.applyTheme()
-//        homepageViewController?.homepageWillAppear(isZeroSearch: !inline)
-//        homepageViewController?.reloadView()
-//        NotificationCenter.default.post(name: .ShowHomepage, object: nil)
     }
 
     func showWebView() {

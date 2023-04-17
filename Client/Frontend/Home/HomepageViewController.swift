@@ -62,6 +62,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     // MARK: - Initializers
     init(profile: Profile,
+         isZeroSearch: Bool = false,
          tabManager: TabManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
@@ -90,6 +91,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
+
+        viewModel.isZeroSearch = isZeroSearch
 
         contextMenuHelper.delegate = self
         contextMenuHelper.getPopoverSourceRect = { [weak self] popoverView in
@@ -133,6 +136,24 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyTheme()
+        homepageWillAppear(isZeroSearch: viewModel.isZeroSearch)
+        reloadView()
+        NotificationCenter.default.post(name: .ShowHomepage, object: nil)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        homepageDidAppear()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        homepageWillDisappear()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -242,6 +263,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
     }
 
+    // FXIOS-6203 - Clean up custom homepage view cycles
     // MARK: - Homepage view cycle
     /// Normal view controller view cycles cannot be relied on the homepage since the current way of showing and hiding the homepage is through alpha.
     /// This is a problem that need to be fixed but until then we have to rely on the methods here.
