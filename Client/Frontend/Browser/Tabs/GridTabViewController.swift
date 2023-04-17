@@ -395,7 +395,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
         saveTabToDelete(tab: tab, index: collectionView.indexPath(for: cell)?.row)
         tabDisplayManager.tabDisplayCompletionDelegate = self
-        tabDisplayManager.closeActionPerformed(forCell: cell)
+        tabDisplayManager.closeAction(for: tab)
 
         guard !tabDisplayManager.shouldPresentUndoToastOnHomepage else {
             // Show undo Toast on homepage

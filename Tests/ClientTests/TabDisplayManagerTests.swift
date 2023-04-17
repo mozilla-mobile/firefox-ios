@@ -361,6 +361,66 @@ class TabDisplayManagerTests: XCTestCase {
         }
         waitForExpectations(timeout: 5)
     }
+
+    // MARK: - Undo tab clos
+    func testShouldPresentUndoToastOnHomepage_ForLastTab() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+        manager.addTab()
+
+        XCTAssertTrue(tabDisplayManager.shouldPresentUndoToastOnHomepage,
+                      "Expected to present toast on homepage")
+    }
+
+    func testShouldNotPresentUndoToastOnHomepage_MultlipleTabs() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        // Add 2 tabs
+        let activeTab1 = manager.addTab()
+        _ = manager.addTab()
+        manager.selectTab(activeTab1)
+
+        XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
+                       "Expected to present toast on TabTray")
+    }
+
+    func testShouldPresentUndoToastOnHomepage_ForLastPrivateTab() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        _ = manager.addTab(nil, afterTab: nil, isPrivate: true)
+
+        XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
+                       "Expected to present toast on homepage")
+    }
+
+    func testShouldPresentUndoToastOnHomepage_ForMultiplePrivateTabs() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        // Add 2 tabs
+        let activeTab1 = manager.addTab(nil, afterTab: nil, isPrivate: true)
+        _ = manager.addTab(nil, afterTab: nil, isPrivate: true)
+        manager.selectTab(activeTab1)
+
+        XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
+                       "Expected to present toast on homepage")
+    }
+
+    func testUndoCloseTabs_ForMultiplePrivateTabs() {
+        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+        let tab = manager.addTab()
+
+        tabDisplayManager.closeAction(for: tab)
+        let expectation = self.expectation(description: "TabDisplayManagerTests")
+        tabDisplayManager.refreshStore {
+            XCTAssertTrue(tabDisplayManager.dataStore.isEmpty, "Expected to be empty")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 15)
+    }
 }
 
 // Helper methods

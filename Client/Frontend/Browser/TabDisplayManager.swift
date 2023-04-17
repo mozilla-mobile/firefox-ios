@@ -448,12 +448,19 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
-    // The user has tapped the close button or has swiped away the cell
+    // Use for Top Tabs view version
     func closeActionPerformed(forCell cell: UICollectionViewCell) {
         guard !isDragging else { return }
 
         guard let index = collectionView.indexPath(for: cell)?.item,
                 let tab = dataStore.at(index) else { return }
+
+        closeAction(for: tab)
+    }
+
+    // Use for Grid tab view version
+    func closeAction(for tab: Tab) {
+        guard !isDragging else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             if self.isPrivate == false,
@@ -673,11 +680,10 @@ extension TabDisplayManager: InactiveTabsDelegate {
 
         cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
                                       completion: { undoButtonPressed in
-            guard undoButtonPressed else {
+            guard !undoButtonPressed else {
                 self.closeInactiveTabs()
                 return
             }
-
             self.undoInactiveTabsClose()
         })
     }
