@@ -6,18 +6,18 @@ import Foundation
 
 public struct TabData: Codable {
     public let id: UUID
-    public let title: String
+    public let title: String?
     public let siteUrl: String
-    public let faviconURL: String
+    public let faviconURL: String?
     public let isPrivate: Bool
     public let lastUsedTime: Date
     public let createdAtTime: Date
     public var tabGroupData: TabGroupData?
 
     public init(id: UUID,
-                title: String,
+                title: String?,
                 siteUrl: String,
-                faviconURL: String,
+                faviconURL: String?,
                 isPrivate: Bool,
                 lastUsedTime: Date,
                 createdAtTime: Date,
