@@ -30,8 +30,28 @@ features:
     defaults:
       - channel: developer
         value:
-          cards: []
-          card-ordering: []
+          cards:
+            - name: "Test 1"
+              title: "First title"
+              body: "Some body text that's rather longer than a title 1"
+              buttons:
+                - title: "Primary Button 1"
+                  action: sync-sign-in
+                - title: "Secondary Button 1"
+                  action: request-notifications
+              type: fresh-install
+            - name: "Test 2"
+              title: "Second title"
+              body: "Some body text that's rather longer than a title 2"
+              buttons:
+                - title: "Primary Button 2"
+                  action: sync-sign-in
+                - title: "Secondary Button 2"
+                  action: next-card
+              type: update
+          card-ordering:
+            - "Test 1"
+            - "Test 2"
           dismissable: true
 
 objects:
