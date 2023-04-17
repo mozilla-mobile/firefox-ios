@@ -1043,7 +1043,7 @@ class BrowserViewController: UIViewController {
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showHomepage(inline: Bool) {
         if self.homepageViewController == nil {
-            createHomepage()
+            createHomepage(inline: inline)
         }
 
         if self.readerModeBar != nil {
@@ -1078,7 +1078,7 @@ class BrowserViewController: UIViewController {
     // FXIOS-6036 - Remove this function as part of cleanup
     /// Once the homepage is created, browserViewController keeps a reference to it, never setting it to nil during
     /// an app session. The homepage can be nil in the case of a user having a Blank Page or custom URL as it's new tab and homepage
-    private func createHomepage() {
+    private func createHomepage(inline: Bool) {
         let homepageViewController = HomepageViewController(
             profile: profile,
             tabManager: tabManager,
