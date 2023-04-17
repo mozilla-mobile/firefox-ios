@@ -17,6 +17,9 @@ features:
           This provides the setting for how we show the notification card in onboarding.
         type: NotificationCard
         default: no-card
+      onboarding-framework:
+        description: >
+          The nimbus configurable onboarding feature
     defaults:
       - channel: beta
         value: {
@@ -40,4 +43,13 @@ enums:
       before-sync:
         description: The notification card is shown before the sync card
       after-sync:
+        description: The notification card is shown after the sync card
+  OnboardingImages:
+    description: The identifiers for the different images available for cards in onboarding
+    variants:
+      welcome-globe:
+        description: The notification card is not shown
+      notifications:
+        description: The notification card is shown before the sync card
+      sync-devices:
         description: The notification card is shown after the sync card
