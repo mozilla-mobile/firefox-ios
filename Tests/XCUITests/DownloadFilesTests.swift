@@ -18,8 +18,6 @@ class DownloadFilesTests: BaseTestCase {
         if processIsTranslatedStr() == m1Rosetta {
             navigator.nowAt(LibraryPanel_Downloads)
             navigator.goto(NewTabScreen)
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
             navigator.goto(ClearPrivateDataSettings)
             app.cells.switches["Downloaded Files"].tap()
             app.tables.cells["ClearPrivateData"].tap()
