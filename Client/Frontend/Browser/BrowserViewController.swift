@@ -43,6 +43,7 @@ class BrowserViewController: UIViewController {
         .title,
     ]
 
+    weak var homepageDelegate: HomepageDelegate?
     var homepageViewController: HomepageViewController?
     var libraryViewController: LibraryViewController?
     var webViewContainer: UIView!
@@ -106,7 +107,7 @@ class BrowserViewController: UIViewController {
     }
 
     // The content container contains the homepage or webview. Embeded by the coordinator.
-    var contentContainer: UIView = .build { view in
+    var contentContainer: ContentContainer = .build { view in
         view.backgroundColor = .red
     }
 
@@ -998,13 +999,93 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.isHidden = false
     }
 
+    // laurie - move this
+    class ContentContainer: UIView {
+        enum ContentType {
+            case webview
+            case homepage
+        }
+
+        var type: ContentType?
+        var contentController: UIViewController?
+
+        func canAdd(viewController: UIViewController) -> Bool {
+            switch type {
+            case .homepage:
+                return !(viewController is HomepageViewController)
+            case .webview:
+                // FXIOS-6015 - Handle Webview add content
+                return true
+            case .none:
+                return true
+            }
+        }
+
+        func addContent(viewController: UIViewController) {
+            if viewController is HomepageViewController {
+                type = .homepage
+            } else {
+                // FXIOS-6015 - Handle Webview add content
+            }
+            contentController = viewController
+
+            // laurie - fix constraints of homepage, fix white top bar
+            addSubview(viewController.view)
+        }
+
+        func removeContent() {
+            contentController?.willMove(toParent: nil)
+            contentController?.view.removeFromSuperview()
+            contentController?.removeFromParent()
+        }
+    }
+
+    func embedContent(_ viewController: UIViewController) {
+        // Make sure we only add once
+        guard contentContainer.canAdd(viewController: viewController) else { return }
+
+        // Remove previous embedded content
+        contentContainer.removeContent()
+
+        // Add new embedded content
+        addChild(viewController)
+        contentContainer.addContent(viewController: viewController)
+        viewController.didMove(toParent: self)
+
+        UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+    }
+
+    func showEmbeddedHomepage(inline: Bool) {
+        if self.readerModeBar != nil {
+            hideReaderModeBar(animated: false)
+        }
+
+        // Make sure reload button is hidden on homepage
+        urlBar.locationView.reloadButton.reloadButtonState = .disabled
+
+        // TODO: Laurie - needed?
+//        view.setNeedsUpdateConstraints()
+
+        homepageDelegate?.showHomepage(homepanelDelegate: self,
+                                       libraryPanelDelegate: self,
+                                       sendToDeviceDelegate: self,
+                                       overlayManager: overlayManager)
+    }
+
+    func showEmbeddedWebview() {
+        // Make sure reload button is working after leaving homepage
+        urlBar.locationView.reloadButton.reloadButtonState = .reload
+
+        // FXIOS-6015 - Show webview (and remove the homepage)
+    }
+
     /// Show the home page
     /// - Parameter inline: Inline is true when the homepage is created from the tab tray, a long press
     /// on the tab bar to open a new tab or by pressing the home page button on the tab bar. Inline is false when
     /// it's the zero search page, aka when the home page is shown by clicking the url bar from a loaded web page.
     func showHomepage(inline: Bool) {
         if self.homepageViewController == nil {
-            createHomepage(inline: inline)
+            createHomepage()
         }
 
         if self.readerModeBar != nil {
@@ -1038,7 +1119,7 @@ class BrowserViewController: UIViewController {
 
     /// Once the homepage is created, browserViewController keeps a reference to it, never setting it to nil during
     /// an app session. The homepage can be nil in the case of a user having a Blank Page or custom URL as it's new tab and homepage
-    private func createHomepage(inline: Bool) {
+    private func createHomepage() {
         let homepageViewController = HomepageViewController(
             profile: profile,
             tabManager: tabManager,
@@ -1091,7 +1172,7 @@ class BrowserViewController: UIViewController {
             if !AppConstants.useCoordinators {
                 hideHomepage()
             } else {
-                // FXIOS-6014 - Homepage in container
+                showEmbeddedWebview()
             }
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
             return
@@ -1101,7 +1182,7 @@ class BrowserViewController: UIViewController {
             if !AppConstants.useCoordinators {
                 showHomepage(inline: true)
             } else {
-                // FXIOS-6014 - Homepage in container
+                showEmbeddedHomepage(inline: true)
             }
 
             if userHasPressedHomeButton {
@@ -1111,7 +1192,7 @@ class BrowserViewController: UIViewController {
             if !AppConstants.useCoordinators {
                 hideHomepage()
             } else {
-                // FXIOS-6014 - Homepage in container
+                showEmbeddedWebview()
             }
             urlBar.shouldHideReloadButton(shouldUseiPadSetup())
         }

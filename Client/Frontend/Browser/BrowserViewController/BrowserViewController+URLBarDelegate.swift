@@ -339,7 +339,7 @@ extension BrowserViewController: URLBarDelegate {
             if !AppConstants.useCoordinators {
                 showHomepage(inline: false)
             } else {
-                // FXIOS-6014 - Homepage in container
+                showEmbeddedHomepage(inline: false)
             }
         }
     }
