@@ -4,6 +4,7 @@
 
 import UIKit
 
+// Laurie - tests for new functionnality
 /// A container for view controllers, currently used to embed content in BrowserViewController
 class ContentContainer: UIView {
     private enum ContentType {
@@ -15,15 +16,15 @@ class ContentContainer: UIView {
     private var contentController: UIViewController?
 
     /// Determine if the content can be added, making sure we only add once
-    /// - Parameter viewController: The view controller to add to the container
+    /// - Parameters:
+    ///   - viewController: The view controller to add to the container
     /// - Returns: True when we can add the view controller to the container
     func canAdd(viewController: UIViewController) -> Bool {
         switch type {
         case .homepage:
             return !(viewController is HomepageViewController)
         case .webview:
-            // FXIOS-6015 - Handle Webview add content
-            return true
+            return !(viewController is WebviewViewController)
         case .none:
             return true
         }
@@ -48,9 +49,10 @@ class ContentContainer: UIView {
     private func saveContentType(viewController: UIViewController) {
         if viewController is HomepageViewController {
             type = .homepage
+        } else if viewController is WebviewViewController {
+            type = .webview
         } else {
-            // FXIOS-6015 - Handle Webview add content in a else if
-            fatalError("Content type not supported")
+            fatalError("Content type not supported, this is a developer error.")
         }
 
         contentController = viewController
