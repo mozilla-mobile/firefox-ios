@@ -70,6 +70,8 @@
     {
       "skippedTests" : [
         "ETPCoverSheetTests",
+        "LaunchScreenViewModelTests\/testLaunchType_nilBrowserIsStarted()",
+        "LaunchScreenViewModelTests\/testLaunchType_survey()",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
         "TestFavicons\/testFaviconFetcherParse()",

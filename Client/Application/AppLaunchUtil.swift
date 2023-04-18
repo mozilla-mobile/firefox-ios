@@ -103,7 +103,7 @@ class AppLaunchUtil {
 
             // Profile setup
             profile.prefs.setString(AppInfo.appVersion, forKey: PrefsKeys.AppVersion.Latest)
-            UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.KeyFirstAppUse)
+            UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.Session.FirstAppUse)
         } else if profile.prefs.boolForKey(PrefsKeys.KeySecondRun) == nil {
             profile.prefs.setBool(true, forKey: PrefsKeys.KeySecondRun)
         }
@@ -125,11 +125,12 @@ class AppLaunchUtil {
         var sessionCount: Int32 = 0
 
         // Get the session count from preferences
-        if let currentSessionCount = profile.prefs.intForKey(PrefsKeys.SessionCount) {
+        if let currentSessionCount = profile.prefs.intForKey(PrefsKeys.Session.Count) {
             sessionCount = currentSessionCount
         }
         // increase session count value
-        profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.SessionCount)
+        profile.prefs.setInt(sessionCount + 1, forKey: PrefsKeys.Session.Count)
+        UserDefaults.standard.set(Date.now(), forKey: PrefsKeys.Session.Last)
     }
 
     // MARK: - Application Services History Migration
