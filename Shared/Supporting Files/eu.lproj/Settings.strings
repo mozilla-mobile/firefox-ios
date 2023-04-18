@@ -34,6 +34,9 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Sync";
 
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "%1$@(r)en jakinarazpen guztiak desgaitu dituzu. Gai itzazu berriro gailuaren Ezarpenak > Jakinarazpenak > %2$@ menura joanez.";
+
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Ikasi eginbide praktikoei buruz eta nola atera zuku gehien %@(r)i.";
 
