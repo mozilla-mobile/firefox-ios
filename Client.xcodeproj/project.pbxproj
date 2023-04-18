@@ -8509,7 +8509,7 @@
 			path = Entitlements;
 			sourceTree = "<group>";
 		};
-		E49943F31AE6879C00BF9DE4 /* Intro */ = {
+		E49943F31AE6879C00BF9DE4 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
 				E49943F61AE69EDD00BF9DE4 /* Intro.xcassets */,
@@ -8521,7 +8521,7 @@
 				21371FA328AA7A8D00BC3F37 /* OnboardingViewModel.swift */,
 				2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */,
 			);
-			path = Intro;
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
@@ -9165,7 +9165,7 @@
 				F84B22211A09122500AAB793 /* Home */,
 				EBC486972195F46A00CDA48D /* InternalSchemeHandler */,
 				43A5643423CD1E1B00B6857D /* Update */,
-				E49943F31AE6879C00BF9DE4 /* Intro */,
+				E49943F31AE6879C00BF9DE4 /* Onboarding */,
 				D05434F3225FDA3400FDE4EF /* Library */,
 				E63ED8DF1BFD254E0097D08E /* LoginManagement */,
 				7BC7B4571C903A6A0046E9D2 /* Menu */,
