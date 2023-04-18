@@ -3038,7 +3038,6 @@
 		43850DA529D1B2F900927110 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = "oc.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		43854ACB29EF08C200CBFBD5 /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Edit Card.strings"; sourceTree = "<group>"; };
 		4387326C28B39ED800FB7454 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
-		43879AFC287BDFE200B15D10 /* LoginManagerChild.jsm */ = {isa = PBXFileReference; lastKnownFileType = text; path = LoginManagerChild.jsm; sourceTree = "<group>"; };
 		4387BE5329E425BC003B6698 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = "el.lproj/Edit Card.strings"; sourceTree = "<group>"; };
 		4388170929D1B24000D86EDF /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/Alert.strings; sourceTree = "<group>"; };
 		4388170A29D1B24000D86EDF /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ka; path = ka.lproj/BiometricAuthentication.strings; sourceTree = "<group>"; };
@@ -3521,6 +3520,16 @@
 		43F1B78728B39D2C00E883CB /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/ToolbarLocation.strings; sourceTree = "<group>"; };
 		43F22E072A0BCBDD00DB5D9B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/FirefoxSync.strings; sourceTree = "<group>"; };
 		43F22E082A0BCBDD00DB5D9B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Upgrade.strings; sourceTree = "<group>"; };
+		43F2284229EE053A0037E085 /* fathom.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = fathom.mjs; sourceTree = "<group>"; };
+		43F2284329EE053A0037E085 /* CreditCardRuleset.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCardRuleset.mjs; sourceTree = "<group>"; };
+		43F2284429EE053A0037E085 /* CC_Python_Update.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = CC_Python_Update.py; sourceTree = "<group>"; };
+		43F2284529EE053A0037E085 /* LabelUtils.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = LabelUtils.mjs; sourceTree = "<group>"; };
+		43F2284629EE053A0037E085 /* CreditCardAutofill.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CreditCardAutofill.js; sourceTree = "<group>"; };
+		43F2284729EE053A0037E085 /* FieldScanner.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FieldScanner.mjs; sourceTree = "<group>"; };
+		43F2284829EE053A0037E085 /* FormAutofillHeuristics.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillHeuristics.shared.mjs; sourceTree = "<group>"; };
+		43F2284929EE053A0037E085 /* FormAutofillUtils.shared.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = FormAutofillUtils.shared.mjs; sourceTree = "<group>"; };
+		43F2284A29EE053A0037E085 /* CreditCard.sys.mjs */ = {isa = PBXFileReference; lastKnownFileType = text; path = CreditCard.sys.mjs; sourceTree = "<group>"; };
+		43F2284B29EE053A0037E085 /* shims.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = shims.js; sourceTree = "<group>"; };
 		43F28137294743D900E57567 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Alerts.strings; sourceTree = "<group>"; };
 		43F28138294743D900E57567 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/TabsTray.strings; sourceTree = "<group>"; };
 		43F2DD1A29BA6C8E00F69D7A /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/EngagementNotification.strings; sourceTree = "<group>"; };
@@ -7144,7 +7153,16 @@
 		43879AFB287BDFB100B15D10 /* CC_Script */ = {
 			isa = PBXGroup;
 			children = (
-				43879AFC287BDFE200B15D10 /* LoginManagerChild.jsm */,
+				43F2284429EE053A0037E085 /* CC_Python_Update.py */,
+				43F2284A29EE053A0037E085 /* CreditCard.sys.mjs */,
+				43F2284629EE053A0037E085 /* CreditCardAutofill.js */,
+				43F2284329EE053A0037E085 /* CreditCardRuleset.mjs */,
+				43F2284229EE053A0037E085 /* fathom.mjs */,
+				43F2284729EE053A0037E085 /* FieldScanner.mjs */,
+				43F2284829EE053A0037E085 /* FormAutofillHeuristics.shared.mjs */,
+				43F2284929EE053A0037E085 /* FormAutofillUtils.shared.mjs */,
+				43F2284529EE053A0037E085 /* LabelUtils.mjs */,
+				43F2284B29EE053A0037E085 /* shims.js */,
 			);
 			path = CC_Script;
 			sourceTree = "<group>";
@@ -7942,7 +7960,6 @@
 		96441BD229DF7DA500FE041F /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				96CB5D6429B23D4D0034AE0A /* MockAppAuthenticator.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
