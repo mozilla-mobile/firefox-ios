@@ -39,7 +39,6 @@ class FxAWebViewModel {
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
 
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
 
     func setupUserScript(for controller: WKUserContentController) {
@@ -269,9 +268,6 @@ extension FxAWebViewModel {
                         self.userDefaults.set(granted, forKey: PrefsKeys.Notifications.TipsAndFeaturesNotifications)
                     }
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-
-                    // schedule engagement notification if necessary after user allowed notification permission
-                    self.engagementNotificationHelper.schedule()
                 }
             }
         }

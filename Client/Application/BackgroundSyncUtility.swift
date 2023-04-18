@@ -6,7 +6,7 @@ import Foundation
 import BackgroundTasks
 import Common
 
-class BackgroundSyncUtil {
+class BackgroundSyncUtility: BackgroundUtilityProtocol {
     let profile: Profile
     let application: UIApplication
     let logger: Logger
@@ -21,42 +21,10 @@ class BackgroundSyncUtil {
         setUpBackgroundSync()
     }
 
-    func setUpBackgroundSync() {
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
-            guard self.profile.hasSyncableAccount() else {
-                self.shutdownProfileWhenNotActive()
-                return
-            }
-            let collection = ["bookmarks", "history"]
-            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                task.setTaskCompleted(success: true)
-                let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
-                request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
-                request.requiresNetworkConnectivity = true
-                do {
-                    try BGTaskScheduler.shared.submit(request)
-                } catch {
-                    self.logger.log("failed to sync named collections \(error.localizedDescription)",
-                                    level: .warning,
-                                    category: .sync)
-                }
-            }
-        }
-
-        // Split up the sync tasks so each can get maximal time for a bg task.
-        // This task runs after the bookmarks+history sync.
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2", using: DispatchQueue.global()) { task in
-            let collection = ["tabs", "logins", "clients"]
-            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
-                self.shutdownProfileWhenNotActive()
-                task.setTaskCompleted(success: true)
-            }
-        }
-    }
-
-    func scheduleSyncOnAppBackground() {
+    func scheduleTaskOnAppBackground() {
         if profile.syncManager.isSyncing {
-            // If syncing, create a bg task because _shutdown() is blocking and might take a few seconds to complete
+            // If syncing, create a background task because _shutdown() is blocking and
+            // might take a few seconds to complete
             var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
             taskId = application.beginBackgroundTask(expirationHandler: {
                 self.shutdownProfileWhenNotActive()
@@ -80,6 +48,42 @@ class BackgroundSyncUtil {
                 logger.log("failed to shut down profile \(error.localizedDescription)",
                            level: .warning,
                            category: .sync)
+            }
+        }
+    }
+
+    // MARK: Private
+    private func setUpBackgroundSync() {
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1",
+                                        using: DispatchQueue.global()) { task in
+            guard self.profile.hasSyncableAccount() else {
+                self.shutdownProfileWhenNotActive()
+                return
+            }
+            let collection = ["bookmarks", "history"]
+            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+                task.setTaskCompleted(success: true)
+                let request = BGProcessingTaskRequest(identifier: "org.mozilla.ios.sync.part2")
+                request.earliestBeginDate = Date(timeIntervalSinceNow: 1)
+                request.requiresNetworkConnectivity = true
+                do {
+                    try BGTaskScheduler.shared.submit(request)
+                } catch {
+                    self.logger.log("failed to sync named collections \(error.localizedDescription)",
+                                    level: .warning,
+                                    category: .sync)
+                }
+            }
+        }
+
+        // Split up the sync tasks so each can get maximal time for a bg task.
+        // This task runs after the bookmarks+history sync.
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part2",
+                                        using: DispatchQueue.global()) { task in
+            let collection = ["tabs", "logins", "clients"]
+            self.profile.syncManager.syncNamedCollections(why: .backgrounded, names: collection).uponQueue(.main) { _ in
+                self.shutdownProfileWhenNotActive()
+                task.setTaskCompleted(success: true)
             }
         }
     }
