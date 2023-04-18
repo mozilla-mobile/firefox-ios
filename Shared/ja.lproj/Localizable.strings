@@ -1778,7 +1778,7 @@
 "Toasts.OpenAppStore" = "App Store を開く";
 
 /* Label for button to undo the action just performed */
-"Toasts.Undo" = "元に戻す";
+"Toasts.Undo" = "取り消す";
 
 /* This label is meant to signify the section containing a group of items from the current day. */
 "Today" = "今日";
