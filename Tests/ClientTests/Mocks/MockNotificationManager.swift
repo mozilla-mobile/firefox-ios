@@ -35,13 +35,25 @@ class MockNotificationManager: NotificationManagerProtocol {
 
     var scheduledNotifications = 0
     var scheduleWithDateWasCalled = false
-    func schedule(title: String, body: String, id: String, userInfo: [AnyHashable: Any]?, date: Date, repeats: Bool) {
+    func schedule(title: String,
+                  body: String,
+                  id: String,
+                  userInfo: [AnyHashable: Any]?,
+                  categoryIdentifier: String,
+                  date: Date,
+                  repeats: Bool) {
         scheduledNotifications += 1
         scheduleWithDateWasCalled = true
     }
 
     var scheduleWithIntervalWasCalled = false
-    func schedule(title: String, body: String, id: String, userInfo: [AnyHashable: Any]?, interval: TimeInterval, repeats: Bool) {
+    func schedule(title: String,
+                  body: String,
+                  id: String,
+                  userInfo: [AnyHashable: Any]?,
+                  categoryIdentifier: String,
+                  interval: TimeInterval,
+                  repeats: Bool) {
         scheduledNotifications += 1
         scheduleWithIntervalWasCalled = true
     }
@@ -50,6 +62,7 @@ class MockNotificationManager: NotificationManagerProtocol {
     }
 
     func findDeliveredNotificationForId(id: String, completion: @escaping (UNNotification?) -> Void) {
+        completion(nil)
     }
 
     var removeAllPendingNotificationsWasCalled = false

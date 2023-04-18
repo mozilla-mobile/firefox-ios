@@ -10,6 +10,7 @@
 	<array>
 		<string>org.mozilla.ios.sync.part1</string>
 		<string>org.mozilla.ios.sync.part2</string>
+		<string>org.mozilla.ios.surface.notification.refresh</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
@@ -165,6 +166,7 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>

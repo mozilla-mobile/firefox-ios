@@ -9,11 +9,13 @@ import Shared
 protocol NotificationSurfaceDelegate: AnyObject {
     func didDisplayMessage(_ message: GleanPlumbMessage)
     func didTapNotification(_ userInfo: [AnyHashable: Any])
+    func didDismissNotification(_ userInfo: [AnyHashable: Any])
 }
 
 class NotificationSurfaceManager: NotificationSurfaceDelegate {
     struct Constant {
         static let notificationBaseId: String = "org.mozilla.ios.notification"
+        static let notificationCategoryId: String = "org.mozilla.ios.notification.category"
         static let messageDelay: CGFloat = 3 // seconds
         static let messageIdKey: String = "messageId"
     }
@@ -23,20 +25,25 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
     private var message: GleanPlumbMessage?
     private var messagingManager: GleanPlumbMessageManagerProtocol
     private var notificationManager: NotificationManagerProtocol
-    private var notificationCenter: NotificationProtocol
 
     var shouldShowSurface: Bool {
         updateMessage()
         return message != nil
     }
 
+    static var notificationCategory: UNNotificationCategory {
+        return UNNotificationCategory(
+            identifier: Constant.notificationCategoryId,
+            actions: [],
+            intentIdentifiers: [],
+            options: .customDismissAction)
+    }
+
     // MARK: - Initialization
     init(messagingManager: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager.shared,
-         notificationManager: NotificationManagerProtocol = NotificationManager(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationManager: NotificationManagerProtocol = NotificationManager()) {
         self.messagingManager = messagingManager
         self.notificationManager = notificationManager
-        self.notificationCenter = notificationCenter
     }
 
     // MARK: - Functionality
@@ -46,17 +53,13 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
         guard let message = message, !message.isExpired else { return }
 
         let notificationId = Constant.notificationBaseId + ".\(message.id)"
-        let userInfo = [Constant.messageIdKey: message.id]
-        notificationManager.schedule(title: message.data.title ?? "",
-                                     body: message.data.text,
-                                     id: notificationId,
-                                     userInfo: userInfo,
-                                     interval: TimeInterval(Constant.messageDelay),
-                                     repeats: false)
 
-        // Schedule notification telemetry for when notification gets displayed
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constant.messageDelay) { [weak self] in
-            self?.didDisplayMessage(message)
+        // Check if message is already getting displayed
+        notificationManager.findDeliveredNotificationForId(id: notificationId) { [weak self] notification in
+            // Don't schedule the notification again if it was already delivered
+            guard notification == nil else { return }
+
+            self?.scheduleNotification(message: message, notificationId: notificationId)
         }
     }
 
@@ -70,18 +73,34 @@ class NotificationSurfaceManager: NotificationSurfaceDelegate {
               let message = messagingManager.messageForId(messageId)
         else { return }
 
-        switch message.action {
-        case "OPEN_NEW_TAB":
-            let object = OpenTabNotificationObject(type: .openNewTab)
-            notificationCenter.post(name: .OpenTabNotification, withObject: object)
-            messagingManager.onMessagePressed(message)
-        default:
-            // do nothing
-            return
-        }
+        messagingManager.onMessagePressed(message)
+    }
+
+    func didDismissNotification(_ userInfo: [AnyHashable: Any]) {
+        guard let messageId = userInfo[Constant.messageIdKey] as? String,
+              let message = messagingManager.messageForId(messageId)
+        else { return }
+
+        messagingManager.onMessageDismissed(message)
     }
 
     // MARK: - Private
+    private func scheduleNotification(message: GleanPlumbMessage, notificationId: String) {
+        let userInfo = [Constant.messageIdKey: message.id]
+        let fallbackTitle = String(format: .Notification.FallbackTitle, AppInfo.displayName)
+        notificationManager.schedule(title: message.data.title ?? fallbackTitle,
+                                     body: message.data.text,
+                                     id: notificationId,
+                                     userInfo: userInfo,
+                                     categoryIdentifier: Constant.notificationCategoryId,
+                                     interval: TimeInterval(Constant.messageDelay),
+                                     repeats: false)
+
+        // Schedule notification telemetry for when notification gets displayed
+        DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + Constant.messageDelay) { [weak self] in
+            self?.didDisplayMessage(message)
+        }
+    }
 
     /// Call messagingManager to retrieve the message for notification surface.
     private func updateMessage() {

@@ -17,8 +17,6 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
     var themeObserver: NSObjectProtocol?
     var userDefaults: UserDefaultsInterface = UserDefaults.standard
 
-    private lazy var engagementNotificationHelper = EngagementNotificationHelper()
-
     struct UX {
         static let closeButtonSize: CGFloat = 30
         static let closeHorizontalMargin: CGFloat = 24
@@ -244,8 +242,6 @@ extension IntroViewController: OnboardingCardDelegate {
                     }
 
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-
-                    self.engagementNotificationHelper.schedule()
                 }
                 self.showNextPage(.notification)
             }

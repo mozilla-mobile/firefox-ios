@@ -49,6 +49,7 @@ enum HomePanelPath: String {
     case history = "history"
     case downloads = "downloads"
     case newPrivateTab = "new-private-tab"
+    case newTab = "new-tab"
 }
 
 // An enum to route to a settings page.
@@ -298,6 +299,7 @@ enum NavigationPath {
         case .downloads: bvc.showLibrary(panel: .downloads)
         case .topSites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl)
         case .newPrivateTab: bvc.openBlankNewTab(focusLocationField: false, isPrivate: true)
+        case .newTab: bvc.openBlankNewTab(focusLocationField: false)
         }
     }
 

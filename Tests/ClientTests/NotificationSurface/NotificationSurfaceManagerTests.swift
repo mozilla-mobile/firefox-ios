@@ -10,13 +10,11 @@ import Common
 class NotificationSurfaceManagerTests: XCTestCase {
     private var messageManager: MockGleanPlumbMessageManagerProtocol!
     private var notificationManager: MockNotificationManager!
-    private var notificationCenter: MockNotificationCenter!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         notificationManager = MockNotificationManager()
-        notificationCenter = MockNotificationCenter()
         messageManager = MockGleanPlumbMessageManagerProtocol()
     }
 
@@ -24,7 +22,6 @@ class NotificationSurfaceManagerTests: XCTestCase {
         super.tearDown()
         messageManager = nil
         notificationManager = nil
-        notificationCenter = nil
     }
 
     func testShouldShowSurface_noMessage() {
@@ -90,14 +87,14 @@ class NotificationSurfaceManagerTests: XCTestCase {
         let subject = createSubject()
         subject.didTapNotification([:])
 
-        XCTAssertEqual(notificationCenter.postCallCount, 0)
+        XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
     func testDidTapNotification_noMessageFound() {
         let subject = createSubject()
         subject.didTapNotification([NotificationSurfaceManager.Constant.messageIdKey: "test"])
 
-        XCTAssertEqual(notificationCenter.postCallCount, 0)
+        XCTAssertEqual(messageManager.onMessagePressedCalled, 0)
     }
 
     func testDidTapNotification_openNewTabAction() {
@@ -109,7 +106,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
         subject.didTapNotification([NotificationSurfaceManager.Constant.messageIdKey: "test-notification"])
 
-        XCTAssertEqual(notificationCenter.postCallCount, 1)
+        XCTAssertEqual(messageManager.onMessagePressedCalled, 1)
     }
 
     func testDidTapNotification_defaultAction() {
@@ -121,7 +118,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
         subject.didTapNotification([NotificationSurfaceManager.Constant.messageIdKey: "test-notification"])
 
-        XCTAssertEqual(notificationCenter.postCallCount, 0)
+        XCTAssertEqual(messageManager.onMessagePressedCalled, 1)
     }
 
     // MARK: Helpers
@@ -129,8 +126,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
                                line: UInt = #line
     ) -> NotificationSurfaceManager {
         let subject = NotificationSurfaceManager(messagingManager: messageManager,
-                                                 notificationManager: notificationManager,
-                                                 notificationCenter: notificationCenter)
+                                                 notificationManager: notificationManager)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
@@ -138,7 +134,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
     private func createMessage(
         for surface: MessageSurfaceId = .notification,
         isExpired: Bool,
-        action: String = "OPEN_NEW_TAB"
+        action: String = "://deep-link?url=homepanel/new-tab"
     ) -> GleanPlumbMessage {
         let metadata = GleanPlumbMessageMetaData(id: "",
                                                  impressions: 0,
@@ -161,7 +157,7 @@ class NotificationSurfaceManagerTests: XCTestCase {
 
         return GleanPlumbMessage(id: "test-notification",
                                  data: MockNotificationMessageDataProtocol(surface: surface),
-                                 action: "OPEN_NEW_TAB",
+                                 action: "://deep-link?url=homepanel/new-tab",
                                  triggers: ["INACTIVE_NEW_USER", "ALLOWED_TIPS_NOTIFICATIONS"],
                                  style: MockStyleDataProtocol(),
                                  metadata: metadata)
