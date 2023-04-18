@@ -21,7 +21,7 @@ struct CreditCardInputField: View {
     @Binding var text: String
     let inputType: CreditCardInputType
     let inputViewModel: CreditCardInputViewModel
-    var showError: Bool = false
+    var showError = false
 
     // Theming
     @Environment(\.themeType) var themeVal
