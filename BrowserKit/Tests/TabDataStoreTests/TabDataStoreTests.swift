@@ -7,12 +7,11 @@ import XCTest
 import Common
 
 final class TabDataStoreTests: XCTestCase {
-
-    private var tabDataStore: TabDataStore!
+    private var tabDataStore: DefaultTabDataStore!
 
     override func setUp() {
         super.setUp()
-        tabDataStore = TabDataStore()
+        tabDataStore = DefaultTabDataStore()
         BrowserKitInformation.shared.configure(buildChannel: .other,
                                                nightlyAppVersion: "",
                                                sharedContainerIdentifier: "group.org.mozilla.ios.Fennec")
@@ -90,7 +89,6 @@ final class TabDataStoreTests: XCTestCase {
             await tabDataStore.saveWindowData(window: windowData2)
         }
 
-
         Task {
             // Fetch all WindowData objects
             let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
@@ -99,8 +97,6 @@ final class TabDataStoreTests: XCTestCase {
             XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData1.id }))
             XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData2.id }))
         }
-
-
     }
 
     func testFetchWindowDataWithId() async throws {
