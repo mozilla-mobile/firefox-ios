@@ -31,19 +31,16 @@ for (let [name, files] of Object.entries(needsFirefoxFile)) {
 // resource://gre/modules/... with Assets/...
 // This is needed because aliases are not supported for URI imports.
 // See: https://github.com/webpack/webpack/issues/12792
-const CustomResourceURIWebpackPlugin = new webpack.NormalModuleReplacementPlugin(
-  /resource:\/\/gre\/modules\/(.*)/,
-  function (resource) {
-    console.log(resource.request.replace(
-      /resource:\/\/gre\/modules\//,
-      path.resolve(__dirname, 'Client/Assets/CC_Script')
-    ));
-    resource.request = resource.request.replace(
-      /resource:\/\/gre\/modules/,
-      "Assets/CC_Script"
-    );
-  }
-);
+const CustomResourceURIWebpackPlugin =
+  new webpack.NormalModuleReplacementPlugin(
+    /resource:\/\/gre\/modules\/(.*)/,
+    function (resource) {
+      resource.request = resource.request.replace(
+        /resource:\/\/gre\/modules/,
+        "Assets/CC_Script"
+      );
+    }
+  );
 
 module.exports = {
   mode: "production",

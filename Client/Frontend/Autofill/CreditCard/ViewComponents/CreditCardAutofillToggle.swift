@@ -11,7 +11,7 @@ protocol ToggleModelDelegate: AnyObject {
 }
 
 class ToggleModel: ObservableObject {
-    @Published var isEnabled: Bool = false {
+    @Published var isEnabled = false {
         didSet {
             delegate?.toggleDidChange(self)
         }
