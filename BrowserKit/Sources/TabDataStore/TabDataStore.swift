@@ -6,18 +6,23 @@ import Foundation
 import Common
 
 // MARK: Protocol
-protocol TabDataStore {
+public protocol TabDataStore {
     func fetchWindowData() async -> WindowData
     func saveWindowData(window: WindowData) async
     func clearAllWindowsData() async
+    func fetchWindowData(withID id: UUID) async -> WindowData?
+    func fetchAllWindowsData() async -> [WindowData]
+    func clearWindowData(for id: UUID) async
 }
 
-actor DefaultTabDataStore: TabDataStore {
+public actor DefaultTabDataStore: TabDataStore {
     // MARK: Variables
     let browserKitInfo = BrowserKitInformation.shared
     static let storePath = "codableWindowsState.archive"
     static let profilePath = "profile.profile"
     private var logger: Logger = DefaultLogger.shared
+
+    public init() {}
 
     // MARK: URL Utils
     private var windowDataDirectoryURL: URL? {
@@ -35,11 +40,11 @@ actor DefaultTabDataStore: TabDataStore {
     }
 
     // MARK: Fetching Window Data
-    func fetchWindowData() async -> WindowData {
+    public func fetchWindowData() async -> WindowData {
         return WindowData(id: UUID(), isPrimary: true, activeTabId: UUID(), tabData: [])
     }
 
-    func fetchWindowData(withID id: UUID) async -> WindowData? {
+    public func fetchWindowData(withID id: UUID) async -> WindowData? {
         guard let profileURL = self.windowURLPath(for: id) else {
             return nil
         }
@@ -51,7 +56,7 @@ actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    func fetchAllWindowsData() async -> [WindowData] {
+    public func fetchAllWindowsData() async -> [WindowData] {
         guard let profileURL = windowDataDirectoryURL else {
             return []
         }
@@ -91,7 +96,7 @@ actor DefaultTabDataStore: TabDataStore {
     }
 
     // MARK: Saving Data
-    func saveWindowData(window: WindowData) async {
+    public func saveWindowData(window: WindowData) async {
         Task {
             if let windowSavingPath = self.windowURLPath(for: window.id) {
                 do {
@@ -115,7 +120,7 @@ actor DefaultTabDataStore: TabDataStore {
     }
 
     // MARK: Deleting Window Data
-    func clearWindowData(for id: UUID) async {
+    public func clearWindowData(for id: UUID) async {
         guard let profileURL = self.windowURLPath(for: id) else {
             return
         }
@@ -130,7 +135,7 @@ actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    func clearAllWindowsData() async {
+    public func clearAllWindowsData() async {
         guard let profileURL = windowDataDirectoryURL else {
             return
         }
