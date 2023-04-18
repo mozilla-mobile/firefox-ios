@@ -3022,7 +3022,7 @@ extension String {
         // ZoomPageBar
         public static let ZoomPageTitle = MZLocalizedString(
             "Menu.ZoomPage.Title.v113",
-            tableName: "ZoomPageBar",
+            tableName: nil,
             value: "Zoom (%@)",
             comment: "Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent.")
         public static let ZoomPageCloseAccessibilityLabel = MZLocalizedString(
