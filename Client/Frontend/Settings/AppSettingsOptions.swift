@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/
+// file, You can obtain one at http://mozilla.org/MPL/2.0
 
 import Common
 import Foundation
@@ -11,7 +11,7 @@ import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 
-private var ShowDebugSettings = false
+private var ShowDebugSettings: Bool = false
 private var DebugSettingsClickCount: Int = 0
 
 struct SettingDisclosureUtility {
@@ -1081,8 +1081,7 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillSettings)
         let viewModel = CreditCardSettingsViewModel(profile: profile)
         let viewController = CreditCardSettingsViewController(
-            creditCardViewModel: viewModel,
-            startingConfig: nil)
+            creditCardViewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

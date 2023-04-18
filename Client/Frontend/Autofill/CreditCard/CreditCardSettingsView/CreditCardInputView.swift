@@ -7,12 +7,6 @@ import Storage
 import SwiftUI
 import Shared
 
-private struct CreditCardInputText {
-    var name = ""
-    var number = ""
-    var expiration = ""
-}
-
 struct CreditCardInputView: View {
     @ObservedObject var viewModel: CreditCardInputViewModel
     var dismiss: ((_ successVal: Bool) -> Void)
@@ -23,7 +17,6 @@ struct CreditCardInputView: View {
     @State var removeButtonColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
-    @State private var cardInputText = CreditCardInputText()
 
     var body: some View {
         NavigationView {
@@ -36,7 +29,6 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .name,
-                                             text: $cardInputText.name,
                                              showError: !viewModel.nameIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -50,7 +42,6 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .number,
-                                             text: $cardInputText.number,
                                              showError: !viewModel.numberIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
@@ -64,7 +55,6 @@ struct CreditCardInputView: View {
 
                     Group {
                         CreditCardInputField(inputType: .expiration,
-                                             text: $cardInputText.expiration,
                                              showError: !viewModel.expirationIsValid,
                                              inputViewModel: viewModel)
                         .padding(.top, 11)
