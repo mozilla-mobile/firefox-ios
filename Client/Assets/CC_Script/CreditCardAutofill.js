@@ -37,7 +37,8 @@ export class CreditCardAutofill {
     const allFields = fieldsMap.flatMap((fields) =>
       fields.map(this.getFieldRef)
     );
-    this.creditCardSections.push(...fieldsMap);
+    // Hacky: This is for PoC only - FXIOS-6124
+    this.creditCardSections.push({ form, fields: fieldsMap[0] }); 
     return allFields;
   }
 
@@ -45,17 +46,20 @@ export class CreditCardAutofill {
     return field.elementWeakRef.get();
   }
 
-  getSectionId(element) {
-    const isFieldInSection = (section, element) =>
-      section.some((field) => this.getFieldRef(field) === element);
-    const sectionId = this.creditCardSections.findIndex((creditCardSection) =>
-      isFieldInSection(creditCardSection, element)
+  getSectionId(form) {
+    const sectionId = this.creditCardSections.findIndex(
+      (creditCardSection) => creditCardSection.form === form
     );
     return sectionId;
   }
 
-  fillCCFormFields(fields, data) {
-    for (let field of fields) {
+  getSection(form) {
+    const sectionId = this.getSectionId(form);
+    return { id: sectionId, formInfo: this.creditCardSections[sectionId] };
+  }
+
+  fillCCFormFields(form, data) {
+    for (let field of form.fields) {
       const fieldRef = this.getFieldRef(field);
       if (field.fieldName in data) {
         fieldRef.value = data[field.fieldName];
