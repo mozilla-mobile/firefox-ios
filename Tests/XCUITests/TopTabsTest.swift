@@ -19,9 +19,8 @@ let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
+            waitForExistence(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
         }
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -43,7 +42,6 @@ class TopTabsTest: BaseTestCase {
     }
 
     func testAddTabFromContext() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(urlExample)
         // Initially there is only one tab open
@@ -217,7 +215,6 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
@@ -227,7 +224,6 @@ class TopTabsTest: BaseTestCase {
 
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()

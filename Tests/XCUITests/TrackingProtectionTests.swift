@@ -100,7 +100,6 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     func testBasicMoreInfo() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info

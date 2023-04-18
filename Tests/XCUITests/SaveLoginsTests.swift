@@ -181,10 +181,6 @@ class SaveLoginTest: BaseTestCase {
 
     // Smoketest
     func testSavedLoginAutofilled() {
-        if iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-        }
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         // Provided text fields are completely empty
@@ -208,10 +204,6 @@ class SaveLoginTest: BaseTestCase {
 
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        if iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
-            navigator.nowAt(NewTabScreen)
-        }
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)

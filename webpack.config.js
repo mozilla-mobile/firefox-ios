@@ -7,6 +7,7 @@ const AllFramesAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScri
 const MainFrameAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.js");
 const MainFrameAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.js");
 const WebcompatAllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.js");
+const AutofillAllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.js");
 
 // Ensure the first script loaded at document start is __firefox__.js
 // since it defines the `window.__firefox__` global.
@@ -52,6 +53,7 @@ module.exports = {
     MainFrameAtDocumentStart,
     MainFrameAtDocumentEnd,
     WebcompatAllFramesAtDocumentStart,
+    AutofillAllFramesAtDocumentStart,
   },
   // optimization: { minimize: false }, // use for debugging
   output: {

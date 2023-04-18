@@ -148,9 +148,12 @@ extension URL {
 
     public func getQuery() -> [String: String] {
         var results = [String: String]()
-        let components = URLComponents(url: self, resolvingAgainstBaseURL: false)
 
-        guard let queryItems = components?.queryItems else { return results }
+        guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
+              let queryItems = components.percentEncodedQueryItems
+        else {
+            return results
+        }
 
         for item in queryItems {
             if let value = item.value {

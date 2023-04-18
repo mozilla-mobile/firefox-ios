@@ -16,7 +16,6 @@ var code: String!
 
 class SyncUITests: BaseTestCase {
     func testUIFromSettings () {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
@@ -25,7 +24,6 @@ class SyncUITests: BaseTestCase {
 
     func testSyncUIFromBrowserTabMenu() {
         // Check menu available from HomeScreenPanel
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
@@ -48,7 +46,6 @@ class SyncUITests: BaseTestCase {
     }
 
     func testTypeOnGivenFields() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
@@ -77,7 +74,6 @@ class SyncUITests: BaseTestCase {
     }
 
     func testCreateAnAccountLink() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
         waitForExistence(app.webViews.firstMatch, timeout: 20)
@@ -90,7 +86,6 @@ class SyncUITests: BaseTestCase {
 
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(FxASigninScreen)
@@ -109,7 +104,6 @@ class SyncUITests: BaseTestCase {
     }
 
     func testQRPairing() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(Intro_FxASignin)

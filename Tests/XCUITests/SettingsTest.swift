@@ -6,7 +6,6 @@ import XCTest
 
 class SettingsTest: BaseTestCase {
     func testHelpOpensSUMOInTab() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
@@ -27,7 +26,6 @@ class SettingsTest: BaseTestCase {
     }
 
     func testOpenSiriOption() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.OpenSiriFromSettings)

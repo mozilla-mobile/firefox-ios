@@ -24,7 +24,7 @@ class TabManagerImplementation: LegacyTabManager {
     // MARK: - Restore tabs
 
     override func restoreTabs(_ forced: Bool = false) {
-        guard AppConstants.useNewTabDataStore else {
+        guard shouldUseNewTabStore() else {
             super.restoreTabs(forced)
             return
         }
@@ -55,6 +55,7 @@ class TabManagerImplementation: LegacyTabManager {
         }
     }
 
+    /// Creates the webview so needs to live on the main thread
     @MainActor
     private func generateTabs(from windowData: WindowData) async {
         for tabData in windowData.tabData {
@@ -87,29 +88,56 @@ class TabManagerImplementation: LegacyTabManager {
     // MARK: - Save tabs
 
     override func preserveTabs() {
-        guard AppConstants.useNewTabDataStore else {
-            super.preserveTabs()
+        // For now we want to continue writing to both data stores so that we can revert to the old system if needed
+        super.preserveTabs()
+        guard shouldUseNewTabStore() else {
             return
         }
 
-        // TODO: FXIOS-6123 Handle new save logic
+        Task {
+            // This value should never be nil but we need to still treat it as if it can be nil until the old code is removed
+            let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
+            let windowData = WindowData(activeTabId: activeTabID,
+                                        tabData: self.generateTabDataForSaving())
+            await tabDataStore.saveTabData(window: windowData)
+        }
+    }
+
+    private func generateTabDataForSaving() -> [TabData] {
+        let tabData = tabs.map { tab in
+            let oldTabGroupData = tab.metadataManager?.tabGroupData
+            let state = TabGroupTimerState(rawValue: oldTabGroupData?.tabHistoryCurrentState ?? "")
+            let groupData = TabGroupData(searchTerm: oldTabGroupData?.tabAssociatedSearchTerm,
+                                         searchUrl: oldTabGroupData?.tabAssociatedSearchUrl,
+                                         nextUrl: oldTabGroupData?.tabAssociatedNextUrl,
+                                         tabHistoryCurrentState: state)
+            return TabData(id: UUID(uuidString: tab.tabUUID) ?? UUID(),
+                           title: tab.title ?? tab.lastTitle,
+                           siteUrl: tab.url?.absoluteString ?? "",
+                           faviconURL: tab.faviconURL,
+                           isPrivate: tab.isPrivate,
+                           lastUsedTime: Date.fromTimestamp(tab.sessionData?.lastUsedTime ?? 0),
+                           createdAtTime: Date.fromTimestamp(tab.firstCreatedTime ?? 0),
+                           tabGroupData: groupData)
+        }
+        return tabData
     }
 
     override func storeChanges() {
-        guard AppConstants.useNewTabDataStore else {
+        guard shouldUseNewTabStore() else {
             super.storeChanges()
             return
         }
 
-        // TODO: FXIOS-6123 Handle new save logic
+        saveTabs(toProfile: profile, normalTabs)
+        preserveTabs()
     }
 
-    override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
-        guard AppConstants.useNewTabDataStore else {
-            super.selectTab(tab, previous: previous)
-            return
+    private func shouldUseNewTabStore() -> Bool {
+        if #available(iOS 15, *),
+            AppConstants.useNewTabDataStore {
+            return true
         }
-
-        // TODO: FXIOS-6123 Handle new select tab logic
+        return false
     }
 }

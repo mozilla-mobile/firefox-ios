@@ -37,6 +37,14 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startLaunch(with: launchType)
     }
 
+    /// Handles the specified route.
+    ///
+    /// - Parameter route: The route to handle.
+    ///
+    func handle(route: Route) {
+        // TODO: Implement this function.
+    }
+
     func launchBrowser() {
         startBrowser(with: nil)
     }
