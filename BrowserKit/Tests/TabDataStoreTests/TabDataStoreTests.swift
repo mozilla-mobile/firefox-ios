@@ -19,7 +19,6 @@ final class TabDataStoreTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        tabDataStore = nil
     }
 
     func testSaveTabData() async throws {
@@ -45,16 +44,17 @@ final class TabDataStoreTests: XCTestCase {
 
         Task {
             let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
-
-            XCTAssertEqual(fetchedWindowData?.id, windowData.id)
-            XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
-            XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
-            XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
+            DispatchQueue.main.async {
+                XCTAssertEqual(fetchedWindowData?.id, windowData.id)
+                XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
+                XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
+                XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
+            }
         }
     }
 
     func testFetchAllWindowsData() async throws {
-        // Create some sample TabData and WindowData objects
+        await tabDataStore.clearAllWindowsData()
         let tab1 = TabData(id: UUID(),
                            title: "Test1",
                            siteUrl: "https://test1.com",
@@ -87,15 +87,14 @@ final class TabDataStoreTests: XCTestCase {
         }
         Task {
             await tabDataStore.saveWindowData(window: windowData2)
-        }
-
-        Task {
-            // Fetch all WindowData objects
-            let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
-            // Verify the fetched data
-            XCTAssertEqual(fetchedWindowsData.count, 2)
-            XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData1.id }))
-            XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData2.id }))
+            Task {
+                // Fetch all WindowData objects
+                let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
+                // Verify the fetched data
+                XCTAssertEqual(fetchedWindowsData.count, 2)
+                XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData1.id }))
+                XCTAssertTrue(fetchedWindowsData.contains(where: { $0.id == windowData2.id }))
+            }
         }
     }
 
@@ -116,18 +115,17 @@ final class TabDataStoreTests: XCTestCase {
         // Save the WindowData object
         Task {
             await tabDataStore.saveWindowData(window: windowData)
-        }
+            // Fetch the WindowData object using its ID
+            Task {
+                let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
 
-        // Fetch the WindowData object using its ID
-        Task {
-            let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
-
-            // Verify the fetched data
-            XCTAssertNotNil(fetchedWindowData)
-            XCTAssertEqual(fetchedWindowData?.id, windowData.id)
-            XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
-            XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
-            XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
+                // Verify the fetched data
+                XCTAssertNotNil(fetchedWindowData)
+                XCTAssertEqual(fetchedWindowData?.id, windowData.id)
+                XCTAssertEqual(fetchedWindowData?.isPrimary, windowData.isPrimary)
+                XCTAssertEqual(fetchedWindowData?.activeTabId, windowData.activeTabId)
+                XCTAssertEqual(fetchedWindowData?.tabData.count, windowData.tabData.count)
+            }
         }
     }
 
@@ -153,4 +151,5 @@ final class TabDataStoreTests: XCTestCase {
         // Assuming the default fetchTabData() returns an empty WindowData object
         XCTAssertTrue(fetchedWindowData.isEmpty)
     }
+
 }

@@ -64,10 +64,10 @@ public actor DefaultTabDataStore: TabDataStore {
         do {
             let fileURLs = try FileManager.default.contentsOfDirectory(at: profileURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
 
-            let windowDataFiles = fileURLs.filter { $0.path.contains(DefaultTabDataStore.storePath) }
+//            let windowDataFiles = fileURLs.filter { $0.path.contains(DefaultTabDataStore.storePath) }
 
             var windowsData: [WindowData] = []
-            for fileURL in windowDataFiles {
+            for fileURL in fileURLs {
                 do {
                     let windowData = try await decodeWindowData(from: fileURL)
                     windowsData.append(windowData)
