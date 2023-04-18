@@ -46,6 +46,11 @@ protocol TabDisplayer: AnyObject {
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell
 }
 
+protocol CloseTabsProtocol {
+    func performCloseAction(for tab: Tab)
+    func undoCloseTab(tab: Tab, index: Int?)
+}
+
 enum TabDisplaySection: Int, CaseIterable {
     case inactiveTabs
     case groupedTabs
@@ -63,7 +68,7 @@ struct TabDisplayOrder: Codable {
     var regularTabUUID: [String] = []
 }
 
-class TabDisplayManager: NSObject, FeatureFlaggable {
+class TabDisplayManager: NSObject, FeatureFlaggable, CloseTabsProtocol {
     // MARK: - Variables
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
@@ -105,6 +110,10 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
     }
 
     private(set) var isPrivate = false
+
+    private var isSelectedTabTypeEmpty: Bool {
+        return isPrivate ? tabManager.privateTabs.isEmpty : tabManager.normalTabs.isEmpty
+    }
 
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
     // that the item has been long pressed on (and not moved yet), and this gesture recognizer has been triggered
@@ -455,11 +464,11 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         guard let index = collectionView.indexPath(for: cell)?.item,
                 let tab = dataStore.at(index) else { return }
 
-        closeAction(for: tab)
+        performCloseAction(for: tab)
     }
 
     // Use for Grid tab view version
-    func closeAction(for tab: Tab) {
+    func performCloseAction(for tab: Tab) {
         guard !isDragging else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
@@ -476,9 +485,9 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
 
     func undoCloseTab(tab: Tab, index: Int?) {
         getTabsAndUpdateInactiveState { _, _ in
-            self.collectionView.reloadData()
             self.tabManager.reAddTabs(tabsToAdd: [tab], previousTabUUID: "")
             self.dataStore.insert(tab, at: index)
+            self.collectionView.reloadData()
             _ = self.profile.recentlyClosedTabs.popFirstTab()
         }
     }
@@ -1004,9 +1013,7 @@ extension TabDisplayManager: TabManagerDelegate {
             return
         }
 
-        if tab.isPrivate != self.isPrivate {
-            return
-        }
+        guard tab.isPrivate == self.isPrivate else { return }
 
         updateWith(animationType: .addTab) { [unowned self] in
             let indexToPlaceTab = getIndexToPlaceTab(placeNextToParentTab: placeNextToParentTab)
@@ -1042,7 +1049,7 @@ extension TabDisplayManager: TabManagerDelegate {
             return
         }
 
-        let type = tabManager.normalTabs.isEmpty ? TabAnimationType.removedLastTab : TabAnimationType.removedNonLastTab
+        let type = isSelectedTabTypeEmpty ? TabAnimationType.removedLastTab : TabAnimationType.removedNonLastTab
 
         updateWith(animationType: type) { [weak self] in
             guard let removed = self?.dataStore.remove(tab) else { return }
