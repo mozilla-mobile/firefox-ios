@@ -136,7 +136,6 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT)
         XCTAssertTrue(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         navigator.goto(ClearPrivateDataSettings)

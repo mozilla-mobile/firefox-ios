@@ -69,12 +69,10 @@ class HistoryTests: BaseTestCase {
 
         // Go to Clear Data
         navigator.goto(NewTabScreen)
-        closeKeyboard()
         navigator.performAction(Action.AcceptClearPrivateData)
 
         // Back on History panel view check that there is not any item
         navigator.goto(HomePanelsScreen)
-        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         waitForExistence(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
@@ -158,7 +156,6 @@ class HistoryTests: BaseTestCase {
         // "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
-        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         XCTAssertTrue(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg].exists)
@@ -302,7 +299,6 @@ class HistoryTests: BaseTestCase {
         // On private mode, the "Recently Closed Tabs List" is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
-        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
@@ -313,7 +309,6 @@ class HistoryTests: BaseTestCase {
         // On regular mode, the "Recently Closed Tabs List" is empty, too
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.goto(NewTabScreen)
-        closeKeyboard()
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables[HistoryPanelA11y.tableView])
         waitForNoExistence(app.tables["Recently Closed Tabs List"])

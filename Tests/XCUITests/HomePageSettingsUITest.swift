@@ -142,12 +142,11 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Open a new tab and tap on Home option
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
         navigator.performAction(Action.GoToHomePage)
 
-        // Workaroud needed after xcode 11.3 update Issue 5937
+        // Workaround needed after Xcode 11.3 update Issue 5937
         // Lets check only that website is open
         waitForExistence(app.textFields["url"], timeout: TIMEOUT)
         waitForValueContains(app.textFields["url"], value: "mozilla")

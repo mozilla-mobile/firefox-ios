@@ -41,8 +41,6 @@ class NewTabSettingsTest: BaseTestCase {
         waitForNoExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
 
         // Now check if it switches to FF Home
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
-        app.buttons["urlBar-cancel"].tap()
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
