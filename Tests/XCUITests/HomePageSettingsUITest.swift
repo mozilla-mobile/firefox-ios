@@ -232,7 +232,6 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         checkRecentlySaved()
-        navigator.performAction(Action.CloseURLBarOpen)
         app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.RecentlySaved.itemCell].staticTexts[urlExampleLabel].tap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -279,8 +278,10 @@ class HomePageSettingsUITests: BaseTestCase {
 
     func testCustomizeHomepage() {
         if !iPad() {
-            waitForExistence(app.collectionViews.firstMatch, timeout: TIMEOUT)
-            app.collectionViews.firstMatch.swipeUp()
+            waitForExistence(app.collectionViews["FxCollectionView"], timeout: TIMEOUT)
+            app.collectionViews["FxCollectionView"].swipeUp()
+            app.collectionViews["FxCollectionView"].swipeUp()
+            app.collectionViews["FxCollectionView"].swipeUp()
             waitForExistence(app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage], timeout: TIMEOUT)
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
