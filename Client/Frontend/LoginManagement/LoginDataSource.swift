@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -27,7 +27,8 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         super.init()
     }
 
-    @objc func numberOfSections(in tableView: UITableView) -> Int {
+    @objc
+    func numberOfSections(in tableView: UITableView) -> Int {
         if viewModel.loginRecordSections.isEmpty {
             tableView.backgroundView = emptyStateView
             return 1
@@ -38,14 +39,16 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         return viewModel.loginRecordSections.count + 1
     }
 
-    @objc func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @objc
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == LoginListViewController.loginsSettingsSection {
             return 2
         }
         return viewModel.loginsForSection(section)?.count ?? 0
     }
 
-    @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    @objc
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == LoginListViewController.loginsSettingsSection,
            let cell = tableView.dequeueReusableCell(withIdentifier: LoginListTableViewSettingsCell.cellIdentifier,
                                                     for: indexPath) as? LoginListTableViewSettingsCell {

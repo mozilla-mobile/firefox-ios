@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -279,7 +279,8 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         return UITableView.automaticDimension
     }
 
-    @objc func moreInfoTapped() {
+    @objc
+    func moreInfoTapped() {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("tracking-protection-ios")
         navigationController?.pushViewController(viewController, animated: true)

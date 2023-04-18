@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 
@@ -173,11 +173,9 @@ extension String {
             return self
         }
         var labels = self.components(separatedBy: ".")
-        for (i, part) in labels.enumerated() {
-            if !isValidUnicodeScala(part) {
-                let a = encode(part)
-                labels[i] = prefixPunycode + a
-            }
+        for (i, part) in labels.enumerated() where !isValidUnicodeScala(part) {
+            let a = encode(part)
+            labels[i] = prefixPunycode + a
         }
         let resultString = labels.joined(separator: ".")
         return resultString
@@ -185,11 +183,9 @@ extension String {
 
     public func asciiHostToUTF8() -> String {
         var labels = self.components(separatedBy: ".")
-        for (index, part) in labels.enumerated() {
-            if isValidPunycodeScala(part) {
-                let changeStr = String(part[part.index(part.startIndex, offsetBy: 4)...])
-                labels[index] = decode(changeStr)
-            }
+        for (index, part) in labels.enumerated() where isValidPunycodeScala(part) {
+            let changeStr = String(part[part.index(part.startIndex, offsetBy: 4)...])
+            labels[index] = decode(changeStr)
         }
         let resultString = labels.joined(separator: ".")
         return resultString

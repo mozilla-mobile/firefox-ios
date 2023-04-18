@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Common
@@ -192,6 +192,7 @@ extension BrowserViewController: WKUIDelegate {
                                             completion: { buttonPressed in
                         if buttonPressed {
                             self.tabManager.selectTab(tab)
+                            self.overlayManager.switchTab(shouldCancelLoading: true)
                         }
                     })
                     self.show(toast: toast)
@@ -302,7 +303,7 @@ extension BrowserViewController: WKUIDelegate {
                         pasteboard.url = url as URL
                         let changeCount = pasteboard.changeCount
                         let application = UIApplication.shared
-                        var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
+                        var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
                         taskId = application.beginBackgroundTask(expirationHandler: {
                             application.endBackgroundTask(taskId)
                         })
@@ -352,7 +353,8 @@ extension BrowserViewController: WKUIDelegate {
         UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveError), nil)
     }
 
-    @objc func saveError(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+    @objc
+    func saveError(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         guard error != nil else { return }
         DispatchQueue.main.async {
             let accessDenied = UIAlertController(title: .PhotoLibraryFirefoxWouldLikeAccessTitle, message: .PhotoLibraryFirefoxWouldLikeAccessMessage, preferredStyle: .alert)
@@ -411,6 +413,7 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
+        zoomPageDidPressClose()
 
         if tab == tabManager.selectedTab,
            navigationAction.navigationType == .linkActivated,

@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import UIKit
@@ -138,7 +138,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
     }
 
     // Button Actions
-    @objc private func closeUpdate() {
+    @objc
+    private func closeUpdate() {
         didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
@@ -191,7 +192,8 @@ class UpdateViewController: UIViewController, OnboardingViewControllerProtocol {
         self.present(controller, animated: true)
     }
 
-    @objc func dismissSignInViewController() {
+    @objc
+    func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
         closeUpdate()
     }

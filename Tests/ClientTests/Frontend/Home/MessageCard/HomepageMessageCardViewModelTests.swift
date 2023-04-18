@@ -161,7 +161,7 @@ class MockMessageCardDataAdaptor: MessageCardDataAdaptor {
 // MARK: - MockMessageDataProtocol
 class MockMessageDataProtocol: MessageDataProtocol {
     var surface: MessageSurfaceId = .newTabCard
-    var isControl: Bool = true
+    var isControl = true
     var title: String? = "Test"
     var text: String = "This is a test"
     var buttonLabel: String?
@@ -203,7 +203,13 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
         onMessageDismissedCalled += 1
     }
 
-    func onMalformedMessage(messageKey: String) {}
+    func onMalformedMessage(id: String, surface: MessageSurfaceId) {}
+
+    func messageForId(_ id: String) -> Client.GleanPlumbMessage? {
+        if message?.id == id { return message }
+
+        return nil
+    }
 }
 
 // MARK: SpyHomepageMessageCardCell

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -93,11 +93,13 @@ class CredentialWelcomeViewController: UIViewController {
         ])
     }
 
-    @objc func cancelButtonTapped(_ sender: UIButton) {
+    @objc
+    func cancelButtonTapped(_ sender: UIButton) {
         delegate?.credentialWelcomeViewControllerDidCancel()
     }
 
-    @objc func proceedButtonTapped(_ sender: UIButton) {
+    @objc
+    func proceedButtonTapped(_ sender: UIButton) {
         delegate?.credentialWelcomeViewControllerDidProceed()
     }
 }

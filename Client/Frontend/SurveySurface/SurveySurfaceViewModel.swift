@@ -12,7 +12,7 @@ class SurveySurfaceViewModel {
 
     // MARK: - Initialization
     init(with info: SurveySurfaceInfoProtocol,
-         andDelegate delegate: SurveySurfaceDelegate
+         delegate: SurveySurfaceDelegate
     ) {
         self.info = info
         self.delegate = delegate

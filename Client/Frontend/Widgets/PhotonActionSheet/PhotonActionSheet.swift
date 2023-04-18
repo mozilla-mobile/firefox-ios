@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Storage
@@ -248,7 +248,8 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     // MARK: - Theme
 
-    @objc func reduceTransparencyChanged() {
+    @objc
+    func reduceTransparencyChanged() {
         // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
         applyTheme()
     }
@@ -300,7 +301,8 @@ class PhotonActionSheet: UIViewController, Themeable {
 
     // MARK: - Actions
 
-    @objc private func stopRotateSyncIcon() {
+    @objc
+    private func stopRotateSyncIcon() {
         ensureMainThread {
             self.tableView.reloadData()
         }
@@ -321,7 +323,8 @@ class PhotonActionSheet: UIViewController, Themeable {
         }
     }
 
-    @objc private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
+    @objc
+    private func dismiss(_ gestureRecognizer: UIGestureRecognizer?) {
         dismissVC()
     }
 

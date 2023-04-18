@@ -28,8 +28,8 @@ class MailProvidersTests: XCTestCase {
         }
 
         let expectedResult = ["recipient": toEmail,
-                              "subject": subject,
-                              "textbody": body,
+                              "subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "textbody": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail,
                               "bcc": bccEmail]
 
@@ -59,8 +59,8 @@ class MailProvidersTests: XCTestCase {
         }
 
         let expectedResult = ["to": toEmail,
-                              "subject": subject,
-                              "htmlBody": body,
+                              "subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "htmlBody": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail,
                               "bcc": bccEmail]
 
@@ -83,8 +83,8 @@ class MailProvidersTests: XCTestCase {
         }
 
         let expectedResult = ["to": toEmail,
-                              "subject": subject,
-                              "body": body,
+                              "subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "body": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail,
                               "bcc": bccEmail]
 
@@ -107,8 +107,8 @@ class MailProvidersTests: XCTestCase {
         }
 
         let expectedResult = ["to": toEmail,
-                              "subject": subject,
-                              "body": body,
+                              "subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "body": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail,
                               "bcc": bccEmail]
 
@@ -131,8 +131,8 @@ class MailProvidersTests: XCTestCase {
         }
 
         let expectedResult = ["to": toEmail,
-                              "subject": subject,
-                              "body": body,
+                              "subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "body": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail,
                               "bcc": bccEmail]
 
@@ -155,8 +155,8 @@ class MailProvidersTests: XCTestCase {
         }
 
         let expectedResult = ["to": toEmail,
-                              "subject": subject,
-                              "body": body,
+                              "subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "body": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail]
 
         XCTAssertEqual(urlStringWithoutQuery(url: mailURL)!, "ymail:mail/any/compose")
@@ -178,8 +178,8 @@ class MailProvidersTests: XCTestCase {
         }
 
         let expectedResult = ["to": toEmail,
-                              "subject": subject,
-                              "body": body,
+                              "subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "body": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail,
                               "bcc": bccEmail]
 
@@ -202,8 +202,8 @@ class MailProvidersTests: XCTestCase {
         }
 
         let expectedResult = ["to": toEmail,
-                              "subject": subject,
-                              "body": body,
+                              "subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "body": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail,
                               "bcc": bccEmail]
 
@@ -225,8 +225,8 @@ class MailProvidersTests: XCTestCase {
             return
         }
 
-        let expectedResult = ["subject": subject,
-                              "body": body,
+        let expectedResult = ["subject": subject.replacingOccurrences(of: " ", with: "%20"),
+                              "body": body.replacingOccurrences(of: " ", with: "%20"),
                               "cc": ccEmail,
                               "bcc": bccEmail]
 

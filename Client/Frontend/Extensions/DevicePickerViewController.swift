@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -259,7 +259,8 @@ class DevicePickerViewController: UITableViewController {
         }
     }
 
-    @objc func refresh() {
+    @objc
+    func refresh() {
         RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
         if let refreshControl = refreshControl {
             refreshControl.beginRefreshing()
@@ -268,11 +269,13 @@ class DevicePickerViewController: UITableViewController {
         }
     }
 
-    @objc func cancel() {
+    @objc
+    func cancel() {
         pickerDelegate?.devicePickerViewControllerDidCancel(self)
     }
 
-    @objc func send() {
+    @objc
+    func send() {
         var pickedItems = [RemoteDevice]()
         for id in selectedIdentifiers {
             if let item = devices.find({ $0.id == id }) {

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // IMPORTANT!: Please take into consideration when adding new imports to
 // this file that it is utilized by external components besides the core
@@ -25,15 +25,18 @@ public protocol SyncManager {
     func syncClients() -> OldSyncResult
     func syncClientsThenTabs() -> OldSyncResult
     func syncHistory() -> OldSyncResult
-    @discardableResult func syncEverything(why: OldSyncReason) -> Success
     func syncNamedCollections(why: OldSyncReason, names: [String]) -> Success
+    @discardableResult
+    func syncEverything(why: OldSyncReason) -> Success
 
     func endTimedSyncs()
     func applicationDidBecomeActive()
     func applicationDidEnterBackground()
 
-    @discardableResult func onRemovedAccount() -> Success
-    @discardableResult func onAddedAccount() -> Success
+    @discardableResult
+    func onRemovedAccount() -> Success
+    @discardableResult
+    func onAddedAccount() -> Success
 }
 
 typealias SyncFunction = (SyncDelegate, Prefs, Ready, OldSyncReason) -> OldSyncResult
@@ -79,6 +82,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: AnyObject {
+    var autofill: RustAutofill { get }
     var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
@@ -126,7 +130,8 @@ protocol Profile: AnyObject {
 
     func cleanupHistoryIfNeeded()
 
-    @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+    @discardableResult
+    func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
     func pollCommands(forcePoll: Bool)
@@ -213,7 +218,7 @@ open class BrowserProfile: Profile {
     var syncManager: SyncManager!
 
     var syncDelegate: SyncDelegate?
-    var useRustSyncManager: Bool = false
+    var useRustSyncManager = false
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -475,7 +480,7 @@ open class BrowserProfile: Profile {
 
     lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
     lazy var browserDbPath =  URL(fileURLWithPath: (try! self.files.getAndEnsureDirectory())).appendingPathComponent("browser.db").path
-    lazy var places: RustPlaces = RustPlaces(databasePath: self.placesDbPath)
+    lazy var places = RustPlaces(databasePath: self.placesDbPath)
 
     public func migrateHistoryToPlaces(callback: @escaping (HistoryMigrationResult) -> Void, errCallback: @escaping (Error?) -> Void) {
         guard FileManager.default.fileExists(atPath: browserDbPath) else {
@@ -858,7 +863,7 @@ open class BrowserProfile: Profile {
 
         fileprivate var syncTimer: Timer?
 
-        fileprivate var backgrounded: Bool = true
+        fileprivate var backgrounded = true
         private let logger: Logger
 
         deinit {
@@ -1042,11 +1047,13 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @objc func onStartSyncing(_ notification: NSNotification) {
+        @objc
+        func onStartSyncing(_ notification: NSNotification) {
             syncDisplayState = .inProgress
         }
 
-        @objc func onFinishSyncing(_ notification: NSNotification) {
+        @objc
+        func onFinishSyncing(_ notification: NSNotification) {
             if let syncState = syncDisplayState, syncState == .good {
                 self.lastSyncFinishTime = Date.now()
             }
@@ -1560,7 +1567,8 @@ open class BrowserProfile: Profile {
             }
         }
 
-        @discardableResult public func syncEverything(why: OldSyncReason) -> Success {
+        @discardableResult
+        public func syncEverything(why: OldSyncReason) -> Success {
             if let accountManager = RustFirefoxAccounts.shared.accountManager.peek(), accountManager.accountMigrationInFlight() {
                 accountManager.retryMigration { _ in }
                 return Success()
@@ -1620,7 +1628,8 @@ open class BrowserProfile: Profile {
             return self.syncSeveral(why: why, synchronizers: synchronizers) >>> succeed
         }
 
-        @objc func syncOnTimer() {
+        @objc
+        func syncOnTimer() {
             self.syncEverything(why: .scheduled)
             self.profile.pollCommands()
         }

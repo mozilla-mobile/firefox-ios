@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -11,7 +11,7 @@ import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 
-private var ShowDebugSettings: Bool = false
+private var ShowDebugSettings = false
 private var DebugSettingsClickCount: Int = 0
 
 struct SettingDisclosureUtility {
@@ -99,7 +99,8 @@ class SyncNowSetting: WithAccountSetting {
         }
     }
 
-    @objc func stopRotateSyncIcon() {
+    @objc
+    func stopRotateSyncIcon() {
         DispatchQueue.main.async {
             self.imageView.layer.removeAllAnimations()
         }
@@ -203,7 +204,8 @@ class SyncNowSetting: WithAccountSetting {
 
     fileprivate let syncSUMOURL = SupportUtils.URLForTopic("sync-status-ios")
 
-    @objc fileprivate func troubleshoot() {
+    @objc
+    fileprivate func troubleshoot() {
         let viewController = SettingsContentViewController()
         viewController.url = syncSUMOURL
         settings.navigationController?.pushViewController(viewController, animated: true)
@@ -306,7 +308,8 @@ class AccountStatusSetting: WithAccountSetting {
         NotificationCenter.default.addObserver(self, selector: #selector(updateAccount), name: .FirefoxAccountProfileChanged, object: nil)
     }
 
-    @objc func updateAccount(notification: Notification) {
+    @objc
+    func updateAccount(notification: Notification) {
         DispatchQueue.main.async {
             self.settings.tableView.reloadData()
         }
@@ -762,6 +765,32 @@ class YourRightsSetting: Setting {
     }
 }
 
+// Opens the on-boarding screen again
+class ShowIntroductionSetting: Setting {
+    let profile: Profile
+
+    override var accessibilityIdentifier: String? { return "ShowTour" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        let attributes = [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]
+        super.init(title: NSAttributedString(string: .AppSettingsShowTour,
+                                             attributes: attributes))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        navigationController?.dismiss(animated: true, completion: {
+            NotificationCenter.default.post(name: .PresentIntroView, object: self)
+
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .tap,
+                object: .settingsMenuShowTour
+            )
+        })
+    }
+}
+
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: .AppSettingsSendFeedback, attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
@@ -887,6 +916,7 @@ class SearchSetting: Setting {
 class LoginsSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
+    private let appAuthenticator: AppAuthenticationProtocol
     weak var navigationController: UINavigationController?
     weak var settings: AppSettingsTableViewController?
 
@@ -894,9 +924,12 @@ class LoginsSetting: Setting {
 
     override var accessibilityIdentifier: String? { return "Logins" }
 
-    init(settings: SettingsTableViewController, delegate: SettingsDelegate?) {
+    init(settings: SettingsTableViewController,
+         delegate: SettingsDelegate?,
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()) {
         self.profile = settings.profile
         self.tabManager = settings.tabManager
+        self.appAuthenticator = appAuthenticator
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
 
@@ -925,7 +958,7 @@ class LoginsSetting: Setting {
             self.delegate?.settingsOpenURLInNewTab(url)
         }
 
-        if AppAuthenticator.canAuthenticateDeviceOwner() {
+        if appAuthenticator.canAuthenticateDeviceOwner() {
             if LoginOnboarding.shouldShow() {
                 let loginOnboardingViewController = LoginOnboardingViewController(profile: profile, tabManager: tabManager)
 
@@ -1033,11 +1066,12 @@ class ClearPrivateDataSetting: Setting {
 }
 
 class AutofillCreditCardSettings: Setting, FeatureFlaggable {
+    private let profile: Profile
     override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
-
     override var accessibilityIdentifier: String? { return "AutofillCreditCard" }
 
     init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
         let title: String = .SettingsAutofillCreditCard
         super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: settings.themeManager.currentTheme.colors.textPrimary]))
     }
@@ -1045,8 +1079,10 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
     override func onClick(_ navigationController: UINavigationController?) {
         // Telemetry
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .creditCardAutofillSettings)
-
-        let viewController = CreditCardSettingsViewController(theme: theme)
+        let viewModel = CreditCardSettingsViewModel(profile: profile)
+        let viewController = CreditCardSettingsViewController(
+            creditCardViewModel: viewModel,
+            startingConfig: nil)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -1099,7 +1135,8 @@ class ChinaSyncServiceSetting: Setting {
         cell.selectionStyle = .none
     }
 
-    @objc func switchValueChanged(_ toggle: UISwitch) {
+    @objc
+    func switchValueChanged(_ toggle: UISwitch) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 
@@ -47,8 +47,8 @@ extension UIView {
     }
 
     func removeVisualEffectView() {
-        for subview in self.subviews {
-            if subview is UIVisualEffectView { subview.removeFromSuperview() }
+        for subview in self.subviews where subview is UIVisualEffectView {
+            subview.removeFromSuperview()
         }
         // Set clipsToBounds to false to make sure shadows will be visible
         clipsToBounds = false

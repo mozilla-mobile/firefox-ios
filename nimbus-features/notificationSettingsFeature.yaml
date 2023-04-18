@@ -7,7 +7,7 @@ features:
       notification-settings-feature-status:
         description: If true, we will allow user to use the the notifications menu in Settings
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value: {

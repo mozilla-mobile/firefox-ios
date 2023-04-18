@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -116,30 +116,29 @@ class SearchTermGroupsUtility {
         var itemsInGroups: [T] = [T]()
 
         outeritemLoop: for item in items {
-            innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata {
-                if historyMetaList.contains(where: { metadata in
-                    var stringURL: String = ""
+            innerMetadataLoop: for (searchTerm, historyMetaList) in searchTermMetadata where  historyMetaList.contains(where: { metadata in
+                var stringURL: String = ""
 
-                    if let item = item as? Site {
-                        stringURL = item.url
-                    } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
-                        stringURL = url
-                    } else if let item = item as? HistoryHighlight {
-                        stringURL = item.url
-                    }
-
-                    return metadata.url == stringURL || metadata.referrerUrl == stringURL
-                }) {
-                    itemsInGroups.append(item)
-                    if itemGroupData[searchTerm] == nil {
-                        itemGroupData[searchTerm] = [item]
-                    } else {
-                        itemGroupData[searchTerm]?.append(item)
-                    }
-                    break innerMetadataLoop
+                if let item = item as? Site {
+                    stringURL = item.url
+                } else if let item = item as? Tab, let url = item.lastKnownUrl?.absoluteString {
+                    stringURL = url
+                } else if let item = item as? HistoryHighlight {
+                    stringURL = item.url
                 }
+
+                return metadata.url == stringURL || metadata.referrerUrl == stringURL
+            }) {
+                itemsInGroups.append(item)
+                if itemGroupData[searchTerm] == nil {
+                    itemGroupData[searchTerm] = [item]
+                } else {
+                    itemGroupData[searchTerm]?.append(item)
+                }
+                break innerMetadataLoop
             }
         }
+
         return (itemGroupData, itemsInGroups)
     }
 
@@ -274,7 +273,8 @@ class StopWatchTimer {
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(incrementValue), userInfo: nil, repeats: true)
     }
 
-    @objc func incrementValue() {
+    @objc
+    func incrementValue() {
         elapsedTime += 1
     }
 

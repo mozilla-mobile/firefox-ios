@@ -22,7 +22,7 @@ public class RustSyncManager: NSObject, SyncManager {
     private weak var profile: BrowserProfile?
     private let prefs: Prefs
     private var syncTimer: Timer?
-    private var backgrounded: Bool = true
+    private var backgrounded = true
     private let logger: Logger
     private let fxaDeclinedEngines = "fxa.cwts.declinedSyncEngines"
     private var notificationCenter: NotificationProtocol
@@ -67,7 +67,8 @@ public class RustSyncManager: NSObject, SyncManager {
         super.init()
     }
 
-    @objc func syncOnTimer() {
+    @objc
+    func syncOnTimer() {
         syncEverything(why: .scheduled)
         profile?.pollCommands()
     }
@@ -309,7 +310,7 @@ public class RustSyncManager: NSObject, SyncManager {
         let deferred = Deferred<Maybe<([EngineIdentifier], [String: String])>>()
         var localEncryptionKeys: [String: String] = [:]
         var rustEngines: [String] = []
-        var registeredPlaces: Bool = false
+        var registeredPlaces = false
 
         for engine in engines {
             switch engine {
@@ -471,7 +472,8 @@ public class RustSyncManager: NSObject, SyncManager {
         }
     }
 
-    @discardableResult public func syncEverything(why: OldSyncReason) -> Success {
+    @discardableResult
+    public func syncEverything(why: OldSyncReason) -> Success {
         let rustReason = toRustSyncReason(reason: why)
         return syncRustEngines(why: rustReason, engines: RustTogglableEngines) >>> succeed
     }
@@ -485,11 +487,9 @@ public class RustSyncManager: NSObject, SyncManager {
         // Massage the list of names into engine identifiers.var engines = [String]()
         var engines = [String]()
 
-        for name in names {
-            // There may be duplicates in `names` so we are removing them here
-            if !engines.contains(name) {
-                engines.append(name)
-            }
+        // There may be duplicates in `names` so we are removing them here
+        for name in names where !engines.contains(name) {
+            engines.append(name)
         }
 
         // Ensuring that only valid engines are submitted

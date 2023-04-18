@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import Storage
@@ -39,6 +39,7 @@ extension BrowserViewController: URLBarDelegate {
             profile: profile,
             tabToFocus: tabToFocus,
             tabManager: tabManager,
+            overlayManager: overlayManager,
             focusedSegment: focusedSegment)
 
         tabTrayViewController?.openInNewTab = { url, isPrivate in
@@ -335,7 +336,11 @@ extension BrowserViewController: URLBarDelegate {
                 toast.removeFromSuperview()
             }
 
-            showHomepage(inline: false)
+            if !AppConstants.useCoordinators {
+                showHomepage(inline: false)
+            } else {
+                // FXIOS-6014 - Homepage in container
+            }
         }
     }
 

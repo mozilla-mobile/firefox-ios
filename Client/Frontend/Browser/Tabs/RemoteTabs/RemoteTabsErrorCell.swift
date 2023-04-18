@@ -14,7 +14,7 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let titleSizeFont: CGFloat = 22
         static let descriptionSizeFont: CGFloat = 17
         static let buttonSizeFont: CGFloat = 16
-        static let imageSize: CGSize = CGSize(width: 90, height: 60)
+        static let imageSize = CGSize(width: 90, height: 60)
         static let buttonVerticalInset: CGFloat = 12
     }
 
@@ -122,7 +122,8 @@ class RemoteTabsErrorCell: UITableViewCell, ReusableCell, ThemeApplicable {
         backgroundColor = theme.colors.layer3
     }
 
-    @objc private func presentSignIn() {
+    @objc
+    private func presentSignIn() {
         if let delegate = self.delegate {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .syncSignIn)
             delegate.remotePanelDidRequestToSignIn()

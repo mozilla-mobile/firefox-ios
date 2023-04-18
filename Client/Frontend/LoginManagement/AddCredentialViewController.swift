@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -89,7 +89,8 @@ class AddCredentialViewController: UIViewController, Themeable {
         KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
-    @objc func addCredential() {
+    @objc
+    func addCredential() {
         guard let hostname = websiteField.text,
               let username = usernameField.text,
               let password = passwordField.text else {
@@ -112,7 +113,8 @@ class AddCredentialViewController: UIViewController, Themeable {
         )
     }
 
-    @objc func cancel() {
+    @objc
+    func cancel() {
         dismiss(animated: true)
     }
 

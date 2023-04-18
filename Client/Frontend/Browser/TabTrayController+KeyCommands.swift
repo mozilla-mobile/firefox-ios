@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import UIKit
@@ -31,34 +31,40 @@ extension GridTabViewController {
         return commands + arrowKeysCommands
     }
 
-    @objc func didTogglePrivateModeKeyCommand() {
+    @objc
+    func didTogglePrivateModeKeyCommand() {
         // NOTE: We cannot and should not capture telemetry here.
         didTogglePrivateMode()
     }
 
-    @objc func didCloseTabKeyCommand() {
+    @objc
+    func didCloseTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-tab"])
         if let tab = tabManager.selectedTab {
             tabManager.removeTab(tab)
         }
     }
 
-    @objc func didCloseAllTabsKeyCommand() {
+    @objc
+    func didCloseAllTabsKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "close-all-tabs"])
         closeTabsTrayBackground()
     }
 
-    @objc func didEnterTabKeyCommand() {
+    @objc
+    func didEnterTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "enter-tab"])
         dismissVC()
     }
 
-    @objc func didOpenNewTabKeyCommand() {
+    @objc
+    func didOpenNewTabKeyCommand() {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
         openNewTab(isPrivate: tabDisplayManager.isPrivate)
     }
 
-    @objc func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
+    @objc
+    func didChangeSelectedTabKeyCommand(sender: UIKeyCommand) {
         TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "select-tab"])
         let step: Int
         guard let input = sender.input else { return }

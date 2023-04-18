@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -254,7 +254,8 @@ class FirefoxAccountSignInViewController: UIViewController {
     // MARK: Button Tap Functions
 
     /// Scan QR code button tapped
-    @objc func scanbuttonTapped(_ sender: UIButton) {
+    @objc
+    func scanbuttonTapped(_ sender: UIButton) {
         let qrCodeVC = QRCodeViewController()
         qrCodeVC.qrCodeDelegate = self
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: telemetryObject, extras: ["flow_type": "pairing"])
@@ -262,7 +263,8 @@ class FirefoxAccountSignInViewController: UIViewController {
     }
 
     /// Use email login button tapped
-    @objc func emailLoginTapped(_ sender: UIButton) {
+    @objc
+    func emailLoginTapped(_ sender: UIButton) {
         let askForPermission = OnboardingNotificationCardHelper().askForPermissionDuringSync(
             isOnboarding: telemetryObject == .onboarding)
 

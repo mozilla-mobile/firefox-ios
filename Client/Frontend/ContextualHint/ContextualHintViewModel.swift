@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -30,6 +30,7 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     private var profile: Profile
     private var hasSentTelemetryEvent = false
     var arrowDirection = UIPopoverArrowDirection.down
+    var overlayState: OverlayStateProtocol?
 
     // MARK: - Initializers
 
@@ -41,7 +42,8 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     // MARK: - Interface
 
     func shouldPresentContextualHint() -> Bool {
-        let hintEligibilityUtility = ContextualHintEligibilityUtility(with: profile)
+        let hintEligibilityUtility = ContextualHintEligibilityUtility(with: profile,
+                                                                      overlayState: overlayState)
 
         return hintEligibilityUtility.canPresent(hintType)
     }
@@ -155,7 +157,8 @@ class ContextualHintViewModel: ContextualHintPrefsKeysProvider {
     }
 
     // MARK: - Present
-    @objc private func presentHint() {
+    @objc
+    private func presentHint() {
         guard shouldPresentContextualHint() else { return }
 
         timer?.invalidate()

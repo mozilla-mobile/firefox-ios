@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import AuthenticationServices
@@ -10,10 +10,14 @@ let CredentialProviderAuthenticationDelay = 0.25
 class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
     public let profile: Profile
+    private let appAuthenticator: AppAuthenticator
 
-    init(view: CredentialProviderViewProtocol, profile: Profile = ExtensionProfile(localName: "profile")) {
+    init(view: CredentialProviderViewProtocol,
+         profile: Profile = ExtensionProfile(localName: "profile"),
+         appAuthenticator: AppAuthenticator = AppAuthenticator()) {
         self.view = view
         self.profile = profile
+        self.appAuthenticator = appAuthenticator
     }
 
     func extensionConfigurationRequested() {
@@ -77,7 +81,7 @@ class CredentialProviderPresenter {
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         // Force a short delay before we trigger authentication. See https://github.com/mozilla-mobile/firefox-ios/issues/9354
         DispatchQueue.main.asyncAfter(deadline: .now() + CredentialProviderAuthenticationDelay) {
-            AppAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
+            self.appAuthenticator.authenticateWithDeviceOwnerAuthentication { result in
                 switch result {
                 case .success:
                     // Move to the main thread because a state update triggers UI changes.

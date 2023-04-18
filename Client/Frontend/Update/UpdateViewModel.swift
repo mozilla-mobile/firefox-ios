@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -9,7 +9,6 @@ import Shared
 class UpdateViewModel: OnboardingViewModelProtocol,
                        FeatureFlaggable,
                        AppVersionUpdateCheckerProtocol {
-    static let prefsKey: String = PrefsKeys.AppVersion.Latest
     let profile: Profile
     var hasSyncableAccount: Bool?
 
@@ -31,7 +30,11 @@ class UpdateViewModel: OnboardingViewModelProtocol,
 
     // If the feature is enabled and is not clean install
     var shouldShowFeature: Bool {
-        return featureFlags.isFeatureEnabled(.onboardingUpgrade, checking: .buildOnly) && profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest) != nil
+        return featureFlags.isFeatureEnabled(.onboardingUpgrade, checking: .buildOnly) && !isFreshInstall
+    }
+
+    var isFreshInstall: Bool {
+        return profile.prefs.stringForKey(PrefsKeys.AppVersion.Latest) == nil
     }
 
     init(profile: Profile) {
@@ -47,14 +50,14 @@ class UpdateViewModel: OnboardingViewModelProtocol,
             return false
         }
 
-        // we check if there is a version number already saved
-        guard profile.prefs.stringForKey(UpdateViewModel.prefsKey) != nil else {
+        // If it's fresh install, we don't show the update onboarding
+        guard !isFreshInstall else {
             saveAppVersion(for: appVersion)
-            return true
+            return false
         }
 
         // Version number saved in user prefs is not the same as current version
-        if isMajorVersionUpdate(using: profile, and: appVersion) {
+        guard !isMajorVersionUpdate(using: profile, and: appVersion) else {
             saveAppVersion(for: appVersion)
             return true
         }
@@ -69,6 +72,15 @@ class UpdateViewModel: OnboardingViewModelProtocol,
             self.hasSyncableAccount = result
             ensureMainThread {
                 completion()
+            }
+        }
+    }
+
+    func hasSyncableAccount() async -> Bool {
+        return await withCheckedContinuation { continuation in
+            profile.hasSyncAccount { hasSync in
+                self.hasSyncableAccount = hasSync
+                continuation.resume(returning: hasSync)
             }
         }
     }
@@ -109,6 +121,6 @@ class UpdateViewModel: OnboardingViewModelProtocol,
     }
 
     private func saveAppVersion(for appVersion: String) {
-        profile.prefs.setString(appVersion, forKey: UpdateViewModel.prefsKey)
+        profile.prefs.setString(appVersion, forKey: PrefsKeys.AppVersion.Latest)
     }
 }

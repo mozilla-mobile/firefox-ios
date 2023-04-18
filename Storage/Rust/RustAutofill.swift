@@ -28,12 +28,28 @@ public enum AutofillEncryptionKeyError: Error {
 
 // Note: This was created in lieu of a view model
 public struct UnencryptedCreditCardFields {
-    public var ccName: String
-    public var ccNumber: String
-    public var ccNumberLast4: String
-    public var ccExpMonth: Int64
-    public var ccExpYear: Int64
-    public var ccType: String
+    public var ccName: String = ""
+    public var ccNumber: String = ""
+    public var ccNumberLast4: String = ""
+    public var ccExpMonth: Int64 = 0
+    public var ccExpYear: Int64 = 0
+    public var ccType: String = ""
+
+    public init() { }
+
+    public init(ccName: String,
+                ccNumber: String,
+                ccNumberLast4: String,
+                ccExpMonth: Int64,
+                ccExpYear: Int64,
+                ccType: String) {
+        self.ccName = ccName
+        self.ccNumber = ccNumber
+        self.ccNumberLast4 = ccNumberLast4
+        self.ccExpMonth = ccExpMonth
+        self.ccExpYear = ccExpYear
+        self.ccType = ccType
+    }
 
     func toUpdatableCreditCardFields() -> UpdatableCreditCardFields {
         let rustKeys = RustAutofillEncryptionKeys()
@@ -50,7 +66,7 @@ public struct UnencryptedCreditCardFields {
 public class RustAutofillEncryptionKeys {
     public let ccKeychainKey = "appservices.key.creditcard.perfield"
 
-    let keychain: MZKeychainWrapper = MZKeychainWrapper.sharedClientAppContainerKeychain
+    let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
     let ccCanaryPhraseKey = "creditCardCanaryPhrase"
     let canaryPhrase = "a string for checking validity of the key"
 

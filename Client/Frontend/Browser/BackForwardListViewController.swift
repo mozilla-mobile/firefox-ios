@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
@@ -58,7 +58,7 @@ class BackForwardListViewController: UIViewController,
         }
     }
 
-    var snappedToBottom: Bool = true
+    var snappedToBottom = true
 
     init(profile: Profile,
          backForwardList: WKBackForwardList,
@@ -220,7 +220,8 @@ class BackForwardListViewController: UIViewController,
         view.addGestureRecognizer(tap)
     }
 
-    @objc func handleTap() {
+    @objc
+    func handleTap() {
         dismiss(animated: true, completion: nil)
     }
 
@@ -235,7 +236,8 @@ class BackForwardListViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    @objc func reduceTransparencyChanged() {
+    @objc
+    func reduceTransparencyChanged() {
         // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
         applyTheme()
     }

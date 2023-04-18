@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Shared
@@ -12,7 +12,7 @@ struct SimpleTab: Hashable, Codable {
     var url: URL?
     let lastUsedTime: Timestamp? // From Session Data
     var faviconURL: String?
-    var isPrivate: Bool = false
+    var isPrivate = false
     var uuid: String = ""
     var imageKey: String {
         return url?.baseDomain ?? ""

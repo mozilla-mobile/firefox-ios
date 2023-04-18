@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 #if canImport(WidgetKit)
 import SwiftUI
@@ -34,8 +34,7 @@ struct QuickLinkEntry: TimelineEntry {
 struct SmallQuickLinkView: View {
     var entry: IntentProvider.Entry
 
-    @ViewBuilder
-    var body: some View {
+    @ViewBuilder var body: some View {
         ImageButtonWithLabel(isSmall: true, link: entry.link)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(LinearGradient(gradient: Gradient(colors: entry.link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing)).widgetURL(entry.link.smallWidgetUrl)

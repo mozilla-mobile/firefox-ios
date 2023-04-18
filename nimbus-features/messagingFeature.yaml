@@ -52,10 +52,11 @@ features:
           # Nimbus team.
           triggers:
             NOT_INSTALLED_TODAY:      days_since_install > 0
-            NOT_LAUNCHED_YESTERDAY:   app_cycle.foreground|eventLastSeen('Days', 1) > 1
-            AFTER_THREE_LAUNCHES_THIS_WEEK: app_cycle.foreground|eventSum('Weeks', 1, 0) >= 3
+            NOT_LAUNCHED_YESTERDAY:   "'app_cycle.foreground'|eventLastSeen('Days', 1) > 1"
+            AFTER_THREE_LAUNCHES_THIS_WEEK: "'app_cycle.foreground'|eventSum('Weeks', 1, 0) >= 3"
             USER_RECENTLY_INSTALLED:  days_since_install < 7
             USER_RECENTLY_UPDATED:    days_since_update < 7 && days_since_install != days_since_update
+            MORE_THAN_24H_SINCE_INSTALLED_OR_UPDATED: days_since_update >= 1
             USER_TIER_ONE_COUNTRY:    ('US' in locale || 'GB' in locale || 'CA' in locale || 'DE' in locale || 'FR' in locale)
             USER_EN_SPEAKER:          "'en' in locale"
             USER_DE_SPEAKER:          "'de' in locale"
@@ -65,6 +66,8 @@ features:
             I_AM_DEFAULT_BROWSER:     "is_default_browser"
             I_AM_NOT_DEFAULT_BROWSER: "is_default_browser == false"
             SUPPORTS_DEFAULT_BROWSER: os_version|versionCompare('14.!') >= 0
+            INACTIVE_NEW_USER:        "is_inactive_new_user"
+            ALLOWED_TIPS_NOTIFICATIONS: "allowed_tips_notifications"
             ALWAYS:                   "true"
             NEVER:                    "false"
           actions:
@@ -83,6 +86,7 @@ features:
             VIEW_HISTORY:                       ://deep-link?url=homepanel/history
             VIEW_DOWNLOADS:                     ://deep-link?url=homepanel/downloads
             ENABLE_PRIVATE_BROWSING:            ://deep-link?url=homepanel/new-private-tab
+            OPEN_NEW_TAB:                       ://deep-link?url=homepanel/new-tab
             MAKE_DEFAULT_BROWSER:               ://deep-link?url=default-browser/system-settings
             MAKE_DEFAULT_BROWSER_WITH_TUTORIAL: ://deep-link?url=default-browser/tutorial
           styles:
@@ -115,6 +119,15 @@ features:
               text: Default Browser/DefaultBrowserCard.Description
               button-label: Default Browser/DefaultBrowserCard.Button.v2
               action: MAKE_DEFAULT_BROWSER_WITH_TUTORIAL
+            engagement-notification:
+              surface: notification
+              style: DEFAULT
+              trigger:
+                - INACTIVE_NEW_USER
+                - ALLOWED_TIPS_NOTIFICATIONS
+              text: EngagementNotification/Engagement.Notification.Title
+              button-label: EngagementNotification/Engagement.Notification.Body
+              action: OPEN_NEW_TAB
       - channel: developer
         value:
           messages:
@@ -208,6 +221,8 @@ enums:
         description: This is the card that appears at the top on the Firefox Home Page.
       survey:
         description: This is a full-page that appears providing a survey to the user.
+      notification:
+        description: This is a local notification send to the user periodically with tips and updates.
       Unknown:
         description: A message has NOT declared its target surface.
 

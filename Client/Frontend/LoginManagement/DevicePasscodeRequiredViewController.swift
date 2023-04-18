@@ -1,12 +1,12 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
 
 class DevicePasscodeRequiredViewController: SettingsViewController {
-    private var shownFromAppMenu: Bool = false
+    private var shownFromAppMenu = false
 
     private var warningLabel: UILabel = {
         let label = UILabel()
@@ -58,11 +58,13 @@ class DevicePasscodeRequiredViewController: SettingsViewController {
         ])
     }
 
-    @objc func doneButtonTapped(_ sender: UIButton) {
+    @objc
+    func doneButtonTapped(_ sender: UIButton) {
         dismiss(animated: true)
     }
 
-    @objc func learnMoreButtonTapped(_ sender: UIButton) {
+    @objc
+    func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("manage-saved-passwords-firefox-ios")
         navigationController?.pushViewController(viewController, animated: true)

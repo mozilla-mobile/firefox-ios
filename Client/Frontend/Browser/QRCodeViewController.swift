@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import AVFoundation
@@ -54,8 +54,8 @@ class QRCodeViewController: UIViewController {
     private var maskView: UIView = .build { view in
         view.backgroundColor = UX.maskViewBackgroundColor
     }
-    private var isAnimationing: Bool = false
-    private var isLightOn: Bool = false
+    private var isAnimationing = false
+    private var isLightOn = false
     private var shapeLayer = CAShapeLayer()
 
     private var scanLineTopConstraint: NSLayoutConstraint!
@@ -218,7 +218,8 @@ class QRCodeViewController: UIViewController {
         }
     }
 
-    @objc func startScanLineAnimation() {
+    @objc
+    func startScanLineAnimation() {
         if !isAnimationing {
             return
         }
@@ -240,11 +241,13 @@ class QRCodeViewController: UIViewController {
         isAnimationing = false
     }
 
-    @objc func goBack() {
+    @objc
+    func goBack() {
         self.dismiss(animated: true, completion: nil)
     }
 
-    @objc func openLight() {
+    @objc
+    func openLight() {
         guard let captureDevice = self.captureDevice else { return }
 
         if isLightOn {

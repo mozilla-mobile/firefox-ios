@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import UIKit
@@ -114,7 +114,9 @@ class IntroViewController: UIViewController, OnboardingViewControllerProtocol, T
         ])
     }
 
-    @objc private func closeOnboarding() {
+    @objc
+    private func closeOnboarding() {
+        viewModel.saveHasSeenOnboarding()
         didFinishFlow?()
         viewModel.sendCloseButtonTelemetry(index: pageControl.currentPage)
     }
@@ -173,6 +175,7 @@ extension IntroViewController: UIPageViewControllerDataSource, UIPageViewControl
 extension IntroViewController: OnboardingCardDelegate {
     func showNextPage(_ cardType: IntroViewModel.InformationCards) {
         guard cardType != viewModel.enabledCards.last else {
+            viewModel.saveHasSeenOnboarding()
             self.didFinishFlow?()
             return
         }
@@ -249,7 +252,8 @@ extension IntroViewController: OnboardingCardDelegate {
         }
     }
 
-    @objc func dismissSignInViewController() {
+    @objc
+    func dismissSignInViewController() {
         dismiss(animated: true, completion: nil)
     }
 }

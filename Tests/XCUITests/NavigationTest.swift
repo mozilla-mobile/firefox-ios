@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -15,10 +15,6 @@ let requestDesktopSiteLabel = "Request Desktop Site"
 
 class NavigationTest: BaseTestCase {
     func testNavigation() {
-        if !iPad() {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        }
-        navigator.performAction(Action.CloseURLBarOpen)
         let urlPlaceholder = "Search or enter address"
         XCTAssert(app.textFields["url"].exists)
         let defaultValuePlaceholder = app.textFields["url"].placeholderValue!
@@ -80,7 +76,6 @@ class NavigationTest: BaseTestCase {
     }
 
     func testTapSignInShowsFxAFromTour() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
@@ -90,7 +85,6 @@ class NavigationTest: BaseTestCase {
     }
 
     func testTapSigninShowsFxAFromSettings() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -122,7 +116,6 @@ class NavigationTest: BaseTestCase {
     }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         // Open FxAccount from remote tab panel and check the Sign in to Firefox screen
@@ -181,7 +174,6 @@ class NavigationTest: BaseTestCase {
     }
 
     func testLongPressLinkOptionsPrivateMode() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
@@ -324,7 +316,6 @@ class NavigationTest: BaseTestCase {
     }
 
     func testShareLinkPrivateMode() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
@@ -334,8 +325,6 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testPopUpBlocker() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         // Check that it is enabled by default
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
@@ -371,8 +360,6 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testSSL() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
@@ -387,7 +374,6 @@ class NavigationTest: BaseTestCase {
 
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testWriteToChildPopupTab() {
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -405,8 +391,6 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testVerifyBrowserTabMenu() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)

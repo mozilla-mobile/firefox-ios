@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Common
@@ -25,7 +25,8 @@ class ThemedNavigationController: DismissableNavigationViewController, Themeable
         super.init(rootViewController: rootViewController)
     }
 
-    @objc func done() {
+    @objc
+    func done() {
         if let delegate = presentingModalViewControllerDelegate {
             delegate.dismissPresentedModalViewController(self, animated: true)
         } else {

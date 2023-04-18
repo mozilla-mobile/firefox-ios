@@ -8,11 +8,11 @@ import Common
 
 final class TabDataStoreTests: XCTestCase {
 
-    private var tabDataStore: DefaultTabDataStore!
+    private var tabDataStore: TabDataStore!
 
     override func setUp() {
         super.setUp()
-        tabDataStore = DefaultTabDataStore()
+        tabDataStore = TabDataStore()
         BrowserKitInformation.shared.configure(buildChannel: .other,
                                                nightlyAppVersion: "",
                                                sharedContainerIdentifier: "group.org.mozilla.ios.Fennec")

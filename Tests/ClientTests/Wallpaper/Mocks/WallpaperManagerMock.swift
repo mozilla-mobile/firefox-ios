@@ -7,17 +7,17 @@ import Foundation
 @testable import Client
 
 class WallpaperManagerMock: WallpaperManagerInterface {
-    var currentWallpaper: Wallpaper = Wallpaper(id: "fxDefault",
-                                                textColor: .green,
-                                                cardColor: .purple,
-                                                logoTextColor: .purple)
+    var currentWallpaper = Wallpaper(id: "fxDefault",
+                                     textColor: .green,
+                                     cardColor: .purple,
+                                     logoTextColor: .purple)
 
     var mockAvailableCollections = [WallpaperCollection]()
     var availableCollections: [WallpaperCollection] {
         return mockAvailableCollections
     }
 
-    var canSettingsBeShown: Bool = true
+    var canSettingsBeShown = true
 
     var setCurrentWallpaperCallCount = 0
     var setCurrentWallpaperResult: Result<Void, Error> = .success(())

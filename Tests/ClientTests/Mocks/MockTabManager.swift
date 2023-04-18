@@ -23,8 +23,8 @@ class MockTabManager: TabManager {
 
     var delaySelectingNewPopupTab: TimeInterval = 0
     var count: Int = 0
-    var didChangedPanelSelection: Bool = false
-    var didAddNewTab: Bool = false
+    var didChangedPanelSelection = false
+    var didAddNewTab = false
     var normalTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
@@ -115,11 +115,13 @@ class MockTabManager: TabManager {
                                          isPrivate: Bool,
                                          previousTabUUID: String) {}
 
-    @discardableResult func addTab(_ request: URLRequest!,
-                                   configuration: WKWebViewConfiguration!,
-                                   afterTab: Tab?,
-                                   zombie: Bool,
-                                   isPrivate: Bool) -> Tab {
+    @discardableResult
+    func addTab(_ request: URLRequest!,
+                configuration: WKWebViewConfiguration!,
+                afterTab: Tab?,
+                zombie: Bool,
+                isPrivate: Bool
+    ) -> Tab {
         return Tab(profile: MockProfile(), configuration: WKWebViewConfiguration())
     }
 

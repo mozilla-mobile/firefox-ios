@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import MobileCoreServices
@@ -81,7 +81,8 @@ public struct ExtensionUtils {
         }
 
         // See if the text is URL-like enough to be an url, in particular, check if it has a valid TLD.
-        @Sendable func textToUrl(_ text: String) -> URL? {
+        @Sendable
+        func textToUrl(_ text: String) -> URL? {
             guard text.contains(".") else { return nil }
             var text = text
             if !text.hasPrefix("http") {

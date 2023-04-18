@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -24,7 +24,6 @@ struct TopTabsUX {
 protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
-    func topTabsDidTogglePrivateMode()
     func topTabsDidChangeTab()
 }
 
@@ -156,7 +155,8 @@ class TopTabsViewController: UIViewController, Themeable {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false, forKey: "wasLastSessionPrivate")
+        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false,
+                                  forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
     func switchForegroundStatus(isInForeground reveal: Bool) {
@@ -174,20 +174,22 @@ class TopTabsViewController: UIViewController, Themeable {
         self.tabsButton.updateTabCount(count, animated: animated)
     }
 
-    @objc func tabsTrayTapped() {
+    @objc
+    func tabsTrayTapped() {
         self.topTabDisplayManager.refreshStore(evenIfHidden: true)
         delegate?.topTabsDidPressTabs()
     }
 
-    @objc func newTabTapped() {
+    @objc
+    func newTabTapped() {
         self.delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
     }
 
-    @objc func togglePrivateModeTapped() {
+    @objc
+    func togglePrivateModeTapped() {
         topTabDisplayManager.togglePrivateMode(isOn: !topTabDisplayManager.isPrivate,
                                                createTabOnEmptyPrivateMode: true,
                                                shouldSelectMostRecentTab: true)
-        delegate?.topTabsDidTogglePrivateMode()
         self.privateModeButton.setSelected(topTabDisplayManager.isPrivate, animated: true)
     }
 

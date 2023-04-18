@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Storage
@@ -82,7 +82,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
     }
     var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
-    private var isEditingFieldData: Bool = false {
+    private var isEditingFieldData = false {
         didSet {
             if isEditingFieldData != oldValue {
                 tableView.reloadData()
@@ -347,15 +347,18 @@ extension LoginDetailViewController: KeyboardHelperDelegate {
 
 // MARK: - Selectors
 extension LoginDetailViewController {
-    @objc func dismissAlertController() {
+    @objc
+    func dismissAlertController() {
         deleteAlert?.dismiss(animated: false, completion: nil)
     }
 
-    @objc func didTapBreachLearnMore() {
+    @objc
+    func didTapBreachLearnMore() {
         webpageNavigationHandler?(BreachAlertsManager.monitorAboutUrl)
     }
 
-    @objc func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
+    @objc
+    func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
         guard let domain = breach?.domain else { return }
         var urlComponents = URLComponents()
         urlComponents.host = domain
@@ -384,14 +387,16 @@ extension LoginDetailViewController {
         }
     }
 
-    @objc func edit() {
+    @objc
+    func edit() {
         isEditingFieldData = true
         guard let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as? LoginDetailTableViewCell else { return }
         cell.descriptionLabel.becomeFirstResponder()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
     }
 
-    @objc func doneEditing() {
+    @objc
+    func doneEditing() {
         isEditingFieldData = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 

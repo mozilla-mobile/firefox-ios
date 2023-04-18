@@ -30,15 +30,22 @@ class AdjustTelemetryHelper: AdjustTelemetryProtocol {
     }
 
     func setAttributionData(_ attribution: AdjustTelemetryData?) {
-        guard let campaign = attribution?.campaign,
-              let adgroup = attribution?.adgroup,
-              let creative = attribution?.creative,
-              let network = attribution?.network else { return }
+        if let campaign = attribution?.campaign {
+            GleanMetrics.Adjust.campaign.set(campaign)
+        }
 
-        GleanMetrics.Adjust.campaign.set(campaign)
-        GleanMetrics.Adjust.adGroup.set(adgroup)
-        GleanMetrics.Adjust.creative.set(creative)
-        GleanMetrics.Adjust.network.set(network)
+        if let adgroup = attribution?.adgroup {
+            GleanMetrics.Adjust.adGroup.set(adgroup)
+        }
+
+        if let creative = attribution?.creative {
+            GleanMetrics.Adjust.creative.set(creative)
+        }
+
+        if let network = attribution?.network {
+            GleanMetrics.Adjust.network.set(network)
+        }
+
         GleanMetrics.Pings.shared.firstSession.submit()
     }
 }

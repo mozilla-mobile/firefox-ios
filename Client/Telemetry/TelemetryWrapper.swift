@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Glean
@@ -203,7 +203,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
             GleanMetrics.Deletion.syncDeviceId.set(deviceId)
         }
     }
-    @objc func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
+    @objc
+    func recordFinishedLaunchingPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else { return }
         // Pocket stories visible
         if let pocketStoriesVisible = profile.prefs.boolForKey(PrefsKeys.FeatureFlags.ASPocketStories) {
@@ -215,7 +216,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
 
     // Function for recording metrics that are better recorded when going to background due
     // to the particular measurement, or availability of the information.
-    @objc func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
+    @objc
+    func recordEnteredBackgroundPreferenceMetrics(notification: NSNotification) {
         guard let profile = self.profile else {
             assertionFailure("Error unwrapping profile")
             return
@@ -289,7 +291,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         GleanMetrics.InstalledMozillaProducts.focus.set(UIApplication.shared.canOpenURL(URL(string: "firefox-focus://")!))
         GleanMetrics.InstalledMozillaProducts.klar.set(UIApplication.shared.canOpenURL(URL(string: "firefox-klar://")!))
         // Device Authentication
-        GleanMetrics.Device.authentication.set(AppAuthenticator.canAuthenticateDeviceOwner())
+        GleanMetrics.Device.authentication.set(AppAuthenticator().canAuthenticateDeviceOwner())
 
         // Wallpapers
         let currentWallpaper = WallpaperManager().currentWallpaper
@@ -301,7 +303,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol {
         }
     }
 
-    @objc func uploadError(notification: NSNotification) {
+    @objc
+    func uploadError(notification: NSNotification) {
         guard !DeviceInfo.isSimulator(), let error = notification.userInfo?["error"] as? NSError else { return }
         logger.log("Upload Error",
                    level: .info,
@@ -405,6 +408,7 @@ extension TelemetryWrapper {
         case appMenu = "app_menu"
         case settings = "settings"
         case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
+        case settingsMenuShowTour = "show-tour"
         case creditCardAutofillSettings = "creditCardAutofillSettings"
         case notificationPermission = "notificationPermission"
         case engagementNotification = "engagementNotification"
@@ -431,6 +435,8 @@ extension TelemetryWrapper {
         case mediumTabsOpenUrl = "medium-tabs-widget-url"
         case largeTabsOpenUrl = "large-tabs-widget-url"
         case smallQuickActionSearch = "small-quick-action-search"
+        case smallQuickActionClosePrivate = "small-quick-action-close-private"
+        case smallQuickActionCopiedLink = "small-quick-action-copied-link"
         case mediumQuickActionSearch = "medium-quick-action-search"
         case mediumQuickActionPrivateSearch = "medium-quick-action-private-search"
         case mediumQuickActionCopiedLink = "medium-quick-action-copied-link"
@@ -762,8 +768,6 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.reloadFromUrlBar.add()
 
         // MARK: - QR Codes
-        case(.action, .tap, .creditCardAutofillSettings, _, _):
-            GleanMetrics.CreditCard.autofillSettingsTapped.record()
         case(.information, .background, .tabNormalQuantity, _, let extras):
             if let quantity = extras?[EventExtraKey.tabsQuantity.rawValue] as? Int64 {
                 GleanMetrics.Tabs.normalTabsQuantity.set(quantity)
@@ -778,9 +782,16 @@ extension TelemetryWrapper {
                 recordUninstrumentedMetrics(category: category, method: method, object: object, value: value, extras: extras)
             }
 
+        // MARK: Credit Card
+        case(.action, .tap, .creditCardAutofillSettings, _, _):
+            GleanMetrics.CreditCard.autofillSettingsTapped.record()
+
         // MARK: Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
+
+        case(.action, .tap, .settingsMenuShowTour, _, _):
+            GleanMetrics.SettingsMenu.showTourPressed.record()
 
         // MARK: Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
@@ -1309,40 +1320,70 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.dragLocationBar.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
-                GleanMetrics.Messaging.shown.record(
-                    GleanMetrics.Messaging.ShownExtra(messageKey: messageId)
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            GleanMetrics.Messaging.shown.record(
+                GleanMetrics.Messaging.ShownExtra(
+                    messageKey: messageId,
+                    messageSurface: messageSurface
                 )
-            }
+            )
         case(.action, .tap, .messaging, .messageDismissed, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
-                GleanMetrics.Messaging.dismissed.record(
-                    GleanMetrics.Messaging.DismissedExtra(messageKey: messageId)
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            GleanMetrics.Messaging.dismissed.record(
+                GleanMetrics.Messaging.DismissedExtra(
+                    messageKey: messageId,
+                    messageSurface: messageSurface
                 )
-            }
+            )
         case(.action, .tap, .messaging, .messageInteracted, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String,
-                let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            if let actionUUID = extras?[EventExtraKey.actionUUID.rawValue] as? String {
                 GleanMetrics.Messaging.clicked.record(
-                    GleanMetrics.Messaging.ClickedExtra(actionUuid: actionUUID, messageKey: messageId)
+                    GleanMetrics.Messaging.ClickedExtra(
+                        actionUuid: actionUUID,
+                        messageKey: messageId,
+                        messageSurface: messageSurface
+                    )
                 )
-            } else if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
+            } else {
                 GleanMetrics.Messaging.clicked.record(
-                    GleanMetrics.Messaging.ClickedExtra(messageKey: messageId)
+                    GleanMetrics.Messaging.ClickedExtra(
+                        messageKey: messageId,
+                        messageSurface: messageSurface
+                    )
                 )
             }
         case(.information, .view, .messaging, .messageExpired, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
-                GleanMetrics.Messaging.expired.record(
-                    GleanMetrics.Messaging.ExpiredExtra(messageKey: messageId)
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            GleanMetrics.Messaging.expired.record(
+                GleanMetrics.Messaging.ExpiredExtra(
+                    messageKey: messageId,
+                    messageSurface: messageSurface
                 )
-            }
+            )
         case(.information, .application, .messaging, .messageMalformed, let extras):
-            if let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String {
-                GleanMetrics.Messaging.malformed.record(
-                    GleanMetrics.Messaging.MalformedExtra(messageKey: messageId)
+            guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
+                  let messageId = extras?[EventExtraKey.messageKey.rawValue] as? String
+            else { return }
+
+            GleanMetrics.Messaging.malformed.record(
+                GleanMetrics.Messaging.MalformedExtra(
+                    messageKey: messageId,
+                    messageSurface: messageSurface
                 )
-            }
+            )
         // MARK: - Share sheet actions
         case (.action, .tap, .shareSheet, .shareSendToDevice, _):
             GleanMetrics.ShareSheet.sendDeviceTapped.record()

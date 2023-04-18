@@ -7,6 +7,7 @@ const AllFramesAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScri
 const MainFrameAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.js");
 const MainFrameAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.js");
 const WebcompatAllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/WebcompatAtDocumentStart/*.js");
+const AutofillAllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AutofillAtDocumentStart/*.js");
 
 // Ensure the first script loaded at document start is __firefox__.js
 // since it defines the `window.__firefox__` global.
@@ -30,19 +31,16 @@ for (let [name, files] of Object.entries(needsFirefoxFile)) {
 // resource://gre/modules/... with Assets/...
 // This is needed because aliases are not supported for URI imports.
 // See: https://github.com/webpack/webpack/issues/12792
-const CustomResourceURIWebpackPlugin = new webpack.NormalModuleReplacementPlugin(
-  /resource:\/\/gre\/modules\/(.*)/,
-  function (resource) {
-    console.log(resource.request.replace(
-      /resource:\/\/gre\/modules\//,
-      path.resolve(__dirname, 'Client/Assets/CC_Script')
-    ));
-    resource.request = resource.request.replace(
-      /resource:\/\/gre\/modules/,
-      "Assets/CC_Script"
-    );
-  }
-);
+const CustomResourceURIWebpackPlugin =
+  new webpack.NormalModuleReplacementPlugin(
+    /resource:\/\/gre\/modules\/(.*)/,
+    function (resource) {
+      resource.request = resource.request.replace(
+        /resource:\/\/gre\/modules/,
+        "Assets/CC_Script"
+      );
+    }
+  );
 
 module.exports = {
   mode: "production",
@@ -52,6 +50,7 @@ module.exports = {
     MainFrameAtDocumentStart,
     MainFrameAtDocumentEnd,
     WebcompatAllFramesAtDocumentStart,
+    AutofillAllFramesAtDocumentStart,
   },
   // optimization: { minimize: false }, // use for debugging
   output: {

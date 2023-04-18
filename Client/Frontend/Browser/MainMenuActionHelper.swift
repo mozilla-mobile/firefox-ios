@@ -63,6 +63,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     var bookmarksHandler: BookmarksHandler
     let profile: Profile
     let tabManager: TabManager
+    let appAuthenticator: AppAuthenticationProtocol
 
     weak var delegate: ToolBarActionMenuDelegate?
     weak var menuActionDelegate: MenuActionsDelegate?
@@ -78,12 +79,15 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
          tabManager: TabManager,
          buttonView: UIButton,
          showFXASyncAction: @escaping (FXASyncClosure) -> Void,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         appAuthenticator: AppAuthenticationProtocol = AppAuthenticator()
+    ) {
         self.profile = profile
         self.bookmarksHandler = profile.places
         self.tabManager = tabManager
         self.buttonView = buttonView
         self.showFXASyncAction = showFXASyncAction
+        self.appAuthenticator = appAuthenticator
 
         self.selectedTab = tabManager.selectedTab
         self.tabUrl = selectedTab?.url
@@ -762,7 +766,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         guard let tab = selectedTab else { return section }
         let zoomLevel = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         let title = String(format: .AppMenu.ZoomPageTitle, zoomLevel)
-        let zoomAction = SingleActionViewModel(title: title) { _ in
+        let zoomAction = SingleActionViewModel(title: title,
+                                               iconString: ImageIdentifiers.zoomIn) { _ in
             self.delegate?.showZoomPage(tab: tab)
         }
 
@@ -787,7 +792,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                 self.delegate?.openURLInNewTab(url, isPrivate: false)
             }
 
-            if AppAuthenticator.canAuthenticateDeviceOwner() {
+            if self.appAuthenticator.canAuthenticateDeviceOwner() {
                 if LoginOnboarding.shouldShow() {
                     self.showLoginOnboarding(navigationHandler: navigationHandler, navigationController: navigationController)
                 } else {

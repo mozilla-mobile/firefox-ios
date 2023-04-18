@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
 import SwiftyJSON
 import Common
 
@@ -207,10 +208,8 @@ public func mapValues<K, T, U>(_ source: [K: T], f: (T) -> U) -> [K: U] {
 }
 
 public func findOneValue<K, V>(_ map: [K: V], f: (V) -> Bool) -> V? {
-    for v in map.values {
-        if f(v) {
-            return v
-        }
+    for v in map.values where f(v) {
+        return v
     }
     return nil
 }

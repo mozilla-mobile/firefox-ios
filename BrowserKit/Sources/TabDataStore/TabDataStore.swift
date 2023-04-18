@@ -46,8 +46,7 @@ actor DefaultTabDataStore: TabDataStore {
         do {
             let windowData = try await decodeWindowData(from: profileURL)
             return windowData
-        }
-        catch {
+        } catch {
             return nil
         }
     }

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Common
@@ -82,10 +82,8 @@ open class ReadingListSchema: Schema {
     }
 
     func run(_ db: SQLiteDBConnection, queries: [String]) -> Bool {
-        for sql in queries {
-            if !run(db, sql: sql, args: nil) {
-                return false
-            }
+        for sql in queries where !run(db, sql: sql, args: nil) {
+            return false
         }
         return true
     }

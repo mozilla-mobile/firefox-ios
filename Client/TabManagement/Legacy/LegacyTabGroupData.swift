@@ -5,7 +5,7 @@
 import Foundation
 import MozillaAppServices
 
-enum TabGroupTimerState: String, Codable {
+enum LegacyTabGroupTimerState: String, Codable {
     case navSearchLoaded
     case tabNavigatedToDifferentUrl
     case tabSwitched
@@ -37,7 +37,7 @@ class LegacyTabGroupData: Codable {
         self.init(searchTerm: "",
                   searchUrl: "",
                   nextReferralUrl: "",
-                  tabHistoryCurrentState: TabGroupTimerState.none.rawValue)
+                  tabHistoryCurrentState: LegacyTabGroupTimerState.none.rawValue)
     }
 
     init(searchTerm: String, searchUrl: String, nextReferralUrl: String, tabHistoryCurrentState: String = "") {

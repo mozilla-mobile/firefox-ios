@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -25,10 +25,6 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReadingList() {
-        XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        }
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // Navigate to reading list
         navigator.goto(BrowserTabMenu)
@@ -50,8 +46,6 @@ class ReaderViewTest: BaseTestCase {
     }
 
     func testAddToReadingListPrivateMode() {
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -163,7 +157,6 @@ class ReaderViewTest: BaseTestCase {
     }
 
     func testAddToReadingListFromBrowserTabMenu() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
         navigator.goto(LibraryPanel_ReadingList)

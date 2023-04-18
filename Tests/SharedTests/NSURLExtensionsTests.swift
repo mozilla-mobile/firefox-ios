@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import UIKit
@@ -306,6 +306,12 @@ class NSURLExtensionsTests: XCTestCase {
 
         let urlParams = url.getQuery()
         params.forEach { XCTAssertEqual(urlParams[$0], $1, "The values in params should be the same in urlParams") }
+    }
+
+    func testGetQueryWithPercentEncodedParams() {
+        let url = URL(string: "http://example.com/path?a=%20")!
+        let urlParams = url.getQuery()
+        XCTAssertEqual(urlParams["a"], "%20")
     }
 
     func testwithQueryParams() {

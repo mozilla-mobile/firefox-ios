@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Common
@@ -203,7 +203,8 @@ private extension BottomSheetViewController {
         childViewController.view.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    @objc func panGesture(_ recognizer: UIPanGestureRecognizer) {
+    @objc
+    func panGesture(_ recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .changed:
             viewTranslation = recognizer.translation(in: view)
@@ -237,7 +238,8 @@ private extension BottomSheetViewController {
         }
     }
 
-    @objc func closeTapped() {
+    @objc
+    func closeTapped() {
         dismissViewController()
     }
 }

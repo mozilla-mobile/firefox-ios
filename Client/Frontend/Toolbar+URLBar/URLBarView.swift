@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Shared
@@ -52,6 +52,7 @@ protocol URLBarDelegate: AnyObject {
 
 protocol URLBarViewProtocol {
     var inOverlayMode: Bool { get }
+    func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool)
     func leaveOverlayMode(didCancel cancel: Bool)
 }
 
@@ -83,7 +84,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     weak var delegate: URLBarDelegate?
     weak var tabToolbarDelegate: TabToolbarDelegate?
     var helper: TabToolbarHelper?
-    var isTransitioning: Bool = false {
+    var isTransitioning = false {
         didSet {
             if isTransitioning {
                 // Cancel any pending/in-progress animations related to the progress bar
@@ -410,7 +411,8 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         }
     }
 
-    @objc func showQRScanner() {
+    @objc
+    func showQRScanner() {
         self.delegate?.urlBarDidPressQRButton(self)
     }
 
@@ -465,7 +467,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
         }
-        locationView.reloadButton.isHidden = hideReloadButton
+        shouldHideReloadButton(hideReloadButton)
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -488,7 +490,7 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
     /// We hide reload button on iPad, but not in multitasking mode
     func updateReaderModeState(_ state: ReaderModeState, hideReloadButton: Bool) {
         locationView.readerModeState = state
-        locationView.reloadButton.isHidden = hideReloadButton
+        shouldHideReloadButton(hideReloadButton)
     }
 
     /// We hide reload button on iPad, but not in multitasking mode
@@ -659,11 +661,13 @@ class URLBarView: UIView, URLBarViewProtocol, AlphaDimmable, TopBottomInterchang
         delegate?.urlBarDidPressTabs(self)
     }
 
-    @objc private func didClickCancel() {
+    @objc
+    private func didClickCancel() {
         leaveOverlayMode(didCancel: true)
     }
 
-    @objc func tappedScrollToTopArea() {
+    @objc
+    func tappedScrollToTopArea() {
         delegate?.urlBarDidPressScrollToTop(self)
     }
 }

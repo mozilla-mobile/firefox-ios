@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -50,14 +50,15 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         self.prefs.setString(currentChoice, forKey: PrefsKeys.KeyMailToOption)
     }
 
-    @objc func appDidBecomeActive() {
+    @objc
+    func appDidBecomeActive() {
         reloadMailProviderSource()
         updateCurrentChoice()
         tableView.reloadData()
     }
 
     func updateCurrentChoice() {
-        var previousChoiceAvailable: Bool = false
+        var previousChoiceAvailable = false
         if let prefMailtoScheme = self.prefs.stringForKey(PrefsKeys.KeyMailToOption) {
             mailProviderSource.forEach({ item in
                 if item.scheme == prefMailtoScheme {

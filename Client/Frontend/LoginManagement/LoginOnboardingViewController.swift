@@ -1,12 +1,12 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Shared
 
 class LoginOnboardingViewController: SettingsViewController {
-    private var shownFromAppMenu: Bool = false
+    private var shownFromAppMenu = false
 
     private var onboardingMessageLabel: UILabel = {
         let label = UILabel()
@@ -79,17 +79,20 @@ class LoginOnboardingViewController: SettingsViewController {
         ])
     }
 
-    @objc func doneButtonTapped(_ sender: UIButton) {
+    @objc
+    func doneButtonTapped(_ sender: UIButton) {
         self.doneHandler()
     }
 
-    @objc func learnMoreButtonTapped(_ sender: UIButton) {
+    @objc
+    func learnMoreButtonTapped(_ sender: UIButton) {
         let viewController = SettingsContentViewController()
         viewController.url = SupportUtils.URLForTopic("set-passcode-and-touch-id-firefox")
         navigationController?.pushViewController(viewController, animated: true)
     }
 
-    @objc func proceedButtonTapped(_ sender: UIButton) {
+    @objc
+    func proceedButtonTapped(_ sender: UIButton) {
         self.proceedHandler()
     }
 

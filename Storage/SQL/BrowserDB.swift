@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Common
@@ -37,9 +37,11 @@ open class BrowserDB {
      * The supported mechanism for a read-only query against a WAL-using SQLite database is to use PRAGMA query_only,
      * but this isn't all that useful for us, because we have a mixed read/write workload.
      */
-    @discardableResult func withConnection<T>(flags: SwiftData.Flags = .readWriteCreate, _
-                                              callback: @escaping (_ connection: SQLiteDBConnection) throws -> T)
-    -> Deferred<Maybe<T>> {
+    @discardableResult
+    func withConnection<T>(
+        flags: SwiftData.Flags = .readWriteCreate,
+        _ callback: @escaping (_ connection: SQLiteDBConnection) throws -> T
+    ) -> Deferred<Maybe<T>> {
         return db.withConnection(flags, callback)
     }
 

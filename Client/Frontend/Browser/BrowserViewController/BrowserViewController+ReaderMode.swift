@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 
@@ -109,7 +109,7 @@ extension BrowserViewController {
         guard let currentURL = webView.backForwardList.currentItem?.url,
                 let readerModeURL = currentURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL())
         else { return }
-
+        zoomPageHandleEnterReaderMode()
         if backList.count > 1 && backList.last?.url == readerModeURL {
             webView.go(to: backList.last!)
         } else if !forwardList.isEmpty && forwardList.first?.url == readerModeURL {
@@ -143,7 +143,7 @@ extension BrowserViewController {
         guard let currentURL = webView.backForwardList.currentItem?.url,
               let originalURL = currentURL.decodeReaderModeURL
         else { return }
-
+        zoomPageHandleExitReaderMode()
         if backList.count > 1 && backList.last?.url == originalURL {
             webView.go(to: backList.last!)
         } else if !forwardList.isEmpty && forwardList.first?.url == originalURL {

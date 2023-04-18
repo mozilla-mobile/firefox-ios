@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 @testable import Shared
@@ -14,11 +14,9 @@ class FeatureSwitchTests: XCTestCase {
         let prefs = MockProfilePrefs()
         var membership = featureSwitch.isMember(prefs)
         var changed = 0
-        for _ in 0..<100 {
-            if featureSwitch.isMember(prefs) != membership {
-                membership = !membership
-                changed += 1
-            }
+        for _ in 0..<100 where featureSwitch.isMember(prefs) != membership {
+            membership = !membership
+            changed += 1
         }
 
         XCTAssertEqual(changed, 0, "Users should get and keep the feature over restarts")

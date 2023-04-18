@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import SnapKit
@@ -12,7 +12,8 @@ private struct SearchInputViewUX {
     static let closeButtonSize: CGFloat = 36
 }
 
-@objc protocol SearchInputViewDelegate: AnyObject {
+@objc
+protocol SearchInputViewDelegate: AnyObject {
     func searchInputView(_ searchView: SearchInputView, didChangeTextTo text: String)
 
     func searchInputViewBeganEditing(_ searchView: SearchInputView)
@@ -23,7 +24,7 @@ private struct SearchInputViewUX {
 class SearchInputView: UIView, NotificationThemeable {
     weak var delegate: SearchInputViewDelegate?
 
-    var showBottomBorder: Bool = true {
+    var showBottomBorder = true {
         didSet {
             bottomBorder.isHidden = !showBottomBorder
         }
@@ -168,20 +169,23 @@ class SearchInputView: UIView, NotificationThemeable {
 
 // MARK: - Selectors
 extension SearchInputView {
-    @objc func tappedSearch() {
+    @objc
+    func tappedSearch() {
         isEditing = true
         inputField.becomeFirstResponder()
         delegate?.searchInputViewBeganEditing(self)
     }
 
-    @objc func tappedClose() {
+    @objc
+    func tappedClose() {
         isEditing = false
         delegate?.searchInputViewFinishedEditing(self)
         inputField.text = nil
         inputField.resignFirstResponder()
     }
 
-    @objc func inputTextDidChange(_ textField: UITextField) {
+    @objc
+    func inputTextDidChange(_ textField: UITextField) {
         delegate?.searchInputView(self, didChangeTextTo: textField.text ?? "")
     }
 }

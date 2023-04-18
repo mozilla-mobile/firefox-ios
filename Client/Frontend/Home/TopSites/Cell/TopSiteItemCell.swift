@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Shared
@@ -19,7 +19,7 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         static let iconSize = CGSize(width: 36, height: 36)
         static let imageBackgroundSize = CGSize(width: 60, height: 60)
         static let pinAlignmentSpacing: CGFloat = 2
-        static let pinIconSize: CGSize = CGSize(width: 12, height: 12)
+        static let pinIconSize = CGSize(width: 12, height: 12)
         static let textSafeSpace: CGFloat = 6
         static let bottomSpace: CGFloat = 8
         static let imageTopSpace: CGFloat = 12

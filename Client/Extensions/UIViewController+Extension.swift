@@ -1,6 +1,6 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import Common
@@ -76,7 +76,8 @@ extension UIViewController {
         presentWithModalDismissIfNeeded(themedNavigationController, animated: true)
     }
 
-    @objc func dismissVC() {
+    @objc
+    func dismissVC() {
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -125,7 +126,8 @@ extension UIViewController {
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
 
-    @objc private func loggerViewWillAppear(_ animated: Bool) {
+    @objc
+    private func loggerViewWillAppear(_ animated: Bool) {
         let values: [String] = LoggerIgnoreViewController.allCases.map { $0.rawValue }
         if !values.contains("\(type(of: self))") {
             DefaultLogger.shared.log("\(type(of: self)) will appear", level: .info, category: .lifecycle)

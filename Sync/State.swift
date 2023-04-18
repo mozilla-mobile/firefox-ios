@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -251,30 +251,25 @@ open class Scratchpad {
                 // Default bundle has changed.  Reset everything but collections that have unchanged bulk keys.
                 var except: Set<String> = Set()
                 // Symmetric difference, like an animal.  Swift doesn't allow Hashable tuples; don't fight it.
-                for (collection, keyBundle) in staleKeys.collectionKeys {
-                    if keyBundle == freshKeys.forCollection(collection) {
-                        except.insert(collection)
-                    }
+                for (collection, keyBundle) in staleKeys.collectionKeys where keyBundle == freshKeys.forCollection(collection) {
+                    except.insert(collection)
                 }
-                for (collection, keyBundle) in freshKeys.collectionKeys {
-                    if keyBundle == staleKeys.forCollection(collection) {
-                        except.insert(collection)
-                    }
+
+                for (collection, keyBundle) in freshKeys.collectionKeys where keyBundle == staleKeys.forCollection(collection) {
+                    except.insert(collection)
                 }
                 self.localCommands.insert(.resetAllEngines(except: except))
             } else {
                 // Default bundle is the same.  Reset collections that have changed bulk keys.
-                for (collection, keyBundle) in staleKeys.collectionKeys {
-                    if keyBundle != freshKeys.forCollection(collection) {
-                        self.localCommands.insert(.resetEngine(engine: collection))
-                    }
+                for (collection, keyBundle) in staleKeys.collectionKeys where keyBundle != freshKeys.forCollection(collection) {
+                    self.localCommands.insert(.resetEngine(engine: collection))
                 }
-                for (collection, keyBundle) in freshKeys.collectionKeys {
-                    if keyBundle != staleKeys.forCollection(collection) {
-                        self.localCommands.insert(.resetEngine(engine: collection))
-                    }
+
+                for (collection, keyBundle) in freshKeys.collectionKeys where keyBundle != staleKeys.forCollection(collection) {
+                    self.localCommands.insert(.resetEngine(engine: collection))
                 }
             }
+
             return self
         }
 

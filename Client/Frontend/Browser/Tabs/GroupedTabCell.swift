@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import SnapKit
@@ -111,7 +111,8 @@ class GroupedTabCell: UICollectionViewCell,
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    @objc func toggleInactiveTabSection() {
+    @objc
+    func toggleInactiveTabSection() {
         hasExpanded = !hasExpanded
         tableView.reloadData()
     }
@@ -293,39 +294,45 @@ class GroupedTabContainerCell: UITableViewCell,
     fileprivate var numberOfColumns: Int {
         // iPhone 4-6+ portrait
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
-            return GridTabTrayControllerUX.CompactNumberOfColumnsThin
+            return GridTabViewController.UX.compactNumberOfColumnsThin
         } else {
-            return GridTabTrayControllerUX.NumberOfColumnsWide
+            return GridTabViewController.UX.numberOfColumnsWide
         }
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return GridTabTrayControllerUX.Margin
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return GridTabViewController.UX.margin
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = floor((collectionView.bounds.width - GridTabTrayControllerUX.Margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellWidth = floor((collectionView.bounds.width - GridTabViewController.UX.margin * CGFloat(numberOfColumns + 1)) / CGFloat(numberOfColumns))
         let isIpad = UIDevice.current.userInterfaceIdiom == .pad
         let padding = isIpad && !UIWindow.isLandscape ? 75 : (isIpad && UIWindow.isLandscape) ? 105 : 10
         let width = (Int(cellWidth) - padding) >= 0 ? Int(cellWidth) - padding : 0
         return CGSize(width: width, height: 188)
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(equalInset: GridTabTrayControllerUX.Margin)
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(equalInset: GridTabViewController.UX.margin)
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return GridTabTrayControllerUX.Margin
+    @objc
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return GridTabViewController.UX.margin
     }
 
-    @objc func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    @objc
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let tab = tabs?[indexPath.item] {
             delegate?.didSelectGroupedTab(tab: tab)
         }
     }
 
-    @objc func handleSearchButtonTapped() {
+    @objc
+    func handleSearchButtonTapped() {
         delegate?.performSearchOfGroupInNewTab(searchTerm: titleLabel.text)
     }
 

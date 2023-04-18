@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import UIKit
@@ -320,7 +320,8 @@ class BookmarksPanel: SiteTableViewController,
 
     // MARK: - Long press
 
-    @objc private func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard longPressGestureRecognizer.state == .began,
               let indexPath = tableView.indexPathForRow(at: touchPoint) else {
@@ -330,7 +331,8 @@ class BookmarksPanel: SiteTableViewController,
         presentContextMenu(for: indexPath)
     }
 
-    @objc private func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         navigationController?.popToRootViewController(animated: true)

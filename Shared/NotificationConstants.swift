@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 extension Notification.Name {
     // add a property to allow the observation of firefox accounts
@@ -100,4 +100,6 @@ extension Notification.Name {
     public static let ReadingListUpdated = Notification.Name("ReadingListUpdated")
     public static let TopSitesUpdated = Notification.Name("TopSitesUpdated")
     public static let HistoryUpdated = Notification.Name("HistoryUpdated")
+
+    public static let PresentIntroView = Notification.Name("PresentIntroView")
 }

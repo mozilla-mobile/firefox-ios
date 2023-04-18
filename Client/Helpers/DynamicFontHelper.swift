@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import UIKit
@@ -146,7 +146,8 @@ class DynamicFontHelper: NSObject {
         defaultSmallFontSize = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .caption2).pointSize
     }
 
-    @objc func contentSizeCategoryDidChange(_ notification: Notification) {
+    @objc
+    func contentSizeCategoryDidChange(_ notification: Notification) {
         refreshFonts()
         let notification = Notification(name: .DynamicFontChanged, object: nil)
         NotificationCenter.default.post(notification)

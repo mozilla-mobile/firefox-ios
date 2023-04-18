@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 
@@ -42,6 +42,7 @@ public struct PrefsKeys {
     public static let KeyCurrentInstallVersion = "KeyCurrentInstallVersion"
     public static let KeyFirstAppUse = "firstAppUse"
     public static let KeySecondRun = "SecondRun"
+    public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
 
     public struct AppVersion {
         public static let Latest = "latestAppVersion"
@@ -148,6 +149,12 @@ public struct PrefsKeys {
 
     // The last timestamp we polled FxA for missing send tabs
     public static let PollCommandsTimestamp = "PollCommandsTimestamp"
+
+    // Representing whether or not the last user session was private
+    public static let LastSessionWasPrivate = "wasLastSessionPrivate"
+
+    // Only used to force nimbus features to true with tests
+    public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"
 }
 
 public struct PrefsDefaults {

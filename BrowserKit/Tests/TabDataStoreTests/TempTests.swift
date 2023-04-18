@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 @testable import TabDataStore
@@ -8,11 +8,11 @@ import Common
 
 final class TempTests: XCTestCase {
 
-    private var tabDataStore: DefaultTabDataStore!
+    private var tabDataStore: TabDataStore!
 
     override func setUp() {
         super.setUp()
-        tabDataStore = DefaultTabDataStore()
+        tabDataStore = TabDataStore()
         BrowserKitInformation.shared.configure(buildChannel: .other,
                                                nightlyAppVersion: "",
                                                sharedContainerIdentifier: "group.org.mozilla.ios.Fennec")

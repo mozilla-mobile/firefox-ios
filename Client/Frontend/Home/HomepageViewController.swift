@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import UIKit
@@ -30,7 +30,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     private var viewModel: HomepageViewModel
     private var contextMenuHelper: HomepageContextMenuHelper
     private var tabManager: TabManager
-    private var urlBar: URLBarViewProtocol
+    private var overlayManager: OverlayModeManager
     private var userDefaults: UserDefaultsInterface
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var jumpBackInContextualHintViewController: ContextualHintViewController
@@ -63,20 +63,19 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     // MARK: - Initializers
     init(profile: Profile,
          tabManager: TabManager,
-         urlBar: URLBarViewProtocol,
+         overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
-        self.urlBar = urlBar
+        self.overlayManager = overlayManager
         self.tabManager = tabManager
         self.userDefaults = userDefaults
         let isPrivate = tabManager.selectedTab?.isPrivate ?? true
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
-                                           urlBar: urlBar,
                                            theme: themeManager.currentTheme)
 
         let jumpBackInContextualViewModel = ContextualHintViewModel(forHintType: .jumpBackIn,
@@ -162,17 +161,6 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         }
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // make sure the keyboard is dismissed when wallpaper onboarding is shown
-        // Can be removed once underlying problem is solved (FXIOS-4904)
-        if let presentedViewController = presentedViewController,
-           presentedViewController.isKind(of: BottomSheetViewController.self) {
-            self.dismissKeyboard()
-        }
-    }
-
     // MARK: - Layout
 
     func configureCollectionView() {
@@ -237,7 +225,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
 
         let point = longPressGestureRecognizer.location(in: collectionView)
@@ -324,9 +313,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         dismissKeyboard()
     }
 
-    @objc private func dismissKeyboard() {
+    @objc
+    private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
-            urlBar.leaveOverlayMode()
+            overlayManager.finishEditing(shouldCancelLoading: false)
         }
     }
 
@@ -364,11 +354,10 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     func displayWallpaperSelector() {
         let wallpaperManager = WallpaperManager(userDefaults: userDefaults)
-        guard wallpaperManager.canOnboardingBeShown(using: viewModel.profile),
+        guard !overlayManager.inOverlayMode,
+              wallpaperManager.canOnboardingBeShown(using: viewModel.profile),
               canModalBePresented
         else { return }
-
-        self.dismissKeyboard()
 
         let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager, openSettingsAction: {
             self.homePanelDidRequestToOpenSettings(at: .wallpaper)
@@ -409,8 +398,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.jumpBackInContextualHintViewController) },
             sourceRect: rect,
-            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackIn) },
-            andActionForButton: { self.openTabsSettings() })
+            andActionForButton: { self.openTabsSettings() },
+            overlayState: overlayManager)
     }
 
     private func prepareSyncedTabContextualHint(onCell cell: SyncedTabCell) {
@@ -426,10 +415,11 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
             withArrowDirection: .down,
             andDelegate: self,
             presentedUsing: { self.presentContextualHint(contextualHintViewController: self.syncTabContextualHintViewController) },
-            withActionBeforeAppearing: { self.contextualHintPresented(type: .jumpBackInSyncedTab) })
+            overlayState: overlayManager)
     }
 
-    @objc private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
+    @objc
+    private func presentContextualHint(contextualHintViewController: ContextualHintViewController) {
         guard viewModel.viewAppeared, canModalBePresented else {
             contextualHintViewController.stopTimer()
             return
@@ -677,10 +667,6 @@ private extension HomepageViewController {
                                      method: .tap,
                                      object: .firefoxHomepage,
                                      value: .customizeHomepageButton)
-    }
-
-    func contextualHintPresented(type: ContextualHintType) {
-        homePanelDelegate?.homePanelDidPresentContextualHintOf(type: type)
     }
 
     func openTabsSettings() {

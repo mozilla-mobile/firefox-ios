@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 
@@ -98,7 +98,8 @@ open class KeyboardHelper: NSObject {
         delegates.append(WeakKeyboardDelegate(delegate))
     }
 
-    @objc private func keyboardWillShow(_ notification: Notification) {
+    @objc
+    private func keyboardWillShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -107,7 +108,8 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc private func keyboardDidShow(_ notification: Notification) {
+    @objc
+    private func keyboardDidShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self,
@@ -116,7 +118,8 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc private func keyboardWillHide(_ notification: Notification) {
+    @objc
+    private func keyboardWillHide(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self,
@@ -125,7 +128,8 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc private func keyboardWillChange(_ notification: Notification) {
+    @objc
+    private func keyboardWillChange(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -135,7 +139,8 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    @objc private func keyboardDidChange(_ notification: Notification) {
+    @objc
+    private func keyboardDidChange(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self,

@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
 import Foundation
@@ -9,7 +9,8 @@ import Shared
 
 protocol WebServerProtocol {
     var server: GCDWebServer { get }
-    @discardableResult func start() throws -> Bool
+    @discardableResult
+    func start() throws -> Bool
 }
 
 class WebServer: WebServerProtocol {
@@ -20,7 +21,7 @@ class WebServer: WebServerProtocol {
         return WebServerSharedInstance
     }
 
-    let server: GCDWebServer = GCDWebServer()
+    let server = GCDWebServer()
 
     var base: String {
         return "http://localhost:\(server.port)"
@@ -39,7 +40,8 @@ class WebServer: WebServerProtocol {
         self.logger = logger
     }
 
-    @discardableResult func start() throws -> Bool {
+    @discardableResult
+    func start() throws -> Bool {
         if !server.isRunning {
             try server.start(options: [
                 GCDWebServerOption_Port: AppInfo.webserverPort,

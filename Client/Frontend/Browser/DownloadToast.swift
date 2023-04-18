@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import UIKit
@@ -176,7 +176,8 @@ class DownloadToast: Toast {
         return toastView
     }
 
-    @objc func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
+    @objc
+    func buttonPressed(_ gestureRecognizer: UIGestureRecognizer) {
         let alert = AlertController(title: .CancelDownloadDialogTitle,
                                     message: .CancelDownloadDialogMessage,
                                     preferredStyle: .alert)

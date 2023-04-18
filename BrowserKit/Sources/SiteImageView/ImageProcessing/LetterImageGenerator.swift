@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Common
@@ -11,7 +11,8 @@ protocol LetterImageGenerator {
     /// Runs main thread due to UILabel.initWithFrame(:)
     /// - Parameter domain: The string domain name
     /// - Returns: The generated letter image
-    @MainActor func generateLetterImage(siteString: String) async throws -> UIImage
+    @MainActor
+    func generateLetterImage(siteString: String) async throws -> UIImage
 }
 
 class DefaultLetterImageGenerator: LetterImageGenerator {
@@ -21,7 +22,8 @@ class DefaultLetterImageGenerator: LetterImageGenerator {
         self.logger = logger
     }
 
-    @MainActor func generateLetterImage(siteString: String) async throws -> UIImage {
+    @MainActor
+    func generateLetterImage(siteString: String) async throws -> UIImage {
         guard let letter: Character = siteString.first else {
             logger.log("No letter found for site, which should never happen",
                        level: .warning,

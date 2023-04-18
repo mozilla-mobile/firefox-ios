@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Storage
@@ -80,7 +80,8 @@ class RemoteTabsPanel: UIViewController, Themeable {
         tableViewController.refreshTabs(updateCache: true)
     }
 
-    @objc func notificationReceived(_ notification: Notification) {
+    @objc
+    func notificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             DispatchQueue.main.async {
@@ -204,7 +205,8 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
         refreshControl = nil
     }
 
-    @objc func onRefreshPulled() {
+    @objc
+    func onRefreshPulled() {
         refreshControl?.beginRefreshing()
         refreshTabs(updateCache: true)
     }
@@ -297,7 +299,8 @@ class RemoteTabsTableViewController: UITableViewController, Themeable {
                                                            theme: themeManager.currentTheme)
     }
 
-    @objc private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc
+    private func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }

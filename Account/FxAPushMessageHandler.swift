@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
 import SyncTelemetry
@@ -29,7 +29,8 @@ extension FxAPushMessageHandler {
     /// Accepts the raw Push message from Autopush.
     /// This method then decrypts it according to the content-encoding (aes128gcm or aesgcm)
     /// and then effects changes on the logged in account.
-    @discardableResult func handle(userInfo: [AnyHashable: Any]) -> PushMessageResults {
+    @discardableResult
+    func handle(userInfo: [AnyHashable: Any]) -> PushMessageResults {
         let keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         guard let pushReg = keychain.object(forKey: KeychainKey.fxaPushRegistration, ofClass: PushRegistration.self) else {
             // We've somehow lost our push registration, lets also reset our apnsToken so we trigger push registration

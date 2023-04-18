@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
 
@@ -43,7 +43,6 @@ class TopTabsTest: BaseTestCase {
     }
 
     func testAddTabFromContext() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(urlExample)
         // Initially there is only one tab open
@@ -120,7 +119,6 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testCloseAllTabsUndo() {
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // A different tab than home is open to do the proper checks
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -218,7 +216,6 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
@@ -228,7 +225,6 @@ class TopTabsTest: BaseTestCase {
 
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
@@ -246,8 +242,6 @@ class TopTabsTest: BaseTestCase {
 
     // Smoketest
     func testOpenNewTabLandscape() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
         if iPad() {
@@ -372,8 +366,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddTabByLongPressTabsButton() {
         if skipPlatform { return }
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
@@ -385,8 +377,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     // This test only runs for iPhone see bug 1409750
     func testAddPrivateTabByLongPressTabsButton() {
         if skipPlatform { return }
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.performAction(Action.OpenPrivateTabLongPressTabsButton)

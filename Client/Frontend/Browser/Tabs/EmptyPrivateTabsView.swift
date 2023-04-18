@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 import Foundation
@@ -15,7 +15,7 @@ class EmptyPrivateTabsView: UIView {
         static let paddingInBetweenItems: CGFloat = 15
         static let verticalPadding: CGFloat = 20
         static let horizontalPadding: CGFloat = 24
-        static let imageSize: CGSize = CGSize(width: 90, height: 90)
+        static let imageSize = CGSize(width: 90, height: 90)
     }
 
     // MARK: - Properties

@@ -8,12 +8,15 @@ import Foundation
 
 import XCTest
 import Common
+import Shared
 
 class TabTrayViewControllerTests: XCTestCase {
     var profile: TabManagerMockProfile!
     var manager: TabManager!
     var tabTray: TabTrayViewController!
     var gridTab: GridTabViewController!
+    var overlayManager: MockOverlayModeManager!
+    var urlBar: MockURLBarView!
 
     override func setUp() {
         super.setUp()
@@ -21,7 +24,14 @@ class TabTrayViewControllerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         profile = TabManagerMockProfile()
         manager = LegacyTabManager(profile: profile, imageStore: nil)
-        tabTray = TabTrayViewController(tabTrayDelegate: nil, profile: profile, tabToFocus: nil, tabManager: manager)
+        urlBar = MockURLBarView()
+        overlayManager = MockOverlayModeManager()
+        overlayManager.setURLBar(urlBarView: urlBar)
+        tabTray = TabTrayViewController(tabTrayDelegate: nil,
+                                        profile: profile,
+                                        tabToFocus: nil,
+                                        tabManager: manager,
+                                        overlayManager: overlayManager)
         gridTab = GridTabViewController(tabManager: manager, profile: profile)
         manager.addDelegate(gridTab)
         FeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
@@ -33,6 +43,8 @@ class TabTrayViewControllerTests: XCTestCase {
         AppContainer.shared.reset()
         profile = nil
         manager = nil
+        urlBar = nil
+        overlayManager = nil
         tabTray = nil
         gridTab = nil
     }
@@ -62,7 +74,7 @@ class TabTrayViewControllerTests: XCTestCase {
         tabTray.didTapAddTab(UIBarButtonItem())
         tabTray.didTapDone()
 
-        let privateState = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+        let privateState = UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
         XCTAssertTrue(privateState)
     }
 
@@ -73,7 +85,7 @@ class TabTrayViewControllerTests: XCTestCase {
         tabTray.viewDidLoad()
         tabTray.didTapDone()
 
-        let privateState = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+        let privateState = UserDefaults.standard.bool(forKey: PrefsKeys.LastSessionWasPrivate)
         XCTAssertFalse(privateState)
     }
 }

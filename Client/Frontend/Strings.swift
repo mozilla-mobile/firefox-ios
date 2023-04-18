@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // swiftlint:disable line_length
 import Foundation
@@ -1339,7 +1339,7 @@ extension String {
                 "Settings.Notifications.SystemNotificationsDisabledMessage.v112",
                 tableName: "Settings",
                 value: "You turned off all %@ notifications. Turn them on by going to device Settings > Notifications > %@",
-                comment: "This is the footer title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name."
+                comment: "This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name."
             )
         }
 
@@ -1441,7 +1441,7 @@ extension String {
     public struct SyncScreen { }
 }
 
-// MARK: Tabs Tray
+// MARK: - Tabs Tray
 extension String {
     public struct TabsTray {
         public struct InactiveTabs {
@@ -1460,6 +1460,24 @@ extension String {
                 tableName: nil,
                 value: "Close All Inactive Tabs",
                 comment: "In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs.")
+        }
+
+        public struct CloseTabsToast {
+            public static let Title = MZLocalizedString(
+                "CloseTabsToast.Title.v113",
+                tableName: "TabsTray",
+                value: "Tabs Closed: %d",
+                comment: "When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs")
+            public static let SingleTabTitle = MZLocalizedString(
+                "CloseTabsToast.SingleTabTitle.v113",
+                tableName: "TabsTray",
+                value: "Tab Closed",
+                comment: "When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup.")
+            public static let Action = MZLocalizedString(
+                "CloseTabsToast.Button.v113",
+                tableName: "TabsTray",
+                value: "Undo",
+                comment: "When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs")
         }
 
         public struct Sync {
@@ -2303,20 +2321,6 @@ extension String {
         comment: "The label for the URL field when editing a bookmark")
 }
 
-// MARK: - Tabs Delete All Undo Toast
-extension String {
-    public static let TabsDeleteAllUndoTitle = MZLocalizedString(
-        "Tabs.DeleteAllUndo.Title.v113",
-        tableName: nil,
-        value: "%d Tab(s) Closed",
-        comment: "The label indicating that all the tabs were closed")
-    public static let TabsDeleteAllUndoAction = MZLocalizedString(
-        "Tabs.DeleteAllUndo.Button",
-        tableName: nil,
-        value: "Undo",
-        comment: "The button to undo the delete all tabs")
-}
-
 // MARK: - Tab tray (chronological tabs)
 extension String {
     public static let TabTrayV2Title = MZLocalizedString(
@@ -2552,9 +2556,9 @@ extension String {
         value: "Switch",
         comment: "The button text in the Button Toast for switching to a fresh New Tab.")
     public static let ContextMenuButtonToastNewPrivateTabOpenedLabelText = MZLocalizedString(
-        "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText",
+        "ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113",
         tableName: nil,
-        value: "New Private Tab opened",
+        value: "New Private Tab Opened",
         comment: "The label text in the Button Toast for switching to a fresh New Private Tab.")
 }
 
@@ -3003,11 +3007,33 @@ extension String {
             tableName: nil,
             value: "Removed from Reading List",
             comment: "Toast displayed to confirm to the user that his reading list item was correctly removed.")
+
+        // ZoomPageBar
         public static let ZoomPageTitle = MZLocalizedString(
             "Menu.ZoomPage.Title.v113",
-            tableName: nil,
+            tableName: "ZoomPageBar",
             value: "Zoom (%@)",
             comment: "Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent.")
+        public static let ZoomPageCloseAccessibilityLabel = MZLocalizedString(
+            "Menu.ZoomPage.Close.AccessibilityLabel.v113",
+            tableName: "ZoomPageBar",
+            value: "Close Zoom Panel",
+            comment: "Accessibility label for closing the zoom panel in Zoom Page Bar")
+        public static let ZoomPageIncreaseZoomAccessibilityLabel = MZLocalizedString(
+            "Menu.ZoomPage.IncreaseZoom.AccessibilityLabel.v113",
+            tableName: "ZoomPageBar",
+            value: "Increase Zoom Level",
+            comment: "Accessibility label for increasing the zoom level in Zoom Page Bar")
+        public static let ZoomPageDecreaseZoomAccessibilityLabel = MZLocalizedString(
+            "Menu.ZoomPage.DecreaseZoom.AccessibilityLabel.v113",
+            tableName: "ZoomPageBar",
+            value: "Decrease Zoom Level",
+            comment: "Accessibility label for decreasing the zoom level in Zoom Page Bar")
+        public static let ZoomPageCurrentZoomLevelAccessibilityLabel = MZLocalizedString(
+            "Menu.ZoomPage.CurrentZoomLevel.AccessibilityLabel.v113",
+            tableName: "ZoomPageBar",
+            value: "Current Zoom Level: %@",
+            comment: "Accessibility label for current zoom level in Zoom Page Bar. The placeholder represents the zoom level")
 
         // Toolbar
         public struct Toolbar {
@@ -4873,3 +4899,4 @@ extension String {
         value: "Connection is not secure",
         comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
 }
+// swiftlint:enable line_length

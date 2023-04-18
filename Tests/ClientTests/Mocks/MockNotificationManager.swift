@@ -6,10 +6,22 @@ import Foundation
 @testable import Client
 
 class MockNotificationManager: NotificationManagerProtocol {
+    let wasAuthorizationSuccessful = true
     func requestAuthorization(completion: @escaping (Bool, Error?) -> Void) {
     }
 
+    func requestAuthorization(completion: @escaping (Result<Bool, Error>) -> Void) {
+    }
+
+    func requestAuthorization() async throws -> Bool {
+        return wasAuthorizationSuccessful
+    }
+
     func getNotificationSettings(sendTelemetry: Bool, completion: @escaping (UNNotificationSettings) -> Void) {
+    }
+
+    func getNotificationSettings(sendTelemetry: Bool) async -> UNNotificationSettings {
+        return await NotificationManager().getNotificationSettings()
     }
 
     var hasPermission = true
@@ -17,15 +29,19 @@ class MockNotificationManager: NotificationManagerProtocol {
         completion(hasPermission)
     }
 
+    func hasPermission() async -> Bool {
+        return hasPermission
+    }
+
     var scheduledNotifications = 0
     var scheduleWithDateWasCalled = false
-    func schedule(title: String, body: String, id: String, date: Date, repeats: Bool) {
+    func schedule(title: String, body: String, id: String, userInfo: [AnyHashable: Any]?, date: Date, repeats: Bool) {
         scheduledNotifications += 1
         scheduleWithDateWasCalled = true
     }
 
     var scheduleWithIntervalWasCalled = false
-    func schedule(title: String, body: String, id: String, interval: TimeInterval, repeats: Bool) {
+    func schedule(title: String, body: String, id: String, userInfo: [AnyHashable: Any]?, interval: TimeInterval, repeats: Bool) {
         scheduledNotifications += 1
         scheduleWithIntervalWasCalled = true
     }

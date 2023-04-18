@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
 
@@ -17,7 +17,7 @@ class SensitiveViewController: UIViewController {
 
         willEnterForegroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [self] notification in
             if !isAuthenticated {
-                AppAuthenticator.authenticateWithDeviceOwnerAuthentication { [self] result in
+                AppAuthenticator().authenticateWithDeviceOwnerAuthentication { [self] result in
                     switch result {
                     case .success:
                         isAuthenticated = false
@@ -31,9 +31,11 @@ class SensitiveViewController: UIViewController {
             }
         }
 
-        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [self] notification in
-            isAuthenticated = false
-            installBlurredOverlay()
+        didEnterBackgroundNotificationObserver = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] notification in
+            guard let self = self else { return }
+
+            self.isAuthenticated = false
+            self.installBlurredOverlay()
         }
     }
 

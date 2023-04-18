@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // This code is loosely based on https://github.com/Antol/APAutocompleteTextField
 
@@ -23,7 +23,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
     private var autocompleteTextLabel: UILabel?
-    private var hideCursor: Bool = false
+    private var hideCursor = false
 
     private let copyShortcutKey = "c"
 
@@ -97,7 +97,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return arrowKeysCommands + commands
     }
 
-    @objc func handleKeyCommand(sender: UIKeyCommand) {
+    @objc
+    func handleKeyCommand(sender: UIKeyCommand) {
         guard let input = sender.input else { return }
         switch input {
         case UIKeyCommand.inputLeftArrow:
@@ -170,14 +171,17 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     }
 
     /// Removes the autocomplete-highlighted. Returns true if a completion was actually removed
-    @objc @discardableResult fileprivate func removeCompletion() -> Bool {
+    @objc
+    @discardableResult
+    fileprivate func removeCompletion() -> Bool {
         let hasActiveCompletion = isSelectionActive
         autocompleteTextLabel?.removeFromSuperview()
         autocompleteTextLabel = nil
         return hasActiveCompletion
     }
 
-    @objc fileprivate func clear() {
+    @objc
+    fileprivate func clear() {
         text = ""
         removeCompletion()
         autocompleteDelegate?.autocompleteTextField(self, didEnterText: "")
@@ -256,6 +260,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return label
     }
 
+    public func refreshAutocompleteLabelTheme() {
+        // Only refresh if an autocomplete label is presented to the user
+        if self.autocompleteTextLabel?.attributedText != nil {
+            self.autocompleteTextLabel?.backgroundColor = self.backgroundColor
+            self.autocompleteTextLabel?.textColor = self.textColor
+        }
+    }
+
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         applyCompletion()
         return true
@@ -284,7 +296,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         removeCompletion()
     }
 
-   @objc func textDidChange(_ textField: UITextField) {
+    @objc
+    func textDidChange(_ textField: UITextField) {
         hideCursor = autocompleteTextLabel != nil
         removeCompletion()
 

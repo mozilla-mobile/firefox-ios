@@ -1,6 +1,6 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
 import Common
@@ -176,19 +176,15 @@ open class BrowserSchema: Schema {
 
     // TODO: transaction.
     func run(_ db: SQLiteDBConnection, queries: [(String, Args?)]) -> Bool {
-        for (sql, args) in queries {
-            if !run(db, sql: sql, args: args) {
+        for (sql, args) in queries where !run(db, sql: sql, args: args) {
                 return false
-            }
         }
         return true
     }
 
     func run(_ db: SQLiteDBConnection, queries: [String]) -> Bool {
-        for sql in queries {
-            if !run(db, sql: sql) {
-                return false
-            }
+        for sql in queries where !run(db, sql: sql) {
+            return false
         }
         return true
     }
