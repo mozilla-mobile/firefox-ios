@@ -13,6 +13,7 @@ final class BrowserCoordinatorTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        FeatureFlagsManager.shared.initializeDeveloperFeatures(with: AppContainer.shared.resolve())
         self.mockRouter = MockRouter(navigationController: MockNavigationController())
         self.profile = MockProfile()
     }
@@ -60,6 +61,19 @@ final class BrowserCoordinatorTests: XCTestCase {
 
         XCTAssertTrue(subject.childCoordinators.isEmpty)
         XCTAssertEqual(mockRouter.dismissCalled, 1)
+    }
+
+    func testShowHomepage_addsOneHomepageOnly() {
+        let overlayModeManager = DefaultOverlayModeManager()
+        let subject = createSubject()
+        subject.showHomepage(inline: true,
+                             homepanelDelegate: subject.browserViewController,
+                             libraryPanelDelegate: subject.browserViewController,
+                             sendToDeviceDelegate: subject.browserViewController,
+                             overlayManager: overlayModeManager)
+
+        let secondHomepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
+        XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(viewController: secondHomepage))
     }
 
     // MARK: - Helpers
