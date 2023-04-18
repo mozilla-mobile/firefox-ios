@@ -26,7 +26,6 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
 
         // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
         navigator.createNewTab()
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
