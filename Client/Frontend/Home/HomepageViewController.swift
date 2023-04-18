@@ -9,7 +9,7 @@ import SyncTelemetry
 import MozillaAppServices
 import Common
 
-class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable {
+class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, Themeable, ContentContainable {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     typealias SendToDeviceDelegate = InstructionsViewDelegate & DevicePickerViewControllerDelegate
@@ -37,6 +37,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
     private var logger: Logger
+    var contentType: ContentType = .homepage
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol

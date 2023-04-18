@@ -4,27 +4,30 @@
 
 import UIKit
 
-// Laurie - tests for new functionnality
+enum ContentType {
+    case webview
+    case homepage
+}
+
+protocol ContentContainable: UIViewController {
+    var contentType: ContentType { get }
+}
+
 /// A container for view controllers, currently used to embed content in BrowserViewController
 class ContentContainer: UIView {
-    private enum ContentType {
-        case webview
-        case homepage
-    }
-
     private var type: ContentType?
-    private var contentController: UIViewController?
+    private var contentController: ContentContainable?
 
     /// Determine if the content can be added, making sure we only add once
     /// - Parameters:
     ///   - viewController: The view controller to add to the container
     /// - Returns: True when we can add the view controller to the container
-    func canAdd(viewController: UIViewController) -> Bool {
+    func canAdd(content: ContentContainable) -> Bool {
         switch type {
         case .homepage:
-            return !(viewController is HomepageViewController)
+            return !(content is HomepageViewController)
         case .webview:
-            return !(viewController is WebviewViewController)
+            return !(content is WebviewViewController)
         case .none:
             return true
         }
@@ -32,10 +35,10 @@ class ContentContainer: UIView {
 
     /// Add content view controller to the container, we remove the previous content if present before adding new one
     /// - Parameter viewController: The view controller to add
-    func addContent(viewController: UIViewController) {
+    func add(content: ContentContainable) {
         removePreviousContent()
-        saveContentType(viewController: viewController)
-        addToView(viewController: viewController)
+        saveContentType(content: content)
+        addToView(content: content)
     }
 
     // MARK: - Private
@@ -46,26 +49,19 @@ class ContentContainer: UIView {
         contentController?.removeFromParent()
     }
 
-    private func saveContentType(viewController: UIViewController) {
-        if viewController is HomepageViewController {
-            type = .homepage
-        } else if viewController is WebviewViewController {
-            type = .webview
-        } else {
-            fatalError("Content type not supported, this is a developer error.")
-        }
-
-        contentController = viewController
+    private func saveContentType(content: ContentContainable) {
+        type = content.contentType
+        contentController = content
     }
 
-    private func addToView(viewController: UIViewController) {
-        addSubview(viewController.view)
-        viewController.view.translatesAutoresizingMaskIntoConstraints = false
+    private func addToView(content: ContentContainable) {
+        addSubview(content.view)
+        content.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            viewController.view.topAnchor.constraint(equalTo: topAnchor),
-            viewController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
-            viewController.view.bottomAnchor.constraint(equalTo: bottomAnchor),
-            viewController.view.trailingAnchor.constraint(equalTo: trailingAnchor)
+            content.view.topAnchor.constraint(equalTo: topAnchor),
+            content.view.leadingAnchor.constraint(equalTo: leadingAnchor),
+            content.view.bottomAnchor.constraint(equalTo: bottomAnchor),
+            content.view.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 }

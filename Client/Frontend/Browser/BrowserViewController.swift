@@ -1008,11 +1008,11 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.isHidden = false
     }
 
-    func embedContent(_ viewController: UIViewController, forceEmbed: Bool = false) {
-        guard contentContainer.canAdd(viewController: viewController) || forceEmbed else { return }
+    func embedContent(_ viewController: ContentContainable, forceEmbed: Bool = false) {
+        guard contentContainer.canAdd(content: viewController) || forceEmbed else { return }
 
         addChild(viewController)
-        contentContainer.addContent(viewController: viewController)
+        contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)

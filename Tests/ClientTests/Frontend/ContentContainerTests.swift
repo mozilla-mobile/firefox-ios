@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import WebKit
 import XCTest
 @testable import Client
 
@@ -29,14 +30,29 @@ final class ContentContainerTests: XCTestCase {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
 
-        XCTAssertTrue(subject.canAdd(viewController: homepage))
+        XCTAssertTrue(subject.canAdd(content: homepage))
     }
 
     func testCanAddHomepageOnceOnly() {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(profile: profile, overlayManager: overlayModeManager)
 
-        subject.addContent(viewController: homepage)
-        XCTAssertFalse(subject.canAdd(viewController: homepage))
+        subject.add(content: homepage)
+        XCTAssertFalse(subject.canAdd(content: homepage))
+    }
+
+    func testCanAddWebview() {
+        let subject = ContentContainer(frame: .zero)
+        let webview = WebviewViewController(webView: WKWebView())
+
+        XCTAssertTrue(subject.canAdd(content: webview))
+    }
+
+    func testCanAddWebviewOnceOnly() {
+        let subject = ContentContainer(frame: .zero)
+        let webview = WebviewViewController(webView: WKWebView())
+
+        subject.add(content: webview)
+        XCTAssertFalse(subject.canAdd(content: webview))
     }
 }

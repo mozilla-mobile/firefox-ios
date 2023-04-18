@@ -5,8 +5,9 @@
 import Foundation
 import WebKit
 
-class WebviewViewController: UIViewController {
+class WebviewViewController: UIViewController, ContentContainable {
     private let webView: WKWebView
+    var contentType: ContentType = .webview
 
     init(webView: WKWebView) {
         self.webView = webView
