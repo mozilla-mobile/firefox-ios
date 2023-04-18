@@ -8,6 +8,9 @@ import Shared
 class BreachAlertsDetailView: UIView, ThemeApplicable {
     private struct UX {
         static let horizontalMargin: CGFloat = 14
+        static let shadowRadius: CGFloat = 8
+        static let shadowOpacity: Float = 0.6
+        static let shadowOffset = CGSize(width: 0, height: 2)
     }
 
     private var breachLink = String()
@@ -111,9 +114,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        self.layer.cornerRadius = 5
-        self.layer.masksToBounds = true
+        configureLayerAppearance()
 
         self.isAccessibilityElement = false
         self.accessibilityElements = [titleLabel, learnMoreButton, breachDateLabel, descriptionLabel, goToButton]
@@ -139,6 +140,15 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
             make.leading.top.equalToSuperview()
         }
         self.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+    }
+
+    private func configureLayerAppearance() {
+        layer.cornerRadius = 5
+        layer.masksToBounds = false
+
+        layer.shadowOpacity = UX.shadowOpacity
+        layer.shadowOffset = UX.shadowOffset
+        layer.shadowRadius = UX.shadowRadius
     }
 
     private func getAttributedText(for text: String, with color: UIColor) -> NSAttributedString {
@@ -199,6 +209,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        layer.shadowColor = theme.colors.shadowDefault.cgColor
         backgroundColor = theme.colors.layer2
         titleIcon.tintColor = theme.colors.iconWarning
         titleLabel.textColor = theme.colors.textWarning
