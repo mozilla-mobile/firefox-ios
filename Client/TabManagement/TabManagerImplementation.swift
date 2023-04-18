@@ -39,7 +39,7 @@ class TabManagerImplementation: LegacyTabManager {
 
         isRestoringTabs = true
         Task {
-            guard let windowData = await self.tabDataStore.fetchTabData() else {
+            guard let windowData = await self.tabDataStore.fetchWindowData(withID: UUID()) else {
                 // Always make sure there is a single normal tab
                 self.generateEmptyTab()
                 return
@@ -99,7 +99,7 @@ class TabManagerImplementation: LegacyTabManager {
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
             let windowData = WindowData(activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
-            await tabDataStore.saveTabData(window: windowData)
+            await tabDataStore.saveWindowData(window: windowData)
         }
     }
 
@@ -135,7 +135,7 @@ class TabManagerImplementation: LegacyTabManager {
 
     private func shouldUseNewTabStore() -> Bool {
         if #available(iOS 15, *),
-            AppConstants.useNewTabDataStore {
+           AppConstants.useNewTabDataStore {
             return true
         }
         return false

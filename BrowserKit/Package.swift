@@ -54,6 +54,7 @@ let package = Package(
             dependencies: ["Common"]),
         .target(
             name: "TabDataStore",
+            dependencies: ["Common"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "TabDataStoreTests",
