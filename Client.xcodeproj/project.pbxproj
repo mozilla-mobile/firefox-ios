@@ -2965,6 +2965,14 @@
 		43DCD39B29E9C0FA007C94FB /* si */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = si; path = si.lproj/SnackBar.strings; sourceTree = "<group>"; };
 		43DCD8B4293E0A790016B422 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/Alerts.strings"; sourceTree = "<group>"; };
 		43DCD8B5293E0A790016B422 /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-AR"; path = "es-AR.lproj/TabsTray.strings"; sourceTree = "<group>"; };
+		43DD34EC29EEF31000D3AE75 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Alert.strings; sourceTree = "<group>"; };
+		43DD34ED29EEF31000D3AE75 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/EditCard.strings; sourceTree = "<group>"; };
+		43DD34EE29EEF31000D3AE75 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/EngagementNotification.strings; sourceTree = "<group>"; };
+		43DD34EF29EEF31000D3AE75 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/ErrorState.strings; sourceTree = "<group>"; };
+		43DD34F029EEF31000D3AE75 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Onboarding.strings; sourceTree = "<group>"; };
+		43DD34F129EEF31000D3AE75 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/ResearchSurface.strings; sourceTree = "<group>"; };
+		43DD34F229EEF31000D3AE75 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Settings.strings; sourceTree = "<group>"; };
+		43DD34F329EEF31000D3AE75 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/SnackBar.strings; sourceTree = "<group>"; };
 		43DDD25228B39D6700E7FF53 /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/BookmarkPanel.strings; sourceTree = "<group>"; };
 		43DEE39E296C2CD600D13D0A /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Alerts.strings; sourceTree = "<group>"; };
 		43DEE39F296C2CD600D13D0A /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/JumpBackIn.strings; sourceTree = "<group>"; };
@@ -12208,6 +12216,7 @@
 				43C8B93829DB09EB00762C10 /* rm */,
 				4350713329DB0A3D00F18B0D /* sq */,
 				43D9D39529E9BF1E0065A19C /* he */,
+				43DD34EE29EEF31000D3AE75 /* ca */,
 			);
 			name = EngagementNotification.strings;
 			sourceTree = "<group>";
@@ -12263,6 +12272,7 @@
 				43C8B93A29DB09EB00762C10 /* rm */,
 				4350713529DB0A3D00F18B0D /* sq */,
 				43DCD39829E9C0FA007C94FB /* si */,
+				43DD34F029EEF31000D3AE75 /* ca */,
 			);
 			name = Onboarding.strings;
 			sourceTree = "<group>";
@@ -12318,6 +12328,7 @@
 				43C8B93B29DB09EB00762C10 /* rm */,
 				4350713629DB0A3D00F18B0D /* sq */,
 				43DCD39929E9C0FA007C94FB /* si */,
+				43DD34F129EEF31000D3AE75 /* ca */,
 			);
 			name = ResearchSurface.strings;
 			sourceTree = "<group>";
@@ -12373,6 +12384,7 @@
 				43BF908129DB0A320094159C /* sl */,
 				4350713129DB0A3D00F18B0D /* sq */,
 				43DCD39529E9C0FA007C94FB /* si */,
+				43DD34EC29EEF31000D3AE75 /* ca */,
 			);
 			name = Alert.strings;
 			sourceTree = "<group>";
@@ -12428,6 +12440,7 @@
 				43BF908229DB0A320094159C /* sl */,
 				4350713229DB0A3D00F18B0D /* sq */,
 				43DCD39629E9C0FA007C94FB /* si */,
+				43DD34ED29EEF31000D3AE75 /* ca */,
 			);
 			name = EditCard.strings;
 			sourceTree = "<group>";
@@ -12483,6 +12496,7 @@
 				43BF908329DB0A320094159C /* sl */,
 				4350713429DB0A3D00F18B0D /* sq */,
 				43DCD39729E9C0FA007C94FB /* si */,
+				43DD34EF29EEF31000D3AE75 /* ca */,
 			);
 			name = ErrorState.strings;
 			sourceTree = "<group>";
@@ -12539,6 +12553,7 @@
 				4350713729DB0A3D00F18B0D /* sq */,
 				43BA26CC29E9C0E400D50FFE /* sat-Olck */,
 				43DCD39A29E9C0FA007C94FB /* si */,
+				43DD34F229EEF31000D3AE75 /* ca */,
 			);
 			name = Settings.strings;
 			sourceTree = "<group>";
@@ -12594,6 +12609,7 @@
 				43BF908529DB0A330094159C /* sl */,
 				4350713829DB0A3D00F18B0D /* sq */,
 				43DCD39B29E9C0FA007C94FB /* si */,
+				43DD34F329EEF31000D3AE75 /* ca */,
 			);
 			name = SnackBar.strings;
 			sourceTree = "<group>";
