@@ -34,6 +34,9 @@
 /* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsTitle.v112" = "同期";
 
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "%1$@ のすべての通知がオフになっています。端末の 設定 > 通知 > %2$@ からオンにしてください。";
+
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "便利な機能と %@ を最大限に活用する方法について学びます。";
 
