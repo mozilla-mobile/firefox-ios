@@ -2,19 +2,43 @@ import { FormAutofillUtilsShared } from "resource://gre/modules/FormAutofillUtil
 import { CreditCard } from "resource://gre/modules/CreditCard.sys.mjs";
 import { LabelUtils } from "resource://gre/modules/LabelUtils.mjs";
 import { FieldScanner } from "resource://gre/modules/FieldScanner.mjs";
+import { creditCardRulesets } from "resource://gre/modules/CreditCardRuleset.mjs";
 
-// TODO(HACK): Update this
-const creditCardRulesets = {
-  types: ["cc-number", "cc-name"],
-};
+// TODO(HACK): FXIOS-6124
+// const creditCardRulesets = {
+//   types: ["cc-number", "cc-name"],
+// };
 
 /**
  * Returns the autocomplete information of fields according to heuristics.
  */
 export const FormAutofillHeuristicsShared = {
-  RULES: null,
-
-  CREDIT_CARD_FIELDNAMES: [],
+  // TODO(HACK): FXIOS-6124
+  RULES: {
+    "cc-name":
+      /(accountholdername|titulaire)|(cc-?name|card-?name|cardholder-?name|cardholder|(^nom$))|(card.?(?:holder|owner)|name.*(\b)?on(\b)?.*card|(?:card|cc).?name|cc.?full.?name|karteninhaber|nombre.*tarjeta|nom.*carte|nome.*cart|名前|имя.*карты|信用卡开户名|开户名|持卡人姓名|持卡人姓名)/u,
+    // TODO(HACK): FXIOS-6124 This was updated to not use lookahead or lookbehind
+    // ( because of lack of support in webkit ), Revisit this
+    "cc-number":
+      /(cc|kk)nr|(cc-?number|cc-?num|card-?number|card-?num|number|cc|cc-?no|card-?no|credit-?card|numero-?carte|carte|carte-?credit|num-?carte|cb-?num)|((add)?(card|cc|acct)[\s#]*)(number|no|num|field)|((telefon|haus|person|fødsels)?nummer[^\s]*|nummer[^\s]*|カード番号|номер.*карты|信用卡号(?:码|卡號)?|카드|(numero|número|numéro))(?:(?:document|fono|phone|réservation)\b|$)/u,
+    "cc-exp-month":
+      /(month|(cc|kk)month)|((^exp-?month$)|(^cc-?exp-?month$)|(^cc-?month$)|(^card-?month$)|(^cc-?mo$)|(^card-?mo$)|(^exp-?mo$)|(^card-?exp-?mo$)|(^cc-?exp-?mo$)|(^card-?expiration-?month$)|(^expiration-?month$)|(^cc-?mm$)|(^cc-?m$)|(^card-?mm$)|(^card-?m$)|(^card-?exp-?mm$)|(^cc-?exp-?mm$)|(^exp-?mm$)|(^exp-?m$)|(^expire-?month$)|(^expire-?mo$)|(^expiry-?month$)|(^expiry-?mo$)|(^card-?expire-?month$)|(^card-?expire-?mo$)|(^card-?expiry-?month$)|(^card-?expiry-?mo$)|(^mois-?validite$)|(^mois-?expiration$)|(^m-?validite$)|(^m-?expiration$)|(^expiry-?date-?field-?month$)|(^expiration-?date-?month$)|(^expiration-?date-?mm$)|(^exp-?mon$)|(^validity-?mo$)|(^exp-?date-?mo$)|(^cb-?date-?mois$)|(^date-?m$))|(expir|exp.*mo|exp.*date|ccmonth|cardmonth|addmonth|gueltig|gültig|monat|fecha|date.*exp|scadenza|有効期限|validade|срок действия карты|月)/u,
+    "cc-exp-year":
+      /(year|(cc|kk)year)|((^exp-?year$)|(^cc-?exp-?year$)|(^cc-?year$)|(^card-?year$)|(^cc-?yr$)|(^card-?yr$)|(^exp-?yr$)|(^card-?exp-?yr$)|(^cc-?exp-?yr$)|(^card-?expiration-?year$)|(^expiration-?year$)|(^cc-?yy$)|(^cc-?y$)|(^card-?yy$)|(^card-?y$)|(^card-?exp-?yy$)|(^cc-?exp-?yy$)|(^exp-?yy$)|(^exp-?y$)|(^cc-?yyyy$)|(^card-?yyyy$)|(^card-?exp-?yyyy$)|(^cc-?exp-?yyyy$)|(^expire-?year$)|(^expire-?yr$)|(^expiry-?year$)|(^expiry-?yr$)|(^card-?expire-?year$)|(^card-?expire-?yr$)|(^card-?expiry-?year$)|(^card-?expiry-?yr$)|(^an-?validite$)|(^an-?expiration$)|(^annee-?validite$)|(^annee-?expiration$)|(^expiry-?date-?field-?year$)|(^expiration-?date-?year$)|(^cb-?date-?ann$)|(^expiration-?date-?yy$)|(^expiration-?date-?yyyy$)|(^validity-?year$)|(^exp-?date-?year$)|(^date-?y$))|(exp|^\/|(add)?year|ablaufdatum|gueltig|gültig|jahr|fecha|scadenza|有効期限|validade|срок действия карты|年|有效期)/u,
+    "cc-exp":
+      /((^cc-?exp$)|(^card-?exp$)|(^cc-?expiration$)|(^card-?expiration$)|(^cc-?ex$)|(^card-?ex$)|(^card-?expire$)|(^card-?expiry$)|(^validite$)|(^expiration$)|(^expiry$)|mm-?yy|mm-?yyyy|yy-?mm|yyyy-?mm|expiration-?date|payment-?card-?expiration|(^payment-?cc-?date$))|(expir|exp.*date|^expfield$|gueltig|gültig|fecha|date.*exp|scadenza|有効期限|validade|срок действия карты)/u,
+    "cc-type":
+      /(type|kartenmarke)|((^cc-?type$)|(^card-?type$)|(^card-?brand$)|(^cc-?brand$)|(^cb-?type$))/u,
+  },
+  // TODO(HACK): FXIOS-6124 Update this
+  CREDIT_CARD_FIELDNAMES: [
+    "cc-name",
+    "cc-number",
+    "cc-exp-month",
+    "cc-exp-year",
+    "cc-exp",
+    "cc-type",
+  ],
   ADDRESS_FIELDNAMES: [],
   /**
    * Try to find a contiguous sub-array within an array.
@@ -519,7 +543,6 @@ export const FormAutofillHeuristicsShared = {
     }
 
     LabelUtils.clearLabelMap();
-
     return fieldScanner.getSectionFieldDetails();
   },
 
@@ -527,22 +550,23 @@ export const FormAutofillHeuristicsShared = {
     let fieldNames = [];
     let isAutoCompleteOff =
       element.autocomplete == "off" || element.form?.autocomplete == "off";
-    //TODO(HACK): Update this
+    // TODO(HACK): FXIOS-6124
     // if (
     //   FormAutofill.isAutofillCreditCardsAvailable &&
     //   (!isAutoCompleteOff || FormAutofill.creditCardsAutocompleteOff)
-    // )
-    if (!isAutoCompleteOff) {
-      fieldNames.push(...this.CREDIT_CARD_FIELDNAMES);
-    }
-    //TODO(HACK): Update this
+    // ) {
+    //   fieldNames.push(...this.CREDIT_CARD_FIELDNAMES);
+    // }
+    fieldNames.push(...this.CREDIT_CARD_FIELDNAMES);
+
+    // TODO(HACK): FXIOS-6124
     // if (
     //     FormAutofill.isAutofillAddressesAvailable &&
     //     (!isAutoCompleteOff || FormAutofill.addressesAutocompleteOff)
     //   )
-    if (!isAutoCompleteOff) {
-      fieldNames.push(...this.ADDRESS_FIELDNAMES);
-    }
+    // if (!isAutoCompleteOff) {
+    //   fieldNames.push(...this.ADDRESS_FIELDNAMES);
+    // }
 
     if (HTMLSelectElement.isInstance(element)) {
       const FIELDNAMES_FOR_SELECT_ELEMENT = [
@@ -574,6 +598,7 @@ export const FormAutofillHeuristicsShared = {
     }
 
     let info = element.getAutocompleteInfo();
+
     // An input[autocomplete="on"] will not be early return here since it stll
     // needs to find the field name.
     if (
@@ -586,9 +611,10 @@ export const FormAutofillHeuristicsShared = {
       return info;
     }
 
-    if (!this._prefEnabled) {
-      return null;
-    }
+    // TODO(HACK): FXIOS-6124
+    // if (!this._prefEnabled) {
+    //   return null;
+    // }
 
     let fields = this._getPossibleFieldNames(element);
 
