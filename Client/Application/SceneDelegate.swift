@@ -166,7 +166,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         completionHandler: @escaping (Bool) -> Void
     ) {
         if AppConstants.useCoordinators {
-            // FXIOS-5983: Handle deeplinks from shortcuts
+            guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem) else { return }
+            sceneCoordinator?.handle(route: route)
         } else {
             QuickActionsImplementation().handleShortCutItem(
                 shortcutItem,

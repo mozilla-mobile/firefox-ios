@@ -30,4 +30,11 @@ enum DeeplinkInput {
         case homepanel = "homepanel"
         case defaultBrowser = "default-browser"
     }
+
+    enum Shortcut: String {
+        case newTab = "NewTab"
+        case newPrivateTab = "NewPrivateTab"
+        case openLastBookmark = "OpenLastBookmark"
+        case qrCode = "QRCode"
+    }
 }
