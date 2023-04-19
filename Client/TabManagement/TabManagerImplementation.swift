@@ -100,7 +100,7 @@ class TabManagerImplementation: LegacyTabManager {
             let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
             let windowData = WindowData(activeTabId: activeTabID,
                                         tabData: self.generateTabDataForSaving())
-            await tabDataStore.saveWindowData(window: windowData)
+            await tabDataStore.saveWindowDataWithBackup(window: windowData)
         }
     }
 
