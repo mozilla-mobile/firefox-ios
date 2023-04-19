@@ -102,20 +102,20 @@ class UpdateViewModel: OnboardingViewModelProtocol,
         switch cardType {
         case .updateWelcome:
             return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingWelcomev106),
-                                       title: .Upgrade.WelcomeTitle,
-                                       description: .Upgrade.WelcomeDescription,
-                                       linkButtonTitle: nil,
-                                       primaryAction: .Upgrade.WelcomeAction,
-                                       secondaryAction: nil,
-                                       a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
+                                             title: .Upgrade.WelcomeTitle,
+                                             description: .Upgrade.WelcomeDescription,
+                                             linkButtonTitle: nil,
+                                             primaryAction: .Upgrade.WelcomeAction,
+                                             secondaryAction: nil,
+                                             a11yIdRoot: AccessibilityIdentifiers.Upgrade.welcomeCard)
         case .updateSignSync:
             return LegacyOnboardingInfoModel(image: UIImage(named: ImageIdentifiers.onboardingSyncv106),
-                                       title: .Upgrade.SyncSignTitle,
-                                       description: .Upgrade.SyncSignDescription,
-                                       linkButtonTitle: nil,
-                                       primaryAction: .Upgrade.SyncAction,
-                                       secondaryAction: .Onboarding.LaterAction,
-                                       a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard)
+                                             title: .Upgrade.SyncSignTitle,
+                                             description: .Upgrade.SyncSignDescription,
+                                             linkButtonTitle: nil,
+                                             primaryAction: .Upgrade.SyncAction,
+                                             secondaryAction: .Onboarding.LaterAction,
+                                             a11yIdRoot: AccessibilityIdentifiers.Upgrade.signSyncCard)
         case .welcome, .signSync, .notification:
             // Cases not supported by the upgrade screen
             return nil

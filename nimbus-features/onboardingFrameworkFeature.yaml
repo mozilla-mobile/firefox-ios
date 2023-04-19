@@ -2,7 +2,8 @@
 features:
   onboarding-framework-feature:
     description: >
-      Feature description
+      The new onboarding framework feature that will allow onboarding
+      to be experimentable through initial experiments.
     variables:
       cards:
         description: >
@@ -78,6 +79,12 @@ objects:
           The body text dispalyed on the card, in less prominent text.
           This should never be defaulted.
         default: ""
+      link:
+        type: Option<OnboardingLink>
+        description: >
+          The object describing the link button for a card.
+          If left empty, the card will have no link.
+        default: null
       buttons:
         type: List<OnboardingButton>
         description: >
@@ -92,6 +99,21 @@ objects:
           whether it a fresh install or an update.
           The default is fresh-install.
         default: fresh-install
+  OnboardingLink:
+    description: >
+      A group of properties describing the attributes for the active
+      link on a card
+    fields:
+      title:
+        type: String
+        description: >
+          The text of the link title.
+        default: "Learn more about our privacy policy"
+      url:
+        type: String
+        description: >
+          The url that the link will lead to.
+        default: "https://macrumors.com"
   OnboardingButton:
     description: >
       A group of properties describing the attributes of a card.

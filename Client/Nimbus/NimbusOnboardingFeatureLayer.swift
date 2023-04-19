@@ -5,7 +5,7 @@
 import Foundation
 
 class NimbusOnboardingFeatureLayer {
-
+    // MARK: - Properties
     private let nimbus: FxNimbus
 
     init(nimbus: FxNimbus = FxNimbus.shared) {
@@ -13,8 +13,21 @@ class NimbusOnboardingFeatureLayer {
     }
 }
 
-struct OnboardingButton {
+struct OnboardingButtonInfo {
     let title: String
     let action: OnboardingActions
 }
 
+struct OnboardingLinkInfo {
+    let title: String
+    let url: URL
+}
+
+struct OnboardingCardInfo {
+    let name: String
+    let title: String
+    let body: String
+    let link: OnboardingLink?
+    let buttons: [OnboardingButton]
+    let type: OnboardingType
+}

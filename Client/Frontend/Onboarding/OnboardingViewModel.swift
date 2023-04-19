@@ -29,7 +29,7 @@ extension OnboardingViewModelProtocol {
         guard let infoModel = getInfoModel(cardType: cardType) else { return nil }
 
         return LegacyOnboardingCardViewModel(cardType: cardType,
-                                       infoModel: infoModel,
-                                       isFeatureEnabled: isFeatureEnabled)
+                                             infoModel: infoModel,
+                                             isFeatureEnabled: isFeatureEnabled)
     }
 }
