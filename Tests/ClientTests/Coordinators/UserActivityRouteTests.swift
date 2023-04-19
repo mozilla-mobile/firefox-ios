@@ -8,10 +8,22 @@ import CoreSpotlight
 @testable import Client
 
 class UserActivityRouteTests: XCTestCase {
+    var routeBuilder: RouteBuilder!
+
+    override func setUp() {
+        super.setUp()
+        self.routeBuilder = RouteBuilder { false }
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        self.routeBuilder = nil
+    }
+
     // Test the Route initializer with a Siri shortcut user activity.
     func testSiriShortcutUserActivity() {
         let userActivity = NSUserActivity(activityType: SiriShortcuts.activityType.openURL.rawValue)
-        let route = Route(userActivity: userActivity)
+        let route = routeBuilder.makeRoute(userActivity: userActivity)
         XCTAssertEqual(route, .search(url: nil, isPrivate: false))
     }
 
@@ -19,7 +31,7 @@ class UserActivityRouteTests: XCTestCase {
     func testDeepLinkUserActivity() {
         let userActivity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
         userActivity.webpageURL = URL(string: "https://www.example.com")
-        let route = Route(userActivity: userActivity)
+        let route = routeBuilder.makeRoute(userActivity: userActivity)
         XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), isPrivate: false))
     }
 
@@ -27,15 +39,14 @@ class UserActivityRouteTests: XCTestCase {
     func testCoreSpotlightUserActivity() {
         let userActivity = NSUserActivity(activityType: CSSearchableItemActionType)
         userActivity.userInfo = [CSSearchableItemActivityIdentifier: "https://www.example.com"]
-        let route = Route(userActivity: userActivity)
+        let route = routeBuilder.makeRoute(userActivity: userActivity)
         XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"), isPrivate: false))
     }
 
     // Test the Route initializer with an unsupported user activity.
     func testUnsupportedUserActivity() {
         let userActivity = NSUserActivity(activityType: "unsupported.activity.type")
-        let route = Route(userActivity: userActivity)
+        let route = routeBuilder.makeRoute(userActivity: userActivity)
         XCTAssertNil(route)
     }
 }
-
