@@ -76,7 +76,7 @@ class DefaultBrowserOnboardingViewModel {
 
         var shouldShow = false
         // Get the session count from preferences
-        let currentSessionCount = userPrefs.intForKey(PrefsKeys.SessionCount) ?? 0
+        let currentSessionCount = userPrefs.intForKey(PrefsKeys.Session.Count) ?? 0
         if currentSessionCount == DefaultBrowserOnboardingViewModel.maxSessionCount {
             shouldShow = true
             UserDefaults.standard.set(true, forKey: PrefsKeys.KeyDidShowDefaultBrowserOnboarding)

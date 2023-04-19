@@ -17,8 +17,7 @@ class DownloadFilesTests: BaseTestCase {
         waitForExistence(app.tables["DownloadsTable"])
         if processIsTranslatedStr() == m1Rosetta {
             navigator.nowAt(LibraryPanel_Downloads)
-            navigator.goto(NewTabScreen)
-            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.goto(HomePanelsScreen)
             navigator.nowAt(NewTabScreen)
             navigator.goto(ClearPrivateDataSettings)
             app.cells.switches["Downloaded Files"].tap()

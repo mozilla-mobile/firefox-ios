@@ -62,7 +62,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     // MARK: - Initializers
     init(profile: Profile,
-         tabManager: TabManager,
+         isZeroSearch: Bool = false,
+         tabManager: TabManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
          userDefaults: UserDefaultsInterface = UserDefaults.standard,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
@@ -90,6 +91,8 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         self.notificationCenter = notificationCenter
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
+
+        viewModel.isZeroSearch = isZeroSearch
 
         contextMenuHelper.delegate = self
         contextMenuHelper.getPopoverSourceRect = { [weak self] popoverView in
@@ -133,6 +136,24 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyTheme()
+        homepageWillAppear(isZeroSearch: viewModel.isZeroSearch)
+        reloadView()
+        NotificationCenter.default.post(name: .ShowHomepage, object: nil)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        homepageDidAppear()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        homepageWillDisappear()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -197,8 +218,13 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
 
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
+        var wallpaperTopConstant: CGFloat = 0
+        if AppConstants.useCoordinators {
+            // Constraint so wallpaper appears under the status bar
+            wallpaperTopConstant = statusBarFrame?.height ?? 0
+        }
         NSLayoutConstraint.activate([
-            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor),
+            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
@@ -237,6 +263,7 @@ class HomepageViewController: UIViewController, HomePanel, FeatureFlaggable, The
         viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
     }
 
+    // FXIOS-6203 - Clean up custom homepage view cycles
     // MARK: - Homepage view cycle
     /// Normal view controller view cycles cannot be relied on the homepage since the current way of showing and hiding the homepage is through alpha.
     /// This is a problem that need to be fixed but until then we have to rely on the methods here.
@@ -722,7 +749,12 @@ extension HomepageViewController {
 
         // The scrollview content offset is automatically adjusted to account for the status bar.
         // We want to start showing the status bar background as soon as the user scrolls.
-        var offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight
+        var offset: CGFloat
+        if AppConstants.useCoordinators {
+            offset = scrollView.contentOffset.y / statusBarHeight
+        } else {
+            offset = (scrollView.contentOffset.y + statusBarHeight) / statusBarHeight
+        }
 
         if offset > 1 {
             offset = 1

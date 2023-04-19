@@ -115,7 +115,6 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
         if iPad() {
-            navigator.performAction(Action.CloseURLBarOpen)
             app.textFields.element(boundBy: 0).tap()
             app.typeText("mozilla.org\n")
         } else {
@@ -173,9 +172,8 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTab() throws {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: 35)
+            waitForExistence(TopSiteCellgroup, timeout: 60)
         }
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         // Long tap on Wikipedia top site
         waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"], timeout: 3)
@@ -206,9 +204,8 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         XCTExpectFailure("The app was not launched", strict: false) {
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
+            waitForExistence(TopSiteCellgroup, timeout: 60)
         }
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 5)
         navigator.nowAt(NewTabScreen)
         // Open one of the sites from Topsites and wait until page is loaded
@@ -247,9 +244,6 @@ class ActivityStreamTest: BaseTestCase {
         // can't scroll only to that area. Needs investigation
         if iPad() {
             XCUIDevice.shared.orientation = .landscapeLeft
-            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-            navigator.performAction(Action.CloseURLBarOpen)
-
             waitForExistence(TopSiteCellgroup, timeout: TIMEOUT)
             app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
 

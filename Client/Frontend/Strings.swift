@@ -2688,6 +2688,17 @@ extension String {
     }
 }
 
+// MARK: - Notification
+extension String {
+    public struct Notification {
+        public static let FallbackTitle = MZLocalizedString(
+            "Notification.Fallback.Title.v113",
+            tableName: "Notification",
+            value: "%@ Tip",
+            comment: "Fallback Title of notification if no notification title was configured. The argument is the app name.")
+    }
+}
+
 // MARK: - Additional messages sent via Push from FxA
 extension String {
     public static let FxAPush_DeviceDisconnected_ThisDevice_title = MZLocalizedString(
@@ -3011,7 +3022,7 @@ extension String {
         // ZoomPageBar
         public static let ZoomPageTitle = MZLocalizedString(
             "Menu.ZoomPage.Title.v113",
-            tableName: "ZoomPageBar",
+            tableName: nil,
             value: "Zoom (%@)",
             comment: "Label for the zoom page button in the menu, used to show the Zoom Page bar. The placeholder shows the current zoom level in percent.")
         public static let ZoomPageCloseAccessibilityLabel = MZLocalizedString(
