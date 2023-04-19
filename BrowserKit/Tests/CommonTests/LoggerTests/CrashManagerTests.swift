@@ -181,33 +181,3 @@ extension CrashManagerTests {
                                                sharedContainerIdentifier: "")
     }
 }
-
-// MARK: - MockSentryWrapper
-private class MockSentryWrapper: SentryWrapper {
-    var mockCrashedInLastRun = false
-    var crashedInLastRun: Bool {
-        return mockCrashedInLastRun
-    }
-
-    var dsn: String?
-
-    var startWithConfigureOptionsCalled = 0
-    func startWithConfigureOptions(configure options: @escaping (Options) -> Void) {
-        startWithConfigureOptionsCalled += 1
-    }
-
-    var savedMessage: String?
-    func captureMessage(message: String, with scopeBlock: @escaping (Scope) -> Void) {
-        savedMessage = message
-    }
-
-    var savedBreadcrumb: Breadcrumb?
-    func addBreadcrumb(crumb: Breadcrumb) {
-        savedBreadcrumb = crumb
-    }
-
-    var configureScopeCalled = 0
-    func configureScope(scope: @escaping (Scope) -> Void) {
-        configureScopeCalled += 1
-    }
-}

@@ -14,6 +14,7 @@ class AppLaunchUtil {
     private var adjustHelper: AdjustHelper
     private var profile: Profile
     private let introScreenManager: IntroScreenManager
+    private var appMetricsManager: AppMetricsManager
 
     init(logger: Logger = DefaultLogger.shared,
          profile: Profile) {
@@ -21,6 +22,7 @@ class AppLaunchUtil {
         self.profile = profile
         self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
+        self.appMetricsManager = AppMetricsManager.shared
     }
 
     func setUpPreLaunchDependencies() {

@@ -24,6 +24,9 @@ public enum LoggerCategory: String {
     /// Related to the application lifecycle.
     case lifecycle
 
+    /// Related to all application performance metrics captured by Apple's MetricKit
+    case metricKit
+
     /// Related to the setup of services on app launch.
     case setup
 
