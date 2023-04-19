@@ -143,12 +143,12 @@ struct RouteBuilder {
 
         switch shortcutType {
         case .newTab:
-            return .search(url: nil, isPrivate: false)
+            return .search(url: nil, isPrivate: false, options: [.focusLocationField])
         case .newPrivateTab:
             return .search(url: nil, isPrivate: true)
         case .openLastBookmark:
             if let urlToOpen = (shortcutItem.userInfo?[QuickActionInfos.tabURLKey] as? String)?.asURL {
-                return .search(url: urlToOpen, isPrivate: false)
+                return .search(url: urlToOpen, isPrivate: false, options: [.switchToNormalMode])
             } else {
                 return nil
             }
