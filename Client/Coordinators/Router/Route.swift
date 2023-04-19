@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import CoreSpotlight
 
 /// An enumeration representing different navigational routes in an application.
 enum Route: Equatable {
@@ -93,5 +94,37 @@ enum Route: Equatable {
     enum DefaultBrowserSection: String, CaseIterable, Equatable {
         case tutorial
         case systemSettings = "system-settings"
+    }
+
+    init?(userActivity: NSUserActivity) {
+        // If the user activity is a Siri shortcut to open the app, show a new search tab.
+        if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
+            self = .search(url: nil, isPrivate: false)
+            return
+        }
+
+        // If the user activity has a webpageURL, it's a deep link or an old history item.
+        // Use the URL to create a new search tab.
+        if let url = userActivity.webpageURL {
+            self = .search(url: url, isPrivate: false)
+            return
+        }
+
+        // If the user activity is a CoreSpotlight item, check its activity identifier to determine
+        // which URL to open.
+        if userActivity.activityType == CSSearchableItemActionType {
+            guard let userInfo = userActivity.userInfo,
+                  let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
+                  let url = URL(string: urlString)
+            else {
+                return nil
+            }
+            self = .search(url: url, isPrivate: false)
+            return
+        }
+
+        // If the user activity does not match any of the above criteria, return nil to indicate that
+        // the route could not be determined.
+        return nil
     }
 }
