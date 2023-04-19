@@ -14,7 +14,9 @@ class TabCounterTests: BaseTestCase {
 
         navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         waitForTabsButton()
 
         tabsOpen = app.buttons["Show Tabs"].value
@@ -39,8 +41,9 @@ class TabCounterTests: BaseTestCase {
         navigator.createNewTab()
         navigator.nowAt(NewTabScreen)
 
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         waitForTabsButton()
 
         tabsOpen = app.buttons["Show Tabs"].value
