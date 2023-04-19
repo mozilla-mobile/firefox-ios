@@ -590,7 +590,6 @@ extension GridTabViewController: TabPeekDelegate {
         if let index = tabDisplayManager.dataStore.index(of: tab),
            let cell = self.collectionView?.cellForItem(at: IndexPath(item: index, section: TabDisplaySection.regularTabs.rawValue)) as? TabCell {
             cell.close()
-            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
         }
     }
 
@@ -643,9 +642,7 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
             if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
-        case .removedNonLastTab:
-            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
-        case .updateTab, .moveTab:
+        case .removedNonLastTab, .updateTab, .moveTab:
             break
         }
     }
@@ -671,9 +668,7 @@ extension GridTabViewController {
     }
 
     func didTapToolbarDelete(_ sender: UIBarButtonItem) {
-        if tabDisplayManager.isDragging {
-            return
-        }
+        guard !tabDisplayManager.isDragging else { return }
 
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: .AppMenu.AppMenuCloseAllTabsTitleString,

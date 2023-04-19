@@ -467,8 +467,9 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         guard !isDragging else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
-            if self.isPrivate == false,
+            if !self.isPrivate,
                tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
+                // TODO: Check why self.tabManager.removeTab(tab) delays the deletion so the toast doesn't show in homepage for last tab
                 self.tabManager.removeTabs([tab])
                 self.tabManager.selectTab(self.tabManager.addTab())
                 return

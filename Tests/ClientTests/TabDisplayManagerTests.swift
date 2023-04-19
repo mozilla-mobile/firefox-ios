@@ -411,6 +411,36 @@ class TabDisplayManagerTests: XCTestCase {
         XCTAssertFalse(tabDisplayManager.shouldPresentUndoToastOnHomepage,
                        "Expected to present toast on homepage")
     }
+
+    func testInitWithExistingRegularTabs() {
+        let tabDisplayManager = createTabDisplayManagerWithTabs(amountOfTabs: 3, isPrivate: false)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        XCTAssertEqual(manager.normalTabs.count, 3, "Expected 3 tabs")
+    }
+
+    func testInitWithExistingPrivateTabs() {
+        let tabDisplayManager = createTabDisplayManagerWithTabs(amountOfTabs: 3, isPrivate: true)
+        tabDisplayManager.tabDisplayType = .TabGrid
+
+        XCTAssertEqual(manager.privateTabs.count, 3, "Expected 3 tabs")
+    }
+
+//    func testTabsCount_ClosingRegularTab() {
+//        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
+//        tabDisplayManager.tabDisplayType = .TabGrid
+//
+//        // Add 2 tabs
+//        let tab = manager.addTab()
+//        manager.addTab()
+//        manager.selectTab(tab)
+//        let expectation = self.expectation(description: "TabDisplayManagerTests")
+//        tabDisplayManager.performCloseAction(for: tab) {
+//            expectation.fulfill()
+//            XCTAssertEqual(self.manager.normalTabs.count, 1, "Expected 1 tabs")
+//        }
+//        waitForExpectations(timeout: 5)
+//    }
 }
 
 // Helper methods
@@ -435,6 +465,24 @@ extension TabDisplayManagerTests {
                                                   theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
         tabDisplayManager.dataStore = useMockDataStore ? mockDataStore : dataStore
+        return tabDisplayManager
+    }
+
+    func createTabDisplayManagerWithTabs(amountOfTabs: Int, isPrivate: Bool) -> TabDisplayManager {
+        for _ in 0..<amountOfTabs {
+            _ = manager.addTab(nil, afterTab: nil, isPrivate: isPrivate)
+        }
+
+        let tabDisplayManager = TabDisplayManager(collectionView: collectionView,
+                                                  tabManager: manager,
+                                                  tabDisplayer: self,
+                                                  reuseID: TopTabCell.cellIdentifier,
+                                                  tabDisplayType: .TopTabTray,
+                                                  profile: profile,
+                                                  cfrDelegate: cfrDelegate,
+                                                  theme: LightTheme())
+        collectionView.dataSource = tabDisplayManager
+//        tabDisplayManager.dataStore = dataStore
         return tabDisplayManager
     }
 

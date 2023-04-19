@@ -73,7 +73,9 @@ extension TabManager {
     }
 
     func removeTab(_ tab: Tab) {
-        removeTab(tab, completion: nil)
+        removeTab(tab) {
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+        }
     }
 
     func restoreTabs(_ forced: Bool = false) {
