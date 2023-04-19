@@ -16891,7 +16891,11 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
+<<<<<<< HEAD
 				version = 97.1.0;
+=======
+				version = 97.5.1;
+>>>>>>> 4b459835c (Bump [v114] Auto update SPM with latest rust-component release 97.5.1 (#14020))
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
