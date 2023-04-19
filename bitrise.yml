@@ -540,6 +540,11 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
+            # Manual triggers leave empty commits. 
+            # Check for empty commit and exit blacklist check if found to avoid erroring out.
+            git log -n 1 origin/main --pretty=format:"%H" && echo "non-empty commit. Continuing Blacklist check..." \
+                || echo "empty commit from manually triggered test detected. Skipping Blacklist check..." && \
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests; exit 0
             echo "Commit on origin/main"
             COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"` || true
             if [[ ! "failed" == *"$COMMIT_ON_MAIN_ORIGIN"* ]]; then
