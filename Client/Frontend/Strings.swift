@@ -2695,7 +2695,7 @@ extension String {
             "Notification.Fallback.Title.v113",
             tableName: "Notification",
             value: "%@ Tip",
-            comment: "Fallback Title of notification if no notification title was configured. The argument is the app name.")
+            comment: "Fallback Title of notification if no notification title was configured. The notification is an advise to the user. The argument is the app name.")
     }
 }
 
