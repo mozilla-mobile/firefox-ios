@@ -45,8 +45,8 @@ features:
               title: "Second title"
               body: "Some body text that's rather longer than a title 2"
               link:
-                - title: "Hello, senator"
-                  url: "https://macrumors.com"
+                title: "Hello, senator"
+                url: "https://macrumors.com"
               buttons:
                 - title: "Primary Button 2"
                   action: sync-sign-in
@@ -56,7 +56,7 @@ features:
           card-ordering:
             - "Test 1"
             - "Test 2"
-          dismissable: true
+          dismissable: false
 
 objects:
   OnboardingCardData:

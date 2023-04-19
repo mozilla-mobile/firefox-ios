@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import MozillaRustComponents
 import XCTest
 @testable import Client
 
@@ -17,16 +16,11 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
 
     func testLayer_dismissable_isTrue() {
         setupNimbusWith(cards: nil, cardOrdering: nil, dismissable: true)
-        let subject = NimbusOnboardingFeatureLayer()
+        let layer = NimbusOnboardingFeatureLayer()
+        let subject = layer.getOnboardingModel()
 
         XCTAssertTrue(subject.dismissable)
     }
-
-//    func testGetNimbusCards() {
-//        let subject = NimbusOnboardingFeatureLayer(nimbus: nimbus)
-//        let cards = subject.getNimbusCards()
-//        XCTAssertEqual(cards.count, 0)
-//    }
 
     // MARK: - Helpers
     private func setupNimbusWith(

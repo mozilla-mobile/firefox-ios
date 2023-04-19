@@ -7,15 +7,17 @@ import Foundation
 class NimbusOnboardingFeatureLayer {
     // MARK: - Properties
     private let nimbus: FxNimbus
-    var dismissable = false
 
     init(nimbus: FxNimbus = FxNimbus.shared) {
         self.nimbus = nimbus
-        self.dismissable = nimbus.features.onboardingFrameworkFeature.value().dismissable
     }
 
-    func getNimbusCards() -> [OnboardingCardInfo] {
-        return []
+    func getOnboardingModel() -> OnboardingViewModel {
+        let framework = nimbus.features.onboardingFrameworkFeature.value()
+
+        return OnboardingViewModel(cards: nil,
+                                   cardOrder: nil,
+                                   dismissable: framework.dismissable)
     }
 }
 
@@ -36,4 +38,10 @@ struct OnboardingCardInfo {
     let link: OnboardingLinkInfo?
     let buttons: [OnboardingButtonInfo]
     let type: OnboardingType
+}
+
+struct OnboardingViewModel {
+    let cards: [OnboardingCardInfo]?
+    let cardOrder: [String]?
+    let dismissable: Bool
 }
