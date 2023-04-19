@@ -138,7 +138,9 @@ class HistoryTests: BaseTestCase {
         // On private mode, the closed tab on regular mode is listed in "Recently Closed Tabs List" as well
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        closeKeyboard()
+        if !iPad() {
+            closeKeyboard()
+        }
         navigator.goto(HistoryRecentlyClosed)
         waitForExistence(app.tables["Recently Closed Tabs List"], timeout: TIMEOUT)
         XCTAssertTrue(app.tables.cells.staticTexts[bookOfMozilla["label"]!].exists)
