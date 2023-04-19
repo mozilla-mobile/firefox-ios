@@ -39,13 +39,14 @@ class TabManagerImplementation: LegacyTabManager {
 
         isRestoringTabs = true
         Task {
-            guard let windowData = await self.tabDataStore.fetchWindowData(withID: UUID()) else {
+            let windowData = await self.tabDataStore.fetchAllWindowsData()
+            guard !windowData.isEmpty, let firstWindow = windowData.first else {
                 // Always make sure there is a single normal tab
                 self.generateEmptyTab()
                 return
             }
 
-            await self.generateTabs(from: windowData)
+            await self.generateTabs(from: firstWindow)
 
             for delegate in self.delegates {
                 delegate.get()?.tabManagerDidRestoreTabs(self)

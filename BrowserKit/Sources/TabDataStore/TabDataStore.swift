@@ -62,10 +62,10 @@ public actor DefaultTabDataStore: TabDataStore {
         }
 
         do {
-            let fileURLs = try FileManager.default.contentsOfDirectory(at: profileURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-
-            //            let windowDataFiles = fileURLs.filter { $0.path.contains(DefaultTabDataStore.storePath) }
-
+            let fileURLs = try FileManager.default.contentsOfDirectory(
+                at: profileURL,
+                includingPropertiesForKeys: nil,
+                options: .skipsHiddenFiles)
             var windowsData: [WindowData] = []
             for fileURL in fileURLs {
                 do {
@@ -141,7 +141,10 @@ public actor DefaultTabDataStore: TabDataStore {
         }
 
         do {
-            let fileURLs = try FileManager.default.contentsOfDirectory(at: profileURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+            let fileURLs = try FileManager.default.contentsOfDirectory(
+                at: profileURL,
+                includingPropertiesForKeys: nil,
+                options: .skipsHiddenFiles)
             for fileURL in fileURLs {
                 do {
                     try FileManager.default.removeItem(at: fileURL)

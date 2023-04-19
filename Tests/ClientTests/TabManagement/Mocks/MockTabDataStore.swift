@@ -7,6 +7,7 @@ import TabDataStore
 
 class MockTabDataStore: TabDataStore {
     var fetchTabDataCalledCount = 0
+    var fetchAllWindowsDataCount = 0
     var fetchWindowDataWithIDCalledCount = 0
     var saveTabDataCalledCount = 0
     var fetchTabWindowData: WindowData?
@@ -34,6 +35,7 @@ class MockTabDataStore: TabDataStore {
         return fetchTabWindowData
     }
     func fetchAllWindowsData() async -> [WindowData] {
+        fetchAllWindowsDataCount += 1
         return allWindowsData ?? [WindowData]()
     }
     func clearWindowData(for id: UUID) async {}
