@@ -17,8 +17,6 @@ struct CreditCardInputField: View {
     var userInputLimit: Int = 0
     var formattedTextLimit: Int = 0
     var keyboardType: UIKeyboardType = .numberPad
-    // TESTING VIEW MODE
-//    @State var viewOnlyModeEnabled = false
     @State var text: String = ""
     let inputType: CreditCardInputType
     let viewModel: CreditCardInputViewModel
@@ -34,13 +32,10 @@ struct CreditCardInputField: View {
     init(inputType: CreditCardInputType,
          showError: Bool,
          inputViewModel: CreditCardInputViewModel
-//         ,
-//         viewOnlyModeEnabled: Bool
     ) {
         self.inputType = inputType
         self.showError = showError
         self.viewModel = inputViewModel
-//        _viewOnlyModeEnabled = State(initialValue: viewOnlyModeEnabled)
         switch self.inputType {
         case .name:
             fieldHeadline = .CreditCard.EditCard.NameOnCardTitle
@@ -126,7 +121,6 @@ struct CreditCardInputField: View {
                     .foregroundColor(textFieldColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-
         } else {
             TextField(text, text: $text)
                 .font(.body)
@@ -157,7 +151,7 @@ struct CreditCardInputField: View {
                 return
             }
             let formattedText = addCreditCardDelimiter(sanitizedCCNum: val)
-            text = formattedText //viewOnlyModeEnabled ? formattedText : val
+            text = formattedText
             viewModel.cardNumber = "\(val)"
         case .expiration:
             guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
