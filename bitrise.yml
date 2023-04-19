@@ -587,7 +587,7 @@ workflows:
                 #
                 # Test Helpers
                 #   test-fixtures/.py$ -> matches all files whose file extension begine with 'py'
-                doNotRunTests='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.py$)'
+                doNotRunTests='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
 
                 if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
                 then
