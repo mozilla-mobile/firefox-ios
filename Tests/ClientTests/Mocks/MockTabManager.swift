@@ -24,8 +24,6 @@ class MockTabManager: TabManager {
 
     var delaySelectingNewPopupTab: TimeInterval = 0
     var count: Int = 0
-    var didChangedPanelSelection = false
-    var didAddNewTab = false
     var normalTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
@@ -73,6 +71,8 @@ class MockTabManager: TabManager {
     func removeTab(_ tab: Tab, completion: (() -> Void)?) {}
 
     func removeTabs(_ tabs: [Tab]) {}
+
+    func undoCloseTab(tab: Client.Tab, position: Int?) {}
 
     func getTabFor(_ url: URL) -> Tab? {
         return nil

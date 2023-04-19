@@ -27,7 +27,7 @@ protocol TopTabsDelegate: AnyObject {
     func topTabsDidChangeTab()
 }
 
-class TopTabsViewController: UIViewController, Themeable {
+class TopTabsViewController: UIViewController, Themeable, Notifiable {
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
@@ -141,6 +141,9 @@ class TopTabsViewController: UIViewController, Themeable {
 
         listenForThemeChange(view)
         setupLayout()
+
+        setupNotifications(forObserver: self,
+                           observing: [.TabsTrayDidClose])
 
         // Setup UIDropInteraction to handle dragging and dropping
         // links onto the "New Tab" button.
@@ -268,6 +271,16 @@ class TopTabsViewController: UIViewController, Themeable {
             topTabFader.setFader(forSides: .left)
         } else if collectionView.contentSize.width <= collectionView.frame.size.width { // all tabs are visible
             topTabFader.setFader(forSides: .none)
+        }
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .TabsTrayDidClose:
+            refreshTabs()
+        default:
+            break
         }
     }
 }

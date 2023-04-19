@@ -56,8 +56,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     private let logger: Logger
     var backupDeletedTab: (Tab, Int?)?
 
-    var didChangedPanelSelection = true
-    var didAddNewTab = true
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
@@ -810,7 +808,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
         }
     }
 
-    func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {
+    private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: String) {
         tabs.append(contentsOf: tabsToAdd)
         let tabToSelect = tabs.first(where: { $0.tabUUID == previousTabUUID })
         let currentlySelectedTab = selectedTab
@@ -820,6 +818,17 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
             // select previous tab
             selectTab(tabToSelect, previous: nil)
         }
+        delegates.forEach { $0.get()?.tabManagerUpdateCount() }
+        storeChanges()
+    }
+
+    func undoCloseTab(tab: Tab, position: Int?) {
+        if let index = position {
+            tabs.insert(tab, at: index)
+        } else {
+            tabs.append(tab)
+        }
+
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
         storeChanges()
     }

@@ -83,6 +83,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     // wherever we need to focus the user's attention.
     var tabToFocus: Tab?
 
+    private var privateTabsAreEmpty: Bool {
+        return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
+    }
+
     override var canBecomeFirstResponder: Bool {
         return true
     }
@@ -155,7 +159,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabManager.addDelegate(self)
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
 
         backgroundPrivacyOverlay.alpha = 0
@@ -173,7 +176,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             tabDisplayManager.togglePrivateMode(isOn: true, createTabOnEmptyPrivateMode: false)
         }
 
-        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
 
         listenForThemeChange(view)
         applyTheme()
@@ -227,7 +230,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     private func tabManagerTeardown() {
         tabManager.removeDelegate(self.tabDisplayManager)
-        tabManager.removeDelegate(self)
         tabDisplayManager = nil
         contextualHintViewController.stopTimer()
         notificationCenter.removeObserver(self)
@@ -302,11 +304,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
-    }
-
-    private func privateTabsAreEmpty() -> Bool {
-        return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
     }
 
     func openNewTab(_ request: URLRequest? = nil, isPrivate: Bool) {
@@ -364,7 +362,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     func closeTabsTrayHelper() {
         if tabDisplayManager.isPrivate {
-            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty
             if !emptyPrivateTabsView.isHidden {
                 // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
                 emptyPrivateTabsView.alpha = 0
@@ -407,6 +405,10 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             if undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab {
                 self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
                 NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+
+                if self.tabDisplayManager.isPrivate {
+                    self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty
+                }
             }
         }
     }
@@ -451,26 +453,6 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
                                               constant: -self.toolbarHeight)
             ]
         }
-    }
-}
-
-// MARK: - TabManagerDelegate
-extension GridTabViewController: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
-    }
-    func tabManagerDidAddTabs(_ tabManager: TabManager) {}
-
-    func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-    }
-
-    func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        // No need to handle removeAll toast in TabTray.
-        // When closing all normal tabs we automatically focus a tab and show the BVC. Which will handle the Toast.
-        // We don't show the removeAll toast in PBM
     }
 }
 
@@ -649,7 +631,7 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
 
     // TabDisplayCompletionDelegate
     func completedAnimation(for type: TabAnimationType) {
-        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
+        emptyPrivateTabsView.isHidden = !privateTabsAreEmpty
 
         switch type {
         case .addTab:
@@ -661,7 +643,9 @@ extension GridTabViewController: TabDisplayCompletionDelegate, RecentlyClosedPan
             if !tabDisplayManager.isPrivate {
                 self.dismissTabTray()
             }
-        case .removedNonLastTab, .updateTab, .moveTab:
+        case .removedNonLastTab:
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+        case .updateTab, .moveTab:
             break
         }
     }

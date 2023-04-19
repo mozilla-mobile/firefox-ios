@@ -46,11 +46,6 @@ protocol TabDisplayer: AnyObject {
     func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell
 }
 
-protocol CloseTabsProtocol {
-    func performCloseAction(for tab: Tab)
-    func undoCloseTab(tab: Tab, index: Int?)
-}
-
 enum TabDisplaySection: Int, CaseIterable {
     case inactiveTabs
     case groupedTabs
@@ -68,7 +63,7 @@ struct TabDisplayOrder: Codable {
     var regularTabUUID: [String] = []
 }
 
-class TabDisplayManager: NSObject, FeatureFlaggable, CloseTabsProtocol {
+class TabDisplayManager: NSObject, FeatureFlaggable {
     // MARK: - Variables
     var performingChainedOperations = false
     var inactiveViewModel: InactiveTabViewModel?
@@ -78,9 +73,9 @@ class TabDisplayManager: NSObject, FeatureFlaggable, CloseTabsProtocol {
     var refreshStoreOperation: (() -> Void)?
     weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
     var tabDisplayType: TabDisplayType = .TabGrid
-    fileprivate let tabManager: TabManager
-    fileprivate let collectionView: UICollectionView
-    fileprivate var tabDisplayer: TabDisplayer
+    private let tabManager: TabManager
+    private let collectionView: UICollectionView
+    private var tabDisplayer: TabDisplayer
     private let tabReuseIdentifier: String
     private var hasSentInactiveTabShownEvent = false
     var profile: Profile
@@ -484,12 +479,10 @@ class TabDisplayManager: NSObject, FeatureFlaggable, CloseTabsProtocol {
     }
 
     func undoCloseTab(tab: Tab, index: Int?) {
-        getTabsAndUpdateInactiveState { _, _ in
-            self.tabManager.reAddTabs(tabsToAdd: [tab], previousTabUUID: "")
-            self.dataStore.insert(tab, at: index)
-            self.collectionView.reloadData()
-            _ = self.profile.recentlyClosedTabs.popFirstTab()
-        }
+        tabManager.undoCloseTab(tab: tab, position: index)
+        _ = profile.recentlyClosedTabs.popFirstTab()
+
+        refreshStore()
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
@@ -545,9 +538,11 @@ class TabDisplayManager: NSObject, FeatureFlaggable, CloseTabsProtocol {
 extension TabDisplayManager: UICollectionViewDataSource {
     @objc
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if tabDisplayType == .TopTabTray {
+        guard tabDisplayType != .TopTabTray else {
+            let items = dataStore.count + (tabGroups?.count ?? 0)
             return dataStore.count + (tabGroups?.count ?? 0)
         }
+
         switch TabDisplaySection(rawValue: section) {
         case .inactiveTabs:
             // Hide inactive tray if there are no inactive tabs
@@ -588,7 +583,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     @objc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
-        if tabDisplayType == .TopTabTray {
+        guard tabDisplayType != .TopTabTray else {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer.cellFactory(for: cell, using: tab)
             return cell
@@ -985,6 +980,7 @@ extension TabDisplayManager: TabEventHandler {
     }
 }
 
+// MARK: - TabManagerDelegate
 extension TabDisplayManager: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
         cancelDragAndGestures()
@@ -1004,9 +1000,7 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
-        if isRestoring {
-            return
-        }
+        guard !isRestoring else { return }
 
         if cancelDragAndGestures() {
             refreshStore()
