@@ -97,15 +97,13 @@ class DragAndDropTests: BaseTestCase {
     }*/
 }
 
-fileprivate extension BaseTestCase {
+private extension BaseTestCase {
     func openTwoWebsites() {
         // Open two tabs
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(firstWebsite.url)
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(secondWebsite.url)
         waitUntilPageLoad()
@@ -188,10 +186,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
     func testDragAndDropHomeTab() {
         if skipPlatform { return }
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         // Home tab is open and then a new website
         navigator.openURL(secondWebsite.url)
@@ -262,8 +258,6 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
         waitForExistence(app.textFields["url"], timeout: 5)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_History)
@@ -289,8 +283,6 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         if skipPlatform { return }
 
         waitForExistence(app.textFields["url"], timeout: 5)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 5)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])

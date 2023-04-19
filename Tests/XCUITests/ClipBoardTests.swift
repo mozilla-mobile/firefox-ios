@@ -55,7 +55,6 @@ class ClipBoardTests: BaseTestCase {
 
         navigator.createNewTab()
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(URLBarOpen)
         app.textFields["address"].press(forDuration: 3)

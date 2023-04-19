@@ -49,8 +49,10 @@ class ReaderViewTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
@@ -74,8 +76,10 @@ class ReaderViewTest: BaseTestCase {
         // Check that it appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.buttons["urlBar-cancel"])
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(LibraryPanel_ReadingList)

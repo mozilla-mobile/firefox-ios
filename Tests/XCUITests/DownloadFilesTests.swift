@@ -74,7 +74,7 @@ class DownloadFilesTests: BaseTestCase {
 
     // Smoketest
     func testDownloadFile() {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
@@ -99,7 +99,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testDeleteDownloadedFile() throws {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
@@ -114,7 +114,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testShareDownloadedFile() throws {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
         if processIsTranslatedStr() == m1Rosetta {
@@ -127,7 +127,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testLongPressOnDownloadedFile() {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
@@ -146,11 +146,11 @@ class DownloadFilesTests: BaseTestCase {
         }
      }
 
-    private func downloadFile(fileName: String, numberOfDownlowds: Int) {
+    private func downloadFile(fileName: String, numberOfDownloads: Int) {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         app.webViews.firstMatch.swipeLeft()
-        for _ in 0..<numberOfDownlowds {
+        for _ in 0..<numberOfDownloads {
             waitForExistence(app.webViews.links[testFileName], timeout: TIMEOUT)
 
             app.webViews.links[testFileName].firstMatch.tap()
@@ -168,7 +168,7 @@ class DownloadFilesTests: BaseTestCase {
     }
 
     func testDownloadMoreThanOneFile() {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 2)
+        downloadFile(fileName: testFileName, numberOfDownloads: 2)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Downloads)
 
@@ -183,7 +183,7 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.cells.switches["Downloaded Files"].isEnabled, "The switch is not set correctly by default")
 
         // Change the value of the setting to on (make an action for this)
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
 
         // Check there is one item
         navigator.goto(BrowserTabMenu)
@@ -194,8 +194,10 @@ class DownloadFilesTests: BaseTestCase {
 
         // Remove private data once the switch to remove downloaded files is enabled
         navigator.goto(NewTabScreen)
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)
         app.cells.switches["Downloaded Files"].tap()
@@ -215,7 +217,7 @@ class DownloadFilesTests: BaseTestCase {
     }
     // Smoketest
     func testToastButtonToGoToDownloads() {
-        downloadFile(fileName: testFileName, numberOfDownlowds: 1)
+        downloadFile(fileName: testFileName, numberOfDownloads: 1)
         waitForExistence(app.buttons["Downloads"])
         app.buttons["Downloads"].tap()
         waitForExistence(app.tables["DownloadsTable"], timeout: TIMEOUT)
