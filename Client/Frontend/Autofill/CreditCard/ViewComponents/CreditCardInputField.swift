@@ -18,13 +18,14 @@ struct CreditCardInputField: View {
     var formattedTextLimit: Int = 0
     var keyboardType: UIKeyboardType = .numberPad
     // TESTING VIEW MODE
-//    @State var viewOnlyModeEnabled: Bool = false
-    @State var showCopyPopover: Bool = false
+    @State var viewOnlyModeEnabled = false
+    @State var showCopyPopover  = false
     @State var text: String = ""
     let inputType: CreditCardInputType
     let inputViewModel: CreditCardInputViewModel
-    var showError: Bool = false
+    var showError = false
 
+    @State private var sort: Int = 0
     // Theming
     @Environment(\.themeType) var themeVal
     @State var errorColor: Color = .clear
@@ -34,11 +35,13 @@ struct CreditCardInputField: View {
 
     init(inputType: CreditCardInputType,
          showError: Bool,
-         inputViewModel: CreditCardInputViewModel
+         inputViewModel: CreditCardInputViewModel,
+         viewOnlyModeEnabled: Bool
     ) {
         self.inputType = inputType
         self.showError = showError
         self.inputViewModel = inputViewModel
+        _viewOnlyModeEnabled = State(initialValue: viewOnlyModeEnabled)
         switch self.inputType {
         case .name:
             fieldHeadline = .CreditCard.EditCard.NameOnCardTitle
@@ -86,8 +89,10 @@ struct CreditCardInputField: View {
                     errorViewWith(errorString: errorString)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 20)
         .onAppear {
             applyTheme(theme: themeVal.theme)
@@ -109,19 +114,59 @@ struct CreditCardInputField: View {
         Text(fieldHeadline)
             .font(.subheadline)
             .foregroundColor(titleColor)
-        TextField(text, text: $text)
-            .font(.body)
-            .padding(.top, 7.5)
-            .keyboardType(keyboardType)
-            .onChange(of: text) { [oldValue = text] newValue in
-                handleTextInputWith(oldValue, and: newValue)
-            }
-            .foregroundColor(textFieldColor)
-            .contextMenu {
+            .frame(maxWidth: .infinity, alignment: .leading)
+        if viewOnlyModeEnabled {
+            Menu {
                 Button(String.CreditCard.EditCard.CopyLabel) {
                     UIPasteboard.general.string = sanitizeInputOn(text)
                 }
+            } label: {
+                Text(text)
+                    .font(.body)
+                    .padding(.top, 7.5)
+                    .foregroundColor(textFieldColor)
+    //                .frame(width: .infinity)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
+//
+//            Text(text)
+//                .font(.body)
+//                .padding(.top, 7.5)
+//                .foregroundColor(textFieldColor)
+////                .frame(width: .infinity)
+//                .frame(maxWidth: .infinity, alignment: .leading)
+////                .onTapGesture {
+////                    Menu {
+////                        Picker(selection: $sort, label: Text("Sorting options")) {
+////                            Text("Size").tag(0)
+////                            Text("Date").tag(1)
+////                            Text("Location").tag(2)
+////                        }
+////                    }
+//////                    Menu("CC") {
+//////                        Button(String.CreditCard.EditCard.CopyLabel, action: {
+//////                            UIPasteboard.general.string = sanitizeInputOn(text)
+//////                        })
+//////                    }
+//                    .menuStyle(.automatic)
+//                }
+//                .contextMenu {
+//                    Button(action: {
+//                        UIPasteboard.general.string = sanitizeInputOn(text)
+//                    }, label: {
+//                        Label(String.CreditCard.EditCard.CopyLabel, systemImage: "")
+//                    })
+//                }
+        } else {
+            TextField(text, text: $text)
+                .font(.body)
+                .padding(.top, 7.5)
+                .foregroundColor(textFieldColor)
+                .keyboardType(keyboardType)
+                .onChange(of: text) { [oldValue = text] newValue in
+                    handleTextInputWith(oldValue, and: newValue)
+                }
+        }
 
 //        TextField("", text: $text)
 //            .font(.body)
