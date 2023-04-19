@@ -64,6 +64,7 @@ extension BrowserViewController {
 
 extension BrowserViewController: ZoomPageBarDelegate {
     func zoomPageDidPressClose() {
+        guard zoomPageBar != nil else { return }
         updateZoomPageBarVisibility(visible: false)
         guard let tab = tabManager.selectedTab else { return }
         guard let host = tab.url?.host else { return }
