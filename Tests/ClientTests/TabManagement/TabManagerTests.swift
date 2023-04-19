@@ -38,28 +38,29 @@ class TabManagerTests: XCTestCase {
     // MARK: - Restore tabs
 
     func testRestoreTabs() async throws {
-        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-                                                     isPrimary: true,
-                                                     activeTabId: UUID(),
-                                                     tabData: getMockTabData(count: 4))
+        mockTabStore.allWindowsData = [WindowData(id: UUID(),
+                                                  isPrimary: true,
+                                                  activeTabId: UUID(),
+                                                  tabData: getMockTabData(count: 4))]
+
         subject.restoreTabs()
-        try await Task.sleep(nanoseconds: sleepTime)
+        try await Task.sleep(nanoseconds: sleepTime * 5)
         XCTAssertEqual(subject.tabs.count, 4)
-        XCTAssertEqual(mockTabStore.fetchTabDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.fetchAllWindowsDataCount, 1)
     }
 
     func testRestoreTabsForced() async throws {
         addTabs(count: 5)
         XCTAssertEqual(subject.tabs.count, 5)
 
-        mockTabStore.fetchTabWindowData = WindowData(id: UUID(),
-                                                     isPrimary: true,
-                                                     activeTabId: UUID(),
-                                                     tabData: getMockTabData(count: 3))
+        mockTabStore.allWindowsData = [WindowData(id: UUID(),
+                                                  isPrimary: true,
+                                                  activeTabId: UUID(),
+                                                  tabData: getMockTabData(count: 3))]
         subject.restoreTabs(true)
-        try await Task.sleep(nanoseconds: sleepTime)
+        try await Task.sleep(nanoseconds: sleepTime * 3)
         XCTAssertEqual(subject.tabs.count, 3)
-        XCTAssertEqual(mockTabStore.fetchTabDataCalledCount, 1)
+        XCTAssertEqual(mockTabStore.fetchAllWindowsDataCount, 1)
     }
 
     // MARK: - Save tabs

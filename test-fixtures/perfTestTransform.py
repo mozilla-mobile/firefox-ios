@@ -1,7 +1,7 @@
 import json
 
 PERFHERDER_DATA = {"framework": 'mozperftest',
-                   "application": {"name": 'firefox-ios'},
+                   "application": {"name": 'fennec'},
                    "suites": []
                    }
 

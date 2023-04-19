@@ -21,11 +21,6 @@ class DiskImageStoreTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-
-        clearStore()
-
-        files = nil
-        store = nil
     }
 
     func testSaveImageForKey() async throws {

@@ -6,12 +6,13 @@ import Foundation
 
 /// An enumeration representing different navigational routes in an application.
 enum Route: Equatable {
-    /// Represents a search route that takes a URL and a boolean value indicating whether the search is private or not.
+    /// Represents a search route that takes a URL, a boolean value indicating whether the search is private or not and an optional set of search options.
     ///
     /// - Parameters:
-    ///   - url: A `URL` object representing the URL to be searched. Can be `nil`.
+    ///   - url: A `URL` object representing the URL to be searched. Pass `nil` if the search does not require a URL.
     ///   - isPrivate: A boolean value indicating whether the search is private or not.
-    case search(url: URL?, isPrivate: Bool)
+    ///   - options: An optional set of `SearchOptions` values that can be used to customize the search behavior.
+    case search(url: URL?, isPrivate: Bool, options: [SearchOptions]? = nil)
 
     /// Represents a search route that takes a URL and a tab identifier.
     ///
@@ -93,5 +94,17 @@ enum Route: Equatable {
     enum DefaultBrowserSection: String, CaseIterable, Equatable {
         case tutorial
         case systemSettings = "system-settings"
+    }
+
+    /// An enumeration representing options that can be used in a search feature.
+    enum SearchOptions {
+        /// An option to focus the user's attention on the location field of the search interface.
+        case focusLocationField
+
+        /// An option to switch to a normal search mode.
+        case switchToNormalMode
+
+        /// An option to switch to a privacy mode that may hide or obscure search results and prevent data sharing.
+        case switchToPrivacyMode
     }
 }
