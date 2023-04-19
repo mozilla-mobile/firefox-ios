@@ -12,6 +12,7 @@ extension WKWebView {
     /// - Parameters:
     ///     - javascript: String representing javascript to be evaluated
     public func evaluateJavascriptInDefaultContentWorld(_ javascript: String) {
+        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
         if #available(iOS 14.3, *) {
             self.evaluateJavaScript(javascript, in: nil, in: .defaultClient, completionHandler: { _ in })
         } else {
@@ -26,6 +27,7 @@ extension WKWebView {
     ///     - javascript: String representing javascript to be evaluated
     ///     - completion: Tuple containing optional data and an optional error
     public func evaluateJavascriptInDefaultContentWorld(_ javascript: String, _ completion: @escaping (Any?, Error?) -> Void) {
+        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
         if #available(iOS 14.3, *) {
             self.evaluateJavaScript(javascript, in: nil, in: .defaultClient) { result in
                 switch result {
@@ -45,6 +47,7 @@ extension WKWebView {
 
 extension WKUserContentController {
     public func addInDefaultContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
         if #available(iOS 14.3, *) {
             add(scriptMessageHandler, contentWorld: .defaultClient, name: name)
         } else {
@@ -53,6 +56,7 @@ extension WKUserContentController {
     }
 
     public func addInPageContentWorld(scriptMessageHandler: WKScriptMessageHandler, name: String) {
+        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
         if #available(iOS 14.3, *) {
             add(scriptMessageHandler, contentWorld: .page, name: name)
         } else {
@@ -63,6 +67,7 @@ extension WKUserContentController {
 
 extension WKUserScript {
     public class func createInDefaultContentWorld(source: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly: Bool) -> WKUserScript {
+        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
         if #available(iOS 14.3, *) {
             return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly, in: .defaultClient)
         } else {
@@ -71,6 +76,7 @@ extension WKUserScript {
     }
 
     public class func createInPageContentWorld(source: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly: Bool) -> WKUserScript {
+        // iOS 14.3 is required here because of a webkit bug in lower iOS versions with this API
         if #available(iOS 14.3, *) {
             return WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: forMainFrameOnly, in: .page)
         } else {
