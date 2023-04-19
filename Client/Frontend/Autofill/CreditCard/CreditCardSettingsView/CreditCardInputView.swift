@@ -17,9 +17,9 @@ struct CreditCardInputView: View {
     @State var removeButtonColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
-    var viewOnlyMode: Bool {
-        viewModel.state == .view
-    }
+//    var viewOnlyMode: Bool {
+//        viewModel.state == .view
+//    }
 
     var body: some View {
         NavigationView {
@@ -33,8 +33,9 @@ struct CreditCardInputView: View {
                     Group {
                         CreditCardInputField(inputType: .name,
                                              showError: !viewModel.nameIsValid,
-                                             inputViewModel: viewModel,
-                                             viewOnlyModeEnabled: viewOnlyMode)
+                                             inputViewModel: viewModel)
+//                        ,
+//                                             viewOnlyModeEnabled: viewOnlyMode)
                         .padding(.top, 11)
 
                         Divider()
@@ -47,8 +48,9 @@ struct CreditCardInputView: View {
                     Group {
                         CreditCardInputField(inputType: .number,
                                              showError: !viewModel.numberIsValid,
-                                             inputViewModel: viewModel,
-                                             viewOnlyModeEnabled: viewOnlyMode)
+                                             inputViewModel: viewModel)
+//                                             ,
+//                                             viewOnlyModeEnabled: viewOnlyMode)
                         .padding(.top, 11)
 
                         Divider()
@@ -61,8 +63,9 @@ struct CreditCardInputView: View {
                     Group {
                         CreditCardInputField(inputType: .expiration,
                                              showError: !viewModel.expirationIsValid,
-                                             inputViewModel: viewModel,
-                                             viewOnlyModeEnabled: viewOnlyMode)
+                                             inputViewModel: viewModel)
+//                        ,
+//                                             viewOnlyModeEnabled: viewOnlyMode)
                         .padding(.top, 11)
 
                         Divider()

@@ -18,14 +18,12 @@ struct CreditCardInputField: View {
     var formattedTextLimit: Int = 0
     var keyboardType: UIKeyboardType = .numberPad
     // TESTING VIEW MODE
-    @State var viewOnlyModeEnabled = false
-    @State var showCopyPopover  = false
+//    @State var viewOnlyModeEnabled = false
     @State var text: String = ""
     let inputType: CreditCardInputType
-    let inputViewModel: CreditCardInputViewModel
+    let viewModel: CreditCardInputViewModel
     var showError = false
 
-    @State private var sort: Int = 0
     // Theming
     @Environment(\.themeType) var themeVal
     @State var errorColor: Color = .clear
@@ -35,13 +33,14 @@ struct CreditCardInputField: View {
 
     init(inputType: CreditCardInputType,
          showError: Bool,
-         inputViewModel: CreditCardInputViewModel,
-         viewOnlyModeEnabled: Bool
+         inputViewModel: CreditCardInputViewModel
+//         ,
+//         viewOnlyModeEnabled: Bool
     ) {
         self.inputType = inputType
         self.showError = showError
-        self.inputViewModel = inputViewModel
-        _viewOnlyModeEnabled = State(initialValue: viewOnlyModeEnabled)
+        self.viewModel = inputViewModel
+//        _viewOnlyModeEnabled = State(initialValue: viewOnlyModeEnabled)
         switch self.inputType {
         case .name:
             fieldHeadline = .CreditCard.EditCard.NameOnCardTitle
@@ -70,11 +69,11 @@ struct CreditCardInputField: View {
      func updateFields(inputType: CreditCardInputType) {
         switch self.inputType {
         case .name:
-            text = inputViewModel.nameOnCard
+            text = viewModel.nameOnCard
         case .number:
-            text = inputViewModel.cardNumber
+            text = viewModel.cardNumber
         case .expiration:
-            text = inputViewModel.expirationDate
+            text = viewModel.expirationDate
         }
     }
 
@@ -115,7 +114,7 @@ struct CreditCardInputField: View {
             .font(.subheadline)
             .foregroundColor(titleColor)
             .frame(maxWidth: .infinity, alignment: .leading)
-        if viewOnlyModeEnabled {
+        if viewModel.state == .view {
             Menu {
                 Button(String.CreditCard.EditCard.CopyLabel) {
                     UIPasteboard.general.string = sanitizeInputOn(text)
@@ -125,38 +124,9 @@ struct CreditCardInputField: View {
                     .font(.body)
                     .padding(.top, 7.5)
                     .foregroundColor(textFieldColor)
-    //                .frame(width: .infinity)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-//
-//            Text(text)
-//                .font(.body)
-//                .padding(.top, 7.5)
-//                .foregroundColor(textFieldColor)
-////                .frame(width: .infinity)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-////                .onTapGesture {
-////                    Menu {
-////                        Picker(selection: $sort, label: Text("Sorting options")) {
-////                            Text("Size").tag(0)
-////                            Text("Date").tag(1)
-////                            Text("Location").tag(2)
-////                        }
-////                    }
-//////                    Menu("CC") {
-//////                        Button(String.CreditCard.EditCard.CopyLabel, action: {
-//////                            UIPasteboard.general.string = sanitizeInputOn(text)
-//////                        })
-//////                    }
-//                    .menuStyle(.automatic)
-//                }
-//                .contextMenu {
-//                    Button(action: {
-//                        UIPasteboard.general.string = sanitizeInputOn(text)
-//                    }, label: {
-//                        Label(String.CreditCard.EditCard.CopyLabel, systemImage: "")
-//                    })
-//                }
+
         } else {
             TextField(text, text: $text)
                 .font(.body)
@@ -167,57 +137,17 @@ struct CreditCardInputField: View {
                     handleTextInputWith(oldValue, and: newValue)
                 }
         }
-
-//        TextField("", text: $text)
-//            .font(.body)
-//            .padding(.top, 7.5)
-//            .foregroundColor(textFieldColor)
-//            .keyboardType(keyboardType)
-//            .onChange(of: text) { [oldValue = text] newValue in
-//                handleTextInputWith(oldValue, and: newValue)
-//            }
-        
-        
-//            .simultaneousGesture(LongPressGesture().onEnded({ val in
-//                print("sd")
-//                showCopyPopover = true
-//            }))
-//            .disabled(inputViewModel.state == .view)
-        
-//            .contextMenu {
-//                Button(String.CreditCard.EditCard.CopyLabel) {
-//                    UIPasteboard.general.string = sanitizeInputOn(text)
-//                }
-//            }
-        
-        
-        
-//            .onLongPressGesture {
-//                showCopyPopover = true
-//            }
-
-//            .popover(isPresented: $showCopyPopover) {
-//                VStack {
-//                    Button(action: {
-//                        // Action when popover is dismissed
-//                        self.showCopyPopover = false
-//                        UIPasteboard.general.string = sanitizeInputOn(text)
-//                    }) {
-//                        Text(String.CreditCard.EditCard.CopyLabel)
-//                    }
-//                }
-//            }
     }
 
     func handleTextInputWith(_ oldValue: String, and newValue: String) {
         switch inputType {
         case .name:
             guard !newValue.isEmpty else {
-                inputViewModel.nameIsValid = false
+                viewModel.nameIsValid = false
                 return
             }
 
-            inputViewModel.nameOnCard = newValue
+            viewModel.nameOnCard = newValue
         case .number:
             // Credit card text with `-` delimiter
             let maxAllowedNumbers = 19
@@ -228,7 +158,7 @@ struct CreditCardInputField: View {
             }
             let formattedText = addCreditCardDelimiter(sanitizedCCNum: val)
             text = formattedText //viewOnlyModeEnabled ? formattedText : val
-            inputViewModel.cardNumber = "\(val)"
+            viewModel.cardNumber = "\(val)"
         case .expiration:
             guard newValue.removingOccurrences(of: " / ") != oldValue else { return }
 
@@ -242,11 +172,11 @@ struct CreditCardInputField: View {
 
             guard numbersCount % 4 == 0 else {
                 text = newSanitizedValue.removingOccurrences(of: " / ")
-                inputViewModel.expirationIsValid = false
+                viewModel.expirationIsValid = false
                 return
             }
 
-            inputViewModel.expirationDate = newSanitizedValue.removingOccurrences(of: " / ")
+            viewModel.expirationDate = newSanitizedValue.removingOccurrences(of: " / ")
 
             guard let formattedText = separate(
                 inputType: inputType,
