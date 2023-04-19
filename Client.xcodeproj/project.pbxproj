@@ -862,6 +862,7 @@
 		C8B0F5F7283B7CCE007AE65D /* PocketFeedStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */; };
 		C8B0F5F8283B7D38007AE65D /* pocketsponsoredfeed.json in Resources */ = {isa = PBXBuildFile; fileRef = C8B0F5EA283B7BF9007AE65D /* pocketsponsoredfeed.json */; };
 		C8B41E0A29F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0929F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift */; };
+		C8B41E0F29F0357300FE218A /* NimbusOnboardingFeatureLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */; };
 		C8B509E3293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */; };
 		C8BA0E7627F20B8E00DD8214 /* HistoryDeletionUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */; };
 		C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */; };
@@ -4934,6 +4935,7 @@
 		C8B0F5F3283B7CCE007AE65D /* PocketFeedStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketFeedStory.swift; sourceTree = "<group>"; };
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C8B41E0929F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayer.swift; sourceTree = "<group>"; };
+		C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusOnboardingFeatureLayerTests.swift; sourceTree = "<group>"; };
 		C8B509E2293FA39900AC013C /* AppVersionUpdateCheckerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionUpdateCheckerProtocol.swift; sourceTree = "<group>"; };
 		C8BA0E7527F20B8E00DD8214 /* HistoryDeletionUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDeletionUtility.swift; sourceTree = "<group>"; };
 		C8BE692629BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveySurfaceInfoModel.swift; sourceTree = "<group>"; };
@@ -8237,6 +8239,24 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		C8B41E0B29F034D500FE218A /* Nimbus */ = {
+			isa = PBXGroup;
+			children = (
+				C8E1BC0928085AA700C62964 /* NimbusFeatureFlagLayerTests.swift */,
+				39C137962655798A003DC662 /* NimbusIntegrationTests.swift */,
+			);
+			path = Nimbus;
+			sourceTree = "<group>";
+		};
+		C8B41E0C29F034E400FE218A /* OnboardingTests */ = {
+			isa = PBXGroup;
+			children = (
+				21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */,
+				C8B41E0D29F034FE00FE218A /* NimbusOnboardingFeatureLayerTests.swift */,
+			);
+			path = OnboardingTests;
+			sourceTree = "<group>";
+		};
 		C8CE38B0265E71FE0009B09E /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -9322,10 +9342,9 @@
 				CA24B52024ABD7D40093848C /* LoginsListViewModelTests.swift */,
 				C889D7D22858C85200121E1D /* Mocks */,
 				D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */,
-				C8E1BC0928085AA700C62964 /* NimbusFeatureFlagLayerTests.swift */,
-				39C137962655798A003DC662 /* NimbusIntegrationTests.swift */,
+				C8B41E0B29F034D500FE218A /* Nimbus */,
 				E1312FCF29D23775008DDA85 /* NotificationSurface */,
-				21371FA128A6C4A200BC3F37 /* OnboardingCardViewModelTests.swift */,
+				C8B41E0C29F034E400FE218A /* OnboardingTests */,
 				21A1C3C62996AFF800181B7C /* OverlayModeManagerTests.swift */,
 				2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */,
 				0BA896491A250E6500C1010C /* ProfileTest.swift */,
@@ -11919,6 +11938,7 @@
 				217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */,
 				2137786129802B7000D01309 /* DownloadsPanelViewModelTests.swift in Sources */,
 				8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */,
+				C8B41E0F29F0357300FE218A /* NimbusOnboardingFeatureLayerTests.swift in Sources */,
 				5AF6254728A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift in Sources */,
 				8A7A26E329D4ACF300EA76F1 /* SceneCoordinatorTests.swift in Sources */,
 				39C137972655798A003DC662 /* NimbusIntegrationTests.swift in Sources */,
