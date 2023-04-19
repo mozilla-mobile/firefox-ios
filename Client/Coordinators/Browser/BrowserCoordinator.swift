@@ -4,25 +4,23 @@
 
 import Common
 import Foundation
-
-protocol BrowserDelegate: AnyObject {
-    func showHomepage(inline: Bool,
-                      homepanelDelegate: HomePanelDelegate,
-                      libraryPanelDelegate: LibraryPanelDelegate,
-                      sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
-                      overlayManager: OverlayModeManager)
-    func showWebView()
-}
+import WebKit
 
 class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDelegate {
     var browserViewController: BrowserViewController
+    var webviewController: WebviewViewController?
+    var homepageViewController: HomepageViewController?
+
     private var profile: Profile
+    private var logger: Logger
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager = AppContainer.shared.resolve()) {
+         tabManager: TabManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.browserViewController = BrowserViewController(profile: profile, tabManager: tabManager)
+        self.logger = logger
         super.init(router: router)
         self.browserViewController.browserDelegate = self
     }
@@ -62,19 +60,38 @@ class BrowserCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, BrowserDel
                       libraryPanelDelegate: LibraryPanelDelegate,
                       sendToDeviceDelegate: HomepageViewController.SendToDeviceDelegate,
                       overlayManager: OverlayModeManager) {
-        let homepageViewController = HomepageViewController(
-            profile: profile,
-            isZeroSearch: inline,
-            overlayManager: overlayManager
-        )
-        homepageViewController.homePanelDelegate = homepanelDelegate
-        homepageViewController.libraryPanelDelegate = libraryPanelDelegate
-        homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
+        var homepage: HomepageViewController
+        if let homepageViewController = homepageViewController {
+            homepage = homepageViewController
+        } else {
+            let homepageViewController = HomepageViewController(
+                profile: profile,
+                isZeroSearch: inline,
+                overlayManager: overlayManager
+            )
+            homepageViewController.homePanelDelegate = homepanelDelegate
+            homepageViewController.libraryPanelDelegate = libraryPanelDelegate
+            homepageViewController.sendToDeviceDelegate = sendToDeviceDelegate
+            homepage = homepageViewController
+            self.homepageViewController = homepageViewController
+        }
 
-        browserViewController.embedContent(homepageViewController)
+        browserViewController.embedContent(homepage)
     }
 
-    func showWebView() {
-        // FXIOS-6015 - Show webview embedded content
+    func show(webView: WKWebView?) {
+        // Navigate with a new webview, or to the existing one
+        if let webView = webView {
+            let webviewViewController = WebviewViewController(webView: webView)
+            webviewController = webviewViewController
+            // Make sure we show the latest webview if we are provided with one
+            browserViewController.embedContent(webviewViewController, forceEmbed: true)
+        } else if let webviewController = webviewController {
+            browserViewController.embedContent(webviewController)
+        } else {
+            logger.log("Webview controller couldn't be shown, this shouldn't happen.",
+                       level: .fatal,
+                       category: .lifecycle)
+        }
     }
 }

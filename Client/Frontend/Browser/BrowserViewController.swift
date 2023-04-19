@@ -1008,11 +1008,11 @@ class BrowserViewController: UIViewController {
         statusBarOverlay.isHidden = false
     }
 
-    func embedContent(_ viewController: UIViewController) {
-        guard contentContainer.canAdd(viewController: viewController) else { return }
+    func embedContent(_ viewController: ContentContainable, forceEmbed: Bool = false) {
+        guard contentContainer.canAdd(content: viewController) || forceEmbed else { return }
 
         addChild(viewController)
-        contentContainer.addContent(viewController: viewController)
+        contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
@@ -1039,7 +1039,7 @@ class BrowserViewController: UIViewController {
         // Make sure reload button is working when showing webview
         urlBar.locationView.reloadButton.reloadButtonState = .reload
 
-        // FXIOS-6015 - Show webview (and remove the homepage)
+        browserDelegate?.show(webView: nil)
     }
 
     // FXIOS-6036 - Remove this function as part of cleanup
@@ -1866,7 +1866,7 @@ extension BrowserViewController: LegacyTabDelegate {
         if !AppConstants.useCoordinators {
             webView.frame = webViewContainer.frame
         } else {
-            // FXIOS-6015 - webview in container
+            browserDelegate?.show(webView: webView)
         }
         // Observers that live as long as the tab. Make sure these are all cleared in willDeleteWebView below!
         KVOs.forEach { webView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
@@ -2207,7 +2207,7 @@ extension BrowserViewController: TabManagerDelegate {
                     make.left.right.top.bottom.equalTo(self.webViewContainer)
                 }
             } else {
-                // FXIOS-6015 - webview in container
+                browserDelegate?.show(webView: webView)
             }
 
             webView.accessibilityLabel = .WebViewAccessibilityLabel
