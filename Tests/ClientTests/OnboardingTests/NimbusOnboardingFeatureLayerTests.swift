@@ -2,7 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import MozillaAppServices
+// Does this need to be here? Should I just bring Shared in?
+import MozillaRustComponents
 import XCTest
 @testable import Client
 
@@ -31,6 +32,9 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     ) {
         guard let dismissable = dismissable else { return }
 
+        // Do the initializers here need to be public as well?
+        // why is this not working?
+        // Why is it asking to import `FocusAppServices`?
         let features = HardcodedNimbusFeatures(with: [
             "onboarding-framework-feature": """
               {

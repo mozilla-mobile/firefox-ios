@@ -3,22 +3,31 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Shared
 
+// I'm building everything in one big file for now because of existing legacy stuff.
+// I'll split everything up for the PR. :)
 class NimbusOnboardingFeatureLayer {
-    // MARK: - Properties
-    private let nimbus: FxNimbus
-
-    init(nimbus: FxNimbus = FxNimbus.shared) {
-        self.nimbus = nimbus
-    }
-
-    func getOnboardingModel() -> OnboardingViewModel {
+    func getOnboardingModel(from nimbus: FxNimbus = FxNimbus.shared) -> OnboardingViewModel {
         let framework = nimbus.features.onboardingFrameworkFeature.value()
 
         return OnboardingViewModel(
-            cards: getOnboardingCards(from: framework.cards),
-            cardOrder: framework.cardOrdering,
+            cards: getOrderedOnboardingCards(from: framework.cards,
+                                             using: framework.cardOrdering),
             dismissable: framework.dismissable)
+    }
+
+    private func getOrderedOnboardingCards(
+        from cardData: [OnboardingCardData],
+        using cardOrder: [String]
+    ) -> [OnboardingCardInfo] {
+        return getOnboardingCards(from: cardData).sorted { firstCard, secondCard in
+            guard let indexOfFirstCard = cardOrder.firstIndex(of: firstCard.name),
+                  let indexOfSecondCard = cardOrder.firstIndex(of: secondCard.name)
+            else { return false }
+
+            return indexOfFirstCard < indexOfSecondCard
+        }
     }
 
     private func getOnboardingCards(from cardData: [OnboardingCardData]) -> [OnboardingCardInfo] {
@@ -39,11 +48,22 @@ class NimbusOnboardingFeatureLayer {
     }
 
     private func getOnboardingCardButtons(from cardButtons: [OnboardingButton]) -> [OnboardingButtonInfo] {
-        return []
+        var buttons = [OnboardingButtonInfo]()
+
+//        cardButtons.forEach { button in
+//             blah blah blah
+//        }
+
+        return buttons
     }
 
     private func getOnboardingLink(from cardLink: OnboardingLink?) -> OnboardingLinkInfo? {
-        return nil
+        guard let cardLink = cardLink,
+              let url = URL(string: cardLink.url)
+        else { return nil }
+
+        return OnboardingLinkInfo(title: cardLink.title,
+                                  url: url)
     }
 }
 
@@ -68,6 +88,5 @@ struct OnboardingCardInfo {
 
 struct OnboardingViewModel {
     let cards: [OnboardingCardInfo]?
-    let cardOrder: [String]?
     let dismissable: Bool
 }
