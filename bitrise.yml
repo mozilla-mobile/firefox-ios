@@ -885,16 +885,6 @@ workflows:
     - script@1:
         inputs:
         - content: |-
-            #!/usr/bin/env bash
-            set -e
-            set -x
-
-            # Import  the locales from firefoxios-l10n
-            git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
-        title: Pull in L10n
-    - script@1:
-        inputs:
-        - content: |-
             ./bootstrap.sh
         title: Run bootstrap
     - script@1:
@@ -931,7 +921,8 @@ workflows:
             set -x
             fastlane -v
 
-            ./l10n-screenshots.sh en-US
+            ./l10n-screenshots.sh it
+            #./l10n-screenshots.sh en-US
         title: Generate screenshots
     - deploy-to-bitrise-io@1.10:
         inputs:
@@ -939,7 +930,8 @@ workflows:
         - is_compress: 'true'
     - deploy-to-bitrise-io@1.10:
         inputs:
-        - deploy_path: l10n-screenshots/en-US/en-US
+        #- deploy_path: l10n-screenshots/en-US/en-US
+        - deploy_path: l10n-screenshots/it/it
         - is_compress: 'true'
     - cache-push@2.3: {}
     envs:
@@ -1440,7 +1432,8 @@ trigger_map:
 - push_branch: release/v112
   workflow: SPM_Deploy_Prod_Beta
 - pull_request_target_branch: main
-  pipeline: pipeline_multiple_shards
+  #pipeline: pipeline_multiple_shards
+  workflow: L10nBuild
 - pull_request_target_branch: epic-branch/*
   pipeline: pipeline_multiple_shards
 - pull_request_target_branch: release/v*
