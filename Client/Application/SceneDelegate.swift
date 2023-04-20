@@ -62,7 +62,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                let route = routeBuilder.makeRoute(shortcutItem: shortcut) {
                 sceneCoordinator?.handle(route: route)
             }
-            
         } else {
             let window = configureWindowFor(scene)
             let rootVC = configureRootViewController()
