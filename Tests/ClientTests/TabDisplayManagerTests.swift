@@ -425,22 +425,6 @@ class TabDisplayManagerTests: XCTestCase {
 
         XCTAssertEqual(manager.privateTabs.count, 3, "Expected 3 tabs")
     }
-
-//    func testTabsCount_ClosingRegularTab() {
-//        let tabDisplayManager = createTabDisplayManager(useMockDataStore: false)
-//        tabDisplayManager.tabDisplayType = .TabGrid
-//
-//        // Add 2 tabs
-//        let tab = manager.addTab()
-//        manager.addTab()
-//        manager.selectTab(tab)
-//        let expectation = self.expectation(description: "TabDisplayManagerTests")
-//        tabDisplayManager.performCloseAction(for: tab) {
-//            expectation.fulfill()
-//            XCTAssertEqual(self.manager.normalTabs.count, 1, "Expected 1 tabs")
-//        }
-//        waitForExpectations(timeout: 5)
-//    }
 }
 
 // Helper methods
@@ -482,7 +466,6 @@ extension TabDisplayManagerTests {
                                                   cfrDelegate: cfrDelegate,
                                                   theme: LightTheme())
         collectionView.dataSource = tabDisplayManager
-//        tabDisplayManager.dataStore = dataStore
         return tabDisplayManager
     }
 

@@ -452,7 +452,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
-    // Use for Top Tabs view version
+    /// Close tab action for Top tabs type
     func closeActionPerformed(forCell cell: UICollectionViewCell) {
         guard !isDragging else { return }
 
@@ -462,14 +462,13 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         performCloseAction(for: tab)
     }
 
-    // Use for Grid tab view version
+    /// Close tab action for Grid type
     func performCloseAction(for tab: Tab) {
         guard !isDragging else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
             if !self.isPrivate,
                tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
-                // TODO: Check why self.tabManager.removeTab(tab) delays the deletion so the toast doesn't show in homepage for last tab
                 self.tabManager.removeTabs([tab])
                 self.tabManager.selectTab(self.tabManager.addTab())
                 return
@@ -584,7 +583,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
     @objc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
-        guard tabDisplayType != .TopTabTray else {
+        if tabDisplayType == .TopTabTray {
             guard let tab = dataStore.at(indexPath.row) else { return cell }
             cell = tabDisplayer.cellFactory(for: cell, using: tab)
             return cell
