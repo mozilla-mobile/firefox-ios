@@ -18,19 +18,25 @@ class NimbusOnboardingFeatureLayer {
     }
 
     private func getOrderedOnboardingCards(
-        from cardData: [OnboardingCardData],
+        from cardData: [NimbusOnboardingCardData],
         using cardOrder: [String]
     ) -> [OnboardingCardInfo] {
-        return getOnboardingCards(from: cardData).sorted { firstCard, secondCard in
-            guard let indexOfFirstCard = cardOrder.firstIndex(of: firstCard.name),
-                  let indexOfSecondCard = cardOrder.firstIndex(of: secondCard.name)
-            else { return false }
-
-            return indexOfFirstCard < indexOfSecondCard
+        let cards = getOnboardingCards(from: cardData)
+        var orderedCards = [OnboardingCardInfo]()
+        
+        // Sorting the cards this way, instead of a simple sort, to account for human
+        // error in the ordering. If a card name is misspelled, it will be ignored
+        // and not included in the list of cards.
+        cardOrder.forEach { cardName in
+            if let card = cards.first(where: { $0.name == cardName }) {
+                orderedCards.append(card)
+            }
         }
+
+        return orderedCards
     }
 
-    private func getOnboardingCards(from cardData: [OnboardingCardData]) -> [OnboardingCardInfo] {
+    private func getOnboardingCards(from cardData: [NimbusOnboardingCardData]) -> [OnboardingCardInfo] {
         var cards = [OnboardingCardInfo]()
 
 //        cardData.forEach { card in
@@ -39,6 +45,7 @@ class NimbusOnboardingFeatureLayer {
 //                name: card.name,
 //                title: card.title,
 //                body: card.body,
+//                image: getOnboardingImageID(from: card.image),
 //                link: getOnboardingLink(from: card.link),
 //                buttons: getOnboardingCardButtons(from: card.buttons),
 //                type: card.type))
@@ -47,23 +54,32 @@ class NimbusOnboardingFeatureLayer {
         return cards
     }
 
-    private func getOnboardingCardButtons(from cardButtons: [OnboardingButton]) -> [OnboardingButtonInfo] {
+    private func getOnboardingCardButtons(from cardButtons: [NimbusOnboardingButton]) -> [OnboardingButtonInfo] {
         var buttons = [OnboardingButtonInfo]()
 
 //        cardButtons.forEach { button in
-//             blah blah blah
+//            buttons.append(OnboardingButtonInfo(title: button.title,
+//                                                action: button.action))
 //        }
 
         return buttons
     }
 
-    private func getOnboardingLink(from cardLink: OnboardingLink?) -> OnboardingLinkInfo? {
+    private func getOnboardingLink(from cardLink: NimbusOnboardingLink?) -> OnboardingLinkInfo? {
         guard let cardLink = cardLink,
               let url = URL(string: cardLink.url)
         else { return nil }
 
         return OnboardingLinkInfo(title: cardLink.title,
                                   url: url)
+    }
+
+    private func getOnboardingImageID(from identifier: NimbusOnboardingImages) -> String {
+        switch identifier {
+        case .welcomeGlobe: return ImageIdentifiers.onboardingWelcomev106
+        case .syncDevices: return ImageIdentifiers.onboardingSyncv106
+        case .notifications: return ImageIdentifiers.onboardingNotification
+        }
     }
 }
 
@@ -81,6 +97,7 @@ struct OnboardingCardInfo {
     let name: String
     let title: String
     let body: String
+    let image: String
     let link: OnboardingLinkInfo?
     let buttons: [OnboardingButtonInfo]
     let type: OnboardingType

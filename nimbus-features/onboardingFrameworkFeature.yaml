@@ -8,7 +8,7 @@ features:
       cards:
         description: >
           The list of available cards for onboarding.
-        type: List<OnboardingCardData>
+        type: List<NimbusOnboardingCardData>
         default: []
       card-ordering:
         description: >
@@ -59,7 +59,7 @@ features:
           dismissable: false
 
 objects:
-  OnboardingCardData:
+  NimbusOnboardingCardData:
     description: >
       A group of properties describing the attributes of a card.
     fields:
@@ -82,14 +82,19 @@ objects:
           The body text dispalyed on the card, in less prominent text.
           This should never be defaulted.
         default: ""
+      image:
+        type: NimbusOnboardingImages
+        description: >
+          The image that should be dispalyed on the card.
+        default: welcome-globe
       link:
-        type: Option<OnboardingLink>
+        type: Option<NimbusOnboardingLink>
         description: >
           The object describing the link button for a card.
           If left empty, the card will have no link.
         default: null
       buttons:
-        type: List<OnboardingButton>
+        type: List<NimbusOnboardingButton>
         description: >
           A list of buttons associated with the card.
           Based on the number of buttons in this list, the card will
@@ -102,7 +107,7 @@ objects:
           whether it a fresh install or an update.
           The default is fresh-install.
         default: fresh-install
-  OnboardingLink:
+  NimbusOnboardingLink:
     description: >
       A group of properties describing the attributes for the active
       link on a card
@@ -117,7 +122,7 @@ objects:
         description: >
           The url that the link will lead to.
         default: "https://macrumors.com"
-  OnboardingButton:
+  NimbusOnboardingButton:
     description: >
       A group of properties describing the attributes of a card.
     fields:
@@ -148,7 +153,7 @@ enums:
       request-notifications:
         description: >
           Will request to allow notifications from the user
-  OnboardingImages:
+  NimbusOnboardingImages:
     description: >
       The identifiers for the different images available for cards in onboarding
     variants:

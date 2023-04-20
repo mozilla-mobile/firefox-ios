@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 // Does this need to be here? Should I just bring Shared in?
-import MozillaRustComponents
 import XCTest
 @testable import Client
 
