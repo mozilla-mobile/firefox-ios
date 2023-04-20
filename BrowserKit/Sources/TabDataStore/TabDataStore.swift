@@ -8,7 +8,7 @@ import Common
 // MARK: Protocol
 public protocol TabDataStore {
     func fetchWindowData() async -> WindowData
-    func saveWindowDataWithBackup(window: WindowData) async
+    func saveWindowData(window: WindowData) async
     func clearAllWindowsData() async
     func fetchWindowData(withID id: UUID) async -> WindowData?
     func fetchAllWindowsData() async -> [WindowData]
@@ -43,15 +43,6 @@ public actor DefaultTabDataStore: TabDataStore {
         let baseFilePath = isBackup ? DefaultTabDataStore.backupPath + "_\(windowID.uuidString)" : DefaultTabDataStore.storePath + "_\(windowID.uuidString)"
 
         return baseURL.appendingPathComponent(baseFilePath)
-    }
-
-    private func windowBackupURLPath(for windowID: UUID) -> URL? {
-        if let backupURL = windowDataBackupDirectoryURL {
-            let filePath = DefaultTabDataStore.backupPath + "_\(windowID.uuidString)"
-            let windowBackupProfileURL = backupURL.appendingPathComponent(filePath)
-            return windowBackupProfileURL
-        }
-        return nil
     }
 
     // MARK: Fetching Window Data
@@ -123,7 +114,7 @@ public actor DefaultTabDataStore: TabDataStore {
     }
 
     // MARK: Saving Data
-    public func saveWindowDataWithBackup(window: WindowData) async {
+    public func saveWindowData(window: WindowData) async {
         guard let windowSavingPath = self.windowURLPath(for: window.id, isBackup: false) else {
             return
         }

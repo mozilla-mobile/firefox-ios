@@ -23,7 +23,7 @@ class MockTabDataStore: TabDataStore {
         return fetchTabWindowData
     }
 
-    func saveWindowDataWithBackup(window: WindowData) async {
+    func saveWindowData(window: WindowData) async {
         saveTabDataCalledCount += 1
         saveWindowData = window
     }

@@ -30,7 +30,7 @@ final class TabDataStoreTests: XCTestCase {
             XCTAssertNil(fetchedNonExistingData)
         }
         Task {
-            await tabDataStore.saveWindowDataWithBackup(window: windowData)
+            await tabDataStore.saveWindowData(window: windowData)
             Task {
                 let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
                 DispatchQueue.main.async {
@@ -47,9 +47,9 @@ final class TabDataStoreTests: XCTestCase {
         let windowData = self.createMockWindow()
         let windowID = windowData.id
         Task {
-            await tabDataStore.saveWindowDataWithBackup(window: windowData)
+            await tabDataStore.saveWindowData(window: windowData)
             Task {
-                await tabDataStore.saveWindowDataWithBackup(window: windowData)
+                await tabDataStore.saveWindowData(window: windowData)
                 let browserKitInfo = BrowserKitInformation.shared
                 let baseURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
                     .appendingPathComponent("profile.backup")
@@ -73,10 +73,10 @@ final class TabDataStoreTests: XCTestCase {
 
         // Save the WindowData objects
         Task {
-            await tabDataStore.saveWindowDataWithBackup(window: windowData1)
+            await tabDataStore.saveWindowData(window: windowData1)
         }
         Task {
-            await tabDataStore.saveWindowDataWithBackup(window: windowData2)
+            await tabDataStore.saveWindowData(window: windowData2)
             Task {
                 // Fetch all WindowData objects
                 let fetchedWindowsData = await tabDataStore.fetchAllWindowsData()
@@ -93,7 +93,7 @@ final class TabDataStoreTests: XCTestCase {
         let windowData = self.createMockWindow()
         // Save the WindowData object
         Task {
-            await tabDataStore.saveWindowDataWithBackup(window: windowData)
+            await tabDataStore.saveWindowData(window: windowData)
             // Fetch the WindowData object using its ID
             Task {
                 let fetchedWindowData = await tabDataStore.fetchWindowData(withID: windowData.id)
@@ -111,7 +111,7 @@ final class TabDataStoreTests: XCTestCase {
     // MARK: Clearing Data
     func testClearAllTabData() async throws {
         let windowData = self.createMockWindow()
-        await tabDataStore.saveWindowDataWithBackup(window: windowData)
+        await tabDataStore.saveWindowData(window: windowData)
         await tabDataStore.clearAllWindowsData()
 
         let fetchedWindowData = await tabDataStore.fetchAllWindowsData()
