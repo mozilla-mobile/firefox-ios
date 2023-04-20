@@ -823,10 +823,16 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     }
 
     func undoCloseTab(tab: Tab, position: Int?) {
+        let tabToSelect = selectedTab
         if let index = position {
             tabs.insert(tab, at: index)
         } else {
             tabs.append(tab)
+        }
+
+        // Select previous selected tab
+        if let tabToSelect = tabToSelect {
+            selectTab(tabToSelect, previous: nil)
         }
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
