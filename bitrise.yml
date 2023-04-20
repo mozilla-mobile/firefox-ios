@@ -80,7 +80,18 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH" 
+        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
+    - script@1.1:
+        title: Bypass Bitrise Mirror for Swiftlint Upgrade
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            set -ex
+
+            cd "$(brew --repository)/Library/Taps/homebrew/homebrew-core"
+            # Bypass Bitrise mirror that lags 1 week to 1 month behind homebrew-core versions
+            git remote set-url origin https://github.com/Homebrew/homebrew-core.git
+            brew upgrade swiftlint
     - script@1.1:
         title: Run Danger 2
         inputs:
