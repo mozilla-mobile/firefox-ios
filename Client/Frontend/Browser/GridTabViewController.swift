@@ -186,7 +186,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.layoutIfNeeded()
-        focusItem()
+        DispatchQueue.main.async {
+            self.focusItem()
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
