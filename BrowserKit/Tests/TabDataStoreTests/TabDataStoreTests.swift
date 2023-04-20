@@ -50,8 +50,17 @@ final class TabDataStoreTests: XCTestCase {
             await tabDataStore.saveWindowDataWithBackup(window: windowData)
             Task {
                 await tabDataStore.saveWindowDataWithBackup(window: windowData)
-                let restoredWindowData = await tabDataStore.fetchBackupWindowData(forID: windowID)
-                XCTAssertEqual(restoredWindowData?.tabData.first?.siteUrl, windowData.tabData.first?.siteUrl, "The backup exists and could be safely read")
+                let browserKitInfo = BrowserKitInformation.shared
+                let baseURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
+                    .appendingPathComponent("profile.backup")
+                let baseFilePath = "profile.backup" + "_\(windowID.uuidString)"
+                if let backupPath = baseURL?.appendingPathComponent(baseFilePath) {
+                    DispatchQueue.main.async {
+                        XCTAssertTrue(FileManager.default.fileExists(atPath: backupPath.path))
+                    }
+                } else {
+                    XCTFail("can't create the backup path")
+                }
             }
         }
     }

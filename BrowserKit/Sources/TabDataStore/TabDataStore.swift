@@ -13,7 +13,6 @@ public protocol TabDataStore {
     func fetchWindowData(withID id: UUID) async -> WindowData?
     func fetchAllWindowsData() async -> [WindowData]
     func clearWindowData(for id: UUID) async
-    func fetchBackupWindowData(forID id: UUID) async -> WindowData?
 }
 
 public actor DefaultTabDataStore: TabDataStore {
@@ -22,29 +21,28 @@ public actor DefaultTabDataStore: TabDataStore {
     static let storePath = "codableWindowsState.archive"
     static let profilePath = "profile.profile"
     static let backupPath = "profile.backup"
-    static let tabFileManager = FileManager.default
     private var logger: Logger = DefaultLogger.shared
 
     public init() {}
 
     // MARK: URL Utils
     private var windowDataDirectoryURL: URL? {
-        DefaultTabDataStore.tabFileManager.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
             .appendingPathComponent(DefaultTabDataStore.profilePath)
     }
 
     private var windowDataBackupDirectoryURL: URL? {
-        DefaultTabDataStore.tabFileManager.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: browserKitInfo.sharedContainerIdentifier)?
             .appendingPathComponent(DefaultTabDataStore.backupPath)
     }
 
-    private func windowURLPath(for windowID: UUID) -> URL? {
-        if let profileURL = windowDataDirectoryURL {
-            let filePath = DefaultTabDataStore.storePath + "_\(windowID.uuidString)"
-            let windowProfileURL = profileURL.appendingPathComponent(filePath)
-            return windowProfileURL
+    private func windowURLPath(for windowID: UUID, isBackup: Bool) -> URL? {
+        guard let baseURL = isBackup ? windowDataBackupDirectoryURL: windowDataDirectoryURL else {
+            return nil
         }
-        return nil
+        let baseFilePath = isBackup ? DefaultTabDataStore.backupPath + "_\(windowID.uuidString)" : DefaultTabDataStore.storePath + "_\(windowID.uuidString)"
+
+        return baseURL.appendingPathComponent(baseFilePath)
     }
 
     private func windowBackupURLPath(for windowID: UUID) -> URL? {
@@ -61,8 +59,8 @@ public actor DefaultTabDataStore: TabDataStore {
         return WindowData(id: UUID(), isPrimary: true, activeTabId: UUID(), tabData: [])
     }
 
-    public func fetchWindowData(withID id: UUID) async -> WindowData? {
-        guard let profileURL = self.windowURLPath(for: id) else {
+    private func fetchWindowData(withID id: UUID, isBackup: Bool) async -> WindowData? {
+        guard let profileURL = self.windowURLPath(for: id, isBackup: isBackup) else {
             return nil
         }
         do {
@@ -73,8 +71,8 @@ public actor DefaultTabDataStore: TabDataStore {
         }
     }
 
-    public func fetchBackupWindowData(forID id: UUID) async -> WindowData? {
-        guard let profileURL = self.windowBackupURLPath(for: id) else {
+    public func fetchWindowData(withID id: UUID) async -> WindowData? {
+        guard let profileURL = self.windowURLPath(for: id, isBackup: false) else {
             return nil
         }
         do {
@@ -91,7 +89,7 @@ public actor DefaultTabDataStore: TabDataStore {
         }
 
         do {
-            let fileURLs = try DefaultTabDataStore.tabFileManager.contentsOfDirectory(
+            let fileURLs = try FileManager.default.contentsOfDirectory(
                 at: profileURL,
                 includingPropertiesForKeys: nil,
                 options: .skipsHiddenFiles)
@@ -126,35 +124,30 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: Saving Data
     public func saveWindowDataWithBackup(window: WindowData) async {
+        guard let windowSavingPath = self.windowURLPath(for: window.id, isBackup: false) else {
+            return
+        }
         Task {
-            if let windowSavingPath = self.windowURLPath(for: window.id),
-               let backupWindowSavingPath = self.windowBackupURLPath(for: window.id) {
-                do {
-                    if self.checkIfFileExistsAtPath(path: windowSavingPath) {
-                        do {
-                            try DefaultTabDataStore.tabFileManager.copyItem(at: windowSavingPath, to: backupWindowSavingPath)
-                        } catch {
-                            self.logger.log("Failed to create window data backup: \(error)", level: .debug, category: .tabs)
-                        }
+            do {
+                if self.checkIfFileExistsAtPath(path: windowSavingPath) {
+                    guard let backupWindowSavingPath = self.windowURLPath(for: window.id, isBackup: true) else {
+                        return
                     }
-                    try await self.writeWindowData(windowData: window, to: windowSavingPath)
-                } catch {
-                    self.logger.log("Failed to save window data: \(error)", level: .debug, category: .tabs)
-                    if self.checkIfFileExistsAtPath(path: backupWindowSavingPath) {
-                        do {
-                            try DefaultTabDataStore.tabFileManager.removeItem(at: windowSavingPath)
-                            try DefaultTabDataStore.tabFileManager.moveItem(at: backupWindowSavingPath, to: windowSavingPath)
-                        } catch {
-                            self.logger.log("Failed to restore backup: \(error)", level: .debug, category: .tabs)
-                        }
+                    do {
+                        try FileManager.default.copyItem(at: windowSavingPath, to: backupWindowSavingPath)
+                    } catch {
+                        self.logger.log("Failed to create window data backup: \(error)", level: .debug, category: .tabs)
                     }
                 }
+                try await self.writeWindowData(windowData: window, to: windowSavingPath)
+            } catch {
+                self.logger.log("Failed to save window data: \(error)", level: .debug, category: .tabs)
             }
         }
     }
 
     private func checkIfFileExistsAtPath(path: URL) -> Bool {
-        return DefaultTabDataStore.tabFileManager.fileExists(atPath: path.path)
+        return FileManager.default.fileExists(atPath: path.path)
     }
 
     private func writeWindowData(windowData: WindowData, to url: URL) async throws {
@@ -168,7 +161,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
     // MARK: Deleting Window Data
     public func clearWindowData(for id: UUID) async {
-        guard let profileURL = self.windowURLPath(for: id) else {
+        guard let profileURL = self.windowURLPath(for: id, isBackup: false) else {
             return
         }
         do {
@@ -187,13 +180,13 @@ public actor DefaultTabDataStore: TabDataStore {
         }
 
         do {
-            let fileURLs = try DefaultTabDataStore.tabFileManager.contentsOfDirectory(
+            let fileURLs = try FileManager.default.contentsOfDirectory(
                 at: profileURL,
                 includingPropertiesForKeys: nil,
                 options: .skipsHiddenFiles)
             for fileURL in fileURLs {
                 do {
-                    try DefaultTabDataStore.tabFileManager.removeItem(at: fileURL)
+                    try FileManager.default.removeItem(at: fileURL)
                 } catch {
                     logger.log("Error while clearing all window data: \(error)",
                                level: .debug,
