@@ -185,8 +185,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.view.layoutIfNeeded()
-        focusItem()
+        DispatchQueue.main.async {
+            self.focusItem()
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -255,16 +256,12 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
             let indexPath = IndexPath(item: indexOfRegularTab, section: TabDisplaySection.regularTabs.rawValue)
             guard var rect = self.collectionView.layoutAttributesForItem(at: indexPath)?.frame else { return }
             if indexOfRegularTab >= self.tabDisplayManager.dataStore.count - 2 {
-                DispatchQueue.main.async {
-                    rect.origin.y += 10
-                    self.collectionView.scrollRectToVisible(rect, animated: false)
-                }
+                rect.origin.y += 10
+                self.collectionView.scrollRectToVisible(rect, animated: false)
             } else {
-                DispatchQueue.main.async {
-                    self.collectionView.scrollToItem(at: indexPath,
-                                                     at: [.centeredVertically, .centeredHorizontally],
-                                                     animated: false)
-                }
+                self.collectionView.scrollToItem(at: indexPath,
+                                                 at: [.centeredVertically, .centeredHorizontally],
+                                                 animated: false)
             }
         }
     }
