@@ -74,11 +74,7 @@ class LoginDetailViewController: SensitiveViewController, Themeable {
     private weak var passwordField: UITextField?
     private var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
-    private var breach: BreachRecord? = BreachRecord(name: "name",
-                                                     title: "title",
-                                                     domain: "www.example.com",
-                                                     breachDate: "1993-05-27",
-                                                     description: "description")
+    private var breach: BreachRecord?
 
     private var login: LoginRecord {
         didSet {
