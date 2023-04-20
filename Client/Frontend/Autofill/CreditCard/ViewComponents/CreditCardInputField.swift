@@ -19,7 +19,7 @@ struct CreditCardInputField: View {
     var keyboardType: UIKeyboardType = .numberPad
     @State var text: String = ""
     let inputType: CreditCardInputType
-    let viewModel: CreditCardInputViewModel
+    @ObservedObject var viewModel: CreditCardInputViewModel
     var showError = false
 
     // Theming

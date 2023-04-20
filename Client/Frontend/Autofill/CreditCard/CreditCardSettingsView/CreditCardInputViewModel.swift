@@ -101,7 +101,12 @@ class CreditCardInputViewModel: ObservableObject {
 
     @Published var expirationDate: String = "" {
         didSet {
-            expirationIsValid = creditCardValidator.isExpirationValidFor(date: expirationDate)
+            var dateVal = expirationDate
+            if state == .view {
+                // We should cleanup the date before passing for validity check
+                dateVal = dateVal.filter { "0123456789".contains($0) }
+            }
+            expirationIsValid = creditCardValidator.isExpirationValidFor(date: dateVal)
         }
     }
 
@@ -114,12 +119,14 @@ class CreditCardInputViewModel: ObservableObject {
     }
 
     var isRightBarButtonEnabled: Bool {
-        state.rightBarBtn == .save && (nameIsValid &&
+        let viewMode = state == .view && state.rightBarBtn == .edit
+        let saveMode = state.rightBarBtn == .save && (nameIsValid &&
                                        !nameOnCard.isEmpty &&
                                        numberIsValid &&
                                        !cardNumber.isEmpty &&
                                        expirationIsValid &&
                                        !expirationDate.isEmpty)
+        return viewMode || saveMode
     }
 
     var signInRemoveButtonDetails: RemoveCardButton.AlertDetails {
