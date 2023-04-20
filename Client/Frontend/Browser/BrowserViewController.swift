@@ -923,7 +923,8 @@ class BrowserViewController: UIViewController {
                     let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
                     if !urls.isEmpty {
                         DispatchQueue.main.async {
-                            self.tabManager.addTabsForURLs(urls, zombie: false)
+                            let shouldSelectTab = !self.overlayManager.inOverlayMode
+                            self.tabManager.addTabsForURLs(urls, zombie: false, shouldSelectTab: shouldSelectTab)
                         }
                     }
 
@@ -941,7 +942,7 @@ class BrowserViewController: UIViewController {
                 }
 
                 if !receivedURLs.isEmpty || cursorCount > 0 {
-                    // Because the notification service runs as a seperate process
+                    // Because the notification service runs as a separate process
                     // we need to make sure that our account manager picks up any persisted state
                     // the notification services persisted.
                     self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
