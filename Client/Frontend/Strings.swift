@@ -241,6 +241,16 @@ extension String {
 
         // Editing and saving credit card
         public struct EditCard {
+            public static let RevealLabel = MZLocalizedString(
+                "CreditCard.EditCard.RevealLabel.v114",
+                tableName: "EditCard",
+                value: "Reveal",
+                comment: "Label for revealing the contents of the credit card number")
+            public static let ConcealLabel = MZLocalizedString(
+                "CreditCard.EditCard.ConcealLabel.v114",
+                tableName: "EditCard",
+                value: "Conceal",
+                comment: "Label for concealing contents of the credit card number")
             public static let CopyLabel = MZLocalizedString(
                 "CreditCard.EditCard.CopyLabel.v113",
                 tableName: "EditCard",
