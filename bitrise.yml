@@ -406,7 +406,7 @@ workflows:
     - script@1.1:
         title: Bypass Bitrise Mirror for Swiftlint Upgrade
         inputs:
-        - content: |
+        - content: |-
             #!/usr/bin/env bash
             set -ex
 
