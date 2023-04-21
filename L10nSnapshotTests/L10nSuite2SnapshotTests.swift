@@ -8,8 +8,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 
     func testPanelsEmptyState() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
         waitForExistence(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Bookmarks)
@@ -38,7 +36,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testURLBar() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
         navigator.goto(URLBarOpen)
         snapshot("URLBar-01")
 
@@ -103,8 +100,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testLoginDetails() {
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 15)
-        app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         waitForExistence(app.cells["Search"], timeout: 5)
