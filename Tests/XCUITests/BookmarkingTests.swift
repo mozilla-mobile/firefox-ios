@@ -56,7 +56,6 @@ class BookmarkingTests: BaseTestCase {
         // Load a different page on a new tab, check it's not bookmarked
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.openURL(path(forTestPage: url_2["url"]!))
 

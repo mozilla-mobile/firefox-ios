@@ -80,7 +80,7 @@ workflows:
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
-        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH" 
+        - pipeline_intermediate_files: "$BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH"
     - script@1.1:
         title: Run Danger 2
         inputs:
@@ -403,6 +403,21 @@ workflows:
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo
+    - script@1.1:
+        title: Bypass Bitrise Mirror for Swiftlint Upgrade
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            echo "Swiftlint version before mirror swap"
+            swiftlint version
+            cd "$(brew --repository)/Library/Taps/homebrew/homebrew-core"
+            # Bypass Bitrise mirror that lags 1 week to 1 month behind homebrew-core versions
+            git remote set-url origin https://github.com/Homebrew/homebrew-core.git
+            brew upgrade swiftlint
+            echo "Swiftlint version after mirror swap"
+            swiftlint version
     - script@1:
         inputs:
         - content: |-
@@ -540,6 +555,11 @@ workflows:
             #!/usr/bin/env bash
             set -e
 
+            # Manual triggers leave empty commits. 
+            # Check for empty commit and exit blacklist check if found to avoid erroring out.
+            git log -n 1 origin/main --pretty=format:"%H" && echo "non-empty commit. Continuing Blacklist check..." \
+                || echo "empty commit from manually triggered test detected. Skipping Blacklist check..." && \
+                envman add --key RUN_UI_TESTS --value Run_UI_Tests; exit 0
             echo "Commit on origin/main"
             COMMIT_ON_MAIN_ORIGIN=`git log -n 1 origin/main --pretty=format:"%H"` || true
             if [[ ! "failed" == *"$COMMIT_ON_MAIN_ORIGIN"* ]]; then
@@ -571,8 +591,23 @@ workflows:
                     filesChanged=`git diff --name-only $GIT_CLONE_COMMIT_HASH $COMMIT_ON_MAIN_PR`
                     echo $filesChanged
                 fi
-
-                doNotRunTests='^(\.[a-zA-Z]+\.y*|Docs/*|Sync*/*|.github/|[a-zA-Z]+\.md|[a-zA-Z]+\.sh|[a-zA-Z0-9]+[-_]+[a-zA-Z]+\.sh)|fastlane/*|taskcluster/*|L10nSnapshotTests/*|Shared/[a-zA-Z]+\.lproj/*|Shared/[A-Za-z]/[a-zA-Z]+\.lproj/*|WidgetKit/[a-zA-Z]+\.lproj/*|Client/*/[a-zA-Z]+\.lproj/*)'
+                # Match on file names in all directories and subdirectories
+                #
+                # Project Configs
+                #   .*[^bitrise]\.y[^/]*$ -> matches all files not named bitrise whose file extension begins with a 'y'
+                #   .*\.sh$ -> matches all files whose file extension begins with 'sh'
+                #   .*\.md$ -> matches all files whose file extension begins with 'md'
+                #   .*\.lproj/.* -> matches all files whose parent directory begins with 'lproj'
+                #   fastlane/* -> matches all files in the fastlane directory
+                #   taskcluster/* -> matches all files in the taskcluster directory
+                #
+                # Features tested outside bitrise
+                #   Sync*/* -> matches all files in the Sync,SyncIntegrationTests,SyncTelemetry directories
+                #   L10nSnapshotTests/* -> matches all files in the L10nSnapshotTests directory
+                #
+                # Test Helpers
+                #   test-fixtures/.py$ -> matches all files whose file extension begine with 'py'
+                doNotRunTests='^(.*[^bitrise]\.y[^/]*$|.*\.sh$|.*\.md$|.*\.lproj/.*|Sync*/*|fastlane/*|taskcluster/*|L10nSnapshotTests/*|test-fixtures/.*.py$)'
 
                 if egrep -v "${doNotRunTests}" <<< "${filesChanged}" && [ ! -z "$filesChanged" ];
                 then

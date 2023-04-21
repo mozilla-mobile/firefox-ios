@@ -38,11 +38,14 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if !iPad() {
+            waitForExistence(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+            navigator.performAction(Action.CloseURLBarOpen)
+            navigator.nowAt(NewTabScreen)
+        }
         waitForNoExistence(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
 
         // Now check if it switches to FF Home
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
-        app.buttons["urlBar-cancel"].tap()
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)

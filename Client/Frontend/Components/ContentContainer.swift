@@ -17,6 +17,11 @@ protocol ContentContainable: UIViewController {
 class ContentContainer: UIView {
     private var type: ContentType?
     private var contentController: ContentContainable?
+
+    var contentView: UIView? {
+        return contentController?.view
+    }
+
     var hasHomepage: Bool {
         return type == .homepage
     }

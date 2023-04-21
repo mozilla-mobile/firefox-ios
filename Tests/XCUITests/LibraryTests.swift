@@ -7,8 +7,6 @@ import XCTest
 class LibraryTestsIpad: IpadOnlyTestCase {
     func testLibraryShortcut() {
         if skipPlatform {return}
-        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
-        navigator.performAction(Action.CloseURLBarOpen)
         // Open Library from shortcut
         waitForExistence(app.buttons["TabToolbar.libraryButton"])
         let libraryShorcutButton = app.buttons["TabToolbar.libraryButton"]

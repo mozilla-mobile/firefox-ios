@@ -923,7 +923,8 @@ class BrowserViewController: UIViewController {
                     let urls = cursor.compactMap { $0?.url.asURL }.filter { !receivedURLs.contains($0) }
                     if !urls.isEmpty {
                         DispatchQueue.main.async {
-                            self.tabManager.addTabsForURLs(urls, zombie: false)
+                            let shouldSelectTab = !self.overlayManager.inOverlayMode
+                            self.tabManager.addTabsForURLs(urls, zombie: false, shouldSelectTab: shouldSelectTab)
                         }
                     }
 
@@ -941,7 +942,7 @@ class BrowserViewController: UIViewController {
                 }
 
                 if !receivedURLs.isEmpty || cursorCount > 0 {
-                    // Because the notification service runs as a seperate process
+                    // Because the notification service runs as a separate process
                     // we need to make sure that our account manager picks up any persisted state
                     // the notification services persisted.
                     self.profile.rustFxA.accountManager.peek()?.resetPersistedAccount()
@@ -2170,6 +2171,7 @@ extension BrowserViewController: TabManagerDelegate {
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
            let activityStreamPanel = homepageViewController {
+            // FXIOS-6203 - Can be removed with coordinator usage, it will be scrolled at the top since we add it back
             activityStreamPanel.scrollToTop()
         }
 
