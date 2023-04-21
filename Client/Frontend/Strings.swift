@@ -4847,18 +4847,18 @@ extension String {
         value: "Take your passwords everywhere",
         comment: "Label displaying welcome view tagline under the title")
     public static let LoginsWelcomeTurnOnAutoFillButtonTitle = MZLocalizedString(
-        key: "Logins.WelcomeView.TurnOnAutoFill",
+        key: "Logins.WelcomeView.TurnOnAutoFill.v2",
         tableName: nil,
         value: "Turn on AutoFill",
-        comment: "Title of the big blue button to enable AutoFill")
+        comment: "Title of the big blue button to enable AutoFill comment change")
     public static let LoginsListSearchCancel = MZLocalizedString(
         key: "LoginsList.Search.Cancel",
         tableName: nil,
         value: "Cancel",
         comment: "Title for cancel button for user to stop searching for a particular login")
     public static let LoginsListSearchPlaceholderCredential = MZLocalizedString(
-        key: "LoginsList.Search.Placeholder",
-        tableName: nil,
+        key: "LoginsList.Search.Placeholder.v2",
+        tableName: "aNewTableName",
         value: "Search logins",
         comment: "Placeholder text for search field")
     public static let LoginsListSelectPasswordTitle = MZLocalizedString(
@@ -4867,9 +4867,9 @@ extension String {
         value: "Select a password to fill",
         comment: "Label displaying select a password to fill instruction")
     public static let LoginsListNoMatchingResultTitle = MZLocalizedString(
-        key: "LoginsList.NoMatchingResult.Title",
+        key: "LoginsList.NoMatchingResult.Title.v2",
         tableName: nil,
-        value: "No matching logins",
+        value: "No matching logins - value and key change",
         comment: "Label displayed when a user searches and no matches can be found against the search query")
     public static let LoginsListNoMatchingResultSubtitle = MZLocalizedString(
         key: "LoginsList.NoMatchingResult.Subtitle",
@@ -4885,7 +4885,7 @@ extension String {
         key: "LoginsList.NoLoginsFound.Description",
         tableName: nil,
         value: "Saved logins will show up here. If you saved your logins to Firefox on a different device, sign in to your Firefox Account.",
-        comment: "Label shown when there are no logins to list")
+        comment: "Label shown when there are no logins to list - comment change")
     public static let LoginsPasscodeRequirementWarning = MZLocalizedString(
         key: "Logins.PasscodeRequirement.Warning",
         tableName: nil,
@@ -4898,7 +4898,7 @@ extension String {
     public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString(
         key: "ActivityStream.JumpBackIn.SectionTitle",
         tableName: nil,
-        value: "Jump Back In",
+        value: "Jump Back In - Value change",
         comment: "Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab")
     public static let TabsTrayInactiveTabsSectionTitle = MZLocalizedString(
         key: "TabTray.InactiveTabs.SectionTitle",
@@ -4916,7 +4916,7 @@ extension String {
         comment: "This is the value for a label that indicates if a user is on a secure https connection.")
     public static let ProtectionStatusNotSecure = MZLocalizedString(
         key: "ProtectionStatus.NotSecure",
-        tableName: nil,
+        tableName: "aNewTableName",
         value: "Connection is not secure",
         comment: "This is the value for a label that indicates if a user is on an unencrypted website.")
 }
