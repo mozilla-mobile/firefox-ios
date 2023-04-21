@@ -53,7 +53,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         var buttonText: String {
             switch self {
             case .singleTab, .inactiveTabs:
-                    return .TabsTray.CloseTabsToast.Action
+                return .TabsTray.CloseTabsToast.Action
             }
         }
     }
@@ -402,13 +402,13 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         }
 
         presentUndoToast(toastType: .singleTab) { undoButtonPressed in
-            if undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab {
-                self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
-                NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+            guard undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab else { return }
 
-                if self.tabDisplayManager.isPrivate {
-                    self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty
-                }
+            self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
+            NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
+
+            if self.tabDisplayManager.isPrivate {
+                self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty
             }
         }
     }
@@ -420,10 +420,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
                                 completion: { undoButtonPressed in
-            if undoButtonPressed,
-               let deletedTab = self.tabManager.backupDeletedTab {
-                self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
-            }
+            guard undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab else { return }
+
+            self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
         })
         delegate?.tabTrayDidCloseLastTab(toast: toast)
     }
