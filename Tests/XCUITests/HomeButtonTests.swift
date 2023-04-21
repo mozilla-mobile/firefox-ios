@@ -13,7 +13,6 @@ class HomeButtonTests: BaseTestCase {
     func testGoHome() throws {
         if iPad() {
             waitForTabsButton()
-            navigator.performAction(Action.CloseURLBarOpen)
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)

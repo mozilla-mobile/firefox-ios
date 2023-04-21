@@ -206,20 +206,19 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
+        navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
+        navigator.nowAt(NewTabScreen)
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         waitForExistence(app.cells.staticTexts["Homepage"])
     }
@@ -233,8 +232,10 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
         navigator.performAction(Action.OpenNewTabFromTabTray)
+        if !iPad() {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
         // Close all tabs and check that the number of tabs is correct
