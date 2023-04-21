@@ -14,7 +14,6 @@ struct CreditCardInputView: View {
     // Theming
     @Environment(\.themeType) var themeVal
     @State var backgroundColor: Color = .clear
-    @State var removeButtonColor: Color = .clear
     @State var borderColor: Color = .clear
     @State var textFieldBackgroundColor: Color = .clear
 
@@ -70,11 +69,7 @@ struct CreditCardInputView: View {
                         .frame(height: 4)
 
                     if viewModel.state == .edit {
-                        RemoveCardButton(
-                            removeButtonColor: removeButtonColor,
-                            borderColor: borderColor,
-                            alertDetails: viewModel.removeButtonDetails
-                        )
+                        RemoveCardButton(alertDetails: viewModel.removeButtonDetails)
                         .padding(.top, 28)
                     }
 
@@ -106,8 +101,6 @@ struct CreditCardInputView: View {
     func applyTheme(theme: Theme) {
         let color = theme.colors
         backgroundColor = Color(color.layer1)
-        removeButtonColor = Color(color.textWarning)
-        borderColor = Color(color.borderPrimary)
         textFieldBackgroundColor = Color(color.layer2)
     }
 
