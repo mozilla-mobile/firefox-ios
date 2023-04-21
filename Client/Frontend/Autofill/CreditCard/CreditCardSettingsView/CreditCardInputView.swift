@@ -118,12 +118,24 @@ struct CreditCardInputView: View {
             case .edit:
                 viewModel.updateState(state: .edit)
             case.save:
-                viewModel.saveCreditCard { _, error in
-                    guard error != nil else {
-                        dismiss(true)
-                        return
+                // Update existing card
+                if viewModel.state == .edit {
+                    viewModel.updateCreditCard { _, error in
+                        guard error != nil else {
+                            dismiss(true)
+                            return
+                        }
+                        dismiss(false)
                     }
-                    dismiss(false)
+                } else {
+                    // Save new card
+                    viewModel.saveCreditCard { _, error in
+                        guard error != nil else {
+                            dismiss(true)
+                            return
+                        }
+                        dismiss(false)
+                    }
                 }
             }
         }

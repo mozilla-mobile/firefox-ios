@@ -70,6 +70,11 @@ enum CreditCardEditState: String, Equatable, CaseIterable {
     }
 }
 
+enum InputVMError: Error {
+    case unableToSaveCC
+    case unableToUpdateCC
+}
+
 class CreditCardInputViewModel: ObservableObject {
     typealias CreditCardText = String.CreditCard.Alert
 
@@ -210,23 +215,25 @@ class CreditCardInputViewModel: ObservableObject {
     }
 
     public func saveCreditCard(completion: @escaping (CreditCard?, Error?) -> Void) {
-        guard let cardType = cardType,
-              nameIsValid,
-              numberIsValid,
-              let month = month,
-              let year = year else {
+        guard let plainCreditCard = getDisplayedCCValues() else {
+            completion(nil, InputVMError.unableToSaveCC)
             return
         }
 
-        let creditCard = UnencryptedCreditCardFields(
-                         ccName: nameOnCard,
-                         ccNumber: cardNumber,
-                         ccNumberLast4: String(cardNumber.suffix(4)),
-                         ccExpMonth: month,
-                         ccExpYear: year,
-                         ccType: cardType.rawValue)
+        autofill.addCreditCard(creditCard: plainCreditCard,
+                               completion: completion)
+    }
 
-        autofill.addCreditCard(creditCard: creditCard, completion: completion)
+    func updateCreditCard(completion: @escaping (Bool, Error?) -> Void) {
+        guard let creditCard = creditCard,
+              let plainCreditCard = getDisplayedCCValues() else {
+            completion(true, InputVMError.unableToUpdateCC)
+            return
+        }
+
+        autofill.updateCreditCard(id: creditCard.guid,
+                                  creditCard: plainCreditCard,
+                                  completion: completion)
     }
 
     public func clearValues() {
@@ -236,6 +243,7 @@ class CreditCardInputViewModel: ObservableObject {
         nameIsValid = true
         expirationIsValid = true
         numberIsValid = true
+        creditCard = nil
     }
 
     public func setupViewValues() {
@@ -247,5 +255,25 @@ class CreditCardInputViewModel: ObservableObject {
         let formattedMonth = month < 10 ? String(format: "%02d", month) : String(month)
 
         expirationDate = "\(formattedMonth) / \(creditCard.ccExpYear)"
+    }
+
+    func getDisplayedCCValues() -> UnencryptedCreditCardFields? {
+        guard let cardType = cardType,
+              nameIsValid,
+              numberIsValid,
+              let month = month,
+              let year = year else {
+            return nil
+        }
+
+        let plainCreditCard = UnencryptedCreditCardFields(
+                         ccName: nameOnCard,
+                         ccNumber: cardNumber,
+                         ccNumberLast4: String(cardNumber.suffix(4)),
+                         ccExpMonth: month,
+                         ccExpYear: year,
+                         ccType: cardType.rawValue)
+
+        return plainCreditCard
     }
 }

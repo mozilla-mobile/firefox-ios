@@ -300,7 +300,7 @@ struct CreditCardInputField: View {
         let sanitizedCardNum =  sanitizeInputOn(viewModel.cardNumber)
         guard !sanitizedCardNum.isEmpty else { return "" }
         let concealedString = String(repeating: "•", count: sanitizedCardNum.count - 4)
-        var lastFour = sanitizedCardNum.suffix(4)
+        let lastFour = sanitizedCardNum.suffix(4)
         return concealedString + lastFour
     }
 
