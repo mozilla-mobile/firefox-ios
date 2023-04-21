@@ -467,6 +467,7 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         guard !isDragging else { return }
 
         getTabsAndUpdateInactiveState { tabGroup, tabsToDisplay in
+            // If it is the last tab of regular mode we automatically create an new tab
             if !self.isPrivate,
                tabsToDisplay.count + (self.tabsInAllGroups?.count ?? 0) == 1 {
                 self.tabManager.removeTabs([tab])
@@ -482,7 +483,13 @@ class TabDisplayManager: NSObject, FeatureFlaggable {
         tabManager.undoCloseTab(tab: tab, position: index)
         _ = profile.recentlyClosedTabs.popFirstTab()
 
-        refreshStore()
+        refreshStore {
+            // Reload collectionView doesn't refresh correctly the restore tab, forcing the reload this way
+            self.collectionView.performBatchUpdates({ [weak self] in
+                let visibleItems = self?.collectionView.indexPathsForVisibleItems ?? []
+                self?.collectionView.reloadItems(at: visibleItems)
+            })
+        }
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
@@ -539,7 +546,6 @@ extension TabDisplayManager: UICollectionViewDataSource {
     @objc
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard tabDisplayType != .TopTabTray else {
-            let items = dataStore.count + (tabGroups?.count ?? 0)
             return dataStore.count + (tabGroups?.count ?? 0)
         }
 

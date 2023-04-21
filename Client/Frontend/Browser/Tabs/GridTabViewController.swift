@@ -391,7 +391,7 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
     }
 
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
-        saveTabToDelete(tab: tab, index: collectionView.indexPath(for: cell)?.row)
+        saveTabToDelete(tab: tab, index: tabManager.tabs.firstIndex(of: tab))
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.performCloseAction(for: tab)
 
@@ -402,9 +402,9 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         }
 
         presentUndoToast(toastType: .singleTab) { undoButtonPressed in
-            guard undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab else { return }
+            guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else { return }
 
-            self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
+            self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
             NotificationCenter.default.post(name: .UpdateLabelOnTabClosed, object: nil)
 
             if self.tabDisplayManager.isPrivate {
@@ -420,15 +420,15 @@ class GridTabViewController: UIViewController, TabTrayViewDelegate, Themeable {
         let toast = ButtonToast(viewModel: viewModel,
                                 theme: themeManager.currentTheme,
                                 completion: { undoButtonPressed in
-            guard undoButtonPressed, let deletedTab = self.tabManager.backupDeletedTab else { return }
+            guard undoButtonPressed, let closedTab = self.tabManager.backupCloseTab else { return }
 
-            self.tabDisplayManager.undoCloseTab(tab: deletedTab.0, index: deletedTab.1)
+            self.tabDisplayManager.undoCloseTab(tab: closedTab.tab, index: closedTab.restorePosition)
         })
         delegate?.tabTrayDidCloseLastTab(toast: toast)
     }
 
     private func saveTabToDelete(tab: Tab, index: Int?) {
-        tabManager.backupDeletedTab = (tab, index)
+        tabManager.backupCloseTab = BackupCloseTab(tab: tab, restorePosition: index)
     }
 
     private func presentUndoToast(toastType: UndoToastType,

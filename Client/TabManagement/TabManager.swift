@@ -15,7 +15,7 @@ protocol TabManager: AnyObject {
     var tabs: [Tab] { get }
     var count: Int { get }
     var selectedTab: Tab? { get }
-    var backupDeletedTab: (Tab, Int?)? { get set }
+    var backupCloseTab: BackupCloseTab? { get set }
     var normalTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
     var tabDisplayType: TabDisplayType { get set }

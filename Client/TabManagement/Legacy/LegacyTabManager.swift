@@ -43,6 +43,11 @@ enum SwitchPrivacyModeResult {
     case usedExistingTab
 }
 
+struct BackupCloseTab {
+    var tab: Tab
+    var restorePosition: Int?
+}
+
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     // MARK: - Variables
@@ -54,7 +59,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager {
     private var _selectedIndex = -1
     var selectedIndex: Int { return _selectedIndex }
     private let logger: Logger
-    var backupDeletedTab: (Tab, Int?)?
+    var backupCloseTab: BackupCloseTab?
 
     var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
