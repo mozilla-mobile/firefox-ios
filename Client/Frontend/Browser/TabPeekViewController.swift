@@ -135,7 +135,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         }
     }
 
-    fileprivate func setupWithScreenshot(_ screenshot: UIImage) {
+    private func setupWithScreenshot(_ screenshot: UIImage) {
         let imageView = UIImageView(image: screenshot)
         self.view.addSubview(imageView)
 
@@ -147,7 +147,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         screenShot?.accessibilityLabel = previewAccessibilityLabel
     }
 
-    fileprivate func setupWebView(_ webView: WKWebView?) {
+    private func setupWebView(_ webView: WKWebView?) {
         guard let webView = webView,
               let url = webView.url,
               !isIgnoredURL(url)
@@ -167,7 +167,8 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         clonedWebView.load(URLRequest(url: url))
     }
 
-    func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: DevicePickerViewControllerDelegate) {
+    func setState(withProfile browserProfile: BrowserProfile,
+                  clientPickerDelegate: DevicePickerViewControllerDelegate) {
         guard let tab = self.tab,
               let displayURL = tab.url?.absoluteString,
               !displayURL.isEmpty
@@ -182,15 +183,10 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
             browserProfile.getClientGUIDs { clientGUIDs in
                 self.hasRemoteClients = !clientGUIDs.isEmpty
-                let clientPickerController = DevicePickerViewController(profile: browserProfile)
-                clientPickerController.pickerDelegate = clientPickerDelegate
-                clientPickerController.profile = browserProfile
-                if let url = tab.url?.absoluteString {
-                    clientPickerController.shareItem = ShareItem(url: url, title: tab.title)
-                }
 
                 DispatchQueue.main.async {
-                    self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
+                    self.createDevicePicker(withProfile: browserProfile,
+                                            clientPickerDelegate: clientPickerDelegate)
                 }
             }
 
@@ -204,5 +200,16 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         screenShot?.removeFromSuperview()
         screenShot = nil
+    }
+
+    private func createDevicePicker(withProfile browserProfile: BrowserProfile,
+                                    clientPickerDelegate: DevicePickerViewControllerDelegate) {
+            let clientPickerController = DevicePickerViewController(profile: browserProfile)
+            clientPickerController.pickerDelegate = clientPickerDelegate
+            clientPickerController.profile = browserProfile
+            if let url = tab?.url?.absoluteString {
+                clientPickerController.shareItem = ShareItem(url: url, title: tab?.title ?? "")
+            }
+            self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
     }
 }
