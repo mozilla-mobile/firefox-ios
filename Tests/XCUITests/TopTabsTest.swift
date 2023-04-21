@@ -216,11 +216,6 @@ class TopTabsTest: BaseTestCase {
 
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
-<<<<<<< HEAD
-        navigator.nowAt(NewTabScreen)
-        navigator.performAction(Action.CloseURLBarOpen)
-=======
->>>>>>> cab18848f (Bugfix FXIOS-5639 [v114] Fix iPad functional test failures related to attentive mode fixes  (#14002))
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"])
         }
